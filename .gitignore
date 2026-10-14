@@ -1,0 +1,12 @@
+build/
+
+references/
+tools/
+
+scripts/
+analysis/
+analysis-projects/
+
+format.cmd
+
+ghidra/
