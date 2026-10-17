@@ -1489,6 +1489,20 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "g_buildingRemovalCount",
+      "va": "0x1018dc18",
+      "rva": "0x0018dc18",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_buildingRemovalRecords",
+      "va": "0x10188df8",
+      "rva": "0x00188df8",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
       "name": "g_chatScreenWidth",
       "va": "0xc17044",
       "rva": null,
@@ -1979,6 +1993,76 @@
       "evidence": "Native callback load/store operands v85 and original initialized data."
     },
     {
+      "name": "g_hookAnimationBlend",
+      "va": "0x1018f550",
+      "rva": "0x0018f550",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationClump",
+      "va": "0x1018e584",
+      "rva": "0x0018e584",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationContinueA",
+      "va": "0x10151aa4",
+      "rva": "0x00151aa4",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationContinueB",
+      "va": "0x10151aa8",
+      "rva": "0x00151aa8",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationGroup",
+      "va": "0x1018f548",
+      "rva": "0x0018f548",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationId",
+      "va": "0x1018f54c",
+      "rva": "0x0018f54c",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationLocalClump",
+      "va": "0x1018eb88",
+      "rva": "0x0018eb88",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationPed",
+      "va": "0x1018eb90",
+      "rva": "0x0018eb90",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationReturn",
+      "va": "0x1018f4c4",
+      "rva": "0x0018f4c4",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookAnimationType",
+      "va": "0x1018f4ec",
+      "rva": "0x0018f4ec",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
       "name": "g_hookCachedBuffer",
       "va": "0x1018f560",
       "rva": "0x0018f560",
@@ -2000,6 +2084,27 @@
       "evidence": "Native callback load/store operands v85 and original initialized data."
     },
     {
+      "name": "g_hookCollisionPed",
+      "va": "0x1018e560",
+      "rva": "0x0018e560",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookDisableFog",
+      "va": "0x102aca70",
+      "rva": "0x002aca70",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookFogEnabled",
+      "va": "0x102aca6c",
+      "rva": "0x002aca6c",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
       "name": "g_hookFreedBuffer",
       "va": "0x1018f568",
       "rva": "0x0018f568",
@@ -2007,11 +2112,130 @@
       "evidence": "Native callback load/store operands v85 and original initialized data."
     },
     {
+      "name": "g_hookHornArgument",
+      "va": "0x1018f52c",
+      "rva": "0x0018f52c",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHornStatus",
+      "va": "0x1018f534",
+      "rva": "0x0018f534",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHornThis",
+      "va": "0x1018f530",
+      "rva": "0x0018f530",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHornVehicle",
+      "va": "0x1018eb24",
+      "rva": "0x0018eb24",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudAspectFix",
+      "va": "0x10151a6e",
+      "rva": "0x00151a6e",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudAspectThreshold",
+      "va": "0x1011c728",
+      "rva": "0x0011c728",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudHeight",
+      "va": "0x1018f510",
+      "rva": "0x0018f510",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudScaleNumerator",
+      "va": "0x1011eb68",
+      "rva": "0x0011eb68",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudScaleX",
+      "va": "0x1018f504",
+      "rva": "0x0018f504",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudScaleY",
+      "va": "0x1018f508",
+      "rva": "0x0018f508",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookHudWidth",
+      "va": "0x1018f50c",
+      "rva": "0x0018f50c",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
       "name": "g_hookKeepBuffer",
       "va": "0x10151ab8",
       "rva": "0x00151ab8",
       "module": "samp.dll",
       "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookMarker",
+      "va": "0x1018f5b4",
+      "rva": "0x0018f5b4",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookMarkerArgument",
+      "va": "0x1018f5b8",
+      "rva": "0x0018f5b8",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookObjectRestore",
+      "va": "0x10151acc",
+      "rva": "0x00151acc",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookQueuedAnimationBlend",
+      "va": "0x1018f4f8",
+      "rva": "0x0018f4f8",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookQueuedAnimationGroup",
+      "va": "0x1018f4f0",
+      "rva": "0x0018f4f0",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookQueuedAnimationId",
+      "va": "0x1018f4f4",
+      "rva": "0x0018f4f4",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
       "name": "g_hookRadarIndex",
@@ -2033,6 +2257,13 @@
       "rva": "0x0018f540",
       "module": "samp.dll",
       "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookRenderObject",
+      "va": "0x1018f5cc",
+      "rva": "0x0018f5cc",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
       "name": "g_hookRenderRestore",
@@ -2068,6 +2299,27 @@
       "rva": "0x0018f5d8",
       "module": "samp.dll",
       "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookSavedMatrix",
+      "va": "0x1018e8e0",
+      "rva": "0x0018e8e0",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookSavedSpeed",
+      "va": "0x1018eab4",
+      "rva": "0x0018eab4",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookSuppressAllMarkers",
+      "va": "0x1018f5bc",
+      "rva": "0x0018f5bc",
+      "module": "samp.dll",
+      "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
       "name": "g_inputAnsiText",
@@ -2378,6 +2630,13 @@
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
     },
     {
+      "name": "GameDistanceBetweenPoints",
+      "va": "0x100b4570",
+      "rva": "0x000b4570",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
+    },
+    {
       "name": "GameExceptionFilter",
       "va": "0x10060470",
       "rva": "0x00060470",
@@ -2424,7 +2683,7 @@
       "va": "0x100a22c0",
       "rva": "0x000a22c0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a22f0",
@@ -2466,7 +2725,7 @@
       "va": "0x100a29d0",
       "rva": "0x000a29d0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a2ab0",
@@ -2494,7 +2753,7 @@
       "va": "0x100a33c0",
       "rva": "0x000a33c0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a3580",
@@ -2571,7 +2830,7 @@
       "va": "0x100a3b90",
       "rva": "0x000a3b90",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a3c60",
@@ -2634,14 +2893,14 @@
       "va": "0x100a3f30",
       "rva": "0x000a3f30",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a3fe0",
       "va": "0x100a3fe0",
       "rva": "0x000a3fe0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a4190",
@@ -2690,7 +2949,7 @@
       "va": "0x100a47d0",
       "rva": "0x000a47d0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a4850",
@@ -2704,7 +2963,7 @@
       "va": "0x100a48c0",
       "rva": "0x000a48c0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed native render/physics/animation callback instructions v85/v86; raw stack/register ABI and independent differential tests v86."
     },
     {
       "name": "GameHook_000a4960",
@@ -2910,6 +3169,13 @@
       "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
     },
     {
+      "name": "GamePrepareHudDraw",
+      "va": "0x100a2220",
+      "rva": "0x000a2220",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
+    },
+    {
       "name": "GameProcessOutgoingEvent",
       "va": "0x10001d10",
       "rva": "0x00001d10",
@@ -2964,6 +3230,20 @@
       "rva": "0x000020c0",
       "module": "samp.dll",
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GameSetupD3DFog",
+      "va": "0x100c5400",
+      "rva": "0x000c5400",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
+    },
+    {
+      "name": "GameShouldSuppressMarker",
+      "va": "0x1009cae0",
+      "rva": "0x0009cae0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
     },
     {
       "name": "GameTxdFind",
@@ -4875,6 +5155,54 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/building_removal.cpp",
+      "name": "g_buildingRemovalRecords",
+      "rva": 1609208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.cpp",
+      "name": "g_buildingRemovalCount",
+      "rva": 1629208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.cpp",
+      "name": "GameDistanceBetweenPoints",
+      "rva": 738672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.cpp",
+      "name": "GameShouldSuppressMarker",
+      "rva": 641760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.h",
+      "name": "g_buildingRemovalRecords",
+      "rva": 1609208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.h",
+      "name": "g_buildingRemovalCount",
+      "rva": 1629208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.h",
+      "name": "GameDistanceBetweenPoints",
+      "rva": 738672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/building_removal.h",
+      "name": "GameShouldSuppressMarker",
+      "rva": 641760,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/effects.cpp",
       "name": "GameBufferReader::Read",
       "rva": 770512,
@@ -6096,6 +6424,486 @@
       "file": "source/game/hooks_independent.h",
       "name": "g_hookSavedFontB",
       "rva": 1635800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudScaleX",
+      "rva": 1635588,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudScaleY",
+      "rva": 1635592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudWidth",
+      "rva": 1635596,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudHeight",
+      "rva": 1635600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudAspectFix",
+      "rva": 1383022,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudAspectThreshold",
+      "rva": 1165096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHudScaleNumerator",
+      "rva": 1174376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookFogEnabled",
+      "rva": 2804332,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookDisableFog",
+      "rva": 2804336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookCollisionPed",
+      "rva": 1631584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookSavedMatrix",
+      "rva": 1632480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookSavedSpeed",
+      "rva": 1632948,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHornArgument",
+      "rva": 1635628,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHornThis",
+      "rva": 1635632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHornVehicle",
+      "rva": 1633060,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookHornStatus",
+      "rva": 1635636,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationReturn",
+      "rva": 1635524,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationClump",
+      "rva": 1631620,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationGroup",
+      "rva": 1635656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationId",
+      "rva": 1635660,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationBlend",
+      "rva": 1635664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationPed",
+      "rva": 1633168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationLocalClump",
+      "rva": 1633160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationType",
+      "rva": 1635564,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookQueuedAnimationGroup",
+      "rva": 1635568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookQueuedAnimationId",
+      "rva": 1635572,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookQueuedAnimationBlend",
+      "rva": 1635576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationContinueA",
+      "rva": 1383076,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookAnimationContinueB",
+      "rva": 1383080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookRenderObject",
+      "rva": 1635788,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookObjectRestore",
+      "rva": 1383116,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookMarker",
+      "rva": 1635764,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookMarkerArgument",
+      "rva": 1635768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "g_hookSuppressAllMarkers",
+      "rva": 1635772,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GamePrepareHudDraw",
+      "rva": 664096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameSetupD3DFog",
+      "rva": 807936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a22c0",
+      "rva": 664256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a29d0",
+      "rva": 666064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a33c0",
+      "rva": 668608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a3b90",
+      "rva": 670608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a3f30",
+      "rva": 671536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a3fe0",
+      "rva": 671712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a47d0",
+      "rva": 673744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.cpp",
+      "name": "GameHook_000a48c0",
+      "rva": 673984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudScaleX",
+      "rva": 1635588,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudScaleY",
+      "rva": 1635592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudWidth",
+      "rva": 1635596,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudHeight",
+      "rva": 1635600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudAspectFix",
+      "rva": 1383022,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudAspectThreshold",
+      "rva": 1165096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHudScaleNumerator",
+      "rva": 1174376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookFogEnabled",
+      "rva": 2804332,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookDisableFog",
+      "rva": 2804336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookCollisionPed",
+      "rva": 1631584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookSavedMatrix",
+      "rva": 1632480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookSavedSpeed",
+      "rva": 1632948,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHornArgument",
+      "rva": 1635628,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHornThis",
+      "rva": 1635632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHornVehicle",
+      "rva": 1633060,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookHornStatus",
+      "rva": 1635636,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationReturn",
+      "rva": 1635524,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationClump",
+      "rva": 1631620,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationGroup",
+      "rva": 1635656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationId",
+      "rva": 1635660,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationBlend",
+      "rva": 1635664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationPed",
+      "rva": 1633168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationLocalClump",
+      "rva": 1633160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationType",
+      "rva": 1635564,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookQueuedAnimationGroup",
+      "rva": 1635568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookQueuedAnimationId",
+      "rva": 1635572,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookQueuedAnimationBlend",
+      "rva": 1635576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationContinueA",
+      "rva": 1383076,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookAnimationContinueB",
+      "rva": 1383080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookRenderObject",
+      "rva": 1635788,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookObjectRestore",
+      "rva": 1383116,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookMarker",
+      "rva": 1635764,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookMarkerArgument",
+      "rva": 1635768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "g_hookSuppressAllMarkers",
+      "rva": 1635772,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "GamePrepareHudDraw",
+      "rva": 664096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_render.h",
+      "name": "GameSetupD3DFog",
+      "rva": 807936,
       "module": "samp.dll"
     },
     {
