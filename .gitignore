@@ -6,6 +6,7 @@ tools/
 scripts/
 analysis/
 analysis-projects/
+worktrees/
 
 format.cmd
 

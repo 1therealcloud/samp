@@ -1,0 +1,6679 @@
+{
+  "reference": "references/samp.dll",
+  "imageBase": "0x10000000",
+  "format": "RVA = native VA - imageBase; GTA addresses are separate",
+  "scope": "Maintained recovered SA-MP source declarations and definitions; tests and frozen snapshots excluded.",
+  "entries": [
+    {
+      "name": "AimStuff::ApplyLocalAim",
+      "va": "0x1009c3e0",
+      "rva": "0x0009c3e0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::ApplyLocalCamera",
+      "va": "0x1009c260",
+      "rva": "0x0009c260",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::ApplyLocalSkills",
+      "va": "0x1009c640",
+      "rva": "0x0009c640",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::ApplyPlayerAim",
+      "va": "0x1009c440",
+      "rva": "0x0009c440",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::ApplyPlayerCamera",
+      "va": "0x1009c2d0",
+      "rva": "0x0009c2d0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::ApplyPlayerSkills",
+      "va": "0x1009c7a0",
+      "rva": "0x0009c7a0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::GetAspectRatio",
+      "va": "0x1009c2a0",
+      "rva": "0x0009c2a0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::GetCameraExtZoom",
+      "va": "0x1009c2b0",
+      "rva": "0x0009c2b0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::GetCameraMode",
+      "va": "0x1009c340",
+      "rva": "0x0009c340",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::GetInternalAim",
+      "va": "0x1009c400",
+      "rva": "0x0009c400",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::GetPlayerAim",
+      "va": "0x1009c470",
+      "rva": "0x0009c470",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::GetPlayerCameraMode",
+      "va": "0x1009c330",
+      "rva": "0x0009c330",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::Initialize",
+      "va": "0x1009c350",
+      "rva": "0x0009c350",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::ResetLocalSkills",
+      "va": "0x1009c710",
+      "rva": "0x0009c710",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::SetAim",
+      "va": "0x1009c410",
+      "rva": "0x0009c410",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::SetPlayerCamera",
+      "va": "0x1009c280",
+      "rva": "0x0009c280",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::SetPlayerCameraMode",
+      "va": "0x1009c310",
+      "rva": "0x0009c310",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::SetPlayerSkill",
+      "va": "0x1009c490",
+      "rva": "0x0009c490",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::UpdateAim",
+      "va": "0x1009c3c0",
+      "rva": "0x0009c3c0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::UpdateCamera",
+      "va": "0x1009c240",
+      "rva": "0x0009c240",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "AimStuff::UpdateLocalSkills",
+      "va": "0x1009c5b0",
+      "rva": "0x0009c5b0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "CCamera::CCamera",
+      "va": "0x1009fda0",
+      "rva": "0x0009fda0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CChat::AddChatMessage",
+      "va": "0x10067a90",
+      "rva": "0x00067a90",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::AddDebugMessage",
+      "va": "0x10067b60",
+      "rva": "0x00067b60",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::AddEntry",
+      "va": "0x10067650",
+      "rva": "0x00067650",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::AddInfoMessage",
+      "va": "0x10067ae0",
+      "rva": "0x00067ae0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::AddMessage",
+      "va": "0x10067be0",
+      "rva": "0x00067be0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::CChat",
+      "va": "0x10067df0",
+      "rva": "0x00067df0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::Draw",
+      "va": "0x10067870",
+      "rva": "0x00067870",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::FilterOutInvalidChars",
+      "va": "0x10066e90",
+      "rva": "0x00066e90",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::GetMode",
+      "va": "0x10060d30",
+      "rva": "0x00060d30",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::Log",
+      "va": "0x10067240",
+      "rva": "0x00067240",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::OnLostDevice",
+      "va": "0x10066c10",
+      "rva": "0x00066c10",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::OnResetDevice",
+      "va": "0x10067c40",
+      "rva": "0x00067c40",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::PageDown",
+      "va": "0x10066da0",
+      "rva": "0x00066da0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::PageUp",
+      "va": "0x10066d40",
+      "rva": "0x00066d40",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::PushBack",
+      "va": "0x10066ec0",
+      "rva": "0x00066ec0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::RecalcFontSize",
+      "va": "0x10066b90",
+      "rva": "0x00066b90",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::Render",
+      "va": "0x100673b0",
+      "rva": "0x000673b0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::RenderEntry",
+      "va": "0x10066ee0",
+      "rva": "0x00066ee0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::RenderToSurface",
+      "va": "0x10067940",
+      "rva": "0x00067940",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::ResetDialogControls",
+      "va": "0x10067310",
+      "rva": "0x00067310",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::Scroll",
+      "va": "0x10066e30",
+      "rva": "0x00066e30",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::ScrollToBottom",
+      "va": "0x10066e00",
+      "rva": "0x00066e00",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::SetPageSize",
+      "va": "0x10066d10",
+      "rva": "0x00066d10",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::SwitchMode",
+      "va": "0x10060d40",
+      "rva": "0x00060d40",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CChat::UpdateScrollbar",
+      "va": "0x10066c70",
+      "rva": "0x00066c70",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
+    },
+    {
+      "name": "CConfig::~CConfig",
+      "va": "0x10065680",
+      "rva": "0x00065680",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::CConfig",
+      "va": "0x10065e60",
+      "rva": "0x00065e60",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::CreateEntry",
+      "va": "0x100657d0",
+      "rva": "0x000657d0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::DoesExist",
+      "va": "0x100657b0",
+      "rva": "0x000657b0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::FindFirstFree",
+      "va": "0x100656c0",
+      "rva": "0x000656c0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::Free",
+      "va": "0x10065920",
+      "rva": "0x00065920",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::GetEntry",
+      "va": "0x100659b0",
+      "rva": "0x000659b0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::GetFloatValue",
+      "va": "0x100658f0",
+      "rva": "0x000658f0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::GetIndex",
+      "va": "0x10065710",
+      "rva": "0x00065710",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::GetIntValue",
+      "va": "0x10065890",
+      "rva": "0x00065890",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CConfig::GetStringValue",
+      "va": "0x100658c0",
+      "rva": "0x000658c0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::GetType",
+      "va": "0x100659e0",
+      "rva": "0x000659e0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::GetValueType",
+      "va": "0x10065980",
+      "rva": "0x00065980",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::Load",
+      "va": "0x10065cf0",
+      "rva": "0x00065cf0",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::Save",
+      "va": "0x10065a50",
+      "rva": "0x00065a50",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::Write",
+      "va": "0x10065c60",
+      "rva": "0x00065c60",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::WriteFloatValue",
+      "va": "0x10065c00",
+      "rva": "0x00065c00",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::WriteIntValue",
+      "va": "0x10065b00",
+      "rva": "0x00065b00",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CConfig::WriteStringValue",
+      "va": "0x10065b60",
+      "rva": "0x00065b60",
+      "module": "samp.dll",
+      "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
+    },
+    {
+      "name": "CDXUTDialog::AddControl",
+      "va": "0x1008c140",
+      "rva": "0x0008c140",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CDXUTDialog::AddIMEEditBox",
+      "va": "0x10090b30",
+      "rva": "0x00090b30",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CDXUTDialog::DrawTextA",
+      "va": "0x1008cae0",
+      "rva": "0x0008cae0",
+      "module": "samp.dll",
+      "evidence": "analysis/dxut-dialog-v69-code/1008cae0.c and instructions; legacy ANSI DXUT body"
+    },
+    {
+      "name": "CDXUTDialog::GetFont",
+      "va": "0x10086b40",
+      "rva": "0x00086b40",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CDXUTDialog::InitDefaultElements",
+      "va": "0x1008d200",
+      "rva": "0x0008d200",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-theme/theme-helpers/theme-font-v71 exports and instructions"
+    },
+    {
+      "name": "CDXUTDialog::InitFont",
+      "va": "0x1008d1c0",
+      "rva": "0x0008d1c0",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-theme/theme-helpers/theme-font-v71 exports and instructions"
+    },
+    {
+      "name": "CDXUTDialog::RequestFocus",
+      "va": "0x100844b0",
+      "rva": "0x000844b0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CDXUTDialog::SetFont",
+      "va": "0x1008ca50",
+      "rva": "0x0008ca50",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-font/createfont-v68 and buffer-state-v67 exports; ANSI font overloads"
+    },
+    {
+      "name": "CDXUTDialog::SetTexture",
+      "va": "0x10089890",
+      "rva": "0x00089890",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "CDXUTDialogResourceManager::AddFont",
+      "va": "0x1008c8f0",
+      "rva": "0x0008c8f0",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-font/createfont-v68 and buffer-state-v67 exports; ANSI font overloads"
+    },
+    {
+      "name": "CDXUTDialogResourceManager::AddTexture",
+      "va": "0x100897d0",
+      "rva": "0x000897d0",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "CDXUTDialogResourceManager::CreateFont",
+      "va": "0x1008c170",
+      "rva": "0x0008c170",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-font/createfont-v68 and buffer-state-v67 exports; ANSI font overloads"
+    },
+    {
+      "name": "CDXUTDialogResourceManager::CreateTexture",
+      "va": "0x100874b0",
+      "rva": "0x000874b0",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "CDXUTEditBox::SetText",
+      "va": "0x10085000",
+      "rva": "0x00085000",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CDXUTIMEEditBox::StaticMsgProc",
+      "va": "0x1008c2c0",
+      "rva": "0x0008c2c0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CDXUTScrollBar::Cap",
+      "va": "0x10084e80",
+      "rva": "0x00084e80",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CDXUTScrollBar::CDXUTScrollBar",
+      "va": "0x1008e750",
+      "rva": "0x0008e750",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CDXUTScrollBar::Scroll",
+      "va": "0x10088230",
+      "rva": "0x00088230",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CDXUTScrollBar::SetTrackPos",
+      "va": "0x10066b50",
+      "rva": "0x00066b50",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CDXUTScrollBar::SetTrackRange",
+      "va": "0x100886d0",
+      "rva": "0x000886d0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CDXUTScrollBar::UpdateThumbRect",
+      "va": "0x10084da0",
+      "rva": "0x00084da0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CEntity::Add",
+      "va": "0x1009f140",
+      "rva": "0x0009f140",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::CEntity",
+      "va": "0x1009bce0",
+      "rva": "0x0009bce0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::GetMatrix",
+      "va": "0x1009e950",
+      "rva": "0x0009e950",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::Remove",
+      "va": "0x1009f240",
+      "rva": "0x0009f240",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::Teleport",
+      "va": "0x1009ee80",
+      "rva": "0x0009ee80",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CFontColorSprite::AddRef",
+      "va": "0x10073890",
+      "rva": "0x00073890",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::Begin",
+      "va": "0x10073900",
+      "rva": "0x00073900",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::Draw",
+      "va": "0x10073660",
+      "rva": "0x00073660",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::End",
+      "va": "0x10073920",
+      "rva": "0x00073920",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::Flush",
+      "va": "0x10073910",
+      "rva": "0x00073910",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::GetDevice",
+      "va": "0x100738b0",
+      "rva": "0x000738b0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::GetTransform",
+      "va": "0x100738c0",
+      "rva": "0x000738c0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::OnLostDevice",
+      "va": "0x10073930",
+      "rva": "0x00073930",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::OnResetDevice",
+      "va": "0x10073940",
+      "rva": "0x00073940",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::QueryInterface",
+      "va": "0x10073880",
+      "rva": "0x00073880",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::Release",
+      "va": "0x100738a0",
+      "rva": "0x000738a0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::SetTransform",
+      "va": "0x100738d0",
+      "rva": "0x000738d0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::SetWorldViewLH",
+      "va": "0x100738f0",
+      "rva": "0x000738f0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontColorSprite::SetWorldViewRH",
+      "va": "0x100738e0",
+      "rva": "0x000738e0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFonts::~CFonts",
+      "va": "0x1006ab40",
+      "rva": "0x0006ab40",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::CFonts",
+      "va": "0x1006b530",
+      "rva": "0x0006b530",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::DrawLicensePlateText",
+      "va": "0x1006b090",
+      "rva": "0x0006b090",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::DrawLittleText",
+      "va": "0x1006af20",
+      "rva": "0x0006af20",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::DrawText",
+      "va": "0x1006ada0",
+      "rva": "0x0006ada0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json (Windows DrawText macro)"
+    },
+    {
+      "name": "CFonts::DrawTextA",
+      "va": "0x1006ada0",
+      "rva": "0x0006ada0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::GetLittleTextScreenSize",
+      "va": "0x1006acf0",
+      "rva": "0x0006acf0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::GetTextScreenSize",
+      "va": "0x1006ac40",
+      "rva": "0x0006ac40",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::OnLostDevice",
+      "va": "0x1006abc0",
+      "rva": "0x0006abc0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::OnResetDevice",
+      "va": "0x1006ac00",
+      "rva": "0x0006ac00",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CFonts::Reset",
+      "va": "0x1006b320",
+      "rva": "0x0006b320",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CFontWrapper::AddRef",
+      "va": "0x10073780",
+      "rva": "0x00073780",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::DrawTextA",
+      "va": "0x10073680",
+      "rva": "0x00073680",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::DrawTextW",
+      "va": "0x10073850",
+      "rva": "0x00073850",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetDC",
+      "va": "0x100737f0",
+      "rva": "0x000737f0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetDescA",
+      "va": "0x100737b0",
+      "rva": "0x000737b0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetDescW",
+      "va": "0x100737c0",
+      "rva": "0x000737c0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetDevice",
+      "va": "0x100737a0",
+      "rva": "0x000737a0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetGlyphData",
+      "va": "0x10073800",
+      "rva": "0x00073800",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetTextMetricsA",
+      "va": "0x100737d0",
+      "rva": "0x000737d0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::GetTextMetricsW",
+      "va": "0x100737e0",
+      "rva": "0x000737e0",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::OnLostDevice",
+      "va": "0x10073860",
+      "rva": "0x00073860",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::OnResetDevice",
+      "va": "0x10073870",
+      "rva": "0x00073870",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::PreloadCharacters",
+      "va": "0x10073810",
+      "rva": "0x00073810",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::PreloadGlyphs",
+      "va": "0x10073820",
+      "rva": "0x00073820",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::PreloadTextA",
+      "va": "0x10073830",
+      "rva": "0x00073830",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::PreloadTextW",
+      "va": "0x10073840",
+      "rva": "0x00073840",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::QueryInterface",
+      "va": "0x10073770",
+      "rva": "0x00073770",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CFontWrapper::Release",
+      "va": "0x10073790",
+      "rva": "0x00073790",
+      "module": "samp.dll",
+      "evidence": "Native vtable and instructions; font-v64 and font-sprite-v63 exports"
+    },
+    {
+      "name": "CGame::CGame",
+      "va": "0x1009fdc0",
+      "rva": "0x0009fdc0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::DoesHeadMoves",
+      "va": "0x10002d70",
+      "rva": "0x00002d70",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::EnableClock",
+      "va": "0x100a1280",
+      "rva": "0x000a1280",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::GetAudio",
+      "va": "0x10002d50",
+      "rva": "0x00002d50",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::GetCamera",
+      "va": "0x10002d60",
+      "rva": "0x00002d60",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::GetDevice",
+      "va": "0x100a1190",
+      "rva": "0x000a1190",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::GetPlayerPed",
+      "va": "0x10001010",
+      "rva": "0x00001010",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CGame::GetWindowHandle",
+      "va": "0x10002d40",
+      "rva": "0x00002d40",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::InitGame",
+      "va": "0x100a06d0",
+      "rva": "0x000a06d0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "CGame::IsMenuVisible",
+      "va": "0x100a0760",
+      "rva": "0x000a0760",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CGame::IsStarted",
+      "va": "0x100a0770",
+      "rva": "0x000a0770",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::ProcessInputEnabling",
+      "va": "0x100a0410",
+      "rva": "0x000a0410",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "CGame::SetCursorMode",
+      "va": "0x100a0530",
+      "rva": "0x000a0530",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "CGame::SetFrameLimiter",
+      "va": "0x100a09f0",
+      "rva": "0x000a09f0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "ChatImeActive",
+      "va": "0x10085e60",
+      "rva": "0x00085e60",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-dependencies-v52-proof.json native operand"
+    },
+    {
+      "name": "ChatInputState::IsActive",
+      "va": "0x10069250",
+      "rva": "0x00069250",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "ChatIsHexDigit",
+      "va": "0x100b5950",
+      "rva": "0x000b5950",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-dependencies-v52-proof.json"
+    },
+    {
+      "name": "ChatParseColorTag",
+      "va": "0x100b59c0",
+      "rva": "0x000b59c0",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-dependencies-v52-proof.json"
+    },
+    {
+      "name": "ChatPrepareMessage",
+      "va": "0x100b5c40",
+      "rva": "0x000b5c40",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "ChatStripColorTags",
+      "va": "0x100b5c00",
+      "rva": "0x000b5c00",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "CInput::AddCommand",
+      "va": "0x100691b0",
+      "rva": "0x000691b0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::AddRecall",
+      "va": "0x10069010",
+      "rva": "0x00069010",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::CInput",
+      "va": "0x10068e10",
+      "rva": "0x00068e10",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::Close",
+      "va": "0x10068fc0",
+      "rva": "0x00068fc0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::EnableCursor",
+      "va": "0x10069130",
+      "rva": "0x00069130",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::GetCommandHandler",
+      "va": "0x10069150",
+      "rva": "0x00069150",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::GetRect",
+      "va": "0x10068e80",
+      "rva": "0x00068e80",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::IsActive",
+      "va": "0x10069250",
+      "rva": "0x00069250",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "CInput::MsgProc",
+      "va": "0x10069210",
+      "rva": "0x00069210",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::Open",
+      "va": "0x10068ec0",
+      "rva": "0x00068ec0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::ProcessInput",
+      "va": "0x10069410",
+      "rva": "0x00069410",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::RecallDown",
+      "va": "0x100690e0",
+      "rva": "0x000690e0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::RecallUp",
+      "va": "0x10069070",
+      "rva": "0x00069070",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::ResetDialogControls",
+      "va": "0x10069280",
+      "rva": "0x00069280",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInput::Send",
+      "va": "0x10069340",
+      "rva": "0x00069340",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CInput::SetDefaultCommand",
+      "va": "0x100691a0",
+      "rva": "0x000691a0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json"
+    },
+    {
+      "name": "CInputConfig::GetIntValue",
+      "va": "0x10065890",
+      "rva": "0x00065890",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CInputConfig::GetStringValue",
+      "va": "0x100658c0",
+      "rva": "0x000658c0",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "CInputGame::SetCursorMode",
+      "va": "0x100a0530",
+      "rva": "0x000a0530",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "CPed::~CPed",
+      "va": "0x100b0ea0",
+      "rva": "0x000b0ea0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPed::CPed",
+      "va": "0x100ab690",
+      "rva": "0x000ab690",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPed::Destroy",
+      "va": "0x100b0ba0",
+      "rva": "0x000b0ba0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPed::IsInVehicle",
+      "va": "0x100aba90",
+      "rva": "0x000aba90",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPed::IsPassenger",
+      "va": "0x100abbe0",
+      "rva": "0x000abbe0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CUniBuffer::SetText",
+      "va": "0x1009ba00",
+      "rva": "0x0009ba00",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
+    },
+    {
+      "name": "CVehicle::SetColor",
+      "va": "0x100b6e20",
+      "rva": "0x000b6e20",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "CVehiclePool::Find",
+      "va": "0x1001e650",
+      "rva": "0x0001e650",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "CVehiclePool::Get",
+      "va": "0x10001120",
+      "rva": "0x00001120",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "DXUTBlendColor::Init",
+      "va": "0x10085e90",
+      "rva": "0x00085e90",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "DXUTFindDXSDKMediaFileCch",
+      "va": "0x100972b0",
+      "rva": "0x000972b0",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "DXUTFindMediaSearchParentDirs",
+      "va": "0x10096320",
+      "rva": "0x00096320",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "DXUTFindMediaSearchTypicalDirs",
+      "va": "0x100961c0",
+      "rva": "0x000961c0",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "FontAnsiToWide",
+      "va": "0x10073440",
+      "rva": "0x00073440",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "FontGetDialogHeight",
+      "va": "0x100c69e0",
+      "rva": "0x000c69e0",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-theme/theme-helpers/theme-font-v71 exports and instructions"
+    },
+    {
+      "name": "FontGetFace",
+      "va": "0x100c6a30",
+      "rva": "0x000c6a30",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "FontGetHeight",
+      "va": "0x100c6950",
+      "rva": "0x000c6950",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "FontGetWeight",
+      "va": "0x100c6a00",
+      "rva": "0x000c6a00",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "FontIsWideHexDigit",
+      "va": "0x100b5980",
+      "rva": "0x000b5980",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "FontNextGlyphColor",
+      "va": "0x10073580",
+      "rva": "0x00073580",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "FontParseWideColorTag",
+      "va": "0x100b5ad0",
+      "rva": "0x000b5ad0",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_aimCameraZoomRange",
+      "va": "0x1011e32c",
+      "rva": "0x0011e32c",
+      "module": "samp.dll",
+      "evidence": "FMUL/FADD operands in ApplyPlayerCamera RVA 0x9c2d0; initialized float 35"
+    },
+    {
+      "name": "g_aimInternal",
+      "va": "0x101419b0",
+      "rva": "0x001419b0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimInternalAspect",
+      "va": "0x101419b8",
+      "rva": "0x001419b8",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimInternalCameraMode",
+      "va": "0x1015195c",
+      "rva": "0x0015195c",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimInternalStats",
+      "va": "0x101419b4",
+      "rva": "0x001419b4",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimInternalZoom",
+      "va": "0x101419bc",
+      "rva": "0x001419bc",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimLocal",
+      "va": "0x10182288",
+      "rva": "0x00182288",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimLocalAspect",
+      "va": "0x10184a18",
+      "rva": "0x00184a18",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimLocalSkills",
+      "va": "0x10184a1c",
+      "rva": "0x00184a1c",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimLocalZoom",
+      "va": "0x10181e60",
+      "rva": "0x00181e60",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimPlayerAspect",
+      "va": "0x10184a48",
+      "rva": "0x00184a48",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimPlayerCameraMode",
+      "va": "0x10181e68",
+      "rva": "0x00181e68",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimPlayers",
+      "va": "0x101822b8",
+      "rva": "0x001822b8",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimPlayerSkills",
+      "va": "0x10184d90",
+      "rva": "0x00184d90",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_aimPlayerZoom",
+      "va": "0x10181f40",
+      "rva": "0x00181f40",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_animationKeys",
+      "va": "0x101871a8",
+      "rva": "0x001871a8",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_animationNames",
+      "va": "0x101419d0",
+      "rva": "0x001419d0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_chatScreenWidth",
+      "va": "0xc17044",
+      "rva": null,
+      "module": "GTA SA",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "g_driverCompareFlag",
+      "va": "0x10156998",
+      "rva": "0x00156998",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_driverPed",
+      "va": "0x10156980",
+      "rva": "0x00156980",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_driverScriptThread",
+      "va": "0x1015699c",
+      "rva": "0x0015699c",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_dxutMediaSearchPath",
+      "va": "0x10181ac8",
+      "rva": "0x00181ac8",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "g_entityTeleportCommand",
+      "va": "0x1011e604",
+      "rva": "0x0011e604",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_fontColorSprite",
+      "va": "0x10140bd8",
+      "rva": "0x00140bd8",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_fontGlyphColor",
+      "va": "0x10174d20",
+      "rva": "0x00174d20",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_fontGlyphCursor",
+      "va": "0x10174d34",
+      "rva": "0x00174d34",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_fontOriginalText",
+      "va": "0x1017e97c",
+      "rva": "0x0017e97c",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_fontRealSprite",
+      "va": "0x10174d30",
+      "rva": "0x00174d30",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_fontStrippedText",
+      "va": "0x1017e980",
+      "rva": "0x0017e980",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_fontWideText",
+      "va": "0x10174d38",
+      "rva": "0x00174d38",
+      "module": "samp.dll",
+      "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_gameCustomStreamRead",
+      "va": "0x1018f6b4",
+      "rva": "0x0018f6b4",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "g_gameD3DDevice",
+      "va": "0x102ac9d0",
+      "rva": "0x002ac9d0",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameDefaultModelFlags",
+      "va": "0x101549a0",
+      "rva": "0x001549a0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameExceptionCount",
+      "va": "0x10163a70",
+      "rva": "0x00163a70",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_gameFrameNodeError",
+      "va": "0x1018f388",
+      "rva": "0x0018f388",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "g_gameKeyCall",
+      "va": "0x10151918",
+      "rva": "0x00151918",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameModelFlags",
+      "va": "0x102a8e70",
+      "rva": "0x002a8e70",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameModelRecords",
+      "va": "0x1020ca70",
+      "rva": "0x0020ca70",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameModelReferenceSites",
+      "va": "0x101546f8",
+      "rva": "0x001546f8",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameMouseCallEU",
+      "va": "0x10151920",
+      "rva": "0x00151920",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameMouseCallUS",
+      "va": "0x10151928",
+      "rva": "0x00151928",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameMouseDummy",
+      "va": "0x1018e1c8",
+      "rva": "0x0018e1c8",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gamePatchStreamBytes",
+      "va": "0x101546c0",
+      "rva": "0x001546c0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_gamePatchValue1546c8",
+      "va": "0x101546c8",
+      "rva": "0x001546c8",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_gamePatchValue1546cc",
+      "va": "0x101546cc",
+      "rva": "0x001546cc",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_gamePatchValue1546f0",
+      "va": "0x101546f0",
+      "rva": "0x001546f0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_gamePatchValue1546f4",
+      "va": "0x101546f4",
+      "rva": "0x001546f4",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_gamePedModels",
+      "va": "0x102075b0",
+      "rva": "0x002075b0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gamePedReferenceSites",
+      "va": "0x1015498c",
+      "rva": "0x0015498c",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gamePhysicalMegabytes",
+      "va": "0x102a9270",
+      "rva": "0x002a9270",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "g_gamePlayerControllerState",
+      "va": "0x102aa0f0",
+      "rva": "0x002aa0f0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_gamePlayerPeds",
+      "va": "0x102a9da8",
+      "rva": "0x002a9da8",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_gamePoolPatchOne",
+      "va": "0x101546b0",
+      "rva": "0x001546b0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gamePoolPatchTwo",
+      "va": "0x101546b8",
+      "rva": "0x001546b8",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameScanDirectEU",
+      "va": "0x10154768",
+      "rva": "0x00154768",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameScanDirectUSA",
+      "va": "0x10154730",
+      "rva": "0x00154730",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameScanList",
+      "va": "0x101e04b0",
+      "rva": "0x001e04b0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameScanOperandEU",
+      "va": "0x10154880",
+      "rva": "0x00154880",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameScanOperandUSA",
+      "va": "0x101547a0",
+      "rva": "0x001547a0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameScanSecondSites",
+      "va": "0x10154960",
+      "rva": "0x00154960",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameStartupTitle",
+      "va": "0x1011ee84",
+      "rva": "0x0011ee84",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "g_gameStreamBuffer",
+      "va": "0x1018f6b8",
+      "rva": "0x0018f6b8",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "g_gameStreamingBytes",
+      "va": "0x102a9274",
+      "rva": "0x002a9274",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "g_gameTextBuffer",
+      "va": "0x1018e1cc",
+      "rva": "0x0018e1cc",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_gameUsedPlayerSlots",
+      "va": "0x1018e1d8",
+      "rva": "0x0018e1d8",
+      "module": "samp.dll",
+      "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "g_gameVersion",
+      "va": "0x102ac9b8",
+      "rva": "0x002ac9b8",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameVersionAddressA",
+      "va": "0x1018f498",
+      "rva": "0x0018f498",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_gameVersionAddressB",
+      "va": "0x1018f49c",
+      "rva": "0x0018f49c",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_inputAnsiText",
+      "va": "0x1017fbb8",
+      "rva": "0x0017fbb8",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "g_inputCommandRpcId",
+      "va": "0x1011c310",
+      "rva": "0x0011c310",
+      "module": "samp.dll",
+      "evidence": "Reviewed native entry/data; analysis/INPUT-RECOVERY-V62.md or GUI-RECOVERY-V52.md"
+    },
+    {
+      "name": "g_inputGameWindow",
+      "va": "0xc97c1c",
+      "rva": null,
+      "module": "GTA SA",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "g_inputImeActivityTick",
+      "va": "0x1017f698",
+      "rva": "0x0017f698",
+      "module": "samp.dll",
+      "evidence": "Native Initialize writes 0x1017f698; activity reads same DWORD"
+    },
+    {
+      "name": "g_inputMaskedText",
+      "va": "0x10180400",
+      "rva": "0x00180400",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-font/createfont-v68 and buffer-state-v67 exports; ANSI font overloads"
+    },
+    {
+      "name": "g_keysDriveLeft",
+      "va": "0x10152ac4",
+      "rva": "0x00152ac4",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_keysDriveRight",
+      "va": "0x10152ac8",
+      "rva": "0x00152ac8",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_keysInternal",
+      "va": "0x10152ac0",
+      "rva": "0x00152ac0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_keysLocal",
+      "va": "0x10190660",
+      "rva": "0x00190660",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_keysPlayers",
+      "va": "0x10190798",
+      "rva": "0x00190798",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_keysSavedDriveLeft",
+      "va": "0x101a0440",
+      "rva": "0x001a0440",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_keysSavedDriveRight",
+      "va": "0x101a0441",
+      "rva": "0x001a0441",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_pChat",
+      "va": "0x102aca10",
+      "rva": "0x002aca10",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "g_pChatConfig",
+      "va": "0x102aca0c",
+      "rva": "0x002aca0c",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "g_pChatGame",
+      "va": "0x102aca3c",
+      "rva": "0x002aca3c",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "g_pChatInput",
+      "va": "0x102aca14",
+      "rva": "0x002aca14",
+      "module": "samp.dll",
+      "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "g_pConfig",
+      "va": "0x102aca0c",
+      "rva": "0x002aca0c",
+      "module": "samp.dll",
+      "evidence": "Shared config pointer operand in Chat/Input/font settings"
+    },
+    {
+      "name": "g_pedCommand0446",
+      "va": "0x1011ef90",
+      "rva": "0x0011ef90",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_pedCommand087e",
+      "va": "0x1011f0d0",
+      "rva": "0x0011f0d0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_pGame",
+      "va": "0x102aca3c",
+      "rva": "0x002aca3c",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "g_pInput",
+      "va": "0x102aca14",
+      "rva": "0x002aca14",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "g_pInputChat",
+      "va": "0x102aca10",
+      "rva": "0x002aca10",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "g_pInputConfig",
+      "va": "0x102aca0c",
+      "rva": "0x002aca0c",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "g_pInputGame",
+      "va": "0x102aca3c",
+      "rva": "0x002aca3c",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "g_pInputNetGame",
+      "va": "0x102aca24",
+      "rva": "0x002aca24",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "g_playerColors",
+      "va": "0x1018f6c0",
+      "rva": "0x0018f6c0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_playerDefaultColors",
+      "va": "0x10151b20",
+      "rva": "0x00151b20",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_pNetGame",
+      "va": "0x102aca24",
+      "rva": "0x002aca24",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "g_scmEventParameters",
+      "va": "0x10156988",
+      "rva": "0x00156988",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "g_scmEventRpcId",
+      "va": "0x10117690",
+      "rva": "0x00117690",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "g_scriptBuffer",
+      "va": "0x102a92f0",
+      "rva": "0x002a92f0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_scriptLastOpcode",
+      "va": "0x102a93f4",
+      "rva": "0x002a93f4",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_scriptLocalDebug",
+      "va": "0x102a93f8",
+      "rva": "0x002a93f8",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_scriptProcessOneCommand",
+      "va": "0x10155390",
+      "rva": "0x00155390",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_scriptThread",
+      "va": "0x102a93f0",
+      "rva": "0x002a93f0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_scriptVariables",
+      "va": "0x102a92a8",
+      "rva": "0x002a92a8",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "GameAnimationKey",
+      "va": "0x100b4080",
+      "rva": "0x000b4080",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameApplyInGamePatches",
+      "va": "0x100aaad0",
+      "rva": "0x000aaad0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GameAssignPlayerPed",
+      "va": "0x100b3f20",
+      "rva": "0x000b3f20",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "GameBufferReader::Read",
+      "va": "0x100bc1d0",
+      "rva": "0x000bc1d0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameClearMouseDelta",
+      "va": "0x100a02f0",
+      "rva": "0x000a02f0",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameDataReadHook",
+      "va": "0x100a5c90",
+      "rva": "0x000a5c90",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameDisableMouseCalls",
+      "va": "0x100a03c0",
+      "rva": "0x000a03c0",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameDisableMousePointers",
+      "va": "0x100a0320",
+      "rva": "0x000a0320",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameExceptionFilter",
+      "va": "0x10060470",
+      "rva": "0x00060470",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "GameFindAnimation",
+      "va": "0x1009c870",
+      "rva": "0x0009c870",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameFindLocalPed",
+      "va": "0x100b3860",
+      "rva": "0x000b3860",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "GameFrameNodeNameHook",
+      "va": "0x100a5c10",
+      "rva": "0x000a5c10",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameGetAnimationName",
+      "va": "0x1009c950",
+      "rva": "0x0009c950",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameIncreasePoolLimits",
+      "va": "0x100aa180",
+      "rva": "0x000aa180",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameInitializeAnimationKeys",
+      "va": "0x1009c980",
+      "rva": "0x0009c980",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameInitializeVersionPatches",
+      "va": "0x100aa300",
+      "rva": "0x000aa300",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameInstallEventOpcodes",
+      "va": "0x10002130",
+      "rva": "0x00002130",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GameLoadDictionaryTexture",
+      "va": "0x100b2860",
+      "rva": "0x000b2860",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameParseStreamData",
+      "va": "0x100b6610",
+      "rva": "0x000b6610",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GamePlayerDriverOpcode",
+      "va": "0x10001c60",
+      "rva": "0x00001c60",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GamePoolVehicleGetAt",
+      "va": "0x100b37d0",
+      "rva": "0x000b37d0",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "GameProcessOutgoingEvent",
+      "va": "0x10001d10",
+      "rva": "0x00001d10",
+      "module": "samp.dll",
+      "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "GameReadStream",
+      "va": "0x100b1a40",
+      "rva": "0x000b1a40",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameRelocateModelFlags",
+      "va": "0x100aa980",
+      "rva": "0x000aa980",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameRelocateModelRecords",
+      "va": "0x100aa630",
+      "rva": "0x000aa630",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameRelocatePedModels",
+      "va": "0x100aa5e0",
+      "rva": "0x000aa5e0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameRelocateScanList",
+      "va": "0x100aa6a0",
+      "rva": "0x000aa6a0",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameRestoreMousePointers",
+      "va": "0x100a0370",
+      "rva": "0x000a0370",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameSetEventOpcode",
+      "va": "0x100020c0",
+      "rva": "0x000020c0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GameTxdFind",
+      "va": "0x100b3480",
+      "rva": "0x000b3480",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdPop",
+      "va": "0x100b3520",
+      "rva": "0x000b3520",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdPush",
+      "va": "0x100b3510",
+      "rva": "0x000b3510",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdReadTexture",
+      "va": "0x100b3540",
+      "rva": "0x000b3540",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdSetCurrent",
+      "va": "0x100b3530",
+      "rva": "0x000b3530",
+      "module": "samp.dll",
+      "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameUnprotect",
+      "va": "0x100aa0b0",
+      "rva": "0x000aa0b0",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameUpdateMouse",
+      "va": "0x100a0310",
+      "rva": "0x000a0310",
+      "module": "samp.dll",
+      "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameUppercaseAscii",
+      "va": "0x10017440",
+      "rva": "0x00017440",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameWaitUnprotect",
+      "va": "0x100aa060",
+      "rva": "0x000aa060",
+      "module": "samp.dll",
+      "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameWorldAdd",
+      "va": "0x100b3720",
+      "rva": "0x000b3720",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "GameWorldRemove",
+      "va": "0x100b3740",
+      "rva": "0x000b3740",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "InputBufferAnsiToWide",
+      "va": "0x1009b700",
+      "rva": "0x0009b700",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
+    },
+    {
+      "name": "InputDxutMediaSearchPath",
+      "va": "0x10093290",
+      "rva": "0x00093290",
+      "module": "samp.dll",
+      "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "InputEditBox::GetText",
+      "va": "0x100850d0",
+      "rva": "0x000850d0",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "InputEnableIme",
+      "va": "0x10085940",
+      "rva": "0x00085940",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "InputMaskWideText",
+      "va": "0x100853a0",
+      "rva": "0x000853a0",
+      "module": "samp.dll",
+      "evidence": "Read-only native dxut-font/createfont-v68 and buffer-state-v67 exports; ANSI font overloads"
+    },
+    {
+      "name": "InputResetIme",
+      "va": "0x10085460",
+      "rva": "0x00085460",
+      "module": "samp.dll",
+      "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "InputWideToAnsi",
+      "va": "0x10085060",
+      "rva": "0x00085060",
+      "module": "samp.dll",
+      "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
+    },
+    {
+      "name": "K_DecodeString",
+      "va": "0x1009d880",
+      "rva": "0x0009d880",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "K_EncodeString",
+      "va": "0x1009d840",
+      "rva": "0x0009d840",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "KeyStuff::ApplyLocalKeys",
+      "va": "0x100a7040",
+      "rva": "0x000a7040",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::ApplyPlayerKeys",
+      "va": "0x100a70a0",
+      "rva": "0x000a70a0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::GetInternalKeys",
+      "va": "0x100a70f0",
+      "rva": "0x000a70f0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::GetLocalKeys",
+      "va": "0x100a7100",
+      "rva": "0x000a7100",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::GetPlayerKeys",
+      "va": "0x100a7110",
+      "rva": "0x000a7110",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::Initialize",
+      "va": "0x100a6fe0",
+      "rva": "0x000a6fe0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::ResetInternalKeys",
+      "va": "0x100a7140",
+      "rva": "0x000a7140",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::ResetKeys",
+      "va": "0x100a7120",
+      "rva": "0x000a7120",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::SetKeys",
+      "va": "0x100a7080",
+      "rva": "0x000a7080",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "KeyStuff::UpdateKeys",
+      "va": "0x100a7000",
+      "rva": "0x000a7000",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "PlayerColors::Get",
+      "va": "0x100a6f70",
+      "rva": "0x000a6f70",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "PlayerColors::Initialize",
+      "va": "0x100a6fc0",
+      "rva": "0x000a6fc0",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "PlayerColors::Set",
+      "va": "0x100a6f50",
+      "rva": "0x000a6f50",
+      "module": "samp.dll",
+      "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "Scripting::ExecBuffer",
+      "va": "0x100b1ed0",
+      "rva": "0x000b1ed0",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "Scripting::Initialize",
+      "va": "0x100b2150",
+      "rva": "0x000b2150",
+      "module": "samp.dll",
+      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "Scripting::ProcessCommand",
+      "va": "0x100b1f10",
+      "rva": "0x000b1f10",
+      "module": "samp.dll",
+      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "Util_itoa",
+      "va": "0x10017600",
+      "rva": "0x00017600",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "Util_strrev",
+      "va": "0x100175b0",
+      "rva": "0x000175b0",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "Util_toupper",
+      "va": "0x10017360",
+      "rva": "0x00017360",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "Util_UrlUnencode",
+      "va": "0x100172e0",
+      "rva": "0x000172e0",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "Util_wildcmp",
+      "va": "0x10017470",
+      "rva": "0x00017470",
+      "module": "samp.dll",
+      "evidence": "analysis/runutil-verification.json"
+    }
+  ],
+  "annotations": [
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "g_pGame",
+      "rva": 2804284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "g_pInput",
+      "rva": 2804244,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "g_chatScreenWidth",
+      "rva": null,
+      "module": "GTA SA"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::GetMode",
+      "rva": 396592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::SwitchMode",
+      "rva": 396608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::RecalcFontSize",
+      "rva": 420752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::OnLostDevice",
+      "rva": 420880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::UpdateScrollbar",
+      "rva": 420976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::SetPageSize",
+      "rva": 421136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::PageUp",
+      "rva": 421184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::PageDown",
+      "rva": 421280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::ScrollToBottom",
+      "rva": 421376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::Scroll",
+      "rva": 421424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::FilterOutInvalidChars",
+      "rva": 421520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::PushBack",
+      "rva": 421568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::Log",
+      "rva": 422464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::ResetDialogControls",
+      "rva": 422672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::AddEntry",
+      "rva": 423504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::AddChatMessage",
+      "rva": 424592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::AddMessage",
+      "rva": 424928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::AddInfoMessage",
+      "rva": 424672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::AddDebugMessage",
+      "rva": 424800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::CChat",
+      "rva": 425456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::Draw",
+      "rva": 424048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::RenderToSurface",
+      "rva": 424256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::OnResetDevice",
+      "rva": 425024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::Render",
+      "rva": 422832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.cpp",
+      "name": "CChat::RenderEntry",
+      "rva": 421600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::CChat",
+      "rva": 425456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::GetMode",
+      "rva": 396592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::SwitchMode",
+      "rva": 396608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::RecalcFontSize",
+      "rva": 420752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::OnLostDevice",
+      "rva": 420880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::UpdateScrollbar",
+      "rva": 420976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::SetPageSize",
+      "rva": 421136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::PageUp",
+      "rva": 421184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::PageDown",
+      "rva": 421280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::ScrollToBottom",
+      "rva": 421376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::Scroll",
+      "rva": 421424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::FilterOutInvalidChars",
+      "rva": 421520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::PushBack",
+      "rva": 421568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::Log",
+      "rva": 422464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::ResetDialogControls",
+      "rva": 422672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::AddEntry",
+      "rva": 423504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::AddChatMessage",
+      "rva": 424592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::AddMessage",
+      "rva": 424928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::AddInfoMessage",
+      "rva": 424672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::AddDebugMessage",
+      "rva": 424800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::RenderEntry",
+      "rva": 421600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::Render",
+      "rva": 422832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::Draw",
+      "rva": 424048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::RenderToSurface",
+      "rva": 424256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/chatwindow.h",
+      "name": "CChat::OnResetDevice",
+      "rva": 425024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::CInput",
+      "rva": 429584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::GetRect",
+      "rva": 429696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::Open",
+      "rva": 429760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::AddRecall",
+      "rva": 430096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::RecallUp",
+      "rva": 430192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::RecallDown",
+      "rva": 430304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::EnableCursor",
+      "rva": 430384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::GetCommandHandler",
+      "rva": 430416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::SetDefaultCommand",
+      "rva": 430496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::AddCommand",
+      "rva": 430512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::MsgProc",
+      "rva": 430608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::ResetDialogControls",
+      "rva": 430720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.cpp",
+      "name": "CInput::Close",
+      "rva": 430016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::CInput",
+      "rva": 429584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::GetRect",
+      "rva": 429696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::Open",
+      "rva": 429760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::Close",
+      "rva": 430016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::AddRecall",
+      "rva": 430096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::RecallUp",
+      "rva": 430192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::RecallDown",
+      "rva": 430304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::EnableCursor",
+      "rva": 430384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::GetCommandHandler",
+      "rva": 430416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::SetDefaultCommand",
+      "rva": 430496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::AddCommand",
+      "rva": 430512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::MsgProc",
+      "rva": 430608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::ResetDialogControls",
+      "rva": 430720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::Send",
+      "rva": 430912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::ProcessInput",
+      "rva": 431120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow.h",
+      "name": "CInput::IsActive",
+      "rva": 430672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow_process.cpp",
+      "name": "CInput::ProcessInput",
+      "rva": 431120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow_send.cpp",
+      "name": "g_pNetGame",
+      "rva": 2804260,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow_send.cpp",
+      "name": "g_inputCommandRpcId",
+      "rva": 1164048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/cmdwindow_send.cpp",
+      "name": "CInput::Send",
+      "rva": 430912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "g_pConfig",
+      "rva": 2804236,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::CConfig",
+      "rva": 417376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::~CConfig",
+      "rva": 415360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::FindFirstFree",
+      "rva": 415424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::GetIndex",
+      "rva": 415504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::DoesExist",
+      "rva": 415664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::CreateEntry",
+      "rva": 415696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::GetIntValue",
+      "rva": 415888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::GetStringValue",
+      "rva": 415936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::GetFloatValue",
+      "rva": 415984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::Free",
+      "rva": 416032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::GetValueType",
+      "rva": 416128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::GetType",
+      "rva": 416224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::Save",
+      "rva": 416336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::WriteIntValue",
+      "rva": 416512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::WriteStringValue",
+      "rva": 416608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::WriteFloatValue",
+      "rva": 416768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::Write",
+      "rva": 416864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.cpp",
+      "name": "CConfig::Load",
+      "rva": 417008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::CConfig",
+      "rva": 417376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::~CConfig",
+      "rva": 415360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::FindFirstFree",
+      "rva": 415424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetIndex",
+      "rva": 415504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::DoesExist",
+      "rva": 415664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::CreateEntry",
+      "rva": 415696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetIntValue",
+      "rva": 415888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetStringValue",
+      "rva": 415936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetFloatValue",
+      "rva": 415984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::Free",
+      "rva": 416032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetValueType",
+      "rva": 416128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetEntry",
+      "rva": 416176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::GetType",
+      "rva": 416224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::Save",
+      "rva": 416336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::WriteIntValue",
+      "rva": 416512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::WriteStringValue",
+      "rva": 416608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::WriteFloatValue",
+      "rva": 416768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::Write",
+      "rva": 416864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "CConfig::Load",
+      "rva": 417008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/config.h",
+      "name": "g_pConfig",
+      "rva": 2804236,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_dialog_native.cpp",
+      "name": "CDXUTDialog::DrawTextA",
+      "rva": 576224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_hybrid_native.cpp",
+      "name": "CDXUTDialogResourceManager::AddFont",
+      "rva": 575728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_hybrid_native.cpp",
+      "name": "CDXUTDialog::SetFont",
+      "rva": 576080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_hybrid_native.cpp",
+      "name": "CDXUTDialogResourceManager::CreateFont",
+      "rva": 573808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.cpp",
+      "name": "g_dxutMediaSearchPath",
+      "rva": 1579720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.cpp",
+      "name": "InputDxutMediaSearchPath",
+      "rva": 602768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.cpp",
+      "name": "DXUTFindDXSDKMediaFileCch",
+      "rva": 619184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.cpp",
+      "name": "DXUTFindMediaSearchTypicalDirs",
+      "rva": 614848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.cpp",
+      "name": "DXUTFindMediaSearchParentDirs",
+      "rva": 615200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.h",
+      "name": "DXUTFindDXSDKMediaFileCch",
+      "rva": 619184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.h",
+      "name": "DXUTFindMediaSearchTypicalDirs",
+      "rva": 614848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.h",
+      "name": "DXUTFindMediaSearchParentDirs",
+      "rva": 615200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.h",
+      "name": "InputDxutMediaSearchPath",
+      "rva": 602768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_media_native.h",
+      "name": "g_dxutMediaSearchPath",
+      "rva": 1579720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_text_native.cpp",
+      "name": "InputBufferAnsiToWide",
+      "rva": 636672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_text_native.cpp",
+      "name": "CUniBuffer::SetText",
+      "rva": 637440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_text_native.cpp",
+      "name": "CDXUTEditBox::SetText",
+      "rva": 544768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_text_native.cpp",
+      "name": "InputEditBox::GetText",
+      "rva": 544976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_text_native.cpp",
+      "name": "CDXUTDialog::AddIMEEditBox",
+      "rva": 592688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_texture_native.cpp",
+      "name": "CDXUTDialogResourceManager::AddTexture",
+      "rva": 563152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_texture_native.cpp",
+      "name": "CDXUTDialog::SetTexture",
+      "rva": 563344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_texture_native.cpp",
+      "name": "CDXUTDialogResourceManager::CreateTexture",
+      "rva": 554160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_theme_native.cpp",
+      "name": "FontGetDialogHeight",
+      "rva": 813536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_theme_native.cpp",
+      "name": "CDXUTDialog::InitFont",
+      "rva": 577984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_theme_native.cpp",
+      "name": "CDXUTDialog::InitDefaultElements",
+      "rva": 578048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_theme_native.h",
+      "name": "FontGetDialogHeight",
+      "rva": 813536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.cpp",
+      "name": "g_scmEventRpcId",
+      "rva": 1144464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.cpp",
+      "name": "g_scmEventParameters",
+      "rva": 1403272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.cpp",
+      "name": "GameProcessOutgoingEvent",
+      "rva": 7440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.cpp",
+      "name": "GameSetEventOpcode",
+      "rva": 8384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.h",
+      "name": "g_scmEventRpcId",
+      "rva": 1144464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.h",
+      "name": "g_scmEventParameters",
+      "rva": 1403272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.h",
+      "name": "GameProcessOutgoingEvent",
+      "rva": 7440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events.h",
+      "name": "GameSetEventOpcode",
+      "rva": 8384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.cpp",
+      "name": "g_driverPed",
+      "rva": 1403264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.cpp",
+      "name": "g_driverCompareFlag",
+      "rva": 1403288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.cpp",
+      "name": "g_driverScriptThread",
+      "rva": 1403292,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.cpp",
+      "name": "GamePlayerDriverOpcode",
+      "rva": 7264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.h",
+      "name": "g_driverPed",
+      "rva": 1403264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.h",
+      "name": "g_driverCompareFlag",
+      "rva": 1403288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/events_driver.h",
+      "name": "g_driverScriptThread",
+      "rva": 1403292,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::CFonts",
+      "rva": 439600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::~CFonts",
+      "rva": 437056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::OnLostDevice",
+      "rva": 437184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::OnResetDevice",
+      "rva": 437248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::GetTextScreenSize",
+      "rva": 437312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::GetLittleTextScreenSize",
+      "rva": 437488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::DrawText",
+      "rva": 437664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::DrawLittleText",
+      "rva": 438048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.cpp",
+      "name": "CFonts::DrawLicensePlateText",
+      "rva": 438416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::CFonts",
+      "rva": 439600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::~CFonts",
+      "rva": 437056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::OnLostDevice",
+      "rva": 437184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::OnResetDevice",
+      "rva": 437248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::GetTextScreenSize",
+      "rva": 437312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::GetLittleTextScreenSize",
+      "rva": 437488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::DrawText",
+      "rva": 437664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::DrawLittleText",
+      "rva": 438048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::DrawLicensePlateText",
+      "rva": 438416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "CFonts::Reset",
+      "rva": 439072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimCameraZoomRange",
+      "rva": 1172268,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimInternal",
+      "rva": 1317296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimInternalStats",
+      "rva": 1317300,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimInternalAspect",
+      "rva": 1317304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimInternalZoom",
+      "rva": 1317308,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimInternalCameraMode",
+      "rva": 1382748,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimLocal",
+      "rva": 1581704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimPlayers",
+      "rva": 1581752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimLocalZoom",
+      "rva": 1580640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimLocalAspect",
+      "rva": 1591832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimPlayerZoom",
+      "rva": 1580864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimPlayerAspect",
+      "rva": 1591880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimPlayerCameraMode",
+      "rva": 1580648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimLocalSkills",
+      "rva": 1591836,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "g_aimPlayerSkills",
+      "rva": 1592720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::UpdateCamera",
+      "rva": 639552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ApplyLocalCamera",
+      "rva": 639584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::SetPlayerCamera",
+      "rva": 639616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::GetAspectRatio",
+      "rva": 639648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::GetCameraExtZoom",
+      "rva": 639664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ApplyPlayerCamera",
+      "rva": 639696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::SetPlayerCameraMode",
+      "rva": 639760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::GetPlayerCameraMode",
+      "rva": 639792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::GetCameraMode",
+      "rva": 639808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::Initialize",
+      "rva": 639824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::UpdateAim",
+      "rva": 639936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ApplyLocalAim",
+      "rva": 639968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::GetInternalAim",
+      "rva": 640000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::SetAim",
+      "rva": 640016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ApplyPlayerAim",
+      "rva": 640064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::GetPlayerAim",
+      "rva": 640112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::SetPlayerSkill",
+      "rva": 640144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::UpdateLocalSkills",
+      "rva": 640432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ApplyLocalSkills",
+      "rva": 640576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ResetLocalSkills",
+      "rva": 640784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.cpp",
+      "name": "AimStuff::ApplyPlayerSkills",
+      "rva": 640928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimInternal",
+      "rva": 1317296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimInternalStats",
+      "rva": 1317300,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimInternalAspect",
+      "rva": 1317304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimInternalZoom",
+      "rva": 1317308,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimInternalCameraMode",
+      "rva": 1382748,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimLocal",
+      "rva": 1581704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimPlayers",
+      "rva": 1581752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimLocalZoom",
+      "rva": 1580640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimLocalAspect",
+      "rva": 1591832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimPlayerZoom",
+      "rva": 1580864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimPlayerAspect",
+      "rva": 1591880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimPlayerCameraMode",
+      "rva": 1580648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimLocalSkills",
+      "rva": 1591836,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "g_aimPlayerSkills",
+      "rva": 1592720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::UpdateCamera",
+      "rva": 639552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ApplyLocalCamera",
+      "rva": 639584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::SetPlayerCamera",
+      "rva": 639616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::GetAspectRatio",
+      "rva": 639648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::GetCameraExtZoom",
+      "rva": 639664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ApplyPlayerCamera",
+      "rva": 639696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::SetPlayerCameraMode",
+      "rva": 639760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::GetPlayerCameraMode",
+      "rva": 639792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::GetCameraMode",
+      "rva": 639808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::Initialize",
+      "rva": 639824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::UpdateAim",
+      "rva": 639936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ApplyLocalAim",
+      "rva": 639968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::GetInternalAim",
+      "rva": 640000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::SetAim",
+      "rva": 640016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ApplyPlayerAim",
+      "rva": 640064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::GetPlayerAim",
+      "rva": 640112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::SetPlayerSkill",
+      "rva": 640144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::UpdateLocalSkills",
+      "rva": 640432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ApplyLocalSkills",
+      "rva": 640576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ResetLocalSkills",
+      "rva": 640784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/aimstuff.h",
+      "name": "AimStuff::ApplyPlayerSkills",
+      "rva": 640928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "g_animationNames",
+      "rva": 1317328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "g_animationKeys",
+      "rva": 1601960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "GameUppercaseAscii",
+      "rva": 95296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "GameFindAnimation",
+      "rva": 641136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "GameGetAnimationName",
+      "rva": 641360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "GameAnimationKey",
+      "rva": 737408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.cpp",
+      "name": "GameInitializeAnimationKeys",
+      "rva": 641408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "g_animationNames",
+      "rva": 1317328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "g_animationKeys",
+      "rva": 1601960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "GameUppercaseAscii",
+      "rva": 95296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "GameFindAnimation",
+      "rva": 641136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "GameGetAnimationName",
+      "rva": 641360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "GameAnimationKey",
+      "rva": 737408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/animation.h",
+      "name": "GameInitializeAnimationKeys",
+      "rva": 641408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameBufferReader::Read",
+      "rva": 770512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdFind",
+      "rva": 734336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdPush",
+      "rva": 734480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdPop",
+      "rva": 734496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdSetCurrent",
+      "rva": 734512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdReadTexture",
+      "rva": 734528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameLoadDictionaryTexture",
+      "rva": 731232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameParseStreamData",
+      "rva": 747024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameBufferReader::Read",
+      "rva": 770512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameLoadDictionaryTexture",
+      "rva": 731232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdFind",
+      "rva": 734336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdPush",
+      "rva": 734480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdPop",
+      "rva": 734496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdSetCurrent",
+      "rva": 734512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdReadTexture",
+      "rva": 734528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "CEntity::CEntity",
+      "rva": 638176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "GameWorldAdd",
+      "rva": 735008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "GameWorldRemove",
+      "rva": 735040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "CEntity::GetMatrix",
+      "rva": 649552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "CEntity::Teleport",
+      "rva": 650880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "CEntity::Add",
+      "rva": 651584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.cpp",
+      "name": "CEntity::Remove",
+      "rva": 651840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::CEntity",
+      "rva": 638176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Add",
+      "rva": 651584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Remove",
+      "rva": 651840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetMatrix",
+      "rva": 649552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Teleport",
+      "rva": 650880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "GameWorldAdd",
+      "rva": 735008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "GameWorldRemove",
+      "rva": 735040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "g_gameUsedPlayerSlots",
+      "rva": 1630680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CCamera::CCamera",
+      "rva": 654752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::CGame",
+      "rva": 654784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::GetDevice",
+      "rva": 659856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::IsStarted",
+      "rva": 657264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::SetFrameLimiter",
+      "rva": 657904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::EnableClock",
+      "rva": 660096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::GetWindowHandle",
+      "rva": 11584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::GetAudio",
+      "rva": 11600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::GetCamera",
+      "rva": 11616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.cpp",
+      "name": "CGame::DoesHeadMoves",
+      "rva": 11632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CCamera::CCamera",
+      "rva": 654752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::CGame",
+      "rva": 654784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::GetPlayerPed",
+      "rva": 4112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::InitGame",
+      "rva": 657104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::IsMenuVisible",
+      "rva": 657248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::SetCursorMode",
+      "rva": 656688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::ProcessInputEnabling",
+      "rva": 656400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::GetDevice",
+      "rva": 659856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::IsStarted",
+      "rva": 657264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::SetFrameLimiter",
+      "rva": 657904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::EnableClock",
+      "rva": 660096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::GetWindowHandle",
+      "rva": 11584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::GetAudio",
+      "rva": 11600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::GetCamera",
+      "rva": 11616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::DoesHeadMoves",
+      "rva": 11632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "g_gameUsedPlayerSlots",
+      "rva": 1630680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/initialization.cpp",
+      "name": "g_gameTextBuffer",
+      "rva": 1630668,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/initialization.cpp",
+      "name": "CGame::InitGame",
+      "rva": 657104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/initialization.h",
+      "name": "g_gameTextBuffer",
+      "rva": 1630668,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "g_gameD3DDevice",
+      "rva": 2804176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "g_gameVersion",
+      "rva": 2804152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "g_gameMouseDummy",
+      "rva": 1630664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "g_gameKeyCall",
+      "rva": 1382680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "g_gameMouseCallEU",
+      "rva": 1382688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "g_gameMouseCallUS",
+      "rva": 1382696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "GameUnprotect",
+      "rva": 696496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "GameClearMouseDelta",
+      "rva": 656112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "GameUpdateMouse",
+      "rva": 656144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "GameDisableMousePointers",
+      "rva": 656160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "GameRestoreMousePointers",
+      "rva": 656240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "GameDisableMouseCalls",
+      "rva": 656320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "CGame::IsMenuVisible",
+      "rva": 657248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "CGame::SetCursorMode",
+      "rva": 656688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.cpp",
+      "name": "CGame::ProcessInputEnabling",
+      "rva": 656400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "GameUnprotect",
+      "rva": 696496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "GameClearMouseDelta",
+      "rva": 656112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "GameUpdateMouse",
+      "rva": 656144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "GameDisableMousePointers",
+      "rva": 656160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "GameRestoreMousePointers",
+      "rva": 656240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "GameDisableMouseCalls",
+      "rva": 656320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "g_gameD3DDevice",
+      "rva": 2804176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "g_gameVersion",
+      "rva": 2804152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "g_gameMouseDummy",
+      "rva": 1630664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "g_gameKeyCall",
+      "rva": 1382680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "g_gameMouseCallEU",
+      "rva": 1382688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/input.h",
+      "name": "g_gameMouseCallUS",
+      "rva": 1382696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysInternal",
+      "rva": 1387200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysDriveLeft",
+      "rva": 1387204,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysDriveRight",
+      "rva": 1387208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysLocal",
+      "rva": 1640032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysPlayers",
+      "rva": 1640344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysSavedDriveLeft",
+      "rva": 1705024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "g_keysSavedDriveRight",
+      "rva": 1705025,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::Initialize",
+      "rva": 684000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::UpdateKeys",
+      "rva": 684032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::ApplyLocalKeys",
+      "rva": 684096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::SetKeys",
+      "rva": 684160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::ApplyPlayerKeys",
+      "rva": 684192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::GetInternalKeys",
+      "rva": 684272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::GetLocalKeys",
+      "rva": 684288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::GetPlayerKeys",
+      "rva": 684304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::ResetKeys",
+      "rva": 684320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.cpp",
+      "name": "KeyStuff::ResetInternalKeys",
+      "rva": 684352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysInternal",
+      "rva": 1387200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysDriveLeft",
+      "rva": 1387204,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysDriveRight",
+      "rva": 1387208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysLocal",
+      "rva": 1640032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysPlayers",
+      "rva": 1640344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysSavedDriveLeft",
+      "rva": 1705024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "g_keysSavedDriveRight",
+      "rva": 1705025,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::Initialize",
+      "rva": 684000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::UpdateKeys",
+      "rva": 684032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::ApplyLocalKeys",
+      "rva": 684096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::SetKeys",
+      "rva": 684160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::ApplyPlayerKeys",
+      "rva": 684192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::GetInternalKeys",
+      "rva": 684272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::GetLocalKeys",
+      "rva": 684288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::GetPlayerKeys",
+      "rva": 684304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::ResetKeys",
+      "rva": 684320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/keystuff.h",
+      "name": "KeyStuff::ResetInternalKeys",
+      "rva": 684352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gamePoolPatchOne",
+      "rva": 1394352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gamePoolPatchTwo",
+      "rva": 1394360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameModelReferenceSites",
+      "rva": 1394424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameScanDirectUSA",
+      "rva": 1394480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameScanDirectEU",
+      "rva": 1394536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameScanOperandUSA",
+      "rva": 1394592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameScanOperandEU",
+      "rva": 1394816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameScanSecondSites",
+      "rva": 1395040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gamePedReferenceSites",
+      "rva": 1395084,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limit_data.h",
+      "name": "g_gameDefaultModelFlags",
+      "rva": 1395104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "g_gameScanList",
+      "rva": 1967280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "g_gamePedModels",
+      "rva": 2127280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "g_gameModelRecords",
+      "rva": 2148976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "g_gameModelFlags",
+      "rva": 2788976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "GameRelocateScanList",
+      "rva": 698016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "GameRelocatePedModels",
+      "rva": 697824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "GameRelocateModelRecords",
+      "rva": 697904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "GameRelocateModelFlags",
+      "rva": 698752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.cpp",
+      "name": "GameIncreasePoolLimits",
+      "rva": 696704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "g_gameScanList",
+      "rva": 1967280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "g_gamePedModels",
+      "rva": 2127280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "g_gameModelRecords",
+      "rva": 2148976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "g_gameModelFlags",
+      "rva": 2788976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "GameRelocateScanList",
+      "rva": 698016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "GameRelocatePedModels",
+      "rva": 697824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "GameRelocateModelRecords",
+      "rva": 697904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "GameRelocateModelFlags",
+      "rva": 698752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/limits.h",
+      "name": "GameIncreasePoolLimits",
+      "rva": 696704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gamePatchStreamBytes",
+      "rva": 1394368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gamePatchValue1546c8",
+      "rva": 1394376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gamePatchValue1546cc",
+      "rva": 1394380,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gamePatchValue1546f0",
+      "rva": 1394416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gamePatchValue1546f4",
+      "rva": 1394420,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gameVersionAddressA",
+      "rva": 1635480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "g_gameVersionAddressB",
+      "rva": 1635484,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "GameApplyInGamePatches",
+      "rva": 699088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.cpp",
+      "name": "GameInstallEventOpcodes",
+      "rva": 8496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gamePatchStreamBytes",
+      "rva": 1394368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gamePatchValue1546c8",
+      "rva": 1394376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gamePatchValue1546cc",
+      "rva": 1394380,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gamePatchValue1546f0",
+      "rva": 1394416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gamePatchValue1546f4",
+      "rva": 1394420,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gameVersionAddressA",
+      "rva": 1635480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "g_gameVersionAddressB",
+      "rva": 1635484,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "GameApplyInGamePatches",
+      "rva": 699088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "GameInstallEventOpcodes",
+      "rva": 8496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "GameSetEventOpcode",
+      "rva": 8384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/patches.h",
+      "name": "GamePlayerDriverOpcode",
+      "rva": 7264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.cpp",
+      "name": "g_pedCommand087e",
+      "rva": 1175760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.cpp",
+      "name": "g_pedCommand0446",
+      "rva": 1175440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.cpp",
+      "name": "g_entityTeleportCommand",
+      "rva": 1172996,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedCommand087e",
+      "rva": 1175760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedCommand0446",
+      "rva": 1175440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_entityTeleportCommand",
+      "rva": 1172996,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.cpp",
+      "name": "g_playerDefaultColors",
+      "rva": 1383200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.cpp",
+      "name": "g_playerColors",
+      "rva": 1636032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.cpp",
+      "name": "PlayerColors::Initialize",
+      "rva": 683968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.cpp",
+      "name": "PlayerColors::Set",
+      "rva": 683856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.cpp",
+      "name": "PlayerColors::Get",
+      "rva": 683888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.h",
+      "name": "g_playerDefaultColors",
+      "rva": 1383200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.h",
+      "name": "g_playerColors",
+      "rva": 1636032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.h",
+      "name": "PlayerColors::Initialize",
+      "rva": 683968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.h",
+      "name": "PlayerColors::Set",
+      "rva": 683856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/player_colors.h",
+      "name": "PlayerColors::Get",
+      "rva": 683888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "g_gamePlayerPeds",
+      "rva": 2792872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "g_gamePlayerControllerState",
+      "rva": 2793712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "GameFindLocalPed",
+      "rva": 735328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "GameAssignPlayerPed",
+      "rva": 737056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "CPed::CPed",
+      "rva": 702096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "CPed::~CPed",
+      "rva": 724640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "CPed::IsInVehicle",
+      "rva": 703120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "CPed::IsPassenger",
+      "rva": 703456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.cpp",
+      "name": "CGame::GetPlayerPed",
+      "rva": 4112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::CPed",
+      "rva": 702096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::~CPed",
+      "rva": 724640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::Destroy",
+      "rva": 723872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::IsInVehicle",
+      "rva": 703120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::IsPassenger",
+      "rva": 703456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "g_gamePlayerPeds",
+      "rva": 2792872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "g_gamePlayerControllerState",
+      "rva": 2793712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "GameFindLocalPed",
+      "rva": 735328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "GameAssignPlayerPed",
+      "rva": 737056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "g_gamePhysicalMegabytes",
+      "rva": 2790000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "g_gameStreamingBytes",
+      "rva": 2790004,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "g_gameStartupTitle",
+      "rva": 1175172,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "g_gameFrameNodeError",
+      "rva": 1635208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "g_gameCustomStreamRead",
+      "rva": 1636020,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "g_gameStreamBuffer",
+      "rva": 1636024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "GameWaitUnprotect",
+      "rva": 696416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "GameInitializeVersionPatches",
+      "rva": 697088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "GameFrameNodeNameHook",
+      "rva": 678928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "GameDataReadHook",
+      "rva": 679056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.cpp",
+      "name": "GameReadStream",
+      "rva": 727616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "GameWaitUnprotect",
+      "rva": 696416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "GameInitializeVersionPatches",
+      "rva": 697088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "GameFrameNodeNameHook",
+      "rva": 678928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "GameDataReadHook",
+      "rva": 679056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "GameReadStream",
+      "rva": 727616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "GameParseStreamData",
+      "rva": 747024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "g_gamePhysicalMegabytes",
+      "rva": 2790000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "g_gameStreamingBytes",
+      "rva": 2790004,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "g_gameStartupTitle",
+      "rva": 1175172,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "g_gameFrameNodeError",
+      "rva": 1635208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "g_gameCustomStreamRead",
+      "rva": 1636020,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/preinit.h",
+      "name": "g_gameStreamBuffer",
+      "rva": 1636024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "g_scriptBuffer",
+      "rva": 2790128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "g_scriptVariables",
+      "rva": 2790056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "g_scriptLastOpcode",
+      "rva": 2790388,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "g_scriptLocalDebug",
+      "rva": 2790392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "g_scriptProcessOneCommand",
+      "rva": 1397648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "g_gameExceptionCount",
+      "rva": 1456752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "GameExceptionFilter",
+      "rva": 394352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "Scripting::ExecBuffer",
+      "rva": 728784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/script_runtime.cpp",
+      "name": "Scripting::ProcessCommand",
+      "rva": 728848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.cpp",
+      "name": "g_scriptThread",
+      "rva": 2790384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.cpp",
+      "name": "Scripting::Initialize",
+      "rva": 729424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_scriptThread",
+      "rva": 2790384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "Scripting::Initialize",
+      "rva": 729424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "Scripting::ExecBuffer",
+      "rva": 728784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "Scripting::ProcessCommand",
+      "rva": 728848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_scriptBuffer",
+      "rva": 2790128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_scriptVariables",
+      "rva": 2790056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_scriptLastOpcode",
+      "rva": 2790388,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_scriptLocalDebug",
+      "rva": 2790392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_scriptProcessOneCommand",
+      "rva": 1397648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "g_gameExceptionCount",
+      "rva": 1456752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/scripting.h",
+      "name": "GameExceptionFilter",
+      "rva": 394352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "GamePoolVehicleGetAt",
+      "rva": 735184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "CVehicle::SetColor",
+      "rva": 749088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetColor",
+      "rva": 749088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "GamePoolVehicleGetAt",
+      "rva": 735184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.cpp",
+      "name": "CInput::IsActive",
+      "rva": 430672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.cpp",
+      "name": "ChatIsHexDigit",
+      "rva": 743760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.cpp",
+      "name": "ChatParseColorTag",
+      "rva": 743872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.cpp",
+      "name": "ChatStripColorTags",
+      "rva": 744448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.cpp",
+      "name": "ChatPrepareMessage",
+      "rva": 744512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.h",
+      "name": "ChatImeActive",
+      "rva": 548448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.h",
+      "name": "ChatIsHexDigit",
+      "rva": 743760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.h",
+      "name": "ChatParseColorTag",
+      "rva": 743872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.h",
+      "name": "ChatStripColorTags",
+      "rva": 744448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/chat_dependencies.h",
+      "name": "ChatPrepareMessage",
+      "rva": 744512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "g_fontOriginalText",
+      "rva": 1567100,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "g_fontStrippedText",
+      "rva": 1567104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "g_fontWideText",
+      "rva": 1527096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "g_fontRealSprite",
+      "rva": 1527088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "g_fontGlyphColor",
+      "rva": 1527072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "g_fontGlyphCursor",
+      "rva": 1527092,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "FontAnsiToWide",
+      "rva": 472128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "FontIsWideHexDigit",
+      "rva": 743808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "FontParseWideColorTag",
+      "rva": 744144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "FontNextGlyphColor",
+      "rva": 472448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "g_fontOriginalText",
+      "rva": 1567100,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "g_fontStrippedText",
+      "rva": 1567104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "g_fontWideText",
+      "rva": 1527096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "g_fontRealSprite",
+      "rva": 1527088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "g_fontGlyphColor",
+      "rva": 1527072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "g_fontGlyphCursor",
+      "rva": 1527092,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "FontAnsiToWide",
+      "rva": 472128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "FontIsWideHexDigit",
+      "rva": 743808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "FontParseWideColorTag",
+      "rva": 744144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "FontNextGlyphColor",
+      "rva": 472448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_settings.cpp",
+      "name": "g_chatScreenWidth",
+      "rva": null,
+      "module": "GTA SA"
+    },
+    {
+      "file": "source/gui/font_settings.cpp",
+      "name": "FontGetHeight",
+      "rva": 813392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_settings.cpp",
+      "name": "FontGetWeight",
+      "rva": 813568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_settings.cpp",
+      "name": "FontGetFace",
+      "rva": 813616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_settings.h",
+      "name": "FontGetHeight",
+      "rva": 813392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_settings.h",
+      "name": "FontGetWeight",
+      "rva": 813568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_settings.h",
+      "name": "FontGetFace",
+      "rva": 813616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::QueryInterface",
+      "rva": 473216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::AddRef",
+      "rva": 473232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Release",
+      "rva": 473248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::GetDevice",
+      "rva": 473264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::GetTransform",
+      "rva": 473280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::SetTransform",
+      "rva": 473296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::SetWorldViewRH",
+      "rva": 473312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::SetWorldViewLH",
+      "rva": 473328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Begin",
+      "rva": 473344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Draw",
+      "rva": 472672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Flush",
+      "rva": 473360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::End",
+      "rva": 473376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::OnLostDevice",
+      "rva": 473392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::OnResetDevice",
+      "rva": 473408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "g_fontColorSprite",
+      "rva": 1313752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::QueryInterface",
+      "rva": 473216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::AddRef",
+      "rva": 473232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Release",
+      "rva": 473248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::GetDevice",
+      "rva": 473264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::GetTransform",
+      "rva": 473280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::SetTransform",
+      "rva": 473296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::SetWorldViewRH",
+      "rva": 473312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::SetWorldViewLH",
+      "rva": 473328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Begin",
+      "rva": 473344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Draw",
+      "rva": 472672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::Flush",
+      "rva": 473360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::End",
+      "rva": 473376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::OnLostDevice",
+      "rva": 473392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "CFontColorSprite::OnResetDevice",
+      "rva": 473408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::QueryInterface",
+      "rva": 472944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::AddRef",
+      "rva": 472960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::Release",
+      "rva": 472976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetDevice",
+      "rva": 472992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetDescA",
+      "rva": 473008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetDescW",
+      "rva": 473024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetTextMetricsA",
+      "rva": 473040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetTextMetricsW",
+      "rva": 473056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetDC",
+      "rva": 473072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::GetGlyphData",
+      "rva": 473088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::PreloadCharacters",
+      "rva": 473104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::PreloadGlyphs",
+      "rva": 473120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::PreloadTextA",
+      "rva": 473136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::PreloadTextW",
+      "rva": 473152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::DrawTextA",
+      "rva": 472704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::DrawTextW",
+      "rva": 473168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::OnLostDevice",
+      "rva": 473184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.cpp",
+      "name": "CFontWrapper::OnResetDevice",
+      "rva": 473200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::QueryInterface",
+      "rva": 472944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::AddRef",
+      "rva": 472960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::Release",
+      "rva": 472976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetDevice",
+      "rva": 472992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetDescA",
+      "rva": 473008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetDescW",
+      "rva": 473024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetTextMetricsA",
+      "rva": 473040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetTextMetricsW",
+      "rva": 473056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetDC",
+      "rva": 473072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::GetGlyphData",
+      "rva": 473088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::PreloadCharacters",
+      "rva": 473104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::PreloadGlyphs",
+      "rva": 473120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::PreloadTextA",
+      "rva": 473136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::PreloadTextW",
+      "rva": 473152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::DrawTextA",
+      "rva": 472704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::DrawTextW",
+      "rva": 473168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::OnLostDevice",
+      "rva": 473184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/font_wrapper.h",
+      "name": "CFontWrapper::OnResetDevice",
+      "rva": 473200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/fonts_reset.cpp",
+      "name": "CFonts::Reset",
+      "rva": 439072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_activity.cpp",
+      "name": "g_inputImeActivityTick",
+      "rva": 1570456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_activity.cpp",
+      "name": "ChatImeActive",
+      "rva": 548448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_activity.h",
+      "name": "g_inputImeActivityTick",
+      "rva": 1570456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_activity.h",
+      "name": "ChatImeActive",
+      "rva": 548448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_ime.cpp",
+      "name": "InputResetIme",
+      "rva": 545888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_ime.cpp",
+      "name": "InputEnableIme",
+      "rva": 547136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_native.h",
+      "name": "InputEditBox::GetText",
+      "rva": 544976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_native.h",
+      "name": "InputEnableIme",
+      "rva": 547136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_native.h",
+      "name": "InputResetIme",
+      "rva": 545888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_password.cpp",
+      "name": "g_inputMaskedText",
+      "rva": 1573888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_password.cpp",
+      "name": "InputMaskWideText",
+      "rva": 545696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_password.h",
+      "name": "g_inputMaskedText",
+      "rva": 1573888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_password.h",
+      "name": "InputMaskWideText",
+      "rva": 545696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_text.cpp",
+      "name": "g_inputAnsiText",
+      "rva": 1571768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_text.cpp",
+      "name": "InputWideToAnsi",
+      "rva": 544864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_text.h",
+      "name": "g_inputAnsiText",
+      "rva": 1571768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/input_text.h",
+      "name": "InputWideToAnsi",
+      "rva": 544864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "g_pGame",
+      "rva": 2804284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "g_pInput",
+      "rva": 2804244,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "g_pChat",
+      "rva": 2804240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "g_pNetGame",
+      "rva": 2804260,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_pGame",
+      "rva": 2804284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_pInput",
+      "rva": 2804244,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_pChat",
+      "rva": 2804240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_pNetGame",
+      "rva": 2804260,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_chatScreenWidth",
+      "rva": null,
+      "module": "GTA SA"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_inputGameWindow",
+      "rva": null,
+      "module": "GTA SA"
+    },
+    {
+      "file": "source/net/vehiclepool.cpp",
+      "name": "CVehiclePool::Find",
+      "rva": 124496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/vehiclepool.cpp",
+      "name": "CVehiclePool::Get",
+      "rva": 4384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/vehiclepool.h",
+      "name": "CVehiclePool::Find",
+      "rva": 124496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/vehiclepool.h",
+      "name": "CVehiclePool::Get",
+      "rva": 4384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "Util_UrlUnencode",
+      "rva": 94944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "Util_toupper",
+      "rva": 95072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "Util_wildcmp",
+      "rva": 95344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "Util_strrev",
+      "rva": 95664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "Util_itoa",
+      "rva": 95744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "K_EncodeString",
+      "rva": 645184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.cpp",
+      "name": "K_DecodeString",
+      "rva": 645248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "Util_UrlUnencode",
+      "rva": 94944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "Util_toupper",
+      "rva": 95072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "Util_wildcmp",
+      "rva": 95344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "Util_strrev",
+      "rva": 95664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "Util_itoa",
+      "rva": 95744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "K_EncodeString",
+      "rva": 645184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/runutil.h",
+      "name": "K_DecodeString",
+      "rva": 645248,
+      "module": "samp.dll"
+    }
+  ],
+  "unknowns": [
+    {
+      "file": "source/cmdwindow.h",
+      "name": "InputRect::InputRect",
+      "reason": "Inline structure initialization; no standalone native entry established"
+    },
+    {
+      "file": "source/fontrender.h",
+      "name": "FontSize::FontSize",
+      "reason": "Inline structure initialization; no standalone native entry established"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameBufferReader::GameBufferReader",
+      "reason": "inline reader initialization in native parser RVA 0x000b6610; standalone entry not established"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameBufferReader::~GameBufferReader",
+      "reason": "inline reader cleanup in native parser RVA 0x000b6610; standalone entry not established"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameBufferReader::Skip",
+      "reason": "inline position/EOF update in native parser; standalone entry not established"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::~CEntity",
+      "reason": "inline empty base destructor/vptr reset; scalar deleting entry RVA 0x0009bd10, standalone destructor entry not established"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CAudio::CAudio",
+      "reason": "inline initialization in CGame RVA 0x0009fdc0; standalone entry not established"
+    },
+    {
+      "file": "source/gui/font_color.cpp",
+      "name": "InitializeFontDrawBuffers",
+      "reason": "integration helper extracted from startup RVA 0x000c5e70"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "InitializeFontDrawBuffers",
+      "reason": "integration helper extracted from startup RVA 0x000c5e70"
+    },
+    {
+      "file": "source/gui/font_color.h",
+      "name": "FontColorSprite",
+      "reason": "recovery accessor for static sprite object RVA 0x00140bd8"
+    },
+    {
+      "file": "source/gui/font_sprite.cpp",
+      "name": "FontColorSprite",
+      "reason": "recovery accessor for static sprite object RVA 0x00140bd8"
+    },
+    {
+      "file": "source/gui/input_activity.cpp",
+      "name": "InputImeActivityAccess::Visible",
+      "reason": "protected DXUT state accessor; no standalone native entry"
+    },
+    {
+      "file": "source/gui/input_activity.h",
+      "name": "InputImeRecent",
+      "reason": "extracted signed tick arithmetic; no standalone native entry"
+    },
+    {
+      "file": "source/gui/input_ime.cpp",
+      "name": "InputImeAccess::ResetDefaultContext",
+      "reason": "recovery access helper for RVA 0x00085460"
+    }
+  ]
+}
