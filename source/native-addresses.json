@@ -1615,11 +1615,137 @@
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
     },
     {
+      "name": "g_gameHookFarClipReturn",
+      "va": "0x1018f56c",
+      "rva": "0x0018f56c",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump0015197c",
+      "va": "0x1015197c",
+      "rva": "0x0015197c",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151984",
+      "va": "0x10151984",
+      "rva": "0x00151984",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump0015198c",
+      "va": "0x1015198c",
+      "rva": "0x0015198c",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151994",
+      "va": "0x10151994",
+      "rva": "0x00151994",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump001519b0",
+      "va": "0x101519b0",
+      "rva": "0x001519b0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump001519b8",
+      "va": "0x101519b8",
+      "rva": "0x001519b8",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump001519d4",
+      "va": "0x101519d4",
+      "rva": "0x001519d4",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump001519e8",
+      "va": "0x101519e8",
+      "rva": "0x001519e8",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump001519f0",
+      "va": "0x101519f0",
+      "rva": "0x001519f0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a10",
+      "va": "0x10151a10",
+      "rva": "0x00151a10",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a1c",
+      "va": "0x10151a1c",
+      "rva": "0x00151a1c",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a34",
+      "va": "0x10151a34",
+      "rva": "0x00151a34",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a3c",
+      "va": "0x10151a3c",
+      "rva": "0x00151a3c",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a44",
+      "va": "0x10151a44",
+      "rva": "0x00151a44",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a50",
+      "va": "0x10151a50",
+      "rva": "0x00151a50",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "g_gameHookJump00151a68",
+      "va": "0x10151a68",
+      "rva": "0x00151a68",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
       "name": "g_gameKeyCall",
       "va": "0x10151918",
       "rva": "0x00151918",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameLoopAddress",
+      "va": "0x102ac9cc",
+      "rva": "0x002ac9cc",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
     },
     {
       "name": "g_gameModelFlags",
@@ -2189,6 +2315,426 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "GameHook_000a2200",
+      "va": "0x100a2200",
+      "rva": "0x000a2200",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a22c0",
+      "va": "0x100a22c0",
+      "rva": "0x000a22c0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a22f0",
+      "va": "0x100a22f0",
+      "rva": "0x000a22f0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a2370",
+      "va": "0x100a2370",
+      "rva": "0x000a2370",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a23a0",
+      "va": "0x100a23a0",
+      "rva": "0x000a23a0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a23d0",
+      "va": "0x100a23d0",
+      "rva": "0x000a23d0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a26d0",
+      "va": "0x100a26d0",
+      "rva": "0x000a26d0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a29d0",
+      "va": "0x100a29d0",
+      "rva": "0x000a29d0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a2ab0",
+      "va": "0x100a2ab0",
+      "rva": "0x000a2ab0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a2b50",
+      "va": "0x100a2b50",
+      "rva": "0x000a2b50",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a2e70",
+      "va": "0x100a2e70",
+      "rva": "0x000a2e70",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a33c0",
+      "va": "0x100a33c0",
+      "rva": "0x000a33c0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3580",
+      "va": "0x100a3580",
+      "rva": "0x000a3580",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a35e0",
+      "va": "0x100a35e0",
+      "rva": "0x000a35e0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a37a0",
+      "va": "0x100a37a0",
+      "rva": "0x000a37a0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a37c0",
+      "va": "0x100a37c0",
+      "rva": "0x000a37c0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3800",
+      "va": "0x100a3800",
+      "rva": "0x000a3800",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3a70",
+      "va": "0x100a3a70",
+      "rva": "0x000a3a70",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3ac0",
+      "va": "0x100a3ac0",
+      "rva": "0x000a3ac0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3ad0",
+      "va": "0x100a3ad0",
+      "rva": "0x000a3ad0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3b00",
+      "va": "0x100a3b00",
+      "rva": "0x000a3b00",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3b20",
+      "va": "0x100a3b20",
+      "rva": "0x000a3b20",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3b90",
+      "va": "0x100a3b90",
+      "rva": "0x000a3b90",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3c60",
+      "va": "0x100a3c60",
+      "rva": "0x000a3c60",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3c80",
+      "va": "0x100a3c80",
+      "rva": "0x000a3c80",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3ca0",
+      "va": "0x100a3ca0",
+      "rva": "0x000a3ca0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3ce0",
+      "va": "0x100a3ce0",
+      "rva": "0x000a3ce0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3d20",
+      "va": "0x100a3d20",
+      "rva": "0x000a3d20",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3d90",
+      "va": "0x100a3d90",
+      "rva": "0x000a3d90",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3e50",
+      "va": "0x100a3e50",
+      "rva": "0x000a3e50",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3ec0",
+      "va": "0x100a3ec0",
+      "rva": "0x000a3ec0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3f30",
+      "va": "0x100a3f30",
+      "rva": "0x000a3f30",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a3fe0",
+      "va": "0x100a3fe0",
+      "rva": "0x000a3fe0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4190",
+      "va": "0x100a4190",
+      "rva": "0x000a4190",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4280",
+      "va": "0x100a4280",
+      "rva": "0x000a4280",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a42c0",
+      "va": "0x100a42c0",
+      "rva": "0x000a42c0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a42d0",
+      "va": "0x100a42d0",
+      "rva": "0x000a42d0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a46b0",
+      "va": "0x100a46b0",
+      "rva": "0x000a46b0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4770",
+      "va": "0x100a4770",
+      "rva": "0x000a4770",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a47d0",
+      "va": "0x100a47d0",
+      "rva": "0x000a47d0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4850",
+      "va": "0x100a4850",
+      "rva": "0x000a4850",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a48c0",
+      "va": "0x100a48c0",
+      "rva": "0x000a48c0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4960",
+      "va": "0x100a4960",
+      "rva": "0x000a4960",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a49d0",
+      "va": "0x100a49d0",
+      "rva": "0x000a49d0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4c30",
+      "va": "0x100a4c30",
+      "rva": "0x000a4c30",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4df0",
+      "va": "0x100a4df0",
+      "rva": "0x000a4df0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4e30",
+      "va": "0x100a4e30",
+      "rva": "0x000a4e30",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a4e70",
+      "va": "0x100a4e70",
+      "rva": "0x000a4e70",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5100",
+      "va": "0x100a5100",
+      "rva": "0x000a5100",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5150",
+      "va": "0x100a5150",
+      "rva": "0x000a5150",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a56b0",
+      "va": "0x100a56b0",
+      "rva": "0x000a56b0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5820",
+      "va": "0x100a5820",
+      "rva": "0x000a5820",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5850",
+      "va": "0x100a5850",
+      "rva": "0x000a5850",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5870",
+      "va": "0x100a5870",
+      "rva": "0x000a5870",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5910",
+      "va": "0x100a5910",
+      "rva": "0x000a5910",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a59b0",
+      "va": "0x100a59b0",
+      "rva": "0x000a59b0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5a50",
+      "va": "0x100a5a50",
+      "rva": "0x000a5a50",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5af0",
+      "va": "0x100a5af0",
+      "rva": "0x000a5af0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5b90",
+      "va": "0x100a5b90",
+      "rva": "0x000a5b90",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameHook_000a5d20",
+      "va": "0x100a5d20",
+      "rva": "0x000a5d20",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
       "name": "GameIncreasePoolLimits",
       "va": "0x100aa180",
       "rva": "0x000aa180",
@@ -2217,6 +2763,20 @@
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
     },
     {
+      "name": "GameInstallHook",
+      "va": "0x100a5d80",
+      "rva": "0x000a5d80",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameInstallHooks",
+      "va": "0x100a6020",
+      "rva": "0x000a6020",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
       "name": "GameLoadDictionaryTexture",
       "va": "0x100b2860",
       "rva": "0x000b2860",
@@ -2243,6 +2803,13 @@
       "rva": "0x000b37d0",
       "module": "samp.dll",
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "GamePrepareHooks",
+      "va": "0x100a5e30",
+      "rva": "0x000a5e30",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
     },
     {
       "name": "GameProcessOutgoingEvent",
@@ -4543,6 +5110,618 @@
       "file": "source/game/game.h",
       "name": "g_gameUsedPlayerSlots",
       "rva": 1630680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameLoopAddress",
+      "rva": 2804172,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookFarClipReturn",
+      "rva": 1635692,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a10",
+      "rva": 1382928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a1c",
+      "rva": 1382940,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump0015197c",
+      "rva": 1382780,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151984",
+      "rva": 1382788,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151994",
+      "rva": 1382804,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump0015198c",
+      "rva": 1382796,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump001519b0",
+      "rva": 1382832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump001519b8",
+      "rva": 1382840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump001519e8",
+      "rva": 1382888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump001519f0",
+      "rva": 1382896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump001519d4",
+      "rva": 1382868,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a34",
+      "rva": 1382964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a3c",
+      "rva": 1382972,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a44",
+      "rva": 1382980,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a50",
+      "rva": 1382992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "g_gameHookJump00151a68",
+      "rva": 1383016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "GameInstallHook",
+      "rva": 679296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "GamePrepareHooks",
+      "rva": 679472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.cpp",
+      "name": "GameInstallHooks",
+      "rva": 679968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameLoopAddress",
+      "rva": 2804172,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookFarClipReturn",
+      "rva": 1635692,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a10",
+      "rva": 1382928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a1c",
+      "rva": 1382940,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump0015197c",
+      "rva": 1382780,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151984",
+      "rva": 1382788,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151994",
+      "rva": 1382804,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump0015198c",
+      "rva": 1382796,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump001519b0",
+      "rva": 1382832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump001519b8",
+      "rva": 1382840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump001519e8",
+      "rva": 1382888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump001519f0",
+      "rva": 1382896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump001519d4",
+      "rva": 1382868,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a34",
+      "rva": 1382964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a3c",
+      "rva": 1382972,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a44",
+      "rva": 1382980,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a50",
+      "rva": 1382992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "g_gameHookJump00151a68",
+      "rva": 1383016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a2200",
+      "rva": 664064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a22c0",
+      "rva": 664256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a22f0",
+      "rva": 664304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a2370",
+      "rva": 664432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a23a0",
+      "rva": 664480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a23d0",
+      "rva": 664528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a26d0",
+      "rva": 665296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a29d0",
+      "rva": 666064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a2ab0",
+      "rva": 666288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a2b50",
+      "rva": 666448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a2e70",
+      "rva": 667248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a33c0",
+      "rva": 668608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3580",
+      "rva": 669056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a35e0",
+      "rva": 669152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a37a0",
+      "rva": 669600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a37c0",
+      "rva": 669632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3800",
+      "rva": 669696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3a70",
+      "rva": 670320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3ac0",
+      "rva": 670400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3ad0",
+      "rva": 670416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3b00",
+      "rva": 670464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3b20",
+      "rva": 670496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3b90",
+      "rva": 670608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3c60",
+      "rva": 670816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3c80",
+      "rva": 670848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3ca0",
+      "rva": 670880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3ce0",
+      "rva": 670944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3d20",
+      "rva": 671008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3d90",
+      "rva": 671120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3e50",
+      "rva": 671312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3ec0",
+      "rva": 671424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3f30",
+      "rva": 671536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a3fe0",
+      "rva": 671712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4190",
+      "rva": 672144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4280",
+      "rva": 672384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a42c0",
+      "rva": 672448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a42d0",
+      "rva": 672464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a46b0",
+      "rva": 673456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4770",
+      "rva": 673648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a47d0",
+      "rva": 673744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4850",
+      "rva": 673872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a48c0",
+      "rva": 673984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4960",
+      "rva": 674144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a49d0",
+      "rva": 674256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4c30",
+      "rva": 674864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4df0",
+      "rva": 675312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4e30",
+      "rva": 675376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a4e70",
+      "rva": 675440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5100",
+      "rva": 676096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5150",
+      "rva": 676176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a56b0",
+      "rva": 677552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5820",
+      "rva": 677920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5850",
+      "rva": 677968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5870",
+      "rva": 678000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5910",
+      "rva": 678160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a59b0",
+      "rva": 678320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5a50",
+      "rva": 678480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5af0",
+      "rva": 678640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5b90",
+      "rva": 678800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameHook_000a5d20",
+      "rva": 679200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameInstallHook",
+      "rva": 679296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GamePrepareHooks",
+      "rva": 679472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks.h",
+      "name": "GameInstallHooks",
+      "rva": 679968,
       "module": "samp.dll"
     },
     {
