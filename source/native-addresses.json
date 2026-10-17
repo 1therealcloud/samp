@@ -1972,6 +1972,104 @@
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
     },
     {
+      "name": "g_hookAllocateFunction",
+      "va": "0x10151abc",
+      "rva": "0x00151abc",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookCachedBuffer",
+      "va": "0x1018f560",
+      "rva": "0x0018f560",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookCameraPed",
+      "va": "0x1018f4b0",
+      "rva": "0x0018f4b0",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookCheatFunction",
+      "va": "0x1018f4cc",
+      "rva": "0x0018f4cc",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookFreedBuffer",
+      "va": "0x1018f568",
+      "rva": "0x0018f568",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookKeepBuffer",
+      "va": "0x10151ab8",
+      "rva": "0x00151ab8",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookRadarIndex",
+      "va": "0x1018f4c8",
+      "rva": "0x0018f4c8",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookRenderEbx",
+      "va": "0x1018f544",
+      "rva": "0x0018f544",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookRenderEsi",
+      "va": "0x1018f540",
+      "rva": "0x0018f540",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookRenderRestore",
+      "va": "0x10151ac8",
+      "rva": "0x00151ac8",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookRenderReturn",
+      "va": "0x1018f5c4",
+      "rva": "0x0018f5c4",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookSavedEsi",
+      "va": "0x1018f570",
+      "rva": "0x0018f570",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookSavedFontA",
+      "va": "0x1018f5d4",
+      "rva": "0x0018f5d4",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookSavedFontB",
+      "va": "0x1018f5d8",
+      "rva": "0x0018f5d8",
+      "module": "samp.dll",
+      "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
       "name": "g_inputAnsiText",
       "va": "0x1017fbb8",
       "rva": "0x0017fbb8",
@@ -2319,7 +2417,7 @@
       "va": "0x100a2200",
       "rva": "0x000a2200",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: yield before original game update; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a22c0",
@@ -2417,14 +2515,14 @@
       "va": "0x100a37a0",
       "rva": "0x000a37a0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: radar color adapter; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a37c0",
       "va": "0x100a37c0",
       "rva": "0x000a37c0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: cheat marker and continuation; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3800",
@@ -2445,28 +2543,28 @@
       "va": "0x100a3ac0",
       "rva": "0x000a3ac0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: intentional native RET; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3ad0",
       "va": "0x100a3ad0",
       "rva": "0x000a3ad0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: local ped camera flags; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3b00",
       "va": "0x100a3b00",
       "rva": "0x000a3b00",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: signed unit float bit repair; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3b20",
       "va": "0x100a3b20",
       "rva": "0x000a3b20",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: animation null guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3b90",
@@ -2501,14 +2599,14 @@
       "va": "0x100a3ce0",
       "rva": "0x000a3ce0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: model render missing-info guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3d20",
       "va": "0x100a3d20",
       "rva": "0x000a3d20",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: model caller/frame guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3d90",
@@ -2522,7 +2620,7 @@
       "va": "0x100a3e50",
       "rva": "0x000a3e50",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: collision pointer/sign guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a3ec0",
@@ -2550,21 +2648,21 @@
       "va": "0x100a4190",
       "rva": "0x000a4190",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: cached buffer free guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a4280",
       "va": "0x100a4280",
       "rva": "0x000a4280",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: lazy buffer allocation/version selection; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a42c0",
       "va": "0x100a42c0",
       "rva": "0x000a42c0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: incoming ESI capture; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a42d0",
@@ -2599,7 +2697,7 @@
       "va": "0x100a4850",
       "rva": "0x000a4850",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: temporary 3-byte render patch; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a48c0",
@@ -2613,7 +2711,7 @@
       "va": "0x100a4960",
       "rva": "0x000a4960",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: temporary two-value font override; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a49d0",
@@ -2662,7 +2760,7 @@
       "va": "0x100a5150",
       "rva": "0x000a5150",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: particle argument null guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a56b0",
@@ -2683,7 +2781,7 @@
       "va": "0x100a5850",
       "rva": "0x000a5850",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: entity update pointer/state guard; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameHook_000a5870",
@@ -2732,7 +2830,7 @@
       "va": "0x100a5d20",
       "rva": "0x000a5d20",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Reviewed callback native instructions v85: argument byte override and original local-frame continuation; raw register/stack ABI, direct differential test."
     },
     {
       "name": "GameIncreasePoolLimits",
@@ -5722,6 +5820,282 @@
       "file": "source/game/hooks.h",
       "name": "GameInstallHooks",
       "rva": 679968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookRadarIndex",
+      "rva": 1635528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookCheatFunction",
+      "rva": 1635532,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookCameraPed",
+      "rva": 1635504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookRenderEsi",
+      "rva": 1635648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookRenderEbx",
+      "rva": 1635652,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookFreedBuffer",
+      "rva": 1635688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookKeepBuffer",
+      "rva": 1383096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookCachedBuffer",
+      "rva": 1635680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookAllocateFunction",
+      "rva": 1383100,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookSavedEsi",
+      "rva": 1635696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookRenderReturn",
+      "rva": 1635780,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookRenderRestore",
+      "rva": 1383112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookSavedFontA",
+      "rva": 1635796,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "g_hookSavedFontB",
+      "rva": 1635800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a2200",
+      "rva": 664064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a37a0",
+      "rva": 669600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a37c0",
+      "rva": 669632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3ac0",
+      "rva": 670400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3ad0",
+      "rva": 670416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3b00",
+      "rva": 670464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3b20",
+      "rva": 670496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3ce0",
+      "rva": 670944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3d20",
+      "rva": 671008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a3e50",
+      "rva": 671312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a4190",
+      "rva": 672144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a4280",
+      "rva": 672384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a42c0",
+      "rva": 672448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a4850",
+      "rva": 673872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a4960",
+      "rva": 674144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a5150",
+      "rva": 676176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a5850",
+      "rva": 677968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.cpp",
+      "name": "GameHook_000a5d20",
+      "rva": 679200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookRadarIndex",
+      "rva": 1635528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookCheatFunction",
+      "rva": 1635532,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookCameraPed",
+      "rva": 1635504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookRenderEsi",
+      "rva": 1635648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookRenderEbx",
+      "rva": 1635652,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookFreedBuffer",
+      "rva": 1635688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookKeepBuffer",
+      "rva": 1383096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookCachedBuffer",
+      "rva": 1635680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookAllocateFunction",
+      "rva": 1383100,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookSavedEsi",
+      "rva": 1635696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookRenderReturn",
+      "rva": 1635780,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookRenderRestore",
+      "rva": 1383112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookSavedFontA",
+      "rva": 1635796,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_independent.h",
+      "name": "g_hookSavedFontB",
+      "rva": 1635800,
       "module": "samp.dll"
     },
     {

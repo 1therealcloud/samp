@@ -37,8 +37,9 @@ extern BYTE g_gameHookJump00151a44[9];
 extern BYTE g_gameHookJump00151a50[6];
 // samp.dll RVA: 0x00151a68
 extern BYTE g_gameHookJump00151a68[6];
-// Address-only callback declarations. Bodies and entry ABIs are not recovered.
-// They are stored as targets only; do not call through these provisional types.
+// Raw callback declarations for installing addresses. Recovered bodies and exact
+// entry ABIs are tracked in the callback review; remaining bodies stay open.
+// Do not call these through the provisional void() types from ordinary C++.
 // samp.dll RVA: 0x000a2200
 void GameHook_000a2200();
 // samp.dll RVA: 0x000a22c0
