@@ -2,7 +2,7 @@
 #include <detours.h>
 #include <string.h>
 // samp.dll RVA: 0x0016bf60
-BYTE g_archiveOpenRecords[1000];
+ArchiveFileRecord g_archiveOpenRecords[50];
 // samp.dll RVA: 0x0016be98
 BOOL g_archiveRecordUsed[50];
 // samp.dll RVA: 0x0016c378

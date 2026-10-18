@@ -1,9 +1,16 @@
 #ifndef SAMP_ARCHIVE_FILEHOOKS_H
 #define SAMP_ARCHIVE_FILEHOOKS_H
 #include <windows.h>
-// Record layout is not yet recovered; installer clears exactly 1000 bytes.
+#pragma pack(push,1)
+struct ArchiveFileRecord {
+    HANDLE handle;
+    DWORD position,size;
+    BYTE *start,*current;
+};
+#pragma pack(pop)
+typedef char ArchiveFileRecordExtent[(sizeof(ArchiveFileRecord)==20)?1:-1];
 // samp.dll RVA: 0x0016bf60
-extern BYTE g_archiveOpenRecords[1000];
+extern ArchiveFileRecord g_archiveOpenRecords[50];
 // samp.dll RVA: 0x0016be98
 extern BOOL g_archiveRecordUsed[50];
 // samp.dll RVA: 0x0016c378
@@ -30,18 +37,32 @@ void ArchiveInstallCursorHook();
 void ArchiveRemoveHooks();
 // samp.dll RVA: 0x000623e0
 int WINAPI Arch_ShowCursor(BOOL visible);
-// Address-only callback declarations used by installers. Their full argument
-// ABIs must be reviewed before implementing or calling them through these types.
+// samp.dll RVA: 0x00140338
+extern DWORD g_archiveNextHandle;
+// samp.dll RVA: 0x00062000
+BOOL ArchiveIsCustomHandle(DWORD handle);
+// samp.dll RVA: 0x00062020
+int ArchiveFindUnusedRecord();
+// samp.dll RVA: 0x00062040
+int ArchiveFindRecord(HANDLE handle);
+// samp.dll RVA: 0x00062070
+HANDLE ArchiveCreateRecord(DWORD index);
+// This native helper removes ONE trailing space in place, despite the const
+// filename type in CreateFileA. Leading separator at byte zero is not skipped.
+// samp.dll RVA: 0x00062410
+char *ArchiveFileNameOnly(char *path);
+// samp.dll RVA: 0x000624d0
+char *ArchiveLowercaseName(char *name);
 // samp.dll RVA: 0x000625d0
-void Arch_CreateFileA();
+HANDLE WINAPI Arch_CreateFileA(LPCSTR name,DWORD access,DWORD share,LPSECURITY_ATTRIBUTES security,DWORD disposition,DWORD flags,HANDLE templateFile);
 // samp.dll RVA: 0x000620f0
-void Arch_ReadFile();
+BOOL WINAPI Arch_ReadFile(HANDLE file,LPVOID buffer,DWORD requested,LPDWORD read,LPOVERLAPPED overlapped);
 // samp.dll RVA: 0x00062270
-void Arch_GetFileSize();
+DWORD WINAPI Arch_GetFileSize(HANDLE file,PDWORD high);
 // samp.dll RVA: 0x000622c0
-void Arch_SetFilePointer();
+DWORD WINAPI Arch_SetFilePointer(HANDLE file,LONG distance,PLONG high,DWORD method);
 // samp.dll RVA: 0x00062360
-void Arch_CloseHandle();
+BOOL WINAPI Arch_CloseHandle(HANDLE file);
 // samp.dll RVA: 0x000623a0
-void Arch_GetFileType();
+DWORD WINAPI Arch_GetFileType(HANDLE file);
 #endif

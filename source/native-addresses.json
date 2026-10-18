@@ -177,42 +177,42 @@
       "va": "0x10062360",
       "rva": "0x00062360",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "Arch_CreateFileA",
       "va": "0x100625d0",
       "rva": "0x000625d0",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "Arch_GetFileSize",
       "va": "0x10062270",
       "rva": "0x00062270",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "Arch_GetFileType",
       "va": "0x100623a0",
       "rva": "0x000623a0",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "Arch_ReadFile",
       "va": "0x100620f0",
       "rva": "0x000620f0",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "Arch_SetFilePointer",
       "va": "0x100622c0",
       "rva": "0x000622c0",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "Arch_ShowCursor",
@@ -220,6 +220,41 @@
       "rva": "0x000623e0",
       "module": "samp.dll",
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ArchiveComputeNameDigest",
+      "va": "0x10062a60",
+      "rva": "0x00062a60",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveCreateRecord",
+      "va": "0x10062070",
+      "rva": "0x00062070",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveFileNameOnly",
+      "va": "0x10062410",
+      "rva": "0x00062410",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveFindRecord",
+      "va": "0x10062040",
+      "rva": "0x00062040",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveFindUnusedRecord",
+      "va": "0x10062020",
+      "rva": "0x00062020",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "ArchiveInstallCursorHook",
@@ -234,6 +269,76 @@
       "rva": "0x00062720",
       "module": "samp.dll",
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ArchiveIsCustomHandle",
+      "va": "0x10062000",
+      "rva": "0x00062000",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveLowercaseName",
+      "va": "0x100624d0",
+      "rva": "0x000624d0",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::~ArchiveNameSha1",
+      "va": "0x10063550",
+      "rva": "0x00063550",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::ArchiveNameSha1",
+      "va": "0x100635c0",
+      "rva": "0x000635c0",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::Input",
+      "va": "0x10063d30",
+      "rva": "0x00063d30",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::Pad",
+      "va": "0x10063c20",
+      "rva": "0x00063c20",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::ProcessBlock",
+      "va": "0x100635f0",
+      "rva": "0x000635f0",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::Reset",
+      "va": "0x10063560",
+      "rva": "0x00063560",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchiveNameSha1::Result",
+      "va": "0x10063ce0",
+      "rva": "0x00063ce0",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
+      "name": "ArchivePublishNameDigest",
+      "va": "0x10062500",
+      "rva": "0x00062500",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "ArchiveRemoveHooks",
@@ -2518,6 +2623,13 @@
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
+      "name": "g_archiveNextHandle",
+      "va": "0x10140338",
+      "rva": "0x00140338",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
+    },
+    {
       "name": "g_archiveOpenRecords",
       "va": "0x1016bf60",
       "rva": "0x0016bf60",
@@ -2579,6 +2691,13 @@
       "rva": "0x0016be98",
       "module": "samp.dll",
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveTrackedNameDigests",
+      "va": "0x1014033c",
+      "rva": "0x0014033c",
+      "module": "samp.dll",
+      "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
       "name": "g_audioLoad",
@@ -5012,6 +5131,84 @@
   ],
   "annotations": [
     {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "g_archiveNextHandle",
+      "rva": 1311544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "ArchiveIsCustomHandle",
+      "rva": 401408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "ArchiveFindUnusedRecord",
+      "rva": 401440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "ArchiveFindRecord",
+      "rva": 401472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "ArchiveCreateRecord",
+      "rva": 401520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "ArchiveFileNameOnly",
+      "rva": 402448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "ArchiveLowercaseName",
+      "rva": 402640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "Arch_CreateFileA",
+      "rva": 402896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "Arch_ReadFile",
+      "rva": 401648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "Arch_GetFileSize",
+      "rva": 402032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "Arch_SetFilePointer",
+      "rva": 402112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "Arch_CloseHandle",
+      "rva": 402272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/file_callbacks.cpp",
+      "name": "Arch_GetFileType",
+      "rva": 402336,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/archive/filehooks.cpp",
       "name": "g_archiveOpenRecords",
       "rva": 1490784,
@@ -5177,6 +5374,48 @@
       "file": "source/archive/filehooks.h",
       "name": "Arch_ShowCursor",
       "rva": 402400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveNextHandle",
+      "rva": 1311544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveIsCustomHandle",
+      "rva": 401408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveFindUnusedRecord",
+      "rva": 401440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveFindRecord",
+      "rva": 401472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveCreateRecord",
+      "rva": 401520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveFileNameOnly",
+      "rva": 402448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveLowercaseName",
+      "rva": 402640,
       "module": "samp.dll"
     },
     {
@@ -5213,6 +5452,126 @@
       "file": "source/archive/filehooks.h",
       "name": "Arch_GetFileType",
       "rva": 402336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "g_archiveTrackedNameDigests",
+      "rva": 1311548,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::ArchiveNameSha1",
+      "rva": 406976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::~ArchiveNameSha1",
+      "rva": 406864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::Reset",
+      "rva": 406880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::ProcessBlock",
+      "rva": 407024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::Input",
+      "rva": 408880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::Pad",
+      "rva": 408608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveNameSha1::Result",
+      "rva": 408800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchiveComputeNameDigest",
+      "rva": 404064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.cpp",
+      "name": "ArchivePublishNameDigest",
+      "rva": 402688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::ArchiveNameSha1",
+      "rva": 406976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::~ArchiveNameSha1",
+      "rva": 406864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::Reset",
+      "rva": 406880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::Input",
+      "rva": 408880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::Result",
+      "rva": 408800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::Pad",
+      "rva": 408608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveNameSha1::ProcessBlock",
+      "rva": 407024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "g_archiveTrackedNameDigests",
+      "rva": 1311548,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchivePublishNameDigest",
+      "rva": 402688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/name_digest.h",
+      "name": "ArchiveComputeNameDigest",
+      "rva": 404064,
       "module": "samp.dll"
     },
     {
