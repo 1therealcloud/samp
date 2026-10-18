@@ -2133,6 +2133,34 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CLabel::OnLostDevice",
+      "va": "0x1006b630",
+      "rva": "0x0006b630",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CLabel::OnResetDevice",
+      "va": "0x1006b640",
+      "rva": "0x0006b640",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CLicensePlate::OnLostDevice",
+      "va": "0x1006d1f0",
+      "rva": "0x0006d1f0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CLicensePlate::OnResetDevice",
+      "va": "0x1006d240",
+      "rva": "0x0006d240",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
       "name": "ClientConstructCrashText",
       "va": "0x10060070",
       "rva": "0x00060070",
@@ -2144,14 +2172,14 @@
       "va": "0x100c5620",
       "rva": "0x000c5620",
       "module": "samp.dll",
-      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "ClientDeviceObjectsReset",
       "va": "0x100c5880",
       "rva": "0x000c5880",
       "module": "samp.dll",
-      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "ClientDllMain",
@@ -2266,6 +2294,27 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CObjectMaterialText::OnLostDevice",
+      "va": "0x100702d0",
+      "rva": "0x000702d0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CObjectMaterialText::OnResetDevice",
+      "va": "0x10070300",
+      "rva": "0x00070300",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CObjectPool::ShutdownMaterials",
+      "va": "0x10012a50",
+      "rva": "0x00012a50",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
       "name": "CPed::~CPed",
       "va": "0x100b0ea0",
       "rva": "0x000b0ea0",
@@ -2299,6 +2348,20 @@
       "rva": "0x000abbe0",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPlayerTags::OnLostDevice",
+      "va": "0x1006d090",
+      "rva": "0x0006d090",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CPlayerTags::OnResetDevice",
+      "va": "0x1006d0c0",
+      "rva": "0x0006d0c0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "CRYPT_FN_AcquireContext",
@@ -2357,6 +2420,20 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CScoreboard::Close",
+      "va": "0x1006e410",
+      "rva": "0x0006e410",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CScoreboard::Recalc",
+      "va": "0x1006e360",
+      "rva": "0x0006e360",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
       "name": "CSigner::~CSigner",
       "va": "0x10065450",
       "rva": "0x00065450",
@@ -2383,6 +2460,27 @@
       "rva": "0x000654b0",
       "module": "samp.dll",
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CSpawnScreen::OnLostDevice",
+      "va": "0x10070940",
+      "rva": "0x00070940",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CSpawnScreen::OnResetDevice",
+      "va": "0x10070690",
+      "rva": "0x00070690",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CTextDrawPool::OnLostDevice",
+      "va": "0x1001e360",
+      "rva": "0x0001e360",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "CTinyEncrypt::~CTinyEncrypt",
@@ -2474,6 +2572,13 @@
       "rva": "0x00001120",
       "module": "samp.dll",
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "CVehiclePool::ShutdownLicensePlates",
+      "va": "0x1001e8a0",
+      "rva": "0x0001e8a0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "DXUTBlendColor::Init",
@@ -2931,6 +3036,41 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "g_deviceCursorSurface",
+      "va": "0x102acacc",
+      "rva": "0x002acacc",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceDeathWindow",
+      "va": "0x102aca18",
+      "rva": "0x002aca18",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceDialogResources",
+      "va": "0x102acab0",
+      "rva": "0x002acab0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceFonts",
+      "va": "0x102aca2c",
+      "rva": "0x002aca2c",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceLabel",
+      "va": "0x102ac9ec",
+      "rva": "0x002ac9ec",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
       "name": "g_deviceMaterialIndex",
       "va": "0x1017ebf0",
       "rva": "0x0017ebf0",
@@ -2950,6 +3090,20 @@
       "rva": "0x001e0494",
       "module": "samp.dll",
       "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceMaterialText",
+      "va": "0x102aca34",
+      "rva": "0x002aca34",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceObjectEdit",
+      "va": "0x102ac9f0",
+      "rva": "0x002ac9f0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "g_devicePlateManager",
@@ -2973,6 +3127,13 @@
       "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
     },
     {
+      "name": "g_devicePlayerTags",
+      "va": "0x102ac9d8",
+      "rva": "0x002ac9d8",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
       "name": "g_deviceProjectionMatrix",
       "va": "0x1017ec40",
       "rva": "0x0017ec40",
@@ -2985,6 +3146,27 @@
       "rva": "0x0018f570",
       "module": "samp.dll",
       "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceResetMarker",
+      "va": "0x1016be80",
+      "rva": "0x0016be80",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceScoreboard",
+      "va": "0x102ac9dc",
+      "rva": "0x002ac9dc",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "g_deviceSpawnScreen",
+      "va": "0x102aca20",
+      "rva": "0x002aca20",
+      "module": "samp.dll",
+      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
       "name": "g_deviceViewMatrix",
@@ -9170,20 +9352,8 @@
     },
     {
       "file": "source/d3dhook/texture_binding.cpp",
-      "name": "g_devicePlateSource",
-      "rva": 1635680,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/d3dhook/texture_binding.cpp",
       "name": "g_devicePlateTexture",
       "rva": 1635684,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/d3dhook/texture_binding.cpp",
-      "name": "g_deviceRenderVehicle",
-      "rva": 1635696,
       "module": "samp.dll"
     },
     {
@@ -9224,20 +9394,8 @@
     },
     {
       "file": "source/d3dhook/texture_binding.h",
-      "name": "g_devicePlateSource",
-      "rva": 1635680,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/d3dhook/texture_binding.h",
       "name": "g_devicePlateTexture",
       "rva": 1635684,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/d3dhook/texture_binding.h",
-      "name": "g_deviceRenderVehicle",
-      "rva": 1635696,
       "module": "samp.dll"
     },
     {
@@ -13855,6 +14013,306 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_devicePlayerTags",
+      "rva": 2804184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceSpawnScreen",
+      "rva": 2804256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceLabel",
+      "rva": 2804204,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceMaterialText",
+      "rva": 2804276,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceDeathWindow",
+      "rva": 2804248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceObjectEdit",
+      "rva": 2804208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceScoreboard",
+      "rva": 2804188,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceDialogResources",
+      "rva": 2804400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceCursorSurface",
+      "rva": 2804428,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "g_deviceResetMarker",
+      "rva": 1490560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "ClientDeviceObjectsLost",
+      "rva": 808480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.cpp",
+      "name": "ClientDeviceObjectsReset",
+      "rva": 809088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_devicePlayerTags",
+      "rva": 2804184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceSpawnScreen",
+      "rva": 2804256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceLabel",
+      "rva": 2804204,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceMaterialText",
+      "rva": 2804276,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceDeathWindow",
+      "rva": 2804248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceObjectEdit",
+      "rva": 2804208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceScoreboard",
+      "rva": 2804188,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceDialogResources",
+      "rva": 2804400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceCursorSurface",
+      "rva": 2804428,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "g_deviceResetMarker",
+      "rva": 1490560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "ClientDeviceObjectsLost",
+      "rva": 808480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_lifecycle.h",
+      "name": "ClientDeviceObjectsReset",
+      "rva": 809088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "g_deviceFonts",
+      "rva": 2804268,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CPlayerTags::OnLostDevice",
+      "rva": 446608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CPlayerTags::OnResetDevice",
+      "rva": 446656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CLabel::OnLostDevice",
+      "rva": 439856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CLabel::OnResetDevice",
+      "rva": 439872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CObjectMaterialText::OnLostDevice",
+      "rva": 459472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CObjectMaterialText::OnResetDevice",
+      "rva": 459520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CLicensePlate::OnLostDevice",
+      "rva": 446960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CLicensePlate::OnResetDevice",
+      "rva": 447040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CSpawnScreen::OnLostDevice",
+      "rva": 461120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.cpp",
+      "name": "CSpawnScreen::OnResetDevice",
+      "rva": 460432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CPlayerTags::OnLostDevice",
+      "rva": 446608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CPlayerTags::OnResetDevice",
+      "rva": 446656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLabel::OnLostDevice",
+      "rva": 439856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLabel::OnResetDevice",
+      "rva": 439872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CObjectMaterialText::OnLostDevice",
+      "rva": 459472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CObjectMaterialText::OnResetDevice",
+      "rva": 459520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLicensePlate::OnLostDevice",
+      "rva": 446960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLicensePlate::OnResetDevice",
+      "rva": 447040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CSpawnScreen::OnLostDevice",
+      "rva": 461120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CSpawnScreen::OnResetDevice",
+      "rva": 460432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::Close",
+      "rva": 451600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::Recalc",
+      "rva": 451424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CObjectPool::ShutdownMaterials",
+      "rva": 76368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CTextDrawPool::OnLostDevice",
+      "rva": 123744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "g_deviceFonts",
+      "rva": 2804268,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/font_color.cpp",
       "name": "g_fontOriginalText",
       "rva": 1567100,
@@ -14662,6 +15120,12 @@
       "file": "source/net/vehiclepool.h",
       "name": "CVehiclePool::Get",
       "rva": 4384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/vehiclepool.h",
+      "name": "CVehiclePool::ShutdownLicensePlates",
+      "rva": 125088,
       "module": "samp.dll"
     },
     {

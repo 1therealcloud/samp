@@ -251,10 +251,10 @@ extern D3DMATRIX g_deviceViewMatrix;
 extern D3DMATRIX g_deviceProjectionMatrix;
 // samp.dll RVA: 0x0017ec80
 extern D3DMATRIX g_deviceWorldMatrix;
-// Reviewed dependency; body is not recovered in this profile.
+// Implemented in gui/device_lifecycle.cpp; downstream UI/pool dependencies remain.
 // samp.dll RVA: 0x000c5620
 void ClientDeviceObjectsLost();
-// Reviewed dependency; body is not recovered in this profile.
+// Implemented in gui/device_lifecycle.cpp; downstream UI dependencies remain.
 // samp.dll RVA: 0x000c5880
 void ClientDeviceObjectsReset();
 // Reviewed dependency; body is not recovered in this profile.

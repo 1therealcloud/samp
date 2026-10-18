@@ -14,6 +14,9 @@ public:
     WORD Find(void *gameObject);
     // samp.dll RVA: 0x00001120
     CVehicle *Get(WORD id);
+    // Stage 3 dependency; full plate shutdown body remains unrecovered.
+    // samp.dll RVA: 0x0001e8a0
+    void ShutdownLicensePlates();
 };
 #pragma pack(pop)
 typedef char VehiclePoolObjectOffset[(offsetof(CVehiclePool,m_pObjects)==0x1134)?1:-1];

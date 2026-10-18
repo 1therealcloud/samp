@@ -1,5 +1,6 @@
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/input.h"
+#include "game/hooks_independent.h"
 #include "d3dhook/texture_binding.h"
 #include "net/vehiclepool.h"
 #include <string.h>
@@ -287,7 +288,7 @@ HRESULT __stdcall IDirect3DDevice9Hook::SetTexture(DWORD Stage, IDirect3DBaseTex
     if(plate && plate==pTexture && g_pNetGame) {
         CVehiclePool *pool=*(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0xc);
         if(pool) {
-            BYTE *vehicle=(BYTE*)pool->Get(pool->Find(g_deviceRenderVehicle));
+            BYTE *vehicle=(BYTE*)pool->Get(pool->Find((void*)g_hookSavedEsi));
             // Additional observed texture field; the full vehicle layout is open.
             if(vehicle && *(DWORD*)(vehicle+0x8f)) {
                 ClientSetRenderState(9,2);
