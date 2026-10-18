@@ -7,7 +7,7 @@ extern HMODULE g_clientModule;
 BOOL WINAPI ClientDllMain(HINSTANCE module,DWORD reason,LPVOID reserved);
 // samp.dll RVA: 0x000c6930
 BOOL WINAPI ClientDllMainForward(HINSTANCE module,DWORD reason,LPVOID reserved);
-// Dependency: exception filter body remains unrecovered.
+// Crash dialog/report dependency details are in client/exceptions.h.
 // samp.dll RVA: 0x00060430
 LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS *exception);
 // Stored callback only; frame/device implementation remains unrecovered.

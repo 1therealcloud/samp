@@ -2133,6 +2133,13 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "ClientConstructCrashText",
+      "va": "0x10060070",
+      "rva": "0x00060070",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
       "name": "ClientDllMain",
       "va": "0x100c6780",
       "rva": "0x000c6780",
@@ -2147,11 +2154,39 @@
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
+      "name": "ClientDumpLoadedModules",
+      "va": "0x1005fee0",
+      "rva": "0x0005fee0",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "ClientDumpMemory",
+      "va": "0x1005fd50",
+      "rva": "0x0005fd50",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "ClientDumpNetworkState",
+      "va": "0x1005fc20",
+      "rva": "0x0005fc20",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "ClientExceptionDialog",
+      "va": "0x10060330",
+      "rva": "0x00060330",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
       "name": "ClientExceptionFilter",
       "va": "0x10060430",
       "rva": "0x00060430",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
     },
     {
       "name": "ClientGameLoop",
@@ -2159,6 +2194,13 @@
       "rva": "0x000c66b0",
       "module": "samp.dll",
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ClientSendCrashReport",
+      "va": "0x10060260",
+      "rva": "0x00060260",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
     },
     {
       "name": "ClientStartupThread",
@@ -2817,6 +2859,34 @@
       "rva": null,
       "module": "GTA SA",
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "g_clientCrashLastRenderedObject",
+      "va": "0x1018f584",
+      "rva": "0x0018f584",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "g_clientCrashPedContext",
+      "va": "0x10151960",
+      "rva": "0x00151960",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "g_clientCrashText",
+      "va": "0x1015fa70",
+      "rva": "0x0015fa70",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "g_clientExceptionContext",
+      "va": "0x1015fa68",
+      "rva": "0x0015fa68",
+      "module": "samp.dll",
+      "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
     },
     {
       "name": "g_clientModule",
@@ -5950,6 +6020,132 @@
       "file": "source/client/bootstrap.h",
       "name": "ClientGameLoop",
       "rva": 812720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "g_clientExceptionContext",
+      "rva": 1440360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "g_clientCrashText",
+      "rva": 1440368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "g_clientCrashPedContext",
+      "rva": 1382752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "g_clientCrashLastRenderedObject",
+      "rva": 1635716,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "ClientDumpMemory",
+      "rva": 392528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "ClientDumpNetworkState",
+      "rva": 392224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "ClientDumpLoadedModules",
+      "rva": 392928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "ClientConstructCrashText",
+      "rva": 393328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "ClientExceptionDialog",
+      "rva": 394032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.cpp",
+      "name": "ClientExceptionFilter",
+      "rva": 394288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "g_clientExceptionContext",
+      "rva": 1440360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "g_clientCrashText",
+      "rva": 1440368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "g_clientCrashPedContext",
+      "rva": 1382752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "g_clientCrashLastRenderedObject",
+      "rva": 1635716,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientExceptionFilter",
+      "rva": 394288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientExceptionDialog",
+      "rva": 394032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientConstructCrashText",
+      "rva": 393328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientDumpMemory",
+      "rva": 392528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientDumpNetworkState",
+      "rva": 392224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientDumpLoadedModules",
+      "rva": 392928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/exceptions.h",
+      "name": "ClientSendCrashReport",
+      "rva": 393824,
       "module": "samp.dll"
     },
     {
