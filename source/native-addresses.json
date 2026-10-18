@@ -2140,6 +2140,20 @@
       "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
     },
     {
+      "name": "ClientDeviceObjectsLost",
+      "va": "0x100c5620",
+      "rva": "0x000c5620",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "ClientDeviceObjectsReset",
+      "va": "0x100c5880",
+      "rva": "0x000c5880",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
       "name": "ClientDllMain",
       "va": "0x100c6780",
       "rva": "0x000c6780",
@@ -2201,6 +2215,13 @@
       "rva": "0x00060260",
       "module": "samp.dll",
       "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "ClientSetRenderState",
+      "va": "0x100c54f0",
+      "rva": "0x000c54f0",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
     },
     {
       "name": "ClientStartupThread",
@@ -2908,6 +2929,76 @@
       "rva": "0x0018dc38",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "g_deviceMaterialIndex",
+      "va": "0x1017ebf0",
+      "rva": "0x0017ebf0",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceMaterialOverrideEnabled",
+      "va": "0x101e0490",
+      "rva": "0x001e0490",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceMaterialOverrides",
+      "va": "0x101e0494",
+      "rva": "0x001e0494",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_devicePlateManager",
+      "va": "0x102aca30",
+      "rva": "0x002aca30",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_devicePlateSource",
+      "va": "0x1018f560",
+      "rva": "0x0018f560",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_devicePlateTexture",
+      "va": "0x1018f564",
+      "rva": "0x0018f564",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceProjectionMatrix",
+      "va": "0x1017ec40",
+      "rva": "0x0017ec40",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceRenderVehicle",
+      "va": "0x1018f570",
+      "rva": "0x0018f570",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceViewMatrix",
+      "va": "0x1017ec00",
+      "rva": "0x0017ec00",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
+      "name": "g_deviceWorldMatrix",
+      "va": "0x1017ec80",
+      "rva": "0x0017ec80",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
     },
     {
       "name": "g_driverCompareFlag",
@@ -4093,6 +4184,13 @@
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
     },
     {
+      "name": "GameDeviceIntegrityCycle",
+      "va": "0x1009d6f0",
+      "rva": "0x0009d6f0",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+    },
+    {
       "name": "GameDisableMouseCalls",
       "va": "0x100a03c0",
       "rva": "0x000a03c0",
@@ -4161,6 +4259,13 @@
       "rva": "0x000a7630",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "GameGetVehiclePlateTexture",
+      "va": "0x100a41d0",
+      "rva": "0x000a41d0",
+      "module": "samp.dll",
+      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
     },
     {
       "name": "GameHook_000a2200",
@@ -4826,6 +4931,839 @@
       "rva": "0x000b3740",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::AddRef",
+      "va": "0x10073f70",
+      "rva": "0x00073f70",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::BeginScene",
+      "va": "0x100742a0",
+      "rva": "0x000742a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::BeginStateBlock",
+      "va": "0x10074540",
+      "rva": "0x00074540",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::Clear",
+      "va": "0x100742f0",
+      "rva": "0x000742f0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::ColorFill",
+      "va": "0x100741e0",
+      "rva": "0x000741e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateAdditionalSwapChain",
+      "va": "0x10074030",
+      "rva": "0x00074030",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateCubeTexture",
+      "va": "0x10074100",
+      "rva": "0x00074100",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateDepthStencilSurface",
+      "va": "0x10074140",
+      "rva": "0x00074140",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateIndexBuffer",
+      "va": "0x10074120",
+      "rva": "0x00074120",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateOffscreenPlainSurface",
+      "va": "0x10074200",
+      "rva": "0x00074200",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreatePixelShader",
+      "va": "0x10074c20",
+      "rva": "0x00074c20",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateQuery",
+      "va": "0x10074da0",
+      "rva": "0x00074da0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateRenderTarget",
+      "va": "0x10074130",
+      "rva": "0x00074130",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateStateBlock",
+      "va": "0x10074520",
+      "rva": "0x00074520",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateTexture",
+      "va": "0x100740e0",
+      "rva": "0x000740e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateVertexBuffer",
+      "va": "0x10074110",
+      "rva": "0x00074110",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateVertexDeclaration",
+      "va": "0x100749a0",
+      "rva": "0x000749a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateVertexShader",
+      "va": "0x10074a40",
+      "rva": "0x00074a40",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::CreateVolumeTexture",
+      "va": "0x100740f0",
+      "rva": "0x000740f0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DeletePatch",
+      "va": "0x10074d80",
+      "rva": "0x00074d80",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DrawIndexedPrimitive",
+      "va": "0x10074920",
+      "rva": "0x00074920",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DrawIndexedPrimitiveUP",
+      "va": "0x10074960",
+      "rva": "0x00074960",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DrawPrimitive",
+      "va": "0x10074900",
+      "rva": "0x00074900",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DrawPrimitiveUP",
+      "va": "0x10074940",
+      "rva": "0x00074940",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DrawRectPatch",
+      "va": "0x10074d40",
+      "rva": "0x00074d40",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::DrawTriPatch",
+      "va": "0x10074d60",
+      "rva": "0x00074d60",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::EndScene",
+      "va": "0x100742c0",
+      "rva": "0x000742c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::EndStateBlock",
+      "va": "0x10074560",
+      "rva": "0x00074560",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::EvictManagedResources",
+      "va": "0x10073fb0",
+      "rva": "0x00073fb0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetAvailableTextureMem",
+      "va": "0x10073fa0",
+      "rva": "0x00073fa0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetBackBuffer",
+      "va": "0x10074090",
+      "rva": "0x00074090",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetClipPlane",
+      "va": "0x100744c0",
+      "rva": "0x000744c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetClipStatus",
+      "va": "0x100745a0",
+      "rva": "0x000745a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetCreationParameters",
+      "va": "0x10073ff0",
+      "rva": "0x00073ff0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetCurrentTexturePalette",
+      "va": "0x10074820",
+      "rva": "0x00074820",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetDepthStencilSurface",
+      "va": "0x10074280",
+      "rva": "0x00074280",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetDeviceCaps",
+      "va": "0x10073fd0",
+      "rva": "0x00073fd0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetDirect3D",
+      "va": "0x10073fc0",
+      "rva": "0x00073fc0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetDisplayMode",
+      "va": "0x10073fe0",
+      "rva": "0x00073fe0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetFrontBufferData",
+      "va": "0x100741a0",
+      "rva": "0x000741a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetFVF",
+      "va": "0x10074a20",
+      "rva": "0x00074a20",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetGammaRamp",
+      "va": "0x100740d0",
+      "rva": "0x000740d0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetIndices",
+      "va": "0x10074c00",
+      "rva": "0x00074c00",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetLight",
+      "va": "0x10074440",
+      "rva": "0x00074440",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetLightEnable",
+      "va": "0x10074480",
+      "rva": "0x00074480",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetMaterial",
+      "va": "0x10074400",
+      "rva": "0x00074400",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetNPatchMode",
+      "va": "0x100748e0",
+      "rva": "0x000748e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetNumberOfSwapChains",
+      "va": "0x10074050",
+      "rva": "0x00074050",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetPaletteEntries",
+      "va": "0x100747e0",
+      "rva": "0x000747e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetPixelShader",
+      "va": "0x10074c60",
+      "rva": "0x00074c60",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantB",
+      "va": "0x10074d20",
+      "rva": "0x00074d20",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantF",
+      "va": "0x10074ca0",
+      "rva": "0x00074ca0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantI",
+      "va": "0x10074ce0",
+      "rva": "0x00074ce0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetRasterStatus",
+      "va": "0x100740a0",
+      "rva": "0x000740a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetRenderState",
+      "va": "0x10074500",
+      "rva": "0x00074500",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetRenderTarget",
+      "va": "0x10074240",
+      "rva": "0x00074240",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetRenderTargetData",
+      "va": "0x10074180",
+      "rva": "0x00074180",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetSamplerState",
+      "va": "0x10074760",
+      "rva": "0x00074760",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetScissorRect",
+      "va": "0x10074860",
+      "rva": "0x00074860",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetSoftwareVertexProcessing",
+      "va": "0x100748a0",
+      "rva": "0x000748a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetStreamSource",
+      "va": "0x10074b80",
+      "rva": "0x00074b80",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetStreamSourceFreq",
+      "va": "0x10074bc0",
+      "rva": "0x00074bc0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetSwapChain",
+      "va": "0x10074040",
+      "rva": "0x00074040",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetTexture",
+      "va": "0x100745c0",
+      "rva": "0x000745c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetTextureStageState",
+      "va": "0x10074720",
+      "rva": "0x00074720",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetTransform",
+      "va": "0x10074360",
+      "rva": "0x00074360",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetVertexDeclaration",
+      "va": "0x100749e0",
+      "rva": "0x000749e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetVertexShader",
+      "va": "0x10074a80",
+      "rva": "0x00074a80",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantB",
+      "va": "0x10074b40",
+      "rva": "0x00074b40",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantF",
+      "va": "0x10074ac0",
+      "rva": "0x00074ac0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantI",
+      "va": "0x10074b00",
+      "rva": "0x00074b00",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::GetViewport",
+      "va": "0x100743c0",
+      "rva": "0x000743c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::LightEnable",
+      "va": "0x10074460",
+      "rva": "0x00074460",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::MultiplyTransform",
+      "va": "0x10074380",
+      "rva": "0x00074380",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::Present",
+      "va": "0x100751b0",
+      "rva": "0x000751b0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::ProcessVertices",
+      "va": "0x10074980",
+      "rva": "0x00074980",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::QueryInterface",
+      "va": "0x10073f60",
+      "rva": "0x00073f60",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::Release",
+      "va": "0x10073f80",
+      "rva": "0x00073f80",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::Reset",
+      "va": "0x10074060",
+      "rva": "0x00074060",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetClipPlane",
+      "va": "0x100744a0",
+      "rva": "0x000744a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetClipStatus",
+      "va": "0x10074580",
+      "rva": "0x00074580",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetCurrentTexturePalette",
+      "va": "0x10074800",
+      "rva": "0x00074800",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetCursorPosition",
+      "va": "0x10074010",
+      "rva": "0x00074010",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetCursorProperties",
+      "va": "0x10074000",
+      "rva": "0x00074000",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetDepthStencilSurface",
+      "va": "0x10074260",
+      "rva": "0x00074260",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetDialogBoxMode",
+      "va": "0x100740b0",
+      "rva": "0x000740b0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetFVF",
+      "va": "0x10074a00",
+      "rva": "0x00074a00",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetGammaRamp",
+      "va": "0x100740c0",
+      "rva": "0x000740c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetIndices",
+      "va": "0x10074be0",
+      "rva": "0x00074be0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetLight",
+      "va": "0x10074420",
+      "rva": "0x00074420",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetMaterial",
+      "va": "0x100743e0",
+      "rva": "0x000743e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetNPatchMode",
+      "va": "0x100748c0",
+      "rva": "0x000748c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetPaletteEntries",
+      "va": "0x100747c0",
+      "rva": "0x000747c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetPixelShader",
+      "va": "0x10074c40",
+      "rva": "0x00074c40",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantB",
+      "va": "0x10074d00",
+      "rva": "0x00074d00",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantF",
+      "va": "0x10074c80",
+      "rva": "0x00074c80",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantI",
+      "va": "0x10074cc0",
+      "rva": "0x00074cc0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetRenderState",
+      "va": "0x100744e0",
+      "rva": "0x000744e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetRenderTarget",
+      "va": "0x10074220",
+      "rva": "0x00074220",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetSamplerState",
+      "va": "0x10074780",
+      "rva": "0x00074780",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetScissorRect",
+      "va": "0x10074840",
+      "rva": "0x00074840",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetSoftwareVertexProcessing",
+      "va": "0x10074880",
+      "rva": "0x00074880",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetStreamSource",
+      "va": "0x10074b60",
+      "rva": "0x00074b60",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetStreamSourceFreq",
+      "va": "0x10074ba0",
+      "rva": "0x00074ba0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetTexture",
+      "va": "0x100745e0",
+      "rva": "0x000745e0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetTextureStageState",
+      "va": "0x10074740",
+      "rva": "0x00074740",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetTransform",
+      "va": "0x10074310",
+      "rva": "0x00074310",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetVertexDeclaration",
+      "va": "0x100749c0",
+      "rva": "0x000749c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetVertexShader",
+      "va": "0x10074a60",
+      "rva": "0x00074a60",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantB",
+      "va": "0x10074b20",
+      "rva": "0x00074b20",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantF",
+      "va": "0x10074aa0",
+      "rva": "0x00074aa0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantI",
+      "va": "0x10074ae0",
+      "rva": "0x00074ae0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::SetViewport",
+      "va": "0x100743a0",
+      "rva": "0x000743a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::ShowCursor",
+      "va": "0x10074020",
+      "rva": "0x00074020",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::StretchRect",
+      "va": "0x100741c0",
+      "rva": "0x000741c0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::TestCooperativeLevel",
+      "va": "0x10073f90",
+      "rva": "0x00073f90",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::UpdateSurface",
+      "va": "0x10074160",
+      "rva": "0x00074160",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::UpdateTexture",
+      "va": "0x10074170",
+      "rva": "0x00074170",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+    },
+    {
+      "name": "IDirect3DDevice9Hook::ValidateDevice",
+      "va": "0x100747a0",
+      "rva": "0x000747a0",
+      "module": "samp.dll",
+      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
     },
     {
       "name": "InputBufferAnsiToWide",
@@ -6734,6 +7672,1590 @@
       "file": "source/d3d9/common/dxut_theme_native.h",
       "name": "FontGetDialogHeight",
       "rva": 813536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "g_deviceViewMatrix",
+      "rva": 1567744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "g_deviceProjectionMatrix",
+      "rva": 1567808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "g_deviceWorldMatrix",
+      "rva": 1567872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::QueryInterface",
+      "rva": 474976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::AddRef",
+      "rva": 474992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::Release",
+      "rva": 475008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::TestCooperativeLevel",
+      "rva": 475024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetAvailableTextureMem",
+      "rva": 475040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::EvictManagedResources",
+      "rva": 475056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetDirect3D",
+      "rva": 475072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetDeviceCaps",
+      "rva": 475088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetDisplayMode",
+      "rva": 475104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetCreationParameters",
+      "rva": 475120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetCursorProperties",
+      "rva": 475136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetCursorPosition",
+      "rva": 475152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::ShowCursor",
+      "rva": 475168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateAdditionalSwapChain",
+      "rva": 475184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetSwapChain",
+      "rva": 475200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetNumberOfSwapChains",
+      "rva": 475216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::Reset",
+      "rva": 475232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetBackBuffer",
+      "rva": 475280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetRasterStatus",
+      "rva": 475296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetDialogBoxMode",
+      "rva": 475312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetGammaRamp",
+      "rva": 475328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetGammaRamp",
+      "rva": 475344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateTexture",
+      "rva": 475360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateVolumeTexture",
+      "rva": 475376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateCubeTexture",
+      "rva": 475392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateVertexBuffer",
+      "rva": 475408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateIndexBuffer",
+      "rva": 475424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateRenderTarget",
+      "rva": 475440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateDepthStencilSurface",
+      "rva": 475456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::UpdateSurface",
+      "rva": 475488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::UpdateTexture",
+      "rva": 475504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetRenderTargetData",
+      "rva": 475520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetFrontBufferData",
+      "rva": 475552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::StretchRect",
+      "rva": 475584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::ColorFill",
+      "rva": 475616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateOffscreenPlainSurface",
+      "rva": 475648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetRenderTarget",
+      "rva": 475680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetRenderTarget",
+      "rva": 475712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetDepthStencilSurface",
+      "rva": 475744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetDepthStencilSurface",
+      "rva": 475776,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::BeginScene",
+      "rva": 475808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::EndScene",
+      "rva": 475840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::Clear",
+      "rva": 475888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetTransform",
+      "rva": 475920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetTransform",
+      "rva": 476000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::MultiplyTransform",
+      "rva": 476032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetViewport",
+      "rva": 476064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetViewport",
+      "rva": 476096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetMaterial",
+      "rva": 476128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetMaterial",
+      "rva": 476160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetLight",
+      "rva": 476192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetLight",
+      "rva": 476224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::LightEnable",
+      "rva": 476256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetLightEnable",
+      "rva": 476288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetClipPlane",
+      "rva": 476320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetClipPlane",
+      "rva": 476352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetRenderState",
+      "rva": 476384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetRenderState",
+      "rva": 476416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateStateBlock",
+      "rva": 476448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::BeginStateBlock",
+      "rva": 476480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::EndStateBlock",
+      "rva": 476512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetClipStatus",
+      "rva": 476544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetClipStatus",
+      "rva": 476576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetTexture",
+      "rva": 476608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetTexture",
+      "rva": 476640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetTextureStageState",
+      "rva": 476960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetTextureStageState",
+      "rva": 476992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetSamplerState",
+      "rva": 477024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetSamplerState",
+      "rva": 477056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::ValidateDevice",
+      "rva": 477088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetPaletteEntries",
+      "rva": 477120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetPaletteEntries",
+      "rva": 477152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetCurrentTexturePalette",
+      "rva": 477184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetCurrentTexturePalette",
+      "rva": 477216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetScissorRect",
+      "rva": 477248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetScissorRect",
+      "rva": 477280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetSoftwareVertexProcessing",
+      "rva": 477312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetSoftwareVertexProcessing",
+      "rva": 477344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetNPatchMode",
+      "rva": 477376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetNPatchMode",
+      "rva": 477408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DrawPrimitive",
+      "rva": 477440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DrawIndexedPrimitive",
+      "rva": 477472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DrawPrimitiveUP",
+      "rva": 477504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DrawIndexedPrimitiveUP",
+      "rva": 477536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::ProcessVertices",
+      "rva": 477568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateVertexDeclaration",
+      "rva": 477600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetVertexDeclaration",
+      "rva": 477632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetVertexDeclaration",
+      "rva": 477664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetFVF",
+      "rva": 477696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetFVF",
+      "rva": 477728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateVertexShader",
+      "rva": 477760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetVertexShader",
+      "rva": 477792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetVertexShader",
+      "rva": 477824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantF",
+      "rva": 477856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantF",
+      "rva": 477888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantI",
+      "rva": 477920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantI",
+      "rva": 477952,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantB",
+      "rva": 477984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantB",
+      "rva": 478016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetStreamSource",
+      "rva": 478048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetStreamSource",
+      "rva": 478080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetStreamSourceFreq",
+      "rva": 478112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetStreamSourceFreq",
+      "rva": 478144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetIndices",
+      "rva": 478176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetIndices",
+      "rva": 478208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreatePixelShader",
+      "rva": 478240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetPixelShader",
+      "rva": 478272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetPixelShader",
+      "rva": 478304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantF",
+      "rva": 478336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantF",
+      "rva": 478368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantI",
+      "rva": 478400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantI",
+      "rva": 478432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantB",
+      "rva": 478464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantB",
+      "rva": 478496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DrawRectPatch",
+      "rva": 478528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DrawTriPatch",
+      "rva": 478560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::DeletePatch",
+      "rva": 478592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.cpp",
+      "name": "IDirect3DDevice9Hook::CreateQuery",
+      "rva": 478624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::QueryInterface",
+      "rva": 474976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::AddRef",
+      "rva": 474992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::Release",
+      "rva": 475008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::TestCooperativeLevel",
+      "rva": 475024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetAvailableTextureMem",
+      "rva": 475040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::EvictManagedResources",
+      "rva": 475056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetDirect3D",
+      "rva": 475072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetDeviceCaps",
+      "rva": 475088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetDisplayMode",
+      "rva": 475104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetCreationParameters",
+      "rva": 475120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetCursorProperties",
+      "rva": 475136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetCursorPosition",
+      "rva": 475152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::ShowCursor",
+      "rva": 475168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateAdditionalSwapChain",
+      "rva": 475184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetSwapChain",
+      "rva": 475200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetNumberOfSwapChains",
+      "rva": 475216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::Reset",
+      "rva": 475232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::Present",
+      "rva": 479664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetBackBuffer",
+      "rva": 475280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetRasterStatus",
+      "rva": 475296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetDialogBoxMode",
+      "rva": 475312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetGammaRamp",
+      "rva": 475328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetGammaRamp",
+      "rva": 475344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateTexture",
+      "rva": 475360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateVolumeTexture",
+      "rva": 475376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateCubeTexture",
+      "rva": 475392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateVertexBuffer",
+      "rva": 475408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateIndexBuffer",
+      "rva": 475424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateRenderTarget",
+      "rva": 475440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateDepthStencilSurface",
+      "rva": 475456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::UpdateSurface",
+      "rva": 475488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::UpdateTexture",
+      "rva": 475504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetRenderTargetData",
+      "rva": 475520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetFrontBufferData",
+      "rva": 475552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::StretchRect",
+      "rva": 475584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::ColorFill",
+      "rva": 475616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateOffscreenPlainSurface",
+      "rva": 475648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetRenderTarget",
+      "rva": 475680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetRenderTarget",
+      "rva": 475712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetDepthStencilSurface",
+      "rva": 475744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetDepthStencilSurface",
+      "rva": 475776,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::BeginScene",
+      "rva": 475808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::EndScene",
+      "rva": 475840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::Clear",
+      "rva": 475888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetTransform",
+      "rva": 475920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetTransform",
+      "rva": 476000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::MultiplyTransform",
+      "rva": 476032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetViewport",
+      "rva": 476064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetViewport",
+      "rva": 476096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetMaterial",
+      "rva": 476128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetMaterial",
+      "rva": 476160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetLight",
+      "rva": 476192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetLight",
+      "rva": 476224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::LightEnable",
+      "rva": 476256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetLightEnable",
+      "rva": 476288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetClipPlane",
+      "rva": 476320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetClipPlane",
+      "rva": 476352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetRenderState",
+      "rva": 476384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetRenderState",
+      "rva": 476416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateStateBlock",
+      "rva": 476448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::BeginStateBlock",
+      "rva": 476480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::EndStateBlock",
+      "rva": 476512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetClipStatus",
+      "rva": 476544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetClipStatus",
+      "rva": 476576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetTexture",
+      "rva": 476608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetTexture",
+      "rva": 476640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetTextureStageState",
+      "rva": 476960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetTextureStageState",
+      "rva": 476992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetSamplerState",
+      "rva": 477024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetSamplerState",
+      "rva": 477056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::ValidateDevice",
+      "rva": 477088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetPaletteEntries",
+      "rva": 477120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetPaletteEntries",
+      "rva": 477152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetCurrentTexturePalette",
+      "rva": 477184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetCurrentTexturePalette",
+      "rva": 477216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetScissorRect",
+      "rva": 477248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetScissorRect",
+      "rva": 477280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetSoftwareVertexProcessing",
+      "rva": 477312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetSoftwareVertexProcessing",
+      "rva": 477344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetNPatchMode",
+      "rva": 477376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetNPatchMode",
+      "rva": 477408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DrawPrimitive",
+      "rva": 477440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DrawIndexedPrimitive",
+      "rva": 477472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DrawPrimitiveUP",
+      "rva": 477504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DrawIndexedPrimitiveUP",
+      "rva": 477536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::ProcessVertices",
+      "rva": 477568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateVertexDeclaration",
+      "rva": 477600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetVertexDeclaration",
+      "rva": 477632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetVertexDeclaration",
+      "rva": 477664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetFVF",
+      "rva": 477696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetFVF",
+      "rva": 477728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateVertexShader",
+      "rva": 477760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetVertexShader",
+      "rva": 477792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetVertexShader",
+      "rva": 477824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantF",
+      "rva": 477856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantF",
+      "rva": 477888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantI",
+      "rva": 477920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantI",
+      "rva": 477952,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetVertexShaderConstantB",
+      "rva": 477984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetVertexShaderConstantB",
+      "rva": 478016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetStreamSource",
+      "rva": 478048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetStreamSource",
+      "rva": 478080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetStreamSourceFreq",
+      "rva": 478112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetStreamSourceFreq",
+      "rva": 478144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetIndices",
+      "rva": 478176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetIndices",
+      "rva": 478208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreatePixelShader",
+      "rva": 478240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetPixelShader",
+      "rva": 478272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetPixelShader",
+      "rva": 478304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantF",
+      "rva": 478336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantF",
+      "rva": 478368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantI",
+      "rva": 478400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantI",
+      "rva": 478432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::SetPixelShaderConstantB",
+      "rva": 478464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::GetPixelShaderConstantB",
+      "rva": 478496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DrawRectPatch",
+      "rva": 478528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DrawTriPatch",
+      "rva": 478560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::DeletePatch",
+      "rva": 478592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "IDirect3DDevice9Hook::CreateQuery",
+      "rva": 478624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "g_deviceViewMatrix",
+      "rva": 1567744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "g_deviceProjectionMatrix",
+      "rva": 1567808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "g_deviceWorldMatrix",
+      "rva": 1567872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "ClientDeviceObjectsLost",
+      "rva": 808480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "ClientDeviceObjectsReset",
+      "rva": 809088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/IDirect3DDevice9Hook.h",
+      "name": "GameDeviceIntegrityCycle",
+      "rva": 644848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_deviceMaterialOverrideEnabled",
+      "rva": 1967248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_deviceMaterialOverrides",
+      "rva": 1967252,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_deviceMaterialIndex",
+      "rva": 1567728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_devicePlateSource",
+      "rva": 1635680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_devicePlateTexture",
+      "rva": 1635684,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_deviceRenderVehicle",
+      "rva": 1635696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "g_devicePlateManager",
+      "rva": 2804272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "GameGetVehiclePlateTexture",
+      "rva": 672208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.cpp",
+      "name": "ClientSetRenderState",
+      "rva": 808176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_deviceMaterialOverrideEnabled",
+      "rva": 1967248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_deviceMaterialOverrides",
+      "rva": 1967252,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_deviceMaterialIndex",
+      "rva": 1567728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_devicePlateSource",
+      "rva": 1635680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_devicePlateTexture",
+      "rva": 1635684,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_deviceRenderVehicle",
+      "rva": 1635696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "g_devicePlateManager",
+      "rva": 2804272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "GameGetVehiclePlateTexture",
+      "rva": 672208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/texture_binding.h",
+      "name": "ClientSetRenderState",
+      "rva": 808176,
       "module": "samp.dll"
     },
     {
