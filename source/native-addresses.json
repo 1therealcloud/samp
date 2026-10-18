@@ -922,6 +922,13 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "CEntity::SetModelIndex",
+      "va": "0x1009ed90",
+      "rva": "0x0009ed90",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "CEntity::SetSpeed",
       "va": "0x1009eb50",
       "rva": "0x0009eb50",
@@ -1321,6 +1328,13 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
     },
     {
+      "name": "CGame::IsModelAvailable",
+      "va": "0x100a07b0",
+      "rva": "0x000a07b0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "CGame::IsStarted",
       "va": "0x100a0770",
       "rva": "0x000a0770",
@@ -1328,11 +1342,25 @@
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
     },
     {
+      "name": "CGame::LoadRequestedModels",
+      "va": "0x100a07a0",
+      "rva": "0x000a07a0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "CGame::ProcessInputEnabling",
       "va": "0x100a0410",
       "rva": "0x000a0410",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "CGame::RequestModel",
+      "va": "0x100a0780",
+      "rva": "0x000a0780",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "CGame::SetCursorMode",
@@ -1347,6 +1375,13 @@
       "rva": "0x000a09f0",
       "module": "samp.dll",
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::StartGame",
+      "va": "0x100a0720",
+      "rva": "0x000a0720",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "ChatImeActive",
@@ -1522,6 +1557,13 @@
       "rva": "0x000a0530",
       "module": "samp.dll",
       "evidence": "analysis/gui-comparison-v52.json native operand"
+    },
+    {
+      "name": "ClientStartupThread",
+      "va": "0x100c5150",
+      "rva": "0x000c5150",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "CPed::~CPed",
@@ -1909,6 +1951,20 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
     },
     {
+      "name": "g_clientSettings",
+      "va": "0x102abe78",
+      "rva": "0x002abe78",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "g_clientStartupMarker",
+      "va": "0x1018dc38",
+      "rva": "0x0018dc38",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "g_driverCompareFlag",
       "va": "0x10156998",
       "rva": "0x00156998",
@@ -2012,6 +2068,13 @@
       "rva": "0x00174d38",
       "module": "samp.dll",
       "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_gameCustomModelInfo",
+      "va": "0x101c0444",
+      "rva": "0x001c0444",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "g_gameCustomStreamRead",
@@ -2175,6 +2238,13 @@
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
     },
     {
+      "name": "g_gameLoadModelsCommand",
+      "va": "0x1011e678",
+      "rva": "0x0011e678",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "g_gameLoopAddress",
       "va": "0x102ac9cc",
       "rva": "0x002ac9cc",
@@ -2182,11 +2252,25 @@
       "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
     },
     {
+      "name": "g_gameModelAvailableCommand",
+      "va": "0x1011e6a0",
+      "rva": "0x0011e6a0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "g_gameModelFlags",
       "va": "0x102a8e70",
       "rva": "0x002a8e70",
       "module": "samp.dll",
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameModelInfoTable",
+      "va": "0x10152ae0",
+      "rva": "0x00152ae0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "g_gameModelRecords",
@@ -2201,6 +2285,13 @@
       "rva": "0x001546f8",
       "module": "samp.dll",
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameModelTimeoutWarning",
+      "va": "0x1011e618",
+      "rva": "0x0011e618",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "g_gameMouseCallEU",
@@ -2308,6 +2399,13 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "g_gameRequestModelCommand",
+      "va": "0x1011e664",
+      "rva": "0x0011e664",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "g_gameScanDirectEU",
       "va": "0x10154768",
       "rva": "0x00154768",
@@ -2376,6 +2474,13 @@
       "rva": "0x0018e1cc",
       "module": "samp.dll",
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_gameUseCustomModelInfo",
+      "va": "0x101e0444",
+      "rva": "0x001e0444",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "g_gameUsedPlayerSlots",
@@ -3092,6 +3197,20 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "GameGetModelData1c",
+      "va": "0x100b41a0",
+      "rva": "0x000b41a0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "GameGetModelInfo",
+      "va": "0x100a7630",
+      "rva": "0x000a7630",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "GameHook_000a2200",
       "va": "0x100a2200",
       "rva": "0x000a2200",
@@ -3568,6 +3687,13 @@
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
     },
     {
+      "name": "GameMarkStartupStage",
+      "va": "0x1009db90",
+      "rva": "0x0009db90",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
       "name": "GameParseStreamData",
       "va": "0x100b6610",
       "rva": "0x000b6610",
@@ -3923,6 +4049,27 @@
       "rva": "0x000b1f10",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "Settings::GetFromCommandLine",
+      "va": "0x100c5590",
+      "rva": "0x000c5590",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "Settings::GetFromQuotes",
+      "va": "0x100c55e0",
+      "rva": "0x000c55e0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "Settings::Initialize",
+      "va": "0x100c5c90",
+      "rva": "0x000c5c90",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
       "name": "Util_itoa",
@@ -6123,6 +6270,12 @@
     },
     {
       "file": "source/game/entity.h",
+      "name": "CEntity::SetModelIndex",
+      "rva": 650640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
       "name": "CEntity::DoesExist",
       "rva": 651792,
       "module": "samp.dll"
@@ -6227,6 +6380,12 @@
       "file": "source/game/entity.h",
       "name": "g_entityBoundaryLift",
       "rva": 1159964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_model.cpp",
+      "name": "CEntity::SetModelIndex",
+      "rva": 650640,
       "module": "samp.dll"
     },
     {
@@ -6455,6 +6614,30 @@
       "file": "source/game/game.h",
       "name": "CGame::InitGame",
       "rva": 657104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::StartGame",
+      "rva": 657184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::RequestModel",
+      "rva": 657280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::LoadRequestedModels",
+      "rva": 657312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::IsModelAvailable",
+      "rva": 657328,
       "module": "samp.dll"
     },
     {
@@ -8450,6 +8633,132 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.cpp",
+      "name": "g_gameCustomModelInfo",
+      "rva": 1836100,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "g_gameUseCustomModelInfo",
+      "rva": 1967172,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "g_gameModelInfoTable",
+      "rva": 1387232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "g_gameRequestModelCommand",
+      "rva": 1173092,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "g_gameLoadModelsCommand",
+      "rva": 1173112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "g_gameModelAvailableCommand",
+      "rva": 1173152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "g_gameModelTimeoutWarning",
+      "rva": 1173016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "GameGetModelInfo",
+      "rva": 685616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "GameGetModelData1c",
+      "rva": 737696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "CGame::RequestModel",
+      "rva": 657280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "CGame::LoadRequestedModels",
+      "rva": 657312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.cpp",
+      "name": "CGame::IsModelAvailable",
+      "rva": 657328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameCustomModelInfo",
+      "rva": 1836100,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameUseCustomModelInfo",
+      "rva": 1967172,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameModelInfoTable",
+      "rva": 1387232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameRequestModelCommand",
+      "rva": 1173092,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameLoadModelsCommand",
+      "rva": 1173112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameModelAvailableCommand",
+      "rva": 1173152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "g_gameModelTimeoutWarning",
+      "rva": 1173016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelInfo",
+      "rva": 685616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelData1c",
+      "rva": 737696,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/patches.cpp",
       "name": "g_gamePatchStreamBytes",
       "rva": 1394368,
@@ -9041,6 +9350,12 @@
       "file": "source/game/scripting.h",
       "name": "GameExceptionFilter",
       "rva": 394352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/start.cpp",
+      "name": "CGame::StartGame",
+      "rva": 657184,
       "module": "samp.dll"
     },
     {
@@ -9980,6 +10295,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/main.cpp",
+      "name": "g_clientSettings",
+      "rva": 2801272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "Settings::GetFromCommandLine",
+      "rva": 808336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "Settings::GetFromQuotes",
+      "rva": 808416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.cpp",
+      "name": "Settings::Initialize",
+      "rva": 810128,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/main.h",
       "name": "g_pGame",
       "rva": 2804284,
@@ -10001,6 +10340,48 @@
       "file": "source/main.h",
       "name": "g_pNetGame",
       "rva": 2804260,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_clientSettings",
+      "rva": 2801272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "g_clientStartupMarker",
+      "rva": 1629240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "GameMarkStartupStage",
+      "rva": 646032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "ClientStartupThread",
+      "rva": 807248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "Settings::Initialize",
+      "rva": 810128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "Settings::GetFromCommandLine",
+      "rva": 808336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/main.h",
+      "name": "Settings::GetFromQuotes",
+      "rva": 808416,
       "module": "samp.dll"
     },
     {
@@ -10121,6 +10502,24 @@
       "file": "source/runutil.h",
       "name": "K_DecodeString",
       "rva": 645248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/startup.cpp",
+      "name": "g_clientStartupMarker",
+      "rva": 1629240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/startup.cpp",
+      "name": "GameMarkStartupStage",
+      "rva": 646032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/startup.cpp",
+      "name": "ClientStartupThread",
+      "rva": 807248,
       "module": "samp.dll"
     }
   ],

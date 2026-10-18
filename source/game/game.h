@@ -36,6 +36,15 @@ public:
     CPed *GetPlayerPed();
     // samp.dll RVA: 0x000a06d0
     void InitGame();
+    // samp.dll RVA: 0x000a0720
+    void StartGame();
+    // Native consumes two stack arguments but serializes only model.
+    // samp.dll RVA: 0x000a0780
+    void RequestModel(int model,int loadingStream);
+    // samp.dll RVA: 0x000a07a0
+    void LoadRequestedModels();
+    // samp.dll RVA: 0x000a07b0
+    BOOL IsModelAvailable(int model);
     // samp.dll RVA: 0x000a0760
     BOOL IsMenuVisible();
     // samp.dll RVA: 0x000a0530
