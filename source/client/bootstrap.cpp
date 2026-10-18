@@ -24,8 +24,7 @@ BOOL WINAPI ClientDllMain(HINSTANCE module,DWORD reason,LPVOID reserved) {
             memcpy(archivePath+end+1,"samp.saa",9);
             // Native computes archivePath but opens the relative name below.
             g_pArchive=new CArchiveFS;
-            typedef bool (__fastcall *LoadArchive)(CArchiveFS*,void*,const char*);
-            if(!((LoadArchive)g_pArchive->nativeVtable[1])(g_pArchive,0,"samp.saa")) {
+            if(!g_pArchive->Load("samp.saa")) {
                 __asm { int 3 }
             }
             AddFontResourceA("gtaweap3.ttf");AddFontResourceA("sampaux3.ttf");

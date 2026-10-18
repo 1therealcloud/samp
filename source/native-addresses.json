@@ -5,6 +5,27 @@
   "scope": "Maintained recovered SA-MP source declarations and definitions; tests and frozen snapshots excluded.",
   "entries": [
     {
+      "name": "AFS_ENTRYBT_NODE::~AFS_ENTRYBT_NODE",
+      "va": "0x10064d80",
+      "rva": "0x00064d80",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "AFS_ENTRYBT_NODE::AddEntry",
+      "va": "0x10064220",
+      "rva": "0x00064220",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "AFS_ENTRYBT_NODE::FindEntry",
+      "va": "0x100642b0",
+      "rva": "0x000642b0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "AimStuff::ApplyLocalAim",
       "va": "0x1009c3e0",
       "rva": "0x0009c3e0",
@@ -222,11 +243,130 @@
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
+      "name": "CAbstractStream::CAbstractStream",
+      "va": "0x10063e80",
+      "rva": "0x00063e80",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CAbstractStream::Read(void*,int,int)",
+      "va": "0x10063e90",
+      "rva": "0x00063e90",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CAbstractStream::Seek(int)",
+      "va": "0x10063ed0",
+      "rva": "0x00063ed0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CAbstractStream::Write(const void*,int,int)",
+      "va": "0x10063eb0",
+      "rva": "0x00063eb0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::~CArchiveFS",
+      "va": "0x10064e80",
+      "rva": "0x00064e80",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "CArchiveFS::CArchiveFS",
       "va": "0x10064dd0",
       "rva": "0x00064dd0",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::CArchiveFS(DWORD,DWORD)",
+      "va": "0x10064e20",
+      "rva": "0x00064e20",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::GetFileData",
+      "va": "0x100649e0",
+      "rva": "0x000649e0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::GetFileIndex(char*)",
+      "va": "0x10064940",
+      "rva": "0x00064940",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::GetFileIndex(DWORD)",
+      "va": "0x100648c0",
+      "rva": "0x000648c0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::GetFileSize",
+      "va": "0x100649a0",
+      "rva": "0x000649a0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::HashString",
+      "va": "0x10064300",
+      "rva": "0x00064300",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::Load(BYTE*,DWORD)",
+      "va": "0x100647b0",
+      "rva": "0x000647b0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::Load(char*)",
+      "va": "0x10064f20",
+      "rva": "0x00064f20",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::LoadEntries",
+      "va": "0x10064550",
+      "rva": "0x00064550",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::ms_dwHashInit",
+      "va": "0x10140778",
+      "rva": "0x00140778",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::Unload",
+      "va": "0x10064890",
+      "rva": "0x00064890",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CArchiveFS::UnloadData",
+      "va": "0x10064bd0",
+      "rva": "0x00064bd0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
       "name": "CAudio::GetRadioStation",
@@ -698,6 +838,55 @@
       "evidence": "Ghidra config-v65-safe export and native instructions; SAMP-API name corrected where contradicted"
     },
     {
+      "name": "CCryptoContext::~CCryptoContext",
+      "va": "0x100650a0",
+      "rva": "0x000650a0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CCryptoContext::CCryptoContext",
+      "va": "0x10065030",
+      "rva": "0x00065030",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CCryptoContext::GetProvider",
+      "va": "0x100650e0",
+      "rva": "0x000650e0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CCryptoContext::ms_dwProviderType",
+      "va": "0x1014077c",
+      "rva": "0x0014077c",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CCryptoContext::ms_dwRefCount",
+      "va": "0x1016c37c",
+      "rva": "0x0016c37c",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CCryptoContext::ms_szContainerName",
+      "va": "0x10140780",
+      "rva": "0x00140780",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CCryptoContext::ms_szProviderName",
+      "va": "0x1016c380",
+      "rva": "0x0016c380",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "CDXUTDialog::AddControl",
       "va": "0x1008c140",
       "rva": "0x0008c140",
@@ -1032,6 +1221,139 @@
       "rva": "0x0009eac0",
       "module": "samp.dll",
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CFileStream::~CFileStream",
+      "va": "0x10064d50",
+      "rva": "0x00064d50",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::CFileStream(const char*,eType,eMode)",
+      "va": "0x10064bf0",
+      "rva": "0x00064bf0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Close",
+      "va": "0x10064c60",
+      "rva": "0x00064c60",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::IsOpen",
+      "va": "0x10064c50",
+      "rva": "0x00064c50",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Open",
+      "va": "0x10063f00",
+      "rva": "0x00063f00",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Read(void*,int,int)",
+      "va": "0x10064ca0",
+      "rva": "0x00064ca0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Read(void*,int)",
+      "va": "0x10064c80",
+      "rva": "0x00064c80",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Seek(int,eSeek)",
+      "va": "0x10064d00",
+      "rva": "0x00064d00",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Tell",
+      "va": "0x10064d20",
+      "rva": "0x00064d20",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Write(const void*,int,int)",
+      "va": "0x10064ce0",
+      "rva": "0x00064ce0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileStream::Write(const void*,int)",
+      "va": "0x10064cc0",
+      "rva": "0x00064cc0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::~CFileSystem",
+      "va": "0x10060690",
+      "rva": "0x00060690",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::CFileSystem",
+      "va": "0x10060500",
+      "rva": "0x00060500",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::DecryptData",
+      "va": "0x10060640",
+      "rva": "0x00060640",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::GetFileData",
+      "va": "0x10060610",
+      "rva": "0x00060610",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::GetFileIndex",
+      "va": "0x10060580",
+      "rva": "0x00060580",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::GetFileSize",
+      "va": "0x100605e0",
+      "rva": "0x000605e0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::Load",
+      "va": "0x100606b0",
+      "rva": "0x000606b0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CFileSystem::Unload",
+      "va": "0x10060520",
+      "rva": "0x00060520",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
       "name": "CFontColorSprite::AddRef",
@@ -1461,6 +1783,41 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "CHasher::~CHasher",
+      "va": "0x10065320",
+      "rva": "0x00065320",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CHasher::AddData",
+      "va": "0x10065330",
+      "rva": "0x00065330",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CHasher::CHasher",
+      "va": "0x100652f0",
+      "rva": "0x000652f0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CHasher::GetContainer",
+      "va": "0x10065350",
+      "rva": "0x00065350",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CHasher::ms_dwHashAlgorithm",
+      "va": "0x10140788",
+      "rva": "0x00140788",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "ChatImeActive",
       "va": "0x10085e60",
       "rva": "0x00085e60",
@@ -1636,6 +1993,41 @@
       "evidence": "analysis/gui-comparison-v52.json native operand"
     },
     {
+      "name": "CKeyPair::~CKeyPair",
+      "va": "0x10065430",
+      "rva": "0x00065430",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CKeyPair::CKeyPair",
+      "va": "0x10065360",
+      "rva": "0x00065360",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CKeyPair::GetContainer",
+      "va": "0x10065420",
+      "rva": "0x00065420",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CKeyPair::LoadFromMemory",
+      "va": "0x100653a0",
+      "rva": "0x000653a0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CKeyPair::ReleaseKey",
+      "va": "0x10065380",
+      "rva": "0x00065380",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "ClientDllMain",
       "va": "0x100c6780",
       "rva": "0x000c6780",
@@ -1671,6 +2063,41 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "CMemoryStream::~CMemoryStream",
+      "va": "0x10064120",
+      "rva": "0x00064120",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CMemoryStream::Read",
+      "va": "0x10064010",
+      "rva": "0x00064010",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CMemoryStream::Seek",
+      "va": "0x100640b0",
+      "rva": "0x000640b0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CMemoryStream::Tell",
+      "va": "0x100640f0",
+      "rva": "0x000640f0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CMemoryStream::Write",
+      "va": "0x10064060",
+      "rva": "0x00064060",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "CPed::~CPed",
       "va": "0x100b0ea0",
       "rva": "0x000b0ea0",
@@ -1704,6 +2131,153 @@
       "rva": "0x000abbe0",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CRYPT_FN_AcquireContext",
+      "va": "0x1011bb18",
+      "rva": "0x0011bb18",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_CreateHash",
+      "va": "0x1011bb48",
+      "rva": "0x0011bb48",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_DestroyHash",
+      "va": "0x1011bb58",
+      "rva": "0x0011bb58",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_DestroyKey",
+      "va": "0x1011bb80",
+      "rva": "0x0011bb80",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_HashData",
+      "va": "0x1011bb70",
+      "rva": "0x0011bb70",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_ImportKey",
+      "va": "0x1011bb90",
+      "rva": "0x0011bb90",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_ReleaseContext",
+      "va": "0x1011bb30",
+      "rva": "0x0011bb30",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CRYPT_FN_VerifySignature",
+      "va": "0x1011bba0",
+      "rva": "0x0011bba0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CSigner::~CSigner",
+      "va": "0x10065450",
+      "rva": "0x00065450",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CSigner::CSigner",
+      "va": "0x10065440",
+      "rva": "0x00065440",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CSigner::SetSignature",
+      "va": "0x10065460",
+      "rva": "0x00065460",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CSigner::VerifySignature",
+      "va": "0x100654b0",
+      "rva": "0x000654b0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::~CTinyEncrypt",
+      "va": "0x10065530",
+      "rva": "0x00065530",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::CTinyEncrypt",
+      "va": "0x100654e0",
+      "rva": "0x000654e0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::DecryptBlock",
+      "va": "0x10065580",
+      "rva": "0x00065580",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::DecryptData",
+      "va": "0x10065640",
+      "rva": "0x00065640",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::ms_bInitDone",
+      "va": "0x1016c3ac",
+      "rva": "0x0016c3ac",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::ms_dwInitDelta",
+      "va": "0x1014079c",
+      "rva": "0x0014079c",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::ms_dwInitSum",
+      "va": "0x1016c3a8",
+      "rva": "0x0016c3a8",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::ms_dwRounds",
+      "va": "0x10140798",
+      "rva": "0x00140798",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CTinyEncrypt::SetKey",
+      "va": "0x10065540",
+      "rva": "0x00065540",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
       "name": "CUniBuffer::SetText",
@@ -4219,6 +4793,20 @@
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
     },
     {
+      "name": "RSA_PUB_KEY",
+      "va": "0x1011b9d0",
+      "rva": "0x0011b9d0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "SAA_FILE_HEADER::Read(CAbstractStream*)",
+      "va": "0x100641c0",
+      "rva": "0x000641c0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "Scripting::ExecBuffer",
       "va": "0x100b1ed0",
       "rva": "0x000b1ed0",
@@ -4261,6 +4849,13 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "TEA_KEY",
+      "va": "0x1011ba64",
+      "rva": "0x0011ba64",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
       "name": "Util_itoa",
       "va": "0x10017600",
       "rva": "0x00017600",
@@ -4294,6 +4889,125 @@
       "rva": "0x00017470",
       "module": "samp.dll",
       "evidence": "analysis/runutil-verification.json"
+    },
+    {
+      "name": "xCryptCallAcquireContext",
+      "va": "0x10065170",
+      "rva": "0x00065170",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallCreateHash",
+      "va": "0x100651d0",
+      "rva": "0x000651d0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallDestroyHash",
+      "va": "0x10065200",
+      "rva": "0x00065200",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallDestroyKey",
+      "va": "0x10065260",
+      "rva": "0x00065260",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallHashData",
+      "va": "0x10065230",
+      "rva": "0x00065230",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallImportKey",
+      "va": "0x10065290",
+      "rva": "0x00065290",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallReleaseContext",
+      "va": "0x100651a0",
+      "rva": "0x000651a0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptCallVerifySignature",
+      "va": "0x100652c0",
+      "rva": "0x000652c0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptGetFunction",
+      "va": "0x100650f0",
+      "rva": "0x000650f0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsAcquireContext",
+      "va": "0x1016c388",
+      "rva": "0x0016c388",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsCreateHash",
+      "va": "0x1016c390",
+      "rva": "0x0016c390",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsDestroyHash",
+      "va": "0x1016c394",
+      "rva": "0x0016c394",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsDestroyKey",
+      "va": "0x1016c39c",
+      "rva": "0x0016c39c",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsHashData",
+      "va": "0x1016c398",
+      "rva": "0x0016c398",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsImportKey",
+      "va": "0x1016c3a0",
+      "rva": "0x0016c3a0",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsReleaseContext",
+      "va": "0x1016c38c",
+      "rva": "0x0016c38c",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "xCryptOffsVerifySignature",
+      "va": "0x1016c3a4",
+      "rva": "0x0016c3a4",
+      "module": "samp.dll",
+      "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     }
   ],
   "annotations": [
@@ -4499,12 +5213,6 @@
       "file": "source/archive/filehooks.h",
       "name": "Arch_GetFileType",
       "rva": 402336,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/archive/provider.h",
-      "name": "CArchiveFS::CArchiveFS",
-      "rva": 413136,
       "module": "samp.dll"
     },
     {
@@ -10980,6 +11688,936 @@
       "name": "ClientStartupThread",
       "rva": 807248,
       "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::Read(CAbstractStream*)",
+      "rva": 410048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::ms_dwHashInit",
+      "rva": 1312632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::CArchiveFS",
+      "rva": 413136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::CArchiveFS(DWORD,DWORD)",
+      "rva": 413216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::~CArchiveFS",
+      "rva": 413312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::HashString",
+      "rva": 410368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::LoadEntries",
+      "rva": 410960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::Load(char*)",
+      "rva": 413472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::Load(BYTE*,DWORD)",
+      "rva": 411568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::Unload",
+      "rva": 411792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::GetFileIndex(DWORD)",
+      "rva": 411840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::GetFileIndex(char*)",
+      "rva": 411968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::GetFileSize",
+      "rva": 412064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::GetFileData",
+      "rva": 412128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "CArchiveFS::UnloadData",
+      "rva": 412624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "AFS_ENTRYBT_NODE::AddEntry",
+      "rva": 410144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "AFS_ENTRYBT_NODE::FindEntry",
+      "rva": 410288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "AFS_ENTRYBT_NODE::~AFS_ENTRYBT_NODE",
+      "rva": 413056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::LoadEntries",
+      "rva": 410960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::ms_dwHashInit",
+      "rva": 1312632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::HashString",
+      "rva": 410368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::CArchiveFS",
+      "rva": 413136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::CArchiveFS(DWORD,DWORD)",
+      "rva": 413216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::~CArchiveFS",
+      "rva": 413312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::Load(char*)",
+      "rva": 413472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::Load(BYTE*,DWORD)",
+      "rva": 411568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::Unload",
+      "rva": 411792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::GetFileIndex(DWORD)",
+      "rva": 411840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::GetFileIndex(char*)",
+      "rva": 411968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::GetFileSize",
+      "rva": 412064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::GetFileData",
+      "rva": 412128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "CArchiveFS::UnloadData",
+      "rva": 412624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::ms_dwRefCount",
+      "rva": 1491836,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::ms_dwProviderType",
+      "rva": 1312636,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::ms_szProviderName",
+      "rva": 1491840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::ms_szContainerName",
+      "rva": 1312640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::CCryptoContext",
+      "rva": 413744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::~CCryptoContext",
+      "rva": 413856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::GetProvider",
+      "rva": 413920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::ms_dwRefCount",
+      "rva": 1491836,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::ms_dwProviderType",
+      "rva": 1312636,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::ms_szProviderName",
+      "rva": 1491840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::ms_szContainerName",
+      "rva": 1312640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::CCryptoContext",
+      "rva": 413744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::~CCryptoContext",
+      "rva": 413856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::GetProvider",
+      "rva": 413920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_AcquireContext",
+      "rva": 1162008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_ReleaseContext",
+      "rva": 1162032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_CreateHash",
+      "rva": 1162056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_DestroyHash",
+      "rva": 1162072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_HashData",
+      "rva": 1162096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_DestroyKey",
+      "rva": 1162112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_ImportKey",
+      "rva": 1162128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "CRYPT_FN_VerifySignature",
+      "rva": 1162144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptGetFunction",
+      "rva": 413936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsAcquireContext",
+      "rva": 1491848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallAcquireContext",
+      "rva": 414064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsReleaseContext",
+      "rva": 1491852,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallReleaseContext",
+      "rva": 414112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsCreateHash",
+      "rva": 1491856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallCreateHash",
+      "rva": 414160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsDestroyHash",
+      "rva": 1491860,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallDestroyHash",
+      "rva": 414208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsHashData",
+      "rva": 1491864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallHashData",
+      "rva": 414256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsDestroyKey",
+      "rva": 1491868,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallDestroyKey",
+      "rva": 414304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsImportKey",
+      "rva": 1491872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallImportKey",
+      "rva": 414352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptOffsVerifySignature",
+      "rva": 1491876,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/CryptoFns.h",
+      "name": "xCryptCallVerifySignature",
+      "rva": 414400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.cpp",
+      "name": "CHasher::ms_dwHashAlgorithm",
+      "rva": 1312648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.cpp",
+      "name": "CHasher::CHasher",
+      "rva": 414448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.cpp",
+      "name": "CHasher::~CHasher",
+      "rva": 414496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.cpp",
+      "name": "CHasher::AddData",
+      "rva": 414512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.cpp",
+      "name": "CHasher::GetContainer",
+      "rva": 414544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.h",
+      "name": "CHasher::ms_dwHashAlgorithm",
+      "rva": 1312648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.h",
+      "name": "CHasher::CHasher",
+      "rva": 414448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.h",
+      "name": "CHasher::~CHasher",
+      "rva": 414496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.h",
+      "name": "CHasher::AddData",
+      "rva": 414512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Hasher.h",
+      "name": "CHasher::GetContainer",
+      "rva": 414544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::CKeyPair",
+      "rva": 414560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::~CKeyPair",
+      "rva": 414768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::ReleaseKey",
+      "rva": 414592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::LoadFromMemory",
+      "rva": 414624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::GetContainer",
+      "rva": 414752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::CKeyPair",
+      "rva": 414560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::~CKeyPair",
+      "rva": 414768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::LoadFromMemory",
+      "rva": 414624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::ReleaseKey",
+      "rva": 414592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::GetContainer",
+      "rva": 414752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::CSigner",
+      "rva": 414784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::~CSigner",
+      "rva": 414800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::SetSignature",
+      "rva": 414816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::VerifySignature",
+      "rva": 414896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::CSigner",
+      "rva": 414784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::~CSigner",
+      "rva": 414800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::SetSignature",
+      "rva": 414816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::VerifySignature",
+      "rva": 414896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::CAbstractStream",
+      "rva": 409216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Read(void*,int,int)",
+      "rva": 409232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Write(const void*,int,int)",
+      "rva": 409264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Seek(int)",
+      "rva": 409296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::CFileStream(const char*,eType,eMode)",
+      "rva": 412656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::~CFileStream",
+      "rva": 413008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Open",
+      "rva": 409344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::IsOpen",
+      "rva": 412752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Close",
+      "rva": 412768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Read(void*,int)",
+      "rva": 412800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Read(void*,int,int)",
+      "rva": 412832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Write(const void*,int)",
+      "rva": 412864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Write(const void*,int,int)",
+      "rva": 412896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Seek(int,eSeek)",
+      "rva": 412928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::Tell",
+      "rva": 412960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CMemoryStream::~CMemoryStream",
+      "rva": 409888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CMemoryStream::Read",
+      "rva": 409616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CMemoryStream::Write",
+      "rva": 409696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CMemoryStream::Seek",
+      "rva": 409776,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CMemoryStream::Tell",
+      "rva": 409840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::ms_dwRounds",
+      "rva": 1312664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::ms_dwInitDelta",
+      "rva": 1312668,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::ms_dwInitSum",
+      "rva": 1491880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::ms_bInitDone",
+      "rva": 1491884,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::CTinyEncrypt",
+      "rva": 414944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::~CTinyEncrypt",
+      "rva": 415024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::SetKey",
+      "rva": 415040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::DecryptBlock",
+      "rva": 415104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::DecryptData",
+      "rva": 415296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::ms_dwRounds",
+      "rva": 1312664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::ms_dwInitDelta",
+      "rva": 1312668,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::ms_dwInitSum",
+      "rva": 1491880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::ms_bInitDone",
+      "rva": 1491884,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::DecryptBlock",
+      "rva": 415104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::CTinyEncrypt",
+      "rva": 414944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::~CTinyEncrypt",
+      "rva": 415024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::SetKey",
+      "rva": 415040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::DecryptData",
+      "rva": 415296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::CFileSystem",
+      "rva": 394496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::~CFileSystem",
+      "rva": 394896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::Load",
+      "rva": 394928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::Unload",
+      "rva": 394528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::GetFileIndex",
+      "rva": 394624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::GetFileSize",
+      "rva": 394720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::GetFileData",
+      "rva": 394768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.h",
+      "name": "CFileSystem::DecryptData",
+      "rva": 394816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::CFileSystem",
+      "rva": 394496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::~CFileSystem",
+      "rva": 394896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::Load",
+      "rva": 394928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::Unload",
+      "rva": 394528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::GetFileIndex",
+      "rva": 394624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::GetFileSize",
+      "rva": 394720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::GetFileData",
+      "rva": 394768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filesystem.cpp",
+      "name": "CFileSystem::DecryptData",
+      "rva": 394816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/keys.h",
+      "name": "RSA_PUB_KEY",
+      "rva": 1161680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/keys.h",
+      "name": "TEA_KEY",
+      "rva": 1161828,
+      "module": "samp.dll"
     }
   ],
   "unknowns": [
@@ -11052,6 +12690,246 @@
       "file": "source/gui/input_ime.cpp",
       "name": "InputImeAccess::ResetDefaultContext",
       "reason": "recovery access helper for RVA 0x00085460"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::SAA_FILE_HEADER",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::SizeOf",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::InitializeDataV1",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::InitializeDataV2",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::Write",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::VerifyIdentifier",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::XorV2Identifier",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveCommon.h",
+      "name": "SAA_FILE_HEADER::Read(FILE*)",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveFS.cpp",
+      "name": "GameForcedExit",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "AFS_ENTRYBT_NODE::AFS_ENTRYBT_NODE()",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/ArchiveFS.h",
+      "name": "AFS_ENTRYBT_NODE::AFS_ENTRYBT_NODE(SAA_ENTRY*)",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::ms_hAdvApi32",
+      "reason": "native global not established; unused legacy declaration"
+    },
+    {
+      "file": "source/archive/CryptoContext.cpp",
+      "name": "CCryptoContext::GenerateRandom",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::ms_hAdvApi32",
+      "reason": "native global not established; unused legacy declaration"
+    },
+    {
+      "file": "source/archive/CryptoContext.h",
+      "name": "CCryptoContext::GenerateRandom",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::ms_dwRSAKeySize",
+      "reason": "native global not established; unused legacy declaration"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::GenerateKey",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::LoadFromFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::WriteToFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.cpp",
+      "name": "CKeyPair::WriteCHeaderFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::ms_dwRSAKeySize",
+      "reason": "native global not established; unused legacy declaration"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::GenerateKey",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::LoadFromFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::WriteToFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/KeyPair.h",
+      "name": "CKeyPair::WriteCHeaderFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::SignHash",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::GetSignature",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Signer.cpp",
+      "name": "CSigner::GetSignatureLength",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::SignHash",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::GetSignature",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Signer.h",
+      "name": "CSigner::GetSignatureLength",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::~CAbstractStream",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Read(void*,int)",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Write(const void*,int)",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Seek(int,eSeek)",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CAbstractStream::Tell",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CFileStream::CFileStream()",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/Stream.h",
+      "name": "CMemoryStream::CMemoryStream",
+      "reason": "inline/pure-virtual or legacy helper; standalone native entry not established"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::EncryptBlock",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::EncryptData",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::LoadKey",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::WriteKey",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.cpp",
+      "name": "CTinyEncrypt::WriteCHeaderFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::EncryptBlock",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::LoadKey",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::WriteKey",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::WriteCHeaderFile",
+      "reason": "ARCTOOL-only branch; not established in the client"
+    },
+    {
+      "file": "source/archive/TinyEncrypt.h",
+      "name": "CTinyEncrypt::EncryptData",
+      "reason": "ARCTOOL-only branch; not established in the client"
     }
   ]
 }
