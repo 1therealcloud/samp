@@ -152,6 +152,83 @@
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
     },
     {
+      "name": "Arch_CloseHandle",
+      "va": "0x10062360",
+      "rva": "0x00062360",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "Arch_CreateFileA",
+      "va": "0x100625d0",
+      "rva": "0x000625d0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "Arch_GetFileSize",
+      "va": "0x10062270",
+      "rva": "0x00062270",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "Arch_GetFileType",
+      "va": "0x100623a0",
+      "rva": "0x000623a0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "Arch_ReadFile",
+      "va": "0x100620f0",
+      "rva": "0x000620f0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "Arch_SetFilePointer",
+      "va": "0x100622c0",
+      "rva": "0x000622c0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "Arch_ShowCursor",
+      "va": "0x100623e0",
+      "rva": "0x000623e0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ArchiveInstallCursorHook",
+      "va": "0x100623f0",
+      "rva": "0x000623f0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ArchiveInstallFileHooks",
+      "va": "0x10062720",
+      "rva": "0x00062720",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ArchiveRemoveHooks",
+      "va": "0x10062810",
+      "rva": "0x00062810",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "CArchiveFS::CArchiveFS",
+      "va": "0x10064dd0",
+      "rva": "0x00064dd0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
       "name": "CAudio::GetRadioStation",
       "va": "0x100a2030",
       "rva": "0x000a2030",
@@ -1559,6 +1636,34 @@
       "evidence": "analysis/gui-comparison-v52.json native operand"
     },
     {
+      "name": "ClientDllMain",
+      "va": "0x100c6780",
+      "rva": "0x000c6780",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ClientDllMainForward",
+      "va": "0x100c6930",
+      "rva": "0x000c6930",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ClientExceptionFilter",
+      "va": "0x10060430",
+      "rva": "0x00060430",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ClientGameLoop",
+      "va": "0x100c66b0",
+      "rva": "0x000c66b0",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
       "name": "ClientStartupThread",
       "va": "0x100c5150",
       "rva": "0x000c5150",
@@ -1832,6 +1937,76 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "g_archiveHooksInstalled",
+      "va": "0x1016c378",
+      "rva": "0x0016c378",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveOpenRecords",
+      "va": "0x1016bf60",
+      "rva": "0x0016bf60",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealCloseHandle",
+      "va": "0x1016c360",
+      "rva": "0x0016c360",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealCreateFileA",
+      "va": "0x1016c354",
+      "rva": "0x0016c354",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealGetFileSize",
+      "va": "0x1016c34c",
+      "rva": "0x0016c34c",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealGetFileType",
+      "va": "0x1016c364",
+      "rva": "0x0016c364",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealReadFile",
+      "va": "0x1016c35c",
+      "rva": "0x0016c35c",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealSetFilePointer",
+      "va": "0x1016c350",
+      "rva": "0x0016c350",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRealShowCursor",
+      "va": "0x1016c368",
+      "rva": "0x0016c368",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_archiveRecordUsed",
+      "va": "0x1016be98",
+      "rva": "0x0016be98",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
       "name": "g_audioLoad",
       "va": "0x1011eb04",
       "rva": "0x0011eb04",
@@ -1949,6 +2124,13 @@
       "rva": null,
       "module": "GTA SA",
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
+    },
+    {
+      "name": "g_clientModule",
+      "va": "0x102ac9c8",
+      "rva": "0x002ac9c8",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
       "name": "g_clientSettings",
@@ -2929,6 +3111,13 @@
       "rva": "0x001a0441",
       "module": "samp.dll",
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_pArchive",
+      "va": "0x102ac9d4",
+      "rva": "0x002ac9d4",
+      "module": "samp.dll",
+      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
       "name": "g_pChat",
@@ -4109,6 +4298,222 @@
   ],
   "annotations": [
     {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveOpenRecords",
+      "rva": 1490784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRecordUsed",
+      "rva": 1490584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveHooksInstalled",
+      "rva": 1491832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealGetFileSize",
+      "rva": 1491788,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealSetFilePointer",
+      "rva": 1491792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealCreateFileA",
+      "rva": 1491796,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealReadFile",
+      "rva": 1491804,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealCloseHandle",
+      "rva": 1491808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealGetFileType",
+      "rva": 1491812,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "g_archiveRealShowCursor",
+      "rva": 1491816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "ArchiveInstallFileHooks",
+      "rva": 403232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "ArchiveInstallCursorHook",
+      "rva": 402416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "ArchiveRemoveHooks",
+      "rva": 403472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.cpp",
+      "name": "Arch_ShowCursor",
+      "rva": 402400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveOpenRecords",
+      "rva": 1490784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRecordUsed",
+      "rva": 1490584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveHooksInstalled",
+      "rva": 1491832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealGetFileSize",
+      "rva": 1491788,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealSetFilePointer",
+      "rva": 1491792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealCreateFileA",
+      "rva": 1491796,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealReadFile",
+      "rva": 1491804,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealCloseHandle",
+      "rva": 1491808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealGetFileType",
+      "rva": 1491812,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "g_archiveRealShowCursor",
+      "rva": 1491816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveInstallFileHooks",
+      "rva": 403232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveInstallCursorHook",
+      "rva": 402416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "ArchiveRemoveHooks",
+      "rva": 403472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_ShowCursor",
+      "rva": 402400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_CreateFileA",
+      "rva": 402896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_ReadFile",
+      "rva": 401648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_GetFileSize",
+      "rva": 402032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_SetFilePointer",
+      "rva": 402112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_CloseHandle",
+      "rva": 402272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/filehooks.h",
+      "name": "Arch_GetFileType",
+      "rva": 402336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/provider.h",
+      "name": "CArchiveFS::CArchiveFS",
+      "rva": 413136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/archive/provider.h",
+      "name": "g_pArchive",
+      "rva": 2804180,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/chatwindow.cpp",
       "name": "g_pGame",
       "rva": 2804284,
@@ -4424,6 +4829,60 @@
       "file": "source/chatwindow.h",
       "name": "CChat::OnResetDevice",
       "rva": 425024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.cpp",
+      "name": "g_clientModule",
+      "rva": 2804168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.cpp",
+      "name": "g_pArchive",
+      "rva": 2804180,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.cpp",
+      "name": "ClientDllMain",
+      "rva": 812928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.cpp",
+      "name": "ClientDllMainForward",
+      "rva": 813360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.h",
+      "name": "g_clientModule",
+      "rva": 2804168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.h",
+      "name": "ClientDllMain",
+      "rva": 812928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.h",
+      "name": "ClientDllMainForward",
+      "rva": 813360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.h",
+      "name": "ClientExceptionFilter",
+      "rva": 394288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/bootstrap.h",
+      "name": "ClientGameLoop",
+      "rva": 812720,
       "module": "samp.dll"
     },
     {
