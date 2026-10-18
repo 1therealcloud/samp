@@ -21,6 +21,49 @@ public:
     virtual void Remove();
     // samp.dll RVA: 0x0009e950
     void GetMatrix(CMatrix *matrix);
+    // samp.dll RVA: 0x0009ea00
+    void SetMatrix(CMatrix matrix);
+    // samp.dll RVA: 0x0009eb20
+    void GetSpeed(CVector *speed);
+    // samp.dll RVA: 0x0009eb50
+    void SetSpeed(CVector speed);
+    // samp.dll RVA: 0x0009ec70
+    void GetTurnSpeed(CVector *speed);
+    // samp.dll RVA: 0x0009eca0
+    void SetTurnSpeed(CVector speed);
+    // samp.dll RVA: 0x0009ecd0
+    void ApplyTurnSpeed();
+    // samp.dll RVA: 0x0009ecf0
+    float GetDistanceFromCentreOfMassToBaseOfModel();
+    // samp.dll RVA: 0x0009ed30
+    void GetBoundCentre(CVector *centre);
+    // samp.dll RVA: 0x0009ee70
+    int GetModelIndex();
+    // samp.dll RVA: 0x0009f210
+    BOOL DoesExist();
+    // samp.dll RVA: 0x0009f260
+    BOOL EnforceWorldBoundries(float positiveX,float negativeX,float positiveY,float negativeY);
+    // samp.dll RVA: 0x0009f400
+    BOOL HasExceededWorldBoundries(float positiveX,float negativeX,float positiveY,float negativeY);
+    // Native results use AL; the SAMP-API BOOL signature is not ABI evidence.
+    // samp.dll RVA: 0x0009f4a0
+    bool GetCollisionFlag();
+    // samp.dll RVA: 0x0009f470
+    void SetCollisionFlag(BOOL enabled);
+    // samp.dll RVA: 0x0009f4c0
+    void SetCollisionProcessed(BOOL processed);
+    // samp.dll RVA: 0x0009f730
+    void GetEulerInverted(float *x,float *y,float *z);
+    // samp.dll RVA: 0x0009f8a0
+    void *GetRwObject();
+    // samp.dll RVA: 0x0009f9f0
+    void DeleteRwObject();
+    // samp.dll RVA: 0x0009fb20
+    bool IsIgnored();
+    // samp.dll RVA: 0x0009fc20
+    BOOL IsStationary();
+    // samp.dll RVA: 0x0009eac0
+    void UpdateRwFrame();
     // samp.dll RVA: 0x0009ee80
     void Teleport(CVector position);
 };
@@ -31,4 +74,10 @@ typedef char EntityBackendOffset[(offsetof(CEntity,m_pGameEntity)==0x40)?1:-1];
 void __stdcall GameWorldAdd(void *entity);
 // samp.dll RVA: 0x000b3740
 void __stdcall GameWorldRemove(void *entity);
+// samp.dll RVA: 0x001181b8
+extern const float g_entityRadiansToDegrees;
+// samp.dll RVA: 0x0011c660
+extern const float g_entityEulerSign;
+// samp.dll RVA: 0x0011b31c
+extern const float g_entityBoundaryLift;
 #endif

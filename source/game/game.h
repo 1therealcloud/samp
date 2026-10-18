@@ -3,24 +3,12 @@
 #include <windows.h>
 #include <d3d9.h>
 #include <stddef.h>
+#include "game/audio.h"
+#include "game/camera.h"
 class CPed;
 class CEntity;
 class CMatrix;
 #pragma pack(push,1)
-class CAudio {
-public:
-    BOOL m_bSoundLoaded;
-    bool m_bOutdoorAmbienceTrackDisabled;
-    // samp.dll RVA: unknown (inline initialization in CGame RVA 0x0009fdc0; standalone entry not established)
-    CAudio() : m_bSoundLoaded(FALSE),m_bOutdoorAmbienceTrackDisabled(false) {}
-};
-class CCamera {
-public:
-    CEntity *m_pAttachedTo;
-    CMatrix *m_pMatrix;
-    // samp.dll RVA: 0x0009fda0
-    CCamera();
-};
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
@@ -76,8 +64,6 @@ typedef char GameExtent[(sizeof(CGame)==0x142)?1:-1];
 typedef char GameCursorOffset[(offsetof(CGame,m_nCursorMode)==0x61)?1:-1];
 typedef char GameWaitOffset[(offsetof(CGame,m_nInputEnableWaitFrames)==0x65)?1:-1];
 typedef char GameClockOffset[(offsetof(CGame,m_bClockEnabled)==0x69)?1:-1];
-typedef char AudioExtent[(sizeof(CAudio)==5)?1:-1];
-typedef char CameraExtent[(sizeof(CCamera)==8)?1:-1];
 // samp.dll RVA: 0x0018e1d8
 extern BOOL g_gameUsedPlayerSlots[210];
 #endif

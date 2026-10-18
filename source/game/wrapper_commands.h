@@ -1,0 +1,32 @@
+#ifndef SAMP_WRAPPER_COMMANDS_H
+#define SAMP_WRAPPER_COMMANDS_H
+#include "game/scripting.h"
+// samp.dll RVA: 0x0011e410
+extern const Scripting::OpcodeInfo g_cameraFade;
+// samp.dll RVA: 0x0011e424
+extern const Scripting::OpcodeInfo g_cameraRestoreJumpcut;
+// samp.dll RVA: 0x0011e438
+extern const Scripting::OpcodeInfo g_cameraPointAt;
+// samp.dll RVA: 0x0011e44c
+extern const Scripting::OpcodeInfo g_cameraRestore;
+// samp.dll RVA: 0x0011e460
+extern const Scripting::OpcodeInfo g_cameraSet;
+// samp.dll RVA: 0x0011e474
+extern const Scripting::OpcodeInfo g_cameraStop;
+// samp.dll RVA: 0x0011e488
+extern const Scripting::OpcodeInfo g_cameraMove;
+// samp.dll RVA: 0x0011e49c
+extern const Scripting::OpcodeInfo g_cameraTrack;
+// samp.dll RVA: 0x0011e4b0
+extern const Scripting::OpcodeInfo g_cameraPersistTrack;
+// samp.dll RVA: 0x0011e4c4
+extern const Scripting::OpcodeInfo g_cameraPersistPosition;
+// samp.dll RVA: 0x0011eaf0
+extern const Scripting::OpcodeInfo g_audioPlay;
+// samp.dll RVA: 0x0011eb04
+extern const Scripting::OpcodeInfo g_audioLoad;
+// samp.dll RVA: 0x0011eb40
+extern const Scripting::OpcodeInfo g_audioUnload;
+// samp.dll RVA: 0x0011eb54
+extern const Scripting::OpcodeInfo g_audioSetPosition;
+#endif

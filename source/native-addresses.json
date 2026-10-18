@@ -152,11 +152,165 @@
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
     },
     {
+      "name": "CAudio::GetRadioStation",
+      "va": "0x100a2030",
+      "rva": "0x000a2030",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::GetRadioVolume",
+      "va": "0x100a20a0",
+      "rva": "0x000a20a0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::IsOutdoorAmbienceTrackDisabled",
+      "va": "0x100a21c0",
+      "rva": "0x000a21c0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::Play",
+      "va": "0x100a20e0",
+      "rva": "0x000a20e0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::SetOutdoorAmbienceTrack",
+      "va": "0x100a20c0",
+      "rva": "0x000a20c0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::StartRadio",
+      "va": "0x100a2060",
+      "rva": "0x000a2060",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::StopOutdoorAmbienceTrack",
+      "va": "0x100a20b0",
+      "rva": "0x000a20b0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CAudio::StopRadio",
+      "va": "0x100a2080",
+      "rva": "0x000a2080",
+      "module": "samp.dll",
+      "evidence": "Read-only audio-stop-v88-code/100a2080.c and audio-stop-v88-instructions.tsv; native 17-byte body and GTA audio-engine operands correct the external A2260 anchor."
+    },
+    {
+      "name": "CCamera::~CCamera",
+      "va": "0x1009fdb0",
+      "rva": "0x0009fdb0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::Attach",
+      "va": "0x1009d4a0",
+      "rva": "0x0009d4a0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
       "name": "CCamera::CCamera",
       "va": "0x1009fda0",
       "rva": "0x0009fda0",
       "module": "samp.dll",
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CCamera::Detach",
+      "va": "0x1009d670",
+      "rva": "0x0009d670",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::Fade",
+      "va": "0x1009d280",
+      "rva": "0x0009d280",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::GetDistanceToPoint",
+      "va": "0x1009d540",
+      "rva": "0x0009d540",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::GetMatrix",
+      "va": "0x1009d2a0",
+      "rva": "0x0009d2a0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::PointAt",
+      "va": "0x1009d620",
+      "rva": "0x0009d620",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::Restore",
+      "va": "0x1009d580",
+      "rva": "0x0009d580",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::Set",
+      "va": "0x1009d5c0",
+      "rva": "0x0009d5c0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::SetMatrix",
+      "va": "0x1009d320",
+      "rva": "0x0009d320",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::SetMoveVector",
+      "va": "0x1009d3d0",
+      "rva": "0x0009d3d0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::SetToOwner",
+      "va": "0x1009d4f0",
+      "rva": "0x0009d4f0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::SetTrackVector",
+      "va": "0x1009d440",
+      "rva": "0x0009d440",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CCamera::TakeControl",
+      "va": "0x1009d3b0",
+      "rva": "0x0009d3b0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
       "name": "CChat::AddChatMessage",
@@ -621,11 +775,67 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CEntity::ApplyTurnSpeed",
+      "va": "0x1009ecd0",
+      "rva": "0x0009ecd0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
       "name": "CEntity::CEntity",
       "va": "0x1009bce0",
       "rva": "0x0009bce0",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::DeleteRwObject",
+      "va": "0x1009f9f0",
+      "rva": "0x0009f9f0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::DoesExist",
+      "va": "0x1009f210",
+      "rva": "0x0009f210",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::EnforceWorldBoundries",
+      "va": "0x1009f260",
+      "rva": "0x0009f260",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetBoundCentre",
+      "va": "0x1009ed30",
+      "rva": "0x0009ed30",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetCollisionFlag",
+      "va": "0x1009f4a0",
+      "rva": "0x0009f4a0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetDistanceFromCentreOfMassToBaseOfModel",
+      "va": "0x1009ecf0",
+      "rva": "0x0009ecf0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetEulerInverted",
+      "va": "0x1009f730",
+      "rva": "0x0009f730",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
       "name": "CEntity::GetMatrix",
@@ -635,6 +845,55 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CEntity::GetModelIndex",
+      "va": "0x1009ee70",
+      "rva": "0x0009ee70",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetRwObject",
+      "va": "0x1009f8a0",
+      "rva": "0x0009f8a0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetSpeed",
+      "va": "0x1009eb20",
+      "rva": "0x0009eb20",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetTurnSpeed",
+      "va": "0x1009ec70",
+      "rva": "0x0009ec70",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::HasExceededWorldBoundries",
+      "va": "0x1009f400",
+      "rva": "0x0009f400",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::IsIgnored",
+      "va": "0x1009fb20",
+      "rva": "0x0009fb20",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::IsStationary",
+      "va": "0x1009fc20",
+      "rva": "0x0009fc20",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
       "name": "CEntity::Remove",
       "va": "0x1009f240",
       "rva": "0x0009f240",
@@ -642,11 +901,53 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CEntity::SetCollisionFlag",
+      "va": "0x1009f470",
+      "rva": "0x0009f470",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::SetCollisionProcessed",
+      "va": "0x1009f4c0",
+      "rva": "0x0009f4c0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::SetMatrix",
+      "va": "0x1009ea00",
+      "rva": "0x0009ea00",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::SetSpeed",
+      "va": "0x1009eb50",
+      "rva": "0x0009eb50",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::SetTurnSpeed",
+      "va": "0x1009eca0",
+      "rva": "0x0009eca0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
       "name": "CEntity::Teleport",
       "va": "0x1009ee80",
       "rva": "0x0009ee80",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::UpdateRwFrame",
+      "va": "0x1009eac0",
+      "rva": "0x0009eac0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
       "name": "CFontColorSprite::AddRef",
@@ -1489,6 +1790,34 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "g_audioLoad",
+      "va": "0x1011eb04",
+      "rva": "0x0011eb04",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_audioPlay",
+      "va": "0x1011eaf0",
+      "rva": "0x0011eaf0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_audioSetPosition",
+      "va": "0x1011eb54",
+      "rva": "0x0011eb54",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_audioUnload",
+      "va": "0x1011eb40",
+      "rva": "0x0011eb40",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
       "name": "g_buildingRemovalCount",
       "va": "0x1018dc18",
       "rva": "0x0018dc18",
@@ -1501,6 +1830,76 @@
       "rva": "0x00188df8",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_cameraFade",
+      "va": "0x1011e410",
+      "rva": "0x0011e410",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraMove",
+      "va": "0x1011e488",
+      "rva": "0x0011e488",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraPersistPosition",
+      "va": "0x1011e4c4",
+      "rva": "0x0011e4c4",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraPersistTrack",
+      "va": "0x1011e4b0",
+      "rva": "0x0011e4b0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraPointAt",
+      "va": "0x1011e438",
+      "rva": "0x0011e438",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraRestore",
+      "va": "0x1011e44c",
+      "rva": "0x0011e44c",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraRestoreJumpcut",
+      "va": "0x1011e424",
+      "rva": "0x0011e424",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraSet",
+      "va": "0x1011e460",
+      "rva": "0x0011e460",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraStop",
+      "va": "0x1011e474",
+      "rva": "0x0011e474",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_cameraTrack",
+      "va": "0x1011e49c",
+      "rva": "0x0011e49c",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
       "name": "g_chatScreenWidth",
@@ -1536,6 +1935,27 @@
       "rva": "0x00181ac8",
       "module": "samp.dll",
       "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "g_entityBoundaryLift",
+      "va": "0x1011b31c",
+      "rva": "0x0011b31c",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_entityEulerSign",
+      "va": "0x1011c660",
+      "rva": "0x0011c660",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_entityRadiansToDegrees",
+      "va": "0x101181b8",
+      "rva": "0x001181b8",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
       "name": "g_entityTeleportCommand",
@@ -3132,6 +3552,13 @@
       "rva": "0x000a6020",
       "module": "samp.dll",
       "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+    },
+    {
+      "name": "GameIsCameraPointValid",
+      "va": "0x100b46e0",
+      "rva": "0x000b46e0",
+      "module": "samp.dll",
+      "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
       "name": "GameLoadDictionaryTexture",
@@ -5155,6 +5582,102 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::GetRadioStation",
+      "rva": 663600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::StartRadio",
+      "rva": 663648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::StopRadio",
+      "rva": 663680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::GetRadioVolume",
+      "rva": 663712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::StopOutdoorAmbienceTrack",
+      "rva": 663728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::SetOutdoorAmbienceTrack",
+      "rva": 663744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::IsOutdoorAmbienceTrackDisabled",
+      "rva": 664000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.cpp",
+      "name": "CAudio::Play",
+      "rva": 663776,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::GetRadioStation",
+      "rva": 663600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::StartRadio",
+      "rva": 663648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::StopRadio",
+      "rva": 663680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::GetRadioVolume",
+      "rva": 663712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::StopOutdoorAmbienceTrack",
+      "rva": 663728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::SetOutdoorAmbienceTrack",
+      "rva": 663744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::IsOutdoorAmbienceTrackDisabled",
+      "rva": 664000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/audio.h",
+      "name": "CAudio::Play",
+      "rva": 663776,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/building_removal.cpp",
       "name": "g_buildingRemovalRecords",
       "rva": 1609208,
@@ -5200,6 +5723,192 @@
       "file": "source/game/building_removal.h",
       "name": "GameShouldSuppressMarker",
       "rva": 641760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::~CCamera",
+      "rva": 654768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::Fade",
+      "rva": 643712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::GetMatrix",
+      "rva": 643744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::SetMatrix",
+      "rva": 643872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::TakeControl",
+      "rva": 644016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::SetMoveVector",
+      "rva": 644048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::SetTrackVector",
+      "rva": 644160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "GameIsCameraPointValid",
+      "rva": 739040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::Attach",
+      "rva": 644256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::SetToOwner",
+      "rva": 644336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::GetDistanceToPoint",
+      "rva": 644416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::Restore",
+      "rva": 644480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::Set",
+      "rva": 644544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::PointAt",
+      "rva": 644640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.cpp",
+      "name": "CCamera::Detach",
+      "rva": 644720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::CCamera",
+      "rva": 654752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::~CCamera",
+      "rva": 654768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::Fade",
+      "rva": 643712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::GetMatrix",
+      "rva": 643744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::SetMatrix",
+      "rva": 643872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::TakeControl",
+      "rva": 644016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::SetMoveVector",
+      "rva": 644048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::SetTrackVector",
+      "rva": 644160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::Attach",
+      "rva": 644256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::SetToOwner",
+      "rva": 644336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::GetDistanceToPoint",
+      "rva": 644416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::Restore",
+      "rva": 644480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::Set",
+      "rva": 644544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::PointAt",
+      "rva": 644640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "CCamera::Detach",
+      "rva": 644720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/camera.h",
+      "name": "GameIsCameraPointValid",
+      "rva": 739040,
       "module": "samp.dll"
     },
     {
@@ -5360,6 +6069,132 @@
     },
     {
       "file": "source/game/entity.h",
+      "name": "CEntity::SetMatrix",
+      "rva": 649728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetSpeed",
+      "rva": 650016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::SetSpeed",
+      "rva": 650064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetTurnSpeed",
+      "rva": 650352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::SetTurnSpeed",
+      "rva": 650400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::ApplyTurnSpeed",
+      "rva": 650448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetDistanceFromCentreOfMassToBaseOfModel",
+      "rva": 650480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetBoundCentre",
+      "rva": 650544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetModelIndex",
+      "rva": 650864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::DoesExist",
+      "rva": 651792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::EnforceWorldBoundries",
+      "rva": 651872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::HasExceededWorldBoundries",
+      "rva": 652288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetCollisionFlag",
+      "rva": 652448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::SetCollisionFlag",
+      "rva": 652400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::SetCollisionProcessed",
+      "rva": 652480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetEulerInverted",
+      "rva": 653104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetRwObject",
+      "rva": 653472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::DeleteRwObject",
+      "rva": 653808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::IsIgnored",
+      "rva": 654112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::IsStationary",
+      "rva": 654368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::UpdateRwFrame",
+      "rva": 649920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
       "name": "CEntity::Teleport",
       "rva": 650880,
       "module": "samp.dll"
@@ -5374,6 +6209,168 @@
       "file": "source/game/entity.h",
       "name": "GameWorldRemove",
       "rva": 735040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "g_entityRadiansToDegrees",
+      "rva": 1147320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "g_entityEulerSign",
+      "rva": 1164896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "g_entityBoundaryLift",
+      "rva": 1159964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "g_entityRadiansToDegrees",
+      "rva": 1147320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "g_entityEulerSign",
+      "rva": 1164896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "g_entityBoundaryLift",
+      "rva": 1159964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::SetMatrix",
+      "rva": 649728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetSpeed",
+      "rva": 650016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::SetSpeed",
+      "rva": 650064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetTurnSpeed",
+      "rva": 650352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::SetTurnSpeed",
+      "rva": 650400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::ApplyTurnSpeed",
+      "rva": 650448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetDistanceFromCentreOfMassToBaseOfModel",
+      "rva": 650480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetBoundCentre",
+      "rva": 650544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetModelIndex",
+      "rva": 650864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::DoesExist",
+      "rva": 651792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::EnforceWorldBoundries",
+      "rva": 651872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::HasExceededWorldBoundries",
+      "rva": 652288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetCollisionFlag",
+      "rva": 652448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::SetCollisionFlag",
+      "rva": 652400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::SetCollisionProcessed",
+      "rva": 652480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetEulerInverted",
+      "rva": 653104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::GetRwObject",
+      "rva": 653472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::DeleteRwObject",
+      "rva": 653808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::IsIgnored",
+      "rva": 654112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::IsStationary",
+      "rva": 654368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_state.cpp",
+      "name": "CEntity::UpdateRwFrame",
+      "rva": 649920,
       "module": "samp.dll"
     },
     {
@@ -5440,12 +6437,6 @@
       "file": "source/game/game.cpp",
       "name": "CGame::DoesHeadMoves",
       "rva": 11632,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/game/game.h",
-      "name": "CCamera::CCamera",
-      "rva": 654752,
       "module": "samp.dll"
     },
     {
@@ -8077,6 +9068,174 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraFade",
+      "rva": 1172496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraRestoreJumpcut",
+      "rva": 1172516,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraPointAt",
+      "rva": 1172536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraRestore",
+      "rva": 1172556,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraSet",
+      "rva": 1172576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraStop",
+      "rva": 1172596,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraMove",
+      "rva": 1172616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraTrack",
+      "rva": 1172636,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraPersistTrack",
+      "rva": 1172656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_cameraPersistPosition",
+      "rva": 1172676,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_audioPlay",
+      "rva": 1174256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_audioLoad",
+      "rva": 1174276,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_audioUnload",
+      "rva": 1174336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_audioSetPosition",
+      "rva": 1174356,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraFade",
+      "rva": 1172496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraRestoreJumpcut",
+      "rva": 1172516,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraPointAt",
+      "rva": 1172536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraRestore",
+      "rva": 1172556,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraSet",
+      "rva": 1172576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraStop",
+      "rva": 1172596,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraMove",
+      "rva": 1172616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraTrack",
+      "rva": 1172636,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraPersistTrack",
+      "rva": 1172656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_cameraPersistPosition",
+      "rva": 1172676,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_audioPlay",
+      "rva": 1174256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_audioLoad",
+      "rva": 1174276,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_audioUnload",
+      "rva": 1174336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_audioSetPosition",
+      "rva": 1174356,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/chat_dependencies.cpp",
       "name": "CInput::IsActive",
       "rva": 430672,
@@ -8977,6 +10136,11 @@
       "reason": "Inline structure initialization; no standalone native entry established"
     },
     {
+      "file": "source/game/audio.h",
+      "name": "CAudio::CAudio",
+      "reason": "inline initialization in CGame RVA 0x0009fdc0; standalone entry not established"
+    },
+    {
       "file": "source/game/effects.h",
       "name": "GameBufferReader::GameBufferReader",
       "reason": "inline reader initialization in native parser RVA 0x000b6610; standalone entry not established"
@@ -8995,11 +10159,6 @@
       "file": "source/game/entity.h",
       "name": "CEntity::~CEntity",
       "reason": "inline empty base destructor/vptr reset; scalar deleting entry RVA 0x0009bd10, standalone destructor entry not established"
-    },
-    {
-      "file": "source/game/game.h",
-      "name": "CAudio::CAudio",
-      "reason": "inline initialization in CGame RVA 0x0009fdc0; standalone entry not established"
     },
     {
       "file": "source/gui/font_color.cpp",
