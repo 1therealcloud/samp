@@ -6008,7 +6008,7 @@
       "va": "0x100aa6a0",
       "rva": "0x000aa6a0",
       "module": "samp.dll",
-      "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+      "evidence": "Original native scan-list base RVA 1e04b0/end RVA 2075b0 and four CMP operand sites; scan-end-v106 red/green original installer and 640032 actual GTA CMP/JL decisions. End operand denotes scanList+40000; native adjacency to real ped storage is not assumed after linking."
     },
     {
       "name": "GameRestoreMousePointers",

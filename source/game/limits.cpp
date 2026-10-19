@@ -23,7 +23,9 @@ void GameRelocateScanList() {
         else if(g_gameVersion==2) { GameUnprotect((void*)g_gameScanOperandEU[j],8);*(DWORD*)(g_gameScanOperandEU[j]+3)=(DWORD)g_gameScanList; }
     }
     for(int k=0;k<11;k++) { GameUnprotect((void*)g_gameScanSecondSites[k],8);*(DWORD*)(g_gameScanSecondSites[k]+3)=(DWORD)(g_gameScanList+1); }
-    for(int p=0;p<4;p++) { GameUnprotect((void*)g_gamePedReferenceSites[p],4);*(DWORD*)g_gamePedReferenceSites[p]=(DWORD)g_gamePedModels; }
+    // In the native DLL the ped store begins exactly one-past the 40000-DWORD scan list.
+    // These four operands terminate scan traversal; they do not reference ped records.
+    for(int p=0;p<4;p++) { GameUnprotect((void*)g_gamePedReferenceSites[p],4);*(DWORD*)g_gamePedReferenceSites[p]=(DWORD)(g_gameScanList+40000); }
     GameUnprotect((void*)0x564dc7,4);*(DWORD*)0x564dc7=(DWORD)((BYTE*)g_gameScanList+0x1c200);
     GameUnprotect((void*)0x40936a,4);*(DWORD*)0x40936a=(DWORD)(g_gameScanList+1);
     memset((void*)0xb7d0b8,0,0x1c200);
