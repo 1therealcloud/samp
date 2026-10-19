@@ -551,6 +551,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CAudioStream::Reset",
+      "va": "0x10065f00",
+      "rva": "0x00065f00",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
+    },
+    {
       "name": "CCamera::~CCamera",
       "va": "0x1009fdb0",
       "rva": "0x0009fdb0",
@@ -1923,6 +1930,13 @@
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
     },
     {
+      "name": "CGame::LetTimeGo",
+      "va": "0x100a0940",
+      "rva": "0x000a0940",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
+    },
+    {
       "name": "CGame::LoadRequestedModels",
       "va": "0x100a07a0",
       "rva": "0x000a07a0",
@@ -1956,6 +1970,13 @@
       "rva": "0x000a09f0",
       "module": "samp.dll",
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "CGame::SetMaxStats",
+      "va": "0x100a0a20",
+      "rva": "0x000a0a20",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
     },
     {
       "name": "CGame::StartGame",
@@ -2532,6 +2553,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CObjectEdit::CObjectEdit",
+      "va": "0x10071600",
+      "rva": "0x00071600",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
+    },
+    {
       "name": "CObjectEdit::Render",
       "va": "0x10073220",
       "rva": "0x00073220",
@@ -2565,6 +2593,13 @@
       "rva": "0x00012a50",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CObjectSelection::CObjectSelection",
+      "va": "0x1006d440",
+      "rva": "0x0006d440",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
     },
     {
       "name": "CObjectSelection::Draw",
@@ -3237,6 +3272,20 @@
       "rva": "0x0011eb2c",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_audioStreamAgent",
+      "va": "0x101407b0",
+      "rva": "0x001407b0",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
+    },
+    {
+      "name": "g_audioStreamHandle",
+      "va": "0x1016c7cc",
+      "rva": "0x0016c7cc",
+      "module": "samp.dll",
+      "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
     },
     {
       "name": "g_audioUnload",
@@ -12145,6 +12194,18 @@
     },
     {
       "file": "source/game/game.h",
+      "name": "CGame::SetMaxStats",
+      "rva": 657952,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::LetTimeGo",
+      "rva": 657728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
       "name": "CGame::GetPlayerPed",
       "rva": 4112,
       "module": "samp.dll"
@@ -14910,6 +14971,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/startup_state.cpp",
+      "name": "CGame::SetMaxStats",
+      "rva": 657952,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/startup_state.cpp",
+      "name": "CGame::LetTimeGo",
+      "rva": 657728,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle.cpp",
       "name": "GamePoolVehicleGetAt",
       "rva": 735184,
@@ -15141,6 +15214,36 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_audioStart",
       "rva": 1174316,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_stream.cpp",
+      "name": "g_audioStreamHandle",
+      "rva": 1492940,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_stream.cpp",
+      "name": "g_audioStreamAgent",
+      "rva": 1312688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_stream.cpp",
+      "name": "CAudioStream::Reset",
+      "rva": 417536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_stream.h",
+      "name": "g_audioStreamHandle",
+      "rva": 1492940,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_stream.h",
+      "name": "g_audioStreamAgent",
+      "rva": 1312688,
       "module": "samp.dll"
     },
     {
@@ -16266,6 +16369,42 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::CObjectEdit",
+      "rva": 464384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::Render",
+      "rva": 471584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_initialization.cpp",
+      "name": "CObjectEdit::CObjectEdit",
+      "rva": 464384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_initialization.cpp",
+      "name": "CObjectSelection::CObjectSelection",
+      "rva": 447552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_selection.h",
+      "name": "CObjectSelection::CObjectSelection",
+      "rva": 447552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_selection.h",
+      "name": "CObjectSelection::Draw",
+      "rva": 448064,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/render_dependencies.h",
       "name": "CNetGame::Process",
       "rva": 45712,
@@ -16275,6 +16414,12 @@
       "file": "source/gui/render_dependencies.h",
       "name": "CNetGame::Destroy",
       "rva": 38256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CAudioStream::Reset",
+      "rva": 417536,
       "module": "samp.dll"
     },
     {
@@ -16305,18 +16450,6 @@
       "file": "source/gui/render_dependencies.h",
       "name": "CDialog::Draw",
       "rva": 455376,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/gui/render_dependencies.h",
-      "name": "CObjectEdit::Render",
-      "rva": 471584,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/gui/render_dependencies.h",
-      "name": "CObjectSelection::Draw",
-      "rva": 448064,
       "module": "samp.dll"
     },
     {

@@ -32,6 +32,10 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a0a20
+    void SetMaxStats();
+    // samp.dll RVA: 0x000a0940
+    void LetTimeGo(char enabled);
     // samp.dll RVA: 0x00001010
     CPed *GetPlayerPed();
     // samp.dll RVA: 0x000a06d0

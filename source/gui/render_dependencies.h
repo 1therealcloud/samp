@@ -13,6 +13,9 @@ public:
 };
 class CAudioStream {
 public:
+    BYTE initialized;
+    // samp.dll RVA: 0x00065f00
+    BOOL Reset();
     // samp.dll RVA: 0x00066530
     void DrawInfo();
     // samp.dll RVA: 0x00066500
@@ -30,14 +33,8 @@ class CDialog {public:
     // samp.dll RVA: 0x0006f2d0
     void Draw();
 };
-class CObjectEdit {public:
-    // samp.dll RVA: 0x00073220
-    void Render();
-};
-class CObjectSelection {public:
-    // samp.dll RVA: 0x0006d640
-    void Draw();
-};
+#include "gui/object_edit.h"
+#include "gui/object_selection.h"
 class CTextDrawSelection {public:
     // samp.dll RVA: 0x00070eb0
     void Process();
