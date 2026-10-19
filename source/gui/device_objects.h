@@ -78,6 +78,10 @@ public:
     void SendNotification();
     // samp.dll RVA: 0x0006e410
     void Close(bool restoreCursor);
+    // samp.dll RVA: 0x0006ee10
+    void Enable();
+    // samp.dll RVA: 0x0006e3c0
+    void GetRect(RECT *rect);
     // samp.dll RVA: 0x0006e360
     void Recalc();
     // samp.dll RVA: 0x0006eaf0

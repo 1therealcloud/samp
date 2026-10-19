@@ -53,6 +53,10 @@ class CDialog {public:
     void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x000700d0
     void Close(char response);
+    // samp.dll RVA: 0x0006ef10
+    bool MsgProc(UINT message,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x0006ef30
+    bool IsInputHidden();
     // samp.dll RVA: 0x0006f2d0
     void Draw();
 };
@@ -61,6 +65,10 @@ class CDialog {public:
 class CTextDrawSelection {public:
     // Inline coordinator initialization; no standalone native constructor entry established.
     DWORD enabled,unknown04;WORD unknown08;
+    // samp.dll RVA: 0x00071010
+    BOOL MsgProc(UINT message,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x00070fc0
+    void Disable();
     // samp.dll RVA: 0x00070eb0
     void Process();
 };

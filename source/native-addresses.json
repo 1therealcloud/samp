@@ -1076,6 +1076,20 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CDialog::IsInputHidden",
+      "va": "0x1006ef30",
+      "rva": "0x0006ef30",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
+      "name": "CDialog::MsgProc",
+      "va": "0x1006ef10",
+      "rva": "0x0006ef10",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
       "name": "CDialog::ResetDialogControls",
       "va": "0x1006f460",
       "rva": "0x0006f460",
@@ -2532,6 +2546,20 @@
       "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
+      "name": "ClientHandleCharacter",
+      "va": "0x10061010",
+      "rva": "0x00061010",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
+      "name": "ClientHandleKeyRelease",
+      "va": "0x10060de0",
+      "rva": "0x00060de0",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
       "name": "ClientInitializeCacheDirectory",
       "va": "0x100c51c0",
       "rva": "0x000c51c0",
@@ -2630,11 +2658,18 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "ClientToggleWindowedMode",
+      "va": "0x10060d90",
+      "rva": "0x00060d90",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
       "name": "ClientWindowProcedure",
       "va": "0x100610d0",
       "rva": "0x000610d0",
       "module": "samp.dll",
-      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
     },
     {
       "name": "CLocalPlayer::Chat",
@@ -2763,6 +2798,20 @@
       "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
     },
     {
+      "name": "CObjectEdit::Disable",
+      "va": "0x10072660",
+      "rva": "0x00072660",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
+      "name": "CObjectEdit::MsgProc",
+      "va": "0x10072ff0",
+      "rva": "0x00072ff0",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
       "name": "CObjectEdit::Render",
       "va": "0x10073220",
       "rva": "0x00073220",
@@ -2810,6 +2859,20 @@
       "rva": "0x0006d640",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CObjectSelection::Enable",
+      "va": "0x1006d5c0",
+      "rva": "0x0006d5c0",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
+      "name": "CObjectSelection::MsgProc",
+      "va": "0x1006d880",
+      "rva": "0x0006d880",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
     },
     {
       "name": "Commands::CmpStat",
@@ -3162,6 +3225,20 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CScoreboard::Enable",
+      "va": "0x1006ee10",
+      "rva": "0x0006ee10",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
+      "name": "CScoreboard::GetRect",
+      "va": "0x1006e3c0",
+      "rva": "0x0006e3c0",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
       "name": "CScoreboard::Recalc",
       "va": "0x1006e360",
       "rva": "0x0006e360",
@@ -3258,6 +3335,20 @@
       "rva": "0x0001e360",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CTextDrawSelection::Disable",
+      "va": "0x10070fc0",
+      "rva": "0x00070fc0",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+    },
+    {
+      "name": "CTextDrawSelection::MsgProc",
+      "va": "0x10071010",
+      "rva": "0x00071010",
+      "module": "samp.dll",
+      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
     },
     {
       "name": "CTextDrawSelection::Process",
@@ -3890,6 +3981,13 @@
       "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
     },
     {
+      "name": "g_clientInputOutsideClick",
+      "va": "0x1016be84",
+      "rva": "0x0016be84",
+      "module": "samp.dll",
+      "evidence": "Original window-v108 DWORD loads/stores; initial zero verified in reference DLL. Cursor/reset state at 16BE80 reuses existing g_deviceResetMarker storage."
+    },
+    {
       "name": "g_clientIntegrityFailed",
       "va": "0x102aca64",
       "rva": "0x002aca64",
@@ -3972,6 +4070,13 @@
       "rva": "0x002abe70",
       "module": "samp.dll",
       "evidence": "Direct operands/publication in native coordinator RVA 0x000c5e70; buffer starts proven, backing window extent does not establish overflow adjacency."
+    },
+    {
+      "name": "g_clientScoreboardOutsideClick",
+      "va": "0x1016be88",
+      "rva": "0x0016be88",
+      "module": "samp.dll",
+      "evidence": "Original window-v108 DWORD loads/stores; initial zero verified in reference DLL. Cursor/reset state at 16BE80 reuses existing g_deviceResetMarker storage."
     },
     {
       "name": "g_clientSettings",
@@ -8933,6 +9038,36 @@
     },
     {
       "file": "source/client/device_setup.h",
+      "name": "g_clientInputOutsideClick",
+      "rva": 1490564,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientScoreboardOutsideClick",
+      "rva": 1490568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientHandleCharacter",
+      "rva": 397328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientToggleWindowedMode",
+      "rva": 396688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientHandleKeyRelease",
+      "rva": 396768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
       "name": "ClientRenderStateHook",
       "rva": 808016,
       "module": "samp.dll"
@@ -9232,6 +9367,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/client/input_handlers.cpp",
+      "name": "ClientHandleCharacter",
+      "rva": 397328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/input_handlers.cpp",
+      "name": "ClientToggleWindowedMode",
+      "rva": 396688,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/client/paths.cpp",
       "name": "g_clientDataDirectory",
       "rva": 2803624,
@@ -9265,6 +9412,36 @@
       "file": "source/client/quit.cpp",
       "name": "ClientRequestQuit",
       "rva": 808272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/window.cpp",
+      "name": "g_clientInputOutsideClick",
+      "rva": 1490564,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/window.cpp",
+      "name": "g_clientScoreboardOutsideClick",
+      "rva": 1490568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/window.cpp",
+      "name": "ClientWindowProcedure",
+      "rva": 397520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/window.cpp",
+      "name": "ClientHandleKeyRelease",
+      "rva": 396768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/window.cpp",
+      "name": "ClientHandleCharacter",
+      "rva": 397328,
       "module": "samp.dll"
     },
     {
@@ -16991,6 +17168,18 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::Enable",
+      "rva": 454160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::GetRect",
+      "rva": 451520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CScoreboard::Recalc",
       "rva": 451424,
       "module": "samp.dll"
@@ -17831,6 +18020,18 @@
     },
     {
       "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::MsgProc",
+      "rva": 471024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::Disable",
+      "rva": 468576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
       "name": "CObjectEdit::CObjectEdit",
       "rva": 464384,
       "module": "samp.dll"
@@ -17851,6 +18052,18 @@
       "file": "source/gui/object_initialization.cpp",
       "name": "CObjectSelection::CObjectSelection",
       "rva": 447552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_selection.h",
+      "name": "CObjectSelection::MsgProc",
+      "rva": 448640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_selection.h",
+      "name": "CObjectSelection::Enable",
+      "rva": 447936,
       "module": "samp.dll"
     },
     {
@@ -17951,8 +18164,32 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CDialog::MsgProc",
+      "rva": 454416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDialog::IsInputHidden",
+      "rva": 454448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CDialog::Draw",
       "rva": 455376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CTextDrawSelection::MsgProc",
+      "rva": 462864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CTextDrawSelection::Disable",
+      "rva": 462784,
       "module": "samp.dll"
     },
     {

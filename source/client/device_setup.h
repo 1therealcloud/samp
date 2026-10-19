@@ -25,9 +25,20 @@ void ClientInitializeCacheDirectory();
 void ClientInitializePaths();
 // samp.dll RVA: 0x00061970
 BOOL ClientInstallWindowProcedure();
-// Address-only dependency; full input handler remains open.
+// Native message routing; downstream input/UI dependencies remain explicit.
 // samp.dll RVA: 0x000610d0
 LRESULT CALLBACK ClientWindowProcedure(HWND window,UINT message,WPARAM wparam,LPARAM lparam);
+// samp.dll RVA: 0x0016be84
+extern DWORD g_clientInputOutsideClick;
+// samp.dll RVA: 0x0016be88
+extern DWORD g_clientScoreboardOutsideClick;
+// samp.dll RVA: 0x00061010
+BOOL ClientHandleCharacter(unsigned int character);
+// samp.dll RVA: 0x00060d90
+void ClientToggleWindowedMode();
+// Keyboard release dispatcher remains a dependency.
+// samp.dll RVA: 0x00060de0
+BOOL ClientHandleKeyRelease(unsigned int key);
 // Naked two-word GTA render-state callback; tail-jumps through original target.
 // samp.dll RVA: 0x000c5450
 void ClientRenderStateHook();

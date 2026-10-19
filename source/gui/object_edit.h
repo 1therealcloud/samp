@@ -6,6 +6,10 @@ class CObjectEdit {public:
     BYTE unknown00[0x78];DWORD unknown78,unknown7c,unknown80,unknown84;WORD objectId;
     BYTE unknown8a[0x14];DWORD lastTick;BYTE flags[5],unknowna7[0x5c];
     IDirect3DDevice9 *device;ID3DXLine *line;ID3DXFont *smallFont,*largeFont;DWORD unknown113;
+    // samp.dll RVA: 0x00072ff0
+    BOOL MsgProc(UINT message,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x00072660
+    void Disable(BOOL send);
     // samp.dll RVA: 0x00071600
     CObjectEdit(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x00073220
