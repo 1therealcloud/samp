@@ -13,6 +13,9 @@ public:
     BYTE nativeState[0x3e2];
     // samp.dll RVA: 0x0000b610
     CNetGame(const char *host,int port,const char *nickname,const char *password);
+    // Address-only command dependency.
+    // samp.dll RVA: 0x00008b80
+    void ToggleNameTagStatus();
     // samp.dll RVA: 0x0000b290
     void Process();
     // Native destructor entry. The full networking lifecycle remains open.
@@ -87,6 +90,9 @@ class CDownloadWindow {public:
     BYTE nativeState[0x260];
     // samp.dll RVA: 0x0006aa10
     CDownloadWindow(IDirect3DDevice9 *device);
+    // Address-only font-size command dependency.
+    // samp.dll RVA: 0x0006a1a0
+    void ResetFonts();
     // samp.dll RVA: 0x0006a500
     void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x0006a350

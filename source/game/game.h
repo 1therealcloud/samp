@@ -36,6 +36,10 @@ public:
     void SetMaxStats();
     // samp.dll RVA: 0x000a0940
     void LetTimeGo(char enabled);
+    // samp.dll RVA: 0x000a0980
+    void SetWorldWeather(int weather);
+    // samp.dll RVA: 0x000a08f0
+    void SetWorldTime(int hour,int minute);
     // samp.dll RVA: 0x00001010
     CPed *GetPlayerPed();
     // samp.dll RVA: 0x000a06d0

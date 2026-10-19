@@ -2,6 +2,8 @@
 #define SAMP_LOCAL_PLAYER_INTERFACE_H
 // Address-only interface; full class layout/networking lifecycle remains open.
 class CLocalPlayer {public:
+    // samp.dll RVA: 0x00005860
+    void Chat(char *text);
     // samp.dll RVA: 0x00003f40
     void RequestSpawn();
     // samp.dll RVA: 0x00005e30

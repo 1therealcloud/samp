@@ -1104,6 +1104,13 @@
       "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
+      "name": "CDownloadWindow::ResetFonts",
+      "va": "0x1006a1a0",
+      "rva": "0x0006a1a0",
+      "module": "samp.dll",
+      "evidence": "Direct caller and exact thiscall callback dependency from commands-v107; declaration-only, no recovered body claim."
+    },
+    {
       "name": "CDXUTDialog::AddControl",
       "va": "0x1008c140",
       "rva": "0x0008c140",
@@ -2035,6 +2042,20 @@
       "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
     },
     {
+      "name": "CGame::SetWorldTime",
+      "va": "0x100a08f0",
+      "rva": "0x000a08f0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107-helper exact entry/body; native raw ABI/state comparison with original quit virtual dispatch and world clock/weather ordering."
+    },
+    {
+      "name": "CGame::SetWorldWeather",
+      "va": "0x100a0980",
+      "rva": "0x000a0980",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107-helper exact entry/body; native raw ABI/state comparison with original quit virtual dispatch and world clock/weather ordering."
+    },
+    {
       "name": "CGame::StartGame",
       "va": "0x100a0720",
       "rva": "0x000a0720",
@@ -2581,6 +2602,13 @@
       "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
+      "name": "ClientRequestQuit",
+      "va": "0x100c5550",
+      "rva": "0x000c5550",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107-helper exact entry/body; native raw ABI/state comparison with original quit virtual dispatch and world clock/weather ordering."
+    },
+    {
       "name": "ClientSendCrashReport",
       "va": "0x10060260",
       "rva": "0x00060260",
@@ -2607,6 +2635,13 @@
       "rva": "0x000610d0",
       "module": "samp.dll",
       "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "CLocalPlayer::Chat",
+      "va": "0x10005860",
+      "rva": "0x00005860",
+      "module": "samp.dll",
+      "evidence": "Direct caller and exact thiscall callback dependency from commands-v107; declaration-only, no recovered body claim."
     },
     {
       "name": "CLocalPlayer::NextClass",
@@ -2700,6 +2735,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CNetGame::ToggleNameTagStatus",
+      "va": "0x10008b80",
+      "rva": "0x00008b80",
+      "module": "samp.dll",
+      "evidence": "Direct caller and exact thiscall callback dependency from commands-v107; declaration-only, no recovered body claim."
+    },
+    {
       "name": "CNetStats::CNetStats",
       "va": "0x100607c0",
       "rva": "0x000607c0",
@@ -2770,11 +2812,193 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "Commands::CmpStat",
+      "va": "0x10068430",
+      "rva": "0x00068430",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DebugCreateVehicle",
+      "va": "0x100687b0",
+      "rva": "0x000687b0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DebugEnableVehicleSelection",
+      "va": "0x100688f0",
+      "rva": "0x000688f0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DebugSetPlayerSkin",
+      "va": "0x10068740",
+      "rva": "0x00068740",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DebugSetWorldTime",
+      "va": "0x10068960",
+      "rva": "0x00068960",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DebugSetWorldWeather",
+      "va": "0x10068910",
+      "rva": "0x00068910",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::Default",
+      "va": "0x10067f50",
+      "rva": "0x00067f50",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DrawChatTimestamps",
+      "va": "0x100681a0",
+      "rva": "0x000681a0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::DrawNameTagStatus",
+      "va": "0x10068190",
+      "rva": "0x00068190",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::PrintCurrentInterior",
+      "va": "0x10068a10",
+      "rva": "0x00068a10",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::PrintMemory",
+      "va": "0x100682f0",
+      "rva": "0x000682f0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::Quit",
+      "va": "0x10068420",
+      "rva": "0x00068420",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::SavePosition",
+      "va": "0x10068440",
+      "rva": "0x00068440",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::SavePositionOnly",
+      "va": "0x100685c0",
+      "rva": "0x000685c0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::SendRconCommand",
+      "va": "0x10068a70",
+      "rva": "0x00068a70",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::SetChatFontSize",
+      "va": "0x100680e0",
+      "rva": "0x000680e0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::SetChatPageSize",
+      "va": "0x10068060",
+      "rva": "0x00068060",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::SetFrameLimiter",
+      "va": "0x10068310",
+      "rva": "0x00068310",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
       "name": "Commands::Setup",
       "va": "0x10068b50",
       "rva": "0x00068b50",
       "module": "samp.dll",
-      "evidence": "Native coordinator direct call at reviewed entry; declaration-only dependency, not an implemented body."
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::TestDeathWindow",
+      "va": "0x10067f70",
+      "rva": "0x00067f70",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleAudioStreamMessages",
+      "va": "0x10068200",
+      "rva": "0x00068200",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleCameraTargetLabels",
+      "va": "0x10068050",
+      "rva": "0x00068050",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleDebugLabels",
+      "va": "0x10068a60",
+      "rva": "0x00068a60",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleHeadMoves",
+      "va": "0x100683a0",
+      "rva": "0x000683a0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleHudScaleFix",
+      "va": "0x100682e0",
+      "rva": "0x000682e0",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleObjectsLight",
+      "va": "0x10068a40",
+      "rva": "0x00068a40",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
+    },
+    {
+      "name": "Commands::ToggleURLMessages",
+      "va": "0x10068270",
+      "rva": "0x00068270",
+      "module": "samp.dll",
+      "evidence": "Read-only commands-v107 actual instruction/ABI review; callback prototype is the CInput cdecl char-pointer contract. SAMP-API names are labels only; seven bodies remain declaration-only as recorded in current profile."
     },
     {
       "name": "CPed::~CPed",
@@ -3771,6 +3995,27 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "g_commandCameraTargetLabels",
+      "va": "0x10156ac8",
+      "rva": "0x00156ac8",
+      "module": "samp.dll",
+      "evidence": "Direct command/world-wrapper operands and exact original data bytes. Reuse existing native globals for HUD/vehicle-debug flags."
+    },
+    {
+      "name": "g_commandGetInterior",
+      "va": "0x1011bde4",
+      "rva": "0x0011bde4",
+      "module": "samp.dll",
+      "evidence": "Direct command/world-wrapper operands and exact original data bytes. Reuse existing native globals for HUD/vehicle-debug flags."
+    },
+    {
+      "name": "g_commandObjectLighting",
+      "va": "0x10154698",
+      "rva": "0x00154698",
+      "module": "samp.dll",
+      "evidence": "Direct command/world-wrapper operands and exact original data bytes. Reuse existing native globals for HUD/vehicle-debug flags."
+    },
+    {
       "name": "g_deviceCursorSurface",
       "va": "0x102acacc",
       "rva": "0x002acacc",
@@ -4413,6 +4658,13 @@
       "rva": "0x00154960",
       "module": "samp.dll",
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "g_gameSetWorldTime",
+      "va": "0x1011e68c",
+      "rva": "0x0011e68c",
+      "module": "samp.dll",
+      "evidence": "Direct command/world-wrapper operands and exact original data bytes. Reuse existing native globals for HUD/vehicle-debug flags."
     },
     {
       "name": "g_gameStartupTitle",
@@ -8242,9 +8494,327 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/client/command_handlers.cpp",
+      "name": "g_commandCameraTargetLabels",
+      "rva": 1403592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "g_commandObjectLighting",
+      "rva": 1394328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "g_commandGetInterior",
+      "rva": 1162724,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::Default",
+      "rva": 425808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleCameraTargetLabels",
+      "rva": 426064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::SetChatPageSize",
+      "rva": 426080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::SetChatFontSize",
+      "rva": 426208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::DrawNameTagStatus",
+      "rva": 426384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::DrawChatTimestamps",
+      "rva": 426400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleAudioStreamMessages",
+      "rva": 426496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleURLMessages",
+      "rva": 426608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleHudScaleFix",
+      "rva": 426720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::PrintMemory",
+      "rva": 426736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::SetFrameLimiter",
+      "rva": 426768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleHeadMoves",
+      "rva": 426912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::Quit",
+      "rva": 427040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::CmpStat",
+      "rva": 427056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::DebugSetWorldWeather",
+      "rva": 428304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::DebugSetWorldTime",
+      "rva": 428384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::PrintCurrentInterior",
+      "rva": 428560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleObjectsLight",
+      "rva": 428608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/command_handlers.cpp",
+      "name": "Commands::ToggleDebugLabels",
+      "rva": 428640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.cpp",
+      "name": "Commands::Setup",
+      "rva": 428880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::Default",
+      "rva": 425808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::TestDeathWindow",
+      "rva": 425840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleCameraTargetLabels",
+      "rva": 426064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::SetChatPageSize",
+      "rva": 426080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::SetChatFontSize",
+      "rva": 426208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DrawNameTagStatus",
+      "rva": 426384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DrawChatTimestamps",
+      "rva": 426400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleAudioStreamMessages",
+      "rva": 426496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleURLMessages",
+      "rva": 426608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleHudScaleFix",
+      "rva": 426720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::PrintMemory",
+      "rva": 426736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::SetFrameLimiter",
+      "rva": 426768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleHeadMoves",
+      "rva": 426912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::Quit",
+      "rva": 427040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::CmpStat",
+      "rva": 427056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::SavePosition",
+      "rva": 427072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::SavePositionOnly",
+      "rva": 427456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DebugSetPlayerSkin",
+      "rva": 427840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DebugCreateVehicle",
+      "rva": 427952,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DebugEnableVehicleSelection",
+      "rva": 428272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DebugSetWorldWeather",
+      "rva": 428304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::DebugSetWorldTime",
+      "rva": 428384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::PrintCurrentInterior",
+      "rva": 428560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleObjectsLight",
+      "rva": 428608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::ToggleDebugLabels",
+      "rva": 428640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "Commands::SendRconCommand",
+      "rva": 428656,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/client/commands.h",
       "name": "Commands::Setup",
       "rva": 428880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "ClientRequestQuit",
+      "rva": 808272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "g_commandCameraTargetLabels",
+      "rva": 1403592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "g_commandObjectLighting",
+      "rva": 1394328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/commands.h",
+      "name": "g_commandGetInterior",
+      "rva": 1162724,
       "module": "samp.dll"
     },
     {
@@ -8689,6 +9259,12 @@
       "file": "source/client/paths.cpp",
       "name": "ClientInitializePaths",
       "rva": 807744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/quit.cpp",
+      "name": "ClientRequestQuit",
+      "rva": 808272,
       "module": "samp.dll"
     },
     {
@@ -12689,6 +13265,18 @@
     },
     {
       "file": "source/game/game.h",
+      "name": "CGame::SetWorldWeather",
+      "rva": 657792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::SetWorldTime",
+      "rva": 657648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
       "name": "CGame::GetPlayerPed",
       "rva": 4112,
       "module": "samp.dll"
@@ -15724,6 +16312,24 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/world_state.cpp",
+      "name": "g_gameSetWorldTime",
+      "rva": 1173132,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/world_state.cpp",
+      "name": "CGame::SetWorldWeather",
+      "rva": 657792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/world_state.cpp",
+      "name": "CGame::SetWorldTime",
+      "rva": 657648,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.cpp",
       "name": "g_cameraFade",
       "rva": 1172496,
@@ -15913,6 +16519,12 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_audioStart",
       "rva": 1174316,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_gameSetWorldTime",
+      "rva": 1173132,
       "module": "samp.dll"
     },
     {
@@ -17267,6 +17879,12 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CNetGame::ToggleNameTagStatus",
+      "rva": 35712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CNetGame::Process",
       "rva": 45712,
       "module": "samp.dll"
@@ -17383,6 +18001,12 @@
       "file": "source/gui/render_dependencies.h",
       "name": "CDownloadWindow::CDownloadWindow",
       "rva": 436752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDownloadWindow::ResetFonts",
+      "rva": 434592,
       "module": "samp.dll"
     },
     {
@@ -17834,6 +18458,12 @@
       "name": "g_inputGameWindow",
       "rva": null,
       "module": "GTA SA"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::Chat",
+      "rva": 22624,
+      "module": "samp.dll"
     },
     {
       "file": "source/net/localplayer.h",

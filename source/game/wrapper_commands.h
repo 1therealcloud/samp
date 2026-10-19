@@ -33,4 +33,6 @@ extern const Scripting::OpcodeInfo g_audioSetPosition;
 extern const Scripting::OpcodeInfo g_audioIsLoaded;
 // samp.dll RVA: 0x0011eb2c
 extern const Scripting::OpcodeInfo g_audioStart;
+// samp.dll RVA: 0x0011e68c
+extern const Scripting::OpcodeInfo g_gameSetWorldTime;
 #endif
