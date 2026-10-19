@@ -68,6 +68,10 @@ public:
 // Address interfaces for later UI/pool layers; never allocate these partial types.
 class CScoreboard {
 public:
+    // Constructor-observed extent; unresolved fields remain opaque.
+    BYTE nativeState[0x44];
+    // samp.dll RVA: 0x0006e460
+    CScoreboard(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x0006e4e0
     void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x0006e640

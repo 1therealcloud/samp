@@ -3,6 +3,9 @@
 #include <windows.h>
 #include <unknwn.h>
 class CDXUTDialog;
+// samp.dll RVA: 0x0016c7f8
+extern DWORD g_srvNetStatsHistory[74];
+struct IDirect3DDevice9;
 // Address interfaces only; never allocate these partial classes.
 class CNetGame {
 public:
@@ -23,6 +26,10 @@ public:
     void ControlGameRadio();
 };
 class CChatBubble {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x44a20];
+    // samp.dll RVA: 0x00066860
+    CChatBubble();
     // samp.dll RVA: 0x00066950
     void Draw();
 };
@@ -31,6 +38,10 @@ class CLabelPool {public:
     void Draw();
 };
 class CDialog {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x29d];
+    // samp.dll RVA: 0x0006eec0
+    CDialog(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x0006f460
     void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x000700d0
@@ -45,30 +56,57 @@ class CTextDrawSelection {public:
     void Process();
 };
 class CDeathWindow {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x157];
+    // samp.dll RVA: 0x0006a090
+    CDeathWindow(IDirect3DDevice9 *device);
+    // Font/resource reset dependency; body remains open.
+    // samp.dll RVA: 0x00069b90
+    void ResetFonts();
     // samp.dll RVA: 0x00069d20
     void Draw();
 };
 class CRenderPanel {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x28];
+    // samp.dll RVA: 0x00071100
+    CRenderPanel(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x00071140
     void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x00071560
     void Draw();
 };
 class CDownloadWindow {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x260];
+    // samp.dll RVA: 0x0006aa10
+    CDownloadWindow(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x0006a500
     void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x0006a350
     void Draw();
 };
 class CNetStats {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x18];
+    // samp.dll RVA: 0x000607c0
+    CNetStats(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x000607f0
     void Draw();
 };
 class CSrvNetStats {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x18];
+    // samp.dll RVA: 0x00070cc0
+    CSrvNetStats(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x00070d00
     void Draw();
 };
 class CHelpDialog {public:
+    // Observed allocation extent, not a complete recovered interface.
+    BYTE nativeState[0x4];
+    // samp.dll RVA: 0x0006b560
+    CHelpDialog(IDirect3DDevice9 *device);
     // samp.dll RVA: 0x0006b570
     void Show();
 };

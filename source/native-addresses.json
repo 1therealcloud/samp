@@ -838,6 +838,13 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
     },
     {
+      "name": "CChatBubble::CChatBubble",
+      "va": "0x10066860",
+      "rva": "0x00066860",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
+    },
+    {
       "name": "CChatBubble::Draw",
       "va": "0x10066950",
       "rva": "0x00066950",
@@ -1027,11 +1034,32 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CDeathWindow::CDeathWindow",
+      "va": "0x1006a090",
+      "rva": "0x0006a090",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
+    },
+    {
       "name": "CDeathWindow::Draw",
       "va": "0x10069d20",
       "rva": "0x00069d20",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CDeathWindow::ResetFonts",
+      "va": "0x10069b90",
+      "rva": "0x00069b90",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104-helper-code; declaration-only dependency, not a recovered body."
+    },
+    {
+      "name": "CDialog::CDialog",
+      "va": "0x1006eec0",
+      "rva": "0x0006eec0",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
     },
     {
       "name": "CDialog::Close",
@@ -1053,6 +1081,13 @@
       "rva": "0x0006f460",
       "module": "samp.dll",
       "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "CDownloadWindow::CDownloadWindow",
+      "va": "0x1006aa10",
+      "rva": "0x0006aa10",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
     },
     {
       "name": "CDownloadWindow::Draw",
@@ -2084,6 +2119,13 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
     },
     {
+      "name": "CHelpDialog::CHelpDialog",
+      "va": "0x1006b560",
+      "rva": "0x0006b560",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
+    },
+    {
       "name": "CHelpDialog::Show",
       "va": "0x1006b570",
       "rva": "0x0006b570",
@@ -2651,6 +2693,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CNetStats::CNetStats",
+      "va": "0x100607c0",
+      "rva": "0x000607c0",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
+    },
+    {
       "name": "CNetStats::Draw",
       "va": "0x100607f0",
       "rva": "0x000607f0",
@@ -2777,6 +2826,13 @@
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
+      "name": "CRenderPanel::CRenderPanel",
+      "va": "0x10071100",
+      "rva": "0x00071100",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
+    },
+    {
       "name": "CRenderPanel::Draw",
       "va": "0x10071560",
       "rva": "0x00071560",
@@ -2854,6 +2910,13 @@
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
+      "name": "CScoreboard::CScoreboard",
+      "va": "0x1006e460",
+      "rva": "0x0006e460",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
+    },
+    {
       "name": "CScoreboard::Draw",
       "va": "0x1006eaf0",
       "rva": "0x0006eaf0",
@@ -2865,7 +2928,7 @@
       "va": "0x1006e360",
       "rva": "0x0006e360",
       "module": "samp.dll",
-      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
     },
     {
       "name": "CScoreboard::ResetDialogControls",
@@ -2929,6 +2992,13 @@
       "rva": "0x00070690",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CSrvNetStats::CSrvNetStats",
+      "va": "0x10070cc0",
+      "rva": "0x00070cc0",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-remaining-v104 instructions and constructor allocation extents in native coordinator RVA C5E70; raw ABI/full-state differential test."
     },
     {
       "name": "CSrvNetStats::Draw",
@@ -5141,6 +5211,13 @@
       "rva": "0x002a92a8",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_srvNetStatsHistory",
+      "va": "0x1016c7f8",
+      "rva": "0x0016c7f8",
+      "module": "samp.dll",
+      "evidence": "Original CSrvNetStats constructor REP STOSD count 0x4a; only observed 296-byte span, not adjacent layout."
     },
     {
       "name": "GameAnimationKey",
@@ -16138,6 +16215,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::CScoreboard",
+      "rva": 451680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CScoreboard::ResetDialogControls",
       "rva": 451808,
       "module": "samp.dll"
@@ -17032,6 +17115,12 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "g_srvNetStatsHistory",
+      "rva": 1492984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CNetGame::Process",
       "rva": 45712,
       "module": "samp.dll"
@@ -17062,6 +17151,12 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CChatBubble::CChatBubble",
+      "rva": 419936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CChatBubble::Draw",
       "rva": 420176,
       "module": "samp.dll"
@@ -17070,6 +17165,12 @@
       "file": "source/gui/render_dependencies.h",
       "name": "CLabelPool::Draw",
       "rva": 4944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDialog::CDialog",
+      "rva": 454336,
       "module": "samp.dll"
     },
     {
@@ -17098,8 +17199,26 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CDeathWindow::CDeathWindow",
+      "rva": 434320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDeathWindow::ResetFonts",
+      "rva": 433040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CDeathWindow::Draw",
       "rva": 433440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CRenderPanel::CRenderPanel",
+      "rva": 463104,
       "module": "samp.dll"
     },
     {
@@ -17116,6 +17235,12 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CDownloadWindow::CDownloadWindow",
+      "rva": 436752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CDownloadWindow::ResetDialogControls",
       "rva": 435456,
       "module": "samp.dll"
@@ -17128,14 +17253,32 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CNetStats::CNetStats",
+      "rva": 395200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CNetStats::Draw",
       "rva": 395248,
       "module": "samp.dll"
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CSrvNetStats::CSrvNetStats",
+      "rva": 462016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CSrvNetStats::Draw",
       "rva": 462080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CHelpDialog::CHelpDialog",
+      "rva": 439648,
       "module": "samp.dll"
     },
     {
@@ -17352,6 +17495,72 @@
       "file": "source/gui/render_state.cpp",
       "name": "GameDebugDraw",
       "rva": 647888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "g_srvNetStatsHistory",
+      "rva": 1492984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CDeathWindow::CDeathWindow",
+      "rva": 434320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CScoreboard::CScoreboard",
+      "rva": 451680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CScoreboard::Recalc",
+      "rva": 451424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CDialog::CDialog",
+      "rva": 454336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CRenderPanel::CRenderPanel",
+      "rva": 463104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CDownloadWindow::CDownloadWindow",
+      "rva": 436752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CNetStats::CNetStats",
+      "rva": 395200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CSrvNetStats::CSrvNetStats",
+      "rva": 462016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CHelpDialog::CHelpDialog",
+      "rva": 439648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/startup_constructors.cpp",
+      "name": "CChatBubble::CChatBubble",
+      "rva": 419936,
       "module": "samp.dll"
     },
     {
