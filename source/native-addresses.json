@@ -1132,6 +1132,20 @@
       "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
     },
     {
+      "name": "CDXUTDialogResourceManager::OnCreateDevice",
+      "va": "0x1008c860",
+      "rva": "0x0008c860",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
+    },
+    {
+      "name": "CDXUTDialogResourceManager::OnResetDevice",
+      "va": "0x10086a00",
+      "rva": "0x00086a00",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
+    },
+    {
       "name": "CDXUTEditBox::SetText",
       "va": "0x10085000",
       "rva": "0x00085000",
@@ -2210,6 +2224,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CLabel::CLabel",
+      "va": "0x1006b5f0",
+      "rva": "0x0006b5f0",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
+    },
+    {
       "name": "CLabel::Draw",
       "va": "0x1006b6d0",
       "rva": "0x0006b6d0",
@@ -2243,6 +2264,13 @@
       "rva": "0x00001350",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CLicensePlate::CLicensePlate",
+      "va": "0x1006d3f0",
+      "rva": "0x0006d3f0",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
     },
     {
       "name": "CLicensePlate::OnLostDevice",
@@ -2369,6 +2397,13 @@
       "rva": "0x000c5e70",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientInitializeDialogResources",
+      "va": "0x100c6a60",
+      "rva": "0x000c6a60",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
     },
     {
       "name": "ClientInitializePaths",
@@ -2504,6 +2539,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CObjectMaterialText::CObjectMaterialText",
+      "va": "0x10070320",
+      "rva": "0x00070320",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
+    },
+    {
       "name": "CObjectMaterialText::OnLostDevice",
       "va": "0x100702d0",
       "rva": "0x000702d0",
@@ -2572,6 +2614,13 @@
       "rva": "0x000abbe0",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPlayerTags::CPlayerTags",
+      "va": "0x1006c730",
+      "rva": "0x0006c730",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
     },
     {
       "name": "CPlayerTags::OnLostDevice",
@@ -2698,6 +2747,13 @@
       "rva": "0x000654b0",
       "module": "samp.dll",
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CSpawnScreen::CSpawnScreen",
+      "va": "0x10070990",
+      "rva": "0x00070990",
+      "module": "samp.dll",
+      "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
     },
     {
       "name": "CSpawnScreen::OnLostDevice",
@@ -8563,6 +8619,18 @@
       "file": "source/d3d9/common/dxut_hybrid_native.cpp",
       "name": "CDXUTDialogResourceManager::CreateFont",
       "rva": 573808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_manager_native.cpp",
+      "name": "CDXUTDialogResourceManager::OnCreateDevice",
+      "rva": 575584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3d9/common/dxut_manager_native.cpp",
+      "name": "CDXUTDialogResourceManager::OnResetDevice",
+      "rva": 551424,
       "module": "samp.dll"
     },
     {
@@ -15136,6 +15204,36 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/device_constructors.cpp",
+      "name": "CLabel::CLabel",
+      "rva": 439792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_constructors.cpp",
+      "name": "CPlayerTags::CPlayerTags",
+      "rva": 444208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_constructors.cpp",
+      "name": "CObjectMaterialText::CObjectMaterialText",
+      "rva": 459552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_constructors.cpp",
+      "name": "CLicensePlate::CLicensePlate",
+      "rva": 447472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_constructors.cpp",
+      "name": "CSpawnScreen::CSpawnScreen",
+      "rva": 461200,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/device_lifecycle.cpp",
       "name": "g_devicePlayerTags",
       "rva": 2804184,
@@ -15347,6 +15445,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CPlayerTags::CPlayerTags",
+      "rva": 444208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CPlayerTags::OnLostDevice",
       "rva": 446608,
       "module": "samp.dll"
@@ -15355,6 +15459,12 @@
       "file": "source/gui/device_objects.h",
       "name": "CPlayerTags::OnResetDevice",
       "rva": 446656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLabel::CLabel",
+      "rva": 439792,
       "module": "samp.dll"
     },
     {
@@ -15389,6 +15499,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CObjectMaterialText::CObjectMaterialText",
+      "rva": 459552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CObjectMaterialText::OnLostDevice",
       "rva": 459472,
       "module": "samp.dll"
@@ -15401,6 +15517,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CLicensePlate::CLicensePlate",
+      "rva": 447472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CLicensePlate::OnLostDevice",
       "rva": 446960,
       "module": "samp.dll"
@@ -15409,6 +15531,12 @@
       "file": "source/gui/device_objects.h",
       "name": "CLicensePlate::OnResetDevice",
       "rva": 447040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CSpawnScreen::CSpawnScreen",
+      "rva": 461200,
       "module": "samp.dll"
     },
     {
@@ -15463,6 +15591,18 @@
       "file": "source/gui/device_objects.h",
       "name": "g_deviceFonts",
       "rva": 2804268,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/dialog_resources.cpp",
+      "name": "ClientInitializeDialogResources",
+      "rva": 813664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/dialog_resources.h",
+      "name": "ClientInitializeDialogResources",
+      "rva": 813664,
       "module": "samp.dll"
     },
     {

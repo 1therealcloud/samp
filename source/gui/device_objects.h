@@ -4,9 +4,11 @@
 #include "fontrender.h"
 struct CVector;
 #pragma pack(push,1)
-// Observed lifecycle prefixes only; constructors/complete interfaces remain open.
+// Observed allocation extents and constructor/lifecycle fields; full render interfaces remain open.
 class CPlayerTags {
 public:
+    // samp.dll RVA: 0x0006c730
+    CPlayerTags(IDirect3DDevice9 *device);
     IDirect3DDevice9 *device;IDirect3DStateBlock9 *state;ID3DXSprite *sprite;
     // samp.dll RVA: 0x0006d090
     void OnLostDevice();
@@ -15,6 +17,8 @@ public:
 };
 class CLabel {
 public:
+    // samp.dll RVA: 0x0006b5f0
+    CLabel(IDirect3DDevice9 *device);
     IDirect3DDevice9 *device;ID3DXSprite *sprite;
     // samp.dll RVA: 0x0006b630
     void OnLostDevice();
@@ -30,6 +34,8 @@ public:
 };
 class CObjectMaterialText {
 public:
+    // samp.dll RVA: 0x00070320
+    CObjectMaterialText(IDirect3DDevice9 *device);
     IDirect3DDevice9 *device;ID3DXSprite *first,*second;
     // samp.dll RVA: 0x000702d0
     void OnLostDevice();
@@ -38,6 +44,8 @@ public:
 };
 class CLicensePlate {
 public:
+    // samp.dll RVA: 0x0006d3f0
+    CLicensePlate(IDirect3DDevice9 *device);
     IDirect3DDevice9 *device;ID3DXRenderToSurface *renderer;IDirect3DTexture9 *texture;
     IDirect3DSurface9 *surface;D3DDISPLAYMODE mode;IDirect3DTexture9 *defaultTexture;
     // samp.dll RVA: 0x0006d1f0
@@ -47,6 +55,8 @@ public:
 };
 class CSpawnScreen {
 public:
+    // samp.dll RVA: 0x00070990
+    CSpawnScreen(IDirect3DDevice9 *device);
     BYTE unknown00[8];CFonts *fonts;IDirect3DDevice9 *device;IDirect3DTexture9 *texture;
     IDirect3DStateBlock9 *states[2];DWORD unknown1c;
     // samp.dll RVA: 0x00070940
