@@ -2357,11 +2357,39 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "ClientInitializeCacheDirectory",
+      "va": "0x100c51c0",
+      "rva": "0x000c51c0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
       "name": "ClientInitializeDeviceAndGui",
       "va": "0x100c5e70",
       "rva": "0x000c5e70",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientInitializePaths",
+      "va": "0x100c5340",
+      "rva": "0x000c5340",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "ClientInstallWindowProcedure",
+      "va": "0x10061970",
+      "rva": "0x00061970",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "ClientPathExists",
+      "va": "0x100b5900",
+      "rva": "0x000b5900",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
       "name": "ClientProcessFrame",
@@ -2376,6 +2404,13 @@
       "rva": "0x00073f10",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientRenderStateHook",
+      "va": "0x100c5450",
+      "rva": "0x000c5450",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
       "name": "ClientSendCrashReport",
@@ -2397,6 +2432,13 @@
       "rva": "0x000c5150",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "ClientWindowProcedure",
+      "va": "0x100610d0",
+      "rva": "0x000610d0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
       "name": "CMemoryStream::~CMemoryStream",
@@ -3239,6 +3281,13 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
     },
     {
+      "name": "g_clientCacheDirectory",
+      "va": "0x102ac8b0",
+      "rva": "0x002ac8b0",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
       "name": "g_clientCrashLastRenderedObject",
       "va": "0x1018f584",
       "rva": "0x0018f584",
@@ -3258,6 +3307,13 @@
       "rva": "0x0015fa70",
       "module": "samp.dll",
       "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
+    },
+    {
+      "name": "g_clientDataDirectory",
+      "va": "0x102ac7a8",
+      "rva": "0x002ac7a8",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
       "name": "g_clientExceptionContext",
@@ -3288,6 +3344,20 @@
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
+      "name": "g_clientPreviousRenderState",
+      "va": "0x102aca50",
+      "rva": "0x002aca50",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "g_clientPreviousWindowProcedure",
+      "va": "0x1016be78",
+      "rva": "0x0016be78",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
       "name": "g_clientQuitRequested",
       "va": "0x102ac9c0",
       "rva": "0x002ac9c0",
@@ -3300,6 +3370,27 @@
       "rva": "0x002ac9c4",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_clientRenderCaller",
+      "va": "0x102aca54",
+      "rva": "0x002aca54",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "g_clientRenderState",
+      "va": "0x102aca58",
+      "rva": "0x002aca58",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "g_clientRenderValue",
+      "va": "0x102aca5c",
+      "rva": "0x002aca5c",
+      "module": "samp.dll",
+      "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
       "name": "g_clientSettings",
@@ -7647,6 +7738,126 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/client/device_setup.cpp",
+      "name": "g_clientPreviousWindowProcedure",
+      "rva": 1490552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.cpp",
+      "name": "g_clientPreviousRenderState",
+      "rva": 2804304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.cpp",
+      "name": "g_clientRenderCaller",
+      "rva": 2804308,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.cpp",
+      "name": "g_clientRenderState",
+      "rva": 2804312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.cpp",
+      "name": "g_clientRenderValue",
+      "rva": 2804316,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.cpp",
+      "name": "ClientInstallWindowProcedure",
+      "rva": 399728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.cpp",
+      "name": "ClientRenderStateHook",
+      "rva": 808016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientDataDirectory",
+      "rva": 2803624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientCacheDirectory",
+      "rva": 2803888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientPreviousWindowProcedure",
+      "rva": 1490552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientPreviousRenderState",
+      "rva": 2804304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientRenderCaller",
+      "rva": 2804308,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientRenderState",
+      "rva": 2804312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "g_clientRenderValue",
+      "rva": 2804316,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientPathExists",
+      "rva": 743680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientInitializeCacheDirectory",
+      "rva": 807360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientInitializePaths",
+      "rva": 807744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientInstallWindowProcedure",
+      "rva": 399728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientWindowProcedure",
+      "rva": 397520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/device_setup.h",
+      "name": "ClientRenderStateHook",
+      "rva": 808016,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/client/exceptions.cpp",
       "name": "g_clientExceptionContext",
       "rva": 1440360,
@@ -7866,6 +8077,36 @@
       "file": "source/client/frame.h",
       "name": "ClientInitializeDeviceAndGui",
       "rva": 810608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/paths.cpp",
+      "name": "g_clientDataDirectory",
+      "rva": 2803624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/paths.cpp",
+      "name": "g_clientCacheDirectory",
+      "rva": 2803888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/paths.cpp",
+      "name": "ClientPathExists",
+      "rva": 743680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/paths.cpp",
+      "name": "ClientInitializeCacheDirectory",
+      "rva": 807360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/paths.cpp",
+      "name": "ClientInitializePaths",
+      "rva": 807744,
       "module": "samp.dll"
     },
     {
