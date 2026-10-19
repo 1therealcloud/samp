@@ -2522,7 +2522,7 @@
       "va": "0x100c5e70",
       "rva": "0x000c5e70",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "Original device-init-v98 saved 1982-byte body and 536 reviewed instructions; full coordinator native differential test v105."
     },
     {
       "name": "ClientInitializeDialogResources",
@@ -2679,6 +2679,13 @@
       "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
     },
     {
+      "name": "CNetGame::CNetGame",
+      "va": "0x1000b610",
+      "rva": "0x0000b610",
+      "module": "samp.dll",
+      "evidence": "Native coordinator direct call at reviewed entry; declaration-only dependency, not an implemented body."
+    },
+    {
       "name": "CNetGame::Destroy",
       "va": "0x10009570",
       "rva": "0x00009570",
@@ -2761,6 +2768,13 @@
       "rva": "0x0006d640",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "Commands::Setup",
+      "va": "0x10068b50",
+      "rva": "0x00068b50",
+      "module": "samp.dll",
+      "evidence": "Native coordinator direct call at reviewed entry; declaration-only dependency, not an implemented body."
     },
     {
       "name": "CPed::~CPed",
@@ -3146,6 +3160,13 @@
       "rva": "0x0001e8a0",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "DebugScript::Initialize",
+      "va": "0x1009e7f0",
+      "rva": "0x0009e7f0",
+      "module": "samp.dll",
+      "evidence": "Native coordinator direct call at reviewed entry; declaration-only dependency, not an implemented body."
     },
     {
       "name": "DXUTBlendColor::Init",
@@ -3589,6 +3610,20 @@
       "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
+      "name": "g_clientChatFilename",
+      "va": "0x102ac6a0",
+      "rva": "0x002ac6a0",
+      "module": "samp.dll",
+      "evidence": "Direct operands/publication in native coordinator RVA 0x000c5e70; buffer starts proven, backing window extent does not establish overflow adjacency."
+    },
+    {
+      "name": "g_clientConfigFilename",
+      "va": "0x102ac498",
+      "rva": "0x002ac498",
+      "module": "samp.dll",
+      "evidence": "Direct operands/publication in native coordinator RVA 0x000c5e70; buffer starts proven, backing window extent does not establish overflow adjacency."
+    },
+    {
       "name": "g_clientCrashLastRenderedObject",
       "va": "0x1018f584",
       "rva": "0x0018f584",
@@ -3617,6 +3652,13 @@
       "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
     },
     {
+      "name": "g_clientDeviceInitialized",
+      "va": "0x102aca40",
+      "rva": "0x002aca40",
+      "module": "samp.dll",
+      "evidence": "Direct operands/publication in native coordinator RVA 0x000c5e70; buffer starts proven, backing window extent does not establish overflow adjacency."
+    },
+    {
       "name": "g_clientExceptionContext",
       "va": "0x1015fa68",
       "rva": "0x0015fa68",
@@ -3643,6 +3685,13 @@
       "rva": "0x002ac9c8",
       "module": "samp.dll",
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "g_clientNetworkInitialized",
+      "va": "0x102aca44",
+      "rva": "0x002aca44",
+      "module": "samp.dll",
+      "evidence": "Direct operands/publication in native coordinator RVA 0x000c5e70; buffer starts proven, backing window extent does not establish overflow adjacency."
     },
     {
       "name": "g_clientPreviousRenderState",
@@ -3692,6 +3741,13 @@
       "rva": "0x002aca5c",
       "module": "samp.dll",
       "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "g_clientSavedGameDevice",
+      "va": "0x102abe70",
+      "rva": "0x002abe70",
+      "module": "samp.dll",
+      "evidence": "Direct operands/publication in native coordinator RVA 0x000c5e70; buffer starts proven, backing window extent does not establish overflow adjacency."
     },
     {
       "name": "g_clientSettings",
@@ -8186,6 +8242,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/client/commands.h",
+      "name": "Commands::Setup",
+      "rva": 428880,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/client/device_setup.cpp",
       "name": "g_clientPreviousWindowProcedure",
       "rva": 1490552,
@@ -8523,6 +8585,78 @@
     },
     {
       "file": "source/client/frame.h",
+      "name": "ClientInitializeDeviceAndGui",
+      "rva": 810608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.cpp",
+      "name": "g_clientConfigFilename",
+      "rva": 2802840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.cpp",
+      "name": "g_clientChatFilename",
+      "rva": 2803360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.cpp",
+      "name": "g_clientSavedGameDevice",
+      "rva": 2801264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.cpp",
+      "name": "g_clientDeviceInitialized",
+      "rva": 2804288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.cpp",
+      "name": "g_clientNetworkInitialized",
+      "rva": 2804292,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.cpp",
+      "name": "ClientInitializeDeviceAndGui",
+      "rva": 810608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.h",
+      "name": "g_clientConfigFilename",
+      "rva": 2802840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.h",
+      "name": "g_clientChatFilename",
+      "rva": 2803360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.h",
+      "name": "g_clientSavedGameDevice",
+      "rva": 2801264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.h",
+      "name": "g_clientDeviceInitialized",
+      "rva": 2804288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.h",
+      "name": "g_clientNetworkInitialized",
+      "rva": 2804292,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/initialize.h",
       "name": "ClientInitializeDeviceAndGui",
       "rva": 810608,
       "module": "samp.dll"
@@ -11867,6 +12001,12 @@
       "file": "source/game/camera.h",
       "name": "GameIsCameraPointValid",
       "rva": 739040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/debugscript.h",
+      "name": "DebugScript::Initialize",
+      "rva": 649200,
       "module": "samp.dll"
     },
     {
@@ -17117,6 +17257,12 @@
       "file": "source/gui/render_dependencies.h",
       "name": "g_srvNetStatsHistory",
       "rva": 1492984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CNetGame::CNetGame",
+      "rva": 46608,
       "module": "samp.dll"
     },
     {

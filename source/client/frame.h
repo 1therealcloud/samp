@@ -16,7 +16,7 @@ void ClientProcessFrame();
 // Naked callback preserves the two native PUSHAD regions and GTA return registers.
 // samp.dll RVA: 0x000c66b0
 void ClientGameLoop();
-// Stage 2/remaining startup dependency; complete device/UI initialization is open.
+// Full coordinator is recovered in the optional v105 profile; downstream startup dependencies remain open.
 // samp.dll RVA: 0x000c5e70
 void ClientInitializeDeviceAndGui();
 #endif

@@ -6,9 +6,13 @@ class CDXUTDialog;
 // samp.dll RVA: 0x0016c7f8
 extern DWORD g_srvNetStatsHistory[74];
 struct IDirect3DDevice9;
-// Address interfaces only; never allocate these partial classes.
+// The network constructor extent is known; its internal layout and lifecycle remain open.
 class CNetGame {
 public:
+    // Native coordinator allocation extent; internal layout and lifecycle remain open.
+    BYTE nativeState[0x3e2];
+    // samp.dll RVA: 0x0000b610
+    CNetGame(const char *host,int port,const char *nickname,const char *password);
     // samp.dll RVA: 0x0000b290
     void Process();
     // Native destructor entry. The full networking lifecycle remains open.
@@ -52,6 +56,8 @@ class CDialog {public:
 #include "gui/object_edit.h"
 #include "gui/object_selection.h"
 class CTextDrawSelection {public:
+    // Inline coordinator initialization; no standalone native constructor entry established.
+    DWORD enabled,unknown04;WORD unknown08;
     // samp.dll RVA: 0x00070eb0
     void Process();
 };
