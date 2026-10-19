@@ -26,6 +26,10 @@ public:
     float GetHealth();
     // samp.dll RVA: 0x000b6ed0
     int GetSubtype();
+    // samp.dll RVA: 0x000b7cd0
+    void ConstructLicensePlate();
+    // samp.dll RVA: 0x000b7d20
+    void ShutdownLicensePlate();
 };
 #pragma pack(pop)
 typedef char VehicleBackendOffset[(offsetof(CVehicle,m_pGameVehicle)==0x4c)?1:-1];

@@ -2427,6 +2427,13 @@
       "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
     },
     {
+      "name": "CLicensePlate::Create",
+      "va": "0x1006d2c0",
+      "rva": "0x0006d2c0",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
       "name": "CLicensePlate::OnLostDevice",
       "va": "0x1006d1f0",
       "rva": "0x0006d1f0",
@@ -2833,6 +2840,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CObject::ConstructMaterialText",
+      "va": "0x100a9ad0",
+      "rva": "0x000a9ad0",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
       "name": "CObject::GetAngleDifference",
       "va": "0x100a7bf0",
       "rva": "0x000a7bf0",
@@ -2840,11 +2854,25 @@
       "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
     },
     {
+      "name": "CObject::GetMaterialSize",
+      "va": "0x100a8870",
+      "rva": "0x000a8870",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
       "name": "CObject::Move",
       "va": "0x100a97c0",
       "rva": "0x000a97c0",
       "module": "samp.dll",
       "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
+      "name": "CObject::Process",
+      "va": "0x100a9240",
+      "rva": "0x000a9240",
+      "module": "samp.dll",
+      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
     },
     {
       "name": "CObject::Rotate",
@@ -2859,6 +2887,13 @@
       "rva": "0x000a7c90",
       "module": "samp.dll",
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
+    },
+    {
+      "name": "CObject::ShutdownMaterialText",
+      "va": "0x100a8ac0",
+      "rva": "0x000a8ac0",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CObject::Stop",
@@ -2966,6 +3001,13 @@
       "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
     },
     {
+      "name": "CObjectMaterialText::Create",
+      "va": "0x10070350",
+      "rva": "0x00070350",
+      "module": "samp.dll",
+      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+    },
+    {
       "name": "CObjectMaterialText::OnLostDevice",
       "va": "0x100702d0",
       "rva": "0x000702d0",
@@ -2984,7 +3026,7 @@
       "va": "0x10012a10",
       "rva": "0x00012a10",
       "module": "samp.dll",
-      "evidence": "Address-only native pre-render thiscall dependency, exact A23D0 operand. Body remains unrecovered; Native01E330 name assigns no unverified semantics."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CObjectPool::Get",
@@ -2998,14 +3040,14 @@
       "va": "0x10012950",
       "rva": "0x00012950",
       "module": "samp.dll",
-      "evidence": "Address-only native pre-render thiscall dependency, exact A23D0 operand. Body remains unrecovered; Native01E330 name assigns no unverified semantics."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CObjectPool::ShutdownMaterials",
       "va": "0x10012a50",
       "rva": "0x00012a50",
       "module": "samp.dll",
-      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CObjectSelection::CObjectSelection",
@@ -3512,25 +3554,60 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CTextDraw::Draw",
+      "va": "0x100b3080",
+      "rva": "0x000b3080",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
+      "name": "CTextDraw::Native0B2C90",
+      "va": "0x100b2c90",
+      "rva": "0x000b2c90",
+      "module": "samp.dll",
+      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+    },
+    {
+      "name": "CTextDraw::Native0B2DA0",
+      "va": "0x100b2da0",
+      "rva": "0x000b2da0",
+      "module": "samp.dll",
+      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+    },
+    {
+      "name": "CTextDraw::Native0B30A0",
+      "va": "0x100b30a0",
+      "rva": "0x000b30a0",
+      "module": "samp.dll",
+      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+    },
+    {
+      "name": "CTextDraw::OnLostDevice",
+      "va": "0x100b32b0",
+      "rva": "0x000b32b0",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
       "name": "CTextDrawPool::Draw",
       "va": "0x1001e2f0",
       "rva": "0x0001e2f0",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CTextDrawPool::Native01E330",
       "va": "0x1001e330",
       "rva": "0x0001e330",
       "module": "samp.dll",
-      "evidence": "Address-only native pre-render thiscall dependency, exact A23D0 operand. Body remains unrecovered; Native01E330 name assigns no unverified semantics."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CTextDrawPool::OnLostDevice",
       "va": "0x1001e360",
       "rva": "0x0001e360",
       "module": "samp.dll",
-      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CTextDrawSelection::Disable",
@@ -3638,6 +3715,13 @@
       "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
     },
     {
+      "name": "CVehicle::ConstructLicensePlate",
+      "va": "0x100b7cd0",
+      "rva": "0x000b7cd0",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
       "name": "CVehicle::GetHealth",
       "va": "0x100b6de0",
       "rva": "0x000b6de0",
@@ -3666,11 +3750,18 @@
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
     },
     {
+      "name": "CVehicle::ShutdownLicensePlate",
+      "va": "0x100b7d20",
+      "rva": "0x000b7d20",
+      "module": "samp.dll",
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
       "name": "CVehiclePool::ConstructLicensePlates",
       "va": "0x1001e830",
       "rva": "0x0001e830",
       "module": "samp.dll",
-      "evidence": "Address-only native pre-render thiscall dependency, exact A23D0 operand. Body remains unrecovered; Native01E330 name assigns no unverified semantics."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "CVehiclePool::Find",
@@ -3691,7 +3782,7 @@
       "va": "0x1001e8a0",
       "rva": "0x0001e8a0",
       "module": "samp.dll",
-      "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+      "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
       "name": "DebugScript::Initialize",
@@ -5675,6 +5766,20 @@
       "evidence": "Original object-mutation-v111 instruction operands and exact reference float/opcode bytes. Shared read-only operand storage; no invented native global address."
     },
     {
+      "name": "g_objectPoolLastTick",
+      "va": "0x10156b74",
+      "rva": "0x00156b74",
+      "module": "samp.dll",
+      "evidence": "Exact CObjectPool::Process read/write operands; native initialized DWORD 0 verified from file."
+    },
+    {
+      "name": "g_objectPoolSecondsPerTick",
+      "va": "0x10118130",
+      "rva": "0x00118130",
+      "module": "samp.dll",
+      "evidence": "Exact native FMUL operand; file bytes 6f12833a (0.001f)."
+    },
+    {
       "name": "g_objectRotationFactor",
       "va": "0x101181c4",
       "rva": "0x001181c4",
@@ -6751,6 +6856,13 @@
       "rva": "0x000a0280",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "GameReleaseTextDrawTexture",
+      "va": "0x100b2750",
+      "rva": "0x000b2750",
+      "module": "samp.dll",
+      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
     },
     {
       "name": "GameRelocateModelFlags",
@@ -16383,6 +16495,30 @@
     },
     {
       "file": "source/game/object.h",
+      "name": "CObject::Process",
+      "rva": 692800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
+      "name": "CObject::GetMaterialSize",
+      "rva": 690288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
+      "name": "CObject::ConstructMaterialText",
+      "rva": 694992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
+      "name": "CObject::ShutdownMaterialText",
+      "rva": 690880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
       "name": "CObject::SetRotation",
       "rva": 687248,
       "module": "samp.dll"
@@ -16415,6 +16551,24 @@
       "file": "source/game/object.h",
       "name": "GamePoolObjectGetAt",
       "rva": 735280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_material.cpp",
+      "name": "CObject::GetMaterialSize",
+      "rva": 690288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_material.cpp",
+      "name": "CObject::ConstructMaterialText",
+      "rva": 694992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_material.cpp",
+      "name": "CObject::ShutdownMaterialText",
+      "rva": 690880,
       "module": "samp.dll"
     },
     {
@@ -17415,8 +17569,32 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::ConstructLicensePlate",
+      "rva": 752848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::ShutdownLicensePlate",
+      "rva": 752928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "GamePoolVehicleGetAt",
       "rva": 735184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_plate.cpp",
+      "name": "CVehicle::ConstructLicensePlate",
+      "rva": 752848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_plate.cpp",
+      "name": "CVehicle::ShutdownLicensePlate",
+      "rva": 752928,
       "module": "samp.dll"
     },
     {
@@ -18045,6 +18223,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CObjectMaterialText::Create",
+      "rva": 459600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CObjectMaterialText::CObjectMaterialText",
       "rva": 459552,
       "module": "samp.dll"
@@ -18077,6 +18261,12 @@
       "file": "source/gui/device_objects.h",
       "name": "CLicensePlate::OnResetDevice",
       "rva": 447040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLicensePlate::Create",
+      "rva": 447168,
       "module": "samp.dll"
     },
     {
@@ -19064,6 +19254,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/license_plate.cpp",
+      "name": "CLicensePlate::Create",
+      "rva": 447168,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/object_edit.h",
       "name": "CObjectEdit::TryChangeProcessType",
       "rva": 465728,
@@ -19736,6 +19932,54 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/textdraw.h",
+      "name": "CTextDraw::Draw",
+      "rva": 733312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw.h",
+      "name": "CTextDraw::Native0B30A0",
+      "rva": 733344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw.h",
+      "name": "CTextDraw::OnLostDevice",
+      "rva": 733872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw.h",
+      "name": "CTextDraw::Native0B2C90",
+      "rva": 732304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw.h",
+      "name": "CTextDraw::Native0B2DA0",
+      "rva": 732576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw.h",
+      "name": "GameReleaseTextDrawTexture",
+      "rva": 730960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_frame.cpp",
+      "name": "CTextDraw::Draw",
+      "rva": 733312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_frame.cpp",
+      "name": "CTextDraw::OnLostDevice",
+      "rva": 733872,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/main.cpp",
       "name": "g_pGame",
       "rva": 2804284,
@@ -19901,6 +20145,78 @@
       "file": "source/net/playerpool.h",
       "name": "CPlayerPool::Native013840",
       "rva": 79936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "g_objectPoolLastTick",
+      "rva": 1403764,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "g_objectPoolSecondsPerTick",
+      "rva": 1147184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CObjectPool::Process",
+      "rva": 76112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CObjectPool::ConstructMaterials",
+      "rva": 76304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CObjectPool::ShutdownMaterials",
+      "rva": 76368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CVehiclePool::ConstructLicensePlates",
+      "rva": 124976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CVehiclePool::ShutdownLicensePlates",
+      "rva": 125088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CTextDrawPool::Draw",
+      "rva": 123632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CTextDrawPool::Native01E330",
+      "rva": 123696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.cpp",
+      "name": "CTextDrawPool::OnLostDevice",
+      "rva": 123744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.h",
+      "name": "g_objectPoolLastTick",
+      "rva": 1403764,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/pool_frame.h",
+      "name": "g_objectPoolSecondsPerTick",
+      "rva": 1147184,
       "module": "samp.dll"
     },
     {

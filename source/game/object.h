@@ -4,6 +4,15 @@
 // Address interface over the established CEntity prefix. Never allocate this partial class:
 // complete CObject allocation/constructor/layout remain unrecovered.
 class CObject : public CEntity {public:
+    // Downstream motion dependency of the recovered pool coordinator.
+    // samp.dll RVA: 0x000a9240
+    void Process(float elapsedSeconds);
+    // samp.dll RVA: 0x000a8870
+    bool GetMaterialSize(int code,int *width,int *height);
+    // samp.dll RVA: 0x000a9ad0
+    void ConstructMaterialText();
+    // samp.dll RVA: 0x000a8ac0
+    void ShutdownMaterialText();
     // samp.dll RVA: 0x000a7c90
     void SetRotation(const CVector *rotation);
     // samp.dll RVA: 0x000a7c20

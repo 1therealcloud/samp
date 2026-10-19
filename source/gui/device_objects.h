@@ -35,6 +35,9 @@ public:
 };
 class CObjectMaterialText {
 public:
+    // Material renderer dependency; body remains open.
+    // samp.dll RVA: 0x00070350
+    IDirect3DTexture9 *Create(const char *text,const char *font,unsigned fontSize,int width,int height,D3DCOLOR color,D3DCOLOR background,BOOL bold,unsigned alignment);
     // samp.dll RVA: 0x00070320
     CObjectMaterialText(IDirect3DDevice9 *device);
     IDirect3DDevice9 *device;ID3DXSprite *first,*second;
@@ -53,6 +56,8 @@ public:
     void OnLostDevice();
     // samp.dll RVA: 0x0006d240
     void OnResetDevice();
+    // samp.dll RVA: 0x0006d2c0
+    IDirect3DTexture9 *Create(const char *text);
 };
 class CSpawnScreen {
 public:
@@ -92,7 +97,7 @@ public:
 class CEntity;
 class CObjectPool {
 public:
-    // Address-only pre-render dependencies; pool implementation remains open.
+    // Frame coordinators recovered; complete pool layout/lifecycle remains open.
     // samp.dll RVA: 0x00012950
     void Process();
     // samp.dll RVA: 0x00012a10

@@ -14,10 +14,10 @@ public:
     WORD Find(void *gameObject);
     // samp.dll RVA: 0x00001120
     CVehicle *Get(WORD id);
-    // Stage 3 dependency; full plate shutdown body remains unrecovered.
+    // Native unbounded largest-ID loop; complete pool extent remains open.
     // samp.dll RVA: 0x0001e8a0
     void ShutdownLicensePlates();
-    // Address-only pre-render dependency; full plate construction remains open.
+    // Native readiness gate and largest-ID loop.
     // samp.dll RVA: 0x0001e830
     void ConstructLicensePlates();
 };
