@@ -38,7 +38,7 @@ public:
     UINT __stdcall GetNumberOfSwapChains();
     // samp.dll RVA: 0x00074060
     HRESULT __stdcall Reset(D3DPRESENT_PARAMETERS* pPresentationParameters);
-    // Render/UI/RPC body remains declaration-only.
+    // Implemented in d3dhook/present.cpp; downstream rendering dependencies remain.
     // samp.dll RVA: 0x000751b0
     HRESULT __stdcall Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion);
     // samp.dll RVA: 0x00074090
@@ -257,7 +257,7 @@ void ClientDeviceObjectsLost();
 // Implemented in gui/device_lifecycle.cpp; downstream UI dependencies remain.
 // samp.dll RVA: 0x000c5880
 void ClientDeviceObjectsReset();
-// Reviewed dependency; body is not recovered in this profile.
+// Implemented in game/device_integrity.cpp.
 // samp.dll RVA: 0x0009d6f0
 void GameDeviceIntegrityCycle();
 #endif

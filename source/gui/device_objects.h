@@ -2,6 +2,7 @@
 #define SAMP_DEVICE_OBJECTS_H
 #include <d3dx9.h>
 #include "fontrender.h"
+struct CVector;
 #pragma pack(push,1)
 // Observed lifecycle prefixes only; constructors/complete interfaces remain open.
 class CPlayerTags {
@@ -19,6 +20,13 @@ public:
     void OnLostDevice();
     // samp.dll RVA: 0x0006b640
     void OnResetDevice();
+    // Render dependencies; bodies remain open.
+    // samp.dll RVA: 0x0006b6b0
+    void Begin();
+    // samp.dll RVA: 0x0006b6c0
+    void End();
+    // samp.dll RVA: 0x0006b6d0
+    void Draw(const CVector *position,const char *text,DWORD color,BOOL shadow,BOOL status);
 };
 class CObjectMaterialText {
 public:
@@ -53,6 +61,8 @@ public:
     void Close(bool restoreCursor);
     // samp.dll RVA: 0x0006e360
     void Recalc();
+    // samp.dll RVA: 0x0006eaf0
+    void Draw();
 };
 class CObjectPool {
 public:
@@ -63,6 +73,8 @@ class CTextDrawPool {
 public:
     // samp.dll RVA: 0x0001e360
     void OnLostDevice();
+    // samp.dll RVA: 0x0001e2f0
+    void Draw();
 };
 #pragma pack(pop)
 // samp.dll RVA: 0x002aca2c

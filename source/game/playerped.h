@@ -38,6 +38,8 @@ public:
     BOOL IsInVehicle();
     // samp.dll RVA: 0x000abbe0
     BOOL IsPassenger();
+    // samp.dll RVA: 0x000adba0
+    DWORD GetDrunkLevel();
 };
 #pragma pack(pop)
 typedef char PedExtent[(sizeof(CPed)==0x32d)?1:-1];

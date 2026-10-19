@@ -67,6 +67,8 @@ public:
     CCamera *GetCamera();
     // samp.dll RVA: 0x00002d70
     BOOL DoesHeadMoves();
+    // samp.dll RVA: 0x000a1bd0
+    void EnableHUD(BOOL enabled);
 };
 #pragma pack(pop)
 typedef char GameExtent[(sizeof(CGame)==0x142)?1:-1];

@@ -29,4 +29,8 @@ extern const Scripting::OpcodeInfo g_audioLoad;
 extern const Scripting::OpcodeInfo g_audioUnload;
 // samp.dll RVA: 0x0011eb54
 extern const Scripting::OpcodeInfo g_audioSetPosition;
+// samp.dll RVA: 0x0011eb18
+extern const Scripting::OpcodeInfo g_audioIsLoaded;
+// samp.dll RVA: 0x0011eb2c
+extern const Scripting::OpcodeInfo g_audioStart;
 #endif

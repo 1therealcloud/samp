@@ -39,6 +39,9 @@ public:
     void GetBoundCentre(CVector *centre);
     // samp.dll RVA: 0x0009ee70
     int GetModelIndex();
+    // Stage 2 distance wrapper dependency.
+    // samp.dll RVA: 0x0009ef00
+    float GetDistanceToLocalPlayer();
     // Returns TRUE only when this call requested/loaded the model, not merely
     // when the entity's model was successfully changed.
     // samp.dll RVA: 0x0009ed90

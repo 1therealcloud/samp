@@ -19,6 +19,13 @@ public:
     BOOL m_bColorChanged;
     // samp.dll RVA: 0x000b6e20
     void SetColor(BYTE primary,BYTE secondary);
+    // Additional stage 2 wrapper dependencies; no complete allocation claim.
+    // samp.dll RVA: 0x000b7e70
+    BYTE GetMaxPassengers();
+    // samp.dll RVA: 0x000b6de0
+    float GetHealth();
+    // samp.dll RVA: 0x000b6ed0
+    int GetSubtype();
 };
 #pragma pack(pop)
 typedef char VehicleBackendOffset[(offsetof(CVehicle,m_pGameVehicle)==0x4c)?1:-1];

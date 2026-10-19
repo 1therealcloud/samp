@@ -25,6 +25,8 @@ public:
     bool IsOutdoorAmbienceTrackDisabled();
     // samp.dll RVA: 0x000a20e0
     void Play(int sound,CVector position);
+    // samp.dll RVA: 0x000a1ff0
+    void Process();
 };
 #pragma pack(pop)
 typedef char AudioExtent[(sizeof(CAudio)==5)?1:-1];

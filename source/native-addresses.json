@@ -502,6 +502,13 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "CAudio::Process",
+      "va": "0x100a1ff0",
+      "rva": "0x000a1ff0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CAudio::SetOutdoorAmbienceTrack",
       "va": "0x100a20c0",
       "rva": "0x000a20c0",
@@ -528,6 +535,20 @@
       "rva": "0x000a2080",
       "module": "samp.dll",
       "evidence": "Read-only audio-stop-v88-code/100a2080.c and audio-stop-v88-instructions.tsv; native 17-byte body and GTA audio-engine operands correct the external A2260 anchor."
+    },
+    {
+      "name": "CAudioStream::ControlGameRadio",
+      "va": "0x10066500",
+      "rva": "0x00066500",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CAudioStream::DrawInfo",
+      "va": "0x10066530",
+      "rva": "0x00066530",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CCamera::~CCamera",
@@ -810,6 +831,13 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json"
     },
     {
+      "name": "CChatBubble::Draw",
+      "va": "0x10066950",
+      "rva": "0x00066950",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CConfig::~CConfig",
       "va": "0x10065680",
       "rva": "0x00065680",
@@ -990,6 +1018,27 @@
       "rva": "0x0016c380",
       "module": "samp.dll",
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CDeathWindow::Draw",
+      "va": "0x10069d20",
+      "rva": "0x00069d20",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CDialog::Draw",
+      "va": "0x1006f2d0",
+      "rva": "0x0006f2d0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CDownloadWindow::Draw",
+      "va": "0x1006a350",
+      "rva": "0x0006a350",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CDXUTDialog::AddControl",
@@ -1200,6 +1249,13 @@
       "rva": "0x0009ecf0",
       "module": "samp.dll",
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "CEntity::GetDistanceToLocalPlayer",
+      "va": "0x1009ef00",
+      "rva": "0x0009ef00",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CEntity::GetEulerInverted",
@@ -1783,6 +1839,13 @@
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
     },
     {
+      "name": "CGame::EnableHUD",
+      "va": "0x100a1bd0",
+      "rva": "0x000a1bd0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CGame::GetAudio",
       "va": "0x10002d50",
       "rva": "0x00002d50",
@@ -1965,6 +2028,13 @@
       "evidence": "analysis/chat-comparison-v52-O2-Ob2.json native operand"
     },
     {
+      "name": "CHelpDialog::Show",
+      "va": "0x1006b570",
+      "rva": "0x0006b570",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CInput::AddCommand",
       "va": "0x100691b0",
       "rva": "0x000691b0",
@@ -2133,6 +2203,27 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CLabel::Begin",
+      "va": "0x1006b6b0",
+      "rva": "0x0006b6b0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CLabel::Draw",
+      "va": "0x1006b6d0",
+      "rva": "0x0006b6d0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CLabel::End",
+      "va": "0x1006b6c0",
+      "rva": "0x0006b6c0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CLabel::OnLostDevice",
       "va": "0x1006b630",
       "rva": "0x0006b630",
@@ -2147,6 +2238,13 @@
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
+      "name": "CLabelPool::Draw",
+      "va": "0x10001350",
+      "rva": "0x00001350",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CLicensePlate::OnLostDevice",
       "va": "0x1006d1f0",
       "rva": "0x0006d1f0",
@@ -2159,6 +2257,13 @@
       "rva": "0x0006d240",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "ClientCaptureScreenshot",
+      "va": "0x10075040",
+      "rva": "0x00075040",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "ClientConstructCrashText",
@@ -2194,6 +2299,20 @@
       "rva": "0x000c6930",
       "module": "samp.dll",
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+    },
+    {
+      "name": "ClientDrawLabels",
+      "va": "0x10074dc0",
+      "rva": "0x00074dc0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientDrawPlayerTags",
+      "va": "0x10073cb0",
+      "rva": "0x00073cb0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "ClientDumpLoadedModules",
@@ -2235,7 +2354,28 @@
       "va": "0x100c66b0",
       "rva": "0x000c66b0",
       "module": "samp.dll",
-      "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientInitializeDeviceAndGui",
+      "va": "0x100c5e70",
+      "rva": "0x000c5e70",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientProcessFrame",
+      "va": "0x100c6630",
+      "rva": "0x000c6630",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "ClientProcessMenuTransition",
+      "va": "0x10073f10",
+      "rva": "0x00073f10",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "ClientSendCrashReport",
@@ -2294,6 +2434,34 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CNetGame::Destroy",
+      "va": "0x10009570",
+      "rva": "0x00009570",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CNetGame::Process",
+      "va": "0x1000b290",
+      "rva": "0x0000b290",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CNetStats::Draw",
+      "va": "0x100607f0",
+      "rva": "0x000607f0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CObjectEdit::Render",
+      "va": "0x10073220",
+      "rva": "0x00073220",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CObjectMaterialText::OnLostDevice",
       "va": "0x100702d0",
       "rva": "0x000702d0",
@@ -2315,6 +2483,13 @@
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
+      "name": "CObjectSelection::Draw",
+      "va": "0x1006d640",
+      "rva": "0x0006d640",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CPed::~CPed",
       "va": "0x100b0ea0",
       "rva": "0x000b0ea0",
@@ -2334,6 +2509,13 @@
       "rva": "0x000b0ba0",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPed::GetDrunkLevel",
+      "va": "0x100adba0",
+      "rva": "0x000adba0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CPed::IsInVehicle",
@@ -2362,6 +2544,13 @@
       "rva": "0x0006d0c0",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CRenderPanel::Draw",
+      "va": "0x10071560",
+      "rva": "0x00071560",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CRYPT_FN_AcquireContext",
@@ -2427,6 +2616,13 @@
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
+      "name": "CScoreboard::Draw",
+      "va": "0x1006eaf0",
+      "rva": "0x0006eaf0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CScoreboard::Recalc",
       "va": "0x1006e360",
       "rva": "0x0006e360",
@@ -2476,11 +2672,32 @@
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
     },
     {
+      "name": "CSrvNetStats::Draw",
+      "va": "0x10070d00",
+      "rva": "0x00070d00",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CTextDrawPool::Draw",
+      "va": "0x1001e2f0",
+      "rva": "0x0001e2f0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "CTextDrawPool::OnLostDevice",
       "va": "0x1001e360",
       "rva": "0x0001e360",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CTextDrawSelection::Process",
+      "va": "0x10070eb0",
+      "rva": "0x00070eb0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CTinyEncrypt::~CTinyEncrypt",
@@ -2551,6 +2768,27 @@
       "rva": "0x0009ba00",
       "module": "samp.dll",
       "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
+    },
+    {
+      "name": "CVehicle::GetHealth",
+      "va": "0x100b6de0",
+      "rva": "0x000b6de0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CVehicle::GetMaxPassengers",
+      "va": "0x100b7e70",
+      "rva": "0x000b7e70",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CVehicle::GetSubtype",
+      "va": "0x100b6ed0",
+      "rva": "0x000b6ed0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "CVehicle::SetColor",
@@ -2868,6 +3106,13 @@
       "evidence": "Read-only file-callbacks-v93 exact entries, original instruction operands, observed 20-byte records and distinct 102-byte filename SHA-1 class. Original native paths compared in private test memory; normal CRT calls are bridged."
     },
     {
+      "name": "g_audioIsLoaded",
+      "va": "0x1011eb18",
+      "rva": "0x0011eb18",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "g_audioLoad",
       "va": "0x1011eb04",
       "rva": "0x0011eb04",
@@ -2887,6 +3132,13 @@
       "rva": "0x0011eb54",
       "module": "samp.dll",
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
+    },
+    {
+      "name": "g_audioStart",
+      "va": "0x1011eb2c",
+      "rva": "0x0011eb2c",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "g_audioUnload",
@@ -3015,6 +3267,20 @@
       "evidence": "Read-only exception-v94 exact entry instructions. SendCrashReport is a reviewed declaration-only HTTP dependency, not recovered behavior."
     },
     {
+      "name": "g_clientIntegrityFailed",
+      "va": "0x102aca64",
+      "rva": "0x002aca64",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_clientIntegrityFailures",
+      "va": "0x102aca60",
+      "rva": "0x002aca60",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "g_clientModule",
       "va": "0x102ac9c8",
       "rva": "0x002ac9c8",
@@ -3022,11 +3288,32 @@
       "evidence": "Read-only bootstrap-v91/filehooks-v91 exports; original operands and C6780/C6930 forwarding. Declaration-only dependencies are not recovered bodies. Detours 1.5 is selected from the original 0.2x reference library, without native library identity claim."
     },
     {
+      "name": "g_clientQuitRequested",
+      "va": "0x102ac9c0",
+      "rva": "0x002ac9c0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_clientQuitStarted",
+      "va": "0x102ac9c4",
+      "rva": "0x002ac9c4",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "g_clientSettings",
       "va": "0x102abe78",
       "rva": "0x002abe78",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "g_clientSkipGameFrame",
+      "va": "0x102aca68",
+      "rva": "0x002aca68",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "g_clientStartupMarker",
@@ -3309,6 +3596,13 @@
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
     },
     {
+      "name": "g_gameDebugStage",
+      "va": "0x1018dde8",
+      "rva": "0x0018dde8",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "g_gameDefaultModelFlags",
       "va": "0x101549a0",
       "rva": "0x001549a0",
@@ -3454,6 +3748,13 @@
       "rva": "0x00151918",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "g_gameLastReleasedResource",
+      "va": "0x1018e538",
+      "rva": "0x0018e538",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "g_gameLoadModelsCommand",
@@ -4100,6 +4401,41 @@
       "evidence": "Read-only native dxut-font/createfont-v68 and buffer-state-v67 exports; ANSI font overloads"
     },
     {
+      "name": "g_integrityComparisons",
+      "va": "0x1018dc2c",
+      "rva": "0x0018dc2c",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_integrityPedChecksum",
+      "va": "0x1018dc28",
+      "rva": "0x0018dc28",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_integrityPending",
+      "va": "0x1018dc30",
+      "rva": "0x0018dc30",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_integritySuppressCount",
+      "va": "0x1018dc34",
+      "rva": "0x0018dc34",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_integrityVehicleChecksum",
+      "va": "0x1018dc24",
+      "rva": "0x0018dc24",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "g_keysDriveLeft",
       "va": "0x10152ac4",
       "rva": "0x00152ac4",
@@ -4268,6 +4604,125 @@
       "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
     },
     {
+      "name": "g_renderAudioStream",
+      "va": "0x102aca1c",
+      "rva": "0x002aca1c",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderChatBubble",
+      "va": "0x102aca08",
+      "rva": "0x002aca08",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderDialog",
+      "va": "0x102ac9e0",
+      "rva": "0x002ac9e0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderDownloadWindow",
+      "va": "0x102ac9e8",
+      "rva": "0x002ac9e8",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderFirstDialog",
+      "va": "0x102acab4",
+      "rva": "0x002acab4",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderGroundHeight",
+      "va": "0x10140bdc",
+      "rva": "0x00140bdc",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderHelp",
+      "va": "0x102aca04",
+      "rva": "0x002aca04",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderMapClickRpc",
+      "va": "0x1011bbd4",
+      "rva": "0x0011bbd4",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderMenuWasVisible",
+      "va": "0x1017ebe0",
+      "rva": "0x0017ebe0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderNetStats",
+      "va": "0x102ac9fc",
+      "rva": "0x002ac9fc",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderObjectSelection",
+      "va": "0x102ac9f4",
+      "rva": "0x002ac9f4",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderPanel",
+      "va": "0x102ac9e4",
+      "rva": "0x002ac9e4",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderScreenshotRequested",
+      "va": "0x1016be7c",
+      "rva": "0x0016be7c",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderSecondDialog",
+      "va": "0x102acabc",
+      "rva": "0x002acabc",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderServerNetStats",
+      "va": "0x102aca00",
+      "rva": "0x002aca00",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderShowVehicleInfo",
+      "va": "0x102aca48",
+      "rva": "0x002aca48",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_renderTextDrawSelection",
+      "va": "0x102ac9f8",
+      "rva": "0x002ac9f8",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "g_scmEventParameters",
       "va": "0x10156988",
       "rva": "0x00156988",
@@ -4366,11 +4821,18 @@
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
     },
     {
+      "name": "GameDebugDraw",
+      "va": "0x1009e2d0",
+      "rva": "0x0009e2d0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "GameDeviceIntegrityCycle",
       "va": "0x1009d6f0",
       "rva": "0x0009d6f0",
       "module": "samp.dll",
-      "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "GameDisableMouseCalls",
@@ -4392,6 +4854,13 @@
       "rva": "0x000b4570",
       "module": "samp.dll",
       "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
+    },
+    {
+      "name": "GameDrawDebugEntities",
+      "va": "0x1009df50",
+      "rva": "0x0009df50",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "GameExceptionFilter",
@@ -4912,6 +5381,34 @@
       "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
     },
     {
+      "name": "GameIntegrityMismatch",
+      "va": "0x100c5c10",
+      "rva": "0x000c5c10",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "GameIntegrityPedArray",
+      "va": "0x1009d6b0",
+      "rva": "0x0009d6b0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "GameIntegrityVehicleArray",
+      "va": "0x1009d690",
+      "rva": "0x0009d690",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "GameIntegrityXor",
+      "va": "0x1009d6d0",
+      "rva": "0x0009d6d0",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
       "name": "GameIsCameraPointValid",
       "va": "0x100b46e0",
       "rva": "0x000b46e0",
@@ -4980,6 +5477,13 @@
       "rva": "0x000b1a40",
       "module": "samp.dll",
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameReleaseRenderResource",
+      "va": "0x100a0280",
+      "rva": "0x000a0280",
+      "module": "samp.dll",
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "GameRelocateModelFlags",
@@ -5637,7 +6141,7 @@
       "va": "0x100751b0",
       "rva": "0x000751b0",
       "module": "samp.dll",
-      "evidence": "119-slot vtable RVA 0x0011fa10 and exact read-only device-v95 instructions; Present is declaration-only pending render/UI/RPC recovery."
+      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
       "name": "IDirect3DDevice9Hook::ProcessVertices",
@@ -7266,6 +7770,102 @@
       "file": "source/client/exceptions.h",
       "name": "ClientSendCrashReport",
       "rva": 393824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "g_clientIntegrityFailures",
+      "rva": 2804320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "g_clientIntegrityFailed",
+      "rva": 2804324,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "g_clientSkipGameFrame",
+      "rva": 2804328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "g_clientQuitRequested",
+      "rva": 2804160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "g_clientQuitStarted",
+      "rva": 2804164,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "GameIntegrityMismatch",
+      "rva": 810000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "ClientProcessFrame",
+      "rva": 812592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.cpp",
+      "name": "ClientGameLoop",
+      "rva": 812720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "g_clientIntegrityFailures",
+      "rva": 2804320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "g_clientIntegrityFailed",
+      "rva": 2804324,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "g_clientSkipGameFrame",
+      "rva": 2804328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "g_clientQuitRequested",
+      "rva": 2804160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "g_clientQuitStarted",
+      "rva": 2804164,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "ClientProcessFrame",
+      "rva": 812592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "ClientGameLoop",
+      "rva": 812720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/client/frame.h",
+      "name": "ClientInitializeDeviceAndGui",
+      "rva": 810608,
       "module": "samp.dll"
     },
     {
@@ -9333,6 +9933,108 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderAudioStream",
+      "rva": 2804252,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderChatBubble",
+      "rva": 2804232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderDialog",
+      "rva": 2804192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderPanel",
+      "rva": 2804196,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderDownloadWindow",
+      "rva": 2804200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderObjectSelection",
+      "rva": 2804212,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderTextDrawSelection",
+      "rva": 2804216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderNetStats",
+      "rva": 2804220,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderServerNetStats",
+      "rva": 2804224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderHelp",
+      "rva": 2804228,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderFirstDialog",
+      "rva": 2804404,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderSecondDialog",
+      "rva": 2804412,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderScreenshotRequested",
+      "rva": 1490556,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderShowVehicleInfo",
+      "rva": 2804296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderGroundHeight",
+      "rva": 1313756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "g_renderMapClickRpc",
+      "rva": 1162196,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/d3dhook/present.cpp",
+      "name": "IDirect3DDevice9Hook::Present",
+      "rva": 479664,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/d3dhook/texture_binding.cpp",
       "name": "g_deviceMaterialOverrideEnabled",
       "rva": 1967248,
@@ -10227,6 +10929,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/audio.h",
+      "name": "CAudio::Process",
+      "rva": 663536,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/building_removal.cpp",
       "name": "g_buildingRemovalRecords",
       "rva": 1609208,
@@ -10461,6 +11169,120 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/device_integrity.cpp",
+      "name": "g_integrityVehicleChecksum",
+      "rva": 1629220,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "g_integrityPedChecksum",
+      "rva": 1629224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "g_integrityComparisons",
+      "rva": 1629228,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "g_integrityPending",
+      "rva": 1629232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "g_integritySuppressCount",
+      "rva": 1629236,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "GameIntegrityVehicleArray",
+      "rva": 644752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "GameIntegrityPedArray",
+      "rva": 644784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "GameIntegrityXor",
+      "rva": 644816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.cpp",
+      "name": "GameDeviceIntegrityCycle",
+      "rva": 644848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "g_integrityVehicleChecksum",
+      "rva": 1629220,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "g_integrityPedChecksum",
+      "rva": 1629224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "g_integrityComparisons",
+      "rva": 1629228,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "g_integrityPending",
+      "rva": 1629232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "g_integritySuppressCount",
+      "rva": 1629236,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "GameIntegrityVehicleArray",
+      "rva": 644752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "GameIntegrityPedArray",
+      "rva": 644784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "GameIntegrityXor",
+      "rva": 644816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "GameIntegrityMismatch",
+      "rva": 810000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/device_integrity.h",
+      "name": "GameDeviceIntegrityCycle",
+      "rva": 644848,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/effects.cpp",
       "name": "GameBufferReader::Read",
       "rva": 770512,
@@ -10668,6 +11490,12 @@
       "file": "source/game/entity.h",
       "name": "CEntity::GetModelIndex",
       "rva": 650864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetDistanceToLocalPlayer",
+      "rva": 651008,
       "module": "samp.dll"
     },
     {
@@ -11106,6 +11934,12 @@
       "file": "source/game/game.h",
       "name": "CGame::DoesHeadMoves",
       "rva": 11632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::EnableHUD",
+      "rva": 662480,
       "module": "samp.dll"
     },
     {
@@ -13462,6 +14296,12 @@
     },
     {
       "file": "source/game/playerped.h",
+      "name": "CPed::GetDrunkLevel",
+      "rva": 711584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
       "name": "g_gamePlayerPeds",
       "rva": 2792872,
       "module": "samp.dll"
@@ -13780,6 +14620,24 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetMaxPassengers",
+      "rva": 753264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetHealth",
+      "rva": 749024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetSubtype",
+      "rva": 749264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "GamePoolVehicleGetAt",
       "rva": 735184,
       "module": "samp.dll"
@@ -13869,6 +14727,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_audioIsLoaded",
+      "rva": 1174296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_audioStart",
+      "rva": 1174316,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_cameraFade",
       "rva": 1172496,
@@ -13950,6 +14820,18 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_audioSetPosition",
       "rva": 1174356,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_audioIsLoaded",
+      "rva": 1174296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_audioStart",
+      "rva": 1174316,
       "module": "samp.dll"
     },
     {
@@ -14248,6 +15130,24 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CLabel::Begin",
+      "rva": 439984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLabel::End",
+      "rva": 440000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CLabel::Draw",
+      "rva": 440016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CObjectMaterialText::OnLostDevice",
       "rva": 459472,
       "module": "samp.dll"
@@ -14296,6 +15196,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::Draw",
+      "rva": 453360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CObjectPool::ShutdownMaterials",
       "rva": 76368,
       "module": "samp.dll"
@@ -14304,6 +15210,12 @@
       "file": "source/gui/device_objects.h",
       "name": "CTextDrawPool::OnLostDevice",
       "rva": 123744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CTextDrawPool::Draw",
+      "rva": 123632,
       "module": "samp.dll"
     },
     {
@@ -14970,6 +15882,312 @@
       "file": "source/gui/input_text.h",
       "name": "InputWideToAnsi",
       "rva": 544864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CNetGame::Process",
+      "rva": 45712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CNetGame::Destroy",
+      "rva": 38256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CAudioStream::DrawInfo",
+      "rva": 419120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CAudioStream::ControlGameRadio",
+      "rva": 419072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CChatBubble::Draw",
+      "rva": 420176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CLabelPool::Draw",
+      "rva": 4944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDialog::Draw",
+      "rva": 455376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CObjectEdit::Render",
+      "rva": 471584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CObjectSelection::Draw",
+      "rva": 448064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CTextDrawSelection::Process",
+      "rva": 462512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDeathWindow::Draw",
+      "rva": 433440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CRenderPanel::Draw",
+      "rva": 464224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDownloadWindow::Draw",
+      "rva": 435024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CNetStats::Draw",
+      "rva": 395248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CSrvNetStats::Draw",
+      "rva": 462080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CHelpDialog::Show",
+      "rva": 439664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderAudioStream",
+      "rva": 2804252,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderChatBubble",
+      "rva": 2804232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderDialog",
+      "rva": 2804192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderPanel",
+      "rva": 2804196,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderDownloadWindow",
+      "rva": 2804200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderObjectSelection",
+      "rva": 2804212,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderTextDrawSelection",
+      "rva": 2804216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderNetStats",
+      "rva": 2804220,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderServerNetStats",
+      "rva": 2804224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderHelp",
+      "rva": 2804228,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderFirstDialog",
+      "rva": 2804404,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderSecondDialog",
+      "rva": 2804412,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderScreenshotRequested",
+      "rva": 1490556,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderShowVehicleInfo",
+      "rva": 2804296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderMenuWasVisible",
+      "rva": 1567712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_gameLastReleasedResource",
+      "rva": 1631544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_gameDebugStage",
+      "rva": 1629672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderGroundHeight",
+      "rva": 1313756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "g_renderMapClickRpc",
+      "rva": 1162196,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "ClientProcessMenuTransition",
+      "rva": 474896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "GameReleaseRenderResource",
+      "rva": 656000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "GameDebugDraw",
+      "rva": 647888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "ClientCaptureScreenshot",
+      "rva": 479296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "ClientDrawPlayerTags",
+      "rva": 474288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "ClientDrawLabels",
+      "rva": 478656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "GameDrawDebugEntities",
+      "rva": 646992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "g_renderMenuWasVisible",
+      "rva": 1567712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "g_gameLastReleasedResource",
+      "rva": 1631544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "g_gameDebugStage",
+      "rva": 1629672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "CGame::EnableHUD",
+      "rva": 662480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "CPed::GetDrunkLevel",
+      "rva": 711584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "CAudio::Process",
+      "rva": 663536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "GameReleaseRenderResource",
+      "rva": 656000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "ClientProcessMenuTransition",
+      "rva": 474896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_state.cpp",
+      "name": "GameDebugDraw",
+      "rva": 647888,
       "module": "samp.dll"
     },
     {
