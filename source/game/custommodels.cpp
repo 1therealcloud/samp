@@ -36,7 +36,7 @@ BOOL CCustomModels::DoesExist(int model) {
     for(DWORD i=0;i<count;i++) {
         BYTE *entry=(*(BYTE***)state)[i];
         if(*(int*)(entry+0x10)==model && entry[7]==1) {
-            if(!GameLoadCustomPedModel(*(DWORD*)(entry+0xc),*(DWORD*)(entry+0x10),*(DWORD*)(entry+0x46),*(DWORD*)(entry+0x4a)))return FALSE;
+            if(!LoadPedModel(*(DWORD*)(entry+0xc),*(DWORD*)(entry+0x10),*(DWORD*)(entry+0x46),*(DWORD*)(entry+0x4a)))return FALSE;
             entry[0x59]=0;entry[0x58]=1;return TRUE;
         }
     }
@@ -50,7 +50,7 @@ BOOL CCustomModels::LoadObjectEntry(int model) {
         // This method alone has the observed null-record guard.
         if(entry && *(int*)(entry+0x10)==model && entry[7]==2) {
             if(!entry[0] || !entry[1])return FALSE;
-            if(!GameLoadCustomObjectModel(*(DWORD*)(entry+0xc),*(DWORD*)(entry+0x10),*(DWORD*)(entry+0x46),*(DWORD*)(entry+0x4a)))return FALSE;
+            if(!LoadObjectModel(*(DWORD*)(entry+0xc),*(DWORD*)(entry+0x10),*(DWORD*)(entry+0x46),*(DWORD*)(entry+0x4a)))return FALSE;
             entry[0x59]=0;entry[0x58]=1;return TRUE;
         }
     }

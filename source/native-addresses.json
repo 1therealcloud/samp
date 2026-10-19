@@ -1076,6 +1076,20 @@
       "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
     },
     {
+      "name": "CCustomModels::LoadObjectModel",
+      "va": "0x1000c2e0",
+      "rva": "0x0000c2e0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external. Corrects v119 provisional free stdcall declaration: native ECX=this, four DWORD arguments, RET16."
+    },
+    {
+      "name": "CCustomModels::LoadPedModel",
+      "va": "0x1000c1c0",
+      "rva": "0x0000c1c0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external. Corrects v119 provisional free stdcall declaration: native ECX=this, four DWORD arguments, RET16."
+    },
+    {
       "name": "CDeathWindow::CDeathWindow",
       "va": "0x1006a090",
       "rva": "0x0006a090",
@@ -5143,6 +5157,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "g_gameLoadingCustomModel",
+      "va": "0x101e0448",
+      "rva": "0x001e0448",
+      "module": "samp.dll",
+      "evidence": "A7820 stores model before cloning; distinct from adjacent enable flag at 1E0444."
+    },
+    {
       "name": "g_gameLoadModelsCommand",
       "va": "0x1011e678",
       "rva": "0x0011e678",
@@ -6361,6 +6382,13 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "GameAttachModelTxd",
+      "va": "0x100a7750",
+      "rva": "0x000a7750",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameBufferReader::Read",
       "va": "0x100bc1d0",
       "rva": "0x000bc1d0",
@@ -6373,6 +6401,20 @@
       "rva": "0x000a02f0",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameCloneObjectModelInfo",
+      "va": "0x100a76c0",
+      "rva": "0x000a76c0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameClonePedModelInfo",
+      "va": "0x100a7670",
+      "rva": "0x000a7670",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
       "name": "GameDataReadHook",
@@ -6443,6 +6485,13 @@
       "rva": "0x00060470",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "GameFileExists",
+      "va": "0x100b5900",
+      "rva": "0x000b5900",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
       "name": "GameFindAnimation",
@@ -7005,6 +7054,13 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "GameIsObjectModelInfo",
+      "va": "0x100b40e0",
+      "rva": "0x000b40e0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameIsPedModel",
       "va": "0x100b39d0",
       "rva": "0x000b39d0",
@@ -7012,18 +7068,25 @@
       "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
     },
     {
+      "name": "GameLoadAtomicStream",
+      "va": "0x100b1ba0",
+      "rva": "0x000b1ba0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameLoadCustomObjectModel",
       "va": "0x1000c2e0",
       "rva": "0x0000c2e0",
       "module": "samp.dll",
-      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+      "evidence": "Historical v119 provisional name only; superseded by CCustomModels member ABI in v120. No maintained declaration or definition uses this free-function identity."
     },
     {
       "name": "GameLoadCustomPedModel",
       "va": "0x1000c1c0",
       "rva": "0x0000c1c0",
       "module": "samp.dll",
-      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+      "evidence": "Historical v119 provisional name only; superseded by CCustomModels member ABI in v120. No maintained declaration or definition uses this free-function identity."
     },
     {
       "name": "GameLoadDictionaryTexture",
@@ -7031,6 +7094,20 @@
       "rva": "0x000b2860",
       "module": "samp.dll",
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameLoadObjectDff",
+      "va": "0x100b1bc0",
+      "rva": "0x000b1bc0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameLoadPedDff",
+      "va": "0x100b1b10",
+      "rva": "0x000b1b10",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
       "name": "GameMarkStartupStage",
@@ -7103,6 +7180,13 @@
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
     },
     {
+      "name": "GamePublishPedClump",
+      "va": "0x100b41d0",
+      "rva": "0x000b41d0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameQuaternionFromMatrix",
       "va": "0x100b4d50",
       "rva": "0x000b4d50",
@@ -7129,6 +7213,20 @@
       "rva": "0x000b1a40",
       "module": "samp.dll",
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameRegisterCustomObject",
+      "va": "0x100a7820",
+      "rva": "0x000a7820",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRegisterCustomPed",
+      "va": "0x100a77c0",
+      "rva": "0x000a77c0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
       "name": "GameReleaseRenderResource",
@@ -7222,6 +7320,20 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwFindChunk",
+      "va": "0x100b1a80",
+      "rva": "0x000b1a80",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwReadClump",
+      "va": "0x100b1ad0",
+      "rva": "0x000b1ad0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameRwRotateFrame",
       "va": "0x100b1920",
       "rva": "0x000b1920",
@@ -7271,6 +7383,20 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwStreamClose",
+      "va": "0x100b1a00",
+      "rva": "0x000b1a00",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwStreamOpen",
+      "va": "0x100b19c0",
+      "rva": "0x000b19c0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameRwTranslateFrame",
       "va": "0x100b18f0",
       "rva": "0x000b18f0",
@@ -7283,6 +7409,20 @@
       "rva": "0x000020c0",
       "module": "samp.dll",
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GameSetModelField8",
+      "va": "0x100b4330",
+      "rva": "0x000b4330",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameSetModelTxd",
+      "va": "0x100b4260",
+      "rva": "0x000b4260",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
       "name": "GameSetupD3DFog",
@@ -7306,11 +7446,25 @@
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
     },
     {
+      "name": "GameTxdAdd",
+      "va": "0x100b34a0",
+      "rva": "0x000b34a0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
       "name": "GameTxdFind",
       "va": "0x100b3480",
       "rva": "0x000b3480",
       "module": "samp.dll",
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdLoad",
+      "va": "0x100b34c0",
+      "rva": "0x000b34c0",
+      "module": "samp.dll",
+      "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
       "name": "GameTxdPop",
@@ -13588,6 +13742,258 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/custom_model_files.cpp",
+      "name": "GameFileExists",
+      "rva": 743680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_files.cpp",
+      "name": "CCustomModels::LoadPedModel",
+      "rva": 49600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_files.cpp",
+      "name": "CCustomModels::LoadObjectModel",
+      "rva": 49888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameFileExists",
+      "rva": 743680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameRegisterCustomPed",
+      "rva": 686016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameRegisterCustomObject",
+      "rva": 686112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameClonePedModelInfo",
+      "rva": 685680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameCloneObjectModelInfo",
+      "rva": 685760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameAttachModelTxd",
+      "rva": 685904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameLoadPedDff",
+      "rva": 727824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameLoadObjectDff",
+      "rva": 728000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GamePublishPedClump",
+      "rva": 737744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameTxdAdd",
+      "rva": 734368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameTxdLoad",
+      "rva": 734400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameSetModelTxd",
+      "rva": 737888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameRwStreamOpen",
+      "rva": 727488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameRwStreamClose",
+      "rva": 727552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameRwFindChunk",
+      "rva": 727680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameRwReadClump",
+      "rva": 727760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameLoadAtomicStream",
+      "rva": 727968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameSetModelField8",
+      "rva": 738096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "GameIsObjectModelInfo",
+      "rva": 737504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_io.h",
+      "name": "g_gameLoadingCustomModel",
+      "rva": 1967176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "g_gameLoadingCustomModel",
+      "rva": 1967176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameClonePedModelInfo",
+      "rva": 685680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameCloneObjectModelInfo",
+      "rva": 685760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameAttachModelTxd",
+      "rva": 685904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameRegisterCustomPed",
+      "rva": 686016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameRegisterCustomObject",
+      "rva": 686112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GamePublishPedClump",
+      "rva": 737744,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameTxdAdd",
+      "rva": 734368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameTxdLoad",
+      "rva": 734400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameSetModelTxd",
+      "rva": 737888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameSetModelField8",
+      "rva": 738096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_registration.cpp",
+      "name": "GameIsObjectModelInfo",
+      "rva": 737504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameRwStreamOpen",
+      "rva": 727488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameRwStreamClose",
+      "rva": 727552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameRwFindChunk",
+      "rva": 727680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameRwReadClump",
+      "rva": 727760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameLoadAtomicStream",
+      "rva": 727968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameLoadPedDff",
+      "rva": 727824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custom_model_stream.cpp",
+      "name": "GameLoadObjectDff",
+      "rva": 728000,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/custommodels.cpp",
       "name": "g_customModels",
       "rva": 2804264,
@@ -13655,20 +14061,20 @@
     },
     {
       "file": "source/game/custommodels.h",
-      "name": "g_customModels",
-      "rva": 2804264,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/game/custommodels.h",
-      "name": "GameLoadCustomPedModel",
+      "name": "CCustomModels::LoadPedModel",
       "rva": 49600,
       "module": "samp.dll"
     },
     {
       "file": "source/game/custommodels.h",
-      "name": "GameLoadCustomObjectModel",
+      "name": "CCustomModels::LoadObjectModel",
       "rva": 49888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "g_customModels",
+      "rva": 2804264,
       "module": "samp.dll"
     },
     {

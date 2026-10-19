@@ -17,12 +17,12 @@ class CCustomModels {public:
     BOOL DoesExist(int model);
     // samp.dll RVA: 0x0000ce90
     BOOL LoadObjectEntry(int model);
+    // ECX is this; four DWORD stack arguments, callee pops 16 bytes.
+    // samp.dll RVA: 0x0000c1c0
+    BOOL LoadPedModel(DWORD base,DWORD model,DWORD dffHash,DWORD txdHash);
+    // samp.dll RVA: 0x0000c2e0
+    BOOL LoadObjectModel(DWORD base,DWORD model,DWORD dffHash,DWORD txdHash);
 };
 // samp.dll RVA: 0x002aca28
 extern CCustomModels *g_customModels;
-// Four native DWORD arguments; detailed loader contracts/bodies remain open.
-// samp.dll RVA: 0x0000c1c0
-BOOL __stdcall GameLoadCustomPedModel(DWORD base,DWORD model,DWORD resource0,DWORD resource1);
-// samp.dll RVA: 0x0000c2e0
-BOOL __stdcall GameLoadCustomObjectModel(DWORD base,DWORD model,DWORD resource0,DWORD resource1);
 #endif
