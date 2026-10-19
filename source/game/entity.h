@@ -19,6 +19,9 @@ public:
     virtual void Add();
     // samp.dll RVA: 0x0009f240
     virtual void Remove();
+    // Broader flag meaning is not established; clears backend DWORD +40 mask 0x00000008.
+    // samp.dll RVA: 0x0009f5c0
+    void ClearBackendFlag8();
     // samp.dll RVA: 0x0009e950
     void GetMatrix(CMatrix *matrix);
     // samp.dll RVA: 0x0009ea00

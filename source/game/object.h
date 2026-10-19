@@ -1,0 +1,15 @@
+#ifndef SAMP_OBJECT_WRAPPER_H
+#define SAMP_OBJECT_WRAPPER_H
+#include "game/entity.h"
+// Address interface over the established CEntity prefix. Never allocate this partial class:
+// complete CObject allocation/constructor/layout remain unrecovered.
+class CObject : public CEntity {public:
+    // samp.dll RVA: 0x000a7c90
+    void SetRotation(const CVector *rotation);
+    // Motion lifecycle dependency; original consumes seven float words.
+    // samp.dll RVA: 0x000a97c0
+    void Move(CVector position,float speed,CVector rotation);
+};
+// samp.dll RVA: 0x000b3830
+void *__stdcall GamePoolObjectGetAt(int handle);
+#endif

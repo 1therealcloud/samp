@@ -1,6 +1,8 @@
 #ifndef SAMP_WRAPPER_COMMANDS_H
 #define SAMP_WRAPPER_COMMANDS_H
 #include "game/scripting.h"
+// samp.dll RVA: 0x0011edfc
+extern const Scripting::OpcodeInfo g_objectSetRotationCommand;
 // samp.dll RVA: 0x0011e410
 extern const Scripting::OpcodeInfo g_cameraFade;
 // samp.dll RVA: 0x0011e424
