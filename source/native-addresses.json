@@ -1293,6 +1293,13 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CEntity::ApplyMatrix",
+      "va": "0x1009fb40",
+      "rva": "0x0009fb40",
+      "module": "samp.dll",
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
       "name": "CEntity::ApplyTurnSpeed",
       "va": "0x1009ecd0",
       "rva": "0x0009ecd0",
@@ -1361,6 +1368,13 @@
       "rva": "0x0009ef00",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CEntity::GetDistanceToPoint",
+      "va": "0x1009f0f0",
+      "rva": "0x0009f0f0",
+      "module": "samp.dll",
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
     },
     {
       "name": "CEntity::GetEulerInverted",
@@ -2700,6 +2714,13 @@
       "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
+      "name": "CLocalPlayer::ProcessSurfing",
+      "va": "0x10003650",
+      "rva": "0x00003650",
+      "module": "samp.dll",
+      "evidence": "Verified exact native Move call target and ABI; declaration-only dependency. Quaternion entry B4FB0 forwards to B4E40. No production observer or stand-in body."
+    },
+    {
       "name": "CLocalPlayer::RequestSpawn",
       "va": "0x10003f40",
       "rva": "0x00003f40",
@@ -2798,11 +2819,25 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CObject::GetAngleDifference",
+      "va": "0x100a7bf0",
+      "rva": "0x000a7bf0",
+      "module": "samp.dll",
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
       "name": "CObject::Move",
       "va": "0x100a97c0",
       "rva": "0x000a97c0",
       "module": "samp.dll",
-      "evidence": "Reviewed object-mutation-v111 helper export: original thiscall motion body consumes seven float words (RET 1C); declaration-only lifecycle/pool dependency. Partial CObject address interface is not an allocation-layout claim."
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
+      "name": "CObject::Rotate",
+      "va": "0x100a7fb0",
+      "rva": "0x000a7fb0",
+      "module": "samp.dll",
+      "evidence": "Verified exact native Move call target and ABI; declaration-only dependency. Quaternion entry B4FB0 forwards to B4E40. No production observer or stand-in body."
     },
     {
       "name": "CObject::SetRotation",
@@ -2810,6 +2845,13 @@
       "rva": "0x000a7c90",
       "module": "samp.dll",
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
+    },
+    {
+      "name": "CObject::Stop",
+      "va": "0x100a7c20",
+      "rva": "0x000a7c20",
+      "module": "samp.dll",
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
     },
     {
       "name": "CObjectEdit::ApplyAttachedChanges",
@@ -5465,6 +5507,13 @@
       "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
     },
     {
+      "name": "g_objectMotionRotationSentinel",
+      "va": "0x1011ee7c",
+      "rva": "0x0011ee7c",
+      "module": "samp.dll",
+      "evidence": "Native Move FCOMP operand; exact float bytes 00c079c4 (-999). Strict greater-than on all three components, including unordered false."
+    },
+    {
       "name": "g_objectMutationStep",
       "va": "0x101181ac",
       "rva": "0x001181ac",
@@ -6506,6 +6555,27 @@
       "rva": "0x00001d10",
       "module": "samp.dll",
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "GameQuaternionFromMatrix",
+      "va": "0x100b4d50",
+      "rva": "0x000b4d50",
+      "module": "samp.dll",
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
+      "name": "GameQuaternionNormalize",
+      "va": "0x100b5040",
+      "rva": "0x000b5040",
+      "module": "samp.dll",
+      "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
+      "name": "GameQuaternionToMatrix",
+      "va": "0x100b4fb0",
+      "rva": "0x000b4fb0",
+      "module": "samp.dll",
+      "evidence": "Verified exact native Move call target and ABI; declaration-only dependency. Quaternion entry B4FB0 forwards to B4E40. No production observer or stand-in body."
     },
     {
       "name": "GameReadStream",
@@ -13241,6 +13311,18 @@
     },
     {
       "file": "source/game/entity.h",
+      "name": "CEntity::ApplyMatrix",
+      "rva": 654144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetDistanceToPoint",
+      "rva": 651504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
       "name": "CEntity::SetMatrix",
       "rva": 649728,
       "module": "samp.dll"
@@ -13423,6 +13505,18 @@
       "file": "source/game/entity_model.cpp",
       "name": "CEntity::SetModelIndex",
       "rva": 650640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_motion.cpp",
+      "name": "CEntity::ApplyMatrix",
+      "rva": 654144,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_motion.cpp",
+      "name": "CEntity::GetDistanceToPoint",
+      "rva": 651504,
       "module": "samp.dll"
     },
     {
@@ -15887,6 +15981,24 @@
     },
     {
       "file": "source/game/object.h",
+      "name": "CObject::Stop",
+      "rva": 687136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
+      "name": "CObject::GetAngleDifference",
+      "rva": 687088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
+      "name": "CObject::Rotate",
+      "rva": 688048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object.h",
       "name": "CObject::Move",
       "rva": 694208,
       "module": "samp.dll"
@@ -15947,6 +16059,12 @@
     },
     {
       "file": "source/game/object_math.h",
+      "name": "g_objectMotionRotationSentinel",
+      "rva": 1175164,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_math.h",
       "name": "g_objectMutationStep",
       "rva": 1147308,
       "module": "samp.dll"
@@ -15991,6 +16109,30 @@
       "file": "source/game/object_math.h",
       "name": "GameTransformPoint",
       "rva": 739408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_motion.cpp",
+      "name": "g_objectMotionRotationSentinel",
+      "rva": 1175164,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_motion.cpp",
+      "name": "CObject::Stop",
+      "rva": 687136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_motion.cpp",
+      "name": "CObject::GetAngleDifference",
+      "rva": 687088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_motion.cpp",
+      "name": "CObject::Move",
+      "rva": 694208,
       "module": "samp.dll"
     },
     {
@@ -16459,6 +16601,36 @@
       "file": "source/game/preinit.h",
       "name": "g_gameStreamBuffer",
       "rva": 1636024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.cpp",
+      "name": "GameQuaternionFromMatrix",
+      "rva": 740688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.cpp",
+      "name": "GameQuaternionNormalize",
+      "rva": 741440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionFromMatrix",
+      "rva": 740688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionNormalize",
+      "rva": 741440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionToMatrix",
+      "rva": 741296,
       "module": "samp.dll"
     },
     {
@@ -19238,6 +19410,12 @@
       "name": "g_inputGameWindow",
       "rva": null,
       "module": "GTA SA"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::ProcessSurfing",
+      "rva": 13904,
+      "module": "samp.dll"
     },
     {
       "file": "source/net/localplayer.h",

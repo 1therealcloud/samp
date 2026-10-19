@@ -1,6 +1,8 @@
 #ifndef SAMP_OBJECT_MATH_H
 #define SAMP_OBJECT_MATH_H
 #include "game/entity.h"
+// samp.dll RVA: 0x0011ee7c
+extern const float g_objectMotionRotationSentinel;
 // samp.dll RVA: 0x001181ac
 extern const float g_objectMutationStep;
 // samp.dll RVA: 0x001181c4

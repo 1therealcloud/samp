@@ -24,6 +24,10 @@ public:
     void ClearBackendFlag8();
     // samp.dll RVA: 0x0009e950
     void GetMatrix(CMatrix *matrix);
+    // samp.dll RVA: 0x0009fb40
+    void ApplyMatrix(CMatrix matrix);
+    // samp.dll RVA: 0x0009f0f0
+    float GetDistanceToPoint(float x,float y,float z);
     // samp.dll RVA: 0x0009ea00
     void SetMatrix(CMatrix matrix);
     // samp.dll RVA: 0x0009eb20

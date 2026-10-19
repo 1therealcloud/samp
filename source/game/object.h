@@ -6,7 +6,15 @@
 class CObject : public CEntity {public:
     // samp.dll RVA: 0x000a7c90
     void SetRotation(const CVector *rotation);
-    // Motion lifecycle dependency; original consumes seven float words.
+    // samp.dll RVA: 0x000a7c20
+    void Stop();
+    // Native angle helper ignores this but consumes two float words.
+    // samp.dll RVA: 0x000a7bf0
+    float GetAngleDifference(float from,float to);
+    // Rotation matrix builder dependency; not a production stand-in.
+    // samp.dll RVA: 0x000a7fb0
+    void Rotate(CVector rotation);
+    // Original consumes seven float words.
     // samp.dll RVA: 0x000a97c0
     void Move(CVector position,float speed,CVector rotation);
 };
