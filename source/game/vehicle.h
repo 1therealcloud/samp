@@ -19,6 +19,8 @@ public:
     BOOL m_bColorChanged;
     // samp.dll RVA: 0x000b6e20
     void SetColor(BYTE primary,BYTE secondary);
+    // samp.dll RVA: 0x000b6fa0
+    BOOL IsTrainPart();
     // Additional stage 2 wrapper dependencies; no complete allocation claim.
     // samp.dll RVA: 0x000b7e70
     BYTE GetMaxPassengers();

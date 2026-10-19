@@ -2784,6 +2784,20 @@
       "evidence": "Direct caller and exact thiscall callback dependency from commands-v107; declaration-only, no recovered body claim."
     },
     {
+      "name": "CLocalPlayer::ExitVehicle",
+      "va": "0x10005a40",
+      "rva": "0x00005a40",
+      "module": "samp.dll",
+      "evidence": "v124 native caller/callee reviewed. Declaration-only entry/damage policy or network RPC dependency. Damage helper RET8, ExitVehicle one four-byte stack slot; no production stand-in."
+    },
+    {
+      "name": "CLocalPlayer::GetPed",
+      "va": "0x10002da0",
+      "rva": "0x00002da0",
+      "module": "samp.dll",
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
+    },
+    {
       "name": "CLocalPlayer::NextClass",
       "va": "0x10005e30",
       "rva": "0x00005e30",
@@ -2894,6 +2908,20 @@
       "rva": "0x00009570",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CNetGame::GetPlayerPool",
+      "va": "0x10001170",
+      "rva": "0x00001170",
+      "module": "samp.dll",
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
+    },
+    {
+      "name": "CNetGame::GetVehiclePool",
+      "va": "0x10001180",
+      "rva": "0x00001180",
+      "module": "samp.dll",
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
       "name": "CNetGame::Process",
@@ -3442,6 +3470,13 @@
       "evidence": "v123 direct native SEH-handler dependency; call convention/arguments/callee return inspected. Declaration-only, body remains unrecovered."
     },
     {
+      "name": "CPlayerPool::GetLocalPlayer",
+      "va": "0x10001a80",
+      "rva": "0x00001a80",
+      "module": "samp.dll",
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
+    },
+    {
       "name": "CPlayerPool::GetPlayer",
       "va": "0x100010f0",
       "rva": "0x000010f0",
@@ -3874,6 +3909,13 @@
       "rva": "0x000b6ed0",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CVehicle::IsTrainPart",
+      "va": "0x100b6fa0",
+      "rva": "0x000b6fa0",
+      "module": "samp.dll",
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
       "name": "CVehicle::SetColor",
@@ -5724,11 +5766,74 @@
       "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
+      "name": "g_hookDamagePed",
+      "va": "0x1018f53c",
+      "rva": "0x0018f53c",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookDamageResponse",
+      "va": "0x1018f538",
+      "rva": "0x0018f538",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
       "name": "g_hookDisableFog",
       "va": "0x102aca70",
       "rva": "0x002aca70",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookEventLocalPlayer",
+      "va": "0x1018eb18",
+      "rva": "0x0018eb18",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookEventVehicleId",
+      "va": "0x1018e568",
+      "rva": "0x0018e568",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookEventVehiclePool",
+      "va": "0x1018e5d4",
+      "rva": "0x0018e5d4",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookExitMatrix",
+      "va": "0x1018eb30",
+      "rva": "0x0018eb30",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookExitTask",
+      "va": "0x1018e550",
+      "rva": "0x0018e550",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookExitTaskArgument",
+      "va": "0x10151aa0",
+      "rva": "0x00151aa0",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
+      "name": "g_hookExitVehicle",
+      "va": "0x1018e868",
+      "rva": "0x0018e868",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
     },
     {
       "name": "g_hookFaultPlayerId",
@@ -5843,6 +5948,13 @@
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
+      "name": "g_hookIgnoreNextExit",
+      "va": "0x1018f4a8",
+      "rva": "0x0018f4a8",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
+    },
+    {
       "name": "g_hookKeepBuffer",
       "va": "0x10151ab8",
       "rva": "0x00151ab8",
@@ -5953,6 +6065,13 @@
       "rva": "0x0018f4f4",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookQuitDeadline",
+      "va": "0x1018e5bc",
+      "rva": "0x0018e5bc",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
     },
     {
       "name": "g_hookRadarIndex",
@@ -6072,6 +6191,13 @@
       "rva": "0x0018f5bc",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookTrainExitOffset",
+      "va": "0x1011c65c",
+      "rva": "0x0011c65c",
+      "module": "samp.dll",
+      "evidence": "v124 native load/store operands; FFFFFFFF task argument and 2.5f train offset verified from original DLL bytes. Shared 18E8D0 and 18F4C4 reuse existing control/animation storage."
     },
     {
       "name": "g_hookVehicleKeys",
@@ -6981,14 +7107,14 @@
       "va": "0x100a3580",
       "rva": "0x000a3580",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
       "name": "GameHook_000a35e0",
       "va": "0x100a35e0",
       "rva": "0x000a35e0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
       "name": "GameHook_000a37a0",
@@ -7009,14 +7135,14 @@
       "va": "0x100a3800",
       "rva": "0x000a3800",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
       "name": "GameHook_000a3a70",
       "va": "0x100a3a70",
       "rva": "0x000a3a70",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
       "name": "GameHook_000a3ac0",
@@ -7479,6 +7605,20 @@
       "rva": "0x000b44e0",
       "module": "samp.dll",
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
+    },
+    {
+      "name": "GameNotifyEnterVehicle",
+      "va": "0x100a3430",
+      "rva": "0x000a3430",
+      "module": "samp.dll",
+      "evidence": "v124 native caller/callee reviewed. Declaration-only entry/damage policy or network RPC dependency. Damage helper RET8, ExitVehicle one four-byte stack slot; no production stand-in."
+    },
+    {
+      "name": "GameNotifyPedDamage",
+      "va": "0x100a3910",
+      "rva": "0x000a3910",
+      "module": "samp.dll",
+      "evidence": "v124 native caller/callee reviewed. Declaration-only entry/damage policy or network RPC dependency. Damage helper RET8, ExitVehicle one four-byte stack slot; no production stand-in."
     },
     {
       "name": "GameParseStreamData",
@@ -19542,6 +19682,216 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookIgnoreNextExit",
+      "rva": 1635496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookExitTask",
+      "rva": 1631568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookEventVehiclePool",
+      "rva": 1631700,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookEventVehicleId",
+      "rva": 1631592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookExitVehicle",
+      "rva": 1632360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookEventLocalPlayer",
+      "rva": 1633048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookExitMatrix",
+      "rva": 1633072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookExitTaskArgument",
+      "rva": 1383072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookTrainExitOffset",
+      "rva": 1164892,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookQuitDeadline",
+      "rva": 1631676,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookDamageResponse",
+      "rva": 1635640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "g_hookDamagePed",
+      "rva": 1635644,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "CNetGame::GetVehiclePool",
+      "rva": 4480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "CNetGame::GetPlayerPool",
+      "rva": 4464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "CPlayerPool::GetLocalPlayer",
+      "rva": 6784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "CLocalPlayer::GetPed",
+      "rva": 11680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "CVehicle::IsTrainPart",
+      "rva": 749472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "GameHook_000a3580",
+      "rva": 669056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "GameHook_000a35e0",
+      "rva": 669152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "GameHook_000a3a70",
+      "rva": 670320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.cpp",
+      "name": "GameHook_000a3800",
+      "rva": 669696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "GameNotifyEnterVehicle",
+      "rva": 668720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "GameNotifyPedDamage",
+      "rva": 669968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookIgnoreNextExit",
+      "rva": 1635496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookExitTask",
+      "rva": 1631568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookEventVehiclePool",
+      "rva": 1631700,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookEventVehicleId",
+      "rva": 1631592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookExitVehicle",
+      "rva": 1632360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookEventLocalPlayer",
+      "rva": 1633048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookExitMatrix",
+      "rva": 1633072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookExitTaskArgument",
+      "rva": 1383072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookTrainExitOffset",
+      "rva": 1164892,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookQuitDeadline",
+      "rva": 1631676,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookDamageResponse",
+      "rva": 1635640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookDamagePed",
+      "rva": 1635644,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle.cpp",
       "name": "GamePoolVehicleGetAt",
       "rva": 735184,
@@ -19557,6 +19907,12 @@
       "file": "source/game/vehicle.h",
       "name": "CVehicle::SetColor",
       "rva": 749088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::IsTrainPart",
+      "rva": 749472,
       "module": "samp.dll"
     },
     {
@@ -21475,6 +21831,18 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CNetGame::GetVehiclePool",
+      "rva": 4480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CNetGame::GetPlayerPool",
+      "rva": 4464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CAudioStream::Reset",
       "rva": 417536,
       "module": "samp.dll"
@@ -22255,6 +22623,18 @@
     },
     {
       "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::GetPed",
+      "rva": 11680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::ExitVehicle",
+      "rva": 23104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
       "name": "CLocalPlayer::ProcessSurfing",
       "rva": 13904,
       "module": "samp.dll"
@@ -22305,6 +22685,12 @@
       "file": "source/net/playerpool.h",
       "name": "CPlayerPool::GetPlayer",
       "rva": 4336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/playerpool.h",
+      "name": "CPlayerPool::GetLocalPlayer",
+      "rva": 6784,
       "module": "samp.dll"
     },
     {

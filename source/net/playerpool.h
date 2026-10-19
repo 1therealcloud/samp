@@ -4,6 +4,7 @@
 // Address-only dependency. No fields, allocation extent or complete interface
 // are established by this declaration; never instantiate this class.
 class CRemotePlayer;
+class CLocalPlayer;
 class CPlayerPool {
 public:
     // Observed thiscall edge after GTA world processing; body not recovered.
@@ -15,5 +16,7 @@ public:
     // Native accepts player <=1004; allocation adjacency is not established here.
     // samp.dll RVA: 0x000010f0
     CRemotePlayer *GetPlayer(WORD player);
+    // samp.dll RVA: 0x00001a80
+    CLocalPlayer *GetLocalPlayer();
 };
 #endif

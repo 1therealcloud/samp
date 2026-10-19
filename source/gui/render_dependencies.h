@@ -7,6 +7,8 @@ class CDXUTDialog;
 extern DWORD g_srvNetStatsHistory[74];
 struct IDirect3DDevice9;
 // The network constructor extent is known; its internal layout and lifecycle remain open.
+class CVehiclePool;
+class CPlayerPool;
 class CNetGame {
 public:
     // Native coordinator allocation extent; internal layout and lifecycle remain open.
@@ -21,6 +23,10 @@ public:
     // Native destructor entry. The full networking lifecycle remains open.
     // samp.dll RVA: 0x00009570
     void Destroy();
+    // samp.dll RVA: 0x00001180
+    CVehiclePool *GetVehiclePool();
+    // samp.dll RVA: 0x00001170
+    CPlayerPool *GetPlayerPool();
 };
 class CAudioStream {
 public:
