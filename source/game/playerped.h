@@ -31,9 +31,16 @@ public:
     CPed();
     // samp.dll RVA: 0x000b0ea0
     virtual ~CPed();
-    // Declaration only: complete destruction/accessory path remains open.
     // samp.dll RVA: 0x000b0ba0
     void Destroy();
+    // samp.dll RVA: 0x000aea30
+    BOOL HasAccessory();
+    // samp.dll RVA: 0x000b06b0
+    void DeleteAllAccessories();
+    // samp.dll RVA: 0x000ad800
+    void DropStuff();
+    // samp.dll RVA: 0x000ac190
+    void WarpFromVehicle(float x,float y,float z);
     // samp.dll RVA: 0x000aba90
     BOOL IsInVehicle();
     // samp.dll RVA: 0x000abbe0
@@ -56,4 +63,6 @@ extern BYTE g_gamePlayerControllerState[210][16];
 void *__stdcall GameFindLocalPed();
 // samp.dll RVA: 0x000b3f20
 void __stdcall GameAssignPlayerPed(BYTE player,void *ped);
+// samp.dll RVA: 0x000b3770
+void *__stdcall GamePoolPedGetAt(int handle);
 #endif

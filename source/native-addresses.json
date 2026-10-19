@@ -3365,11 +3365,25 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CPed::DeleteAllAccessories",
+      "va": "0x100b06b0",
+      "rva": "0x000b06b0",
+      "module": "samp.dll",
+      "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
+    },
+    {
       "name": "CPed::Destroy",
       "va": "0x100b0ba0",
       "rva": "0x000b0ba0",
       "module": "samp.dll",
-      "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+      "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
+    },
+    {
+      "name": "CPed::DropStuff",
+      "va": "0x100ad800",
+      "rva": "0x000ad800",
+      "module": "samp.dll",
+      "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
       "name": "CPed::GetDrunkLevel",
@@ -3377,6 +3391,13 @@
       "rva": "0x000adba0",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CPed::HasAccessory",
+      "va": "0x100aea30",
+      "rva": "0x000aea30",
+      "module": "samp.dll",
+      "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
       "name": "CPed::HasTaskType268",
@@ -3398,6 +3419,13 @@
       "rva": "0x000abbe0",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CPed::WarpFromVehicle",
+      "va": "0x100ac190",
+      "rva": "0x000ac190",
+      "module": "samp.dll",
+      "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
       "name": "CPlayerPool::Native013840",
@@ -6067,6 +6095,41 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "g_pedDestroyParachute",
+      "va": "0x1011f148",
+      "rva": "0x0011f148",
+      "module": "samp.dll",
+      "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
+    },
+    {
+      "name": "g_pedDetachParachute",
+      "va": "0x1011f15c",
+      "rva": "0x0011f15c",
+      "module": "samp.dll",
+      "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
+    },
+    {
+      "name": "g_pedDropStuff",
+      "va": "0x1011f238",
+      "rva": "0x0011f238",
+      "module": "samp.dll",
+      "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
+    },
+    {
+      "name": "g_pedNullAnimation",
+      "va": "0x1011f320",
+      "rva": "0x0011f320",
+      "module": "samp.dll",
+      "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
+    },
+    {
+      "name": "g_pedWarpFromVehicle",
+      "va": "0x1011efcc",
+      "rva": "0x0011efcc",
+      "module": "samp.dll",
+      "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
+    },
+    {
       "name": "g_pGame",
       "va": "0x102aca3c",
       "rva": "0x002aca3c",
@@ -7150,6 +7213,13 @@
       "rva": "0x000b3830",
       "module": "samp.dll",
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
+    },
+    {
+      "name": "GamePoolPedGetAt",
+      "va": "0x100b3770",
+      "rva": "0x000b3770",
+      "module": "samp.dll",
+      "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
       "name": "GamePoolVehicleGetAt",
@@ -17882,6 +17952,36 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedDetachParachute",
+      "rva": 1175900,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedDestroyParachute",
+      "rva": 1175880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedDropStuff",
+      "rva": 1176120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedWarpFromVehicle",
+      "rva": 1175500,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedNullAnimation",
+      "rva": 1176352,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/player_colors.cpp",
       "name": "g_playerDefaultColors",
       "rva": 1383200,
@@ -18015,6 +18115,30 @@
     },
     {
       "file": "source/game/playerped.h",
+      "name": "CPed::HasAccessory",
+      "rva": 715312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::DeleteAllAccessories",
+      "rva": 722608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::DropStuff",
+      "rva": 710656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::WarpFromVehicle",
+      "rva": 704912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
       "name": "CPed::IsInVehicle",
       "rva": 703120,
       "module": "samp.dll"
@@ -18059,6 +18183,78 @@
       "file": "source/game/playerped.h",
       "name": "GameAssignPlayerPed",
       "rva": 737056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "GamePoolPedGetAt",
+      "rva": 735088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "g_pedDetachParachute",
+      "rva": 1175900,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "g_pedDestroyParachute",
+      "rva": 1175880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "g_pedDropStuff",
+      "rva": 1176120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "g_pedWarpFromVehicle",
+      "rva": 1175500,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "g_pedNullAnimation",
+      "rva": 1176352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "GamePoolPedGetAt",
+      "rva": 735088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "CPed::HasAccessory",
+      "rva": 715312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "CPed::DeleteAllAccessories",
+      "rva": 722608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "CPed::DropStuff",
+      "rva": 710656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "CPed::WarpFromVehicle",
+      "rva": 704912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped_destroy.cpp",
+      "name": "CPed::Destroy",
+      "rva": 723872,
       "module": "samp.dll"
     },
     {
