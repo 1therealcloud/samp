@@ -3246,6 +3246,13 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CPlayerPool::Native013840",
+      "va": "0x10013840",
+      "rva": "0x00013840",
+      "module": "samp.dll",
+      "evidence": "Address-only thiscall dependency from raw world-processing hook A2370. Opaque address name; native body, semantics and full player pool remain unrecovered."
+    },
+    {
       "name": "CPlayerTags::CPlayerTags",
       "va": "0x1006c730",
       "rva": "0x0006c730",
@@ -5129,11 +5136,39 @@
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
+      "name": "g_hookAudioArgument0",
+      "va": "0x1018f6ac",
+      "rva": "0x0018f6ac",
+      "module": "samp.dll",
+      "evidence": "Exact boot-hooks-v114 byte/DWORD native operands. Shared storage and post-backend mutations checked; original zero-filled virtual data."
+    },
+    {
+      "name": "g_hookAudioArgument1",
+      "va": "0x1018f6b0",
+      "rva": "0x0018f6b0",
+      "module": "samp.dll",
+      "evidence": "Exact boot-hooks-v114 byte/DWORD native operands. Shared storage and post-backend mutations checked; original zero-filled virtual data."
+    },
+    {
+      "name": "g_hookAudioSavedState",
+      "va": "0x1018f6a8",
+      "rva": "0x0018f6a8",
+      "module": "samp.dll",
+      "evidence": "Exact boot-hooks-v114 byte/DWORD native operands. Shared storage and post-backend mutations checked; original zero-filled virtual data."
+    },
+    {
       "name": "g_hookCachedBuffer",
       "va": "0x1018f560",
       "rva": "0x0018f560",
       "module": "samp.dll",
       "evidence": "Native callback load/store operands v85 and original initialized data."
+    },
+    {
+      "name": "g_hookCameraHudPrepared",
+      "va": "0x1018f514",
+      "rva": "0x0018f514",
+      "module": "samp.dll",
+      "evidence": "Exact boot-hooks-v114 byte/DWORD native operands. Shared storage and post-backend mutations checked; original zero-filled virtual data."
     },
     {
       "name": "g_hookCameraPed",
@@ -6015,21 +6050,21 @@
       "va": "0x100a22f0",
       "rva": "0x000a22f0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Read-only boot-hooks-v114 native instructions; four raw GTA entries tested against original code with wrapper/HUD/aim/pool/GTA observer boundaries. Register/flags, post-callback reloads, restoration and callee-pop checked; no GTA execution."
     },
     {
       "name": "GameHook_000a2370",
       "va": "0x100a2370",
       "rva": "0x000a2370",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Read-only boot-hooks-v114 native instructions; four raw GTA entries tested against original code with wrapper/HUD/aim/pool/GTA observer boundaries. Register/flags, post-callback reloads, restoration and callee-pop checked; no GTA execution."
     },
     {
       "name": "GameHook_000a23a0",
       "va": "0x100a23a0",
       "rva": "0x000a23a0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Read-only boot-hooks-v114 native instructions; four raw GTA entries tested against original code with wrapper/HUD/aim/pool/GTA observer boundaries. Register/flags, post-callback reloads, restoration and callee-pop checked; no GTA execution."
     },
     {
       "name": "GameHook_000a23d0",
@@ -6407,7 +6442,7 @@
       "va": "0x100a5b90",
       "rva": "0x000a5b90",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "Read-only boot-hooks-v114 native instructions; four raw GTA entries tested against original code with wrapper/HUD/aim/pool/GTA observer boundaries. Register/flags, post-callback reloads, restoration and callee-pop checked; no GTA execution."
     },
     {
       "name": "GameHook_000a5d20",
@@ -14493,6 +14528,78 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "g_hookCameraHudPrepared",
+      "rva": 1635604,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "g_hookAudioSavedState",
+      "rva": 1636008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "g_hookAudioArgument0",
+      "rva": 1636012,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "g_hookAudioArgument1",
+      "rva": 1636016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "GameHook_000a22f0",
+      "rva": 664304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "GameHook_000a2370",
+      "rva": 664432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "GameHook_000a23a0",
+      "rva": 664480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.cpp",
+      "name": "GameHook_000a5b90",
+      "rva": 678800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.h",
+      "name": "g_hookCameraHudPrepared",
+      "rva": 1635604,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.h",
+      "name": "g_hookAudioSavedState",
+      "rva": 1636008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.h",
+      "name": "g_hookAudioArgument0",
+      "rva": 1636012,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_boot.h",
+      "name": "g_hookAudioArgument1",
+      "rva": 1636016,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/hooks_independent.cpp",
       "name": "g_hookRadarIndex",
       "rva": 1635528,
@@ -19470,6 +19577,12 @@
       "file": "source/net/object_access.cpp",
       "name": "CObjectPool::Get",
       "rva": 11792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/playerpool.h",
+      "name": "CPlayerPool::Native013840",
+      "rva": 79936,
       "module": "samp.dll"
     },
     {
