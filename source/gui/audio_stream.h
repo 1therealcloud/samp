@@ -5,4 +5,7 @@
 extern DWORD g_audioStreamHandle;
 // samp.dll RVA: 0x001407b0
 extern char g_audioStreamAgent[10];
+// Observed radio-control gate; stream start/stop writers remain to be recovered.
+// samp.dll RVA: 0x0016c7d0
+extern BYTE g_audioStreamRadioActive;
 #endif

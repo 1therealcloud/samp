@@ -541,7 +541,7 @@
       "va": "0x10066500",
       "rva": "0x00066500",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "Read-only frame-audio-v113 instructions and 65536 raw ABI/state comparisons; full byte gates, original reload ordering, GTA radio observer boundaries. Not GTA startup."
     },
     {
       "name": "CAudioStream::DrawInfo",
@@ -4000,6 +4000,13 @@
       "rva": "0x0016c7cc",
       "module": "samp.dll",
       "evidence": "Read-only offline-gui-v100 original constructors/startup/audio bodies and instruction operands. BASS 2.4.7 SDK supplied by the user; native FMUL uses 7000 before 64-bit ftol conversion."
+    },
+    {
+      "name": "g_audioStreamRadioActive",
+      "va": "0x1016c7d0",
+      "rva": "0x0016c7d0",
+      "module": "samp.dll",
+      "evidence": "Zero-filled PE virtual .data tail; exact byte read at RVA 0x00066505. Start/stop writers remain open."
     },
     {
       "name": "g_audioUnload",
@@ -17228,6 +17235,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/audio_radio.cpp",
+      "name": "g_audioStreamRadioActive",
+      "rva": 1492944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_radio.cpp",
+      "name": "CAudioStream::ControlGameRadio",
+      "rva": 419072,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/audio_stream.cpp",
       "name": "g_audioStreamHandle",
       "rva": 1492940,
@@ -17255,6 +17274,12 @@
       "file": "source/gui/audio_stream.h",
       "name": "g_audioStreamAgent",
       "rva": 1312688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/audio_stream.h",
+      "name": "g_audioStreamRadioActive",
+      "rva": 1492944,
       "module": "samp.dll"
     },
     {
