@@ -2623,6 +2623,20 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CModelPreview::CModelPreview",
+      "va": "0x1006c700",
+      "rva": "0x0006c700",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
+    },
+    {
+      "name": "CModelPreview::Reset",
+      "va": "0x1006b880",
+      "rva": "0x0006b880",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
+    },
+    {
       "name": "CNetGame::Destroy",
       "va": "0x10009570",
       "rva": "0x00009570",
@@ -4821,6 +4835,13 @@
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
     },
     {
+      "name": "g_modelPreview",
+      "va": "0x102aca38",
+      "rva": "0x002aca38",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
+    },
+    {
       "name": "g_pArchive",
       "va": "0x102ac9d4",
       "rva": "0x002ac9d4",
@@ -5057,6 +5078,13 @@
       "rva": "0x002ac9f8",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "g_rwPreviewAxes",
+      "va": "0x1015535c",
+      "rva": "0x0015535c",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
     },
     {
       "name": "g_scmEventParameters",
@@ -5855,6 +5883,104 @@
       "rva": "0x000a0370",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameRwAddCameraToWorld",
+      "va": "0x100b14b0",
+      "rva": "0x000b14b0",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwCreateCamera",
+      "va": "0x100b1430",
+      "rva": "0x000b1430",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwCreateFrame",
+      "va": "0x100b1390",
+      "rva": "0x000b1390",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwCreateLight",
+      "va": "0x100b1700",
+      "rva": "0x000b1700",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwCreateRaster",
+      "va": "0x100b12d0",
+      "rva": "0x000b12d0",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwCreateTexture",
+      "va": "0x100b1320",
+      "rva": "0x000b1320",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwRotateFrame",
+      "va": "0x100b1920",
+      "rva": "0x000b1920",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetCameraRasters",
+      "va": "0x100b15b0",
+      "rva": "0x000b15b0",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetClipDistances",
+      "va": "0x100b1680",
+      "rva": "0x000b1680",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetLightColor",
+      "va": "0x100b1770",
+      "rva": "0x000b1770",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetObjectFrame",
+      "va": "0x100b1580",
+      "rva": "0x000b1580",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetProjection",
+      "va": "0x100b18c0",
+      "rva": "0x000b18c0",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetViewWindow",
+      "va": "0x100b16d0",
+      "rva": "0x000b16d0",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwTranslateFrame",
+      "va": "0x100b18f0",
+      "rva": "0x000b18f0",
+      "module": "samp.dll",
+      "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
       "name": "GameSetEventOpcode",
@@ -14505,6 +14631,42 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model_preview.cpp",
+      "name": "g_modelPreview",
+      "rva": 2804280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.cpp",
+      "name": "CModelPreview::CModelPreview",
+      "rva": 444160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.cpp",
+      "name": "CModelPreview::Reset",
+      "rva": 440448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.h",
+      "name": "CModelPreview::CModelPreview",
+      "rva": 444160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.h",
+      "name": "CModelPreview::Reset",
+      "rva": 440448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.h",
+      "name": "g_modelPreview",
+      "rva": 2804280,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/patches.cpp",
       "name": "g_gamePatchStreamBytes",
       "rva": 1394368,
@@ -14970,6 +15132,186 @@
       "file": "source/game/preinit.h",
       "name": "g_gameStreamBuffer",
       "rva": 1636024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "g_rwPreviewAxes",
+      "rva": 1397596,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwCreateLight",
+      "rva": 726784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwSetLightColor",
+      "rva": 726896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwCreateRaster",
+      "rva": 725712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwCreateCamera",
+      "rva": 726064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwCreateFrame",
+      "rva": 725904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwTranslateFrame",
+      "rva": 727280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwRotateFrame",
+      "rva": 727328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwSetCameraRasters",
+      "rva": 726448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwSetObjectFrame",
+      "rva": 726400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwSetClipDistances",
+      "rva": 726656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwSetViewWindow",
+      "rva": 726736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwSetProjection",
+      "rva": 727232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwAddCameraToWorld",
+      "rva": 726192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.cpp",
+      "name": "GameRwCreateTexture",
+      "rva": 725792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "g_rwPreviewAxes",
+      "rva": 1397596,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwCreateLight",
+      "rva": 726784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwSetLightColor",
+      "rva": 726896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwCreateRaster",
+      "rva": 725712,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwCreateCamera",
+      "rva": 726064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwCreateFrame",
+      "rva": 725904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwTranslateFrame",
+      "rva": 727280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwRotateFrame",
+      "rva": 727328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwSetCameraRasters",
+      "rva": 726448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwSetObjectFrame",
+      "rva": 726400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwSetClipDistances",
+      "rva": 726656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwSetViewWindow",
+      "rva": 726736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwSetProjection",
+      "rva": 727232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwAddCameraToWorld",
+      "rva": 726192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_preview.h",
+      "name": "GameRwCreateTexture",
+      "rva": 725792,
       "module": "samp.dll"
     },
     {
