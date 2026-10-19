@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 #include "fontrender.h"
 struct CVector;
+class CDXUTDialog;
 #pragma pack(push,1)
 // Observed allocation extents and constructor/lifecycle fields; full render interfaces remain open.
 class CPlayerTags {
@@ -67,6 +68,10 @@ public:
 // Address interfaces for later UI/pool layers; never allocate these partial types.
 class CScoreboard {
 public:
+    // samp.dll RVA: 0x0006e4e0
+    void ResetDialogControls(CDXUTDialog *dialog);
+    // samp.dll RVA: 0x0006e640
+    void SendNotification();
     // samp.dll RVA: 0x0006e410
     void Close(bool restoreCursor);
     // samp.dll RVA: 0x0006e360

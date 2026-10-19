@@ -1034,6 +1034,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CDialog::Close",
+      "va": "0x100700d0",
+      "rva": "0x000700d0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
       "name": "CDialog::Draw",
       "va": "0x1006f2d0",
       "rva": "0x0006f2d0",
@@ -1041,11 +1048,25 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CDialog::ResetDialogControls",
+      "va": "0x1006f460",
+      "rva": "0x0006f460",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
       "name": "CDownloadWindow::Draw",
       "va": "0x1006a350",
       "rva": "0x0006a350",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CDownloadWindow::ResetDialogControls",
+      "va": "0x1006a500",
+      "rva": "0x0006a500",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
       "name": "CDXUTDialog::AddControl",
@@ -2406,6 +2427,48 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "ClientGuiDialogEvent",
+      "va": "0x100c6b60",
+      "rva": "0x000c6b60",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "ClientGuiDownloadEvent",
+      "va": "0x100c6cd0",
+      "rva": "0x000c6cd0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "ClientGuiInputEvent",
+      "va": "0x100c6bf0",
+      "rva": "0x000c6bf0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "ClientGuiPanelEvent",
+      "va": "0x100c6cc0",
+      "rva": "0x000c6cc0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "ClientGuiScoreboardEvent",
+      "va": "0x100c6c30",
+      "rva": "0x000c6c30",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "ClientGuiSpawnEvent",
+      "va": "0x100c6c60",
+      "rva": "0x000c6c60",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
       "name": "ClientInitializeCacheDirectory",
       "va": "0x100c51c0",
       "rva": "0x000c51c0",
@@ -2425,6 +2488,13 @@
       "rva": "0x000c6a60",
       "module": "samp.dll",
       "evidence": "Read-only gui-start-v99 constructor/manager bodies. Manager create/reset differ from selected SDK and are replaced only in the v99 candidate; complete GUI/startup not established."
+    },
+    {
+      "name": "ClientInitializeGui",
+      "va": "0x100c6ce0",
+      "rva": "0x000c6ce0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
       "name": "ClientInitializePaths",
@@ -2495,6 +2565,27 @@
       "rva": "0x000610d0",
       "module": "samp.dll",
       "evidence": "Read-only device-init-v98 native entry and instructions. Window procedure remains address-only; main device/GUI coordinator is reviewed, not implemented."
+    },
+    {
+      "name": "CLocalPlayer::NextClass",
+      "va": "0x10005e30",
+      "rva": "0x00005e30",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "CLocalPlayer::PrevClass",
+      "va": "0x10005ec0",
+      "rva": "0x00005ec0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "CLocalPlayer::RequestSpawn",
+      "va": "0x10003f40",
+      "rva": "0x00003f40",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
       "name": "CMemoryStream::~CMemoryStream",
@@ -2679,6 +2770,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CRenderPanel::ResetDialogControls",
+      "va": "0x10071140",
+      "rva": "0x00071140",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
       "name": "CRYPT_FN_AcquireContext",
       "va": "0x1011bb18",
       "rva": "0x0011bb18",
@@ -2754,6 +2852,20 @@
       "rva": "0x0006e360",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CScoreboard::ResetDialogControls",
+      "va": "0x1006e4e0",
+      "rva": "0x0006e4e0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "CScoreboard::SendNotification",
+      "va": "0x1006e640",
+      "rva": "0x0006e640",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
       "name": "CSigner::~CSigner",
@@ -4224,6 +4336,34 @@
       "rva": "0x0018f49c",
       "module": "samp.dll",
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "g_guiDownloadDialog",
+      "va": "0x102acac8",
+      "rva": "0x002acac8",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "g_guiPanelDialog",
+      "va": "0x102acac4",
+      "rva": "0x002acac4",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "g_guiScoreboardDialog",
+      "va": "0x102acab8",
+      "rva": "0x002acab8",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "g_guiServerDialog",
+      "va": "0x102acac0",
+      "rva": "0x002acac0",
+      "module": "samp.dll",
+      "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
       "name": "g_hookAllocateFunction",
@@ -15656,6 +15796,18 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::ResetDialogControls",
+      "rva": 451808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
+      "name": "CScoreboard::SendNotification",
+      "rva": 452160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CScoreboard::Close",
       "rva": 451600,
       "module": "samp.dll"
@@ -16267,6 +16419,138 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/gui.cpp",
+      "name": "g_guiScoreboardDialog",
+      "rva": 2804408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.cpp",
+      "name": "g_guiServerDialog",
+      "rva": 2804416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.cpp",
+      "name": "g_guiPanelDialog",
+      "rva": 2804420,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.cpp",
+      "name": "g_guiDownloadDialog",
+      "rva": 2804424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.cpp",
+      "name": "ClientInitializeGui",
+      "rva": 814304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "g_guiScoreboardDialog",
+      "rva": 2804408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "g_guiServerDialog",
+      "rva": 2804416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "g_guiPanelDialog",
+      "rva": 2804420,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "g_guiDownloadDialog",
+      "rva": 2804424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientInitializeGui",
+      "rva": 814304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientGuiScoreboardEvent",
+      "rva": 814128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientGuiInputEvent",
+      "rva": 814064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientGuiSpawnEvent",
+      "rva": 814176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientGuiDialogEvent",
+      "rva": 813920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientGuiPanelEvent",
+      "rva": 814272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui.h",
+      "name": "ClientGuiDownloadEvent",
+      "rva": 814288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui_events.cpp",
+      "name": "ClientGuiScoreboardEvent",
+      "rva": 814128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui_events.cpp",
+      "name": "ClientGuiInputEvent",
+      "rva": 814064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui_events.cpp",
+      "name": "ClientGuiSpawnEvent",
+      "rva": 814176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui_events.cpp",
+      "name": "ClientGuiDialogEvent",
+      "rva": 813920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui_events.cpp",
+      "name": "ClientGuiPanelEvent",
+      "rva": 814272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/gui_events.cpp",
+      "name": "ClientGuiDownloadEvent",
+      "rva": 814288,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/input_activity.cpp",
       "name": "g_inputImeActivityTick",
       "rva": 1570456,
@@ -16448,6 +16732,18 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CDialog::ResetDialogControls",
+      "rva": 455776,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDialog::Close",
+      "rva": 458960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CDialog::Draw",
       "rva": 455376,
       "module": "samp.dll"
@@ -16466,8 +16762,20 @@
     },
     {
       "file": "source/gui/render_dependencies.h",
+      "name": "CRenderPanel::ResetDialogControls",
+      "rva": 463168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
       "name": "CRenderPanel::Draw",
       "rva": 464224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/render_dependencies.h",
+      "name": "CDownloadWindow::ResetDialogControls",
+      "rva": 435456,
       "module": "samp.dll"
     },
     {
@@ -16829,6 +17137,24 @@
       "name": "g_inputGameWindow",
       "rva": null,
       "module": "GTA SA"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::RequestSpawn",
+      "rva": 16192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::NextClass",
+      "rva": 24112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::PrevClass",
+      "rva": 24256,
+      "module": "samp.dll"
     },
     {
       "file": "source/net/vehiclepool.cpp",

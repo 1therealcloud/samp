@@ -2,6 +2,7 @@
 #define SAMP_RENDER_DEPENDENCIES_H
 #include <windows.h>
 #include <unknwn.h>
+class CDXUTDialog;
 // Address interfaces only; never allocate these partial classes.
 class CNetGame {
 public:
@@ -30,6 +31,10 @@ class CLabelPool {public:
     void Draw();
 };
 class CDialog {public:
+    // samp.dll RVA: 0x0006f460
+    void ResetDialogControls(CDXUTDialog *dialog);
+    // samp.dll RVA: 0x000700d0
+    void Close(char response);
     // samp.dll RVA: 0x0006f2d0
     void Draw();
 };
@@ -44,10 +49,14 @@ class CDeathWindow {public:
     void Draw();
 };
 class CRenderPanel {public:
+    // samp.dll RVA: 0x00071140
+    void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x00071560
     void Draw();
 };
 class CDownloadWindow {public:
+    // samp.dll RVA: 0x0006a500
+    void ResetDialogControls(CDXUTDialog *dialog);
     // samp.dll RVA: 0x0006a350
     void Draw();
 };
