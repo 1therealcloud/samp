@@ -11,13 +11,13 @@ class CTextDraw {public:
     void Native0B30A0();
     // samp.dll RVA: 0x000b32b0
     void OnLostDevice();
-    // Drawing backend dependencies, names intentionally remain address-based.
+    // Recovered drawing backends; original method names remain unestablished.
     // samp.dll RVA: 0x000b2c90
     void Native0B2C90();
     // samp.dll RVA: 0x000b2da0
     void Native0B2DA0();
 };
-// Texture-slot release dependency; body remains open.
+// Shared texture-slot release entry.
 // samp.dll RVA: 0x000b2750
 void GameReleaseTextDrawTexture(int slot);
 #endif

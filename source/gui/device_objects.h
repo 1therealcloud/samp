@@ -35,7 +35,6 @@ public:
 };
 class CObjectMaterialText {
 public:
-    // Material renderer dependency; body remains open.
     // samp.dll RVA: 0x00070350
     IDirect3DTexture9 *Create(const char *text,const char *font,unsigned fontSize,int width,int height,D3DCOLOR color,D3DCOLOR background,BOOL bold,unsigned alignment);
     // samp.dll RVA: 0x00070320

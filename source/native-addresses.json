@@ -5,6 +5,13 @@
   "scope": "Maintained recovered SA-MP source declarations and definitions; tests and frozen snapshots excluded.",
   "entries": [
     {
+      "name": "_ftol2",
+      "va": "0x100f9324",
+      "rva": "0x000f9324",
+      "module": "samp.dll",
+      "evidence": "Exact native textdraw CALL operands; external MSVC CRT helper supplied by the selected static runtime, no implementation recovered here."
+    },
+    {
       "name": "AFS_ENTRYBT_NODE::~AFS_ENTRYBT_NODE",
       "va": "0x10064d80",
       "rva": "0x00064d80",
@@ -3005,7 +3012,7 @@
       "va": "0x10070350",
       "rva": "0x00070350",
       "module": "samp.dll",
-      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
       "name": "CObjectMaterialText::OnLostDevice",
@@ -3565,14 +3572,14 @@
       "va": "0x100b2c90",
       "rva": "0x000b2c90",
       "module": "samp.dll",
-      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
       "name": "CTextDraw::Native0B2DA0",
       "va": "0x100b2da0",
       "rva": "0x000b2da0",
       "module": "samp.dll",
-      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
       "name": "CTextDraw::Native0B30A0",
@@ -3818,6 +3825,125 @@
       "rva": "0x000961c0",
       "module": "samp.dll",
       "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
+    },
+    {
+      "name": "Font_PrintString",
+      "va": "0x1009fc80",
+      "rva": "0x0009fc80",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetColor",
+      "va": "0x1009fca0",
+      "rva": "0x0009fca0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetDropColor",
+      "va": "0x1009fcb0",
+      "rva": "0x0009fcb0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetFontStyle",
+      "va": "0x1009fd00",
+      "rva": "0x0009fd00",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetJustify",
+      "va": "0x1009fcf0",
+      "rva": "0x0009fcf0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetLineHeight",
+      "va": "0x1009fd60",
+      "rva": "0x0009fd60",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetLineWidth",
+      "va": "0x1009fd50",
+      "rva": "0x0009fd50",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetOutline",
+      "va": "0x1009fcc0",
+      "rva": "0x0009fcc0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetProportional",
+      "va": "0x1009fd10",
+      "rva": "0x0009fd10",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetRightJustifyWrap",
+      "va": "0x1009fd20",
+      "rva": "0x0009fd20",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetScale",
+      "va": "0x1009fce0",
+      "rva": "0x0009fce0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_SetShadow",
+      "va": "0x1009fd70",
+      "rva": "0x0009fd70",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_Unk12",
+      "va": "0x1009fcd0",
+      "rva": "0x0009fcd0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_UnkConv",
+      "va": "0x1009fd80",
+      "rva": "0x0009fd80",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_UnkConv2",
+      "va": "0x1009fd90",
+      "rva": "0x0009fd90",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_UseBox",
+      "va": "0x1009fd30",
+      "rva": "0x0009fd30",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
+      "name": "Font_UseBoxColor",
+      "va": "0x1009fd40",
+      "rva": "0x0009fd40",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
       "name": "FontAnsiToWide",
@@ -6109,6 +6235,48 @@
       "evidence": "Original CSrvNetStats constructor REP STOSD count 0x4a; only observed 296-byte span, not adjacent layout."
     },
     {
+      "name": "g_textDrawHalf",
+      "va": "0x10117884",
+      "rva": "0x00117884",
+      "module": "samp.dll",
+      "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
+    },
+    {
+      "name": "g_textDrawTextures",
+      "va": "0x102a9400",
+      "rva": "0x002a9400",
+      "module": "samp.dll",
+      "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
+    },
+    {
+      "name": "g_textDrawTextureUsed",
+      "va": "0x102a9720",
+      "rva": "0x002a9720",
+      "module": "samp.dll",
+      "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
+    },
+    {
+      "name": "g_textDrawVirtualHeight",
+      "va": "0x1011f568",
+      "rva": "0x0011f568",
+      "module": "samp.dll",
+      "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
+    },
+    {
+      "name": "g_textDrawVirtualWidth",
+      "va": "0x1011f564",
+      "rva": "0x0011f564",
+      "module": "samp.dll",
+      "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
+    },
+    {
+      "name": "GameAllocateTextDrawTexture",
+      "va": "0x100b2720",
+      "rva": "0x000b2720",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
       "name": "GameAnimationKey",
       "va": "0x100b4080",
       "rva": "0x000b4080",
@@ -6158,6 +6326,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "GameDestroyTextDrawTexture",
+      "va": "0x100b3560",
+      "rva": "0x000b3560",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
+    },
+    {
       "name": "GameDeviceIntegrityCycle",
       "va": "0x1009d6f0",
       "rva": "0x0009d6f0",
@@ -6191,6 +6366,13 @@
       "rva": "0x0009df50",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "GameDrawTextDrawTexture",
+      "va": "0x100b28a0",
+      "rva": "0x000b28a0",
+      "module": "samp.dll",
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
       "name": "GameExceptionFilter",
@@ -6862,7 +7044,7 @@
       "va": "0x100b2750",
       "rva": "0x000b2750",
       "module": "samp.dll",
-      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+      "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
       "name": "GameRelocateModelFlags",
@@ -13944,6 +14126,210 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/font.cpp",
+      "name": "Font_PrintString",
+      "rva": 654464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetColor",
+      "rva": 654496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetDropColor",
+      "rva": 654512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetOutline",
+      "rva": 654528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_Unk12",
+      "rva": 654544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetScale",
+      "rva": 654560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetJustify",
+      "rva": 654576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetFontStyle",
+      "rva": 654592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetProportional",
+      "rva": 654608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetRightJustifyWrap",
+      "rva": 654624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_UseBox",
+      "rva": 654640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_UseBoxColor",
+      "rva": 654656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetLineWidth",
+      "rva": 654672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetLineHeight",
+      "rva": 654688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_SetShadow",
+      "rva": 654704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_UnkConv2",
+      "rva": 654736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.cpp",
+      "name": "Font_UnkConv",
+      "rva": 654720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_PrintString",
+      "rva": 654464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetColor",
+      "rva": 654496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetDropColor",
+      "rva": 654512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetOutline",
+      "rva": 654528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_Unk12",
+      "rva": 654544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetScale",
+      "rva": 654560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetJustify",
+      "rva": 654576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetFontStyle",
+      "rva": 654592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetProportional",
+      "rva": 654608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetRightJustifyWrap",
+      "rva": 654624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_UseBox",
+      "rva": 654640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_UseBoxColor",
+      "rva": 654656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetLineWidth",
+      "rva": 654672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetLineHeight",
+      "rva": 654688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_SetShadow",
+      "rva": 654704,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_UnkConv2",
+      "rva": 654736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/font.h",
+      "name": "Font_UnkConv",
+      "rva": 654720,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/frame_limit.cpp",
       "name": "g_frameKeyCycle",
       "rva": 1631520,
@@ -19260,6 +19646,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/material_text.cpp",
+      "name": "CObjectMaterialText::Create",
+      "rva": 459600,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/object_edit.h",
       "name": "CObjectEdit::TryChangeProcessType",
       "rva": 465728,
@@ -19977,6 +20369,132 @@
       "file": "source/gui/textdraw_frame.cpp",
       "name": "CTextDraw::OnLostDevice",
       "rva": 733872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "_ftol2",
+      "rva": 1020708,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "g_textDrawTextures",
+      "rva": 2790400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "g_textDrawTextureUsed",
+      "rva": 2791200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "g_textDrawHalf",
+      "rva": 1144964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "g_textDrawVirtualWidth",
+      "rva": 1176932,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "g_textDrawVirtualHeight",
+      "rva": 1176936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "GameAllocateTextDrawTexture",
+      "rva": 730912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "GameReleaseTextDrawTexture",
+      "rva": 730960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "GameDestroyTextDrawTexture",
+      "rva": 734560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "GameDrawTextDrawTexture",
+      "rva": 731296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "CTextDraw::Native0B2C90",
+      "rva": 732304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "CTextDraw::Native0B2DA0",
+      "rva": 732576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "g_textDrawTextures",
+      "rva": 2790400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "g_textDrawTextureUsed",
+      "rva": 2791200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "g_textDrawHalf",
+      "rva": 1144964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "g_textDrawVirtualWidth",
+      "rva": 1176932,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "g_textDrawVirtualHeight",
+      "rva": 1176936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "GameAllocateTextDrawTexture",
+      "rva": 730912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "GameReleaseTextDrawTexture",
+      "rva": 730960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "GameDestroyTextDrawTexture",
+      "rva": 734560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "GameDrawTextDrawTexture",
+      "rva": 731296,
       "module": "samp.dll"
     },
     {
