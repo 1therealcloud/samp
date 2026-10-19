@@ -2046,7 +2046,7 @@
       "va": "0x100a1a30",
       "rva": "0x000a1a30",
       "module": "samp.dll",
-      "evidence": "Address-only native pre-render thiscall dependency, exact A23D0 operand. Body remains unrecovered; Native01E330 name assigns no unverified semantics."
+      "evidence": "Read-only frame-limit-v116 native instructions: five bodies, 223 instructions. 71 focused native/source ABI/state cases, including 24 timing states at two x87 precisions; clock, Sleep, GetPlayerPed and GTA task virtual are observer boundaries. Native nested timing/task bodies execute independently. No GTA boot."
     },
     {
       "name": "CGame::ProcessInputEnabling",
@@ -2096,6 +2096,13 @@
       "rva": "0x000a0980",
       "module": "samp.dll",
       "evidence": "Read-only commands-v107-helper exact entry/body; native raw ABI/state comparison with original quit virtual dispatch and world clock/weather ordering."
+    },
+    {
+      "name": "CGame::Sleep",
+      "va": "0x1009fed0",
+      "rva": "0x0009fed0",
+      "module": "samp.dll",
+      "evidence": "Read-only frame-limit-v116 native instructions: five bodies, 223 instructions. 71 focused native/source ABI/state cases, including 24 timing states at two x87 precisions; clock, Sleep, GetPlayerPed and GTA task virtual are observer boundaries. Native nested timing/task bodies execute independently. No GTA boot."
     },
     {
       "name": "CGame::StartGame",
@@ -3251,6 +3258,13 @@
       "rva": "0x000adba0",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CPed::HasTaskType268",
+      "va": "0x100ac8f0",
+      "rva": "0x000ac8f0",
+      "module": "samp.dll",
+      "evidence": "Read-only frame-limit-v116 native instructions: five bodies, 223 instructions. 71 focused native/source ABI/state cases, including 24 timing states at two x87 precisions; clock, Sleep, GetPlayerPed and GTA task virtual are observer boundaries. Native nested timing/task bodies execute independently. No GTA boot."
     },
     {
       "name": "CPed::IsInVehicle",
@@ -4609,6 +4623,62 @@
       "rva": "0x00174d38",
       "module": "samp.dll",
       "evidence": "Reviewed Ghidra native instructions; font-v64 and gui-dependencies-v52 exports"
+    },
+    {
+      "name": "g_frameKeyCycle",
+      "va": "0x1018e520",
+      "rva": "0x0018e520",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameKeyCycleTick",
+      "va": "0x1018e524",
+      "rva": "0x0018e524",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameSampleCount",
+      "va": "0x1018e528",
+      "rva": "0x0018e528",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameSampleTick",
+      "va": "0x1018e52c",
+      "rva": "0x0018e52c",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameScale",
+      "va": "0x1018e534",
+      "rva": "0x0018e534",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameScaleMultiplier",
+      "va": "0x101181d8",
+      "rva": "0x001181d8",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameScaleNumerator",
+      "va": "0x1011c664",
+      "rva": "0x0011c664",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
+    },
+    {
+      "name": "g_frameSleepTick",
+      "va": "0x1018e530",
+      "rva": "0x0018e530",
+      "module": "samp.dll",
+      "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
     },
     {
       "name": "g_gameCustomModelInfo",
@@ -6067,6 +6137,13 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "GameGetTaskType",
+      "va": "0x100b3ca0",
+      "rva": "0x000b3ca0",
+      "module": "samp.dll",
+      "evidence": "Read-only frame-limit-v116 native instructions: five bodies, 223 instructions. 71 focused native/source ABI/state cases, including 24 timing states at two x87 precisions; clock, Sleep, GetPlayerPed and GTA task virtual are observer boundaries. Native nested timing/task bodies execute independently. No GTA boot."
+    },
+    {
       "name": "GameGetVehiclePlateTexture",
       "va": "0x100a41d0",
       "rva": "0x000a41d0",
@@ -6877,6 +6954,13 @@
       "rva": "0x000aa0b0",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameUpdateKeyCycle",
+      "va": "0x1009fe50",
+      "rva": "0x0009fe50",
+      "module": "samp.dll",
+      "evidence": "Read-only frame-limit-v116 native instructions: five bodies, 223 instructions. 71 focused native/source ABI/state cases, including 24 timing states at two x87 precisions; clock, Sleep, GetPlayerPed and GTA task virtual are observer boundaries. Native nested timing/task bodies execute independently. No GTA boot."
     },
     {
       "name": "GameUpdateMouse",
@@ -13748,6 +13832,144 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameKeyCycle",
+      "rva": 1631520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameKeyCycleTick",
+      "rva": 1631524,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameSampleCount",
+      "rva": 1631528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameSampleTick",
+      "rva": 1631532,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameSleepTick",
+      "rva": 1631536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameScale",
+      "rva": 1631540,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameScaleMultiplier",
+      "rva": 1147352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "g_frameScaleNumerator",
+      "rva": 1164900,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "GameUpdateKeyCycle",
+      "rva": 654928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "CGame::Sleep",
+      "rva": 655056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "GameGetTaskType",
+      "rva": 736416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "CPed::HasTaskType268",
+      "rva": 706800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.cpp",
+      "name": "CGame::ProcessFrameLimiter",
+      "rva": 662064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameKeyCycle",
+      "rva": 1631520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameKeyCycleTick",
+      "rva": 1631524,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameSampleCount",
+      "rva": 1631528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameSampleTick",
+      "rva": 1631532,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameSleepTick",
+      "rva": 1631536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameScale",
+      "rva": 1631540,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameScaleMultiplier",
+      "rva": 1147352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "g_frameScaleNumerator",
+      "rva": 1164900,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "GameUpdateKeyCycle",
+      "rva": 654928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/frame_limit.h",
+      "name": "GameGetTaskType",
+      "rva": 736416,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/game.cpp",
       "name": "g_gameUsedPlayerSlots",
       "rva": 1630680,
@@ -13919,6 +14141,12 @@
       "file": "source/game/game.h",
       "name": "CGame::ProcessFrameLimiter",
       "rva": 662064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::Sleep",
+      "rva": 655056,
       "module": "samp.dll"
     },
     {
@@ -16619,6 +16847,12 @@
       "file": "source/game/playerped.h",
       "name": "CPed::GetDrunkLevel",
       "rva": 711584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::HasTaskType268",
+      "rva": 706800,
       "module": "samp.dll"
     },
     {

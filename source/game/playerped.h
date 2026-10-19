@@ -40,6 +40,9 @@ public:
     BOOL IsPassenger();
     // samp.dll RVA: 0x000adba0
     DWORD GetDrunkLevel();
+    // Observed task-type test; does not establish a complete GTA task interface.
+    // samp.dll RVA: 0x000ac8f0
+    BOOL HasTaskType268();
 };
 #pragma pack(pop)
 typedef char PedExtent[(sizeof(CPed)==0x32d)?1:-1];
