@@ -84,6 +84,8 @@ public:
     void GetRect(RECT *rect);
     // samp.dll RVA: 0x0006e360
     void Recalc();
+    // samp.dll RVA: 0x0006e760
+    void UpdateList();
     // samp.dll RVA: 0x0006eaf0
     void Draw();
 };

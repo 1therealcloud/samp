@@ -65,6 +65,10 @@ class CDialog {public:
 class CTextDrawSelection {public:
     // Inline coordinator initialization; no standalone native constructor entry established.
     DWORD enabled,unknown04;WORD unknown08;
+    // samp.dll RVA: 0x00070f20
+    void SendNotification();
+    // samp.dll RVA: 0x00070d50
+    void ResetTextDraws();
     // samp.dll RVA: 0x00071010
     BOOL MsgProc(UINT message,WPARAM wparam,LPARAM lparam);
     // samp.dll RVA: 0x00070fc0
