@@ -17,6 +17,9 @@ public:
     // Stage 3 dependency; full plate shutdown body remains unrecovered.
     // samp.dll RVA: 0x0001e8a0
     void ShutdownLicensePlates();
+    // Address-only pre-render dependency; full plate construction remains open.
+    // samp.dll RVA: 0x0001e830
+    void ConstructLicensePlates();
 };
 #pragma pack(pop)
 typedef char VehiclePoolObjectOffset[(offsetof(CVehiclePool,m_pObjects)==0x1134)?1:-1];

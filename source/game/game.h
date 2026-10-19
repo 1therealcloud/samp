@@ -65,6 +65,9 @@ public:
     BOOL IsStarted();
     // samp.dll RVA: 0x000a09f0
     void SetFrameLimiter(int);
+    // Native per-frame dependency; full limiter implementation remains open.
+    // samp.dll RVA: 0x000a1a30
+    void ProcessFrameLimiter();
     // samp.dll RVA: 0x000a1280
     void EnableClock(bool);
     // samp.dll RVA: 0x00002d40

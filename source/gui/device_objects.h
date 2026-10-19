@@ -92,6 +92,11 @@ public:
 class CEntity;
 class CObjectPool {
 public:
+    // Address-only pre-render dependencies; pool implementation remains open.
+    // samp.dll RVA: 0x00012950
+    void Process();
+    // samp.dll RVA: 0x00012a10
+    void ConstructMaterials();
     // Returns the established entity prefix; complete CObject/pool allocations remain open.
     // samp.dll RVA: 0x00002e10
     CEntity *Get(WORD id);
@@ -100,6 +105,8 @@ public:
 };
 class CTextDrawPool {
 public:
+    // samp.dll RVA: 0x0001e330
+    void Native01E330();
     // samp.dll RVA: 0x0001e360
     void OnLostDevice();
     // samp.dll RVA: 0x0001e2f0
