@@ -55,6 +55,8 @@ public:
     BOOL IsModelAvailable(int model);
     // samp.dll RVA: 0x000a0760
     BOOL IsMenuVisible();
+    // samp.dll RVA: 0x000a0d00
+    BYTE GetCurrentInterior();
     // samp.dll RVA: 0x000a0530
     void SetCursorMode(int,BOOL);
     // samp.dll RVA: 0x000a0410

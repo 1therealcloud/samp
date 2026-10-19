@@ -2035,6 +2035,13 @@
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
     },
     {
+      "name": "CGame::GetCurrentInterior",
+      "va": "0x100a0d00",
+      "rva": "0x000a0d00",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "CGame::GetDevice",
       "va": "0x100a1190",
       "rva": "0x000a1190",
@@ -3428,6 +3435,20 @@
       "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
+      "name": "CPlayerPool::Find",
+      "va": "0x100137c0",
+      "rva": "0x000137c0",
+      "module": "samp.dll",
+      "evidence": "v123 direct native SEH-handler dependency; call convention/arguments/callee return inspected. Declaration-only, body remains unrecovered."
+    },
+    {
+      "name": "CPlayerPool::GetPlayer",
+      "va": "0x100010f0",
+      "rva": "0x000010f0",
+      "module": "samp.dll",
+      "evidence": "v123 direct native SEH-handler dependency; call convention/arguments/callee return inspected. Declaration-only, body remains unrecovered."
+    },
+    {
       "name": "CPlayerPool::Native013840",
       "va": "0x10013840",
       "rva": "0x00013840",
@@ -3454,6 +3475,13 @@
       "rva": "0x0006d0c0",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CRemotePlayer::Remove",
+      "va": "0x10017040",
+      "rva": "0x00017040",
+      "module": "samp.dll",
+      "evidence": "v123 direct native SEH-handler dependency; call convention/arguments/callee return inspected. Declaration-only, body remains unrecovered."
     },
     {
       "name": "CRenderPanel::CRenderPanel",
@@ -5003,6 +5031,13 @@
       "evidence": "Exact frame-limit-v116 operands; observed BYTE/DWORD/float storage. Constants 3.0 and 50.0 verified against reference bytes; remaining fields zero-filled virtual data. Existing patch global at 1546F0 is reused."
     },
     {
+      "name": "g_gameCurrentInteriorCommand",
+      "va": "0x1011e7b8",
+      "rva": "0x0011e7b8",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
       "name": "g_gameCustomModelInfo",
       "va": "0x101c0444",
       "rva": "0x001c0444",
@@ -5185,6 +5220,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "g_gameLinkedVehicle",
+      "va": "0x102a9a48",
+      "rva": "0x002a9a48",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_gameLoadingCustomModel",
       "va": "0x101e0448",
       "rva": "0x001e0448",
@@ -5197,6 +5239,13 @@
       "rva": "0x0011e678",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "g_gameLocalPedMatrix",
+      "va": "0x102a9da0",
+      "rva": "0x002a9da0",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "g_gameLoopAddress",
@@ -5430,6 +5479,13 @@
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
     },
     {
+      "name": "g_gameStreamingDistanceSquared",
+      "va": "0x1011f5dc",
+      "rva": "0x0011f5dc",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_gameTextBuffer",
       "va": "0x1018e1cc",
       "rva": "0x0018e1cc",
@@ -5449,6 +5505,27 @@
       "rva": "0x0018e1d8",
       "module": "samp.dll",
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
+    },
+    {
+      "name": "g_gameVehicleDistanceSquared",
+      "va": "0x102a9a4c",
+      "rva": "0x002a9a4c",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_gameVehicleMatrix",
+      "va": "0x102a9da4",
+      "rva": "0x002a9da4",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_gameVehicleModel",
+      "va": "0x102a9a44",
+      "rva": "0x002a9a44",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "g_gameVersion",
@@ -5612,6 +5689,13 @@
       "evidence": "Exact boot-hooks-v114 byte/DWORD native operands. Shared storage and post-backend mutations checked; original zero-filled virtual data."
     },
     {
+      "name": "g_hookCameraModeWord",
+      "va": "0x10151964",
+      "rva": "0x00151964",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_hookCameraPed",
       "va": "0x1018f4b0",
       "rva": "0x0018f4b0",
@@ -5633,11 +5717,39 @@
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
+      "name": "g_hookControlVehicle",
+      "va": "0x1018e8d0",
+      "rva": "0x0018e8d0",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_hookDisableFog",
       "va": "0x102aca70",
       "rva": "0x002aca70",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookFaultPlayerId",
+      "va": "0x10151970",
+      "rva": "0x00151970",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookFaultPlayerPool",
+      "va": "0x1018f378",
+      "rva": "0x0018f378",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookFaultRemotePlayer",
+      "va": "0x1018e824",
+      "rva": "0x0018e824",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
     },
     {
       "name": "g_hookFogEnabled",
@@ -5738,6 +5850,13 @@
       "evidence": "Native callback load/store operands v85 and original initialized data."
     },
     {
+      "name": "g_hookLocalPedControl",
+      "va": "0x1018f524",
+      "rva": "0x0018f524",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_hookMarker",
       "va": "0x1018f5b4",
       "rva": "0x0018f5b4",
@@ -5757,6 +5876,62 @@
       "rva": "0x00151acc",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookPedControlField540",
+      "va": "0x1018e8c0",
+      "rva": "0x0018e8c0",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookPedControlThis",
+      "va": "0x1018f4c0",
+      "rva": "0x0018f4c0",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookPedExceptionLabel",
+      "va": "0x1011ebcc",
+      "rva": "0x0011ebcc",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookPedRemoteRestore",
+      "va": "0x10151a90",
+      "rva": "0x00151a90",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookPedRemovedMessage",
+      "va": "0x1011ebac",
+      "rva": "0x0011ebac",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookPedRestoreA",
+      "va": "0x10151a70",
+      "rva": "0x00151a70",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookPedRestoreB",
+      "va": "0x10151a88",
+      "rva": "0x00151a88",
+      "module": "samp.dll",
+      "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
+    },
+    {
+      "name": "g_hookPlayerIndex",
+      "va": "0x1018f4b4",
+      "rva": "0x0018f4b4",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "g_hookQueuedAnimationBlend",
@@ -5822,6 +5997,34 @@
       "evidence": "Native callback load/store operands v85 and original initialized data."
     },
     {
+      "name": "g_hookRestoreKeys",
+      "va": "0x1018f528",
+      "rva": "0x0018f528",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookRestoreSkills",
+      "va": "0x1018f520",
+      "rva": "0x0018f520",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookSavedCameraMode",
+      "va": "0x1018ea58",
+      "rva": "0x0018ea58",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookSavedCameraModeWord",
+      "va": "0x1018e5c8",
+      "rva": "0x0018e5c8",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_hookSavedEsi",
       "va": "0x1018f570",
       "rva": "0x0018f570",
@@ -5850,6 +6053,13 @@
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
+      "name": "g_hookSavedPlayer",
+      "va": "0x1018f4ac",
+      "rva": "0x0018f4ac",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "g_hookSavedSpeed",
       "va": "0x1018eab4",
       "rva": "0x0018eab4",
@@ -5862,6 +6072,55 @@
       "rva": "0x0018f5bc",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookVehicleKeys",
+      "va": "0x1018e934",
+      "rva": "0x0018e934",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookVehicleLean",
+      "va": "0x1018eb20",
+      "rva": "0x0018eb20",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookVehicleLeanTarget",
+      "va": "0x1018e8cc",
+      "rva": "0x0018e8cc",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookVehicleProcess",
+      "va": "0x1018e810",
+      "rva": "0x0018e810",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookVehicleStatus",
+      "va": "0x1018e938",
+      "rva": "0x0018e938",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookVehicleVtable",
+      "va": "0x1018ea54",
+      "rva": "0x0018ea54",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "g_hookWeaponResult",
+      "va": "0x1018f51c",
+      "rva": "0x0018f51c",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "g_inputAnsiText",
@@ -6571,6 +6830,13 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "GameFindPlayerPedIndex",
+      "va": "0x100b3f60",
+      "rva": "0x000b3f60",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "GameFrameNodeNameHook",
       "va": "0x100a5c10",
       "rva": "0x000a5c10",
@@ -6620,6 +6886,13 @@
       "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
     },
     {
+      "name": "GameHasOccupiedLinkedVehicle",
+      "va": "0x100b4460",
+      "rva": "0x000b4460",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "GameHook_000a2200",
       "va": "0x100a2200",
       "rva": "0x000a2200",
@@ -6666,7 +6939,7 @@
       "va": "0x100a26d0",
       "rva": "0x000a26d0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "GameHook_000a29d0",
@@ -6680,21 +6953,21 @@
       "va": "0x100a2ab0",
       "rva": "0x000a2ab0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "GameHook_000a2b50",
       "va": "0x100a2b50",
       "rva": "0x000a2b50",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "GameHook_000a2e70",
       "va": "0x100a2e70",
       "rva": "0x000a2e70",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "GameHook_000a33c0",
@@ -7131,6 +7404,20 @@
       "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
     },
     {
+      "name": "GameIsTrainVehicle",
+      "va": "0x100b4410",
+      "rva": "0x000b4410",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "GameIsVehicleInStreamingArea",
+      "va": "0x100b6490",
+      "rva": "0x000b6490",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
       "name": "GameLoadAtomicStream",
       "va": "0x100b1ba0",
       "rva": "0x000b1ba0",
@@ -7346,6 +7633,13 @@
       "rva": "0x000a0370",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameRunPedControlBackend",
+      "va": "0x100a2530",
+      "rva": "0x000a2530",
+      "module": "samp.dll",
+      "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
     },
     {
       "name": "GameRwAddCameraToWorld",
@@ -15265,6 +15559,12 @@
     },
     {
       "file": "source/game/game.h",
+      "name": "CGame::GetCurrentInterior",
+      "rva": 658688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
       "name": "CGame::SetCursorMode",
       "rva": 656688,
       "module": "samp.dll"
@@ -16029,6 +16329,348 @@
       "file": "source/game/hooks_boot.h",
       "name": "g_hookAudioArgument1",
       "rva": 1636016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookCameraModeWord",
+      "rva": 1382756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookSavedPlayer",
+      "rva": 1635500,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookPlayerIndex",
+      "rva": 1635508,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookPedControlThis",
+      "rva": 1635520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookWeaponResult",
+      "rva": 1635612,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookRestoreSkills",
+      "rva": 1635616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookLocalPedControl",
+      "rva": 1635620,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookRestoreKeys",
+      "rva": 1635624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookSavedCameraMode",
+      "rva": 1632856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookSavedCameraModeWord",
+      "rva": 1631688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookVehicleProcess",
+      "rva": 1632272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookControlVehicle",
+      "rva": 1632464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookVehicleVtable",
+      "rva": 1632852,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookVehicleKeys",
+      "rva": 1632564,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookVehicleStatus",
+      "rva": 1632568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookVehicleLean",
+      "rva": 1633056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_hookVehicleLeanTarget",
+      "rva": 1632460,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_gameVehicleModel",
+      "rva": 2792004,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_gameLinkedVehicle",
+      "rva": 2792008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_gameVehicleDistanceSquared",
+      "rva": 2792012,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_gameLocalPedMatrix",
+      "rva": 2792864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_gameVehicleMatrix",
+      "rva": 2792868,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "g_gameStreamingDistanceSquared",
+      "rva": 1177052,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameFindPlayerPedIndex",
+      "rva": 737120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameIsTrainVehicle",
+      "rva": 738320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameHasOccupiedLinkedVehicle",
+      "rva": 738400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameHook_000a2ab0",
+      "rva": 666288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameHook_000a2b50",
+      "rva": 666448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameHook_000a2e70",
+      "rva": 667248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.cpp",
+      "name": "GameIsVehicleInStreamingArea",
+      "rva": 746640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookCameraModeWord",
+      "rva": 1382756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookSavedPlayer",
+      "rva": 1635500,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookPlayerIndex",
+      "rva": 1635508,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookPedControlThis",
+      "rva": 1635520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookWeaponResult",
+      "rva": 1635612,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookRestoreSkills",
+      "rva": 1635616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookLocalPedControl",
+      "rva": 1635620,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookRestoreKeys",
+      "rva": 1635624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookSavedCameraMode",
+      "rva": 1632856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookSavedCameraModeWord",
+      "rva": 1631688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookVehicleProcess",
+      "rva": 1632272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookControlVehicle",
+      "rva": 1632464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookVehicleVtable",
+      "rva": 1632852,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookVehicleKeys",
+      "rva": 1632564,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookVehicleStatus",
+      "rva": 1632568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookVehicleLean",
+      "rva": 1633056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_hookVehicleLeanTarget",
+      "rva": 1632460,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_gameVehicleModel",
+      "rva": 2792004,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_gameLinkedVehicle",
+      "rva": 2792008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_gameVehicleDistanceSquared",
+      "rva": 2792012,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_gameLocalPedMatrix",
+      "rva": 2792864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_gameVehicleMatrix",
+      "rva": 2792868,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "g_gameStreamingDistanceSquared",
+      "rva": 1177052,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "GameFindPlayerPedIndex",
+      "rva": 737120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "GameIsTrainVehicle",
+      "rva": 738320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "GameHasOccupiedLinkedVehicle",
+      "rva": 738400,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_control.h",
+      "name": "GameIsVehicleInStreamingArea",
+      "rva": 746640,
       "module": "samp.dll"
     },
     {
@@ -17979,6 +18621,150 @@
       "file": "source/game/ped_commands.h",
       "name": "g_pedNullAnimation",
       "rva": 1176352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookPedControlField540",
+      "rva": 1632448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookFaultPlayerPool",
+      "rva": 1635192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookFaultPlayerId",
+      "rva": 1382768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookFaultRemotePlayer",
+      "rva": 1632292,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookPedRestoreA",
+      "rva": 1383024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookPedRestoreB",
+      "rva": 1383048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookPedRemoteRestore",
+      "rva": 1383056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_gameCurrentInteriorCommand",
+      "rva": 1173432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookPedExceptionLabel",
+      "rva": 1174476,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "g_hookPedRemovedMessage",
+      "rva": 1174444,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "CGame::GetCurrentInterior",
+      "rva": 658688,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "GameRunPedControlBackend",
+      "rva": 664880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "GameHook_000a26d0",
+      "rva": 665296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookPedControlField540",
+      "rva": 1632448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookFaultPlayerPool",
+      "rva": 1635192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookFaultPlayerId",
+      "rva": 1382768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookFaultRemotePlayer",
+      "rva": 1632292,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookPedRestoreA",
+      "rva": 1383024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookPedRestoreB",
+      "rva": 1383048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookPedRemoteRestore",
+      "rva": 1383056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_gameCurrentInteriorCommand",
+      "rva": 1173432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookPedExceptionLabel",
+      "rva": 1174476,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "g_hookPedRemovedMessage",
+      "rva": 1174444,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "GameRunPedControlBackend",
+      "rva": 664880,
       "module": "samp.dll"
     },
     {
@@ -21510,6 +22296,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/net/playerpool.h",
+      "name": "CPlayerPool::Find",
+      "rva": 79808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/playerpool.h",
+      "name": "CPlayerPool::GetPlayer",
+      "rva": 4336,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/net/pool_frame.cpp",
       "name": "g_objectPoolLastTick",
       "rva": 1403764,
@@ -21579,6 +22377,12 @@
       "file": "source/net/pool_frame.h",
       "name": "g_objectPoolSecondsPerTick",
       "rva": 1147184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/remoteplayer.h",
+      "name": "CRemotePlayer::Remove",
+      "rva": 94272,
       "module": "samp.dll"
     },
     {
@@ -22685,6 +23489,16 @@
       "file": "source/game/entity.h",
       "name": "CEntity::~CEntity",
       "reason": "inline empty base destructor/vptr reset; scalar deleting entry RVA 0x0009bd10, standalone destructor entry not established"
+    },
+    {
+      "file": "source/game/ped_control.cpp",
+      "name": "GameProcessPedControlBody",
+      "reason": "reconstruction-only body helper extracted from A26D0; no standalone native entry"
+    },
+    {
+      "file": "source/game/ped_control.h",
+      "name": "GameProcessPedControlBody",
+      "reason": "reconstruction-only body helper extracted from A26D0; no standalone native entry"
     },
     {
       "file": "source/gui/font_color.cpp",
