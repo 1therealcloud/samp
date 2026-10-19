@@ -89,8 +89,12 @@ public:
     // samp.dll RVA: 0x0006eaf0
     void Draw();
 };
+class CEntity;
 class CObjectPool {
 public:
+    // Returns the established entity prefix; complete CObject/pool allocations remain open.
+    // samp.dll RVA: 0x00002e10
+    CEntity *Get(WORD id);
     // samp.dll RVA: 0x00012a50
     void ShutdownMaterials();
 };

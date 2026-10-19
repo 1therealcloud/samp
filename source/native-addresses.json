@@ -2791,6 +2791,27 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CObjectEdit::ApplyAttachedChanges",
+      "va": "0x10071cb0",
+      "rva": "0x00071cb0",
+      "module": "samp.dll",
+      "evidence": "Exact native ApplyChanges tail target with same thiscall axis/float arguments and RET 8 contract; declaration-only mutation backend. Descriptive recovered name is not an original debug symbol claim."
+    },
+    {
+      "name": "CObjectEdit::ApplyChanges",
+      "va": "0x10072f00",
+      "rva": "0x00072f00",
+      "module": "samp.dll",
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
+    },
+    {
+      "name": "CObjectEdit::ApplyObjectChanges",
+      "va": "0x10072cb0",
+      "rva": "0x00072cb0",
+      "module": "samp.dll",
+      "evidence": "Exact native ApplyChanges tail target with same thiscall axis/float arguments and RET 8 contract; declaration-only mutation backend. Descriptive recovered name is not an original debug symbol claim."
+    },
+    {
       "name": "CObjectEdit::CObjectEdit",
       "va": "0x10071600",
       "rva": "0x00071600",
@@ -2809,7 +2830,14 @@
       "va": "0x10072ff0",
       "rva": "0x00072ff0",
       "module": "samp.dll",
-      "evidence": "Read-only window-v108 native instructions and switch-case bytes. Only ClientWindowProcedure, ClientHandleCharacter and ClientToggleWindowedMode are recovered in this profile; other entries are explicit call-boundary declarations."
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
+    },
+    {
+      "name": "CObjectEdit::ProcessMouseMove",
+      "va": "0x10072f20",
+      "rva": "0x00072f20",
+      "module": "samp.dll",
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
     },
     {
       "name": "CObjectEdit::Render",
@@ -2817,6 +2845,13 @@
       "rva": "0x00073220",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CObjectEdit::ResetMousePos",
+      "va": "0x10071e60",
+      "rva": "0x00071e60",
+      "module": "samp.dll",
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
     },
     {
       "name": "CObjectEdit::SendAttachedEditEndNotification",
@@ -2831,6 +2866,20 @@
       "rva": "0x00072350",
       "module": "samp.dll",
       "evidence": "Exact direct thiscall target in reviewed input-ui-v109 caller; declaration-only pool/network dependency."
+    },
+    {
+      "name": "CObjectEdit::SetEditMode",
+      "va": "0x10071c90",
+      "rva": "0x00071c90",
+      "module": "samp.dll",
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
+    },
+    {
+      "name": "CObjectEdit::TryChangeProcessType",
+      "va": "0x10071b40",
+      "rva": "0x00071b40",
+      "module": "samp.dll",
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
     },
     {
       "name": "CObjectMaterialText::CObjectMaterialText",
@@ -2852,6 +2901,13 @@
       "rva": "0x00070300",
       "module": "samp.dll",
       "evidence": "Read-only device-life-v96 exact native entry/operands. Scoreboard and pool methods are declarations for later stages. Shared texture state uses existing hook globals at RVAs 18f560/18f570."
+    },
+    {
+      "name": "CObjectPool::Get",
+      "va": "0x10002e10",
+      "rva": "0x00002e10",
+      "module": "samp.dll",
+      "evidence": "Read-only object-input-v110 original bodies/instructions and 258048 raw ABI/state cases across nested input/UI routes, all hit modes, wraparound deltas and twelve x87 modes. OS/entity/mutation backends explicitly observed; actual inactive-editor HWND/HAL composition separate."
     },
     {
       "name": "CObjectPool::ShutdownMaterials",
@@ -17252,6 +17308,12 @@
     },
     {
       "file": "source/gui/device_objects.h",
+      "name": "CObjectPool::Get",
+      "rva": 11792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/device_objects.h",
       "name": "CObjectPool::ShutdownMaterials",
       "rva": 76368,
       "module": "samp.dll"
@@ -18140,6 +18202,48 @@
     },
     {
       "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::TryChangeProcessType",
+      "rva": 465728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::SetEditMode",
+      "rva": 466064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::ResetMousePos",
+      "rva": 466528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::ApplyChanges",
+      "rva": 470784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::ApplyObjectChanges",
+      "rva": 470192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::ApplyAttachedChanges",
+      "rva": 466096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
+      "name": "CObjectEdit::ProcessMouseMove",
+      "rva": 470816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_edit.h",
       "name": "CObjectEdit::SendAttachedEditEndNotification",
       "rva": 468320,
       "module": "samp.dll"
@@ -18184,6 +18288,42 @@
       "file": "source/gui/object_initialization.cpp",
       "name": "CObjectSelection::CObjectSelection",
       "rva": 447552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_input.cpp",
+      "name": "CObjectEdit::MsgProc",
+      "rva": 471024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_input.cpp",
+      "name": "CObjectEdit::TryChangeProcessType",
+      "rva": 465728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_input.cpp",
+      "name": "CObjectEdit::SetEditMode",
+      "rva": 466064,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_input.cpp",
+      "name": "CObjectEdit::ResetMousePos",
+      "rva": 466528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_input.cpp",
+      "name": "CObjectEdit::ApplyChanges",
+      "rva": 470784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/object_input.cpp",
+      "name": "CObjectEdit::ProcessMouseMove",
+      "rva": 470816,
       "module": "samp.dll"
     },
     {
@@ -18868,6 +19008,12 @@
       "file": "source/net/localplayer.h",
       "name": "CLocalPlayer::PrevClass",
       "rva": 24256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/object_access.cpp",
+      "name": "CObjectPool::Get",
+      "rva": 11792,
       "module": "samp.dll"
     },
     {
