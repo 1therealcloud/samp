@@ -6,7 +6,7 @@
 class CTextDraw {public:
     // samp.dll RVA: 0x000b3080
     void Draw();
-    // Model-preview coordinator dependency; full body remains open.
+    // Preview coordinator; downstream preview renderers remain open.
     // samp.dll RVA: 0x000b30a0
     void Native0B30A0();
     // samp.dll RVA: 0x000b32b0

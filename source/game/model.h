@@ -22,4 +22,11 @@ void *__stdcall GameGetModelInfo(int model);
 // Observed raw DWORD at model-info +0x1c. No additional null guard is native.
 // samp.dll RVA: 0x000b41a0
 DWORD __stdcall GameGetModelData1c(int model);
+// samp.dll RVA: 0x000b39b0
+BOOL __stdcall GameHasModelInfo(int model);
+// samp.dll RVA: 0x000b39d0
+BOOL __stdcall GameIsPedModel(int model);
+// Observed wrapped vtable-address-plus-14 test, not a slot-content query.
+// samp.dll RVA: 0x000b4170
+BOOL __stdcall GameModelQueryB4170(int model);
 #endif

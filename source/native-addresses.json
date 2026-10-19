@@ -1041,6 +1041,41 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CCustomModels::DoesExist",
+      "va": "0x1000ce30",
+      "rva": "0x0000ce30",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
+      "name": "CCustomModels::GetLoadedFlag",
+      "va": "0x1000cd00",
+      "rva": "0x0000cd00",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
+      "name": "CCustomModels::IsObjectEntry",
+      "va": "0x1000ccc0",
+      "rva": "0x0000ccc0",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
+      "name": "CCustomModels::IsPedEntry",
+      "va": "0x1000cc80",
+      "rva": "0x0000cc80",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
+      "name": "CCustomModels::LoadObjectEntry",
+      "va": "0x1000ce90",
+      "rva": "0x0000ce90",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
       "name": "CDeathWindow::CDeathWindow",
       "va": "0x1006a090",
       "rva": "0x0006a090",
@@ -2798,6 +2833,27 @@
       "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
     },
     {
+      "name": "CModelPreview::RenderObject",
+      "va": "0x1006c3f0",
+      "rva": "0x0006c3f0",
+      "module": "samp.dll",
+      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+    },
+    {
+      "name": "CModelPreview::RenderPed",
+      "va": "0x1006bb80",
+      "rva": "0x0006bb80",
+      "module": "samp.dll",
+      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+    },
+    {
+      "name": "CModelPreview::RenderVehicle",
+      "va": "0x1006be00",
+      "rva": "0x0006be00",
+      "module": "samp.dll",
+      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+    },
+    {
       "name": "CModelPreview::Reset",
       "va": "0x1006b880",
       "rva": "0x0006b880",
@@ -3586,7 +3642,7 @@
       "va": "0x100b30a0",
       "rva": "0x000b30a0",
       "module": "samp.dll",
-      "evidence": "Exact pool-frame-v117 native CALL/JMP operand. Declaration-only downstream dependency; address names intentionally preserve unknown semantics."
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
     },
     {
       "name": "CTextDraw::OnLostDevice",
@@ -4581,6 +4637,13 @@
       "rva": "0x00154698",
       "module": "samp.dll",
       "evidence": "Direct command/world-wrapper operands and exact original data bytes. Reuse existing native globals for HUD/vehicle-debug flags."
+    },
+    {
+      "name": "g_customModels",
+      "va": "0x102aca28",
+      "rva": "0x002aca28",
+      "module": "samp.dll",
+      "evidence": "Exact B30A0 global pointer operand, registry query receiver; pointer array/count prefix observed at +0/+4, complete allocation/ownership not established."
     },
     {
       "name": "g_debugObjectPool",
@@ -6438,6 +6501,13 @@
       "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
     },
     {
+      "name": "GameHasModelInfo",
+      "va": "0x100b39b0",
+      "rva": "0x000b39b0",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
       "name": "GameHook_000a2200",
       "va": "0x100a2200",
       "rva": "0x000a2200",
@@ -6935,6 +7005,27 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "GameIsPedModel",
+      "va": "0x100b39d0",
+      "rva": "0x000b39d0",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
+    },
+    {
+      "name": "GameLoadCustomObjectModel",
+      "va": "0x1000c2e0",
+      "rva": "0x0000c2e0",
+      "module": "samp.dll",
+      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+    },
+    {
+      "name": "GameLoadCustomPedModel",
+      "va": "0x1000c1c0",
+      "rva": "0x0000c1c0",
+      "module": "samp.dll",
+      "evidence": "Address-only direct native dependency. Preview signatures established from B30A0 call words and callee RET 10/18/10; custom loader four DWORD arguments and RET 10 independently inspected. Bodies remain unrecovered."
+    },
+    {
       "name": "GameLoadDictionaryTexture",
       "va": "0x100b2860",
       "rva": "0x000b2860",
@@ -6947,6 +7038,13 @@
       "rva": "0x0009db90",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "GameModelQueryB4170",
+      "va": "0x100b4170",
+      "rva": "0x000b4170",
+      "module": "samp.dll",
+      "evidence": "textdraw-preview-v119 read-only Ghidra/native instruction review and VC7 compilation only; no runtime validation. Custom model query names describe observed fields; DoesExist name is an existing exact-entry anchor, with loading side effects verified."
     },
     {
       "name": "GameNormalizeAngle",
@@ -13490,6 +13588,90 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/custommodels.cpp",
+      "name": "g_customModels",
+      "rva": 2804264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.cpp",
+      "name": "CCustomModels::IsPedEntry",
+      "rva": 52352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.cpp",
+      "name": "CCustomModels::IsObjectEntry",
+      "rva": 52416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.cpp",
+      "name": "CCustomModels::GetLoadedFlag",
+      "rva": 52480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.cpp",
+      "name": "CCustomModels::DoesExist",
+      "rva": 52784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.cpp",
+      "name": "CCustomModels::LoadObjectEntry",
+      "rva": 52880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "CCustomModels::IsPedEntry",
+      "rva": 52352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "CCustomModels::IsObjectEntry",
+      "rva": 52416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "CCustomModels::GetLoadedFlag",
+      "rva": 52480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "CCustomModels::DoesExist",
+      "rva": 52784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "CCustomModels::LoadObjectEntry",
+      "rva": 52880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "g_customModels",
+      "rva": 2804264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "GameLoadCustomPedModel",
+      "rva": 49600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/custommodels.h",
+      "name": "GameLoadCustomObjectModel",
+      "rva": 49888,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/debugscript.h",
       "name": "DebugScript::Initialize",
       "rva": 649200,
@@ -16826,6 +17008,24 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.h",
+      "name": "GameHasModelInfo",
+      "rva": 735664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameIsPedModel",
+      "rva": 735696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameModelQueryB4170",
+      "rva": 737648,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/model_preview.cpp",
       "name": "g_modelPreview",
       "rva": 2804280,
@@ -16857,8 +17057,44 @@
     },
     {
       "file": "source/game/model_preview.h",
+      "name": "CModelPreview::RenderPed",
+      "rva": 441216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.h",
+      "name": "CModelPreview::RenderVehicle",
+      "rva": 441856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.h",
+      "name": "CModelPreview::RenderObject",
+      "rva": 443376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_preview.h",
       "name": "g_modelPreview",
       "rva": 2804280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_queries.cpp",
+      "name": "GameHasModelInfo",
+      "rva": 735664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_queries.cpp",
+      "name": "GameIsPedModel",
+      "rva": 735696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_queries.cpp",
+      "name": "GameModelQueryB4170",
+      "rva": 737648,
       "module": "samp.dll"
     },
     {
@@ -20369,6 +20605,12 @@
       "file": "source/gui/textdraw_frame.cpp",
       "name": "CTextDraw::OnLostDevice",
       "rva": 733872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_preview.cpp",
+      "name": "CTextDraw::Native0B30A0",
+      "rva": 733344,
       "module": "samp.dll"
     },
     {

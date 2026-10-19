@@ -9,6 +9,13 @@ class CModelPreview {public:
     CModelPreview();
     // samp.dll RVA: 0x0006b880
     bool Reset();
+    // Render bodies/lifecycle dependencies remain unrecovered.
+    // samp.dll RVA: 0x0006bb80
+    void *RenderPed(int model,DWORD background,const CVector *rotation,float zoom);
+    // samp.dll RVA: 0x0006be00
+    void *RenderVehicle(int model,DWORD background,const CVector *rotation,float zoom,int primary,int secondary);
+    // samp.dll RVA: 0x0006c3f0
+    void *RenderObject(int model,DWORD background,const CVector *rotation,float zoom);
 };
 #pragma pack(pop)
 typedef char ModelPreviewExtent[(sizeof(CModelPreview)==28)?1:-1];
