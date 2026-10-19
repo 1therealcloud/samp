@@ -1,10 +1,20 @@
 #ifndef SAMP_LOCAL_PLAYER_INTERFACE_H
 #define SAMP_LOCAL_PLAYER_INTERFACE_H
+#include <windows.h>
 // Address-only interface; full class layout/networking lifecycle remains open.
 class CPed;
 class CLocalPlayer {public:
     // samp.dll RVA: 0x00002da0
     CPed *GetPed();
+    // Declaration-only protocol dependencies; damage arguments retain raw 32-bit words.
+    // samp.dll RVA: 0x00005920
+    void EnterVehicle(WORD vehicle,BOOL passenger);
+    // samp.dll RVA: 0x000066b0
+    void SendTakeDamage(WORD player,DWORD damageBits,DWORD weapon,DWORD bodyPart);
+    // samp.dll RVA: 0x000067c0
+    void SendGiveDamage(WORD player,DWORD damageBits,DWORD weapon,DWORD bodyPart);
+    // samp.dll RVA: 0x000068d0
+    void SendActorDamage(WORD actor,DWORD damageBits,DWORD weapon,DWORD bodyPart);
     // Declaration-only networking/RPC dependency.
     // samp.dll RVA: 0x00005a40
     void ExitVehicle(int vehicle);

@@ -17,4 +17,8 @@ extern const Scripting::OpcodeInfo g_pedDropStuff;
 extern const Scripting::OpcodeInfo g_pedWarpFromVehicle;
 // samp.dll RVA: 0x0011f320
 extern const char g_pedNullAnimation[5];
+// samp.dll RVA: 0x0011ef54
+extern const Scripting::OpcodeInfo g_pedGetCurrentWeaponCommand;
+// samp.dll RVA: 0x0011ef40
+extern const Scripting::OpcodeInfo g_pedSetArmedWeaponCommand;
 #endif

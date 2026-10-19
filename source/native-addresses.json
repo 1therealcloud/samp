@@ -383,6 +383,13 @@
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
     },
     {
+      "name": "CActorPool::Find",
+      "va": "0x100018b0",
+      "rva": "0x000018b0",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
       "name": "CArchiveFS::~CArchiveFS",
       "va": "0x10064e80",
       "rva": "0x00064e80",
@@ -2784,6 +2791,13 @@
       "evidence": "Direct caller and exact thiscall callback dependency from commands-v107; declaration-only, no recovered body claim."
     },
     {
+      "name": "CLocalPlayer::EnterVehicle",
+      "va": "0x10005920",
+      "rva": "0x00005920",
+      "module": "samp.dll",
+      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+    },
+    {
       "name": "CLocalPlayer::ExitVehicle",
       "va": "0x10005a40",
       "rva": "0x00005a40",
@@ -2824,6 +2838,27 @@
       "rva": "0x00003f40",
       "module": "samp.dll",
       "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
+    },
+    {
+      "name": "CLocalPlayer::SendActorDamage",
+      "va": "0x100068d0",
+      "rva": "0x000068d0",
+      "module": "samp.dll",
+      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+    },
+    {
+      "name": "CLocalPlayer::SendGiveDamage",
+      "va": "0x100067c0",
+      "rva": "0x000067c0",
+      "module": "samp.dll",
+      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+    },
+    {
+      "name": "CLocalPlayer::SendTakeDamage",
+      "va": "0x100066b0",
+      "rva": "0x000066b0",
+      "module": "samp.dll",
+      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
     },
     {
       "name": "CMemoryStream::~CMemoryStream",
@@ -3421,6 +3456,13 @@
       "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
+      "name": "CPed::GetCurrentWeapon",
+      "va": "0x100ab870",
+      "rva": "0x000ab870",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
       "name": "CPed::GetDrunkLevel",
       "va": "0x100adba0",
       "rva": "0x000adba0",
@@ -3433,6 +3475,20 @@
       "rva": "0x000aea30",
       "module": "samp.dll",
       "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
+    },
+    {
+      "name": "CPed::HasDanceState",
+      "va": "0x100acb10",
+      "rva": "0x000acb10",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
+      "name": "CPed::HasDanceStyle",
+      "va": "0x100aca60",
+      "rva": "0x000aca60",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
       "name": "CPed::HasTaskType268",
@@ -3456,6 +3512,13 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CPed::SetArmedWeapon",
+      "va": "0x100abc80",
+      "rva": "0x000abc80",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
       "name": "CPed::WarpFromVehicle",
       "va": "0x100ac190",
       "rva": "0x000ac190",
@@ -3467,7 +3530,7 @@
       "va": "0x100137c0",
       "rva": "0x000137c0",
       "module": "samp.dll",
-      "evidence": "v123 direct native SEH-handler dependency; call convention/arguments/callee return inspected. Declaration-only, body remains unrecovered."
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
       "name": "CPlayerPool::GetLocalPlayer",
@@ -3481,7 +3544,21 @@
       "va": "0x100010f0",
       "rva": "0x000010f0",
       "module": "samp.dll",
-      "evidence": "v123 direct native SEH-handler dependency; call convention/arguments/callee return inspected. Declaration-only, body remains unrecovered."
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
+      "name": "CPlayerPool::GetPlayerInfoFlag",
+      "va": "0x1000e300",
+      "rva": "0x0000e300",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
+      "name": "CPlayerPool::IsConnected",
+      "va": "0x100010b0",
+      "rva": "0x000010b0",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
       "name": "CPlayerPool::Native013840",
@@ -5787,6 +5864,13 @@
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
+      "name": "g_hookEnterVehicle",
+      "va": "0x1018e81c",
+      "rva": "0x0018e81c",
+      "module": "samp.dll",
+      "evidence": "v125 native store and original DLL descriptor bytes: opcode 0470 iv and 01B9 ii. Native global identity reviewed against existing registry."
+    },
+    {
       "name": "g_hookEventLocalPlayer",
       "va": "0x1018eb18",
       "rva": "0x0018eb18",
@@ -6501,11 +6585,25 @@
       "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
     },
     {
+      "name": "g_pedGetCurrentWeaponCommand",
+      "va": "0x1011ef54",
+      "rva": "0x0011ef54",
+      "module": "samp.dll",
+      "evidence": "v125 native store and original DLL descriptor bytes: opcode 0470 iv and 01B9 ii. Native global identity reviewed against existing registry."
+    },
+    {
       "name": "g_pedNullAnimation",
       "va": "0x1011f320",
       "rva": "0x0011f320",
       "module": "samp.dll",
       "evidence": "Native descriptor/string bytes read directly from references/samp.dll; consumed by B0BA0/AD800/AC190. Zero double arguments preserve native 11AE68 value."
+    },
+    {
+      "name": "g_pedSetArmedWeaponCommand",
+      "va": "0x1011ef40",
+      "rva": "0x0011ef40",
+      "module": "samp.dll",
+      "evidence": "v125 native store and original DLL descriptor bytes: opcode 0470 iv and 01B9 ii. Native global identity reviewed against existing registry."
     },
     {
       "name": "g_pedWarpFromVehicle",
@@ -7611,14 +7709,14 @@
       "va": "0x100a3430",
       "rva": "0x000a3430",
       "module": "samp.dll",
-      "evidence": "v124 native caller/callee reviewed. Declaration-only entry/damage policy or network RPC dependency. Damage helper RET8, ExitVehicle one four-byte stack slot; no production stand-in."
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
       "name": "GameNotifyPedDamage",
       "va": "0x100a3910",
       "rva": "0x000a3910",
       "module": "samp.dll",
-      "evidence": "v124 native caller/callee reviewed. Declaration-only entry/damage policy or network RPC dependency. Damage helper RET8, ExitVehicle one four-byte stack slot; no production stand-in."
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
       "name": "GameParseStreamData",
@@ -7766,6 +7864,20 @@
       "rva": "0x000aa6a0",
       "module": "samp.dll",
       "evidence": "Original native scan-list base RVA 1e04b0/end RVA 2075b0 and four CMP operand sites; scan-end-v106 red/green original installer and 640032 actual GTA CMP/JL decisions. End operand denotes scanList+40000; native adjacency to real ped storage is not assumed after linking."
+    },
+    {
+      "name": "GameResolveDamageActor",
+      "va": "0x100a38e0",
+      "rva": "0x000a38e0",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
+    },
+    {
+      "name": "GameResolveDamagePlayer",
+      "va": "0x100a3840",
+      "rva": "0x000a3840",
+      "module": "samp.dll",
+      "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
       "name": "GameRestoreMousePointers",
@@ -15218,6 +15330,36 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/event_policy.cpp",
+      "name": "g_hookEnterVehicle",
+      "rva": 1632284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/event_policy.cpp",
+      "name": "GameNotifyEnterVehicle",
+      "rva": 668720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/event_policy.cpp",
+      "name": "GameResolveDamagePlayer",
+      "rva": 669760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/event_policy.cpp",
+      "name": "GameResolveDamageActor",
+      "rva": 669920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/event_policy.cpp",
+      "name": "GameNotifyPedDamage",
+      "rva": 669968,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/font.cpp",
       "name": "Font_PrintString",
       "rva": 654464,
@@ -18764,6 +18906,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedGetCurrentWeaponCommand",
+      "rva": 1175380,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_commands.h",
+      "name": "g_pedSetArmedWeaponCommand",
+      "rva": 1175360,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/ped_control.cpp",
       "name": "g_hookPedControlField540",
       "rva": 1632448,
@@ -18905,6 +19059,42 @@
       "file": "source/game/ped_control.h",
       "name": "GameRunPedControlBackend",
       "rva": 664880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_weapons.cpp",
+      "name": "g_pedGetCurrentWeaponCommand",
+      "rva": 1175380,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_weapons.cpp",
+      "name": "g_pedSetArmedWeaponCommand",
+      "rva": 1175360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_weapons.cpp",
+      "name": "CPed::HasDanceState",
+      "rva": 707344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_weapons.cpp",
+      "name": "CPed::HasDanceStyle",
+      "rva": 707168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_weapons.cpp",
+      "name": "CPed::GetCurrentWeapon",
+      "rva": 702576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/ped_weapons.cpp",
+      "name": "CPed::SetArmedWeapon",
+      "rva": 703616,
       "module": "samp.dll"
     },
     {
@@ -19085,6 +19275,30 @@
       "file": "source/game/playerped.h",
       "name": "CPed::HasTaskType268",
       "rva": 706800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::HasDanceState",
+      "rva": 707344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::HasDanceStyle",
+      "rva": 707168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::GetCurrentWeapon",
+      "rva": 702576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/playerped.h",
+      "name": "CPed::SetArmedWeapon",
+      "rva": 703616,
       "module": "samp.dll"
     },
     {
@@ -19889,6 +20103,24 @@
       "file": "source/game/task_events.h",
       "name": "g_hookDamagePed",
       "rva": 1635644,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "GameResolveDamagePlayer",
+      "rva": 669760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "GameResolveDamageActor",
+      "rva": 669920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task_events.h",
+      "name": "g_hookEnterVehicle",
+      "rva": 1632284,
       "module": "samp.dll"
     },
     {
@@ -22622,9 +22854,69 @@
       "module": "GTA SA"
     },
     {
+      "file": "source/net/actorpool.h",
+      "name": "CActorPool::Find",
+      "rva": 6320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/event_lookup.cpp",
+      "name": "CPlayerPool::GetPlayer",
+      "rva": 4336,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/event_lookup.cpp",
+      "name": "CPlayerPool::IsConnected",
+      "rva": 4272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/event_lookup.cpp",
+      "name": "CPlayerPool::GetPlayerInfoFlag",
+      "rva": 58112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/event_lookup.cpp",
+      "name": "CPlayerPool::Find",
+      "rva": 79808,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/event_lookup.cpp",
+      "name": "CActorPool::Find",
+      "rva": 6320,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/net/localplayer.h",
       "name": "CLocalPlayer::GetPed",
       "rva": 11680,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::EnterVehicle",
+      "rva": 22816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::SendTakeDamage",
+      "rva": 26288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::SendGiveDamage",
+      "rva": 26560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/localplayer.h",
+      "name": "CLocalPlayer::SendActorDamage",
+      "rva": 26832,
       "module": "samp.dll"
     },
     {
@@ -22691,6 +22983,18 @@
       "file": "source/net/playerpool.h",
       "name": "CPlayerPool::GetLocalPlayer",
       "rva": 6784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/playerpool.h",
+      "name": "CPlayerPool::IsConnected",
+      "rva": 4272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/playerpool.h",
+      "name": "CPlayerPool::GetPlayerInfoFlag",
+      "rva": 58112,
       "module": "samp.dll"
     },
     {

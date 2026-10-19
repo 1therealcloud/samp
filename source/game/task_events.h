@@ -4,7 +4,7 @@
 #include "game/entity.h"
 #include "net/vehiclepool.h"
 #include "net/localplayer.h"
-// Native policy helpers remain explicit pool/network dependencies.
+// Native policy helpers; their protocol send methods remain separate dependencies.
 // samp.dll RVA: 0x000a3430
 BOOL GameNotifyEnterVehicle();
 // samp.dll RVA: 0x000a3910
@@ -33,4 +33,10 @@ extern DWORD g_hookQuitDeadline;
 extern DWORD g_hookDamageResponse;
 // samp.dll RVA: 0x0018f53c
 extern DWORD g_hookDamagePed;
+// samp.dll RVA: 0x000a3840
+WORD GameResolveDamagePlayer(void *entity);
+// samp.dll RVA: 0x000a38e0
+DWORD GameResolveDamageActor(void *entity);
+// samp.dll RVA: 0x0018e81c
+extern CVehicle *g_hookEnterVehicle;
 #endif

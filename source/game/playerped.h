@@ -50,6 +50,15 @@ public:
     // Observed task-type test; does not establish a complete GTA task interface.
     // samp.dll RVA: 0x000ac8f0
     BOOL HasTaskType268();
+    // Descriptive predicates for native dance state/style fields.
+    // samp.dll RVA: 0x000acb10
+    BOOL HasDanceState();
+    // samp.dll RVA: 0x000aca60
+    BOOL HasDanceStyle();
+    // samp.dll RVA: 0x000ab870
+    DWORD GetCurrentWeapon();
+    // samp.dll RVA: 0x000abc80
+    void SetArmedWeapon(DWORD weapon,BYTE direct);
 };
 #pragma pack(pop)
 typedef char PedExtent[(sizeof(CPed)==0x32d)?1:-1];
