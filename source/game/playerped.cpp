@@ -837,3 +837,44 @@ void CPed::SetControllable(BOOL enabled) {
         Teleport(matrix.position);
     }
 }
+
+// samp.dll RVA: 0x000acd10
+void CPed::CallBackend730AndVehicle490() {
+    if(m_pGamePed) {
+        void *state=*(void**)((BYTE*)m_pGamePed+0x730);
+        if(state) {
+            // GTA SA virtual address: 0x005393f0, ECX raw state/no arguments.
+            __asm { mov ecx,state
+                mov eax,0x5393f0
+                call eax
+            }
+        }
+        BYTE *ped=(BYTE*)m_pGamePed;
+        if(*(DWORD*)(ped+0x46c)&0x100) {
+            BYTE *vehicle=*(BYTE**)(ped+0x58c);
+            if(vehicle) {
+                state=*(void**)(vehicle+0x490);
+                if(state) {
+                    __asm { mov ecx,state
+                        mov eax,0x5393f0
+                        call eax
+                    }
+                }
+            }
+        }
+    }
+}
+
+// samp.dll RVA: 0x000afbd0
+void CPed::Kill() {
+    if(!m_nHandle||!m_pGamePed) return;
+    if(HasJetpack()) DisableJetpack();
+    CallBackend730AndVehicle490();
+    CMatrix matrix;
+    GetMatrix(&matrix);
+    Teleport(matrix.position);
+    *(DWORD*)((BYTE*)m_pGamePed+0x540)=0;
+    *g_clientCrashPedContext=m_nPlayerNumber;
+    Scripting::ProcessCommand(&g_pedKillCommand,m_nHandle);
+    *g_clientCrashPedContext=0;
+}

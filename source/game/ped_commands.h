@@ -73,4 +73,6 @@ extern const Scripting::OpcodeInfo g_pedRefreshInteriorCommand;
 extern const Scripting::OpcodeInfo g_pedControllableCommand;
 // samp.dll RVA: 0x0011f044
 extern const Scripting::OpcodeInfo g_pedFreezeCommand;
+// samp.dll RVA: 0x0011f080
+extern const Scripting::OpcodeInfo g_pedKillCommand;
 #endif

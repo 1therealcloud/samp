@@ -12452,6 +12452,27 @@
       "rva": "0x0011f044",
       "module": "samp.dll",
       "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "CPed::CallBackend730AndVehicle490",
+      "va": "0x100acd10",
+      "rva": "0x000acd10",
+      "module": "samp.dll",
+      "evidence": "v183 direct original PE disassembly and source/VC7 static ABI/state review."
+    },
+    {
+      "name": "CPed::Kill",
+      "va": "0x100afbd0",
+      "rva": "0x000afbd0",
+      "module": "samp.dll",
+      "evidence": "v183 direct original PE disassembly and source/VC7 static ABI/state review."
+    },
+    {
+      "name": "g_pedKillCommand",
+      "va": "0x1011f080",
+      "rva": "0x0011f080",
+      "module": "samp.dll",
+      "evidence": "v183 direct original PE disassembly and source/VC7 static ABI/state review."
     }
   ],
   "annotations": [
