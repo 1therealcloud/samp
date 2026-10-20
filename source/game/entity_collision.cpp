@@ -156,3 +156,9 @@ __declspec(naked) bool __stdcall GameEntityCollisionQueryScoped(const GameEntity
         ret 0xc
     }
 }
+
+// GTA SA virtual address: 0x00411E70; exactly two cdecl arguments.
+// samp.dll RVA: 0x000b60e0
+BOOL GameTestCollisionSpheres(const GameCollisionSphere *first,const GameCollisionSphere *second) {
+    return ((BOOL(__cdecl*)(const GameCollisionSphere*,const GameCollisionSphere*))0x411e70)(first,second);
+}

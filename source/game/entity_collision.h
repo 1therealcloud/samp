@@ -25,4 +25,8 @@ float __cdecl GameGetModelCollisionRadius(int model);
 bool __stdcall GameEntityCollisionQueryDirect(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second,void *entity);
 // samp.dll RVA: 0x000b6090
 bool __stdcall GameEntityCollisionQueryScoped(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second,void *entity);
+// Only the four-float sphere prefix is read by this GTA query.
+struct GameCollisionSphere { CVector centre; float radius; };
+// samp.dll RVA: 0x000b60e0
+BOOL GameTestCollisionSpheres(const GameCollisionSphere *first,const GameCollisionSphere *second);
 #endif
