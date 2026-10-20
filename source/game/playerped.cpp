@@ -946,3 +946,31 @@ __declspec(naked) void *CPed::GetFloor() {
         ret
     }
 }
+
+// samp.dll RVA: 0x0018f4a4
+DWORD g_pedVehicleEntryFlag;
+
+// samp.dll RVA: 0x000ac030
+void CPed::EnterVehicle(int vehicle,BOOL passenger) {
+    if(!m_pGamePed) return;
+    BYTE *backend=(BYTE*)GamePoolVehicleGetAt(vehicle);
+    if(!backend||!GamePoolPedGetAt(m_nHandle)) return;
+    g_pedVehicleEntryFlag=1;
+    if(GetCurrentWeapon()==46) SetArmedWeapon(0,0);
+    if(passenger) {
+        if(*(WORD*)(backend+0x22)==570&&m_pGamePed==GameFindLocalPed())
+            Scripting::ProcessCommand(&g_pedWarpPassengerCommand,m_nHandle,vehicle,-1);
+        else Scripting::ProcessCommand(&g_pedEnterPassengerCommand,m_nHandle,vehicle,3000,-1);
+    } else Scripting::ProcessCommand(&g_pedEnterDriverCommand,m_nHandle,vehicle,3000);
+}
+
+// samp.dll RVA: 0x000add00
+void CPed::StartUrinating() {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle)||m_bUrinating) return;
+    if(m_nPlayerNumber==0) ApplyAnimation(g_pedUrinationAnimation,g_pedUrinationLibrary,4.0f,1,0,0,0,-1);
+    Scripting::ProcessCommand(&g_pedCreateUrinationEffectCommand,g_pedUrinationEffect,m_nHandle,
+        g_pedParachuteZero,g_pedUrinationOffsetY,g_pedUrinationOffsetZ,
+        g_pedParachuteZero,g_pedUrinationDirectionY,g_pedParachuteZero,1,(DWORD*)unknown2bd);
+    Scripting::ProcessCommand(&g_pedStartUrinationEffectCommand,*(DWORD*)unknown2bd);
+    m_bUrinating=1;
+}

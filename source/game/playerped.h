@@ -30,6 +30,10 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000add00
+    void StartUrinating();
+    // samp.dll RVA: 0x000ac030
+    void EnterVehicle(int vehicle,BOOL passenger);
     // samp.dll RVA: 0x000ac630
     void *GetFloor();
     // samp.dll RVA: 0x000afbd0
@@ -229,4 +233,6 @@ void *__stdcall GamePoolPedGetAt(int handle);
 extern void *g_pedCommandTaskSnapshot;
 // samp.dll RVA: 0x0011f258
 extern const float g_pedFloorRayLength;
+// samp.dll RVA: 0x0018f4a4
+extern DWORD g_pedVehicleEntryFlag;
 #endif

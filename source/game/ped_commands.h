@@ -75,4 +75,26 @@ extern const Scripting::OpcodeInfo g_pedControllableCommand;
 extern const Scripting::OpcodeInfo g_pedFreezeCommand;
 // samp.dll RVA: 0x0011f080
 extern const Scripting::OpcodeInfo g_pedKillCommand;
+// samp.dll RVA: 0x0011f06c
+extern const Scripting::OpcodeInfo g_pedWarpPassengerCommand;
+// samp.dll RVA: 0x0011eff4
+extern const Scripting::OpcodeInfo g_pedEnterPassengerCommand;
+// samp.dll RVA: 0x0011efe0
+extern const Scripting::OpcodeInfo g_pedEnterDriverCommand;
+// samp.dll RVA: 0x0011f1fc
+extern const Scripting::OpcodeInfo g_pedCreateUrinationEffectCommand;
+// samp.dll RVA: 0x0011f210
+extern const Scripting::OpcodeInfo g_pedStartUrinationEffectCommand;
+// samp.dll RVA: 0x0011eacc
+extern const char g_pedUrinationLibrary[9];
+// samp.dll RVA: 0x0011f378
+extern const char g_pedUrinationAnimation[10];
+// samp.dll RVA: 0x0011f354
+extern const char g_pedUrinationEffect[10];
+// samp.dll RVA: 0x0011f360
+extern const double g_pedUrinationOffsetY;
+// samp.dll RVA: 0x0011f368
+extern const double g_pedUrinationOffsetZ;
+// samp.dll RVA: 0x0011f370
+extern const double g_pedUrinationDirectionY;
 #endif

@@ -12487,6 +12487,104 @@
       "rva": "0x0011f258",
       "module": "samp.dll",
       "evidence": "v184 direct reference disassembly and complete VC7 body/data comparison; native x87 staging/output ABI retained."
+    },
+    {
+      "name": "g_pedVehicleEntryFlag",
+      "va": "0x1018f4a4",
+      "rva": "0x0018f4a4",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::EnterVehicle",
+      "va": "0x100ac030",
+      "rva": "0x000ac030",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::StartUrinating",
+      "va": "0x100add00",
+      "rva": "0x000add00",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedWarpPassengerCommand",
+      "va": "0x1011f06c",
+      "rva": "0x0011f06c",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedEnterPassengerCommand",
+      "va": "0x1011eff4",
+      "rva": "0x0011eff4",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedEnterDriverCommand",
+      "va": "0x1011efe0",
+      "rva": "0x0011efe0",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedCreateUrinationEffectCommand",
+      "va": "0x1011f1fc",
+      "rva": "0x0011f1fc",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedStartUrinationEffectCommand",
+      "va": "0x1011f210",
+      "rva": "0x0011f210",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedUrinationLibrary",
+      "va": "0x1011eacc",
+      "rva": "0x0011eacc",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedUrinationAnimation",
+      "va": "0x1011f378",
+      "rva": "0x0011f378",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedUrinationEffect",
+      "va": "0x1011f354",
+      "rva": "0x0011f354",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedUrinationOffsetY",
+      "va": "0x1011f360",
+      "rva": "0x0011f360",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedUrinationOffsetZ",
+      "va": "0x1011f368",
+      "rva": "0x0011f368",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedUrinationDirectionY",
+      "va": "0x1011f370",
+      "rva": "0x0011f370",
+      "module": "samp.dll",
+      "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
     }
   ],
   "annotations": [
