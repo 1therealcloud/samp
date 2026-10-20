@@ -6,16 +6,15 @@ class CPed;
 class CLocalPlayer {public:
     // samp.dll RVA: 0x00002da0
     CPed *GetPed();
-    // Declaration-only protocol dependencies; damage arguments retain raw 32-bit words.
+    // Damage amount is a native float; take/give apply scaling before serialization.
     // samp.dll RVA: 0x00005920
     void EnterVehicle(WORD vehicle,BOOL passenger);
     // samp.dll RVA: 0x000066b0
-    void SendTakeDamage(WORD player,DWORD damageBits,DWORD weapon,DWORD bodyPart);
+    void SendTakeDamage(WORD player,float damage,DWORD weapon,DWORD bodyPart);
     // samp.dll RVA: 0x000067c0
-    void SendGiveDamage(WORD player,DWORD damageBits,DWORD weapon,DWORD bodyPart);
+    void SendGiveDamage(WORD player,float damage,DWORD weapon,DWORD bodyPart);
     // samp.dll RVA: 0x000068d0
-    void SendActorDamage(WORD actor,DWORD damageBits,DWORD weapon,DWORD bodyPart);
-    // Declaration-only networking/RPC dependency.
+    void SendActorDamage(WORD actor,float damage,DWORD weapon,DWORD bodyPart);
     // samp.dll RVA: 0x00005a40
     void ExitVehicle(int vehicle);
     // Network/pool dependency used only when Move finds a player pool.

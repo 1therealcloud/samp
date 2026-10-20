@@ -2795,14 +2795,14 @@
       "va": "0x10005920",
       "rva": "0x00005920",
       "module": "samp.dll",
-      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+      "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim."
     },
     {
       "name": "CLocalPlayer::ExitVehicle",
       "va": "0x10005a40",
       "rva": "0x00005a40",
       "module": "samp.dll",
-      "evidence": "v124 native caller/callee reviewed. Declaration-only entry/damage policy or network RPC dependency. Damage helper RET8, ExitVehicle one four-byte stack slot; no production stand-in."
+      "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim."
     },
     {
       "name": "CLocalPlayer::GetPed",
@@ -2844,21 +2844,21 @@
       "va": "0x100068d0",
       "rva": "0x000068d0",
       "module": "samp.dll",
-      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+      "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim. Refines v125 provisional damageBits DWORD to observed float amount; 32-bit stack ABI unchanged, event_policy callers recompiled. Actor float bits are serialized without arithmetic."
     },
     {
       "name": "CLocalPlayer::SendGiveDamage",
       "va": "0x100067c0",
       "rva": "0x000067c0",
       "module": "samp.dll",
-      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+      "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim. Refines v125 provisional damageBits DWORD to observed float amount; 32-bit stack ABI unchanged, event_policy callers recompiled. Actor float bits are serialized without arithmetic."
     },
     {
       "name": "CLocalPlayer::SendTakeDamage",
       "va": "0x100066b0",
       "rva": "0x000066b0",
       "module": "samp.dll",
-      "evidence": "v125 native caller/callee ABI review only. Declaration-only protocol dependency; EnterVehicle RET8, damage methods RET16, damage amount is forwarded as raw 32-bit bits and IDs use low WORD. No RPC production stand-in."
+      "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim. Refines v125 provisional damageBits DWORD to observed float amount; 32-bit stack ABI unchanged, event_policy callers recompiled. Actor float bits are serialized without arithmetic."
     },
     {
       "name": "CMemoryStream::~CMemoryStream",
@@ -3986,6 +3986,13 @@
       "rva": "0x000b6ed0",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "CVehicle::IsRC",
+      "va": "0x100b7940",
+      "rva": "0x000b7940",
+      "module": "samp.dll",
+      "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim."
     },
     {
       "name": "CVehicle::IsTrainPart",
@@ -6450,6 +6457,55 @@
       "rva": "0x001a0441",
       "module": "samp.dll",
       "evidence": "Read-only aim-keys/weapon-skills/player-colors-v76 exports; data operands and initialized DLL globals"
+    },
+    {
+      "name": "g_localActorDamageRpc",
+      "va": "0x10117974",
+      "rva": "0x00117974",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
+    },
+    {
+      "name": "g_localDamageScale",
+      "va": "0x10117970",
+      "rva": "0x00117970",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
+    },
+    {
+      "name": "g_localEnterVehicleRpc",
+      "va": "0x10117960",
+      "rva": "0x00117960",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
+    },
+    {
+      "name": "g_localExitVehicleRpc",
+      "va": "0x10117964",
+      "rva": "0x00117964",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
+    },
+    {
+      "name": "g_localPlayerDamageRpc",
+      "va": "0x1011796c",
+      "rva": "0x0011796c",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
+    },
+    {
+      "name": "g_localTrainCameraCommand",
+      "va": "0x10117840",
+      "rva": "0x00117840",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
+    },
+    {
+      "name": "g_localTrainCameraTick",
+      "va": "0x1013c0a4",
+      "rva": "0x0013c0a4",
+      "module": "samp.dll",
+      "evidence": "v126 original DLL data checked: RPC 26/154/115/177; scale bits 3EA8F5C3; opcode 0158 iii; train tick initialized FFFFFFFF."
     },
     {
       "name": "g_modelPreview",
@@ -20149,6 +20205,12 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::IsRC",
+      "rva": 751936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::GetMaxPassengers",
       "rva": 753264,
       "module": "samp.dll"
@@ -20193,6 +20255,12 @@
       "file": "source/game/vehicle_plate.cpp",
       "name": "CVehicle::ShutdownLicensePlate",
       "rva": 752928,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::IsRC",
+      "rva": 751936,
       "module": "samp.dll"
     },
     {
@@ -22887,6 +22955,120 @@
       "file": "source/net/event_lookup.cpp",
       "name": "CActorPool::Find",
       "rva": 6320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localEnterVehicleRpc",
+      "rva": 1145184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localExitVehicleRpc",
+      "rva": 1145188,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localPlayerDamageRpc",
+      "rva": 1145196,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localActorDamageRpc",
+      "rva": 1145204,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localDamageScale",
+      "rva": 1145200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localTrainCameraCommand",
+      "rva": 1144896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "g_localTrainCameraTick",
+      "rva": 1294500,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "CLocalPlayer::EnterVehicle",
+      "rva": 22816,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "CLocalPlayer::ExitVehicle",
+      "rva": 23104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "CLocalPlayer::SendTakeDamage",
+      "rva": 26288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "CLocalPlayer::SendGiveDamage",
+      "rva": 26560,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.cpp",
+      "name": "CLocalPlayer::SendActorDamage",
+      "rva": 26832,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localEnterVehicleRpc",
+      "rva": 1145184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localExitVehicleRpc",
+      "rva": 1145188,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localPlayerDamageRpc",
+      "rva": 1145196,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localActorDamageRpc",
+      "rva": 1145204,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localDamageScale",
+      "rva": 1145200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localTrainCameraCommand",
+      "rva": 1144896,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/local_rpc.h",
+      "name": "g_localTrainCameraTick",
+      "rva": 1294500,
       "module": "samp.dll"
     },
     {

@@ -71,7 +71,7 @@ DWORD GameResolveDamageActor(void *entity) {
     return actors->Find(entity);
 }
 // Observed first four DWORDs only, not a complete native allocation layout.
-struct GameDamageResponsePrefix { void *entity;DWORD damageBits,bodyPart,weapon; };
+struct GameDamageResponsePrefix { void *entity;float damage;DWORD bodyPart,weapon; };
 // samp.dll RVA: 0x000a3910
 BOOL __stdcall GameNotifyPedDamage(void *response,void *ped) {
     void *local=GameFindLocalPed();
@@ -90,17 +90,17 @@ BOOL __stdcall GameNotifyPedDamage(void *response,void *ped) {
             if(*(void**)(protectedObject+0x40)==attacker || damage->weapon==54)return TRUE;
         }
         player=GameResolveDamagePlayer(attacker);
-        (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendTakeDamage(player,damage->damageBits,damage->weapon,damage->bodyPart);
+        (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendTakeDamage(player,damage->damage,damage->weapon,damage->bodyPart);
     } else {
         player=GameResolveDamagePlayer(ped);
         if(player==0xffff) {
             DWORD actor=GameResolveDamageActor(ped);
             if((WORD)actor!=0xffff) {
-                (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendActorDamage((WORD)actor,damage->damageBits,damage->weapon,damage->bodyPart);
+                (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendActorDamage((WORD)actor,damage->damage,damage->weapon,damage->bodyPart);
                 return TRUE;
             }
         } else {
-            (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendGiveDamage(player,damage->damageBits,damage->weapon,damage->bodyPart);
+            (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendGiveDamage(player,damage->damage,damage->weapon,damage->bodyPart);
             if(*(DWORD*)((BYTE*)players->GetPlayer(player)+0x1c))return TRUE;
         }
     }

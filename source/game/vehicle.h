@@ -21,6 +21,8 @@ public:
     void SetColor(BYTE primary,BYTE secondary);
     // samp.dll RVA: 0x000b6fa0
     BOOL IsTrainPart();
+    // samp.dll RVA: 0x000b7940
+    BOOL IsRC();
     // Additional stage 2 wrapper dependencies; no complete allocation claim.
     // samp.dll RVA: 0x000b7e70
     BYTE GetMaxPassengers();
