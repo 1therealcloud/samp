@@ -11973,6 +11973,83 @@
       "rva": "0x0011ef18",
       "module": "samp.dll",
       "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::GetWeaponSlot",
+      "va": "0x100acdb0",
+      "rva": "0x000acdb0",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::SetWeaponAmmo",
+      "va": "0x100afc80",
+      "rva": "0x000afc80",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::GetAim",
+      "va": "0x100ab810",
+      "rva": "0x000ab810",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::PerformingCustomAnimation",
+      "va": "0x100ad600",
+      "rva": "0x000ad600",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::HasJetpack",
+      "va": "0x100ac9e0",
+      "rva": "0x000ac9e0",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::StopDancing",
+      "va": "0x100ad720",
+      "rva": "0x000ad720",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::GetAimZ",
+      "va": "0x100ad510",
+      "rva": "0x000ad510",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::CurrentWeaponHasAmmo",
+      "va": "0x100abd80",
+      "rva": "0x000abd80",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::RemoveWeaponModel",
+      "va": "0x100ad4d0",
+      "rva": "0x000ad4d0",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::GetBonePosition",
+      "va": "0x100ae080",
+      "rva": "0x000ae080",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::ClearWeapons",
+      "va": "0x100abc30",
+      "rva": "0x000abc30",
+      "module": "samp.dll",
+      "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
     }
   ],
   "annotations": [

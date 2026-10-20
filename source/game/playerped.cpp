@@ -254,3 +254,123 @@ BOOL CPed::IsDead() {
     }
     return dead;
 }
+
+#include "game/keystuff.h"
+#include "client/exceptions.h"
+#include "main.h"
+
+// samp.dll RVA: 0x000acdb0
+void * CPed::GetWeaponSlot(DWORD weapon) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(ped) for(BYTE index=0;index<13;++index) {
+        BYTE *slot=ped+0x5a0+index*0x1c;
+        if(*(DWORD*)slot==weapon) return slot;
+    }
+    return 0;
+}
+
+// samp.dll RVA: 0x000afc80
+void CPed::SetWeaponAmmo(BYTE weapon,WORD ammo) {
+    if(m_pGamePed) {
+        BYTE *slot=(BYTE*)GetWeaponSlot(weapon);
+        if(slot) *(DWORD*)(slot+0x0c)=ammo;
+    }
+}
+
+// samp.dll RVA: 0x000ab810
+BYTE CPed::GetAim() {
+    KeyPad *keys=KeyStuff::GetInternalKeys();
+    if(keys->keys1[11]) return 1;
+    if(keys->keys1[10]) return 2;
+    return keys->keys1[9]?3:0;
+}
+
+// samp.dll RVA: 0x000ad600
+BOOL CPed::PerformingCustomAnimation() {
+    if(!m_pGamePed||!CEntity::DoesExist()) return FALSE;
+    BYTE *tasks=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+    return *(DWORD*)(tasks+0x10)!=0;
+}
+
+// samp.dll RVA: 0x000ac9e0
+BOOL CPed::HasJetpack() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||(*(DWORD*)(ped+0x46c)&0x100)) return FALSE;
+    BYTE *tasks=*(BYTE**)(ped+0x47c);
+    BYTE *task=*(BYTE**)(tasks+0x10);
+    // GTA SA virtual address: 0x008705c4, native task vtable comparison.
+    return task&&*(DWORD*)task==0x8705c4?TRUE:FALSE;
+}
+
+// samp.dll RVA: 0x000ad720
+void CPed::StopDancing() {
+    CMatrix matrix;
+    unknown2d2=0;
+    GetMatrix(&matrix);
+    Teleport(matrix.position);
+}
+
+// samp.dll RVA: 0x000ad510
+float CPed::GetAimZ() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped) return g_objectScaleLowerBound;
+    BYTE *state=*(BYTE**)(ped+0x480);
+    return *(float*)(state+0x54);
+}
+
+// samp.dll RVA: 0x000abd80
+BOOL CPed::CurrentWeaponHasAmmo() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped) return TRUE;
+    BYTE *slot=(BYTE*)((DWORD)ped+0x5a0+*(ped+0x718)*0x1c);
+    if(!slot) return TRUE;
+    DWORD weapon=*(DWORD*)slot;
+    if(weapon<=15||weapon==46||*(DWORD*)(slot+0x0c)) return TRUE;
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000ad4d0
+void CPed::RemoveWeaponModel(int weapon) {
+    void *ped=m_pGamePed;
+    if(ped) {
+        BYTE *info=(BYTE*)g_pGame->GetWeaponInfo(weapon,1);
+        DWORD model=*(DWORD*)(info+0x0c);
+        // GTA SA virtual address: 0x005e3990, ECX original backend, argument model.
+        __asm { push model
+            mov ecx,ped
+            mov edx,0x5e3990
+            call edx
+        }
+    }
+}
+
+// samp.dll RVA: 0x000ae080
+DWORD CPed::GetBonePosition(int bone,CVector *position) {
+    void *ped=m_pGamePed;
+    // GTA SA virtual addresses: excluded vtable0x00863c40, callee0x005e4280.
+    if(!ped||*(DWORD*)ped==0x863c40) return 0;
+    DWORD result;
+    __asm { push 0
+        push bone
+        push position
+        mov ecx,ped
+        mov edx,0x5e4280
+        call edx
+        mov result,eax
+    }
+    return result;
+}
+
+// samp.dll RVA: 0x000abc30
+void CPed::ClearWeapons() {
+    void *ped=m_pGamePed;
+    *g_clientCrashPedContext=m_nPlayerNumber;
+    if(ped) {
+        // GTA SA virtual address: 0x005e6320, unchecked backend ECX, no stack arguments.
+        __asm { mov ecx,ped
+            mov eax,0x5e6320
+            call eax
+        }
+    }
+    *g_clientCrashPedContext=0;
+}

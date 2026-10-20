@@ -30,6 +30,28 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000abc30
+    void ClearWeapons();
+    // samp.dll RVA: 0x000ae080
+    DWORD GetBonePosition(int bone,CVector *position);
+    // samp.dll RVA: 0x000ad4d0
+    void RemoveWeaponModel(int weapon);
+    // samp.dll RVA: 0x000abd80
+    BOOL CurrentWeaponHasAmmo();
+    // samp.dll RVA: 0x000ad510
+    float GetAimZ();
+    // samp.dll RVA: 0x000ad720
+    void StopDancing();
+    // samp.dll RVA: 0x000ac9e0
+    BOOL HasJetpack();
+    // samp.dll RVA: 0x000ad600
+    BOOL PerformingCustomAnimation();
+    // samp.dll RVA: 0x000ab810
+    BYTE GetAim();
+    // samp.dll RVA: 0x000afc80
+    void SetWeaponAmmo(BYTE weapon,WORD ammo);
+    // samp.dll RVA: 0x000acdb0
+    void * GetWeaponSlot(DWORD weapon);
     // samp.dll RVA: 0x000aba30
     BOOL IsDead();
     // samp.dll RVA: 0x000ac370
