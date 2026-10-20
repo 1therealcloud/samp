@@ -14,8 +14,10 @@ public:
     ~GameBufferReader() { if(owns && data) { free((void*)data);data=0; } }
     // samp.dll RVA: 0x000bc1d0
     DWORD Read(void *out,DWORD count);
-    // samp.dll RVA: unknown (inline position/EOF update in native parser; standalone entry not established)
-    void Skip(DWORD count) { if(position+count<length)position+=count;else { position=length;eof=true; } }
+    // samp.dll RVA: 0x000b36c0
+    DWORD Skip(DWORD count) { if(position+count<length)position+=count;else { position=length;eof=true; } return position; }
+    // samp.dll RVA: 0x000b36a0
+    BYTE ReadByte();
 };
 #pragma pack(pop)
 typedef char GameBufferReaderExtent[(sizeof(GameBufferReader)==23)?1:-1];
@@ -51,4 +53,10 @@ int GameRwRegisterClumpPlugin(DWORD pluginId);
 int GameRwRegisterClumpPluginStream(DWORD pluginId,DWORD readCallback);
 // samp.dll RVA: 0x000b1e60
 void GameRwEnableAutoMipmapping();
+// samp.dll RVA: 0x000b1ca0
+void *GameRwGetFirstAtomic(void *clump);
+// samp.dll RVA: 0x000b1d40
+void *GameRwGetClumpAnimHierarchy(void *clump);
+// samp.dll RVA: 0x000b1d70
+void *GameRwCreateHierarchyAnimation(void *hierarchy);
 #endif

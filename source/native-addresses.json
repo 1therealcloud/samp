@@ -7495,6 +7495,20 @@
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
     },
     {
+      "name": "GameBufferReader::ReadByte",
+      "va": "0x100b36a0",
+      "rva": "0x000b36a0",
+      "module": "samp.dll",
+      "evidence": "v143 original instructions: ECX reader, local byte initialized0, Read(&byte,1), raw AL result. No fastcall extra params despite decompiler artifact."
+    },
+    {
+      "name": "GameBufferReader::Skip",
+      "va": "0x100b36c0",
+      "rva": "0x000b36c0",
+      "module": "samp.dll",
+      "evidence": "v143 native instructions establish previously unknown standalone entry: unsigned DWORD position+count, strict less-than length, sticky eof on boundary, full EAX new position. Existing void inline declaration refined to observed DWORD result."
+    },
+    {
       "name": "GameChangeBackendEntityModel",
       "va": "0x100b3990",
       "rva": "0x000b3990",
@@ -8776,6 +8790,13 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwCreateHierarchyAnimation",
+      "va": "0x100b1d70",
+      "rva": "0x000b1d70",
+      "module": "samp.dll",
+      "evidence": "Preserved v149 native instructions: single cdecl pointer argument/full EAX pointer result. FirstAtomic version delta60, remaining targets fixed. Pinned gta-reversed RwHelper/RpAnimBlendPlugin primary source corroborates GTA backend identity, not original SA-MP helper spelling."
+    },
+    {
       "name": "GameRwCreateLight",
       "va": "0x100b1700",
       "rva": "0x000b1700",
@@ -8809,6 +8830,20 @@
       "rva": "0x000b1a80",
       "module": "samp.dll",
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwGetClumpAnimHierarchy",
+      "va": "0x100b1d40",
+      "rva": "0x000b1d40",
+      "module": "samp.dll",
+      "evidence": "Preserved v149 native instructions: single cdecl pointer argument/full EAX pointer result. FirstAtomic version delta60, remaining targets fixed. Pinned gta-reversed RwHelper/RpAnimBlendPlugin primary source corroborates GTA backend identity, not original SA-MP helper spelling."
+    },
+    {
+      "name": "GameRwGetFirstAtomic",
+      "va": "0x100b1ca0",
+      "rva": "0x000b1ca0",
+      "module": "samp.dll",
+      "evidence": "Preserved v149 native instructions: single cdecl pointer argument/full EAX pointer result. FirstAtomic version delta60, remaining targets fixed. Pinned gta-reversed RwHelper/RpAnimBlendPlugin primary source corroborates GTA backend identity, not original SA-MP helper spelling."
     },
     {
       "name": "GameRwGetGeometrySkin",
@@ -15851,6 +15886,18 @@
     },
     {
       "file": "source/game/effects.cpp",
+      "name": "GameBufferReader::Skip",
+      "rva": 734912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameBufferReader::ReadByte",
+      "rva": 734880,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
       "name": "GameBufferReader::Read",
       "rva": 770512,
       "module": "samp.dll"
@@ -15958,9 +16005,39 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwGetFirstAtomic",
+      "rva": 728224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwGetClumpAnimHierarchy",
+      "rva": 728384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwCreateHierarchyAnimation",
+      "rva": 728432,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/effects.h",
       "name": "GameBufferReader::Read",
       "rva": 770512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameBufferReader::Skip",
+      "rva": 734912,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameBufferReader::ReadByte",
+      "rva": 734880,
       "module": "samp.dll"
     },
     {
@@ -16057,6 +16134,24 @@
       "file": "source/game/effects.h",
       "name": "GameRwEnableAutoMipmapping",
       "rva": 728672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwGetFirstAtomic",
+      "rva": 728224,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwGetClumpAnimHierarchy",
+      "rva": 728384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwCreateHierarchyAnimation",
+      "rva": 728432,
       "module": "samp.dll"
     },
     {
@@ -27082,11 +27177,6 @@
       "file": "source/game/effects.h",
       "name": "GameBufferReader::~GameBufferReader",
       "reason": "inline reader cleanup in native parser RVA 0x000b6610; standalone entry not established"
-    },
-    {
-      "file": "source/game/effects.h",
-      "name": "GameBufferReader::Skip",
-      "reason": "inline position/EOF update in native parser; standalone entry not established"
     },
     {
       "file": "source/game/entity.h",

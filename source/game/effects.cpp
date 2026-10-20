@@ -1,5 +1,11 @@
 #include "game/effects.h"
 #include "game/preinit.h"
+// samp.dll RVA: 0x000b36a0
+BYTE GameBufferReader::ReadByte() {
+    BYTE result=0;
+    Read(&result,1);
+    return result;
+}
 // samp.dll RVA: 0x000bc1d0
 DWORD GameBufferReader::Read(void *out,DWORD count) {
     memset(out,0,count);
@@ -133,4 +139,21 @@ int GameRwRegisterClumpPluginStream(DWORD pluginId,DWORD readCallback) {
 void GameRwEnableAutoMipmapping() {
     DWORD target=g_gameVersion==1?0x7f3560:0x7f35a0;
     ((void(__cdecl*)(DWORD))target)(1);
+}
+
+// GTA SA virtual addresses: USA734820, all other version values734880 (+60).
+// samp.dll RVA: 0x000b1ca0
+void *GameRwGetFirstAtomic(void *clump) {
+    DWORD target=g_gameVersion==1?0x734820:0x734880;
+    return ((void*(__cdecl*)(void*))target)(clump);
+}
+// GTA SA virtual address: 0x00734B10, exactly one clump argument.
+// samp.dll RVA: 0x000b1d40
+void *GameRwGetClumpAnimHierarchy(void *clump) {
+    return ((void*(__cdecl*)(void*))0x734b10)(clump);
+}
+// GTA SA virtual address: 0x004D60E0, exactly one hierarchy argument.
+// samp.dll RVA: 0x000b1d70
+void *GameRwCreateHierarchyAnimation(void *hierarchy) {
+    return ((void*(__cdecl*)(void*))0x4d60e0)(hierarchy);
 }
