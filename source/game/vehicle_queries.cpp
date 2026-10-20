@@ -484,7 +484,7 @@ void CVehicle::CallBackend6a6ae0(DWORD first,DWORD second,DWORD third) {
 
 // samp.dll RVA: 0x000b7440
 void CVehicle::SetTrainSpeed(float speed) {
-    
+
     // Preserve both FCOMP operations and native status masks, including NaNs.
     __asm {
         fld speed
