@@ -17,6 +17,10 @@ public:
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
+    // samp.dll RVA: 0x000b85a0
+    void EnableEngine(BOOL enabled);
+    // samp.dll RVA: 0x000b7220
+    void ProcessMarkers();
     // samp.dll RVA: 0x000b77d0
     CVehicle * GetTrailer();
     // samp.dll RVA: 0x000b7830
@@ -160,4 +164,6 @@ extern DWORD g_vehicleDetachingTrailer;
 extern const float g_vehicleTrainSpeedMinimum;
 // samp.dll RVA: 0x001181a4
 extern const float g_vehicleTrainSpeedMaximum;
+// samp.dll RVA: 0x0011812c
+extern const float g_vehicleMarkerDistance;
 #endif

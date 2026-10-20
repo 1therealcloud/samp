@@ -4275,6 +4275,13 @@
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
+      "name": "CVehicle::EnableEngine",
+      "va": "0x100b85a0",
+      "rva": "0x000b85a0",
+      "module": "samp.dll",
+      "evidence": "v160 lifecycle native export: original backend snapshot, flags428 bit10, subtype3/driver state75, live-health x87 FCOMP, backend4FCF40 original+138 and GTA B6B990 save/restore."
+    },
+    {
       "name": "CVehicle::EnableLights",
       "va": "0x100b7990",
       "rva": "0x000b7990",
@@ -4476,6 +4483,13 @@
       "rva": "0x000b7380",
       "module": "samp.dll",
       "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::ProcessMarkers",
+      "va": "0x100b7220",
+      "rva": "0x000b7220",
+      "module": "samp.dll",
+      "evidence": "v159 native337-byte/105-instruction ProcessMarkers export; v160 preserves raw x87 status masks, repeat queries, SCM order and native field views64/65/B4."
     },
     {
       "name": "CVehicle::RemoveComponent",
@@ -7866,11 +7880,25 @@
       "evidence": "v159 exact18-byte original SCM descriptor and native wrapper operands."
     },
     {
+      "name": "g_vehicleCreateMarkerCommand",
+      "va": "0x1011f628",
+      "rva": "0x0011f628",
+      "module": "samp.dll",
+      "evidence": "v160 exact original18-byte SCM descriptor; native ProcessMarkers operands preserved in v159 instruction export."
+    },
+    {
       "name": "g_vehicleDamageableCommand",
       "va": "0x1011f790",
       "rva": "0x0011f790",
       "module": "samp.dll",
       "evidence": "v158 exact native18-byte opcode record referenced by SetInvulnerable."
+    },
+    {
+      "name": "g_vehicleDestroyMarkerCommand",
+      "va": "0x1011f63c",
+      "rva": "0x0011f63c",
+      "module": "samp.dll",
+      "evidence": "v160 exact original18-byte SCM descriptor; native ProcessMarkers operands preserved in v159 instruction export."
     },
     {
       "name": "g_vehicleDetachingTrailer",
@@ -7892,6 +7920,27 @@
       "rva": "0x0011f678",
       "module": "samp.dll",
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleMarkerColorCommand",
+      "va": "0x1011f650",
+      "rva": "0x0011f650",
+      "module": "samp.dll",
+      "evidence": "v160 exact original18-byte SCM descriptor; native ProcessMarkers operands preserved in v159 instruction export."
+    },
+    {
+      "name": "g_vehicleMarkerDistance",
+      "va": "0x1011812c",
+      "rva": "0x0011812c",
+      "module": "samp.dll",
+      "evidence": "Original native threshold float200.0 at11812C, no previously established source storage."
+    },
+    {
+      "name": "g_vehicleMarkerModeCommand",
+      "va": "0x1011f664",
+      "rva": "0x0011f664",
+      "module": "samp.dll",
+      "evidence": "v160 exact original18-byte SCM descriptor; native ProcessMarkers operands preserved in v159 instruction export."
     },
     {
       "name": "g_vehiclePaintjobCommand",
@@ -24099,6 +24148,18 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::EnableEngine",
+      "rva": 755104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::ProcessMarkers",
+      "rva": 750112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::GetTrailer",
       "rva": 751568,
       "module": "samp.dll"
@@ -24506,6 +24567,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleMarkerDistance",
+      "rva": 1147180,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle_plate.cpp",
       "name": "CVehicle::ConstructLicensePlate",
       "rva": 752848,
@@ -24896,6 +24963,24 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "g_vehicleMarkerDistance",
+      "rva": 1147180,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::ProcessMarkers",
+      "rva": 750112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::EnableEngine",
+      "rva": 755104,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/video_mode.cpp",
       "name": "GameSetVideoMode",
       "rva": 744720,
@@ -25124,6 +25209,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleCreateMarkerCommand",
+      "rva": 1177128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleDestroyMarkerCommand",
+      "rva": 1177148,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleMarkerColorCommand",
+      "rva": 1177168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleMarkerModeCommand",
+      "rva": 1177188,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -25307,6 +25416,30 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_vehicleRequestComponentCommand",
       "rva": 1177448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleCreateMarkerCommand",
+      "rva": 1177128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleDestroyMarkerCommand",
+      "rva": 1177148,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleMarkerColorCommand",
+      "rva": 1177168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleMarkerModeCommand",
+      "rva": 1177188,
       "module": "samp.dll"
     },
     {

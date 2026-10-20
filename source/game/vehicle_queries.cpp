@@ -598,3 +598,105 @@ BOOL CVehicle::AddComponent(WORD component) {
     Scripting::ProcessCommand(&g_vehicleAddComponentCommand,m_nHandle,model,&result);
     return TRUE;
 }
+
+// samp.dll RVA: 0x0011812c
+const float g_vehicleMarkerDistance=200.0f;
+
+// Keep x87 return in ST0: no float spill between distance call and FCOMP.
+// Raw wrapper views do not establish the full allocation extent.
+// samp.dll RVA: 0x000b7220
+void CVehicle::ProcessMarkers() {
+    if(!m_pGameVehicle)return;
+    DWORD *marker=(DWORD*)((BYTE*)this+0xb4);
+    DWORD *special=(DWORD*)((BYTE*)this+0x65);
+    if(*((BYTE*)this+0x64)) {
+        if(!*special) {
+            if(*marker) {
+                Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand,*marker);
+                *marker=0;
+            }
+            Scripting::ProcessCommand(&g_vehicleCreateMarkerCommand,m_nHandle,1,3,marker);
+            Scripting::ProcessCommand(&g_vehicleMarkerColorCommand,*marker,0x3ee);
+            Scripting::ProcessCommand(&g_vehicleMarkerModeCommand,*marker,3);
+            *special=1;
+        }
+        return;
+    }
+    if(*special && *marker) {
+        Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand,*marker);
+        *special=0;
+        *marker=0;
+    }
+    BOOL farOrUnordered;
+    __asm {
+        mov ecx,this
+        call CEntity::GetDistanceToLocalPlayer
+        fcomp dword ptr [g_vehicleMarkerDistance]
+        fnstsw ax
+        test ah,5
+        setp al
+        movzx eax,al
+        mov farOrUnordered,eax
+    }
+    if(!farOrUnordered && !IsOccupied()) {
+        if(!*marker) {
+            Scripting::ProcessCommand(&g_vehicleCreateMarkerCommand,m_nHandle,1,2,marker);
+            Scripting::ProcessCommand(&g_vehicleMarkerColorCommand,*marker,0x3ec);
+        }
+        return;
+    }
+    if(!IsOccupied()) {
+        BOOL orderedFar;
+        __asm {
+            mov ecx,this
+            call CEntity::GetDistanceToLocalPlayer
+            fcomp dword ptr [g_vehicleMarkerDistance]
+            fnstsw ax
+            test ah,1
+            setz al
+            movzx eax,al
+            mov orderedFar,eax
+        }
+        if(!orderedFar)return;
+    }
+    if(*marker) {
+        Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand,*marker);
+        *marker=0;
+    }
+}
+
+// GTA SA backend: 0x004FCF40, ECX=original backend+138.
+// GTA SA shared word 0x00B6B990 is saved only around that backend call.
+// samp.dll RVA: 0x000b85a0
+void CVehicle::EnableEngine(BOOL enabled) {
+    BYTE *initial=(BYTE*)m_pGameVehicle;
+    if(!initial)return;
+    if(enabled) {
+        initial[0x428]|=0x10;
+        if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==3 &&
+            HasDriver() && !DriverIsPlayerPed())*(DWORD*)((BYTE*)this+0x75)=1;
+    } else {
+        initial[0x428]&=0xef;
+        if(!m_pGameVehicle || GameGetVehicleSubtype(m_pGameVehicle)!=3 ||
+            !*(DWORD*)((BYTE*)this+0x75))return;
+        BYTE *current=(BYTE*)m_pGameVehicle;
+        if(current) {
+            __asm {
+                mov eax,current
+                fld dword ptr [eax+0x4c0]
+                fcomp dword ptr [g_objectScaleLowerBound]
+                fnstsw ax
+                test ah,0x41
+                jnz skipBackend
+                mov edi,dword ptr ds:[0xb6b990]
+                mov eax,initial
+                lea ecx,[eax+0x138]
+                mov edx,0x4fcf40
+                call edx
+                mov dword ptr ds:[0xb6b990],edi
+skipBackend:
+            }
+        }
+        *(DWORD*)((BYTE*)this+0x75)=0;
+    }
+}

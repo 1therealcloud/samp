@@ -63,4 +63,12 @@ extern const Scripting::OpcodeInfo g_vehicleAddComponentCommand;
 extern const Scripting::OpcodeInfo g_vehicleComponentLoadedCommand;
 // samp.dll RVA: 0x0011f768
 extern const Scripting::OpcodeInfo g_vehicleRequestComponentCommand;
+// samp.dll RVA: 0x0011f628
+extern const Scripting::OpcodeInfo g_vehicleCreateMarkerCommand;
+// samp.dll RVA: 0x0011f63c
+extern const Scripting::OpcodeInfo g_vehicleDestroyMarkerCommand;
+// samp.dll RVA: 0x0011f650
+extern const Scripting::OpcodeInfo g_vehicleMarkerColorCommand;
+// samp.dll RVA: 0x0011f664
+extern const Scripting::OpcodeInfo g_vehicleMarkerModeCommand;
 #endif
