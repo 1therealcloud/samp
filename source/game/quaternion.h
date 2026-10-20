@@ -28,7 +28,18 @@ extern const float g_textDrawHalf;
 // samp.dll RVA: 0x0011d7c8
 extern const float g_quaternionEulerNegativeTwo;
 // Scalar-component conversion; no implicit normalization.
+// samp.dll RVA: 0x000b4a50
 void GameQuaternionComponentsToMatrix(float w,float x,float y,float z,
     float *m00,float *m01,float *m02,float *m10,float *m11,float *m12,
     float *m20,float *m21,float *m22);
+// samp.dll RVA: 0x000b48b0
+void GameMatrixComponentsToQuaternion(float m00,float m01,float m02,
+    float m10,float m11,float m12,float m20,float m21,float m22,
+    float *w,float *x,float *y,float *z);
+// samp.dll RVA: 0x000b4df0
+void GameQuaternionFromMatrixComponents(const CMatrix *matrix,GameQuaternion *out);
+// samp.dll RVA: 0x000b4b60
+void GameQuaternionFromVectors(GameQuaternion *out,const CVector *from,const CVector *to);
+// samp.dll RVA: 0x0011f588
+extern const float g_quaternionOppositeThreshold;
 #endif

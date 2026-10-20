@@ -12,6 +12,13 @@
       "evidence": "Existing MSVC CRT library classification: function-origin-map/COFF asin.obj fragment __CIasin. External helper, not recovered SA-MP implementation."
     },
     {
+      "name": "_copysign",
+      "va": "0x100fd048",
+      "rva": "0x000fd048",
+      "module": "samp.dll",
+      "evidence": "Existing CRT origin classification and direct native body: copies double sign bit and returns via x87. External selected static runtime, not recovered SA-MP code."
+    },
+    {
       "name": "_ftol2",
       "va": "0x100f9324",
       "rva": "0x000f9324",
@@ -6977,6 +6984,13 @@
       "evidence": "v132 direct reference instruction/data review; native x87 precision/store order retained. Whole compiled body static comparison after relocation substitution; no runtime execution claim. Original source/library authorship not established."
     },
     {
+      "name": "g_quaternionOppositeThreshold",
+      "va": "0x1011f588",
+      "rva": "0x0011f588",
+      "module": "samp.dll",
+      "evidence": "Native FCOMP operand at B4C29. Reference bits 0x38d1b717, float 0.0001."
+    },
+    {
       "name": "g_renderAudioStream",
       "va": "0x102aca1c",
       "rva": "0x002aca1c",
@@ -8055,6 +8069,13 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "GameMatrixComponentsToQuaternion",
+      "va": "0x100b48b0",
+      "rva": "0x000b48b0",
+      "module": "samp.dll",
+      "evidence": "Read-only v137 instruction export; scalar cdecl matrix input, four output pointers, x87 sqrt/clamps and three CRT _copysign calls."
+    },
+    {
       "name": "GameModelQueryB4170",
       "va": "0x100b4170",
       "rva": "0x000b4170",
@@ -8153,6 +8174,13 @@
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
+      "name": "GameQuaternionComponentsToMatrix",
+      "va": "0x100b4a50",
+      "rva": "0x000b4a50",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra v137 export: 74 native instructions, scalar cdecl inputs and nine output pointers. Explicit x87 preserves register precision and ordered alias-visible stores."
+    },
+    {
       "name": "GameQuaternionFromEuler",
       "va": "0x100b50a0",
       "rva": "0x000b50a0",
@@ -8165,6 +8193,20 @@
       "rva": "0x000b4d50",
       "module": "samp.dll",
       "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
+      "name": "GameQuaternionFromMatrixComponents",
+      "va": "0x100b4df0",
+      "rva": "0x000b4df0",
+      "module": "samp.dll",
+      "evidence": "Read-only v133 instruction export; nine basis DWORDs passed by value to B48B0; output WXYZ pointers."
+    },
+    {
+      "name": "GameQuaternionFromVectors",
+      "va": "0x100b4b60",
+      "rva": "0x000b4b60",
+      "module": "samp.dll",
+      "evidence": "Read-only v137 native instructions; cdecl output WXYZ and two XYZ inputs, snapshotted before output. Cross/dot, near-opposite branch, reciprocal length with native x87 precision/spills."
     },
     {
       "name": "GameQuaternionNormalize",
@@ -20598,6 +20640,72 @@
       "file": "source/game/quaternion.h",
       "name": "g_quaternionEulerNegativeTwo",
       "rva": 1169352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionComponentsToMatrix",
+      "rva": 739920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameMatrixComponentsToQuaternion",
+      "rva": 739504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionFromMatrixComponents",
+      "rva": 740848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionFromVectors",
+      "rva": 740192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "g_quaternionOppositeThreshold",
+      "rva": 1176968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion_components.cpp",
+      "name": "GameQuaternionComponentsToMatrix",
+      "rva": 739920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion_from_matrix.cpp",
+      "name": "_copysign",
+      "rva": 1036360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion_from_matrix.cpp",
+      "name": "GameMatrixComponentsToQuaternion",
+      "rva": 739504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion_from_matrix.cpp",
+      "name": "GameQuaternionFromMatrixComponents",
+      "rva": 740848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion_from_matrix.cpp",
+      "name": "g_quaternionOppositeThreshold",
+      "rva": 1176968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion_from_matrix.cpp",
+      "name": "GameQuaternionFromVectors",
+      "rva": 740192,
       "module": "samp.dll"
     },
     {

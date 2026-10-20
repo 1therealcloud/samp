@@ -3,6 +3,7 @@
 // The four input components are passed by value, without normalization.
 // Keep products in x87 registers until the native output stores. Output order
 // is 00,11,22,10,01,20,02,21,12; output pointers may alias.
+// samp.dll RVA: 0x000b4a50
 __declspec(naked) void GameQuaternionComponentsToMatrix(float w,float x,float y,float z,
     float *m00,float *m01,float *m02,float *m10,float *m11,float *m12,
     float *m20,float *m21,float *m22) {
