@@ -32,6 +32,22 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a1220
+    void SetWorldGravity(float gravity);
+    // samp.dll RVA: 0x000a1360
+    void EnableStuntBonus(BYTE enabled);
+    // samp.dll RVA: 0x000a1340
+    void EnableZoneDisplaying(BYTE enabled);
+    // samp.dll RVA: 0x000a0d90
+    void IncreasePlayerMoney(int amount);
+    // samp.dll RVA: 0x000a0ce0
+    void DeleteMarker(DWORD marker);
+    // samp.dll RVA: 0x000a0ab0
+    DWORD IsAnimationLoaded(const char *name);
+    // samp.dll RVA: 0x000a0a90
+    void RequestAnimation(const char *name);
+    // samp.dll RVA: 0x000a0a50
+    void DisableTrainTraffic();
     // samp.dll RVA: 0x000a0920
     void GetWorldTime(BYTE *hour,BYTE *minute);
     // samp.dll RVA: 0x000a1240

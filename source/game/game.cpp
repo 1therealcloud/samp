@@ -89,3 +89,35 @@ void CGame::SetWantedLevel(BYTE level) { *(BYTE*)0x58db60=level; }
 // samp.dll RVA: 0x000a0920
 void CGame::GetWorldTime(BYTE *hour,BYTE *minute) { *minute=*(BYTE*)0xb70152;
     *hour=*(BYTE*)0xb70153; }
+
+#include "game/wrapper_commands.h"
+
+// samp.dll RVA: 0x000a0a50
+void CGame::DisableTrainTraffic() { Scripting::ProcessCommand(&g_gameDisableTrainTrafficCommand,0); }
+
+// samp.dll RVA: 0x000a0a90
+void CGame::RequestAnimation(const char *name) { Scripting::ProcessCommand(&g_gameRequestAnimationCommand,name); }
+
+// samp.dll RVA: 0x000a0ab0
+DWORD CGame::IsAnimationLoaded(const char *name) { return Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand,name); }
+
+// samp.dll RVA: 0x000a0ce0
+void CGame::DeleteMarker(DWORD marker) { Scripting::ProcessCommand(&g_gameDeleteMarkerCommand,marker); }
+
+// samp.dll RVA: 0x000a0d90
+void CGame::IncreasePlayerMoney(int amount) { Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand,0,amount); }
+
+// samp.dll RVA: 0x000a1340
+void CGame::EnableZoneDisplaying(BYTE enabled) { Scripting::ProcessCommand(&g_gameZoneDisplayCommand,(DWORD)enabled); }
+
+// samp.dll RVA: 0x000a1360
+void CGame::EnableStuntBonus(BYTE enabled) {
+    // GTA SA virtual address: 0x00a4a474.
+    GameUnprotect((void*)0xa4a474,4);
+    *(DWORD*)0xa4a474=enabled; }
+
+// samp.dll RVA: 0x000a1220
+void CGame::SetWorldGravity(float gravity) {
+    // GTA SA virtual address: 0x00863984; store raw float bits without x87 conversion.
+    GameUnprotect((void*)0x863984,4);
+    *(DWORD*)0x863984=*(DWORD*)&gravity; }

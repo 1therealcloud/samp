@@ -11392,6 +11392,104 @@
       "rva": "0x000a0920",
       "module": "samp.dll",
       "evidence": "v164 direct reference PE disassembly; exact VC7 body check for simple leaves, ordered byte loads/stores for time outputs."
+    },
+    {
+      "name": "CGame::DisableTrainTraffic",
+      "va": "0x100a0a50",
+      "rva": "0x000a0a50",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::RequestAnimation",
+      "va": "0x100a0a90",
+      "rva": "0x000a0a90",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::IsAnimationLoaded",
+      "va": "0x100a0ab0",
+      "rva": "0x000a0ab0",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::DeleteMarker",
+      "va": "0x100a0ce0",
+      "rva": "0x000a0ce0",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::IncreasePlayerMoney",
+      "va": "0x100a0d90",
+      "rva": "0x000a0d90",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::EnableZoneDisplaying",
+      "va": "0x100a1340",
+      "rva": "0x000a1340",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::EnableStuntBonus",
+      "va": "0x100a1360",
+      "rva": "0x000a1360",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::SetWorldGravity",
+      "va": "0x100a1220",
+      "rva": "0x000a1220",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "g_gameDisableTrainTrafficCommand",
+      "va": "0x1011e790",
+      "rva": "0x0011e790",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "g_gameRequestAnimationCommand",
+      "va": "0x1011e7e0",
+      "rva": "0x0011e7e0",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "g_gameIsAnimationLoadedCommand",
+      "va": "0x1011e7f4",
+      "rva": "0x0011e7f4",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "g_gameDeleteMarkerCommand",
+      "va": "0x1011e6b4",
+      "rva": "0x0011e6b4",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "g_gameIncreaseMoneyCommand",
+      "va": "0x1011e740",
+      "rva": "0x0011e740",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "g_gameZoneDisplayCommand",
+      "va": "0x1011e86c",
+      "rva": "0x0011e86c",
+      "module": "samp.dll",
+      "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
     }
   ],
   "annotations": [

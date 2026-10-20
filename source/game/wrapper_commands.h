@@ -83,4 +83,16 @@ extern const Scripting::OpcodeInfo g_vehicleGasTankExplosionCommand;
 extern const Scripting::OpcodeInfo g_vehicleHydraulicsCommand;
 // samp.dll RVA: 0x0011f6c8
 extern const Scripting::OpcodeInfo g_vehicleCreateTrainCommand;
+// samp.dll RVA: 0x0011e790
+extern const Scripting::OpcodeInfo g_gameDisableTrainTrafficCommand;
+// samp.dll RVA: 0x0011e7e0
+extern const Scripting::OpcodeInfo g_gameRequestAnimationCommand;
+// samp.dll RVA: 0x0011e7f4
+extern const Scripting::OpcodeInfo g_gameIsAnimationLoadedCommand;
+// samp.dll RVA: 0x0011e6b4
+extern const Scripting::OpcodeInfo g_gameDeleteMarkerCommand;
+// samp.dll RVA: 0x0011e740
+extern const Scripting::OpcodeInfo g_gameIncreaseMoneyCommand;
+// samp.dll RVA: 0x0011e86c
+extern const Scripting::OpcodeInfo g_gameZoneDisplayCommand;
 #endif
