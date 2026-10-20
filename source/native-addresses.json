@@ -3890,6 +3890,90 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "CTask::~CTask",
+      "va": "0x100b21a0",
+      "rva": "0x000b21a0",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::ApplyToPed",
+      "va": "0x100b2260",
+      "rva": "0x000b2260",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::Create",
+      "va": "0x100b21b0",
+      "rva": "0x000b21b0",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::Create(BYTE*)",
+      "va": "0x100b21e0",
+      "rva": "0x000b21e0",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::CreateCopy",
+      "va": "0x100b25b0",
+      "rva": "0x000b25b0",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::CTask",
+      "va": "0x100b2180",
+      "rva": "0x000b2180",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::CTask(BYTE*)",
+      "va": "0x100b2590",
+      "rva": "0x000b2590",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::CTask(DWORD)",
+      "va": "0x100b2560",
+      "rva": "0x000b2560",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::Destroy",
+      "va": "0x100b2200",
+      "rva": "0x000b2200",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::GetID",
+      "va": "0x100b22c0",
+      "rva": "0x000b22c0",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::IsDestroyed",
+      "va": "0x100b22e0",
+      "rva": "0x000b22e0",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
+      "name": "CTask::IsSimple",
+      "va": "0x100b2300",
+      "rva": "0x000b2300",
+      "module": "samp.dll",
+      "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
+    },
+    {
       "name": "CTextDraw::Draw",
       "va": "0x100b3080",
       "rva": "0x000b3080",
@@ -22004,6 +22088,150 @@
       "file": "source/game/startup_state.cpp",
       "name": "CGame::LetTimeGo",
       "rva": 657728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::CTask",
+      "rva": 729472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::CTask(DWORD)",
+      "rva": 730464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::CTask(BYTE*)",
+      "rva": 730512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::~CTask",
+      "rva": 729504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::Create",
+      "rva": 729520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::Create(BYTE*)",
+      "rva": 729568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::CreateCopy",
+      "rva": 730544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::Destroy",
+      "rva": 729600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::ApplyToPed",
+      "rva": 729696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::GetID",
+      "rva": 729792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::IsDestroyed",
+      "rva": 729824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTask::IsSimple",
+      "rva": 729856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::CTask",
+      "rva": 729472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::CTask(DWORD)",
+      "rva": 730464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::CTask(BYTE*)",
+      "rva": 730512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::~CTask",
+      "rva": 729504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::Create",
+      "rva": 729520,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::Create(BYTE*)",
+      "rva": 729568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::CreateCopy",
+      "rva": 730544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::Destroy",
+      "rva": 729600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::ApplyToPed",
+      "rva": 729696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::GetID",
+      "rva": 729792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::IsDestroyed",
+      "rva": 729824,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTask::IsSimple",
+      "rva": 729856,
       "module": "samp.dll"
     },
     {
