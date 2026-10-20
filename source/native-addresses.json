@@ -5871,6 +5871,20 @@
       "evidence": "Reviewed original GUI Initialize and six STDCALL event callbacks in offline-gui-v100 exports. Pool/network methods are declaration-only dependencies. SDK wide button text is selected-library API adaptation, not a native widget-layout identity claim."
     },
     {
+      "name": "g_headingInverseHalfTurn",
+      "va": "0x1011f58c",
+      "rva": "0x0011f58c",
+      "module": "samp.dll",
+      "evidence": "Direct native instruction operand and reference DLL initialized data; one storage definition."
+    },
+    {
+      "name": "g_headingPi",
+      "va": "0x1011f590",
+      "rva": "0x0011f590",
+      "module": "samp.dll",
+      "evidence": "Direct native instruction operand and reference DLL initialized data; one storage definition."
+    },
+    {
       "name": "g_hookAllocateFunction",
       "va": "0x10151abc",
       "rva": "0x00151abc",
@@ -7110,6 +7124,20 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "g_rwAxisRotateBackend",
+      "va": "0x101553fc",
+      "rva": "0x001553fc",
+      "module": "samp.dll",
+      "evidence": "Direct native instruction operand and reference DLL initialized data; one storage definition."
+    },
+    {
+      "name": "g_rwPointTransformBackend",
+      "va": "0x101553d4",
+      "rva": "0x001553d4",
+      "module": "samp.dll",
+      "evidence": "Direct native instruction operand and reference DLL initialized data; one storage definition."
+    },
+    {
       "name": "g_rwPreviewAxes",
       "va": "0x1015535c",
       "rva": "0x0015535c",
@@ -7493,6 +7521,13 @@
       "rva": "0x000b4460",
       "module": "samp.dll",
       "evidence": "v123 binary/disassembly/pseudocode to maintained C++ port; instruction/ABI/data review and VC7 compilation only. No runtime differential testing, full unwind equivalence or GTA execution."
+    },
+    {
+      "name": "GameHeadingToRadians",
+      "va": "0x100b54b0",
+      "rva": "0x000b54b0",
+      "module": "samp.dll",
+      "evidence": "v140 read-only Ghidra instruction/pseudocode export. Native arguments, shared-storage publication and raw register/x87 boundaries retained; GTA library bodies remain dependencies."
     },
     {
       "name": "GameHook_000a2200",
@@ -7985,6 +8020,13 @@
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
     },
     {
+      "name": "GameInvertRwMatrix",
+      "va": "0x100b5280",
+      "rva": "0x000b5280",
+      "module": "samp.dll",
+      "evidence": "v140 read-only Ghidra instruction/pseudocode export. Native arguments, shared-storage publication and raw register/x87 boundaries retained; GTA library bodies remain dependencies."
+    },
+    {
       "name": "GameIsCameraPointValid",
       "va": "0x100b46e0",
       "rva": "0x000b46e0",
@@ -8328,6 +8370,13 @@
       "evidence": "Original native scan-list base RVA 1e04b0/end RVA 2075b0 and four CMP operand sites; scan-end-v106 red/green original installer and 640032 actual GTA CMP/JL decisions. End operand denotes scanList+40000; native adjacency to real ped storage is not assumed after linking."
     },
     {
+      "name": "GameRepeatRwMatrixInvert",
+      "va": "0x100b5260",
+      "rva": "0x000b5260",
+      "module": "samp.dll",
+      "evidence": "v140 read-only Ghidra instruction/pseudocode export. Native arguments, shared-storage publication and raw register/x87 boundaries retained; GTA library bodies remain dependencies."
+    },
+    {
       "name": "GameResolveDamageActor",
       "va": "0x100a38e0",
       "rva": "0x000a38e0",
@@ -8354,6 +8403,13 @@
       "rva": "0x000b5410",
       "module": "samp.dll",
       "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
+    },
+    {
+      "name": "GameRotateRwMatrixOnAxis",
+      "va": "0x100b52d0",
+      "rva": "0x000b52d0",
+      "module": "samp.dll",
+      "evidence": "v140 read-only Ghidra instruction/pseudocode export. Native arguments, shared-storage publication and raw register/x87 boundaries retained; GTA library bodies remain dependencies."
     },
     {
       "name": "GameRotateRwQuaternion",
@@ -8557,6 +8613,20 @@
       "rva": "0x000b4850",
       "module": "samp.dll",
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
+    },
+    {
+      "name": "GameTransformRwPoint",
+      "va": "0x100b5230",
+      "rva": "0x000b5230",
+      "module": "samp.dll",
+      "evidence": "v140 read-only Ghidra instruction/pseudocode export. Native arguments, shared-storage publication and raw register/x87 boundaries retained; GTA library bodies remain dependencies."
+    },
+    {
+      "name": "GameTransformRwVector",
+      "va": "0x100b5210",
+      "rva": "0x000b5210",
+      "module": "samp.dll",
+      "evidence": "v140 read-only Ghidra instruction/pseudocode export. Native arguments, shared-storage publication and raw register/x87 boundaries retained; GTA library bodies remain dependencies."
     },
     {
       "name": "GameTransformVectorByTranspose",
@@ -20734,6 +20804,126 @@
       "file": "source/game/quaternion_from_matrix.cpp",
       "name": "GameQuaternionFromVectors",
       "rva": 740192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "g_rwPointTransformBackend",
+      "rva": 1397716,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "g_rwAxisRotateBackend",
+      "rva": 1397756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "g_headingInverseHalfTurn",
+      "rva": 1176972,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "g_headingPi",
+      "rva": 1176976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "GameTransformRwVector",
+      "rva": 741904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "GameTransformRwPoint",
+      "rva": 741936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "GameRepeatRwMatrixInvert",
+      "rva": 741984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "GameInvertRwMatrix",
+      "rva": 742016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "GameHeadingToRadians",
+      "rva": 742576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.cpp",
+      "name": "GameRotateRwMatrixOnAxis",
+      "rva": 742096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "g_rwPointTransformBackend",
+      "rva": 1397716,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "g_rwAxisRotateBackend",
+      "rva": 1397756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "g_headingInverseHalfTurn",
+      "rva": 1176972,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "g_headingPi",
+      "rva": 1176976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "GameTransformRwVector",
+      "rva": 741904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "GameTransformRwPoint",
+      "rva": 741936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "GameRepeatRwMatrixInvert",
+      "rva": 741984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "GameInvertRwMatrix",
+      "rva": 742016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "GameRotateRwMatrixOnAxis",
+      "rva": 742096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_helpers.h",
+      "name": "GameHeadingToRadians",
+      "rva": 742576,
       "module": "samp.dll"
     },
     {
