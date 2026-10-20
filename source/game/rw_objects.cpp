@@ -109,3 +109,63 @@ void *GameRwQueryAtomic48(const void *object) {
 void *__stdcall GameRwReadField34(const void *object) {
     return object?*(void* const*)((const BYTE*)object+0x34):0;
 }
+
+// Each entry snapshots GTA world slot C17038 once, and tests only that world.
+// GTA SA virtual backend: 0x00750F20; non-USA fallback +0x50.
+// samp.dll RVA: 0x000b14b0
+void GameRwWorldAddCamera(void *camera) {
+    void *world=*(void**)0xc17038;
+    if(world) {
+        DWORD target=g_gameVersion==1?0x750f20:0x750f70;
+        ((void*(__cdecl*)(void*,void*))target)(world,camera);
+    }
+}
+// GTA SA virtual backend: 0x00751300 (fixed for every version).
+// samp.dll RVA: 0x000b1600
+void GameRwWorldAddClump(void *clump) {
+    void *world=*(void**)0xc17038;
+    if(world) {
+        ((void*(__cdecl*)(void*,void*))0x751300)(world,clump);
+    }
+}
+// GTA SA virtual backend: 0x00751460 (fixed for every version).
+// samp.dll RVA: 0x000b1630
+void GameRwWorldRemoveClump(void *clump) {
+    void *world=*(void**)0xc17038;
+    if(world) {
+        ((void*(__cdecl*)(void*,void*))0x751460)(world,clump);
+    }
+}
+// GTA SA virtual backend: 0x0074F570 (fixed for every version).
+// samp.dll RVA: 0x000b1660
+void GameRwWorldRender() {
+    void *world=*(void**)0xc17038;
+    if(world) {
+        ((void*(__cdecl*)(void*))0x74f570)(world);
+    }
+}
+// GTA SA virtual backend: 0x00751910; non-USA fallback +0x50.
+// samp.dll RVA: 0x000b17c0
+void GameRwWorldAddLight(void *light) {
+    void *world=*(void**)0xc17038;
+    if(world) {
+        DWORD target=g_gameVersion==1?0x751910:0x751960;
+        ((void*(__cdecl*)(void*,void*))target)(world,light);
+    }
+}
+// GTA SA virtual backend: 0x00751960; non-USA fallback +0x50.
+// samp.dll RVA: 0x000b1800
+void GameRwWorldRemoveLight(void *light) {
+    void *world=*(void**)0xc17038;
+    if(world) {
+        DWORD target=g_gameVersion==1?0x751960:0x7519b0;
+        ((void*(__cdecl*)(void*,void*))target)(world,light);
+    }
+}
+
+// GTA SA virtual address: 0x00749F70, fixed even for non-USA version values.
+// samp.dll RVA: 0x000b1850
+void *GameRwCloneClump(void *clump) {
+    if(!clump)return 0;
+    return ((void*(__cdecl*)(void*))0x749f70)(clump);
+}

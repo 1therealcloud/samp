@@ -8797,6 +8797,13 @@
       "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7ee340 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
     },
     {
+      "name": "GameRwCloneClump",
+      "va": "0x100b1850",
+      "rva": "0x000b1850",
+      "module": "samp.dll",
+      "evidence": "v151 original instructions: cdecl clump pointer, null ->0, else fixed GTA749F70 and full EAX pointer result. No version dispatch or extra arguments."
+    },
+    {
       "name": "GameRwCountClumpAtomics",
       "va": "0x100b1010",
       "rva": "0x000b1010",
@@ -9061,6 +9068,48 @@
       "rva": "0x000b18f0",
       "module": "samp.dll",
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwWorldAddCamera",
+      "va": "0x100b14b0",
+      "rva": "0x000b14b0",
+      "module": "samp.dll",
+      "evidence": "Preserved v151 native instructions. Snapshots GTA C17038 world slot and skips only null world; native cdecl world[/object] arguments and ignored backend return. Target 750f20 iff version1, fallback+50. Backend names corroborated by primary RenderWare.cpp."
+    },
+    {
+      "name": "GameRwWorldAddClump",
+      "va": "0x100b1600",
+      "rva": "0x000b1600",
+      "module": "samp.dll",
+      "evidence": "Preserved v151 native instructions. Snapshots GTA C17038 world slot and skips only null world; native cdecl world[/object] arguments and ignored backend return. Target 751300 fixed for all versions. Backend names corroborated by primary RenderWare.cpp."
+    },
+    {
+      "name": "GameRwWorldAddLight",
+      "va": "0x100b17c0",
+      "rva": "0x000b17c0",
+      "module": "samp.dll",
+      "evidence": "Preserved v151 native instructions. Snapshots GTA C17038 world slot and skips only null world; native cdecl world[/object] arguments and ignored backend return. Target 751910 iff version1, fallback+50. Backend names corroborated by primary RenderWare.cpp."
+    },
+    {
+      "name": "GameRwWorldRemoveClump",
+      "va": "0x100b1630",
+      "rva": "0x000b1630",
+      "module": "samp.dll",
+      "evidence": "Preserved v151 native instructions. Snapshots GTA C17038 world slot and skips only null world; native cdecl world[/object] arguments and ignored backend return. Target 751460 fixed for all versions. Backend names corroborated by primary RenderWare.cpp."
+    },
+    {
+      "name": "GameRwWorldRemoveLight",
+      "va": "0x100b1800",
+      "rva": "0x000b1800",
+      "module": "samp.dll",
+      "evidence": "Preserved v151 native instructions. Snapshots GTA C17038 world slot and skips only null world; native cdecl world[/object] arguments and ignored backend return. Target 751960 iff version1, fallback+50. Backend names corroborated by primary RenderWare.cpp."
+    },
+    {
+      "name": "GameRwWorldRender",
+      "va": "0x100b1660",
+      "rva": "0x000b1660",
+      "module": "samp.dll",
+      "evidence": "Preserved v151 native instructions. Snapshots GTA C17038 world slot and skips only null world; native cdecl world[/object] arguments and ignored backend return. Target 74f570 fixed for all versions. Backend names corroborated by primary RenderWare.cpp."
     },
     {
       "name": "GameScaleRwMatrix",
@@ -22135,6 +22184,48 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwWorldAddCamera",
+      "rva": 726192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwWorldAddClump",
+      "rva": 726528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwWorldRemoveClump",
+      "rva": 726576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwWorldRender",
+      "rva": 726624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwWorldAddLight",
+      "rva": 726976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwWorldRemoveLight",
+      "rva": 727040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwCloneClump",
+      "rva": 727120,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/rw_objects.h",
       "name": "GameRwCountClumpAtomics",
       "rva": 725008,
@@ -22228,6 +22319,48 @@
       "file": "source/game/rw_objects.h",
       "name": "GameRwReadField34",
       "rva": 725296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwWorldAddCamera",
+      "rva": 726192,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwWorldAddClump",
+      "rva": 726528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwWorldRemoveClump",
+      "rva": 726576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwWorldRender",
+      "rva": 726624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwWorldAddLight",
+      "rva": 726976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwWorldRemoveLight",
+      "rva": 727040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwCloneClump",
+      "rva": 727120,
       "module": "samp.dll"
     },
     {

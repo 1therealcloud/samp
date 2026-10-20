@@ -35,4 +35,18 @@ BOOL GameRwDestroyClump(void *clump);
 void *GameRwQueryAtomic48(const void *object);
 // samp.dll RVA: 0x000b1130
 void *__stdcall GameRwReadField34(const void *object);
+// samp.dll RVA: 0x000b14b0
+void GameRwWorldAddCamera(void *camera);
+// samp.dll RVA: 0x000b1600
+void GameRwWorldAddClump(void *clump);
+// samp.dll RVA: 0x000b1630
+void GameRwWorldRemoveClump(void *clump);
+// samp.dll RVA: 0x000b1660
+void GameRwWorldRender();
+// samp.dll RVA: 0x000b17c0
+void GameRwWorldAddLight(void *light);
+// samp.dll RVA: 0x000b1800
+void GameRwWorldRemoveLight(void *light);
+// samp.dll RVA: 0x000b1850
+void *GameRwCloneClump(void *clump);
 #endif
