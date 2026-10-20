@@ -180,3 +180,40 @@ float CGame::FindGroundZ(float x,float y,float z) {
 void CGame::RefreshRenderer(float x,float y) {
     Scripting::ProcessCommand(&g_gameRefreshRendererCommand,(double)x,(double)y);
 }
+
+#include "game/playerped.h"
+#include "game/vehicle.h"
+
+// samp.dll RVA: 0x000a0090
+CVehicle * CGame::CreateVehicle(int model,float x,float y,float z,float rotation,BOOL siren) {
+    // Native indexes this+model-0x122 without a model-range check.
+    DWORD keepLoaded=*((BYTE*)this+model-0x122)!=0;
+    CVehicle *vehicle=new CVehicle(model,x,y,z,rotation,keepLoaded,siren);
+    // Native dereferences even a null allocation; failed backend creation leaks this wrapper.
+    return vehicle->m_pGameVehicle?vehicle:0;
+}
+
+// samp.dll RVA: 0x000a0050
+BOOL CGame::RemovePed(CPed *ped) {
+    if(!ped) return FALSE;
+    BYTE player=ped->m_nPlayerNumber;
+    delete ped;
+    g_gameUsedPlayerSlots[player]=FALSE;
+    return TRUE;
+}
+
+// samp.dll RVA: 0x000a1ee0
+void CGame::ResetMoney() {
+    // GTA SA virtual address: 0x00b7ce50. Modular negation preserves INT_MIN.
+    DWORD money=*(DWORD*)0xb7ce50;
+    if(money) Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand,0,0u-money);
+}
+
+// samp.dll RVA: 0x000a0b80
+void CGame::DeleteRacingCheckpoint() {
+    if(unknown31) {
+        Scripting::ProcessCommand(&g_gameDeleteRacingCheckpointCommand,unknown31);
+        unknown31=0;
+    }
+    unknown29=0;
+}

@@ -6,6 +6,7 @@
 #include "game/audio.h"
 #include "game/camera.h"
 class CPed;
+class CVehicle;
 class CEntity;
 class CMatrix;
 #pragma pack(push,1)
@@ -32,6 +33,14 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a0b80
+    void DeleteRacingCheckpoint();
+    // samp.dll RVA: 0x000a1ee0
+    void ResetMoney();
+    // samp.dll RVA: 0x000a0050
+    BOOL RemovePed(CPed *ped);
+    // samp.dll RVA: 0x000a0090
+    CVehicle * CreateVehicle(int model,float x,float y,float z,float rotation,BOOL siren);
     // samp.dll RVA: 0x000a0a60
     void RefreshRenderer(float x,float y);
     // samp.dll RVA: 0x000a0240

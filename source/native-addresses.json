@@ -11560,6 +11560,41 @@
       "rva": "0x0011e7cc",
       "module": "samp.dll",
       "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::CreateVehicle",
+      "va": "0x100a0090",
+      "rva": "0x000a0090",
+      "module": "samp.dll",
+      "evidence": "v167 original PE disassembly and focused source/VC7 ABI/control-flow review."
+    },
+    {
+      "name": "CGame::RemovePed",
+      "va": "0x100a0050",
+      "rva": "0x000a0050",
+      "module": "samp.dll",
+      "evidence": "v167 original PE disassembly and focused source/VC7 ABI/control-flow review."
+    },
+    {
+      "name": "CGame::ResetMoney",
+      "va": "0x100a1ee0",
+      "rva": "0x000a1ee0",
+      "module": "samp.dll",
+      "evidence": "v167 original PE disassembly and focused source/VC7 ABI/control-flow review."
+    },
+    {
+      "name": "CGame::DeleteRacingCheckpoint",
+      "va": "0x100a0b80",
+      "rva": "0x000a0b80",
+      "module": "samp.dll",
+      "evidence": "v167 original PE disassembly and focused source/VC7 ABI/control-flow review."
+    },
+    {
+      "name": "g_gameDeleteRacingCheckpointCommand",
+      "va": "0x1011e77c",
+      "rva": "0x0011e77c",
+      "module": "samp.dll",
+      "evidence": "v167 original PE disassembly and focused source/VC7 ABI/control-flow review."
     }
   ],
   "annotations": [

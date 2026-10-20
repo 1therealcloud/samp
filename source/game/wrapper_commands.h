@@ -99,4 +99,6 @@ extern const Scripting::OpcodeInfo g_gameZoneDisplayCommand;
 extern const Scripting::OpcodeInfo g_gameFindGroundZCommand;
 // samp.dll RVA: 0x0011e7cc
 extern const Scripting::OpcodeInfo g_gameRefreshRendererCommand;
+// samp.dll RVA: 0x0011e77c
+extern const Scripting::OpcodeInfo g_gameDeleteRacingCheckpointCommand;
 #endif
