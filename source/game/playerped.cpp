@@ -974,3 +974,41 @@ void CPed::StartUrinating() {
     Scripting::ProcessCommand(&g_pedStartUrinationEffectCommand,*(DWORD*)unknown2bd);
     m_bUrinating=1;
 }
+
+#include "net/vehiclepool.h"
+// samp.dll RVA: 0x000abeb0
+void CPed::PutIntoVehicle(int vehicle,int seat) {
+    if(!m_pGamePed||!GamePoolVehicleGetAt(vehicle)||!GamePoolPedGetAt(m_nHandle)) return;
+    if(GetCurrentWeapon()==46) SetArmedWeapon(0,0);
+    BYTE *backend=(BYTE*)GamePoolVehicleGetAt(vehicle);
+    DWORD reject;
+    __asm { fld dword ptr [g_objectScaleLowerBound]
+        mov eax,backend
+        fld dword ptr [eax+0x4c0]
+        fucompp
+        fnstsw ax
+        test ah,0x44
+        setnp al
+        movzx eax,al
+        mov reject,eax
+    }
+    // GTA SA virtual address: excluded vehicle vtable0x00863c40.
+    if(reject||*(DWORD*)backend==0x863c40) return;
+    if((GameGetVehicleSubtype(backend)==1||GameGetVehicleSubtype(backend)==2)&&seat>(int)*(backend+0x488)) return;
+    if(seat==0) {
+        BYTE *driver=*(BYTE**)(backend+0x460);
+        if(driver&&(*(DWORD*)(driver+0x46c)&0x100)) return;
+        Scripting::ProcessCommand(&g_pedWarpDriverCommand,m_nHandle,vehicle);
+    } else Scripting::ProcessCommand(&g_pedWarpPassengerCommand,m_nHandle,vehicle,(DWORD)seat-1u);
+    void *ped=m_pGamePed;
+    if(ped==GameFindLocalPed()&&(*(DWORD*)((BYTE*)ped+0x46c)&0x100)) g_pGame->m_pCamera->Restore();
+    if(g_pNetGame) {
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
+        CVehiclePool *pool=*(CVehiclePool**)(pools+0xc);
+        WORD id=pool->Find(backend);
+        if(id==0xffff||id>2000) return;
+        CVehicle *wrapper=pool->Get(id);
+        if(wrapper&&wrapper->IsTrainPart()&&m_pGamePed==GameFindLocalPed())
+            Scripting::ProcessCommand(&g_pedTrainCameraCommand,wrapper->m_nHandle,3,2);
+    }
+}

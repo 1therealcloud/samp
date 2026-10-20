@@ -97,4 +97,8 @@ extern const double g_pedUrinationOffsetY;
 extern const double g_pedUrinationOffsetZ;
 // samp.dll RVA: 0x0011f370
 extern const double g_pedUrinationDirectionY;
+// samp.dll RVA: 0x0011ef68
+extern const Scripting::OpcodeInfo g_pedWarpDriverCommand;
+// samp.dll RVA: 0x0011eedc
+extern const Scripting::OpcodeInfo g_pedTrainCameraCommand;
 #endif

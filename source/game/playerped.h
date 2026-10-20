@@ -30,6 +30,8 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000abeb0
+    void PutIntoVehicle(int vehicle,int seat);
     // samp.dll RVA: 0x000add00
     void StartUrinating();
     // samp.dll RVA: 0x000ac030

@@ -12585,6 +12585,27 @@
       "rva": "0x0011f370",
       "module": "samp.dll",
       "evidence": "v185 direct reference instructions/data and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::PutIntoVehicle",
+      "va": "0x100abeb0",
+      "rva": "0x000abeb0",
+      "module": "samp.dll",
+      "evidence": "v186 direct reference instructions/commands and focused source/VC7 branch/ABI review."
+    },
+    {
+      "name": "g_pedWarpDriverCommand",
+      "va": "0x1011ef68",
+      "rva": "0x0011ef68",
+      "module": "samp.dll",
+      "evidence": "v186 direct reference instructions/commands and focused source/VC7 branch/ABI review."
+    },
+    {
+      "name": "g_pedTrainCameraCommand",
+      "va": "0x1011eedc",
+      "rva": "0x0011eedc",
+      "module": "samp.dll",
+      "evidence": "v186 direct reference instructions/commands and focused source/VC7 branch/ABI review."
     }
   ],
   "annotations": [
