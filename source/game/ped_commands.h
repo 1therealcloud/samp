@@ -33,4 +33,6 @@ extern const Scripting::OpcodeInfo g_pedSpawnInfoCommand;
 extern const Scripting::OpcodeInfo g_pedHandsUpCommand;
 // samp.dll RVA: 0x0011ef7c
 extern const Scripting::OpcodeInfo g_pedImmunitiesCommand;
+// samp.dll RVA: 0x0011f01c
+extern const Scripting::OpcodeInfo g_pedRotationCommand;
 #endif

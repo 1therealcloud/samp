@@ -30,6 +30,14 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000abdc0
+    float GetDistanceToEntity(CEntity *entity);
+    // samp.dll RVA: 0x000aea50
+    void DeleteAccessory(int index);
+    // samp.dll RVA: 0x000abb80
+    void SetRotation(float rotation);
+    // samp.dll RVA: 0x000abb30
+    void ForceRotation(float rotation);
     // samp.dll RVA: 0x000ac980
     void DisableJetpack();
     // samp.dll RVA: 0x000ac780

@@ -12134,6 +12134,41 @@
       "rva": "0x000ac980",
       "module": "samp.dll",
       "evidence": "v174 direct original PE disassembly and focused source/VC7 ABI/state review."
+    },
+    {
+      "name": "CPed::ForceRotation",
+      "va": "0x100abb30",
+      "rva": "0x000abb30",
+      "module": "samp.dll",
+      "evidence": "v175 original PE disassembly/SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::SetRotation",
+      "va": "0x100abb80",
+      "rva": "0x000abb80",
+      "module": "samp.dll",
+      "evidence": "v175 original PE disassembly/SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::DeleteAccessory",
+      "va": "0x100aea50",
+      "rva": "0x000aea50",
+      "module": "samp.dll",
+      "evidence": "v175 original PE disassembly/SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::GetDistanceToEntity",
+      "va": "0x100abdc0",
+      "rva": "0x000abdc0",
+      "module": "samp.dll",
+      "evidence": "v175 original PE disassembly/SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_pedRotationCommand",
+      "va": "0x1011f01c",
+      "rva": "0x0011f01c",
+      "module": "samp.dll",
+      "evidence": "v175 original PE disassembly/SCM bytes and source/VC7 static ABI review."
     }
   ],
   "annotations": [

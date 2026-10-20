@@ -514,3 +514,67 @@ void CPed::DisableJetpack() {
         }
     }
 }
+
+#include "game/rw_helpers.h"
+
+// samp.dll RVA: 0x000abb30
+void CPed::ForceRotation(float rotation) {
+    if(m_pGamePed&&GamePoolPedGetAt(m_nHandle)) {
+        *(float*)((BYTE*)m_pGamePed+0x55c)=GameHeadingToRadians(rotation);
+        *(float*)((BYTE*)m_pGamePed+0x558)=GameHeadingToRadians(rotation);
+    }
+}
+
+// samp.dll RVA: 0x000abb80
+void CPed::SetRotation(float rotation) {
+    if(m_pGamePed&&GamePoolPedGetAt(m_nHandle)) {
+        *(float*)((BYTE*)m_pGamePed+0x55c)=GameHeadingToRadians(rotation);
+        *(float*)((BYTE*)m_pGamePed+0x558)=GameHeadingToRadians(rotation);
+        Scripting::ProcessCommand(&g_pedRotationCommand,m_nHandle,(double)rotation);
+    }
+}
+
+// samp.dll RVA: 0x000aea50
+void CPed::DeleteAccessory(int index) {
+    if(index<0||index>=10||m_accessoryOccupied[index]!=1) return;
+    if(m_accessoryObjects[index]) {
+        delete (CEntity*)m_accessoryObjects[index];
+        m_accessoryObjects[index]=0;
+    }
+    memset(&m_accessoryInfo[index],0,sizeof(m_accessoryInfo[index]));
+    m_accessoryOccupied[index]=0;
+}
+
+// samp.dll RVA: 0x000abdc0
+__declspec(naked) float CPed::GetDistanceToEntity(CEntity *entity) {
+    // Native uninitialized matrix outputs and extended x87 return are intentional.
+    __asm { sub esp,0x80
+        lea eax,[esp]
+        push eax
+        call CEntity::GetMatrix
+        lea ecx,[esp+0x40]
+        push ecx
+        mov ecx,[esp+0x88]
+        call CEntity::GetMatrix
+        fld dword ptr [esp+0x38]
+        fsub dword ptr [esp+0x78]
+        fld dword ptr [esp+0x34]
+        fsub dword ptr [esp+0x74]
+        fld dword ptr [esp+0x30]
+        fsub dword ptr [esp+0x70]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st(0)
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st(0)
+        fsqrt
+        fstp st(3)
+        fstp st(0)
+        fstp st(0)
+        add esp,0x80
+        ret 4
+    }
+}
