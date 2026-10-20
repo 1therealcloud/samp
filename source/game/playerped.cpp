@@ -697,3 +697,86 @@ void CPed::StartDancing(int style) {
     if(m_nPlayerNumber==0)
         ApplyAnimation(g_pedDanceNames[style],g_pedDanceLibraries[style],16.0f,1,0,0,0,-1);
 }
+
+// samp.dll RVA: 0x000abab0
+__declspec(naked) float CPed::GetRotation() {
+    __asm { sub esp,0x40
+        push esi
+        mov esi,ecx
+        mov eax,[esi+0x2a4]
+        test eax,eax
+        jz no_rotation
+        mov eax,[esi+0x44]
+        push eax
+        call GamePoolPedGetAt
+        test eax,eax
+        jnz rotation_matrix
+    no_rotation:
+        fld dword ptr [g_objectScaleLowerBound]
+        pop esi
+        add esp,0x40
+        ret
+    rotation_matrix:
+        lea ecx,[esp+4]
+        push ecx
+        mov ecx,esi
+        call CEntity::GetMatrix
+        fld dword ptr [esp+0x14]
+        fchs
+        fld dword ptr [esp+0x18]
+        fpatan
+        fmul dword ptr [g_entityRadiansToDegrees]
+        fcom dword ptr [g_objectScaleLowerBound]
+        fnstsw ax
+        test ah,5
+        jp rotation_upper
+        fadd dword ptr [g_anglePeriod]
+        pop esi
+        add esp,0x40
+        ret
+    rotation_upper:
+        fcom dword ptr [g_anglePeriod]
+        fnstsw ax
+        test ah,1
+        jnz rotation_done
+        fsub dword ptr [g_anglePeriod]
+    rotation_done:
+        pop esi
+        add esp,0x40
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000ac6e0
+__declspec(naked) void * CPed::GetCurrentWeaponInfo() {
+    // Preserve the native uninitialized output slot on a null-backend path.
+    __asm { mov eax,[ecx+0x2a4]
+        sub esp,8
+        test eax,eax
+        jz weapon_info_return
+        test eax,eax
+        jz no_weapon_slot
+        movzx ecx,byte ptr [eax+0x718]
+        imul ecx,ecx,0x1c
+        lea eax,[ecx+eax+0x5a0]
+        jmp query_weapon_info
+    no_weapon_slot:
+        xor eax,eax
+    query_weapon_info:
+        mov edx,[eax]
+        mov ecx,g_pGame
+        push ebx
+        push 1
+        push edx
+        call CGame::GetWeaponInfo
+        mov [esp+8],eax
+        mov ebx,[esp+8]
+        lea eax,[ebx+0x24]
+        mov [esp+4],eax
+        pop ebx
+    weapon_info_return:
+        mov eax,[esp]
+        add esp,8
+        ret
+    }
+}

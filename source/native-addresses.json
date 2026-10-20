@@ -12316,6 +12316,20 @@
       "rva": "0x00154df0",
       "module": "samp.dll",
       "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::GetRotation",
+      "va": "0x100abab0",
+      "rva": "0x000abab0",
+      "module": "samp.dll",
+      "evidence": "v179 direct reference disassembly and complete VC7 body comparison; raw x87/uninitialized-stack ABI retained."
+    },
+    {
+      "name": "CPed::GetCurrentWeaponInfo",
+      "va": "0x100ac6e0",
+      "rva": "0x000ac6e0",
+      "module": "samp.dll",
+      "evidence": "v179 direct reference disassembly and complete VC7 body comparison; raw x87/uninitialized-stack ABI retained."
     }
   ],
   "annotations": [
