@@ -3974,6 +3974,41 @@
       "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
     },
     {
+      "name": "CTaskJetpack::~CTaskJetpack",
+      "va": "0x100b23b0",
+      "rva": "0x000b23b0",
+      "module": "samp.dll",
+      "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
+    },
+    {
+      "name": "CTaskJetpack::CTaskJetpack",
+      "va": "0x100b2330",
+      "rva": "0x000b2330",
+      "module": "samp.dll",
+      "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
+    },
+    {
+      "name": "CTaskJetpack::CTaskJetpack(BYTE*)",
+      "va": "0x100b2380",
+      "rva": "0x000b2380",
+      "module": "samp.dll",
+      "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
+    },
+    {
+      "name": "CTaskTakeDamageFall::~CTaskTakeDamageFall",
+      "va": "0x100b2630",
+      "rva": "0x000b2630",
+      "module": "samp.dll",
+      "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
+    },
+    {
+      "name": "CTaskTakeDamageFall::CTaskTakeDamageFall",
+      "va": "0x100b2410",
+      "rva": "0x000b2410",
+      "module": "samp.dll",
+      "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
+    },
+    {
       "name": "CTextDraw::Draw",
       "va": "0x100b3080",
       "rva": "0x000b3080",
@@ -22163,6 +22198,36 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/task.cpp",
+      "name": "CTaskJetpack::CTaskJetpack",
+      "rva": 729904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskJetpack::CTaskJetpack(BYTE*)",
+      "rva": 729984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskJetpack::~CTaskJetpack",
+      "rva": 730032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskTakeDamageFall::CTaskTakeDamageFall",
+      "rva": 730128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskTakeDamageFall::~CTaskTakeDamageFall",
+      "rva": 730672,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/task.h",
       "name": "CTask::CTask",
       "rva": 729472,
@@ -22232,6 +22297,36 @@
       "file": "source/game/task.h",
       "name": "CTask::IsSimple",
       "rva": 729856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskJetpack::CTaskJetpack",
+      "rva": 729904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskJetpack::CTaskJetpack(BYTE*)",
+      "rva": 729984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskJetpack::~CTaskJetpack",
+      "rva": 730032,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskTakeDamageFall::CTaskTakeDamageFall",
+      "rva": 730128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskTakeDamageFall::~CTaskTakeDamageFall",
+      "rva": 730672,
       "module": "samp.dll"
     },
     {

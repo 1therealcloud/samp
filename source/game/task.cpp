@@ -13,8 +13,15 @@ CTask::CTask(BYTE *task) { m_pTaskType=0; m_pPlayerPed=0; Create(task); }
 CTask::~CTask() {}
 // GTA SA virtual address: 0x0061A5A0, backend task allocation.
 // samp.dll RVA: 0x000b21b0
-void CTask::Create(DWORD size) {
-    BYTE *task=((BYTE*(__cdecl*)(DWORD))0x61a5a0)(size);
+void CTask::Create(DWORD bytes) {
+    BYTE *task;
+    __asm {
+        push bytes
+        mov eax,0x61a5a0
+        call eax
+        add esp,4
+        mov task,eax
+    }
     m_bSelfCreated=TRUE; m_pTaskType=task;
 }
 // samp.dll RVA: 0x000b21e0
@@ -102,3 +109,53 @@ BOOL CTask::IsSimple() {
     }
     return result;
 }
+
+// GTA SA virtual address: 0x0067B4E0. Wrapper remains 16 bytes; backend is 112.
+// samp.dll RVA: 0x000b2330
+CTaskJetpack::CTaskJetpack() {
+    m_pPlayerPed=0;
+    Create(112);
+    BYTE *task=m_pTaskType;
+    __asm {
+        push 0
+        push 0
+        push 0x41200000
+        push 0
+        mov ecx,task
+        mov eax,0x67b4e0
+        call eax
+    }
+}
+// samp.dll RVA: 0x000b2380
+CTaskJetpack::CTaskJetpack(BYTE *task) {
+    m_pPlayerPed=0;
+    Create(task);
+}
+// Clear the attached ped's jetpack task slot before the explicit Destroy call.
+// No backend/manager null guards beyond the native wrapper-ped check.
+// samp.dll RVA: 0x000b23b0
+CTaskJetpack::~CTaskJetpack() {
+    if(m_pPlayerPed) {
+        BYTE *manager=*(BYTE**)((BYTE*)m_pPlayerPed->m_pGamePed+0x47c);
+        *(DWORD*)(manager+0x10)=0;
+    }
+    CTask::Destroy();
+}
+// GTA SA virtual address: 0x006786C0. Backend args: fallType, zero, number.
+// samp.dll RVA: 0x000b2410
+CTaskTakeDamageFall::CTaskTakeDamageFall(DWORD fallType,DWORD number) {
+    m_pPlayerPed=0;
+    Create(24);
+    BYTE *task=m_pTaskType;
+    __asm {
+        push number
+        push 0
+        push fallType
+        mov ecx,task
+        mov eax,0x6786c0
+        call eax
+    }
+}
+// Native thunk delegates to base destruction only; it does not call Destroy.
+// samp.dll RVA: 0x000b2630
+CTaskTakeDamageFall::~CTaskTakeDamageFall() {}

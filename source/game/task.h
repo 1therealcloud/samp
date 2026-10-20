@@ -39,4 +39,24 @@ public:
 typedef char TaskSize[(sizeof(CTask)==16)?1:-1];
 typedef char TaskBackendOffset[(offsetof(CTask,m_pTaskType)==12)?1:-1];
 typedef char TaskPedOffset[(offsetof(CTask,m_pPlayerPed)==8)?1:-1];
+// samp.dll vtable RVA: 0x0011f450
+class CTaskJetpack : public CTask {
+public:
+    // samp.dll RVA: 0x000b2330
+    CTaskJetpack();
+    // samp.dll RVA: 0x000b2380
+    CTaskJetpack(BYTE *task);
+    // samp.dll RVA: 0x000b23b0
+    virtual ~CTaskJetpack();
+};
+// samp.dll vtable RVA: 0x0011f46c
+class CTaskTakeDamageFall : public CTask {
+public:
+    // samp.dll RVA: 0x000b2410
+    CTaskTakeDamageFall(DWORD fallType,DWORD number);
+    // samp.dll RVA: 0x000b2630
+    virtual ~CTaskTakeDamageFall();
+};
+typedef char JetpackWrapperSize[(sizeof(CTaskJetpack)==16)?1:-1];
+typedef char FallWrapperSize[(sizeof(CTaskTakeDamageFall)==16)?1:-1];
 #endif
