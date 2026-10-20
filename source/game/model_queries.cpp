@@ -34,3 +34,36 @@ DWORD __cdecl GameQueryModelVirtual2c(int model) {
     }
     return result;
 }
+
+// samp.dll RVA: 0x000b3d00
+DWORD __cdecl GameReadPedModelTable28(int model) {
+    if(model<0||model>30000) return 0;
+    void *info=GameGetModelInfo(model);
+    // GTA SA virtual address: observed model-info first-word identity0x0085bdc0.
+    if(!info||*(DWORD*)info!=0x85bdc0) return 0;
+    // Keep the second lookup and native extra pointer indirection unchecked.
+    BYTE *table=*(BYTE**)GameGetModelInfo(model);
+    return *(DWORD*)(table+0x28);
+}
+
+// samp.dll RVA: 0x000b3d40
+DWORD __cdecl GameReadPedModelTable2c(int model) {
+    if(model<0||model>30000) return 0;
+    void *info=GameGetModelInfo(model);
+    // GTA SA virtual address: observed model-info first-word identity0x0085bdc0.
+    if(!info||*(DWORD*)info!=0x85bdc0) return 0;
+    // Keep the second lookup and native extra pointer indirection unchecked.
+    BYTE *table=*(BYTE**)GameGetModelInfo(model);
+    return *(DWORD*)(table+0x2c);
+}
+
+// samp.dll RVA: 0x000b3d80
+DWORD __cdecl GameReadPedModelTable24(int model) {
+    if(model<0||model>30000) return 0;
+    void *info=GameGetModelInfo(model);
+    // GTA SA virtual address: observed model-info first-word identity0x0085bdc0.
+    if(!info||*(DWORD*)info!=0x85bdc0) return 0;
+    // Keep the second lookup and native extra pointer indirection unchecked.
+    BYTE *table=*(BYTE**)GameGetModelInfo(model);
+    return *(DWORD*)(table+0x24);
+}

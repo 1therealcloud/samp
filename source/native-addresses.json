@@ -12330,6 +12330,41 @@
       "rva": "0x000ac6e0",
       "module": "samp.dll",
       "evidence": "v179 direct reference disassembly and complete VC7 body comparison; raw x87/uninitialized-stack ABI retained."
+    },
+    {
+      "name": "GameReadPedModelTable28",
+      "va": "0x100b3d00",
+      "rva": "0x000b3d00",
+      "module": "samp.dll",
+      "evidence": "v180 direct native disassembly: repeated model lookup then indirect table DWORD; raw field meaning remains technical."
+    },
+    {
+      "name": "GameReadPedModelTable2c",
+      "va": "0x100b3d40",
+      "rva": "0x000b3d40",
+      "module": "samp.dll",
+      "evidence": "v180 direct native disassembly: repeated model lookup then indirect table DWORD; raw field meaning remains technical."
+    },
+    {
+      "name": "GameReadPedModelTable24",
+      "va": "0x100b3d80",
+      "rva": "0x000b3d80",
+      "module": "samp.dll",
+      "evidence": "v180 direct native disassembly: repeated model lookup then indirect table DWORD; raw field meaning remains technical."
+    },
+    {
+      "name": "CPed::GetModelTable28",
+      "va": "0x100ad5c0",
+      "rva": "0x000ad5c0",
+      "module": "samp.dll",
+      "evidence": "v180 direct native disassembly: repeated model lookup then indirect table DWORD; raw field meaning remains technical."
+    },
+    {
+      "name": "CPed::GetModelTable24",
+      "va": "0x100ad5e0",
+      "rva": "0x000ad5e0",
+      "module": "samp.dll",
+      "evidence": "v180 direct native disassembly: repeated model lookup then indirect table DWORD; raw field meaning remains technical."
     }
   ],
   "annotations": [

@@ -59,4 +59,10 @@ WORD __stdcall GameGetModelReferenceCount(int model);
 BOOL GameCleanupModelAndTxd(int model);
 // samp.dll RVA: 0x000b1070
 void GameClearModelCollision(int model);
+// samp.dll RVA: 0x000b3d00
+DWORD __cdecl GameReadPedModelTable28(int model);
+// samp.dll RVA: 0x000b3d40
+DWORD __cdecl GameReadPedModelTable2c(int model);
+// samp.dll RVA: 0x000b3d80
+DWORD __cdecl GameReadPedModelTable24(int model);
 #endif

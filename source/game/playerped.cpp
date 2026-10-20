@@ -780,3 +780,15 @@ __declspec(naked) void * CPed::GetCurrentWeaponInfo() {
         ret
     }
 }
+
+// samp.dll RVA: 0x000ad5c0
+DWORD CPed::GetModelTable28() {
+    if(!m_pGamePed) return 0xffffffff;
+    return GameReadPedModelTable28(*(short*)((BYTE*)m_pGamePed+0x22));
+}
+
+// samp.dll RVA: 0x000ad5e0
+DWORD CPed::GetModelTable24() {
+    if(!m_pGamePed) return 0xffffffff;
+    return GameReadPedModelTable24(*(short*)((BYTE*)m_pGamePed+0x22));
+}

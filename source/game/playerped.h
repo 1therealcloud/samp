@@ -30,6 +30,10 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ad5e0
+    DWORD GetModelTable24();
+    // samp.dll RVA: 0x000ad5c0
+    DWORD GetModelTable28();
     // samp.dll RVA: 0x000ac6e0
     void * GetCurrentWeaponInfo();
     // samp.dll RVA: 0x000abab0
