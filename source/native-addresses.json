@@ -7530,6 +7530,13 @@
       "evidence": "v136/v140 read-only instruction exports, direct native ABI and dependency inspection. Two-argument sphere backend and pad ECX receiver explicitly retained; raster shared-state order and raw renderer GPR frame retained."
     },
     {
+      "name": "GameClearModelCollision",
+      "va": "0x100b1070",
+      "rva": "0x000b1070",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra v154 export: analysis/rw-dispatch-v154-instructions.tsv; native tags, guards, call order and RET/RET4 ABI reviewed. Two previously missing entries safely temporary-exported and discarded."
+    },
+    {
       "name": "GameClearMouseDelta",
       "va": "0x100a02f0",
       "rva": "0x000a02f0",
@@ -8874,6 +8881,13 @@
       "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7f05a0 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
     },
     {
+      "name": "GameRwDestroyObject",
+      "va": "0x100b5df0",
+      "rva": "0x000b5df0",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra v154 export: analysis/rw-dispatch-v154-instructions.tsv; native tags, guards, call order and RET/RET4 ABI reviewed. Two previously missing entries safely temporary-exported and discarded."
+    },
+    {
       "name": "GameRwDestroyRaster",
       "va": "0x100b1470",
       "rva": "0x000b1470",
@@ -8972,6 +8986,13 @@
       "evidence": "v151 native instructions: nullable raw backend prefix access; B1030 also requires tag1, reads+48; B1130 reads+34 and stdcall RET4. No complete typed interface/callback meaning established."
     },
     {
+      "name": "GameRwQueryAtomic7c",
+      "va": "0x100b1050",
+      "rva": "0x000b1050",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra v154 export: analysis/rw-dispatch-v154-instructions.tsv; native tags, guards, call order and RET/RET4 ABI reviewed. Two previously missing entries safely temporary-exported and discarded."
+    },
+    {
       "name": "GameRwReadClump",
       "va": "0x100b1ad0",
       "rva": "0x000b1ad0",
@@ -9000,11 +9021,25 @@
       "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
     },
     {
+      "name": "GameRwRenderAtomic",
+      "va": "0x100b5e30",
+      "rva": "0x000b5e30",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra v154 export: analysis/rw-dispatch-v154-instructions.tsv; native tags, guards, call order and RET/RET4 ABI reviewed. Two previously missing entries safely temporary-exported and discarded."
+    },
+    {
       "name": "GameRwRenderClump",
       "va": "0x100b15d0",
       "rva": "0x000b15d0",
       "module": "samp.dll",
       "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 749b20 with version==1 versus fallback +50. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwRenderObject",
+      "va": "0x100b5e70",
+      "rva": "0x000b5e70",
+      "module": "samp.dll",
+      "evidence": "Read-only Ghidra v154 export: analysis/rw-dispatch-v154-instructions.tsv; native tags, guards, call order and RET/RET4 ABI reviewed. Two previously missing entries safely temporary-exported and discarded."
     },
     {
       "name": "GameRwRotateFrame",
@@ -20420,6 +20455,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.h",
+      "name": "GameClearModelCollision",
+      "rva": 725104,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/model_preview.cpp",
       "name": "g_modelPreview",
       "rva": 2804280,
@@ -20543,6 +20584,12 @@
       "file": "source/game/model_properties.cpp",
       "name": "GameCleanupModelAndTxd",
       "rva": 728128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameClearModelCollision",
+      "rva": 725104,
       "module": "samp.dll"
     },
     {
@@ -22304,6 +22351,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwQueryAtomic7c",
+      "rva": 725072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwDestroyObject",
+      "rva": 744944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwRenderAtomic",
+      "rva": 745008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwRenderObject",
+      "rva": 745072,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/rw_objects.h",
       "name": "GameRwCountClumpAtomics",
       "rva": 725008,
@@ -22475,6 +22546,30 @@
       "file": "source/game/rw_objects.h",
       "name": "GameRwUpdateClumpAnimations",
       "rva": 727456,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwQueryAtomic7c",
+      "rva": 725072,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwDestroyObject",
+      "rva": 744944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwRenderAtomic",
+      "rva": 745008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwRenderObject",
+      "rva": 745072,
       "module": "samp.dll"
     },
     {

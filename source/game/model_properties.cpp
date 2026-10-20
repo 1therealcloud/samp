@@ -118,3 +118,10 @@ BOOL GameCleanupModelAndTxd(int model) {
     }
     return TRUE;
 }
+
+// Clear the observed collision slot only; no destructor or release is native.
+// samp.dll RVA: 0x000b1070
+void GameClearModelCollision(int model) {
+    BYTE *info=(BYTE*)GameGetModelInfo(model);
+    if(info)*(void**)(info+0x14)=0;
+}

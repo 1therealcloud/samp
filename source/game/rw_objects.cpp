@@ -97,7 +97,7 @@ BOOL GameRwDestroyClump(void *clump) {
 }
 
 // Native object tag must be1 before the raw +48 field is read.
-// Field/callback semantics remain deliberately opaque in this interface.
+// B5E30 establishes this field as the atomic render callback; keep raw view.
 // samp.dll RVA: 0x000b1030
 void *GameRwQueryAtomic48(const void *object) {
     const BYTE *bytes=(const BYTE*)object;
@@ -236,4 +236,41 @@ void GameRwUpdateClumpHierarchy(void *clump) {
 // samp.dll RVA: 0x000b19a0
 void GameRwUpdateClumpAnimations(void *clump,float timeStep,DWORD onScreen) {
     ((void(__cdecl*)(void*,float,DWORD))0x4d34f0)(clump,timeStep,onScreen);
+}
+
+// Return the address at +7C, not the pointer stored there; tag1 only.
+// samp.dll RVA: 0x000b1050
+void *GameRwQueryAtomic7c(void *object) {
+    BYTE *bytes=(BYTE*)object;
+    return bytes && *bytes==1?bytes+0x7c:0;
+}
+
+// Snapshot frame before atomic destruction; clump path has no frame teardown.
+// samp.dll RVA: 0x000b5df0
+void GameRwDestroyObject(void *object) {
+    if(!object)return;
+    BYTE type=*(BYTE*)object;
+    if(type==1) {
+        void *frame=*(void**)((BYTE*)object+4);
+        GameRwDestroyAtomic(object);
+        if(frame)GameRwDestroyFrame(frame);
+    } else if(type==2)GameRwDestroyClump(object);
+}
+
+// Native callback is cdecl, unchecked, and its return value is ignored.
+// samp.dll RVA: 0x000b5e30
+BOOL __stdcall GameRwRenderAtomic(void *object) {
+    if(!object || *(BYTE*)object!=1)return FALSE;
+    void *callback=GameRwQueryAtomic48(object);
+    ((void*(__cdecl*)(void*))callback)(object);
+    return TRUE;
+}
+
+// Dispatch opaque backend tags1/2 only; native entry pops its one argument.
+// samp.dll RVA: 0x000b5e70
+void __stdcall GameRwRenderObject(void *object) {
+    if(!object)return;
+    BYTE type=*(BYTE*)object;
+    if(type==1)GameRwRenderAtomic(object);
+    else if(type==2)GameRwRenderClump(object);
 }

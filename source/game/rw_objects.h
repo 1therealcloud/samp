@@ -61,4 +61,12 @@ void GameRwSetVisibilityCamera(void *camera);
 void GameRwUpdateClumpHierarchy(void *clump);
 // samp.dll RVA: 0x000b19a0
 void GameRwUpdateClumpAnimations(void *clump,float timeStep,DWORD onScreen);
+// samp.dll RVA: 0x000b1050
+void *GameRwQueryAtomic7c(void *object);
+// samp.dll RVA: 0x000b5df0
+void GameRwDestroyObject(void *object);
+// samp.dll RVA: 0x000b5e30
+BOOL __stdcall GameRwRenderAtomic(void *object);
+// samp.dll RVA: 0x000b5e70
+void __stdcall GameRwRenderObject(void *object);
 #endif
