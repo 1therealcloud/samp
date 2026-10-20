@@ -49,4 +49,16 @@ void GameRwWorldAddLight(void *light);
 void GameRwWorldRemoveLight(void *light);
 // samp.dll RVA: 0x000b1850
 void *GameRwCloneClump(void *clump);
+// samp.dll RVA: 0x000b0ff0
+DWORD GameRwInvokeEngineSlot20(DWORD first,DWORD second);
+// samp.dll RVA: 0x000b1100
+void *GameRwUnlockGeometry(void *geometry);
+// samp.dll RVA: 0x000b1110
+DWORD GameRwLockGeometry(void *geometry);
+// samp.dll RVA: 0x000b1840
+void GameRwSetVisibilityCamera(void *camera);
+// samp.dll RVA: 0x000b1980
+void GameRwUpdateClumpHierarchy(void *clump);
+// samp.dll RVA: 0x000b19a0
+void GameRwUpdateClumpAnimations(void *clump,float timeStep,DWORD onScreen);
 #endif

@@ -8944,6 +8944,20 @@
       "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
     },
     {
+      "name": "GameRwInvokeEngineSlot20",
+      "va": "0x100b0ff0",
+      "rva": "0x000b0ff0",
+      "module": "samp.dll",
+      "evidence": "v151 preserved native instructions. Raw cdecl ABI intentionally overwrites EAX by POP: engine+20 returns final second argument word, geometry unlock returns input word, lock returns maskFFF. Slot20 purpose remains unresolved; no library return substituted."
+    },
+    {
+      "name": "GameRwLockGeometry",
+      "va": "0x100b1110",
+      "rva": "0x000b1110",
+      "module": "samp.dll",
+      "evidence": "v151 preserved native instructions. Raw cdecl ABI intentionally overwrites EAX by POP: engine+20 returns final second argument word, geometry unlock returns input word, lock returns maskFFF. Slot20 purpose remains unresolved; no library return substituted."
+    },
+    {
       "name": "GameRwQuaternionFromMatrix",
       "va": "0x100b4d20",
       "rva": "0x000b4d20",
@@ -9049,6 +9063,13 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwSetVisibilityCamera",
+      "va": "0x100b1840",
+      "rva": "0x000b1840",
+      "module": "samp.dll",
+      "evidence": "v151 preserved native cdecl calls, fixed targets and full stack words. Pinned GTA-reversed VisibilityPlugins/RwHelper/RpAnimBlend sources corroborate backend identity. Hierarchy lookup result forwarded without new null guard."
+    },
+    {
       "name": "GameRwStreamClose",
       "va": "0x100b1a00",
       "rva": "0x000b1a00",
@@ -9068,6 +9089,27 @@
       "rva": "0x000b18f0",
       "module": "samp.dll",
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwUnlockGeometry",
+      "va": "0x100b1100",
+      "rva": "0x000b1100",
+      "module": "samp.dll",
+      "evidence": "v151 preserved native instructions. Raw cdecl ABI intentionally overwrites EAX by POP: engine+20 returns final second argument word, geometry unlock returns input word, lock returns maskFFF. Slot20 purpose remains unresolved; no library return substituted."
+    },
+    {
+      "name": "GameRwUpdateClumpAnimations",
+      "va": "0x100b19a0",
+      "rva": "0x000b19a0",
+      "module": "samp.dll",
+      "evidence": "v151 preserved native cdecl calls, fixed targets and full stack words. Pinned GTA-reversed VisibilityPlugins/RwHelper/RpAnimBlend sources corroborate backend identity. Hierarchy lookup result forwarded without new null guard."
+    },
+    {
+      "name": "GameRwUpdateClumpHierarchy",
+      "va": "0x100b1980",
+      "rva": "0x000b1980",
+      "module": "samp.dll",
+      "evidence": "v151 preserved native cdecl calls, fixed targets and full stack words. Pinned GTA-reversed VisibilityPlugins/RwHelper/RpAnimBlend sources corroborate backend identity. Hierarchy lookup result forwarded without new null guard."
     },
     {
       "name": "GameRwWorldAddCamera",
@@ -22226,6 +22268,42 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwInvokeEngineSlot20",
+      "rva": 724976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwUnlockGeometry",
+      "rva": 725248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwLockGeometry",
+      "rva": 725264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwSetVisibilityCamera",
+      "rva": 727104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwUpdateClumpHierarchy",
+      "rva": 727424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwUpdateClumpAnimations",
+      "rva": 727456,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/rw_objects.h",
       "name": "GameRwCountClumpAtomics",
       "rva": 725008,
@@ -22361,6 +22439,42 @@
       "file": "source/game/rw_objects.h",
       "name": "GameRwCloneClump",
       "rva": 727120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwInvokeEngineSlot20",
+      "rva": 724976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwUnlockGeometry",
+      "rva": 725248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwLockGeometry",
+      "rva": 725264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwSetVisibilityCamera",
+      "rva": 727104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwUpdateClumpHierarchy",
+      "rva": 727424,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwUpdateClumpAnimations",
+      "rva": 727456,
       "module": "samp.dll"
     },
     {

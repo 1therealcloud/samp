@@ -169,3 +169,71 @@ void *GameRwCloneClump(void *clump) {
     if(!clump)return 0;
     return ((void*(__cdecl*)(void*))0x749f70)(clump);
 }
+
+// Raw return ABI: stack cleanup POPs intentionally overwrite backend EAX.
+// GTA SA engine slot C97B24, entry+20; slot purpose remains unresolved.
+// Two raw words are passed, and the final popped second word is returned.
+// samp.dll RVA: 0x000b0ff0
+__declspec(naked) DWORD GameRwInvokeEngineSlot20(DWORD first,DWORD second) {
+    __asm {
+        push ebp
+        mov ebp,esp
+        mov edx,0xc97b24
+        mov eax,dword ptr [edx]
+        push dword ptr [ebp + 0xc]
+        push dword ptr [ebp + 0x8]
+        call dword ptr [eax + 0x20]
+        pop eax
+        pop eax
+        pop ebp
+        ret
+    }
+}
+// GTA SA virtual address74C800. Return input word, not backend result.
+// samp.dll RVA: 0x000b1100
+__declspec(naked) void *GameRwUnlockGeometry(void *geometry) {
+    __asm {
+        push ebp
+        mov ebp,esp
+        push dword ptr [ebp + 0x8]
+        mov eax,0x74c800
+        call eax
+        pop eax
+        pop ebp
+        ret
+    }
+}
+// GTA SA virtual address74C7D0. Pass lock maskFFF, then return that word.
+// samp.dll RVA: 0x000b1110
+__declspec(naked) DWORD GameRwLockGeometry(void *geometry) {
+    __asm {
+        push ebp
+        mov ebp,esp
+        push 0xfff
+        push dword ptr [ebp + 0x8]
+        mov eax,0x74c7d0
+        call eax
+        pop eax
+        pop eax
+        pop ebp
+        ret
+    }
+}
+
+// GTA SA virtual address: 0x007328C0, static visibility camera setter.
+// samp.dll RVA: 0x000b1840
+void GameRwSetVisibilityCamera(void *camera) {
+    ((void(__cdecl*)(void*))0x7328c0)(camera);
+}
+// GTA SA virtual addresses: hierarchy lookup734A40, matrix update7C51D0.
+// No additional null hierarchy guard is native.
+// samp.dll RVA: 0x000b1980
+void GameRwUpdateClumpHierarchy(void *clump) {
+    void *hierarchy=((void*(__cdecl*)(void*))0x734a40)(clump);
+    ((BOOL(__cdecl*)(void*))0x7c51d0)(hierarchy);
+}
+// GTA SA virtual address: 0x004D34F0; full native on-screen word is forwarded.
+// samp.dll RVA: 0x000b19a0
+void GameRwUpdateClumpAnimations(void *clump,float timeStep,DWORD onScreen) {
+    ((void(__cdecl*)(void*,float,DWORD))0x4d34f0)(clump,timeStep,onScreen);
+}
