@@ -3,7 +3,7 @@
 #include "game/entity.h"
 #include <stddef.h>
 // Native allocation extent B8 and CEntity prefix/three-slot virtual interface.
-// Opaque bytes retain unknown meaning. Constructor remains declaration-only.
+// Opaque bytes retain unknown meaning; lifecycle follows the recovered DL bodies.
 #pragma pack(push,1)
 class CVehicle : public CEntity {
 public:
@@ -16,7 +16,7 @@ public:
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
     BYTE unknown7f[0x39];
-    // Native constructor entry established; body/creation paths still open.
+    // Native constructor with ordinary, train and carriage paths.
     // samp.dll RVA: 0x000b7f00
     CVehicle(int model,float x,float y,float z,float rotation,DWORD keepLoaded,BOOL siren);
     // samp.dll RVA: 0x000b8420
@@ -182,4 +182,14 @@ void __stdcall GameRemoveDriverByState598(void *vehicle);
 // Raw heap callback; record must be nonnull. First argument is unused natively.
 // samp.dll RVA: 0x000b86b0
 DWORD __stdcall GameDeletePointerRecord(DWORD unused,void **record);
+// samp.dll RVA: 0x002abe64
+extern void *g_vehicleTrainCursor;
+// samp.dll RVA: 0x002abe68
+extern DWORD g_vehicleLastCreatedHandle;
+// samp.dll RVA: 0x0011e33c
+extern const float g_vehicleCreationLift;
+// samp.dll RVA: 0x0011f7e0
+extern const char g_vehicleBadCarriageWarning[29];
+// samp.dll RVA: 0x0011f800
+extern const char g_vehicleCreationWarning[42];
 #endif

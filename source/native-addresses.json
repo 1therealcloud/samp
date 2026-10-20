@@ -4279,7 +4279,7 @@
       "va": "0x100b7f00",
       "rva": "0x000b7f00",
       "module": "samp.dll",
-      "evidence": "v162: Declaration only: native constructor1296 bytes/7 stack arguments, implementation remains open."
+      "evidence": "v163 recovered full normal/train/carriage constructor from v160 original1296-byte/7-argument body; native base reset, untouched/early-return state, global reloads, model waits and commands preserved."
     },
     {
       "name": "CVehicle::DetachTrailer",
@@ -7901,6 +7901,13 @@
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
     },
     {
+      "name": "g_vehicleBadCarriageWarning",
+      "va": "0x1011f7e0",
+      "rva": "0x0011f7e0",
+      "module": "samp.dll",
+      "evidence": "v163: Original NUL-terminated28-byte carriage warning plus terminator."
+    },
+    {
       "name": "g_vehicleChangeInteriorCommand",
       "va": "0x1011f7a4",
       "rva": "0x0011f7a4",
@@ -7915,11 +7922,39 @@
       "evidence": "v159 exact18-byte original SCM descriptor and native wrapper operands."
     },
     {
+      "name": "g_vehicleCreateCommand",
+      "va": "0x1011f5ec",
+      "rva": "0x0011f5ec",
+      "module": "samp.dll",
+      "evidence": "v163 exact18-byte original opcode descriptor; 0.2x command names corroborate native opcodeA5/9C4/7FF/6D8, DL constructor operands establish actual calls."
+    },
+    {
       "name": "g_vehicleCreateMarkerCommand",
       "va": "0x1011f628",
       "rva": "0x0011f628",
       "module": "samp.dll",
       "evidence": "v160 exact original18-byte SCM descriptor; native ProcessMarkers operands preserved in v159 instruction export."
+    },
+    {
+      "name": "g_vehicleCreateTrainCommand",
+      "va": "0x1011f6c8",
+      "rva": "0x0011f6c8",
+      "module": "samp.dll",
+      "evidence": "v163 exact18-byte original opcode descriptor; 0.2x command names corroborate native opcodeA5/9C4/7FF/6D8, DL constructor operands establish actual calls."
+    },
+    {
+      "name": "g_vehicleCreationLift",
+      "va": "0x1011e33c",
+      "rva": "0x0011e33c",
+      "module": "samp.dll",
+      "evidence": "v163: Original float0.25 operand after GetMatrix/subtype checks; final position Z is rounded to float."
+    },
+    {
+      "name": "g_vehicleCreationWarning",
+      "va": "0x1011f800",
+      "rva": "0x0011f800",
+      "module": "samp.dll",
+      "evidence": "v163: Original NUL-terminated41-byte creation warning plus terminator."
     },
     {
       "name": "g_vehicleDamageableCommand",
@@ -7964,11 +7999,32 @@
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
     },
     {
+      "name": "g_vehicleGasTankExplosionCommand",
+      "va": "0x1011f6f0",
+      "rva": "0x0011f6f0",
+      "module": "samp.dll",
+      "evidence": "v163 exact18-byte original opcode descriptor; 0.2x command names corroborate native opcodeA5/9C4/7FF/6D8, DL constructor operands establish actual calls."
+    },
+    {
+      "name": "g_vehicleHydraulicsCommand",
+      "va": "0x1011f718",
+      "rva": "0x0011f718",
+      "module": "samp.dll",
+      "evidence": "v163 exact18-byte original opcode descriptor; 0.2x command names corroborate native opcodeA5/9C4/7FF/6D8, DL constructor operands establish actual calls."
+    },
+    {
       "name": "g_vehicleIsSunkCommand",
       "va": "0x1011f678",
       "rva": "0x0011f678",
       "module": "samp.dll",
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleLastCreatedHandle",
+      "va": "0x102abe68",
+      "rva": "0x002abe68",
+      "module": "samp.dll",
+      "evidence": "v163: Native BSS last handle, assigned on successful ordinary creation, locomotive creation and carriage traversal."
     },
     {
       "name": "g_vehicleMarkerColorCommand",
@@ -8025,6 +8081,13 @@
       "rva": "0x0011f614",
       "module": "samp.dll",
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleTrainCursor",
+      "va": "0x102abe64",
+      "rva": "0x002abe64",
+      "module": "samp.dll",
+      "evidence": "v163: Native BSS cursor, shared by train creation and carriage traversal; not duplicated in collision arena ending2ABE5C."
     },
     {
       "name": "g_vehicleTrainSpeedMaximum",
@@ -24240,6 +24303,42 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle.cpp",
+      "name": "g_vehicleTrainCursor",
+      "rva": 2801252,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "g_vehicleLastCreatedHandle",
+      "rva": 2801256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "g_vehicleCreationLift",
+      "rva": 1172284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "g_vehicleBadCarriageWarning",
+      "rva": 1177568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "g_vehicleCreationWarning",
+      "rva": 1177600,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "CVehicle::CVehicle",
+      "rva": 753408,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle.h",
       "name": "CVehicle::CVehicle",
       "rva": 753408,
@@ -24699,6 +24798,36 @@
       "file": "source/game/vehicle.h",
       "name": "GameDeletePointerRecord",
       "rva": 755376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleTrainCursor",
+      "rva": 2801252,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleLastCreatedHandle",
+      "rva": 2801256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleCreationLift",
+      "rva": 1172284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleBadCarriageWarning",
+      "rva": 1177568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleCreationWarning",
+      "rva": 1177600,
       "module": "samp.dll"
     },
     {
@@ -25386,6 +25515,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleCreateCommand",
+      "rva": 1177068,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleGasTankExplosionCommand",
+      "rva": 1177328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleHydraulicsCommand",
+      "rva": 1177368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleCreateTrainCommand",
+      "rva": 1177288,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -25605,6 +25758,30 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_vehicleDestroyTrainCommand",
       "rva": 1177308,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleCreateCommand",
+      "rva": 1177068,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleGasTankExplosionCommand",
+      "rva": 1177328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleHydraulicsCommand",
+      "rva": 1177368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleCreateTrainCommand",
+      "rva": 1177288,
       "module": "samp.dll"
     },
     {

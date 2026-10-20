@@ -75,4 +75,12 @@ extern const Scripting::OpcodeInfo g_vehicleMarkerModeCommand;
 extern const Scripting::OpcodeInfo g_vehicleDestroyCommand;
 // samp.dll RVA: 0x0011f6dc
 extern const Scripting::OpcodeInfo g_vehicleDestroyTrainCommand;
+// samp.dll RVA: 0x0011f5ec
+extern const Scripting::OpcodeInfo g_vehicleCreateCommand;
+// samp.dll RVA: 0x0011f6f0
+extern const Scripting::OpcodeInfo g_vehicleGasTankExplosionCommand;
+// samp.dll RVA: 0x0011f718
+extern const Scripting::OpcodeInfo g_vehicleHydraulicsCommand;
+// samp.dll RVA: 0x0011f6c8
+extern const Scripting::OpcodeInfo g_vehicleCreateTrainCommand;
 #endif
