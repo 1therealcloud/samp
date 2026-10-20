@@ -1,15 +1,13 @@
 #ifndef SAMP_RECOVERED_VEHICLE_H
 #define SAMP_RECOVERED_VEHICLE_H
-#include <windows.h>
+#include "game/entity.h"
 #include <stddef.h>
-// Observed prefix only. Full allocation extent, inheritance and remaining fields
-// are not established; production code must not allocate this partial type yet.
+// Native allocation extent B8 and CEntity prefix/three-slot virtual interface.
+// Opaque bytes retain unknown meaning. Constructor remains declaration-only.
 #pragma pack(push,1)
-class CVehicle {
+class CVehicle : public CEntity {
 public:
-    BYTE unknown00[0x44];
-    int m_nHandle;
-    BYTE unknown48[4];
+    CVehicle *m_pTrailer;
     void *m_pGameVehicle;
     BYTE unknown50[0x21];
     BOOL m_bInModShop;
@@ -17,6 +15,16 @@ public:
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
+    BYTE unknown7f[0x39];
+    // Native constructor entry established; body/creation paths still open.
+    // samp.dll RVA: 0x000b7f00
+    CVehicle(int model,float x,float y,float z,float rotation,DWORD keepLoaded,BOOL siren);
+    // samp.dll RVA: 0x000b8420
+    virtual ~CVehicle();
+    // samp.dll RVA: 0x000b8540
+    virtual void Add();
+    // samp.dll RVA: 0x000b8570
+    virtual void Remove();
     // samp.dll RVA: 0x000b85a0
     void EnableEngine(BOOL enabled);
     // samp.dll RVA: 0x000b7220
@@ -151,6 +159,9 @@ public:
     void ShutdownLicensePlate();
 };
 #pragma pack(pop)
+typedef char VehicleExtent[(sizeof(CVehicle)==0xb8)?1:-1];
+typedef char VehicleHandleOffset[(offsetof(CVehicle,m_nHandle)==0x44)?1:-1];
+typedef char VehicleTrailerOffset[(offsetof(CVehicle,m_pTrailer)==0x48)?1:-1];
 typedef char VehicleBackendOffset[(offsetof(CVehicle,m_pGameVehicle)==0x4c)?1:-1];
 typedef char VehicleColorOffset[(offsetof(CVehicle,m_bColorChanged)==0x7b)?1:-1];
 // samp.dll RVA: 0x000b37d0

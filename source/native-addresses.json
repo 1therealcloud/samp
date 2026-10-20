@@ -4219,6 +4219,20 @@
       "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
     },
     {
+      "name": "CVehicle::~CVehicle",
+      "va": "0x100b8420",
+      "rva": "0x000b8420",
+      "module": "samp.dll",
+      "evidence": "v162: v160 original destructor286 bytes, real recovered dependencies and native base-vptr reset; no early cleanup on failed pool lookup."
+    },
+    {
+      "name": "CVehicle::Add",
+      "va": "0x100b8540",
+      "rva": "0x000b8540",
+      "module": "samp.dll",
+      "evidence": "v162: v160 original40 bytes, base DoesExist gate and base-qualified Add then trailer virtual+4."
+    },
+    {
       "name": "CVehicle::AddComponent",
       "va": "0x100b7b00",
       "rva": "0x000b7b00",
@@ -4259,6 +4273,13 @@
       "rva": "0x000b7cd0",
       "module": "samp.dll",
       "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
+      "name": "CVehicle::CVehicle",
+      "va": "0x100b7f00",
+      "rva": "0x000b7f00",
+      "module": "samp.dll",
+      "evidence": "v162: Declaration only: native constructor1296 bytes/7 stack arguments, implementation remains open."
     },
     {
       "name": "CVehicle::DetachTrailer",
@@ -4497,6 +4518,13 @@
       "rva": "0x000b7220",
       "module": "samp.dll",
       "evidence": "v159 native337-byte/105-instruction ProcessMarkers export; v160 preserves raw x87 status masks, repeat queries, SCM order and native field views64/65/B4."
+    },
+    {
+      "name": "CVehicle::Remove",
+      "va": "0x100b8570",
+      "rva": "0x000b8570",
+      "module": "samp.dll",
+      "evidence": "v162: v160 original40 bytes, base DoesExist gate then trailer virtual+8 before base-qualified Remove."
     },
     {
       "name": "CVehicle::RemoveComponent",
@@ -24191,6 +24219,48 @@
       "file": "source/game/vehicle.cpp",
       "name": "CVehicle::SetColor",
       "rva": 749088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "CVehicle::~CVehicle",
+      "rva": 754720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "CVehicle::Add",
+      "rva": 755008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.cpp",
+      "name": "CVehicle::Remove",
+      "rva": 755056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::CVehicle",
+      "rva": 753408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::~CVehicle",
+      "rva": 754720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::Add",
+      "rva": 755008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::Remove",
+      "rva": 755056,
       "module": "samp.dll"
     },
     {
