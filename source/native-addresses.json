@@ -11847,6 +11847,132 @@
       "rva": "0x000abd60",
       "module": "samp.dll",
       "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::SetAim",
+      "va": "0x100ab850",
+      "rva": "0x000ab850",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::SetInitialState",
+      "va": "0x100ab7f0",
+      "rva": "0x000ab7f0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::GetLoadedShoppingDataSubsection",
+      "va": "0x100adee0",
+      "rva": "0x000adee0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::RemoveWeaponWhenEnteringVehicle",
+      "va": "0x100abd30",
+      "rva": "0x000abd30",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::GetAimedPed",
+      "va": "0x100aeb60",
+      "rva": "0x000aeb60",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::GetAccessory",
+      "va": "0x10013580",
+      "rva": "0x00013580",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::ResetDamageEntity",
+      "va": "0x100ad4a0",
+      "rva": "0x000ad4a0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::SetFightingStyle",
+      "va": "0x100adcd0",
+      "rva": "0x000adcd0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::GetAccessoryState",
+      "va": "0x100aeab0",
+      "rva": "0x000aeab0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::EnableCellphone",
+      "va": "0x100adc70",
+      "rva": "0x000adc70",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::DeleteArrow",
+      "va": "0x100ab8d0",
+      "rva": "0x000ab8d0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::LoadShoppingDataSubsection",
+      "va": "0x100adf00",
+      "rva": "0x000adf00",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::SetSpawnInfo",
+      "va": "0x100ac370",
+      "rva": "0x000ac370",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "CPed::IsDead",
+      "va": "0x100aba30",
+      "rva": "0x000aba30",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedFightingStyleCommand",
+      "va": "0x1011f1c0",
+      "rva": "0x0011f1c0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedCellphoneCommand",
+      "va": "0x1011f198",
+      "rva": "0x0011f198",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedDeleteArrowCommand",
+      "va": "0x1011eef0",
+      "rva": "0x0011eef0",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
+    },
+    {
+      "name": "g_pedSpawnInfoCommand",
+      "va": "0x1011ef18",
+      "rva": "0x0011ef18",
+      "module": "samp.dll",
+      "evidence": "v171 direct reference PE instruction/SCM evidence and focused source/VC7 static review."
     }
   ],
   "annotations": [

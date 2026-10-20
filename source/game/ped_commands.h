@@ -21,4 +21,12 @@ extern const char g_pedNullAnimation[5];
 extern const Scripting::OpcodeInfo g_pedGetCurrentWeaponCommand;
 // samp.dll RVA: 0x0011ef40
 extern const Scripting::OpcodeInfo g_pedSetArmedWeaponCommand;
+// samp.dll RVA: 0x0011f1c0
+extern const Scripting::OpcodeInfo g_pedFightingStyleCommand;
+// samp.dll RVA: 0x0011f198
+extern const Scripting::OpcodeInfo g_pedCellphoneCommand;
+// samp.dll RVA: 0x0011eef0
+extern const Scripting::OpcodeInfo g_pedDeleteArrowCommand;
+// samp.dll RVA: 0x0011ef18
+extern const Scripting::OpcodeInfo g_pedSpawnInfoCommand;
 #endif

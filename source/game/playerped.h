@@ -1,6 +1,7 @@
 #ifndef SAMP_RECOVERED_PED_H
 #define SAMP_RECOVERED_PED_H
 #include "game/entity.h"
+struct CameraAim;
 #pragma pack(push,1)
 struct PedAccessoryState { BYTE opaque[52]; };
 // samp.dll vtable RVA: 0x0011f24c
@@ -29,6 +30,34 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000aba30
+    BOOL IsDead();
+    // samp.dll RVA: 0x000ac370
+    void SetSpawnInfo(const CVector *position,float rotation);
+    // samp.dll RVA: 0x000adf00
+    void LoadShoppingDataSubsection(const char *name);
+    // samp.dll RVA: 0x000ab8d0
+    void DeleteArrow();
+    // samp.dll RVA: 0x000adc70
+    void EnableCellphone(BOOL enabled);
+    // samp.dll RVA: 0x000aeab0
+    BOOL GetAccessoryState(int index);
+    // samp.dll RVA: 0x000adcd0
+    void SetFightingStyle(int style);
+    // samp.dll RVA: 0x000ad4a0
+    void ResetDamageEntity();
+    // samp.dll RVA: 0x00013580
+    void * GetAccessory(int index);
+    // samp.dll RVA: 0x000aeb60
+    void * GetAimedPed();
+    // samp.dll RVA: 0x000abd30
+    void RemoveWeaponWhenEnteringVehicle();
+    // samp.dll RVA: 0x000adee0
+    const char * GetLoadedShoppingDataSubsection();
+    // samp.dll RVA: 0x000ab7f0
+    void SetInitialState();
+    // samp.dll RVA: 0x000ab850
+    void SetAim(const CameraAim *aim);
     // samp.dll RVA: 0x000abd60
     void * GetCurrentWeaponSlot();
     // samp.dll RVA: 0x000ad480
