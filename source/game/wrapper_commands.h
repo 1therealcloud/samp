@@ -101,4 +101,20 @@ extern const Scripting::OpcodeInfo g_gameFindGroundZCommand;
 extern const Scripting::OpcodeInfo g_gameRefreshRendererCommand;
 // samp.dll RVA: 0x0011e77c
 extern const Scripting::OpcodeInfo g_gameDeleteRacingCheckpointCommand;
+// samp.dll RVA: 0x0011e6dc
+extern const Scripting::OpcodeInfo g_gameCreateMarkerCommand;
+// samp.dll RVA: 0x0011e718
+extern const Scripting::OpcodeInfo g_gameCreateMarkerType1Command;
+// samp.dll RVA: 0x0011e858
+extern const Scripting::OpcodeInfo g_gameCreateMarkerType2Command;
+// samp.dll RVA: 0x0011e704
+extern const Scripting::OpcodeInfo g_gameCreateMarkerType3Command;
+// samp.dll RVA: 0x0011e6c8
+extern const Scripting::OpcodeInfo g_gameMarkerColorCommand;
+// samp.dll RVA: 0x0011e6f0
+extern const Scripting::OpcodeInfo g_gameMarkerModeCommand;
+// samp.dll RVA: 0x0011e768
+extern const Scripting::OpcodeInfo g_gameCreateRacingCheckpointCommand;
+// samp.dll RVA: 0x0011e72c
+extern const Scripting::OpcodeInfo g_gameLocateCheckpointCommand;
 #endif

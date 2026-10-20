@@ -7,6 +7,7 @@
 #include "game/camera.h"
 class CPed;
 class CVehicle;
+struct CVector;
 class CEntity;
 class CMatrix;
 #pragma pack(push,1)
@@ -33,6 +34,16 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a1d40
+    void ProcessCheckpoints();
+    // samp.dll RVA: 0x000a1f20
+    void SetRacingCheckpoint(BYTE type,const CVector *position,const CVector *next,float size);
+    // samp.dll RVA: 0x000a1cc0
+    void CreateRacingCheckpoint();
+    // samp.dll RVA: 0x000a1c00
+    void SetCheckpoint(const CVector *position,const CVector *size);
+    // samp.dll RVA: 0x000a0bb0
+    DWORD CreateMarker(int icon,float x,float y,float z,DWORD color,int type);
     // samp.dll RVA: 0x000a0b80
     void DeleteRacingCheckpoint();
     // samp.dll RVA: 0x000a1ee0

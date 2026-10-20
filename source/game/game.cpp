@@ -217,3 +217,123 @@ void CGame::DeleteRacingCheckpoint() {
     }
     unknown29=0;
 }
+
+// Observed checkpoint region at CGame+0x0c, not a separate native allocation.
+#pragma pack(push,1)
+struct GameCheckpointState {
+    CVector racePosition,raceNext;
+    float raceSize;
+    BYTE raceType;
+    DWORD raceEnabled,raceMarker,raceCheckpoint;
+    CVector position,size;
+    DWORD enabled,marker;
+};
+#pragma pack(pop)
+typedef char CheckpointRegionSize[(sizeof(GameCheckpointState)==0x49)?1:-1];
+typedef char CheckpointMarkerOffset[(offsetof(GameCheckpointState,marker)==0x45)?1:-1];
+typedef char RacingMarkerOffset[(offsetof(GameCheckpointState,raceMarker)==0x21)?1:-1];
+
+// samp.dll RVA: 0x000a0bb0
+DWORD CGame::CreateMarker(int icon,float x,float y,float z,DWORD color,int type) {
+    DWORD marker=0;
+    const Scripting::OpcodeInfo *command=&g_gameCreateMarkerCommand;
+    if(type==1) command=&g_gameCreateMarkerType1Command;
+    else if(type==2) command=&g_gameCreateMarkerType2Command;
+    else if(type==3) command=&g_gameCreateMarkerType3Command;
+    Scripting::ProcessCommand(command,(double)x,(double)y,(double)z,icon,&marker);
+    if(icon==0) {
+        Scripting::ProcessCommand(&g_gameMarkerColorCommand,marker,color);
+        Scripting::ProcessCommand(&g_gameMarkerModeCommand,marker,color<1004u?2:3);
+    }
+    return marker;
+}
+
+// samp.dll RVA: 0x000a1c00
+void CGame::SetCheckpoint(const CVector *position,const CVector *size) {
+    GameCheckpointState *s=(GameCheckpointState*)((BYTE*)this+0x0c);
+    s->position=*position;
+    s->size=*size;
+    if(s->marker) {
+        Scripting::ProcessCommand(&g_gameDeleteMarkerCommand,s->marker);
+        s->marker=0;
+        DWORD marker=0;
+        Scripting::ProcessCommand(&g_gameCreateMarkerCommand,(double)s->position.x,(double)s->position.y,(double)s->position.z,0,&marker);
+        Scripting::ProcessCommand(&g_gameMarkerColorCommand,marker,1005);
+        Scripting::ProcessCommand(&g_gameMarkerModeCommand,marker,3);
+        s->marker=marker;
+    }
+}
+
+// samp.dll RVA: 0x000a1cc0
+void CGame::CreateRacingCheckpoint() {
+    GameCheckpointState *s=(GameCheckpointState*)((BYTE*)this+0x0c);
+    if(s->raceCheckpoint) {
+        Scripting::ProcessCommand(&g_gameDeleteRacingCheckpointCommand,s->raceCheckpoint);
+        s->raceCheckpoint=0;
+    }
+    s->raceEnabled=0;
+    Scripting::ProcessCommand(&g_gameCreateRacingCheckpointCommand,(DWORD)s->raceType,
+        (double)s->racePosition.x,(double)s->racePosition.y,(double)s->racePosition.z,
+        (double)s->raceNext.x,(double)s->raceNext.y,(double)s->raceNext.z,
+        (double)s->raceSize,&s->raceCheckpoint);
+    s->raceEnabled=1;
+}
+
+// samp.dll RVA: 0x000a1f20
+void CGame::SetRacingCheckpoint(BYTE type,const CVector *position,const CVector *next,float size) {
+    GameCheckpointState *s=(GameCheckpointState*)((BYTE*)this+0x0c);
+    s->racePosition=*position;
+    s->raceNext=*next;
+    s->raceSize=size;
+    s->raceType=type;
+    if(s->raceMarker) {
+        Scripting::ProcessCommand(&g_gameDeleteMarkerCommand,s->raceMarker);
+        s->raceMarker=0;
+        DWORD marker=0;
+        Scripting::ProcessCommand(&g_gameCreateMarkerCommand,(double)s->racePosition.x,(double)s->racePosition.y,(double)s->racePosition.z,0,&marker);
+        Scripting::ProcessCommand(&g_gameMarkerColorCommand,marker,1005);
+        Scripting::ProcessCommand(&g_gameMarkerModeCommand,marker,3);
+        s->raceMarker=marker;
+    }
+    CreateRacingCheckpoint();
+}
+
+// samp.dll RVA: 0x000a1d40
+void CGame::ProcessCheckpoints() {
+    GameCheckpointState *s=(GameCheckpointState*)((BYTE*)this+0x0c);
+    if(s->enabled) {
+        CPed *ped=GetPlayerPed();
+        if(ped) {
+            Scripting::ProcessCommand(&g_gameLocateCheckpointCommand,ped->m_nHandle,
+                (double)s->position.x,(double)s->position.y,(double)s->position.z,
+                (double)s->size.x,(double)s->size.y,(double)s->size.z,1);
+            if(!s->marker) {
+                DWORD marker=0;
+                Scripting::ProcessCommand(&g_gameCreateMarkerCommand,(double)s->position.x,(double)s->position.y,(double)s->position.z,0,&marker);
+                Scripting::ProcessCommand(&g_gameMarkerColorCommand,marker,1005);
+                Scripting::ProcessCommand(&g_gameMarkerModeCommand,marker,3);
+                s->marker=marker;
+            }
+        }
+    } else if(s->marker) {
+        Scripting::ProcessCommand(&g_gameDeleteMarkerCommand,s->marker);
+        s->marker=0;
+    }
+    if(s->raceEnabled) {
+        if(GetPlayerPed()&&!s->raceMarker) {
+            DWORD marker=0;
+            Scripting::ProcessCommand(&g_gameCreateMarkerCommand,(double)s->racePosition.x,(double)s->racePosition.y,(double)s->racePosition.z,0,&marker);
+            Scripting::ProcessCommand(&g_gameMarkerColorCommand,marker,1005);
+            Scripting::ProcessCommand(&g_gameMarkerModeCommand,marker,3);
+            s->raceMarker=marker;
+        }
+    } else if(s->raceMarker) {
+        Scripting::ProcessCommand(&g_gameDeleteMarkerCommand,s->raceMarker);
+        if(s->raceCheckpoint) {
+            Scripting::ProcessCommand(&g_gameDeleteRacingCheckpointCommand,s->raceCheckpoint);
+            s->raceCheckpoint=0;
+        }
+        s->raceEnabled=0;
+        s->raceMarker=0;
+    }
+}

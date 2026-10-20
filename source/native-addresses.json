@@ -11595,6 +11595,97 @@
       "rva": "0x0011e77c",
       "module": "samp.dll",
       "evidence": "v167 original PE disassembly and focused source/VC7 ABI/control-flow review."
+    },
+    {
+      "name": "CGame::CreateMarker",
+      "va": "0x100a0bb0",
+      "rva": "0x000a0bb0",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "CGame::SetCheckpoint",
+      "va": "0x100a1c00",
+      "rva": "0x000a1c00",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "CGame::CreateRacingCheckpoint",
+      "va": "0x100a1cc0",
+      "rva": "0x000a1cc0",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "CGame::SetRacingCheckpoint",
+      "va": "0x100a1f20",
+      "rva": "0x000a1f20",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "CGame::ProcessCheckpoints",
+      "va": "0x100a1d40",
+      "rva": "0x000a1d40",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameCreateMarkerCommand",
+      "va": "0x1011e6dc",
+      "rva": "0x0011e6dc",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameCreateMarkerType1Command",
+      "va": "0x1011e718",
+      "rva": "0x0011e718",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameCreateMarkerType2Command",
+      "va": "0x1011e858",
+      "rva": "0x0011e858",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameCreateMarkerType3Command",
+      "va": "0x1011e704",
+      "rva": "0x0011e704",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameMarkerColorCommand",
+      "va": "0x1011e6c8",
+      "rva": "0x0011e6c8",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameMarkerModeCommand",
+      "va": "0x1011e6f0",
+      "rva": "0x0011e6f0",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameCreateRacingCheckpointCommand",
+      "va": "0x1011e768",
+      "rva": "0x0011e768",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "g_gameLocateCheckpointCommand",
+      "va": "0x1011e72c",
+      "rva": "0x0011e72c",
+      "module": "samp.dll",
+      "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
     }
   ],
   "annotations": [
