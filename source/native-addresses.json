@@ -12606,6 +12606,48 @@
       "rva": "0x0011eedc",
       "module": "samp.dll",
       "evidence": "v186 direct reference instructions/commands and focused source/VC7 branch/ABI review."
+    },
+    {
+      "name": "CPed::ApplyStuff",
+      "va": "0x100ad8a0",
+      "rva": "0x000ad8a0",
+      "module": "samp.dll",
+      "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
+    },
+    {
+      "name": "g_pedSmokeLibrary",
+      "va": "0x1011ead8",
+      "rva": "0x0011ead8",
+      "module": "samp.dll",
+      "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
+    },
+    {
+      "name": "g_pedSmokeAnimation",
+      "va": "0x1011f348",
+      "rva": "0x0011f348",
+      "module": "samp.dll",
+      "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
+    },
+    {
+      "name": "g_pedDrinkLibrary",
+      "va": "0x1011eae0",
+      "rva": "0x0011eae0",
+      "module": "samp.dll",
+      "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
+    },
+    {
+      "name": "g_pedDrinkAnimationM",
+      "va": "0x1011f338",
+      "rva": "0x0011f338",
+      "module": "samp.dll",
+      "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
+    },
+    {
+      "name": "g_pedDrinkAnimationF",
+      "va": "0x1011f328",
+      "rva": "0x0011f328",
+      "module": "samp.dll",
+      "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
     }
   ],
   "annotations": [

@@ -1012,3 +1012,29 @@ void CPed::PutIntoVehicle(int vehicle,int seat) {
             Scripting::ProcessCommand(&g_pedTrainCameraCommand,wrapper->m_nHandle,3,2);
     }
 }
+
+// samp.dll RVA: 0x000ad8a0
+BOOL CPed::ApplyStuff() {
+    if(!m_stuffType||!m_pGamePed||!CEntity::DoesExist()) return FALSE;
+    KeyPad *keys=m_nPlayerNumber?KeyStuff::GetPlayerKeys(m_nPlayerNumber):KeyStuff::GetInternalKeys();
+    SetArmedWeapon(0,0);
+    if(m_nPlayerNumber||PerformingCustomAnimation()||!keys->keys1[17]) return FALSE;
+    DWORD type=m_stuffType;
+    if(type==4) {
+        ApplyAnimation(g_pedSmokeAnimation,g_pedSmokeLibrary,700.0f,0,0,0,0,2750);
+        return TRUE;
+    }
+    if(type==1||type==2||type==3) {
+        if(GetModelTable28()==5||GetModelTable28()==22)
+            ApplyAnimation(g_pedDrinkAnimationF,g_pedDrinkLibrary,4.0f,0,0,0,0,-1);
+        else ApplyAnimation(g_pedDrinkAnimationM,g_pedDrinkLibrary,4.0f,0,0,0,0,-1);
+        // Native reload after ApplyAnimation, modular add followed by signed upper bound.
+        if(m_stuffType!=3) {
+            DWORD level=m_drunkLevel+1250u;
+            m_drunkLevel=level;
+            if((int)level>50000) m_drunkLevel=50000;
+        }
+        return TRUE;
+    }
+    return FALSE;
+}

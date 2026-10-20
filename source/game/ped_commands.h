@@ -101,4 +101,14 @@ extern const double g_pedUrinationDirectionY;
 extern const Scripting::OpcodeInfo g_pedWarpDriverCommand;
 // samp.dll RVA: 0x0011eedc
 extern const Scripting::OpcodeInfo g_pedTrainCameraCommand;
+// samp.dll RVA: 0x0011ead8
+extern const char g_pedSmokeLibrary[6];
+// samp.dll RVA: 0x0011f348
+extern const char g_pedSmokeAnimation[12];
+// samp.dll RVA: 0x0011eae0
+extern const char g_pedDrinkLibrary[4];
+// samp.dll RVA: 0x0011f338
+extern const char g_pedDrinkAnimationM[15];
+// samp.dll RVA: 0x0011f328
+extern const char g_pedDrinkAnimationF[15];
 #endif
