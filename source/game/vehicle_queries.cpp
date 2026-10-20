@@ -330,3 +330,196 @@ void CVehicle::ClearWindowOpenFlag(BYTE window) {
         }
     }
 }
+
+#include "game/quaternion.h"
+
+// samp.dll RVA: 0x001181a0
+const float g_vehicleTrainSpeedMinimum=-100.0f;
+// samp.dll RVA: 0x001181a4
+const float g_vehicleTrainSpeedMaximum=100.0f;
+
+// samp.dll RVA: 0x000b6cd0
+void CVehicle::SetInvulnerable(BOOL enabled) {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && *(DWORD*)m_pGameVehicle!=0x863c40) {
+        if(enabled) {
+            Scripting::ProcessCommand(&g_vehicleProofsCommand,m_nHandle,1,1,1,1,1);
+            Scripting::ProcessCommand(&g_vehicleDamageableCommand,m_nHandle,0);
+            *(DWORD*)((BYTE*)this+0x58)=1;
+        } else {
+            Scripting::ProcessCommand(&g_vehicleProofsCommand,m_nHandle,0,0,0,0,0);
+            Scripting::ProcessCommand(&g_vehicleDamageableCommand,m_nHandle,1);
+            *(DWORD*)((BYTE*)this+0x58)=0;
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b70e0
+void CVehicle::SetLandingGearState(int state) {
+    if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==5) {
+        void *backend=m_pGameVehicle;
+        DWORD position=*(DWORD*)((BYTE*)backend+0x9cc);
+        // Invalid state must not load/compare the float in x87.
+        if(state==1) {
+            __asm {
+                fld dword ptr [g_objectScaleLowerBound]
+                fld dword ptr position
+                fucompp
+                fnstsw ax
+                test ah,0x44
+                jp skipRaise
+                mov ecx,backend
+                mov edx,0x6cac20
+                call edx
+skipRaise:
+            }
+        } else if(state==0) {
+            __asm {
+                fld dword ptr [g_quaternionMatrixOne]
+                fld dword ptr position
+                fucompp
+                fnstsw ax
+                test ah,0x44
+                jp skipLower
+                mov ecx,backend
+                mov edx,0x6cac70
+                call edx
+skipLower:
+            }
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b7170
+BOOL CVehicle::GetLandingGearState() {
+    return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==5 &&
+        *(float*)((BYTE*)m_pGameVehicle+0x9cc)!=g_objectScaleLowerBound;
+}
+
+// samp.dll RVA: 0x000b7480
+void CVehicle::SetTires(BYTE tires) {
+    if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==1) {
+        *((BYTE*)m_pGameVehicle+0x5a8)=tires&1;
+        *((BYTE*)m_pGameVehicle+0x5a7)=(tires>>1)&1;
+        *((BYTE*)m_pGameVehicle+0x5a6)=(tires>>2)&1;
+        *((BYTE*)m_pGameVehicle+0x5a5)=(tires>>3)&1;
+        return;
+    }
+    if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==2) {
+        *((BYTE*)m_pGameVehicle+0x65d)=tires&1;
+        *((BYTE*)m_pGameVehicle+0x65c)=(tires>>1)&1;
+    }
+}
+
+// samp.dll RVA: 0x000b7570
+BYTE CVehicle::GetTires() {
+    if(!m_pGameVehicle)return 0;
+    if(GameGetVehicleSubtype(m_pGameVehicle)==1) {
+        BYTE *backend=(BYTE*)m_pGameVehicle;
+        BYTE result=(backend[0x5a5]!=0)<<1;
+        if(backend[0x5a6])result|=1;
+        result<<=1;
+        if(backend[0x5a7])result|=1;
+        result<<=1;
+        if(backend[0x5a8])result|=1;
+        return result;
+    }
+    if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==2) {
+        BYTE result=(*((BYTE*)m_pGameVehicle+0x65c)!=0)<<1;
+        if(*((BYTE*)m_pGameVehicle+0x65d))result|=1;
+        return result;
+    }
+    return 0;
+}
+
+// samp.dll RVA: 0x000b7600
+void CVehicle::UpdateDamage(DWORD panels,DWORD doors,BYTE lights) {
+    if(!m_pGameVehicle)return;
+    if(GameGetVehicleSubtype(m_pGameVehicle)!=1) {
+        if(!m_pGameVehicle || GameGetVehicleSubtype(m_pGameVehicle)!=5)return;
+    }
+    if(!panels && !doors && !lights &&
+        (*(DWORD*)((BYTE*)m_pGameVehicle+0x5b4) || *(DWORD*)((BYTE*)m_pGameVehicle+0x5a9) ||
+         *(DWORD*)((BYTE*)m_pGameVehicle+0x5b0))) {
+        void *backend=m_pGameVehicle;
+        __asm { mov ecx,backend
+            mov edx,0x6a3440
+            call edx }
+        return;
+    }
+    *(DWORD*)((BYTE*)m_pGameVehicle+0x5b4)=panels;
+    *(DWORD*)((BYTE*)m_pGameVehicle+0x5a9)=doors;
+    *(DWORD*)((BYTE*)m_pGameVehicle+0x5b0)=lights;
+    void *backend=m_pGameVehicle;
+    __asm { mov ecx,backend
+        mov edx,0x6b3e90
+        call edx }
+}
+
+// samp.dll RVA: 0x000b78b0
+BOOL CVehicle::IsTrailer() {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle)) {
+        short model=*(short*)((BYTE*)m_pGameVehicle+0x22);
+        return model==0x1b3 || model==0x1c2 || model==0x248 || model==0x24f ||
+            model==0x25e || model==0x25f || model==0x260 || model==0x262 || model==0x263;
+    }
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000b7d80
+void CVehicle::CallBackend6a6ae0(DWORD first,DWORD second,DWORD third) {
+    if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==1) {
+        void *backend=m_pGameVehicle;
+        __asm {
+            push 1
+            push third
+            push first
+            push second
+            push 0
+            mov ecx,backend
+            mov edx,0x6a6ae0
+            call edx
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b7440
+void CVehicle::SetTrainSpeed(float speed) {
+    
+    // Preserve both FCOMP operations and native status masks, including NaNs.
+    __asm {
+        fld speed
+        fcomp dword ptr [g_vehicleTrainSpeedMaximum]
+        fnstsw ax
+        test ah,0x41
+        jz rejected
+        fld speed
+        fcomp dword ptr [g_vehicleTrainSpeedMinimum]
+        fnstsw ax
+        test ah,5
+        jnp rejected
+    }
+    if(m_pGameVehicle)*(DWORD*)((BYTE*)m_pGameVehicle+0x5a4)=*(DWORD*)&speed;
+rejected:
+    ;
+}
+
+// samp.dll RVA: 0x000b7e10
+void CVehicle::SetBackendFloat64c(float speed) {
+    if(!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))return;
+    // Preserve both FCOMP operations and native status masks, including NaNs.
+    __asm {
+        fld speed
+        fcomp dword ptr [g_quaternionMatrixOne]
+        fnstsw ax
+        test ah,0x41
+        jz rejected
+        fld speed
+        fcomp dword ptr [g_entityEulerSign]
+        fnstsw ax
+        test ah,5
+        jnp rejected
+    }
+    *(DWORD*)((BYTE*)m_pGameVehicle+0x64c)=*(DWORD*)&speed;
+rejected:
+    ;
+}

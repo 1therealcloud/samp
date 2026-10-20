@@ -4219,6 +4219,13 @@
       "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
+      "name": "CVehicle::CallBackend6a6ae0",
+      "va": "0x100b7d80",
+      "rva": "0x000b7d80",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
+    },
+    {
       "name": "CVehicle::ChangeInterior",
       "va": "0x100b6bd0",
       "rva": "0x000b6bd0",
@@ -4324,6 +4331,13 @@
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
+      "name": "CVehicle::GetLandingGearState",
+      "va": "0x100b7170",
+      "rva": "0x000b7170",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
+    },
+    {
       "name": "CVehicle::GetLightsDamage",
       "va": "0x100b7720",
       "rva": "0x000b7720",
@@ -4350,6 +4364,13 @@
       "rva": "0x000b6ed0",
       "module": "samp.dll",
       "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
+    },
+    {
+      "name": "CVehicle::GetTires",
+      "va": "0x100b7570",
+      "rva": "0x000b7570",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
     },
     {
       "name": "CVehicle::GetTrainSpeed",
@@ -4415,6 +4436,13 @@
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
+      "name": "CVehicle::IsTrailer",
+      "va": "0x100b78b0",
+      "rva": "0x000b78b0",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
+    },
+    {
       "name": "CVehicle::IsTrainPart",
       "va": "0x100b6fa0",
       "rva": "0x000b6fa0",
@@ -4448,6 +4476,13 @@
       "rva": "0x000b7010",
       "module": "samp.dll",
       "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::SetBackendFloat64c",
+      "va": "0x100b7e10",
+      "rva": "0x000b7e10",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
     },
     {
       "name": "CVehicle::SetBackendWord45c",
@@ -4492,6 +4527,20 @@
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
+      "name": "CVehicle::SetInvulnerable",
+      "va": "0x100b6cd0",
+      "rva": "0x000b6cd0",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
+    },
+    {
+      "name": "CVehicle::SetLandingGearState",
+      "va": "0x100b70e0",
+      "rva": "0x000b70e0",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
+    },
+    {
       "name": "CVehicle::SetLicensePlateText",
       "va": "0x100b7c80",
       "rva": "0x000b7c80",
@@ -4513,11 +4562,25 @@
       "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
+      "name": "CVehicle::SetTires",
+      "va": "0x100b7480",
+      "rva": "0x000b7480",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
+    },
+    {
       "name": "CVehicle::SetTrailer",
       "va": "0x100b77c0",
       "rva": "0x000b77c0",
       "module": "samp.dll",
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetTrainSpeed",
+      "va": "0x100b7440",
+      "rva": "0x000b7440",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
     },
     {
       "name": "CVehicle::SetWindowOpenFlag",
@@ -4546,6 +4609,13 @@
       "rva": "0x000b6e70",
       "module": "samp.dll",
       "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::UpdateDamage",
+      "va": "0x100b7600",
+      "rva": "0x000b7600",
+      "module": "samp.dll",
+      "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
     },
     {
       "name": "CVehicle::UpdateLastDrivenTime",
@@ -7747,6 +7817,13 @@
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
     },
     {
+      "name": "g_vehicleDamageableCommand",
+      "va": "0x1011f790",
+      "rva": "0x0011f790",
+      "module": "samp.dll",
+      "evidence": "v158 exact native18-byte opcode record referenced by SetInvulnerable."
+    },
+    {
       "name": "g_vehicleDetachingTrailer",
       "va": "0x1018f5dc",
       "rva": "0x0018f5dc",
@@ -7775,6 +7852,13 @@
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
     },
     {
+      "name": "g_vehicleProofsCommand",
+      "va": "0x1011f6a0",
+      "rva": "0x0011f6a0",
+      "module": "samp.dll",
+      "evidence": "v158 exact native18-byte opcode record referenced by SetInvulnerable."
+    },
+    {
       "name": "g_vehicleRemoveComponentCommand",
       "va": "0x1011f77c",
       "rva": "0x0011f77c",
@@ -7787,6 +7871,20 @@
       "rva": "0x0011f614",
       "module": "samp.dll",
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleTrainSpeedMaximum",
+      "va": "0x101181a4",
+      "rva": "0x001181a4",
+      "module": "samp.dll",
+      "evidence": "v158 native FCOMP operands, original float bits -100 and +100; no prior canonical storage at these VAs."
+    },
+    {
+      "name": "g_vehicleTrainSpeedMinimum",
+      "va": "0x101181a0",
+      "rva": "0x001181a0",
+      "module": "samp.dll",
+      "evidence": "v158 native FCOMP operands, original float bits -100 and +100; no prior canonical storage at these VAs."
     },
     {
       "name": "GameAllocateTextDrawTexture",
@@ -23938,6 +24036,66 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetInvulnerable",
+      "rva": 748752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetLandingGearState",
+      "rva": 749792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetLandingGearState",
+      "rva": 749936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetTires",
+      "rva": 750720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetTires",
+      "rva": 750960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::UpdateDamage",
+      "rva": 751104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::IsTrailer",
+      "rva": 751792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::CallBackend6a6ae0",
+      "rva": 753024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetTrainSpeed",
+      "rva": 750656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetBackendFloat64c",
+      "rva": 753168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::ChangeInterior",
       "rva": 748496,
       "module": "samp.dll"
@@ -24249,6 +24407,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleTrainSpeedMinimum",
+      "rva": 1147296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleTrainSpeedMaximum",
+      "rva": 1147300,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle_plate.cpp",
       "name": "CVehicle::ConstructLicensePlate",
       "rva": 752848,
@@ -24543,6 +24713,78 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "g_vehicleTrainSpeedMinimum",
+      "rva": 1147296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "g_vehicleTrainSpeedMaximum",
+      "rva": 1147300,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetInvulnerable",
+      "rva": 748752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetLandingGearState",
+      "rva": 749792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetLandingGearState",
+      "rva": 749936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetTires",
+      "rva": 750720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetTires",
+      "rva": 750960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::UpdateDamage",
+      "rva": 751104,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::IsTrailer",
+      "rva": 751792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::CallBackend6a6ae0",
+      "rva": 753024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetTrainSpeed",
+      "rva": 750656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetBackendFloat64c",
+      "rva": 753168,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/video_mode.cpp",
       "name": "GameSetVideoMode",
       "rva": 744720,
@@ -24735,6 +24977,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleProofsCommand",
+      "rva": 1177248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleDamageableCommand",
+      "rva": 1177488,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -24882,6 +25136,18 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_vehicleRotationCommand",
       "rva": 1177108,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleProofsCommand",
+      "rva": 1177248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleDamageableCommand",
+      "rva": 1177488,
       "module": "samp.dll"
     },
     {

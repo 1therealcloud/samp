@@ -17,6 +17,26 @@ public:
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
+    // samp.dll RVA: 0x000b6cd0
+    void SetInvulnerable(BOOL enabled);
+    // samp.dll RVA: 0x000b70e0
+    void SetLandingGearState(int state);
+    // samp.dll RVA: 0x000b7170
+    BOOL GetLandingGearState();
+    // samp.dll RVA: 0x000b7480
+    void SetTires(BYTE tires);
+    // samp.dll RVA: 0x000b7570
+    BYTE GetTires();
+    // samp.dll RVA: 0x000b7600
+    void UpdateDamage(DWORD panels,DWORD doors,BYTE lights);
+    // samp.dll RVA: 0x000b78b0
+    BOOL IsTrailer();
+    // samp.dll RVA: 0x000b7d80
+    void CallBackend6a6ae0(DWORD first,DWORD second,DWORD third);
+    // samp.dll RVA: 0x000b7440
+    void SetTrainSpeed(float speed);
+    // samp.dll RVA: 0x000b7e10
+    void SetBackendFloat64c(float speed);
     // samp.dll RVA: 0x000b6bd0
     void ChangeInterior(int interior);
     // samp.dll RVA: 0x000b6e70
@@ -128,4 +148,8 @@ void *__stdcall GamePoolVehicleGetAt(int handle);
 int GameGetVehicleSubtype(void *vehicle);
 // samp.dll RVA: 0x0018f5dc
 extern DWORD g_vehicleDetachingTrailer;
+// samp.dll RVA: 0x001181a0
+extern const float g_vehicleTrainSpeedMinimum;
+// samp.dll RVA: 0x001181a4
+extern const float g_vehicleTrainSpeedMaximum;
 #endif
