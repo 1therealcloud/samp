@@ -16,8 +16,6 @@ void **g_entityCollisionContextSlot=(void**)0x9655cc; // GTA SA virtual address.
 void *g_entityCollisionSavedContext;
 // samp.dll RVA: 0x002abe60
 BYTE g_entityCollisionResult;
-// samp.dll RVA: 0x002aae18
-BYTE g_entityCollisionScratch[0x1044];
 
 // samp.dll RVA: 0x0009fa40
 __declspec(naked) bool CEntity::TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second,BYTE mode) {

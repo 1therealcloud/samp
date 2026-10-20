@@ -7103,6 +7103,20 @@
       "evidence": "Read-only preview-v102 exact constructor/reset operands and original axis data. Descriptive class name; reset returns bool in AL, not full DWORD."
     },
     {
+      "name": "g_rwQueryAngle",
+      "va": "0x102aae14",
+      "rva": "0x002aae14",
+      "module": "samp.dll",
+      "evidence": "v136 native matrix-query output and float-load/store publication; initial BSS storage."
+    },
+    {
+      "name": "g_rwRotationAxes",
+      "va": "0x101553d8",
+      "rva": "0x001553d8",
+      "module": "samp.dll",
+      "evidence": "v136 original nine floats: three unit axes. Native unbounded axis index retained; out-of-table adjacency unproven."
+    },
+    {
       "name": "g_scmEventParameters",
       "va": "0x10156988",
       "rva": "0x00156988",
@@ -8069,6 +8083,13 @@
       "evidence": "v125 binary/disassembly/pseudocode to C++ port, native ABI/data/branch review and VC7 compilation only. No runtime differential tests or GTA execution. Lookup prefixes do not establish full allocations."
     },
     {
+      "name": "GameOrthoNormalizeRwMatrix",
+      "va": "0x100b5450",
+      "rva": "0x000b5450",
+      "module": "samp.dll",
+      "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
+    },
+    {
       "name": "GameParseStreamData",
       "va": "0x100b6610",
       "rva": "0x000b6610",
@@ -8181,6 +8202,20 @@
       "evidence": "v132 direct reference instruction/data review; native x87 precision/store order retained. Whole compiled body static comparison after relocation substitution; no runtime execution claim. Original source/library authorship not established."
     },
     {
+      "name": "GameQueryRwMatrixAngle",
+      "va": "0x100b5370",
+      "rva": "0x000b5370",
+      "module": "samp.dll",
+      "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
+    },
+    {
+      "name": "GameQueryRwQuaternionAngle",
+      "va": "0x100b53e0",
+      "rva": "0x000b53e0",
+      "module": "samp.dll",
+      "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
+    },
+    {
       "name": "GameReadStream",
       "va": "0x100b1a40",
       "rva": "0x000b1a40",
@@ -8263,6 +8298,20 @@
       "rva": "0x000a0370",
       "module": "samp.dll",
       "evidence": "Read-only native game-bridge/game-input-cycle-v73 instructions, state refs and initialized DLL bytes"
+    },
+    {
+      "name": "GameRotateRwMatrix",
+      "va": "0x100b5410",
+      "rva": "0x000b5410",
+      "module": "samp.dll",
+      "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
+    },
+    {
+      "name": "GameRotateRwQuaternion",
+      "va": "0x100b5320",
+      "rva": "0x000b5320",
+      "module": "samp.dll",
+      "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
     },
     {
       "name": "GameRunPedControlBackend",
@@ -8396,6 +8445,13 @@
       "rva": "0x000b18f0",
       "module": "samp.dll",
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameScaleRwMatrix",
+      "va": "0x100b5480",
+      "rva": "0x000b5480",
+      "module": "samp.dll",
+      "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
     },
     {
       "name": "GameSetEventOpcode",
@@ -15662,12 +15718,6 @@
     },
     {
       "file": "source/game/entity_collision.cpp",
-      "name": "g_entityCollisionScratch",
-      "rva": 2797080,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/game/entity_collision.cpp",
       "name": "CEntity::TestCollisionShapes",
       "rva": 653888,
       "module": "samp.dll"
@@ -15730,12 +15780,6 @@
       "file": "source/game/entity_collision.h",
       "name": "g_entityCollisionResult",
       "rva": 2801248,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/game/entity_collision.h",
-      "name": "g_entityCollisionScratch",
-      "rva": 2797080,
       "module": "samp.dll"
     },
     {
@@ -19363,6 +19407,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/native_scratch.cpp",
+      "name": "g_entityCollisionScratch",
+      "rva": 2797080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/native_scratch.h",
+      "name": "g_entityCollisionScratch",
+      "rva": 2797080,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/object.cpp",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -20722,6 +20778,102 @@
       "file": "source/game/rw_preview.h",
       "name": "GameRwCreateTexture",
       "rva": 725792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "g_rwRotationAxes",
+      "rva": 1397720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "g_rwQueryAngle",
+      "rva": 2797076,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "GameRotateRwQuaternion",
+      "rva": 742176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "GameQueryRwMatrixAngle",
+      "rva": 742256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "GameQueryRwQuaternionAngle",
+      "rva": 742368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "GameRotateRwMatrix",
+      "rva": 742416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "GameOrthoNormalizeRwMatrix",
+      "rva": 742480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.cpp",
+      "name": "GameScaleRwMatrix",
+      "rva": 742528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "g_rwRotationAxes",
+      "rva": 1397720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "g_rwQueryAngle",
+      "rva": 2797076,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "GameRotateRwQuaternion",
+      "rva": 742176,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "GameQueryRwMatrixAngle",
+      "rva": 742256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "GameQueryRwQuaternionAngle",
+      "rva": 742368,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "GameRotateRwMatrix",
+      "rva": 742416,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "GameOrthoNormalizeRwMatrix",
+      "rva": 742480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_transform.h",
+      "name": "GameScaleRwMatrix",
+      "rva": 742528,
       "module": "samp.dll"
     },
     {

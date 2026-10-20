@@ -1,6 +1,7 @@
 #ifndef SAMP_ENTITY_COLLISION_H
 #define SAMP_ENTITY_COLLISION_H
 #include "game/entity.h"
+#include "game/native_scratch.h"
 typedef bool (__cdecl *GameEntityCollisionBackend)(const GameEntityCollisionShape*,const GameEntityCollisionShape*,void*);
 // Opaque native scratch span ends at saved-context RVA 002ABE5C.
 // No typed collision-object layout or broader initialization completeness is claimed.
@@ -18,8 +19,6 @@ extern void **g_entityCollisionContextSlot;
 extern void *g_entityCollisionSavedContext;
 // samp.dll RVA: 0x002abe60
 extern BYTE g_entityCollisionResult;
-// samp.dll RVA: 0x002aae18
-extern BYTE g_entityCollisionScratch[0x1044];
 // samp.dll RVA: 0x000b5ea0
 float __cdecl GameGetModelCollisionRadius(int model);
 // samp.dll RVA: 0x000b6070
