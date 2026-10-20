@@ -31,4 +31,14 @@ void GameTxdPop();
 void GameTxdSetCurrent(int index);
 // samp.dll RVA: 0x000b3540
 void *GameTxdReadTexture(const char *name);
+// samp.dll RVA: 0x000b34f0
+void *GameTxdAddRef(int index);
+// samp.dll RVA: 0x000b3500
+void GameTxdRemoveRef(int index);
+// samp.dll RVA: 0x000b35b0
+void GameTxdRemove(int index);
+// samp.dll RVA: 0x000b35d0
+void GameTxdRemoveSlot(int index);
+// samp.dll RVA: 0x000b35f0
+DWORD GameTxdGetReferenceCount(int index);
 #endif

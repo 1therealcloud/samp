@@ -80,3 +80,16 @@ void GameParseStreamData(const void *data,DWORD length,void *destination) {
     else { *(DWORD*)result=written;*(void**)((BYTE*)destination+0x78)=result; }
     delete reader;
 }
+
+// Texture dictionary reference/slot adapters. Only the native -1 gates are
+// applied; other indices pass through unchanged to their GTA backends.
+// samp.dll RVA: 0x000b34f0
+void *GameTxdAddRef(int index) { return ((void*(__cdecl*)(int))0x731a00)(index); }
+// samp.dll RVA: 0x000b3500
+void GameTxdRemoveRef(int index) { ((void(__cdecl*)(int))0x731a30)(index); }
+// samp.dll RVA: 0x000b35b0
+void GameTxdRemove(int index) { if(index!=-1)((void(__cdecl*)(int))0x731e90)(index); }
+// samp.dll RVA: 0x000b35d0
+void GameTxdRemoveSlot(int index) { if(index!=-1)((void(__cdecl*)(int))0x731cd0)(index); }
+// samp.dll RVA: 0x000b35f0
+DWORD GameTxdGetReferenceCount(int index) { return index==-1?0xffffffffu:((DWORD(__cdecl*)(int))0x731aa0)(index); }

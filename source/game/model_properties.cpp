@@ -42,3 +42,59 @@ WORD __cdecl GameGetModelFlagsWord(int model) {
     BYTE *info=(BYTE*)GameGetModelInfo(model);
     return info?*(WORD*)(info+0x12):0;
 }
+
+// These helpers receive an existing backend model-info pointer, not a model ID.
+// samp.dll RVA: 0x000b4150
+void __stdcall GameSetModelDrawDistance(void *info,float distance) {
+    *(float*)((BYTE*)info+0x18)=distance;
+}
+// samp.dll RVA: 0x000b4160
+float __stdcall GameGetModelDrawDistance(const void *info) {
+    return *(const float*)((const BYTE*)info+0x18);
+}
+
+// Native writes +1C before invoking the backend virtual slot. Its meaning
+// remains unresolved; preserve the unchecked model lookup and callee-pop call.
+// samp.dll RVA: 0x000b4200
+void __stdcall GameSetModelRenderObjectCall3c(int model,void *object) {
+    BYTE *info=(BYTE*)GameGetModelInfo(model);
+    *(void**)(info+0x1c)=object;
+    __asm {
+        mov ecx,info
+        push object
+        mov edx,dword ptr [ecx]
+        call dword ptr [edx+0x3c]
+    }
+}
+
+// GTA SA virtual address: 0x004C4BC0; ECX=model info, initPairedModel=0.
+// samp.dll RVA: 0x000b4230
+void __stdcall GameSetModelCollision(int model,void *collision) {
+    void *info=GameGetModelInfo(model);
+    __asm {
+        mov ecx,info
+        push 0
+        push collision
+        mov edx,0x4c4bc0
+        call edx
+    }
+}
+
+// Native zero-extends the WORD, including FFFF -> 65535; lookup failure -> -1.
+// samp.dll RVA: 0x000b4280
+DWORD __stdcall GameGetModelTxdIndex(int model) {
+    const BYTE *info=(const BYTE*)GameGetModelInfo(model);
+    return info?*(const WORD*)(info+0xa):0xffffffffu;
+}
+
+// No null check is present in either of the following native entries.
+// samp.dll RVA: 0x000b42d0
+void *__stdcall GameGetModelCollision(int model) {
+    BYTE *info=(BYTE*)GameGetModelInfo(model);
+    return *(void**)(info+0x14);
+}
+// samp.dll RVA: 0x000b4300
+WORD __stdcall GameGetModelReferenceCount(int model) {
+    const BYTE *info=(const BYTE*)GameGetModelInfo(model);
+    return *(const WORD*)(info+8);
+}

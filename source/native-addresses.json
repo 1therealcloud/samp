@@ -7495,6 +7495,13 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "GameGetModelCollision",
+      "va": "0x100b42d0",
+      "rva": "0x000b42d0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
+    },
+    {
       "name": "GameGetModelCollisionCentre",
       "va": "0x100b5f50",
       "rva": "0x000b5f50",
@@ -7516,6 +7523,13 @@
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
     },
     {
+      "name": "GameGetModelDrawDistance",
+      "va": "0x100b4160",
+      "rva": "0x000b4160",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
+    },
+    {
       "name": "GameGetModelFlagsByte",
       "va": "0x100b5fe0",
       "rva": "0x000b5fe0",
@@ -7535,6 +7549,20 @@
       "rva": "0x000a7630",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "GameGetModelReferenceCount",
+      "va": "0x100b4300",
+      "rva": "0x000b4300",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
+    },
+    {
+      "name": "GameGetModelTxdIndex",
+      "va": "0x100b4280",
+      "rva": "0x000b4280",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
     },
     {
       "name": "GameGetTaskType",
@@ -8636,6 +8664,13 @@
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
     },
     {
+      "name": "GameSetModelCollision",
+      "va": "0x100b4230",
+      "rva": "0x000b4230",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
+    },
+    {
       "name": "GameSetModelCollisionRadius",
       "va": "0x100b5ef0",
       "rva": "0x000b5ef0",
@@ -8643,11 +8678,25 @@
       "evidence": "v135 direct original model-property instruction/pseudocode recovery. Repeated lookups, no added null guards, raw centre copies, ST0/AL/AX return widths preserved. Readable VC7 C++; compile/static review only."
     },
     {
+      "name": "GameSetModelDrawDistance",
+      "va": "0x100b4150",
+      "rva": "0x000b4150",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
+    },
+    {
       "name": "GameSetModelField8",
       "va": "0x100b4330",
       "rva": "0x000b4330",
       "module": "samp.dll",
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameSetModelRenderObjectCall3c",
+      "va": "0x100b4200",
+      "rva": "0x000b4200",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instructions. stdcall pop widths, model-info offsets, native null-check differences and zero-extension preserved. Field naming corroborated by plugin-sdk CBaseModelInfo offsets; virtual +3C semantics remain unknown."
     },
     {
       "name": "GameSetModelTxd",
@@ -8720,11 +8769,25 @@
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
+      "name": "GameTxdAddRef",
+      "va": "0x100b34f0",
+      "rva": "0x000b34f0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only instruction export; fixed GTA texture dictionary targets and exact -1 index gates. EAX reference-count sentinel and AddRef backend pointer result retained. CTxdStore.cpp corroborates callee names/signatures."
+    },
+    {
       "name": "GameTxdFind",
       "va": "0x100b3480",
       "rva": "0x000b3480",
       "module": "samp.dll",
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdGetReferenceCount",
+      "va": "0x100b35f0",
+      "rva": "0x000b35f0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only instruction export; fixed GTA texture dictionary targets and exact -1 index gates. EAX reference-count sentinel and AddRef backend pointer result retained. CTxdStore.cpp corroborates callee names/signatures."
     },
     {
       "name": "GameTxdLoad",
@@ -8753,6 +8816,27 @@
       "rva": "0x000b3540",
       "module": "samp.dll",
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
+    },
+    {
+      "name": "GameTxdRemove",
+      "va": "0x100b35b0",
+      "rva": "0x000b35b0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only instruction export; fixed GTA texture dictionary targets and exact -1 index gates. EAX reference-count sentinel and AddRef backend pointer result retained. CTxdStore.cpp corroborates callee names/signatures."
+    },
+    {
+      "name": "GameTxdRemoveRef",
+      "va": "0x100b3500",
+      "rva": "0x000b3500",
+      "module": "samp.dll",
+      "evidence": "v143 read-only instruction export; fixed GTA texture dictionary targets and exact -1 index gates. EAX reference-count sentinel and AddRef backend pointer result retained. CTxdStore.cpp corroborates callee names/signatures."
+    },
+    {
+      "name": "GameTxdRemoveSlot",
+      "va": "0x100b35d0",
+      "rva": "0x000b35d0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only instruction export; fixed GTA texture dictionary targets and exact -1 index gates. EAX reference-count sentinel and AddRef backend pointer result retained. CTxdStore.cpp corroborates callee names/signatures."
     },
     {
       "name": "GameTxdSetCurrent",
@@ -15541,6 +15625,36 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdAddRef",
+      "rva": 734448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdRemoveRef",
+      "rva": 734464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdRemove",
+      "rva": 734640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdRemoveSlot",
+      "rva": 734672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdGetReferenceCount",
+      "rva": 734704,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/effects.h",
       "name": "GameBufferReader::Read",
       "rva": 770512,
@@ -15580,6 +15694,36 @@
       "file": "source/game/effects.h",
       "name": "GameTxdReadTexture",
       "rva": 734528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdAddRef",
+      "rva": 734448,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdRemoveRef",
+      "rva": 734464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdRemove",
+      "rva": 734640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdRemoveSlot",
+      "rva": 734672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameTxdGetReferenceCount",
+      "rva": 734704,
       "module": "samp.dll"
     },
     {
@@ -19567,6 +19711,48 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.h",
+      "name": "GameSetModelDrawDistance",
+      "rva": 737616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelDrawDistance",
+      "rva": 737632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameSetModelRenderObjectCall3c",
+      "rva": 737792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameSetModelCollision",
+      "rva": 737840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelTxdIndex",
+      "rva": 737920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelCollision",
+      "rva": 738000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelReferenceCount",
+      "rva": 738048,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/model_preview.cpp",
       "name": "g_modelPreview",
       "rva": 2804280,
@@ -19642,6 +19828,48 @@
       "file": "source/game/model_properties.cpp",
       "name": "GameGetModelFlagsWord",
       "rva": 745472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameSetModelDrawDistance",
+      "rva": 737616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelDrawDistance",
+      "rva": 737632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameSetModelRenderObjectCall3c",
+      "rva": 737792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameSetModelCollision",
+      "rva": 737840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelTxdIndex",
+      "rva": 737920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelCollision",
+      "rva": 738000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelReferenceCount",
+      "rva": 738048,
       "module": "samp.dll"
     },
     {

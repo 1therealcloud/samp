@@ -41,4 +41,18 @@ WORD __cdecl GameGetModelFlagsWord(int model);
 // Raw EAX from model-info vtable +2C, gated by the existing game pointer.
 // samp.dll RVA: 0x000b5d90
 DWORD __cdecl GameQueryModelVirtual2c(int model);
+// samp.dll RVA: 0x000b4150
+void __stdcall GameSetModelDrawDistance(void *info,float distance);
+// samp.dll RVA: 0x000b4160
+float __stdcall GameGetModelDrawDistance(const void *info);
+// samp.dll RVA: 0x000b4200
+void __stdcall GameSetModelRenderObjectCall3c(int model,void *object);
+// samp.dll RVA: 0x000b4230
+void __stdcall GameSetModelCollision(int model,void *collision);
+// samp.dll RVA: 0x000b4280
+DWORD __stdcall GameGetModelTxdIndex(int model);
+// samp.dll RVA: 0x000b42d0
+void *__stdcall GameGetModelCollision(int model);
+// samp.dll RVA: 0x000b4300
+WORD __stdcall GameGetModelReferenceCount(int model);
 #endif
