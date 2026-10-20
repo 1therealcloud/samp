@@ -30,6 +30,8 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ac630
+    void *GetFloor();
     // samp.dll RVA: 0x000afbd0
     void Kill();
     // samp.dll RVA: 0x000acd10
@@ -225,4 +227,6 @@ void __stdcall GameAssignPlayerPed(BYTE player,void *ped);
 void *__stdcall GamePoolPedGetAt(int handle);
 // samp.dll RVA: 0x002a92a0
 extern void *g_pedCommandTaskSnapshot;
+// samp.dll RVA: 0x0011f258
+extern const float g_pedFloorRayLength;
 #endif

@@ -12473,6 +12473,20 @@
       "rva": "0x0011f080",
       "module": "samp.dll",
       "evidence": "v183 direct original PE disassembly and source/VC7 static ABI/state review."
+    },
+    {
+      "name": "CPed::GetFloor",
+      "va": "0x100ac630",
+      "rva": "0x000ac630",
+      "module": "samp.dll",
+      "evidence": "v184 direct reference disassembly and complete VC7 body/data comparison; native x87 staging/output ABI retained."
+    },
+    {
+      "name": "g_pedFloorRayLength",
+      "va": "0x1011f258",
+      "rva": "0x0011f258",
+      "module": "samp.dll",
+      "evidence": "v184 direct reference disassembly and complete VC7 body/data comparison; native x87 staging/output ABI retained."
     }
   ],
   "annotations": [

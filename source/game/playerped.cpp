@@ -878,3 +878,71 @@ void CPed::Kill() {
     Scripting::ProcessCommand(&g_pedKillCommand,m_nHandle);
     *g_clientCrashPedContext=0;
 }
+
+#include "game/entity_collision.h"
+// samp.dll RVA: 0x0011f258
+const float g_pedFloorRayLength=1.75f;
+
+// samp.dll RVA: 0x000ac630
+__declspec(naked) void *CPed::GetFloor() {
+    // Preserve native float spills, x87 stack lifetime and unchecked query output.
+    __asm { sub esp,0x50
+        push esi
+        mov esi,ecx
+        mov eax,[esi+0x2a4]
+        test eax,eax
+        jz floor_rejected
+        mov ecx,[eax+0x46c]
+        test ch,1
+        jnz floor_rejected
+        mov eax,[esi+0x44]
+        push eax
+        call GamePoolPedGetAt
+        test eax,eax
+        jz floor_rejected
+        mov eax,[esi+0x2a4]
+        mov ecx,[eax+0x14]
+        fld dword ptr [ecx+0x30]
+        push 0
+        fst dword ptr [esp+0xc]
+        mov edx,[eax+0x14]
+        fld dword ptr [edx+0x34]
+        push 0
+        fst dword ptr [esp+0x14]
+        mov eax,[eax+0x14]
+        fld dword ptr [eax+0x38]
+        push 0
+        fsub dword ptr [g_vehicleCreationLift]
+        push 0
+        push 1
+        push 0
+        fstp dword ptr [esp+0x28]
+        push 1
+        fxch st(1)
+        push 0
+        fstp dword ptr [esp+0x34]
+        lea ecx,[esp+0x24]
+        push ecx
+        fstp dword ptr [esp+0x3c]
+        lea edx,[esp+0x44]
+        fld dword ptr [esp+0x34]
+        push edx
+        fsub dword ptr [g_pedFloorRayLength]
+        lea eax,[esp+0x3c]
+        push eax
+        lea ecx,[esp+0x34]
+        push ecx
+        fstp dword ptr [esp+0x4c]
+        call GameProcessLineOfSightRaw
+        mov eax,[esp+0x34]
+        add esp,0x30
+        pop esi
+        add esp,0x50
+        ret
+    floor_rejected:
+        xor eax,eax
+        pop esi
+        add esp,0x50
+        ret
+    }
+}
