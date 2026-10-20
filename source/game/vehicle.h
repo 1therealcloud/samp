@@ -17,6 +17,42 @@ public:
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
+    // samp.dll RVA: 0x000b6bd0
+    void ChangeInterior(int interior);
+    // samp.dll RVA: 0x000b6e70
+    void UpdateColor();
+    // samp.dll RVA: 0x000b6ef0
+    DWORD IsSunk();
+    // samp.dll RVA: 0x000b6fe0
+    BOOL HasTurret();
+    // samp.dll RVA: 0x000b7010
+    void SetBackendBytes1f6And514(BYTE value);
+    // samp.dll RVA: 0x000b7380
+    void Lock(BOOL locked);
+    // samp.dll RVA: 0x000b73b0
+    BOOL UpdateLastDrivenTime();
+    // samp.dll RVA: 0x000b7750
+    void AttachTrailer();
+    // samp.dll RVA: 0x000b7770
+    void DetachTrailer();
+    // samp.dll RVA: 0x000b7990
+    void EnableLights(BYTE enabled);
+    // samp.dll RVA: 0x000b79f0
+    BYTE GetBackendLightsDisabledFlag();
+    // samp.dll RVA: 0x000b7be0
+    BOOL RemoveComponent(WORD component);
+    // samp.dll RVA: 0x000b7c20
+    void SetPaintjob(BYTE paintjob);
+    // samp.dll RVA: 0x000b7c80
+    void SetLicensePlateText(const char *text);
+    // samp.dll RVA: 0x000b7ca0
+    void SetRotation(float angle);
+    // samp.dll RVA: 0x000b7de0
+    float GetBackendFloat648();
+    // samp.dll RVA: 0x000b7ea0
+    void SetWindowOpenFlag(BYTE window);
+    // samp.dll RVA: 0x000b7ed0
+    void ClearWindowOpenFlag(BYTE window);
     // samp.dll RVA: 0x000b6c00
     void ResetPointers();
     // samp.dll RVA: 0x000b6c20
@@ -90,4 +126,6 @@ void *__stdcall GamePoolVehicleGetAt(int handle);
 // GTA SA vtable classification helper; values are native 0..7 tags.
 // samp.dll RVA: 0x000b5d20
 int GameGetVehicleSubtype(void *vehicle);
+// samp.dll RVA: 0x0018f5dc
+extern DWORD g_vehicleDetachingTrailer;
 #endif

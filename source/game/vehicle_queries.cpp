@@ -170,3 +170,163 @@ DWORD CVehicle::GetField54() {
     return *(DWORD*)((BYTE*)this+0x54);
 }
 
+#include "game/entity.h"
+#include "game/wrapper_commands.h"
+#include <string.h>
+
+// samp.dll RVA: 0x0018f5dc
+DWORD g_vehicleDetachingTrailer;
+
+// samp.dll RVA: 0x000b6bd0
+void CVehicle::ChangeInterior(int interior) {
+    if(GamePoolVehicleGetAt(m_nHandle))Scripting::ProcessCommand(&g_vehicleChangeInteriorCommand,m_nHandle,interior);
+}
+
+// samp.dll RVA: 0x000b6e70
+void CVehicle::UpdateColor() {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_bColorChanged && !m_bInModShop) {
+        if(m_nPrimaryColor!=*((BYTE*)m_pGameVehicle+0x434) || m_nSecondaryColor!=*((BYTE*)m_pGameVehicle+0x435)) {
+            *((BYTE*)m_pGameVehicle+0x434)=m_nPrimaryColor;
+            *((BYTE*)m_pGameVehicle+0x435)=m_nSecondaryColor;
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b6ef0
+DWORD CVehicle::IsSunk() {
+    return m_pGameVehicle?Scripting::ProcessCommand(&g_vehicleIsSunkCommand,m_nHandle):0;
+}
+
+// samp.dll RVA: 0x000b6fe0
+BOOL CVehicle::HasTurret() {
+    int model=((CEntity*)this)->GetModelIndex();
+    return model==0x1b0 || model==0x234 || model==0x197 || model==0x259;
+}
+
+// samp.dll RVA: 0x000b7010
+void CVehicle::SetBackendBytes1f6And514(BYTE value) {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle)) {
+        if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==4)return;
+        if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==5)return;
+        if(m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle)==3)return;
+        *((BYTE*)m_pGameVehicle+0x1f6)=value;
+        *((BYTE*)m_pGameVehicle+0x514)=value;
+    }
+}
+
+// samp.dll RVA: 0x000b7380
+void CVehicle::Lock(BOOL locked) {
+    if(locked) {
+        *(DWORD*)((BYTE*)m_pGameVehicle+0x4f8)=2;
+        *(DWORD*)((BYTE*)this+0x60)=1;
+    } else {
+        *(DWORD*)((BYTE*)m_pGameVehicle+0x4f8)=0;
+        *(DWORD*)((BYTE*)this+0x60)=0;
+    }
+}
+
+// samp.dll RVA: 0x000b73b0
+BOOL CVehicle::UpdateLastDrivenTime() {
+    if(m_pGameVehicle && *(void**)((BYTE*)m_pGameVehicle+0x460)) {
+        *(DWORD*)((BYTE*)this+0x6d)=1;
+        *(DWORD*)((BYTE*)this+0x69)=GetTickCount();
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000b7750
+void CVehicle::AttachTrailer() {
+    CVehicle *trailer=*(CVehicle**)((BYTE*)this+0x48);
+    if(trailer)Scripting::ProcessCommand(&g_vehicleAttachTrailerCommand,trailer->m_nHandle,m_nHandle);
+}
+
+// samp.dll RVA: 0x000b7770
+void CVehicle::DetachTrailer() {
+    g_vehicleDetachingTrailer=1;
+    if(*(CVehicle**)((BYTE*)this+0x48) && (*(CVehicle**)((BYTE*)this+0x48))->m_nHandle &&
+        GamePoolVehicleGetAt((*(CVehicle**)((BYTE*)this+0x48))->m_nHandle) &&
+        (*(CVehicle**)((BYTE*)this+0x48))->m_pGameVehicle) {
+        Scripting::ProcessCommand(&g_vehicleDetachTrailerCommand,(*(CVehicle**)((BYTE*)this+0x48))->m_nHandle,m_nHandle);
+    }
+    g_vehicleDetachingTrailer=0;
+}
+
+// samp.dll RVA: 0x000b7990
+void CVehicle::EnableLights(BYTE enabled) {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle)) {
+        if(enabled) {
+            *((BYTE*)m_pGameVehicle+0x4a8)&=0xf7;
+            *((BYTE*)m_pGameVehicle+0x428)|=0x40;
+        } else {
+            *((BYTE*)m_pGameVehicle+0x4a8)|=8;
+            *((BYTE*)m_pGameVehicle+0x428)&=0xbf;
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b79f0
+BYTE CVehicle::GetBackendLightsDisabledFlag() {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))return (*((BYTE*)m_pGameVehicle+0x4a8)>>3)&1;
+    return 1;
+}
+
+// samp.dll RVA: 0x000b7be0
+BOOL CVehicle::RemoveComponent(WORD component) {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle)) {
+        Scripting::ProcessCommand(&g_vehicleRemoveComponentCommand,m_nHandle,(unsigned int)component);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000b7c20
+void CVehicle::SetPaintjob(BYTE paintjob) {
+    if(m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle &&
+        GameGetVehicleSubtype(m_pGameVehicle)==1 && paintjob<4) {
+        Scripting::ProcessCommand(&g_vehiclePaintjobCommand,m_nHandle,(unsigned int)paintjob);
+    }
+}
+
+// samp.dll RVA: 0x000b7c80
+void CVehicle::SetLicensePlateText(const char *text) {
+    strncpy((char*)this+0x93,text,32);
+}
+
+// samp.dll RVA: 0x000b7ca0
+void CVehicle::SetRotation(float angle) {
+    if(GamePoolVehicleGetAt(m_nHandle))Scripting::ProcessCommand(&g_vehicleRotationCommand,m_nHandle,(double)angle);
+}
+
+// samp.dll RVA: 0x000b7de0
+float CVehicle::GetBackendFloat648() {
+    return m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle)?*(float*)((BYTE*)m_pGameVehicle+0x648):g_objectScaleLowerBound;
+}
+
+// samp.dll RVA: 0x000b7ea0
+void CVehicle::SetWindowOpenFlag(BYTE window) {
+    void *backend=m_pGameVehicle;
+    if(backend) {
+        unsigned int value=window;
+        __asm {
+            mov ecx,backend
+            push value
+            mov edx,0x6d3080
+            call edx
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b7ed0
+void CVehicle::ClearWindowOpenFlag(BYTE window) {
+    void *backend=m_pGameVehicle;
+    if(backend) {
+        unsigned int value=window;
+        __asm {
+            mov ecx,backend
+            push value
+            mov edx,0x6d30b0
+            call edx
+        }
+    }
+}

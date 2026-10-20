@@ -37,4 +37,18 @@ extern const Scripting::OpcodeInfo g_audioIsLoaded;
 extern const Scripting::OpcodeInfo g_audioStart;
 // samp.dll RVA: 0x0011e68c
 extern const Scripting::OpcodeInfo g_gameSetWorldTime;
+// samp.dll RVA: 0x0011f7a4
+extern const Scripting::OpcodeInfo g_vehicleChangeInteriorCommand;
+// samp.dll RVA: 0x0011f678
+extern const Scripting::OpcodeInfo g_vehicleIsSunkCommand;
+// samp.dll RVA: 0x0011f7b8
+extern const Scripting::OpcodeInfo g_vehicleAttachTrailerCommand;
+// samp.dll RVA: 0x0011f7cc
+extern const Scripting::OpcodeInfo g_vehicleDetachTrailerCommand;
+// samp.dll RVA: 0x0011f77c
+extern const Scripting::OpcodeInfo g_vehicleRemoveComponentCommand;
+// samp.dll RVA: 0x0011f72c
+extern const Scripting::OpcodeInfo g_vehiclePaintjobCommand;
+// samp.dll RVA: 0x0011f614
+extern const Scripting::OpcodeInfo g_vehicleRotationCommand;
 #endif

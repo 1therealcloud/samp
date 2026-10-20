@@ -4212,11 +4212,39 @@
       "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
     },
     {
+      "name": "CVehicle::AttachTrailer",
+      "va": "0x100b7750",
+      "rva": "0x000b7750",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::ChangeInterior",
+      "va": "0x100b6bd0",
+      "rva": "0x000b6bd0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::ClearWindowOpenFlag",
+      "va": "0x100b7ed0",
+      "rva": "0x000b7ed0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
       "name": "CVehicle::ConstructLicensePlate",
       "va": "0x100b7cd0",
       "rva": "0x000b7cd0",
       "module": "samp.dll",
       "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
+      "name": "CVehicle::DetachTrailer",
+      "va": "0x100b7770",
+      "rva": "0x000b7770",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
       "name": "CVehicle::DoesExist",
@@ -4233,11 +4261,32 @@
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
+      "name": "CVehicle::EnableLights",
+      "va": "0x100b7990",
+      "rva": "0x000b7990",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
       "name": "CVehicle::EnableSiren",
       "va": "0x100b7080",
       "rva": "0x000b7080",
       "module": "samp.dll",
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::GetBackendFloat648",
+      "va": "0x100b7de0",
+      "rva": "0x000b7de0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::GetBackendLightsDisabledFlag",
+      "va": "0x100b79f0",
+      "rva": "0x000b79f0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
       "name": "CVehicle::GetDoorsDamage",
@@ -4331,6 +4380,13 @@
       "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
+      "name": "CVehicle::HasTurret",
+      "va": "0x100b6fe0",
+      "rva": "0x000b6fe0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
       "name": "CVehicle::IsOccupied",
       "va": "0x100b6c70",
       "rva": "0x000b6c70",
@@ -4343,6 +4399,13 @@
       "rva": "0x000b7940",
       "module": "samp.dll",
       "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim."
+    },
+    {
+      "name": "CVehicle::IsSunk",
+      "va": "0x100b6ef0",
+      "rva": "0x000b6ef0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
       "name": "CVehicle::IsTowtruck",
@@ -4359,11 +4422,32 @@
       "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
+      "name": "CVehicle::Lock",
+      "va": "0x100b7380",
+      "rva": "0x000b7380",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::RemoveComponent",
+      "va": "0x100b7be0",
+      "rva": "0x000b7be0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
       "name": "CVehicle::ResetPointers",
       "va": "0x100b6c00",
       "rva": "0x000b6c00",
       "module": "samp.dll",
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetBackendBytes1f6And514",
+      "va": "0x100b7010",
+      "rva": "0x000b7010",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
       "name": "CVehicle::SetBackendWord45c",
@@ -4408,11 +4492,39 @@
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
+      "name": "CVehicle::SetLicensePlateText",
+      "va": "0x100b7c80",
+      "rva": "0x000b7c80",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::SetPaintjob",
+      "va": "0x100b7c20",
+      "rva": "0x000b7c20",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::SetRotation",
+      "va": "0x100b7ca0",
+      "rva": "0x000b7ca0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
       "name": "CVehicle::SetTrailer",
       "va": "0x100b77c0",
       "rva": "0x000b77c0",
       "module": "samp.dll",
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetWindowOpenFlag",
+      "va": "0x100b7ea0",
+      "rva": "0x000b7ea0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
       "name": "CVehicle::ShutdownLicensePlate",
@@ -4427,6 +4539,20 @@
       "rva": "0x000b70a0",
       "module": "samp.dll",
       "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::UpdateColor",
+      "va": "0x100b6e70",
+      "rva": "0x000b6e70",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::UpdateLastDrivenTime",
+      "va": "0x100b73b0",
+      "rva": "0x000b73b0",
+      "module": "samp.dll",
+      "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
     },
     {
       "name": "CVehiclePool::ConstructLicensePlates",
@@ -7605,6 +7731,62 @@
       "rva": "0x0011f564",
       "module": "samp.dll",
       "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
+    },
+    {
+      "name": "g_vehicleAttachTrailerCommand",
+      "va": "0x1011f7b8",
+      "rva": "0x0011f7b8",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleChangeInteriorCommand",
+      "va": "0x1011f7a4",
+      "rva": "0x0011f7a4",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleDetachingTrailer",
+      "va": "0x1018f5dc",
+      "rva": "0x0018f5dc",
+      "module": "samp.dll",
+      "evidence": "v157 B7770 stores DWORD1 before validation and DWORD0 on normal exit; native BSS, no previous-value restoration."
+    },
+    {
+      "name": "g_vehicleDetachTrailerCommand",
+      "va": "0x1011f7cc",
+      "rva": "0x0011f7cc",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleIsSunkCommand",
+      "va": "0x1011f678",
+      "rva": "0x0011f678",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehiclePaintjobCommand",
+      "va": "0x1011f72c",
+      "rva": "0x0011f72c",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleRemoveComponentCommand",
+      "va": "0x1011f77c",
+      "rva": "0x0011f77c",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleRotationCommand",
+      "va": "0x1011f614",
+      "rva": "0x0011f614",
+      "module": "samp.dll",
+      "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
     },
     {
       "name": "GameAllocateTextDrawTexture",
@@ -23756,6 +23938,114 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::ChangeInterior",
+      "rva": 748496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::UpdateColor",
+      "rva": 749168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::IsSunk",
+      "rva": 749296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::HasTurret",
+      "rva": 749536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetBackendBytes1f6And514",
+      "rva": 749584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::Lock",
+      "rva": 750464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::UpdateLastDrivenTime",
+      "rva": 750512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::AttachTrailer",
+      "rva": 751440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::DetachTrailer",
+      "rva": 751472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::EnableLights",
+      "rva": 752016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetBackendLightsDisabledFlag",
+      "rva": 752112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::RemoveComponent",
+      "rva": 752608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetPaintjob",
+      "rva": 752672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetLicensePlateText",
+      "rva": 752768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetRotation",
+      "rva": 752800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetBackendFloat648",
+      "rva": 753120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetWindowOpenFlag",
+      "rva": 753312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::ClearWindowOpenFlag",
+      "rva": 753360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::ResetPointers",
       "rva": 748544,
       "module": "samp.dll"
@@ -23953,6 +24243,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle.h",
+      "name": "g_vehicleDetachingTrailer",
+      "rva": 1635804,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle_plate.cpp",
       "name": "CVehicle::ConstructLicensePlate",
       "rva": 752848,
@@ -24133,6 +24429,120 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "g_vehicleDetachingTrailer",
+      "rva": 1635804,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::ChangeInterior",
+      "rva": 748496,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::UpdateColor",
+      "rva": 749168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::IsSunk",
+      "rva": 749296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::HasTurret",
+      "rva": 749536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetBackendBytes1f6And514",
+      "rva": 749584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::Lock",
+      "rva": 750464,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::UpdateLastDrivenTime",
+      "rva": 750512,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::AttachTrailer",
+      "rva": 751440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::DetachTrailer",
+      "rva": 751472,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::EnableLights",
+      "rva": 752016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetBackendLightsDisabledFlag",
+      "rva": 752112,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::RemoveComponent",
+      "rva": 752608,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetPaintjob",
+      "rva": 752672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetLicensePlateText",
+      "rva": 752768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetRotation",
+      "rva": 752800,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetBackendFloat648",
+      "rva": 753120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetWindowOpenFlag",
+      "rva": 753312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::ClearWindowOpenFlag",
+      "rva": 753360,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/video_mode.cpp",
       "name": "GameSetVideoMode",
       "rva": 744720,
@@ -24283,6 +24693,48 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleChangeInteriorCommand",
+      "rva": 1177508,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleIsSunkCommand",
+      "rva": 1177208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleAttachTrailerCommand",
+      "rva": 1177528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleDetachTrailerCommand",
+      "rva": 1177548,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleRemoveComponentCommand",
+      "rva": 1177468,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehiclePaintjobCommand",
+      "rva": 1177388,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleRotationCommand",
+      "rva": 1177108,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -24388,6 +24840,48 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_gameSetWorldTime",
       "rva": 1173132,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleChangeInteriorCommand",
+      "rva": 1177508,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleIsSunkCommand",
+      "rva": 1177208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleAttachTrailerCommand",
+      "rva": 1177528,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleDetachTrailerCommand",
+      "rva": 1177548,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleRemoveComponentCommand",
+      "rva": 1177468,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehiclePaintjobCommand",
+      "rva": 1177388,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleRotationCommand",
+      "rva": 1177108,
       "module": "samp.dll"
     },
     {
