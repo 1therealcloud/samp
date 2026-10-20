@@ -29,4 +29,7 @@ bool __stdcall GameEntityCollisionQueryScoped(const GameEntityCollisionShape *fi
 struct GameCollisionSphere { CVector centre; float radius; };
 // samp.dll RVA: 0x000b60e0
 BOOL GameTestCollisionSpheres(const GameCollisionSphere *first,const GameCollisionSphere *second);
+// Semantics unresolved; this is the observed pointer/zero backend adapter.
+// samp.dll RVA: 0x000b43f0
+BYTE GameQueryBackend410ce0(const void *data);
 #endif

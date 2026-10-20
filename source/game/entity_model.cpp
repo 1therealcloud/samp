@@ -20,3 +20,20 @@ BOOL CEntity::SetModelIndex(int model) {
     ((void (__fastcall*)(void*,void*,int))(*(DWORD**)entity)[5])(entity,0,model);
     return loaded;
 }
+
+// GTA SA virtual address: 0x00403EC0; ECX is the opaque GTA entity.
+// Native forwards the complete argument word; backend reads its low model WORD.
+// samp.dll RVA: 0x000b3990
+void GameChangeBackendEntityModel(void *entity,DWORD model) {
+    __asm {
+        push model
+        mov ecx,entity
+        mov edx,0x403ec0
+        call edx
+    }
+}
+// Caller context/semantic object type is not established; raw first DWORD only.
+// samp.dll RVA: 0x000b4120
+DWORD __stdcall GameReadBackendDword(const void *backend) {
+    return *(const DWORD*)backend;
+}

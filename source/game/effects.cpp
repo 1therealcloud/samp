@@ -93,3 +93,10 @@ void GameTxdRemove(int index) { if(index!=-1)((void(__cdecl*)(int))0x731e90)(ind
 void GameTxdRemoveSlot(int index) { if(index!=-1)((void(__cdecl*)(int))0x731cd0)(index); }
 // samp.dll RVA: 0x000b35f0
 DWORD GameTxdGetReferenceCount(int index) { return index==-1?0xffffffffu:((DWORD(__cdecl*)(int))0x731aa0)(index); }
+
+// Native performs name lookup, then removes the slot only when it is not -1.
+// samp.dll RVA: 0x000b3580
+void GameTxdRemoveSlotByName(const char *name) {
+    int index=GameTxdFind(name);
+    if(index!=-1)((void(__cdecl*)(int))0x731cd0)(index);
+}

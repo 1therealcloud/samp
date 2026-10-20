@@ -41,4 +41,6 @@ void GameTxdRemove(int index);
 void GameTxdRemoveSlot(int index);
 // samp.dll RVA: 0x000b35f0
 DWORD GameTxdGetReferenceCount(int index);
+// samp.dll RVA: 0x000b3580
+void GameTxdRemoveSlotByName(const char *name);
 #endif

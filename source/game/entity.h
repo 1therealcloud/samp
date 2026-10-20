@@ -6,6 +6,11 @@
 struct GameEntityCollisionShape { DWORD words[5]; };
 struct CVector { float x,y,z; };
 class CMatrix { public: CVector right;DWORD flags;CVector up;DWORD pad1;CVector at;DWORD pad2;CVector position;DWORD pad3; };
+// samp.dll RVA: 0x000b3990
+void GameChangeBackendEntityModel(void *entity,DWORD model);
+// Raw helper; no full object type or vtable meaning established.
+// samp.dll RVA: 0x000b4120
+DWORD __stdcall GameReadBackendDword(const void *backend);
 #pragma pack(push,1)
 // samp.dll vtable RVA: 0x0011e30c
 class CEntity {

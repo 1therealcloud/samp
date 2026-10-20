@@ -7334,6 +7334,13 @@
       "evidence": "Read-only game-effects-helpers/game-texture-dictionary-v75 exports and instructions"
     },
     {
+      "name": "GameChangeBackendEntityModel",
+      "va": "0x100b3990",
+      "rva": "0x000b3990",
+      "module": "samp.dll",
+      "evidence": "v143 native instructions: cdecl opaque GTA entity plus raw model DWORD; ECX thiscall GTA403EC0. Backend reads model WORD, removes entity RW object through virtual20 before model update."
+    },
+    {
       "name": "GameClearLocalPad",
       "va": "0x100b58e0",
       "rva": "0x000b58e0",
@@ -8412,6 +8419,13 @@
       "evidence": "v132 direct reference instruction/data review; native x87 precision/store order retained. Whole compiled body static comparison after relocation substitution; no runtime execution claim. Original source/library authorship not established."
     },
     {
+      "name": "GameQueryBackend410ce0",
+      "va": "0x100b43f0",
+      "rva": "0x000b43f0",
+      "module": "samp.dll",
+      "evidence": "v143 native instructions: cdecl data pointer, additional literal zero to GTA410CE0; returns raw AL only. Backend query semantics are unresolved; no bool normalization inferred."
+    },
+    {
       "name": "GameQueryModelVirtual2c",
       "va": "0x100b5d90",
       "rva": "0x000b5d90",
@@ -8431,6 +8445,13 @@
       "rva": "0x000b53e0",
       "module": "samp.dll",
       "evidence": "v136 direct original adapter instruction/pseudocode port. USA iff game version==1; all other values use native +40 targets. Original arguments/fixed combine=1, axis table and shared storage views retained. GTA callee naming corroborated by plugin-sdk RenderWare.cpp. Compile/static review only, no native library implementation or runtime claim."
+    },
+    {
+      "name": "GameReadBackendDword",
+      "va": "0x100b4120",
+      "rva": "0x000b4120",
+      "module": "samp.dll",
+      "evidence": "v143 native three instructions: stdcall pointer, first DWORD load, RET4. Caller semantic context/object type remains unestablished."
     },
     {
       "name": "GameReadStream",
@@ -8879,6 +8900,13 @@
       "rva": "0x000b35d0",
       "module": "samp.dll",
       "evidence": "v143 read-only instruction export; fixed GTA texture dictionary targets and exact -1 index gates. EAX reference-count sentinel and AddRef backend pointer result retained. CTxdStore.cpp corroborates callee names/signatures."
+    },
+    {
+      "name": "GameTxdRemoveSlotByName",
+      "va": "0x100b3580",
+      "rva": "0x000b3580",
+      "module": "samp.dll",
+      "evidence": "v143 native instructions: cdecl name, GameTxdFind, -1 gate, GTA731CD0. Decompiler thiscall annotation is contradicted by the stack argument."
     },
     {
       "name": "GameTxdSetCurrent",
@@ -15697,6 +15725,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/effects.cpp",
+      "name": "GameTxdRemoveSlotByName",
+      "rva": 734592,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/effects.h",
       "name": "GameBufferReader::Read",
       "rva": 770512,
@@ -15769,6 +15803,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/effects.h",
+      "name": "GameTxdRemoveSlotByName",
+      "rva": 734592,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/entity.cpp",
       "name": "CEntity::CEntity",
       "rva": 638176,
@@ -15808,6 +15848,18 @@
       "file": "source/game/entity.cpp",
       "name": "CEntity::Remove",
       "rva": 651840,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "GameChangeBackendEntityModel",
+      "rva": 735632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "GameReadBackendDword",
+      "rva": 737568,
       "module": "samp.dll"
     },
     {
@@ -16171,6 +16223,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/entity_collision.cpp",
+      "name": "GameQueryBackend410ce0",
+      "rva": 738288,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/entity_collision.h",
       "name": "g_entityCollisionShapeA",
       "rva": 1629792,
@@ -16234,6 +16292,12 @@
       "file": "source/game/entity_collision.h",
       "name": "GameTestCollisionSpheres",
       "rva": 745696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "GameQueryBackend410ce0",
+      "rva": 738288,
       "module": "samp.dll"
     },
     {
@@ -16318,6 +16382,18 @@
       "file": "source/game/entity_model.cpp",
       "name": "CEntity::SetModelIndex",
       "rva": 650640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_model.cpp",
+      "name": "GameChangeBackendEntityModel",
+      "rva": 735632,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_model.cpp",
+      "name": "GameReadBackendDword",
+      "rva": 737568,
       "module": "samp.dll"
     },
     {

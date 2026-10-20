@@ -162,3 +162,10 @@ __declspec(naked) bool __stdcall GameEntityCollisionQueryScoped(const GameEntity
 BOOL GameTestCollisionSpheres(const GameCollisionSphere *first,const GameCollisionSphere *second) {
     return ((BOOL(__cdecl*)(const GameCollisionSphere*,const GameCollisionSphere*))0x411e70)(first,second);
 }
+
+// GTA SA virtual address: 0x00410CE0; exact query semantics remain unresolved.
+// Native forwards the input pointer plus a literal zero and returns raw AL.
+// samp.dll RVA: 0x000b43f0
+BYTE GameQueryBackend410ce0(const void *data) {
+    return ((BYTE(__cdecl*)(const void*,DWORD))0x410ce0)(data,0);
+}
