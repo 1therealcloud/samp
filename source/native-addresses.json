@@ -8251,6 +8251,34 @@
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
     },
     {
+      "name": "GamePoolBuildingGetArray",
+      "va": "0x100b3870",
+      "rva": "0x000b3870",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instruction export; GTA pool slots, thiscall/stdcall index ABI, array double dereference and fixed 3100x412 object model scan. Pool names corroborated by plugin-sdk CPools.cpp; index adapters agree with original 0.2x util.cpp."
+    },
+    {
+      "name": "GamePoolDummyGetArray",
+      "va": "0x100b3890",
+      "rva": "0x000b3890",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instruction export; GTA pool slots, thiscall/stdcall index ABI, array double dereference and fixed 3100x412 object model scan. Pool names corroborated by plugin-sdk CPools.cpp; index adapters agree with original 0.2x util.cpp."
+    },
+    {
+      "name": "GamePoolHasObjectModel",
+      "va": "0x100b3930",
+      "rva": "0x000b3930",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instruction export; GTA pool slots, thiscall/stdcall index ABI, array double dereference and fixed 3100x412 object model scan. Pool names corroborated by plugin-sdk CPools.cpp; index adapters agree with original 0.2x util.cpp."
+    },
+    {
+      "name": "GamePoolObjectGetArray",
+      "va": "0x100b38b0",
+      "rva": "0x000b38b0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instruction export; GTA pool slots, thiscall/stdcall index ABI, array double dereference and fixed 3100x412 object model scan. Pool names corroborated by plugin-sdk CPools.cpp; index adapters agree with original 0.2x util.cpp."
+    },
+    {
       "name": "GamePoolObjectGetAt",
       "va": "0x100b3830",
       "rva": "0x000b3830",
@@ -8265,11 +8293,25 @@
       "evidence": "v122 read-only Ghidra disassembly/pseudocode to C++ port; native argument/call/state order reviewed and VC7 compilation only. No runtime differential test or GTA execution."
     },
     {
+      "name": "GamePoolPedGetIndex",
+      "va": "0x100b37a0",
+      "rva": "0x000b37a0",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instruction export; GTA pool slots, thiscall/stdcall index ABI, array double dereference and fixed 3100x412 object model scan. Pool names corroborated by plugin-sdk CPools.cpp; index adapters agree with original 0.2x util.cpp."
+    },
+    {
       "name": "GamePoolVehicleGetAt",
       "va": "0x100b37d0",
       "rva": "0x000b37d0",
       "module": "samp.dll",
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
+    },
+    {
+      "name": "GamePoolVehicleGetIndex",
+      "va": "0x100b3800",
+      "rva": "0x000b3800",
+      "module": "samp.dll",
+      "evidence": "v143 read-only native instruction export; GTA pool slots, thiscall/stdcall index ABI, array double dereference and fixed 3100x412 object model scan. Pool names corroborated by plugin-sdk CPools.cpp; index adapters agree with original 0.2x util.cpp."
     },
     {
       "name": "GamePrepareHooks",
@@ -20830,6 +20872,78 @@
       "file": "source/game/playerped_destroy.cpp",
       "name": "CPed::Destroy",
       "rva": 723872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GamePoolPedGetIndex",
+      "rva": 735136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GamePoolVehicleGetIndex",
+      "rva": 735232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GamePoolBuildingGetArray",
+      "rva": 735344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GamePoolDummyGetArray",
+      "rva": 735376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GamePoolObjectGetArray",
+      "rva": 735408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GamePoolHasObjectModel",
+      "rva": 735536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GamePoolPedGetIndex",
+      "rva": 735136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GamePoolVehicleGetIndex",
+      "rva": 735232,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GamePoolBuildingGetArray",
+      "rva": 735344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GamePoolDummyGetArray",
+      "rva": 735376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GamePoolObjectGetArray",
+      "rva": 735408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GamePoolHasObjectModel",
+      "rva": 735536,
       "module": "samp.dll"
     },
     {
