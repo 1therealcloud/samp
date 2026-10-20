@@ -34,6 +34,8 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a16c0
+    void LoadAnimationsAndModels();
     // samp.dll RVA: 0x000a07e0
     void ReleaseModel(int model,BYTE force);
     // samp.dll RVA: 0x000a1430

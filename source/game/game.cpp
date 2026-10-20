@@ -422,3 +422,35 @@ void CGame::SetRequiredVehicleModels(BYTE *priorities) {
         }
     }
 }
+
+#include "game/ped_commands.h"
+// samp.dll RVA: 0x000a16c0
+void CGame::LoadAnimationsAndModels() {
+    if(!IsAnimationLoaded(g_gameParachuteLibrary)) RequestAnimation(g_gameParachuteLibrary);
+    if(!IsAnimationLoaded(g_pedDrinkLibrary)) RequestAnimation(g_pedDrinkLibrary);
+    if(!IsAnimationLoaded(g_pedSmokeLibrary)) RequestAnimation(g_pedSmokeLibrary);
+    if(!IsAnimationLoaded(g_pedUrinationLibrary)) RequestAnimation(g_pedUrinationLibrary);
+    if(!IsAnimationLoaded(g_gameVendingLibrary)) RequestAnimation(g_gameVendingLibrary);
+    if(!IsAnimationLoaded(g_gameFightBLibrary)) RequestAnimation(g_gameFightBLibrary);
+    if(!IsAnimationLoaded(g_gameFightCLibrary)) RequestAnimation(g_gameFightCLibrary);
+    if(!IsAnimationLoaded(g_gameFightDLibrary)) RequestAnimation(g_gameFightDLibrary);
+    if(!IsAnimationLoaded(g_gameFightELibrary)) RequestAnimation(g_gameFightELibrary);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,3131))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,3131);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,1485))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,1485);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,1486))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,1486);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,1543))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,1543);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,1546))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,1546);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,343))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,343);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,342))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,342);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,344))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,344);
+    if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,330))
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,330);
+}

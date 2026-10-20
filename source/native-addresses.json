@@ -12690,6 +12690,55 @@
       "rva": "0x0011e7a4",
       "module": "samp.dll",
       "evidence": "v190 direct original instructions/command bytes; CD40 is verified native RET4, not a substitute stub."
+    },
+    {
+      "name": "CGame::LoadAnimationsAndModels",
+      "va": "0x100a16c0",
+      "rva": "0x000a16c0",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_gameParachuteLibrary",
+      "va": "0x1011eae4",
+      "rva": "0x0011eae4",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_gameVendingLibrary",
+      "va": "0x10118224",
+      "rva": "0x00118224",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_gameFightBLibrary",
+      "va": "0x1011eac4",
+      "rva": "0x0011eac4",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_gameFightCLibrary",
+      "va": "0x1011eabc",
+      "rva": "0x0011eabc",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_gameFightDLibrary",
+      "va": "0x1011eab4",
+      "rva": "0x0011eab4",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_gameFightELibrary",
+      "va": "0x1011eaac",
+      "rva": "0x0011eaac",
+      "module": "samp.dll",
+      "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
     }
   ],
   "annotations": [

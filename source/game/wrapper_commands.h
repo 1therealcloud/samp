@@ -123,4 +123,16 @@ extern const Scripting::OpcodeInfo g_gameClearTextCommand;
 extern const Scripting::OpcodeInfo g_gameCreatePickupCommand;
 // samp.dll RVA: 0x0011e7a4
 extern const Scripting::OpcodeInfo g_gameReleaseModelCommand;
+// samp.dll RVA: 0x0011eae4
+extern const char g_gameParachuteLibrary[10];
+// samp.dll RVA: 0x00118224
+extern const char g_gameVendingLibrary[8];
+// samp.dll RVA: 0x0011eac4
+extern const char g_gameFightBLibrary[8];
+// samp.dll RVA: 0x0011eabc
+extern const char g_gameFightCLibrary[8];
+// samp.dll RVA: 0x0011eab4
+extern const char g_gameFightDLibrary[8];
+// samp.dll RVA: 0x0011eaac
+extern const char g_gameFightELibrary[8];
 #endif
