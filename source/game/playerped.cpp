@@ -1082,3 +1082,122 @@ WORD CPed::GetKeys(WORD *leftRight,WORD *upDown) {
     if(keys->keys1[4]) bits|=0x0001;
     return (WORD)bits;
 }
+
+// samp.dll RVA: 0x000aef40
+void CPed::SetKeys(WORD mask,WORD leftRight,WORD upDown) {
+    KeyPad *keys=KeyStuff::GetPlayerKeys(m_nPlayerNumber);
+    BOOL held=keys->keys1[0]!=0;
+    keys->keys1[0]=leftRight;
+    keys->keys2[0]=held&&leftRight?leftRight:0;
+    held=keys->keys1[1]!=0;
+    keys->keys1[1]=upDown;
+    keys->keys2[1]=held&&upDown?upDown:0;
+    if((mask&0x0001)) {
+        WORD previous=keys->keys1[4];
+        keys->keys1[4]=255;
+        keys->keys2[4]=previous!=0?255:0;
+    } else {
+        keys->keys1[4]=0;
+        keys->keys2[4]=0;
+    }
+    BYTE *backend=(BYTE*)*(void *volatile*)&m_pGamePed;
+    if(backend&&(*(volatile DWORD*)(backend+0x46c)&0x100)&&(mask&0x0002)) {
+        WORD previous=keys->keys1[18];
+        keys->keys1[18]=255;
+        keys->keys2[18]=previous!=0?255:0;
+    } else {
+        keys->keys1[18]=0;
+        keys->keys2[18]=0;
+    }
+    if((mask&0x0004)) {
+        WORD previous=keys->keys1[17];
+        keys->keys1[17]=255;
+        keys->keys2[17]=previous!=0?255:0;
+    } else {
+        keys->keys1[17]=0;
+        keys->keys2[17]=0;
+    }
+    if((mask&0x0008)) {
+        WORD previous=keys->keys1[16];
+        keys->keys1[16]=255;
+        keys->keys2[16]=previous!=0?255:0;
+    } else {
+        keys->keys1[16]=0;
+        keys->keys2[16]=0;
+    }
+    BOOL down=(mask&0x0010)!=0;
+    if(down) {
+        BYTE *current=(BYTE*)*(void *volatile*)&m_pGamePed;
+        if(current&&!(*(volatile DWORD*)(current+0x46c)&0x100)) {
+            BYTE *manager=*(BYTE**)(current+0x47c);
+            BYTE *task=*(BYTE**)(manager+0x10);
+            // GTA SA virtual address: jetpack task vtable0x008705c4.
+            if(task&&*(DWORD*)task==0x8705c4) down=FALSE;
+        }
+    }
+    if(down) {
+        WORD previous=keys->keys1[15];
+        keys->keys1[15]=255;
+        keys->keys2[15]=previous!=0?255:0;
+    } else {
+        keys->keys1[15]=0;
+        keys->keys2[15]=0;
+    }
+    if((mask&0x0020)) {
+        WORD previous=keys->keys1[14];
+        keys->keys1[14]=255;
+        keys->keys2[14]=previous!=0?255:0;
+    } else {
+        keys->keys1[14]=0;
+        keys->keys2[14]=0;
+    }
+    if((mask&0x0040)) {
+        WORD previous=keys->keys1[7];
+        keys->keys1[7]=255;
+        keys->keys2[7]=previous!=0?255:0;
+    } else {
+        keys->keys1[7]=0;
+        keys->keys2[7]=0;
+    }
+    if((mask&0x0080)) {
+        WORD previous=keys->keys1[6];
+        keys->keys1[6]=255;
+        keys->keys2[6]=previous!=0?255:0;
+    } else {
+        keys->keys1[6]=0;
+        keys->keys2[6]=0;
+    }
+    if((mask&0x0100)) {
+        WORD previous=keys->keys1[5];
+        keys->keys1[5]=255;
+        keys->keys2[5]=previous!=0?255:0;
+    } else {
+        keys->keys1[5]=0;
+        keys->keys2[5]=0;
+    }
+    if((mask&0x0200)) {
+        WORD previous=keys->keys1[19];
+        keys->keys1[19]=255;
+        keys->keys2[19]=previous==255?255:0;
+    } else {
+        keys->keys1[19]=0;
+        keys->keys2[19]=0;
+    }
+    if((mask&0x0400)) {
+        WORD previous=keys->keys1[21];
+        keys->keys1[21]=255;
+        keys->keys2[21]=previous==255?255:0;
+    } else {
+        keys->keys1[21]=0;
+        keys->keys2[21]=0;
+    }
+    WORD direction=(mask>>11)&3;
+    WORD axis=direction==2?0x0080:direction==1?0xff80:0;
+    keys->keys1[3]=axis;
+    keys->keys2[3]=axis;
+    direction=(mask>>13)&3;
+    axis=direction==2?0x0080:direction==1?0xff80:0;
+    keys->keys1[2]=axis;
+    keys->keys2[2]=axis;
+    KeyStuff::SetKeys(m_nPlayerNumber,keys);
+}

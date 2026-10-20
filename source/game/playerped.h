@@ -30,6 +30,8 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000aef40
+    void SetKeys(WORD mask,WORD leftRight,WORD upDown);
     // samp.dll RVA: 0x000af1d0
     WORD GetKeys(WORD *leftRight,WORD *upDown);
     // samp.dll RVA: 0x000ad8a0

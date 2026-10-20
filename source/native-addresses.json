@@ -12655,6 +12655,13 @@
       "rva": "0x000af1d0",
       "module": "samp.dll",
       "evidence": "v188 direct native disassembly and focused source/VC7 key-bit/axis/ABI review."
+    },
+    {
+      "name": "CPed::SetKeys",
+      "va": "0x100aef40",
+      "rva": "0x000aef40",
+      "module": "samp.dll",
+      "evidence": "v189 direct native key-write/previous-state disassembly and focused VC7 ABI review."
     }
   ],
   "annotations": [
