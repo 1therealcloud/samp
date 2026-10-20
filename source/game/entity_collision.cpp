@@ -169,3 +169,15 @@ BOOL GameTestCollisionSpheres(const GameCollisionSphere *first,const GameCollisi
 BYTE GameQueryBackend410ce0(const void *data) {
     return ((BYTE(__cdecl*)(const void*,DWORD))0x410ce0)(data,0);
 }
+
+// GTA SA virtual address: 0x0056BA00. Native is a transparent tail bridge:
+// preserve caller argument copies and the backend's raw AL return.
+// samp.dll RVA: 0x000b3710
+__declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector *origin,const CVector *target,void *colPoint,
+    void **entity,DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,
+    DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough) {
+    __asm {
+        mov eax,0x56ba00
+        jmp eax
+    }
+}

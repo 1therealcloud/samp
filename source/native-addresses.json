@@ -7558,6 +7558,13 @@
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
+      "name": "GameCountEmptyBackendModelSlots",
+      "va": "0x100b3a00",
+      "rva": "0x000b3a00",
+      "module": "samp.dll",
+      "evidence": "v143 preserved native25-byte scan: DWORDs at GTA A9C068 through AAE948 exclusive (19000 slots), increment for zero only. Fixed physical backend span, no SA-MP bank substitution."
+    },
+    {
       "name": "GameCreateSceneRasters",
       "va": "0x100b57d0",
       "rva": "0x000b57d0",
@@ -8529,6 +8536,13 @@
       "rva": "0x000a2220",
       "module": "samp.dll",
       "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
+    },
+    {
+      "name": "GameProcessLineOfSightRaw",
+      "va": "0x100b3710",
+      "rva": "0x000b3710",
+      "module": "samp.dll",
+      "evidence": "v143 original7-byte MOV/JMP bridge; plugin-sdk CWorld primary source corroborates 12 cdecl arguments and AL boolean. Raw flag words forwarded without normalization."
     },
     {
       "name": "GameProcessOutgoingEvent",
@@ -16807,6 +16821,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/entity_collision.cpp",
+      "name": "GameProcessLineOfSightRaw",
+      "rva": 734992,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/entity_collision.h",
       "name": "g_entityCollisionShapeA",
       "rva": 1629792,
@@ -16876,6 +16896,12 @@
       "file": "source/game/entity_collision.h",
       "name": "GameQueryBackend410ce0",
       "rva": 738288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "GameProcessLineOfSightRaw",
+      "rva": 734992,
       "module": "samp.dll"
     },
     {
@@ -21589,6 +21615,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/pool_helpers.cpp",
+      "name": "GameCountEmptyBackendModelSlots",
+      "rva": 735744,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/pool_helpers.h",
       "name": "GamePoolPedGetIndex",
       "rva": 735136,
@@ -21622,6 +21654,12 @@
       "file": "source/game/pool_helpers.h",
       "name": "GamePoolHasObjectModel",
       "rva": 735536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/pool_helpers.h",
+      "name": "GameCountEmptyBackendModelSlots",
+      "rva": 735744,
       "module": "samp.dll"
     },
     {

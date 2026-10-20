@@ -54,3 +54,14 @@ bool GamePoolHasObjectModel(int model) {
     }
     return false;
 }
+
+// GTA SA virtual addresses: scan A9C068 inclusive through AAE948 exclusive.
+// Exactly 19000 DWORD slots; do not use the relocated/custom SA-MP bank here.
+// samp.dll RVA: 0x000b3a00
+int GameCountEmptyBackendModelSlots() {
+    int count=0;
+    for(DWORD *slot=(DWORD*)0xa9c068;slot!=(DWORD*)0xaae948;++slot) {
+        if(*slot==0)++count;
+    }
+    return count;
+}

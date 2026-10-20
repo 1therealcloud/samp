@@ -32,4 +32,9 @@ BOOL GameTestCollisionSpheres(const GameCollisionSphere *first,const GameCollisi
 // Semantics unresolved; this is the observed pointer/zero backend adapter.
 // samp.dll RVA: 0x000b43f0
 BYTE GameQueryBackend410ce0(const void *data);
+// Raw native flag words are forwarded without bool normalization; result is AL.
+// samp.dll RVA: 0x000b3710
+BYTE GameProcessLineOfSightRaw(const CVector *origin,const CVector *target,void *colPoint,
+    void **entity,DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,
+    DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough);
 #endif

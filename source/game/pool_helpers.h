@@ -14,4 +14,7 @@ void *GamePoolDummyGetArray();
 void *GamePoolObjectGetArray();
 // samp.dll RVA: 0x000b3930
 bool GamePoolHasObjectModel(int model);
+// Fixed physical GTA table span, independent of recovered custom-model bank.
+// samp.dll RVA: 0x000b3a00
+int GameCountEmptyBackendModelSlots();
 #endif
