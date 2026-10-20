@@ -8293,6 +8293,13 @@
       "evidence": "v132 direct reference instruction/data review; native x87 precision/store order retained. Whole compiled body static comparison after relocation substitution; no runtime execution claim. Original source/library authorship not established."
     },
     {
+      "name": "GameQueryModelVirtual2c",
+      "va": "0x100b5d90",
+      "rva": "0x000b5d90",
+      "module": "samp.dll",
+      "evidence": "Native CGame pointer gate, two GameGetModelInfo calls each null-checked, ECX model-info virtual +2C returning raw EAX. Meaning remains unresolved."
+    },
+    {
       "name": "GameQueryRwMatrixAngle",
       "va": "0x100b5370",
       "rva": "0x000b5370",
@@ -8601,6 +8608,13 @@
       "evidence": "Read-only Ghidra helper export v86 and native operand/ABI review."
     },
     {
+      "name": "GameSetVideoMode",
+      "va": "0x100b5d10",
+      "rva": "0x000b5d10",
+      "module": "samp.dll",
+      "evidence": "Native cdecl one-word forwarding wrapper to GTA 745C70. Video-mode naming corroborated by MTA CSettingsSA source."
+    },
+    {
       "name": "GameShouldSuppressMarker",
       "va": "0x1009cae0",
       "rva": "0x0009cae0",
@@ -8725,6 +8739,20 @@
       "rva": "0x000aa060",
       "module": "samp.dll",
       "evidence": "Read-only game-preinit/game-stream-v75 exports and instruction operands; stream parser recovered with its helper graph"
+    },
+    {
+      "name": "GameWeaponFireInstantHit",
+      "va": "0x100b6020",
+      "rva": "0x000b6020",
+      "module": "samp.dll",
+      "evidence": "Native stdcall RET 24; ECX weapon, eight raw DWORD arguments, backend 73FB10 returns bool AL. MTA CWeaponSA signature corroboration; full native flag words preserved."
+    },
+    {
+      "name": "GameWeaponFireSniper",
+      "va": "0x100b6050",
+      "rva": "0x000b6050",
+      "module": "samp.dll",
+      "evidence": "Native stdcall RET 8; ECX weapon, shooter and two literal null arguments, GTA 73AAC0 returns bool AL."
     },
     {
       "name": "GameWorldAdd",
@@ -19451,6 +19479,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.h",
+      "name": "GameQueryModelVirtual2c",
+      "rva": 744848,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/model_preview.cpp",
       "name": "g_modelPreview",
       "rva": 2804280,
@@ -19544,6 +19578,12 @@
       "file": "source/game/model_queries.cpp",
       "name": "GameModelQueryB4170",
       "rva": 737648,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_queries.cpp",
+      "name": "GameQueryModelVirtual2c",
+      "rva": 744848,
       "module": "samp.dll"
     },
     {
@@ -21752,6 +21792,42 @@
       "file": "source/game/vehicle_queries.cpp",
       "name": "GameGetVehicleSubtype",
       "rva": 744736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/video_mode.cpp",
+      "name": "GameSetVideoMode",
+      "rva": 744720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/video_mode.h",
+      "name": "GameSetVideoMode",
+      "rva": 744720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/weapon_backend.cpp",
+      "name": "GameWeaponFireInstantHit",
+      "rva": 745504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/weapon_backend.cpp",
+      "name": "GameWeaponFireSniper",
+      "rva": 745552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/weapon_backend.h",
+      "name": "GameWeaponFireInstantHit",
+      "rva": 745504,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/weapon_backend.h",
+      "name": "GameWeaponFireSniper",
+      "rva": 745552,
       "module": "samp.dll"
     },
     {
