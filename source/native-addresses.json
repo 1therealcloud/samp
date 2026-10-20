@@ -5,6 +5,13 @@
   "scope": "Maintained recovered SA-MP source declarations and definitions; tests and frozen snapshots excluded.",
   "entries": [
     {
+      "name": "_CIasin",
+      "va": "0x100fce60",
+      "rva": "0x000fce60",
+      "module": "samp.dll",
+      "evidence": "Existing MSVC CRT library classification: function-origin-map/COFF asin.obj fragment __CIasin. External helper, not recovered SA-MP implementation."
+    },
+    {
       "name": "_ftol2",
       "va": "0x100f9324",
       "rva": "0x000f9324",
@@ -4086,6 +4093,13 @@
       "evidence": "Read-only dxut-texture/texture-loader/media/media-state-v70 exports and instructions; legacy ANSI DXUT source"
     },
     {
+      "name": "FloatOffset",
+      "va": "0x100b44b0",
+      "rva": "0x000b44b0",
+      "module": "samp.dll",
+      "evidence": "v133 original instruction/pseudocode port. FloatOffset name/source matches 0.2x util.cpp. x87 trig, store order and alias behavior retained; Slerp delegates to selected D3DX. Compile/static review, not runtime coverage."
+    },
+    {
       "name": "Font_PrintString",
       "va": "0x1009fc80",
       "rva": "0x0009fc80",
@@ -6802,6 +6816,13 @@
       "evidence": "Native GUI runtime v66 export and reviewed shared pointer operands"
     },
     {
+      "name": "g_quaternionEulerNegativeTwo",
+      "va": "0x1011d7c8",
+      "rva": "0x0011d7c8",
+      "module": "samp.dll",
+      "evidence": "v133 original instruction/pseudocode port. FloatOffset name/source matches 0.2x util.cpp. x87 trig, store order and alias behavior retained; Slerp delegates to selected D3DX. Compile/static review, not runtime coverage."
+    },
+    {
       "name": "g_quaternionMatrixOne",
       "va": "0x10117b9c",
       "rva": "0x00117b9c",
@@ -7929,6 +7950,13 @@
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
+      "name": "GameQuaternionFromEuler",
+      "va": "0x100b50a0",
+      "rva": "0x000b50a0",
+      "module": "samp.dll",
+      "evidence": "v133 original instruction/pseudocode port. FloatOffset name/source matches 0.2x util.cpp. x87 trig, store order and alias behavior retained; Slerp delegates to selected D3DX. Compile/static review, not runtime coverage."
+    },
+    {
       "name": "GameQuaternionFromMatrix",
       "va": "0x100b4d50",
       "rva": "0x000b4d50",
@@ -7941,6 +7969,20 @@
       "rva": "0x000b5040",
       "module": "samp.dll",
       "evidence": "Read-only object-motion-v112 bodies/instructions and 86016 raw ABI/state cases with independent nested original/source helpers, quaternion adapter and x87 return checks. Rotate/to-matrix, entity, clock/GTA and surfing boundaries observed; real source motion pipeline checked separately on owned backend prefixes."
+    },
+    {
+      "name": "GameQuaternionSlerp",
+      "va": "0x100b4fc0",
+      "rva": "0x000b4fc0",
+      "module": "samp.dll",
+      "evidence": "v133 original instruction/pseudocode port. FloatOffset name/source matches 0.2x util.cpp. x87 trig, store order and alias behavior retained; Slerp delegates to selected D3DX. Compile/static review, not runtime coverage."
+    },
+    {
+      "name": "GameQuaternionToEuler",
+      "va": "0x100b5160",
+      "rva": "0x000b5160",
+      "module": "samp.dll",
+      "evidence": "v133 original instruction/pseudocode port. FloatOffset name/source matches 0.2x util.cpp. x87 trig, store order and alias behavior retained; Slerp delegates to selected D3DX. Compile/static review, not runtime coverage."
     },
     {
       "name": "GameQuaternionToMatrix",
@@ -18946,6 +18988,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/object_math.cpp",
+      "name": "FloatOffset",
+      "rva": 738480,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/object_math.h",
       "name": "g_objectMotionRotationSentinel",
       "rva": 1175164,
@@ -18997,6 +19045,12 @@
       "file": "source/game/object_math.h",
       "name": "GameTransformPoint",
       "rva": 739408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/object_math.h",
+      "name": "FloatOffset",
+      "rva": 738480,
       "module": "samp.dll"
     },
     {
@@ -19876,6 +19930,36 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/quaternion.cpp",
+      "name": "_CIasin",
+      "rva": 1035872,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.cpp",
+      "name": "g_quaternionEulerNegativeTwo",
+      "rva": 1169352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.cpp",
+      "name": "GameQuaternionSlerp",
+      "rva": 741312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.cpp",
+      "name": "GameQuaternionFromEuler",
+      "rva": 741536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.cpp",
+      "name": "GameQuaternionToEuler",
+      "rva": 741728,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/quaternion.h",
       "name": "GameQuaternionFromMatrix",
       "rva": 740688,
@@ -19909,6 +19993,36 @@
       "file": "source/game/quaternion.h",
       "name": "g_quaternionMatrixOne",
       "rva": 1145756,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionSlerp",
+      "rva": 741312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionFromEuler",
+      "rva": 741536,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "GameQuaternionToEuler",
+      "rva": 741728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "g_textDrawHalf",
+      "rva": 1144964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/quaternion.h",
+      "name": "g_quaternionEulerNegativeTwo",
+      "rva": 1169352,
       "module": "samp.dll"
     },
     {
@@ -24659,6 +24773,11 @@
     }
   ],
   "unknowns": [
+    {
+      "file": "source/client/dll_entry.cpp",
+      "name": "DllMain",
+      "reason": "standard VC7 CRT integration adapter; no established standalone native entry"
+    },
     {
       "file": "source/cmdwindow.h",
       "name": "InputRect::InputRect",

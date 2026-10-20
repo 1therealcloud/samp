@@ -21,4 +21,6 @@ float __cdecl GameNormalizeAngle(float angle);
 // Output may alias the matrix or input; native stores each component before reading the next.
 // samp.dll RVA: 0x000b4850
 void GameTransformPoint(CVector *out,const CMatrix *matrix,const CVector *delta);
+// samp.dll RVA: 0x000b44b0
+float FloatOffset(float first,float second);
 #endif

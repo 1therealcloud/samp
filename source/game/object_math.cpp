@@ -37,3 +37,10 @@ void GameTransformPoint(CVector *out,const CMatrix *matrix,const CVector *delta)
     out->y=((matrix->at.y*delta->z+matrix->up.y*delta->y)+matrix->right.y*delta->x)+matrix->position.y;
     out->z=((matrix->at.z*delta->z+matrix->up.z*delta->y)+matrix->right.z*delta->x)+matrix->position.z;
 }
+
+// Native 0.2x name retained; result stays extended in x87 ST0.
+// samp.dll RVA: 0x000b44b0
+float FloatOffset(float first,float second) {
+    if(first>=second)return first-second;
+    return second-first;
+}

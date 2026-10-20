@@ -140,3 +140,162 @@ __declspec(naked) void GameQuaternionToMatrixBody(const GameQuaternion *quaterni
 __declspec(naked) void GameQuaternionToMatrix(const GameQuaternion *quaternion,CMatrix *matrix) {
     __asm { jmp GameQuaternionToMatrixBody }
 }
+
+// CRT helper uses x87 ST0 for its argument/result, rather than a C stack argument.
+// samp.dll RVA: 0x000fce60
+extern "C" void __cdecl _CIasin();
+// samp.dll RVA: 0x0011d7c8
+const float g_quaternionEulerNegativeTwo=-2.0f;
+
+// Snapshot both inputs in D3DX x,y,z,w order before publishing the result.
+// samp.dll RVA: 0x000b4fc0
+void GameQuaternionSlerp(GameQuaternion *out,const GameQuaternion *from,const GameQuaternion *to,float amount) {
+    D3DXQUATERNION first,second,result;
+    memcpy(&first.w,&from->w,4);memcpy(&first.x,&from->x,12);
+    memcpy(&second.w,&to->w,4);memcpy(&second.x,&to->x,12);
+    D3DXQuaternionSlerp(&result,&first,&second,amount);
+    __asm {
+        mov eax,out
+        fld result.w
+        fstp dword ptr [eax]
+    }
+    memcpy(&out->x,&result.x,12);
+}
+
+// Euler inputs are radians. Native FSIN/FCOS and mixed float/x87 intermediates
+// implement the half-angle rotation; all inputs are consumed before output stores.
+// samp.dll RVA: 0x000b50a0
+__declspec(naked) void GameQuaternionFromEuler(const CVector *angles,GameQuaternion *quaternion) {
+    __asm {
+        sub esp,0x10
+        mov eax,dword ptr [esp + 0x14]
+        fld float ptr [eax + 0x8]
+        fmul float ptr g_textDrawHalf
+        fld st(0)
+        fcos
+        fld float ptr [eax + 0x4]
+        fmul float ptr g_textDrawHalf
+        fld st(0)
+        fcos
+        fstp float ptr [esp + 0x4]
+        fld float ptr [eax]
+        mov eax,dword ptr [esp + 0x18]
+        fmul float ptr g_textDrawHalf
+        fld st(0)
+        fcos
+        fstp float ptr [esp]
+        fxch st(3)
+        fsin
+        fstp float ptr [esp + 0x14]
+        fsin
+        fstp float ptr [esp + 0x8]
+        fxch st(1)
+        fsin
+        fxch st(1)
+        fld float ptr [esp + 0x8]
+        fmul st(0),st(2)
+        fstp float ptr [esp + 0xc]
+        fld float ptr [esp]
+        fmul float ptr [esp + 0x4]
+        fmul st(0),st(1)
+        fld float ptr [esp + 0xc]
+        fmul float ptr [esp + 0x14]
+        faddp st(1),st(0)
+        fstp float ptr [eax]
+        fld float ptr [esp + 0x4]
+        fmul st(0),st(2)
+        fmul st(0),st(1)
+        fld float ptr [esp + 0x8]
+        fmul float ptr [esp + 0x14]
+        fmul float ptr [esp]
+        fsubp st(1),st(0)
+        fstp float ptr [eax + 0x4]
+        fxch st(1)
+        fmul float ptr [esp + 0x14]
+        fmul float ptr [esp + 0x4]
+        fld float ptr [esp + 0x8]
+        fmul float ptr [esp]
+        fmul st(0),st(2)
+        faddp st(1),st(0)
+        fstp float ptr [eax + 0x8]
+        fld float ptr [esp + 0x14]
+        fmul float ptr [esp]
+        fmul float ptr [esp + 0x4]
+        fld float ptr [esp + 0xc]
+        fmul st(0),st(2)
+        fsubp st(1),st(0)
+        fstp float ptr [eax + 0xc]
+        fstp st(0)
+        add esp,0x10
+        ret
+    }
+}
+
+// Native FPATAN and CRT asin return radians, without clamping or normalization.
+// Inputs are re-read after each output store; overlapping buffers follow that order.
+// samp.dll RVA: 0x000b5160
+__declspec(naked) void GameQuaternionToEuler(const GameQuaternion *quaternion,CVector *angles) {
+    __asm {
+        sub esp,0xc
+        push esi
+        mov esi,dword ptr [esp + 0x14]
+        fld float ptr [esi]
+        push edi
+        fld st(0)
+        mov edi,dword ptr [esp + 0x1c]
+        fmul st(0),st(1)
+        fstp float ptr [esp + 0x10]
+        fstp st(0)
+        fld float ptr [esi + 0x4]
+        fld st(0)
+        fmul st(0),st(1)
+        fstp float ptr [esp + 0x8]
+        fstp st(0)
+        fld float ptr [esi + 0x8]
+        fld st(0)
+        fmul st(0),st(1)
+        fstp float ptr [esp + 0x18]
+        fstp st(0)
+        fld float ptr [esi + 0xc]
+        fld st(0)
+        fmul st(0),st(1)
+        fstp float ptr [esp + 0xc]
+        fstp st(0)
+        fld float ptr [esi + 0x8]
+        fmul float ptr [esi + 0x4]
+        fld float ptr [esi + 0xc]
+        fmul float ptr [esi]
+        faddp st(1),st(0)
+        fadd st(0),st(0)
+        fld float ptr [esp + 0x8]
+        fsub float ptr [esp + 0x18]
+        fsub float ptr [esp + 0xc]
+        fadd float ptr [esp + 0x10]
+        fpatan
+        fstp float ptr [edi]
+        fld float ptr [esi + 0xc]
+        fmul float ptr [esi + 0x4]
+        fld float ptr [esi + 0x8]
+        fmul float ptr [esi]
+        fsubp st(1),st(0)
+        fmul float ptr g_quaternionEulerNegativeTwo
+        call _CIasin
+        fstp float ptr [edi + 0x4]
+        fld float ptr [esi + 0xc]
+        fmul float ptr [esi + 0x8]
+        fld float ptr [esi + 0x4]
+        fmul float ptr [esi]
+        faddp st(1),st(0)
+        fadd st(0),st(0)
+        fld float ptr [esp + 0x18]
+        fadd float ptr [esp + 0x8]
+        fsubr float ptr [esp + 0xc]
+        fadd float ptr [esp + 0x10]
+        fpatan
+        fstp float ptr [edi + 0x8]
+        pop edi
+        pop esi
+        add esp,0xc
+        ret
+    }
+}
