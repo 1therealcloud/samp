@@ -159,3 +159,60 @@ CTaskTakeDamageFall::CTaskTakeDamageFall(DWORD fallType,DWORD number) {
 // Native thunk delegates to base destruction only; it does not call Destroy.
 // samp.dll RVA: 0x000b2630
 CTaskTakeDamageFall::~CTaskTakeDamageFall() {}
+
+// GTA SA virtual address: 0x00634EF0; no stack arguments, backend extent12.
+// samp.dll RVA: 0x000b2460
+CTaskUseGoggles::CTaskUseGoggles() {
+    m_pPlayerPed=0;
+    Create(12);
+    BYTE *task=m_pTaskType;
+    __asm {
+        push ecx
+        mov ecx,task
+        mov eax,0x634ef0
+        call eax
+        pop ecx
+    }
+}
+// Native thunk only resets the base vptr; does not call Destroy.
+// samp.dll RVA: 0x000b2660
+CTaskUseGoggles::~CTaskUseGoggles() {}
+// GTA SA virtual address: 0x00667CD0; backend extent48.
+// samp.dll RVA: 0x000b24a0
+CTaskGoToPoint::CTaskGoToPoint(DWORD moveState,const CVector *target,float radius,DWORD moveTowards,DWORD finalFlag) {
+    m_pPlayerPed=0;
+    Create(48);
+    BYTE *task=m_pTaskType;
+    __asm {
+        push finalFlag
+        push moveTowards
+        push radius
+        push target
+        push moveState
+        mov ecx,task
+        mov eax,0x667cd0
+        call eax
+    }
+}
+// samp.dll RVA: 0x000b2690
+CTaskGoToPoint::~CTaskGoToPoint() {}
+// GTA SA virtual address: 0x00621190; backend extent92. Native argument order:
+// target, duckingConditions, duckTime, duckChance, competence (full raw words).
+// samp.dll RVA: 0x000b24f0
+CTaskKillPedOnFootArmed::CTaskKillPedOnFootArmed(DWORD competence,DWORD duckTime,DWORD duckChance,DWORD duckingConditions,void *target) {
+    m_pPlayerPed=0;
+    Create(92);
+    BYTE *task=m_pTaskType;
+    __asm {
+        push competence
+        push duckChance
+        push duckTime
+        push duckingConditions
+        push target
+        mov ecx,task
+        mov eax,0x621190
+        call eax
+    }
+}
+// samp.dll RVA: 0x000b26c0
+CTaskKillPedOnFootArmed::~CTaskKillPedOnFootArmed() {}

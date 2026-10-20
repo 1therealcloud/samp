@@ -3974,6 +3974,20 @@
       "evidence": "v146 read-only original task instructions and seven-slot vtable. 16-byte extent, untouched default ownership field, independent destructor/Destroy, backend virtual calls and existing CPed offsets reviewed. Overload identities retain distinct native entries."
     },
     {
+      "name": "CTaskGoToPoint::~CTaskGoToPoint",
+      "va": "0x100b2690",
+      "rva": "0x000b2690",
+      "module": "samp.dll",
+      "evidence": "Preserved v147 native instructions and vtable records. Descriptive wrapper name inferred from GTA backend identity in pinned gta-reversed task reference; original SA-MP class spelling not established. Native allocation extents, five-word argument order, callee pops and empty base-dtor thunks reviewed."
+    },
+    {
+      "name": "CTaskGoToPoint::CTaskGoToPoint",
+      "va": "0x100b24a0",
+      "rva": "0x000b24a0",
+      "module": "samp.dll",
+      "evidence": "Preserved v147 native instructions and vtable records. Descriptive wrapper name inferred from GTA backend identity in pinned gta-reversed task reference; original SA-MP class spelling not established. Native allocation extents, five-word argument order, callee pops and empty base-dtor thunks reviewed."
+    },
+    {
       "name": "CTaskJetpack::~CTaskJetpack",
       "va": "0x100b23b0",
       "rva": "0x000b23b0",
@@ -3995,6 +4009,20 @@
       "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
     },
     {
+      "name": "CTaskKillPedOnFootArmed::~CTaskKillPedOnFootArmed",
+      "va": "0x100b26c0",
+      "rva": "0x000b26c0",
+      "module": "samp.dll",
+      "evidence": "Preserved v147 native instructions and vtable records. Descriptive wrapper name inferred from GTA backend identity in pinned gta-reversed task reference; original SA-MP class spelling not established. Native allocation extents, five-word argument order, callee pops and empty base-dtor thunks reviewed."
+    },
+    {
+      "name": "CTaskKillPedOnFootArmed::CTaskKillPedOnFootArmed",
+      "va": "0x100b24f0",
+      "rva": "0x000b24f0",
+      "module": "samp.dll",
+      "evidence": "Preserved v147 native instructions and vtable records. Descriptive wrapper name inferred from GTA backend identity in pinned gta-reversed task reference; original SA-MP class spelling not established. Native allocation extents, five-word argument order, callee pops and empty base-dtor thunks reviewed."
+    },
+    {
       "name": "CTaskTakeDamageFall::~CTaskTakeDamageFall",
       "va": "0x100b2630",
       "rva": "0x000b2630",
@@ -4007,6 +4035,20 @@
       "rva": "0x000b2410",
       "module": "samp.dll",
       "evidence": "v147 read-only native instruction/vtable review. Original 0.2x task sources corroborate names; DL establishes constructor arguments, wrapper/backend extents and jetpack destructor cleanup. B2380 exported as temporary read-only function and discarded, rather than inheriting the incomplete old inventory."
+    },
+    {
+      "name": "CTaskUseGoggles::~CTaskUseGoggles",
+      "va": "0x100b2660",
+      "rva": "0x000b2660",
+      "module": "samp.dll",
+      "evidence": "Preserved v147 native instructions and vtable records. Descriptive wrapper name inferred from GTA backend identity in pinned gta-reversed task reference; original SA-MP class spelling not established. Native allocation extents, five-word argument order, callee pops and empty base-dtor thunks reviewed."
+    },
+    {
+      "name": "CTaskUseGoggles::CTaskUseGoggles",
+      "va": "0x100b2460",
+      "rva": "0x000b2460",
+      "module": "samp.dll",
+      "evidence": "Preserved v147 native instructions and vtable records. Descriptive wrapper name inferred from GTA backend identity in pinned gta-reversed task reference; original SA-MP class spelling not established. Native allocation extents, five-word argument order, callee pops and empty base-dtor thunks reviewed."
     },
     {
       "name": "CTextDraw::Draw",
@@ -22228,6 +22270,42 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/task.cpp",
+      "name": "CTaskUseGoggles::CTaskUseGoggles",
+      "rva": 730208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskUseGoggles::~CTaskUseGoggles",
+      "rva": 730720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskGoToPoint::CTaskGoToPoint",
+      "rva": 730272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskGoToPoint::~CTaskGoToPoint",
+      "rva": 730768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskKillPedOnFootArmed::CTaskKillPedOnFootArmed",
+      "rva": 730352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.cpp",
+      "name": "CTaskKillPedOnFootArmed::~CTaskKillPedOnFootArmed",
+      "rva": 730816,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/task.h",
       "name": "CTask::CTask",
       "rva": 729472,
@@ -22327,6 +22405,42 @@
       "file": "source/game/task.h",
       "name": "CTaskTakeDamageFall::~CTaskTakeDamageFall",
       "rva": 730672,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskUseGoggles::CTaskUseGoggles",
+      "rva": 730208,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskUseGoggles::~CTaskUseGoggles",
+      "rva": 730720,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskGoToPoint::CTaskGoToPoint",
+      "rva": 730272,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskGoToPoint::~CTaskGoToPoint",
+      "rva": 730768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskKillPedOnFootArmed::CTaskKillPedOnFootArmed",
+      "rva": 730352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/task.h",
+      "name": "CTaskKillPedOnFootArmed::~CTaskKillPedOnFootArmed",
+      "rva": 730816,
       "module": "samp.dll"
     },
     {

@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <stddef.h>
 class CPed;
+struct CVector;
 #pragma pack(push,1)
 // samp.dll vtable RVA: 0x0011f434; seven slots, allocated extent 16 bytes.
 class CTask {
@@ -59,4 +60,34 @@ public:
 };
 typedef char JetpackWrapperSize[(sizeof(CTaskJetpack)==16)?1:-1];
 typedef char FallWrapperSize[(sizeof(CTaskTakeDamageFall)==16)?1:-1];
+// Descriptive wrapper names inferred from established GTA backend identities.
+// samp.dll vtable RVA: 0x0011f488
+class CTaskUseGoggles : public CTask {
+public:
+    // samp.dll RVA: 0x000b2460
+    CTaskUseGoggles();
+    // samp.dll RVA: 0x000b2660
+    virtual ~CTaskUseGoggles();
+};
+// samp.dll vtable RVA: 0x0011f4a4
+class CTaskGoToPoint : public CTask {
+public:
+    // Full native DWORD flag words are forwarded without bool normalization.
+    // samp.dll RVA: 0x000b24a0
+    CTaskGoToPoint(DWORD moveState,const CVector *target,float radius,DWORD moveTowards,DWORD finalFlag);
+    // samp.dll RVA: 0x000b2690
+    virtual ~CTaskGoToPoint();
+};
+// samp.dll vtable RVA: 0x0011f4c0
+class CTaskKillPedOnFootArmed : public CTask {
+public:
+    // Wrapper argument order differs from the GTA constructor. Target is opaque GTA ped.
+    // samp.dll RVA: 0x000b24f0
+    CTaskKillPedOnFootArmed(DWORD competence,DWORD duckTime,DWORD duckChance,DWORD duckingConditions,void *target);
+    // samp.dll RVA: 0x000b26c0
+    virtual ~CTaskKillPedOnFootArmed();
+};
+typedef char GogglesWrapperSize[(sizeof(CTaskUseGoggles)==16)?1:-1];
+typedef char GoToWrapperSize[(sizeof(CTaskGoToPoint)==16)?1:-1];
+typedef char KillPedWrapperSize[(sizeof(CTaskKillPedOnFootArmed)==16)?1:-1];
 #endif
