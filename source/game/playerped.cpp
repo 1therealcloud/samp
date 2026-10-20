@@ -665,3 +665,35 @@ void CPed::SetModelIndex(int model) {
     }
 }
 
+// samp.dll RVA: 0x000ace50
+void CPed::ApplyAnimation(const char *name,const char *library,float speed,DWORD loop,DWORD lockX,DWORD lockY,DWORD freeze,int time) {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle)) return;
+    if(_stricmp(library,g_pedBlockedAnimationLibrary)==0) return;
+    if(!g_pGame->IsAnimationLoaded(library)) {
+        g_pGame->RequestAnimation(library);
+        if(!g_pGame->IsAnimationLoaded(library)) {
+            void (WINAPI *volatile sleep)(DWORD)=::Sleep;
+            int attempts=0;
+            do {
+                sleep(1);
+                if(++attempts==15) return;
+            } while(!g_pGame->IsAnimationLoaded(library));
+        }
+    }
+    Scripting::ProcessCommand(&g_pedApplyAnimationCommand,m_nHandle,name,library,(double)speed,loop,lockX,lockY,freeze,time);
+}
+
+// samp.dll RVA: 0x000acf20
+BOOL CPed::IsPerformingAnimation(const char *name) {
+    if(m_pGamePed) return Scripting::ProcessCommand(&g_pedIsPerformingAnimationCommand,m_nHandle,name)!=0;
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000ad6d0
+void CPed::StartDancing(int style) {
+    if(style<0||style>3) return;
+    unknown2d2=1;
+    *(DWORD*)unknown2d6=style;
+    if(m_nPlayerNumber==0)
+        ApplyAnimation(g_pedDanceNames[style],g_pedDanceLibraries[style],16.0f,1,0,0,0,-1);
+}

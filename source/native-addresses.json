@@ -12260,6 +12260,62 @@
       "rva": "0x0011f008",
       "module": "samp.dll",
       "evidence": "v177 direct reference disassembly/SCM records and focused source/VC7 ABI review."
+    },
+    {
+      "name": "CPed::ApplyAnimation",
+      "va": "0x100ace50",
+      "rva": "0x000ace50",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::IsPerformingAnimation",
+      "va": "0x100acf20",
+      "rva": "0x000acf20",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::StartDancing",
+      "va": "0x100ad6d0",
+      "rva": "0x000ad6d0",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedApplyAnimationCommand",
+      "va": "0x1011f0a8",
+      "rva": "0x0011f0a8",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedIsPerformingAnimationCommand",
+      "va": "0x1011f0bc",
+      "rva": "0x0011f0bc",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedBlockedAnimationLibrary",
+      "va": "0x1011e324",
+      "rva": "0x0011e324",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedDanceLibraries",
+      "va": "0x10154db0",
+      "rva": "0x00154db0",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedDanceNames",
+      "va": "0x10154df0",
+      "rva": "0x00154df0",
+      "module": "samp.dll",
+      "evidence": "v178 direct original PE instructions/data and focused VC7 source/ABI review."
     }
   ],
   "annotations": [

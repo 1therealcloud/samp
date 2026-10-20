@@ -30,6 +30,12 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ad6d0
+    void StartDancing(int style);
+    // samp.dll RVA: 0x000acf20
+    BOOL IsPerformingAnimation(const char *name);
+    // samp.dll RVA: 0x000ace50
+    void ApplyAnimation(const char *name,const char *library,float speed,DWORD loop,DWORD lockX,DWORD lockY,DWORD freeze,int time);
     // samp.dll RVA: 0x000afb50
     void SetModelIndex(int model);
     // samp.dll RVA: 0x000ac100

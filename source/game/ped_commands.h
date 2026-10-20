@@ -49,4 +49,14 @@ extern const double g_pedParachuteZero;
 extern const Scripting::OpcodeInfo g_pedStopUrinationEffectCommand;
 // samp.dll RVA: 0x0011f008
 extern const Scripting::OpcodeInfo g_pedExitVehicleCommand;
+// samp.dll RVA: 0x0011f0a8
+extern const Scripting::OpcodeInfo g_pedApplyAnimationCommand;
+// samp.dll RVA: 0x0011f0bc
+extern const Scripting::OpcodeInfo g_pedIsPerformingAnimationCommand;
+// samp.dll RVA: 0x0011e324
+extern const char g_pedBlockedAnimationLibrary[4];
+// samp.dll RVA: 0x00154db0
+extern char g_pedDanceLibraries[4][16];
+// samp.dll RVA: 0x00154df0
+extern char g_pedDanceNames[4][16];
 #endif
