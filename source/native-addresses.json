@@ -8090,6 +8090,13 @@
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
     },
     {
+      "name": "GameNormalizeVector",
+      "va": "0x100b4630",
+      "rva": "0x000b4630",
+      "module": "samp.dll",
+      "evidence": "Native adapter ECX argument and fixed GTA 59C910 call; backend inspected read-only for normalization and void x87 return."
+    },
+    {
       "name": "GameNotifyEnterVehicle",
       "va": "0x100a3430",
       "rva": "0x000a3430",
@@ -8412,6 +8419,13 @@
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
     },
     {
+      "name": "GameRwQuaternionFromMatrix",
+      "va": "0x100b4d20",
+      "rva": "0x000b4d20",
+      "module": "samp.dll",
+      "evidence": "Native version-dispatched cdecl adapter, target 7EB5C0 iff version==1 else 7EB600. Raw backend quaternion without wrapper reorder."
+    },
+    {
       "name": "GameRwReadClump",
       "va": "0x100b1ad0",
       "rva": "0x000b1ad0",
@@ -8545,6 +8559,13 @@
       "evidence": "Read-only object-mutation-v111 native bodies/instructions; seven entries compared in 86016 raw ABI/state cases with independent nested native/source helpers, x87/alias and notification publication checks. Motion/Euler/ped/SCM/GTA boundaries explicitly observed; real HAL attachment composition separate."
     },
     {
+      "name": "GameTransformVectorByTranspose",
+      "va": "0x100b4790",
+      "rva": "0x000b4790",
+      "module": "samp.dll",
+      "evidence": "Native cdecl adapter to GTA 59C810; out/vector/matrix and transposed basis/no translation confirmed against local GTA body."
+    },
+    {
       "name": "GameTxdAdd",
       "va": "0x100b34a0",
       "rva": "0x000b34a0",
@@ -8620,6 +8641,13 @@
       "rva": "0x00017440",
       "module": "samp.dll",
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameVectorCrossProduct",
+      "va": "0x100b4750",
+      "rva": "0x000b4750",
+      "module": "samp.dll",
+      "evidence": "Native cdecl adapter to GTA 59C730; out/left/right and EAX output pointer confirmed against local GTA body."
     },
     {
       "name": "GameWaitUnprotect",
@@ -20985,6 +21013,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/rw_transform.h",
+      "name": "GameRwQuaternionFromMatrix",
+      "rva": 740640,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/script_runtime.cpp",
       "name": "g_scriptBuffer",
       "rva": 2790128,
@@ -21360,6 +21394,48 @@
       "file": "source/game/task_events.h",
       "name": "g_hookEnterVehicle",
       "rva": 1632284,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.cpp",
+      "name": "GameNormalizeVector",
+      "rva": 738864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.cpp",
+      "name": "GameVectorCrossProduct",
+      "rva": 739152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.cpp",
+      "name": "GameTransformVectorByTranspose",
+      "rva": 739216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.cpp",
+      "name": "GameRwQuaternionFromMatrix",
+      "rva": 740640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.h",
+      "name": "GameNormalizeVector",
+      "rva": 738864,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.h",
+      "name": "GameVectorCrossProduct",
+      "rva": 739152,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vector_adapters.h",
+      "name": "GameTransformVectorByTranspose",
+      "rva": 739216,
       "module": "samp.dll"
     },
     {

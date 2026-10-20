@@ -20,4 +20,7 @@ void __cdecl GameRotateRwMatrix(CMatrix *matrix,const CVector *axis,float angle)
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix *out,const CMatrix *matrix);
 // samp.dll RVA: 0x000b5480
 void __cdecl GameScaleRwMatrix(CMatrix *matrix,const CVector *scale);
+// Raw backend layout; unlike GameQuaternionFromMatrix, no XYZW/WXYZ reorder.
+// samp.dll RVA: 0x000b4d20
+void GameRwQuaternionFromMatrix(void *quaternion,const CMatrix *matrix);
 #endif
