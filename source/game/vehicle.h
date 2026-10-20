@@ -17,6 +17,14 @@ public:
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
+    // samp.dll RVA: 0x000b77d0
+    CVehicle * GetTrailer();
+    // samp.dll RVA: 0x000b7830
+    CVehicle * GetTractor();
+    // samp.dll RVA: 0x000b7a20
+    void RemovePassengers();
+    // samp.dll RVA: 0x000b7b00
+    BOOL AddComponent(WORD component);
     // samp.dll RVA: 0x000b6cd0
     void SetInvulnerable(BOOL enabled);
     // samp.dll RVA: 0x000b70e0

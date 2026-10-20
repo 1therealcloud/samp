@@ -6,3 +6,7 @@ WORD CVehiclePool::Find(void *gameObject) {
 }
 // samp.dll RVA: 0x00001120
 CVehicle *CVehiclePool::Get(WORD id) { return id<2000 && m_bNotEmpty[id]?m_pObjects[id]:0; }
+
+// Native returns the raw state DWORD; do not normalize it to bool.
+// samp.dll RVA: 0x00001150
+BOOL CVehiclePool::DoesExist(WORD id) { return id<2000?m_bNotEmpty[id]:FALSE; }

@@ -4212,6 +4212,13 @@
       "evidence": "Read-only Ghidra dxut-buffer-v67 and dxut-buffer-core-v67 exports; ANSI overload only"
     },
     {
+      "name": "CVehicle::AddComponent",
+      "va": "0x100b7b00",
+      "rva": "0x000b7b00",
+      "module": "samp.dll",
+      "evidence": "v159 read-only native export establishes guards, pool chain3DE/C, component wait/order and raw position snapshot; full classes remain incomplete."
+    },
+    {
       "name": "CVehicle::AttachTrailer",
       "va": "0x100b7750",
       "rva": "0x000b7750",
@@ -4373,6 +4380,20 @@
       "evidence": "v158 read-only Ghidra original instructions establish guards, packed fields, raw backend thiscall stack and float status handling; no complete wrapper/GTA class layout inferred."
     },
     {
+      "name": "CVehicle::GetTractor",
+      "va": "0x100b7830",
+      "rva": "0x000b7830",
+      "module": "samp.dll",
+      "evidence": "v159 read-only native export establishes guards, pool chain3DE/C, component wait/order and raw position snapshot; full classes remain incomplete."
+    },
+    {
+      "name": "CVehicle::GetTrailer",
+      "va": "0x100b77d0",
+      "rva": "0x000b77d0",
+      "module": "samp.dll",
+      "evidence": "v159 read-only native export establishes guards, pool chain3DE/C, component wait/order and raw position snapshot; full classes remain incomplete."
+    },
+    {
       "name": "CVehicle::GetTrainSpeed",
       "va": "0x100b7420",
       "rva": "0x000b7420",
@@ -4462,6 +4483,13 @@
       "rva": "0x000b7be0",
       "module": "samp.dll",
       "evidence": "v157 read-only original instructions, exact guard/call/order/field/width review; SAMP-API anchors for established names, technical names retain unresolved field semantics."
+    },
+    {
+      "name": "CVehicle::RemovePassengers",
+      "va": "0x100b7a20",
+      "rva": "0x000b7a20",
+      "module": "samp.dll",
+      "evidence": "v159 read-only native export establishes guards, pool chain3DE/C, component wait/order and raw position snapshot; full classes remain incomplete."
     },
     {
       "name": "CVehicle::ResetPointers",
@@ -4630,6 +4658,13 @@
       "rva": "0x0001e830",
       "module": "samp.dll",
       "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
+      "name": "CVehiclePool::DoesExist",
+      "va": "0x10001150",
+      "rva": "0x00001150",
+      "module": "samp.dll",
+      "evidence": "v159 separate native export: unsigned WORD id<2000 then raw DWORD state at3074, else0."
     },
     {
       "name": "CVehiclePool::Find",
@@ -7803,6 +7838,13 @@
       "evidence": "Exact textdraw-render-v118 table/data operands: 200 texture words, 200 DWORD activity flags, float constants 0.5/640/448. Out-of-table adjacency is unproven."
     },
     {
+      "name": "g_vehicleAddComponentCommand",
+      "va": "0x1011f740",
+      "rva": "0x0011f740",
+      "module": "samp.dll",
+      "evidence": "v159 exact18-byte original SCM descriptor and native wrapper operands."
+    },
+    {
       "name": "g_vehicleAttachTrailerCommand",
       "va": "0x1011f7b8",
       "rva": "0x0011f7b8",
@@ -7815,6 +7857,13 @@
       "rva": "0x0011f7a4",
       "module": "samp.dll",
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
+    },
+    {
+      "name": "g_vehicleComponentLoadedCommand",
+      "va": "0x1011f754",
+      "rva": "0x0011f754",
+      "module": "samp.dll",
+      "evidence": "v159 exact18-byte original SCM descriptor and native wrapper operands."
     },
     {
       "name": "g_vehicleDamageableCommand",
@@ -7866,6 +7915,13 @@
       "evidence": "v157 original PE exact18-byte packed opcode descriptor, operands in vehicle-state-v157-instructions.tsv."
     },
     {
+      "name": "g_vehicleRequestComponentCommand",
+      "va": "0x1011f768",
+      "rva": "0x0011f768",
+      "module": "samp.dll",
+      "evidence": "v159 exact18-byte original SCM descriptor and native wrapper operands."
+    },
+    {
       "name": "g_vehicleRotationCommand",
       "va": "0x1011f614",
       "rva": "0x0011f614",
@@ -7885,6 +7941,13 @@
       "rva": "0x001181a0",
       "module": "samp.dll",
       "evidence": "v158 native FCOMP operands, original float bits -100 and +100; no prior canonical storage at these VAs."
+    },
+    {
+      "name": "g_vehicleWarpPedCommand",
+      "va": "0x1011f6b4",
+      "rva": "0x0011f6b4",
+      "module": "samp.dll",
+      "evidence": "v159 exact18-byte original SCM descriptor and native wrapper operands."
     },
     {
       "name": "GameAllocateTextDrawTexture",
@@ -24036,6 +24099,30 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetTrailer",
+      "rva": 751568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetTractor",
+      "rva": 751664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::RemovePassengers",
+      "rva": 752160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::AddComponent",
+      "rva": 752384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::SetInvulnerable",
       "rva": 748752,
       "module": "samp.dll"
@@ -24785,6 +24872,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetTrailer",
+      "rva": 751568,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetTractor",
+      "rva": 751664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::RemovePassengers",
+      "rva": 752160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::AddComponent",
+      "rva": 752384,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/video_mode.cpp",
       "name": "GameSetVideoMode",
       "rva": 744720,
@@ -24989,6 +25100,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleWarpPedCommand",
+      "rva": 1177268,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleAddComponentCommand",
+      "rva": 1177408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleComponentLoadedCommand",
+      "rva": 1177428,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleRequestComponentCommand",
+      "rva": 1177448,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -25148,6 +25283,30 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_vehicleDamageableCommand",
       "rva": 1177488,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleWarpPedCommand",
+      "rva": 1177268,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleAddComponentCommand",
+      "rva": 1177408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleComponentLoadedCommand",
+      "rva": 1177428,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleRequestComponentCommand",
+      "rva": 1177448,
       "module": "samp.dll"
     },
     {
@@ -27944,6 +28103,18 @@
       "file": "source/net/vehiclepool.cpp",
       "name": "CVehiclePool::Get",
       "rva": 4384,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/vehiclepool.cpp",
+      "name": "CVehiclePool::DoesExist",
+      "rva": 4432,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/net/vehiclepool.h",
+      "name": "CVehiclePool::DoesExist",
+      "rva": 4432,
       "module": "samp.dll"
     },
     {

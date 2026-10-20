@@ -10,6 +10,8 @@ public:
     CVehicle *m_pObjects[2000];
     BOOL m_bNotEmpty[2000];
     void *m_pGameObjects[2000];
+    // samp.dll RVA: 0x00001150
+    BOOL DoesExist(WORD id);
     // samp.dll RVA: 0x0001e650
     WORD Find(void *gameObject);
     // samp.dll RVA: 0x00001120

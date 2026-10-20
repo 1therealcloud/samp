@@ -523,3 +523,78 @@ void CVehicle::SetBackendFloat64c(float speed) {
 rejected:
     ;
 }
+
+#include "main.h"
+#include "game/pool_helpers.h"
+#include "net/vehiclepool.h"
+
+// samp.dll RVA: 0x000b77d0
+CVehicle * CVehicle::GetTrailer() {
+    if(!m_pGameVehicle)return 0;
+    void *backend=*(void**)((BYTE*)m_pGameVehicle+0x4c8);
+    if(backend && g_pNetGame) {
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
+        CVehiclePool *pool=*(CVehiclePool**)(pools+0xc);
+        WORD id=pool->Find(backend);
+        if(id!=0xffff && pool->DoesExist(id))return pool->Get(id);
+    }
+    return 0;
+}
+
+// samp.dll RVA: 0x000b7830
+CVehicle * CVehicle::GetTractor() {
+    if(!m_pGameVehicle)return 0;
+    int subtype=GameGetVehicleSubtype(m_pGameVehicle);
+    if(subtype==2 || subtype==4 || subtype==7 || subtype==6)return 0;
+    void *backend=*(void**)((BYTE*)m_pGameVehicle+0x4c4);
+    if(backend && g_pNetGame) {
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
+        CVehiclePool *pool=*(CVehiclePool**)(pools+0xc);
+        WORD id=pool->Find(backend);
+        if(id!=0xffff && pool->DoesExist(id))return pool->Get(id);
+    }
+    return 0;
+}
+
+// samp.dll RVA: 0x000b7a20
+void CVehicle::RemovePassengers() {
+    if(!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))return;
+    BYTE *matrix=*(BYTE**)((BYTE*)m_pGameVehicle+0x14);
+    DWORD xBits=*(DWORD*)(matrix+0x30),yBits=*(DWORD*)(matrix+0x34),zBits=*(DWORD*)(matrix+0x38);
+    for(int offset=0x460;offset<0x480;offset+=4) {
+        void *ped=*(void**)((BYTE*)m_pGameVehicle+offset);
+        if(ped) {
+            int handle=GamePoolPedGetIndex(ped);
+            double raisedZ;
+            // Native loads Z before FADD and rounds directly to the vararg double.
+            __asm {
+                fld dword ptr zBits
+                fadd dword ptr [g_quaternionMatrixTwo]
+                fstp qword ptr raisedZ
+            }
+            Scripting::ProcessCommand(&g_vehicleWarpPedCommand,handle,
+                (double)*(float*)&xBits,(double)*(float*)&yBits,raisedZ);
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b7b00
+BOOL CVehicle::AddComponent(WORD component) {
+    DWORD result=(DWORD)this;
+    if(!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle) || !m_pGameVehicle ||
+        GameGetVehicleSubtype(m_pGameVehicle)!=1)return FALSE;
+    unsigned int model=component;
+    if(!Scripting::ProcessCommand(&g_vehicleComponentLoadedCommand,model)) {
+        g_pGame->RequestModel(model,2);
+        g_pGame->LoadRequestedModels();
+        Scripting::ProcessCommand(&g_vehicleRequestComponentCommand,model);
+        void (WINAPI *sleep)(DWORD)=Sleep;
+        for(int attempts=20;attempts!=0;--attempts) {
+            if(Scripting::ProcessCommand(&g_vehicleComponentLoadedCommand,model))break;
+            sleep(1);
+        }
+    }
+    if(!Scripting::ProcessCommand(&g_vehicleComponentLoadedCommand,model))return FALSE;
+    Scripting::ProcessCommand(&g_vehicleAddComponentCommand,m_nHandle,model,&result);
+    return TRUE;
+}

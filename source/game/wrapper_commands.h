@@ -55,4 +55,12 @@ extern const Scripting::OpcodeInfo g_vehicleRotationCommand;
 extern const Scripting::OpcodeInfo g_vehicleProofsCommand;
 // samp.dll RVA: 0x0011f790
 extern const Scripting::OpcodeInfo g_vehicleDamageableCommand;
+// samp.dll RVA: 0x0011f6b4
+extern const Scripting::OpcodeInfo g_vehicleWarpPedCommand;
+// samp.dll RVA: 0x0011f740
+extern const Scripting::OpcodeInfo g_vehicleAddComponentCommand;
+// samp.dll RVA: 0x0011f754
+extern const Scripting::OpcodeInfo g_vehicleComponentLoadedCommand;
+// samp.dll RVA: 0x0011f768
+extern const Scripting::OpcodeInfo g_vehicleRequestComponentCommand;
 #endif
