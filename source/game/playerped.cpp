@@ -1,3 +1,4 @@
+#include "game/model.h"
 #include "game/playerped.h"
 #include "game/ped_commands.h"
 #include "game/scripting.h"
@@ -609,3 +610,58 @@ int CPed::GetVehicleSeatIndex() {
         if(*(void**)(vehicle+0x460+seat*4)==ped) return seat;
     return -1;
 }
+
+#include "game/input.h"
+
+// samp.dll RVA: 0x000adde0
+void CPed::StopUrinating() {
+    if(m_pGamePed&&GamePoolPedGetAt(m_nHandle)&&m_bUrinating) {
+        DWORD *effect=(DWORD*)unknown2bd;
+        if(*effect) {
+            Scripting::ProcessCommand(&g_pedStopUrinationEffectCommand,*effect);
+            *effect=0;
+        }
+        CMatrix matrix;
+        GetMatrix(&matrix);
+        Teleport(matrix.position);
+        m_bUrinating=0;
+    }
+}
+
+// samp.dll RVA: 0x000ac100
+void CPed::ExitVehicle() {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle)) return;
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!(*(DWORD*)(ped+0x46c)&0x100)) return;
+    if(!GamePoolVehicleGetIndex(*(void**)(ped+0x58c))) return;
+    DWORD reference=0;
+    if(m_pGamePed) reference=GamePoolVehicleGetIndex(*(void**)((BYTE*)m_pGamePed+0x58c));
+    BYTE *vehicle=(BYTE*)GamePoolVehicleGetAt(reference);
+    if(!vehicle) return;
+    WORD model=*(WORD*)(vehicle+0x22);
+    if(model==570||model==538) return;
+    Scripting::ProcessCommand(&g_pedExitVehicleCommand,m_nHandle,GetVehicleRef());
+}
+
+// samp.dll RVA: 0x000afb50
+void CPed::SetModelIndex(int model) {
+    void *ped=m_pGamePed;
+    if(GamePoolPedGetAt(m_nHandle)) {
+        if(!GameIsPedModel(model)) model=0;
+        if(ped) {
+            // GTA SA virtual address: persistent one-byte patch0x005a82c0.
+            GameUnprotect((void*)0x5a82c0,1);
+            *(BYTE*)0x5a82c0=0xc3;
+            DestroyCommandTask();
+            CEntity::SetModelIndex(model);
+            // GTA SA virtual address: 0x004e68d0, ECX original backend+294, argument original backend.
+            __asm { mov eax,ped
+                lea ecx,[eax+0x294]
+                push eax
+                mov edx,0x4e68d0
+                call edx
+            }
+        }
+    }
+}
+

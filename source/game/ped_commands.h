@@ -45,4 +45,8 @@ extern const Scripting::OpcodeInfo g_pedArrowColorCommand;
 extern const Scripting::OpcodeInfo g_pedArrowModeCommand;
 // samp.dll RVA: 0x0011ae68
 extern const double g_pedParachuteZero;
+// samp.dll RVA: 0x0011f1e8
+extern const Scripting::OpcodeInfo g_pedStopUrinationEffectCommand;
+// samp.dll RVA: 0x0011f008
+extern const Scripting::OpcodeInfo g_pedExitVehicleCommand;
 #endif

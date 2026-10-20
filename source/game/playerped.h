@@ -30,6 +30,12 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000afb50
+    void SetModelIndex(int model);
+    // samp.dll RVA: 0x000ac100
+    void ExitVehicle();
+    // samp.dll RVA: 0x000adde0
+    void StopUrinating();
     // samp.dll RVA: 0x000abe20
     int GetVehicleSeatIndex();
     // samp.dll RVA: 0x000af330

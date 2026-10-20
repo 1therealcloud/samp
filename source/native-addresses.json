@@ -12225,6 +12225,41 @@
       "rva": "0x0011ae68",
       "module": "samp.dll",
       "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::StopUrinating",
+      "va": "0x100adde0",
+      "rva": "0x000adde0",
+      "module": "samp.dll",
+      "evidence": "v177 direct reference disassembly/SCM records and focused source/VC7 ABI review."
+    },
+    {
+      "name": "CPed::ExitVehicle",
+      "va": "0x100ac100",
+      "rva": "0x000ac100",
+      "module": "samp.dll",
+      "evidence": "v177 direct reference disassembly/SCM records and focused source/VC7 ABI review."
+    },
+    {
+      "name": "CPed::SetModelIndex",
+      "va": "0x100afb50",
+      "rva": "0x000afb50",
+      "module": "samp.dll",
+      "evidence": "v177 direct reference disassembly/SCM records and focused source/VC7 ABI review."
+    },
+    {
+      "name": "g_pedStopUrinationEffectCommand",
+      "va": "0x1011f1e8",
+      "rva": "0x0011f1e8",
+      "module": "samp.dll",
+      "evidence": "v177 direct reference disassembly/SCM records and focused source/VC7 ABI review."
+    },
+    {
+      "name": "g_pedExitVehicleCommand",
+      "va": "0x1011f008",
+      "rva": "0x0011f008",
+      "module": "samp.dll",
+      "evidence": "v177 direct reference disassembly/SCM records and focused source/VC7 ABI review."
     }
   ],
   "annotations": [
