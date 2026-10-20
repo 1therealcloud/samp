@@ -29,4 +29,13 @@ BOOL __stdcall GameIsPedModel(int model);
 // Observed wrapped vtable-address-plus-14 test, not a slot-content query.
 // samp.dll RVA: 0x000b4170
 BOOL __stdcall GameModelQueryB4170(int model);
+struct CVector;
+// samp.dll RVA: 0x000b5ef0
+float __cdecl GameSetModelCollisionRadius(int model,float radius);
+// samp.dll RVA: 0x000b5f50
+BOOL __cdecl GameGetModelCollisionCentre(int model,CVector *centre);
+// samp.dll RVA: 0x000b5fe0
+BYTE __cdecl GameGetModelFlagsByte(int model);
+// samp.dll RVA: 0x000b6000
+WORD __cdecl GameGetModelFlagsWord(int model);
 #endif

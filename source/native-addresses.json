@@ -7390,6 +7390,13 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "GameGetModelCollisionCentre",
+      "va": "0x100b5f50",
+      "rva": "0x000b5f50",
+      "module": "samp.dll",
+      "evidence": "v135 direct original model-property instruction/pseudocode recovery. Repeated lookups, no added null guards, raw centre copies, ST0/AL/AX return widths preserved. Readable VC7 C++; compile/static review only."
+    },
+    {
       "name": "GameGetModelCollisionRadius",
       "va": "0x100b5ea0",
       "rva": "0x000b5ea0",
@@ -7402,6 +7409,20 @@
       "rva": "0x000b41a0",
       "module": "samp.dll",
       "evidence": "Read-only offline-core-v89, offline-path-v89 and settings-v89 original bodies/instructions; exact opcode descriptors and original pointer initialization. Offline debug path remains integration work."
+    },
+    {
+      "name": "GameGetModelFlagsByte",
+      "va": "0x100b5fe0",
+      "rva": "0x000b5fe0",
+      "module": "samp.dll",
+      "evidence": "v135 direct original model-property instruction/pseudocode recovery. Repeated lookups, no added null guards, raw centre copies, ST0/AL/AX return widths preserved. Readable VC7 C++; compile/static review only."
+    },
+    {
+      "name": "GameGetModelFlagsWord",
+      "va": "0x100b6000",
+      "rva": "0x000b6000",
+      "module": "samp.dll",
+      "evidence": "v135 direct original model-property instruction/pseudocode recovery. Repeated lookups, no added null guards, raw centre copies, ST0/AL/AX return widths preserved. Readable VC7 C++; compile/static review only."
     },
     {
       "name": "GameGetModelInfo",
@@ -8382,6 +8403,13 @@
       "rva": "0x000020c0",
       "module": "samp.dll",
       "evidence": "Reviewed native StartGame/global patches exports v77 and event callbacks v78; callbacks are declaration-only"
+    },
+    {
+      "name": "GameSetModelCollisionRadius",
+      "va": "0x100b5ef0",
+      "rva": "0x000b5ef0",
+      "module": "samp.dll",
+      "evidence": "v135 direct original model-property instruction/pseudocode recovery. Repeated lookups, no added null guards, raw centre copies, ST0/AL/AX return widths preserved. Readable VC7 C++; compile/static review only."
     },
     {
       "name": "GameSetModelField8",
@@ -19215,6 +19243,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.h",
+      "name": "GameSetModelCollisionRadius",
+      "rva": 745200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelCollisionCentre",
+      "rva": 745296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelFlagsByte",
+      "rva": 745440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model.h",
+      "name": "GameGetModelFlagsWord",
+      "rva": 745472,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/model_preview.cpp",
       "name": "g_modelPreview",
       "rva": 2804280,
@@ -19266,6 +19318,30 @@
       "file": "source/game/model_preview.h",
       "name": "g_modelPreview",
       "rva": 2804280,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameSetModelCollisionRadius",
+      "rva": 745200,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelCollisionCentre",
+      "rva": 745296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelFlagsByte",
+      "rva": 745440,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameGetModelFlagsWord",
+      "rva": 745472,
       "module": "samp.dll"
     },
     {
