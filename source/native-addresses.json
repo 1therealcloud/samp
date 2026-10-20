@@ -8776,6 +8776,34 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwAddClumpLight",
+      "va": "0x100b1740",
+      "rva": "0x000b1740",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 74a4f0 with version==1 versus fallback +50. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwBeginCameraUpdate",
+      "va": "0x100b1520",
+      "rva": "0x000b1520",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7ee190 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwClearCamera",
+      "va": "0x100b14f0",
+      "rva": "0x000b14f0",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7ee340 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwCountClumpAtomics",
+      "va": "0x100b1010",
+      "rva": "0x000b1010",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7498e0 fixed. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
       "name": "GameRwCreateCamera",
       "va": "0x100b1430",
       "rva": "0x000b1430",
@@ -8818,6 +8846,41 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwDestroyAtomic",
+      "va": "0x100b1400",
+      "rva": "0x000b1400",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 749dc0 with version==1 versus fallback +50. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwDestroyClump",
+      "va": "0x100b1880",
+      "rva": "0x000b1880",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 74a310 with version==1 versus fallback +50. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwDestroyFrame",
+      "va": "0x100b13d0",
+      "rva": "0x000b13d0",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7f05a0 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwDestroyRaster",
+      "va": "0x100b1470",
+      "rva": "0x000b1470",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7fb020 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwDestroyTexture",
+      "va": "0x100b1360",
+      "rva": "0x000b1360",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7f3820 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
       "name": "GameRwEnableAutoMipmapping",
       "va": "0x100b1e60",
       "rva": "0x000b1e60",
@@ -8825,11 +8888,32 @@
       "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
     },
     {
+      "name": "GameRwEndCameraUpdate",
+      "va": "0x100b1550",
+      "rva": "0x000b1550",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7ee180 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
       "name": "GameRwFindChunk",
       "va": "0x100b1a80",
       "rva": "0x000b1a80",
       "module": "samp.dll",
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwForAllAtomics",
+      "va": "0x100b1090",
+      "rva": "0x000b1090",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 749b70 fixed. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
+    },
+    {
+      "name": "GameRwForAllFrameObjects",
+      "va": "0x100b10c0",
+      "rva": "0x000b10c0",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 7f1200 with version==1 versus fallback +40. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
     },
     {
       "name": "GameRwGetClumpAnimHierarchy",
@@ -8860,11 +8944,25 @@
       "evidence": "Native version-dispatched cdecl adapter, target 7EB5C0 iff version==1 else 7EB600. Raw backend quaternion without wrapper reorder."
     },
     {
+      "name": "GameRwQueryAtomic48",
+      "va": "0x100b1030",
+      "rva": "0x000b1030",
+      "module": "samp.dll",
+      "evidence": "v151 native instructions: nullable raw backend prefix access; B1030 also requires tag1, reads+48; B1130 reads+34 and stdcall RET4. No complete typed interface/callback meaning established."
+    },
+    {
       "name": "GameRwReadClump",
       "va": "0x100b1ad0",
       "rva": "0x000b1ad0",
       "module": "samp.dll",
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwReadField34",
+      "va": "0x100b1130",
+      "rva": "0x000b1130",
+      "module": "samp.dll",
+      "evidence": "v151 native instructions: nullable raw backend prefix access; B1030 also requires tag1, reads+48; B1130 reads+34 and stdcall RET4. No complete typed interface/callback meaning established."
     },
     {
       "name": "GameRwRegisterClumpPlugin",
@@ -8879,6 +8977,13 @@
       "rva": "0x000b1e00",
       "module": "samp.dll",
       "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
+    },
+    {
+      "name": "GameRwRenderClump",
+      "va": "0x100b15d0",
+      "rva": "0x000b15d0",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 749b20 with version==1 versus fallback +50. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
     },
     {
       "name": "GameRwRotateFrame",
@@ -8907,6 +9012,13 @@
       "rva": "0x000b1770",
       "module": "samp.dll",
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
+    },
+    {
+      "name": "GameRwSetLightRadius",
+      "va": "0x100b17a0",
+      "rva": "0x000b17a0",
+      "module": "samp.dll",
+      "evidence": "v151 read-only native instructions: reviewed cdecl argument count, native return/discard behavior, target 751a70 fixed. Primary plugin-sdk RenderWare.cpp corroborates backend identity, not original SA-MP helper names."
     },
     {
       "name": "GameRwSetObjectFrame",
@@ -15886,12 +15998,6 @@
     },
     {
       "file": "source/game/effects.cpp",
-      "name": "GameBufferReader::Skip",
-      "rva": 734912,
-      "module": "samp.dll"
-    },
-    {
-      "file": "source/game/effects.cpp",
       "name": "GameBufferReader::ReadByte",
       "rva": 734880,
       "module": "samp.dll"
@@ -21930,6 +22036,198 @@
       "file": "source/game/rw_helpers.h",
       "name": "GameHeadingToRadians",
       "rva": 742576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwCountClumpAtomics",
+      "rva": 725008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwForAllAtomics",
+      "rva": 725136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwForAllFrameObjects",
+      "rva": 725184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwDestroyTexture",
+      "rva": 725856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwDestroyFrame",
+      "rva": 725968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwDestroyAtomic",
+      "rva": 726016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwDestroyRaster",
+      "rva": 726128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwClearCamera",
+      "rva": 726256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwBeginCameraUpdate",
+      "rva": 726304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwEndCameraUpdate",
+      "rva": 726352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwRenderClump",
+      "rva": 726480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwAddClumpLight",
+      "rva": 726848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwSetLightRadius",
+      "rva": 726944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwDestroyClump",
+      "rva": 727168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwQueryAtomic48",
+      "rva": 725040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.cpp",
+      "name": "GameRwReadField34",
+      "rva": 725296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwCountClumpAtomics",
+      "rva": 725008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwForAllAtomics",
+      "rva": 725136,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwForAllFrameObjects",
+      "rva": 725184,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwDestroyTexture",
+      "rva": 725856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwDestroyFrame",
+      "rva": 725968,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwDestroyAtomic",
+      "rva": 726016,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwDestroyRaster",
+      "rva": 726128,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwClearCamera",
+      "rva": 726256,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwBeginCameraUpdate",
+      "rva": 726304,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwEndCameraUpdate",
+      "rva": 726352,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwRenderClump",
+      "rva": 726480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwAddClumpLight",
+      "rva": 726848,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwSetLightRadius",
+      "rva": 726944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwDestroyClump",
+      "rva": 727168,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwQueryAtomic48",
+      "rva": 725040,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/rw_objects.h",
+      "name": "GameRwReadField34",
+      "rva": 725296,
       "module": "samp.dll"
     },
     {
