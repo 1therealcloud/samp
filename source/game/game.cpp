@@ -68,3 +68,24 @@ int CGame::CountBackendVehicleModelRecords() {
     }
     return count;
 }
+
+// GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
+// samp.dll RVA: 0x000a0db0
+int CGame::GetPlayerMoney() { return *(int*)0xb7ce50; }
+
+// GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
+// samp.dll RVA: 0x000a13f0
+DWORD CGame::GetUsedMemory() { return *(DWORD*)0x8e4cb4; }
+
+// GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
+// samp.dll RVA: 0x000a1400
+DWORD CGame::GetStreamingMemory() { return *(DWORD*)0x8a5a80; }
+
+// GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
+// samp.dll RVA: 0x000a1240
+void CGame::SetWantedLevel(BYTE level) { *(BYTE*)0x58db60=level; }
+
+// GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
+// samp.dll RVA: 0x000a0920
+void CGame::GetWorldTime(BYTE *hour,BYTE *minute) { *minute=*(BYTE*)0xb70152;
+    *hour=*(BYTE*)0xb70153; }

@@ -32,6 +32,16 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a0920
+    void GetWorldTime(BYTE *hour,BYTE *minute);
+    // samp.dll RVA: 0x000a1240
+    void SetWantedLevel(BYTE level);
+    // samp.dll RVA: 0x000a1400
+    DWORD GetStreamingMemory();
+    // samp.dll RVA: 0x000a13f0
+    DWORD GetUsedMemory();
+    // samp.dll RVA: 0x000a0db0
+    int GetPlayerMoney();
     // Technical fixed-table scan; full backend record meaning remains unresolved.
     // samp.dll RVA: 0x000a1410
     int CountBackendVehicleModelRecords();

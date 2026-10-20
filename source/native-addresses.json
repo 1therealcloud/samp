@@ -11357,6 +11357,41 @@
       "rva": "0x0016c3a4",
       "module": "samp.dll",
       "evidence": "Original 0.2x archive source port; read-only archive-v92/archive-crypto-v92/archive-stream-v92 bodies, instructions, virtual tables and direct data operands. Native key, signature, file/memory data and utility differential checks. Pure virtual/inlined/ARCTOOL-only helpers remain explicit unknowns."
+    },
+    {
+      "name": "CGame::GetPlayerMoney",
+      "va": "0x100a0db0",
+      "rva": "0x000a0db0",
+      "module": "samp.dll",
+      "evidence": "v164 direct reference PE disassembly; exact VC7 body check for simple leaves, ordered byte loads/stores for time outputs."
+    },
+    {
+      "name": "CGame::GetUsedMemory",
+      "va": "0x100a13f0",
+      "rva": "0x000a13f0",
+      "module": "samp.dll",
+      "evidence": "v164 direct reference PE disassembly; exact VC7 body check for simple leaves, ordered byte loads/stores for time outputs."
+    },
+    {
+      "name": "CGame::GetStreamingMemory",
+      "va": "0x100a1400",
+      "rva": "0x000a1400",
+      "module": "samp.dll",
+      "evidence": "v164 direct reference PE disassembly; exact VC7 body check for simple leaves, ordered byte loads/stores for time outputs."
+    },
+    {
+      "name": "CGame::SetWantedLevel",
+      "va": "0x100a1240",
+      "rva": "0x000a1240",
+      "module": "samp.dll",
+      "evidence": "v164 direct reference PE disassembly; exact VC7 body check for simple leaves, ordered byte loads/stores for time outputs."
+    },
+    {
+      "name": "CGame::GetWorldTime",
+      "va": "0x100a0920",
+      "rva": "0x000a0920",
+      "module": "samp.dll",
+      "evidence": "v164 direct reference PE disassembly; exact VC7 body check for simple leaves, ordered byte loads/stores for time outputs."
     }
   ],
   "annotations": [
