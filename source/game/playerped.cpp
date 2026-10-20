@@ -439,3 +439,78 @@ void CPed::SetAimZ(float value) {
         *(DWORD*)(state+0x54)=*(DWORD*)&value;
     }
 }
+
+// samp.dll RVA: 0x002a92a0
+void *g_pedCommandTaskSnapshot;
+
+// samp.dll RVA: 0x000adbd0
+void CPed::ApplyCommandTask(const char *name,int p1,int p2,int p3,const CVector *p4,int p5,float p6,int p7,int p8,int p9) {
+    void *ped=m_pGamePed;
+    if(ped) {
+        // GTA SA virtual addresses: receiver0x00c15448, callee0x00618970.
+        __asm { push p9
+            push p8
+            push p7
+            push p6
+            push p5
+            push p4
+            push p3
+            push p2
+            push p1
+            push ped
+            push name
+            mov ecx,0xc15448
+            mov edx,0x618970
+            call edx
+        }
+    }
+}
+
+// samp.dll RVA: 0x000adc20
+void CPed::DestroyCommandTask() {
+    if(m_pGamePed) {
+        BYTE *manager=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+        void *task=*(void**)(manager+0x2c);
+        g_pedCommandTaskSnapshot=task;
+        if(task) {
+            // GTA SA virtual address: 0x00639330, ECX published task, argument1.
+            __asm { mov ecx,g_pedCommandTaskSnapshot
+                mov edx,0x639330
+                push 1
+                call edx
+            }
+            manager=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+            *(DWORD*)(manager+0x2c)=0;
+        }
+    }
+}
+
+// samp.dll RVA: 0x000ac780
+BOOL CPed::DoesHandsUp() {
+    if(m_pGamePed&&!(*(DWORD*)((BYTE*)m_pGamePed+0x46c)&0x100)&&CEntity::DoesExist()&&GamePoolPedGetAt(m_nHandle)) {
+        BYTE *manager=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+        BYTE *task=*(BYTE**)(manager+0x10);
+        // GTA SA virtual address: task vtable0x0085a29c.
+        return task&&*(DWORD*)task==0x85a29c?TRUE:FALSE;
+    }
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000ac980
+void CPed::DisableJetpack() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(ped&&!(*(DWORD*)(ped+0x46c)&0x100)) {
+        BYTE *manager=*(BYTE**)(ped+0x47c);
+        void *task=*(void**)(manager+0x10);
+        // GTA SA virtual addresses: vtable0x008705c4 and callee0x006801d0.
+        if(task&&*(DWORD*)task==0x8705c4) {
+            __asm { mov ecx,task
+                mov edx,0x6801d0
+                push 1
+                call edx
+            }
+            manager=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+            *(DWORD*)(manager+0x10)=0;
+        }
+    }
+}

@@ -30,6 +30,14 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ac980
+    void DisableJetpack();
+    // samp.dll RVA: 0x000ac780
+    BOOL DoesHandsUp();
+    // samp.dll RVA: 0x000adc20
+    void DestroyCommandTask();
+    // samp.dll RVA: 0x000adbd0
+    void ApplyCommandTask(const char *name,int p1,int p2,int p3,const CVector *p4,int p5,float p6,int p7,int p8,int p9);
     // samp.dll RVA: 0x000ad550
     void SetAimZ(float value);
     // samp.dll RVA: 0x000ac7e0
@@ -171,4 +179,6 @@ void *__stdcall GameFindLocalPed();
 void __stdcall GameAssignPlayerPed(BYTE player,void *ped);
 // samp.dll RVA: 0x000b3770
 void *__stdcall GamePoolPedGetAt(int handle);
+// samp.dll RVA: 0x002a92a0
+extern void *g_pedCommandTaskSnapshot;
 #endif

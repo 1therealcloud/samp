@@ -12099,6 +12099,41 @@
       "rva": "0x0011ef7c",
       "module": "samp.dll",
       "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedCommandTaskSnapshot",
+      "va": "0x102a92a0",
+      "rva": "0x002a92a0",
+      "module": "samp.dll",
+      "evidence": "v174 direct original PE disassembly and focused source/VC7 ABI/state review."
+    },
+    {
+      "name": "CPed::ApplyCommandTask",
+      "va": "0x100adbd0",
+      "rva": "0x000adbd0",
+      "module": "samp.dll",
+      "evidence": "v174 direct original PE disassembly and focused source/VC7 ABI/state review."
+    },
+    {
+      "name": "CPed::DestroyCommandTask",
+      "va": "0x100adc20",
+      "rva": "0x000adc20",
+      "module": "samp.dll",
+      "evidence": "v174 direct original PE disassembly and focused source/VC7 ABI/state review."
+    },
+    {
+      "name": "CPed::DoesHandsUp",
+      "va": "0x100ac780",
+      "rva": "0x000ac780",
+      "module": "samp.dll",
+      "evidence": "v174 direct original PE disassembly and focused source/VC7 ABI/state review."
+    },
+    {
+      "name": "CPed::DisableJetpack",
+      "va": "0x100ac980",
+      "rva": "0x000ac980",
+      "module": "samp.dll",
+      "evidence": "v174 direct original PE disassembly and focused source/VC7 ABI/state review."
     }
   ],
   "annotations": [
