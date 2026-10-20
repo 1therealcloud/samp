@@ -1038,3 +1038,47 @@ BOOL CPed::ApplyStuff() {
     }
     return FALSE;
 }
+
+// samp.dll RVA: 0x000af1d0
+WORD CPed::GetKeys(WORD *leftRight,WORD *upDown) {
+    KeyPad *keys=KeyStuff::GetInternalKeys();
+    *leftRight=keys->keys1[0];
+    *upDown=keys->keys1[1];
+    short horizontal=(short)keys->keys1[2];
+    short vertical=(short)keys->keys1[3];
+    DWORD bits=0;
+    if(horizontal>0) bits|=0x4000;
+    if(horizontal<0) bits|=0x2000;
+    if(vertical>0) bits|=0x1000;
+    if(vertical<0) bits|=0x0800;
+    if(keys->keys1[21]) bits|=0x0400;
+    if(keys->keys1[19]) bits|=0x0200;
+    BYTE *backend=(BYTE*)m_pGamePed;
+    if(backend&&(*(volatile DWORD*)(backend+0x46c)&0x100)&&keys->keys1[5]) bits|=0x0100;
+    if(keys->keys1[6]) bits|=0x0080;
+    if(backend&&(*(volatile DWORD*)(backend+0x46c)&0x100)&&keys->keys1[7]) bits|=0x0040;
+    if(keys->keys1[14]) bits|=0x0020;
+    BOOL suppress=FALSE;
+    if(backend&&!(*(volatile DWORD*)(backend+0x46c)&0x100)) {
+        BYTE *manager=*(BYTE**)(backend+0x47c);
+        BYTE *task=*(BYTE**)(manager+0x10);
+        // GTA SA virtual address: native jetpack task vtable0x008705c4.
+        suppress=task&&*(DWORD*)task==0x8705c4;
+    }
+    if(!suppress&&keys->keys1[15]) bits|=0x0010;
+    if(keys->keys1[16]) bits|=0x0008;
+    BOOL fire=TRUE;
+    if(backend) {
+        // Native reload is separate from the earlier cached nonnull gate.
+        BYTE *current=(BYTE*)*(void *volatile*)&m_pGamePed;
+        BYTE *slot=(BYTE*)((DWORD)current+0x5a0+*(current+0x718)*0x1c);
+        if(slot) {
+            DWORD weapon=*(DWORD*)slot;
+            if(weapon>15&&weapon!=46&&!*(DWORD*)(slot+0x0c)) fire=FALSE;
+        }
+    }
+    if(fire&&keys->keys1[17]) bits|=0x0004;
+    if(keys->keys1[18]) bits|=0x0002;
+    if(keys->keys1[4]) bits|=0x0001;
+    return (WORD)bits;
+}

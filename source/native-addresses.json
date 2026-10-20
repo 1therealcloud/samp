@@ -12648,6 +12648,13 @@
       "rva": "0x0011f328",
       "module": "samp.dll",
       "evidence": "v187 direct native instruction/string evidence and static VC7 ABI/control-flow review."
+    },
+    {
+      "name": "CPed::GetKeys",
+      "va": "0x100af1d0",
+      "rva": "0x000af1d0",
+      "module": "samp.dll",
+      "evidence": "v188 direct native disassembly and focused source/VC7 key-bit/axis/ABI review."
     }
   ],
   "annotations": [
