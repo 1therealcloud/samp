@@ -700,3 +700,33 @@ skipBackend:
         *(DWORD*)((BYTE*)this+0x75)=0;
     }
 }
+
+// Raw GTA driver interface, no complete ped/vtable allocation is inferred.
+// samp.dll RVA: 0x000b3eb0
+void __stdcall GameRemoveDriverByState598(void *vehicle) {
+    if(!vehicle)return;
+    void *driver=*(void**)((BYTE*)vehicle+0x460);
+    if(!driver)return;
+    DWORD state=*(DWORD*)((BYTE*)driver+0x598);
+    if(!state || state==1)return;
+    __asm {
+        mov ecx,driver
+        mov eax,dword ptr [ecx]
+        push 1
+        call dword ptr [eax]
+    }
+    *(void**)((BYTE*)vehicle+0x460)=0;
+}
+
+// Two native delete thunks resolve to the same operator delete implementation.
+// Pointee is cleared only when nonnull; no typed object destructor is called.
+// samp.dll RVA: 0x000b86b0
+DWORD __stdcall GameDeletePointerRecord(DWORD unused,void **record) {
+    (void)unused;
+    if(*record) {
+        ::operator delete(*record);
+        *record=0;
+    }
+    ::operator delete(record);
+    return 0;
+}

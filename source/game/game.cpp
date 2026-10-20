@@ -57,3 +57,14 @@ CAudio *CGame::GetAudio() { return m_pAudio; }
 CCamera *CGame::GetCamera() { return m_pCamera; }
 // samp.dll RVA: 0x00002d70
 BOOL CGame::DoesHeadMoves() { return m_bHeadMove; }
+
+// GTA SA virtual addresses: fixed range8E6C10..8E7C8C, stride20 (211 records).
+// Tests the entire DWORD, never substitute a live vehicle-pool count.
+// samp.dll RVA: 0x000a1410
+int CGame::CountBackendVehicleModelRecords() {
+    int count=0;
+    for(DWORD address=0x8e6c10;address!=0x8e7c8c;address+=20) {
+        if(*(DWORD*)address)++count;
+    }
+    return count;
+}

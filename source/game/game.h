@@ -32,6 +32,9 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // Technical fixed-table scan; full backend record meaning remains unresolved.
+    // samp.dll RVA: 0x000a1410
+    int CountBackendVehicleModelRecords();
     // samp.dll RVA: 0x000a0a20
     void SetMaxStats();
     // samp.dll RVA: 0x000a0940

@@ -2098,6 +2098,13 @@
       "evidence": "Read-only game-startup/state/layout/accessors-v74 native instructions and constructor allocation caller"
     },
     {
+      "name": "CGame::CountBackendVehicleModelRecords",
+      "va": "0x100a1410",
+      "rva": "0x000a1410",
+      "module": "samp.dll",
+      "evidence": "v161 original25-byte scan: fixed GTA8E6C10..8E7C8C exclusive, stride20,211 DWORD tests !=0. CGame thiscall use established by native destructor caller; record semantics remain technical."
+    },
+    {
       "name": "CGame::DoesHeadMoves",
       "va": "0x10002d70",
       "rva": "0x00002d70",
@@ -7894,11 +7901,25 @@
       "evidence": "v158 exact native18-byte opcode record referenced by SetInvulnerable."
     },
     {
+      "name": "g_vehicleDestroyCommand",
+      "va": "0x1011f600",
+      "rva": "0x0011f600",
+      "module": "samp.dll",
+      "evidence": "v161 exact18-byte native SCM descriptor referenced by CVehicle destructor B8420; actual destructor not implemented in this profile."
+    },
+    {
       "name": "g_vehicleDestroyMarkerCommand",
       "va": "0x1011f63c",
       "rva": "0x0011f63c",
       "module": "samp.dll",
       "evidence": "v160 exact original18-byte SCM descriptor; native ProcessMarkers operands preserved in v159 instruction export."
+    },
+    {
+      "name": "g_vehicleDestroyTrainCommand",
+      "va": "0x1011f6dc",
+      "rva": "0x0011f6dc",
+      "module": "samp.dll",
+      "evidence": "v161 exact18-byte native SCM descriptor referenced by CVehicle destructor B8420; actual destructor not implemented in this profile."
     },
     {
       "name": "g_vehicleDetachingTrailer",
@@ -8130,6 +8151,13 @@
       "rva": "0x0009e2d0",
       "module": "samp.dll",
       "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+    },
+    {
+      "name": "GameDeletePointerRecord",
+      "va": "0x100b86b0",
+      "rva": "0x000b86b0",
+      "module": "samp.dll",
+      "evidence": "v161 native stdcall RET8 callback, unused first word and required record pointer; optional pointee delete then zero then record delete, returns0. Native FCA09 JMP F836B JMP verified freeF891D; use operator delete, not inferred typed destruction."
     },
     {
       "name": "GameDestroyTextDrawTexture",
@@ -9271,6 +9299,13 @@
       "rva": "0x000aa6a0",
       "module": "samp.dll",
       "evidence": "Original native scan-list base RVA 1e04b0/end RVA 2075b0 and four CMP operand sites; scan-end-v106 red/green original installer and 640032 actual GTA CMP/JL decisions. End operand denotes scanList+40000; native adjacency to real ped storage is not assumed after linking."
+    },
+    {
+      "name": "GameRemoveDriverByState598",
+      "va": "0x100b3eb0",
+      "rva": "0x000b3eb0",
+      "module": "samp.dll",
+      "evidence": "v161 original stdcall RET4; vehicle460 driver, driver598 not0/not1, virtual slot0 ECX driver flag1, clears original vehicle460 after return."
     },
     {
       "name": "GameRenderWithSceneRasters",
@@ -18141,9 +18176,21 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/game.cpp",
+      "name": "CGame::CountBackendVehicleModelRecords",
+      "rva": 660496,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/game.h",
       "name": "CGame::CGame",
       "rva": 654784,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/game.h",
+      "name": "CGame::CountBackendVehicleModelRecords",
+      "rva": 660496,
       "module": "samp.dll"
     },
     {
@@ -24573,6 +24620,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle.h",
+      "name": "GameRemoveDriverByState598",
+      "rva": 736944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "GameDeletePointerRecord",
+      "rva": 755376,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle_plate.cpp",
       "name": "CVehicle::ConstructLicensePlate",
       "rva": 752848,
@@ -24981,6 +25040,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "GameRemoveDriverByState598",
+      "rva": 736944,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "GameDeletePointerRecord",
+      "rva": 755376,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/video_mode.cpp",
       "name": "GameSetVideoMode",
       "rva": 744720,
@@ -25233,6 +25304,18 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleDestroyCommand",
+      "rva": 1177088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.cpp",
+      "name": "g_vehicleDestroyTrainCommand",
+      "rva": 1177308,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/wrapper_commands.h",
       "name": "g_objectSetRotationCommand",
       "rva": 1175036,
@@ -25440,6 +25523,18 @@
       "file": "source/game/wrapper_commands.h",
       "name": "g_vehicleMarkerModeCommand",
       "rva": 1177188,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleDestroyCommand",
+      "rva": 1177088,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/wrapper_commands.h",
+      "name": "g_vehicleDestroyTrainCommand",
+      "rva": 1177308,
       "module": "samp.dll"
     },
     {
