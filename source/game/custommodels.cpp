@@ -56,3 +56,7 @@ BOOL CCustomModels::LoadObjectEntry(int model) {
     }
     return FALSE;
 }
+
+// The reference entry is exactly RET4; this empty behavior is native.
+// samp.dll RVA: 0x0000cd40
+void CCustomModels::ReleaseObjectEntry(int model) { (void)model; }

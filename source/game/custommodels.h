@@ -4,6 +4,9 @@
 // Observed registry prefix only: pointer array at +0, DWORD count at +4.
 // Complete allocation, ownership and loader lifecycle remain open. Never allocate.
 class CCustomModels {public:
+    // Native is deliberately a bare RET4; no object unload is performed here.
+    // samp.dll RVA: 0x0000cd40
+    void ReleaseObjectEntry(int model);
     // Descriptive query names follow observed record type bytes 1 and 2.
     // samp.dll RVA: 0x0000cc80
     bool IsPedEntry(int model);

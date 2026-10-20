@@ -121,4 +121,6 @@ extern const Scripting::OpcodeInfo g_gameLocateCheckpointCommand;
 extern const Scripting::OpcodeInfo g_gameClearTextCommand;
 // samp.dll RVA: 0x0011e830
 extern const Scripting::OpcodeInfo g_gameCreatePickupCommand;
+// samp.dll RVA: 0x0011e7a4
+extern const Scripting::OpcodeInfo g_gameReleaseModelCommand;
 #endif

@@ -375,3 +375,50 @@ void CGame::DrawGangZone(const float *position,DWORD color) {
     // GTA SA virtual addresses: radar flag0x00ba67a4 and cdecl draw0x005853d0.
     ((void (__cdecl *)(const float*,DWORD*,DWORD))0x5853d0)(position,&color,(DWORD)*(BYTE*)0xba67a4);
 }
+
+#include "game/custommodels.h"
+#include "game/pool_helpers.h"
+// samp.dll RVA: 0x000a07e0
+void CGame::ReleaseModel(int model,BYTE force) {
+    if(model>=0) {
+        if(model>=20000) return;
+        if(force) {
+            if(Scripting::ProcessCommand(&g_gameModelAvailableCommand,model)) {
+                // GTA SA virtual address: 0x004089a0, cdecl model argument.
+                ((void (__cdecl *)(int))0x4089a0)(model);
+            }
+        } else if(Scripting::ProcessCommand(&g_gameModelAvailableCommand,model)) {
+            Scripting::ProcessCommand(&g_gameReleaseModelCommand,model);
+        }
+    } else if(g_customModels&&g_customModels->IsObjectEntry(model)&&!GamePoolHasObjectModel(model)) {
+        g_customModels->ReleaseObjectEntry(model);
+    }
+}
+
+// samp.dll RVA: 0x000a1430
+void CGame::SetRequiredVehicleModels(BYTE *priorities) {
+    memset(m_aKeepLoadedVehicleModels,0,sizeof(m_aKeepLoadedVehicleModels));
+    for(int model=400;model<612;++model) ReleaseModel(model,0);
+    int models[212];
+    for(int i=0;i<212;++i) models[i]=400+i;
+    for(int count=211;count>0;--count) {
+        for(int i=0;i<count;++i) {
+            if(priorities[i+1]>priorities[i]) {
+                BYTE priority=priorities[i];
+                priorities[i]=priorities[i+1];
+                int model=models[i];
+                models[i]=models[i+1];
+                priorities[i+1]=priority;
+                models[i+1]=model;
+            }
+        }
+    }
+    for(int i=0;i<80;++i) {
+        if(priorities[i]) {
+            int model=models[i];
+            Scripting::ProcessCommand(&g_gameRequestModelCommand,model);
+            Scripting::ProcessCommand(&g_gameLoadModelsCommand);
+            m_aKeepLoadedVehicleModels[model-400]=true;
+        }
+    }
+}

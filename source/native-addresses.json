@@ -12662,6 +12662,34 @@
       "rva": "0x000aef40",
       "module": "samp.dll",
       "evidence": "v189 direct native key-write/previous-state disassembly and focused VC7 ABI review."
+    },
+    {
+      "name": "CCustomModels::ReleaseObjectEntry",
+      "va": "0x1000cd40",
+      "rva": "0x0000cd40",
+      "module": "samp.dll",
+      "evidence": "v190 direct original instructions/command bytes; CD40 is verified native RET4, not a substitute stub."
+    },
+    {
+      "name": "CGame::ReleaseModel",
+      "va": "0x100a07e0",
+      "rva": "0x000a07e0",
+      "module": "samp.dll",
+      "evidence": "v190 direct original instructions/command bytes; CD40 is verified native RET4, not a substitute stub."
+    },
+    {
+      "name": "CGame::SetRequiredVehicleModels",
+      "va": "0x100a1430",
+      "rva": "0x000a1430",
+      "module": "samp.dll",
+      "evidence": "v190 direct original instructions/command bytes; CD40 is verified native RET4, not a substitute stub."
+    },
+    {
+      "name": "g_gameReleaseModelCommand",
+      "va": "0x1011e7a4",
+      "rva": "0x0011e7a4",
+      "module": "samp.dll",
+      "evidence": "v190 direct original instructions/command bytes; CD40 is verified native RET4, not a substitute stub."
     }
   ],
   "annotations": [
