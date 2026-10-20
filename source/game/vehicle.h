@@ -17,6 +17,50 @@ public:
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
+    // samp.dll RVA: 0x000b6c00
+    void ResetPointers();
+    // samp.dll RVA: 0x000b6c20
+    BOOL HasDriver();
+    // samp.dll RVA: 0x000b6c70
+    BOOL IsOccupied();
+    // samp.dll RVA: 0x000b6e00
+    void SetHealth(float health);
+    // samp.dll RVA: 0x000b6f30
+    BOOL DriverIsPlayerPed();
+    // samp.dll RVA: 0x000b6f60
+    BOOL HasPlayerPed();
+    // samp.dll RVA: 0x000b7080
+    void EnableSiren(BYTE enabled);
+    // samp.dll RVA: 0x000b70a0
+    bool SirenEnabled();
+    // samp.dll RVA: 0x000b70c0
+    void SetBackendWord45c(WORD value);
+    // samp.dll RVA: 0x000b71e0
+    void SetHydraThrusters(DWORD value);
+    // samp.dll RVA: 0x000b7200
+    DWORD GetHydraThrusters();
+    // samp.dll RVA: 0x000b7420
+    float GetTrainSpeed();
+    // samp.dll RVA: 0x000b76c0
+    DWORD GetPanelsDamage();
+    // samp.dll RVA: 0x000b76f0
+    DWORD GetDoorsDamage();
+    // samp.dll RVA: 0x000b7720
+    BYTE GetLightsDamage();
+    // samp.dll RVA: 0x000b77c0
+    void SetTrailer(CVehicle *trailer);
+    // samp.dll RVA: 0x000b7910
+    bool IsTowtruck();
+    // samp.dll RVA: 0x000b7c70
+    bool DoesExist();
+    // samp.dll RVA: 0x000b7d40
+    void SetField50(DWORD value);
+    // samp.dll RVA: 0x000b7d50
+    DWORD GetField50();
+    // samp.dll RVA: 0x000b7d60
+    void SetField54(DWORD value);
+    // samp.dll RVA: 0x000b7d70
+    DWORD GetField54();
     // samp.dll RVA: 0x000b6e20
     void SetColor(BYTE primary,BYTE secondary);
     // samp.dll RVA: 0x000b6fa0

@@ -4219,11 +4219,67 @@
       "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
     },
     {
+      "name": "CVehicle::DoesExist",
+      "va": "0x100b7c70",
+      "rva": "0x000b7c70",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::DriverIsPlayerPed",
+      "va": "0x100b6f30",
+      "rva": "0x000b6f30",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::EnableSiren",
+      "va": "0x100b7080",
+      "rva": "0x000b7080",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::GetDoorsDamage",
+      "va": "0x100b76f0",
+      "rva": "0x000b76f0",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::GetField50",
+      "va": "0x100b7d50",
+      "rva": "0x000b7d50",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::GetField54",
+      "va": "0x100b7d70",
+      "rva": "0x000b7d70",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
       "name": "CVehicle::GetHealth",
       "va": "0x100b6de0",
       "rva": "0x000b6de0",
       "module": "samp.dll",
       "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
+    },
+    {
+      "name": "CVehicle::GetHydraThrusters",
+      "va": "0x100b7200",
+      "rva": "0x000b7200",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::GetLightsDamage",
+      "va": "0x100b7720",
+      "rva": "0x000b7720",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
       "name": "CVehicle::GetMaxPassengers",
@@ -4233,11 +4289,39 @@
       "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
+      "name": "CVehicle::GetPanelsDamage",
+      "va": "0x100b76c0",
+      "rva": "0x000b76c0",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
       "name": "CVehicle::GetSubtype",
       "va": "0x100b6ed0",
       "rva": "0x000b6ed0",
       "module": "samp.dll",
       "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
+    },
+    {
+      "name": "CVehicle::GetTrainSpeed",
+      "va": "0x100b7420",
+      "rva": "0x000b7420",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::HasDriver",
+      "va": "0x100b6c20",
+      "rva": "0x000b6c20",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::HasPlayerPed",
+      "va": "0x100b6f60",
+      "rva": "0x000b6f60",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
       "name": "CVehicle::HasSiren",
@@ -4247,11 +4331,25 @@
       "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
+      "name": "CVehicle::IsOccupied",
+      "va": "0x100b6c70",
+      "rva": "0x000b6c70",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
       "name": "CVehicle::IsRC",
       "va": "0x100b7940",
       "rva": "0x000b7940",
       "module": "samp.dll",
       "evidence": "v126 direct native disassembly/pseudocode/data port and VC7 compilation only. Selected RakNet remains the dependency; no live RPC, protocol runtime test, native library/EH identity or GTA execution claim."
+    },
+    {
+      "name": "CVehicle::IsTowtruck",
+      "va": "0x100b7910",
+      "rva": "0x000b7910",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
       "name": "CVehicle::IsTrainPart",
@@ -4261,6 +4359,20 @@
       "evidence": "v124 native disassembly/pseudocode to source port and VC7 compilation. Raw task/damage/quit ABI and train branch reviewed; no runtime tests or GTA execution."
     },
     {
+      "name": "CVehicle::ResetPointers",
+      "va": "0x100b6c00",
+      "rva": "0x000b6c00",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetBackendWord45c",
+      "va": "0x100b70c0",
+      "rva": "0x000b70c0",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
       "name": "CVehicle::SetColor",
       "va": "0x100b6e20",
       "rva": "0x000b6e20",
@@ -4268,11 +4380,53 @@
       "evidence": "Reviewed event/dependencies-v78 and scm-vehicles-v79 native instruction exports"
     },
     {
+      "name": "CVehicle::SetField50",
+      "va": "0x100b7d40",
+      "rva": "0x000b7d40",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetField54",
+      "va": "0x100b7d60",
+      "rva": "0x000b7d60",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetHealth",
+      "va": "0x100b6e00",
+      "rva": "0x000b6e00",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetHydraThrusters",
+      "va": "0x100b71e0",
+      "rva": "0x000b71e0",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
+      "name": "CVehicle::SetTrailer",
+      "va": "0x100b77c0",
+      "rva": "0x000b77c0",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
+    },
+    {
       "name": "CVehicle::ShutdownLicensePlate",
       "va": "0x100b7d20",
       "rva": "0x000b7d20",
       "module": "samp.dll",
       "evidence": "pool-frame-v117 read-only Ghidra decompilation and instruction operands, source review and VC7.1 compilation. No runtime/differential validation claimed. Downstream bodies remain explicit dependencies."
+    },
+    {
+      "name": "CVehicle::SirenEnabled",
+      "va": "0x100b70a0",
+      "rva": "0x000b70a0",
+      "module": "samp.dll",
+      "evidence": "Read-only v156 original export: vehicle-leaves-v156-instructions.tsv. Native field offsets, guards, reloads and full EAX versus AL/WORD/float ABI reviewed; technical unnamed field accessors do not infer semantics or full allocation."
     },
     {
       "name": "CVehiclePool::ConstructLicensePlates",
@@ -23602,6 +23756,138 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::ResetPointers",
+      "rva": 748544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::HasDriver",
+      "rva": 748576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::IsOccupied",
+      "rva": 748656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetHealth",
+      "rva": 749056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::DriverIsPlayerPed",
+      "rva": 749360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::HasPlayerPed",
+      "rva": 749408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::EnableSiren",
+      "rva": 749696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SirenEnabled",
+      "rva": 749728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetBackendWord45c",
+      "rva": 749760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetHydraThrusters",
+      "rva": 750048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetHydraThrusters",
+      "rva": 750080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetTrainSpeed",
+      "rva": 750624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetPanelsDamage",
+      "rva": 751296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetDoorsDamage",
+      "rva": 751344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetLightsDamage",
+      "rva": 751392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetTrailer",
+      "rva": 751552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::IsTowtruck",
+      "rva": 751888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::DoesExist",
+      "rva": 752752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetField50",
+      "rva": 752960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetField50",
+      "rva": 752976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::SetField54",
+      "rva": 752992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
+      "name": "CVehicle::GetField54",
+      "rva": 753008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::SetColor",
       "rva": 749088,
       "module": "samp.dll"
@@ -23712,6 +23998,138 @@
       "file": "source/game/vehicle_queries.cpp",
       "name": "GameGetVehicleSubtype",
       "rva": 744736,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::ResetPointers",
+      "rva": 748544,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::HasDriver",
+      "rva": 748576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::IsOccupied",
+      "rva": 748656,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetHealth",
+      "rva": 749056,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::DriverIsPlayerPed",
+      "rva": 749360,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::HasPlayerPed",
+      "rva": 749408,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::EnableSiren",
+      "rva": 749696,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SirenEnabled",
+      "rva": 749728,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetBackendWord45c",
+      "rva": 749760,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetHydraThrusters",
+      "rva": 750048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetHydraThrusters",
+      "rva": 750080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetTrainSpeed",
+      "rva": 750624,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetPanelsDamage",
+      "rva": 751296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetDoorsDamage",
+      "rva": 751344,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetLightsDamage",
+      "rva": 751392,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetTrailer",
+      "rva": 751552,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::IsTowtruck",
+      "rva": 751888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::DoesExist",
+      "rva": 752752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetField50",
+      "rva": 752960,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetField50",
+      "rva": 752976,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::SetField54",
+      "rva": 752992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetField54",
+      "rva": 753008,
       "module": "samp.dll"
     },
     {
