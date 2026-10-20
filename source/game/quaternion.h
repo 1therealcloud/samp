@@ -6,7 +6,14 @@ struct GameQuaternion {float w,x,y,z;};
 void GameQuaternionFromMatrix(const CMatrix *matrix,GameQuaternion *out);
 // samp.dll RVA: 0x000b5040
 void GameQuaternionNormalize(GameQuaternion *quaternion);
-// Native forwarding entry; full conversion body at RVA B4E40 remains open.
+// Writes the nine basis floats only; position and padding remain untouched.
+// samp.dll RVA: 0x000b4e40
+void GameQuaternionToMatrixBody(const GameQuaternion *quaternion,CMatrix *matrix);
+// Native forwarding entry.
 // samp.dll RVA: 0x000b4fb0
 void GameQuaternionToMatrix(const GameQuaternion *quaternion,CMatrix *matrix);
+// samp.dll RVA: 0x001181a8
+extern const float g_quaternionMatrixTwo;
+// samp.dll RVA: 0x00117b9c
+extern const float g_quaternionMatrixOne;
 #endif
