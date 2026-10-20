@@ -32,6 +32,22 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a0a60
+    void RefreshRenderer(float x,float y);
+    // samp.dll RVA: 0x000a0240
+    float FindGroundZ(float x,float y,float z);
+    // samp.dll RVA: 0x000a1380
+    void DisableEnterExits();
+    // samp.dll RVA: 0x000a19f0
+    void DisableAutoAiming();
+    // samp.dll RVA: 0x000a1200
+    void * GetWeaponInfo(int weapon,int skill);
+    // samp.dll RVA: 0x000a19c0
+    void LoadCullZone(const char *name);
+    // samp.dll RVA: 0x000a19a0
+    void LoadCollisionFile(const char *name);
+    // samp.dll RVA: 0x000a13d0
+    void LoadScene(const char *name);
     // samp.dll RVA: 0x000a1220
     void SetWorldGravity(float gravity);
     // samp.dll RVA: 0x000a1360

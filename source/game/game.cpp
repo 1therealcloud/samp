@@ -121,3 +121,62 @@ void CGame::SetWorldGravity(float gravity) {
     // GTA SA virtual address: 0x00863984; store raw float bits without x87 conversion.
     GameUnprotect((void*)0x863984,4);
     *(DWORD*)0x863984=*(DWORD*)&gravity; }
+
+// samp.dll RVA: 0x000a13d0
+void CGame::LoadScene(const char *name) {
+    // GTA SA virtual address: 0x005b8700, cdecl.
+    ((void (__cdecl *)(const char*))0x5b8700)(name);
+}
+
+// samp.dll RVA: 0x000a19a0
+void CGame::LoadCollisionFile(const char *name) {
+    // GTA SA virtual address: 0x005b4e60, cdecl; native second argument is zero.
+    ((void (__cdecl *)(const char*,int))0x5b4e60)(name,0);
+}
+
+// samp.dll RVA: 0x000a19c0
+void CGame::LoadCullZone(const char *name) {
+    // GTA SA virtual address: 0x005b4b40, cdecl.
+    ((void (__cdecl *)(const char*))0x5b4b40)(name);
+}
+
+// samp.dll RVA: 0x000a1200
+void * CGame::GetWeaponInfo(int weapon,int skill) {
+    // GTA SA virtual address: 0x00743c60, cdecl; raw backend pointer.
+    return ((void *(__cdecl *)(int,int))0x743c60)(weapon,skill);
+}
+
+// samp.dll RVA: 0x000a19f0
+void CGame::DisableAutoAiming() {
+    // GTA SA virtual addresses: 0x0060dc50 and 0x0060e530..0x0060e532.
+    GameUnprotect((void*)0x60dc50,1);
+    *(BYTE*)0x60dc50=0xc3;
+    GameUnprotect((void*)0x60e530,3);
+    *(BYTE*)0x60e530=0xc2;
+    *(BYTE*)0x60e531=8;
+    *(BYTE*)0x60e532=0;
+}
+
+// samp.dll RVA: 0x000a1380
+void CGame::DisableEnterExits() {
+    // GTA SA virtual address: 0x0096a7d8; unchecked native array/count prefix.
+    BYTE *pool=*(BYTE *volatile*)0x96a7d8;
+    BYTE *record=*(BYTE *volatile*)pool;
+    DWORD count=*(volatile DWORD*)(pool+8);
+    while(count) {
+        *(volatile WORD*)(record+0x30)&=0;
+        record+=0x3c;
+        --count;
+    }
+}
+
+// samp.dll RVA: 0x000a0240
+float CGame::FindGroundZ(float x,float y,float z) {
+    Scripting::ProcessCommand(&g_gameFindGroundZCommand,(double)x,(double)y,(double)z,&z);
+    return z;
+}
+
+// samp.dll RVA: 0x000a0a60
+void CGame::RefreshRenderer(float x,float y) {
+    Scripting::ProcessCommand(&g_gameRefreshRendererCommand,(double)x,(double)y);
+}

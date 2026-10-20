@@ -95,4 +95,8 @@ extern const Scripting::OpcodeInfo g_gameDeleteMarkerCommand;
 extern const Scripting::OpcodeInfo g_gameIncreaseMoneyCommand;
 // samp.dll RVA: 0x0011e86c
 extern const Scripting::OpcodeInfo g_gameZoneDisplayCommand;
+// samp.dll RVA: 0x0011e754
+extern const Scripting::OpcodeInfo g_gameFindGroundZCommand;
+// samp.dll RVA: 0x0011e7cc
+extern const Scripting::OpcodeInfo g_gameRefreshRendererCommand;
 #endif

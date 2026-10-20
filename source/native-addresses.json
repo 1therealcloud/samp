@@ -11490,6 +11490,76 @@
       "rva": "0x0011e86c",
       "module": "samp.dll",
       "evidence": "v165 direct PE disassembly/descriptor bytes and VC7 static comparison."
+    },
+    {
+      "name": "CGame::LoadScene",
+      "va": "0x100a13d0",
+      "rva": "0x000a13d0",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::LoadCollisionFile",
+      "va": "0x100a19a0",
+      "rva": "0x000a19a0",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::LoadCullZone",
+      "va": "0x100a19c0",
+      "rva": "0x000a19c0",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::GetWeaponInfo",
+      "va": "0x100a1200",
+      "rva": "0x000a1200",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::DisableAutoAiming",
+      "va": "0x100a19f0",
+      "rva": "0x000a19f0",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::DisableEnterExits",
+      "va": "0x100a1380",
+      "rva": "0x000a1380",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::FindGroundZ",
+      "va": "0x100a0240",
+      "rva": "0x000a0240",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CGame::RefreshRenderer",
+      "va": "0x100a0a60",
+      "rva": "0x000a0a60",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_gameFindGroundZCommand",
+      "va": "0x1011e754",
+      "rva": "0x0011e754",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_gameRefreshRendererCommand",
+      "va": "0x1011e7cc",
+      "rva": "0x0011e7cc",
+      "module": "samp.dll",
+      "evidence": "v166 direct native PE disassembly, SCM bytes and source/VC7 static ABI review."
     }
   ],
   "annotations": [
