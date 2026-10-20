@@ -29,6 +29,42 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000abd60
+    void * GetCurrentWeaponSlot();
+    // samp.dll RVA: 0x000ad480
+    BOOL IsOnGround();
+    // samp.dll RVA: 0x000aba70
+    void SetState(BYTE state);
+    // samp.dll RVA: 0x000ab9b0
+    float GetArmour();
+    // samp.dll RVA: 0x000ab970
+    float GetHealth();
+    // samp.dll RVA: 0x000ab8b0
+    DWORD GetVehicleRef();
+    // samp.dll RVA: 0x000aba10
+    void SetFlags(DWORD flags);
+    // samp.dll RVA: 0x000ab9d0
+    void SetArmour(float armour);
+    // samp.dll RVA: 0x000ab990
+    void SetHealth(float health);
+    // samp.dll RVA: 0x000ab7d0
+    void ResetPointers();
+    // samp.dll RVA: 0x000ab9f0
+    DWORD GetFlags();
+    // samp.dll RVA: 0x000ad760
+    BOOL DoesDancing();
+    // samp.dll RVA: 0x000adbb0
+    void SetDrunkLevel(DWORD level);
+    // samp.dll RVA: 0x000abc20
+    void * GetVehicle();
+    // samp.dll RVA: 0x000aba60
+    BYTE GetState();
+    // samp.dll RVA: 0x000ade60
+    BOOL DoesUrinating();
+    // samp.dll RVA: 0x000ad890
+    DWORD GetStuff();
+    // samp.dll RVA: 0x000adca0
+    BOOL UsingCellphone();
     // samp.dll RVA: 0x000b0ea0
     virtual ~CPed();
     // samp.dll RVA: 0x000b0ba0

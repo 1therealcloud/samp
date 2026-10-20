@@ -11721,6 +11721,132 @@
       "rva": "0x0011e830",
       "module": "samp.dll",
       "evidence": "v169 original PE disassembly, descriptor bytes and focused source/VC7 ABI review."
+    },
+    {
+      "name": "CPed::UsingCellphone",
+      "va": "0x100adca0",
+      "rva": "0x000adca0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetStuff",
+      "va": "0x100ad890",
+      "rva": "0x000ad890",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::DoesUrinating",
+      "va": "0x100ade60",
+      "rva": "0x000ade60",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetState",
+      "va": "0x100aba60",
+      "rva": "0x000aba60",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetVehicle",
+      "va": "0x100abc20",
+      "rva": "0x000abc20",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::SetDrunkLevel",
+      "va": "0x100adbb0",
+      "rva": "0x000adbb0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::DoesDancing",
+      "va": "0x100ad760",
+      "rva": "0x000ad760",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetFlags",
+      "va": "0x100ab9f0",
+      "rva": "0x000ab9f0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::ResetPointers",
+      "va": "0x100ab7d0",
+      "rva": "0x000ab7d0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::SetHealth",
+      "va": "0x100ab990",
+      "rva": "0x000ab990",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::SetArmour",
+      "va": "0x100ab9d0",
+      "rva": "0x000ab9d0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::SetFlags",
+      "va": "0x100aba10",
+      "rva": "0x000aba10",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetVehicleRef",
+      "va": "0x100ab8b0",
+      "rva": "0x000ab8b0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetHealth",
+      "va": "0x100ab970",
+      "rva": "0x000ab970",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetArmour",
+      "va": "0x100ab9b0",
+      "rva": "0x000ab9b0",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::SetState",
+      "va": "0x100aba70",
+      "rva": "0x000aba70",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::IsOnGround",
+      "va": "0x100ad480",
+      "rva": "0x000ad480",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
+    },
+    {
+      "name": "CPed::GetCurrentWeaponSlot",
+      "va": "0x100abd60",
+      "rva": "0x000abd60",
+      "module": "samp.dll",
+      "evidence": "v170 direct reference disassembly and VC7 static field/ABI review; no actual GTA execution."
     }
   ],
   "annotations": [

@@ -36,3 +36,102 @@ BOOL CPed::IsPassenger() {
 }
 // samp.dll RVA: 0x00001010
 CPed *CGame::GetPlayerPed() { if(!m_pPlayerPed)m_pPlayerPed=new CPed;return m_pPlayerPed; }
+
+#include "game/pool_helpers.h"
+#include "game/object_math.h"
+
+// samp.dll RVA: 0x000adca0
+BOOL CPed::UsingCellphone() {
+    return m_bUsingCellphone;
+}
+
+// samp.dll RVA: 0x000ad890
+DWORD CPed::GetStuff() {
+    return m_stuffType;
+}
+
+// samp.dll RVA: 0x000ade60
+BOOL CPed::DoesUrinating() {
+    return m_bUrinating;
+}
+
+// samp.dll RVA: 0x000aba60
+BYTE CPed::GetState() {
+    return *((BYTE*)m_pGamePed+0x530);
+}
+
+// samp.dll RVA: 0x000abc20
+void * CPed::GetVehicle() {
+    return *(void**)((BYTE*)m_pGamePed+0x58c);
+}
+
+// samp.dll RVA: 0x000adbb0
+void CPed::SetDrunkLevel(DWORD level) {
+    m_drunkLevel=level;
+}
+
+// samp.dll RVA: 0x000ad760
+BOOL CPed::DoesDancing() {
+    return unknown2d2!=0;
+}
+
+// samp.dll RVA: 0x000ab9f0
+DWORD CPed::GetFlags() {
+    return m_pGamePed?*(DWORD*)((BYTE*)m_pGamePed+0x46c):0;
+}
+
+// samp.dll RVA: 0x000ab7d0
+void CPed::ResetPointers() {
+    m_pGamePed=GamePoolPedGetAt(m_nHandle);
+    m_pGameEntity=m_pGamePed;
+}
+
+// samp.dll RVA: 0x000ab990
+void CPed::SetHealth(float health) {
+    if(m_pGamePed) *(DWORD*)((BYTE*)m_pGamePed+0x540)=*(DWORD*)&health;
+}
+
+// samp.dll RVA: 0x000ab9d0
+void CPed::SetArmour(float armour) {
+    if(m_pGamePed) *(DWORD*)((BYTE*)m_pGamePed+0x548)=*(DWORD*)&armour;
+}
+
+// samp.dll RVA: 0x000aba10
+void CPed::SetFlags(DWORD flags) {
+    if(m_pGamePed) *(DWORD*)((BYTE*)m_pGamePed+0x46c)=flags;
+}
+
+// samp.dll RVA: 0x000ab8b0
+DWORD CPed::GetVehicleRef() {
+    if(!m_pGamePed) return 0;
+    return GamePoolVehicleGetIndex(*(void**)((BYTE*)m_pGamePed+0x58c));
+}
+
+// samp.dll RVA: 0x000ab970
+float CPed::GetHealth() {
+    if(!m_pGamePed) return g_objectScaleLowerBound;
+    return *(float*)((BYTE*)m_pGamePed+0x540);
+}
+
+// samp.dll RVA: 0x000ab9b0
+float CPed::GetArmour() {
+    if(!m_pGamePed) return g_objectScaleLowerBound;
+    return *(float*)((BYTE*)m_pGamePed+0x548);
+}
+
+// samp.dll RVA: 0x000aba70
+void CPed::SetState(BYTE state) {
+    if(m_pGamePed) *(DWORD*)((BYTE*)m_pGamePed+0x530)=state;
+}
+
+// samp.dll RVA: 0x000ad480
+BOOL CPed::IsOnGround() {
+    return m_pGamePed&&(*((BYTE*)m_pGamePed+0x46c)&3)?TRUE:FALSE;
+}
+
+// samp.dll RVA: 0x000abd60
+void * CPed::GetCurrentWeaponSlot() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped) return 0;
+    return ped+0x5a0+*(ped+0x718)*0x1c;
+}
