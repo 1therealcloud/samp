@@ -35,4 +35,14 @@ extern const Scripting::OpcodeInfo g_pedHandsUpCommand;
 extern const Scripting::OpcodeInfo g_pedImmunitiesCommand;
 // samp.dll RVA: 0x0011f01c
 extern const Scripting::OpcodeInfo g_pedRotationCommand;
+// samp.dll RVA: 0x0011f1d4
+extern const Scripting::OpcodeInfo g_pedParachuteCleanupCommand;
+// samp.dll RVA: 0x0011ee8c
+extern const Scripting::OpcodeInfo g_pedCreateArrowCommand;
+// samp.dll RVA: 0x0011ef04
+extern const Scripting::OpcodeInfo g_pedArrowColorCommand;
+// samp.dll RVA: 0x0011f184
+extern const Scripting::OpcodeInfo g_pedArrowModeCommand;
+// samp.dll RVA: 0x0011ae68
+extern const double g_pedParachuteZero;
 #endif

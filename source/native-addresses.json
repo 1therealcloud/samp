@@ -12169,6 +12169,62 @@
       "rva": "0x0011f01c",
       "module": "samp.dll",
       "evidence": "v175 original PE disassembly/SCM bytes and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::DestroyParachute",
+      "va": "0x100ad000",
+      "rva": "0x000ad000",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::CreateArrow",
+      "va": "0x100af330",
+      "rva": "0x000af330",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "CPed::GetVehicleSeatIndex",
+      "va": "0x100abe20",
+      "rva": "0x000abe20",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_pedParachuteCleanupCommand",
+      "va": "0x1011f1d4",
+      "rva": "0x0011f1d4",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_pedCreateArrowCommand",
+      "va": "0x1011ee8c",
+      "rva": "0x0011ee8c",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_pedArrowColorCommand",
+      "va": "0x1011ef04",
+      "rva": "0x0011ef04",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_pedArrowModeCommand",
+      "va": "0x1011f184",
+      "rva": "0x0011f184",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
+    },
+    {
+      "name": "g_pedParachuteZero",
+      "va": "0x1011ae68",
+      "rva": "0x0011ae68",
+      "module": "samp.dll",
+      "evidence": "v176 direct reference PE disassembly and source/VC7 static ABI review."
     }
   ],
   "annotations": [

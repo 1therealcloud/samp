@@ -30,6 +30,12 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000abe20
+    int GetVehicleSeatIndex();
+    // samp.dll RVA: 0x000af330
+    void CreateArrow(DWORD color);
+    // samp.dll RVA: 0x000ad000
+    void DestroyParachute();
     // samp.dll RVA: 0x000abdc0
     float GetDistanceToEntity(CEntity *entity);
     // samp.dll RVA: 0x000aea50

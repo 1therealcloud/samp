@@ -578,3 +578,34 @@ __declspec(naked) float CPed::GetDistanceToEntity(CEntity *entity) {
         ret 4
     }
 }
+
+// samp.dll RVA: 0x000ad000
+void CPed::DestroyParachute() {
+    if(m_parachuteObject) {
+        Scripting::ProcessCommand(&g_pedDetachParachute,m_parachuteObject,g_pedParachuteZero,g_pedParachuteZero,g_pedParachuteZero,0);
+        Scripting::ProcessCommand(&g_pedParachuteCleanupCommand,m_parachuteObject);
+        m_parachuteObject=0;
+    }
+}
+
+// samp.dll RVA: 0x000af330
+void CPed::CreateArrow(DWORD color) {
+    if(m_arrow) {
+        Scripting::ProcessCommand(&g_pedDeleteArrowCommand,m_arrow);
+        m_arrow=0;
+    }
+    Scripting::ProcessCommand(&g_pedCreateArrowCommand,m_nHandle,&m_arrow);
+    Scripting::ProcessCommand(&g_pedArrowColorCommand,m_arrow,color);
+    Scripting::ProcessCommand(&g_pedArrowModeCommand,m_arrow,2);
+}
+
+// samp.dll RVA: 0x000abe20
+int CPed::GetVehicleSeatIndex() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(*(ped+0x530)!=50) return -1;
+    BYTE *vehicle=*(BYTE**)(ped+0x58c);
+    if(!vehicle) return -1;
+    for(int seat=0;seat<8;++seat)
+        if(*(void**)(vehicle+0x460+seat*4)==ped) return seat;
+    return -1;
+}
