@@ -34,6 +34,12 @@ public:
     bool m_aKeepLoadedVehicleModels[212];
     // samp.dll RVA: 0x0009fdc0
     CGame();
+    // samp.dll RVA: 0x000a1260
+    void DrawGangZone(const float *position,DWORD color);
+    // samp.dll RVA: 0x000a1010
+    DWORD CreatePickup(int model,int type,float x,float y,float z,DWORD *index);
+    // samp.dll RVA: 0x000a0b20
+    void DisplayGameText(const char *text,int time,int style);
     // samp.dll RVA: 0x000a1d40
     void ProcessCheckpoints();
     // samp.dll RVA: 0x000a1f20

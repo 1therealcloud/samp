@@ -117,4 +117,8 @@ extern const Scripting::OpcodeInfo g_gameMarkerModeCommand;
 extern const Scripting::OpcodeInfo g_gameCreateRacingCheckpointCommand;
 // samp.dll RVA: 0x0011e72c
 extern const Scripting::OpcodeInfo g_gameLocateCheckpointCommand;
+// samp.dll RVA: 0x0011e81c
+extern const Scripting::OpcodeInfo g_gameClearTextCommand;
+// samp.dll RVA: 0x0011e830
+extern const Scripting::OpcodeInfo g_gameCreatePickupCommand;
 #endif

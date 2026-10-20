@@ -11686,6 +11686,41 @@
       "rva": "0x0011e72c",
       "module": "samp.dll",
       "evidence": "v168 direct reference PE disassembly, observed checkpoint state offsets, SCM records and focused source/VC7 review."
+    },
+    {
+      "name": "CGame::DisplayGameText",
+      "va": "0x100a0b20",
+      "rva": "0x000a0b20",
+      "module": "samp.dll",
+      "evidence": "v169 original PE disassembly, descriptor bytes and focused source/VC7 ABI review."
+    },
+    {
+      "name": "CGame::CreatePickup",
+      "va": "0x100a1010",
+      "rva": "0x000a1010",
+      "module": "samp.dll",
+      "evidence": "v169 original PE disassembly, descriptor bytes and focused source/VC7 ABI review."
+    },
+    {
+      "name": "CGame::DrawGangZone",
+      "va": "0x100a1260",
+      "rva": "0x000a1260",
+      "module": "samp.dll",
+      "evidence": "v169 original PE disassembly, descriptor bytes and focused source/VC7 ABI review."
+    },
+    {
+      "name": "g_gameClearTextCommand",
+      "va": "0x1011e81c",
+      "rva": "0x0011e81c",
+      "module": "samp.dll",
+      "evidence": "v169 original PE disassembly, descriptor bytes and focused source/VC7 ABI review."
+    },
+    {
+      "name": "g_gameCreatePickupCommand",
+      "va": "0x1011e830",
+      "rva": "0x0011e830",
+      "module": "samp.dll",
+      "evidence": "v169 original PE disassembly, descriptor bytes and focused source/VC7 ABI review."
     }
   ],
   "annotations": [

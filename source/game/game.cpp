@@ -337,3 +337,41 @@ void CGame::ProcessCheckpoints() {
         s->raceMarker=0;
     }
 }
+
+#include "game/model.h"
+#include "game/initialization.h"
+
+// samp.dll RVA: 0x000a0b20
+void CGame::DisplayGameText(const char *text,int time,int style) {
+    if(style<=200) {
+        Scripting::ProcessCommand(&g_gameClearTextCommand);
+        *(DWORD*)g_gameTextBuffer=0;
+        strncpy(g_gameTextBuffer,text,512);
+        // GTA SA virtual address: 0x0069f2b0, cdecl.
+        ((void (__cdecl *)(const char*,int,int))0x69f2b0)(g_gameTextBuffer,time,style);
+    }
+}
+
+// samp.dll RVA: 0x000a1010
+DWORD CGame::CreatePickup(int model,int type,float x,float y,float z,DWORD *index) {
+    int selected=model;
+    if(!GameModelQueryB4170(selected)) selected=18631;
+    if(selected>=0&&selected<=20000) {
+        if(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,selected)) {
+            Scripting::ProcessCommand(&g_gameRequestModelCommand,selected);
+            Scripting::ProcessCommand(&g_gameLoadModelsCommand);
+            void (WINAPI *volatile sleep)(DWORD)=::Sleep;
+            while(selected<=20000&&!Scripting::ProcessCommand(&g_gameModelAvailableCommand,selected)) sleep(1);
+        }
+    }
+    // The native output aliases the original model argument, not the selected fallback.
+    Scripting::ProcessCommand(&g_gameCreatePickupCommand,selected,type,(double)x,(double)y,(double)z,&model);
+    if(index) *index=(DWORD)model&0xffff;
+    return (DWORD)model;
+}
+
+// samp.dll RVA: 0x000a1260
+void CGame::DrawGangZone(const float *position,DWORD color) {
+    // GTA SA virtual addresses: radar flag0x00ba67a4 and cdecl draw0x005853d0.
+    ((void (__cdecl *)(const float*,DWORD*,DWORD))0x5853d0)(position,&color,(DWORD)*(BYTE*)0xba67a4);
+}
