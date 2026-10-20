@@ -27,4 +27,8 @@ void GameQuaternionToEuler(const GameQuaternion *quaternion,CVector *angles);
 extern const float g_textDrawHalf;
 // samp.dll RVA: 0x0011d7c8
 extern const float g_quaternionEulerNegativeTwo;
+// Scalar-component conversion; no implicit normalization.
+void GameQuaternionComponentsToMatrix(float w,float x,float y,float z,
+    float *m00,float *m01,float *m02,float *m10,float *m11,float *m12,
+    float *m20,float *m21,float *m22);
 #endif
