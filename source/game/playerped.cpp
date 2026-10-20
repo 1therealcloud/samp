@@ -374,3 +374,68 @@ void CPed::ClearWeapons() {
     }
     *g_clientCrashPedContext=0;
 }
+
+#include "game/vehicle.h"
+
+// samp.dll RVA: 0x000ac930
+void CPed::EnableJetpack() {
+    if(m_pGamePed) {
+        *g_clientCrashPedContext=m_nPlayerNumber;
+        CMatrix *matrix=*(CMatrix**)((BYTE*)m_pGamePed+0x14);
+        Teleport(matrix->position);
+        // GTA SA virtual address: 0x00439600, no stack arguments.
+        ((void (__cdecl *)())0x439600)();
+        *g_clientCrashPedContext=0;
+    }
+}
+
+// samp.dll RVA: 0x000ac730
+void CPed::HandsUp() {
+    if(m_pGamePed&&!(*(DWORD*)((BYTE*)m_pGamePed+0x46c)&0x100)&&CEntity::DoesExist()&&GamePoolPedGetAt(m_nHandle))
+        Scripting::ProcessCommand(&g_pedHandsUpCommand,m_nHandle,-2);
+}
+
+// samp.dll RVA: 0x000ab920
+void CPed::SetImmunities(DWORD bullet,DWORD fire,DWORD explosion,DWORD collision,DWORD melee) {
+    if(m_pGamePed&&GamePoolPedGetAt(m_nHandle))
+        Scripting::ProcessCommand(&g_pedImmunitiesCommand,m_nHandle,bullet,fire,explosion,collision,melee);
+}
+
+// samp.dll RVA: 0x000ac7e0
+void CPed::HoldObject(DWORD object) {
+    if(m_pGamePed&&CEntity::DoesExist()&&GamePoolPedGetAt(m_nHandle)) {
+        void *ped=m_pGamePed;
+        // GTA SA virtual address: 0x005e4390, ECX backend, arguments object/1.
+        __asm { push 1
+            push object
+            mov ecx,ped
+            mov edx,0x5e4390
+            call edx
+        }
+    }
+}
+
+// samp.dll RVA: 0x000ad550
+void CPed::SetAimZ(float value) {
+    DWORD accepted;
+    __asm { fld value
+        fcomp dword ptr [g_vehicleTrainSpeedMaximum]
+        fnstsw ax
+        test ah,0x41
+        jz reject
+        fld value
+        fcomp dword ptr [g_vehicleTrainSpeedMinimum]
+        fnstsw ax
+        test ah,5
+        jnp reject
+        mov accepted,1
+        jmp compared
+    reject:
+        mov accepted,0
+    compared:
+    }
+    if(accepted&&m_pGamePed) {
+        BYTE *state=*(BYTE**)((BYTE*)m_pGamePed+0x480);
+        *(DWORD*)(state+0x54)=*(DWORD*)&value;
+    }
+}

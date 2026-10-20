@@ -12050,6 +12050,55 @@
       "rva": "0x000abc30",
       "module": "samp.dll",
       "evidence": "v172 direct reference PE disassembly and focused source/VC7 ABI/field review."
+    },
+    {
+      "name": "CPed::EnableJetpack",
+      "va": "0x100ac930",
+      "rva": "0x000ac930",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::HandsUp",
+      "va": "0x100ac730",
+      "rva": "0x000ac730",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::SetImmunities",
+      "va": "0x100ab920",
+      "rva": "0x000ab920",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::HoldObject",
+      "va": "0x100ac7e0",
+      "rva": "0x000ac7e0",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "CPed::SetAimZ",
+      "va": "0x100ad550",
+      "rva": "0x000ad550",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedHandsUpCommand",
+      "va": "0x1011f1ac",
+      "rva": "0x0011f1ac",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
+    },
+    {
+      "name": "g_pedImmunitiesCommand",
+      "va": "0x1011ef7c",
+      "rva": "0x0011ef7c",
+      "module": "samp.dll",
+      "evidence": "v173 direct PE instructions/SCM bytes and static VC7 source/ABI review."
     }
   ],
   "annotations": [

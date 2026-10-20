@@ -29,4 +29,8 @@ extern const Scripting::OpcodeInfo g_pedCellphoneCommand;
 extern const Scripting::OpcodeInfo g_pedDeleteArrowCommand;
 // samp.dll RVA: 0x0011ef18
 extern const Scripting::OpcodeInfo g_pedSpawnInfoCommand;
+// samp.dll RVA: 0x0011f1ac
+extern const Scripting::OpcodeInfo g_pedHandsUpCommand;
+// samp.dll RVA: 0x0011ef7c
+extern const Scripting::OpcodeInfo g_pedImmunitiesCommand;
 #endif

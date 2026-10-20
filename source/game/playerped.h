@@ -30,6 +30,16 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ad550
+    void SetAimZ(float value);
+    // samp.dll RVA: 0x000ac7e0
+    void HoldObject(DWORD object);
+    // samp.dll RVA: 0x000ab920
+    void SetImmunities(DWORD bullet,DWORD fire,DWORD explosion,DWORD collision,DWORD melee);
+    // samp.dll RVA: 0x000ac730
+    void HandsUp();
+    // samp.dll RVA: 0x000ac930
+    void EnableJetpack();
     // samp.dll RVA: 0x000abc30
     void ClearWeapons();
     // samp.dll RVA: 0x000ae080
