@@ -792,3 +792,18 @@ DWORD CPed::GetModelTable24() {
     if(!m_pGamePed) return 0xffffffff;
     return GameReadPedModelTable24(*(short*)((BYTE*)m_pGamePed+0x22));
 }
+
+// samp.dll RVA: 0x000ad770
+const char *CPed::GetAnimationForDance(int move) {
+    if(unknown2d2) {
+        int style=*(int*)unknown2d6;
+        DWORD offset=(DWORD)move<<4;
+        if(style>=0&&style<=2) {
+            if((m_pGamePed&&GameReadPedModelTable28(*(short*)((BYTE*)m_pGamePed+0x22))==5)||GetModelTable28()==22)
+                return (const char*)((DWORD)g_pedDanceMoveTables+offset);
+            return (const char*)((DWORD)g_pedDanceMoveTables+0x100+offset);
+        }
+        if(style==3) return (const char*)((DWORD)g_pedDanceMoveTables+0x200+offset);
+    }
+    return g_pedEmptyDanceAnimation;
+}

@@ -59,4 +59,8 @@ extern const char g_pedBlockedAnimationLibrary[4];
 extern char g_pedDanceLibraries[4][16];
 // samp.dll RVA: 0x00154df0
 extern char g_pedDanceNames[4][16];
+// samp.dll RVA: 0x00154e30
+extern char g_pedDanceMoveTables[3][16][16];
+// samp.dll RVA: 0x00117a39
+extern const char g_pedEmptyDanceAnimation[1];
 #endif

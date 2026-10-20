@@ -12365,6 +12365,44 @@
       "rva": "0x000ad5e0",
       "module": "samp.dll",
       "evidence": "v180 direct native disassembly: repeated model lookup then indirect table DWORD; raw field meaning remains technical."
+    },
+    {
+      "name": "CPed::GetAnimationForDance",
+      "va": "0x100ad770",
+      "rva": "0x000ad770",
+      "module": "samp.dll",
+      "evidence": "v181 direct PE instructions and contiguous three-table byte block; unchecked input retained."
+    },
+    {
+      "name": "g_pedDanceMoveTables",
+      "va": "0x10154e30",
+      "rva": "0x00154e30",
+      "module": "samp.dll",
+      "evidence": "v181 direct PE instructions and contiguous three-table byte block; unchecked input retained.",
+      "views": [
+        {
+          "rva": "0x00154e30",
+          "offset": 0,
+          "bytes": 256
+        },
+        {
+          "rva": "0x00154f30",
+          "offset": 256,
+          "bytes": 256
+        },
+        {
+          "rva": "0x00155030",
+          "offset": 512,
+          "bytes": 256
+        }
+      ]
+    },
+    {
+      "name": "g_pedEmptyDanceAnimation",
+      "va": "0x10117a39",
+      "rva": "0x00117a39",
+      "module": "samp.dll",
+      "evidence": "v181 direct PE instructions and contiguous three-table byte block; unchecked input retained."
     }
   ],
   "annotations": [
