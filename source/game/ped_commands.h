@@ -63,4 +63,14 @@ extern char g_pedDanceNames[4][16];
 extern char g_pedDanceMoveTables[3][16][16];
 // samp.dll RVA: 0x00117a39
 extern const char g_pedEmptyDanceAnimation[1];
+// samp.dll RVA: 0x0011eec8
+extern const Scripting::OpcodeInfo g_pedSelectInteriorCommand;
+// samp.dll RVA: 0x0011f0f8
+extern const Scripting::OpcodeInfo g_pedLinkInteriorCommand;
+// samp.dll RVA: 0x0011f058
+extern const Scripting::OpcodeInfo g_pedRefreshInteriorCommand;
+// samp.dll RVA: 0x0011ef2c
+extern const Scripting::OpcodeInfo g_pedControllableCommand;
+// samp.dll RVA: 0x0011f044
+extern const Scripting::OpcodeInfo g_pedFreezeCommand;
 #endif

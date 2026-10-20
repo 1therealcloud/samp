@@ -807,3 +807,33 @@ const char *CPed::GetAnimationForDance(int move) {
     }
     return g_pedEmptyDanceAnimation;
 }
+
+// samp.dll RVA: 0x000acf60
+void CPed::LinkToInterior(BYTE interior,BOOL refresh) {
+    if(!m_pGamePed) return;
+    if(m_nPlayerNumber==0) {
+        Scripting::ProcessCommand(&g_pedSelectInteriorCommand,(DWORD)interior);
+        Scripting::ProcessCommand(&g_pedLinkInteriorCommand,m_nHandle,(DWORD)interior);
+        if(refresh) {
+            CMatrix matrix;
+            GetMatrix(&matrix);
+            Scripting::ProcessCommand(&g_pedRefreshInteriorCommand,(double)matrix.position.x,(double)matrix.position.y);
+        }
+    } else Scripting::ProcessCommand(&g_pedLinkInteriorCommand,m_nHandle,(DWORD)interior);
+}
+
+// samp.dll RVA: 0x000ac3b0
+void CPed::SetControllable(BOOL enabled) {
+    if(!GamePoolPedGetAt(m_nHandle)) return;
+    if(!enabled) {
+        Scripting::ProcessCommand(&g_pedControllableCommand,(DWORD)m_nPlayerNumber,0);
+        Scripting::ProcessCommand(&g_pedFreezeCommand,m_nHandle,1);
+    } else {
+        Scripting::ProcessCommand(&g_pedControllableCommand,(DWORD)m_nPlayerNumber,1);
+        Scripting::ProcessCommand(&g_pedFreezeCommand,m_nHandle,0);
+        if(m_pGamePed&&(*(DWORD*)((BYTE*)m_pGamePed+0x46c)&0x100)) return;
+        CMatrix matrix;
+        GetMatrix(&matrix);
+        Teleport(matrix.position);
+    }
+}

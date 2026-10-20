@@ -12403,6 +12403,55 @@
       "rva": "0x00117a39",
       "module": "samp.dll",
       "evidence": "v181 direct PE instructions and contiguous three-table byte block; unchecked input retained."
+    },
+    {
+      "name": "CPed::LinkToInterior",
+      "va": "0x100acf60",
+      "rva": "0x000acf60",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "CPed::SetControllable",
+      "va": "0x100ac3b0",
+      "rva": "0x000ac3b0",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "g_pedSelectInteriorCommand",
+      "va": "0x1011eec8",
+      "rva": "0x0011eec8",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "g_pedLinkInteriorCommand",
+      "va": "0x1011f0f8",
+      "rva": "0x0011f0f8",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "g_pedRefreshInteriorCommand",
+      "va": "0x1011f058",
+      "rva": "0x0011f058",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "g_pedControllableCommand",
+      "va": "0x1011ef2c",
+      "rva": "0x0011ef2c",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
+    },
+    {
+      "name": "g_pedFreezeCommand",
+      "va": "0x1011f044",
+      "rva": "0x0011f044",
+      "module": "samp.dll",
+      "evidence": "v182 direct native instruction/SCM evidence and static VC7 ABI review."
     }
   ],
   "annotations": [

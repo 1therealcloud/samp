@@ -30,6 +30,10 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ac3b0
+    void SetControllable(BOOL enabled);
+    // samp.dll RVA: 0x000acf60
+    void LinkToInterior(BYTE interior,BOOL refresh);
     // samp.dll RVA: 0x000ad770
     const char *GetAnimationForDance(int move);
     // samp.dll RVA: 0x000ad5e0
