@@ -2,6 +2,8 @@
 #define SAMP_RECOVERED_ENTITY_H
 #include <windows.h>
 #include <stddef.h>
+// Five raw DWORDs consumed by the native collision adapter; semantic fields unresolved.
+struct GameEntityCollisionShape { DWORD words[5]; };
 struct CVector { float x,y,z; };
 class CMatrix { public: CVector right;DWORD flags;CVector up;DWORD pad1;CVector at;DWORD pad2;CVector position;DWORD pad3; };
 #pragma pack(push,1)
@@ -46,9 +48,32 @@ public:
     void GetBoundCentre(CVector *centre);
     // samp.dll RVA: 0x0009ee70
     int GetModelIndex();
-    // Stage 2 distance wrapper dependency.
+    // Uses camera position for the two observed local-player mode flags.
     // samp.dll RVA: 0x0009ef00
     float GetDistanceToLocalPlayer();
+    // samp.dll RVA: 0x0009efd0
+    float GetDistanceToCamera();
+    // samp.dll RVA: 0x0009f030
+    float GetDistanceToLocalPlayerNoHeight();
+    // samp.dll RVA: 0x0009f560
+    void SetBackendHighFlag();
+    // samp.dll RVA: 0x0009fa20
+    void ProcessControl();
+    // Additional native wrappers; original names/semantic argument types are unresolved.
+    // samp.dll RVA: 0x0009ed60
+    void Native009ed60(DWORD argument);
+    // samp.dll RVA: 0x0009f5d0
+    void Native009f5d0(DWORD argument);
+    // samp.dll RVA: 0x0009f810
+    void Native009f810(DWORD a1,DWORD a2,DWORD a3,DWORD a4,DWORD a5,DWORD a6);
+    // samp.dll RVA: 0x0009f840
+    void Native009f840(DWORD argument);
+    // samp.dll RVA: 0x0009f960
+    void Native009f960();
+    // samp.dll RVA: 0x0009fba0
+    void ApplyLinearSpeed();
+    // samp.dll RVA: 0x0009fa40
+    bool TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second,BYTE mode);
     // Returns TRUE only when this call requested/loaded the model, not merely
     // when the entity's model was successfully changed.
     // samp.dll RVA: 0x0009ed90
@@ -94,4 +119,6 @@ extern const float g_entityRadiansToDegrees;
 extern const float g_entityEulerSign;
 // samp.dll RVA: 0x0011b31c
 extern const float g_entityBoundaryLift;
+// samp.dll RVA: 0x0011e644
+extern const float g_entityUnavailableDistance;
 #endif

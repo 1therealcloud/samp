@@ -1363,6 +1363,13 @@
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
     },
     {
+      "name": "CEntity::ApplyLinearSpeed",
+      "va": "0x1009fba0",
+      "rva": "0x0009fba0",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
       "name": "CEntity::ApplyMatrix",
       "va": "0x1009fb40",
       "rva": "0x0009fb40",
@@ -1433,11 +1440,25 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "CEntity::GetDistanceToCamera",
+      "va": "0x1009efd0",
+      "rva": "0x0009efd0",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
       "name": "CEntity::GetDistanceToLocalPlayer",
       "va": "0x1009ef00",
       "rva": "0x0009ef00",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "CEntity::GetDistanceToLocalPlayerNoHeight",
+      "va": "0x1009f030",
+      "rva": "0x0009f030",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
     },
     {
       "name": "CEntity::GetDistanceToPoint",
@@ -1510,11 +1531,60 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "CEntity::Native009ed60",
+      "va": "0x1009ed60",
+      "rva": "0x0009ed60",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "CEntity::Native009f5d0",
+      "va": "0x1009f5d0",
+      "rva": "0x0009f5d0",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "CEntity::Native009f810",
+      "va": "0x1009f810",
+      "rva": "0x0009f810",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "CEntity::Native009f840",
+      "va": "0x1009f840",
+      "rva": "0x0009f840",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "CEntity::Native009f960",
+      "va": "0x1009f960",
+      "rva": "0x0009f960",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "CEntity::ProcessControl",
+      "va": "0x1009fa20",
+      "rva": "0x0009fa20",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
       "name": "CEntity::Remove",
       "va": "0x1009f240",
       "rva": "0x0009f240",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::SetBackendHighFlag",
+      "va": "0x1009f560",
+      "rva": "0x0009f560",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
     },
     {
       "name": "CEntity::SetCollisionFlag",
@@ -1564,6 +1634,13 @@
       "rva": "0x0009ee80",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "CEntity::TestCollisionShapes",
+      "va": "0x1009fa40",
+      "rva": "0x0009fa40",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
     },
     {
       "name": "CEntity::UpdateRwFrame",
@@ -5052,6 +5129,62 @@
       "evidence": "Read-only wrappers-v88 native bodies/instructions, camera helper, original opcode descriptors and float constants. External address anchors alone are not implementation evidence."
     },
     {
+      "name": "g_entityCollisionBackend",
+      "va": "0x10155404",
+      "rva": "0x00155404",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionContextSlot",
+      "va": "0x10155408",
+      "rva": "0x00155408",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionEntity",
+      "va": "0x1018de7c",
+      "rva": "0x0018de7c",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionResult",
+      "va": "0x102abe60",
+      "rva": "0x002abe60",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionSavedContext",
+      "va": "0x102abe5c",
+      "rva": "0x002abe5c",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionScratch",
+      "va": "0x102aae18",
+      "rva": "0x002aae18",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionShapeA",
+      "va": "0x1018de60",
+      "rva": "0x0018de60",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
+      "name": "g_entityCollisionShapeB",
+      "va": "0x1018de4c",
+      "rva": "0x0018de4c",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
+    },
+    {
       "name": "g_entityEulerSign",
       "va": "0x1011c660",
       "rva": "0x0011c660",
@@ -5071,6 +5204,13 @@
       "rva": "0x0011e604",
       "module": "samp.dll",
       "evidence": "Reviewed native constructor/script/entity exports v80 and driver/ped helpers v78. CPed::Destroy is declaration-only."
+    },
+    {
+      "name": "g_entityUnavailableDistance",
+      "va": "0x1011e644",
+      "rva": "0x0011e644",
+      "module": "samp.dll",
+      "evidence": "v134 native operands/data. Two 20-byte records and saved entity/context/result; opaque BSS scratch span 2AAE18..2ABE5B is bounded by next observed global, not a proven typed object. Defaults match original data; shared 1179B0 uses existing storage."
     },
     {
       "name": "g_fontColorSprite",
@@ -7187,6 +7327,20 @@
       "evidence": "textdraw-render-v118 read-only Ghidra exports/instruction review and VC7.1 compilation. No runtime validation. Font thunk names use original 0.2x reference, DL targets and behavior checked independently."
     },
     {
+      "name": "GameEntityCollisionQueryDirect",
+      "va": "0x100b6070",
+      "rva": "0x000b6070",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
+      "name": "GameEntityCollisionQueryScoped",
+      "va": "0x100b6090",
+      "rva": "0x000b6090",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
+    },
+    {
       "name": "GameExceptionFilter",
       "va": "0x10060470",
       "rva": "0x00060470",
@@ -7234,6 +7388,13 @@
       "rva": "0x0009c950",
       "module": "samp.dll",
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
+    },
+    {
+      "name": "GameGetModelCollisionRadius",
+      "va": "0x100b5ea0",
+      "rva": "0x000b5ea0",
+      "module": "samp.dll",
+      "evidence": "v134 direct original instruction/pseudocode recovery; thiscall/cdecl/stdcall, guards/reloads, native x87 and collision scratch publication retained. Native009 names/raw-word argument types are provisional. Static whole-body comparison where stated; not actual GTA runtime or complete semantic-name recovery."
     },
     {
       "name": "GameGetModelData1c",
@@ -15245,6 +15406,72 @@
     },
     {
       "file": "source/game/entity.h",
+      "name": "CEntity::GetDistanceToCamera",
+      "rva": 651216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::GetDistanceToLocalPlayerNoHeight",
+      "rva": 651312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::SetBackendHighFlag",
+      "rva": 652640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::ProcessControl",
+      "rva": 653856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Native009ed60",
+      "rva": 650592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Native009f5d0",
+      "rva": 652752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Native009f810",
+      "rva": 653328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Native009f840",
+      "rva": 653376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::Native009f960",
+      "rva": 653664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::ApplyLinearSpeed",
+      "rva": 654240,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "CEntity::TestCollisionShapes",
+      "rva": 653888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
       "name": "CEntity::SetModelIndex",
       "rva": 650640,
       "module": "samp.dll"
@@ -15355,6 +15582,222 @@
       "file": "source/game/entity.h",
       "name": "g_entityBoundaryLift",
       "rva": 1159964,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity.h",
+      "name": "g_entityUnavailableDistance",
+      "rva": 1173060,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionShapeA",
+      "rva": 1629792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionShapeB",
+      "rva": 1629772,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionEntity",
+      "rva": 1629820,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionBackend",
+      "rva": 1397764,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionContextSlot",
+      "rva": 1397768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionSavedContext",
+      "rva": 2801244,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionResult",
+      "rva": 2801248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "g_entityCollisionScratch",
+      "rva": 2797080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "CEntity::TestCollisionShapes",
+      "rva": 653888,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "GameGetModelCollisionRadius",
+      "rva": 745120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "GameEntityCollisionQueryDirect",
+      "rva": 745584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.cpp",
+      "name": "GameEntityCollisionQueryScoped",
+      "rva": 745616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionShapeA",
+      "rva": 1629792,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionShapeB",
+      "rva": 1629772,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionEntity",
+      "rva": 1629820,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionBackend",
+      "rva": 1397764,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionContextSlot",
+      "rva": 1397768,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionSavedContext",
+      "rva": 2801244,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionResult",
+      "rva": 2801248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "g_entityCollisionScratch",
+      "rva": 2797080,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "GameGetModelCollisionRadius",
+      "rva": 745120,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "GameEntityCollisionQueryDirect",
+      "rva": 745584,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_collision.h",
+      "name": "GameEntityCollisionQueryScoped",
+      "rva": 745616,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "g_entityUnavailableDistance",
+      "rva": 1173060,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::GetDistanceToLocalPlayer",
+      "rva": 651008,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::GetDistanceToCamera",
+      "rva": 651216,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::GetDistanceToLocalPlayerNoHeight",
+      "rva": 651312,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::SetBackendHighFlag",
+      "rva": 652640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::ProcessControl",
+      "rva": 653856,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::Native009ed60",
+      "rva": 650592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::Native009f5d0",
+      "rva": 652752,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::Native009f810",
+      "rva": 653328,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::Native009f840",
+      "rva": 653376,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::Native009f960",
+      "rva": 653664,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/entity_extra.cpp",
+      "name": "CEntity::ApplyLinearSpeed",
+      "rva": 654240,
       "module": "samp.dll"
     },
     {
