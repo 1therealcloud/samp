@@ -23,6 +23,9 @@ public:
     BOOL IsTrainPart();
     // samp.dll RVA: 0x000b7940
     BOOL IsRC();
+    // Raw wrapper DWORD at +8B, normalized by the native query.
+    // samp.dll RVA: 0x000b7e60
+    BOOL HasSiren();
     // Additional stage 2 wrapper dependencies; no complete allocation claim.
     // samp.dll RVA: 0x000b7e70
     BYTE GetMaxPassengers();
@@ -40,4 +43,7 @@ typedef char VehicleBackendOffset[(offsetof(CVehicle,m_pGameVehicle)==0x4c)?1:-1
 typedef char VehicleColorOffset[(offsetof(CVehicle,m_bColorChanged)==0x7b)?1:-1];
 // samp.dll RVA: 0x000b37d0
 void *__stdcall GamePoolVehicleGetAt(int handle);
+// GTA SA vtable classification helper; values are native 0..7 tags.
+// samp.dll RVA: 0x000b5d20
+int GameGetVehicleSubtype(void *vehicle);
 #endif

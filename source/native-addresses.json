@@ -3971,21 +3971,28 @@
       "va": "0x100b6de0",
       "rva": "0x000b6de0",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "CVehicle::GetMaxPassengers",
       "va": "0x100b7e70",
       "rva": "0x000b7e70",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "CVehicle::GetSubtype",
       "va": "0x100b6ed0",
       "rva": "0x000b6ed0",
       "module": "samp.dll",
-      "evidence": "Exact read-only present-v97 instructions, device-v95 Present call operands and frame/integrity exports. Many render/UI/network methods are declaration-only dependencies, not implemented bodies."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
+    },
+    {
+      "name": "CVehicle::HasSiren",
+      "va": "0x100b7e60",
+      "rva": "0x000b7e60",
+      "module": "samp.dll",
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "CVehicle::IsRC",
@@ -5843,6 +5850,27 @@
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
     },
     {
+      "name": "g_hookContactOther",
+      "va": "0x1018f694",
+      "rva": "0x0018f694",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
+      "name": "g_hookContactReturn",
+      "va": "0x1018f698",
+      "rva": "0x0018f698",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
+      "name": "g_hookContactThis",
+      "va": "0x1018f690",
+      "rva": "0x0018f690",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
       "name": "g_hookControlVehicle",
       "va": "0x1018e8d0",
       "rva": "0x0018e8d0",
@@ -6102,6 +6130,20 @@
       "evidence": "v123 native load/store operands and initialized DLL bytes reviewed; reuse of existing storage at 151960 and 117884 avoids duplicate native globals."
     },
     {
+      "name": "g_hookPedQueryPed",
+      "va": "0x1018f640",
+      "rva": "0x0018f640",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
+      "name": "g_hookPedQueryThis",
+      "va": "0x1018f63c",
+      "rva": "0x0018f63c",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
       "name": "g_hookPedRemoteRestore",
       "va": "0x10151a90",
       "rva": "0x00151a90",
@@ -6275,6 +6317,34 @@
       "rva": "0x0018eab4",
       "module": "samp.dll",
       "evidence": "Native helper/callback load-store operands v86, original data; removal table physical extent ends at count RVA 0x0018dc18."
+    },
+    {
+      "name": "g_hookSirenOnce",
+      "va": "0x1018f6a4",
+      "rva": "0x0018f6a4",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
+      "name": "g_hookSirenResult",
+      "va": "0x1018f6a0",
+      "rva": "0x0018f6a0",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
+      "name": "g_hookSirenVehicle",
+      "va": "0x1018f69c",
+      "rva": "0x0018f69c",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
+    },
+    {
+      "name": "g_hookSirenVehicleId",
+      "va": "0x10151b0c",
+      "rva": "0x00151b0c",
+      "module": "samp.dll",
+      "evidence": "v127 native callback load/store operands; siren ID low WORD initialized FFFF. Native shared storage reused at 151960 and health fallback at 1179B0."
     },
     {
       "name": "g_hookSuppressAllMarkers",
@@ -7159,6 +7229,13 @@
       "evidence": "Exact device-v95 instruction operands; lifecycle and integrity helpers remain declaration-only."
     },
     {
+      "name": "GameGetVehicleSubtype",
+      "va": "0x100b5d20",
+      "rva": "0x000b5d20",
+      "module": "samp.dll",
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
+    },
+    {
       "name": "GameHasModelInfo",
       "va": "0x100b39b0",
       "rva": "0x000b39b0",
@@ -7513,7 +7590,7 @@
       "va": "0x100a5100",
       "rva": "0x000a5100",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a5150",
@@ -7534,7 +7611,7 @@
       "va": "0x100a5820",
       "rva": "0x000a5820",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a5850",
@@ -7548,35 +7625,35 @@
       "va": "0x100a5870",
       "rva": "0x000a5870",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a5910",
       "va": "0x100a5910",
       "rva": "0x000a5910",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a59b0",
       "va": "0x100a59b0",
       "rva": "0x000a59b0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a5a50",
       "va": "0x100a5a50",
       "rva": "0x000a5a50",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a5af0",
       "va": "0x100a5af0",
       "rva": "0x000a5af0",
       "module": "samp.dll",
-      "evidence": "Read-only Ghidra game-hooks-v83 export, native instruction bytes and target operands; callbacks are address-only declarations."
+      "evidence": "v127 direct native instruction/pseudocode port and VC7 compilation. Raw callback register/stack/return/continuation paths reviewed. No runtime observer, GTA execution or complete class layout claim."
     },
     {
       "name": "GameHook_000a5b90",
@@ -17786,6 +17863,156 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookContactThis",
+      "rva": 1635984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookContactOther",
+      "rva": 1635988,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookContactReturn",
+      "rva": 1635992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookSirenVehicle",
+      "rva": 1635996,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookSirenResult",
+      "rva": 1636000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookSirenOnce",
+      "rva": 1636004,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookSirenVehicleId",
+      "rva": 1383180,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookPedQueryThis",
+      "rva": 1635900,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "g_hookPedQueryPed",
+      "rva": 1635904,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a5870",
+      "rva": 678000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a5910",
+      "rva": 678160,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a59b0",
+      "rva": 678320,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a5a50",
+      "rva": 678480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a5820",
+      "rva": 677920,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a5100",
+      "rva": 676096,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.cpp",
+      "name": "GameHook_000a5af0",
+      "rva": 678640,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookContactThis",
+      "rva": 1635984,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookContactOther",
+      "rva": 1635988,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookContactReturn",
+      "rva": 1635992,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookSirenVehicle",
+      "rva": 1635996,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookSirenResult",
+      "rva": 1636000,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookSirenOnce",
+      "rva": 1636004,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookSirenVehicleId",
+      "rva": 1383180,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookPedQueryThis",
+      "rva": 1635900,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/hooks_vehicle.h",
+      "name": "g_hookPedQueryPed",
+      "rva": 1635904,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/initialization.cpp",
       "name": "g_gameTextBuffer",
       "rva": 1630668,
@@ -20211,6 +20438,12 @@
     },
     {
       "file": "source/game/vehicle.h",
+      "name": "CVehicle::HasSiren",
+      "rva": 753248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle.h",
       "name": "CVehicle::GetMaxPassengers",
       "rva": 753264,
       "module": "samp.dll"
@@ -20246,6 +20479,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/vehicle.h",
+      "name": "GameGetVehicleSubtype",
+      "rva": 744736,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/vehicle_plate.cpp",
       "name": "CVehicle::ConstructLicensePlate",
       "rva": 752848,
@@ -20261,6 +20500,36 @@
       "file": "source/game/vehicle_queries.cpp",
       "name": "CVehicle::IsRC",
       "rva": 751936,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::HasSiren",
+      "rva": 753248,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetMaxPassengers",
+      "rva": 753264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetHealth",
+      "rva": 749024,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "CVehicle::GetSubtype",
+      "rva": 749264,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/vehicle_queries.cpp",
+      "name": "GameGetVehicleSubtype",
+      "rva": 744736,
       "module": "samp.dll"
     },
     {
