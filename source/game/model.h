@@ -55,4 +55,6 @@ DWORD __stdcall GameGetModelTxdIndex(int model);
 void *__stdcall GameGetModelCollision(int model);
 // samp.dll RVA: 0x000b4300
 WORD __stdcall GameGetModelReferenceCount(int model);
+// samp.dll RVA: 0x000b1c40
+BOOL GameCleanupModelAndTxd(int model);
 #endif

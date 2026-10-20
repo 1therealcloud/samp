@@ -236,3 +236,11 @@ void CTextDraw::Native0B2DA0() {
     }
     state[0x9bf]=1;
 }
+
+// Native clears usage flags first, then texture words, without releasing them.
+// samp.dll RVA: 0x000b26f0
+BOOL GameInitializeTextDrawTextures() {
+    memset(g_textDrawTextureUsed,0,sizeof(g_textDrawTextureUsed));
+    memset(g_textDrawTextures,0,sizeof(g_textDrawTextures));
+    return TRUE;
+}

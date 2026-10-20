@@ -98,3 +98,23 @@ WORD __stdcall GameGetModelReferenceCount(int model) {
     const BYTE *info=(const BYTE*)GameGetModelInfo(model);
     return *(const WORD*)(info+8);
 }
+
+#include "game/effects.h"
+// Native preserves the first model-info pointer across the second lookup made
+// by the TXD-index helper. Backend call is ECX, no added failure cleanup.
+// samp.dll RVA: 0x000b1c40
+BOOL GameCleanupModelAndTxd(int model) {
+    void *info=GameGetModelInfo(model);
+    if(!info)return FALSE;
+    int index=(int)GameGetModelTxdIndex(model);
+    __asm {
+        mov ecx,info
+        mov edx,0x4c4d50
+        call edx
+    }
+    if(GameTxdGetReferenceCount(index)==0) {
+        GameTxdRemove(index);
+        GameTxdRemoveSlot(index);
+    }
+    return TRUE;
+}

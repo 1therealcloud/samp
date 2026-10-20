@@ -43,4 +43,12 @@ void GameTxdRemoveSlot(int index);
 DWORD GameTxdGetReferenceCount(int index);
 // samp.dll RVA: 0x000b3580
 void GameTxdRemoveSlotByName(const char *name);
+// samp.dll RVA: 0x000b1ce0
+void *GameRwGetGeometrySkin(void *geometry);
+// samp.dll RVA: 0x000b1da0
+int GameRwRegisterClumpPlugin(DWORD pluginId);
+// samp.dll RVA: 0x000b1e00
+int GameRwRegisterClumpPluginStream(DWORD pluginId,DWORD readCallback);
+// samp.dll RVA: 0x000b1e60
+void GameRwEnableAutoMipmapping();
 #endif

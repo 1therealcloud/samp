@@ -21,4 +21,6 @@ void GameReleaseTextDrawTexture(int slot);
 void GameDestroyTextDrawTexture(void *texture);
 // samp.dll RVA: 0x000b28a0
 void GameDrawTextDrawTexture(void *texture,TextDrawRect *rect,DWORD *color);
+// samp.dll RVA: 0x000b26f0
+BOOL GameInitializeTextDrawTextures();
 #endif

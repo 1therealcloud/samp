@@ -100,3 +100,37 @@ void GameTxdRemoveSlotByName(const char *name) {
     int index=GameTxdFind(name);
     if(index!=-1)((void(__cdecl*)(int))0x731cd0)(index);
 }
+
+#include "game/input.h"
+// GTA SA virtual addresses: USA7C7550, fallback7C7590. Exactly one argument.
+// samp.dll RVA: 0x000b1ce0
+void *GameRwGetGeometrySkin(void *geometry) {
+    DWORD target=g_gameVersion==1?0x7c7550:0x7c7590;
+    return ((void*(__cdecl*)(void*))target)(geometry);
+}
+// GTA SA virtual addresses: backend74BDD0/+50; initialization flag C97B20.
+// Callback addresses are opaque GTA code pointers; no invented callable types.
+// samp.dll RVA: 0x000b1da0
+int GameRwRegisterClumpPlugin(DWORD pluginId) {
+    DWORD target=g_gameVersion==1?0x74bdd0:0x74be20;
+    *(DWORD*)0xc97b20=0;
+    int result=((int(__cdecl*)(DWORD,DWORD,DWORD,DWORD,DWORD))target)(0,pluginId,0x41b1a0,0x41b1c0,0x41b1b0);
+    *(DWORD*)0xc97b20=1;
+    return result;
+}
+// GTA SA virtual addresses: backend74BE70/+50, callbacks41B2F0/41B300.
+// Native forces the flag back to1, not to its previous value, even on failure.
+// samp.dll RVA: 0x000b1e00
+int GameRwRegisterClumpPluginStream(DWORD pluginId,DWORD readCallback) {
+    DWORD target=g_gameVersion==1?0x74be70:0x74bec0;
+    *(DWORD*)0xc97b20=0;
+    int result=((int(__cdecl*)(DWORD,DWORD,DWORD,DWORD))target)(pluginId,readCallback,0x41b2f0,0x41b300);
+    *(DWORD*)0xc97b20=1;
+    return result;
+}
+// GTA SA virtual addresses: USA7F3560, fallback7F35A0; fixed enable argument1.
+// samp.dll RVA: 0x000b1e60
+void GameRwEnableAutoMipmapping() {
+    DWORD target=g_gameVersion==1?0x7f3560:0x7f35a0;
+    ((void(__cdecl*)(DWORD))target)(1);
+}

@@ -7502,6 +7502,13 @@
       "evidence": "v143 native instructions: cdecl opaque GTA entity plus raw model DWORD; ECX thiscall GTA403EC0. Backend reads model WORD, removes entity RW object through virtual20 before model update."
     },
     {
+      "name": "GameCleanupModelAndTxd",
+      "va": "0x100b1c40",
+      "rva": "0x000b1c40",
+      "module": "samp.dll",
+      "evidence": "v149 native model-info lookup/snapshot, TXD index helper, ECX GTA4C4D50, reference count zero gate then remove TXD and slot. Return0 only on missing initial model-info, else1."
+    },
+    {
       "name": "GameClearLocalPad",
       "va": "0x100b58e0",
       "rva": "0x000b58e0",
@@ -8209,6 +8216,13 @@
       "evidence": "Read-only game-start/dependencies-v77 and animation v76 native instructions; initialized data operands"
     },
     {
+      "name": "GameInitializeTextDrawTextures",
+      "va": "0x100b26f0",
+      "rva": "0x000b26f0",
+      "module": "samp.dll",
+      "evidence": "v149 native two REP STOSD sequences:200 usage DWORDs then200 texture words, return1. Reuses existing v118 physical arrays; no cleanup or duplicate storage."
+    },
+    {
       "name": "GameInitializeVersionPatches",
       "va": "0x100aa300",
       "rva": "0x000aa300",
@@ -8783,11 +8797,25 @@
       "evidence": "Read-only preview-v102 original forwarding wrapper instructions; typed cdecl GTA targets and USA/EU fallback. RenderWare backend is external GTA, not recovered library code."
     },
     {
+      "name": "GameRwEnableAutoMipmapping",
+      "va": "0x100b1e60",
+      "rva": "0x000b1e60",
+      "module": "samp.dll",
+      "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
+    },
+    {
       "name": "GameRwFindChunk",
       "va": "0x100b1a80",
       "rva": "0x000b1a80",
       "module": "samp.dll",
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwGetGeometrySkin",
+      "va": "0x100b1ce0",
+      "rva": "0x000b1ce0",
+      "module": "samp.dll",
+      "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
     },
     {
       "name": "GameRwQuaternionFromMatrix",
@@ -8802,6 +8830,20 @@
       "rva": "0x000b1ad0",
       "module": "samp.dll",
       "evidence": "custom-load-v120 read-only native instruction/decompilation review and VC7 compilation only; no runtime validation. GTA and CRT callees remain external."
+    },
+    {
+      "name": "GameRwRegisterClumpPlugin",
+      "va": "0x100b1da0",
+      "rva": "0x000b1da0",
+      "module": "samp.dll",
+      "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
+    },
+    {
+      "name": "GameRwRegisterClumpPluginStream",
+      "va": "0x100b1e00",
+      "rva": "0x000b1e00",
+      "module": "samp.dll",
+      "evidence": "v149 read-only native instruction export. Single-argument skin/mipmap calls, exact version fallback deltas and clump registration callback words/state writes reviewed. RenderWare.cpp corroborates backend names/signatures; GTA code is external."
     },
     {
       "name": "GameRwRotateFrame",
@@ -15892,6 +15934,30 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwGetGeometrySkin",
+      "rva": 728288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwRegisterClumpPlugin",
+      "rva": 728480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwRegisterClumpPluginStream",
+      "rva": 728576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.cpp",
+      "name": "GameRwEnableAutoMipmapping",
+      "rva": 728672,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/effects.h",
       "name": "GameBufferReader::Read",
       "rva": 770512,
@@ -15967,6 +16033,30 @@
       "file": "source/game/effects.h",
       "name": "GameTxdRemoveSlotByName",
       "rva": 734592,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwGetGeometrySkin",
+      "rva": 728288,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwRegisterClumpPlugin",
+      "rva": 728480,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwRegisterClumpPluginStream",
+      "rva": 728576,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/effects.h",
+      "name": "GameRwEnableAutoMipmapping",
+      "rva": 728672,
       "module": "samp.dll"
     },
     {
@@ -20032,6 +20122,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/game/model.h",
+      "name": "GameCleanupModelAndTxd",
+      "rva": 728128,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/game/model_preview.cpp",
       "name": "g_modelPreview",
       "rva": 2804280,
@@ -20149,6 +20245,12 @@
       "file": "source/game/model_properties.cpp",
       "name": "GameGetModelReferenceCount",
       "rva": 738048,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/game/model_properties.cpp",
+      "name": "GameCleanupModelAndTxd",
+      "rva": 728128,
       "module": "samp.dll"
     },
     {
@@ -25354,6 +25456,12 @@
       "module": "samp.dll"
     },
     {
+      "file": "source/gui/textdraw_render.cpp",
+      "name": "GameInitializeTextDrawTextures",
+      "rva": 730864,
+      "module": "samp.dll"
+    },
+    {
       "file": "source/gui/textdraw_texture.h",
       "name": "g_textDrawTextures",
       "rva": 2790400,
@@ -25405,6 +25513,12 @@
       "file": "source/gui/textdraw_texture.h",
       "name": "GameDrawTextDrawTexture",
       "rva": 731296,
+      "module": "samp.dll"
+    },
+    {
+      "file": "source/gui/textdraw_texture.h",
+      "name": "GameInitializeTextDrawTextures",
+      "rva": 730864,
       "module": "samp.dll"
     },
     {
