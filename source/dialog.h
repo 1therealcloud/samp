@@ -75,4 +75,6 @@ extern const float g_dialogLineScale;
 
 // samp.dll RVA: 0x0011c724
 extern const float g_dialogEditPadding;
+// samp.dll RVA: 0x0011c348
+extern int g_dialogResponseRpcId;
 #endif

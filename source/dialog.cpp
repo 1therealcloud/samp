@@ -12,6 +12,8 @@
 #include <DXUTgui.h>
 #include <string.h>
 #include <stdlib.h>
+#include "BitStream.h"
+#include "RakClientInterface.h"
 
 // Reconstruction-only access facade for the established control vtable slot4C.
 // It adds no fields, virtual methods or standalone native entries.
@@ -339,3 +341,39 @@ void CDialog::Show(int requestId,int style,const char *caption,const char *value
     }
     Recalc();active=TRUE;
 }
+
+// samp.dll RVA: 0x0011c348
+int g_dialogResponseRpcId=62;
+
+// samp.dll RVA: 0x000700d0
+void CDialog::Close(char response) {
+    if(!active)return;
+    WORD dialogId=(WORD)id;
+    char reply[129]={0};
+    int selection=-1;
+    BYTE length=0;
+    if(type==1 || type==3) {
+        strncpy(reply,((CDXUTEditBoxDL*)input)->GetText(),128);
+        length=(BYTE)strlen(reply);
+    } else if(type==2 || type==4 || type==5) {
+        selection=list->GetSelectedIndex(-1);
+        CDXUTListBoxDL *selectedList=list;
+        DXUTListBoxItemDL *item=selectedList->GetItem(selectedList->GetSelectedIndex(-1));
+        if(item)strncpy(reply,item->text,128);
+        ChatStripColorTags(reply);
+        length=(BYTE)strlen(reply);
+    }
+    if(serverSide) {
+        RakNet::BitStream stream;
+        stream.WriteBits((const unsigned char*)&dialogId,16,true);
+        BYTE button=(BYTE)response;
+        stream.WriteBits(&button,8,true);
+        stream.WriteBits((const unsigned char*)&selection,16,true);
+        stream.WriteBits(&length,8,true);
+        if(length)stream.Write(reply,length);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_dialogResponseRpcId,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+    }
+    Hide();
+}
+
+typedef char DialogRpcEnums[(HIGH_PRIORITY==1 && RELIABLE_ORDERED==9)?1:-1];

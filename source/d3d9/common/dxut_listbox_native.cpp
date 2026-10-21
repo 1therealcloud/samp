@@ -2,6 +2,10 @@
 #include <strsafe.h>
 #include <string.h>
 #include <DXUTgui.h>
+#include "gui/input_text.h"
+
+// samp.dll RVA: 0x000850d0
+const char *CDXUTEditBoxDL::GetText() { return InputWideToAnsi(wideText); }
 
 // samp.dll RVA: 0x000875c0
 HRESULT CDXUTStaticDL::SetText(const char *value) {
@@ -88,4 +92,15 @@ void CDXUTListBoxDL::SelectItem(int index) {
     }
     CDXUTDialog *parent=*(CDXUTDialog**)(control+0x18);
     parent->SendEvent(0x702,true,(CDXUTControl*)this);
+}
+
+// samp.dll RVA: 0x000888f0
+int CDXUTListBoxDL::GetSelectedIndex(int previous) {
+    if(previous<-1)return -1;
+    if(style&1) {
+        int count=items.GetSize();
+        for(int i=previous+1;i<count;++i)if(items[i]->selected)return i;
+        return -1;
+    }
+    return selected;
 }

@@ -7,6 +7,12 @@
 #include <DXUTmisc.h>
 class CDXUTDialog;
 #pragma pack(push,1)
+struct CDXUTEditBoxDL {
+    BYTE control[0x4d];
+    const wchar_t *wideText;
+    // samp.dll RVA: 0x000850d0
+    const char *GetText();
+};
 // ANSI static-text prefix only, not a constructed or complete virtual control.
 struct CDXUTStaticDL {
     BYTE control[0x4d];
@@ -68,6 +74,8 @@ public:
     void RemoveAllItems();
     // samp.dll RVA: 0x0008a470
     void SelectItem(int index);
+    // samp.dll RVA: 0x000888f0
+    int GetSelectedIndex(int previous=-1);
 private:
     // Declaration-only native lifecycle; the observed view must not be constructed.
     // samp.dll RVA: 0x0008e810
