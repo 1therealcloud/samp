@@ -1,0 +1,143 @@
+#include "filehooks.h"
+#include <detours.h>
+#include <string.h>
+// samp.dll RVA: 0x0016bf60
+ArchiveFileRecord g_archiveOpenRecords[50];
+// samp.dll RVA: 0x0016be98
+BOOL g_archiveRecordUsed[50];
+// samp.dll RVA: 0x0016c378
+BOOL g_archiveHooksInstalled;
+// samp.dll RVA: 0x0016c34c
+BYTE *g_archiveRealGetFileSize;
+// samp.dll RVA: 0x0016c350
+BYTE *g_archiveRealSetFilePointer;
+// samp.dll RVA: 0x0016c354
+BYTE *g_archiveRealCreateFileA;
+// samp.dll RVA: 0x0016c35c
+BYTE *g_archiveRealReadFile;
+// samp.dll RVA: 0x0016c360
+BYTE *g_archiveRealCloseHandle;
+// samp.dll RVA: 0x0016c364
+BYTE *g_archiveRealGetFileType;
+// samp.dll RVA: 0x0016c368
+BYTE *g_archiveRealShowCursor;
+// samp.dll RVA: 0x00062720
+void ArchiveInstallFileHooks() {
+    if(g_archiveHooksInstalled)return;
+    memset(g_archiveOpenRecords,0,1000);memset(g_archiveRecordUsed,0,200);
+    g_archiveRealCreateFileA=DetourFunction(DetourFindFunction("kernel32.dll","CreateFileA"),(BYTE*)Arch_CreateFileA);
+    g_archiveRealReadFile=DetourFunction(DetourFindFunction("kernel32.dll","ReadFile"),(BYTE*)Arch_ReadFile);
+    g_archiveRealGetFileSize=DetourFunction(DetourFindFunction("kernel32.dll","GetFileSize"),(BYTE*)Arch_GetFileSize);
+    g_archiveRealSetFilePointer=DetourFunction(DetourFindFunction("kernel32.dll","SetFilePointer"),(BYTE*)Arch_SetFilePointer);
+    g_archiveRealCloseHandle=DetourFunction(DetourFindFunction("kernel32.dll","CloseHandle"),(BYTE*)Arch_CloseHandle);
+    g_archiveRealGetFileType=DetourFunction(DetourFindFunction("kernel32.dll","GetFileType"),(BYTE*)Arch_GetFileType);
+    g_archiveHooksInstalled=TRUE;
+}
+// samp.dll RVA: 0x000623f0
+void ArchiveInstallCursorHook() {
+    g_archiveRealShowCursor=DetourFunction(DetourFindFunction("user32.dll","ShowCursor"),(BYTE*)Arch_ShowCursor);
+}
+// samp.dll RVA: 0x00062810
+void ArchiveRemoveHooks() {
+    if(!g_archiveHooksInstalled)return;
+    DetourRemove(g_archiveRealCreateFileA,(BYTE*)Arch_CreateFileA);
+    DetourRemove(g_archiveRealReadFile,(BYTE*)Arch_ReadFile);
+    DetourRemove(g_archiveRealGetFileSize,(BYTE*)Arch_GetFileSize);
+    DetourRemove(g_archiveRealSetFilePointer,(BYTE*)Arch_SetFilePointer);
+    DetourRemove(g_archiveRealCloseHandle,(BYTE*)Arch_CloseHandle);
+    DetourRemove(g_archiveRealGetFileType,(BYTE*)Arch_GetFileType);
+    DetourRemove(g_archiveRealShowCursor,(BYTE*)Arch_ShowCursor);
+    g_archiveHooksInstalled=FALSE;
+}
+// samp.dll RVA: 0x000623e0
+int WINAPI Arch_ShowCursor(BOOL visible) { return visible?0:-1; }
+
+#include "archive/provider.h"
+#include "archive/name_digest.h"
+#include <ctype.h>
+// samp.dll RVA: 0x00140338
+DWORD g_archiveNextHandle=0xff000001;
+// samp.dll RVA: 0x00062000
+BOOL ArchiveIsCustomHandle(DWORD handle) { return handle>0xff000000&&handle<0xff000101; }
+// samp.dll RVA: 0x00062020
+int ArchiveFindUnusedRecord() {
+    for(int i=0;i<50;i++)if(g_archiveRecordUsed[i]==FALSE)return i;return -1;
+}
+// samp.dll RVA: 0x00062040
+int ArchiveFindRecord(HANDLE handle) {
+    for(int i=0;i<50;i++)if(g_archiveRecordUsed[i]==TRUE&&g_archiveOpenRecords[i].handle==handle)return i;return -1;
+}
+// samp.dll RVA: 0x00062070
+HANDLE ArchiveCreateRecord(DWORD index) {
+    int slot=ArchiveFindUnusedRecord();if(slot==-1)return 0;
+    g_archiveRecordUsed[slot]=TRUE;
+    ArchiveFileRecord &record=g_archiveOpenRecords[slot];
+    record.handle=(HANDLE)g_archiveNextHandle;g_archiveNextHandle+=2;record.position=0;
+    record.size=g_pArchive->GetFileSize(index);
+    record.start=g_pArchive->GetFileData(index);record.current=record.start;return record.handle;
+}
+// samp.dll RVA: 0x00062410
+char *ArchiveFileNameOnly(char *path) {
+    if(path[strlen(path)-1]==' ')path[strlen(path)-1]=0;
+    char *search=path+strlen(path);
+    while(search!=path) { if(*search=='/'||*search=='\\')return search+1;--search; }
+    return path;
+}
+// samp.dll RVA: 0x000624d0
+char *ArchiveLowercaseName(char *name) {
+    char *cursor=name;while(*cursor) { *cursor=(char)tolower(*cursor);++cursor; }return name;
+}
+// samp.dll RVA: 0x000625d0
+HANDLE WINAPI Arch_CreateFileA(LPCSTR name,DWORD access,DWORD share,LPSECURITY_ATTRIBUTES security,DWORD disposition,DWORD flags,HANDLE templateFile) {
+    DWORD index=g_pArchive->GetFileIndex(ArchiveFileNameOnly((char*)name));
+    if(index!=0xffffffff) {
+        HANDLE handle=ArchiveCreateRecord(index);char fileName[MAX_PATH];DWORD digest[5];
+        strcpy(fileName,ArchiveFileNameOnly((char*)name));ArchiveLowercaseName(fileName);
+        ArchiveComputeNameDigest(fileName,strlen(fileName),digest);ArchivePublishNameDigest(digest);return handle;
+    }
+    typedef HANDLE (WINAPI *Original)(LPCSTR,DWORD,DWORD,LPSECURITY_ATTRIBUTES,DWORD,DWORD,HANDLE);
+    return ((Original)g_archiveRealCreateFileA)(name,access,share,security,disposition,flags,templateFile);
+}
+// samp.dll RVA: 0x000620f0
+BOOL WINAPI Arch_ReadFile(HANDLE file,LPVOID buffer,DWORD requested,LPDWORD read,LPOVERLAPPED overlapped) {
+    int slot;
+    if(ArchiveIsCustomHandle((DWORD)file)&&(slot=ArchiveFindRecord(file))!=-1) {
+        ArchiveFileRecord &record=g_archiveOpenRecords[slot];DWORD size=record.size;HANDLE event=0;
+        if(overlapped) { record.position=overlapped->Offset;record.current=(BYTE*)((DWORD)record.start+overlapped->Offset);event=overlapped->hEvent; }
+        if(record.position>=size) { if(read)*read=0;if(event)SetEvent(event);SetLastError(ERROR_HANDLE_EOF);return TRUE; }
+        DWORD end=record.position+requested,count=requested;bool eof=end>=size;
+        if(eof)count=requested-(end-size);
+        memcpy(buffer,record.current,count);record.current+=count;record.position+=count;
+        if(read)*read=count;if(event)SetEvent(event);if(eof)SetLastError(ERROR_HANDLE_EOF);return TRUE;
+    }
+    typedef BOOL (WINAPI *Original)(HANDLE,LPVOID,DWORD,LPDWORD,LPOVERLAPPED);
+    return ((Original)g_archiveRealReadFile)(file,buffer,requested,read,overlapped);
+}
+// samp.dll RVA: 0x00062270
+DWORD WINAPI Arch_GetFileSize(HANDLE file,PDWORD high) {
+    int slot;
+    if(ArchiveIsCustomHandle((DWORD)file)&&(slot=ArchiveFindRecord(file))!=-1) { if(high)*high=0;return g_archiveOpenRecords[slot].size; }
+    typedef DWORD (WINAPI *Original)(HANDLE,PDWORD);return ((Original)g_archiveRealGetFileSize)(file,high);
+}
+// samp.dll RVA: 0x000622c0
+DWORD WINAPI Arch_SetFilePointer(HANDLE file,LONG distance,PLONG high,DWORD method) {
+    int slot;
+    if(ArchiveIsCustomHandle((DWORD)file)&&(slot=ArchiveFindRecord(file))!=-1) {
+        ArchiveFileRecord &record=g_archiveOpenRecords[slot];
+        if(method==FILE_BEGIN) { record.position=distance;record.current=(BYTE*)((DWORD)record.start+(DWORD)distance); }
+        else if(method==FILE_CURRENT) { record.position+=distance;record.current=(BYTE*)((DWORD)record.current+(DWORD)distance); }
+        else if(method==FILE_END) { record.position=record.size;record.current=(BYTE*)((DWORD)record.start+record.size); }
+        return record.position;
+    }
+    typedef DWORD (WINAPI *Original)(HANDLE,LONG,PLONG,DWORD);return ((Original)g_archiveRealSetFilePointer)(file,distance,high,method);
+}
+// samp.dll RVA: 0x00062360
+BOOL WINAPI Arch_CloseHandle(HANDLE file) {
+    int slot;if(ArchiveIsCustomHandle((DWORD)file)&&(slot=ArchiveFindRecord(file))!=-1) { g_archiveRecordUsed[slot]=FALSE;return TRUE; }
+    typedef BOOL (WINAPI *Original)(HANDLE);return ((Original)g_archiveRealCloseHandle)(file);
+}
+// samp.dll RVA: 0x000623a0
+DWORD WINAPI Arch_GetFileType(HANDLE file) {
+    int slot;if(ArchiveIsCustomHandle((DWORD)file)&&(slot=ArchiveFindRecord(file))!=-1)return FILE_TYPE_DISK;
+    typedef DWORD (WINAPI *Original)(HANDLE);return ((Original)g_archiveRealGetFileType)(file);
+}

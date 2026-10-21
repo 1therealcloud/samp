@@ -1,3 +1,4 @@
+#include "gui/chat_dependencies.h"
 #include "gui/input_native.h"
 // samp.dll RVA: 0x00068e10
 CInput::CInput(IDirect3DDevice9 *device) {
@@ -99,3 +100,99 @@ void CInput::Close() {
     }
 }
 
+
+// Recovered from 0x10069410. Byte identity is not required for register restores.
+// samp.dll RVA: 0x00069410
+void CInput::ProcessInput() {
+    if (!m_pEditbox)
+        return;
+
+    strncpy(m_szInput, m_pEditbox->GetText(), 128);
+    m_szInput[128] = 0;
+    if (strlen(m_szInput)) {
+        AddRecall(m_szInput);
+        m_nCurrentRecall = -1;
+
+        if (m_szInput[0] != '/') {
+            if (m_pDefaultCommand)
+                m_pDefaultCommand(m_szInput);
+        } else {
+            char *name = m_szInput + 1;
+            char *space = name;
+            while (*space && *space != ' ')
+                ++space;
+
+            if (!*space) {
+                InputCommand command = GetCommandHandler(name);
+                if (command)
+                    command("");
+                else if (g_pNetGame)
+                    Send(m_szInput);
+                else
+                    g_pChat->AddDebugMessage("I don't know that command.");
+            } else {
+                // Preserve the complete command before splitting its name.
+                char full[129];
+                strcpy(full, m_szInput);
+                *space = 0;
+                InputCommand command = GetCommandHandler(name);
+                if (command)
+                    command(space + 1);
+                else if (g_pNetGame)
+                    Send(full);
+                else
+                    g_pChat->AddDebugMessage("I don't know that command.");
+            }
+        }
+
+        m_szInput[0] = 0;
+        m_pEditbox->SetText("", false);
+    }
+
+    if (m_bEnabled) {
+        if (g_pChat)
+            g_pChat->ScrollToBottom();
+        Close();
+    }
+}
+
+#include "cmdwindow.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
+#include <string.h>
+
+// samp.dll RVA: 0x002aca24
+extern void *g_pNetGame;
+
+// Partial view: only the independently observed client field is described.
+#pragma pack(push, 1)
+struct InputNetGameView {
+    unsigned char unknown[0x2c];
+    RakClientInterface *client;
+};
+#pragma pack(pop)
+typedef char InputClientOffset[(offsetof(InputNetGameView, client) == 0x2c) ? 1 : -1];
+
+// Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
+// samp.dll RVA: 0x0011c310
+int g_inputCommandRpcId = 50;
+
+// Recovered from 0x10069340. The input length excludes the trailing NUL.
+// samp.dll RVA: 0x00069340
+void CInput::Send(const char *text) {
+    if (g_pNetGame) {
+        RakNet::BitStream stream;
+        int length = (int)strlen(text);
+        stream.Write(length);
+        stream.Write(text, length);
+        InputNetGameView *netGame = (InputNetGameView *)g_pNetGame;
+        netGame->client->RPC(&g_inputCommandRpcId, &stream,
+            HIGH_PRIORITY, RELIABLE, 0, false);
+    }
+}
+
+// samp.dll RVA: 0x00069250
+bool CInput::IsActive() {
+    if(m_pEditbox) return ChatImeActive();
+    return false;
+}

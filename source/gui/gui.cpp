@@ -3,7 +3,7 @@
 #include "gui/render_dependencies.h"
 #include "chatwindow.h"
 #include "cmdwindow.h"
-#include "game/input.h"
+#include "game/game.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 // samp.dll RVA: 0x002acab8
@@ -69,4 +69,156 @@ void ClientInitializeGui(){
         D3DXLoadSurfaceFromFileA(g_deviceCursorSurface,0,0,"mouse.png",0,D3DX_FILTER_NONE,0,0);
         if(g_deviceCursorSurface)g_gameD3DDevice->SetCursorProperties(0,0,g_deviceCursorSurface);
     }
+}
+
+#include "gui/render_dependencies.h"
+#include "gui/device_objects.h"
+#include "game/game.h"
+#include "chatwindow.h"
+#include <GetTime.h>
+#include <string.h>
+// Constructor-only opaque storage is intentional: the full UI interfaces remain open.
+typedef char CDeathWindowObservedExtent[(sizeof(CDeathWindow)==0x157)?1:-1];
+typedef char CScoreboardObservedExtent[(sizeof(CScoreboard)==0x44)?1:-1];
+typedef char CDialogObservedExtent[(sizeof(CDialog)==0x29d)?1:-1];
+typedef char CRenderPanelObservedExtent[(sizeof(CRenderPanel)==0x28)?1:-1];
+typedef char CDownloadWindowObservedExtent[(sizeof(CDownloadWindow)==0x260)?1:-1];
+typedef char CNetStatsObservedExtent[(sizeof(CNetStats)==0x18)?1:-1];
+typedef char CSrvNetStatsObservedExtent[(sizeof(CSrvNetStats)==0x18)?1:-1];
+typedef char CHelpDialogObservedExtent[(sizeof(CHelpDialog)==0x4)?1:-1];
+typedef char CChatBubbleObservedExtent[(sizeof(CChatBubble)==0x44a20)?1:-1];
+// samp.dll RVA: 0x0016c7f8
+DWORD g_srvNetStatsHistory[74];
+// samp.dll RVA: 0x0006a090
+CDeathWindow::CDeathWindow(IDirect3DDevice9 *device){
+    *(DWORD*)(nativeState+0x137)=0;*(DWORD*)(nativeState+0x13b)=0;
+    *(DWORD*)(nativeState+0x13f)=0;*(DWORD*)(nativeState+0x143)=0;
+    *(DWORD*)(nativeState+0x14b)=0;*(DWORD*)(nativeState+0x14f)=0;
+    *(DWORD*)(nativeState+0x153)=0;*(DWORD*)nativeState=1;
+    *(IDirect3DDevice9**)(nativeState+0x147)=device;
+    ResetFonts();memset(nativeState+4,0,0x127);
+}
+// samp.dll RVA: 0x0006e460
+CScoreboard::CScoreboard(IDirect3DDevice9 *device){
+    DWORD *state=(DWORD*)nativeState;
+    state[12]=(DWORD)device;state[13]=0;state[14]=0;state[15]=0;state[16]=0;state[1]=0;
+    if(!g_pGame||g_chatScreenWidth<801){state[5]=0x44200000;state[6]=0x43f00000;}
+    else {state[5]=0x44480000;state[6]=0x44160000;}
+    state[7]=0x42700000;state[8]=0;state[9]=0x3dae147b;state[10]=0x3e880000;state[11]=0x3ee00000;
+    Recalc();state[0]=0;
+}
+// samp.dll RVA: 0x0006e360
+void CScoreboard::Recalc(){
+    RECT rect;GetClientRect(g_inputGameWindow,&rect);
+    *(float*)(nativeState+0x10)=1.0f;
+    *(float*)(nativeState+8)=(float)rect.right*0.5f-*(float*)(nativeState+0x14)*0.5f;
+    *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
+}
+// samp.dll RVA: 0x0006eec0
+CDialog::CDialog(IDirect3DDevice9 *device){
+    DWORD *state=(DWORD*)nativeState;state[0]=(DWORD)device;state[7]=0;state[10]=0;state[13]=0;state[12]=0;state[11]=0;
+    state[3]=600;state[4]=300;state[5]=100;state[6]=30;memset(nativeState+0x89,0,0x204);
+}
+// samp.dll RVA: 0x00071100
+CRenderPanel::CRenderPanel(IDirect3DDevice9 *device){
+    DWORD *state=(DWORD*)nativeState;state[0]=(DWORD)device;state[8]=0;state[9]=0;state[3]=280;state[4]=150;state[5]=210;state[6]=30;state[7]=38;
+}
+// samp.dll RVA: 0x0006aa10
+CDownloadWindow::CDownloadWindow(IDirect3DDevice9 *device){
+    DWORD *state=(DWORD*)nativeState;state[0]=0;state[1]=0;state[2]=(DWORD)device;state[10]=0;state[12]=0;
+    state[5]=640;state[6]=300;state[7]=210;state[8]=30;state[13]=3;
+    memcpy(nativeState+0x38,"Type",5);
+    memcpy(nativeState+0xb9,"ID",3);
+    memcpy(nativeState+0x13a,"Progress",9);
+    state[0x8f]=180;state[0x90]=220;state[0x93]=0;state[0x94]=0xffffffff;
+    DWORD started=RakNet::GetTime();state[0x97]=0;state[0x96]=0;state[0x95]=started;
+}
+// samp.dll RVA: 0x000607c0
+CNetStats::CNetStats(IDirect3DDevice9 *device){
+    DWORD *state=(DWORD*)nativeState;state[2]=GetTickCount();state[1]=0;state[0]=0;state[4]=0;state[3]=0;state[5]=(DWORD)device;
+}
+// samp.dll RVA: 0x00070cc0
+CSrvNetStats::CSrvNetStats(IDirect3DDevice9 *device){
+    DWORD *state=(DWORD*)nativeState;state[2]=GetTickCount();state[1]=0;state[0]=0;state[4]=0;state[3]=0;state[5]=(DWORD)device;
+    memset(g_srvNetStatsHistory,0,sizeof(g_srvNetStatsHistory));
+}
+// samp.dll RVA: 0x0006b560
+CHelpDialog::CHelpDialog(IDirect3DDevice9 *device){*(IDirect3DDevice9**)nativeState=device;}
+// samp.dll RVA: 0x00066860
+CChatBubble::CChatBubble(){memset(nativeState,0,sizeof(nativeState));}
+
+#include "gui/render_dependencies.h"
+#include "gui/device_lifecycle.h"
+#include "gui/input_activity.h"
+#include "main.h"
+#include "cmdwindow.h"
+#include <DXUT.h>
+#include <DXUTgui.h>
+// samp.dll RVA: 0x0006e3c0
+void CScoreboard::GetRect(RECT *rect) {
+    int left=(int)*(float*)(nativeState+8);rect->left=left;
+    rect->right=left+(int)*(float*)(nativeState+0x14);
+    int top=(int)*(float*)(nativeState+12);rect->top=top;
+    rect->bottom=top+(int)*(float*)(nativeState+0x18);
+}
+// samp.dll RVA: 0x0006e410
+void CScoreboard::Close(bool restoreCursor) {
+    if(*(DWORD*)nativeState&&*(CDXUTDialog**)(nativeState+0x34)) {
+        (*(CDXUTDialog**)(nativeState+0x34))->SetVisible(false);
+        (*(CDXUTListBox**)(nativeState+0x38))->SetEnabled(false);
+        (*(CDXUTListBox**)(nativeState+0x38))->SetVisible(false);
+        if(restoreCursor)g_pGame->SetCursorMode(0,FALSE);
+        *(DWORD*)nativeState=0;
+    }
+}
+// samp.dll RVA: 0x0006ee10
+void CScoreboard::Enable() {
+    if(!*(DWORD*)nativeState&&*(CDXUTDialog**)(nativeState+0x34)) {
+        (*(CDXUTDialog**)(nativeState+0x34))->SetVisible(true);
+        (*(CDXUTListBox**)(nativeState+0x38))->SetEnabled(true);
+        (*(CDXUTListBox**)(nativeState+0x38))->UpdateRects();
+        (*(CDXUTListBox**)(nativeState+0x38))->SetVisible(true);
+        UpdateList();g_pGame->SetCursorMode(3,FALSE);*(DWORD*)nativeState=1;
+    }
+}
+// samp.dll RVA: 0x0006ef10
+bool CDialog::MsgProc(UINT message,WPARAM wparam,LPARAM lparam) {return CDXUTIMEEditBox::StaticMsgProc(message,wparam,lparam)!=false;}
+// samp.dll RVA: 0x0006ef30
+bool CDialog::IsInputHidden() {if(!*(DWORD*)(nativeState+0x24))return false;return ChatImeActive();}
+// samp.dll RVA: 0x0006d880
+BOOL CObjectSelection::MsgProc(UINT message,WPARAM,LPARAM) {if(enabled&&message==WM_LBUTTONUP){SendNotification();return TRUE;}return FALSE;}
+// samp.dll RVA: 0x00071010
+BOOL CTextDrawSelection::MsgProc(UINT message,WPARAM,LPARAM) {if(enabled&&message==WM_LBUTTONUP){if(unknown08!=0xffff)SendNotification();return TRUE;}return FALSE;}
+// samp.dll RVA: 0x0006d5c0
+void CObjectSelection::Enable(BOOL on) {
+    if(enabled){if(!on){g_pGame->SetCursorMode(0,TRUE);if(g_pInput->m_bEnabled){g_pInput->Close();g_pInput->Open();}}if(enabled){enabled=on;return;}}
+    if(on){g_pGame->SetCursorMode(0,TRUE);g_pGame->m_nInputEnableWaitFrames=0;g_pGame->ProcessInputEnabling();}
+    enabled=on;
+}
+// samp.dll RVA: 0x00070fc0
+void CTextDrawSelection::Disable() {
+    enabled=0;g_pGame->SetCursorMode(0,FALSE);
+    if(g_pInput->m_bEnabled){g_pInput->Close();g_pInput->Open();}
+    unknown08=0xffff;SendNotification();ResetTextDraws();
+}
+// samp.dll RVA: 0x00072660
+void CObjectEdit::Disable(BOOL send) {
+    BOOL notify=send!=0;unknown80=0;g_pGame->SetCursorMode(0,TRUE);
+    if(g_pInput->m_bEnabled){g_pInput->Close();g_pInput->Open();}
+    if(unknown78==2)SendAttachedEditEndNotification(notify);
+    if(unknown78==1)SendEditEndNotification(notify);
+}
+
+#include "gui/dialog_resources.h"
+#include "gui/device_lifecycle.h"
+#include "game/game.h"
+#include <DXUT.h>
+#include <DXUTgui.h>
+// Allocation extent and packed manager layout observed in the original constructor.
+typedef char DialogManagerExtent[(sizeof(CDXUTDialogResourceManager)==36)?1:-1];
+// samp.dll RVA: 0x000c6a60
+void ClientInitializeDialogResources() {
+    g_deviceDialogResources=new CDXUTDialogResourceManager;
+    g_deviceDialogResources->OnCreateDevice(g_gameD3DDevice);
+    g_deviceDialogResources->OnResetDevice();
 }

@@ -1,5 +1,5 @@
 #include "game/audio.h"
-#include "game/wrapper_commands.h"
+#include "game/scripting.h"
 // samp.dll RVA: 0x000a2030
 int CAudio::GetRadioStation() { unsigned station=*(BYTE*)0x8cb7e1;return station<=12?(int)station:-1; }
 // samp.dll RVA: 0x000a2060
@@ -21,4 +21,11 @@ void CAudio::Play(int sound,CVector position) {
     else if(sound<1000)SetOutdoorAmbienceTrack(sound);
     else if(sound<2000)Scripting::ProcessCommand(&g_audioPlay,(double)position.x,(double)position.y,(double)position.z,sound);
     else { Scripting::ProcessCommand(&g_audioUnload,1);Scripting::ProcessCommand(&g_audioLoad,1,sound);Scripting::ProcessCommand(&g_audioSetPosition,1,(double)position.x,(double)position.y,(double)position.z);m_bSoundLoaded=TRUE; }
+}
+
+// samp.dll RVA: 0x000a1ff0
+void CAudio::Process() {
+    if(m_bSoundLoaded==1&&Scripting::ProcessCommand(&g_audioIsLoaded,1)) {
+        Scripting::ProcessCommand(&g_audioStart,1);m_bSoundLoaded=2;
+    }
 }

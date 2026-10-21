@@ -1,5 +1,5 @@
 #include "game/camera.h"
-#include "game/wrapper_commands.h"
+#include "game/scripting.h"
 #include <string.h>
 // Native destructor clears only the low BYTE of the matrix pointer.
 // samp.dll RVA: 0x0009fdb0
@@ -67,3 +67,6 @@ void CCamera::Set(CVector position,CVector rotation) { Scripting::ProcessCommand
 void CCamera::PointAt(CVector point,int switchStyle) { Scripting::ProcessCommand(&g_cameraStop);m_pAttachedTo=0;Scripting::ProcessCommand(&g_cameraPointAt,(double)point.x,(double)point.y,(double)point.z,switchStyle); }
 // samp.dll RVA: 0x0009d670
 void CCamera::Detach() { m_pAttachedTo=0;Scripting::ProcessCommand(&g_cameraRestore); }
+
+// samp.dll RVA: 0x0009fda0
+CCamera::CCamera() { m_pMatrix=(CMatrix*)0xb6f99c;m_pAttachedTo=0; }

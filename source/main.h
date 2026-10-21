@@ -46,3 +46,107 @@ extern int g_chatScreenWidth; // GTA binding remains unresolved.
 // GTA SA VA: 0x00c97c1c (outside samp.dll)
 extern HWND g_inputGameWindow; // GTA binding remains unresolved.
 #endif
+
+#ifndef SAMP_CLIENT_BOOTSTRAP_H
+#define SAMP_CLIENT_BOOTSTRAP_H
+// samp.dll RVA: 0x002ac9c8
+extern HMODULE g_clientModule;
+// samp.dll RVA: 0x000c6780
+BOOL WINAPI ClientDllMain(HINSTANCE module,DWORD reason,LPVOID reserved);
+// samp.dll RVA: 0x000c6930
+BOOL WINAPI ClientDllMainForward(HINSTANCE module,DWORD reason,LPVOID reserved);
+// Crash dialog/report dependency details are in client/exceptions.h.
+// samp.dll RVA: 0x00060430
+LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS *exception);
+// Stored callback only; frame/device implementation remains unrecovered.
+// samp.dll RVA: 0x000c66b0
+void ClientGameLoop();
+#endif
+
+#ifndef SAMP_CLIENT_INITIALIZE_H
+#define SAMP_CLIENT_INITIALIZE_H
+struct IDirect3DDevice9;
+// Native start addresses; buffer backing windows are bounded by the next known native buffer.
+// Overflow adjacency is not established by these declarations.
+// samp.dll RVA: 0x002ac498
+extern char g_clientConfigFilename[520];
+// samp.dll RVA: 0x002ac6a0
+extern char g_clientChatFilename[264];
+// samp.dll RVA: 0x002abe70
+extern IDirect3DDevice9 *g_clientSavedGameDevice;
+// samp.dll RVA: 0x002aca40
+extern DWORD g_clientDeviceInitialized;
+// samp.dll RVA: 0x002aca44
+extern DWORD g_clientNetworkInitialized;
+// samp.dll RVA: 0x000c5e70
+void ClientInitializeDeviceAndGui();
+#include "cmdprocs.h"
+#include "game/debugscript.h"
+#endif
+
+#ifndef SAMP_CLIENT_DEVICE_SETUP_H
+#define SAMP_CLIENT_DEVICE_SETUP_H
+// Observed native buffers include the 261st byte cleared by startup.
+// samp.dll RVA: 0x002ac7a8
+extern char g_clientDataDirectory[261];
+// samp.dll RVA: 0x002ac8b0
+extern char g_clientCacheDirectory[261];
+// samp.dll RVA: 0x0016be78
+extern WNDPROC g_clientPreviousWindowProcedure;
+// samp.dll RVA: 0x002aca50
+extern DWORD g_clientPreviousRenderState;
+// samp.dll RVA: 0x002aca54
+extern DWORD g_clientRenderCaller;
+// samp.dll RVA: 0x002aca58
+extern DWORD g_clientRenderState;
+// samp.dll RVA: 0x002aca5c
+extern DWORD g_clientRenderValue;
+// Native _stat success test accepts any existing file type.
+// samp.dll RVA: 0x000b5900
+BOOL ClientPathExists(const char *path);
+// samp.dll RVA: 0x000c51c0
+void ClientInitializeCacheDirectory();
+// samp.dll RVA: 0x000c5340
+void ClientInitializePaths();
+// samp.dll RVA: 0x00061970
+BOOL ClientInstallWindowProcedure();
+// Native message routing; downstream input/UI dependencies remain explicit.
+// samp.dll RVA: 0x000610d0
+LRESULT CALLBACK ClientWindowProcedure(HWND window,UINT message,WPARAM wparam,LPARAM lparam);
+// samp.dll RVA: 0x0016be84
+extern DWORD g_clientInputOutsideClick;
+// samp.dll RVA: 0x0016be88
+extern DWORD g_clientScoreboardOutsideClick;
+// samp.dll RVA: 0x00061010
+BOOL ClientHandleCharacter(unsigned int character);
+// samp.dll RVA: 0x00060d90
+void ClientToggleWindowedMode();
+// Keyboard release dispatcher remains a dependency.
+// samp.dll RVA: 0x00060de0
+BOOL ClientHandleKeyRelease(unsigned int key);
+// Naked two-word GTA render-state callback; tail-jumps through original target.
+// samp.dll RVA: 0x000c5450
+void ClientRenderStateHook();
+#endif
+
+#ifndef SAMP_CLIENT_FRAME_H
+#define SAMP_CLIENT_FRAME_H
+// samp.dll RVA: 0x002aca60
+extern DWORD g_clientIntegrityFailures;
+// samp.dll RVA: 0x002aca64
+extern DWORD g_clientIntegrityFailed;
+// samp.dll RVA: 0x002aca68
+extern DWORD g_clientSkipGameFrame;
+// samp.dll RVA: 0x002ac9c0
+extern DWORD g_clientQuitRequested;
+// samp.dll RVA: 0x002ac9c4
+extern DWORD g_clientQuitStarted;
+// samp.dll RVA: 0x000c6630
+void ClientProcessFrame();
+// Naked callback preserves the two native PUSHAD regions and GTA return registers.
+// samp.dll RVA: 0x000c66b0
+void ClientGameLoop();
+// Full coordinator is recovered in the optional v105 profile; downstream startup dependencies remain open.
+// samp.dll RVA: 0x000c5e70
+void ClientInitializeDeviceAndGui();
+#endif

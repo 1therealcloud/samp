@@ -119,3 +119,78 @@ void CFonts::DrawLicensePlateText(const char *text,RECT rect,D3DCOLOR color) {
     m_pLicensePlateFont->DrawTextA(sprite,text,-1,&rect,DT_NOCLIP|DT_CENTER|DT_VCENTER,color);
     sprite->End();
 }
+
+#include "gui/font_wrapper.h"
+#include <stdlib.h>
+
+// samp.dll RVA: 0x0006b320
+void CFonts::Reset() {
+    if (!m_pDevice) return;
+    if (m_pFont) { m_pFont->Release(); m_pFont = 0; }
+    if (m_pLittleFont) { m_pLittleFont->Release(); m_pLittleFont = 0; }
+    if (m_pShadow) { m_pShadow->Release(); m_pShadow = 0; }
+    if (m_pLittleShadow) { m_pLittleShadow->Release(); m_pLittleShadow = 0; }
+    if (m_pDefaultSprite) { m_pDefaultSprite->Release(); m_pDefaultSprite = 0; }
+    if (m_pLicensePlateFont) { m_pLicensePlateFont->Release(); m_pLicensePlateFont = 0; }
+
+    int height = FontGetHeight();
+    int smallHeight = height - 2;
+    int weight = FontGetWeight();
+    const char *face = FontGetFace();
+    ID3DXFont *font;
+    D3DXCreateFontA(m_pDevice, height, 0, weight, 1, FALSE, DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, face, &font);
+    CFontWrapper *wrapper = new CFontWrapper;
+    wrapper->font = font;
+    m_pFont = wrapper;
+    D3DXCreateFontA(m_pDevice, height, 0, weight, 1, FALSE, DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, face, &m_pShadow);
+    D3DXCreateFontA(m_pDevice, smallHeight, 0, weight, 1, FALSE, DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, face, &font);
+    wrapper = new CFontWrapper;
+    wrapper->font = font;
+    m_pLittleFont = wrapper;
+    D3DXCreateFontA(m_pDevice, smallHeight, 0, weight, 1, FALSE, DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, face, &m_pLittleShadow);
+    D3DXCreateSprite(m_pDevice, &m_pDefaultSprite);
+    // The native Reset overwrites this pointer without freeing its old buffer.
+    m_szTempBuffer = (char *)calloc(1, 100001);
+    D3DXCreateFontA(m_pDevice, 38, 10, 700, 1, FALSE, DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, "Arial", &m_pLicensePlateFont);
+    wrapper = new CFontWrapper;
+    wrapper->font = m_pLicensePlateFont;
+    m_pLicensePlateFont = wrapper;
+    FontSize size;
+    GetTextScreenSize(&size, "Y", 0);
+    m_nFontHeight = size.cy;
+    GetLittleTextScreenSize(&size, "Y", 0);
+    m_nLittleFontHeight = size.cy;
+}
+
+#include "config.h"
+// GTA SA VA: 0x00c17044 (outside samp.dll)
+extern int g_chatScreenWidth;
+
+// samp.dll RVA: 0x000c6950
+int FontGetHeight() {
+    int height;
+    if (g_chatScreenWidth < 1024) height = 14;
+    else if (g_chatScreenWidth < 1400) height = 16;
+    else if (g_chatScreenWidth < 1600) height = 18;
+    else height = 20;
+    return height + g_pConfig->GetIntValue("fontsize") * 2;
+}
+
+// samp.dll RVA: 0x000c6a00
+int FontGetWeight() {
+    int weight = g_pConfig->GetIntValue("fontweight");
+    if (weight == 0) return 700;
+    return weight == 1 ? 400 : 700;
+}
+
+// samp.dll RVA: 0x000c6a30
+const char *FontGetFace() {
+    if (g_pConfig && g_pConfig->GetStringValue("fontface"))
+        return g_pConfig->GetStringValue("fontface");
+    return "Arial";
+}

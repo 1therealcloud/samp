@@ -66,8 +66,8 @@ class CDialog {public:
     // samp.dll RVA: 0x0006f2d0
     void Draw();
 };
-#include "gui/object_edit.h"
-#include "gui/object_selection.h"
+#include "objectedit.h"
+#include "objectselection.h"
 class CTextDrawSelection {public:
     // Inline coordinator initialization; no standalone native constructor entry established.
     DWORD enabled,unknown04;WORD unknown08;

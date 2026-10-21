@@ -1,7 +1,7 @@
 #include "gui/device_lifecycle.h"
 #include "d3dhook/texture_binding.h"
 #include "game/hooks_independent.h"
-#include "game/input.h"
+#include "game/game.h"
 #include "net/vehiclepool.h"
 #include "chatwindow.h"
 #include "cmdwindow.h"

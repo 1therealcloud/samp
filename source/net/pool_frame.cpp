@@ -3,7 +3,7 @@
 #include "game/object.h"
 #include "gui/device_objects.h"
 #include "gui/device_lifecycle.h"
-#include "gui/textdraw.h"
+#include "game/textdraw.h"
 #include "d3dhook/texture_binding.h"
 #include <GetTime.h>
 

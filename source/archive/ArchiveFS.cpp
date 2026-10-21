@@ -15,7 +15,7 @@
 #include "Obfuscator.h"
 
 #ifndef ARCTOOL
-//#include "../main.h"
+//#include "main.h"
 //#include "../game/Util.h"
 // Client diagnostics header is unused in the release archive path.
 #endif

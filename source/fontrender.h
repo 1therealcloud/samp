@@ -37,3 +37,13 @@ public:
 typedef char FontsSize[(sizeof(CFonts)==40)?1:-1];
 typedef char FontsScratchOffset[(offsetof(CFonts,m_szTempBuffer)==28)?1:-1];
 #endif
+
+#ifndef SAMP_RECOVERED_FONT_SETTINGS_H
+#define SAMP_RECOVERED_FONT_SETTINGS_H
+// samp.dll RVA: 0x000c6950
+int FontGetHeight();
+// samp.dll RVA: 0x000c6a00
+int FontGetWeight();
+// samp.dll RVA: 0x000c6a30
+const char *FontGetFace();
+#endif

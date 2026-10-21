@@ -1,5 +1,5 @@
 #include "game/device_integrity.h"
-#include "client/frame.h"
+#include "main.h"
 #include <stdlib.h>
 // samp.dll RVA: 0x0018dc24
 DWORD g_integrityVehicleChecksum;

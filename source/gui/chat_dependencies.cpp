@@ -3,11 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-// samp.dll RVA: 0x00069250
-bool CInput::IsActive() {
-    if(m_pEditbox) return ChatImeActive();
-    return false;
-}
 
 // samp.dll RVA: 0x000b5950
 int ChatIsHexDigit(char value) {

@@ -1,7 +1,7 @@
 #ifndef SAMP_GAME_HOOKS_CONTROL_H
 #define SAMP_GAME_HOOKS_CONTROL_H
 #include "game/hooks_render.h"
-#include "client/exceptions.h"
+#include "exceptions.h"
 #include "gui/textdraw_texture.h"
 #include "game/playerped.h"
 #include "game/aimstuff.h"
