@@ -75,4 +75,11 @@ typedef char NativeObjectAllocationExtent[(sizeof(CObject)==0x119c)?1:-1];
 extern void *g_objectSharedMaterialTexture;
 // samp.dll RVA: 0x000b3830
 void *__stdcall GamePoolObjectGetAt(int handle);
+// Raw render traversal callbacks; the native entries do not establish a return value.
+// samp.dll RVA: 0x000a8430
+void __cdecl ObjectApplyMaterials(void *atomic,void *object);
+// samp.dll RVA: 0x000a86c0
+void __cdecl ObjectSaveMaterials(void *atomic,void *object);
+// samp.dll RVA: 0x000a8740
+void __cdecl ObjectRestoreMaterials(void *atomic,void *object);
 #endif

@@ -659,3 +659,49 @@ BOOL CObject::IsMoving() {
     if(*(WORD*)(state+0xbe)!=0xffff)return TRUE;
     return state[0x1af]&1;
 }
+
+// samp.dll RVA: 0x000a8430
+void __cdecl ObjectApplyMaterials(void *atomic,void *object) {
+    BYTE *a=(BYTE*)atomic,*state=(BYTE*)object;
+    if(*a!=1 || !*(void**)(a+0x18) || !state)return;
+    BYTE *geometry=*(BYTE**)(a+0x18);int count=*(int*)(geometry+0x24);if(count>16)count=16;
+    for(int i=0;i<count;++i) {
+        BYTE *material=(*(BYTE***)(*(BYTE**)(a+0x18)+0x20))[i];if(!material)continue;
+        DWORD texture=*(DWORD*)(state+0x217+i*4);
+        if(texture){*(DWORD*)material=texture;*(DWORD*)(state+0x1cb)=1;}
+        if(*(DWORD*)(state+0x257+i*4)) {
+            *(DWORD*)(*(BYTE**)(a+0x18)+8)|=0x40;
+            *(DWORD*)(*(BYTE**)(a+0x18)+8)&=~8;
+            *(DWORD*)(material+0xc)=0x3f800000;*(DWORD*)(material+0x10)=0;*(DWORD*)(material+0x14)=0x3f800000;
+            *(DWORD*)(material+4)=*(DWORD*)(state+0x257+i*4);*(DWORD*)(state+0x1cf)=1;
+        }
+    }
+}
+// samp.dll RVA: 0x000a86c0
+void __cdecl ObjectSaveMaterials(void *atomic,void *object) {
+    BYTE *a=(BYTE*)atomic,*state=(BYTE*)object;
+    if(*a!=1 || !*(void**)(a+0x18) || !state)return;
+    BYTE *geometry=*(BYTE**)(a+0x18);int count=*(int*)(geometry+0x24);if(count>16)count=16;
+    *(DWORD*)(state+0x2d7)=*(DWORD*)(geometry+8);
+    for(int i=0;i<count;++i) {
+        BYTE *material=(*(BYTE***)(*(BYTE**)(a+0x18)+0x20))[i];if(!material)continue;
+        *(DWORD*)(state+0x1d7+i*4)=*(DWORD*)material;
+        *(DWORD*)(state+0x297+i*4)=*(DWORD*)(material+4);
+    }
+    *(DWORD*)(state+0x1c7)=1;
+}
+// samp.dll RVA: 0x000a8740
+void __cdecl ObjectRestoreMaterials(void *atomic,void *object) {
+    BYTE *a=(BYTE*)atomic,*state=(BYTE*)object;
+    if(*a!=1 || !*(void**)(a+0x18) || !state)return;
+    BYTE *geometry=*(BYTE**)(a+0x18);int count=*(int*)(geometry+0x24);if(count>16)count=16;
+    for(int i=0;i<count;++i) {
+        BYTE *material=(*(BYTE***)(*(BYTE**)(a+0x18)+0x20))[i];if(!material)continue;
+        if(*(DWORD*)(state+0x217+i*4) && *(DWORD*)material!=*(DWORD*)(state+0x1d7+i*4))
+            *(DWORD*)material=*(DWORD*)(state+0x1d7+i*4);
+        if(*(DWORD*)(state+0x1cf) && *(DWORD*)(state+0x257+i*4))
+            *(DWORD*)(material+4)=*(DWORD*)(state+0x297+i*4);
+    }
+    *(DWORD*)(*(BYTE**)(a+0x18)+8)=*(DWORD*)(state+0x2d7);
+    *(DWORD*)(state+0x1cf)=0;*(DWORD*)(state+0x1cb)=0;
+}
