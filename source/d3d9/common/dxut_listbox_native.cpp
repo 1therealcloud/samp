@@ -113,6 +113,17 @@ void CDXUTScrollBarDL::Scroll(int delta) {position+=delta;Cap();UpdateThumbRect(
 // samp.dll RVA: 0x00084e70
 bool CDXUTScrollBarDL::HandleKeyboard(UINT,WPARAM,LPARAM) {return false;}
 
+// samp.dll RVA: 0x0008e810
+CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog *parent):CDXUTControl(0),scrollBar(parent) {
+    m_pDialog=parent;style=0;selectionStart=0;drag=false;textHeight=0;
+    columnCount=0;m_Type=DXUT_CONTROL_LISTBOX;scrollBarWidth=16;
+    selected=-1;border=6;margin=5;
+    columnWidths[0]=columnWidths[1]=columnWidths[2]=0;
+}
+
+// samp.dll RVA: 0x0008e8d0
+CDXUTListBoxDL::~CDXUTListBoxDL() {RemoveAllItems();}
+
 // samp.dll RVA: 0x0008e8c0
 HRESULT CDXUTListBoxDL::OnInit() {
     return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
@@ -342,7 +353,7 @@ void CDXUTListBoxDL::SelectItem(int index) {
         if(style&1)items[selected]->selected=true;
         selectionStart=selected;scrollBar.ShowItem(selected);
     }
-    CDXUTDialog *parent=*(CDXUTDialog**)(control+0x18);
+    CDXUTDialog *parent=m_pDialog;
     parent->SendEvent(0x702,true,(CDXUTControl*)this);
 }
 

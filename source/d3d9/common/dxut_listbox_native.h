@@ -104,10 +104,9 @@ public:
 extern bool g_dxutScrollDragging;
 // samp.dll RVA: 0x00181a90
 extern int g_dxutScrollThumbOffsetY;
-class CDXUTListBoxDL {
+class CDXUTListBoxDL : public CDXUTControl {
     friend class CDialog;
 public:
-    BYTE control[0x4d];
     int columnCount;
     int columnWidths[3];
     CDXUTScrollBarDL scrollBar;
@@ -117,12 +116,23 @@ public:
     int selected,selectionStart;
     bool drag;
     CGrowableArray<DXUTListBoxItemDL*> items;
+    // samp.dll RVA: 0x0008e810
+    CDXUTListBoxDL(CDXUTDialog *parent);
+    // samp.dll RVA: 0x0008e8d0
+    virtual ~CDXUTListBoxDL();
+    // Declaration-only native virtuals; no recovered body yet.
+    // samp.dll RVA: 0x0008e900
+    virtual void Render(IDirect3DDevice9 *device,float elapsed);
+    // samp.dll RVA: 0x0008a500
+    virtual bool HandleKeyboard(UINT message,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x0008a6e0
+    virtual bool HandleMouse(UINT message,POINT point,WPARAM wparam,LPARAM lparam);
     // samp.dll RVA: 0x00088700
-    void UpdateRects();
+    virtual void UpdateRects();
     // samp.dll RVA: 0x0008e8c0
-    HRESULT OnInit();
+    virtual HRESULT OnInit();
     // samp.dll RVA: 0x0008e8a0
-    bool CanHaveFocus();
+    virtual bool CanHaveFocus();
     // samp.dll RVA: 0x0008a270
     HRESULT AddItem(const char *text,void *data,int row);
     // samp.dll RVA: 0x00088880
@@ -135,12 +145,7 @@ public:
     void SelectItem(int index);
     // samp.dll RVA: 0x000888f0
     int GetSelectedIndex(int previous=-1);
-private:
-    // Declaration-only native lifecycle; the observed view must not be constructed.
-    // samp.dll RVA: 0x0008e810
-    CDXUTListBoxDL(CDXUTDialog *parent);
-    // samp.dll RVA: 0x0008e8d0
-    ~CDXUTListBoxDL();
+
 };
 #pragma pack(pop)
 typedef char DLListItemExtent[(sizeof(DXUTListBoxItemDL)==0x29e)?1:-1];
