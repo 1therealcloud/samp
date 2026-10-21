@@ -957,7 +957,7 @@ BYTE __stdcall GameGetModelFlagsByte(int model) {
 }
 // Native exposes AX; this reads the full overlapping two-byte field.
 // samp.dll RVA: 0x000b6000
-WORD __cdecl GameGetModelFlagsWord(int model) {
+WORD __stdcall GameGetModelFlagsWord(int model) {
     BYTE *info=(BYTE*)GameGetModelInfo(model);
     return info?*(WORD*)(info+0x12):0;
 }

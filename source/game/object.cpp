@@ -587,3 +587,42 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
         *(DWORD*)(state+0x10cb+i*4)=0;*(DWORD*)(state+0x110b+i*4)=0;*(DWORD*)(state+0x114b+i*4)=0;
     }
 }
+
+// samp.dll RVA: 0x000a79c0
+BOOL CObject::IsAdded() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    return m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40 &&
+        *(DWORD*)((BYTE*)m_pGameEntity+0x18) && ((BYTE*)this)[0x48]?TRUE:FALSE;
+}
+// samp.dll RVA: 0x000a8c30
+void CObject::NativeA8C30() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40) {
+        *(DWORD*)((BYTE*)m_pGameEntity+0x1c)|=0x10000000;
+        void *backend=m_pGameEntity;DWORD *table=*(DWORD**)backend;
+        __asm {mov ecx,backend}
+        __asm {mov eax,table}
+        __asm {call dword ptr [eax+0x4c]}
+        ((BYTE*)this)[0x1194]=1;
+    }
+}
+// samp.dll RVA: 0x000a8c70
+void CObject::NativeA8C70() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40 && ((BYTE*)this)[0x1194]) {
+        void *backend=m_pGameEntity;DWORD *table=*(DWORD**)backend;
+        __asm {push 1}
+        __asm {mov ecx,backend}
+        __asm {mov eax,table}
+        __asm {call dword ptr [eax+0x50]}
+        ((BYTE*)this)[0x1194]=0;
+    }
+}
+// samp.dll RVA: 0x000a8cc0
+bool CObject::HasRwFrameFlag8() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    if(!m_pGameEntity || *(DWORD*)m_pGameEntity==0x863c40)return false;
+    BYTE *rw=(BYTE*)GetRwObject();if(!rw)return false;
+    BYTE *frame=*(BYTE**)(rw+4);if(!frame || *frame!=1)return false;
+    BYTE *data=*(BYTE**)(frame+0x18);return data && (data[8]&8)!=0;
+}

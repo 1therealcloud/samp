@@ -18,6 +18,14 @@ public:
     virtual void Add();
     // samp.dll RVA: 0x000a79f0
     virtual void Remove();
+    // samp.dll RVA: 0x000a79c0
+    BOOL IsAdded();
+    // samp.dll RVA: 0x000a8c30
+    void NativeA8C30();
+    // samp.dll RVA: 0x000a8c70
+    void NativeA8C70();
+    // samp.dll RVA: 0x000a8cc0
+    bool HasRwFrameFlag8();
     // samp.dll RVA: 0x000a8bc0
     void UpdateCachedCentre();
     // samp.dll RVA: 0x000a7b40
