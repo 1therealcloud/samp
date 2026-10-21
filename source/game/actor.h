@@ -7,6 +7,10 @@ class CActor : public CEntity {
     void *actorBackend;
     BYTE unknown4c[10];
 public:
+    // samp.dll RVA: 0x0009bee0
+    void PerformAnimation(const char *name,const char *library,float speed,DWORD loop,DWORD lockX,DWORD lockY,DWORD freeze,int time);
+    // samp.dll RVA: 0x0009bfd0
+    void ClearTasks();
     // samp.dll RVA: 0x0009c1d0
     virtual ~CActor();
     // samp.dll RVA: 0x0009be80
@@ -37,4 +41,8 @@ public:
     void SetInvulnerable(BYTE enabled);
 };
 #pragma pack(pop)
+// samp.dll RVA: 0x00181e5c
+extern void *g_actorTaskBackend;
+// samp.dll RVA: 0x0009bfb0
+DWORD GameClearActorTasks();
 #endif

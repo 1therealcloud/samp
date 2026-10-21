@@ -66,3 +66,30 @@ void CActor::SetRotation(float heading) {
 }
 // samp.dll RVA: 0x0009c1d0
 CActor::~CActor(){Destroy();}
+
+#include "game/game.h"
+// samp.dll RVA: 0x0011e2e4
+const Scripting::OpcodeInfo g_actorAnimationCommand={0x812,"issfiiiii"};
+// samp.dll RVA: 0x0009bee0
+void CActor::PerformAnimation(const char *name,const char *library,float speed,DWORD loop,DWORD lockX,DWORD lockY,DWORD freeze,int time) {
+    if(!actorBackend || !GamePoolPedGetAt(m_nHandle))return;
+    if(_stricmp(library,g_pedBlockedAnimationLibrary)==0)return;
+    if(!g_pGame->IsAnimationLoaded(library)) {
+        g_pGame->RequestAnimation(library);
+        if(!g_pGame->IsAnimationLoaded(library)) {
+            void (WINAPI *volatile sleep)(DWORD)=::Sleep;int attempts=0;
+            do {sleep(1);if(++attempts==15)return;}while(!g_pGame->IsAnimationLoaded(library));
+        }
+    }
+    Scripting::ProcessCommand(&g_actorAnimationCommand,m_nHandle,name,library,(double)speed,loop,lockX,lockY,freeze,time);
+}
+// samp.dll RVA: 0x00181e5c
+void *g_actorTaskBackend;
+// samp.dll RVA: 0x0009bfb0
+DWORD GameClearActorTasks() {
+    void *tasks=*(void**)((BYTE*)g_actorTaskBackend+0x47c);
+    // GTA SA virtual address: task clearing backend, thiscall with argument1.
+    ((void(__fastcall*)(void*,void*,int))0x601640)(tasks,0,1);return 1;
+}
+// samp.dll RVA: 0x0009bfd0
+void CActor::ClearTasks(){g_actorTaskBackend=actorBackend;if(actorBackend)GameClearActorTasks();}
