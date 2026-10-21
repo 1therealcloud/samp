@@ -305,3 +305,185 @@ void CObject::ProcessStreaming() {
         }
     }
 }
+
+#include "game/playerped.h"
+#include "net/pool_frame.h"
+// samp.dll RVA: 0x00118200
+extern const float g_objectStreamingNearDistance=300.0f;
+// samp.dll RVA: 0x00117878
+extern const float g_objectStreamingVehicleMargin=30.0f;
+// samp.dll RVA: 0x001181b0
+extern const float g_objectTurnVelocityScale=0.01f;
+// samp.dll RVA: 0x0011ee78
+extern const float g_objectNegativeTurnVelocityLimit=-0.001f;
+// samp.dll RVA: 0x000a9240
+void CObject::Process(float elapsedSeconds) {
+    BYTE *state=(BYTE*)this;
+    if(!*(DWORD*)(state+0x118b) && !(*(float*)(state+0x54)>g_objectStreamingNearDistance) && !state[0x1199]) {
+        if(!GetRwObject() && g_pGame->GetPlayerPed()->IsInVehicle()) {
+            bool within;
+            __asm {
+                mov ecx,state
+                call CEntity::GetDistanceToCamera
+                mov edx,state
+                fld dword ptr [edx+0x54]
+                fsub g_objectStreamingVehicleMargin
+                fcompp
+                fnstsw ax
+                test ah,0x41
+                sete within
+            }
+            if(within && !g_pGame->IsModelAvailable(*(int*)(state+0x4e)))
+                g_pGame->RequestModel(*(int*)(state+0x4e),2);
+        }
+    } else ProcessStreaming();
+    WORD vehicle=*(WORD*)(state+0xbe);
+    if(vehicle!=0xffff) {
+        if(!g_pNetGame)return;
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de),*pool=*(BYTE**)(pools+0xc);
+        if(!pool || vehicle>=2000 || !*(DWORD*)(pool+0x3074+vehicle*4))return;
+        CVehicle *attached=*(CVehicle**)(pool+0x1134+vehicle*4);
+        if(attached && ((CEntity*)attached)->DoesExist())AttachToVehicle(attached);
+        return;
+    }
+    WORD object=*(WORD*)(state+0xc0);
+    if(object!=0xffff) {
+        if(!g_pNetGame)return;
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);CObjectPool *pool=*(CObjectPool**)(pools+0x14);
+        if(!pool)return;CObject *attached=(CObject*)pool->Get(object);
+        if(attached)AttachToObject(attached);return;
+    }
+    if(!(state[0x1af]&1))return;
+    CVector velocity={0,0,0};CMatrix matrix;GetMatrix(&matrix);
+    float step=elapsedSeconds**(float*)(state+0x1b0);
+    float remaining=GetDistanceToTarget(&matrix);
+    DWORD now=RakNet::GetTime();int elapsedTicks=(int)(now-*(DWORD*)(state+0x15f));
+    float clockDistance;
+    __asm {
+        fild elapsedTicks
+        fmul g_objectPoolSecondsPerTick
+        mov eax,now
+        mov edx,state
+        mov dword ptr [edx+0x163],eax
+        fmul dword ptr [edx+0x1b0]
+        fstp clockDistance
+    }
+    CVector old=matrix.position;
+    float travelled=*(float*)(state+0x15b)-remaining;
+    if(step>=remaining) {
+        SetSpeed(velocity);SetTurnSpeed(velocity);memcpy(&matrix.position,state+0x10b,12);
+        if(state[0x1b5])GameQuaternionToMatrix((GameQuaternion*)(state+0x167),&matrix);
+        ApplyMatrix(matrix);Stop();return;
+    }
+    if(!(elapsedSeconds>0.0f))return;
+    float remainingFraction,progress;CMatrix *moving=&matrix;CVector *previous=&old;
+    // Native retains reciprocal/dx intermediates in ST0 while spilling dy/dz.
+    __asm {
+        mov esi,state
+        mov edx,moving
+        fld remaining
+        fdiv step
+        fdivr g_quaternionMatrixOne
+        fld dword ptr [esi+0x10b]
+        fsub dword ptr [edx+0x30]
+        fmul st,st(1)
+        fld dword ptr [esi+0x10f]
+        fsub dword ptr [edx+0x34]
+        fmul st,st(2)
+        fstp velocity.y
+        fld dword ptr [esi+0x113]
+        fsub dword ptr [edx+0x38]
+        fmul st,st(2)
+        fstp velocity.z
+        fadd dword ptr [edx+0x30]
+        fstp dword ptr [edx+0x30]
+        fstp st
+        fld velocity.y
+        fadd dword ptr [edx+0x34]
+        fstp dword ptr [edx+0x34]
+        fld velocity.z
+        fadd dword ptr [edx+0x38]
+        fstp dword ptr [edx+0x38]
+        fld remaining
+        fdiv dword ptr [esi+0x15b]
+        fld g_quaternionMatrixOne
+        fsub st,st(1)
+        fstp progress
+        fstp remainingFraction
+        mov eax,previous
+        fld g_quaternionMatrixOne
+        fdiv elapsedSeconds
+        fld dword ptr [edx+0x30]
+        fsub dword ptr [eax]
+        fmul st,st(1)
+        fld dword ptr [edx+0x34]
+        fsub dword ptr [eax+4]
+        fmul st,st(2)
+        fstp velocity.y
+        fld dword ptr [edx+0x38]
+        fsub dword ptr [eax+8]
+        fmul st,st(2)
+        fstp velocity.z
+        fmul g_pedDrunkShakeScale
+        fstp velocity.x
+        fstp st
+        fld velocity.y
+        fmul g_pedDrunkShakeScale
+        fstp velocity.y
+        fld velocity.z
+        fmul g_pedDrunkShakeScale
+        fstp velocity.z
+    }
+    bool correct;
+    __asm {
+        push travelled
+        push clockDistance
+        call FloatOffset
+        add esp,8
+        fcomp g_objectMutationStep
+        fnstsw ax
+        test ah,0x41
+        sete correct
+    }
+    if(correct && (clockDistance>travelled || travelled>clockDistance)) {
+        if(clockDistance>travelled) {
+            __asm {
+                fld clockDistance
+                fsub travelled
+                fmul g_objectMutationStep
+                fadd g_quaternionMatrixOne
+            }
+        } else {
+            __asm {
+                fld travelled
+                fsub clockDistance
+                fmul g_objectMutationStep
+                fsubr g_quaternionMatrixOne
+            }
+        }
+        __asm {
+            fld velocity.x
+            fmul st,st(1)
+            fstp velocity.x
+            fld velocity.y
+            fmul st,st(1)
+            fstp velocity.y
+            fmul velocity.z
+            fstp velocity.z
+        }
+    }
+    SetSpeed(velocity);ApplyLinearSpeed();CMatrix current;
+    if(state[0x1b5]) {
+        float x,y,z;GetEulerInverted(&x,&y,&z);
+        float desired=*(float*)(state+0x19f)-remainingFraction**(float*)(state+0x1ab);
+        CVector turn={0,0,GetAngleDifference(z,desired)*g_objectTurnVelocityScale};
+        if(turn.z>g_objectPoolSecondsPerTick)turn.z=g_objectPoolSecondsPerTick;
+        else if(turn.z<g_objectNegativeTurnVelocityLimit)turn.z=g_objectNegativeTurnVelocityLimit;
+        SetTurnSpeed(turn);GetMatrix(&current);
+        GameQuaternionSlerp((GameQuaternion*)(state+0x177),(GameQuaternion*)(state+0x187),
+            (GameQuaternion*)(state+0x167),progress);
+        GameQuaternionNormalize((GameQuaternion*)(state+0x177));
+        GameQuaternionToMatrix((GameQuaternion*)(state+0x177),&current);
+    } else GetMatrix(&current);
+    ApplyMatrix(current);
+}
