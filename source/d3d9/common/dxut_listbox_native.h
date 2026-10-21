@@ -5,16 +5,11 @@
 #include <d3dx9.h>
 #include <DXUT.h>
 #include <DXUTmisc.h>
+#include <DXUTgui.h>
 class CDXUTDialog;
 #pragma pack(push,1)
 class CDXUTDialogDL;
-// Native ANSI button allocation view; lifecycle/vtable are still dependencies.
-class CDXUTButtonDL {
-    BYTE storage[0x152];
-    friend class CDXUTDialogDL;
-    // samp.dll RVA: 0x0008df20
-    CDXUTButtonDL(CDXUTDialog *parent);
-};
+class CDXUTButtonDL;
 // ANSI factory view of the same parent, not a separately constructed dialog.
 class CDXUTDialogDL {public:
     // samp.dll RVA: 0x00090790
@@ -27,12 +22,40 @@ struct CDXUTEditBoxDL {
     // samp.dll RVA: 0x000850d0
     const char *GetText();
 };
-// ANSI static-text prefix only, not a constructed or complete virtual control.
-struct CDXUTStaticDL {
-    BYTE control[0x4d];
+// Native ANSI controls share the established packed SDK base, not its wide text.
+struct CDXUTStaticDL : CDXUTControl {
     char text[260];
+    // samp.dll RVA: 0x0008de50
+    CDXUTStaticDL(CDXUTDialog *parent);
+    // samp.dll RVA: 0x0008dec0
+    virtual ~CDXUTStaticDL();
+    // samp.dll RVA: 0x0008ded0
+    virtual void Render(IDirect3DDevice9 *device,float elapsed);
+    // samp.dll RVA: 0x0008deb0
+    virtual BOOL ContainsPoint(POINT point);
     // samp.dll RVA: 0x000875c0
     HRESULT SetText(const char *text);
+};
+class CDXUTButtonDL : public CDXUTStaticDL {
+    friend class CDXUTDialogDL;
+    // samp.dll RVA: 0x0008df20
+    CDXUTButtonDL(CDXUTDialog *parent);
+public:
+    bool pressed;
+    // samp.dll RVA: 0x0008dfc0
+    virtual ~CDXUTButtonDL();
+    // samp.dll RVA: 0x0008dfd0
+    virtual void Render(IDirect3DDevice9 *device,float elapsed);
+    // samp.dll RVA: 0x000848d0
+    virtual bool HandleKeyboard(UINT message,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x00084930
+    virtual bool HandleMouse(UINT message,POINT point,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x0008df80
+    virtual bool CanHaveFocus();
+    // samp.dll RVA: 0x0008dfa0
+    virtual void OnHotkey();
+    // samp.dll RVA: 0x0008df60
+    virtual BOOL ContainsPoint(POINT point);
 };
 // Observed native storage views. Construction, virtual interfaces and rendering
 // remain separate recovery work; these are not the SDK Unicode widget types.
@@ -100,6 +123,9 @@ private:
 };
 #pragma pack(pop)
 typedef char DLListItemExtent[(sizeof(DXUTListBoxItemDL)==0x29e)?1:-1];
+typedef char DLControlExtent[(sizeof(CDXUTControl)==0x4d)?1:-1];
+typedef char DLStaticExtent[(sizeof(CDXUTStaticDL)==0x151)?1:-1];
+typedef char DLButtonExtent[(sizeof(CDXUTButtonDL)==0x152)?1:-1];
 typedef char DLListItemData[(offsetof(DXUTListBoxItemDL,data)==0x284)?1:-1];
 typedef char DLScrollExtent[(sizeof(CDXUTScrollBarDL)==0xd2)?1:-1];
 typedef char DLScrollPosition[(offsetof(CDXUTScrollBarDL,position)==0x8e)?1:-1];

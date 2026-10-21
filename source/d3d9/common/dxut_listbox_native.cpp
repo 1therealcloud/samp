@@ -5,6 +5,103 @@
 #include "gui/input_text.h"
 #include <new>
 
+// samp.dll RVA: 0x0008de50
+CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog *parent):CDXUTControl(0) {
+    m_pDialog=parent;m_Type=DXUT_CONTROL_STATIC;
+    memset(text,0,sizeof(text));
+    for(int i=0;i<m_Elements.GetSize();++i)if(m_Elements[i])delete m_Elements[i];
+    m_Elements.RemoveAll();
+}
+
+// samp.dll RVA: 0x0008dec0
+CDXUTStaticDL::~CDXUTStaticDL() {}
+
+// samp.dll RVA: 0x0008deb0
+BOOL CDXUTStaticDL::ContainsPoint(POINT) {return FALSE;}
+
+// samp.dll RVA: 0x0008ded0
+void CDXUTStaticDL::Render(IDirect3DDevice9 *,float elapsed) {
+    if(!m_bVisible)return;
+    UINT state=m_bEnabled?DXUT_STATE_NORMAL:DXUT_STATE_DISABLED;
+    CDXUTElement *element=m_Elements.GetAt(0);
+    element->FontColor.Blend(state,elapsed,0.7f);
+    m_pDialog->DrawTextA(text,element,&m_rcBoundingBox,true,-1);
+}
+
+// samp.dll RVA: 0x0008df20
+CDXUTButtonDL::CDXUTButtonDL(CDXUTDialog *parent):CDXUTStaticDL(0) {
+    m_pDialog=parent;m_Type=DXUT_CONTROL_BUTTON;pressed=false;m_nHotkey=0;
+}
+
+// samp.dll RVA: 0x0008dfc0
+CDXUTButtonDL::~CDXUTButtonDL() {}
+
+// samp.dll RVA: 0x0008df60
+BOOL CDXUTButtonDL::ContainsPoint(POINT point) {return PtInRect(&m_rcBoundingBox,point);}
+
+// samp.dll RVA: 0x0008df80
+bool CDXUTButtonDL::CanHaveFocus() {return m_bVisible && m_bEnabled;}
+
+// samp.dll RVA: 0x0008dfa0
+void CDXUTButtonDL::OnHotkey() {
+    m_pDialog->RequestFocus(this);
+    m_pDialog->SendEvent(0x101,true,this);
+}
+
+// samp.dll RVA: 0x000848d0
+bool CDXUTButtonDL::HandleKeyboard(UINT message,WPARAM wparam,LPARAM) {
+    if(!m_bEnabled || !m_bVisible)return false;
+    if(message==WM_KEYDOWN && wparam==VK_SPACE){pressed=true;return true;}
+    if(message==WM_KEYUP && wparam==VK_SPACE) {
+        if(pressed==true){pressed=false;m_pDialog->SendEvent(0x101,true,this);}
+        return true;
+    }
+    return false;
+}
+
+// samp.dll RVA: 0x00084930
+bool CDXUTButtonDL::HandleMouse(UINT message,POINT point,WPARAM,LPARAM) {
+    if(!m_bEnabled || !m_bVisible)return false;
+    if(message==WM_LBUTTONDOWN || message==WM_LBUTTONDBLCLK) {
+        if(!ContainsPoint(point))return false;
+        pressed=true;
+        SetCapture(DXUTGetHWND());
+        m_pDialog->SendEvent(0x102,true,this);
+        if(!m_bHasFocus)m_pDialog->RequestFocus(this);
+        return true;
+    }
+    if(message==WM_LBUTTONUP && pressed) {
+        pressed=false;ReleaseCapture();
+        if(!m_pDialog->m_bKeyboardInput)CDXUTDialog::ClearFocus();
+        if(ContainsPoint(point))m_pDialog->SendEvent(0x101,true,this);
+        return true;
+    }
+    return false;
+}
+
+// samp.dll RVA: 0x0008dfd0
+void CDXUTButtonDL::Render(IDirect3DDevice9 *,float elapsed) {
+    int offsetX=0,offsetY=0;
+    UINT state=DXUT_STATE_NORMAL;
+    if(!m_bVisible)state=DXUT_STATE_HIDDEN;
+    else if(!m_bEnabled)state=DXUT_STATE_DISABLED;
+    else if(pressed){state=DXUT_STATE_PRESSED;offsetX=1;offsetY=2;}
+    else if(m_bMouseOver){state=DXUT_STATE_MOUSEOVER;offsetX=-1;offsetY=-2;}
+    else if(m_bHasFocus)state=DXUT_STATE_FOCUS;
+    CDXUTElement *element=m_Elements.GetAt(0);
+    float rate=state==DXUT_STATE_PRESSED?0.0f:0.8f;
+    RECT rect=m_rcBoundingBox;OffsetRect(&rect,offsetX,offsetY);
+    element->TextureColor.Blend(state,elapsed,rate);
+    element->FontColor.Blend(state,elapsed,rate);
+    m_pDialog->DrawSprite(element,&rect);
+    m_pDialog->DrawTextA(text,element,&rect,false,-1);
+    element=m_Elements.GetAt(1);
+    element->TextureColor.Blend(state,elapsed,rate);
+    element->FontColor.Blend(state,elapsed,rate);
+    m_pDialog->DrawSprite(element,&rect);
+    m_pDialog->DrawTextA(text,element,&rect,false,-1);
+}
+
 // samp.dll RVA: 0x00090790
 HRESULT CDXUTDialogDL::AddButton(int id,const char *text,int x,int y,int width,
     int height,UINT hotkey,bool isDefault,CDXUTButtonDL **created) {
