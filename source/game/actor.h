@@ -7,6 +7,12 @@ class CActor : public CEntity {
     void *actorBackend;
     BYTE unknown4c[10];
 public:
+    // samp.dll RVA: 0x0009c1d0
+    virtual ~CActor();
+    // samp.dll RVA: 0x0009be80
+    void Destroy();
+    // samp.dll RVA: 0x0009bff0
+    void SetRotation(float heading);
     // samp.dll RVA: 0x0009c030
     float GetHealth();
     // samp.dll RVA: 0x0009c050

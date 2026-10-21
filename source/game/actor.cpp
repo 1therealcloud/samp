@@ -35,3 +35,34 @@ void CActor::SetInvulnerable(BYTE enabled){
     if(enabled)Scripting::ProcessCommand(&g_actorImmunityCommand,m_nHandle,1,1,1,1,1);
     else Scripting::ProcessCommand(&g_actorImmunityCommand,m_nHandle,0,0,0,1,0);
 }
+
+#include "game/playerped.h"
+#include "game/util.h"
+// samp.dll RVA: 0x0009be80
+void CActor::Destroy() {
+    void *saved=actorBackend;
+    // GTA SA virtual address: excluded backend vtable.
+    if(saved && GamePoolPedGetAt(m_nHandle) && *(DWORD*)actorBackend!=0x863c40) {
+        DWORD *table=*(DWORD**)saved;
+        __asm {mov ecx,saved}
+        __asm {mov eax,table}
+        __asm {push 1}
+        __asm {call dword ptr [eax]}
+        actorBackend=0;m_pGameEntity=0;
+        return;
+    }
+    m_nHandle=0;actorBackend=0;m_pGameEntity=0;
+}
+// samp.dll RVA: 0x0009bff0
+void CActor::SetRotation(float heading) {
+    if(!actorBackend || !GamePoolPedGetAt(m_nHandle))return;
+    // Preserve helper's extended ST0 until the native final store; reload backend.
+    __asm {push heading}
+    __asm {call GameHeadingToRadians}
+    __asm {add esp,4}
+    __asm {mov ecx,this}
+    __asm {mov edx,dword ptr [ecx+0x48]}
+    __asm {fstp dword ptr [edx+0x55c]}
+}
+// samp.dll RVA: 0x0009c1d0
+CActor::~CActor(){Destroy();}
