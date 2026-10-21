@@ -1,10 +1,23 @@
 #ifndef SAMP_OBJECT_WRAPPER_H
 #define SAMP_OBJECT_WRAPPER_H
 #include "game/entity.h"
-// Address interface over the established CEntity prefix. Never allocate this partial class:
-// complete CObject allocation/constructor/layout remain unrecovered.
+// Native allocation extent is established; the tail remains an opaque storage view.
+// The native constructor is declaration-only: do not construct this class yet.
 class CVehicle;
-class CObject : public CEntity {public:
+#pragma pack(push,1)
+class CObject : public CEntity {
+    BYTE nativeState[0x1154];
+    // Native eleven-word entry; remaining parameter semantics are under review.
+    // samp.dll RVA: 0x000a8d00
+    CObject(int model,CVector position,CVector rotation,float drawDistance,
+        BYTE flag1193,BYTE firstHour,BYTE lastHour);
+public:
+    // samp.dll RVA: 0x000a9020
+    virtual ~CObject();
+    // samp.dll RVA: 0x000a79a0
+    virtual void Add();
+    // samp.dll RVA: 0x000a79f0
+    virtual void Remove();
     // samp.dll RVA: 0x000a7b40
     bool IsTimeVisible();
     // samp.dll RVA: 0x000a8b90
@@ -40,6 +53,10 @@ class CObject : public CEntity {public:
     // samp.dll RVA: 0x000a97c0
     void Move(CVector position,float speed,CVector rotation);
 };
+#pragma pack(pop)
+typedef char NativeObjectAllocationExtent[(sizeof(CObject)==0x119c)?1:-1];
+// samp.dll RVA: 0x001e0498
+extern void *g_objectSharedMaterialTexture;
 // samp.dll RVA: 0x000b3830
 void *__stdcall GamePoolObjectGetAt(int handle);
 #endif

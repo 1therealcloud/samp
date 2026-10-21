@@ -487,3 +487,46 @@ void CObject::Process(float elapsedSeconds) {
     } else GetMatrix(&current);
     ApplyMatrix(current);
 }
+
+#include "gui/textdraw_texture.h"
+#include "d3dhook/texture_binding.h"
+#include <stdlib.h>
+// samp.dll RVA: 0x001e0498
+void *g_objectSharedMaterialTexture=0;
+// samp.dll RVA: 0x0011ee4c
+extern const Scripting::OpcodeInfo g_objectDestroyCommand={0x108,"i"};
+// samp.dll RVA: 0x000a79a0
+void CObject::Add() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40)GameWorldAdd(m_pGameEntity);
+}
+// samp.dll RVA: 0x000a79f0
+void CObject::Remove() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40)GameWorldRemove(m_pGameEntity);
+}
+// samp.dll RVA: 0x000a9020
+CObject::~CObject() {
+    BYTE *state=(BYTE*)this;m_pGameEntity=GamePoolObjectGetAt(m_nHandle);
+    // Native deliberately skips resource cleanup with no valid backend or on quit.
+    if(!m_pGameEntity || *(DWORD*)m_pGameEntity==0x863c40 || g_clientQuitRequested)return;
+    if(GetRwObject())DeleteRwObject();
+    Scripting::ProcessCommand(&g_objectDestroyCommand,m_nHandle);
+    int model=*(int*)(state+0x4e);
+    if(model<0 || !GameGetModelReferenceCount(model))g_pGame->ReleaseModel(*(int*)(state+0x4e),0);
+    if(*(DWORD*)(state+0x118b)) {
+        ShutdownMaterialText();
+        for(int i=0;i<16;++i) {
+            void **texture=(void**)(state+0x217+i*4);
+            if(*texture && *texture!=g_objectSharedMaterialTexture) {
+                GameDestroyTextDrawTexture(*texture);*texture=0;
+                if(*(DWORD*)(state+0x110b+i*4))*(DWORD*)(state+0x110b+i*4)=0;
+            }
+            void **text=(void**)(state+0x10cb+i*4);
+            if(*text){free(*text);*text=0;}
+        }
+        if(g_deviceMaterialOverrides==state) {
+            g_deviceMaterialOverrides=0;g_deviceMaterialOverrideEnabled=0;
+        }
+    }
+}
