@@ -13,10 +13,8 @@ void CPlayerTags::OnResetDevice() {
     if(sprite)sprite->OnResetDevice();
     if(!state)device->CreateStateBlock(D3DSBT_ALL,&state);
 }
-// samp.dll RVA: 0x0006b630
-void CLabel::OnLostDevice() { if(sprite)sprite->OnLostDevice(); }
-// samp.dll RVA: 0x0006b640
-void CLabel::OnResetDevice() { if(sprite)sprite->OnResetDevice(); }
+
+
 // samp.dll RVA: 0x000702d0
 void CObjectMaterialText::OnLostDevice() {
     if(second){second->Release();second=0;}
@@ -83,8 +81,7 @@ void CSpawnScreen::OnResetDevice() {
 }
 
 #include "gui/device_objects.h"
-// samp.dll RVA: 0x0006b5f0
-CLabel::CLabel(IDirect3DDevice9 *value) { device=value;D3DXCreateSprite(device,&sprite); }
+
 // samp.dll RVA: 0x0006c730
 CPlayerTags::CPlayerTags(IDirect3DDevice9 *value) { device=value;state=0;sprite=0;D3DXCreateSprite(device,&sprite); }
 // samp.dll RVA: 0x00070320

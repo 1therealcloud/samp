@@ -16,23 +16,7 @@ public:
     // samp.dll RVA: 0x0006d0c0
     void OnResetDevice();
 };
-class CLabel {
-public:
-    // samp.dll RVA: 0x0006b5f0
-    CLabel(IDirect3DDevice9 *device);
-    IDirect3DDevice9 *device;ID3DXSprite *sprite;
-    // samp.dll RVA: 0x0006b630
-    void OnLostDevice();
-    // samp.dll RVA: 0x0006b640
-    void OnResetDevice();
-    // Render dependencies; bodies remain open.
-    // samp.dll RVA: 0x0006b6b0
-    void Begin();
-    // samp.dll RVA: 0x0006b6c0
-    void End();
-    // samp.dll RVA: 0x0006b6d0
-    void Draw(const CVector *position,const char *text,DWORD color,BOOL shadow,BOOL status);
-};
+#include "label.h"
 class CObjectMaterialText {
 public:
     // samp.dll RVA: 0x00070350

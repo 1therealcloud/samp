@@ -51,6 +51,9 @@ class CLabelPool {public:
     void Draw();
 };
 class CDialog {public:
+    // Caller-observed ABI; full dialog implementation remains open.
+    // samp.dll RVA: 0x0006fa50
+    void Show(int id,int type,const char *title,const char *text,const char *button1,const char *button2,BOOL serverSide);
     // Observed allocation extent, not a complete recovered interface.
     BYTE nativeState[0x29d];
     // samp.dll RVA: 0x0006eec0
@@ -132,14 +135,7 @@ class CSrvNetStats {public:
     // samp.dll RVA: 0x00070d00
     void Draw();
 };
-class CHelpDialog {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x4];
-    // samp.dll RVA: 0x0006b560
-    CHelpDialog(IDirect3DDevice9 *device);
-    // samp.dll RVA: 0x0006b570
-    void Show();
-};
+#include "helpdialog.h"
 class CDXUTDialog;
 // samp.dll RVA: 0x002aca1c
 extern CAudioStream *g_renderAudioStream;
