@@ -5,6 +5,12 @@
 // complete CObject allocation/constructor/layout remain unrecovered.
 class CVehicle;
 class CObject : public CEntity {public:
+    // samp.dll RVA: 0x000a7b40
+    bool IsTimeVisible();
+    // samp.dll RVA: 0x000a8b90
+    void ClearModelFlag0();
+    // samp.dll RVA: 0x000a9150
+    void ProcessStreaming();
     // samp.dll RVA: 0x000a7bb0
     float GetDistanceToTarget(const CMatrix *matrix);
     // samp.dll RVA: 0x000a7e30

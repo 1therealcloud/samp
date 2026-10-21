@@ -250,3 +250,58 @@ void CObject::ShutdownMaterialText() {
         }
     }
 }
+
+#include "game/game.h"
+// samp.dll RVA: 0x000a7b40
+bool CObject::IsTimeVisible() {
+    BYTE *state=(BYTE*)this;BYTE hour=0,minute=0;
+    if(!state[0x1199])return false;
+    if(g_pGame)g_pGame->GetWorldTime(&hour,&minute);
+    BYTE first=state[0x119a],last=state[0x119b];
+    if(last>first)return hour>=first && hour<last;
+    if(last<first)return hour>=first || hour<last;
+    return false;
+}
+// samp.dll RVA: 0x000a8b90
+void CObject::ClearModelFlag0() {
+    if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40) {
+        BYTE *info=(BYTE*)GameGetModelInfo(*(int*)((BYTE*)this+0x4e));
+        if(info)*(DWORD*)(info+0x12)&=0xfffffffe;
+    }
+}
+// samp.dll RVA: 0x000a9150
+void CObject::ProcessStreaming() {
+    BYTE *state=(BYTE*)this;state[0x49]=0;
+    bool timeHidden=state[0x1199] && !IsTimeVisible();
+    bool outside;
+    // Native caches a float but compares the unspilled ST0 result.
+    __asm {
+        mov ecx,state
+        call CEntity::GetDistanceToCamera
+        mov edx,state
+        fst dword ptr [edx+0x68]
+        fcomp dword ptr [edx+0x54]
+        fnstsw ax
+        test ah,0x41
+        sete outside
+    }
+    if(!outside && !timeHidden) {
+        if(!GetRwObject()) {
+            if(!g_pGame->IsModelAvailable(*(int*)(state+0x4e))) {
+                g_pGame->RequestModel(*(int*)(state+0x4e),2);return;
+            }
+            SetModelIndex(*(int*)(state+0x4e));
+        }
+        if(GetRwObject()) {
+            state[0x49]=1;*(DWORD*)(state+0x4a)=0;ClearModelFlag0();
+        }
+    } else if(GetRwObject()) {
+        DWORD count=++*(DWORD*)(state+0x4a);
+        if(count==1000) {
+            DeleteRwObject();*(DWORD*)(state+0x4a)=0;
+            int model=*(int*)(state+0x4e);
+            if(model>0 && !GameGetModelReferenceCount(model))
+                g_pGame->ReleaseModel(*(int*)(state+0x4e),0);
+        }
+    }
+}
