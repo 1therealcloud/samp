@@ -626,3 +626,36 @@ bool CObject::HasRwFrameFlag8() {
     BYTE *frame=*(BYTE**)(rw+4);if(!frame || *frame!=1)return false;
     BYTE *data=*(BYTE**)(frame+0x18);return data && (data[8]&8)!=0;
 }
+
+// samp.dll RVA: 0x000a7d00
+void CObject::SetAttachedVehicle(WORD id,const CVector *offset,const CVector *rotation) {
+    BYTE *state=(BYTE*)this;*(WORD*)(state+0xbe)=id;
+    if(id==0xffff){for(int i=0;i<6;++i)*(DWORD*)(state+0xc2+i*4)=0;return;}
+    for(int i=0;i<3;++i)*(DWORD*)(state+0xc2+i*4)=*(const DWORD*)((const BYTE*)offset+i*4);
+    for(int i=0;i<3;++i)*(DWORD*)(state+0xce+i*4)=*(const DWORD*)((const BYTE*)rotation+i*4);
+}
+// samp.dll RVA: 0x000a7d90
+void CObject::SetAttachedObject(WORD id,const CVector *offset,const CVector *rotation,BYTE flag) {
+    BYTE *state=(BYTE*)this;*(WORD*)(state+0xc0)=id;
+    if(id==0xffff) {
+        for(int i=0;i<5;++i)*(DWORD*)(state+0xc2+i*4)=0;
+        state[0xda]=1;*(DWORD*)(state+0xd6)=0;return;
+    }
+    for(int i=0;i<3;++i)*(DWORD*)(state+0xc2+i*4)=*(const DWORD*)((const BYTE*)offset+i*4);
+    for(int i=0;i<2;++i)*(DWORD*)(state+0xce+i*4)=*(const DWORD*)((const BYTE*)rotation+i*4);
+    DWORD last=*(const DWORD*)((const BYTE*)rotation+8);state[0xda]=flag;*(DWORD*)(state+0xd6)=last;
+}
+// samp.dll RVA: 0x000a80b0
+BOOL CObject::IsMoving() {
+    BYTE *state=(BYTE*)this;WORD object=*(WORD*)(state+0xc0);
+    if(object!=0xffff) {
+        if(!g_pNetGame)return FALSE;
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de),*pool=*(BYTE**)(pools+0x14);
+        // Native accepts id2100 as well; the adjacent-state layout is unproven.
+        if(!pool || object>2100 || !*(DWORD*)(pool+4+object*4))return FALSE;
+        BYTE *attached=*(BYTE**)(pool+0x20d4+object*4);
+        return attached && (attached[0x1af]&1)?TRUE:FALSE;
+    }
+    if(*(WORD*)(state+0xbe)!=0xffff)return TRUE;
+    return state[0x1af]&1;
+}

@@ -18,6 +18,12 @@ public:
     virtual void Add();
     // samp.dll RVA: 0x000a79f0
     virtual void Remove();
+    // samp.dll RVA: 0x000a7d00
+    void SetAttachedVehicle(WORD id,const CVector *offset,const CVector *rotation);
+    // samp.dll RVA: 0x000a7d90
+    void SetAttachedObject(WORD id,const CVector *offset,const CVector *rotation,BYTE flag);
+    // samp.dll RVA: 0x000a80b0
+    BOOL IsMoving();
     // samp.dll RVA: 0x000a79c0
     BOOL IsAdded();
     // samp.dll RVA: 0x000a8c30
