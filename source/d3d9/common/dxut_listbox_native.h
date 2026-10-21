@@ -120,7 +120,7 @@ public:
     CDXUTListBoxDL(CDXUTDialog *parent);
     // samp.dll RVA: 0x0008e8d0
     virtual ~CDXUTListBoxDL();
-    // Declaration-only native virtuals; no recovered body yet.
+    // Rendering remains declaration-only.
     // samp.dll RVA: 0x0008e900
     virtual void Render(IDirect3DDevice9 *device,float elapsed);
     // samp.dll RVA: 0x0008a500

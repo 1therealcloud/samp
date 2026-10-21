@@ -124,6 +124,45 @@ CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog *parent):CDXUTControl(0),scrollBar(pa
 // samp.dll RVA: 0x0008e8d0
 CDXUTListBoxDL::~CDXUTListBoxDL() {RemoveAllItems();}
 
+// samp.dll RVA: 0x0008a500
+bool CDXUTListBoxDL::HandleKeyboard(UINT message,WPARAM key,LPARAM lparam) {
+    if(!m_bEnabled || !m_bVisible)return false;
+    if(scrollBar.HandleKeyboard(message,key,lparam))return true;
+    if(message!=WM_KEYDOWN)return false;
+    switch(key) {
+    case VK_UP:case VK_DOWN:case VK_NEXT:case VK_PRIOR:case VK_HOME:case VK_END:
+        break;
+    default:return false;
+    }
+    int count=items.GetSize();if(!count)return true;
+    int old=selected;
+    switch(key) {
+    case VK_UP:--selected;break;
+    case VK_DOWN:++selected;break;
+    case VK_NEXT:selected+=scrollBar.pageSize-1;break;
+    case VK_PRIOR:selected-=scrollBar.pageSize-1;break;
+    case VK_HOME:selected=0;break;
+    case VK_END:selected=count-1;break;
+    }
+    if(selected<0)selected=0;
+    if(selected>=count)selected=count-1;
+    if(old!=selected) {
+        if(style&1) {
+            for(int i=0;i<items.GetSize();++i)items[i]->selected=false;
+            if(GetKeyState(VK_SHIFT)<0) {
+                int first=selectionStart,last=selected;
+                if(first>last){int swap=first;first=last;last=swap;}
+                for(int i=first;i<=last;++i)items[i]->selected=true;
+            } else {
+                items[selected]->selected=true;selectionStart=selected;
+            }
+        } else selectionStart=selected;
+        scrollBar.ShowItem(selected);
+        m_pDialog->SendEvent(0x702,true,this);
+    }
+    return true;
+}
+
 // samp.dll RVA: 0x0008e8c0
 HRESULT CDXUTListBoxDL::OnInit() {
     return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
