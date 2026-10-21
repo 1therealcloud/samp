@@ -696,3 +696,12 @@ __declspec(naked) void GameRenderWithSceneRasters() {
 
 // samp.dll RVA: 0x002aae18
 BYTE g_entityCollisionScratch[0x1044];
+
+// samp.dll RVA: 0x000b3e40
+DWORD __stdcall GameTestCameraSphere(const CVector *centre,float radius) {
+    DWORD sphere[4];memcpy(sphere,centre,12);memcpy(sphere+3,&radius,4);
+    // GTA SA virtual address: current RenderWare camera pointer.
+    void *camera=*(void**)0xc1703c;if(!camera)return 0;
+    DWORD target=g_gameVersion==1?0x7ee2d0:0x7ee310;
+    return ((DWORD(__cdecl*)(void*,const void*))target)(camera,sphere);
+}

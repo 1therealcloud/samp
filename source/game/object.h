@@ -18,6 +18,10 @@ public:
     virtual void Add();
     // samp.dll RVA: 0x000a79f0
     virtual void Remove();
+    // samp.dll RVA: 0x000a8b50
+    void NativeA8B50();
+    // samp.dll RVA: 0x000a9b80
+    void Render();
     // samp.dll RVA: 0x000a7a10
     void UpdateAttachedObjectRotation();
     // samp.dll RVA: 0x000a7d00
@@ -83,6 +87,10 @@ public:
 };
 #pragma pack(pop)
 typedef char NativeObjectAllocationExtent[(sizeof(CObject)==0x119c)?1:-1];
+// samp.dll RVA: 0x0011ee80
+extern const float g_objectRenderDistanceThreshold;
+// samp.dll RVA: 0x001e04a8
+extern BYTE g_objectRenderFlag;
 // samp.dll RVA: 0x001e0450
 extern CMatrix g_objectAttachmentMatrix;
 // samp.dll RVA: 0x001e049c

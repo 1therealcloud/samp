@@ -209,3 +209,6 @@ void GameRenderWithSceneRasters();
 // samp.dll RVA: 0x002aae18
 extern BYTE g_entityCollisionScratch[0x1044];
 #endif
+
+// samp.dll RVA: 0x000b3e40
+DWORD __stdcall GameTestCameraSphere(const CVector *centre,float radius);

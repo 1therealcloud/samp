@@ -813,3 +813,56 @@ void CObject::UpdateAttachedObjectRotation() {
     SetMatrix(g_objectAttachmentMatrix);
     SetTurnSpeed(g_objectAttachmentZeroSpeed);SetSpeed(g_objectAttachmentZeroSpeed);
 }
+
+#include "game/camera.h"
+#include "game/hooks_render.h"
+// samp.dll RVA: 0x0011ee80
+extern const float g_objectRenderDistanceThreshold=600.0f;
+// samp.dll RVA: 0x001e04a8
+BYTE g_objectRenderFlag;
+// samp.dll RVA: 0x000a8b50
+void CObject::NativeA8B50() {
+    void *backend=m_pGameEntity;
+    // GTA SA virtual addresses: excluded vtable, backend post-call helper.
+    if(!backend || *(DWORD*)backend==0x863c40)return;
+    DWORD *table=*(DWORD**)backend;
+    __asm {mov ecx,backend}
+    __asm {mov eax,table}
+    __asm {call dword ptr [eax+0x44]}
+    ((void(__cdecl*)(void*))0x553260)(backend);
+}
+// samp.dll RVA: 0x000a9b80
+void CObject::Render() {
+    BYTE *state=(BYTE*)this;
+    // GTA SA virtual address: excluded backend vtable.
+    if(!m_pGameEntity || *(DWORD*)m_pGameEntity==0x863c40 || !GetRwObject())return;
+    UpdateCachedCentre();
+    CCamera *camera=*(CCamera**)((BYTE*)g_pGame+4);CVector *centre=(CVector*)(state+0x5c);
+    float *radius=(float*)(state+0x58);BYTE closer;
+    // Compare the camera's unspilled ST0 result, as in the original body.
+    __asm {mov ecx,camera}
+    __asm {push centre}
+    __asm {call CCamera::GetDistanceToPoint}
+    __asm {mov edx,radius}
+    __asm {fcomp dword ptr [edx]}
+    __asm {fnstsw ax}
+    __asm {test ah,5}
+    __asm {setnp closer}
+    if(!closer && !GameTestCameraSphere(centre,*radius))return;
+    if(state[0x6c]) {
+        // GTA SA virtual address: native weather/render state gate.
+        DWORD alpha=(*(DWORD*)0xb72914 || (GameGetModelFlagsByte(*(int*)(state+0x4e))&8))?0:100;
+        ClientSetRenderState(30,alpha);
+    }
+    ClientSetRenderState(20,(GameGetModelFlagsByte(*(int*)(state+0x4e))&0x40)?2:1);
+    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f))ProcessMaterials();
+    GameSetupD3DFog(1);
+    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x1cf)) {
+        if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold) {
+            NativeA8C30();GameRwRenderObject(GetRwObject());NativeA8C70();
+        } else GameRwRenderObject(GetRwObject());
+    } else if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold)NativeA8B50();
+    else GameRwRenderObject(GetRwObject());
+    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f))AfterMaterialRender();
+    g_objectRenderFlag=0;*(DWORD*)(state+0x118f)=1;
+}
