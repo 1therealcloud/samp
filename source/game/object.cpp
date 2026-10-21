@@ -35,6 +35,91 @@ extern const float g_objectMotionRotationSentinel=-999.0f;
 void CObject::Stop(){CVector zero={0,0,0};SetSpeed(zero);SetTurnSpeed(zero);((BYTE*)this)[0x1af]&=0xfe;}
 // samp.dll RVA: 0x000a7bf0
 float CObject::GetAngleDifference(float from,float to){return GameNormalizeAngle(GameNormalizeAngle(to)-from);}
+// samp.dll RVA: 0x0011e648
+extern const float g_objectDegreesToRadians=0.01745329238474369f;
+// Keep the native x87 trigonometry and float spill boundaries. Only the nine
+// rotation coefficients are written; matrix padding and position are untouched.
+// samp.dll RVA: 0x000a7fb0
+void CObject::Rotate(CVector rotation) {
+    BYTE *state=(BYTE*)this;
+    __asm {
+        mov esi,state
+        lea edx,rotation
+        fld dword ptr [edx]
+        mov ebx, dword ptr [edx + 4]
+        fmul g_objectDegreesToRadians
+        mov eax, dword ptr [edx]
+        fld dword ptr [edx + 4]
+        mov dword ptr [esi + 0xad], eax
+        fmul g_objectDegreesToRadians
+        mov eax, dword ptr [edx + 8]
+        mov dword ptr [esi + 0xb1], ebx
+        mov dword ptr [esi + 0xb5], eax
+        fstp dword ptr [edx + 4]
+        fld dword ptr [edx + 8]
+        fmul g_objectDegreesToRadians
+        fstp dword ptr [edx + 8]
+        fld st(0)
+        fcos 
+        fstp dword ptr [edx]
+        fsin 
+        fld dword ptr [edx + 4]
+        fcos 
+        fld dword ptr [edx + 4]
+        fsin 
+        fld dword ptr [edx + 8]
+        fcos 
+        fld dword ptr [edx + 8]
+        fsin 
+        fst dword ptr [edx + 4]
+        fmul st,st(4)
+        fld st(1)
+        fmul st,st(5)
+        fstp dword ptr [edx + 8]
+        fld st(1)
+        fmul st,st(4)
+        fld st(1)
+        fmul st,st(4)
+        fsubp st(1),st
+        fstp dword ptr [esi + 0xdb]
+        fld dword ptr [edx + 8]
+        fmul st,st(3)
+        fld dword ptr [edx + 4]
+        fmul st,st(5)
+        faddp st(1),st
+        fstp dword ptr [esi + 0xdf]
+        fld st(2)
+        fmul dword ptr [edx]
+        fchs 
+        fstp dword ptr [esi + 0xe3]
+        fld dword ptr [edx + 4]
+        fmul dword ptr [edx]
+        fchs 
+        fstp dword ptr [esi + 0xeb]
+        fld st(1)
+        fmul dword ptr [edx]
+        fstp dword ptr [esi + 0xef]
+        fxch st(4)
+        fstp dword ptr [esi + 0xf3]
+        fxch st(3)
+        fmul st,st(2)
+        fxch st(3)
+        fmul st,st(1)
+        faddp st(3),st
+        fxch st(2)
+        fstp dword ptr [esi + 0xfb]
+        fld dword ptr [edx + 4]
+        fmul st,st(2)
+        fld dword ptr [edx + 8]
+        fmul st,st(2)
+        fsubp st(1),st
+        fstp dword ptr [esi + 0xff]
+        fstp st(1)
+        fmul dword ptr [edx]
+        fstp dword ptr [esi + 0x103]
+    }
+}
+
 // samp.dll RVA: 0x000a97c0
 void CObject::Move(CVector position,float speed,CVector rotation) {
     BYTE *state=(BYTE*)this;CMatrix matrix;GetMatrix(&matrix);
