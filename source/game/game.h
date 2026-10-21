@@ -236,7 +236,7 @@ float __cdecl GameSetModelCollisionRadius(int model,float radius);
 // samp.dll RVA: 0x000b5f50
 BOOL __cdecl GameGetModelCollisionCentre(int model,CVector *centre);
 // samp.dll RVA: 0x000b5fe0
-BYTE __cdecl GameGetModelFlagsByte(int model);
+BYTE __stdcall GameGetModelFlagsByte(int model);
 // samp.dll RVA: 0x000b6000
 WORD __cdecl GameGetModelFlagsWord(int model);
 // Raw EAX from model-info vtable +2C, gated by the existing game pointer.

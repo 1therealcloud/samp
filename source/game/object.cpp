@@ -530,3 +530,60 @@ CObject::~CObject() {
         }
     }
 }
+
+#include "game/custom_model_io.h"
+// samp.dll RVA: 0x0011ede8
+extern const Scripting::OpcodeInfo g_objectCreateCommand={0x107,"ifffv"};
+// samp.dll RVA: 0x000a8bc0
+void CObject::UpdateCachedCentre() {
+    // GTA SA virtual address: excluded backend vtable 0x00863c40.
+    if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40) {
+        CMatrix matrix;GetMatrix(&matrix);CVector centre;
+        if(GameGetModelCollisionCentre(*(int*)((BYTE*)this+0x4e),&centre))
+            GameTransformPoint((CVector*)((BYTE*)this+0x5c),&matrix,&centre);
+        else memcpy((BYTE*)this+0x5c,&matrix.position,12);
+    }
+}
+// samp.dll RVA: 0x000a8d00
+CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
+    BYTE flag1193,BYTE firstHour,BYTE lastHour):CEntity() {
+    BYTE *state=(BYTE*)this;DWORD handle=0;
+    *(WORD*)(state+0xbe)=*(WORD*)(state+0xc0)=0xffff;
+    state[0x1193]=flag1193;m_pGameEntity=0;m_nHandle=0;
+    memset(state+0xc2,0,24);state[0xda]=1;state[0x1b4]=0;state[0x1194]=0;
+    state[0xb9]=0;*(DWORD*)(state+0xba)=0;state[0x53]=0;
+    state[0x1199]=state[0x119a]=state[0x119b]=0;
+    if(firstHour || lastHour){state[0x1199]=1;state[0x119a]=firstHour;state[0x119b]=lastHour;}
+    if(!GameModelQueryB4170(model))model=18631;
+    void *info=GameGetModelInfo(model);state[0x6c]=(GameGetModelFlagsByte(model)>>1)&1;
+    if(drawDistance!=g_objectScaleLowerBound && info && GameIsObjectModelInfo(info))
+        GameSetModelDrawDistance(info,drawDistance);
+    if(model<0) {
+        // GTA SA virtual address: native negative-model create patch.
+        GameUnprotect((void*)0x46977f,1);*(BYTE*)0x46977f=0x75;
+    }
+    Scripting::ProcessCommand(&g_objectCreateCommand,model,(double)position.x,
+        (double)position.y,(double)position.z,&handle);
+    if(model<0)*(BYTE*)0x46977f=0x7d;
+    if(handle && GamePoolObjectGetAt(handle)) {
+        m_pGameEntity=GamePoolObjectGetAt(handle);m_nHandle=handle;
+        state[0x48]=1;state[0x1af]=0;*(DWORD*)(state+0x1b0)=0;
+        state[0x1b6]=0;*(DWORD*)(state+0x163)=0;*(int*)(state+0x4e)=model;
+        if(GameIsObjectModelInfo(info)){state[0x52]=1;*(float*)(state+0x54)=GameGetModelDrawDistance(info);}
+        else{state[0x52]=0;memcpy(state+0x54,&drawDistance,4);}
+        GetMatrix((CMatrix*)(state+0x11b));memcpy(state+0x14b,&position,12);
+        SetMatrix(*(CMatrix*)(state+0x11b));SetRotation(&rotation);SetBackendHighFlag();
+        state[0x49]=0;*(DWORD*)(state+0x4a)=0;
+        *(float*)(state+0x58)=GameGetModelCollisionRadius(model);UpdateCachedCentre();
+    }
+    *(DWORD*)(state+0x118f)=0;*(DWORD*)(state+0x1c3)=0;*(DWORD*)(state+0x118b)=0;
+    *(DWORD*)(state+0x1c7)=0;*(DWORD*)(state+0x1d3)=0;*(DWORD*)(state+0x1cb)=0;
+    *(DWORD*)(state+0x1cf)=0;*(DWORD*)(state+0x2d7)=0;*(DWORD*)(state+0x1195)=0;
+    for(int i=0;i<16;++i) {
+        *(DWORD*)(state+0x1d7+i*4)=0;*(DWORD*)(state+0x217+i*4)=0;
+        *(DWORD*)(state+0x257+i*4)=0;*(DWORD*)(state+0x297+i*4)=0;
+        *(DWORD*)(state+0x2db+i*4)=0;*(DWORD*)(state+0x31b+i*4)=0;
+        memset(state+0x35b+i*0xd7,0,0xd7);
+        *(DWORD*)(state+0x10cb+i*4)=0;*(DWORD*)(state+0x110b+i*4)=0;*(DWORD*)(state+0x114b+i*4)=0;
+    }
+}

@@ -951,7 +951,7 @@ BOOL __cdecl GameGetModelCollisionCentre(int model,CVector *centre) {
 }
 // Native exposes only AL; no meaning is assigned to individual flag bits.
 // samp.dll RVA: 0x000b5fe0
-BYTE __cdecl GameGetModelFlagsByte(int model) {
+BYTE __stdcall GameGetModelFlagsByte(int model) {
     BYTE *info=(BYTE*)GameGetModelInfo(model);
     return info?*(BYTE*)(info+0x12):0;
 }

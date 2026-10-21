@@ -2,22 +2,24 @@
 #define SAMP_OBJECT_WRAPPER_H
 #include "game/entity.h"
 // Native allocation extent is established; the tail remains an opaque storage view.
-// The native constructor is declaration-only: do not construct this class yet.
+// Constructor/lifecycle use the native opaque tail; field semantics remain partial.
 class CVehicle;
 #pragma pack(push,1)
 class CObject : public CEntity {
     BYTE nativeState[0x1154];
-    // Native eleven-word entry; remaining parameter semantics are under review.
+public:
+    // Native eleven-word entry; flag1193 retains its raw byte.
     // samp.dll RVA: 0x000a8d00
     CObject(int model,CVector position,CVector rotation,float drawDistance,
         BYTE flag1193,BYTE firstHour,BYTE lastHour);
-public:
     // samp.dll RVA: 0x000a9020
     virtual ~CObject();
     // samp.dll RVA: 0x000a79a0
     virtual void Add();
     // samp.dll RVA: 0x000a79f0
     virtual void Remove();
+    // samp.dll RVA: 0x000a8bc0
+    void UpdateCachedCentre();
     // samp.dll RVA: 0x000a7b40
     bool IsTimeVisible();
     // samp.dll RVA: 0x000a8b90
