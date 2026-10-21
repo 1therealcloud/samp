@@ -53,6 +53,10 @@ public:
     void SetMaterial(int model,int index,const char *dictionary,const char *texture,DWORD color);
     // samp.dll RVA: 0x000a82a0
     void SetMaterialText(int index,const char *text,BYTE size,const char *font,BYTE fontSize,BYTE bold,DWORD fontColor,DWORD backgroundColor,BYTE alignment);
+    // samp.dll RVA: 0x000a9a20
+    void BeforeMaterialRender();
+    // samp.dll RVA: 0x000a9a60
+    void AfterMaterialRender();
     // samp.dll RVA: 0x000a87f0
     void ProcessMaterials();
     // samp.dll RVA: 0x000a8870

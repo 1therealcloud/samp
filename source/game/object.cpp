@@ -777,3 +777,21 @@ void CObject::SetMaterial(int model,int index,const char *dictionary,const char 
     *(DWORD*)(state+0x257+index*4)=color;
     *(DWORD*)(state+0x2db+index*4)=1;*(DWORD*)(state+0x118b)=1;
 }
+
+// samp.dll RVA: 0x000a9a20
+void CObject::BeforeMaterialRender() {
+    BYTE *state=(BYTE*)this;
+    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f)) {
+        ProcessMaterials();if(state[0x1193])NativeA8C30();
+    }
+    *(DWORD*)(state+0x118f)=1;
+}
+// samp.dll RVA: 0x000a9a60
+void CObject::AfterMaterialRender() {
+    BYTE *state=(BYTE*)this;if(!*(DWORD*)(state+0x118b))return;
+    if(state[0x1193])NativeA8C70();
+    g_deviceMaterialOverrideEnabled=0;g_deviceMaterialOverrides=0;
+    if(!*(DWORD*)(state+0x1cb) && !*(DWORD*)(state+0x1cf))return;
+    BYTE *rw=(BYTE*)GetRwObject();if(!rw || *(void**)(state+0x1d3)!=rw)return;
+    void *frame=*(void**)(rw+4);if(frame)GameRwForAllFrameObjects(frame,ObjectRestoreMaterials,this);
+}
