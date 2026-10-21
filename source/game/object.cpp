@@ -661,9 +661,9 @@ BOOL CObject::IsMoving() {
 }
 
 // samp.dll RVA: 0x000a8430
-void __cdecl ObjectApplyMaterials(void *atomic,void *object) {
+void *__cdecl ObjectApplyMaterials(void *atomic,void *object) {
     BYTE *a=(BYTE*)atomic,*state=(BYTE*)object;
-    if(*a!=1 || !*(void**)(a+0x18) || !state)return;
+    if(*a!=1 || !*(void**)(a+0x18) || !state)return atomic;
     BYTE *geometry=*(BYTE**)(a+0x18);int count=*(int*)(geometry+0x24);if(count>16)count=16;
     for(int i=0;i<count;++i) {
         BYTE *material=(*(BYTE***)(*(BYTE**)(a+0x18)+0x20))[i];if(!material)continue;
@@ -676,11 +676,12 @@ void __cdecl ObjectApplyMaterials(void *atomic,void *object) {
             *(DWORD*)(material+4)=*(DWORD*)(state+0x257+i*4);*(DWORD*)(state+0x1cf)=1;
         }
     }
+    return atomic;
 }
 // samp.dll RVA: 0x000a86c0
-void __cdecl ObjectSaveMaterials(void *atomic,void *object) {
+void *__cdecl ObjectSaveMaterials(void *atomic,void *object) {
     BYTE *a=(BYTE*)atomic,*state=(BYTE*)object;
-    if(*a!=1 || !*(void**)(a+0x18) || !state)return;
+    if(*a!=1 || !*(void**)(a+0x18) || !state)return atomic;
     BYTE *geometry=*(BYTE**)(a+0x18);int count=*(int*)(geometry+0x24);if(count>16)count=16;
     *(DWORD*)(state+0x2d7)=*(DWORD*)(geometry+8);
     for(int i=0;i<count;++i) {
@@ -689,11 +690,12 @@ void __cdecl ObjectSaveMaterials(void *atomic,void *object) {
         *(DWORD*)(state+0x297+i*4)=*(DWORD*)(material+4);
     }
     *(DWORD*)(state+0x1c7)=1;
+    return atomic;
 }
 // samp.dll RVA: 0x000a8740
-void __cdecl ObjectRestoreMaterials(void *atomic,void *object) {
+void *__cdecl ObjectRestoreMaterials(void *atomic,void *object) {
     BYTE *a=(BYTE*)atomic,*state=(BYTE*)object;
-    if(*a!=1 || !*(void**)(a+0x18) || !state)return;
+    if(*a!=1 || !*(void**)(a+0x18) || !state)return atomic;
     BYTE *geometry=*(BYTE**)(a+0x18);int count=*(int*)(geometry+0x24);if(count>16)count=16;
     for(int i=0;i<count;++i) {
         BYTE *material=(*(BYTE***)(*(BYTE**)(a+0x18)+0x20))[i];if(!material)continue;
@@ -704,4 +706,21 @@ void __cdecl ObjectRestoreMaterials(void *atomic,void *object) {
     }
     *(DWORD*)(*(BYTE**)(a+0x18)+8)=*(DWORD*)(state+0x2d7);
     *(DWORD*)(state+0x1cf)=0;*(DWORD*)(state+0x1cb)=0;
+    return atomic;
+}
+
+// samp.dll RVA: 0x000a87f0
+void CObject::ProcessMaterials() {
+    BYTE *state=(BYTE*)this;
+    if(!*(DWORD*)(state+0x118b))return;
+    BYTE *rw=(BYTE*)GetRwObject();if(!rw)return;
+    if(*(void**)(state+0x1d3)!=rw) {
+        *(DWORD*)(state+0x1c7)=0;
+        void *frame=*(void**)(rw+4);if(!frame)return;
+        GameRwForAllFrameObjects(frame,ObjectSaveMaterials,this);
+        *(void**)(state+0x1d3)=rw;*(DWORD*)(state+0x118f)=0;
+        return;
+    }
+    g_deviceMaterialOverrideEnabled=1;g_deviceMaterialOverrides=state;
+    void *frame=*(void**)(rw+4);if(frame)GameRwForAllFrameObjects(frame,ObjectApplyMaterials,this);
 }
