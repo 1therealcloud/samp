@@ -68,21 +68,28 @@ struct DXUTListBoxItemDL {
     int row;
     bool flag;
 };
-class CDXUTScrollBarDL {
+class CDXUTScrollBarDL : public CDXUTControl {
 public:
-    BYTE control[0x4d];
     bool showThumb;
     RECT up,down,track,thumb;
     int position,pageSize,start,end;
     POINT lastMouse;
     int arrowState;
     double arrowTimestamp;
+    // samp.dll RVA: 0x0008e750
+    CDXUTScrollBarDL(CDXUTDialog *parent);
+    // samp.dll RVA: 0x0008e800
+    virtual ~CDXUTScrollBarDL();
+    // samp.dll RVA: 0x00088250
+    virtual bool HandleMouse(UINT message,POINT point,WPARAM wparam,LPARAM lparam);
+    // samp.dll RVA: 0x000884d0
+    virtual void Render(IDirect3DDevice9 *device,float elapsed);
     // samp.dll RVA: 0x000881b0
-    void UpdateRects();
+    virtual void UpdateRects();
     // samp.dll RVA: 0x00088230
     void Scroll(int delta);
     // samp.dll RVA: 0x00084e70
-    bool HandleKeyboard(UINT message,WPARAM wparam,LPARAM lparam);
+    virtual bool HandleKeyboard(UINT message,WPARAM wparam,LPARAM lparam);
     // samp.dll RVA: 0x00084e80
     void Cap();
     // samp.dll RVA: 0x00084da0
@@ -91,13 +98,12 @@ public:
     void SetTrackRange(int first,int last);
     // samp.dll RVA: 0x00084e30
     void ShowItem(int index);
-private:
-    // Declaration-only native lifecycle; the observed view must not be constructed.
-    // samp.dll RVA: 0x0008e750
-    CDXUTScrollBarDL(CDXUTDialog *parent);
-    // samp.dll RVA: 0x0008e800
-    ~CDXUTScrollBarDL();
 };
+// These public SDK aliases resolve to its original function-local storage.
+// samp.dll RVA: 0x00181a8d
+extern bool g_dxutScrollDragging;
+// samp.dll RVA: 0x00181a90
+extern int g_dxutScrollThumbOffsetY;
 class CDXUTListBoxDL {
     friend class CDialog;
 public:

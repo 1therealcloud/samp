@@ -5,6 +5,88 @@
 #include "gui/input_text.h"
 #include <new>
 
+// samp.dll RVA: 0x0008e750
+CDXUTScrollBarDL::CDXUTScrollBarDL(CDXUTDialog *parent):CDXUTControl(0) {
+    m_Type=DXUT_CONTROL_SCROLLBAR;m_pDialog=parent;showThumb=true;
+    SetRect(&up,0,0,0,0);SetRect(&down,0,0,0,0);
+    SetRect(&track,0,0,0,0);SetRect(&thumb,0,0,0,0);
+    position=0;pageSize=1;start=0;end=1;arrowState=0;arrowTimestamp=0.0;
+}
+
+// samp.dll RVA: 0x0008e800
+CDXUTScrollBarDL::~CDXUTScrollBarDL() {}
+
+// samp.dll RVA: 0x00088250
+bool CDXUTScrollBarDL::HandleMouse(UINT message,POINT point,WPARAM,LPARAM) {
+    lastMouse=point;
+    switch(message) {
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONDBLCLK:
+        if(PtInRect(&up,point)) {
+            SetCapture(DXUTGetHWND());
+            if(position>start)--position;
+            UpdateThumbRect();arrowState=1;arrowTimestamp=DXUTGetTime();return true;
+        }
+        if(PtInRect(&down,point)) {
+            SetCapture(DXUTGetHWND());
+            if(position+pageSize<end)++position;
+            UpdateThumbRect();arrowState=2;arrowTimestamp=DXUTGetTime();return true;
+        }
+        if(PtInRect(&thumb,point)) {
+            SetCapture(DXUTGetHWND());
+            g_dxutScrollThumbOffsetY=point.y-thumb.top;g_dxutScrollDragging=true;return true;
+        }
+        if(thumb.left<=point.x && thumb.right>point.x) {
+            SetCapture(DXUTGetHWND());
+            if(thumb.top>point.y && track.top<=point.y){Scroll(1-pageSize);return true;}
+            if(thumb.bottom<=point.y && track.bottom>point.y){Scroll(pageSize-1);return true;}
+        }
+        break;
+    case WM_LBUTTONUP:
+        g_dxutScrollDragging=false;ReleaseCapture();UpdateThumbRect();arrowState=0;break;
+    case WM_MOUSEMOVE:
+        if(g_dxutScrollDragging) {
+            thumb.bottom+=point.y-g_dxutScrollThumbOffsetY-thumb.top;
+            thumb.top=point.y-g_dxutScrollThumbOffsetY;
+            if(thumb.top<track.top)OffsetRect(&thumb,0,track.top-thumb.top);
+            else if(thumb.bottom>track.bottom)OffsetRect(&thumb,0,track.bottom-thumb.bottom);
+            int maxFirst=end-start-pageSize;
+            int maxThumb=(track.bottom-track.top)-(thumb.bottom-thumb.top);
+            position=start+(thumb.top-track.top+maxThumb/(maxFirst*2))*maxFirst/maxThumb;
+            return true;
+        }
+        break;
+    }
+    return false;
+}
+
+// samp.dll RVA: 0x000884d0
+void CDXUTScrollBarDL::Render(IDirect3DDevice9 *,float elapsed) {
+    if(arrowState) {
+        double now=DXUTGetTime();
+        if(PtInRect(&up,lastMouse)) {
+            if(arrowState==1 && 0.33<now-arrowTimestamp){Scroll(-1);arrowState=3;arrowTimestamp=now;}
+            else if(arrowState==3 && 0.05<now-arrowTimestamp){Scroll(-1);arrowTimestamp=now;}
+        } else if(PtInRect(&down,lastMouse)) {
+            if(arrowState==2 && 0.33<now-arrowTimestamp){Scroll(1);arrowState=4;arrowTimestamp=now;}
+            else if(arrowState==4 && 0.05<now-arrowTimestamp){Scroll(1);arrowTimestamp=now;}
+        }
+    }
+    UINT state=DXUT_STATE_NORMAL;
+    if(!m_bVisible)state=DXUT_STATE_HIDDEN;
+    else if(!m_bEnabled || !showThumb)state=DXUT_STATE_DISABLED;
+    else if(m_bMouseOver)state=DXUT_STATE_MOUSEOVER;
+    else if(m_bHasFocus)state=DXUT_STATE_FOCUS;
+    CDXUTElement *element=m_Elements.GetAt(0);
+    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&track);
+    element=m_Elements.GetAt(1);
+    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&up);
+    element=m_Elements.GetAt(2);
+    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&down);
+    element=m_Elements.GetAt(3);
+    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&thumb);
+}
+
 // Reconstruction-only access to the shared base layout/nonvirtual body;
 // no fields, virtual overrides or established standalone native entry.
 struct DLControlAccess : CDXUTControl {
