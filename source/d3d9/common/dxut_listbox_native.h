@@ -7,6 +7,20 @@
 #include <DXUTmisc.h>
 class CDXUTDialog;
 #pragma pack(push,1)
+class CDXUTDialogDL;
+// Native ANSI button allocation view; lifecycle/vtable are still dependencies.
+class CDXUTButtonDL {
+    BYTE storage[0x152];
+    friend class CDXUTDialogDL;
+    // samp.dll RVA: 0x0008df20
+    CDXUTButtonDL(CDXUTDialog *parent);
+};
+// ANSI factory view of the same parent, not a separately constructed dialog.
+class CDXUTDialogDL {public:
+    // samp.dll RVA: 0x00090790
+    HRESULT AddButton(int id,const char *text,int x,int y,int width,int height,
+        UINT hotkey=0,bool isDefault=false,CDXUTButtonDL **created=0);
+};
 struct CDXUTEditBoxDL {
     BYTE control[0x4d];
     const wchar_t *wideText;
@@ -54,6 +68,7 @@ private:
     ~CDXUTScrollBarDL();
 };
 class CDXUTListBoxDL {
+    friend class CDialog;
 public:
     BYTE control[0x4d];
     int columnCount;

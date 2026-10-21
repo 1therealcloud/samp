@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
+#include "gui/input_native.h"
 
 // Reconstruction-only access facade for the established control vtable slot4C.
 // It adds no fields, virtual methods or standalone native entries.
@@ -377,3 +378,32 @@ void CDialog::Close(char response) {
 }
 
 typedef char DialogRpcEnums[(HIGH_PRIORITY==1 && RELIABLE_ORDERED==9)?1:-1];
+
+// samp.dll RVA: 0x0006f460
+void CDialog::ResetDialogControls(CDXUTDialog *parent) {
+    dialog=parent;
+    if(!parent)return;
+    list=new CDXUTListBoxDL(dialog);
+    dialog->AddControl((CDXUTControl*)list);
+    ((CDXUTControl*)list)->SetLocation(10,10);
+    ((CDXUTControl*)list)->SetSize(width,height-100);
+    ((CDXUTControl*)list)->OnInit();
+    ((CDXUTControl*)list)->GetElement(0)->TextureColor.Init(0xc8ffffff,0xc8808080,0);
+    list->columnCount=0;
+    ((CDXUTControl*)list)->SetEnabled(false);
+    ((CDXUTControl*)list)->SetVisible(false);
+    ((CDXUTDialogDL*)dialog)->AddButton(20,"BUTTON1",10,5,buttonWidth,buttonHeight,0,false,0);
+    ((CDXUTDialogDL*)dialog)->AddButton(21,"BUTTON2",110,5,buttonWidth,buttonHeight,0,false,0);
+    dialog->AddIMEEditBox(19,g_pedEmptyDanceAnimation,10,175,570,40,true,&input);
+    if(g_pConfig->GetIntValue("ime")) {
+        InputEnableIme(true);
+        InputResetIme();
+    }
+    input->GetElement(0)->TextureColor.Init(0xf0050505,0xc8808080,0);
+    input->SetTextColor(0xffffffff);
+    ((InputEditColors*)input)->caret=0xff969696;
+    ((InputEditColors*)input)->selectedBackground=0xffb92228;
+    ((InputEditColors*)input)->selectedText=0xff0a0a0f;
+    input->SetEnabled(false);
+    input->SetVisible(false);
+}

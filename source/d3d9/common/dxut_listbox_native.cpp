@@ -3,6 +3,26 @@
 #include <string.h>
 #include <DXUTgui.h>
 #include "gui/input_text.h"
+#include <new>
+
+// samp.dll RVA: 0x00090790
+HRESULT CDXUTDialogDL::AddButton(int id,const char *text,int x,int y,int width,
+    int height,UINT hotkey,bool isDefault,CDXUTButtonDL **created) {
+    // This native factory has no constructor-failure cleanup frame.
+    CDXUTButtonDL *button=(CDXUTButtonDL*)operator new(sizeof(CDXUTButtonDL));
+    if(button)new(button) CDXUTButtonDL((CDXUTDialog*)this);
+    if(created)*created=button;
+    if(!button)return E_OUTOFMEMORY;
+    HRESULT result=((CDXUTDialog*)this)->AddControl((CDXUTControl*)button);
+    if(FAILED(result))return result;
+    ((CDXUTControl*)button)->SetID(id);
+    ((CDXUTStaticDL*)button)->SetText(text);
+    ((CDXUTControl*)button)->SetLocation(x,y);
+    ((CDXUTControl*)button)->SetSize(width,height);
+    ((CDXUTControl*)button)->SetHotkey(hotkey);
+    *((BYTE*)button+7)=(BYTE)isDefault;
+    return S_OK;
+}
 
 // samp.dll RVA: 0x000850d0
 const char *CDXUTEditBoxDL::GetText() { return InputWideToAnsi(wideText); }
