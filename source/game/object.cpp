@@ -866,3 +866,31 @@ void CObject::Render() {
     if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f))AfterMaterialRender();
     g_objectRenderFlag=0;*(DWORD*)(state+0x118f)=1;
 }
+
+// samp.dll RVA: 0x000a8b00
+void *__cdecl ObjectFrameIdentity(void *object,void *) {return object;}
+// samp.dll RVA: 0x000a8b10
+void CObject::ProcessFrameObjectsOnce() {
+    BYTE *rw=(BYTE*)GetRwObject();if(!rw || *(DWORD*)((BYTE*)this+0x1c3))return;
+    void *frame=*(void**)(rw+4);if(!frame)return;
+    GameRwForAllFrameObjects(frame,ObjectFrameIdentity,this);
+    *(DWORD*)((BYTE*)this+0x1c3)=1;
+}
+// samp.dll RVA: 0x000a7f30
+void CObject::AttachToBackend(void *target,const CVector *offset,const CVector *rotation) {
+    void *backend=m_pGameEntity;if(!backend || !target)return;
+    float x,y,z;
+    __asm {mov eax,rotation}
+    __asm {fld dword ptr [eax]}
+    __asm {fmul g_objectDegreesToRadians}
+    __asm {fstp x}
+    __asm {fld dword ptr [eax+4]}
+    __asm {fmul g_objectDegreesToRadians}
+    __asm {fstp y}
+    __asm {fld dword ptr [eax+8]}
+    __asm {fmul g_objectDegreesToRadians}
+    __asm {fstp z}
+    // GTA SA virtual address: native entity attachment backend (thiscall).
+    ((void(__fastcall*)(void*,void*,void*,float,float,float,float,float,float))0x54d570)
+        (backend,0,target,offset->x,offset->y,offset->z,x,y,z);
+}

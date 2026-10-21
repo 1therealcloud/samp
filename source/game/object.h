@@ -18,6 +18,10 @@ public:
     virtual void Add();
     // samp.dll RVA: 0x000a79f0
     virtual void Remove();
+    // samp.dll RVA: 0x000a7f30
+    void AttachToBackend(void *target,const CVector *offset,const CVector *rotation);
+    // samp.dll RVA: 0x000a8b10
+    void ProcessFrameObjectsOnce();
     // samp.dll RVA: 0x000a8b50
     void NativeA8B50();
     // samp.dll RVA: 0x000a9b80
@@ -99,6 +103,8 @@ extern CVector g_objectAttachmentZeroSpeed;
 extern void *g_objectSharedMaterialTexture;
 // samp.dll RVA: 0x000b3830
 void *__stdcall GamePoolObjectGetAt(int handle);
+// samp.dll RVA: 0x000a8b00
+void *__cdecl ObjectFrameIdentity(void *object,void *data);
 // Raw render traversal callbacks return the input atomic pointer.
 // samp.dll RVA: 0x000a8430
 void *__cdecl ObjectApplyMaterials(void *atomic,void *object);
