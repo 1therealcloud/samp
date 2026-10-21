@@ -724,3 +724,33 @@ void CObject::ProcessMaterials() {
     g_deviceMaterialOverrideEnabled=1;g_deviceMaterialOverrides=state;
     void *frame=*(void**)(rw+4);if(frame)GameRwForAllFrameObjects(frame,ObjectApplyMaterials,this);
 }
+
+#include "game/rw_preview.h"
+// samp.dll RVA: 0x000a82a0
+void CObject::SetMaterialText(int index,const char *text,BYTE size,const char *font,
+    BYTE fontSize,BYTE bold,DWORD fontColor,DWORD backgroundColor,BYTE alignment) {
+    if(index>16)return;
+    BYTE *state=(BYTE*)this;
+    void **texture=(void**)(state+0x217+index*4);
+    if(*texture){GameDestroyTextDrawTexture(*texture);*texture=0;
+        if(*(DWORD*)(state+0x110b+index*4))*(DWORD*)(state+0x110b+index*4)=0;}
+    IUnknown **rendered=(IUnknown**)(state+0x114b+index*4);
+    if(*rendered){(*rendered)->Release();*rendered=0;*(DWORD*)(state+0x31b+index*4)=0;}
+    char **stored=(char**)(state+0x10cb+index*4);
+    if(*stored){free(*stored);*stored=0;}
+    *texture=GameRwCreateTexture(GameRwCreateRaster(2,2,0,0));if(!*texture)return;
+    ++*(DWORD*)((BYTE*)*texture+0x50);
+    unsigned length=0;while(text[length])++length;
+    *stored=(char*)calloc(1,length+1);
+    char *destination=*stored;do{*destination++=*text;}while(*text++);
+    BYTE *record=state+index*0xd7;
+    record[0x35c]=(BYTE)index;record[0x3e5]=size;
+    destination=(char*)(record+0x3e6);do{*destination++=*font;}while(*font++);
+    record[0x427]=fontSize;record[0x428]=bold!=0;
+    *(DWORD*)(record+0x429)=fontColor;*(DWORD*)(record+0x42d)=backgroundColor;
+    record[0x431]=alignment;
+    *(DWORD*)(state+0x257+index*4)=0;*(DWORD*)(state+0x2db+index*4)=2;
+    void *raster=*(void**)*texture;
+    if(raster)*(void**)(state+0x110b+index*4)=GameRwReadField34(raster);
+    *(DWORD*)(state+0x118b)=1;
+}
