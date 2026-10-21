@@ -30,6 +30,8 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000ad9f0
+    void ProcessDrunk();
     // samp.dll RVA: 0x000aef40
     void SetKeys(WORD mask,WORD leftRight,WORD upDown);
     // samp.dll RVA: 0x000af1d0
@@ -243,4 +245,10 @@ extern void *g_pedCommandTaskSnapshot;
 extern const float g_pedFloorRayLength;
 // samp.dll RVA: 0x0018f4a4
 extern DWORD g_pedVehicleEntryFlag;
+// samp.dll RVA: 0x002a92a4
+extern DWORD g_pedDrunkVehicleTick;
+// samp.dll RVA: 0x001181c0
+extern const float g_pedDrunkShakeScale;
+// samp.dll RVA: 0x00117668
+extern const float g_pedDrunkSpeedThreshold;
 #endif

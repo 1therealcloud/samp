@@ -12739,6 +12739,48 @@
       "rva": "0x0011eaac",
       "module": "samp.dll",
       "evidence": "v191 direct native coordinator instructions and exact animation-library string data."
+    },
+    {
+      "name": "g_pedDrunkVehicleTick",
+      "va": "0x102a92a4",
+      "rva": "0x002a92a4",
+      "module": "samp.dll",
+      "evidence": "v192 direct original instructions/data; CRT rand separately identified from selected VC7 MT archive, not new SA-MP source."
+    },
+    {
+      "name": "g_pedDrunkShakeScale",
+      "va": "0x101181c0",
+      "rva": "0x001181c0",
+      "module": "samp.dll",
+      "evidence": "v192 direct original instructions/data; CRT rand separately identified from selected VC7 MT archive, not new SA-MP source."
+    },
+    {
+      "name": "g_pedDrunkSpeedThreshold",
+      "va": "0x10117668",
+      "rva": "0x00117668",
+      "module": "samp.dll",
+      "evidence": "v192 direct original instructions/data; CRT rand separately identified from selected VC7 MT archive, not new SA-MP source."
+    },
+    {
+      "name": "CPed::ProcessDrunk",
+      "va": "0x100ad9f0",
+      "rva": "0x000ad9f0",
+      "module": "samp.dll",
+      "evidence": "v192 direct original instructions/data; CRT rand separately identified from selected VC7 MT archive, not new SA-MP source."
+    },
+    {
+      "name": "rand",
+      "va": "0x100fd026",
+      "rva": "0x000fd026",
+      "module": "samp.dll",
+      "evidence": "v192 direct original instructions/data; CRT rand separately identified from selected VC7 MT archive, not new SA-MP source."
+    },
+    {
+      "name": "g_pedDrunkShakeCommand",
+      "va": "0x1011f224",
+      "rva": "0x0011f224",
+      "module": "samp.dll",
+      "evidence": "v192 direct original instructions/data; CRT rand separately identified from selected VC7 MT archive, not new SA-MP source."
     }
   ],
   "annotations": [

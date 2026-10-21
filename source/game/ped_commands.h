@@ -111,4 +111,6 @@ extern const char g_pedDrinkLibrary[4];
 extern const char g_pedDrinkAnimationM[15];
 // samp.dll RVA: 0x0011f328
 extern const char g_pedDrinkAnimationF[15];
+// samp.dll RVA: 0x0011f224
+extern const Scripting::OpcodeInfo g_pedDrunkShakeCommand;
 #endif

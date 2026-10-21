@@ -1201,3 +1201,88 @@ void CPed::SetKeys(WORD mask,WORD leftRight,WORD upDown) {
     keys->keys2[2]=axis;
     KeyStuff::SetKeys(m_nPlayerNumber,keys);
 }
+
+#include <stdlib.h>
+extern "C" {
+// MSVC CRT x87 conversion helper, provided by selected runtime.
+// samp.dll RVA: 0x000f9324
+__int64 __cdecl _ftol2();
+}
+// samp.dll RVA: 0x002a92a4
+DWORD g_pedDrunkVehicleTick;
+// samp.dll RVA: 0x001181c0
+const float g_pedDrunkShakeScale=0.02f;
+// samp.dll RVA: 0x00117668
+const float g_pedDrunkSpeedThreshold=0.05f;
+
+// samp.dll RVA: 0x000ad9f0
+void CPed::ProcessDrunk() {
+    int level=(int)m_drunkLevel;
+    DWORD deltaBits=0;
+    if(level>2000) {
+        if(m_nPlayerNumber) return;
+        int shake;
+        __asm { fild level
+            fmul dword ptr [g_pedDrunkShakeScale]
+            call _ftol2
+            mov shake,eax
+        }
+        if(shake>250) shake=250;
+        else if(shake<5) shake=0;
+        Scripting::ProcessCommand(&g_pedDrunkShakeCommand,0,shake);
+        if((int)m_drunkLevel>2000) {
+            BYTE *ped=(BYTE*)m_pGamePed;
+            if(ped&&(*(DWORD*)(ped+0x46c)&0x100)&&!IsPassenger()) {
+                BYTE *vehicle=*(BYTE**)(ped+0x58c);
+                if(vehicle) {
+                    DWORD previous=g_pedDrunkVehicleTick;
+                    DWORD (WINAPI *volatile tick)()=::GetTickCount;
+                    BOOL process=TRUE;
+                    if(previous) {
+                        DWORD now=tick();
+                        process=now-g_pedDrunkVehicleTick>200u;
+                    }
+                    if(process) {
+                        int outcome=rand()%40;
+                        if(outcome>=20) {
+                            if(outcome>30) deltaBits=(int)m_drunkLevel<5000?0x3c449ba6:0x3c75c28f;
+                            else deltaBits=(int)m_drunkLevel<5000?0xbc449ba6:0xbc75c28f;
+                        }
+                        __asm { mov edx,vehicle
+                            push 0
+                            push dword ptr [edx+0x44]
+                            call FloatOffset
+                            fcomp dword ptr [g_pedDrunkSpeedThreshold]
+                            add esp,8
+                            fnstsw ax
+                            test ah,0x41
+                            jz drunk_apply_delta
+                            mov edx,vehicle
+                            push 0
+                            push dword ptr [edx+0x48]
+                            call FloatOffset
+                            fcomp dword ptr [g_pedDrunkSpeedThreshold]
+                            add esp,8
+                            fnstsw ax
+                            test ah,0x41
+                            jnz drunk_delta_done
+                        drunk_apply_delta:
+                            mov edx,vehicle
+                            fld dword ptr deltaBits
+                            fadd dword ptr [edx+0x58]
+                            fstp dword ptr [edx+0x58]
+                        drunk_delta_done:
+                        }
+                        g_pedDrunkVehicleTick=tick();
+                    }
+                }
+            }
+        }
+        --m_drunkLevel;
+        return;
+    }
+    if(!m_nPlayerNumber) {
+        if(level>0) m_drunkLevel=(DWORD)(level-1);
+        Scripting::ProcessCommand(&g_pedDrunkShakeCommand,0,0);
+    }
+}
