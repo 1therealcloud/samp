@@ -18,6 +18,8 @@ public:
     virtual void Add();
     // samp.dll RVA: 0x000a79f0
     virtual void Remove();
+    // samp.dll RVA: 0x000a7a10
+    void UpdateAttachedObjectRotation();
     // samp.dll RVA: 0x000a7d00
     void SetAttachedVehicle(WORD id,const CVector *offset,const CVector *rotation);
     // samp.dll RVA: 0x000a7d90
@@ -81,6 +83,10 @@ public:
 };
 #pragma pack(pop)
 typedef char NativeObjectAllocationExtent[(sizeof(CObject)==0x119c)?1:-1];
+// samp.dll RVA: 0x001e0450
+extern CMatrix g_objectAttachmentMatrix;
+// samp.dll RVA: 0x001e049c
+extern CVector g_objectAttachmentZeroSpeed;
 // samp.dll RVA: 0x001e0498
 extern void *g_objectSharedMaterialTexture;
 // samp.dll RVA: 0x000b3830

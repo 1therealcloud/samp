@@ -795,3 +795,21 @@ void CObject::AfterMaterialRender() {
     BYTE *rw=(BYTE*)GetRwObject();if(!rw || *(void**)(state+0x1d3)!=rw)return;
     void *frame=*(void**)(rw+4);if(frame)GameRwForAllFrameObjects(frame,ObjectRestoreMaterials,this);
 }
+
+// samp.dll RVA: 0x001e0450
+CMatrix g_objectAttachmentMatrix;
+// samp.dll RVA: 0x001e049c
+CVector g_objectAttachmentZeroSpeed={0,0,0};
+// samp.dll RVA: 0x000a7a10
+void CObject::UpdateAttachedObjectRotation() {
+    BYTE *state=(BYTE*)this;
+    if(*(WORD*)(state+0xc0)==0xffff || state[0xda])return;
+    GetMatrix(&g_objectAttachmentMatrix);
+    DWORD *out=(DWORD*)&g_objectAttachmentMatrix,*in=(DWORD*)(state+0x11b);
+    for(int column=0;column<3;++column)for(int row=0;row<3;++row)out[column*4+row]=in[column*4+row];
+    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,0,*(float*)(state+0xce));
+    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,1,*(float*)(state+0xd2));
+    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,2,*(float*)(state+0xd6));
+    SetMatrix(g_objectAttachmentMatrix);
+    SetTurnSpeed(g_objectAttachmentZeroSpeed);SetSpeed(g_objectAttachmentZeroSpeed);
+}
