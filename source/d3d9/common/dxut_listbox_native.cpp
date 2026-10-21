@@ -234,6 +234,61 @@ bool CDXUTListBoxDL::HandleMouse(UINT message,POINT point,WPARAM keys,LPARAM lpa
     return false;
 }
 
+// samp.dll RVA: 0x0008e900
+void CDXUTListBoxDL::Render(IDirect3DDevice9 *device,float elapsed) {
+    if(!m_bVisible)return;
+    CDXUTElement *normal=m_Elements.GetAt(0);
+    normal->TextureColor.Blend(DXUT_STATE_NORMAL,elapsed,0.7f);
+    normal->FontColor.Blend(DXUT_STATE_NORMAL,elapsed,0.7f);
+    CDXUTElement *selection=m_Elements.GetAt(1);
+    selection->TextureColor.Blend(DXUT_STATE_NORMAL,elapsed,0.7f);
+    selection->FontColor.Blend(DXUT_STATE_NORMAL,elapsed,0.7f);
+    m_pDialog->DrawSprite(normal,&m_rcBoundingBox);
+    if(items.GetSize()>0) {
+        RECT text=textRect,highlight=selectionRect;
+        text.bottom=text.top+m_pDialog->GetFont(normal->iFont)->nHeight;
+        textHeight=text.bottom-text.top;
+        if(scrollBar.position<0){scrollBar.position=0;scrollBar.Cap();scrollBar.UpdateThumbRect();}
+        if(!g_dxutListScrollInitialized) {
+            scrollBar.pageSize=textHeight?(textRect.bottom-textRect.top)/textHeight:textRect.bottom-textRect.top;
+            scrollBar.Cap();scrollBar.UpdateThumbRect();g_dxutListScrollInitialized=true;
+        }
+        text.right=textRect.right;
+        for(int i=scrollBar.position;i<items.GetSize();++i) {
+            if(text.bottom>textRect.bottom)break;
+            DXUTListBoxItemDL *item=items[i];bool selectedStyle=false;
+            if(!(style&1) && i==selected)selectedStyle=true;
+            else if(style&1) {
+                if(drag && ((i>=selected && i<selectionStart)||(i<=selected && i>selectionStart)))
+                    selectedStyle=items[selectionStart]->selected;
+                else if(item->selected)selectedStyle=true;
+            }
+            CDXUTElement *element=normal;
+            if(!item->flag && selectedStyle) {
+                highlight.top=text.top;highlight.bottom=text.bottom;
+                m_pDialog->DrawSprite(selection,&highlight);element=selection;
+            } else if(item->color) {
+                const float scale=1.0f/255.0f;
+                normal->FontColor.Current.r=(float)((item->color>>16)&255)*scale;
+                normal->FontColor.Current.g=(float)((item->color>>8)&255)*scale;
+                normal->FontColor.Current.b=(float)(item->color&255)*scale;
+                normal->FontColor.Current.a=(float)(item->color>>24)*scale;
+            }
+            m_pDialog->DrawTextA(item->text,element,&text,false,-1);
+            if(columnCount>0) {
+                int left=text.left;
+                for(int column=0;column<columnCount;++column) {
+                    text.left+=columnWidths[column];
+                    m_pDialog->DrawTextA(item->subitems[column],element,&text,false,-1);
+                }
+                text.left=left;
+            }
+            OffsetRect(&text,0,textHeight);
+        }
+    }
+    scrollBar.Render(device,elapsed);
+}
+
 // samp.dll RVA: 0x0008e8c0
 HRESULT CDXUTListBoxDL::OnInit() {
     return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
@@ -425,7 +480,7 @@ HRESULT CDXUTListBoxDL::AddItem(const char *value,void *data,int row) {
     if(!item)return E_OUTOFMEMORY;
     StringCchCopyA(item->text,256,value);
     item->data=data;SetRect(&item->activeRect,0,0,0,0);
-    item->selected=false;item->row=row;item->flag=false;
+    item->selected=false;item->color=row;item->flag=false;
     // Native initializes only64 bytes of each129-byte subitem buffer.
     for(int i=0;i<3;++i)memset(item->subitems[i],0,64);
     HRESULT result=items.Add(item);

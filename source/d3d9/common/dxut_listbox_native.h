@@ -65,7 +65,7 @@ struct DXUTListBoxItemDL {
     void *data;
     RECT activeRect;
     bool selected;
-    int row;
+    DWORD color;
     bool flag;
 };
 class CDXUTScrollBarDL : public CDXUTControl {
@@ -104,6 +104,8 @@ public:
 extern bool g_dxutScrollDragging;
 // samp.dll RVA: 0x00181a90
 extern int g_dxutScrollThumbOffsetY;
+// samp.dll RVA: 0x00181a95
+extern bool g_dxutListScrollInitialized;
 class CDXUTListBoxDL : public CDXUTControl {
     friend class CDialog;
 public:
@@ -120,7 +122,6 @@ public:
     CDXUTListBoxDL(CDXUTDialog *parent);
     // samp.dll RVA: 0x0008e8d0
     virtual ~CDXUTListBoxDL();
-    // Rendering remains declaration-only.
     // samp.dll RVA: 0x0008e900
     virtual void Render(IDirect3DDevice9 *device,float elapsed);
     // samp.dll RVA: 0x0008a500
