@@ -754,3 +754,26 @@ void CObject::SetMaterialText(int index,const char *text,BYTE size,const char *f
     if(raster)*(void**)(state+0x110b+index*4)=GameRwReadField34(raster);
     *(DWORD*)(state+0x118b)=1;
 }
+
+#include "game/effects.h"
+// samp.dll RVA: 0x000a8120
+void CObject::SetMaterial(int model,int index,const char *dictionary,const char *texture,DWORD color) {
+    if(index>16)return;
+    if(model>0 && !GameModelQueryB4170(model))return;
+    BYTE *state=(BYTE*)this;void **slot=(void**)(state+0x217+index*4);
+    if(*slot){GameDestroyTextDrawTexture(*slot);*slot=0;
+        if(*(DWORD*)(state+0x110b+index*4))*(DWORD*)(state+0x110b+index*4)=0;}
+    if(model>0) {
+        BOOL ready=g_pGame->IsModelAvailable(model);
+        if(!ready){g_pGame->RequestModel(model,2);g_pGame->LoadRequestedModels();ready=g_pGame->IsModelAvailable(model);
+            int waits=0;while(!ready){if(++waits>250)break;Sleep(2);ready=g_pGame->IsModelAvailable(model);}}
+        *slot=ready?GameLoadDictionaryTexture(dictionary,texture):0;
+        if(!GameGetModelReferenceCount(model) && g_pGame->IsModelAvailable(model))g_pGame->ReleaseModel(model,0);
+    } else if(model==0) {
+        if(!g_objectSharedMaterialTexture){GameLoadTextureDictionary("blanktex","blanktex",1);
+            g_objectSharedMaterialTexture=GameLoadDictionaryTexture("blanktex","blanktex");}
+        *slot=g_objectSharedMaterialTexture;
+    }
+    *(DWORD*)(state+0x257+index*4)=color;
+    *(DWORD*)(state+0x2db+index*4)=1;*(DWORD*)(state+0x118b)=1;
+}

@@ -1369,3 +1369,15 @@ void CGame::EnableHUD(BOOL enabled) {
     if(enabled){*(BYTE*)0xba6769=1;*(BYTE*)0xbaa3fb=0;}
     else {*(BYTE*)0xba6769=0;*(BYTE*)0xbaa3fb=1;}
 }
+
+#include "game/custom_model_io.h"
+#include <stdio.h>
+// samp.dll RVA: 0x000b2790
+BOOL GameLoadTextureDictionary(const char *name,const char *filename,BYTE fromSamp) {
+    char directory[64],path[136];
+    strcpy(directory,fromSamp?"SAMP\\":"models\\txd");
+    int index=GameTxdFind(name);if(index!=-1)return TRUE;
+    index=GameTxdAdd(name);sprintf(path,"%s\\%s.txd",directory,filename);
+    if(!GameFileExists(path))return FALSE;
+    GameTxdLoad(index,path);GameTxdAddRef(index);return TRUE;
+}

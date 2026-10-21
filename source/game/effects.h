@@ -21,6 +21,8 @@ public:
 };
 #pragma pack(pop)
 typedef char GameBufferReaderExtent[(sizeof(GameBufferReader)==23)?1:-1];
+// samp.dll RVA: 0x000b2790
+BOOL GameLoadTextureDictionary(const char *name,const char *filename,BYTE fromSamp);
 // samp.dll RVA: 0x000b2860
 void *GameLoadDictionaryTexture(const char *dictionary,const char *name);
 // samp.dll RVA: 0x000b3480
