@@ -120,6 +120,58 @@ void CObject::Rotate(CVector rotation) {
     }
 }
 
+// samp.dll RVA: 0x0011ee24
+extern const Scripting::OpcodeInfo g_objectIsAttachedCommand={0x685,"i"};
+// samp.dll RVA: 0x0011ee10
+extern const Scripting::OpcodeInfo g_objectAttachVehicleCommand={0x681,"iiffffff"};
+// samp.dll RVA: 0x0011ee38
+extern const Scripting::OpcodeInfo g_objectAttachObjectCommand={0x69a,"iiffffff"};
+// Keep differences/products in x87 registers through sqrt, returning ST0.
+// samp.dll RVA: 0x000a7bb0
+float CObject::GetDistanceToTarget(const CMatrix *matrix) {
+    BYTE *state=(BYTE*)this;
+    __asm {
+        mov ecx,state
+        mov eax,matrix
+        fld dword ptr [eax+0x38]
+        fsub dword ptr [ecx+0x113]
+        fld dword ptr [eax+0x34]
+        fsub dword ptr [ecx+0x10f]
+        fld dword ptr [eax+0x30]
+        fsub dword ptr [ecx+0x10b]
+        fld st
+        fmul st,st(1)
+        fld st(2)
+        fmul st,st(3)
+        faddp st(1),st
+        fld st(3)
+        fmul st,st(4)
+        faddp st(1),st
+        fsqrt
+        fstp st(3)
+        fstp st
+        fstp st
+    }
+}
+// samp.dll RVA: 0x000a7e30
+void CObject::AttachToVehicle(CVehicle *vehicle) {
+    if(!Scripting::ProcessCommand(&g_objectIsAttachedCommand,m_nHandle)) {
+        BYTE *state=(BYTE*)this;
+        Scripting::ProcessCommand(&g_objectAttachVehicleCommand,m_nHandle,((CEntity*)vehicle)->m_nHandle,
+            (double)*(float*)(state+0xc2),(double)*(float*)(state+0xc6),(double)*(float*)(state+0xca),
+            (double)*(float*)(state+0xce),(double)*(float*)(state+0xd2),(double)*(float*)(state+0xd6));
+    }
+}
+// samp.dll RVA: 0x000a7eb0
+void CObject::AttachToObject(CObject *object) {
+    if(!Scripting::ProcessCommand(&g_objectIsAttachedCommand,m_nHandle)) {
+        BYTE *state=(BYTE*)this;
+        Scripting::ProcessCommand(&g_objectAttachObjectCommand,m_nHandle,object->m_nHandle,
+            (double)*(float*)(state+0xc2),(double)*(float*)(state+0xc6),(double)*(float*)(state+0xca),
+            (double)*(float*)(state+0xce),(double)*(float*)(state+0xd2),(double)*(float*)(state+0xd6));
+    }
+}
+
 // samp.dll RVA: 0x000a97c0
 void CObject::Move(CVector position,float speed,CVector rotation) {
     BYTE *state=(BYTE*)this;CMatrix matrix;GetMatrix(&matrix);

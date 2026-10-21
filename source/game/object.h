@@ -3,7 +3,14 @@
 #include "game/entity.h"
 // Address interface over the established CEntity prefix. Never allocate this partial class:
 // complete CObject allocation/constructor/layout remain unrecovered.
+class CVehicle;
 class CObject : public CEntity {public:
+    // samp.dll RVA: 0x000a7bb0
+    float GetDistanceToTarget(const CMatrix *matrix);
+    // samp.dll RVA: 0x000a7e30
+    void AttachToVehicle(CVehicle *vehicle);
+    // samp.dll RVA: 0x000a7eb0
+    void AttachToObject(CObject *object);
     // Downstream motion dependency of the recovered pool coordinator.
     // samp.dll RVA: 0x000a9240
     void Process(float elapsedSeconds);
