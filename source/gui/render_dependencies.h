@@ -50,25 +50,7 @@ class CLabelPool {public:
     // samp.dll RVA: 0x00001350
     void Draw();
 };
-class CDialog {public:
-    // Caller-observed ABI; full dialog implementation remains open.
-    // samp.dll RVA: 0x0006fa50
-    void Show(int id,int type,const char *title,const char *text,const char *button1,const char *button2,BOOL serverSide);
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x29d];
-    // samp.dll RVA: 0x0006eec0
-    CDialog(IDirect3DDevice9 *device);
-    // samp.dll RVA: 0x0006f460
-    void ResetDialogControls(CDXUTDialog *dialog);
-    // samp.dll RVA: 0x000700d0
-    void Close(char response);
-    // samp.dll RVA: 0x0006ef10
-    bool MsgProc(UINT message,WPARAM wparam,LPARAM lparam);
-    // samp.dll RVA: 0x0006ef30
-    bool IsInputHidden();
-    // samp.dll RVA: 0x0006f2d0
-    void Draw();
-};
+#include "dialog.h"
 #include "objectedit.h"
 #include "objectselection.h"
 class CTextDrawSelection {public:

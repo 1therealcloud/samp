@@ -114,11 +114,7 @@ void CScoreboard::Recalc(){
     *(float*)(nativeState+8)=(float)rect.right*0.5f-*(float*)(nativeState+0x14)*0.5f;
     *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
 }
-// samp.dll RVA: 0x0006eec0
-CDialog::CDialog(IDirect3DDevice9 *device){
-    DWORD *state=(DWORD*)nativeState;state[0]=(DWORD)device;state[7]=0;state[10]=0;state[13]=0;state[12]=0;state[11]=0;
-    state[3]=600;state[4]=300;state[5]=100;state[6]=30;memset(nativeState+0x89,0,0x204);
-}
+
 // samp.dll RVA: 0x00071100
 CRenderPanel::CRenderPanel(IDirect3DDevice9 *device){
     DWORD *state=(DWORD*)nativeState;state[0]=(DWORD)device;state[8]=0;state[9]=0;state[3]=280;state[4]=150;state[5]=210;state[6]=30;state[7]=38;
@@ -180,10 +176,8 @@ void CScoreboard::Enable() {
         UpdateList();g_pGame->SetCursorMode(3,FALSE);*(DWORD*)nativeState=1;
     }
 }
-// samp.dll RVA: 0x0006ef10
-bool CDialog::MsgProc(UINT message,WPARAM wparam,LPARAM lparam) {return CDXUTIMEEditBox::StaticMsgProc(message,wparam,lparam)!=false;}
-// samp.dll RVA: 0x0006ef30
-bool CDialog::IsInputHidden() {if(!*(DWORD*)(nativeState+0x24))return false;return ChatImeActive();}
+
+
 // samp.dll RVA: 0x0006d880
 BOOL CObjectSelection::MsgProc(UINT message,WPARAM,LPARAM) {if(enabled&&message==WM_LBUTTONUP){SendNotification();return TRUE;}return FALSE;}
 // samp.dll RVA: 0x00071010
