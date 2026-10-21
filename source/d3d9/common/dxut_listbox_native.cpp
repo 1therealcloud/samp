@@ -163,6 +163,77 @@ bool CDXUTListBoxDL::HandleKeyboard(UINT message,WPARAM key,LPARAM lparam) {
     return true;
 }
 
+// samp.dll RVA: 0x0008a6e0
+bool CDXUTListBoxDL::HandleMouse(UINT message,POINT point,WPARAM keys,LPARAM lparam) {
+    if(!m_bEnabled || !m_bVisible)return false;
+    if(message==WM_LBUTTONDOWN && !m_bHasFocus)m_pDialog->RequestFocus(this);
+    if(scrollBar.HandleMouse(message,point,keys,lparam))return true;
+    switch(message) {
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONDBLCLK:
+        if(items.GetSize()>0 && PtInRect(&selectionRect,point)) {
+            int clicked=textHeight?scrollBar.position+(point.y-textRect.top)/textHeight:-1;
+            if(clicked<scrollBar.position || clicked>=items.GetSize() ||
+                clicked>=scrollBar.position+scrollBar.pageSize)return true;
+            SetCapture(DXUTGetHWND());
+            if(message==WM_LBUTTONDBLCLK){m_pDialog->SendEvent(0x701,true,this);return true;}
+            selected=clicked;if(!(keys&MK_SHIFT))selectionStart=clicked;
+            if(style&1) {
+                DXUTListBoxItemDL *item=items[clicked];
+                int modifiers=keys&(MK_SHIFT|MK_CONTROL);
+                if(modifiers==MK_CONTROL)item->selected=!item->selected;
+                else if(modifiers==MK_SHIFT) {
+                    int first=selectionStart,last=clicked;
+                    if(first>last){int swap=first;first=last;last=swap;}
+                    for(int i=0;i<first;++i)items[i]->selected=false;
+                    for(int i=last+1;i<items.GetSize();++i)items[i]->selected=false;
+                    for(int i=first;i<=last;++i)items[i]->selected=true;
+                } else if(modifiers==(MK_SHIFT|MK_CONTROL)) {
+                    int first=selectionStart,last=clicked;
+                    if(first>last){int swap=first;first=last;last=swap;}
+                    bool state=items[selectionStart]->selected;
+                    for(int i=first+1;i<last;++i)items[i]->selected=state;
+                    item->selected=true;selected=selectionStart;
+                } else {
+                    for(int i=0;i<items.GetSize();++i)items[i]->selected=false;
+                    item->selected=true;
+                }
+            }
+            m_pDialog->SendEvent(0x702,true,this);return true;
+        }
+        break;
+    case WM_LBUTTONUP:
+        ReleaseCapture();drag=false;
+        if(selected<items.GetSize() && selected!=-1) {
+            int first=selectionStart,last=selected;
+            if(first>last){int swap=first;first=last;last=swap;}
+            for(int i=first+1;i<last;++i)items[i]->selected=items[selectionStart]->selected;
+            items[selected]->selected=items[selectionStart]->selected;
+            if(selectionStart!=selected)m_pDialog->SendEvent(0x702,true,this);
+        }
+        break;
+    case WM_MOUSEMOVE:
+        if(drag) {
+            int item=textHeight?scrollBar.position+(point.y-textRect.top)/textHeight:-1;
+            if(item>=scrollBar.position && item<items.GetSize() &&
+                item<scrollBar.position+scrollBar.pageSize)selected=item;
+            else if(item<scrollBar.position){scrollBar.Scroll(-1);selected=scrollBar.position;}
+            else if(item>=scrollBar.position+scrollBar.pageSize) {
+                scrollBar.Scroll(1);int last=scrollBar.position+scrollBar.pageSize;
+                if(items.GetSize()<last)last=items.GetSize();selected=last-1;
+            } else break;
+            m_pDialog->SendEvent(0x702,true,this);
+        }
+        break;
+    case WM_MOUSEWHEEL: {
+        UINT lines;SystemParametersInfoA(SPI_GETWHEELSCROLLLINES,0,&lines,0);
+        int amount=(short)HIWORD(keys)/WHEEL_DELTA*lines;
+        scrollBar.Scroll(-amount);return true;
+    }
+    }
+    return false;
+}
+
 // samp.dll RVA: 0x0008e8c0
 HRESULT CDXUTListBoxDL::OnInit() {
     return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
