@@ -5,6 +5,59 @@
 #include "gui/input_text.h"
 #include <new>
 
+// Reconstruction-only access to the shared base layout/nonvirtual body;
+// no fields, virtual overrides or established standalone native entry.
+struct DLControlAccess : CDXUTControl {
+    using CDXUTControl::UpdateRects;
+    using CDXUTControl::m_rcBoundingBox;
+    using CDXUTControl::m_bEnabled;
+};
+
+// samp.dll RVA: 0x000881b0
+void CDXUTScrollBarDL::UpdateRects() {
+    DLControlAccess *base=(DLControlAccess*)this;
+    base->DLControlAccess::UpdateRects();
+    const RECT &bounds=base->m_rcBoundingBox;
+    SetRect(&up,bounds.left,bounds.top,bounds.right,bounds.top+bounds.right-bounds.left);
+    SetRect(&down,bounds.left,bounds.bottom-(bounds.right-bounds.left),bounds.right,bounds.bottom);
+    SetRect(&track,up.left,up.bottom,down.right,down.top);
+    thumb.left=up.left;thumb.right=up.right;
+    UpdateThumbRect();
+}
+
+// samp.dll RVA: 0x00088230
+void CDXUTScrollBarDL::Scroll(int delta) {position+=delta;Cap();UpdateThumbRect();}
+
+// samp.dll RVA: 0x00084e70
+bool CDXUTScrollBarDL::HandleKeyboard(UINT,WPARAM,LPARAM) {return false;}
+
+// samp.dll RVA: 0x0008e8c0
+HRESULT CDXUTListBoxDL::OnInit() {
+    return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
+}
+
+// samp.dll RVA: 0x0008e8a0
+bool CDXUTListBoxDL::CanHaveFocus() {
+    DLControlAccess *base=(DLControlAccess*)this;
+    return base->m_bVisible && base->m_bEnabled;
+}
+
+// samp.dll RVA: 0x00088700
+void CDXUTListBoxDL::UpdateRects() {
+    DLControlAccess *base=(DLControlAccess*)this;
+    base->DLControlAccess::UpdateRects();
+    selectionRect=base->m_rcBoundingBox;selectionRect.right-=scrollBarWidth;
+    InflateRect(&selectionRect,-border,-border);
+    textRect=selectionRect;InflateRect(&textRect,-margin,0);
+    ((CDXUTControl*)&scrollBar)->SetLocation(base->m_rcBoundingBox.right-scrollBarWidth,base->m_rcBoundingBox.top);
+    ((CDXUTControl*)&scrollBar)->SetSize(scrollBarWidth,base->m_height);
+    DXUTFontNode *font=base->m_pDialog->GetFont(base->GetElement(0)->iFont);
+    if(font && font->nHeight) {
+        scrollBar.pageSize=(textRect.bottom-textRect.top)/font->nHeight;
+        scrollBar.Cap();scrollBar.UpdateThumbRect();scrollBar.ShowItem(selected);
+    }
+}
+
 // samp.dll RVA: 0x0008de50
 CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog *parent):CDXUTControl(0) {
     m_pDialog=parent;m_Type=DXUT_CONTROL_STATIC;

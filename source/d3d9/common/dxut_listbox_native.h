@@ -74,7 +74,15 @@ public:
     bool showThumb;
     RECT up,down,track,thumb;
     int position,pageSize,start,end;
-    BYTE unknown9e[0x34];
+    POINT lastMouse;
+    int arrowState;
+    double arrowTimestamp;
+    // samp.dll RVA: 0x000881b0
+    void UpdateRects();
+    // samp.dll RVA: 0x00088230
+    void Scroll(int delta);
+    // samp.dll RVA: 0x00084e70
+    bool HandleKeyboard(UINT message,WPARAM wparam,LPARAM lparam);
     // samp.dll RVA: 0x00084e80
     void Cap();
     // samp.dll RVA: 0x00084da0
@@ -97,11 +105,18 @@ public:
     int columnCount;
     int columnWidths[3];
     CDXUTScrollBarDL scrollBar;
+    RECT textRect,selectionRect;
     int scrollBarWidth,border,margin,textHeight;
     DWORD style;
     int selected,selectionStart;
     bool drag;
     CGrowableArray<DXUTListBoxItemDL*> items;
+    // samp.dll RVA: 0x00088700
+    void UpdateRects();
+    // samp.dll RVA: 0x0008e8c0
+    HRESULT OnInit();
+    // samp.dll RVA: 0x0008e8a0
+    bool CanHaveFocus();
     // samp.dll RVA: 0x0008a270
     HRESULT AddItem(const char *text,void *data,int row);
     // samp.dll RVA: 0x00088880
@@ -127,8 +142,12 @@ typedef char DLControlExtent[(sizeof(CDXUTControl)==0x4d)?1:-1];
 typedef char DLStaticExtent[(sizeof(CDXUTStaticDL)==0x151)?1:-1];
 typedef char DLButtonExtent[(sizeof(CDXUTButtonDL)==0x152)?1:-1];
 typedef char DLListItemData[(offsetof(DXUTListBoxItemDL,data)==0x284)?1:-1];
-typedef char DLScrollExtent[(sizeof(CDXUTScrollBarDL)==0xd2)?1:-1];
+typedef char DLScrollExtent[(sizeof(CDXUTScrollBarDL)==0xb2)?1:-1];
 typedef char DLScrollPosition[(offsetof(CDXUTScrollBarDL,position)==0x8e)?1:-1];
+typedef char DLScrollArrow[(offsetof(CDXUTScrollBarDL,arrowTimestamp)==0xaa)?1:-1];
 typedef char DLListExtent[(sizeof(CDXUTListBoxDL)==0x158)?1:-1];
+typedef char DLListScroll[(offsetof(CDXUTListBoxDL,scrollBar)==0x5d)?1:-1];
+typedef char DLListTextRect[(offsetof(CDXUTListBoxDL,textRect)==0x10f)?1:-1];
+typedef char DLListSelectionRect[(offsetof(CDXUTListBoxDL,selectionRect)==0x11f)?1:-1];
 typedef char DLListArrayOffset[(offsetof(CDXUTListBoxDL,items)==0x14c)?1:-1];
 #endif
