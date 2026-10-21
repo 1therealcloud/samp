@@ -1,6 +1,14 @@
 #include "d3d9/common/dxut_listbox_native.h"
 #include <strsafe.h>
 #include <string.h>
+#include <DXUTgui.h>
+
+// samp.dll RVA: 0x000875c0
+HRESULT CDXUTStaticDL::SetText(const char *value) {
+    if(!value){text[0]=0;return S_OK;}
+    StringCchCopyA(text,260,value);
+    return S_OK;
+}
 
 // samp.dll RVA: 0x00084e80
 void CDXUTScrollBarDL::Cap() {
@@ -23,6 +31,15 @@ void CDXUTScrollBarDL::UpdateThumbRect() {
 // samp.dll RVA: 0x000886d0
 void CDXUTScrollBarDL::SetTrackRange(int first,int last) {
     start=first;end=last;Cap();UpdateThumbRect();
+}
+
+// samp.dll RVA: 0x00084e30
+void CDXUTScrollBarDL::ShowItem(int index) {
+    if(index<0)index=0;
+    if(index>=end)index=end-1;
+    if(position>index)position=index;
+    else if(position+pageSize<=index)position=index-pageSize+1;
+    UpdateThumbRect();
 }
 
 // samp.dll RVA: 0x0008a270
@@ -57,4 +74,18 @@ DXUTListBoxItemDL *CDXUTListBoxDL::GetItem(int row) {
 void CDXUTListBoxDL::RemoveAllItems() {
     for(int i=0;i<items.GetSize();++i)delete items[i];
     items.RemoveAll();scrollBar.SetTrackRange(0,1);
+}
+
+// samp.dll RVA: 0x0008a470
+void CDXUTListBoxDL::SelectItem(int index) {
+    int count=items.GetSize();if(!count)return;
+    int old=selected;selected=index;
+    if(selected<0)selected=0;
+    if(selected>=count)selected=count-1;
+    if(old!=selected) {
+        if(style&1)items[selected]->selected=true;
+        selectionStart=selected;scrollBar.ShowItem(selected);
+    }
+    CDXUTDialog *parent=*(CDXUTDialog**)(control+0x18);
+    parent->SendEvent(0x702,true,(CDXUTControl*)this);
 }

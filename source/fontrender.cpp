@@ -161,9 +161,9 @@ void CFonts::Reset() {
     wrapper->font = m_pLicensePlateFont;
     m_pLicensePlateFont = wrapper;
     FontSize size;
-    GetTextScreenSize(&size, "Y", 0);
+    GetTextScreenSize(&size, g_fontMeasureProbe, 0);
     m_nFontHeight = size.cy;
-    GetLittleTextScreenSize(&size, "Y", 0);
+    GetLittleTextScreenSize(&size, g_fontMeasureProbe, 0);
     m_nLittleFontHeight = size.cy;
 }
 
@@ -194,3 +194,6 @@ const char *FontGetFace() {
         return g_pConfig->GetStringValue("fontface");
     return "Arial";
 }
+
+// samp.dll RVA: 0x00118400
+const char g_fontMeasureProbe[2]="Y";

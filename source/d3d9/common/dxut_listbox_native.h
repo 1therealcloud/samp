@@ -7,6 +7,13 @@
 #include <DXUTmisc.h>
 class CDXUTDialog;
 #pragma pack(push,1)
+// ANSI static-text prefix only, not a constructed or complete virtual control.
+struct CDXUTStaticDL {
+    BYTE control[0x4d];
+    char text[260];
+    // samp.dll RVA: 0x000875c0
+    HRESULT SetText(const char *text);
+};
 // Observed native storage views. Construction, virtual interfaces and rendering
 // remain separate recovery work; these are not the SDK Unicode widget types.
 struct DXUTListBoxItemDL {
@@ -31,6 +38,8 @@ public:
     void UpdateThumbRect();
     // samp.dll RVA: 0x000886d0
     void SetTrackRange(int first,int last);
+    // samp.dll RVA: 0x00084e30
+    void ShowItem(int index);
 private:
     // Declaration-only native lifecycle; the observed view must not be constructed.
     // samp.dll RVA: 0x0008e750
@@ -57,6 +66,8 @@ public:
     DXUTListBoxItemDL *GetItem(int row);
     // samp.dll RVA: 0x0008c270
     void RemoveAllItems();
+    // samp.dll RVA: 0x0008a470
+    void SelectItem(int index);
 private:
     // Declaration-only native lifecycle; the observed view must not be constructed.
     // samp.dll RVA: 0x0008e810

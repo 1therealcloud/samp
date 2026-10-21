@@ -6,9 +6,16 @@
 #include "main.h"
 #include "cmdwindow.h"
 #include "d3d9/common/dxut_listbox_native.h"
+#include "game/hooks_render.h"
+#include "game/scripting.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <string.h>
+#include <stdlib.h>
+
+// Reconstruction-only access facade for the established control vtable slot4C.
+// It adds no fields, virtual methods or standalone native entries.
+struct DialogControlAccess : CDXUTControl { using CDXUTControl::UpdateRects; };
 
 // samp.dll RVA: 0x0006eec0
 CDialog::CDialog(IDirect3DDevice9 *device){
@@ -218,4 +225,117 @@ int CDialog::PopulateTable(const char *value,SIZE *size,BOOL header) {
     columnWidths[2]=scratch.widths[2]+20;
     if(size){size->cx=scratch.widths[0]+scratch.widths[1]+scratch.widths[2]+scratch.widths[3]+80;size->cy=totalHeight;}
     return 1;
+}
+
+// samp.dll RVA: 0x0011c724
+const float g_dialogEditPadding=14.0f;
+
+// samp.dll RVA: 0x0006fa50
+void CDialog::Show(int requestId,int style,const char *caption,const char *value,const char *firstButton,const char *secondButton,BOOL remote) {
+    if(requestId<0){if(active)Hide();return;}
+    if(g_pInput && g_pInput->m_bEnabled)g_pInput->Close();
+    id=requestId;type=style;serverSide=remote;
+    memset(title,0,sizeof(title));strncpy(title,caption,64);
+    if(text)free(text);
+    text=(char*)calloc(1,strlen(value)+64);
+    strcpy(text,value);
+    // Native hidden-result scratch; do not invoke the reconstruction FontSize ctor.
+    SIZE bodySize;
+    FontSize *measured=g_deviceFonts->GetLittleTextScreenSize((FontSize*)&bodySize,text,0x40);
+    textWidth=measured->cx;textHeight=measured->cy;
+    if(strlen(caption)) {
+        SIZE titleSize;g_deviceFonts->GetTextScreenSize((FontSize*)&titleSize,g_fontMeasureProbe,0);
+        // Native copies the original, untruncated caption and leaves stale caption
+        // state untouched when the input caption is empty.
+        strcpy((char*)dialog+0x16,caption);
+        *(BYTE*)((BYTE*)dialog+0x14)=1;
+        dialog->SetCaptionHeight(titleSize.cy+4);
+    }
+    SIZE size={0,0};
+    switch(type) {
+    case 0:
+        width=textWidth+40;
+        height=dialog->GetCaptionHeight()+textHeight+buttonHeight+25;
+        input->SetVisible(false);input->SetEnabled(false);
+        ((CDXUTControl*)list)->SetVisible(false);((CDXUTControl*)list)->SetEnabled(false);
+        break;
+    case 1:
+    case 3: {
+        width=textWidth+40;
+        bool password=type==3;
+        int captionHeight=dialog->GetCaptionHeight();
+        int editHeight=(int)(dialog->GetFont(1)->nHeight*g_hookHudAspectThreshold+g_dialogEditPadding);
+        height=editHeight+textHeight+buttonHeight+captionHeight+25;
+        input->SetVisible(true);input->SetEnabled(true);
+        BYTE *flags=(BYTE*)input;
+        flags[0x126]=password;flags[0x5f]=password;
+        input->SetText(g_pedEmptyDanceAnimation,false);
+        ((CDXUTControl*)list)->SetVisible(false);((CDXUTControl*)list)->SetEnabled(false);
+        break;
+    }
+    case 2: {
+        PopulateList(text,&size);
+        width=size.cx+40;
+        if(width<400)width=400;
+        if(width>800)width=800;
+        if(width<buttonWidth*2+30)width=buttonWidth*2+30;
+        int listHeight=size.cy+list->border*2;
+        if(listHeight<200)listHeight=200;else if(listHeight>400)listHeight=400;
+        height=dialog->GetCaptionHeight()+buttonHeight+listHeight+15;
+        ((CDXUTControl*)list)->SetLocation(5,5);
+        ((CDXUTControl*)list)->SetSize(width-10,listHeight);
+        input->SetVisible(false);input->SetEnabled(false);
+        ((CDXUTControl*)list)->SetVisible(true);((CDXUTControl*)list)->SetEnabled(true);
+        ((DialogControlAccess*)list)->UpdateRects();
+        break;
+    }
+    case 4:
+    case 5: {
+        bool header=type==5;
+        PopulateTable(text,&size,header);
+        width=size.cx+40;
+        if(width<400) {
+            width=400;
+            int columns=list->columnCount;
+            if(columns>0) {
+                int extra=(360-size.cx)/columns;
+                int i=0;
+                do {
+                    int own=columnWidths[i];
+                    int widget=list->columnWidths[i];
+                    columnWidths[i]=own+extra;
+                    list->columnWidths[i]=widget+extra;
+                    ++i;
+                } while(i!=list->columnCount);
+            }
+        }
+        if(width<buttonWidth*2+30)width=buttonWidth*2+30;
+        int listHeight=size.cy+list->border*2;
+        if(listHeight<200)listHeight=200;else if(listHeight>400)listHeight=400;
+        if(header) {
+            SIZE headerSize;g_deviceFonts->GetLittleTextScreenSize((FontSize*)&headerSize,g_fontMeasureProbe,0);
+            height=dialog->GetCaptionHeight()+buttonHeight+headerSize.cy+listHeight+15;
+            ((CDXUTControl*)list)->SetLocation(5,headerSize.cy+5);
+        } else {
+            height=dialog->GetCaptionHeight()+buttonHeight+listHeight+15;
+            ((CDXUTControl*)list)->SetLocation(5,5);
+        }
+        ((CDXUTControl*)list)->SetSize(width-10,listHeight);
+        input->SetVisible(false);input->SetEnabled(false);
+        ((CDXUTControl*)list)->SetVisible(true);((CDXUTControl*)list)->SetEnabled(true);
+        ((DialogControlAccess*)list)->UpdateRects();
+        break;
+    }
+    }
+    bool second=strlen(secondButton)!=0;
+    ((CDXUTStaticDL*)dialog->GetControl(20,0))->SetText(firstButton);
+    ((CDXUTStaticDL*)dialog->GetControl(21,0))->SetText(second?secondButton:g_pedEmptyDanceAnimation);
+    dialog->GetControl(21,0)->SetVisible(second);
+    dialog->SetVisible(true);
+    if(type==1 || type==3)dialog->RequestFocus(input);
+    if(type==2 || type==4 || type==5) {
+        dialog->RequestFocus((CDXUTControl*)list);
+        list->SelectItem(0);
+    }
+    Recalc();active=TRUE;
 }

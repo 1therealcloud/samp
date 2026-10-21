@@ -36,6 +36,9 @@ public:
 };
 typedef char FontsSize[(sizeof(CFonts)==40)?1:-1];
 typedef char FontsScratchOffset[(offsetof(CFonts,m_szTempBuffer)==28)?1:-1];
+
+// samp.dll RVA: 0x00118400
+extern const char g_fontMeasureProbe[2];
 #endif
 
 #ifndef SAMP_RECOVERED_FONT_SETTINGS_H

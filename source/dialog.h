@@ -8,7 +8,6 @@ class CDXUTListBoxDL;
 class CDXUTIMEEditBox;
 #pragma pack(push,1)
 class CDialog {public:
-    // Caller-observed ABI; full dialog implementation remains open.
     // samp.dll RVA: 0x0006fa50
     void Show(int id,int type,const char *title,const char *text,const char *button1,const char *button2,BOOL serverSide);
     // Observed allocation extent, not a complete recovered interface.
@@ -73,4 +72,7 @@ typedef char DialogWidthsOffset[(offsetof(CDialog,columnWidths)==0x28d)?1:-1];
 extern const float g_dialogNegativeLineScale;
 // samp.dll RVA: 0x00118490
 extern const float g_dialogLineScale;
+
+// samp.dll RVA: 0x0011c724
+extern const float g_dialogEditPadding;
 #endif
