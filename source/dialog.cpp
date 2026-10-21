@@ -5,6 +5,7 @@
 #include "game/game.h"
 #include "main.h"
 #include "cmdwindow.h"
+#include "d3d9/common/dxut_listbox_native.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <string.h>
@@ -126,4 +127,95 @@ void CDialog::Draw() {
             left+=columnWidths[i];
         }
     }
+}
+
+// samp.dll RVA: 0x0006f630
+BOOL CDialog::PopulateList(const char *value,SIZE *size) {
+    list->RemoveAllItems();list->columnCount=0;
+    int widest=0,totalHeight=0,row=0;
+    while(value && *value) {
+        char line[256]={0};
+        value=CopyLine(value,line,256);
+        if(strlen(line)) {
+            int measured=GetTextWidth(line);
+            if(measured>widest)widest=measured;
+            totalHeight+=GetFontHeight();
+            list->AddItem(line,(void*)row,-1);
+            ++row;
+        }
+        if(!value)break;
+        if(*value=='\n')++value;
+    }
+    if(size){size->cx=widest+20;size->cy=totalHeight;}
+    return TRUE;
+}
+
+// samp.dll RVA: 0x0006f730
+int CDialog::PopulateTable(const char *value,SIZE *size,BOOL header) {
+    list->RemoveAllItems();list->columnCount=0;
+    // Observed adjacency: the native extra-column width access aliases the
+    // first DWORD of the129-byte cell buffer. No broader stack layout is claimed.
+    struct TableScratch {
+        int widths[4];
+        char cell[129];
+        BYTE padding[7];
+        char line[256];
+    } scratch;
+    typedef char TableCellAlias[(offsetof(TableScratch,cell)==16)?1:-1];
+    typedef char TableLineOffset[(offsetof(TableScratch,line)==0x98)?1:-1];
+    memset(scratch.widths,0,sizeof(scratch.widths));
+    memset(scratch.line,0,sizeof(scratch.line));
+    int totalHeight=0;
+    const char *cursor=value;
+    const char *next=CopyLine(value,scratch.line,256);
+    if((BYTE)header)cursor=next;
+    if(!strlen(scratch.line))return -1;
+    int columns=0;
+    const char *column=scratch.line;
+    do {
+        if(columns>=4)break;
+        memset(scratch.cell,0,sizeof(scratch.cell));
+        column=CopyColumn(column,scratch.cell,128);
+        memset(columnTitles[columns],0,129);
+        if((BYTE)header) {
+            strncpy(columnTitles[columns],scratch.cell,128);
+            int measured=GetTextWidth(scratch.cell);
+            if(measured>scratch.widths[columns])scratch.widths[columns]=measured;
+        }
+        ++columns;
+    } while(column);
+    columnCount=columns;list->columnCount=columns-1;
+    int row=0;
+    while(cursor && *cursor) {
+        memset(scratch.line,0,sizeof(scratch.line));
+        cursor=CopyLine(cursor,scratch.line,256);
+        bool added=false;
+        if(strlen(scratch.line)) {
+            int col=0;column=scratch.line;
+            do {
+                if(col>columnCount)break;
+                memset(scratch.cell,0,sizeof(scratch.cell));
+                column=CopyColumn(column,scratch.cell,128);
+                int measured=GetTextWidth(scratch.cell);
+                int *width=(int*)((BYTE*)&scratch+col*4);
+                if(measured>*width)*width=measured;
+                if(col==0) {
+                    list->AddItem(scratch.cell,(void*)row,-1);
+                    added=true;totalHeight+=GetFontHeight();
+                } else list->SetSubItemText(row,col-1,scratch.cell);
+                ++col;
+            } while(column);
+        }
+        if(added)++row;
+        if(!cursor)break;
+        if(*cursor=='\n')++cursor;
+    }
+    list->columnWidths[0]=scratch.widths[0]+20;
+    columnWidths[0]=scratch.widths[0]+20;
+    list->columnWidths[1]=scratch.widths[1]+20;
+    columnWidths[1]=scratch.widths[1]+20;
+    list->columnWidths[2]=scratch.widths[2]+20;
+    columnWidths[2]=scratch.widths[2]+20;
+    if(size){size->cx=scratch.widths[0]+scratch.widths[1]+scratch.widths[2]+scratch.widths[3]+80;size->cy=totalHeight;}
+    return 1;
 }

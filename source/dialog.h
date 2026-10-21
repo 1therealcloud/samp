@@ -4,7 +4,7 @@
 #include <stddef.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
-class CDXUTListBox;
+class CDXUTListBoxDL;
 class CDXUTIMEEditBox;
 #pragma pack(push,1)
 class CDialog {public:
@@ -18,7 +18,7 @@ class CDialog {public:
             IDirect3DDevice9 *device;
             int x,y,width,height,buttonWidth,buttonHeight;
             CDXUTDialog *dialog;
-            CDXUTListBox *list;
+            CDXUTListBoxDL *list;
             CDXUTIMEEditBox *input;
             BOOL active;
             int type,id;
@@ -57,6 +57,10 @@ class CDialog {public:
     const char *CopyLine(const char *text,char *output,int limit);
     // samp.dll RVA: 0x0006f2a0
     void Hide();
+    // samp.dll RVA: 0x0006f630
+    BOOL PopulateList(const char *text,SIZE *size);
+    // samp.dll RVA: 0x0006f730
+    int PopulateTable(const char *text,SIZE *size,BOOL header);
 };
 #pragma pack(pop)
 typedef char DialogSize[(sizeof(CDialog)==0x29d)?1:-1];
