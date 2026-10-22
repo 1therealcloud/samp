@@ -2,6 +2,7 @@
 #include "net/pool_frame.h"
 #include "main.h"
 #include <GetTime.h>
+#include <string.h>
 // samp.dll RVA: 0x00012700
 CObjectPool::CObjectPool() {
     for(int i=0;i<2100;++i){active[i]=0;objects[i]=0;}
@@ -163,4 +164,81 @@ bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape *first,cons
         if(object->CEntity::TestCollisionShapes(first,second,1))return true;
     }
     return false;
+}
+
+// samp.dll RVA: 0x00156b5c
+GameEntityCollisionShape g_objectPoolRayOrigin;
+// samp.dll RVA: 0x00156b48
+GameEntityCollisionShape g_objectPoolRayEnd;
+// samp.dll RVA: 0x00156b70
+CObject *g_objectPoolRayDebugObject;
+
+// samp.dll RVA: 0x00012d70
+WORD CObjectPool::FindInRay(float maxDistance,const CVector *origin,const CVector *end) {
+    GameEntityCollisionShape from,to;
+    memcpy(from.words,origin,12);from.words[3]=0x3e800000;
+    memcpy(to.words,end,12);to.words[3]=0x3e800000;
+    // Neither native fifth word is written. Copy the opaque representations,
+    // including those stack bytes, rather than inventing a zero/default value.
+    memcpy(&g_objectPoolRayOrigin,&from,sizeof(from));
+    memcpy(&g_objectPoolRayEnd,&to,sizeof(to));
+    WORD selected=0xffff;float closest=maxDistance;
+    for(int i=0;i<=largestId;++i)if(active[i]) {
+        CObject *object=objects[i];float distance;
+        // Native calls the distance method even before checking a null object.
+        // It also stores ST0 to float before the later comparison.
+        __asm {
+            mov eax,origin
+            push dword ptr [eax+8]
+            push dword ptr [eax+4]
+            push dword ptr [eax]
+            mov ecx,object
+            call CEntity::GetDistanceToPoint
+            fstp distance
+        }
+        if(!object || !object->IsAdded() || object->GetModelIndex()==19300 || !(distance<closest))continue;
+        BYTE *collision=(BYTE*)GameGetModelCollision(object->GetModelIndex());
+        if(!collision)continue;
+        DWORD collisionEnabled;
+        __asm {
+            mov ecx,object
+            call CEntity::GetCollisionFlag
+            mov collisionEnabled,eax
+        }
+        BYTE hit;
+        if(collisionEnabled && *(DWORD*)(collision+0x2c))
+            hit=object->CEntity::TestCollisionShapes(&from,&to,0);
+        else {
+            CVector centre;object->GetBoundCentre(&centre);
+            hit=GameTestEntityLineSphere((const CVector*)from.words,(const CVector*)to.words,
+                object->m_pGameEntity,&centre,1.0f,1);
+        }
+        if(hit){closest=distance;selected=(WORD)i;}
+    }
+    return selected;
+}
+
+#include "label.h"
+#include "gui/device_lifecycle.h"
+// samp.dll RVA: 0x0011813c
+const char g_objectPoolRayOriginText[8]="Sphere1";
+// samp.dll RVA: 0x00118134
+const char g_objectPoolRayEndText[8]="Sphere2";
+
+// samp.dll RVA: 0x00012f50
+void DrawObjectPoolCollisionDebug() {
+    if(!g_deviceLabel)return;
+    CVector origin,end;
+    memcpy(&origin,g_objectPoolRayOrigin.words,12);
+    memcpy(&end,g_objectPoolRayEnd.words,12);
+    g_deviceLabel->Draw(&origin,g_objectPoolRayOriginText,0xffffffff,TRUE,FALSE);
+    g_deviceLabel->Draw(&end,g_objectPoolRayEndText,0xffffffff,TRUE,FALSE);
+    if(!g_objectPoolRayDebugObject) {
+        CVector rotation={0,0,0};
+        g_objectPoolRayDebugObject=g_pGame->NewObject(3065,0,0,0,rotation,200.0f,0,0);
+        g_objectPoolRayDebugObject->SetCollisionFlag(FALSE);
+        g_objectPoolRayDebugObject->Add();
+    }
+    CVector position;memcpy(&position,g_objectPoolRayEnd.words,12);
+    g_objectPoolRayDebugObject->Teleport(position);
 }

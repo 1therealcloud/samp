@@ -7,6 +7,9 @@ class CObjectPool {
     DWORD active[2100];
     CObject *objects[2100];
 public:
+    // Descriptive name. Native snapshots the ray, but reloads origin for distances.
+    // samp.dll RVA: 0x00012d70
+    WORD FindInRay(float maxDistance,const CVector *origin,const CVector *end);
     // Descriptive name: tests eligible pool objects, returns on first collision.
     // samp.dll RVA: 0x00012ce0
     bool TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second);
@@ -44,4 +47,18 @@ public:
 };
 #pragma pack(pop)
 typedef char NativeObjectPoolExtent[(sizeof(CObjectPool)==0x41a4)?1:-1];
+// Native copies all five words; the fifth is intentionally uninitialized stack data.
+// samp.dll RVA: 0x00156b5c
+extern GameEntityCollisionShape g_objectPoolRayOrigin;
+// samp.dll RVA: 0x00156b48
+extern GameEntityCollisionShape g_objectPoolRayEnd;
+// samp.dll RVA: 0x00156b70
+extern CObject *g_objectPoolRayDebugObject;
+// samp.dll RVA: 0x0011813c
+extern const char g_objectPoolRayOriginText[8];
+// samp.dll RVA: 0x00118134
+extern const char g_objectPoolRayEndText[8];
+// No this pointer is consumed; class ownership and callers are not established.
+// samp.dll RVA: 0x00012f50
+void DrawObjectPoolCollisionDebug();
 #endif
