@@ -23,3 +23,29 @@ DWORD CActorPool::Find(void *ped) {
     // Native OR AX,FFFF preserves the high half of the terminating counter.
     return (actor&0xffff0000)|0xffff;
 }
+
+#include "main.h"
+#include "chatwindow.h"
+#include "game/custommodels.h"
+// samp.dll RVA: 0x00001900
+BOOL CActorPool::Create(const ActorCreateInfo *info) {
+    // Native deliberately performs no ID bounds check.
+    if(actors[info->id]) {
+        g_pChat->AddDebugMessage("Warning: actor %u was not deleted",(unsigned)info->id);
+        Delete(info->id);
+    }
+    actors[info->id]=new CActor(info->model,info->position,info->heading);
+    if(!actors[info->id])return FALSE;
+    // Actor backend is distinct from the base CEntity pointer.
+    peds[info->id]=*(void**)((BYTE*)actors[info->id]+0x48);
+    active[info->id]=1;
+    actors[info->id]->SetHealth(info->health);
+    actors[info->id]->SetInvulnerable(info->invulnerable?1:0);
+    state2ee4[info->id]=1;
+    state3e84[info->id]=0;
+    UpdateLargestId();
+    if(g_customModels && info->customModel>20000 &&
+       (GameIsPedModel(info->customModel) || g_customModels->DoesExist(info->customModel)))
+        actors[info->id]->SetModelIndex(info->customModel);
+    return TRUE;
+}

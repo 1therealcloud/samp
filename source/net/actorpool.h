@@ -1,16 +1,23 @@
 #ifndef SAMP_ACTOR_POOL_H
 #define SAMP_ACTOR_POOL_H
 #include <windows.h>
+#include "game/entity.h"
 class CActor;
 #pragma pack(push,1)
+// Packed native creation request; custom model is separate from constructor model.
+struct ActorCreateInfo { WORD id; int model,customModel; CVector position; float heading,health; BYTE invulnerable; };
+typedef char NativeActorCreateInfoExtent[(sizeof(ActorCreateInfo)==31)?1:-1];
 class CActorPool {
     int largestId;
     CActor *actors[1000];
     DWORD active[1000];
     void *peds[1000];
-    // Native allocation extends beyond initialized lookup tables; tail meaning unresolved.
-    BYTE unknown2ee4[0x1f40];
+    // Observed per-slot DWORDs; semantic roles remain unresolved. Constructor leaves both untouched.
+    DWORD state2ee4[1000];
+    DWORD state3e84[1000];
 public:
+    // samp.dll RVA: 0x00001900
+    BOOL Create(const ActorCreateInfo *info);
     // samp.dll RVA: 0x000016c0
     CActorPool();
     // samp.dll RVA: 0x000018e0
