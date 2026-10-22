@@ -1,13 +1,4 @@
-build/
-
-references/
-tools/
-
-scripts/
-analysis/
-analysis-projects/
-worktrees/
-
-format.cmd
-
-ghidra/
+/*
+!/.gitattributes
+!/.gitignore
+!/source/
