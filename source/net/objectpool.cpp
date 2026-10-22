@@ -96,3 +96,20 @@ void CObjectPool::ShutdownMaterials() {
         } while((LONG)++i<=*(LONG*)state);
     }
 }
+
+#include "game/custommodels.h"
+// samp.dll RVA: 0x000127d0
+BOOL CObjectPool::Create(WORD id,int model,CVector position,CVector rotation,float drawDistance) {
+    BYTE *state=(BYTE*)this;
+    if(*(CObject**)(state+0x20d4+id*4))Delete(id);
+    BYTE firstHour=0,lastHour=0;
+    if(model<0 && g_customModels && g_customModels->IsObjectEntry(model)) {
+        firstHour=g_customModels->GetObjectFirstHour(model);
+        lastHour=g_customModels->GetObjectLastHour(model);
+        if(!g_customModels->GetLoadedFlag(model) && !g_customModels->LoadObjectEntry(model))model=18631;
+    }
+    CObject *object=g_pGame->NewObject(model,position.x,position.y,position.z,rotation,drawDistance,firstHour,lastHour);
+    *(CObject**)(state+0x20d4+id*4)=object;
+    if(!object)return FALSE;
+    *(DWORD*)(state+4+id*4)=1;UpdateLargestId();return TRUE;
+}

@@ -1452,3 +1452,10 @@ radius_scale:
     g_gameLineSphereResult=((Intersect)0x417470)(line,&sphere);
     return g_gameLineSphereResult;
 }
+
+#include "game/object.h"
+// samp.dll RVA: 0x000a0170
+CObject *CGame::NewObject(int model,float x,float y,float z,CVector rotation,float drawDistance,BYTE firstHour,BYTE lastHour) {
+    CVector position;memcpy(&position.x,&x,4);memcpy(&position.y,&y,4);memcpy(&position.z,&z,4);
+    return new CObject(model,position,rotation,drawDistance,0,firstHour,lastHour);
+}

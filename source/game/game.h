@@ -9,11 +9,14 @@ class CPed;
 class CVehicle;
 struct CVector;
 class CEntity;
+class CObject;
 class CMatrix;
 #pragma pack(push,1)
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
+    // samp.dll RVA: 0x000a0170
+    CObject *NewObject(int model,float x,float y,float z,CVector rotation,float drawDistance,BYTE firstHour,BYTE lastHour);
     CAudio *m_pAudio;
     CCamera *m_pCamera;
     CPed *m_pPlayerPed;

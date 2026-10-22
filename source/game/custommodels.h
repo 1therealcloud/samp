@@ -18,6 +18,11 @@ class CCustomModels {public:
     // Native DoesExist has loading side effects for type-1 entries.
     // samp.dll RVA: 0x0000ce30
     BOOL DoesExist(int model);
+    // Raw time bytes of first matching type-2 record; null records skipped.
+    // samp.dll RVA: 0x0000cf00
+    BYTE GetObjectFirstHour(int model);
+    // samp.dll RVA: 0x0000cf40
+    BYTE GetObjectLastHour(int model);
     // First matching type-2 record, skipping null records; raw TXD hash at +4A.
     // samp.dll RVA: 0x0000cdf0
     DWORD GetObjectTextureHash(int model);

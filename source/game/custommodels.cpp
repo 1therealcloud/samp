@@ -280,3 +280,23 @@ DWORD CCustomModels::GetObjectTextureHash(int model) {
     }
     return 0;
 }
+
+// samp.dll RVA: 0x0000cf00
+BYTE CCustomModels::GetObjectFirstHour(int model) {
+    BYTE *state=(BYTE*)this;DWORD count=*(DWORD*)(state+4);
+    for(DWORD i=0;i<count;++i) {
+        BYTE *entry=(*(BYTE***)state)[i];
+        if(entry && *(int*)(entry+0x10)==model && entry[7]==2)return entry[0x56];
+    }
+    return 0;
+}
+
+// samp.dll RVA: 0x0000cf40
+BYTE CCustomModels::GetObjectLastHour(int model) {
+    BYTE *state=(BYTE*)this;DWORD count=*(DWORD*)(state+4);
+    for(DWORD i=0;i<count;++i) {
+        BYTE *entry=(*(BYTE***)state)[i];
+        if(entry && *(int*)(entry+0x10)==model && entry[7]==2)return entry[0x57];
+    }
+    return 0;
+}
