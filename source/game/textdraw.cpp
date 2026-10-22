@@ -372,3 +372,41 @@ void CTextDraw::LoadTexture() {
     void *loaded=GameLoadDictionaryTexture(selected,texture);
     g_textDrawTextures[*(int*)(state+0x9a3)]=loaded;
 }
+
+// samp.dll RVA: 0x000b32e0
+CTextDraw::CTextDraw(const TextDrawTransmit *info,const char *text) {
+    BYTE *state=(BYTE*)this;const BYTE *input=info->data;
+    memset(state+0x963,0,91);
+    *(DWORD*)(state+0x963)=*(const DWORD*)(input+1);
+    *(DWORD*)(state+0x967)=*(const DWORD*)(input+5);
+    *(DWORD*)(state+0x96b)=*(const DWORD*)(input+9);
+    state[0x96f]=0;state[0x970]=(input[0]>>3)&1;state[0x971]=input[0]&1;
+    *(DWORD*)(state+0x972)=*(const DWORD*)(input+0xd);
+    *(DWORD*)(state+0x976)=*(const DWORD*)(input+0x11);
+    *(DWORD*)(state+0x97a)=*(const DWORD*)(input+0x15);
+    state[0x97e]=(input[0]>>4)&1;
+    *(DWORD*)(state+0x97f)=*(const DWORD*)(input+0x1b);
+    state[0x983]=input[0x19];state[0x984]=input[0x1a];
+    state[0x985]=(input[0]>>1)&1;state[0x986]=(input[0]>>2)&1;
+    *(DWORD*)(state+0x987)=input[0x1f];
+    *(DWORD*)(state+0x98b)=*(const DWORD*)(input+0x21);
+    *(DWORD*)(state+0x98f)=*(const DWORD*)(input+0x25);
+    *(DWORD*)(state+0x99b)=0xffffffff;*(DWORD*)(state+0x99f)=0xffffffff;
+    state[0x9a7]=input[0x20];*(WORD*)(state+0x9a8)=*(const WORD*)(input+0x29);
+    *(DWORD*)(state+0x9aa)=*(const DWORD*)(input+0x2b);
+    *(DWORD*)(state+0x9ae)=*(const DWORD*)(input+0x2f);
+    *(DWORD*)(state+0x9b2)=*(const DWORD*)(input+0x33);
+    *(DWORD*)(state+0x9b6)=*(const DWORD*)(input+0x37);
+    *(WORD*)(state+0x9ba)=*(const WORD*)(input+0x3b);
+    *(WORD*)(state+0x9bc)=*(const WORD*)(input+0x3d);
+    state[0x9c0]=0;*(int*)(state+0x9a3)=-1;
+    SetText(text);
+    if(*(DWORD*)(state+0x987)==4) {
+        *(int*)(state+0x9a3)=GameAllocateTextDrawTexture();
+        LoadTexture();
+    }
+    state[0x9bf]=0;
+    *(DWORD*)(state+0x9c1)=0;*(DWORD*)(state+0x9c9)=0;
+    *(DWORD*)(state+0x9c5)=0;*(DWORD*)(state+0x9cd)=0;
+    state[0x9d1]=0;*(DWORD*)(state+0x9d2)=0;
+}
