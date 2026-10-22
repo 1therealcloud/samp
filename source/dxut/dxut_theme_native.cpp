@@ -1,6 +1,6 @@
 // Isolated native SA-MP dialog theme. Values reviewed from RVA 0x0008d200.
 #include "dxstdafx.h"
-#include "d3d9/common/dxut_theme_native.h"
+#include "dxut/dxut_theme_native.h"
 #include "fontrender.h"
 #include "config.h"
 // samp.dll RVA: 0x000c69e0

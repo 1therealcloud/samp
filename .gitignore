@@ -10,3 +10,5 @@
 !/third-party/curl
 !/third-party/ttmath
 !/third-party/lzma
+!/third-party/bass
+!/third-party/detours

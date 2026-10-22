@@ -1,4 +1,4 @@
-#include "d3d9/common/dxut_listbox_native.h"
+#include "dxut/dxut_listbox_native.h"
 #include <strsafe.h>
 #include <string.h>
 #include <DXUTgui.h>

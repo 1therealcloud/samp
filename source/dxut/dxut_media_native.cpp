@@ -1,5 +1,5 @@
 #include "dxstdafx.h"
-#include "d3d9/common/dxut_media_native.h"
+#include "dxut/dxut_media_native.h"
 // samp.dll RVA: 0x00181ac8
 char g_dxutMediaSearchPath[MAX_PATH];
 // samp.dll RVA: 0x00093290

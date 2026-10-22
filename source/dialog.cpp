@@ -5,7 +5,7 @@
 #include "game/game.h"
 #include "main.h"
 #include "cmdwindow.h"
-#include "d3d9/common/dxut_listbox_native.h"
+#include "dxut/dxut_listbox_native.h"
 #include "game/hooks_render.h"
 #include "game/scripting.h"
 #include <DXUT.h>

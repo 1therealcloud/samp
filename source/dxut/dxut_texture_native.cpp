@@ -1,6 +1,6 @@
 // Native ANSI texture closure; isolated hybrid DXUT candidate.
 #include "dxstdafx.h"
-#include "d3d9/common/dxut_media_native.h"
+#include "dxut/dxut_media_native.h"
 // samp.dll RVA: 0x000897d0
 int CDXUTDialogResourceManager::AddTexture( const char * strFilename )
 {
