@@ -8,6 +8,20 @@ class CObjectEdit {public:
     BYTE unknown00[0x78];DWORD unknown78,unknown7c,unknown80,unknown84;WORD objectId;
     BYTE unknown8a[0x14];DWORD lastTick;BYTE flags[5],unknowna7[0x5c];
     IDirect3DDevice9 *device;ID3DXLine *line;ID3DXFont *smallFont,*largeFont;DWORD unknown113;
+    // samp.dll RVA: 0x00071a30
+    static const char *GetMaxSizeChar();
+    // Selector is an axis (0..2), not a boolean font selector.
+    // samp.dll RVA: 0x00071a40
+    const char *GetRenderChar(int axis);
+    // Descriptive names for native rectangle helpers.
+    // samp.dll RVA: 0x00071ae0
+    void CenterButtonRect(RECT *out,const POINT *center);
+    // samp.dll RVA: 0x00071b20
+    void ClearButtonRect(RECT *out);
+    // samp.dll RVA: 0x00071ec0
+    void EnterEditObject(WORD id,BOOL playerObject);
+    // samp.dll RVA: 0x00071f80
+    void EnterEditAttachedObject(int index);
     // samp.dll RVA: 0x000716c0
     float WorldToScreen(const CVector *position,float *screen);
     // samp.dll RVA: 0x000717c0
@@ -47,4 +61,26 @@ typedef char ObjectEditExtent[(sizeof(CObjectEdit)==0x117)?1:-1];
 void __cdecl ObjectEditBuildCursorRay(float rayLength,CVector *origin,CVector *end);
 // samp.dll RVA: 0x0011a7ac
 extern const float g_cursorRayUnsignedBias;
+// samp.dll RVA: 0x00118388
+extern const char g_objectEditGlyphMax[4];
+// samp.dll RVA: 0x0011c340
+extern const char g_objectEditGlyphXPosition[4];
+// samp.dll RVA: 0x0011c33c
+extern const char g_objectEditGlyphXRotation[4];
+// samp.dll RVA: 0x00118394
+extern const char g_objectEditGlyphXScale[4];
+// samp.dll RVA: 0x00118304
+extern const char g_objectEditGlyphYPosition[4];
+// samp.dll RVA: 0x00117880
+extern const char g_objectEditGlyphYRotation[4];
+// samp.dll RVA: 0x00118308
+extern const char g_objectEditGlyphYScale[4];
+// samp.dll RVA: 0x001183e0
+extern const char g_objectEditGlyphZPosition[4];
+// samp.dll RVA: 0x00117950
+extern const char g_objectEditGlyphZRotation[4];
+// samp.dll RVA: 0x001184c0
+extern const char g_objectEditGlyphZScale[4];
+// samp.dll RVA: 0x001182d8
+extern const char g_objectEditGlyphDefault[4];
 #endif

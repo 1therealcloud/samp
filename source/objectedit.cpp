@@ -282,3 +282,86 @@ height_unsigned:
         fstp dword ptr [eax+8]
     }
 }
+
+// samp.dll RVA: 0x00118388
+const char g_objectEditGlyphMax[4] = "C";
+// samp.dll RVA: 0x0011c340
+const char g_objectEditGlyphXPosition[4] = "6";
+// samp.dll RVA: 0x0011c33c
+const char g_objectEditGlyphXRotation[4] = "3";
+// samp.dll RVA: 0x00118394
+const char g_objectEditGlyphXScale[4] = "9";
+// samp.dll RVA: 0x00118304
+const char g_objectEditGlyphYPosition[4] = "7";
+// samp.dll RVA: 0x00117880
+const char g_objectEditGlyphYRotation[4] = "4";
+// samp.dll RVA: 0x00118308
+const char g_objectEditGlyphYScale[4] = "A";
+// samp.dll RVA: 0x001183e0
+const char g_objectEditGlyphZPosition[4] = "8";
+// samp.dll RVA: 0x00117950
+const char g_objectEditGlyphZRotation[4] = "5";
+// samp.dll RVA: 0x001184c0
+const char g_objectEditGlyphZScale[4] = "B";
+// samp.dll RVA: 0x001182d8
+const char g_objectEditGlyphDefault[4] = "0";
+
+// samp.dll RVA: 0x00071a30
+const char *CObjectEdit::GetMaxSizeChar() {return g_objectEditGlyphMax;}
+// samp.dll RVA: 0x00071a40
+const char *CObjectEdit::GetRenderChar(int axis) {
+    if(axis==0) {
+        if(unknown7c==0)return g_objectEditGlyphXPosition;
+        if(unknown7c==1)return g_objectEditGlyphXRotation;
+        if(unknown7c==2)return g_objectEditGlyphXScale;
+    } else if(axis==1) {
+        if(unknown7c==0)return g_objectEditGlyphYPosition;
+        if(unknown7c==1)return g_objectEditGlyphYRotation;
+        if(unknown7c==2)return g_objectEditGlyphYScale;
+    } else if(axis==2) {
+        if(unknown7c==0)return g_objectEditGlyphZPosition;
+        if(unknown7c==1)return g_objectEditGlyphZRotation;
+        if(unknown7c==2)return g_objectEditGlyphZScale;
+    }
+    return g_objectEditGlyphDefault;
+}
+// samp.dll RVA: 0x00071ae0
+void CObjectEdit::CenterButtonRect(RECT *out,const POINT *center) {
+    LONG width=*(LONG*)unknown00;
+    LONG half=((LONG)((DWORD)width-(width<0?0xffffffffUL:0)) >> 1);
+    out->left=(LONG)((DWORD)center->x-(DWORD)half);
+    out->right=(LONG)(*(DWORD*)unknown00+(DWORD)out->left);
+    LONG height=*(LONG*)(unknown00+4);
+    half=((LONG)((DWORD)height-(height<0?0xffffffffUL:0)) >> 1);
+    out->top=(LONG)((DWORD)center->y-(DWORD)half);
+    out->bottom=(LONG)(*(DWORD*)(unknown00+4)+(DWORD)out->top);
+}
+// samp.dll RVA: 0x00071b20
+void CObjectEdit::ClearButtonRect(RECT *out) {
+    out->left=0;out->right=0;out->top=0;out->bottom=0;
+}
+// samp.dll RVA: 0x00071ec0
+void CObjectEdit::EnterEditObject(WORD id,BOOL playerObject) {
+    unknown80=1;unknown78=1;SetEditMode(0);
+    objectId=id;*(BOOL*)((BYTE*)this+0x8e)=playerObject;flags[0]=0;
+    g_pGame->SetCursorMode(0,TRUE);
+    g_pGame->m_nInputEnableWaitFrames=0;
+    g_pGame->ProcessInputEnabling();
+    if(!g_pNetGame)return;
+    BYTE *pool=*(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0x14);
+    // Native permits ID2100, including its unproven adjacent storage access.
+    if(id>2100||!*(DWORD*)(pool+4+id*4))return;
+    BYTE *object=*(BYTE**)(pool+0x20d4+id*4);
+    if(!object)return;
+    *(DWORD*)((BYTE*)this+0x92)=*(DWORD*)(object+0xad);
+    *(DWORD*)((BYTE*)this+0x96)=*(DWORD*)(object+0xb1);
+    *(DWORD*)((BYTE*)this+0x9a)=*(DWORD*)(object+0xb5);
+}
+// samp.dll RVA: 0x00071f80
+void CObjectEdit::EnterEditAttachedObject(int index) {
+    unknown80=1;unknown78=2;SetEditMode(0);
+    *(int*)((BYTE*)this+0x8a)=index;objectId=0xffff;flags[0]=1;
+    g_pGame->SetCursorMode(0,TRUE);
+    g_pGame->m_nInputEnableWaitFrames=0;
+    g_pGame->ProcessInputEnabling();
+}
