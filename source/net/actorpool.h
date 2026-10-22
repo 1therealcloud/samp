@@ -16,6 +16,9 @@ class CActorPool {
     DWORD state2ee4[1000];
     DWORD state3e84[1000];
 public:
+    // Fourth parameter is copied into native ray records; semantic role unresolved.
+    // samp.dll RVA: 0x00001770
+    WORD FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord);
     // samp.dll RVA: 0x00001900
     BOOL Create(const ActorCreateInfo *info);
     // samp.dll RVA: 0x000016c0

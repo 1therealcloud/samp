@@ -306,3 +306,11 @@ extern void *g_gameStreamBuffer;
 
 // samp.dll RVA: 0x0011e844
 extern const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand;
+
+// GTA backend collision adapters; pointers describe observed prefixes, not complete GTA types.
+// samp.dll RVA: 0x000b3df0
+int __cdecl GameCameraSphereQuery(const void *sphere);
+// samp.dll RVA: 0x000b6110
+BYTE __stdcall GameTestEntityLineSphere(const CVector *origin,const CVector *end,void *backend,const CVector *centre,float scale,BYTE cameraCheck);
+// samp.dll RVA: 0x002abe58
+extern BYTE g_gameLineSphereResult;

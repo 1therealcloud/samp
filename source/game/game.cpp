@@ -1396,3 +1396,59 @@ DWORD CGame::CreateWeaponPickup(int model,int ammo,float x,float y,float z){
     Scripting::ProcessCommand(&g_gameCreateWeaponPickupCommand,selected,4,ammo,(double)x,(double)y,(double)z,&model);
     return (DWORD)model;
 }
+
+// samp.dll RVA: 0x002abe58
+BYTE g_gameLineSphereResult;
+// samp.dll RVA: 0x000b3df0
+int __cdecl GameCameraSphereQuery(const void *sphere) {
+    void *camera=*(void**)0xc1703c;
+    if(!camera)return 0;
+    typedef int (__cdecl *Query)(void *,const void *);
+    Query query=(Query)(g_gameVersion==1?0x7ee2d0:0x7ee310);
+    return query(camera,sphere);
+}
+// samp.dll RVA: 0x000b6110
+BYTE __stdcall GameTestEntityLineSphere(const CVector *origin,const CVector *end,void *backend,const CVector *centre,float scale,BYTE cameraCheck) {
+    if(!backend || !*(void**)((BYTE*)backend+0x14))return false;
+    float line[8]={0,0,0,0,0,0,0,0};
+    BYTE *model=(BYTE*)GameGetModelInfo(*(short*)((BYTE*)backend+0x22));
+    BYTE *collision=*(BYTE**)(model+0x14);
+    if(!collision)return false;
+    struct Sphere {CVector centre;float radius;};
+    if(cameraCheck) {
+        Sphere cameraSphere;cameraSphere.centre=*centre;
+        cameraSphere.radius=*(float*)(collision+0x24);
+        if(!GameCameraSphereQuery(&cameraSphere))return false;
+    }
+    line[0]=origin->x-centre->x;line[1]=origin->y-centre->y;line[2]=origin->z-centre->z;
+    line[4]=end->x-centre->x;line[5]=end->y-centre->y;line[6]=end->z-centre->z;
+    Sphere sphere;sphere.centre.x=0;sphere.centre.y=0;sphere.centre.z=0;
+    // Keep the native unrounded radius comparison/multiplication sequence.
+    const float half=0.5f,one=1.0f,enlarge=1.5f;
+    float radius;
+    __asm {
+        mov eax,collision
+        fld dword ptr [eax+0x24]
+        fcom half
+        fnstsw ax
+        test ah,5
+        jp radius_above_half
+        fstp st(0)
+        fld half
+        jmp radius_enlarge
+radius_above_half:
+        fcom one
+        fnstsw ax
+        test ah,5
+        jp radius_scale
+radius_enlarge:
+        fmul enlarge
+radius_scale:
+        fmul scale
+        fstp radius
+    }
+    sphere.radius=radius;
+    typedef BYTE (__cdecl *Intersect)(const void *,const void *);
+    g_gameLineSphereResult=((Intersect)0x417470)(line,&sphere);
+    return g_gameLineSphereResult;
+}

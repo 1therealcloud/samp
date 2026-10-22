@@ -49,3 +49,48 @@ BOOL CActorPool::Create(const ActorCreateInfo *info) {
         actors[info->id]->SetModelIndex(info->customModel);
     return TRUE;
 }
+
+// samp.dll RVA: 0x00001770
+WORD CActorPool::FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord) {
+    struct RayPoint {CVector point;DWORD word;};
+    RayPoint from={*origin,rayWord},to={*end,rayWord};
+    WORD selected=0xffff;float closest=100000.0f;
+    for(int i=0;i<=largestId;++i) {
+        WORD id=(WORD)i;
+        if(!active[i] || id>=1000 || !active[id] || !actors[id])continue;
+        CActor *actor=actors[id];if(!actor->DoesExist())continue;
+        BYTE nearer;
+        __asm {
+            mov ecx,actor
+            call CEntity::GetDistanceToCamera
+            fcomp maxCameraDistance
+            fnstsw ax
+            test ah,5
+            setnp nearer
+        }
+        if(!nearer)continue;
+        CVector centre;actor->GetBoundCentre(&centre);
+        if(!GameTestEntityLineSphere(&from.point,&to.point,actor->m_pGameEntity,&centre,1.5f,1))continue;
+        float x=origin->x,y=origin->y,z=origin->z;
+        __asm {
+            push z
+            push y
+            push x
+            mov ecx,actor
+            call CEntity::GetDistanceToPoint
+            fcom closest
+            fnstsw ax
+            test ah,5
+            jp distance_not_closer
+            fstp closest
+            mov nearer,1
+            jmp distance_done
+distance_not_closer:
+            fstp st(0)
+            mov nearer,0
+distance_done:
+        }
+        if(nearer)selected=(WORD)i;
+    }
+    return selected;
+}
