@@ -113,3 +113,32 @@ BOOL CObjectPool::Create(WORD id,int model,CVector position,CVector rotation,flo
     if(!object)return FALSE;
     *(DWORD*)(state+4+id*4)=1;UpdateLargestId();return TRUE;
 }
+
+// samp.dll RVA: 0x00012a90
+void CObjectPool::Draw() {
+    BYTE *state=(BYTE*)this;
+    for(int i=0;i<=*(int*)state;++i)if(*(DWORD*)(state+4+i*4)) {
+        CObject *object=*(CObject**)(state+0x20d4+i*4);
+        BYTE *data=(BYTE*)object;
+        if(data[0x49] && !data[0x6c])object->Render();
+    }
+}
+// samp.dll RVA: 0x00012ad0
+void CObjectPool::DrawLast() {
+    float distances[1000]={0};CObject *ordered[1000]={0};int count=0;
+    BYTE *state=(BYTE*)this;
+    for(int i=0;i<=*(int*)state;++i)if(*(DWORD*)(state+4+i*4) && count<1000) {
+        CObject *object=*(CObject**)(state+0x20d4+i*4);
+        BYTE *data=(BYTE*)object;
+        if(data[0x49] && data[0x6c]) {
+            ordered[count]=object;
+            distances[count]=object->GetDistanceToCamera();++count;
+        }
+    }
+    // Stable descending bubble pass; unordered pairs do not exchange places.
+    for(int end=count-1;end>0;--end)for(int i=0;i<end;++i)if(distances[i+1]>distances[i]) {
+        float distance=distances[i];distances[i]=distances[i+1];distances[i+1]=distance;
+        CObject *object=ordered[i];ordered[i]=ordered[i+1];ordered[i+1]=object;
+    }
+    for(int j=0;j<count;++j)if(ordered[j])ordered[j]->Render();
+}

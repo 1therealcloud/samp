@@ -7,6 +7,10 @@ class CObjectPool {
     DWORD active[2100];
     CObject *objects[2100];
 public:
+    // samp.dll RVA: 0x00012a90
+    void Draw();
+    // samp.dll RVA: 0x00012ad0
+    void DrawLast();
     // Native Create has no ID bounds guard.
     // samp.dll RVA: 0x000127d0
     BOOL Create(WORD id,int model,CVector position,CVector rotation,float drawDistance);
