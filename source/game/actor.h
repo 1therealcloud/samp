@@ -2,11 +2,13 @@
 #define SAMP_ACTOR_H
 #include "game/entity.h"
 #pragma pack(push,1)
-// Observed prefix through byte55; complete allocation/lifecycle not established.
+// Native allocation is 0x56 bytes; unresolved tail fields retain native untouched bytes.
 class CActor : public CEntity {
     void *actorBackend;
     BYTE unknown4c[10];
 public:
+    // samp.dll RVA: 0x0009bd30
+    CActor(int model,CVector position,float heading);
     // samp.dll RVA: 0x0009bee0
     void PerformAnimation(const char *name,const char *library,float speed,DWORD loop,DWORD lockX,DWORD lockY,DWORD freeze,int time);
     // samp.dll RVA: 0x0009bfd0
@@ -41,6 +43,7 @@ public:
     void SetInvulnerable(BYTE enabled);
 };
 #pragma pack(pop)
+typedef char NativeActorExtent[(sizeof(CActor)==0x56)?1:-1];
 // samp.dll RVA: 0x00181e5c
 extern void *g_actorTaskBackend;
 // samp.dll RVA: 0x0009bfb0

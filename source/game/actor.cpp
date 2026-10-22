@@ -93,3 +93,35 @@ DWORD GameClearActorTasks() {
 }
 // samp.dll RVA: 0x0009bfd0
 void CActor::ClearTasks(){g_actorTaskBackend=actorBackend;if(actorBackend)GameClearActorTasks();}
+
+#include "game/quaternion.h"
+// samp.dll RVA: 0x0011e280
+const Scripting::OpcodeInfo g_actorCreateCommand={0x9a,"iifffv"};
+// samp.dll RVA: 0x0011e2bc
+const Scripting::OpcodeInfo g_actorHeadingCommand={0x173,"if"};
+// samp.dll RVA: 0x0011e2a8
+const Scripting::OpcodeInfo g_actorConfigurationCommand={0x446,"ii"};
+// samp.dll RVA: 0x0011e2f8
+const Scripting::OpcodeInfo g_actorTaskFlagsCommand={0x60b,"ii"};
+// samp.dll RVA: 0x0009bd30
+CActor::CActor(int model,CVector position,float heading) {
+    actorBackend=0;m_nHandle=0;((BYTE*)this)[0x55]=0;
+    DWORD handle=0;
+    if(!g_pGame->IsModelAvailable(model)) {
+        g_pGame->RequestModel(model,2);g_pGame->LoadRequestedModels();
+        if(!g_pGame->IsModelAvailable(model)) {
+            void(WINAPI *volatile sleep)(DWORD)=::Sleep;
+            do{sleep(1);}while(!g_pGame->IsModelAvailable(model));
+        }
+    }
+    double loweredZ;float *z=&position.z;
+    __asm {mov eax,z}
+    __asm {fld dword ptr [eax]}
+    __asm {fsub g_quaternionMatrixOne}
+    __asm {fstp qword ptr loweredZ}
+    Scripting::ProcessCommand(&g_actorCreateCommand,5,model,(double)position.x,(double)position.y,loweredZ,&handle);
+    Scripting::ProcessCommand(&g_actorHeadingCommand,handle,(double)heading);
+    m_nHandle=handle;actorBackend=GamePoolPedGetAt(handle);m_pGameEntity=actorBackend;
+    Scripting::ProcessCommand(&g_actorConfigurationCommand,m_nHandle,0);
+    Scripting::ProcessCommand(&g_actorTaskFlagsCommand,m_nHandle,0x10006);
+}
