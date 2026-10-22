@@ -77,20 +77,7 @@ public:
     // samp.dll RVA: 0x0006eaf0
     void Draw();
 };
-class CEntity;
-class CObjectPool {
-public:
-    // Frame coordinators recovered; complete pool layout/lifecycle remains open.
-    // samp.dll RVA: 0x00012950
-    void Process();
-    // samp.dll RVA: 0x00012a10
-    void ConstructMaterials();
-    // Returns the established entity prefix; complete CObject/pool allocations remain open.
-    // samp.dll RVA: 0x00002e10
-    CEntity *Get(WORD id);
-    // samp.dll RVA: 0x00012a50
-    void ShutdownMaterials();
-};
+#include "net/objectpool.h"
 #include "net/textdrawpool.h"
 #pragma pack(pop)
 // samp.dll RVA: 0x002aca2c
