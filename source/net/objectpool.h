@@ -7,6 +7,9 @@ class CObjectPool {
     DWORD active[2100];
     CObject *objects[2100];
 public:
+    // Descriptive name: tests eligible pool objects, returns on first collision.
+    // samp.dll RVA: 0x00012ce0
+    bool TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second);
     // samp.dll RVA: 0x00012a90
     void Draw();
     // samp.dll RVA: 0x00012ad0

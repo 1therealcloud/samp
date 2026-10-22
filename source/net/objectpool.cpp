@@ -142,3 +142,25 @@ void CObjectPool::DrawLast() {
     }
     for(int j=0;j<count;++j)if(ordered[j])ordered[j]->Render();
 }
+
+// samp.dll RVA: 0x00012ce0
+bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second) {
+    BYTE *state=(BYTE*)this;const float limit=200.0f;
+    for(int i=0;i<=*(int*)state;++i)if(*(DWORD*)(state+4+i*4)) {
+        CObject *object=*(CObject**)(state+0x20d4+i*4);
+        if(!object || !object->IsAdded() || ((BYTE*)object)[0x53])continue;
+        // Compare extended ST0 directly; rounding to float can change this gate.
+        BYTE nearby;
+        __asm {
+            mov ecx,object
+            call CEntity::GetDistanceToCamera
+            fcomp limit
+            fnstsw ax
+            test ah,5
+            setnp nearby
+        }
+        if(!nearby || object->IsIgnored())continue;
+        if(object->CEntity::TestCollisionShapes(first,second,1))return true;
+    }
+    return false;
+}
