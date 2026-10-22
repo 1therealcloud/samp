@@ -48,3 +48,26 @@ char *CMenuPool::GetTextPointer(const char *suffix){
     }
     return 0;
 }
+
+#include "game/keystuff.h"
+#include "main.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
+typedef char MenuRpcOptions[(HIGH_PRIORITY==1 && RELIABLE==8)?1:-1];
+// samp.dll RVA: 0x001179c4
+int g_menuSelectedRpc=132;
+// samp.dll RVA: 0x001179c0
+int g_menuExitedRpc=140;
+// samp.dll RVA: 0x00007ef0
+void CMenuPool::Process(){
+    if(currentMenu==128)return;
+    BYTE *keys=(BYTE*)KeyStuff::GetInternalKeys();
+    RakClientInterface *client=*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c);
+    if(*(WORD*)(keys+0x20) && !*(WORD*)(keys+0x50)){
+        BYTE row=menus[currentMenu]->GetActiveRow();if(row==0xff)return;
+        unknown401=1;RakNet::BitStream stream;stream.WriteBits(&row,8,true);
+        client->RPC(&g_menuSelectedRpc,&stream,HIGH_PRIORITY,RELIABLE,0,false);
+    } else if(*(WORD*)(keys+0x1e) && !*(WORD*)(keys+0x4e)){
+        unknown401=1;client->RPC(&g_menuExitedRpc,(RakNet::BitStream*)0,HIGH_PRIORITY,RELIABLE,0,false);
+    } else if(unknown401){Hide(currentMenu);unknown401=0;}
+}

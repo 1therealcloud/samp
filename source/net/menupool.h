@@ -2,12 +2,14 @@
 #define SAMP_MENUPOOL_H
 #include "menu.h"
 #pragma pack(push,1)
-// Observed storage through401; no broader CNetGame/pool ownership claim.
+// Native allocation is0x402 bytes; current-menu sentinel is128.
 class CMenuPool {
     CMenu *menus[128];
     DWORD active[128];
     BYTE currentMenu,unknown401;
 public:
+    // samp.dll RVA: 0x00007ef0
+    void Process();
     // samp.dll RVA: 0x00007d50
     char *GetTextPointer(const char *suffix);
     // samp.dll RVA: 0x00007b40
@@ -24,4 +26,9 @@ public:
     void Hide(BYTE id);
 };
 #pragma pack(pop)
+typedef char NativeMenuPoolExtent[(sizeof(CMenuPool)==0x402)?1:-1];
+// samp.dll RVA: 0x001179c4
+extern int g_menuSelectedRpc;
+// samp.dll RVA: 0x001179c0
+extern int g_menuExitedRpc;
 #endif
