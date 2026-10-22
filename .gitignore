@@ -2,3 +2,7 @@
 !/.gitattributes
 !/.gitignore
 !/source/
+!/.gitmodules
+!/third-party/
+/third-party/*
+!/third-party/RakNet
