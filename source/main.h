@@ -41,10 +41,7 @@ namespace Settings {
     // samp.dll RVA: 0x000c55e0
     void GetFromQuotes(const char *line,char *output);
 }
-// GTA SA VA: 0x00c17044 (outside samp.dll)
-extern int g_chatScreenWidth; // GTA binding remains unresolved.
-// GTA SA VA: 0x00c97c1c (outside samp.dll)
-extern HWND g_inputGameWindow; // GTA binding remains unresolved.
+#include "game/gta_globals.h"
 #endif
 
 #ifndef SAMP_CLIENT_BOOTSTRAP_H

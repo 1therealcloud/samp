@@ -12,3 +12,5 @@
 !/third-party/lzma
 !/third-party/bass
 !/third-party/detours
+!/build.cmd
+!/build-libs.cmd

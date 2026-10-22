@@ -168,8 +168,7 @@ void CFonts::Reset() {
 }
 
 #include "config.h"
-// GTA SA VA: 0x00c17044 (outside samp.dll)
-extern int g_chatScreenWidth;
+#include "game/gta_globals.h"
 
 // samp.dll RVA: 0x000c6950
 int FontGetHeight() {

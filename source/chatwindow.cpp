@@ -20,8 +20,6 @@
 extern CGame *g_pGame;
 // samp.dll RVA: 0x002aca14
 extern CInput *g_pInput;
-// GTA SA VA: 0x00c17044 (outside samp.dll)
-extern int g_chatScreenWidth;
 
 // samp.dll RVA: 0x00060d30
 int CChat::GetMode() { return m_nMode; }
