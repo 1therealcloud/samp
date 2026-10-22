@@ -12,7 +12,7 @@ class CTextDraw {public:
     ~CTextDraw();
     // samp.dll RVA: 0x000b2b60
     void SetText(const char *text);
-    // Texture-name resolution dependency; native body not yet recovered.
+    // Texture-name resolution; descriptive recovered method name.
     // samp.dll RVA: 0x000b28d0
     void LoadTexture();
     // samp.dll RVA: 0x000b3080

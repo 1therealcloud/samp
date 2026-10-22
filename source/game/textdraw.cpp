@@ -338,3 +338,37 @@ void CTextDraw::SetText(const char *text) {
         LoadTexture();
     }
 }
+
+#include "game/effects.h"
+#include "game/custommodels.h"
+#include <stdlib.h>
+#include <stdio.h>
+// samp.dll RVA: 0x000b28d0
+void CTextDraw::LoadTexture() {
+    char dictionary[65]={0},texture[65]={0},selected[65]={0};
+    const char *text=(const char*)this;
+    const char *colon=strchr(text,':');
+    if(!colon || strlen(text)>=64 || strchr(text,'\\') || strchr(text,'/'))return;
+    strncpy(dictionary,text,colon-text);strcpy(texture,colon+1);
+    BYTE *state=(BYTE*)this;
+    if(*(int*)(state+0x9a3)==-1)return;
+    if(!memcmp(dictionary,"hud",4))strcpy(selected,"hud");
+    else if(!memcmp(dictionary,"samaps",7)) {
+        strcpy(selected,"samaps");
+        if(!GameLoadTextureDictionary(selected,"samaps",1))return;
+    } else if(!memcmp(dictionary,"vehicleprev",12)) {
+        strcpy(selected,"vehicleprev");
+        if(!GameLoadTextureDictionary(selected,"vehicles128",1))return;
+    } else if(g_customModels && strlen(dictionary)<10 && !_strnicmp(dictionary,"mdl",3)) {
+        int model=atoi(dictionary+3);
+        if(!g_customModels->IsObjectEntry(model))return;
+        if(!g_customModels->GetLoadedFlag(model) && !g_customModels->LoadObjectEntry(model))return;
+        DWORD hash=g_customModels->GetObjectTextureHash(model);if(!hash)return;
+        sprintf(selected,"%X",hash);
+    } else {
+        strncpy(selected,dictionary,10);
+        if(!GameLoadTextureDictionary(selected,dictionary,0))return;
+    }
+    void *loaded=GameLoadDictionaryTexture(selected,texture);
+    g_textDrawTextures[*(int*)(state+0x9a3)]=loaded;
+}

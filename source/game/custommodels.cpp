@@ -270,3 +270,13 @@ BOOL GameLoadObjectDff(const char *path,int model) {
     g_gameCustomStreamRead=false;
     return TRUE;
 }
+
+// samp.dll RVA: 0x0000cdf0
+DWORD CCustomModels::GetObjectTextureHash(int model) {
+    BYTE *state=(BYTE*)this;DWORD count=*(DWORD*)(state+4);
+    for(DWORD i=0;i<count;++i) {
+        BYTE *entry=(*(BYTE***)state)[i];
+        if(entry && *(int*)(entry+0x10)==model && entry[7]==2)return *(DWORD*)(entry+0x4a);
+    }
+    return 0;
+}

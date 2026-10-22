@@ -18,6 +18,9 @@ class CCustomModels {public:
     // Native DoesExist has loading side effects for type-1 entries.
     // samp.dll RVA: 0x0000ce30
     BOOL DoesExist(int model);
+    // First matching type-2 record, skipping null records; raw TXD hash at +4A.
+    // samp.dll RVA: 0x0000cdf0
+    DWORD GetObjectTextureHash(int model);
     // samp.dll RVA: 0x0000ce90
     BOOL LoadObjectEntry(int model);
     // ECX is this; four DWORD stack arguments, callee pops 16 bytes.
