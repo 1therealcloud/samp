@@ -28,3 +28,38 @@ void CPickupPool::DeleteWeapon(WORD owner){for(int i=0;i<4096;++i)if(handles[i]&
 int CPickupPool::GetIndex(int index){for(int i=0;i<4096;++i)if(indices[i]==index)return i;return -1;}
 // samp.dll RVA: 0x00013310
 CPickupPool::~CPickupPool(){for(int i=0;i<4096;++i)if(handles[i])Scripting::ProcessCommand(&g_pickupDestroyCommand,handles[i]);}
+
+#include "main.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
+typedef char PickupRpcOptions[(HIGH_PRIORITY==1 && RELIABLE_ORDERED==9 && RELIABLE_SEQUENCED==10)?1:-1];
+// samp.dll RVA: 0x0011816c
+int g_pickupCollectedRpc=131;
+// samp.dll RVA: 0x00118170
+int g_weaponPickupCollectedRpc=97;
+// samp.dll RVA: 0x00118144
+const Scripting::OpcodeInfo g_pickupCollectedCommand={0x214,"i"};
+// samp.dll RVA: 0x00013340
+void CPickupPool::SendNotification(int index){
+    int id=GetIndex(index);
+    if(id==-1 || !handles[id] || cooldown[id] || weapons[id].enabled)return;
+    RakNet::BitStream stream;stream.WriteBits((const BYTE*)&id,32,true);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_pickupCollectedRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+    cooldown[id]=15;
+}
+// samp.dll RVA: 0x00013420
+void CPickupPool::Process(){
+    for(int i=0;i<4096;++i){
+        if(!handles[i])continue;
+        if(!weapons[i].enabled && pickups[i].type!=14){if(cooldown[i])--cooldown[i];continue;}
+        if(!Scripting::ProcessCommand(&g_pickupCollectedCommand,handles[i]))continue;
+        RakNet::BitStream stream;
+        if(weapons[i].enabled){
+            WORD owner=weapons[i].owner;stream.WriteBits((const BYTE*)&owner,16,true);
+            (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_weaponPickupCollectedRpc,&stream,HIGH_PRIORITY,RELIABLE_SEQUENCED,0,false);
+        } else {
+            stream.WriteBits((const BYTE*)&i,32,true);
+            (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_pickupCollectedRpc,&stream,HIGH_PRIORITY,RELIABLE_SEQUENCED,0,false);
+        }
+    }
+}

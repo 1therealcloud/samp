@@ -12,6 +12,10 @@ class CPickupPool {
     WeaponPickupState weapons[4096];
     Pickup pickups[4096];
 public:
+    // samp.dll RVA: 0x00013340
+    void SendNotification(int index);
+    // samp.dll RVA: 0x00013420
+    void Process();
     // samp.dll RVA: 0x00008190
     CPickupPool();
     // samp.dll RVA: 0x00013310
@@ -29,4 +33,8 @@ public:
 typedef char NativePickupExtent[(sizeof(Pickup)==20)?1:-1];
 typedef char NativeWeaponPickupExtent[(sizeof(WeaponPickupState)==3)?1:-1];
 typedef char NativePickupPoolExtent[(sizeof(CPickupPool)==0x23004)?1:-1];
+// samp.dll RVA: 0x0011816c
+extern int g_pickupCollectedRpc;
+// samp.dll RVA: 0x00118170
+extern int g_weaponPickupCollectedRpc;
 #endif
