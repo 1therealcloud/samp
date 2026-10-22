@@ -114,7 +114,6 @@ void CObjectEdit::ApplyAttachedChanges(int axis,float difference) {
 }
 
 #include "objectedit.h"
-#include "objectselection.h"
 // samp.dll RVA: 0x00071600
 CObjectEdit::CObjectEdit(IDirect3DDevice9 *value) {
     device=value;unknown7c=0;unknown113=0xffffffff;unknown80=0;unknown84=0;unknown78=0;
@@ -123,5 +122,163 @@ CObjectEdit::CObjectEdit(IDirect3DDevice9 *value) {
     D3DXCreateFontA(value,22,0,400,1,FALSE,SYMBOL_CHARSET,0,0,0,"SAMPAUX3",&smallFont);
     D3DXCreateFontA(value,28,0,400,1,FALSE,SYMBOL_CHARSET,0,0,0,"SAMPAUX3",&largeFont);
 }
-// samp.dll RVA: 0x0006d440
-CObjectSelection::CObjectSelection(){enabled=0;objectId=0xffff;}
+
+#include "d3dhook/IDirect3DDevice9Hook.h"
+#include "game/quaternion.h"
+// samp.dll RVA: 0x000716c0
+float CObjectEdit::WorldToScreen(const CVector *position,float *screen) {
+    CVector point;memcpy(&point,position,12);
+    D3DVIEWPORT9 viewport;device->GetViewport(&viewport);
+    D3DXMATRIX identity;D3DXMatrixIdentity(&identity);
+    D3DXVECTOR3 projected;
+    D3DXVec3Project(&projected,(const D3DXVECTOR3*)&point,&viewport,
+        (const D3DXMATRIX*)&g_deviceProjectionMatrix,
+        (const D3DXMATRIX*)&g_deviceViewMatrix,&identity);
+    const float *projectedData=(const float*)&projected;
+    __asm {
+        mov eax,screen
+        mov ecx,projectedData
+        fld dword ptr [ecx]
+        fstp dword ptr [eax]
+        mov edx,[ecx+4]
+        mov [eax+4],edx
+    }
+    return projected.z;
+}
+
+// samp.dll RVA: 0x000717c0
+int CObjectEdit::RenderAxes(const CMatrix *matrix,float axisSize) {
+    if(!line)return 0;
+    line->SetAntialias(TRUE);
+    CVector delta,point;D3DXVECTOR2 vertices[2];float negativeSize;
+    for(int axis=0;axis<3;++axis) {
+        delta.x=0;delta.y=0;delta.z=0;memcpy((float*)&delta+axis,&axisSize,4);
+        GameTransformPoint(&point,matrix,&delta);
+        const CVector *position=&point;float *screen=(float*)&vertices[0];BYTE visible;
+        __asm {
+            push screen
+            push position
+            mov ecx,this
+            call CObjectEdit::WorldToScreen
+            fcomp g_quaternionMatrixOne
+            fnstsw ax
+            test ah,41h
+            setnz visible
+        }
+        // Native permits unordered depth here and rejects only depth>1.
+        if(!visible)return 0;
+        if(axis==0) {
+            __asm {
+                fld axisSize
+                fchs
+                fstp negativeSize
+            }
+        }
+        memcpy((float*)&delta+axis,&negativeSize,4);
+        GameTransformPoint(&point,matrix,&delta);screen=(float*)&vertices[1];
+        __asm {
+            push screen
+            push position
+            mov ecx,this
+            call CObjectEdit::WorldToScreen
+            fcomp g_quaternionMatrixOne
+            fnstsw ax
+            test ah,41h
+            setnz visible
+        }
+        if(!visible)return 0;
+        line->Begin();line->Draw(vertices,2,0xffcc9999);line->End();
+    }
+    return 1;
+}
+
+// samp.dll RVA: 0x0011a7ac
+const float g_cursorRayUnsignedBias=4294967296.0f;
+// samp.dll RVA: 0x000739e0
+void __cdecl ObjectEditBuildCursorRay(float rayLength,CVector *origin,CVector *end) {
+    IDirect3DSurface9 *surface=0;D3DSURFACE_DESC description;
+    g_gameD3DDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&surface);
+    surface->GetDesc(&description);surface->Release();
+    POINT point;GetCursorPos(&point);ScreenToClient(g_inputGameWindow,&point);
+    LONG x=point.x,y=point.y;DWORD width=description.Width,height=description.Height;
+    float normalizedX,normalizedY;
+    __asm {
+        fild x
+        fadd st(0),st(0)
+        mov eax,width
+        test eax,eax
+        fild width
+        jge width_unsigned
+        fadd g_cursorRayUnsignedBias
+width_unsigned:
+        fdivp st(1),st(0)
+        fsub g_quaternionMatrixOne
+        fdiv dword ptr g_deviceProjectionMatrix
+        fstp normalizedX
+        fild y
+        fadd st(0),st(0)
+        mov eax,height
+        test eax,eax
+        fild height
+        jge height_unsigned
+        fadd g_cursorRayUnsignedBias
+height_unsigned:
+        fdivp st(1),st(0)
+        fsub g_quaternionMatrixOne
+        fdiv dword ptr [g_deviceProjectionMatrix+20]
+        fchs
+        fstp normalizedY
+    }
+    D3DXMATRIX product,copy,inverse;
+    D3DXMatrixMultiply(&product,(const D3DXMATRIX*)&g_deviceWorldMatrix,
+        (const D3DXMATRIX*)&g_deviceViewMatrix);
+    memcpy(&copy,&product,64);
+    // Native ignores singular-matrix/API failures and leaves untouched output bytes.
+    D3DXMatrixInverse(&inverse,0,&copy);
+    const float *inverseData=(const float*)&inverse;
+    // Preserve y*x-basis summation order, float stores and overlapping outputs.
+    __asm {
+        mov eax,end
+        mov ecx,origin
+        mov esi,inverseData
+        fld dword ptr [esi+16]
+        fmul normalizedY
+        fld dword ptr [esi+0]
+        fmul normalizedX
+        faddp st(1),st(0)
+        fadd dword ptr [esi+32]
+        fstp dword ptr [eax]
+        fld dword ptr [esi+20]
+        fmul normalizedY
+        fld dword ptr [esi+4]
+        fmul normalizedX
+        faddp st(1),st(0)
+        fadd dword ptr [esi+36]
+        fstp dword ptr [eax+4]
+        fld dword ptr [esi+24]
+        fmul normalizedY
+        fld dword ptr [esi+8]
+        fmul normalizedX
+        faddp st(1),st(0)
+        fadd dword ptr [esi+40]
+        fstp dword ptr [eax+8]
+        mov edx,dword ptr [esi+52]
+        mov [ecx+4],edx
+        fld dword ptr [esi+48]
+        mov edx,dword ptr [esi+56]
+        fstp dword ptr [ecx]
+        mov [ecx+8],edx
+        fld rayLength
+        fmul dword ptr [eax]
+        fadd dword ptr [esi+48]
+        fstp dword ptr [eax]
+        fld rayLength
+        fmul dword ptr [eax+4]
+        fadd dword ptr [ecx+4]
+        fstp dword ptr [eax+4]
+        fld rayLength
+        fmul dword ptr [eax+8]
+        fadd dword ptr [ecx+8]
+        fstp dword ptr [eax+8]
+    }
+}

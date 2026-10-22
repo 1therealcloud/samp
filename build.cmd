@@ -69,6 +69,7 @@ for %%F in (
     source\game\device_integrity.cpp
     source\main.cpp
     source\objectedit.cpp
+    source\objectselection.cpp
     source\game\model_preview.cpp
     source\game\object.cpp
     source\game\textdraw.cpp

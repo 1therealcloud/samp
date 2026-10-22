@@ -178,14 +178,6 @@ void CScoreboard::Enable() {
 }
 
 
-// samp.dll RVA: 0x0006d880
-BOOL CObjectSelection::MsgProc(UINT message,WPARAM,LPARAM) {if(enabled&&message==WM_LBUTTONUP){SendNotification();return TRUE;}return FALSE;}
-// samp.dll RVA: 0x0006d5c0
-void CObjectSelection::Enable(BOOL on) {
-    if(enabled){if(!on){g_pGame->SetCursorMode(0,TRUE);if(g_pInput->m_bEnabled){g_pInput->Close();g_pInput->Open();}}if(enabled){enabled=on;return;}}
-    if(on){g_pGame->SetCursorMode(0,TRUE);g_pGame->m_nInputEnableWaitFrames=0;g_pGame->ProcessInputEnabling();}
-    enabled=on;
-}
 // samp.dll RVA: 0x00072660
 void CObjectEdit::Disable(BOOL send) {
     BOOL notify=send!=0;unknown80=0;g_pGame->SetCursorMode(0,TRUE);
