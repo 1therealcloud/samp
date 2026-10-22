@@ -297,3 +297,44 @@ void CTextDraw::Native0B30A0() {
         g_textDrawTextures[slot]=created;
     }
 }
+
+#include <string.h>
+// samp.dll RVA: 0x0011f54c
+const char g_textDrawUnmatchedTilde[23]="Error: unmatched tilde";
+// samp.dll RVA: 0x0011f524
+const char g_textDrawLongKeyString[40]="Error: can't use k-codes in long string";
+// samp.dll RVA: 0x00070d10
+RECT *CTextDraw::GetSelectableRect() {
+    BYTE *state=(BYTE*)this;
+    return state[0x9a7] && state[0x9bf]?(RECT*)(state+0x9c1):0;
+}
+// samp.dll RVA: 0x00070d30
+void CTextDraw::SetHover(BYTE active,DWORD color) {
+    BYTE *state=(BYTE*)this;state[0x9d1]=active;*(DWORD*)(state+0x9d2)=color;
+}
+// samp.dll RVA: 0x000b2b50
+CTextDraw::~CTextDraw() {GameReleaseTextDrawTexture(*(int*)((BYTE*)this+0x9a3));}
+// samp.dll RVA: 0x000b2b60
+void CTextDraw::SetText(const char *text) {
+    BYTE *state=(BYTE*)this;
+    // Clear precedes input length lookup, including aliased input.
+    memset(state,0,800);
+    if(strlen(text)>=800)return;
+    strncpy((char*)state,text,800);state[800]=0;state[0x9c0]=0;
+    bool inside=false,valid=true;int length=0;
+    for(char *p=(char*)state;*p;++p) {
+        if(*p=='~') {
+            if(inside){length=0;inside=false;continue;}
+            inside=true;
+            if(p[1]=='k'||p[1]=='K')state[0x9c0]=1;
+        }
+        if(inside && ++length>24)valid=false;
+    }
+    if(!valid || inside){memcpy(state,g_textDrawUnmatchedTilde,23);state[0x9c0]=0;}
+    if(state[0x9c0] && strlen((char*)state)>255){memcpy(state,g_textDrawLongKeyString,40);state[0x9c0]=0;}
+    if(*(DWORD*)(state+0x987)==4 && *(int*)(state+0x9a3)!=-1) {
+        GameReleaseTextDrawTexture(*(int*)(state+0x9a3));
+        *(int*)(state+0x9a3)=GameAllocateTextDrawTexture();
+        LoadTexture();
+    }
+}
