@@ -53,3 +53,16 @@ void CTextDrawSelection::Process() {
     g_pGame->EnableHUD(FALSE);
     UpdateHovered();
 }
+
+#include "BitStream.h"
+#include "RakClientInterface.h"
+typedef char TextDrawClickRpcOptions[(HIGH_PRIORITY==1 && RELIABLE_ORDERED==9)?1:-1];
+// samp.dll RVA: 0x001182f8
+int g_textDrawClickRpc=83;
+// samp.dll RVA: 0x00070f20
+void CTextDrawSelection::SendNotification() {
+    RakNet::BitStream stream;
+    DWORD id=unknown08;
+    stream.WriteBits((const BYTE*)&id,16,true);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_textDrawClickRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+}

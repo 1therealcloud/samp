@@ -22,4 +22,6 @@ class CTextDrawSelection {public:
 };
 #pragma pack(pop)
 typedef char NativeTextDrawSelectionSize[(sizeof(CTextDrawSelection)==10)?1:-1];
+// samp.dll RVA: 0x001182f8
+extern int g_textDrawClickRpc;
 #endif
