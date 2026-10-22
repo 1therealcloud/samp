@@ -63,3 +63,18 @@ void CPickupPool::Process(){
         }
     }
 }
+
+// samp.dll RVA: 0x00013080
+void CPickupPool::CreateWeapon(int model,float x,float y,float z,int ammo,WORD owner){
+    if(count>=4096)return;
+    int id=0;while(id<4096 && handles[id])++id;if(id==4096)return;
+    pickups[id].model=model;pickups[id].type=4;
+    memcpy(&pickups[id].x,&x,4);memcpy(&pickups[id].y,&y,4);
+    float *storedZ=&pickups[id].z;
+    __asm {fld z}
+    __asm {mov eax,storedZ}
+    __asm {fstp dword ptr [eax]}
+    handles[id]=g_pGame->CreateWeaponPickup(model,ammo,x,y,z);
+    weapons[id].enabled=1;weapons[id].owner=owner;
+    cooldown[id]=0;indices[id]=-1;++count;
+}

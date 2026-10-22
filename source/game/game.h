@@ -44,6 +44,8 @@ public:
     void DrawGangZone(const float *position,DWORD color);
     // samp.dll RVA: 0x000a1010
     DWORD CreatePickup(int model,int type,float x,float y,float z,DWORD *index);
+    // samp.dll RVA: 0x000a10f0
+    DWORD CreateWeaponPickup(int model,int ammo,float x,float y,float z);
     // samp.dll RVA: 0x000a0b20
     void DisplayGameText(const char *text,int time,int style);
     // samp.dll RVA: 0x000a1d40
@@ -301,3 +303,6 @@ extern bool g_gameCustomStreamRead;
 // samp.dll RVA: 0x0018f6b8
 extern void *g_gameStreamBuffer;
 #endif
+
+// samp.dll RVA: 0x0011e844
+extern const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand;

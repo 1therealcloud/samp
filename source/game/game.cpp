@@ -1381,3 +1381,18 @@ BOOL GameLoadTextureDictionary(const char *name,const char *filename,BYTE fromSa
     if(!GameFileExists(path))return FALSE;
     GameTxdLoad(index,path);GameTxdAddRef(index);return TRUE;
 }
+
+// samp.dll RVA: 0x0011e844
+const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand={0x32b,"iiifffv"};
+// samp.dll RVA: 0x000a10f0
+DWORD CGame::CreateWeaponPickup(int model,int ammo,float x,float y,float z){
+    int selected=model;
+    if(selected>=0 && selected<=20000 && !Scripting::ProcessCommand(&g_gameModelAvailableCommand,selected)){
+        Scripting::ProcessCommand(&g_gameRequestModelCommand,selected);
+        Scripting::ProcessCommand(&g_gameLoadModelsCommand);
+        void(WINAPI *volatile sleep)(DWORD)=::Sleep;
+        while(!Scripting::ProcessCommand(&g_gameModelAvailableCommand,selected))sleep(5);
+    }
+    Scripting::ProcessCommand(&g_gameCreateWeaponPickupCommand,selected,4,ammo,(double)x,(double)y,(double)z,&model);
+    return (DWORD)model;
+}

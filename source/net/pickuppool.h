@@ -12,6 +12,8 @@ class CPickupPool {
     WeaponPickupState weapons[4096];
     Pickup pickups[4096];
 public:
+    // samp.dll RVA: 0x00013080
+    void CreateWeapon(int model,float x,float y,float z,int ammo,WORD owner);
     // samp.dll RVA: 0x00013340
     void SendNotification(int index);
     // samp.dll RVA: 0x00013420
