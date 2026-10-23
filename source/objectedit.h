@@ -22,6 +22,14 @@ class CObjectEdit {public:
     void EnterEditObject(WORD id,BOOL playerObject);
     // samp.dll RVA: 0x00071f80
     void EnterEditAttachedObject(int index);
+    // Descriptive name; rectangle is passed by value (native RET20).
+    // samp.dll RVA: 0x00071fe0
+    void DrawButton(int processType,RECT rect);
+    // samp.dll RVA: 0x000726d0
+    BOOL RenderControlsForObject(const CMatrix *matrix,float axisSize);
+    // Native forwarding entry to RenderControlsForObject.
+    // samp.dll RVA: 0x00072ca0
+    BOOL RenderControls(const CMatrix *matrix,float axisSize);
     // samp.dll RVA: 0x000716c0
     float WorldToScreen(const CVector *position,float *screen);
     // samp.dll RVA: 0x000717c0
@@ -83,4 +91,8 @@ extern const char g_objectEditGlyphZRotation[4];
 extern const char g_objectEditGlyphZScale[4];
 // samp.dll RVA: 0x001182d8
 extern const char g_objectEditGlyphDefault[4];
+// samp.dll RVA: 0x0011c344
+extern const char g_objectEditGlyphScale[4];
+// samp.dll RVA: 0x00118350
+extern const char g_objectEditGlyphSave[4];
 #endif

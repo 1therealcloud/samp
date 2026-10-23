@@ -365,3 +365,141 @@ void CObjectEdit::EnterEditAttachedObject(int index) {
     g_pGame->m_nInputEnableWaitFrames=0;
     g_pGame->ProcessInputEnabling();
 }
+
+// Also used as the string "2" by the native editor; share the existing RPC storage.
+// samp.dll RVA: 0x0011c310
+extern int g_inputCommandRpcId;
+// samp.dll RVA: 0x0011c344
+const char g_objectEditGlyphScale[4]="1";
+// samp.dll RVA: 0x00118350
+const char g_objectEditGlyphSave[4]="H";
+// samp.dll RVA: 0x00071fe0
+void CObjectEdit::DrawButton(int processType,RECT rect) {
+    DWORD background=0x99222222,foreground=0xff999999;
+    int slot;
+    if(processType>=0&&processType<=2) {
+        slot=processType;
+        if(unknown113==(DWORD)processType)
+            background=flags[1]?0xff774444:0xffaaaaaa;
+        foreground=processType==0?0xff9999cc:processType==1?0xffcc9999:0xff99cc99;
+    } else if(processType>=3&&processType<=5) {
+        slot=processType;
+        if(unknown113==(DWORD)processType)background=0xffaaaaaa;
+        if(unknown7c==(DWORD)(processType-3))background=0xff774444;
+    } else if(processType==10) {
+        slot=6;
+        if(unknown113==10)background=0xffaaaaaa;
+    } else return;
+    largeFont->DrawTextA(0,g_objectEditGlyphMax,1,&rect,0x105,background);
+    ID3DXFont *font=smallFont;
+    const char *glyph;
+    if(processType<=2)glyph=GetRenderChar(processType);
+    else if(processType==3)glyph=(const char*)&g_inputCommandRpcId;
+    else if(processType==4)glyph=g_objectEditGlyphDefault;
+    else if(processType==5)glyph=g_objectEditGlyphScale;
+    else glyph=g_objectEditGlyphSave;
+    font->DrawTextA(0,glyph,1,&rect,0x105,foreground);
+    CenterButtonRect((RECT*)((BYTE*)this+8+slot*16),(const POINT*)&rect);
+}
+// samp.dll RVA: 0x000726d0
+BOOL CObjectEdit::RenderControlsForObject(const CMatrix *matrix,float axisSize) {
+    if(!line)return FALSE;
+    RECT measured; // Native does not initialize this, including the null-font path.
+    if(largeFont)largeFont->DrawTextA(0,GetMaxSizeChar(),-1,&measured,0x505,0xff000000);
+    *(DWORD*)unknown00=(DWORD)measured.right-(DWORD)measured.left;
+    *(DWORD*)(unknown00+4)=(DWORD)measured.bottom-(DWORD)measured.top;
+    line->SetAntialias(TRUE);
+    D3DXVECTOR2 vertices[2];
+    const DWORD colors[3]={0xff9999cc,0xffcc9999,0xff99cc99};
+    float negativeSize;
+    for(int axis=0;axis<3;axis++) {
+        CVector delta={0,0,0},point;
+        memcpy((float*)&delta+axis,&axisSize,4);
+        GameTransformPoint(&point,matrix,&delta);
+        const CVector *position=&point;
+        float *screen=(float*)&vertices[0];BYTE visible;
+        __asm {
+            push screen
+            push position
+            mov ecx,this
+            call CObjectEdit::WorldToScreen
+            fcomp g_quaternionMatrixOne
+            fnstsw ax
+            test ah,41h
+            setnz visible
+        }
+        if(!visible)return FALSE;
+        if(axis==0) {
+            __asm {
+                fld axisSize
+                fchs
+                fstp negativeSize
+            }
+        }
+        memcpy((float*)&delta+axis,&negativeSize,4);
+        GameTransformPoint(&point,matrix,&delta);
+        screen=(float*)&vertices[1];
+        __asm {
+            push screen
+            push position
+            mov ecx,this
+            call CObjectEdit::WorldToScreen
+            fcomp g_quaternionMatrixOne
+            fnstsw ax
+            test ah,41h
+            setnz visible
+        }
+        if(!visible)return FALSE;
+        line->Begin();line->Draw(vertices,2,colors[axis]);line->End();
+        if(!flags[1]) {
+            float *values=(float*)vertices;BYTE horizontal,reverse;
+            // Keep differences extended; unordered/tied magnitudes choose vertical.
+            __asm {
+                mov ecx,values
+                fld dword ptr [ecx]
+                fsub dword ptr [ecx+8]
+                fabs
+                fld dword ptr [ecx+4]
+                fsub dword ptr [ecx+12]
+                fabs
+                fcompp
+                fnstsw ax
+                test ah,5
+                setnp horizontal
+            }
+            float *coordinate=values+(horizontal?0:1);
+            __asm {
+                mov ecx,coordinate
+                fld dword ptr [ecx]
+                fcomp dword ptr [ecx+8]
+                fnstsw ax
+                test ah,5
+                setnp reverse
+            }
+            *((BYTE*)this+0xa4+axis)=reverse;
+            *(DWORD*)((BYTE*)this+0xb7+axis*4)=horizontal?0:1;
+        }
+        LONG x=(LONG)vertices[0].x,y=(LONG)vertices[0].y;
+        RECT rect={x,y,(LONG)((DWORD)x+1),(LONG)((DWORD)y+1)};
+        DrawButton(axis,rect);
+    }
+    LONG x=(LONG)vertices[1].x,y=(LONG)vertices[1].y;
+    RECT rect={x,y,(LONG)((DWORD)x+1),(LONG)((DWORD)y+1)};
+    DrawButton(10,rect);
+    if(flags[0]) {
+        DWORD shift=0xfffffffe-*(DWORD*)unknown00;
+        rect.left=(LONG)((DWORD)rect.left+shift);rect.right=(LONG)((DWORD)rect.right+shift);
+        DrawButton(5,rect);
+    } else ClearButtonRect((RECT*)((BYTE*)this+0x58));
+    DWORD shift=0xfffffffe-*(DWORD*)unknown00;
+    rect.left=(LONG)((DWORD)rect.left+shift);rect.right=(LONG)((DWORD)rect.right+shift);
+    DrawButton(4,rect);
+    shift=0xfffffffe-*(DWORD*)unknown00;
+    rect.left=(LONG)((DWORD)rect.left+shift);rect.right=(LONG)((DWORD)rect.right+shift);
+    DrawButton(3,rect);
+    return TRUE;
+}
+// samp.dll RVA: 0x00072ca0
+BOOL CObjectEdit::RenderControls(const CMatrix *matrix,float axisSize) {
+    return RenderControlsForObject(matrix,axisSize);
+}
