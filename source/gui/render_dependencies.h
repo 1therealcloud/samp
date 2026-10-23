@@ -12,17 +12,7 @@ struct IDirect3DDevice9;
 #include "objectedit.h"
 #include "objectselection.h"
 #include "textdrawselection.h"
-class CDeathWindow {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x157];
-    // samp.dll RVA: 0x0006a090
-    CDeathWindow(IDirect3DDevice9 *device);
-    // Font/resource reset dependency; body remains open.
-    // samp.dll RVA: 0x00069b90
-    void ResetFonts();
-    // samp.dll RVA: 0x00069d20
-    void Draw();
-};
+#include "deathwindow.h"
 #include "renderpanel.h"
 #include "downloadwindow.h"
 #include "netstats.h"

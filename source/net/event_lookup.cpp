@@ -93,3 +93,14 @@ CObject *CPlayerPool::FindAccessory(void *backend) {
     }
     return 0;
 }
+
+// samp.dll RVA: 0x000170d0
+const char *CPlayerPool::GetName(WORD player) {
+    BYTE *state=(BYTE*)this;
+    if(player==*(WORD*)state)
+        return *(DWORD*)(state+0x1a)>=16?*(char**)(state+6):(char*)state+6;
+    if(player>1004)return 0;
+    BYTE *entry=*(BYTE**)(state+0x26+player*4);
+    if(!entry)return 0;
+    return *(DWORD*)(entry+0x28)>=16?*(char**)(entry+0x14):(char*)entry+0x14;
+}

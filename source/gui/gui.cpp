@@ -87,15 +87,6 @@ typedef char CNetStatsObservedExtent[(sizeof(CNetStats)==0x18)?1:-1];
 typedef char CSrvNetStatsObservedExtent[(sizeof(CSrvNetStats)==0x18)?1:-1];
 typedef char CHelpDialogObservedExtent[(sizeof(CHelpDialog)==0x4)?1:-1];
 typedef char CChatBubbleObservedExtent[(sizeof(CChatBubble)==0x44a20)?1:-1];
-// samp.dll RVA: 0x0006a090
-CDeathWindow::CDeathWindow(IDirect3DDevice9 *device){
-    *(DWORD*)(nativeState+0x137)=0;*(DWORD*)(nativeState+0x13b)=0;
-    *(DWORD*)(nativeState+0x13f)=0;*(DWORD*)(nativeState+0x143)=0;
-    *(DWORD*)(nativeState+0x14b)=0;*(DWORD*)(nativeState+0x14f)=0;
-    *(DWORD*)(nativeState+0x153)=0;*(DWORD*)nativeState=1;
-    *(IDirect3DDevice9**)(nativeState+0x147)=device;
-    ResetFonts();memset(nativeState+4,0,0x127);
-}
 // samp.dll RVA: 0x0006e460
 CScoreboard::CScoreboard(IDirect3DDevice9 *device){
     DWORD *state=(DWORD*)nativeState;

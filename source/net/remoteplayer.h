@@ -3,6 +3,10 @@
 #include <windows.h>
 // Address-only dependency. No allocation or complete interface established.
 class CRemotePlayer {public:
+    // samp.dll RVA: 0x00015e30
+    DWORD GetColorAsARGB();
+    // samp.dll RVA: 0x00015fd0
+    int GetStatus();
     // Requires a ped pointer and nonzero native state byte.
     // samp.dll RVA: 0x00001080
     BOOL IsActive();

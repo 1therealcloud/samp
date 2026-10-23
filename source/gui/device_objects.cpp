@@ -3,18 +3,6 @@
 #include "main.h"
 // samp.dll RVA: 0x002aca2c
 CFonts *g_deviceFonts;
-// samp.dll RVA: 0x0006d090
-void CPlayerTags::OnLostDevice() {
-    if(state){state->Release();state=0;}
-    if(sprite)sprite->OnLostDevice();
-}
-// samp.dll RVA: 0x0006d0c0
-void CPlayerTags::OnResetDevice() {
-    if(sprite)sprite->OnResetDevice();
-    if(!state)device->CreateStateBlock(D3DSBT_ALL,&state);
-}
-
-
 // samp.dll RVA: 0x000702d0
 void CObjectMaterialText::OnLostDevice() {
     if(second){second->Release();second=0;}
@@ -82,8 +70,6 @@ void CSpawnScreen::OnResetDevice() {
 
 #include "gui/device_objects.h"
 
-// samp.dll RVA: 0x0006c730
-CPlayerTags::CPlayerTags(IDirect3DDevice9 *value) { device=value;state=0;sprite=0;D3DXCreateSprite(device,&sprite); }
 // samp.dll RVA: 0x00070320
 CObjectMaterialText::CObjectMaterialText(IDirect3DDevice9 *value) { device=value;first=0;second=0;OnResetDevice(); }
 // samp.dll RVA: 0x0006d3f0

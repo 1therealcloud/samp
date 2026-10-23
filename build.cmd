@@ -99,6 +99,8 @@ for %%F in (
     source\svrnetstats.cpp
     source\netstats.cpp
     source\chatbubble.cpp
+    source\playertags.cpp
+    source\deathwindow.cpp
     source\gui\gui_events.cpp
     source\cmdprocs.cpp
     source\subclass.cpp

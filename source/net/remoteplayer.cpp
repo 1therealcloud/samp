@@ -55,3 +55,18 @@ BOOL CRemotePlayer::IsActive() {
     BYTE *state=(BYTE*)this;
     return *(CPed**)(state+4)&&state[0x1a]!=0;
 }
+
+#include "game/player_colors.h"
+// samp.dll RVA: 0x00015e30
+DWORD CRemotePlayer::GetColorAsARGB() {
+    return (PlayerColors::Get(*(WORD*)this)>>8)|0xff000000;
+}
+// samp.dll RVA: 0x00015fd0
+int CRemotePlayer::GetStatus() {
+    BYTE *state=(BYTE*)this;
+    if(!*(CPed**)(state+4))return 0;
+    if(!(*(CPed**)(state+4))->DoesExist())return 0;
+    if((*(CPed**)(state+4))->GetVehicleTransitionTaskState())return 0;
+    if((*(CPed**)(state+4))->HasTaskType704())return 0;
+    return *(int*)(state+0x1d1);
+}

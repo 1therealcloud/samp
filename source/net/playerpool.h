@@ -8,6 +8,9 @@ class CLocalPlayer;
 class CObject;
 class CPlayerPool {
 public:
+    // MSVC small-string storage; native accepts the adjacent ID1004 as well.
+    // samp.dll RVA: 0x000170d0
+    const char *GetName(WORD player);
     // Local accessories first, then connected remote-player accessories.
     // samp.dll RVA: 0x00013a40
     CObject *FindAccessory(void *backend);

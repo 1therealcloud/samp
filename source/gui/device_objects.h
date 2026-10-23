@@ -6,16 +6,7 @@ struct CVector;
 class CDXUTDialog;
 #pragma pack(push,1)
 // Observed allocation extents and constructor/lifecycle fields; full render interfaces remain open.
-class CPlayerTags {
-public:
-    // samp.dll RVA: 0x0006c730
-    CPlayerTags(IDirect3DDevice9 *device);
-    IDirect3DDevice9 *device;IDirect3DStateBlock9 *state;ID3DXSprite *sprite;
-    // samp.dll RVA: 0x0006d090
-    void OnLostDevice();
-    // samp.dll RVA: 0x0006d0c0
-    void OnResetDevice();
-};
+#include "playertags.h"
 #include "label.h"
 class CObjectMaterialText {
 public:
