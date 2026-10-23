@@ -1674,3 +1674,168 @@ void *GameGetTaskChild(void *task) {
     }
     return result;
 }
+
+// samp.dll RVA: 0x0009fea0
+void CGame::SetTimeScale(float scale) {
+    // GTA SA virtual addresses: paired game time-scale words.
+    __asm {
+        mov eax,scale
+        fld scale
+        fmul g_frameScaleMultiplier
+        mov dword ptr ds:[0b7cb5ch],eax
+        mov ecx,eax
+        mov dword ptr ds:[0b7cb58h],ecx
+        fstp dword ptr g_gamePatchValue1546f0
+    }
+}
+
+// samp.dll RVA: 0x0009ff00
+BYTE CGame::FindFreePlayerSlot() {
+    for(int player=2;player<210;player++)if(g_gameUsedPlayerSlots[player]!=1)return (BYTE)player;
+    return 0;
+}
+
+// samp.dll RVA: 0x0009ff30
+BYTE CGame::CountUsedPlayerSlots() {
+    BYTE count=0;
+    for(int player=2;player<210;player++)if(g_gameUsedPlayerSlots[player]==1)++count;
+    return count;
+}
+
+// samp.dll RVA: 0x000a0120
+void CGame::SetEightByteName(const char *name) {
+    if(name&&*name&&strlen(name)<=8)GameSetEightByteName(name);
+}
+
+// samp.dll RVA: 0x000a0150
+BOOL CGame::DeleteEntity(CEntity *entity) {
+    if(!entity)return FALSE;
+    delete entity;
+    return TRUE;
+}
+
+// samp.dll RVA: 0x000a0210
+int CGame::GetWeaponModel(int weapon) {
+    return GameGetWeaponModel(weapon);
+}
+
+// samp.dll RVA: 0x000a0220
+BOOL CGame::IsKeyPressed(int key) {
+    KeyPad *keys=KeyStuff::GetInternalKeys();
+    return *((WORD*)keys+key)!=0;
+}
+
+// samp.dll RVA: 0x000a0870
+BOOL CGame::LoadModelNow(int model) {
+    if(model<0||model>20000)return TRUE;
+    if(Scripting::ProcessCommand(&g_gameModelAvailableCommand,model))return TRUE;
+    // GTA SA virtual addresses: request/load are direct cdecl backends here.
+    ((void(__cdecl*)(int,int))0x4087e0)(model,2);
+    ((void(__cdecl*)(int))0x40ea10)(0);
+    DWORD offset=(DWORD)model*20;
+    if(*(BYTE*)(0x8e4cd0+offset)!=1)return FALSE;
+    if(*(BYTE*)(0x8e4cc6+offset)&2) {
+        ((void(__cdecl*)(int))0x409c10)(model);
+        ((void(__cdecl*)(int))0x409c70)(model);
+    }
+    return TRUE;
+}
+
+// samp.dll RVA: 0x000a09a0
+DWORD CGame::GetWeather() {
+    // GTA SA virtual address: raw weather DWORD.
+    return *(DWORD*)0xc81318;
+}
+
+// samp.dll RVA: 0x000a09b0
+BYTE CGame::GetFrontendByteBA6769() {
+    // GTA SA virtual address: raw frontend byte; semantic name unestablished.
+    return *(BYTE*)0xba6769;
+}
+
+// samp.dll RVA: 0x000a09d0
+BOOL CGame::IsFrontendFlagBA6794Set() {
+    // GTA SA virtual address: frontend flag, normalized to BOOL.
+    return *(BYTE*)0xba6794!=0;
+}
+
+// samp.dll RVA: 0x000a09e0
+void CGame::SetFrontendFlagBA6794() {
+    // GTA SA virtual address: native writes exactly one byte.
+    *(BYTE*)0xba6794=1;
+}
+
+// samp.dll RVA: 0x000a1570
+void CGame::SetTimer(DWORD value) {
+    if(m_bClockEnabled)return;
+    // GTA SA virtual address: native timer word, upper two bits stripped.
+    *(DWORD*)0xb7cb84=value&0x3fffffff;
+    g_gameTimerOverridden=1;
+}
+
+// samp.dll RVA: 0x000a15a0
+DWORD CGame::GetBackendWordB71804() {
+    // GTA SA virtual address: raw DWORD; semantic name unestablished.
+    return *(DWORD*)0xb71804;
+}
+
+// Eight bytes are read by the native getter; the wrapper also permits8 chars
+// plus the terminating NUL. Longer native-helper overflow adjacency is unproven.
+// samp.dll RVA: 0x00151950
+char g_gameEightByteName[9]="SAMP03";
+// samp.dll RVA: 0x0018e53c
+BYTE g_gameTimerOverridden;
+
+// samp.dll RVA: 0x000a3ed0
+void GameSetEightByteName(const char *name) {
+    volatile DWORD *words=(volatile DWORD*)g_gameEightByteName;
+    words[0]=0;words[1]=0;
+    // Native forward copy also retains the clear-before-read alias behavior.
+    char *out=g_gameEightByteName;
+    do {*out++=*name;}while(*name++);
+}
+// samp.dll RVA: 0x000a3f00
+bool GameCopyEightByteName(void *output) {
+    volatile DWORD *out=(volatile DWORD*)output;
+    const volatile DWORD *source=(const volatile DWORD*)g_gameEightByteName;
+    out[0]=0;out[1]=0;
+    out[0]=source[0];out[1]=source[1];
+    return true;
+}
+
+// samp.dll RVA: 0x0018eb98
+DWORD g_gamePreviewPed[488];
+
+// samp.dll RVA: 0x000a15b0
+void CGame::ApplyPreviewAnimation(DWORD first,DWORD second,BOOL useVehicle,int model,DWORD color) {
+    memset(g_gamePreviewPed,0,sizeof(g_gamePreviewPed));
+    // GTA SA virtual address: native permanent39-byte NOP patch, no restoration.
+    GameUnprotect((void*)0x4e7529,39);
+    memset((void*)0x4e7529,0x90,39);
+    BYTE *local=(BYTE*)GameFindLocalPed();
+    CVehicle *vehicle=0;
+    if(useVehicle&&model>=400&&model<612) {
+        vehicle=new CVehicle(model,0,0,0,0,0,0);
+        // Native does not handle a failed allocation before this call.
+        vehicle->SetColor((BYTE)color,0xff);
+        vehicle->Remove();
+        // Native aliases within the same preview-ped storage, not new globals.
+        // samp.dll RVAs: vehicle pointer0018f124, flags0018f004.
+        g_gamePreviewPed[0x58c/4]=(DWORD)vehicle->m_pGameVehicle;
+        g_gamePreviewPed[0x46c/4]|=0x100;
+    }
+    if(local) {
+        BYTE *intelligence=*(BYTE**)(local+0x480);
+        void *receiver=(BYTE*)*(void**)intelligence+0x21c;
+        // GTA SA virtual address: thiscall backend(receiver,A4,first,second).
+        __asm {
+            push second
+            push first
+            push 0a4h
+            mov ecx,receiver
+            mov edx,4e71e0h
+            call edx
+        }
+    }
+    if(vehicle)delete vehicle;
+}

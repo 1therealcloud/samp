@@ -1,5 +1,14 @@
 #include "game/hooks.h"
 #include "game/game.h"
+
+// Raw installed callback: EAX returns the preview-ped backing storage.
+// samp.dll RVA: 0x000a3ec0
+__declspec(naked) void GameHook_000a3ec0() {
+    __asm {
+        mov eax,offset g_gamePreviewPed
+        ret
+    }
+}
 #include <string.h>
 // samp.dll RVA: 0x002ac9cc
 DWORD g_gameLoopAddress;

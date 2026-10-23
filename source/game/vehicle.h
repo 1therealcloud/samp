@@ -8,6 +8,15 @@
 #pragma pack(push,1)
 class CVehicle : public CEntity {
 public:
+    // Raw native flag; no unverified higher-level flag name assigned.
+    // samp.dll RVA: 0x000b6db0
+    void SetBackendFlag428Bit5(BOOL enabled);
+    // Native backend pointer is unchecked; result is returned in ST0.
+    // samp.dll RVA: 0x000b7400
+    float GetBackendFloat94C();
+    // Native backend pointer is unchecked; result is returned in ST0.
+    // samp.dll RVA: 0x000b7410
+    float GetBackendFloat950();
     // samp.dll RVA: 0x000b6d70
     void SetLocked(BOOL locked);
     // samp.dll RVA: 0x000b6f10

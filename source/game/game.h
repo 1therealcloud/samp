@@ -15,6 +15,43 @@ class CMatrix;
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
+    // Uses the native preview-ped buffer and a temporary vehicle when requested.
+    // samp.dll RVA: 0x000a15b0
+    void ApplyPreviewAnimation(DWORD first,DWORD second,BOOL useVehicle,int model,DWORD color);
+    // samp.dll RVA: 0x0009fea0
+    void SetTimeScale(float scale);
+    // Native free means occupied DWORD !=1, not only zero.
+    // samp.dll RVA: 0x0009ff00
+    BYTE FindFreePlayerSlot();
+    // samp.dll RVA: 0x0009ff30
+    BYTE CountUsedPlayerSlots();
+    // Descriptive name; native string consumers remain to be attributed.
+    // samp.dll RVA: 0x000a0120
+    void SetEightByteName(const char *name);
+    // Virtual scalar deletion; no pool-slot bookkeeping is performed.
+    // samp.dll RVA: 0x000a0150
+    BOOL DeleteEntity(CEntity *entity);
+    // Native forwarding entry to the recovered weapon-model switch.
+    // samp.dll RVA: 0x000a0210
+    int GetWeaponModel(int weapon);
+    // Native key index is unchecked, including negative/out-of-range values.
+    // samp.dll RVA: 0x000a0220
+    BOOL IsKeyPressed(int key);
+    // Invalid IDs and already-loaded models return TRUE without streaming calls.
+    // samp.dll RVA: 0x000a0870
+    BOOL LoadModelNow(int model);
+    // samp.dll RVA: 0x000a09a0
+    DWORD GetWeather();
+    // samp.dll RVA: 0x000a09b0
+    BYTE GetFrontendByteBA6769();
+    // samp.dll RVA: 0x000a09d0
+    BOOL IsFrontendFlagBA6794Set();
+    // samp.dll RVA: 0x000a09e0
+    void SetFrontendFlagBA6794();
+    // samp.dll RVA: 0x000a1570
+    void SetTimer(DWORD value);
+    // samp.dll RVA: 0x000a15a0
+    DWORD GetBackendWordB71804();
     // Native reserves slots2..209; sixth argument is ignored.
     // samp.dll RVA: 0x0009ff50
     CPed *CreatePed(int model,CVector position,float rotation,DWORD unused,BOOL playerFlag);
@@ -431,3 +468,16 @@ extern const char g_gameWeaponName49[8];
 extern const char g_gameWeaponName53[8];
 // samp.dll RVA: 0x0011e8e4
 extern const char g_gameWeaponName54[6];
+
+// Shared native name storage; only the first8 bytes are reset/read by helpers.
+// samp.dll RVA: 0x00151950
+extern char g_gameEightByteName[9];
+// samp.dll RVA: 0x0018e53c
+extern BYTE g_gameTimerOverridden;
+// samp.dll RVA: 0x000a3ed0
+void GameSetEightByteName(const char *name);
+// samp.dll RVA: 0x000a3f00
+bool GameCopyEightByteName(void *output);
+// Backing storage returned by the installed GTA preview hook.
+// samp.dll RVA: 0x0018eb98
+extern DWORD g_gamePreviewPed[488];

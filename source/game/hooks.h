@@ -100,6 +100,8 @@ void GameHook_000a3d20();
 void GameHook_000a3d90();
 // samp.dll RVA: 0x000a3e50
 void GameHook_000a3e50();
+// Raw installed ABI: no arguments, returns the preview backing pointer in EAX.
+// The void() declaration is an installation-address type, not a calling prototype.
 // samp.dll RVA: 0x000a3ec0
 void GameHook_000a3ec0();
 // samp.dll RVA: 0x000a3f30

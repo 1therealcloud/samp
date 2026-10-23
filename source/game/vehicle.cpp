@@ -972,3 +972,21 @@ void CVehicle::SetLocked(BOOL locked) {
 BOOL CVehicle::IsWrecked() {
     return m_pGameVehicle?(BOOL)Scripting::ProcessCommand(&g_vehicleWreckedCommand,m_nHandle):FALSE;
 }
+
+// samp.dll RVA: 0x000b6db0
+void CVehicle::SetBackendFlag428Bit5(BOOL enabled) {
+    BYTE *vehicle=(BYTE*)m_pGameVehicle;
+    if(!vehicle)return;
+    if(enabled)vehicle[0x428]|=0x20;
+    else vehicle[0x428]&=0xdf;
+}
+
+// samp.dll RVA: 0x000b7400
+float CVehicle::GetBackendFloat94C() {
+    return *(float*)((BYTE*)m_pGameVehicle+0x94c);
+}
+
+// samp.dll RVA: 0x000b7410
+float CVehicle::GetBackendFloat950() {
+    return *(float*)((BYTE*)m_pGameVehicle+0x950);
+}
