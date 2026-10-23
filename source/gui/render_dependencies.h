@@ -66,19 +66,7 @@ class CDeathWindow {public:
     void Draw();
 };
 #include "renderpanel.h"
-class CDownloadWindow {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x260];
-    // samp.dll RVA: 0x0006aa10
-    CDownloadWindow(IDirect3DDevice9 *device);
-    // Address-only font-size command dependency.
-    // samp.dll RVA: 0x0006a1a0
-    void ResetFonts();
-    // samp.dll RVA: 0x0006a500
-    void ResetDialogControls(CDXUTDialog *dialog);
-    // samp.dll RVA: 0x0006a350
-    void Draw();
-};
+#include "downloadwindow.h"
 class CNetStats {public:
     // Observed allocation extent, not a complete recovered interface.
     BYTE nativeState[0x18];

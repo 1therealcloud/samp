@@ -115,16 +115,6 @@ void CScoreboard::Recalc(){
     *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
 }
 
-// samp.dll RVA: 0x0006aa10
-CDownloadWindow::CDownloadWindow(IDirect3DDevice9 *device){
-    DWORD *state=(DWORD*)nativeState;state[0]=0;state[1]=0;state[2]=(DWORD)device;state[10]=0;state[12]=0;
-    state[5]=640;state[6]=300;state[7]=210;state[8]=30;state[13]=3;
-    memcpy(nativeState+0x38,"Type",5);
-    memcpy(nativeState+0xb9,"ID",3);
-    memcpy(nativeState+0x13a,"Progress",9);
-    state[0x8f]=180;state[0x90]=220;state[0x93]=0;state[0x94]=0xffffffff;
-    DWORD started=RakNet::GetTime();state[0x97]=0;state[0x96]=0;state[0x95]=started;
-}
 // samp.dll RVA: 0x000607c0
 CNetStats::CNetStats(IDirect3DDevice9 *device){
     DWORD *state=(DWORD*)nativeState;state[2]=GetTickCount();state[1]=0;state[0]=0;state[4]=0;state[3]=0;state[5]=(DWORD)device;

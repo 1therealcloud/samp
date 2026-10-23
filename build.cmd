@@ -93,6 +93,7 @@ for %%F in (
     source\exceptions.cpp
     source\gui\gui.cpp
     source\renderpanel.cpp
+    source\downloadwindow.cpp
     source\audiostream.cpp
     source\gui\gui_events.cpp
     source\cmdprocs.cpp
