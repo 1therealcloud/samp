@@ -11,6 +11,104 @@
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/player_colors.h"
+#include "game/camera.h"
+#include "game/custommodels.h"
+#include "gui/render_dependencies.h"
+#include "gui/textdraw_texture.h"
+// samp.dll RVA: 0x00117880
+int g_localSpawnRpc=52;
+// samp.dll RVA: 0x0013c0a0
+DWORD g_localSkipInitialState=1;
+// samp.dll RVA: 0x00003110
+void CLocalPlayer::SetSpecialAction(BYTE action) {
+    switch(action) {
+    case 0:
+        if(GetPed()->DoesDancing())GetPed()->StopDancing();
+        if(GetPed()->UsingCellphone())GetPed()->EnableCellphone(FALSE);
+        if(GetPed()->DoesUrinating())GetPed()->StopUrinating();
+        if(GetPed()->GetStuff())GetPed()->DropStuff();
+        if(GetPed()->HasJetpack())GetPed()->DisableJetpack();
+        if(GetPed()->HasDanceState())GetPed()->SetDancePoseState(0);
+        if(GetPed()->HasDanceStyle())GetPed()->SetSecondaryPoseState(0);
+        break;
+    case 2:if(!GetPed()->HasJetpack())GetPed()->EnableJetpack();break;
+    case 5:case 6:case 7:case 8:GetPed()->StartDancing(action-5);break;
+    case 10:GetPed()->HandsUp();break;
+    case 11:if(!GetPed()->IsInVehicle())GetPed()->EnableCellphone(TRUE);break;
+    case 13:if(GetPed()->UsingCellphone())GetPed()->EnableCellphone(FALSE);break;
+    case 20:if(!GetPed()->IsInVehicle())GetPed()->GiveStuff(1);break;
+    case 21:if(!GetPed()->IsInVehicle())GetPed()->GiveStuff(4);break;
+    case 22:if(!GetPed()->IsInVehicle())GetPed()->GiveStuff(2);break;
+    case 23:if(!GetPed()->IsInVehicle())GetPed()->GiveStuff(3);break;
+    case 24:if(!GetPed()->HasDanceState())GetPed()->SetDancePoseState(1);break;
+    case 25:if(!GetPed()->HasDanceStyle())GetPed()->SetSecondaryPoseState(1);break;
+    case 68:if(!GetPed()->IsInVehicle())GetPed()->StartUrinating();break;
+    }
+}
+// samp.dll RVA: 0x00003b20
+BOOL CLocalPlayer::Spawn() {
+    BYTE *state=(BYTE*)this;if(!*(DWORD*)(state+0x181))return FALSE;
+    if(*(DWORD*)(state+0x30a)==1) {
+        *(DWORD*)(state+0x30a)=0;
+        if(g_renderSecondDialog)*((BYTE*)g_renderSecondDialog+0x13)=0;
+        g_pGame->SetCursorMode(0,FALSE);
+    }
+    CCamera *camera=g_pGame->m_pCamera;camera->Detach();camera->Restore();g_pGame->EnableHUD(TRUE);
+    GetPed()->SetControllable(TRUE);
+    if(!g_localSkipInitialState)GetPed()->SetInitialState();else g_localSkipInitialState=0;
+    g_pGame->RefreshRenderer(*(float*)(state+0x159),*(float*)(state+0x15d));
+    if(GetPed()->HasDanceState())GetPed()->SetDancePoseState(0);
+    GetPed()->SetSpawnInfo((CVector*)(state+0x159),*(float*)(state+0x165));
+    if(g_customModels&&*(int*)(state+0x154)>20000) {
+        if(GameIsPedModel(*(int*)(state+0x154)))GetPed()->SetModelIndex(*(int*)(state+0x154));
+        else if(g_customModels->DoesExist(*(int*)(state+0x154)))GetPed()->SetModelIndex(*(int*)(state+0x154));
+        else GetPed()->SetModelIndex(0);
+    } else GetPed()->SetModelIndex(*(int*)(state+0x150));
+    GetPed()->ClearWeapons();GetPed()->ResetDamageEntity();SetSpecialAction(0);
+    int weapon=*(int*)(state+0x171);
+    *(DWORD*)(state+0x2e6)=0;*(DWORD*)(state+0x2ea)=0;*(DWORD*)(state+0x2ee)=0;*(DWORD*)(state+0x2f2)=0;
+    *(WORD*)(state+0x2d8)=0xffff;*(DWORD*)(state+0x2de)=0;*(DWORD*)(state+0x2e2)=0;
+    if(weapon!=-1)GetPed()->GiveWeapon(weapon,*(int*)(state+0x17d));
+    weapon=*(int*)(state+0x16d);if(weapon!=-1)GetPed()->GiveWeapon(weapon,*(int*)(state+0x179));
+    weapon=*(int*)(state+0x169);if(weapon!=-1)GetPed()->GiveWeapon(weapon,*(int*)(state+0x175));
+    g_pGame->DisableTrainTraffic();GameUnprotect((void*)0x50ac20,3);
+    // GTA SA virtual addresses: native three-byte permanent RET8 patch.
+    *(BYTE*)0x50ac20=0xc2;*(BYTE*)0x50ac21=8;*(BYTE*)0x50ac22=0;
+    CVector position={*(float*)(state+0x159),*(float*)(state+0x15d),*(float*)(state+0x161)+g_textDrawHalf};
+    GetPed()->Teleport(position);GetPed()->SetRotation(*(float*)(state+0x165));
+    *(DWORD*)(state+0xf8)=0;*(DWORD*)(state+0xf4)=1;*(DWORD*)(state+0x306)=0;
+    RakNet::BitStream stream;
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localSpawnRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+    *(DWORD*)(state+0x30e)=GetTickCount()+1000;return TRUE;
+}
+// samp.dll RVA: 0x00004080
+void CLocalPlayer::ToggleSpectating(BOOL enabled) {
+    BYTE *state=(BYTE*)this;
+    if(*(DWORD*)(state+0x12c)&&!*(DWORD*)(state+0x2fe)) {if(!enabled)Spawn();}
+    else if(*(DWORD*)(state+0x2fe)&&!enabled){*(DWORD*)(state+0xf4)=0;*(DWORD*)(state+0x181)=0;}
+    *(DWORD*)(state+0x12c)=enabled;state[0x313]=0;*(DWORD*)(state+0x318)=0;*(DWORD*)(state+0x314)=0xffffffff;
+}
+// samp.dll RVA: 0x000040f0
+void CLocalPlayer::SpectateVehicle(WORD id) {
+    CVehiclePool *pool=*(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0xc);
+    if(pool&&id<2000&&pool->m_bNotEmpty[id]){nativeState[0x313]=2;*(DWORD*)(nativeState+0x314)=id;*(DWORD*)(nativeState+0x318)=0;}
+}
+// samp.dll RVA: 0x00004140
+void CLocalPlayer::SpectatePlayer(WORD id) {
+    CPlayerPool *pool=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
+    if(!pool||id>=1004||!pool->connected[id])return;
+    CRemotePlayer *remote=pool->GetPlayer(id);
+    BYTE state=*((BYTE*)remote+0x1a);
+    if(state&&*((BYTE*)pool->GetPlayer(id)+0x1a)!=32){nativeState[0x313]=1;*(DWORD*)(nativeState+0x314)=id;*(DWORD*)(nativeState+0x318)=0;}
+}
+// samp.dll RVA: 0x00003de0
+void CLocalPlayer::SetColor(DWORD color) {
+    CPlayerPool *pool=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);PlayerColors::Set(*(WORD*)pool,color);
+}
+// samp.dll RVA: 0x00003e00
+DWORD CLocalPlayer::GetColorAsRGBA() {
+    CPlayerPool *pool=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);return PlayerColors::Get(*(WORD*)pool);
+}
 // samp.dll RVA: 0x00002ec0
 void CLocalPlayer::ResetData() {
     BYTE *state=(BYTE*)this;

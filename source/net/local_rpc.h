@@ -3,6 +3,11 @@
 #include "game/scripting.h"
 // samp.dll RVA: 0x0011787c
 extern int g_localSpawnRequestRpc;
+// samp.dll RVA: 0x00117880
+extern int g_localSpawnRpc;
+// Skip one SetInitialState call when nonzero; broader startup meaning unresolved.
+// samp.dll RVA: 0x0013c0a0
+extern DWORD g_localSkipInitialState;
 // samp.dll RVA: 0x00117954
 extern int g_localRequestClassRpc;
 // samp.dll RVA: 0x00117958

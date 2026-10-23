@@ -16,9 +16,14 @@ public:
     DWORD savedCollision[1004];DWORD localPing;int localScore;
     // samp.dll RVA: 0x00013e80
     CPlayerPool();
-    // Declaration-only: remote deletion/spectator dependency remains open.
     // samp.dll RVA: 0x00013fd0
     ~CPlayerPool();
+    // Native constructs the info before validating the inclusive ID1004.
+    // samp.dll RVA: 0x00014100
+    BOOL Create(WORD id,const char *name,DWORD npc);
+    // Native reason word is ignored; this entry pops eight bytes.
+    // samp.dll RVA: 0x00013f40
+    BOOL Delete(WORD id,BYTE reason);
     // samp.dll RVA: 0x00013650
     void UpdateLargestId();
     // samp.dll RVA: 0x00013b50

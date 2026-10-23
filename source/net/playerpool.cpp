@@ -9,6 +9,30 @@ CPlayerPool::CPlayerPool() {
     for(WORD id=0;id<1004;id++){players[id]=0;connected[id]=0;}
     local=new CLocalPlayer;localScore=0;localPing=0;localId=0;largestId=0;
 }
+// samp.dll RVA: 0x00014100
+BOOL CPlayerPool::Create(WORD id,const char *name,DWORD npc) {
+    CPlayerInfo *info=new CPlayerInfo(name,npc);
+    if(id>1004)return FALSE;
+    BYTE *state=(BYTE*)this;CPlayerInfo **slot=(CPlayerInfo**)(state+0x26+id*4);
+    *slot=info;if(!info)return FALSE;
+    *(WORD*)info->remote=id;
+    if(npc) {
+        CRemotePlayer *remote=*slot?(*slot)->remote:0;
+        *(DWORD*)((BYTE*)remote+0x1c)=1;
+    }
+    *(DWORD*)(state+0xfd6+id*4)=1;UpdateLargestId();return TRUE;
+}
+// samp.dll RVA: 0x00013f40
+BOOL CPlayerPool::Delete(WORD id,BYTE reason) {
+    (void)reason;
+    if(id>=1004||!connected[id]||!players[id])return FALSE;
+    if(local&&*(DWORD*)((BYTE*)local+0x12c)&&*(DWORD*)((BYTE*)local+0x314)==id)local->ToggleSpectating(FALSE);
+    connected[id]=0;delete players[id];players[id]=0;UpdateLargestId();return TRUE;
+}
+// samp.dll RVA: 0x00013fd0
+CPlayerPool::~CPlayerPool() {
+    if(local)delete local;local=0;for(WORD id=0;id<1004;id++)Delete(id,0);
+}
 // samp.dll RVA: 0x00013650
 void CPlayerPool::UpdateLargestId() {
     int largest=0;for(int id=0;id<1004;id++)if(connected[id])largest=id;largestId=largest;

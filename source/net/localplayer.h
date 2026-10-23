@@ -12,6 +12,21 @@ class CLocalPlayer {public:
     CLocalPlayer();
     // samp.dll RVA: 0x00002ec0
     void ResetData();
+    // samp.dll RVA: 0x00003110
+    void SetSpecialAction(BYTE action);
+    // samp.dll RVA: 0x00003b20
+    BOOL Spawn();
+    // The raw DWORD state is retained; this is not normalized to bool.
+    // samp.dll RVA: 0x00004080
+    void ToggleSpectating(BOOL enabled);
+    // samp.dll RVA: 0x000040f0
+    void SpectateVehicle(WORD vehicle);
+    // samp.dll RVA: 0x00004140
+    void SpectatePlayer(WORD player);
+    // samp.dll RVA: 0x00003de0
+    void SetColor(DWORD color);
+    // samp.dll RVA: 0x00003e00
+    DWORD GetColorAsRGBA();
     // Raw DWORD result: returns1 after500ms or when any byte differs.
     // samp.dll RVA: 0x00003970
     DWORD HasDataChanged(const void *previous,const void *current,DWORD length);
