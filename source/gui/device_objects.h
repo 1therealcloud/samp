@@ -45,29 +45,7 @@ public:
     void OnResetDevice();
 };
 // Address interfaces for later UI/pool layers; never allocate these partial types.
-class CScoreboard {
-public:
-    // Constructor-observed extent; unresolved fields remain opaque.
-    BYTE nativeState[0x44];
-    // samp.dll RVA: 0x0006e460
-    CScoreboard(IDirect3DDevice9 *device);
-    // samp.dll RVA: 0x0006e4e0
-    void ResetDialogControls(CDXUTDialog *dialog);
-    // samp.dll RVA: 0x0006e640
-    void SendNotification();
-    // samp.dll RVA: 0x0006e410
-    void Close(bool restoreCursor);
-    // samp.dll RVA: 0x0006ee10
-    void Enable();
-    // samp.dll RVA: 0x0006e3c0
-    void GetRect(RECT *rect);
-    // samp.dll RVA: 0x0006e360
-    void Recalc();
-    // samp.dll RVA: 0x0006e760
-    void UpdateList();
-    // samp.dll RVA: 0x0006eaf0
-    void Draw();
-};
+#include "scoreboard.h"
 #include "net/objectpool.h"
 #include "net/textdrawpool.h"
 #pragma pack(pop)

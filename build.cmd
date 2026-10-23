@@ -101,6 +101,7 @@ for %%F in (
     source\chatbubble.cpp
     source\playertags.cpp
     source\deathwindow.cpp
+    source\scoreboard.cpp
     source\gui\gui_events.cpp
     source\cmdprocs.cpp
     source\subclass.cpp

@@ -6,6 +6,8 @@ class CPed;
 class CEntity;
 struct PedBulletData;
 class CLocalPlayer {public:
+    // samp.dll RVA: 0x00003e20
+    DWORD GetColorAsARGB();
     // samp.dll RVA: 0x000039c0
     DWORD GetInCarSendRate();
     // samp.dll RVA: 0x00003a00

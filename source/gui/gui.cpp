@@ -87,22 +87,8 @@ typedef char CNetStatsObservedExtent[(sizeof(CNetStats)==0x18)?1:-1];
 typedef char CSrvNetStatsObservedExtent[(sizeof(CSrvNetStats)==0x18)?1:-1];
 typedef char CHelpDialogObservedExtent[(sizeof(CHelpDialog)==0x4)?1:-1];
 typedef char CChatBubbleObservedExtent[(sizeof(CChatBubble)==0x44a20)?1:-1];
-// samp.dll RVA: 0x0006e460
-CScoreboard::CScoreboard(IDirect3DDevice9 *device){
-    DWORD *state=(DWORD*)nativeState;
-    state[12]=(DWORD)device;state[13]=0;state[14]=0;state[15]=0;state[16]=0;state[1]=0;
-    if(!g_pGame||g_chatScreenWidth<801){state[5]=0x44200000;state[6]=0x43f00000;}
-    else {state[5]=0x44480000;state[6]=0x44160000;}
-    state[7]=0x42700000;state[8]=0;state[9]=0x3dae147b;state[10]=0x3e880000;state[11]=0x3ee00000;
-    Recalc();state[0]=0;
-}
-// samp.dll RVA: 0x0006e360
-void CScoreboard::Recalc(){
-    RECT rect;GetClientRect(g_inputGameWindow,&rect);
-    *(float*)(nativeState+0x10)=1.0f;
-    *(float*)(nativeState+8)=(float)rect.right*0.5f-*(float*)(nativeState+0x14)*0.5f;
-    *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
-}
+
+
 
 
 #include "gui/render_dependencies.h"
@@ -112,33 +98,9 @@ void CScoreboard::Recalc(){
 #include "cmdwindow.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
-// samp.dll RVA: 0x0006e3c0
-void CScoreboard::GetRect(RECT *rect) {
-    int left=(int)*(float*)(nativeState+8);rect->left=left;
-    rect->right=left+(int)*(float*)(nativeState+0x14);
-    int top=(int)*(float*)(nativeState+12);rect->top=top;
-    rect->bottom=top+(int)*(float*)(nativeState+0x18);
-}
-// samp.dll RVA: 0x0006e410
-void CScoreboard::Close(bool restoreCursor) {
-    if(*(DWORD*)nativeState&&*(CDXUTDialog**)(nativeState+0x34)) {
-        (*(CDXUTDialog**)(nativeState+0x34))->SetVisible(false);
-        (*(CDXUTListBox**)(nativeState+0x38))->SetEnabled(false);
-        (*(CDXUTListBox**)(nativeState+0x38))->SetVisible(false);
-        if(restoreCursor)g_pGame->SetCursorMode(0,FALSE);
-        *(DWORD*)nativeState=0;
-    }
-}
-// samp.dll RVA: 0x0006ee10
-void CScoreboard::Enable() {
-    if(!*(DWORD*)nativeState&&*(CDXUTDialog**)(nativeState+0x34)) {
-        (*(CDXUTDialog**)(nativeState+0x34))->SetVisible(true);
-        (*(CDXUTListBox**)(nativeState+0x38))->SetEnabled(true);
-        (*(CDXUTListBox**)(nativeState+0x38))->UpdateRects();
-        (*(CDXUTListBox**)(nativeState+0x38))->SetVisible(true);
-        UpdateList();g_pGame->SetCursorMode(3,FALSE);*(DWORD*)nativeState=1;
-    }
-}
+
+
+
 
 
 #include "gui/dialog_resources.h"

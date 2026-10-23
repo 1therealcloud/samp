@@ -2,6 +2,30 @@
 #include "net/remoteplayer.h"
 #include "net/actorpool.h"
 #include "game/playerped.h"
+// samp.dll RVA: 0x000138c0
+int CPlayerPool::GetCount(BOOL includeFlagged) {
+    int count=0;BYTE *state=(BYTE*)this;
+    for(int id=0;id<1004;id++)if(*(DWORD*)(state+0xfd6+id*4)==1) {
+        if(includeFlagged||!*(DWORD*)(*(BYTE**)(state+0x26+id*4)+4))count++;
+    }
+    return count;
+}
+// samp.dll RVA: 0x0006e290
+int CPlayerPool::GetScore(WORD player) {
+    if(player>1004)return 0;
+    BYTE *entry=*(BYTE**)((BYTE*)this+0x26+player*4);
+    return entry?*(int*)entry:0;
+}
+// samp.dll RVA: 0x0006e2b0
+DWORD CPlayerPool::GetPing(WORD player) {
+    if(player>1004)return 0;
+    BYTE *entry=*(BYTE**)((BYTE*)this+0x26+player*4);
+    return entry?*(DWORD*)(entry+0xc):0;
+}
+// samp.dll RVA: 0x0006e2e0
+int CPlayerPool::GetLocalScore() {return *(int*)((BYTE*)this+0x2f3a);}
+// samp.dll RVA: 0x0006e2f0
+DWORD CPlayerPool::GetLocalPing() {return *(DWORD*)((BYTE*)this+0x2f36);}
 // samp.dll RVA: 0x000010f0
 CRemotePlayer *CPlayerPool::GetPlayer(WORD player) {
     if(player<1005) {

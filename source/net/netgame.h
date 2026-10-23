@@ -8,6 +8,8 @@ class CMenuPool;
 class CObjectPool;
 class CNetGame {
 public:
+    // samp.dll RVA: 0x00008c00
+    void UpdatePlayersInfo();
     // samp.dll RVA: 0x000081e0
     CMenuPool *GetMenuPool();
     // samp.dll RVA: 0x00002e40
@@ -29,4 +31,8 @@ public:
     // samp.dll RVA: 0x00001170
     CPlayerPool *GetPlayerPool();
 };
+// samp.dll RVA: 0x00156b38
+extern DWORD g_netPlayersInfoTick;
+// samp.dll RVA: 0x00117b98
+extern int g_netPlayersInfoRpc;
 #endif

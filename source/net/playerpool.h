@@ -8,6 +8,16 @@ class CLocalPlayer;
 class CObject;
 class CPlayerPool {
 public:
+    // samp.dll RVA: 0x000138c0
+    int GetCount(BOOL includeFlagged);
+    // samp.dll RVA: 0x0006e290
+    int GetScore(WORD player);
+    // samp.dll RVA: 0x0006e2b0
+    DWORD GetPing(WORD player);
+    // samp.dll RVA: 0x0006e2e0
+    int GetLocalScore();
+    // samp.dll RVA: 0x0006e2f0
+    DWORD GetLocalPing();
     // MSVC small-string storage; native accepts the adjacent ID1004 as well.
     // samp.dll RVA: 0x000170d0
     const char *GetName(WORD player);

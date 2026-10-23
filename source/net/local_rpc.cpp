@@ -10,6 +10,12 @@
 #include "main.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
+#include "game/player_colors.h"
+// samp.dll RVA: 0x00003e20
+DWORD CLocalPlayer::GetColorAsARGB() {
+    CPlayerPool *players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
+    return (PlayerColors::Get(*(WORD*)players)>>8)|0xff000000;
+}
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
 typedef char LocalRpcReliability[(HIGH_PRIORITY==1 && RELIABLE_ORDERED==9 && RELIABLE_SEQUENCED==10)?1:-1];
 // samp.dll RVA: 0x00117960
