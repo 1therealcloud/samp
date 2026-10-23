@@ -6,6 +6,9 @@ class CAudioStream {public:
     BYTE initialized;
     // samp.dll RVA: 0x00065f00
     BOOL Reset();
+    // Descriptive static coordinator; native entry consumes no this pointer.
+    // samp.dll RVA: 0x00066650
+    static void Update3D();
     // samp.dll RVA: 0x000663e0
     BOOL Play(const char *url,float x,float y,float z,float radius,bool spatial);
     // CRT _beginthread entry; native ignores its argument and returns normally.
@@ -75,4 +78,10 @@ extern const char g_audioStreamStationUrlMarker[9];
 extern const char g_audioStreamMessageOffKey[12];
 // samp.dll RVA: 0x0011bc34
 extern const char g_audioStreamMessageFormat[17];
+// samp.dll RVA: 0x0011bc98
+extern const char g_audioStreamOffsetFormat[45];
+// samp.dll RVA: 0x0011bc74
+extern const char g_audioStreamAttributesError[34];
+// samp.dll RVA: 0x0011bc54
+extern const char g_audioStreamPositionError[32];
 #endif

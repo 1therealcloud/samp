@@ -1683,3 +1683,31 @@ void CPed::GetBoneMatrix(CMatrix *out,int bone) {
     BYTE *entry=*(BYTE**)(ped+0x488+(DWORD)bone*4);
     GetBoneMatrixById(out,*(int*)(entry+0x14));
 }
+
+// samp.dll RVA: 0x000ab840
+CameraAim *CPed::GetCameraAim() {return AimStuff::GetInternalAim();}
+
+// samp.dll RVA: 0x000b3dc0
+BOOL __stdcall GameIsBackendOnScreen(void *backend) {
+    // GTA SA virtual address: thiscall backend, raw EAX normalized to BOOL.
+    int result;
+    __asm {
+        mov ecx,backend
+        mov edx,534540h
+        call edx
+        mov result,eax
+    }
+    return result!=0;
+}
+// samp.dll RVA: 0x000ab900
+BOOL CPed::IsOnScreen() {return m_pGamePed?GameIsBackendOnScreen(m_pGamePed):FALSE;}
+// samp.dll RVA: 0x000ad5a0
+void *CPed::GetContactEntity() {return *(void**)((BYTE*)m_pGamePed+0x584);}
+// samp.dll RVA: 0x000ad5b0
+void *CPed::GetContactVehicle() {return *(void**)((BYTE*)m_pGamePed+0x568);}
+// samp.dll RVA: 0x000141e0
+void CPed::SetCameraMode(BYTE mode) {AimStuff::SetPlayerCameraMode(mode,m_nPlayerNumber);}
+// samp.dll RVA: 0x00014200
+void CPed::SetCameraExtZoomAndAspectRatio(float zoom,float aspect) {AimStuff::SetPlayerCamera(m_nPlayerNumber,zoom,aspect);}
+// samp.dll RVA: 0x00002d00
+BYTE CPed::GetCameraMode() {return m_nPlayerNumber?AimStuff::GetPlayerCameraMode(m_nPlayerNumber):AimStuff::GetCameraMode();}

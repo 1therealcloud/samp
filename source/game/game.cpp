@@ -1459,3 +1459,193 @@ CObject *CGame::NewObject(int model,float x,float y,float z,CVector rotation,flo
     CVector position;memcpy(&position.x,&x,4);memcpy(&position.y,&y,4);memcpy(&position.z,&z,4);
     return new CObject(model,position,rotation,drawDistance,0,firstHour,lastHour);
 }
+
+#include "game/ped_control.h"
+// samp.dll RVA: 0x0011e808
+const Scripting::OpcodeInfo g_gameReleaseAnimationCommand={0x4ef,"s"};
+// samp.dll RVA: 0x0011e8e0
+const float g_gameFarClipBase=1250.0f;
+// samp.dll RVA: 0x0011e8dc
+const float g_gameFarClipMinimum=700.0f;
+// samp.dll RVA: 0x0015196c
+float g_gameFarClipDistance=1400.0f;
+// samp.dll RVA: 0x0011ea9c
+const char g_gameWeaponName01[15]="Brass Knuckles";
+// samp.dll RVA: 0x0011ea90
+const char g_gameWeaponName02[10]="Golf Club";
+// samp.dll RVA: 0x0011ea84
+const char g_gameWeaponName03[11]="Nite Stick";
+// samp.dll RVA: 0x0011ea7c
+const char g_gameWeaponName04[6]="Knife";
+// samp.dll RVA: 0x0011ea6c
+const char g_gameWeaponName05[13]="Baseball Bat";
+// samp.dll RVA: 0x0011ea64
+const char g_gameWeaponName06[7]="Shovel";
+// samp.dll RVA: 0x0011ea58
+const char g_gameWeaponName07[9]="Pool Cue";
+// samp.dll RVA: 0x0011ea50
+const char g_gameWeaponName08[7]="Katana";
+// samp.dll RVA: 0x0011ea44
+const char g_gameWeaponName09[9]="Chainsaw";
+// samp.dll RVA: 0x0011ea3c
+const char g_gameWeaponName10[6]="Dildo";
+// samp.dll RVA: 0x0011ea30
+const char g_gameWeaponName12[9]="Vibrator";
+// samp.dll RVA: 0x0011ea28
+const char g_gameWeaponName14[8]="Flowers";
+// samp.dll RVA: 0x0011ea20
+const char g_gameWeaponName15[5]="Cane";
+// samp.dll RVA: 0x0011ea18
+const char g_gameWeaponName16[8]="Grenade";
+// samp.dll RVA: 0x0011ea10
+const char g_gameWeaponName17[8]="Teargas";
+// samp.dll RVA: 0x0011ea08
+const char g_gameWeaponName18[8]="Molotov";
+// samp.dll RVA: 0x0011ea00
+const char g_gameWeaponName22[8]="Colt 45";
+// samp.dll RVA: 0x0011e9f0
+const char g_gameWeaponName23[16]="Silenced Pistol";
+// samp.dll RVA: 0x0011e9e0
+const char g_gameWeaponName24[13]="Desert Eagle";
+// samp.dll RVA: 0x0011e9d8
+const char g_gameWeaponName25[8]="Shotgun";
+// samp.dll RVA: 0x0011e9c4
+const char g_gameWeaponName26[17]="Sawn-off Shotgun";
+// samp.dll RVA: 0x0011e9b4
+const char g_gameWeaponName27[15]="Combat Shotgun";
+// samp.dll RVA: 0x0011e9b0
+const char g_gameWeaponName28[4]="UZI";
+// samp.dll RVA: 0x0011e9ac
+const char g_gameWeaponName29[4]="MP5";
+// samp.dll RVA: 0x0011e9a4
+const char g_gameWeaponName30[5]="AK47";
+// samp.dll RVA: 0x0011e9a0
+const char g_gameWeaponName31[3]="M4";
+// samp.dll RVA: 0x0011e998
+const char g_gameWeaponName32[5]="TEC9";
+// samp.dll RVA: 0x0011e990
+const char g_gameWeaponName33[6]="Rifle";
+// samp.dll RVA: 0x0011e980
+const char g_gameWeaponName34[13]="Sniper Rifle";
+// samp.dll RVA: 0x0011e970
+const char g_gameWeaponName35[16]="Rocket Launcher";
+// samp.dll RVA: 0x0011e964
+const char g_gameWeaponName36[12]="Heat Seaker";
+// samp.dll RVA: 0x0011e954
+const char g_gameWeaponName37[13]="Flamethrower";
+// samp.dll RVA: 0x0011e94c
+const char g_gameWeaponName38[8]="Minigun";
+// samp.dll RVA: 0x0011e938
+const char g_gameWeaponName39[19]="Satchel Explosives";
+// samp.dll RVA: 0x0011e930
+const char g_gameWeaponName40[5]="Bomb";
+// samp.dll RVA: 0x0011e924
+const char g_gameWeaponName41[10]="Spray Can";
+// samp.dll RVA: 0x0011e910
+const char g_gameWeaponName42[18]="Fire Extinguisher";
+// samp.dll RVA: 0x0011e908
+const char g_gameWeaponName43[7]="Camera";
+// samp.dll RVA: 0x0011e8fc
+const char g_gameWeaponName46[10]="Parachute";
+// samp.dll RVA: 0x0011e8f4
+const char g_gameWeaponName49[8]="Vehicle";
+// samp.dll RVA: 0x0011e8ec
+const char g_gameWeaponName53[8]="Drowned";
+// samp.dll RVA: 0x0011e8e4
+const char g_gameWeaponName54[6]="Splat";
+
+// samp.dll RVA: 0x000a0ad0
+void CGame::ReleaseAnimation(const char *name) {
+    if(Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand,name))
+        Scripting::ProcessCommand(&g_gameReleaseAnimationCommand,name);
+}
+// samp.dll RVA: 0x000a0b00
+void CGame::EnableRadar(BOOL enabled) {
+    // GTA SA virtual address: radar-disable byte.
+    *(BYTE*)0xbaa3fb=enabled==0;
+}
+// samp.dll RVA: 0x000a0d20
+void CGame::UpdateFarClippingPlane() {
+    BYTE *ped=(BYTE*)GameFindLocalPed();
+    if(!ped){g_gameFarClipDistance=1250.0f;return;}
+    DWORD interior;Scripting::ProcessCommand(&g_gameCurrentInteriorCommand,&interior);
+    if((BYTE)interior){g_gameFarClipDistance=400.0f;return;}
+    const float *height=(const float*)(*(BYTE**)(ped+0x14)+0x38);
+    __asm {
+        mov eax,height
+        fld dword ptr [eax]
+        fadd st(0),st(0)
+        fsubr g_gameFarClipBase
+        fst g_gameFarClipDistance
+        fcomp g_gameFarClipMinimum
+        fnstsw ax
+        test ah,5
+        jp far_clip_done
+        mov g_gameFarClipDistance,442f0000h
+far_clip_done:
+    }
+}
+// samp.dll RVA: 0x000a0dc0
+const char *CGame::GetWeaponName(int weapon) {
+    switch(weapon) {
+    case 1:return g_gameWeaponName01;
+    case 2:return g_gameWeaponName02;
+    case 3:return g_gameWeaponName03;
+    case 4:return g_gameWeaponName04;
+    case 5:return g_gameWeaponName05;
+    case 6:return g_gameWeaponName06;
+    case 7:return g_gameWeaponName07;
+    case 8:return g_gameWeaponName08;
+    case 9:return g_gameWeaponName09;
+    case 10:case 11:return g_gameWeaponName10;
+    case 12:case 13:return g_gameWeaponName12;
+    case 14:return g_gameWeaponName14;
+    case 15:return g_gameWeaponName15;
+    case 16:return g_gameWeaponName16;
+    case 17:return g_gameWeaponName17;
+    case 18:return g_gameWeaponName18;
+    case 19:case 20:case 21:case 44:case 45:case 47:case 48:case 50:case 51:case 52:return g_pedEmptyDanceAnimation;
+    case 22:return g_gameWeaponName22;
+    case 23:return g_gameWeaponName23;
+    case 24:return g_gameWeaponName24;
+    case 25:return g_gameWeaponName25;
+    case 26:return g_gameWeaponName26;
+    case 27:return g_gameWeaponName27;
+    case 28:return g_gameWeaponName28;
+    case 29:return g_gameWeaponName29;
+    case 30:return g_gameWeaponName30;
+    case 31:return g_gameWeaponName31;
+    case 32:return g_gameWeaponName32;
+    case 33:return g_gameWeaponName33;
+    case 34:return g_gameWeaponName34;
+    case 35:return g_gameWeaponName35;
+    case 36:return g_gameWeaponName36;
+    case 37:return g_gameWeaponName37;
+    case 38:return g_gameWeaponName38;
+    case 39:return g_gameWeaponName39;
+    case 40:return g_gameWeaponName40;
+    case 41:return g_gameWeaponName41;
+    case 42:return g_gameWeaponName42;
+    case 43:return g_gameWeaponName43;
+    case 46:return g_gameWeaponName46;
+    case 49:return g_gameWeaponName49;
+    case 53:return g_gameWeaponName53;
+    case 54:return g_gameWeaponName54;
+    default:return g_pedEmptyDanceAnimation;
+    }
+}
+// samp.dll RVA: 0x000a11d0
+void CGame::Restart() {
+    // GTA SA virtual addresses: restart flags and three no-argument backend calls.
+    *(BYTE*)0xba67a5=1;*(BYTE*)0xba67a6=1;
+    ((void(__cdecl*)())0x53c550)();
+    ((void(__cdecl*)())0x561aa0)();
+    ((void(__cdecl*)())0x53c680)();
+    *(BYTE*)0xba6831=1;
+}
+// samp.dll RVA: 0x000a1250
+void CGame::SetNumberOfIntroTextLinesThisFrame(WORD value) {*(WORD*)0xa44b68=value;}
+// samp.dll RVA: 0x000a1590
+int CGame::GetTimer() {return *(int*)0xb7cb84;}
+// samp.dll RVA: 0x000a19e0
+BOOL CGame::UsingGamepad() {return *(BYTE*)0xba6818!=0;}

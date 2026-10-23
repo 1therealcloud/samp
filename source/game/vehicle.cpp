@@ -959,3 +959,16 @@ void CVehicle::ShutdownLicensePlate() {
     IDirect3DTexture9 **texture=(IDirect3DTexture9**)((BYTE*)this+0x8f);
     if(*texture){(*texture)->Release();*texture=0;}
 }
+
+// samp.dll RVA: 0x0011f704
+const Scripting::OpcodeInfo g_vehicleLockedCommand={0x519,"ii"};
+// samp.dll RVA: 0x0011f68c
+const Scripting::OpcodeInfo g_vehicleWreckedCommand={0x119,"i"};
+// samp.dll RVA: 0x000b6d70
+void CVehicle::SetLocked(BOOL locked) {
+    if(m_pGameVehicle)Scripting::ProcessCommand(&g_vehicleLockedCommand,m_nHandle,locked?1:0);
+}
+// samp.dll RVA: 0x000b6f10
+BOOL CVehicle::IsWrecked() {
+    return m_pGameVehicle?(BOOL)Scripting::ProcessCommand(&g_vehicleWreckedCommand,m_nHandle):FALSE;
+}

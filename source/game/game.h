@@ -15,6 +15,23 @@ class CMatrix;
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
+    // samp.dll RVA: 0x000a0ad0
+    void ReleaseAnimation(const char *name);
+    // samp.dll RVA: 0x000a0b00
+    void EnableRadar(BOOL enabled);
+    // samp.dll RVA: 0x000a0d20
+    void UpdateFarClippingPlane();
+    // samp.dll RVA: 0x000a0dc0
+    const char *GetWeaponName(int weapon);
+    // samp.dll RVA: 0x000a11d0
+    void Restart();
+    // samp.dll RVA: 0x000a1250
+    void SetNumberOfIntroTextLinesThisFrame(WORD value);
+    // samp.dll RVA: 0x000a1590
+    int GetTimer();
+    // samp.dll RVA: 0x000a19e0
+    BOOL UsingGamepad();
+
     // samp.dll RVA: 0x000a0170
     CObject *NewObject(int model,float x,float y,float z,CVector rotation,float drawDistance,BYTE firstHour,BYTE lastHour);
     CAudio *m_pAudio;
@@ -317,3 +334,96 @@ int __cdecl GameCameraSphereQuery(const void *sphere);
 BYTE __stdcall GameTestEntityLineSphere(const CVector *origin,const CVector *end,void *backend,const CVector *centre,float scale,BYTE cameraCheck);
 // samp.dll RVA: 0x002abe58
 extern BYTE g_gameLineSphereResult;
+
+// samp.dll RVA: 0x0011e808
+extern const Scripting::OpcodeInfo g_gameReleaseAnimationCommand;
+// samp.dll RVA: 0x0011e8e0
+extern const float g_gameFarClipBase;
+// samp.dll RVA: 0x0011e8dc
+extern const float g_gameFarClipMinimum;
+// samp.dll RVA: 0x0015196c
+extern float g_gameFarClipDistance;
+// samp.dll RVA: 0x0011ea9c
+extern const char g_gameWeaponName01[15];
+// samp.dll RVA: 0x0011ea90
+extern const char g_gameWeaponName02[10];
+// samp.dll RVA: 0x0011ea84
+extern const char g_gameWeaponName03[11];
+// samp.dll RVA: 0x0011ea7c
+extern const char g_gameWeaponName04[6];
+// samp.dll RVA: 0x0011ea6c
+extern const char g_gameWeaponName05[13];
+// samp.dll RVA: 0x0011ea64
+extern const char g_gameWeaponName06[7];
+// samp.dll RVA: 0x0011ea58
+extern const char g_gameWeaponName07[9];
+// samp.dll RVA: 0x0011ea50
+extern const char g_gameWeaponName08[7];
+// samp.dll RVA: 0x0011ea44
+extern const char g_gameWeaponName09[9];
+// samp.dll RVA: 0x0011ea3c
+extern const char g_gameWeaponName10[6];
+// samp.dll RVA: 0x0011ea30
+extern const char g_gameWeaponName12[9];
+// samp.dll RVA: 0x0011ea28
+extern const char g_gameWeaponName14[8];
+// samp.dll RVA: 0x0011ea20
+extern const char g_gameWeaponName15[5];
+// samp.dll RVA: 0x0011ea18
+extern const char g_gameWeaponName16[8];
+// samp.dll RVA: 0x0011ea10
+extern const char g_gameWeaponName17[8];
+// samp.dll RVA: 0x0011ea08
+extern const char g_gameWeaponName18[8];
+// samp.dll RVA: 0x0011ea00
+extern const char g_gameWeaponName22[8];
+// samp.dll RVA: 0x0011e9f0
+extern const char g_gameWeaponName23[16];
+// samp.dll RVA: 0x0011e9e0
+extern const char g_gameWeaponName24[13];
+// samp.dll RVA: 0x0011e9d8
+extern const char g_gameWeaponName25[8];
+// samp.dll RVA: 0x0011e9c4
+extern const char g_gameWeaponName26[17];
+// samp.dll RVA: 0x0011e9b4
+extern const char g_gameWeaponName27[15];
+// samp.dll RVA: 0x0011e9b0
+extern const char g_gameWeaponName28[4];
+// samp.dll RVA: 0x0011e9ac
+extern const char g_gameWeaponName29[4];
+// samp.dll RVA: 0x0011e9a4
+extern const char g_gameWeaponName30[5];
+// samp.dll RVA: 0x0011e9a0
+extern const char g_gameWeaponName31[3];
+// samp.dll RVA: 0x0011e998
+extern const char g_gameWeaponName32[5];
+// samp.dll RVA: 0x0011e990
+extern const char g_gameWeaponName33[6];
+// samp.dll RVA: 0x0011e980
+extern const char g_gameWeaponName34[13];
+// samp.dll RVA: 0x0011e970
+extern const char g_gameWeaponName35[16];
+// samp.dll RVA: 0x0011e964
+extern const char g_gameWeaponName36[12];
+// samp.dll RVA: 0x0011e954
+extern const char g_gameWeaponName37[13];
+// samp.dll RVA: 0x0011e94c
+extern const char g_gameWeaponName38[8];
+// samp.dll RVA: 0x0011e938
+extern const char g_gameWeaponName39[19];
+// samp.dll RVA: 0x0011e930
+extern const char g_gameWeaponName40[5];
+// samp.dll RVA: 0x0011e924
+extern const char g_gameWeaponName41[10];
+// samp.dll RVA: 0x0011e910
+extern const char g_gameWeaponName42[18];
+// samp.dll RVA: 0x0011e908
+extern const char g_gameWeaponName43[7];
+// samp.dll RVA: 0x0011e8fc
+extern const char g_gameWeaponName46[10];
+// samp.dll RVA: 0x0011e8f4
+extern const char g_gameWeaponName49[8];
+// samp.dll RVA: 0x0011e8ec
+extern const char g_gameWeaponName53[8];
+// samp.dll RVA: 0x0011e8e4
+extern const char g_gameWeaponName54[6];

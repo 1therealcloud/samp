@@ -1,12 +1,18 @@
 #ifndef SAMP_RECOVERED_VEHICLE_H
 #define SAMP_RECOVERED_VEHICLE_H
 #include "game/entity.h"
+#include "game/scripting.h"
 #include <stddef.h>
 // Native allocation extent B8 and CEntity prefix/three-slot virtual interface.
 // Opaque bytes retain unknown meaning; lifecycle follows the recovered DL bodies.
 #pragma pack(push,1)
 class CVehicle : public CEntity {
 public:
+    // samp.dll RVA: 0x000b6d70
+    void SetLocked(BOOL locked);
+    // samp.dll RVA: 0x000b6f10
+    BOOL IsWrecked();
+
     CVehicle *m_pTrailer;
     void *m_pGameVehicle;
     BYTE unknown50[0x21];
@@ -193,3 +199,8 @@ extern const char g_vehicleBadCarriageWarning[29];
 // samp.dll RVA: 0x0011f800
 extern const char g_vehicleCreationWarning[42];
 #endif
+
+// samp.dll RVA: 0x0011f704
+extern const Scripting::OpcodeInfo g_vehicleLockedCommand;
+// samp.dll RVA: 0x0011f68c
+extern const Scripting::OpcodeInfo g_vehicleWreckedCommand;

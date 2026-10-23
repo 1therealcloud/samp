@@ -256,3 +256,57 @@ distance_done:
     }
     BASS_ChannelStop(g_audioStreamHandle);g_audioStreamHandle=0;g_audioStreamRadioActive=0;
 }
+
+// samp.dll RVA: 0x0011bc98
+const char g_audioStreamOffsetFormat[45]="BASS_ChannelSet3DAttributes offset: %f %f %f";
+// samp.dll RVA: 0x0011bc74
+const char g_audioStreamAttributesError[34]="BASS_ChannelSet3DAttributes Error";
+// samp.dll RVA: 0x0011bc54
+const char g_audioStreamPositionError[32]="BASS_ChannelSet3DPosition Error";
+
+// samp.dll RVA: 0x00066650
+void CAudioStream::Update3D() {
+    CPed *ped=g_pGame->GetPlayerPed();if(!ped)return;
+    CVector aim[2];memcpy(aim,ped->GetCameraAim(),24);
+    CVector front,listener,source;
+    AudioStreamSwapNegateYZ(&aim[0],&front);
+    AudioStreamSwapYZNegateX(&aim[1],&listener);
+    AudioStreamSwapYZNegateX(&g_audioStreamPosition,&source);
+    CVector velocity={0,0,0};BYTE *backend;
+    if(ped->IsInVehicle()) {backend=(BYTE*)ped->GetVehicle();if(!backend)return;}
+    else backend=(BYTE*)ped->m_pGamePed;
+    memcpy(&velocity,backend+0x44,12);
+    BASS_Set3DFactors(1.0f,1.0f,2.0f);
+    BASS_Set3DPosition(0,(const BASS_3DVECTOR*)&velocity,(const BASS_3DVECTOR*)&front,0);
+    if(g_audioStreamHandle&&g_audioStreamSpatial) {
+        CChat *chat=g_pChat;CVector offset;double debugX,debugY,debugZ;
+        const float *listenerData=(const float*)&listener,*sourceData=(const float*)&source;
+        float *offsetData=(float*)&offset;
+        __asm {
+            mov ecx,listenerData
+            mov edx,sourceData
+            mov eax,offsetData
+            fld dword ptr [ecx]
+            fsub dword ptr [edx]
+            fstp dword ptr [eax]
+            fld dword ptr [ecx+4]
+            fsub dword ptr [edx+4]
+            fstp dword ptr [eax+4]
+            fld dword ptr [ecx+8]
+            fsub dword ptr [edx+8]
+            fst dword ptr [eax+8]
+            fstp debugZ
+            fld dword ptr [eax+4]
+            fstp debugY
+            fld dword ptr [eax]
+            fstp debugX
+        }
+        // Native Z debug value retains the difference before its float store.
+        chat->AddDebugMessage(g_audioStreamOffsetFormat,debugX,debugY,debugZ);
+        if(!BASS_ChannelSet3DAttributes(g_audioStreamHandle,1,10.0f,100.0f,360,360,1.0f))
+            g_pChat->AddDebugMessage(g_audioStreamAttributesError);
+        if(!BASS_ChannelSet3DPosition(g_audioStreamHandle,(const BASS_3DVECTOR*)&offset,0,0))
+            g_pChat->AddDebugMessage(g_audioStreamPositionError);
+    }
+    BASS_Apply3D();
+}

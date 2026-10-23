@@ -7,6 +7,19 @@ struct PedAccessoryState { BYTE opaque[52]; };
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // samp.dll RVA: 0x000ab900
+    BOOL IsOnScreen();
+    // samp.dll RVA: 0x000ad5a0
+    void *GetContactEntity();
+    // samp.dll RVA: 0x000ad5b0
+    void *GetContactVehicle();
+    // samp.dll RVA: 0x000141e0
+    void SetCameraMode(BYTE mode);
+    // samp.dll RVA: 0x00014200
+    void SetCameraExtZoomAndAspectRatio(float zoom,float aspect);
+    // samp.dll RVA: 0x00002d00
+    BYTE GetCameraMode();
+
     BOOL m_bUsingCellphone;
     BOOL m_accessoryOccupied[10];
     PedAccessoryState m_accessoryInfo[10];
@@ -126,6 +139,9 @@ public:
     BOOL PerformingCustomAnimation();
     // samp.dll RVA: 0x000ab810
     BYTE GetAim();
+    // Native forwarding entry to the existing internal camera-aim accessor.
+    // samp.dll RVA: 0x000ab840
+    CameraAim *GetCameraAim();
     // samp.dll RVA: 0x000afc80
     void SetWeaponAmmo(BYTE weapon,WORD ammo);
     // samp.dll RVA: 0x000acdb0
@@ -260,3 +276,6 @@ extern const float g_pedDrunkShakeScale;
 // samp.dll RVA: 0x00117668
 extern const float g_pedDrunkSpeedThreshold;
 #endif
+
+// samp.dll RVA: 0x000b3dc0
+BOOL __stdcall GameIsBackendOnScreen(void *backend);
