@@ -3,8 +3,13 @@
 #include <d3dx9.h>
 #include "game/entity.h"
 #include "game/scripting.h"
+struct PlayerTagVertex {float x,y,z,rhw;DWORD color;};
 class CPlayerTags {
 public:
+    // samp.dll RVA: 0x0006cae0
+    void DrawHealthBar(const CVector *position,float health,float armour,float distance);
+    // samp.dll RVA: 0x0006d0f0
+    void BeginHealthBar();
     // samp.dll RVA: 0x0006c760
     ~CPlayerTags();
     // samp.dll RVA: 0x0006c790
@@ -46,4 +51,25 @@ extern const Scripting::OpcodeInfo g_nametagLineOfSightCommand;
 extern const char g_nametagNameFormat[8];
 // samp.dll RVA: 0x00074dc0
 void ClientDrawLabels();
+// samp.dll RVA: 0x00073cb0
+void ClientDrawPlayerTags();
+// Border, background and fill: four vertices each, sharing native mutable storage.
+// samp.dll RVA: 0x00140878
+extern PlayerTagVertex g_playerTagVertices[12];
+// samp.dll RVA: 0x0011c674
+extern const float g_playerTagFillScale;
+// samp.dll RVA: 0x0011c678
+extern const float g_playerTagInnerBottom;
+// samp.dll RVA: 0x0011c67c
+extern const float g_playerTagHalfWidth;
+// samp.dll RVA: 0x0011c680
+extern const float g_playerTagOuterRight;
+// samp.dll RVA: 0x0011c684
+extern const float g_playerTagOuterBottom;
+// samp.dll RVA: 0x0011c688
+extern const float g_playerTagOuterTop;
+// samp.dll RVA: 0x00117874
+extern const float g_playerTagOuterLeft;
+// samp.dll RVA: 0x0011797c
+extern const float g_playerTagArmourOffset;
 #endif
