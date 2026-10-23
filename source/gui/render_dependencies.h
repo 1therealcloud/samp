@@ -65,16 +65,7 @@ class CDeathWindow {public:
     // samp.dll RVA: 0x00069d20
     void Draw();
 };
-class CRenderPanel {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x28];
-    // samp.dll RVA: 0x00071100
-    CRenderPanel(IDirect3DDevice9 *device);
-    // samp.dll RVA: 0x00071140
-    void ResetDialogControls(CDXUTDialog *dialog);
-    // samp.dll RVA: 0x00071560
-    void Draw();
-};
+#include "renderpanel.h"
 class CDownloadWindow {public:
     // Observed allocation extent, not a complete recovered interface.
     BYTE nativeState[0x260];

@@ -115,10 +115,6 @@ void CScoreboard::Recalc(){
     *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
 }
 
-// samp.dll RVA: 0x00071100
-CRenderPanel::CRenderPanel(IDirect3DDevice9 *device){
-    DWORD *state=(DWORD*)nativeState;state[0]=(DWORD)device;state[8]=0;state[9]=0;state[3]=280;state[4]=150;state[5]=210;state[6]=30;state[7]=38;
-}
 // samp.dll RVA: 0x0006aa10
 CDownloadWindow::CDownloadWindow(IDirect3DDevice9 *device){
     DWORD *state=(DWORD*)nativeState;state[0]=0;state[1]=0;state[2]=(DWORD)device;state[10]=0;state[12]=0;
