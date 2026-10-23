@@ -9,6 +9,9 @@ class CModelPreview {public:
     CModelPreview();
     // samp.dll RVA: 0x0006b880
     bool Reset();
+    // Descriptive native test-scene entry; uses the preview's existing render target.
+    // samp.dll RVA: 0x0006b9d0
+    void RenderTestScene(int model);
     // samp.dll RVA: 0x0006bb80
     void *RenderPed(int model,DWORD background,const CVector *rotation,float zoom);
     // samp.dll RVA: 0x0006be00

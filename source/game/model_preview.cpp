@@ -45,6 +45,23 @@ const float g_previewObjectDistance=-0.1f;
 // samp.dll RVA: 0x0011c66c
 const float g_previewObjectRadiusScale=2.25f;
 
+// samp.dll RVA: 0x0006b9d0
+void CModelPreview::RenderTestScene(int model) {
+    if(!g_pGame->IsStarted()||!camera)return;
+    DWORD background=0xff330033;
+    GameRwSetVisibilityCamera(camera);GameRwClearCamera(camera,&background,3);
+    GameRwBeginCameraUpdate(camera);GameRwWorldAddLight(light);
+    ClientSetRenderState(6,1);ClientSetRenderState(8,1);ClientSetRenderState(7,2);
+    CVector position={0,0,70.0f};
+    CObject *object=new CObject(model,position,CVector(),200.0f,0,0,0);
+    object->Add();position.z=40.0f;object->Teleport(position);
+    // GetMatrix deliberately leaves the four padding/flag words untouched.
+    CMatrix matrix;object->GetMatrix(&matrix);
+    GameRotateRwMatrixOnAxis(&matrix,0,50.0f);GameRotateRwMatrixOnAxis(&matrix,2,-40.0f);
+    object->ApplyMatrix(matrix);object->SetModelIndex(model);object->Native009f960();delete object;
+    GameRwEndCameraUpdate(camera);GameRwWorldRemoveLight(light);
+}
+
 // samp.dll RVA: 0x0006bb80
 void *CModelPreview::RenderPed(int model,DWORD background,const CVector *rotation,float zoom) {
     void *raster=GameRwCreateRaster(256,256,0,0x505);

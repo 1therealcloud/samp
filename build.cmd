@@ -82,7 +82,6 @@ for %%F in (
     source\game\debug.cpp
     source\game\debugscript.cpp
     source\game\pad.cpp
-    source\net\pool_frame.cpp
     source\game\vehicle.cpp
     source\net\vehiclepool.cpp
     source\game\custommodels.cpp
