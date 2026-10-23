@@ -13,6 +13,34 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // Opaque task fields, not an established complete GTA animation-task class.
+    // samp.dll RVA: 0x000ae1f0
+    DWORD PackAnimationTask(const void *task);
+    // samp.dll RVA: 0x000ae2a0
+    DWORD PackQueuedAnimation();
+    // samp.dll RVA: 0x000ae2e0
+    void *FindAnimationTask();
+    // samp.dll RVA: 0x000ae390
+    DWORD GetPackedAnimation();
+    // samp.dll RVA: 0x000ae3d0
+    void ApplyPackedAnimation(DWORD packed);
+    // samp.dll RVA: 0x000ae560
+    int GetBoneId(int bone);
+    // Raw hierarchy field +0; higher-level flag meaning is not assumed.
+    // samp.dll RVA: 0x000ae590
+    DWORD GetBoneHierarchyFlags();
+    // samp.dll RVA: 0x000ae890
+    void UpdateBoneMatrices();
+    // Descriptive backend-name accessor, distinct from the global shopping subsection.
+    // samp.dll RVA: 0x000adf30
+    const char *GetBackendShoppingName();
+    // samp.dll RVA: 0x000adf80
+    void SetBackendShoppingName(const char *name);
+    // samp.dll RVA: 0x000aeae0
+    void GetAimOffsetMatrix(CMatrix *matrix);
+    // Native always returns TRUE; invalid output/backend paths are not repaired.
+    // samp.dll RVA: 0x000af5c0
+    BOOL GetWeaponAimOffsets(BOOL alternate,CVector *position,CVector *weaponOffsetOut);
     // Descriptive task-state name; original numeric return categories retained.
     // samp.dll RVA: 0x000ac1f0
     int GetVehicleTransitionTaskState();
@@ -481,3 +509,6 @@ extern const double g_pedStuffOffset3Y;
 
 // samp.dll RVA: 0x0011f398
 extern const double g_pedStuffOffset3Z;
+
+// samp.dll RVA: 0x002a9280
+extern char g_pedShoppingName[32];

@@ -32,3 +32,15 @@ void GameInitializeAnimationKeys() {
         }
     }
 }
+
+// samp.dll RVA: 0x0009ca50
+WORD GameFindAnimationByKey(DWORD key) {
+    for(int i=0;i<1812;i++)if(g_animationKeys[i]==key)return (WORD)(i+1);
+    return 0xffff;
+}
+// samp.dll RVA: 0x000b4030
+DWORD __stdcall GameGetAnimationGroupKey(int group,int animation) {
+    // GTA SA virtual address: lookup returns an opaque association descriptor.
+    BYTE *entry=((BYTE*(__cdecl*)(int,int))0x4d3a60)(group,animation);
+    return entry?**(DWORD**)(entry+0x10):0;
+}

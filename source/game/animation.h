@@ -11,6 +11,11 @@ void GameUppercaseAscii(char *text);
 WORD GameFindAnimation(const char *library,const char *name);
 // samp.dll RVA: 0x0009c950
 char *GameGetAnimationName(short index);
+// One-based index; a miss returns 0xffff in AX.
+// samp.dll RVA: 0x0009ca50
+WORD GameFindAnimationByKey(DWORD key);
+// samp.dll RVA: 0x000b4030
+DWORD __stdcall GameGetAnimationGroupKey(int group,int animation);
 // samp.dll RVA: 0x000b4080
 DWORD __stdcall GameAnimationKey(const char *name);
 // samp.dll RVA: 0x0009c980

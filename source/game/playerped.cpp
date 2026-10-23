@@ -2,6 +2,8 @@
 #include "game/playerped.h"
 #include "game/scripting.h"
 #include "game/frame_limit.h"
+#include "game/animation.h"
+#include "game/hooks_render.h"
 #include "gui/device_lifecycle.h"
 #include <string.h>
 // samp.dll RVA: 0x002a9da8
@@ -2470,4 +2472,172 @@ float CPed::GetRootPoseFactor() {
     GameQueryRwQuaternionAngle(quaternion,&axis,&angle);
     // Native returns the subtraction in extended ST0, without a float spill.
     return 1.0f-axis.z;
+}
+
+// samp.dll RVA: 0x002a9280
+char g_pedShoppingName[32];
+
+// samp.dll RVA: 0x000ae1f0
+DWORD CPed::PackAnimationTask(const void *task) {
+    const BYTE *data=(const BYTE*)task;
+    WORD index=GameFindAnimation((const char*)data+0x28,(const char*)data+0x10);
+    BYTE speed=(BYTE)(int)*(const float*)(data+0x38);
+    DWORD flags=*(const DWORD*)(data+0x5c);
+    int time=*(const int*)(data+0x40);
+    DWORD direction=time>0?2:(time<0?1:0);
+    DWORD packedFlags=(direction<<4)|((flags&8)?0:8)|
+        ((flags&0x80)?4:0)|((flags&0x40)?2:0)|((flags&2)?1:0);
+    // Native sign-extends the index before OR, even for a failed lookup.
+    return (DWORD)(int)(short)index|((DWORD)speed<<16)|(packedFlags<<24);
+}
+
+// samp.dll RVA: 0x000ae2a0
+DWORD CPed::PackQueuedAnimation() {
+    DWORD key=GameGetAnimationGroupKey(g_hookQueuedAnimationGroup,g_hookQueuedAnimationId);
+    short index=(short)GameFindAnimationByKey(key);
+    BYTE speed=(BYTE)(int)*(float*)&g_hookQueuedAnimationBlend;
+    return (DWORD)(int)index|((0xffff8000u|(DWORD)speed)<<16);
+}
+
+// samp.dll RVA: 0x000ae2e0
+void *CPed::FindAnimationTask() {
+    void *task=*(void**)(*(BYTE**)((BYTE*)m_pGamePed+0x47c)+0x10);
+    if(!task)return 0;
+    if(GameGetTaskType(task)==401||GameGetTaskType(task)==934)return task;
+    task=GameGetTaskChild(task);
+    while(task) {
+        if(GameGetTaskType(task)==401||GameGetTaskType(task)==934) {
+            // Native repeats the matching-child type tests before returning it.
+            if(task&&(GameGetTaskType(task)==401||GameGetTaskType(task)==934))return task;
+            return 0;
+        }
+        task=GameGetTaskChild(task);
+    }
+    return 0;
+}
+
+// samp.dll RVA: 0x000ae390
+DWORD CPed::GetPackedAnimation() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40||!*(void**)(ped+0x18))return 0;
+    void *task=FindAnimationTask();
+    return task?PackAnimationTask(task):PackQueuedAnimation();
+}
+
+// samp.dll RVA: 0x000ae3d0
+void CPed::ApplyPackedAnimation(DWORD packed) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40||!*(void**)(ped+0x18))return;
+    float speed=(float)((packed>>16)&0xff);
+    DWORD flags=packed>>24;
+    DWORD direction=(flags>>4)&3;
+    int time=direction==2?1:(direction==1?-1:0);
+    char *combined=GameGetAnimationName((short)packed);
+    char library[32]={0},name[32]={0};
+    if(combined) {
+        char *separator=strchr(combined,':');
+        if(separator) {
+            // Retain native unbounded split/copy behavior; do not add truncation.
+            strncpy(library,combined,separator-combined);
+            strcpy(name,separator+1);
+            ApplyAnimation(name,library,speed,flags&1,(flags>>1)&1,
+                (flags>>2)&1,(flags>>3)&1,time);
+        }
+    }
+    if(!memcmp(library,g_gameParachuteLibrary,10))ProcessParachuteEvent(name);
+}
+
+// samp.dll RVA: 0x000ae560
+int CPed::GetBoneId(int bone) {
+    BYTE *entry=*(BYTE**)((BYTE*)m_pGamePed+0x488+(DWORD)bone*4);
+    return *(int*)(entry+0x14);
+}
+
+// samp.dll RVA: 0x000ae590
+DWORD CPed::GetBoneHierarchyFlags() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40)return 0;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return 0;
+    // GTA SA virtual address: clump animation hierarchy lookup.
+    BYTE *hierarchy=((BYTE*(__cdecl*)(void*))0x734a40)(clump);
+    return *(DWORD*)hierarchy;
+}
+
+// samp.dll RVA: 0x000ae890
+void CPed::UpdateBoneMatrices() {
+    void *ped=m_pGamePed;
+    if(ped) {
+        // GTA SA virtual address: native thiscall backend.
+        __asm {
+            mov ecx,ped
+            mov eax,532b20h
+            call eax
+        }
+    }
+}
+
+// samp.dll RVA: 0x000adf30
+const char *CPed::GetBackendShoppingName() {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return 0;
+    return *(const char**)((BYTE*)m_pGamePed+0x78c);
+}
+
+// samp.dll RVA: 0x000adf80
+void CPed::SetBackendShoppingName(const char *name) {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(name&&strlen(name)) {
+        if(strlen(name)>31)return;
+        memset(g_pedShoppingName,0,32);
+        strncpy(g_pedShoppingName,name,32);
+        *(char**)(ped+0x78c)=g_pedShoppingName;
+    } else {
+        // Native clears only the low byte of the field, not the whole pointer.
+        *(BYTE*)(ped+0x78c)=0;
+    }
+}
+
+// samp.dll RVA: 0x000aeae0
+void CPed::GetAimOffsetMatrix(CMatrix *matrix) {
+    GetBoneMatrix(matrix,2);
+    CameraAim *aim=AimStuff::GetInternalAim();
+    // Native float constants at RVAs 0011b31c and 0011f384.
+    matrix->position.x=aim->front.x*0.04f+matrix->position.x;
+    matrix->position.y=aim->front.y*0.04f+matrix->position.y;
+    matrix->position.z=matrix->position.z+0.08f;
+}
+
+// samp.dll RVA: 0x000af5c0
+BOOL CPed::GetWeaponAimOffsets(BOOL alternate,CVector *position,CVector *weaponOffsetOut) {
+    int bone=alternate?34:24;
+    CVector *weaponOffset=(CVector*)GetCurrentWeaponInfo();
+    // Preserve read-before-backend-validation and raw three-word copy.
+    memcpy(weaponOffsetOut,weaponOffset,12);
+    void *ped=m_pGamePed;
+    if(ped&&*(DWORD*)ped!=0x863c40) {
+        // GTA SA virtual address: backend(position,bone,0), thiscall.
+        __asm {
+            push 0
+            push bone
+            push position
+            mov ecx,ped
+            mov edx,5e4280h
+            call edx
+        }
+    }
+    position->z=(weaponOffset->z+position->z)+g_pedSpawnLift;
+    ped=m_pGamePed;
+    if(ped&&*(DWORD*)ped!=0x863c40) {
+        // GTA SA virtual address: backend(weaponOffsetOut,bone,0), thiscall.
+        __asm {
+            push 0
+            push bone
+            push weaponOffsetOut
+            mov ecx,ped
+            mov edx,5e01c0h
+            call edx
+        }
+    }
+    return TRUE;
 }
