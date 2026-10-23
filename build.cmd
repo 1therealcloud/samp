@@ -109,10 +109,11 @@ for %%F in (
     source\events.cpp
     source\gui\device_lifecycle.cpp
     source\game\playerped.cpp
-    source\net\event_lookup.cpp
+    source\net\playerpool.cpp
+    source\net\playerinfo.cpp
     source\game\task.cpp
     source\gui\render_state.cpp
-    source\net\local_rpc.cpp
+    source\net\localplayer.cpp
     source\net\netgame.cpp
     source\net\remoteplayer.cpp
     source\dllmain.cpp

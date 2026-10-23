@@ -12,6 +12,23 @@
 const float g_remoteAbsentDistance=10000.0f;
 // samp.dll RVA: 0x001181e8
 const char g_remoteCarJackedText[]="~r~Car Jacked~w~!";
+// samp.dll RVA: 0x00016250
+CRemotePlayer::CRemotePlayer() {
+    BYTE *state=(BYTE*)this;DWORD (WINAPI *tick)()=GetTickCount;
+    *(WORD*)(state+2)=0;state[0x1a]=0;*(WORD*)state=0xffff;*(DWORD*)(state+4)=0;
+    state[0x1c4]=0;state[0x19]=0xff;*(DWORD*)(state+0x10)=1;
+    *(DWORD*)(state+0xc)=0;*(DWORD*)(state+0x14)=0;*(DWORD*)(state+0x1f9)=0;
+    state[0x18]=0;*(DWORD*)(state+0x1c)=0;*(DWORD*)(state+0x1cd)=0;
+    *(DWORD*)(state+0x1e1)=tick();*(DWORD*)(state+0x1e5)=tick();*(DWORD*)(state+0x1c5)=tick();
+    ResetData();
+}
+// samp.dll RVA: 0x000162c0
+CRemotePlayer::~CRemotePlayer() {
+    BYTE *state=(BYTE*)this;DWORD marker=*(DWORD*)(state+0x1f9);
+    if(marker){g_pGame->DeleteMarker(marker);*(DWORD*)(state+0x1f9)=0;}
+    CPed *ped=*(CPed**)(state+4);*(DWORD*)(state+0x1e9)=0;
+    if(ped){g_pGame->RemovePed(ped);*(DWORD*)(state+4)=0;}
+}
 // samp.dll RVA: 0x00015c60
 void CRemotePlayer::ResetData() {
     BYTE *state=(BYTE*)this;

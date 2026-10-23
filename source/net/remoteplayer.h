@@ -1,8 +1,14 @@
 #ifndef SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
 #define SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
 #include <windows.h>
-// Partial recovered interface. Allocation extent and full virtual interface remain open.
+// Native allocation extent0x1FD; unreviewed state remains opaque.
+#pragma pack(push,1)
 class CRemotePlayer {public:
+    BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x00016250
+    CRemotePlayer();
+    // samp.dll RVA: 0x000162c0
+    ~CRemotePlayer();
     // samp.dll RVA: 0x00015c60
     void ResetData();
     // Native distance returns extended ST0; the other ped has no extra null guard.
@@ -35,6 +41,8 @@ class CRemotePlayer {public:
     // samp.dll RVA: 0x00017040
     void Remove();
 };
+#pragma pack(pop)
+typedef char RemotePlayerExtent[(sizeof(CRemotePlayer)==0x1fd)?1:-1];
 // samp.dll RVA: 0x001181e4
 extern const float g_remoteAbsentDistance;
 // samp.dll RVA: 0x001181e8

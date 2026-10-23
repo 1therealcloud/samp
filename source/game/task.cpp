@@ -247,10 +247,6 @@ DWORD g_hookQuitDeadline;
 DWORD g_hookDamageResponse;
 // samp.dll RVA: 0x0018f53c
 DWORD g_hookDamagePed;
-// samp.dll RVA: 0x00001a80
-CLocalPlayer *CPlayerPool::GetLocalPlayer() { return *(CLocalPlayer**)((BYTE*)this+0x1e); }
-// samp.dll RVA: 0x00002da0
-CPed *CLocalPlayer::GetPed() { return *(CPed**)this; }
 // samp.dll RVA: 0x000b6fa0
 BOOL CVehicle::IsTrainPart() {
     if(!m_pGameVehicle)return FALSE;

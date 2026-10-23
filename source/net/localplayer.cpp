@@ -11,6 +11,37 @@
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/player_colors.h"
+// samp.dll RVA: 0x00002ec0
+void CLocalPlayer::ResetData() {
+    BYTE *state=(BYTE*)this;
+    *(DWORD*)(state+0x181)=0;*(DWORD*)(state+0x2fe)=0;
+    *(DWORD*)(state+0x306)=0;*(DWORD*)(state+0x302)=0;state[0x1d3]=0;
+    *(WORD*)(state+0xfe)=0xffff;*(DWORD*)(state+0x1d4)=0;*(WORD*)(state+0x31c)=0xffff;
+    *(WORD*)(state+0x108)=0xffff;*(WORD*)(state+0x10a)=0xffff;*(WORD*)(state+0x10c)=0xffff;
+    memset(state+0x114,0,12);memset(state+0xd5,0,31);
+    memset(state+4,0,54);memset(state+0x3a,0,68);memset(state+0x96,0,63);
+    DWORD (WINAPI *tick)()=GetTickCount;
+    memset(state+0x7e,0,24);*(DWORD*)(state+0x100)=0;*(DWORD*)(state+0x104)=0;
+    *(WORD*)(state+0x189)=0xffff;*(WORD*)(state+0x18b)=0xffff;
+    *(DWORD*)(state+0x185)=tick();state[0x18d]=0;
+    DWORD last=tick();*(DWORD*)(state+0x2de)=0;*(DWORD*)(state+0x2e2)=0;*(DWORD*)(state+0x110)=last;
+}
+// samp.dll RVA: 0x00004af0
+CLocalPlayer::CLocalPlayer() {
+    BYTE *state=(BYTE*)this;DWORD (WINAPI *tick)()=GetTickCount;
+    *(DWORD*)(state+0x147)=tick();*(DWORD*)(state+0x120)=tick();*(DWORD*)(state+0x124)=tick();
+    *(DWORD*)(state+0x1d4)=0;*(DWORD*)(state+0x2e6)=0;*(DWORD*)(state+0x2da)=tick();
+    *(DWORD*)(state+0x2fa)=0;*(CPed**)state=g_pGame->GetPlayerPed();
+    *(DWORD*)(state+0xf4)=0;*(DWORD*)(state+0xf8)=0;*(WORD*)(state+0x131)=0;*(DWORD*)(state+0x30e)=0;
+    *(DWORD*)(state+0x133)=tick();*(DWORD*)(state+0x137)=tick();*(DWORD*)(state+0x128)=tick();
+    *(DWORD*)(state+0x13b)=*(DWORD*)(state+0x133);*(DWORD*)(state+0x13f)=*(DWORD*)(state+0x133);
+    *(DWORD*)(state+0x12c)=0;state[0x313]=0;*(DWORD*)(state+0x314)=0xffffffff;*(DWORD*)(state+0x30a)=0;
+    ResetData();
+    for(int slot=0;slot<13;slot++){state[0x18e+slot]=0;*(DWORD*)(state+0x19b+slot*4)=0;}
+    state[0x130]=0xff;
+}
+// samp.dll RVA: 0x00002da0
+CPed *CLocalPlayer::GetPed() { return *(CPed**)this; }
 // samp.dll RVA: 0x00003e20
 DWORD CLocalPlayer::GetColorAsARGB() {
     CPlayerPool *players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);

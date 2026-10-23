@@ -1,11 +1,17 @@
 #ifndef SAMP_LOCAL_PLAYER_INTERFACE_H
 #define SAMP_LOCAL_PLAYER_INTERFACE_H
 #include <windows.h>
-// Address-only interface; full class layout/networking lifecycle remains open.
+// Native allocation extent0x328; unreviewed fields/networking lifecycle remain open.
 class CPed;
 class CEntity;
 struct PedBulletData;
+#pragma pack(push,1)
 class CLocalPlayer {public:
+    BYTE nativeState[0x328];
+    // samp.dll RVA: 0x00004af0
+    CLocalPlayer();
+    // samp.dll RVA: 0x00002ec0
+    void ResetData();
     // Raw DWORD result: returns1 after500ms or when any byte differs.
     // samp.dll RVA: 0x00003970
     DWORD HasDataChanged(const void *previous,const void *current,DWORD length);
@@ -56,4 +62,6 @@ class CLocalPlayer {public:
     // samp.dll RVA: 0x00005ec0
     void PrevClass();
 };
+#pragma pack(pop)
+typedef char LocalPlayerExtent[(sizeof(CLocalPlayer)==0x328)?1:-1];
 #endif

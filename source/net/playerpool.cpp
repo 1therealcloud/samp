@@ -2,6 +2,39 @@
 #include "net/remoteplayer.h"
 #include "net/actorpool.h"
 #include "game/playerped.h"
+#include "net/playerinfo.h"
+#include "net/localplayer.h"
+// samp.dll RVA: 0x00013e80
+CPlayerPool::CPlayerPool() {
+    for(WORD id=0;id<1004;id++){players[id]=0;connected[id]=0;}
+    local=new CLocalPlayer;localScore=0;localPing=0;localId=0;largestId=0;
+}
+// samp.dll RVA: 0x00013650
+void CPlayerPool::UpdateLargestId() {
+    int largest=0;for(int id=0;id<1004;id++)if(connected[id])largest=id;largestId=largest;
+}
+// samp.dll RVA: 0x00013b50
+void CPlayerPool::ForceCollision() {
+    int highest=largestId;
+    for(WORD id=0;(int)id<=highest;id++) {
+        if(id>=1004||connected[id]!=1)continue;
+        CRemotePlayer *remote=players[id]?players[id]->remote:0;
+        CPed *ped=*(CPed**)((BYTE*)remote+4);
+        if(ped&&!ped->IsInVehicle()){savedCollision[id]=ped->GetCollisionFlag();ped->SetCollisionFlag(TRUE);}
+    }
+}
+// samp.dll RVA: 0x00013bd0
+void CPlayerPool::RestoreCollision() {
+    int highest=largestId;
+    for(WORD id=0;(int)id<=highest;id++) {
+        if(id>=1004||connected[id]!=1)continue;
+        CRemotePlayer *remote=players[id]?players[id]->remote:0;
+        CPed *ped=*(CPed**)((BYTE*)remote+4);
+        if(ped&&!ped->IsInVehicle())ped->SetCollisionFlag(savedCollision[id]!=0);
+    }
+}
+// samp.dll RVA: 0x00001a80
+CLocalPlayer *CPlayerPool::GetLocalPlayer() { return *(CLocalPlayer**)((BYTE*)this+0x1e); }
 // samp.dll RVA: 0x000138c0
 int CPlayerPool::GetCount(BOOL includeFlagged) {
     int count=0;BYTE *state=(BYTE*)this;
