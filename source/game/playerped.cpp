@@ -6,6 +6,10 @@
 #include "game/hooks_render.h"
 #include "game/hooks_control.h"
 #include "game/weapon_backend.h"
+#include "game/task.h"
+#include "game/keystuff.h"
+#include "game/building_removal.h"
+#include "net/localplayer.h"
 #include "label.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -2880,4 +2884,108 @@ void CPed::ClearAimTarget() {
         mov eax,5e6010h
         call eax
     }
+}
+
+// samp.dll RVA: 0x000ade70
+void CPed::ProcessVehicleHorn() {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    KeyPad *keys=m_nPlayerNumber?KeyStuff::GetPlayerKeys(m_nPlayerNumber):KeyStuff::GetInternalKeys();
+    BYTE *ped=(BYTE*)m_pGamePed;
+    BYTE *vehicle=*(BYTE**)(ped+0x58c);
+    if(vehicle&&(*(DWORD*)(ped+0x46c)&0x100)&&*(void**)(vehicle+0x460)==ped)
+        *(BYTE*)(vehicle+0x514)=*(WORD*)((BYTE*)keys+0x24)!=0;
+}
+
+// samp.dll RVA: 0x000ae050
+void CPed::SetWeaponSkill(int skill,WORD value) {
+    if(m_nPlayerNumber)AimStuff::SetPlayerSkill(m_nPlayerNumber,skill,value);
+    else AimStuff::SetLocalSkill(skill,value);
+}
+
+// samp.dll RVA: 0x000ae130
+void CPed::UpdateClumpAnimations(float timeStep,DWORD onScreen) {
+    if(!m_pGamePed)return;
+    void *clump=GetRwObject();
+    if(clump)GameRwUpdateClumpAnimations(clump,timeStep,onScreen);
+}
+
+// samp.dll RVA: 0x000ae1d0
+BYTE *CPed::GetControlFlags() {
+    return m_nPlayerNumber?GameGetPlayerControlFlags(m_nPlayerNumber):0;
+}
+
+// samp.dll RVA: 0x000ae960
+float CPed::GetArmBoneDistance() {
+    CMatrix first,second;memset(&first,0,64);memset(&second,0,64);
+    GetBoneMatrix(&first,5);GetBoneMatrix(&second,6);
+    return GameDistanceBetweenPoints(first.position.x,first.position.y,first.position.z,
+        second.position.x,second.position.y,second.position.z);
+}
+
+// samp.dll RVA: 0x000aee80
+void CPed::SetBulletData(PedBulletData *data) {
+    volatile DWORD *destination=(volatile DWORD*)unknown2fd;
+    if(!data) {
+        destination[11]=0;
+        for(int i=0;i<11;i++)destination[i]=0;
+        return;
+    }
+    const volatile DWORD *source=(const volatile DWORD*)data;
+    destination[11]=1;
+    destination[10]=source[10];
+    // Preserve forward word reads/stores and the untouched leading DWORD.
+    for(int i=1;i<10;i++)destination[i]=source[i];
+    if(m_nPlayerNumber||!g_pNetGame)return;
+    CPlayerPool *players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
+    if(players)(*(CLocalPlayer**)((BYTE*)players+0x1e))->SendBullet(data);
+}
+
+// samp.dll RVA: 0x000af390
+void CPed::GiveWeapon(int weapon,int ammo) {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    int model=GameGetWeaponModel(weapon);
+    if(model==-1)return;
+    if(!g_pGame->IsModelAvailable(model)) {
+        g_pGame->RequestModel(model,2);g_pGame->LoadRequestedModels();
+        while(!g_pGame->IsModelAvailable(model))Sleep(1);
+    }
+    *g_clientCrashPedContext=m_nPlayerNumber;
+    AimStuff::UpdateLocalSkills();AimStuff::ApplyPlayerSkills(m_nPlayerNumber);
+    void *ped=m_pGamePed;
+    // GTA SA virtual address: backend GiveWeapon(weapon,ammo,1), thiscall.
+    __asm {
+        push 1
+        push ammo
+        push weapon
+        mov ecx,ped
+        mov edx,5e6080h
+        call edx
+    }
+    AimStuff::ApplyLocalSkills();
+    SetArmedWeapon(weapon,0);
+    *g_clientCrashPedContext=0;
+}
+
+// samp.dll RVA: 0x000afa60
+void CPed::EnableGoggles() {
+    if(m_pGamePed&&(*(DWORD*)((BYTE*)m_pGamePed+0x500)||m_lastDanceMove))return;
+    if(!GetWeaponSlot(44)&&!GetWeaponSlot(45))GiveWeapon(44,1);
+    CTaskUseGoggles *task=new CTaskUseGoggles;
+    // The native allocation/constructor path does not handle a null result here.
+    task->ApplyToPed(this);
+    m_lastDanceMove=1;
+}
+
+// samp.dll RVA: 0x000b3fd0
+BYTE *__stdcall GameGetPlayerControlFlags(BYTE player) {
+    return player<210?g_gamePlayerControllerState[player]:0;
+}
+// samp.dll RVA: 0x000b3a20
+int __stdcall GameGetWeaponModel(int weapon) {
+    // Reconstruction-only lookup storage for the native switch/jump table.
+    // No established standalone native data entry for this compact table.
+    static const int models[46]={
+        331, 333, 334, 335, 336, 337, 338, 339, 341, 321, 322, 323, 324, 325, 326, 342, 343, 344, -1, -1, -1, 346, 347, 348, 349, 350, 351, 352, 353, 355, 356, 372, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 371
+    };
+    return (DWORD)weapon-1u<46?models[(DWORD)weapon-1u]:-1;
 }

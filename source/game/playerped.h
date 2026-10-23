@@ -4,6 +4,13 @@
 #include "game/scripting.h"
 struct CameraAim;
 #pragma pack(push,1)
+// Observed firing-data extent; the first DWORD is not copied by CPed::SetBulletData.
+struct PedBulletData {
+    DWORD unknown0;
+    CVector origin,target,offset;
+    void *entity;
+};
+typedef char PedBulletDataExtent[(sizeof(PedBulletData)==44)?1:-1];
 struct PedAccessoryState {
     int model,bone;
     CVector offset,rotation,scale;
@@ -13,6 +20,23 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // samp.dll RVA: 0x000ade70
+    void ProcessVehicleHorn();
+    // samp.dll RVA: 0x000ae050
+    void SetWeaponSkill(int skill,WORD value);
+    // samp.dll RVA: 0x000ae130
+    void UpdateClumpAnimations(float timeStep,DWORD onScreen);
+    // samp.dll RVA: 0x000ae1d0
+    BYTE *GetControlFlags();
+    // Descriptive distance between mapped bone slots5 and6; result remains in ST0.
+    // samp.dll RVA: 0x000ae960
+    float GetArmBoneDistance();
+    // samp.dll RVA: 0x000aee80
+    void SetBulletData(PedBulletData *data);
+    // samp.dll RVA: 0x000af390
+    void GiveWeapon(int weapon,int ammo);
+    // samp.dll RVA: 0x000afa60
+    void EnableGoggles();
     // Returns the raw GTA hit entity; the output stays untouched on a miss.
     // samp.dll RVA: 0x000af490
     void *GetAimHit(CVector *position);
@@ -541,3 +565,8 @@ extern CPed *g_pedFiringContext;
 extern void *g_pedFiringData;
 // samp.dll RVA: 0x0011c6d4
 extern const char g_pedBoneIdFormat[3];
+
+// samp.dll RVA: 0x000b3fd0
+BYTE *__stdcall GameGetPlayerControlFlags(BYTE player);
+// samp.dll RVA: 0x000b3a20
+int __stdcall GameGetWeaponModel(int weapon);

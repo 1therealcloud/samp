@@ -3,7 +3,11 @@
 #include <windows.h>
 // Address-only interface; full class layout/networking lifecycle remains open.
 class CPed;
+struct PedBulletData;
 class CLocalPlayer {public:
+    // May transform data->offset in place for an unclassified backend target.
+    // samp.dll RVA: 0x000069d0
+    void SendBullet(PedBulletData *data);
     // samp.dll RVA: 0x00002da0
     CPed *GetPed();
     // Damage amount is a native float; take/give apply scaling before serialization.

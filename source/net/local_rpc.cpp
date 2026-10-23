@@ -1,6 +1,10 @@
 #include "net/local_rpc.h"
 #include "net/localplayer.h"
 #include "net/vehiclepool.h"
+#include "net/playerpool.h"
+#include "net/objectpool.h"
+#include "game/util.h"
+#include <string.h>
 #include "game/game.h"
 #include "game/playerped.h"
 #include "main.h"
@@ -86,4 +90,54 @@ void CLocalPlayer::SendActorDamage(WORD actor,float damage,DWORD weapon,DWORD bo
     stream.WriteBits((const unsigned char*)&weapon,32,true);
     stream.WriteBits((const unsigned char*)&bodyPart,32,true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localActorDamageRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+}
+
+// samp.dll RVA: 0x000069d0
+void CLocalPlayer::SendBullet(PedBulletData *data) {
+    CPed *ped=*(CPed**)this;
+    if(!ped)return;
+    if((BYTE)ped->GetCurrentWeapon()==34&&!data->entity)return;
+    BYTE type=0;WORD id=0xffff;
+    if(data->entity) {
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
+        CPlayerPool *players=*(CPlayerPool**)(pools+8);
+        CVehiclePool *vehicles=*(CVehiclePool**)(pools+0xc);
+        CObjectPool *objects=*(CObjectPool**)(pools+0x14);
+        // Native requires player and vehicle pools, but does not check objects.
+        if(players&&vehicles) {
+            id=players->Find(data->entity);
+            if(id!=0xffff)type=1;
+            else {
+                id=vehicles->Find(data->entity);
+                if(id!=0xffff)type=2;
+                else {
+                    id=objects->GetId(data->entity);
+                    if(id!=0xffff)type=3;
+                    else {
+                        BYTE *backend=(BYTE*)data->entity;
+                        CMatrix *matrix=*(CMatrix**)(backend+0x14);
+                        if(matrix) {
+                            CVector world={0,0,0};
+                            GameTransformPoint(&world,matrix,&data->offset);
+                            memcpy(&data->offset,&world,12);
+                        } else {
+                            data->offset.x=*(float*)(backend+4)+data->offset.x;
+                            data->offset.y=*(float*)(backend+8)+data->offset.y;
+                            data->offset.z=*(float*)(backend+0xc)+data->offset.z;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    BYTE payload[40]={0};
+    payload[0]=type;memcpy(payload+1,&id,2);
+    memcpy(payload+3,&data->origin,12);memcpy(payload+15,&data->target,12);
+    memcpy(payload+27,&data->offset,12);
+    payload[39]=(BYTE)(*(CPed**)this)->GetCurrentWeapon();
+    RakNet::BitStream stream;
+    BYTE packet=206;stream.WriteBits(&packet,8,true);
+    stream.Write((const char*)payload,40);
+    typedef char BulletReliability[(HIGH_PRIORITY==1&&UNRELIABLE_SEQUENCED==7)?1:-1];
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,0);
 }

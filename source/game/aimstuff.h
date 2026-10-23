@@ -67,6 +67,9 @@ namespace AimStuff {
     CameraAim *__stdcall GetPlayerAim(int player);
     // samp.dll RVA: 0x0009c490
     void __stdcall SetPlayerSkill(int player,int skill,WORD value);
+    // Native checks only skill<11, including negative indices.
+    // samp.dll RVA: 0x0009c4c0
+    void __stdcall SetLocalSkill(int skill,WORD value);
     // samp.dll RVA: 0x0009c5b0
     void __stdcall UpdateLocalSkills();
     // samp.dll RVA: 0x0009c640

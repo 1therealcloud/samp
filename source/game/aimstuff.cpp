@@ -81,6 +81,14 @@ void __stdcall AimStuff::ApplyPlayerAim(int player) { memcpy(g_aimInternal,&g_ai
 CameraAim *__stdcall AimStuff::GetPlayerAim(int player) { return &g_aimPlayers[player]; }
 // samp.dll RVA: 0x0009c490
 void __stdcall AimStuff::SetPlayerSkill(int player,int skill,WORD value) { if(skill<11 && player<210)g_aimPlayerSkills[player][skill]=(float)value; }
+// samp.dll RVA: 0x0009c4c0
+void __stdcall AimStuff::SetLocalSkill(int skill,WORD value) {
+    if(skill<11) {
+        float converted=(float)value;
+        g_aimLocalSkills[skill]=converted;
+        *(float*)((BYTE*)g_aimInternalStats+0x114+skill*4)=converted;
+    }
+}
 // samp.dll RVA: 0x0009c5b0
 void __stdcall AimStuff::UpdateLocalSkills() { memcpy(g_aimLocalSkills,(BYTE*)g_aimInternalStats+0x114,sizeof(g_aimLocalSkills)); }
 // samp.dll RVA: 0x0009c640
