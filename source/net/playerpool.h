@@ -5,8 +5,12 @@
 // are established by this declaration; never instantiate this class.
 class CRemotePlayer;
 class CLocalPlayer;
+class CObject;
 class CPlayerPool {
 public:
+    // Local accessories first, then connected remote-player accessories.
+    // samp.dll RVA: 0x00013a40
+    CObject *FindAccessory(void *backend);
     // Observed pose/accessory frame pass; complete pool layout remains unknown.
     // samp.dll RVA: 0x00013840
     void Native013840();

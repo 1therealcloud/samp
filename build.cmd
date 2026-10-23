@@ -106,6 +106,7 @@ for %%F in (
     source\gui\render_state.cpp
     source\net\local_rpc.cpp
     source\net\netgame.cpp
+    source\net\remoteplayer.cpp
     source\dllmain.cpp
     source\helpdialog.cpp
     source\label.cpp

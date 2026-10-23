@@ -36,4 +36,27 @@ extern CObjectPool * g_hookObjectDrawPool;
 extern DWORD g_hookObjectDrawBackend;
 // samp.dll RVA: 0x0018f578
 extern CObject * g_hookObjectDrawWrapper;
+class CPlayerPool;
+class CRemotePlayer;
+struct GameEntityCollisionShape;
+// samp.dll RVA: 0x0018f580
+extern DWORD g_hookMaterialReturn;
+// samp.dll RVA: 0x0018f574
+extern DWORD g_hookMaterialBackend;
+// samp.dll RVA: 0x0018f57c
+extern CPlayerPool * g_hookMaterialPlayerPool;
+// samp.dll RVA: 0x0018f5a4
+extern DWORD g_hookSurfingIndex;
+// samp.dll RVA: 0x0018e7f4
+extern CRemotePlayer * g_hookSurfingRemote;
+// samp.dll RVA: 0x0018eac0
+extern GameEntityCollisionShape g_hookCollisionFirst;
+// samp.dll RVA: 0x0018e56c
+extern GameEntityCollisionShape g_hookCollisionSecond;
+// samp.dll RVA: 0x0018f68c
+extern BYTE g_hookCollisionResult;
+// samp.dll RVA: 0x0011e508
+extern const float g_hookCollisionBoundHigh;
+// samp.dll RVA: 0x0011ec3c
+extern const float g_hookCollisionBoundLow;
 #endif

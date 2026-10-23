@@ -2687,3 +2687,305 @@ __declspec(naked) void GameHook_000a4e70() {
         jmp edx
     }
 }
+
+#include "net/remoteplayer.h"
+#include "net/localplayer.h"
+// samp.dll RVA: 0x0018f580
+DWORD g_hookMaterialReturn;
+// samp.dll RVA: 0x0018f574
+DWORD g_hookMaterialBackend;
+// samp.dll RVA: 0x0018f57c
+CPlayerPool * g_hookMaterialPlayerPool;
+// samp.dll RVA: 0x0018f5a4
+DWORD g_hookSurfingIndex;
+// samp.dll RVA: 0x0018e7f4
+CRemotePlayer * g_hookSurfingRemote;
+// samp.dll RVA: 0x0018eac0
+GameEntityCollisionShape g_hookCollisionFirst;
+// samp.dll RVA: 0x0018e56c
+GameEntityCollisionShape g_hookCollisionSecond;
+// samp.dll RVA: 0x0018f68c
+BYTE g_hookCollisionResult;
+// samp.dll RVA: 0x0011e508
+const float g_hookCollisionBoundHigh=3000.0f;
+// samp.dll RVA: 0x0011ec3c
+const float g_hookCollisionBoundLow=-3000.0f;
+
+// Raw installed GTA ABI; void() is an installation-address type only.
+// samp.dll RVA: 0x000a42d0
+__declspec(naked) void GameHook_000a42d0() {
+    __asm {
+        mov eax, dword ptr [esp]
+        mov dword ptr [g_hookMaterialReturn], eax
+        mov dword ptr [g_hookMaterialBackend], ecx
+        pushad
+        mov eax, dword ptr [g_hookMaterialBackend]
+        test eax, eax
+        je hook_a42d0_a42f3
+        mov cx, word ptr [eax + 0x22]
+        mov word ptr [g_clientCrashLastRenderedObject], cx
+    hook_a42d0_a42f3:
+        mov ecx, dword ptr [g_pNetGame]
+        test ecx, ecx
+        mov dword ptr [g_hookObjectDrawWrapper], 0
+        mov esi, 0x80000000
+        je hook_a42d0_a4366
+        test eax, eax
+        je hook_a42d0_a4366
+        test dword ptr [eax + 0x1c], esi
+        je hook_a42d0_a4366
+        mov edx, dword ptr [ecx + 0x3de]
+        mov ecx, dword ptr [edx + 0x14]
+        push eax
+        call CObjectPool::Find
+        test eax, eax
+        mov dword ptr [g_hookObjectDrawWrapper], eax
+        jne hook_a42d0_a435a
+        mov eax, dword ptr [g_pNetGame]
+        mov ecx, dword ptr [eax + 0x3de]
+        mov ecx, dword ptr [ecx + 8]
+        test ecx, ecx
+        mov dword ptr [g_hookMaterialPlayerPool], ecx
+        je hook_a42d0_a4361
+        mov edx, dword ptr [g_hookMaterialBackend]
+        push edx
+        call CPlayerPool::FindAccessory
+        test eax, eax
+        mov dword ptr [g_hookObjectDrawWrapper], eax
+        je hook_a42d0_a4361
+    hook_a42d0_a435a:
+        mov ecx, eax
+        call CObject::BeforeMaterialRender
+    hook_a42d0_a4361:
+        mov eax, dword ptr [g_hookMaterialBackend]
+    hook_a42d0_a4366:
+        mov ecx, dword ptr [g_debugObjectPool]
+        test ecx, ecx
+        je hook_a42d0_a438f
+        test eax, eax
+        je hook_a42d0_a438f
+        test dword ptr [eax + 0x1c], esi
+        je hook_a42d0_a438f
+        push eax
+        call CObjectPool::Find
+        test eax, eax
+        mov dword ptr [g_hookObjectDrawWrapper], eax
+        je hook_a42d0_a438f
+        mov ecx, eax
+        call CObject::BeforeMaterialRender
+    hook_a42d0_a438f:
+        popad
+        mov eax, 0x59f180
+        call eax
+        pushad
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        mov ecx, dword ptr [g_hookObjectDrawWrapper]
+        je hook_a42d0_a43b6
+        test ecx, ecx
+        je hook_a42d0_a43b6
+        call CObject::AfterMaterialRender
+        mov ecx, dword ptr [g_hookObjectDrawWrapper]
+    hook_a42d0_a43b6:
+        mov eax, dword ptr [g_debugObjectPool]
+        test eax, eax
+        je hook_a42d0_a43c8
+        test ecx, ecx
+        je hook_a42d0_a43c8
+        call CObject::AfterMaterialRender
+    hook_a42d0_a43c8:
+        popad
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an installation-address type only.
+// samp.dll RVA: 0x000a46b0
+__declspec(naked) void GameHook_000a46b0() {
+    __asm {
+        mov edx, 0x5647f0
+        call edx
+        pushad
+        mov esi, dword ptr [g_pNetGame]
+        test esi, esi
+        je hook_a46b0_a4768
+        mov eax, dword ptr [esi + 0x3de]
+        mov eax, dword ptr [eax + 8]
+        test eax, eax
+        je hook_a46b0_a46e1
+        mov ecx, dword ptr [eax + 0x1e]
+        call CLocalPlayer::ApplySurfingPhysics
+        mov esi, dword ptr [g_pNetGame]
+    hook_a46b0_a46e1:
+        test esi, esi
+        je hook_a46b0_a4768
+        mov ecx, dword ptr [esi + 0x3de]
+        mov eax, dword ptr [ecx + 8]
+        test eax, eax
+        je hook_a46b0_a4768
+        xor edx, edx
+        mov dword ptr [g_hookSurfingIndex], edx
+        mov edi, edi
+    hook_a46b0_a4700:
+        cmp dx, 0x3ec
+        jae hook_a46b0_a4759
+        mov eax, dword ptr [esi + 0x3de]
+        mov ecx, dword ptr [eax + 8]
+        movzx eax, dx
+        shl eax, 2
+        mov edi, dword ptr [eax + ecx + 0xfd6]
+        test edi, edi
+        je hook_a46b0_a4759
+        mov eax, dword ptr [eax + ecx + 0x26]
+        test eax, eax
+        je hook_a46b0_a472e
+        mov ecx, dword ptr [eax + 8]
+        jmp hook_a46b0_a4730
+    hook_a46b0_a472e:
+        xor ecx, ecx
+    hook_a46b0_a4730:
+        test ecx, ecx
+        mov dword ptr [g_hookSurfingRemote], ecx
+        je hook_a46b0_a4759
+        mov eax, dword ptr [ecx + 4]
+        test eax, eax
+        je hook_a46b0_a4759
+        mov al, byte ptr [ecx + 0x1a]
+        test al, al
+        je hook_a46b0_a4759
+        call CRemotePlayer::ApplySurfingMatrix
+        mov esi, dword ptr [g_pNetGame]
+        mov edx, dword ptr [g_hookSurfingIndex]
+    hook_a46b0_a4759:
+        inc edx
+        cmp edx, 0x3ec
+        mov dword ptr [g_hookSurfingIndex], edx
+        jne hook_a46b0_a4700
+    hook_a46b0_a4768:
+        popad
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an installation-address type only.
+// samp.dll RVA: 0x000a56b0
+__declspec(naked) void GameHook_000a56b0() {
+    __asm {
+        push ebp
+        mov ebp, esp
+        mov eax, dword ptr [ebp + 8]
+        mov ecx, dword ptr [eax]
+        mov dword ptr [g_hookCollisionFirst], ecx
+        mov edx, dword ptr [eax + 4]
+        mov dword ptr [g_hookCollisionFirst+4], edx
+        mov ecx, dword ptr [eax + 8]
+        mov dword ptr [g_hookCollisionFirst+8], ecx
+        mov edx, dword ptr [eax + 0xc]
+        mov dword ptr [g_hookCollisionFirst+12], edx
+        mov eax, dword ptr [eax + 0x10]
+        push esi
+        mov esi, dword ptr [ebp + 0xc]
+        mov dword ptr [g_hookCollisionFirst+16], eax
+        mov ecx, esi
+        mov edx, dword ptr [ecx]
+        mov dword ptr [g_hookCollisionSecond], edx
+        mov eax, dword ptr [ecx + 4]
+        mov dword ptr [g_hookCollisionSecond+4], eax
+        mov edx, dword ptr [ecx + 8]
+        mov dword ptr [g_hookCollisionSecond+8], edx
+        mov eax, dword ptr [ecx + 0xc]
+        mov dword ptr [g_hookCollisionSecond+12], eax
+        mov ecx, dword ptr [ecx + 0x10]
+        mov dword ptr [g_hookCollisionSecond+16], ecx
+        mov byte ptr [g_hookCollisionResult], 0
+        push dword ptr [ebp + 0xc]
+        push dword ptr [ebp + 8]
+        mov edx, 0x41ac40
+        call edx
+        mov byte ptr [g_hookCollisionResult], al
+        pop edx
+        pop edx
+        fld dword ptr [esi]
+        fcomp dword ptr [g_hookCollisionBoundHigh]
+        fnstsw ax
+        test ah, 0x41
+        je hook_a56b0_a576e
+        fld dword ptr [esi]
+        fcomp dword ptr [g_hookCollisionBoundLow]
+        fnstsw ax
+        test ah, 5
+        jnp hook_a56b0_a576e
+        fld dword ptr [esi + 4]
+        fcomp dword ptr [g_hookCollisionBoundHigh]
+        fnstsw ax
+        test ah, 0x41
+        je hook_a56b0_a576e
+        fld dword ptr [esi + 4]
+        fcomp dword ptr [g_hookCollisionBoundLow]
+        fnstsw ax
+        test ah, 5
+        jp hook_a56b0_a5818
+    hook_a56b0_a576e:
+        mov ecx, dword ptr [g_pNetGame]
+        test ecx, ecx
+        mov al, byte ptr [g_hookCollisionResult]
+        je hook_a56b0_a57ab
+        test al, al
+        jne hook_a56b0_a57ab
+        mov edx, dword ptr [ecx + 0x3de]
+        mov ecx, dword ptr [edx + 0x14]
+        push g_hookCollisionSecond
+        push g_hookCollisionFirst
+        call CObjectPool::TestCollisionShapes
+        test al, al
+        je hook_a56b0_a57a6
+        mov al, 1
+        mov byte ptr [g_hookCollisionResult], al
+        jmp hook_a56b0_a57ab
+    hook_a56b0_a57a6:
+        mov al, byte ptr [g_hookCollisionResult]
+    hook_a56b0_a57ab:
+        mov ecx, dword ptr [g_debugObjectPool]
+        test ecx, ecx
+        je hook_a56b0_a57da
+        test al, al
+        jne hook_a56b0_a57da
+        push g_hookCollisionSecond
+        push g_hookCollisionFirst
+        call CObjectPool::TestCollisionShapes
+        test al, al
+        je hook_a56b0_a57d5
+        mov al, 1
+        mov byte ptr [g_hookCollisionResult], al
+        jmp hook_a56b0_a57da
+    hook_a56b0_a57d5:
+        mov al, byte ptr [g_hookCollisionResult]
+    hook_a56b0_a57da:
+        mov ecx, dword ptr [g_pNetGame]
+        test ecx, ecx
+        je hook_a56b0_a581d
+        mov dl, byte ptr [ecx + 0x232]
+        test dl, dl
+        jne hook_a56b0_a581d
+        test al, al
+        jne hook_a56b0_a581d
+        mov eax, dword ptr [ecx + 0x3de]
+        mov ecx, dword ptr [eax + 0xc]
+        push g_hookCollisionSecond
+        push g_hookCollisionFirst
+        call CVehiclePool::TestCollisionShapes
+        test al, al
+        je hook_a56b0_a5818
+        mov al, 1
+        mov byte ptr [g_hookCollisionResult], al
+        pop esi
+        pop ebp
+        ret
+    hook_a56b0_a5818:
+        mov al, byte ptr [g_hookCollisionResult]
+    hook_a56b0_a581d:
+        pop esi
+        pop ebp
+        ret
+    }
+}

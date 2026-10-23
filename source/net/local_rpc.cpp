@@ -141,3 +141,51 @@ void CLocalPlayer::SendBullet(PedBulletData *data) {
     typedef char BulletReliability[(HIGH_PRIORITY==1&&UNRELIABLE_SEQUENCED==7)?1:-1];
     (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,0);
 }
+
+#include "game/keystuff.h"
+// Shared native surfing work buffers; matrix.position aliases are not new globals.
+// samp.dll RVA: 0x001569a8
+CVector g_localSurfPedTurnSpeed;
+// samp.dll RVA: 0x001569b8
+CMatrix g_localSurfPedMatrix;
+// samp.dll RVA: 0x001569f8
+CVector g_localSurfEntitySpeed;
+// samp.dll RVA: 0x00156a08
+CMatrix g_localSurfInverseMatrix;
+// samp.dll RVA: 0x00156a48
+CVector g_localSurfPedSpeed;
+// samp.dll RVA: 0x00156a58
+CMatrix g_localSurfEntityMatrix;
+// samp.dll RVA: 0x00156aa4
+CVector g_localSurfEntityTurnSpeed;
+
+// samp.dll RVA: 0x000034b0
+void CLocalPlayer::ApplySurfingPhysics() {
+    BYTE *state=(BYTE*)this;
+    if(!*(CEntity**)(state+0x2de))return;
+    (*(CEntity**)(state+0x2de))->GetMatrix(&g_localSurfEntityMatrix);
+    (*(CPed**)state)->GetMatrix(&g_localSurfPedMatrix);
+    (*(CEntity**)(state+0x2de))->GetSpeed(&g_localSurfEntitySpeed);
+    (*(CEntity**)(state+0x2de))->GetTurnSpeed(&g_localSurfEntityTurnSpeed);
+    WORD leftRight,upDown;
+    (*(CPed**)state)->GetKeys(&leftRight,&upDown);
+    KeyStuff::GetInternalKeys();
+    if(*(DWORD*)(state+0x2e2)&&!leftRight&&!upDown&&!(*(CPed**)state)->HasTaskType211()) {
+        GameTransformPoint(&g_localSurfPedMatrix.position,&g_localSurfEntityMatrix,(CVector*)(state+0x2ea));
+        (*(CPed**)state)->ApplyMatrix(g_localSurfPedMatrix);
+        (*(CPed**)state)->GetSpeed(&g_localSurfPedSpeed);
+        memcpy(&g_localSurfPedSpeed.x,&g_localSurfEntitySpeed.x,8);
+        (*(CPed**)state)->SetSpeed(g_localSurfPedSpeed);
+        (*(CPed**)state)->GetTurnSpeed(&g_localSurfPedTurnSpeed);
+        memcpy(&g_localSurfPedTurnSpeed.z,&g_localSurfEntityTurnSpeed.z,4);
+        (*(CPed**)state)->SetTurnSpeed(g_localSurfPedTurnSpeed);
+    } else {
+        GameInvertRwMatrix(&g_localSurfInverseMatrix,&g_localSurfEntityMatrix);
+        GameTransformPoint((CVector*)(state+0x2ea),&g_localSurfInverseMatrix,&g_localSurfPedMatrix.position);
+    }
+}
+// samp.dll RVA: 0x00003630
+void CLocalPlayer::SetSurfingEntity(CEntity *entity,DWORD locked) {
+    *(CEntity**)((BYTE*)this+0x2de)=entity;
+    *(DWORD*)((BYTE*)this+0x2e2)=locked;
+}

@@ -3,8 +3,14 @@
 #include <windows.h>
 // Address-only interface; full class layout/networking lifecycle remains open.
 class CPed;
+class CEntity;
 struct PedBulletData;
 class CLocalPlayer {public:
+    // Descriptive native surfing helpers; complete local-player layout is open.
+    // samp.dll RVA: 0x000034b0
+    void ApplySurfingPhysics();
+    // samp.dll RVA: 0x00003630
+    void SetSurfingEntity(CEntity *entity,DWORD locked);
     // May transform data->offset in place for an unclassified backend target.
     // samp.dll RVA: 0x000069d0
     void SendBullet(PedBulletData *data);

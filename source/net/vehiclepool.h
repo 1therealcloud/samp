@@ -5,6 +5,9 @@
 // Observed prefix only; the remaining pool fields and complete extent are open.
 class CVehiclePool {
 public:
+    // Native unbounded live-largest-ID scan; returns bool in AL.
+    // samp.dll RVA: 0x0001e8e0
+    bool TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second);
     int m_nLargestId;
     BYTE unknown04[0x1130];
     CVehicle *m_pObjects[2000];

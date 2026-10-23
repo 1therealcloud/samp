@@ -64,3 +64,32 @@ void CPlayerPool::Native013840() {
         }
     }
 }
+
+// samp.dll RVA: 0x00013a40
+CObject *CPlayerPool::FindAccessory(void *backend) {
+    BYTE *state=(BYTE*)this;
+    BYTE *local=*(BYTE**)(state+0x1e);
+    CPed *ped=local?*(CPed**)local:0;
+    if(ped)for(int slot=0;slot<10;slot++) {
+        if(!*(volatile BOOL*)&ped->m_accessoryOccupied[slot])continue;
+        CEntity *object=(CEntity*)ped->m_accessoryObjects[slot];
+        if(object&&object->m_pGameEntity==backend)
+            return *(volatile BOOL*)&ped->m_accessoryOccupied[slot]?(CObject*)ped->m_accessoryObjects[slot]:0;
+    }
+    int highest=*(int*)(state+0x22);
+    for(WORD player=0;(int)player<=highest;++player) {
+        if(player>=1004||*(DWORD*)(state+0xfd6+player*4)!=1)continue;
+        BYTE *entry=*(BYTE**)(state+0x26+player*4);
+        BYTE *remote=entry?*(BYTE**)(entry+8):0;
+        // Native dereferences remote+4 even for inconsistent records.
+        ped=*(CPed**)(remote+4);
+        if(!ped)continue;
+        for(int slot=0;slot<10;slot++) {
+            if(!*(volatile BOOL*)&ped->m_accessoryOccupied[slot])continue;
+            CEntity *object=(CEntity*)ped->m_accessoryObjects[slot];
+            if(object&&object->m_pGameEntity==backend)
+                return *(volatile BOOL*)&ped->m_accessoryOccupied[slot]?(CObject*)ped->m_accessoryObjects[slot]:0;
+        }
+    }
+    return 0;
+}
