@@ -180,6 +180,13 @@ int FontGetHeight() {
     return height + g_pConfig->GetIntValue("fontsize") * 2;
 }
 
+// samp.dll RVA: 0x000c69a0
+int FontGetDeathWindowHeight() {
+    int base=g_chatScreenWidth<1024?12:14;
+    int adjusted=(int)((DWORD)base+(DWORD)g_pConfig->GetIntValue("fontsize")*2);
+    return adjusted<base?base:adjusted;
+}
+
 // samp.dll RVA: 0x000c6a00
 int FontGetWeight() {
     int weight = g_pConfig->GetIntValue("fontweight");
