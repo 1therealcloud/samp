@@ -1,9 +1,15 @@
 #ifndef SAMP_RECOVERED_PED_H
 #define SAMP_RECOVERED_PED_H
 #include "game/entity.h"
+#include "game/scripting.h"
 struct CameraAim;
 #pragma pack(push,1)
-struct PedAccessoryState { BYTE opaque[52]; };
+struct PedAccessoryState {
+    int model,bone;
+    CVector offset,rotation,scale;
+    DWORD materialColor1,materialColor2;
+};
+typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
@@ -43,6 +49,8 @@ public:
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
+    // samp.dll RVA: 0x000b08e0
+    CPed(int player,int model,CVector position,float rotation);
     // samp.dll RVA: 0x000ad9f0
     void ProcessDrunk();
     // samp.dll RVA: 0x000aef40
@@ -97,6 +105,8 @@ public:
     void DestroyParachute();
     // samp.dll RVA: 0x000abdc0
     float GetDistanceToEntity(CEntity *entity);
+    // samp.dll RVA: 0x000b0710
+    void AddAccessory(int index,const PedAccessoryState *info);
     // samp.dll RVA: 0x000aea50
     void DeleteAccessory(int index);
     // samp.dll RVA: 0x000abb80
@@ -279,3 +289,18 @@ extern const float g_pedDrunkSpeedThreshold;
 
 // samp.dll RVA: 0x000b3dc0
 BOOL __stdcall GameIsBackendOnScreen(void *backend);
+
+// Opaque player flag table; factory-selected slots are2..209.
+// The byte-index setter has no native bounds check; adjacency beyond210 is unproven.
+// samp.dll RVA: 0x002a9a50
+extern DWORD g_gamePlayerFlags[210];
+// samp.dll RVA: 0x000b40c0
+void __stdcall GameSetPlayerFlag(BYTE player,DWORD value);
+// samp.dll RVA: 0x0011eea0
+extern const Scripting::OpcodeInfo g_pedCreatePlayerCommand;
+// samp.dll RVA: 0x0011eeb4
+extern const Scripting::OpcodeInfo g_pedGetPlayerHandleCommand;
+// samp.dll RVA: 0x0011f0e4
+extern const Scripting::OpcodeInfo g_pedCommand03fe;
+// samp.dll RVA: 0x0011f388
+extern const float g_pedSpawnLift;

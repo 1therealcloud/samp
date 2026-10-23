@@ -1649,3 +1649,17 @@ void CGame::SetNumberOfIntroTextLinesThisFrame(WORD value) {*(WORD*)0xa44b68=val
 int CGame::GetTimer() {return *(int*)0xb7cb84;}
 // samp.dll RVA: 0x000a19e0
 BOOL CGame::UsingGamepad() {return *(BYTE*)0xba6818!=0;}
+
+// samp.dll RVA: 0x0009ff50
+CPed *CGame::CreatePed(int model,CVector position,float rotation,DWORD,BOOL playerFlag) {
+    BYTE slot=2;
+    while(g_gameUsedPlayerSlots[slot]==1) {if(++slot==210)return 0;}
+    if(!slot)return 0;
+    CPed *ped=new CPed(slot,model,position,rotation);
+    if(ped&&ped->m_pGamePed) {
+        g_gameUsedPlayerSlots[slot]=1;
+        GameSetPlayerFlag(slot,playerFlag?1:0);
+    }
+    // Native returns an allocated wrapper even when its GTA backend is null.
+    return ped;
+}

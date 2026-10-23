@@ -89,7 +89,7 @@ void CObjectEdit::ApplyObjectChanges(int axis,float difference) {
 void CObjectEdit::ApplyAttachedChanges(int axis,float difference) {
     int slot=*(int*)((BYTE*)this+0x8a);CPed *ped=g_pGame->GetPlayerPed();
     if(slot<0||slot>=10||!ped->m_accessoryOccupied[slot])return;
-    BYTE *record=ped->m_accessoryInfo[slot].opaque;if(!record)return;
+    BYTE *record=(BYTE*)&ped->m_accessoryInfo[slot];if(!record)return;
     if(axis<0||axis>2)return;
     DWORD mode=unknown7c;
     if(mode==0){float *value=(float*)(record+8+axis*4);*value=difference*g_objectMutationStep+*value;}

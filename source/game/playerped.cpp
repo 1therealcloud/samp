@@ -1711,3 +1711,79 @@ void CPed::SetCameraMode(BYTE mode) {AimStuff::SetPlayerCameraMode(mode,m_nPlaye
 void CPed::SetCameraExtZoomAndAspectRatio(float zoom,float aspect) {AimStuff::SetPlayerCamera(m_nPlayerNumber,zoom,aspect);}
 // samp.dll RVA: 0x00002d00
 BYTE CPed::GetCameraMode() {return m_nPlayerNumber?AimStuff::GetPlayerCameraMode(m_nPlayerNumber):AimStuff::GetCameraMode();}
+
+// samp.dll RVA: 0x002a9a50
+DWORD g_gamePlayerFlags[210];
+// samp.dll RVA: 0x000b40c0
+void __stdcall GameSetPlayerFlag(BYTE player,DWORD value) {g_gamePlayerFlags[player]=value;}
+// samp.dll RVA: 0x0011eea0
+const Scripting::OpcodeInfo g_pedCreatePlayerCommand={0x53,"vfffv"};
+// samp.dll RVA: 0x0011eeb4
+const Scripting::OpcodeInfo g_pedGetPlayerHandleCommand={0x1f5,"vv"};
+// samp.dll RVA: 0x0011f0e4
+const Scripting::OpcodeInfo g_pedCommand03fe={0x3fe,"ii"};
+// samp.dll RVA: 0x0011f388
+const float g_pedSpawnLift=0.15f;
+// samp.dll RVA: 0x000b08e0
+CPed::CPed(int player,int model,CVector position,float rotation) {
+    DWORD handle=0,scriptPlayer=(BYTE)player;
+    m_pGamePed=0;m_nHandle=0;
+    Scripting::ProcessCommand(&g_pedCreatePlayerCommand,&scriptPlayer,
+        (double)position.x,(double)position.y,(double)position.z,&handle);
+    Scripting::ProcessCommand(&g_pedGetPlayerHandleCommand,&scriptPlayer,&handle);
+    m_nHandle=handle;
+    m_pGamePed=GamePoolPedGetAt(handle);m_pGameEntity=m_pGamePed;
+    m_nPlayerNumber=(BYTE)player;GameAssignPlayerPed((BYTE)player,m_pGamePed);
+    Scripting::ProcessCommand(&g_pedCommand087e,m_nHandle,1);
+    Scripting::ProcessCommand(&g_pedImmunitiesCommand,m_nHandle,0,0,1,0,0);
+    Scripting::ProcessCommand(&g_pedCommand0446,m_nHandle,0);
+    if(g_pNetGame) {
+        DWORD setting=*(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+1);
+        Scripting::ProcessCommand(&g_pedCommand03fe,m_nHandle,0);
+        Scripting::ProcessCommand(&g_pedCommand03fe,m_nHandle,setting);
+    }
+    unknown2a8=1;unknown2ac=1;m_arrow=0;m_parachuteObject=0;m_bUsingCellphone=0;
+    m_danceStyle=0;unknown2d2=0;m_bUrinating=0;m_bDancing=0;m_lastDanceMove=0;
+    SetModelIndex(model);
+    ForceRotation(rotation);
+    KeyStuff::ResetKeys(m_nPlayerNumber);
+    m_stuffType=0;m_stuffObject=0;m_drunkLevel=0;unknown2f6=0;unknown2f7=0;unknown2f8=0;
+    *(DWORD*)((BYTE*)this+0x329)=0;memset(unknown2fd,0,44);
+    CMatrix matrix;GetMatrix(&matrix);
+    memcpy(&matrix.position.x,&position.x,4);memcpy(&matrix.position.y,&position.y,4);
+    float pz=position.z,liftedZ;
+    __asm {
+        fld pz
+        fadd g_pedSpawnLift
+        fstp liftedZ
+    }
+    memcpy(&matrix.position.z,&liftedZ,4);SetMatrix(matrix);
+    for(int i=0;i<10;i++) {
+        m_accessoryOccupied[i]=0;m_accessoryObjects[i]=0;memset(&m_accessoryInfo[i],0,52);
+    }
+    unknown2f9=0;*(DWORD*)((BYTE*)this+0x329)=0;memset(unknown2fd,0,44);
+}
+
+#include "game/object.h"
+#include "game/custommodels.h"
+// samp.dll RVA: 0x000b0710
+void CPed::AddAccessory(int index,const PedAccessoryState *info) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    // GTA SA virtual address: excluded backend vtable0x00863c40.
+    if(!ped||*(DWORD*)ped==0x863c40||!*(void**)(ped+0x18))return;
+    if(index<0||index>=10||info->bone<=0||info->bone>18)return;
+    if(GetAccessoryState(index))DeleteAccessory(index);
+    CMatrix matrix;GetMatrix(&matrix);
+    PedAccessoryState *stored=&m_accessoryInfo[index];
+    // Native REP MOVSD runs after deletion and forwards overlapping input/output.
+    for(int i=0;i<13;i++)((volatile DWORD*)stored)[i]=((const DWORD*)info)[i];
+    if(stored->model<0&&g_customModels&&g_customModels->IsObjectEntry(stored->model)&&
+        !g_customModels->GetLoadedFlag(stored->model)&&!g_customModels->LoadObjectEntry(stored->model))
+        stored->model=18631;
+    CObject *object=new CObject(stored->model,matrix.position,stored->rotation,200.0f,1,0,0);
+    m_accessoryObjects[index]=object;
+    if(info->materialColor1)object->SetMaterial(-1,0,0,0,info->materialColor1);
+    if(info->materialColor2)((CObject*)m_accessoryObjects[index])->SetMaterial(-1,1,0,0,info->materialColor2);
+    ((CObject*)m_accessoryObjects[index])->SetCollisionFlag(FALSE);
+    m_accessoryOccupied[index]=1;
+}

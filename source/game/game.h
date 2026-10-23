@@ -15,6 +15,10 @@ class CMatrix;
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
+    // Native reserves slots2..209; sixth argument is ignored.
+    // samp.dll RVA: 0x0009ff50
+    CPed *CreatePed(int model,CVector position,float rotation,DWORD unused,BOOL playerFlag);
+
     // samp.dll RVA: 0x000a0ad0
     void ReleaseAnimation(const char *name);
     // samp.dll RVA: 0x000a0b00
