@@ -28,16 +28,7 @@ public:
     // samp.dll RVA: 0x00001170
     CPlayerPool *GetPlayerPool();
 };
-class CAudioStream {
-public:
-    BYTE initialized;
-    // samp.dll RVA: 0x00065f00
-    BOOL Reset();
-    // samp.dll RVA: 0x00066530
-    void DrawInfo();
-    // samp.dll RVA: 0x00066500
-    void ControlGameRadio();
-};
+#include "audiostream.h"
 class CChatBubble {public:
     // Observed allocation extent, not a complete recovered interface.
     BYTE nativeState[0x44a20];
