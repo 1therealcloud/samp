@@ -87,8 +87,6 @@ typedef char CNetStatsObservedExtent[(sizeof(CNetStats)==0x18)?1:-1];
 typedef char CSrvNetStatsObservedExtent[(sizeof(CSrvNetStats)==0x18)?1:-1];
 typedef char CHelpDialogObservedExtent[(sizeof(CHelpDialog)==0x4)?1:-1];
 typedef char CChatBubbleObservedExtent[(sizeof(CChatBubble)==0x44a20)?1:-1];
-// samp.dll RVA: 0x0016c7f8
-DWORD g_srvNetStatsHistory[74];
 // samp.dll RVA: 0x0006a090
 CDeathWindow::CDeathWindow(IDirect3DDevice9 *device){
     *(DWORD*)(nativeState+0x137)=0;*(DWORD*)(nativeState+0x13b)=0;
@@ -119,12 +117,6 @@ void CScoreboard::Recalc(){
 CNetStats::CNetStats(IDirect3DDevice9 *device){
     DWORD *state=(DWORD*)nativeState;state[2]=GetTickCount();state[1]=0;state[0]=0;state[4]=0;state[3]=0;state[5]=(DWORD)device;
 }
-// samp.dll RVA: 0x00070cc0
-CSrvNetStats::CSrvNetStats(IDirect3DDevice9 *device){
-    DWORD *state=(DWORD*)nativeState;state[2]=GetTickCount();state[1]=0;state[0]=0;state[4]=0;state[3]=0;state[5]=(DWORD)device;
-    memset(g_srvNetStatsHistory,0,sizeof(g_srvNetStatsHistory));
-}
-
 // samp.dll RVA: 0x00066860
 CChatBubble::CChatBubble(){memset(nativeState,0,sizeof(nativeState));}
 

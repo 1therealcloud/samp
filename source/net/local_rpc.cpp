@@ -189,3 +189,26 @@ void CLocalPlayer::SetSurfingEntity(CEntity *entity,DWORD locked) {
     *(CEntity**)((BYTE*)this+0x2de)=entity;
     *(DWORD*)((BYTE*)this+0x2e2)=locked;
 }
+
+// samp.dll RVA: 0x0013c0a8
+DWORD g_localOnFootSendRate=30;
+// samp.dll RVA: 0x0013c0ac
+DWORD g_localInCarSendRate=30;
+// samp.dll RVA: 0x000039c0
+DWORD CLocalPlayer::GetInCarSendRate() {
+    if(!*(CPed**)this)return 1000;
+    if(*(DWORD*)((BYTE*)g_pNetGame+0x239))return 15;
+    return g_pGame->CountUsedPlayerSlots()+g_localInCarSendRate;
+}
+// samp.dll RVA: 0x00003a00
+DWORD CLocalPlayer::GetOnFootSendRate() {
+    if(!*(CPed**)this)return 1000;
+    if(*(DWORD*)((BYTE*)g_pNetGame+0x239))return 15;
+    return g_pGame->CountUsedPlayerSlots()+g_localOnFootSendRate;
+}
+// samp.dll RVA: 0x00003a40
+DWORD CLocalPlayer::GetSendRate() {
+    CPed *ped=*(CPed**)this;
+    if(!ped)return 1000;
+    return ped->IsInVehicle()?GetInCarSendRate():GetOnFootSendRate();
+}

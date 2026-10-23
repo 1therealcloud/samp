@@ -33,3 +33,8 @@ extern CVector g_localSurfPedSpeed;
 extern CMatrix g_localSurfEntityMatrix;
 // samp.dll RVA: 0x00156aa4
 extern CVector g_localSurfEntityTurnSpeed;
+
+// samp.dll RVA: 0x0013c0a8
+extern DWORD g_localOnFootSendRate;
+// samp.dll RVA: 0x0013c0ac
+extern DWORD g_localInCarSendRate;

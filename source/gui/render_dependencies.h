@@ -3,8 +3,6 @@
 #include <windows.h>
 #include <unknwn.h>
 class CDXUTDialog;
-// samp.dll RVA: 0x0016c7f8
-extern DWORD g_srvNetStatsHistory[74];
 struct IDirect3DDevice9;
 #include "net/netgame.h"
 #include "audiostream.h"
@@ -45,14 +43,7 @@ class CNetStats {public:
     // samp.dll RVA: 0x000607f0
     void Draw();
 };
-class CSrvNetStats {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x18];
-    // samp.dll RVA: 0x00070cc0
-    CSrvNetStats(IDirect3DDevice9 *device);
-    // samp.dll RVA: 0x00070d00
-    void Draw();
-};
+#include "svrnetstats.h"
 #include "helpdialog.h"
 class CDXUTDialog;
 // samp.dll RVA: 0x002aca1c
@@ -107,6 +98,5 @@ void ClientCaptureScreenshot();
 void ClientDrawPlayerTags();
 // samp.dll RVA: 0x00074dc0
 void ClientDrawLabels();
-// samp.dll RVA: 0x0009df50
-void GameDrawDebugEntities();
+#include "game/debug.h"
 #endif

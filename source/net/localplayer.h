@@ -6,6 +6,12 @@ class CPed;
 class CEntity;
 struct PedBulletData;
 class CLocalPlayer {public:
+    // samp.dll RVA: 0x000039c0
+    DWORD GetInCarSendRate();
+    // samp.dll RVA: 0x00003a00
+    DWORD GetOnFootSendRate();
+    // samp.dll RVA: 0x00003a40
+    DWORD GetSendRate();
     // Descriptive native surfing helpers; complete local-player layout is open.
     // samp.dll RVA: 0x000034b0
     void ApplySurfingPhysics();

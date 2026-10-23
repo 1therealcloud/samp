@@ -78,6 +78,7 @@ for %%F in (
     source\game\quaternion.cpp
     source\game\weapon_backend.cpp
     source\game\game.cpp
+    source\game\debug.cpp
     source\game\pad.cpp
     source\net\pool_frame.cpp
     source\game\vehicle.cpp
@@ -95,6 +96,7 @@ for %%F in (
     source\renderpanel.cpp
     source\downloadwindow.cpp
     source\audiostream.cpp
+    source\svrnetstats.cpp
     source\gui\gui_events.cpp
     source\cmdprocs.cpp
     source\subclass.cpp
