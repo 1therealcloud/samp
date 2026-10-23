@@ -503,3 +503,67 @@ BOOL CObjectEdit::RenderControlsForObject(const CMatrix *matrix,float axisSize) 
 BOOL CObjectEdit::RenderControls(const CMatrix *matrix,float axisSize) {
     return RenderControlsForObject(matrix,axisSize);
 }
+
+// samp.dll RVA: 0x0011c768
+const float g_objectEditDistanceScale=0.125f;
+// samp.dll RVA: 0x00073220
+void CObjectEdit::Render() {
+    unknown84=0;
+    if(!unknown80)return;
+    WORD leftRight,upDown;
+    WORD keys=g_pGame->GetPlayerPed()->GetKeys(&leftRight,&upDown);
+    if(flags[1])g_gameD3DDevice->ShowCursor(FALSE);
+    else if(keys&8)g_pGame->SetCursorMode(0,TRUE);
+    else {
+        g_gameD3DDevice->ShowCursor(TRUE);
+        g_pGame->SetCursorMode(3,TRUE);
+    }
+    if(!g_pNetGame)return;
+    if(unknown78==1) {
+        WORD id=objectId;
+        BYTE *pool=*(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0x14);
+        if(id<=2100&&*(DWORD*)(pool+4+id*4)) {
+            CEntity *object=*(CEntity**)(pool+0x20d4+id*4);
+            if(object) {
+                CMatrix matrix;object->GetMatrix(&matrix);
+                float distance;
+                __asm {
+                    mov ecx,object
+                    call CEntity::GetDistanceToCamera
+                    fmul g_objectEditDistanceScale
+                    fstp distance
+                }
+                if(RenderControls(&matrix,distance))unknown84=1;
+            }
+        }
+    } else if(unknown78==2) {
+        int index=*(int*)((BYTE*)this+0x8a);
+        CEntity *object=(CEntity*)g_pGame->GetPlayerPed()->GetAccessory(index);
+        // Reload the index and player after the first call, even when object is null.
+        PedAccessoryState *info=g_pGame->GetPlayerPed()->GetAccessoryInfo(*(int*)((BYTE*)this+0x8a));
+        if(object) {
+            CMatrix matrix;object->GetMatrix(&matrix);
+            float distance;
+            __asm {
+                mov ecx,object
+                call CEntity::GetDistanceToCamera
+                fstp distance
+            }
+            if(!unknown7c) {
+                CMatrix boneMatrix;
+                g_pGame->GetPlayerPed()->GetBoneMatrix(&boneMatrix,*(int*)((BYTE*)info+4));
+                // Preserve matrix position and all three untouched padding DWORDs.
+                memcpy(&matrix.up,&boneMatrix.up,12);
+                memcpy(&matrix.right,&boneMatrix.right,12);
+                memcpy(&matrix.at,&boneMatrix.at,12);
+            }
+            __asm {
+                fld distance
+                fmul g_objectEditDistanceScale
+                fstp distance
+            }
+            if(RenderControls(&matrix,distance))unknown84=1;
+        }
+    }
+    if(!flags[1])TryChangeProcessType();
+}

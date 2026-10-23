@@ -95,4 +95,6 @@ extern const char g_objectEditGlyphDefault[4];
 extern const char g_objectEditGlyphScale[4];
 // samp.dll RVA: 0x00118350
 extern const char g_objectEditGlyphSave[4];
+// samp.dll RVA: 0x0011c768
+extern const float g_objectEditDistanceScale;
 #endif

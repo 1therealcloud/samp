@@ -1653,3 +1653,33 @@ const Scripting::OpcodeInfo g_pedDrunkShakeCommand={0x52c,{0x69,0x69,0x0,0x0,0x0
 
 // samp.dll RVA: 0x000adba0
 DWORD CPed::GetDrunkLevel() { return m_drunkLevel; }
+
+// samp.dll RVA: 0x000715d0
+PedAccessoryState *CPed::GetAccessoryInfo(int index) {
+    if(index<0||index>=10||!m_accessoryOccupied[index])return 0;
+    return &m_accessoryInfo[index];
+}
+// samp.dll RVA: 0x000ae680
+void CPed::GetBoneMatrixById(CMatrix *out,int bone) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    // GTA SA virtual address: excluded vtable 0x00863c40.
+    if(!ped||*(DWORD*)ped==0x863c40)return;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return;
+    typedef BYTE *(__cdecl *GetHierarchy)(void*);
+    typedef int (__cdecl *GetBoneIndex)(void*,int);
+    // GTA SA virtual addresses: hierarchy lookup and US/EU bone-index lookup.
+    GetBoneIndex getIndex=(GetBoneIndex)(g_gameVersion==1?0x7c51a0:0x7c51e0);
+    BYTE *hierarchy=((GetHierarchy)0x734a40)(clump);
+    int index=getIndex(hierarchy,bone);
+    const DWORD *source=(const DWORD*)(*(BYTE**)(hierarchy+8)+(DWORD)index*64);
+    // Native REP MOVSD copies forward, including overlapping output.
+    volatile DWORD *destination=(volatile DWORD*)out;
+    for(int i=0;i<16;i++)destination[i]=source[i];
+}
+// samp.dll RVA: 0x000ae810
+void CPed::GetBoneMatrix(CMatrix *out,int bone) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    BYTE *entry=*(BYTE**)(ped+0x488+(DWORD)bone*4);
+    GetBoneMatrixById(out,*(int*)(entry+0x14));
+}

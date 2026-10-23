@@ -148,6 +148,14 @@ public:
     void ResetDamageEntity();
     // samp.dll RVA: 0x00013580
     void * GetAccessory(int index);
+    // samp.dll RVA: 0x000715d0
+    PedAccessoryState *GetAccessoryInfo(int index);
+    // Descriptive names; native output remains untouched when the backend is invalid.
+    // samp.dll RVA: 0x000ae680
+    void GetBoneMatrixById(CMatrix *out,int bone);
+    // Accesses the backend bone table without bounds/null checks before forwarding.
+    // samp.dll RVA: 0x000ae810
+    void GetBoneMatrix(CMatrix *out,int bone);
     // samp.dll RVA: 0x000aeb60
     void * GetAimedPed();
     // samp.dll RVA: 0x000abd30
