@@ -127,3 +127,132 @@ void CAudioStream::ReadMetadata() {
 }
 // samp.dll RVA: 0x00066170
 void CALLBACK CAudioStream::MetadataSync(DWORD,DWORD,DWORD,void*) {ReadMetadata();}
+
+#include "chatwindow.h"
+#include "game/playerped.h"
+#include "game/util.h"
+#include "game/quaternion.h"
+#include <process.h>
+// MSVC CRT conversion helper, supplied by selected static runtime.
+// samp.dll RVA: 0x000f9324
+extern "C" __int64 __cdecl _ftol2();
+// samp.dll RVA: 0x0016c4b8
+char g_audioStreamUrl[257];
+// samp.dll RVA: 0x0016c6c8
+char g_audioStreamStationUrl[257];
+// samp.dll RVA: 0x0016c7d4
+CVector g_audioStreamPosition;
+// samp.dll RVA: 0x0016c7e0
+BYTE g_audioStreamSpatial;
+// samp.dll RVA: 0x001407bc
+float g_audioStreamRadius=50.0f;
+// samp.dll RVA: 0x0011bbec
+const float g_audioStreamVolumeScale=7000.0f;
+// samp.dll RVA: 0x0011bc18
+const float g_audioStreamSpatialVolumeScale=8000.0f;
+// samp.dll RVA: 0x0011bc28
+const char g_audioStreamStationMarker[10]="icy-name:";
+// samp.dll RVA: 0x0011bc1c
+const char g_audioStreamStationUrlMarker[9]="icy-url:";
+// samp.dll RVA: 0x0011bc48
+const char g_audioStreamMessageOffKey[12]="audiomsgoff";
+// samp.dll RVA: 0x0011bc34
+const char g_audioStreamMessageFormat[17]="Audio stream: %s";
+// samp.dll RVA: 0x000663e0
+BOOL CAudioStream::Play(const char *url,float x,float y,float z,float radius,bool spatial) {
+    if(!initialized)return FALSE;
+    Stop(true);
+    if(g_audioStreamHandle){BASS_ChannelStop(g_audioStreamHandle);g_audioStreamHandle=0;}
+    BYTE allowed;
+    __asm {
+        mov eax,g_pGame
+        mov ecx,[eax]
+        call CAudio::GetRadioVolume
+        fcomp g_objectScaleLowerBound
+        fnstsw ax
+        test ah,41h
+        setp allowed
+    }
+    // The original parity test accepts unordered radio volume as well as >0.
+    if(!allowed)return FALSE;
+    memset(g_audioStreamUrl,0,257);strncpy(g_audioStreamUrl,url,256);
+    memset(g_audioStreamTitle,0,257);memset(g_audioStreamStation,0,257);memset(g_audioStreamStationUrl,0,257);
+    memcpy(&g_audioStreamPosition.x,&x,4);memcpy(&g_audioStreamPosition.y,&y,4);memcpy(&g_audioStreamPosition.z,&z,4);
+    memcpy(&g_audioStreamRadius,&radius,4);g_audioStreamSpatial=spatial;
+    if(!g_pConfig->GetIntValue(g_audioStreamMessageOffKey))g_pChat->AddInfoMessage(g_audioStreamMessageFormat,g_audioStreamUrl);
+    g_audioStreamStopRequested=0;_beginthread(Worker,0,0);return TRUE;
+}
+// samp.dll RVA: 0x00066180
+void __cdecl CAudioStream::Worker(void*) {
+    g_audioStreamRadioActive=1;
+    if(g_audioStreamHandle){BASS_ChannelStop(g_audioStreamHandle);g_audioStreamHandle=0;}
+    g_audioStreamHandle=BASS_StreamCreateURL(g_audioStreamUrl,0,0x940000,0,0);
+    BASS_ChannelPlay(g_audioStreamHandle,FALSE);
+    memset(g_audioStreamStation,0,257);memset(g_audioStreamStationUrl,0,257);
+    const char *tags=BASS_ChannelGetTags(g_audioStreamHandle,4);
+    if(!tags)tags=BASS_ChannelGetTags(g_audioStreamHandle,3);
+    if(tags)while(*tags) {
+        if(!_strnicmp(tags,g_audioStreamStationMarker,9))_snprintf(g_audioStreamStation,256,g_audioStreamStringFormat,tags+9);
+        if(!_strnicmp(tags,g_audioStreamStationUrlMarker,8))_snprintf(g_audioStreamStationUrl,256,g_audioStreamStringFormat,tags+8);
+        tags+=strlen(tags)+1;
+    }
+    ReadMetadata();
+    BASS_ChannelSetSync(g_audioStreamHandle,4,0,MetadataSync,0);
+    BASS_ChannelSetSync(g_audioStreamHandle,12,0,MetadataSync,0);
+    while(!*(volatile BYTE*)&g_audioStreamStopRequested) {
+        BASS_StreamGetFilePosition(g_audioStreamHandle,4);
+        int volume=0;
+        if(!g_pGame->IsMenuVisible()) {
+            HWND window=g_inputGameWindow;
+            if(GetForegroundWindow()==window) {
+                if(g_audioStreamSpatial) {
+                    int baseVolume;
+                    __asm {
+                        mov eax,g_pGame
+                        mov ecx,[eax]
+                        call CAudio::GetRadioVolume
+                        fmul g_audioStreamSpatialVolumeScale
+                        call _ftol2
+                        mov baseVolume,eax
+                    }
+                    CPed *ped=g_pGame->GetPlayerPed();
+                    if(ped) {
+                        DWORD px,py,pz;
+                        memcpy(&px,&g_audioStreamPosition.x,4);memcpy(&py,&g_audioStreamPosition.y,4);memcpy(&pz,&g_audioStreamPosition.z,4);
+                        __asm {
+                            push pz
+                            push py
+                            push px
+                            mov ecx,ped
+                            call CEntity::GetDistanceToPoint
+                            fcom g_audioStreamRadius
+                            fnstsw ax
+                            test ah,5
+                            jp outside_radius
+                            fdiv g_audioStreamRadius
+                            fsubr g_quaternionMatrixOne
+                            fimul baseVolume
+                            call _ftol2
+                            mov volume,eax
+                            jmp distance_done
+outside_radius:
+                            fstp st(0)
+distance_done:
+                        }
+                    }
+                } else {
+                    __asm {
+                        mov eax,g_pGame
+                        mov ecx,[eax]
+                        call CAudio::GetRadioVolume
+                        fmul g_audioStreamVolumeScale
+                        call _ftol2
+                        mov volume,eax
+                    }
+                }
+            }
+        }
+        BASS_SetConfig(5,(DWORD)volume);Sleep(20);
+    }
+    BASS_ChannelStop(g_audioStreamHandle);g_audioStreamHandle=0;g_audioStreamRadioActive=0;
+}
