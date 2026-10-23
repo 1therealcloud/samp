@@ -1,4 +1,9 @@
 #include "net/vehiclepool.h"
+#include "game/util.h"
+// samp.dll RVA: 0x0001e680
+DWORD CVehiclePool::GetRef(int id) {return m_pGameObjects[id]?GamePoolVehicleGetIndex(m_pGameObjects[id]):0xffff;}
+// samp.dll RVA: 0x0001e6a0
+DWORD CVehiclePool::GetRef(void *backend) {return backend?GamePoolVehicleGetIndex(backend):0xffff;}
 // samp.dll RVA: 0x0001e650
 WORD CVehiclePool::Find(void *gameObject) {
     for(int i=1;i<=m_nLargestId;i++)if(m_pGameObjects[i]==gameObject)return (WORD)i;

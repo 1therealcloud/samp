@@ -8,6 +8,9 @@ class CMenuPool;
 class CObjectPool;
 class CNetGame {
 public:
+    // Native tail adapter exposes the complete EDX:EAX counter result.
+    // samp.dll RVA: 0x000085d0
+    __int64 GetCounter();
     // samp.dll RVA: 0x00008c00
     void UpdatePlayersInfo();
     // samp.dll RVA: 0x000081e0

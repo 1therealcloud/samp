@@ -4,6 +4,12 @@
 #include "main.h"
 #include "chatwindow.h"
 #include "config.h"
+#include "GetTime.h"
+// samp.dll RVA: 0x000085d0
+__declspec(naked) __int64 CNetGame::GetCounter() {
+    // Do not zero-extend a typed32-bit return: native forwards both registers.
+    __asm jmp RakNet::GetTime
+}
 // samp.dll RVA: 0x00008b80
 void CNetGame::ToggleNameTagStatus() {
     if(!nativeState[0x234]) {

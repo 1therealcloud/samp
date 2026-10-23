@@ -5,6 +5,12 @@
 // Observed prefix only; the remaining pool fields and complete extent are open.
 class CVehiclePool {
 public:
+    // Native ID overload has no bounds check.
+    // samp.dll RVA: 0x0001e680
+    DWORD GetRef(int id);
+    // No this data is consumed by the backend overload.
+    // samp.dll RVA: 0x0001e6a0
+    DWORD GetRef(void *backend);
     // Native unbounded live-largest-ID scan; returns bool in AL.
     // samp.dll RVA: 0x0001e8e0
     bool TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second);

@@ -6,6 +6,9 @@ class CPed;
 class CEntity;
 struct PedBulletData;
 class CLocalPlayer {public:
+    // Raw DWORD result: returns1 after500ms or when any byte differs.
+    // samp.dll RVA: 0x00003970
+    DWORD HasDataChanged(const void *previous,const void *current,DWORD length);
     // samp.dll RVA: 0x00003a70
     void SendSpawnRequest();
     // samp.dll RVA: 0x00005720

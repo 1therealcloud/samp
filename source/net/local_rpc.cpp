@@ -26,6 +26,87 @@ int g_localRequestClassRpc=128;
 int g_localInteriorChangeRpc=118;
 // samp.dll RVA: 0x0011795c
 int g_localChatRpc=101;
+// samp.dll RVA: 0x00003970
+DWORD CLocalPlayer::HasDataChanged(const void *previous,const void *current,DWORD length) {
+    BYTE *state=(BYTE*)this;
+    if(GetTickCount()-*(DWORD*)(state+0x128)>500||memcmp(previous,current,length)) {
+        *(DWORD*)(state+0x128)=GetTickCount();return 1;
+    }
+    return 0;
+}
+// samp.dll RVA: 0x00003650
+void CLocalPlayer::ProcessSurfing() {
+    BYTE *state=(BYTE*)this;
+    void *floor=(*(CPed**)state)->GetFloor();
+    BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
+    CVehiclePool *vehicles=*(CVehiclePool**)(pools+0xc);
+    CObjectPool *objects=*(CObjectPool**)(pools+0x14);
+    WORD vehicleId=0xffff,objectId=0xffff;int mode=0;
+    if(floor) {
+        vehicleId=vehicles->Find(floor);
+        if(vehicleId&&vehicleId!=0xffff) {
+            if(vehicleId<2000&&vehicles->m_bNotEmpty[vehicleId]) {
+                CVehicle *vehicle=vehicles->m_pObjects[vehicleId];
+                if(vehicle&&(vehicle->HasDriver()||vehicle->GetModelIndex()==569||vehicle->GetModelIndex()==570)) {
+                    BYTE nearby;
+                    __asm {
+                        mov ecx,vehicle
+                        call CEntity::GetDistanceToLocalPlayer
+                        fcomp g_objectStreamingVehicleMargin
+                        fnstsw ax
+                        test ah,5
+                        setnp nearby
+                    }
+                    if(nearby)mode=1;
+                }
+            }
+        } else {
+            objectId=objects->GetId(floor);
+            if(objectId&&objectId!=0xffff) {
+                CObject *object=(CObject*)objects->Get(objectId);
+                if(object&&object->IsMoving())mode=2;
+            }
+        }
+    }
+    if((*(CPed**)state)->HasTaskType208()||(*(CPed**)state)->HasTaskType704()||(*(CPed**)state)->GetVehicleTransitionTaskState()) {
+        *(DWORD*)(state+0x2fa)=0;*(DWORD*)(state+0x2de)=0;*(DWORD*)(state+0x2e2)=0;return;
+    }
+    if(!mode) {
+        if(!*(DWORD*)(state+0x2e6)) {
+            *(DWORD*)(state+0x2fa)=0;*(DWORD*)(state+0x2de)=0;*(DWORD*)(state+0x2e2)=0;return;
+        }
+        if(*(DWORD*)(state+0x2e6)==1&&GetTickCount()-*(DWORD*)(state+0x2da)>=2000) {
+            *(DWORD*)(state+0x2e6)=0;
+            memset(state+0x2ea,0,12);*(WORD*)(state+0x2d8)=0xffff;
+            *(DWORD*)(state+0x2de)=0;*(DWORD*)(state+0x2e2)=0;*(DWORD*)(state+0x2fa)=0;
+        }
+        if(*(DWORD*)(state+0x2e6)==1&&GetTickCount()-*(DWORD*)(state+0x2da)<2000) {
+            WORD id=*(WORD*)(state+0x2d8);
+            CEntity *entity=id<2000?(CEntity*)vehicles->Get(id):objects->Get((WORD)(id-2000));
+            if(entity){*(CEntity**)(state+0x2de)=entity;*(DWORD*)(state+0x2e2)=1;}
+            *(DWORD*)(state+0x2fa)=1;
+        } else *(DWORD*)(state+0x2fa)=0xffffffff;
+        return;
+    }
+    if(mode==1) {
+        *(WORD*)(state+0x2d8)=vehicleId;*(DWORD*)(state+0x2da)=GetTickCount();
+        CEntity *entity=vehicles->Get(*(WORD*)(state+0x2d8));
+        if(!*(DWORD*)(state+0x2e6)) {
+            *(CEntity**)(state+0x2de)=entity;*(DWORD*)(state+0x2e2)=0;ApplySurfingPhysics();
+        }
+        *(CEntity**)(state+0x2de)=entity;*(DWORD*)(state+0x2e6)=1;*(DWORD*)(state+0x2e2)=1;
+    } else if(mode==2) {
+        *(WORD*)(state+0x2d8)=(WORD)(objectId+2000);*(DWORD*)(state+0x2da)=GetTickCount();
+        CEntity *entity=objects->Get((WORD)(*(WORD*)(state+0x2d8)-2000));
+        if(entity) {
+            if(!*(DWORD*)(state+0x2e6)) {
+                *(CEntity**)(state+0x2de)=entity;*(DWORD*)(state+0x2e2)=0;ApplySurfingPhysics();
+            }
+            *(CEntity**)(state+0x2de)=entity;*(DWORD*)(state+0x2e6)=1;*(DWORD*)(state+0x2e2)=1;
+        }
+    }
+    *(DWORD*)(state+0x2fa)=2;
+}
 // samp.dll RVA: 0x00003a70
 void CLocalPlayer::SendSpawnRequest() {
     RakNet::BitStream stream;

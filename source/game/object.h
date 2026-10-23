@@ -95,6 +95,8 @@ typedef char NativeObjectAllocationExtent[(sizeof(CObject)==0x119c)?1:-1];
 extern const float g_objectRenderDistanceThreshold;
 // samp.dll RVA: 0x00118200
 extern const float g_objectStreamingNearDistance;
+// samp.dll RVA: 0x00117878
+extern const float g_objectStreamingVehicleMargin;
 // samp.dll RVA: 0x001e04a8
 extern BYTE g_objectRenderFlag;
 // samp.dll RVA: 0x001e0450
