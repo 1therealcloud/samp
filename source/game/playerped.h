@@ -197,6 +197,18 @@ public:
     // Accesses the backend bone table without bounds/null checks before forwarding.
     // samp.dll RVA: 0x000ae810
     void GetBoneMatrix(CMatrix *out,int bone);
+    // Raw animation-frame quaternion; the bone index is unchecked.
+    // samp.dll RVA: 0x000ae7b0
+    void *GetBoneQuaternion(int bone);
+    // Descriptive names for the observed pose/frame bodies.
+    // samp.dll RVA: 0x000ae8b0
+    void ApplySecondaryPose();
+    // samp.dll RVA: 0x000b0360
+    void ApplyDancePose();
+    // samp.dll RVA: 0x000b0e70
+    void ProcessAnimationPose();
+    // samp.dll RVA: 0x000b0180
+    void ProcessAccessories();
     // samp.dll RVA: 0x000aeb60
     void * GetAimedPed();
     // samp.dll RVA: 0x000abd30

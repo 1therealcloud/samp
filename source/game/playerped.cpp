@@ -1999,3 +1999,195 @@ void CPed::GiveStuff(int type) {
         6,16,g_pedNullAnimation,g_pedNullAnimation,-1);
     m_stuffType=type;
 }
+
+// Raw quaternion DWORDs from the native animation-frame tables.
+// samp.dll RVA: 0x00155298
+static const DWORD g_pedDancePose[9][5]={
+    {0x00000009,0xbf2b14fd,0x3e38cda7,0xbf38b8e1,0xbc4c0bdd},
+    {0x0000000a,0x3d2bd2b7,0x3f07455a,0x3d9ce0fc,0x3f583090},
+    {0x0000000b,0xbdcc5543,0x3f0e6245,0x3e959429,0x3f4586fd},
+    {0x0000000c,0xbf05aa93,0xbec5dfa8,0xbee184a1,0x3f1ea37b},
+    {0x0000000d,0xb97fda40,0x00000000,0x3e9b074a,0x3f73fb8b},
+    {0x0000000f,0x3f23e3c1,0xbe08e326,0xbf41388b,0xbd510d39},
+    {0x00000010,0x3c69ff0d,0xbf01e00d,0x3de86163,0x3f5aa876},
+    {0x00000011,0x3e027aea,0xbf0cee39,0x3ea91eeb,0x3f418bc6},
+    {0x00000012,0x3f1470da,0x3eede311,0xbe784a0e,0x3f1fb0a3},
+};
+// samp.dll RVA: 0x00155130
+static const DWORD g_pedSecondaryPose[12][5]={
+    {0x00000007,0x3d440e17,0xbd80895d,0x3f147b03,0x3f4f8f69},
+    {0x00000009,0xbf24ab2e,0xbd978a2b,0xbf3f8cfc,0xbe140a28},
+    {0x0000000e,0x00000000,0x00000000,0x3dee03b4,0x3f7e43ee},
+    {0x00000013,0x397fda40,0x00000000,0x3e2d883c,0x3f7c4c16},
+    {0x0000000a,0xbe05c422,0x3f0c8440,0xbde2070c,0x3f517657},
+    {0x0000000b,0x00000000,0x00000000,0xbf1f0175,0x3f48a1cf},
+    {0x0000000c,0xbf7ca3d7,0xbd98023a,0x3cdc0336,0xbe104253},
+    {0x0000000d,0xb97fda40,0x00000000,0x3e2d883c,0x3f7c4c16},
+    {0x0000000f,0x3f25b888,0x3db5097d,0xbf3d89be,0xbe21c865},
+    {0x00000010,0x3e368944,0xbf13e76d,0xbd8b06c4,0x3f4b2a39},
+    {0x00000011,0x00000000,0x00000000,0xbf1228dd,0x3f522cba},
+    {0x00000012,0xbf768134,0xbd170a3d,0xbc68101f,0x3e88a99b},
+};
+
+// samp.dll RVA: 0x000ae7b0
+void *CPed::GetBoneQuaternion(int bone) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    // GTA SA virtual address: excluded vtable 0x00863c40.
+    if(!ped||*(DWORD*)ped==0x863c40)return 0;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return 0;
+    // GTA SA virtual address: clump animation hierarchy lookup.
+    BYTE *hierarchy=((BYTE*(__cdecl*)(void*))0x734a40)(clump);
+    BYTE *animation=*(BYTE**)(hierarchy+0x20);
+    return (void*)((DWORD)animation+0x4c+*(DWORD*)(animation+0x24)*(DWORD)bone);
+}
+
+// samp.dll RVA: 0x000ae8b0
+void CPed::ApplySecondaryPose() {
+    for(int i=0;i<12;i++) {
+        volatile DWORD *destination=(volatile DWORD*)GetBoneQuaternion(g_pedSecondaryPose[i][0]);
+        if(destination)for(int j=0;j<4;j++)destination[j]=g_pedSecondaryPose[i][j+1];
+    }
+    void *backend=m_pGamePed;
+    if(backend) {
+        // GTA SA virtual address: update ped bone matrices, thiscall.
+        __asm {
+            mov ecx,backend
+            mov eax,532b20h
+            call eax
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b0360
+void CPed::ApplyDancePose() {
+    for(int i=0;i<9;i++) {
+        volatile DWORD *destination=(volatile DWORD*)GetBoneQuaternion(g_pedDancePose[i][0]);
+        if(destination)for(int j=0;j<4;j++)destination[j]=g_pedDancePose[i][j+1];
+    }
+    float factor=0.0f;
+    void *root=GetBoneQuaternion(0);
+    if(root) {
+        CVector axis={0,0,0};float angle=0.0f;
+        GameQueryRwQuaternionAngle(root,&axis,&angle);
+        factor=1.0f-axis.z;
+    }
+    // Keep repeated backend/model lookups: each native helper may change state.
+    if((m_pGamePed&&GameReadPedModelTable28(*(short*)((BYTE*)m_pGamePed+0x22))==5)||
+       (m_pGamePed&&GameReadPedModelTable28(*(short*)((BYTE*)m_pGamePed+0x22))==22)) {
+        void *quaternion=GetBoneQuaternion(9);
+        if(quaternion) {
+            GameRotateRwQuaternion(quaternion,1,-6.25f,1);
+            GameRotateRwQuaternion(quaternion,0,12.5f,1);
+        }
+        quaternion=GetBoneQuaternion(15);
+        if(quaternion) {
+            GameRotateRwQuaternion(quaternion,1,6.25f,1);
+            GameRotateRwQuaternion(quaternion,0,-12.5f,1);
+        }
+    } else if(m_pGamePed&&GameReadPedModelTable24(*(short*)((BYTE*)m_pGamePed+0x22))==124) {
+        void *quaternion=GetBoneQuaternion(9);
+        if(quaternion) {
+            GameRotateRwQuaternion(quaternion,1,10.0f,1);
+            GameRotateRwQuaternion(quaternion,0,25.0f,1);
+        }
+        quaternion=GetBoneQuaternion(15);
+        if(quaternion) {
+            GameRotateRwQuaternion(quaternion,1,-10.0f,1);
+            GameRotateRwQuaternion(quaternion,0,-25.0f,1);
+        }
+    } else {
+        // Native float constants: RVAs 0011e33c/0011f3c8/0011f3c4/
+        // 0011c194/0011f3c0. Every product is spilled to a float argument.
+        factor=factor+0.25f;
+        void *quaternion=GetBoneQuaternion(9);
+        if(quaternion) {
+            GameRotateRwQuaternion(quaternion,1,factor*-5.0f,1);
+            GameRotateRwQuaternion(quaternion,0,factor*25.0f,1);
+        }
+        quaternion=GetBoneQuaternion(15);
+        if(quaternion) {
+            GameRotateRwQuaternion(quaternion,1,factor*5.0f,1);
+            GameRotateRwQuaternion(quaternion,0,factor*-25.0f,1);
+        }
+    }
+    void *backend=m_pGamePed;
+    if(backend) {
+        // GTA SA virtual address: update ped bone matrices, thiscall.
+        __asm {
+            mov ecx,backend
+            mov eax,532b20h
+            call eax
+        }
+    }
+}
+
+// samp.dll RVA: 0x000b0e70
+void CPed::ProcessAnimationPose() {
+    if(m_bDancing)ApplyDancePose();
+    if(m_danceStyle)ApplySecondaryPose();
+}
+
+// samp.dll RVA: 0x000b0180
+void CPed::ProcessAccessories() {
+    bool bonesUpdated=false;
+    for(int i=0;i<10;i++) {
+        if(m_accessoryOccupied[i]!=1)continue;
+        CEntity *object=(CEntity*)m_accessoryObjects[i];
+        if(!object||!object->m_pGameEntity)continue;
+        // The native ECX is this ped, not the accessory wrapper.
+        if(!DoesExist()) {
+            CVector zero={0,0,0};
+            ((CEntity*)m_accessoryObjects[i])->Teleport(zero);
+            continue;
+        }
+        if(!bonesUpdated) {
+            void *ped=m_pGamePed;
+            if(ped) {
+                // GTA SA virtual address: update ped bone matrices, thiscall.
+                __asm {
+                    mov ecx,ped
+                    mov eax,532b20h
+                    call eax
+                }
+            }
+            bonesUpdated=true;
+        }
+        void *backend=((CEntity*)m_accessoryObjects[i])->m_pGameEntity;
+        DWORD *vtable=*(DWORD**)backend;
+        // Cache the original backend and vtable across all following calls.
+        __asm {
+            mov ecx,backend
+            mov eax,vtable
+            call dword ptr [eax+0ch]
+        }
+        CMatrix matrix;
+        GetBoneMatrix(&matrix,m_accessoryInfo[i].bone);
+        CVector position;
+        GameTransformPoint(&position,&matrix,&m_accessoryInfo[i].offset);
+        memcpy(&matrix.position,&position,sizeof(position));
+        for(int axis=0;axis<3;axis++) {
+            float *rotation=(float*)&m_accessoryInfo[i].rotation+axis;
+            BYTE rotate;
+            // Skip ordered +/-zero; unordered values take the rotate branch.
+            __asm {
+                fld g_objectScaleLowerBound
+                mov edx,rotation
+                fld dword ptr [edx]
+                fucompp
+                fnstsw ax
+                test ah,44h
+                setp rotate
+            }
+            if(rotate)GameRotateRwMatrixOnAxis(&matrix,axis,*rotation);
+        }
+        GameScaleRwMatrix(&matrix,&m_accessoryInfo[i].scale);
+        ((CEntity*)m_accessoryObjects[i])->SetMatrix(matrix);
+        ((CEntity*)m_accessoryObjects[i])->UpdateRwFrame();
+        __asm {
+            mov ecx,backend
+            mov eax,vtable
+            call dword ptr [eax+8]
+        }
+    }
+}

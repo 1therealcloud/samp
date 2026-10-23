@@ -41,3 +41,26 @@ WORD CPlayerPool::Find(void *ped) {
     }
     return 0xffff;
 }
+
+// samp.dll RVA: 0x00013840
+void CPlayerPool::Native013840() {
+    BYTE *state=(BYTE*)this;
+    BYTE *local=*(BYTE**)(state+0x1e);
+    if(local&&*(CPed**)local) {
+        (*(CPed**)local)->ProcessAnimationPose();
+        local=*(BYTE**)(state+0x1e);
+        (*(CPed**)local)->ProcessAccessories();
+    }
+    // Native captures the highest ID once; the WORD counter wraps naturally.
+    int highest=*(int*)(state+0x22);
+    for(WORD player=0;(int)player<=highest;++player) {
+        if(player>=1004||*(DWORD*)(state+0xfd6+player*4)!=1)continue;
+        BYTE *entry=*(BYTE**)(state+0x26+player*4);
+        BYTE *remote=entry?*(BYTE**)(entry+8):0;
+        // Preserve the native unchecked remote+4 read for inconsistent records.
+        if(*(CPed**)(remote+4)) {
+            (*(CPed**)(remote+4))->ProcessAnimationPose();
+            (*(CPed**)(remote+4))->ProcessAccessories();
+        }
+    }
+}

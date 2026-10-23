@@ -7,7 +7,7 @@ class CRemotePlayer;
 class CLocalPlayer;
 class CPlayerPool {
 public:
-    // Observed thiscall edge after GTA world processing; body not recovered.
+    // Observed pose/accessory frame pass; complete pool layout remains unknown.
     // samp.dll RVA: 0x00013840
     void Native013840();
     // Observed lookup prefix; no complete allocation layout.
