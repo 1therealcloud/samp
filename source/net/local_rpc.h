@@ -1,6 +1,14 @@
 #ifndef SAMP_LOCAL_RPC_H
 #define SAMP_LOCAL_RPC_H
 #include "game/scripting.h"
+// samp.dll RVA: 0x0011787c
+extern int g_localSpawnRequestRpc;
+// samp.dll RVA: 0x00117954
+extern int g_localRequestClassRpc;
+// samp.dll RVA: 0x00117958
+extern int g_localInteriorChangeRpc;
+// samp.dll RVA: 0x0011795c
+extern int g_localChatRpc;
 // samp.dll RVA: 0x00117960
 extern int g_localEnterVehicleRpc;
 // samp.dll RVA: 0x00117964

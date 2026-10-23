@@ -3,6 +3,21 @@
 #include <windows.h>
 struct BuildingRemovalRecord { int model;float x,y,z,radius; };
 typedef char BuildingRemovalRecordExtent[(sizeof(BuildingRemovalRecord)==20)?1:-1];
+// samp.dll RVA: 0x0009ca80
+void GameHideObjectEntity(void *entity);
+// samp.dll RVA: 0x0009cab0
+void GameHideBuildingEntity(void *entity);
+// samp.dll RVA: 0x0009cb50
+void GameRemoveLodBuildings(float x,float y,float z,float radius);
+// samp.dll RVA: 0x0009cc10
+void GameRemoveBuildingsInRange(int model,float x,float y,float z,float radius);
+// Publishes an unbounded record after applying removal to the current world.
+// samp.dll RVA: 0x0009d210
+void GameRemoveBuilding(int model,float x,float y,float z,float radius);
+// samp.dll RVA: 0x0011e338
+extern const float g_buildingRemovalDrop;
+// samp.dll RVA: 0x0011e33c
+extern const float g_buildingLodCoordinateScale;
 // Physical extent up to the native count at RVA 0x0018dc18 is 1000 records.
 // Native publication/search does not enforce a 1000-record bound. Adjacent
 // out-of-range accesses are not proven layout-equivalent in this recovery.

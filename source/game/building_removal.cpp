@@ -1,4 +1,100 @@
 #include "game/building_removal.h"
+#include "game/util.h"
+#include <string.h>
+// samp.dll RVA: 0x0011e338
+const float g_buildingRemovalDrop=2000.0f;
+// samp.dll RVA: 0x0011e33c
+const float g_buildingLodCoordinateScale=0.25f;
+// samp.dll RVA: 0x0009ca80
+void GameHideObjectEntity(void *entity) {
+    __asm {
+        mov eax,entity
+        fld dword ptr [eax+0ch]
+        mov byte ptr [eax+2fh],1
+        fsub g_buildingRemovalDrop
+        fstp dword ptr [eax+0ch]
+        mov eax,dword ptr [eax+14h]
+        test eax,eax
+        jz hidden
+        fld dword ptr [eax+38h]
+        fsub g_buildingRemovalDrop
+        fstp dword ptr [eax+38h]
+    hidden:
+    }
+}
+// samp.dll RVA: 0x0009cab0
+void GameHideBuildingEntity(void *entity) {if(entity)GameHideObjectEntity(entity);}
+// samp.dll RVA: 0x0009cb50
+void GameRemoveLodBuildings(float x,float y,float z,float radius) {
+    // GTA SA virtual addresses: count0x00c73f98, inline18-byte records0x00c73fa0.
+    int count=*(int*)0xc73f98;BYTE *record=(BYTE*)0xc73fa0;
+    for(int i=0;i<count;i++,record+=18) {
+        float px=(float)*(short*)record*g_buildingLodCoordinateScale;
+        float py=(float)*(short*)(record+2)*g_buildingLodCoordinateScale;
+        float pz=(float)*(short*)(record+4)*g_buildingLodCoordinateScale;
+        BYTE inside;
+        __asm {
+            push z
+            push y
+            push x
+            push pz
+            push py
+            push px
+            call GameDistanceBetweenPoints
+            fcomp radius
+            fnstsw ax
+            test ah,5
+            setnp inside
+        }
+        if(inside)for(int word=0;word<6;word++)((short*)record)[word]=0;
+    }
+}
+// samp.dll RVA: 0x0009cc10
+void GameRemoveBuildingsInRange(int model,float x,float y,float z,float radius) {
+    BYTE *pool=(BYTE*)GamePoolBuildingGetArray();
+    GameRemoveLodBuildings(x,y,z,500.0f);
+    for(int kind=0;kind<3;kind++) {
+        if(kind==1)pool=(BYTE*)GamePoolDummyGetArray();
+        else if(kind==2)pool=(BYTE*)GamePoolObjectGetArray();
+        int count=kind==0?20000:kind==1?16000:3100;
+        int stride=kind==2?0x19c:0x38;
+        for(int i=0;i<count;i++,pool+=stride) {
+            DWORD vtable=*(DWORD*)pool;
+            // GTA SA virtual address0x00863c40 identifies the skipped backend type.
+            if(!vtable||vtable==0x863c40)continue;
+            if((int)*(short*)(pool+0x22)!=model&&model!=-1)continue;
+            BYTE *matrix=*(BYTE**)(pool+0x14);
+            float *point=(float*)(matrix?matrix+0x30:pool+4);
+            BYTE inside;
+            __asm {
+                push z
+                push y
+                push x
+                mov edx,point
+                push dword ptr [edx+8]
+                push dword ptr [edx+4]
+                push dword ptr [edx]
+                call GameDistanceBetweenPoints
+                fcomp radius
+                fnstsw ax
+                test ah,41h
+                setnp inside
+            }
+            if(inside) {
+                if(kind==2)GameHideObjectEntity(pool);else GameHideBuildingEntity(pool);
+            }
+        }
+    }
+}
+// samp.dll RVA: 0x0009d210
+void GameRemoveBuilding(int model,float x,float y,float z,float radius) {
+    GameRemoveBuildingsInRange(model,x,y,z,radius);
+    int count=g_buildingRemovalCount;
+    BuildingRemovalRecord *record=(BuildingRemovalRecord*)((BYTE*)g_buildingRemovalRecords+(DWORD)count*20);
+    record->model=model;
+    memcpy(&record->x,&x,4);memcpy(&record->y,&y,4);memcpy(&record->z,&z,4);memcpy(&record->radius,&radius,4);
+    g_buildingRemovalCount=(int)((DWORD)count+1);
+}
 // samp.dll RVA: 0x00188df8
 BuildingRemovalRecord g_buildingRemovalRecords[1000];
 // samp.dll RVA: 0x0018dc18

@@ -79,6 +79,7 @@ for %%F in (
     source\game\weapon_backend.cpp
     source\game\game.cpp
     source\game\debug.cpp
+    source\game\debugscript.cpp
     source\game\pad.cpp
     source\net\pool_frame.cpp
     source\game\vehicle.cpp

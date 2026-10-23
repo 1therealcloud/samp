@@ -18,6 +18,66 @@ DWORD CLocalPlayer::GetColorAsARGB() {
 }
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
 typedef char LocalRpcReliability[(HIGH_PRIORITY==1 && RELIABLE_ORDERED==9 && RELIABLE_SEQUENCED==10)?1:-1];
+// samp.dll RVA: 0x0011787c
+int g_localSpawnRequestRpc=129;
+// samp.dll RVA: 0x00117954
+int g_localRequestClassRpc=128;
+// samp.dll RVA: 0x00117958
+int g_localInteriorChangeRpc=118;
+// samp.dll RVA: 0x0011795c
+int g_localChatRpc=101;
+// samp.dll RVA: 0x00003a70
+void CLocalPlayer::SendSpawnRequest() {
+    RakNet::BitStream stream;
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localSpawnRequestRpc,&stream,HIGH_PRIORITY,RELIABLE,0,false);
+}
+// samp.dll RVA: 0x00003f40
+void CLocalPlayer::RequestSpawn() {
+    BYTE *state=(BYTE*)this;
+    if(*(DWORD*)(state+0x30a)){SendSpawnRequest();*(DWORD*)(state+0x306)=1;}
+}
+// samp.dll RVA: 0x00005720
+void CLocalPlayer::RequestClass(int selection) {
+    RakNet::BitStream stream;stream.WriteBits((const unsigned char*)&selection,32,true);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localRequestClassRpc,&stream,HIGH_PRIORITY,RELIABLE,0,false);
+}
+// samp.dll RVA: 0x000057c0
+void CLocalPlayer::SendInteriorChange(BYTE interior) {
+    ((BYTE*)this)[0x1d3]=interior;
+    RakNet::BitStream stream;stream.WriteBits(&interior,8,true);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localInteriorChangeRpc,&stream,HIGH_PRIORITY,RELIABLE,0,false);
+}
+// samp.dll RVA: 0x00005860
+void CLocalPlayer::Chat(char *text) {
+    BYTE length=(BYTE)strlen(text);
+    RakNet::BitStream stream;stream.WriteBits(&length,8,true);stream.Write(text,length);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localChatRpc,&stream,HIGH_PRIORITY,RELIABLE,0,false);
+}
+// samp.dll RVA: 0x00005e30
+void CLocalPlayer::NextClass() {
+    BYTE *state=(BYTE*)this;
+    if(!*(DWORD*)(state+0x30a))return;
+    *(DWORD*)(state+0x143)=0;
+    CMatrix matrix;(*(CPed**)state)->GetMatrix(&matrix);
+    BYTE *settings=*(BYTE**)((BYTE*)g_pNetGame+0x3d5);
+    DWORD selection=*(DWORD*)(state+0x302);
+    if(selection==*(DWORD*)(settings+0x23)-1)selection=0;else selection++;
+    *(DWORD*)(state+0x302)=selection;
+    g_pGame->m_pAudio->Play(1052,matrix.position);
+    RequestClass(*(int*)(state+0x302));
+}
+// samp.dll RVA: 0x00005ec0
+void CLocalPlayer::PrevClass() {
+    BYTE *state=(BYTE*)this;
+    if(!*(DWORD*)(state+0x30a))return;
+    *(DWORD*)(state+0x143)=0;
+    CMatrix matrix;(*(CPed**)state)->GetMatrix(&matrix);
+    DWORD selection=*(DWORD*)(state+0x302);
+    if(!selection)selection=*(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x23);
+    *(DWORD*)(state+0x302)=selection-1;
+    g_pGame->m_pAudio->Play(1053,matrix.position);
+    RequestClass(*(int*)(state+0x302));
+}
 // samp.dll RVA: 0x00117960
 int g_localEnterVehicleRpc=26;
 // samp.dll RVA: 0x00117964
