@@ -1303,15 +1303,6 @@ DWORD GameGetTaskType(void *task) {
     }
     return result;
 }
-// samp.dll RVA: 0x000ac8f0
-BOOL CPed::HasTaskType268() {
-    BYTE *ped=(BYTE*)m_pGamePed;
-    if(ped && !(*(DWORD*)(ped+0x46c)&0x100)) {
-        void *task=*(void**)(*(BYTE**)(ped+0x47c)+0xc);
-        if(task)return GameGetTaskType(task)==0x10c;
-    }
-    return FALSE;
-}
 // samp.dll RVA: 0x000a1a30
 void CGame::ProcessFrameLimiter() {
     DWORD now=RakNet::GetTime();
@@ -1662,4 +1653,24 @@ CPed *CGame::CreatePed(int model,CVector position,float rotation,DWORD,BOOL play
     }
     // Native returns an allocated wrapper even when its GTA backend is null.
     return ped;
+}
+
+// samp.dll RVA: 0x000b3c50
+void *GameGetTaskChild(void *task) {
+    void *result=0;
+    if(task) {
+        DWORD table=*(DWORD*)task;
+        if(table>=0x800000&&table<=0x900000) {
+            // GTA SA virtual interface: preserve caller registers across the call.
+            __asm {
+                pushad
+                mov ecx,task
+                mov edx,[ecx]
+                call dword ptr [edx+8]
+                mov result,eax
+                popad
+            }
+        }
+    }
+    return result;
 }

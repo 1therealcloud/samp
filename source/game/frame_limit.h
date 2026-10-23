@@ -21,4 +21,7 @@ extern const float g_frameScaleNumerator;
 void GameUpdateKeyCycle();
 // samp.dll RVA: 0x000b3ca0
 DWORD GameGetTaskType(void *task);
+// Validates the raw GTA vtable range before calling virtual slot +8.
+// samp.dll RVA: 0x000b3c50
+void *GameGetTaskChild(void *task);
 #endif

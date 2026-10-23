@@ -1,6 +1,8 @@
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/scripting.h"
+#include "game/frame_limit.h"
+#include "gui/device_lifecycle.h"
 #include <string.h>
 // samp.dll RVA: 0x002a9da8
 void *g_gamePlayerPeds[210];
@@ -2190,4 +2192,282 @@ void CPed::ProcessAccessories() {
             call dword ptr [eax+8]
         }
     }
+}
+
+// samp.dll RVA: 0x000ac8f0
+BOOL CPed::HasTaskType268() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(ped && !(*(DWORD*)(ped+0x46c)&0x100)) {
+        void *task=*(void**)(*(BYTE**)(ped+0x47c)+0xc);
+        if(task)return GameGetTaskType(task)==0x10c;
+    }
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000ac1f0
+int CPed::GetVehicleTransitionTaskState() {
+    if(!GamePoolPedGetAt(m_nHandle)||!m_pGamePed)return 0;
+    BYTE *tasks=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+    if(!tasks)return 0;
+    void *task=*(void**)(tasks+0x10);
+    if(!task)return 0;
+    DWORD type=GameGetTaskType(task);
+    if(type==700||type==712)return 2;
+    if(type==701||type==713)return 1;
+    return 0;
+}
+
+// samp.dll RVA: 0x000ac260
+BOOL CPed::HasTaskType704() {
+    if(!GamePoolPedGetAt(m_nHandle)||!m_pGamePed)return FALSE;
+    BYTE *tasks=*(BYTE**)((BYTE*)m_pGamePed+0x47c);
+    if(!tasks)return FALSE;
+    void *task=*(void**)(tasks+0x10);
+    return task?GameGetTaskType(task)==704:FALSE;
+}
+
+// samp.dll RVA: 0x000ac2b0
+BOOL CPed::IsDucking() {
+    if(!GamePoolPedGetAt(m_nHandle)||!m_pGamePed)return FALSE;
+    return (*(DWORD*)((BYTE*)m_pGamePed+0x46c)>>26)&1;
+}
+
+// samp.dll RVA: 0x000ac2e0
+void CPed::ClearTasksIfOnFoot() {
+    if(!GamePoolPedGetAt(m_nHandle)||!m_pGamePed)return;
+    if(*(DWORD*)((BYTE*)m_pGamePed+0x46c)&0x100)return;
+    if(IsDucking())return;
+    void *tasks=*(void**)((BYTE*)m_pGamePed+0x47c);
+    if(tasks) {
+        // GTA SA virtual address: task-manager thiscall, argument 0.
+        __asm {
+            push 0
+            mov ecx,tasks
+            mov edx,601230h
+            call edx
+        }
+    }
+}
+
+// samp.dll RVA: 0x000ac340
+void CPed::ClearDuckingFlag() {
+    if(!GamePoolPedGetAt(m_nHandle)||!m_pGamePed)return;
+    *(DWORD*)((BYTE*)m_pGamePed+0x46c)&=0xfbffffff;
+}
+
+// samp.dll RVA: 0x000ac830
+BOOL CPed::HasTaskType211() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||(*(DWORD*)(ped+0x46c)&0x100))return FALSE;
+    // Native task-manager pointer is unchecked here.
+    void *task=*(void**)(*(BYTE**)(ped+0x47c)+0x10);
+    return task?GameGetTaskType(task)==211:FALSE;
+}
+
+// samp.dll RVA: 0x000ac870
+BOOL CPed::HasTaskType1016() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||(*(DWORD*)(ped+0x46c)&0x100))return FALSE;
+    // Native task-manager pointer is unchecked here.
+    void *task=*(void**)(*(BYTE**)(ped+0x47c)+0x18);
+    return task?GameGetTaskType(task)==1016:FALSE;
+}
+
+// samp.dll RVA: 0x000ac8b0
+BOOL CPed::HasTaskType208() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||(*(DWORD*)(ped+0x46c)&0x100))return FALSE;
+    // Native task-manager pointer is unchecked here.
+    void *task=*(void**)(*(BYTE**)(ped+0x47c)+0x4);
+    return task?GameGetTaskType(task)==208:FALSE;
+}
+
+// samp.dll RVA: 0x000aca20
+BOOL CPed::HasAimTarget() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    return ped&&(*(DWORD*)(ped+0x500)||m_lastDanceMove);
+}
+
+// samp.dll RVA: 0x000aca70
+void CPed::SetSecondaryPoseState(DWORD state) {
+    m_danceStyle=state;
+    unknown2f7=unknown2f6=unknown2f8=state!=0;
+}
+
+// samp.dll RVA: 0x000acab0
+void CPed::ProcessSecondaryPoseWeapon() {
+    if(!m_danceStyle||!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    DWORD weapon;
+    Scripting::ProcessCommand(&g_pedGetCurrentWeaponCommand,m_nHandle,&weapon);
+    if((BYTE)weapon)SetArmedWeapon(0,0);
+}
+
+// samp.dll RVA: 0x000acb20
+void CPed::SetDancePoseState(DWORD state) {
+    m_bDancing=state;
+    unknown2f8=state!=0;
+}
+
+// samp.dll RVA: 0x000acb40
+void CPed::ProcessDancePoseWeapon() {
+    if(!m_bDancing)return;
+    if(g_deviceObjectEdit&&*(DWORD*)(g_deviceObjectEdit+0x80))unknown2f8=0;
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    DWORD weapon;
+    Scripting::ProcessCommand(&g_pedGetCurrentWeaponCommand,m_nHandle,&weapon);
+    if((BYTE)weapon)SetArmedWeapon(0,0);
+}
+
+// samp.dll RVA: 0x000acc50
+BOOL CPed::HasTaskType1022() {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return FALSE;
+    void *task=*(void**)(*(BYTE**)((BYTE*)m_pGamePed+0x47c)+0x10);
+    return task?GameGetTaskType(task)==1022:FALSE;
+}
+
+// samp.dll RVA: 0x000acca0
+void CPed::StopTaskType1022() {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    void *task=*(void**)(*(BYTE**)((BYTE*)m_pGamePed+0x47c)+0x10);
+    if(!task||GameGetTaskType(task)!=1022)return;
+    // GTA SA virtual address: original task teardown, thiscall/1.
+    __asm {
+        push 1
+        mov ecx,task
+        mov edx,6275e0h
+        call edx
+    }
+    // Native reloads the backend and task manager after teardown.
+    *(DWORD*)(*(BYTE**)((BYTE*)m_pGamePed+0x47c)+0x10)=0;
+}
+
+// samp.dll RVA: 0x000ace20
+void CPed::SetMoney(int amount) {
+    Scripting::ProcessCommand(&g_pedCommand03fe,m_nHandle,0);
+    Scripting::ProcessCommand(&g_pedCommand03fe,m_nHandle,amount);
+}
+
+// samp.dll RVA: 0x000ad060
+void CPed::CheckParachuteWeapon() {
+    if(!GamePoolPedGetAt(m_nHandle)||!DoesExist()||!m_parachuteObject)return;
+    if((BYTE)GetCurrentWeapon()==46)return;
+    Scripting::ProcessCommand(&g_pedDetachParachute,m_parachuteObject,
+        g_pedParachuteZero,g_pedParachuteZero,g_pedParachuteZero,0);
+    Scripting::ProcessCommand(&g_pedDestroyParachute,m_parachuteObject);
+    m_parachuteObject=0;
+}
+
+// samp.dll RVA: 0x000ad640
+BOOL CPed::HasTaskType401() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    // GTA SA virtual address: excluded backend vtable.
+    if(!ped||*(DWORD*)ped==0x863c40||!*(void**)(ped+0x18))return FALSE;
+    void *task=*(void**)(*(BYTE**)(ped+0x47c)+0x10);
+    if(!task)return FALSE;
+    if(GameGetTaskType(task)==401)return TRUE;
+    task=GameGetTaskChild(task);
+    while(task) {
+        if(GameGetTaskType(task)==401) {
+            // Native checks the matching child again, retaining both calls.
+            return task&&GameGetTaskType(task)==401;
+        }
+        task=GameGetTaskChild(task);
+    }
+    return FALSE;
+}
+
+// samp.dll RVA: 0x000adcb0
+DWORD CPed::GetBackendByte72D() {
+    return m_pGamePed?*(BYTE*)((BYTE*)m_pGamePed+0x72d):0;
+}
+
+// samp.dll RVA: 0x000ae0d0
+DWORD CPed::CallBackend5E01C0(DWORD first,DWORD second) {
+    void *ped=m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40)return 0;
+    DWORD result;
+    // GTA SA virtual address: thiscall backend(second,first,0).
+    __asm {
+        push 0
+        push first
+        push second
+        mov ecx,ped
+        mov edx,5e01c0h
+        call edx
+        mov result,eax
+    }
+    return result;
+}
+
+// samp.dll RVA: 0x000ae120
+void CPed::ResetLocalControlWord() {
+    // GTA SA virtual address: local control word.
+    *(WORD*)0xb7cedc=0;
+}
+
+// samp.dll RVA: 0x000ae160
+void CPed::ApplyClumpAnimation(int mode,DWORD first,DWORD second,DWORD third) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40)return;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return;
+    // GTA SA virtual addresses: native clump animation backends.
+    if(mode==1)((void(__cdecl*)(void*,DWORD,DWORD))0x4d3aa0)(clump,first,second);
+    else if(mode==2)((void(__cdecl*)(void*,DWORD,DWORD,DWORD))0x4d4610)(clump,first,second,third);
+}
+
+// samp.dll RVA: 0x000ae5e0
+int CPed::GetBoneCount() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40)return 0;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return 0;
+    // GTA SA virtual address: clump animation hierarchy lookup.
+    BYTE *hierarchy=((BYTE*(__cdecl*)(void*))0x734a40)(clump);
+    return *(int*)(hierarchy+4);
+}
+
+// samp.dll RVA: 0x000ae630
+CMatrix * CPed::GetBoneMatrices() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40)return 0;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return 0;
+    // GTA SA virtual address: clump animation hierarchy lookup.
+    BYTE *hierarchy=((BYTE*(__cdecl*)(void*))0x734a40)(clump);
+    return *(CMatrix **)(hierarchy+8);
+}
+
+// samp.dll RVA: 0x000ae710
+void CPed::SetBoneMatrixById(const CMatrix *matrix,int bone) {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||*(DWORD*)ped==0x863c40)return;
+    void *clump=*(void**)(ped+0x18);
+    if(!clump)return;
+    // GTA SA virtual addresses: US/EU index helper selected before hierarchy call.
+    typedef int (__cdecl *GetIndex)(void*,int);
+    GetIndex getIndex=(GetIndex)(g_gameVersion==1?0x7c51a0:0x7c51e0);
+    BYTE *hierarchy=((BYTE*(__cdecl*)(void*))0x734a40)(clump);
+    int index=getIndex(hierarchy,bone);
+    volatile DWORD *destination=(volatile DWORD*)(*(BYTE**)(hierarchy+8)+(DWORD)index*64);
+    const volatile DWORD *source=(const volatile DWORD*)matrix;
+    // Forward DWORD copy, including overlap, then clear native RW matrix flags.
+    for(int i=0;i<16;i++)destination[i]=source[i];
+    destination[3]&=0xfffdfffc;
+}
+
+// samp.dll RVA: 0x000ae850
+void CPed::SetBoneMatrix(const CMatrix *matrix,int bone) {
+    BYTE *entry=*(BYTE**)((BYTE*)m_pGamePed+0x488+(DWORD)bone*4);
+    SetBoneMatrixById(matrix,*(int*)(entry+0x14));
+}
+
+// samp.dll RVA: 0x000aee20
+float CPed::GetRootPoseFactor() {
+    void *quaternion=GetBoneQuaternion(0);
+    if(!quaternion)return 0.0f;
+    CVector axis={0,0,0};float angle=0.0f;
+    GameQueryRwQuaternionAngle(quaternion,&axis,&angle);
+    // Native returns the subtraction in extended ST0, without a float spill.
+    return 1.0f-axis.z;
 }

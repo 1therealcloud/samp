@@ -13,6 +13,66 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // Descriptive task-state name; original numeric return categories retained.
+    // samp.dll RVA: 0x000ac1f0
+    int GetVehicleTransitionTaskState();
+    // samp.dll RVA: 0x000ac260
+    BOOL HasTaskType704();
+    // samp.dll RVA: 0x000ac2b0
+    BOOL IsDucking();
+    // samp.dll RVA: 0x000ac2e0
+    void ClearTasksIfOnFoot();
+    // samp.dll RVA: 0x000ac340
+    void ClearDuckingFlag();
+    // samp.dll RVA: 0x000ac830
+    BOOL HasTaskType211();
+    // samp.dll RVA: 0x000ac870
+    BOOL HasTaskType1016();
+    // samp.dll RVA: 0x000ac8b0
+    BOOL HasTaskType208();
+    // Raw backend +500 or wrapper +2e6 gate; existing field names retained.
+    // samp.dll RVA: 0x000aca20
+    BOOL HasAimTarget();
+    // Descriptive pose-state name; does not rename the historical layout fields.
+    // samp.dll RVA: 0x000aca70
+    void SetSecondaryPoseState(DWORD state);
+    // samp.dll RVA: 0x000acab0
+    void ProcessSecondaryPoseWeapon();
+    // Preserves the full state DWORD, not only a normalized BOOL.
+    // samp.dll RVA: 0x000acb20
+    void SetDancePoseState(DWORD state);
+    // samp.dll RVA: 0x000acb40
+    void ProcessDancePoseWeapon();
+    // samp.dll RVA: 0x000acc50
+    BOOL HasTaskType1022();
+    // samp.dll RVA: 0x000acca0
+    void StopTaskType1022();
+    // samp.dll RVA: 0x000ace20
+    void SetMoney(int amount);
+    // samp.dll RVA: 0x000ad060
+    void CheckParachuteWeapon();
+    // samp.dll RVA: 0x000ad640
+    BOOL HasTaskType401();
+    // Backend flag semantics not established; descriptive offset name.
+    // samp.dll RVA: 0x000adcb0
+    DWORD GetBackendByte72D();
+    // Argument/return words established; higher-level semantic name remains unknown.
+    // samp.dll RVA: 0x000ae0d0
+    DWORD CallBackend5E01C0(DWORD first,DWORD second);
+    // samp.dll RVA: 0x000ae120
+    void ResetLocalControlWord();
+    // samp.dll RVA: 0x000ae160
+    void ApplyClumpAnimation(int mode,DWORD first,DWORD second,DWORD third);
+    // samp.dll RVA: 0x000ae5e0
+    int GetBoneCount();
+    // samp.dll RVA: 0x000ae630
+    CMatrix * GetBoneMatrices();
+    // samp.dll RVA: 0x000ae710
+    void SetBoneMatrixById(const CMatrix *matrix,int bone);
+    // samp.dll RVA: 0x000ae850
+    void SetBoneMatrix(const CMatrix *matrix,int bone);
+    // samp.dll RVA: 0x000aee20
+    float GetRootPoseFactor();
     // samp.dll RVA: 0x000afcb0
     void ProcessDancing();
     // samp.dll RVA: 0x000afed0
