@@ -1,6 +1,63 @@
 #include "net/scriptrpc.h"
 #include "RakClientInterface.h"
 #include "textdrawselection.h"
+#include "BitStream.h"
+#include "main.h"
+#include "net/netgame.h"
+#include "net/playerpool.h"
+#include "net/localplayer.h"
+#include "game/playerped.h"
+// samp.dll RVA: 0x000178f0
+void ScrDisableVehicleCollisions(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool disabled=false;stream.Read(disabled);
+    if(g_pNetGame)((BYTE*)g_pNetGame)[0x232]=(BYTE)disabled;
+}
+// samp.dll RVA: 0x0001a800
+void ScrSetGravity(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    float gravity;stream.Read(gravity);g_pGame->SetWorldGravity(gravity);
+}
+// samp.dll RVA: 0x0001c7b0
+void ScrSetPlayerWantedLevel(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(g_pGame){BYTE level;stream.Read(level);g_pGame->SetWantedLevel(level);}
+}
+// samp.dll RVA: 0x00019080
+void ScrSetPlayerHealth(RPCParameters *parameters) {
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    float health;stream.Read(health);(*(CPed**)local->nativeState)->SetHealth(health);
+}
+// samp.dll RVA: 0x0001a690
+void ScrSetPlayerArmor(RPCParameters *parameters) {
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    float armour;stream.Read(armour);(*(CPed**)local->nativeState)->SetArmour(armour);
+}
+// samp.dll RVA: 0x00019530
+void ScrSetPlayerInterior(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE interior;stream.Read(interior);g_pGame->GetPlayerPed()->LinkToInterior(interior,TRUE);
+}
+// samp.dll RVA: 0x0001a030
+void ScrGivePlayerMoney(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int amount;stream.Read(amount);g_pGame->IncreasePlayerMoney(amount);
+}
+// samp.dll RVA: 0x00017ba0
+void ScrResetPlayerMoney(RPCParameters *parameters) {(void)parameters;g_pGame->ResetMoney();}
+// samp.dll RVA: 0x000181a0
+void ScrSetPlayerSpecialAction(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE action;stream.Read(action);CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+    if(players)players->local->SetSpecialAction(action);
+}
+// samp.dll RVA: 0x00019dc0
+void ScrTogglePlayerControllable(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE enabled;stream.Read(enabled);g_pGame->GetPlayerPed()->SetControllable(enabled);
+}
 // samp.dll RVA: 0x00118448
 const int g_rpcScrDisableVehicleCollisions=167;
 // samp.dll RVA: 0x00118444

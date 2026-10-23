@@ -5,6 +5,52 @@
 #include "net/netgame.h"
 #include "objectedit.h"
 #include "objectselection.h"
+#include "BitStream.h"
+#include "main.h"
+// The original handlers use signed bits/8+1, including an extra byte for aligned data.
+// Read failures are deliberately ignored; uninitialized native output locals stay so.
+// samp.dll RVA: 0x0000edc0
+void ScrSetWorldTime(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE hour;stream.Read(hour);
+    (*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x2c]=hour;
+}
+// samp.dll RVA: 0x0000f240
+void ScrSetWeather(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE weather;stream.Read(weather);
+    (*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x2e]=weather;
+    g_pGame->SetWorldWeather(weather);
+}
+// samp.dll RVA: 0x0000f2f0
+void ScrSetPlayerTime(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE hour,minute;stream.Read(hour);stream.Read(minute);
+    g_pGame->SetWorldTime(hour,minute);
+    (*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x2c]=hour;
+    (*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x2d]=minute;
+}
+// samp.dll RVA: 0x0000f3d0
+void ScrToggleClock(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool enabled;stream.ReadBits((unsigned char*)&enabled,8,true);
+    g_pGame->EnableClock(enabled);
+    if(enabled)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x1f]=0;
+    else {
+        (*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x1f]=1;
+        BYTE *settings=*(BYTE**)((BYTE*)g_pNetGame+0x3d5);
+        g_pGame->GetWorldTime(settings+0x2c,settings+0x2d);
+    }
+}
+// samp.dll RVA: 0x0000fe00
+void ScrSetIngameTimer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    DWORD timer=0;stream.Read(timer);g_pGame->SetTimer(timer);
+}
+// samp.dll RVA: 0x0000e430
+void ScrDisableCheckpoint(RPCParameters *parameters) {(void)parameters;g_pGame->unknown4d=0;}
+// samp.dll RVA: 0x0000e440
+void ScrDisableRaceCheckpoint(RPCParameters *parameters) {(void)parameters;g_pGame->unknown29=0;}
 // samp.dll RVA: 0x00117fa8
 const int g_rpcScrSetIngameTimer=60;
 // samp.dll RVA: 0x00117fa4

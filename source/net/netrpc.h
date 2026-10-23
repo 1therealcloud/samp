@@ -1,6 +1,21 @@
 #ifndef SAMP_NETRPC_H
 #define SAMP_NETRPC_H
 class RakClientInterface;
+struct RPCParameters;
+// samp.dll RVA: 0x0000edc0
+void ScrSetWorldTime(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f240
+void ScrSetWeather(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f2f0
+void ScrSetPlayerTime(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f3d0
+void ScrToggleClock(RPCParameters *parameters);
+// samp.dll RVA: 0x0000fe00
+void ScrSetIngameTimer(RPCParameters *parameters);
+// samp.dll RVA: 0x0000e430
+void ScrDisableCheckpoint(RPCParameters *parameters);
+// samp.dll RVA: 0x0000e440
+void ScrDisableRaceCheckpoint(RPCParameters *parameters);
 // samp.dll RVA: 0x0000eb60
 void UnRegisterRPCs(RakClientInterface *client);
 // samp.dll RVA: 0x00117fa8

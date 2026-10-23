@@ -1,6 +1,27 @@
 #ifndef SAMP_SCRIPTRPC_H
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
+struct RPCParameters;
+// samp.dll RVA: 0x000178f0
+void ScrDisableVehicleCollisions(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a800
+void ScrSetGravity(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c7b0
+void ScrSetPlayerWantedLevel(RPCParameters *parameters);
+// samp.dll RVA: 0x00019080
+void ScrSetPlayerHealth(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a690
+void ScrSetPlayerArmor(RPCParameters *parameters);
+// samp.dll RVA: 0x00019530
+void ScrSetPlayerInterior(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a030
+void ScrGivePlayerMoney(RPCParameters *parameters);
+// samp.dll RVA: 0x00017ba0
+void ScrResetPlayerMoney(RPCParameters *parameters);
+// samp.dll RVA: 0x000181a0
+void ScrSetPlayerSpecialAction(RPCParameters *parameters);
+// samp.dll RVA: 0x00019dc0
+void ScrTogglePlayerControllable(RPCParameters *parameters);
 // samp.dll RVA: 0x00017c20
 void UnRegisterScriptRPCs(RakClientInterface *client);
 // samp.dll RVA: 0x00118448
