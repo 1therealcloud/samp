@@ -86,3 +86,167 @@ void CDownloadWindow::ResetDialogControls(CDXUTDialog *dialog) {
     created=(CDXUTListBoxDL*)state[11];created->columnWidths[0]=state[0x8f];
     created=(CDXUTListBoxDL*)state[11];created->columnWidths[1]=state[0x90];
 }
+
+#include "objectedit.h"
+#include "game/vehicle.h"
+#include <stdlib.h>
+#include <stdio.h>
+// samp.dll RVA: 0x0011c414
+const char g_downloadModel[6]="Model";
+// samp.dll RVA: 0x0011c40c
+const char g_downloadTexture[8]="Texture";
+// samp.dll RVA: 0x0011c404
+const char g_downloadIdFormat[5]="0x%X";
+// samp.dll RVA: 0x0011c400
+const char g_downloadZeroFormat[4]="0%%";
+// samp.dll RVA: 0x0011c3f8
+const char g_downloadPercentFormat[7]="%.0f%%";
+// samp.dll RVA: 0x0011c3e0
+const char g_downloadDetailFormat[21]="{CC8888}(%d) %.16s..";
+// samp.dll RVA: 0x0011c3c8
+const char g_downloadErrorFormat[24]="{CC8888}Error(%d) %d/%d";
+// samp.dll RVA: 0x0011c3b8
+const char g_downloadCompleteFormat[15]="{77AA77}%.0f%%";
+// samp.dll RVA: 0x0011c390
+const char g_downloadCaptionFormat[38]="Updating models.. [%d/%d] (%.2f KB/s)";
+
+// samp.dll RVA: 0x0011b918
+const float g_downloadKilobytesPerByte=0.0009765625f;
+// samp.dll RVA: 0x0006a420
+DownloadRecord *CDownloadWindow::GetRecord(DWORD index) {
+    DWORD *state=(DWORD*)nativeState;
+    return index<state[1]?((DownloadRecord**)state[0])[index]:0;
+}
+// samp.dll RVA: 0x0006a450
+bool CDownloadWindow::ResizeRecords(DWORD count) {
+    DWORD *state=(DWORD*)nativeState;
+    if(!count) {
+        if(state[0]){free((void*)state[0]);state[0]=0;}
+        state[1]=0;return true;
+    }
+    DownloadRecord **records=(DownloadRecord**)realloc((void*)state[0],count*4);
+    if(!records)return false;
+    state[0]=(DWORD)records;
+    for(DWORD i=state[1];i<count;i++)((DownloadRecord**)state[0])[i]=0;
+    state[1]=count;return true;
+}
+// samp.dll RVA: 0x0006a4c0
+void CDownloadWindow::TrimRecords() {
+    DWORD *state=(DWORD*)nativeState;DWORD count=state[1],last=0xffffffff;
+    for(DWORD i=0;i<count;i++)if(((DownloadRecord**)state[0])[i])last=i;
+    ResizeRecords(last==0xffffffff?0:last+1);
+}
+// samp.dll RVA: 0x0006a610
+int CDownloadWindow::FindRecord(DWORD id) {
+    DWORD *state=(DWORD*)nativeState;DWORD count=state[1];
+    // Native assumes every visited record is non-null; holes are not skipped.
+    for(DWORD i=0;i<count;i++)if(((DownloadRecord**)state[0])[i]->id==id)return (int)i;
+    return -1;
+}
+// samp.dll RVA: 0x0006a640
+void CDownloadWindow::ResetRecordStorage() {ResizeRecords(0);}
+// samp.dll RVA: 0x0006a650
+int CDownloadWindow::AddRecord(DownloadRecord *record) {
+    DWORD *state=(DWORD*)nativeState;DWORD count=state[1];
+    for(DWORD i=0;i<count;i++)if(!((DownloadRecord**)state[0])[i]) {
+        if((LONG)i<0)break;
+        ((DownloadRecord**)state[0])[i]=record;return (int)i;
+    }
+    if(!ResizeRecords(count+1))return -1;
+    ((DownloadRecord**)state[0])[count]=record;return (int)count;
+}
+// samp.dll RVA: 0x0006a6b0
+bool CDownloadWindow::RemoveRecord(DWORD index) {
+    DWORD *state=(DWORD*)nativeState;if(index>=state[1])return false;
+    ((DownloadRecord**)state[0])[index]=0;TrimRecords();return true;
+}
+// samp.dll RVA: 0x0006a6e0
+void CDownloadWindow::ClearRecords() {
+    DWORD *state=(DWORD*)nativeState;int count=(int)state[1];
+    for(int i=0;i<count;i++)if((DWORD)i<state[1]) {
+        DownloadRecord *record=((DownloadRecord**)state[0])[i];
+        if(record){free(record);RemoveRecord(i);}
+    }
+    ((CDXUTListBoxDL*)state[11])->RemoveAllItems();
+}
+// samp.dll RVA: 0x0006ab10
+void CDownloadWindow::Hide() {
+    DWORD *state=(DWORD*)nativeState;((BYTE*)state[10])[0x13]=0;state[12]=0;
+    ClearRecords();state[0x93]=0;state[0x94]=0xffffffff;
+}
+// samp.dll RVA: 0x0006a720
+void CDownloadWindow::UpdateRecord(BYTE type,DWORD id,BYTE status,DWORD downloaded,DWORD total,int error,const char *detail) {
+    DWORD *state=(DWORD*)nativeState;int index=FindRecord(id);
+    DownloadRecord *record;DWORD delta;BYTE currentStatus=status;
+    char text[64];
+    if(index==-1) {
+        record=(DownloadRecord*)calloc(1,18);
+        record->type=type;record->id=id;record->status=status;
+        record->downloaded=downloaded;record->total=total;delta=downloaded;
+        _snprintf(text,64,type==1?g_downloadModel:g_downloadTexture);
+        ((CDXUTListBoxDL*)state[11])->AddItem(text,(void*)0xffffffff,-1);
+        record->row=state[1];AddRecord(record);
+        _snprintf(text,64,g_downloadIdFormat,id);
+        ((CDXUTListBoxDL*)state[11])->SetSubItemText(record->row,0,text);
+        ((CDXUTListBoxDL*)state[11])->SelectItem(record->row);
+        ((CDXUTListBoxDL*)state[11])->GetItem(record->row)->flag=true;
+    } else {
+        record=GetRecord(index);delta=downloaded-record->downloaded;
+        record->status=status;record->downloaded=downloaded;
+    }
+    float percentage=0.0f;
+    if(downloaded>0&&record->total>0) {
+        DWORD denominator=record->total;
+        __asm {
+            mov eax,downloaded
+            test eax,eax
+            fild downloaded
+            jge numerator_signed
+            fadd g_cursorRayUnsignedBias
+numerator_signed:
+            fmul g_vehicleTrainSpeedMaximum
+            mov eax,denominator
+            test eax,eax
+            fild denominator
+            jge denominator_signed
+            fadd g_cursorRayUnsignedBias
+denominator_signed:
+            fdivp st(1),st(0)
+            fstp percentage
+        }
+    }
+    state[0x96]+=delta;
+    if((LONG)(RakNet::GetTime()-state[0x95])>1000) {
+        state[0x95]=RakNet::GetTime();DWORD bytes=state[0x96];state[0x97]=0;
+        if(bytes) {
+            float speed;
+            __asm {
+                mov eax,bytes
+                test eax,eax
+                fild bytes
+                jge bytes_signed
+                fadd g_cursorRayUnsignedBias
+bytes_signed:
+                fmul g_downloadKilobytesPerByte
+                fstp speed
+            }
+            memcpy(&state[0x97],&speed,4);
+        }
+        state[0x96]=0;
+    }
+    if(currentStatus==0)_snprintf(text,64,g_downloadZeroFormat);
+    else if(currentStatus==1)_snprintf(text,64,g_downloadPercentFormat,(double)percentage);
+    else if(currentStatus==3) {
+        if(detail)_snprintf(text,64,g_downloadDetailFormat,error,detail);
+        else _snprintf(text,64,g_downloadErrorFormat,error,record->downloaded,record->total);
+    } else if(currentStatus==4) {
+        state[0x93]++;_snprintf(text,64,g_downloadCompleteFormat,(double)percentage);
+    }
+    // Other native statuses leave the previous or untouched local text in place.
+    ((CDXUTListBoxDL*)state[11])->SetSubItemText(record->row,1,text);
+    if((LONG)state[0x94]>0) {
+        char title[64];float speed;memcpy(&speed,&state[0x97],4);
+        _snprintf(title,64,g_downloadCaptionFormat,state[0x93],state[0x94],(double)speed);
+        strcpy((char*)state[10]+0x16,title);
+    }
+}
