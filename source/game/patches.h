@@ -1,6 +1,13 @@
 #ifndef SAMP_RECOVERED_GAME_PATCHES_H
 #define SAMP_RECOVERED_GAME_PATCHES_H
 #include <windows.h>
+// samp.dll RVA: 0x002a9278
+extern DWORD g_gameVehicleControlPatched;
+// samp.dll RVA: 0x002a927c
+extern DWORD g_gameManualVehicleControl;
+// Descriptive name: native settings +0x2B selects this patch set.
+// samp.dll RVA: 0x000aa800
+void GameApplyManualVehicleControlPatches();
 // samp.dll RVA: 0x001546c0
 extern BYTE g_gamePatchStreamBytes[7];
 // samp.dll RVA: 0x001546c8

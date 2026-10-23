@@ -20,6 +20,57 @@
 #include "RakNetworkFactory.h"
 #include "game/camera.h"
 #include "game/playerped.h"
+#include "game/patches.h"
+#include "gui/render_dependencies.h"
+// samp.dll RVA: 0x001179dc
+const char g_netStartedMessage[]="{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
+// samp.dll RVA: 0x00117af0
+const char g_netDisconnectedMessage[]="Server closed the connection.";
+// samp.dll RVA: 0x00117b10
+const char g_netInvalidPasswordMessage[]="Wrong server password.";
+// samp.dll RVA: 0x00008450
+void CNetGame::InitialNotification() {
+    if(g_pChat)g_pChat->AddDebugMessage(g_netStartedMessage);
+}
+// samp.dll RVA: 0x000085e0
+void CNetGame::InitializeGameLogic() {
+    if((*(BYTE**)(nativeState+0x3d5))[0x2b])GameApplyManualVehicleControlPatches();
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+5)=0x469c4000;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+9)=0xc69c4000;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0xd)=0x469c4000;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0x11)=0xc69c4000;
+}
+// samp.dll RVA: 0x00008ad0
+void CNetGame::Packet_DisconnectionNotification(Packet *packet) {
+    (void)packet;g_pChat->AddDebugMessage(g_netDisconnectedMessage);
+    if(g_renderAudioStream)g_renderAudioStream->Stop(true);
+    (*(RakClientInterface**)(nativeState+0x2c))->Disconnect(2000,0);
+}
+// samp.dll RVA: 0x00008b10
+void CNetGame::Packet_InvalidPassword(Packet *packet) {
+    (void)packet;g_pChat->AddDebugMessage(g_netInvalidPasswordMessage);
+    (*(RakClientInterface**)(nativeState+0x2c))->Disconnect(0,0);
+}
+// samp.dll RVA: 0x00009fb0
+void CNetGame::ResetMapIcons() {
+    for(BYTE index=0;index<100;index++) {
+        DWORD *icon=(DWORD*)(nativeState+0x23d+index*4);
+        if(*icon){Scripting::ProcessCommand(&g_netRemoveMapIconCommand,*icon);*icon=0;}
+    }
+}
+// samp.dll RVA: 0x00009ff0
+void CNetGame::CreateMapIcon(BYTE index,CVector position,BYTE icon,DWORD color,int type) {
+    if(index<100) {
+        DWORD *slot=(DWORD*)(nativeState+0x23d+index*4);
+        if(*slot){Scripting::ProcessCommand(&g_netRemoveMapIconCommand,*slot);*slot=0;}
+        *slot=g_pGame->CreateMarker(icon,position.x,position.y,position.z,color,type);
+    }
+}
+// samp.dll RVA: 0x0000a1e0
+void CNetGame::ResetPools() {
+    ResetVehiclePool();ResetActorPool();ResetTextDrawPool();ResetGangZonePool();
+    ResetLabelPool();ResetMapIcons();ResetPickupPool();ResetObjectPool();ResetMenuPool();
+}
 // samp.dll RVA: 0x00009570
 void CNetGame::Destroy() {
     (*(RakClientInterface**)(nativeState+0x2c))->Disconnect(0,0);

@@ -1,6 +1,34 @@
 #include "game/patches.h"
 #include "game/game.h"
 #include <string.h>
+// samp.dll RVA: 0x002a9278
+DWORD g_gameVehicleControlPatched=0;
+// samp.dll RVA: 0x002a927c
+DWORD g_gameManualVehicleControl=0;
+// samp.dll RVA: 0x000aa800
+void GameApplyManualVehicleControlPatches() {
+    if(g_gameVehicleControlPatched)return;
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD oldProtection;
+    // GTA SA virtual addresses. Native leaves these pages writable.
+    protect((void*)0x6e1be3,37,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1be3,0x90,37);
+    protect((void*)0x6e1c38,8,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1c38,0x90,8);
+    protect((void*)0x6e1d98,15,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1d98,0x90,15);
+    protect((void*)0x6e1dbc,8,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1dbc,0x90,8);
+    protect((void*)0x6e1ba0,6,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1ba0,0x90,6);
+    protect((void*)0x6e1bb1,6,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1bb1,0x90,6);
+    protect((void*)0x6e1bd2,7,PAGE_EXECUTE_READWRITE,&oldProtection);
+    memset((void*)0x6e1bd2,0x90,7);
+    const BYTE branch[]={0x8a,0x86,0x28,0x04,0,0,0xa8,0x40,0x74,0x28};
+    memcpy((void*)0x6e1be5,branch,sizeof(branch));
+    g_gameVehicleControlPatched=1;g_gameManualVehicleControl=1;
+}
 // samp.dll RVA: 0x001546c0
 BYTE g_gamePatchStreamBytes[7]={0xb8,0x89,0x8f,0x6f,0x0,0xff,0xe0};
 // samp.dll RVA: 0x001546c8

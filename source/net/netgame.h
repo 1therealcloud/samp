@@ -14,6 +14,7 @@ class CGangZonePool;
 class CLabelPool;
 class CTextDrawPool;
 struct Packet;
+struct CVector;
 #pragma pack(push,1)
 struct CNetGamePools {
     CMenuPool *menus;CActorPool *actors;CPlayerPool *players;CVehiclePool *vehicles;
@@ -21,6 +22,21 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x00008450
+    void InitialNotification();
+    // samp.dll RVA: 0x000085e0
+    void InitializeGameLogic();
+    // samp.dll RVA: 0x00008ad0
+    void Packet_DisconnectionNotification(Packet *packet);
+    // samp.dll RVA: 0x00008b10
+    void Packet_InvalidPassword(Packet *packet);
+    // samp.dll RVA: 0x00009fb0
+    void ResetMapIcons();
+    // samp.dll RVA: 0x00009ff0
+    void CreateMapIcon(BYTE index,CVector position,BYTE icon,DWORD color,int type);
+    // Native excludes the player pool from this reset sequence.
+    // samp.dll RVA: 0x0000a1e0
+    void ResetPools();
     // samp.dll RVA: 0x00008630
     void Connect();
     // samp.dll RVA: 0x000086a0
@@ -113,4 +129,10 @@ extern const char g_netConnectionAcceptedMessage[];
 extern const char g_netServerFullMessage[];
 // samp.dll RVA: 0x00117b28
 extern const char g_netNoResponseMessage[];
+// samp.dll RVA: 0x001179dc
+extern const char g_netStartedMessage[];
+// samp.dll RVA: 0x00117af0
+extern const char g_netDisconnectedMessage[];
+// samp.dll RVA: 0x00117b10
+extern const char g_netInvalidPasswordMessage[];
 #endif
