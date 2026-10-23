@@ -178,14 +178,6 @@ void CScoreboard::Enable() {
 }
 
 
-// samp.dll RVA: 0x00072660
-void CObjectEdit::Disable(BOOL send) {
-    BOOL notify=send!=0;unknown80=0;g_pGame->SetCursorMode(0,TRUE);
-    if(g_pInput->m_bEnabled){g_pInput->Close();g_pInput->Open();}
-    if(unknown78==2)SendAttachedEditEndNotification(notify);
-    if(unknown78==1)SendEditEndNotification(notify);
-}
-
 #include "gui/dialog_resources.h"
 #include "gui/device_lifecycle.h"
 #include "game/game.h"

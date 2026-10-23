@@ -567,3 +567,57 @@ void CObjectEdit::Render() {
     }
     if(!flags[1])TryChangeProcessType();
 }
+
+#include "cmdwindow.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
+// samp.dll RVA: 0x00117f2c
+int g_objectEditRpc=117;
+// samp.dll RVA: 0x00117f30
+int g_objectEditAttachedRpc=116;
+// samp.dll RVA: 0x00072350
+void CObjectEdit::SendEditEndNotification(int status) {
+    BYTE *pool=*(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0x14);
+    WORD id=objectId;
+    if(id>2100||!*(DWORD*)(pool+4+id*4))return;
+    CEntity *object=*(CEntity**)(pool+0x20d4+id*4);
+    if(!object)return;
+    if(status==2&&(LONG)(GetTickCount()-lastTick)<250)return;
+    DWORD tick=GetTickCount();
+    DWORD rotation[3];
+    rotation[0]=*(DWORD*)((BYTE*)this+0x92);
+    rotation[2]=*(DWORD*)((BYTE*)this+0x9a);
+    lastTick=tick;
+    rotation[1]=*(DWORD*)((BYTE*)this+0x96);
+    CMatrix matrix;object->GetMatrix(&matrix);
+    RakNet::BitStream stream;
+    if(*(DWORD*)((BYTE*)this+0x8e))stream.Write1();else stream.Write0();
+    DWORD value=objectId;stream.WriteBits((const BYTE*)&value,16,true);
+    value=status;stream.WriteBits((const BYTE*)&value,32,true);
+    memcpy(&value,&matrix.position.x,4);stream.WriteBits((const BYTE*)&value,32,true);
+    memcpy(&value,&matrix.position.y,4);stream.WriteBits((const BYTE*)&value,32,true);
+    memcpy(&value,&matrix.position.z,4);stream.WriteBits((const BYTE*)&value,32,true);
+    value=rotation[0];stream.WriteBits((const BYTE*)&value,32,true);
+    value=rotation[1];stream.WriteBits((const BYTE*)&value,32,true);
+    value=rotation[2];stream.WriteBits((const BYTE*)&value,32,true);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_objectEditRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+}
+// samp.dll RVA: 0x00072560
+void CObjectEdit::SendAttachedEditEndNotification(int status) {
+    RakNet::BitStream stream;
+    int index=*(int*)((BYTE*)this+0x8a);
+    CPed *ped=g_pGame->GetPlayerPed();
+    // Inline native occupancy/bounds lookup; the 52-byte record remains live.
+    PedAccessoryState *info=index>=0&&index<10&&ped->m_accessoryOccupied[index]?&ped->m_accessoryInfo[index]:0;
+    DWORD value=status;stream.WriteBits((const BYTE*)&value,32,true);
+    value=*(DWORD*)((BYTE*)this+0x8a);stream.WriteBits((const BYTE*)&value,32,true);
+    stream.Write((const char*)info,52);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_objectEditAttachedRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+}
+// samp.dll RVA: 0x00072660
+void CObjectEdit::Disable(BOOL send) {
+    BOOL notify=send!=0;unknown80=0;g_pGame->SetCursorMode(0,TRUE);
+    if(g_pInput->m_bEnabled){g_pInput->Close();g_pInput->Open();}
+    if(unknown78==2)SendAttachedEditEndNotification(notify);
+    if(unknown78==1)SendEditEndNotification(notify);
+}

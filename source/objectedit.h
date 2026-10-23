@@ -42,7 +42,6 @@ class CObjectEdit {public:
     void ResetMousePos();
     // samp.dll RVA: 0x00072f00
     void ApplyChanges(int axis,float difference);
-    // Address-only mutation backends; object/ped integration remains open.
     // samp.dll RVA: 0x00072cb0
     void ApplyObjectChanges(int axis,float difference);
     // samp.dll RVA: 0x00071cb0
@@ -50,9 +49,9 @@ class CObjectEdit {public:
     // samp.dll RVA: 0x00072f20
     void ProcessMouseMove();
     // samp.dll RVA: 0x00072560
-    void SendAttachedEditEndNotification(BOOL send);
+    void SendAttachedEditEndNotification(int status);
     // samp.dll RVA: 0x00072350
-    void SendEditEndNotification(BOOL send);
+    void SendEditEndNotification(int status);
     // samp.dll RVA: 0x00072ff0
     BOOL MsgProc(UINT message,WPARAM wparam,LPARAM lparam);
     // samp.dll RVA: 0x00072660
@@ -97,4 +96,8 @@ extern const char g_objectEditGlyphScale[4];
 extern const char g_objectEditGlyphSave[4];
 // samp.dll RVA: 0x0011c768
 extern const float g_objectEditDistanceScale;
+// samp.dll RVA: 0x00117f2c
+extern int g_objectEditRpc;
+// samp.dll RVA: 0x00117f30
+extern int g_objectEditAttachedRpc;
 #endif
