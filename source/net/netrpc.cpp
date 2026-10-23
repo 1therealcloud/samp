@@ -1,0 +1,110 @@
+#include "net/netrpc.h"
+#include "RakClientInterface.h"
+#include "events.h"
+#include "net/local_rpc.h"
+#include "net/netgame.h"
+#include "objectedit.h"
+#include "objectselection.h"
+// samp.dll RVA: 0x00117fa8
+const int g_rpcScrSetIngameTimer=60;
+// samp.dll RVA: 0x00117fa4
+const int g_rpcScrWorldPlayerAdd=32;
+// samp.dll RVA: 0x00117fa0
+const int g_rpcScrWorldPlayerDeath=166;
+// samp.dll RVA: 0x00117f9c
+const int g_rpcScrWorldPlayerRemove=163;
+// samp.dll RVA: 0x00117f98
+const int g_rpcScrWorldVehicleAdd=164;
+// samp.dll RVA: 0x00117f94
+const int g_rpcScrWorldVehicleRemove=165;
+// samp.dll RVA: 0x00117f90
+const int g_rpcScrSetVehicleParamsEx=24;
+// samp.dll RVA: 0x00117968
+const int g_rpcDamageVehicle=106;
+// samp.dll RVA: 0x00117f8c
+const int g_rpcScrSetPlayerSkillLevel=34;
+// samp.dll RVA: 0x00117f88
+const int g_rpcScrCreate3DTextLabel=36;
+// samp.dll RVA: 0x00117f84
+const int g_rpcScrDestroy3DTextLabel=58;
+// samp.dll RVA: 0x00117f80
+const int g_rpcScrChatBubble=59;
+// samp.dll RVA: 0x00117f7c
+const int g_rpcScrShowDialog=61;
+// samp.dll RVA: 0x00117f78
+const int g_rpcScrServerJoin=137;
+// samp.dll RVA: 0x00117f74
+const int g_rpcScrServerQuit=138;
+// samp.dll RVA: 0x00117f70
+const int g_rpcScrInitGame=139;
+// samp.dll RVA: 0x00117f6c
+const int g_rpcScrSetCheckpoint=107;
+// samp.dll RVA: 0x00117f68
+const int g_rpcScrDisableCheckpoint=37;
+// samp.dll RVA: 0x00117f64
+const int g_rpcScrSetRaceCheckpoint=38;
+// samp.dll RVA: 0x00117f60
+const int g_rpcScrDisableRaceCheckpoint=39;
+// samp.dll RVA: 0x00117f5c
+const int g_rpcSrvNetStats=102;
+// samp.dll RVA: 0x00117f58
+const int g_rpcScrGamemodeRestart=40;
+// samp.dll RVA: 0x00117f54
+const int g_rpcConnectionRejected=130;
+// samp.dll RVA: 0x00117f50
+const int g_rpcScrClientMessage=93;
+// samp.dll RVA: 0x00117f4c
+const int g_rpcScrSetWorldTime=94;
+// samp.dll RVA: 0x00117f48
+const int g_rpcScrCreatePickup=95;
+// samp.dll RVA: 0x00117f44
+const int g_rpcScrDestroyPickup=63;
+// samp.dll RVA: 0x00117f40
+const int g_rpcScrDestroyWeaponPickup=151;
+// samp.dll RVA: 0x00117f3c
+const int g_rpcScrSetWeather=152;
+// samp.dll RVA: 0x00117f38
+const int g_rpcScrSetPlayerTime=29;
+// samp.dll RVA: 0x00117f34
+const int g_rpcScrToggleClock=30;
+// samp.dll RVA: 0x00117f24
+const int g_rpcScrCancelEdit=28;
+// samp.dll RVA: 0x00117f20
+const int g_rpcScrUpdateCameraTarget=170;
+// samp.dll RVA: 0x00117f1c
+const int g_rpcClientCheck=103;
+// samp.dll RVA: 0x00117f18
+const int g_rpcScrCreateActor=171;
+// samp.dll RVA: 0x00117f14
+const int g_rpcScrDestroyActor=172;
+// Handler RVA0x00011d80; semantic name not established.
+// samp.dll RVA: 0x00117f10
+const int g_rpcUnknown00117F10=179;
+// Handler RVA0x0000ea40; semantic name not established.
+// samp.dll RVA: 0x00117f0c
+const int g_rpcUnknown00117F0C=180;
+// Handler RVA0x00011f80; semantic name not established.
+// samp.dll RVA: 0x00117f08
+const int g_rpcUnknown00117F08=183;
+// Handler RVA0x0000ead0; semantic name not established.
+// samp.dll RVA: 0x00117f04
+const int g_rpcUnknown00117F04=185;
+// samp.dll RVA: 0x0000eb60
+void UnRegisterRPCs(RakClientInterface *client) {
+    const int *ids[]={
+        &g_rpcScrSetIngameTimer,&g_rpcScrWorldPlayerAdd,&g_rpcScrWorldPlayerDeath,&g_rpcScrWorldPlayerRemove,
+        &g_rpcScrWorldVehicleAdd,&g_rpcScrWorldVehicleRemove,&g_rpcScrSetVehicleParamsEx,&g_localRequestClassRpc,
+        &g_localSpawnRequestRpc,&g_rpcDamageVehicle,&g_localEnterVehicleRpc,&g_localExitVehicleRpc,
+        &g_rpcScrSetPlayerSkillLevel,&g_rpcScrCreate3DTextLabel,&g_rpcScrDestroy3DTextLabel,&g_rpcScrChatBubble,
+        &g_rpcScrShowDialog,&g_rpcScrServerJoin,&g_rpcScrServerQuit,&g_rpcScrInitGame,
+        &g_localChatRpc,&g_rpcScrSetCheckpoint,&g_rpcScrDisableCheckpoint,&g_rpcScrSetRaceCheckpoint,
+        &g_rpcScrDisableRaceCheckpoint,&g_netPlayersInfoRpc,&g_rpcSrvNetStats,&g_rpcScrGamemodeRestart,
+        &g_rpcConnectionRejected,&g_rpcScrClientMessage,&g_rpcScrSetWorldTime,&g_rpcScrCreatePickup,
+        &g_rpcScrDestroyPickup,&g_rpcScrDestroyWeaponPickup,&g_scmEventRpcId,&g_rpcScrSetWeather,
+        &g_rpcScrSetPlayerTime,&g_rpcScrToggleClock,&g_objectEditAttachedRpc,&g_objectEditRpc,
+        &g_objectSelectionRpc,&g_rpcScrCancelEdit,&g_rpcScrUpdateCameraTarget,&g_rpcClientCheck,
+        &g_rpcScrCreateActor,&g_rpcScrDestroyActor,&g_rpcUnknown00117F10,&g_rpcUnknown00117F0C,
+        &g_rpcUnknown00117F08,&g_rpcUnknown00117F04,
+    };
+    for(unsigned i=0;i<sizeof(ids)/sizeof(ids[0]);i++)client->UnregisterAsRemoteProcedureCall(const_cast<int*>(ids[i]));
+}

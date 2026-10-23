@@ -15,6 +15,69 @@
 #include "net/pickuppool.h"
 #include "net/actorpool.h"
 #include <stdlib.h>
+#include "net/netrpc.h"
+#include "net/scriptrpc.h"
+#include "RakNetworkFactory.h"
+#include "game/camera.h"
+#include "game/playerped.h"
+// samp.dll RVA: 0x00009570
+void CNetGame::Destroy() {
+    (*(RakClientInterface**)(nativeState+0x2c))->Disconnect(0,0);
+    UnRegisterRPCs(*(RakClientInterface**)(nativeState+0x2c));
+    UnRegisterScriptRPCs(*(RakClientInterface**)(nativeState+0x2c));
+    RakNetworkFactory::DestroyRakClientInterface(*(RakClientInterface**)(nativeState+0x2c));
+    CPlayerPool *players=pools->players;if(players){delete players;pools->players=0;}
+    CVehiclePool *vehicles=pools->vehicles;if(vehicles){delete vehicles;pools->vehicles=0;}
+    CActorPool *actors=pools->actors;if(actors){delete actors;pools->actors=0;}
+    CTextDrawPool *textDraws=pools->textDraws;if(textDraws){delete textDraws;pools->textDraws=0;}
+    CGangZonePool *gangZones=pools->gangZones;if(gangZones){delete gangZones;pools->gangZones=0;}
+    CLabelPool *labels=pools->labels;if(labels){delete labels;pools->labels=0;}
+    CPickupPool *pickups=pools->pickups;if(pickups){delete pickups;pools->pickups=0;}
+    CObjectPool *objects=pools->objects;if(objects){delete objects;pools->objects=0;}
+    CMenuPool *menus=pools->menus;if(menus){delete menus;pools->menus=0;}
+    if(pools){operator delete(pools);pools=0;}
+    void *settings=*(void**)(nativeState+0x3d5);
+    if(settings){operator delete(settings);*(void**)(nativeState+0x3d5)=0;}
+}
+// samp.dll RVA: 0x00117a0c
+const char g_netConnectingMessage[]="Connecting to %s:%d...";
+// samp.dll RVA: 0x00117a64
+const char g_netEncryptionFailedMessage[]="Failed to initialize encryption.";
+// samp.dll RVA: 0x00117a88
+const char g_netConnectionBannedMessage[]="You are banned from this server.";
+// samp.dll RVA: 0x00117aac
+const char g_netConnectionAcceptedMessage[]="Server has accepted the connection.";
+// samp.dll RVA: 0x00117ad0
+const char g_netServerFullMessage[]="The server is full. Retrying...";
+// samp.dll RVA: 0x00117b28
+const char g_netNoResponseMessage[]="The server didn't respond. Retrying..";
+// samp.dll RVA: 0x00008630
+void CNetGame::Connect() {
+    DWORD (WINAPI *tick)()=GetTickCount;
+    if(tick()-*(DWORD*)(nativeState+0x3d1)>3000) {
+        if(g_pChat)g_pChat->AddDebugMessage(g_netConnectingMessage,(char*)nativeState+0x30,*(int*)(nativeState+0x235));
+        (*(RakClientInterface**)(nativeState+0x2c))->Connect((char*)nativeState+0x30,*(WORD*)(nativeState+0x235),0,0,2);
+        *(DWORD*)(nativeState+0x3d1)=tick();*(DWORD*)(nativeState+0x3cd)=2;
+    }
+}
+// samp.dll RVA: 0x000086a0
+void CNetGame::SpawnScreen() {
+    if(g_pGame->GetPlayerPed()->IsInVehicle())g_pGame->GetPlayerPed()->WarpFromVehicle(1093.4000244140625f,-2036.5f,82.710601806640625f);
+    else {CVector position={1133.0504150390625f,-2038.4034423828125f,69.09999847412109375f};g_pGame->GetPlayerPed()->Teleport(position);}
+    CVector position={1093.0f,-2036.0f,90.0f},rotation={0,0,0};
+    g_pGame->m_pCamera->Set(position,rotation);CVector point={384.0f,-1557.0f,20.0f};g_pGame->m_pCamera->PointAt(point,2);
+    g_pGame->SetWorldWeather(1);g_pGame->EnableHUD(FALSE);
+}
+// samp.dll RVA: 0x00008a40
+void CNetGame::Packet_RSAPublicKeyMismatch(Packet *packet) {(void)packet;g_pChat->AddDebugMessage(g_netEncryptionFailedMessage);}
+// samp.dll RVA: 0x00008a60
+void CNetGame::Packet_ConnectionBanned(Packet *packet) {(void)packet;g_pChat->AddDebugMessage(g_netConnectionBannedMessage);}
+// samp.dll RVA: 0x00008a80
+void CNetGame::Packet_ConnectionRequestAccepted(Packet *packet) {(void)packet;g_pChat->AddDebugMessage(g_netConnectionAcceptedMessage);}
+// samp.dll RVA: 0x00008aa0
+void CNetGame::Packet_NoFreeIncomingConnections(Packet *packet) {(void)packet;g_pChat->AddDebugMessage(g_netServerFullMessage);*(DWORD*)(nativeState+0x3cd)=1;}
+// samp.dll RVA: 0x00008b50
+void CNetGame::Packet_ConnectionAttemptFailed(Packet *packet) {(void)packet;g_pChat->AddDebugMessage(g_netNoResponseMessage);*(DWORD*)(nativeState+0x3cd)=1;}
 // samp.dll RVA: 0x00008230
 void CNetGame::InitializePools() {
     pools=(CNetGamePools*)calloc(1,sizeof(CNetGamePools));

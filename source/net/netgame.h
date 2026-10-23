@@ -13,6 +13,7 @@ class CPickupPool;
 class CGangZonePool;
 class CLabelPool;
 class CTextDrawPool;
+struct Packet;
 #pragma pack(push,1)
 struct CNetGamePools {
     CMenuPool *menus;CActorPool *actors;CPlayerPool *players;CVehiclePool *vehicles;
@@ -20,6 +21,21 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x00008630
+    void Connect();
+    // samp.dll RVA: 0x000086a0
+    void SpawnScreen();
+    // Packet arguments are deliberately ignored by these notification entries.
+    // samp.dll RVA: 0x00008a40
+    void Packet_RSAPublicKeyMismatch(Packet *packet);
+    // samp.dll RVA: 0x00008a60
+    void Packet_ConnectionBanned(Packet *packet);
+    // samp.dll RVA: 0x00008a80
+    void Packet_ConnectionRequestAccepted(Packet *packet);
+    // samp.dll RVA: 0x00008aa0
+    void Packet_NoFreeIncomingConnections(Packet *packet);
+    // samp.dll RVA: 0x00008b50
+    void Packet_ConnectionAttemptFailed(Packet *packet);
     // samp.dll RVA: 0x00008230
     void InitializePools();
     // samp.dll RVA: 0x00008cd0
@@ -85,4 +101,16 @@ extern DWORD g_netPlayersInfoTick;
 extern int g_netPlayersInfoRpc;
 // samp.dll RVA: 0x001179c8
 extern const Scripting::OpcodeInfo g_netRemoveMapIconCommand;
+// samp.dll RVA: 0x00117a0c
+extern const char g_netConnectingMessage[];
+// samp.dll RVA: 0x00117a64
+extern const char g_netEncryptionFailedMessage[];
+// samp.dll RVA: 0x00117a88
+extern const char g_netConnectionBannedMessage[];
+// samp.dll RVA: 0x00117aac
+extern const char g_netConnectionAcceptedMessage[];
+// samp.dll RVA: 0x00117ad0
+extern const char g_netServerFullMessage[];
+// samp.dll RVA: 0x00117b28
+extern const char g_netNoResponseMessage[];
 #endif
