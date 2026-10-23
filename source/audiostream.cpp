@@ -82,3 +82,48 @@ void __cdecl AudioStreamSwapNegateYZ(const CVector *input,CVector *output) {
         fstp dword ptr [ecx+8]
     }
 }
+
+#include <stdlib.h>
+// samp.dll RVA: 0x001407ba
+BYTE g_audioStreamStopRequested;
+// samp.dll RVA: 0x0011bc08
+const char g_audioStreamIcyTitleMarker[14]="StreamTitle='";
+// samp.dll RVA: 0x0011bc00
+const char g_audioStreamArtistMarker[8]="artist=";
+// samp.dll RVA: 0x0011bbf8
+const char g_audioStreamTitleMarker[7]="title=";
+// samp.dll RVA: 0x001185d8
+const char g_audioStreamStringFormat[3]="%s";
+// samp.dll RVA: 0x00065fe0
+BOOL CAudioStream::Stop(bool wait) {
+    if(!initialized||!g_audioStreamRadioActive)return FALSE;
+    g_audioStreamStopRequested=1;
+    if(wait)while(*(volatile BYTE*)&g_audioStreamRadioActive)Sleep(2);
+    BASS_StreamFree(g_audioStreamHandle);g_audioStreamHandle=0;return TRUE;
+}
+// samp.dll RVA: 0x00066040
+void CAudioStream::ReadMetadata() {
+    memset(g_audioStreamTitle,0,257);
+    const char *tags=BASS_ChannelGetTags(g_audioStreamHandle,5);
+    if(tags) {
+        const char *title=strstr(tags,g_audioStreamIcyTitleMarker);
+        if(title) {
+            char *copy=_strdup(title+13);
+            // Original assumes allocation and a trailing quote/semicolon are present.
+            char *separator=strchr(copy,';');separator[-1]=0;
+            _snprintf(g_audioStreamTitle,256,g_audioStreamStringFormat,copy);free(copy);
+        }
+        return;
+    }
+    tags=BASS_ChannelGetTags(g_audioStreamHandle,2);if(!tags)return;
+    const char *artist=0,*title=0;
+    while(*tags) {
+        if(!_strnicmp(tags,g_audioStreamArtistMarker,7))artist=tags+7;
+        if(!_strnicmp(tags,g_audioStreamTitleMarker,6))title=tags+6;
+        tags+=strlen(tags)+1;
+    }
+    if(artist)_snprintf(g_audioStreamTitle,256,g_audioStreamInfoFormat,artist,title);
+    else if(title)_snprintf(g_audioStreamTitle,256,g_audioStreamStringFormat,title);
+}
+// samp.dll RVA: 0x00066170
+void CALLBACK CAudioStream::MetadataSync(DWORD,DWORD,DWORD,void*) {ReadMetadata();}

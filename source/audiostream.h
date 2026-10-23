@@ -6,6 +6,14 @@ class CAudioStream {public:
     BYTE initialized;
     // samp.dll RVA: 0x00065f00
     BOOL Reset();
+    // samp.dll RVA: 0x00065fe0
+    BOOL Stop(bool wait);
+    // Descriptive static helpers; native metadata entry consumes no this pointer.
+    // samp.dll RVA: 0x00066040
+    static void ReadMetadata();
+    // BASS SYNCPROC ABI; all callback arguments are ignored by the original.
+    // samp.dll RVA: 0x00066170
+    static void CALLBACK MetadataSync(DWORD handle,DWORD channel,DWORD data,void *user);
     // samp.dll RVA: 0x00066530
     void DrawInfo();
     // samp.dll RVA: 0x00066500
@@ -30,4 +38,14 @@ extern char g_audioStreamAgent[10];
 // Observed radio-control gate; stream start/stop writers remain to be recovered.
 // samp.dll RVA: 0x0016c7d0
 extern BYTE g_audioStreamRadioActive;
+// samp.dll RVA: 0x001407ba
+extern BYTE g_audioStreamStopRequested;
+// samp.dll RVA: 0x0011bc08
+extern const char g_audioStreamIcyTitleMarker[14];
+// samp.dll RVA: 0x0011bc00
+extern const char g_audioStreamArtistMarker[8];
+// samp.dll RVA: 0x0011bbf8
+extern const char g_audioStreamTitleMarker[7];
+// samp.dll RVA: 0x001185d8
+extern const char g_audioStreamStringFormat[3];
 #endif
