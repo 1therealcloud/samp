@@ -6,14 +6,7 @@ class CDXUTDialog;
 struct IDirect3DDevice9;
 #include "net/netgame.h"
 #include "audiostream.h"
-class CChatBubble {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x44a20];
-    // samp.dll RVA: 0x00066860
-    CChatBubble();
-    // samp.dll RVA: 0x00066950
-    void Draw();
-};
+#include "chatbubble.h"
 class CLabelPool {public:
     // samp.dll RVA: 0x00001350
     void Draw();

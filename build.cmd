@@ -98,6 +98,7 @@ for %%F in (
     source\audiostream.cpp
     source\svrnetstats.cpp
     source\netstats.cpp
+    source\chatbubble.cpp
     source\gui\gui_events.cpp
     source\cmdprocs.cpp
     source\subclass.cpp

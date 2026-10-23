@@ -113,8 +113,6 @@ void CScoreboard::Recalc(){
     *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
 }
 
-// samp.dll RVA: 0x00066860
-CChatBubble::CChatBubble(){memset(nativeState,0,sizeof(nativeState));}
 
 #include "gui/render_dependencies.h"
 #include "gui/device_lifecycle.h"
