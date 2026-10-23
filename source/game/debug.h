@@ -4,6 +4,11 @@
 struct KeyPad;
 class CCamera;
 class CVehicle;
+// Descriptive recovery names for the native debug-state setters.
+// samp.dll RVA: 0x0009dee0
+void GameSetDebugState(DWORD first,DWORD second,DWORD stage);
+// samp.dll RVA: 0x0009df00
+void GameClearDebugState();
 // samp.dll RVA: 0x001518d4
 extern DWORD g_debugSelectedVehicleModel;
 // samp.dll RVA: 0x0018dd48

@@ -1,6 +1,21 @@
 #include "net/netgame.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
+#include "main.h"
+#include "chatwindow.h"
+#include "config.h"
+// samp.dll RVA: 0x00008b80
+void CNetGame::ToggleNameTagStatus() {
+    if(!nativeState[0x234]) {
+        g_pChat->AddInfoMessage("NameTag Player Status: ON");
+        if(g_pConfig)g_pConfig->WriteIntValue("nonametagstatus",0,FALSE);
+        nativeState[0x234]=1;
+    } else {
+        g_pChat->AddInfoMessage("NameTag Player Status: OFF");
+        if(g_pConfig)g_pConfig->WriteIntValue("nonametagstatus",1,FALSE);
+        nativeState[0x234]=0;
+    }
+}
 // samp.dll RVA: 0x00156b38
 DWORD g_netPlayersInfoTick=0;
 // samp.dll RVA: 0x00117b98

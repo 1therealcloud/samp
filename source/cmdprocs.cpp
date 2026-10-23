@@ -42,12 +42,127 @@ void Commands::Setup(){
 #include "gui/gui.h"
 #include "game/hooks_render.h"
 #include "game/playerped.h"
+#include "game/vehicle.h"
+#include "game/debug.h"
+#include "game/quaternion.h"
+#include "game/util.h"
+#include "scoreboard.h"
 #include "net/localplayer.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "BitStream.h"
+#include "RakClientInterface.h"
+// samp.dll RVA: 0x0011bdd0
+const Scripting::OpcodeInfo g_commandGetVehicleAngle={0x174,"iv"};
+// samp.dll RVA: 0x0011bdf8
+const Scripting::OpcodeInfo g_commandGetActorAngle={0x172,"iv"};
+
+// samp.dll RVA: 0x00067f70
+void Commands::TestDeathWindow(char*) {
+    if(!g_deviceDeathWindow)return;
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper","Pooper333",0xffffffff,0xffffffff,1);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper","Pooper",0xffffffff,0xffffffff,5);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper","Pooper",0xffffffff,0xffffffff,15);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper","Pooper",0xffffffff,0xffffffff,14);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper","Pooper",0xffffffff,0xffffffff,2);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage(0,"PooperPooperPooper0001",0xffffffff,0xffffffff,5);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage(0,"Pooper",0xffffffff,0xffffffff,255);
+    ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper","PooperPooperPooper0001",0xffffffff,0xffffffff,0);
+}
+
+// samp.dll RVA: 0x00068740
+void Commands::DebugSetPlayerSkin(char *params) {
+    if(!g_clientSettings.debug)return;
+    if(!strlen(params)){g_pChat->AddDebugMessage("Usage: player_skin (skin number).");return;}
+    int model=atoi(params);
+    if(!g_pGame->IsStarted())return;
+    CPed *ped=g_pGame->GetPlayerPed();if(ped)ped->SetModelIndex(model);
+}
+
+// samp.dll RVA: 0x000687b0
+void Commands::DebugCreateVehicle(char *params) {
+    if(!g_clientSettings.debug)return;
+    if(!strlen(params)){g_pChat->AddDebugMessage("Usage: /v (vehicle id).");return;}
+    int model=atoi(params);
+    if(!g_pGame->IsStarted()){g_pChat->AddDebugMessage("game not loaded.");return;}
+    g_pGame->RequestModel(model,2);g_pGame->LoadRequestedModels();
+    CPed *ped=g_pGame->GetPlayerPed();
+    if(!ped){g_pChat->AddDebugMessage("I couldn't find the player actor.");return;}
+    CMatrix matrix;ped->GetMatrix(&matrix);
+    char type[9]={0};sprintf(type,g_debugVehicleTypeFormat,model);
+    CVector position=matrix.position;
+    position.z+=g_quaternionMatrixOne;position.y-=g_scoreboardHeaderInset;position.x-=g_scoreboardHeaderInset;
+    g_pGame->CreateVehicle(model,position.x,position.y,position.z,0,FALSE)->Add();
+}
+
+// samp.dll RVA: 0x000688f0
+void Commands::DebugEnableVehicleSelection(char*) {
+    if(g_clientSettings.debug)GameSetDebugState(0,0,10);
+}
+
+// samp.dll RVA: 0x00068a70
+void Commands::SendRconCommand(char *params) {
+    if(!params||!g_pNetGame)return;
+    RakNet::BitStream stream;
+    BYTE packet=201;stream.WriteBits(&packet,8,true);
+    DWORD length=(DWORD)strlen(params);stream.WriteBits((const unsigned char*)&length,32,true);
+    stream.Write(params,(int)length);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,RELIABLE,0);
+}
+
+// samp.dll RVA: 0x00068440
+void Commands::SavePosition(char *params) {
+    CPed *ped=g_pGame->GetPlayerPed();
+    char path[260];sprintf(path,"%s\\savedpositions.txt",ClientGetDataDirectory());
+    FILE *file=fopen(path,"a");
+    if(!file){g_pChat->AddDebugMessage("I can't open the savepositions.txt file for append.");return;}
+    float angle;
+    if(ped->IsInVehicle()) {
+        BYTE *vehicle=(BYTE*)ped->GetVehicle();
+        Scripting::ProcessCommand(&g_commandGetVehicleAngle,GamePoolVehicleGetIndex(vehicle),&angle);
+        BYTE *matrix=*(BYTE**)(vehicle+0x14);
+        fprintf(file,"AddStaticVehicle(%u,%.4f,%.4f,%.4f,%.4f,%u,%u); // %s\n",
+            (int)*(short*)(vehicle+0x22),*(float*)(matrix+0x30),*(float*)(matrix+0x34),*(float*)(matrix+0x38),angle,
+            (unsigned)vehicle[0x434],(unsigned)vehicle[0x435],params);
+        fclose(file);g_pChat->AddInfoMessage("-> InCar position saved");
+    } else {
+        BYTE *backend=(BYTE*)ped->m_pGamePed;
+        Scripting::ProcessCommand(&g_commandGetActorAngle,ped->m_nHandle,&angle);
+        BYTE *matrix=*(BYTE**)(backend+0x14);
+        double heading=angle,z=*(float*)(matrix+0x38),y=*(float*)(matrix+0x34),x=*(float*)(matrix+0x30);
+        int model=ped->GetModelIndex();
+        fprintf(file,"AddPlayerClass(%u,%.4f,%.4f,%.4f,%.4f,0,0,0,0,0,0); // %s\n",model,x,y,z,heading,params);
+        fclose(file);g_pChat->AddInfoMessage("-> OnFoot position saved");
+    }
+}
+
+// samp.dll RVA: 0x000685c0
+void Commands::SavePositionOnly(char *params) {
+    CPed *ped=g_pGame->GetPlayerPed();float angle;
+    if(ped->IsInVehicle()) {
+        FILE *file=fopen("rawvehicles.txt","a");
+        if(!file){g_pChat->AddDebugMessage("I can't open the rawvehicles.txt file for append.");return;}
+        BYTE *vehicle=(BYTE*)ped->GetVehicle();
+        Scripting::ProcessCommand(&g_commandGetVehicleAngle,GamePoolVehicleGetIndex(vehicle),&angle);
+        BYTE *matrix=*(BYTE**)(vehicle+0x14);
+        fprintf(file,"%u,%.4f,%.4f,%.4f,%.4f,%u,%u ; %s\n",
+            (int)*(short*)(vehicle+0x22),*(float*)(matrix+0x30),*(float*)(matrix+0x34),*(float*)(matrix+0x38),angle,
+            (unsigned)vehicle[0x434],(unsigned)vehicle[0x435],params);
+        fclose(file);g_pChat->AddDebugMessage("-> InCar pos saved");
+    } else {
+        BYTE *backend=(BYTE*)ped->m_pGamePed;
+        Scripting::ProcessCommand(&g_commandGetActorAngle,ped->m_nHandle,&angle);
+        char path[260];sprintf(path,"%s\\rawpositions.txt",ClientGetDataDirectory());
+        FILE *file=fopen(path,"a");
+        if(!file){g_pChat->AddDebugMessage("I can't open the rawvehicles.txt file for append.");return;}
+        BYTE *matrix=*(BYTE**)(backend+0x14);
+        fprintf(file,"%.4f,%.4f,%.4f,%.4f ; %s\n",*(float*)(matrix+0x30),*(float*)(matrix+0x34),*(float*)(matrix+0x38),angle,params);
+        fclose(file);g_pChat->AddDebugMessage("-> OnFoot pos saved");
+    }
+}
 // samp.dll RVA: 0x00156ac8
 BYTE g_commandCameraTargetLabels;
 // samp.dll RVA: 0x00154698

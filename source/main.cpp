@@ -94,6 +94,60 @@ BOOL WINAPI ClientDllMainForward(HINSTANCE module,DWORD reason,LPVOID reserved) 
 char g_clientDataDirectory[261];
 // samp.dll RVA: 0x002ac8b0
 char g_clientCacheDirectory[261];
+// samp.dll RVA: 0x000c51a0
+const char *ClientGetDataDirectory() {return g_clientDataDirectory;}
+// samp.dll RVA: 0x000c51b0
+const char *ClientGetCacheDirectory() {return g_clientCacheDirectory;}
+
+// samp.dll RVA: 0x0011b928
+const char g_screenshotFilenamePattern[]="\\screens\\sa-mp-%03i.png";
+// samp.dll RVA: 0x0011c7dc
+const char g_screenshotTakenMessage[]="Screenshot Taken - sa-mp-%03i.png";
+// samp.dll RVA: 0x0011c7c0
+const char g_screenshotFailureMessage[]="Unable to save screenshot.";
+
+// samp.dll RVA: 0x00061cf0
+int ClientFindScreenshotFilename(std::string *path) {
+    path->assign(ClientGetDataDirectory());
+    char candidate[260]={0};int index;
+    for(index=0;index<1000;index++) {
+        sprintf(candidate,(*path+g_screenshotFilenamePattern).c_str(),index);
+        WIN32_FIND_DATAA data;HANDLE found=FindFirstFileA(candidate,&data);
+        if(found==INVALID_HANDLE_VALUE)break;
+        FindClose(found);
+    }
+    path->assign(candidate);
+    // If all names exist, native reports1000 but retains the final999 filename.
+    return index;
+}
+
+#include "chatwindow.h"
+#include "gui/render_dependencies.h"
+#include "game/gta_globals.h"
+#include <d3dx9.h>
+#ifdef GetSystemMetrics
+#undef GetSystemMetrics
+#endif
+// samp.dll RVA: 0x00075040
+void ClientCaptureScreenshot() {
+    g_renderScreenshotRequested=0;
+    std::string path;int index=ClientFindScreenshotFilename(&path);
+    // Native captures this vtable slot before both metric calls, then reloads this.
+    typedef HRESULT (WINAPI *CreateSurfaceFunction)(IDirect3DDevice9*,UINT,UINT,D3DFORMAT,D3DPOOL,IDirect3DSurface9**,HANDLE*);
+    CreateSurfaceFunction create=(CreateSurfaceFunction)(*(void***)g_gameD3DDevice)[36];
+    int height=GetSystemMetrics(SM_CYSCREEN),width=GetSystemMetrics(SM_CXSCREEN);
+    IDirect3DSurface9 *surface;
+    create(g_gameD3DDevice,width,height,D3DFMT_A8R8G8B8,D3DPOOL_SCRATCH,&surface,0);
+    if(SUCCEEDED(g_gameD3DDevice->GetFrontBufferData(0,surface))) {
+        POINT origin={0,0};ClientToScreen(g_inputGameWindow,&origin);
+        RECT rect;GetClientRect(g_inputGameWindow,&rect);
+        rect.left+=origin.x;rect.right+=origin.x;
+        rect.top+=origin.y;rect.bottom+=origin.y;
+        D3DXSaveSurfaceToFileA(path.c_str(),D3DXIFF_PNG,surface,0,&rect);
+        g_pChat->AddInfoMessage(g_screenshotTakenMessage,index);
+    } else g_pChat->AddDebugMessage(g_screenshotFailureMessage);
+    // Original does not release surface and does not check create/save HRESULTs.
+}
 // samp.dll RVA: 0x000b5900
 BOOL ClientPathExists(const char *path) {
     struct _stat info;return _stat(path,&info)==0;

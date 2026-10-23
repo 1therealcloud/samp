@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_RUNTIME_GLOBALS_H
 #define SAMP_RECOVERED_RUNTIME_GLOBALS_H
+#include <string>
 #include <windows.h>
 class CInput;
 class CChat;
@@ -88,6 +89,20 @@ void ClientInitializeDeviceAndGui();
 extern char g_clientDataDirectory[261];
 // samp.dll RVA: 0x002ac8b0
 extern char g_clientCacheDirectory[261];
+// samp.dll RVA: 0x000c51a0
+const char *ClientGetDataDirectory();
+// samp.dll RVA: 0x000c51b0
+const char *ClientGetCacheDirectory();
+// samp.dll RVA: 0x00061cf0
+int ClientFindScreenshotFilename(std::string *path);
+// samp.dll RVA: 0x00075040
+void ClientCaptureScreenshot();
+// samp.dll RVA: 0x0011b928
+extern const char g_screenshotFilenamePattern[];
+// samp.dll RVA: 0x0011c7dc
+extern const char g_screenshotTakenMessage[];
+// samp.dll RVA: 0x0011c7c0
+extern const char g_screenshotFailureMessage[];
 // samp.dll RVA: 0x0016be78
 extern WNDPROC g_clientPreviousWindowProcedure;
 // samp.dll RVA: 0x002aca50

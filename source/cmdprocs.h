@@ -65,4 +65,8 @@ extern BYTE g_commandCameraTargetLabels;
 extern DWORD g_commandObjectLighting;
 // samp.dll RVA: 0x0011bde4
 extern const Scripting::OpcodeInfo g_commandGetInterior;
+// samp.dll RVA: 0x0011bdd0
+extern const Scripting::OpcodeInfo g_commandGetVehicleAngle;
+// samp.dll RVA: 0x0011bdf8
+extern const Scripting::OpcodeInfo g_commandGetActorAngle;
 #endif

@@ -25,6 +25,12 @@ DWORD g_debugSelectionFlagB;
 const char g_debugVehicleSelectText[15]="Vehicle Select";
 // samp.dll RVA: 0x0011c198
 const char g_debugVehicleTypeFormat[8]="TYPE_%d";
+// samp.dll RVA: 0x0009dee0
+void GameSetDebugState(DWORD first,DWORD second,DWORD stage) {
+    g_gameDebugStage=stage;g_debugSelectionFlagA=first;g_debugSelectionFlagB=second;
+}
+// samp.dll RVA: 0x0009df00
+void GameClearDebugState() {g_gameDebugStage=0;}
 
 // samp.dll RVA: 0x0009df10
 void GameRebuildDebugVehicle() {
