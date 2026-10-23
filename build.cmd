@@ -124,6 +124,7 @@ for %%F in (
     source\textdrawselection.cpp
     source\net\textdrawpool.cpp
     source\net\objectpool.cpp
+    source\net\labelpool.cpp
 ) do (
     call :compile "%%F"
     if errorlevel 1 goto :failed

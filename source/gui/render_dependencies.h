@@ -7,10 +7,7 @@ struct IDirect3DDevice9;
 #include "net/netgame.h"
 #include "audiostream.h"
 #include "chatbubble.h"
-class CLabelPool {public:
-    // samp.dll RVA: 0x00001350
-    void Draw();
-};
+#include "net/labelpool.h"
 #include "dialog.h"
 #include "objectedit.h"
 #include "objectselection.h"

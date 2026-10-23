@@ -49,3 +49,9 @@ void CRemotePlayer::ApplySurfingMatrix() {
     memcpy(&pedMatrix.position,&position,12);
     (*(CPed**)(state+4))->ApplyMatrix(pedMatrix);
 }
+
+// samp.dll RVA: 0x00001080
+BOOL CRemotePlayer::IsActive() {
+    BYTE *state=(BYTE*)this;
+    return *(CPed**)(state+4)&&state[0x1a]!=0;
+}
