@@ -2277,3 +2277,413 @@ BOOL __stdcall GameNotifyPedDamage(void *response,void *ped) {
     }
     return FALSE;
 }
+
+#include "net/netgame.h"
+#include "net/gangzonepool.h"
+#include "net/pickuppool.h"
+#include "net/menupool.h"
+#include "game/util.h"
+
+// samp.dll RVA: 0x0018e7f8
+DWORD g_hookPickupBackend;
+// samp.dll RVA: 0x0018e5cc
+DWORD g_hookMenuTextResult;
+// samp.dll RVA: 0x0018f5a8
+CVector g_hookPassengerCameraPosition;
+// samp.dll RVA: 0x0018e580
+DWORD g_hookTrailerBackend;
+// samp.dll RVA: 0x0018e7fc
+CVehiclePool * g_hookTrailerPool;
+// samp.dll RVA: 0x0018e7f0
+WORD g_hookTrailerId;
+// samp.dll RVA: 0x0018f5e0
+CVehicle * g_hookTrailerVehicle;
+// samp.dll RVA: 0x0018f600
+DWORD g_hookObjectSavedStack;
+// samp.dll RVA: 0x0018f5f8
+DWORD g_hookObjectBackend;
+// samp.dll RVA: 0x0018f604
+DWORD g_hookObjectResult;
+// samp.dll RVA: 0x0018f5fc
+CObject * g_hookObjectRotationWrapper;
+// samp.dll RVA: 0x0018f614
+CObjectPool * g_hookObjectDrawPool;
+// samp.dll RVA: 0x0018f618
+DWORD g_hookObjectDrawBackend;
+// samp.dll RVA: 0x0018f578
+CObject * g_hookObjectDrawWrapper;
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a3c60
+__declspec(naked) void GameHook_000a3c60() {
+    __asm {
+        pushad
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je hook_a3c60_a3c7c
+        mov eax, dword ptr [eax + 0x3de]
+        mov ecx, dword ptr [eax + 0x18]
+        test ecx, ecx
+        je hook_a3c60_a3c7c
+        call CGangZonePool::Draw
+    hook_a3c60_a3c7c:
+        popad
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a3c80
+__declspec(naked) void GameHook_000a3c80() {
+    __asm {
+        pushad
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je hook_a3c80_a3c9e
+        mov eax, dword ptr [eax + 0x3d5]
+        cmp byte ptr [eax], 0
+        je hook_a3c80_a3c9e
+        popad
+        mov dword ptr [esi + 0x4d4], eax
+        jmp hook_a3c80_a3c9f
+    hook_a3c80_a3c9e:
+        popad
+    hook_a3c80_a3c9f:
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a3ca0
+__declspec(naked) void GameHook_000a3ca0() {
+    __asm {
+        mov dword ptr [g_hookPickupBackend], esi
+        pushad
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je hook_a3ca0_a3cd2
+        mov eax, dword ptr [eax + 0x3de]
+        mov ecx, dword ptr [eax + 0x10]
+        test ecx, ecx
+        je hook_a3ca0_a3cd2
+        mov edx, dword ptr [g_hookPickupBackend]
+        add edx, 0xff687740
+        shr edx, 5
+        push edx
+        call CPickupPool::SendNotification
+    hook_a3ca0_a3cd2:
+        popad
+        mov al, byte ptr [esi + 0x1c]
+        cmp al, 6
+        push 0x4579cb
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a3d90
+__declspec(naked) void GameHook_000a3d90() {
+    __asm {
+        sub esp, 0x20
+        push esi
+        push edi
+        mov edi, dword ptr [esp + 0x2c]
+        pushad
+        mov dword ptr [g_hookPedControlThis], edi
+        mov dword ptr [g_hookMenuTextResult], 0
+        cmp dword ptr [g_pNetGame], 0
+        je hook_a3d90_a3e1c
+        mov eax, dword ptr [g_hookPedControlThis]
+        movsx ecx, byte ptr [eax]
+        cmp ecx, 0x53
+        jne hook_a3d90_a3e1c
+        mov edx, dword ptr [g_hookPedControlThis]
+        movsx eax, byte ptr [edx + 1]
+        cmp eax, 0x41
+        jne hook_a3d90_a3e1c
+        mov ecx, dword ptr [g_hookPedControlThis]
+        movsx edx, byte ptr [ecx + 2]
+        cmp edx, 0x4d
+        jne hook_a3d90_a3e1c
+        mov eax, dword ptr [g_hookPedControlThis]
+        movsx ecx, byte ptr [eax + 3]
+        cmp ecx, 0x50
+        jne hook_a3d90_a3e1c
+        mov ecx, dword ptr [g_pNetGame]
+        call CNetGame::GetMenuPool
+        test eax, eax
+        je hook_a3d90_a3e1c
+        mov edx, dword ptr [g_hookPedControlThis]
+        add edx, 4
+        push edx
+        mov ecx, dword ptr [g_pNetGame]
+        call CNetGame::GetMenuPool
+        mov ecx, eax
+        call CMenuPool::GetTextPointer
+        mov dword ptr [g_hookMenuTextResult], eax
+    hook_a3d90_a3e1c:
+        popad
+        cmp dword ptr [g_hookMenuTextResult], 0
+        je hook_a3d90_a3e33
+        mov eax, dword ptr [g_hookMenuTextResult]
+        pop edi
+        pop esi
+        add esp, 0x20
+        ret 4
+    hook_a3d90_a3e33:
+        mov eax, 0x6a0059
+        jmp eax
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a4770
+__declspec(naked) void GameHook_000a4770() {
+    __asm {
+        cmp dword ptr [g_pGame], 0
+        je hook_a4770_a47bb
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        test eax, eax
+        je hook_a4770_a47bb
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        mov ecx, eax
+        call CPed::IsInVehicle
+        test eax, eax
+        je hook_a4770_a47bb
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        mov ecx, eax
+        call CPed::IsPassenger
+        test eax, eax
+        je hook_a4770_a47bb
+        lea eax, [g_hookPassengerCameraPosition]
+        ret
+    hook_a4770_a47bb:
+        mov edx, 0x56e090
+        jmp edx
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a49d0
+__declspec(naked) void GameHook_000a49d0() {
+    __asm {
+        mov dword ptr [g_hookTrailerBackend], ecx
+        pushad
+        cmp dword ptr [g_pNetGame], 0
+        je hook_a49d0_a4a90
+        cmp dword ptr [g_vehicleDetachingTrailer], 0
+        jne hook_a49d0_a4a90
+        cmp dword ptr [g_hookTrailerBackend], 0
+        je hook_a49d0_a4a90
+        mov eax, dword ptr [g_hookTrailerBackend]
+        fld dword ptr [eax + 0x4c0]
+        fcomp dword ptr [g_objectScaleLowerBound]
+        fnstsw ax
+        test ah, 0x41
+        jne hook_a49d0_a4a90
+        mov ecx, dword ptr [g_pNetGame]
+        call CNetGame::GetVehiclePool
+        mov dword ptr [g_hookTrailerPool], eax
+        mov ecx, dword ptr [g_hookTrailerBackend]
+        mov edx, dword ptr [ecx + 0x4c4]
+        push edx
+        mov ecx, dword ptr [g_hookTrailerPool]
+        call CVehiclePool::Find
+        mov word ptr [g_hookTrailerId], ax
+        movzx eax, word ptr [g_hookTrailerId]
+        cmp eax, 0xffff
+        je hook_a49d0_a4a90
+        mov cx, word ptr [g_hookTrailerId]
+        push ecx
+        mov ecx, dword ptr [g_hookTrailerPool]
+        call CVehiclePool::Get
+        mov dword ptr [g_hookTrailerVehicle], eax
+        cmp dword ptr [g_hookTrailerVehicle], 0
+        je hook_a49d0_a4a90
+        mov ecx, dword ptr [g_hookTrailerVehicle]
+        call CVehicle::DriverIsPlayerPed
+        test eax, eax
+        jne hook_a49d0_a4a90
+        mov edx, dword ptr [g_hookTrailerVehicle]
+        cmp dword ptr [edx + 0x48], 0
+        je hook_a49d0_a4a90
+        popad
+        ret
+    hook_a49d0_a4a90:
+        popad
+        mov eax, 0x6a4400
+        jmp eax
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a4c30
+__declspec(naked) void GameHook_000a4c30() {
+    __asm {
+        mov dword ptr [g_hookObjectSavedStack], esp
+        mov dword ptr [g_hookObjectBackend], ecx
+        pushad
+        mov ecx, dword ptr [g_hookObjectBackend]
+        mov ebx, 0x546ff0
+        call ebx
+        mov dword ptr [g_hookObjectResult], eax
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je hook_a4c30_a4c81
+        mov eax, dword ptr [eax + 0x3de]
+        mov ecx, dword ptr [eax + 0x14]
+        test ecx, ecx
+        je hook_a4c30_a4c81
+        mov edx, dword ptr [g_hookObjectBackend]
+        push edx
+        call CObjectPool::Find
+        test eax, eax
+        mov dword ptr [g_hookObjectRotationWrapper], eax
+        je hook_a4c30_a4c81
+        mov ecx, eax
+        call CObject::UpdateAttachedObjectRotation
+    hook_a4c30_a4c81:
+        popad
+        mov eax, dword ptr [g_hookObjectResult]
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a4df0
+__declspec(naked) void GameHook_000a4df0() {
+    __asm {
+        mov eax, 0x553aa0
+        call eax
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je hook_a4df0_a4e18
+        mov eax, dword ptr [eax + 0x3de]
+        mov ecx, dword ptr [eax + 0x14]
+        test ecx, ecx
+        mov dword ptr [g_hookObjectDrawPool], ecx
+        je hook_a4df0_a4e18
+        call CObjectPool::Draw
+    hook_a4df0_a4e18:
+        mov ecx, dword ptr [g_debugObjectPool]
+        test ecx, ecx
+        je hook_a4df0_a4e27
+        call CObjectPool::Draw
+    hook_a4df0_a4e27:
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a4e30
+__declspec(naked) void GameHook_000a4e30() {
+    __asm {
+        mov eax, 0x5531e0
+        call eax
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je hook_a4e30_a4e58
+        mov eax, dword ptr [eax + 0x3de]
+        mov ecx, dword ptr [eax + 0x14]
+        test ecx, ecx
+        mov dword ptr [g_hookObjectDrawPool], ecx
+        je hook_a4e30_a4e58
+        call CObjectPool::DrawLast
+    hook_a4e30_a4e58:
+        mov ecx, dword ptr [g_debugObjectPool]
+        test ecx, ecx
+        je hook_a4e30_a4e67
+        call CObjectPool::DrawLast
+    hook_a4e30_a4e67:
+        ret
+    }
+}
+
+// Raw installed GTA ABI; void() is an address declaration only.
+// samp.dll RVA: 0x000a4e70
+__declspec(naked) void GameHook_000a4e70() {
+    __asm {
+        push esi
+        mov esi, dword ptr [esp + 8]
+        mov dword ptr [g_hookObjectDrawBackend], esi
+        pushad
+        cmp dword ptr [g_pNetGame], 0
+        je hook_a4e70_a4f0e
+        cmp dword ptr [g_hookObjectDrawBackend], 0
+        je hook_a4e70_a4f0e
+        mov eax, dword ptr [g_hookObjectDrawBackend]
+        cmp dword ptr [eax], 0x866f60
+        jne hook_a4e70_a4f0e
+        mov ecx, dword ptr [g_hookObjectDrawBackend]
+        mov edx, dword ptr [ecx + 0x1c]
+        and edx, 0x80000000
+        je hook_a4e70_a4f0e
+        mov eax, dword ptr [g_hookObjectDrawBackend]
+        push eax
+        mov ecx, dword ptr [g_pNetGame]
+        call CNetGame::GetObjectPool
+        mov ecx, eax
+        call CObjectPool::Find
+        mov dword ptr [g_hookObjectDrawWrapper], eax
+        cmp dword ptr [g_hookObjectDrawWrapper], 0
+        je hook_a4e70_a4f0e
+        mov ecx, dword ptr [g_hookObjectDrawWrapper]
+        cmp dword ptr [ecx + 0x118b], 0
+        jne hook_a4e70_a4f0b
+        mov edx, dword ptr [g_hookObjectDrawWrapper]
+        fld dword ptr [edx + 0x54]
+        fcomp dword ptr [g_objectStreamingNearDistance]
+        fnstsw ax
+        test ah, 0x41
+        je hook_a4e70_a4f0b
+        mov eax, dword ptr [g_hookObjectDrawWrapper]
+        movzx ecx, byte ptr [eax + 0x1199]
+        test ecx, ecx
+        je hook_a4e70_a4f0e
+    hook_a4e70_a4f0b:
+        popad
+        pop esi
+        ret
+    hook_a4e70_a4f0e:
+        cmp dword ptr [g_debugObjectPool], 0
+        je hook_a4e70_a4f85
+        cmp dword ptr [g_hookObjectDrawBackend], 0
+        je hook_a4e70_a4f85
+        mov edx, dword ptr [g_hookObjectDrawBackend]
+        cmp dword ptr [edx], 0x866f60
+        jne hook_a4e70_a4f85
+        mov eax, dword ptr [g_hookObjectDrawBackend]
+        mov ecx, dword ptr [eax + 0x1c]
+        and ecx, 0x80000000
+        je hook_a4e70_a4f85
+        mov edx, dword ptr [g_hookObjectDrawBackend]
+        push edx
+        mov ecx, dword ptr [g_debugObjectPool]
+        call CObjectPool::Find
+        mov dword ptr [g_hookObjectDrawWrapper], eax
+        cmp dword ptr [g_hookObjectDrawWrapper], 0
+        je hook_a4e70_a4f85
+        mov eax, dword ptr [g_hookObjectDrawWrapper]
+        cmp dword ptr [eax + 0x118b], 0
+        jne hook_a4e70_a4f82
+        mov ecx, dword ptr [g_hookObjectDrawWrapper]
+        fld dword ptr [ecx + 0x54]
+        fcomp dword ptr [g_objectStreamingNearDistance]
+        fnstsw ax
+        test ah, 0x41
+        jne hook_a4e70_a4f85
+    hook_a4e70_a4f82:
+        popad
+        pop esi
+        ret
+    hook_a4e70_a4f85:
+        popad
+        mov esi, dword ptr [g_hookObjectDrawBackend]
+        movsx eax, word ptr [esi + 0x22]
+        mov edx, 0x5534b9
+        jmp edx
+    }
+}

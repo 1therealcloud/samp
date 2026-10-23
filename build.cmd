@@ -105,6 +105,7 @@ for %%F in (
     source\game\task.cpp
     source\gui\render_state.cpp
     source\net\local_rpc.cpp
+    source\net\netgame.cpp
     source\dllmain.cpp
     source\helpdialog.cpp
     source\label.cpp

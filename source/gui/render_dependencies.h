@@ -6,28 +6,7 @@ class CDXUTDialog;
 // samp.dll RVA: 0x0016c7f8
 extern DWORD g_srvNetStatsHistory[74];
 struct IDirect3DDevice9;
-// The network constructor extent is known; its internal layout and lifecycle remain open.
-class CVehiclePool;
-class CPlayerPool;
-class CNetGame {
-public:
-    // Native coordinator allocation extent; internal layout and lifecycle remain open.
-    BYTE nativeState[0x3e2];
-    // samp.dll RVA: 0x0000b610
-    CNetGame(const char *host,int port,const char *nickname,const char *password);
-    // Address-only command dependency.
-    // samp.dll RVA: 0x00008b80
-    void ToggleNameTagStatus();
-    // samp.dll RVA: 0x0000b290
-    void Process();
-    // Native destructor entry. The full networking lifecycle remains open.
-    // samp.dll RVA: 0x00009570
-    void Destroy();
-    // samp.dll RVA: 0x00001180
-    CVehiclePool *GetVehiclePool();
-    // samp.dll RVA: 0x00001170
-    CPlayerPool *GetPlayerPool();
-};
+#include "net/netgame.h"
 #include "audiostream.h"
 class CChatBubble {public:
     // Observed allocation extent, not a complete recovered interface.
