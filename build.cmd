@@ -97,6 +97,7 @@ for %%F in (
     source\downloadwindow.cpp
     source\audiostream.cpp
     source\svrnetstats.cpp
+    source\netstats.cpp
     source\gui\gui_events.cpp
     source\cmdprocs.cpp
     source\subclass.cpp
@@ -136,7 +137,7 @@ if exist "%OUT%\samp-link.dll" del /q "%OUT%\samp-link.dll"
 "%SAMP_VC%\bin\link.exe" /NOLOGO /DLL /MACHINE:X86 /OPT:REF /OUT:"%OUT%\samp-link.dll" /MAP:"%OUT%\samp.map" @"%OBJECTS%" ^
     build\libs\RakNet.lib build\libs\zlib.lib build\libs\libcurl.lib ^
     build\libs\lzma.lib build\libs\dxut.lib build\libs\bass.lib build\libs\detours.lib ^
-    libcmt.lib libcpmt.lib oldnames.lib kernel32.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib wldap32.lib crypt32.lib secur32.lib version.lib usp10.lib dsound.lib d3d9.lib d3dx9.lib dxguid.lib dxerr9.lib >"%OUT%\link.log" 2>&1
+    libcmt.lib libcpmt.lib oldnames.lib kernel32.lib psapi.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib wldap32.lib crypt32.lib secur32.lib version.lib usp10.lib dsound.lib d3d9.lib d3dx9.lib dxguid.lib dxerr9.lib >"%OUT%\link.log" 2>&1
 if errorlevel 1 (
     type "%OUT%\link.log"
     if exist "%OUT%\samp-link.dll" del /q "%OUT%\samp-link.dll"

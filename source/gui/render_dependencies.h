@@ -35,14 +35,7 @@ class CDeathWindow {public:
 };
 #include "renderpanel.h"
 #include "downloadwindow.h"
-class CNetStats {public:
-    // Observed allocation extent, not a complete recovered interface.
-    BYTE nativeState[0x18];
-    // samp.dll RVA: 0x000607c0
-    CNetStats(IDirect3DDevice9 *device);
-    // samp.dll RVA: 0x000607f0
-    void Draw();
-};
+#include "netstats.h"
 #include "svrnetstats.h"
 #include "helpdialog.h"
 class CDXUTDialog;

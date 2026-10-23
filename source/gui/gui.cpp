@@ -113,10 +113,6 @@ void CScoreboard::Recalc(){
     *(float*)(nativeState+12)=(float)rect.bottom*0.5f-*(float*)(nativeState+0x18)*0.5f;
 }
 
-// samp.dll RVA: 0x000607c0
-CNetStats::CNetStats(IDirect3DDevice9 *device){
-    DWORD *state=(DWORD*)nativeState;state[2]=GetTickCount();state[1]=0;state[0]=0;state[4]=0;state[3]=0;state[5]=(DWORD)device;
-}
 // samp.dll RVA: 0x00066860
 CChatBubble::CChatBubble(){memset(nativeState,0,sizeof(nativeState));}
 
