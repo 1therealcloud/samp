@@ -13,6 +13,28 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // Returns the raw GTA hit entity; the output stays untouched on a miss.
+    // samp.dll RVA: 0x000af490
+    void *GetAimHit(CVector *position);
+    // samp.dll RVA: 0x000af870
+    void GetCameraAimRay(CVector *origin,CVector *target);
+    // samp.dll RVA: 0x000b0ce0
+    void *GetCameraAimHit(CVector *position);
+    // Preserves native publication/clearing of shared firing context; always returns TRUE.
+    // samp.dll RVA: 0x000af670
+    BOOL FireWeapon();
+    // samp.dll RVA: 0x000aeb90
+    void DrawBoneIds();
+    // samp.dll RVA: 0x000aec20
+    void DrawMappedBoneIds();
+    // samp.dll RVA: 0x000aecf0
+    void DrawAnimationFrameIds();
+    // samp.dll RVA: 0x000aedf0
+    void UpdateAndDrawBoneIds();
+    // samp.dll RVA: 0x000b0d90
+    void ProcessAimMarker();
+    // samp.dll RVA: 0x000afb10
+    void ClearAimTarget();
     // Opaque task fields, not an established complete GTA animation-task class.
     // samp.dll RVA: 0x000ae1f0
     DWORD PackAnimationTask(const void *task);
@@ -512,3 +534,10 @@ extern const double g_pedStuffOffset3Z;
 
 // samp.dll RVA: 0x002a9280
 extern char g_pedShoppingName[32];
+
+// samp.dll RVA: 0x0018f664
+extern CPed *g_pedFiringContext;
+// samp.dll RVA: 0x0018f668
+extern void *g_pedFiringData;
+// samp.dll RVA: 0x0011c6d4
+extern const char g_pedBoneIdFormat[3];

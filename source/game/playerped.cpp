@@ -4,6 +4,12 @@
 #include "game/frame_limit.h"
 #include "game/animation.h"
 #include "game/hooks_render.h"
+#include "game/hooks_control.h"
+#include "game/weapon_backend.h"
+#include "label.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "gui/device_lifecycle.h"
 #include <string.h>
 // samp.dll RVA: 0x002a9da8
@@ -2640,4 +2646,238 @@ BOOL CPed::GetWeaponAimOffsets(BOOL alternate,CVector *position,CVector *weaponO
         }
     }
     return TRUE;
+}
+
+// samp.dll RVA: 0x0018f664
+CPed *g_pedFiringContext;
+// samp.dll RVA: 0x0018f668
+void *g_pedFiringData;
+// samp.dll RVA: 0x0011c6d4
+const char g_pedBoneIdFormat[3]="%d";
+
+// samp.dll RVA: 0x000af490
+void *CPed::GetAimHit(CVector *position) {
+    if(!m_pGamePed||GetCameraMode()!=4)return 0;
+    CMatrix unused;GetMatrix(&unused);
+    CameraAim *aim=AimStuff::GetInternalAim();
+    CVector bone;GetBonePosition(8,&bone);
+    CVector origin,target;
+    // Native float constants at RVAs 0011bcc8 and 0011c664.
+    origin.x=aim->front.x*0.2f+bone.x;
+    origin.y=aim->front.y*0.2f+bone.y;
+    origin.z=aim->front.z*0.2f+bone.z;
+    target.x=aim->front.x*50.0f+bone.x;
+    target.y=aim->front.y*50.0f+bone.y;
+    target.z=aim->front.z*50.0f+bone.z;
+    BYTE collision[44];void *entity=0;
+    GameProcessLineOfSightRaw(&origin,&target,collision,&entity,1,1,1,1,0,1,0,1);
+    // Native ignores AL and tests the returned entity pointer instead.
+    if(entity) {
+        __asm {
+            mov eax,position
+            fld dword ptr collision
+            fstp dword ptr [eax]
+        }
+        memcpy(&position->y,collision+4,8);
+    }
+    return entity;
+}
+
+// samp.dll RVA: 0x000af870
+void CPed::GetCameraAimRay(CVector *origin,CVector *target) {
+    CVector source={0,0,0},destination={0,0,0};
+    // Native saves these only on the nonlocal path. A later changed player byte
+    // still controls restoration, so do not invent initialized fallback values.
+    BYTE savedMode;WORD savedModeWord;
+    if(m_nPlayerNumber) {
+        savedMode=*g_aimInternalCameraMode;
+        *g_aimInternalCameraMode=AimStuff::GetPlayerCameraMode(m_nPlayerNumber);
+        savedModeWord=*g_hookCameraModeWord;
+        *g_hookCameraModeWord=AimStuff::GetPlayerCameraMode(m_nPlayerNumber);
+        if(*g_hookCameraModeWord==4)*g_hookCameraModeWord=0;
+        AimStuff::UpdateCamera();AimStuff::ApplyPlayerCamera(m_nPlayerNumber);
+        AimStuff::UpdateAim();AimStuff::ApplyPlayerAim(m_nPlayerNumber);
+        AimStuff::UpdateLocalSkills();AimStuff::ApplyPlayerSkills(m_nPlayerNumber);
+    }
+    // This camera-mode query is present even though its return is unused.
+    GetCameraMode();
+    CVector *weaponOffset=(CVector*)GetCurrentWeaponInfo();
+    if(*g_aimInternalCameraMode==55) {
+        CMatrix matrix;GetBoneMatrix(&matrix,6);
+        GameTransformRwPoint(origin,weaponOffset,&matrix);
+    } else {
+        void *ped=m_pGamePed;
+        if(ped&&*(DWORD*)ped!=0x863c40) {
+            // GTA SA virtual address: backend(origin,24,0), thiscall.
+            __asm {
+                push 0
+                push 24
+                push origin
+                mov ecx,ped
+                mov edx,5e4280h
+                call edx
+            }
+        }
+        origin->z=(weaponOffset->z+origin->z)+g_pedSpawnLift;
+    }
+    CVector copied;memcpy(&copied,origin,12);
+    // GTA SA virtual addresses: camera 00b6f028, thiscall 00514970.
+    __asm {
+        lea eax,destination
+        push eax
+        lea eax,source
+        push eax
+        push copied.z
+        push copied.y
+        push copied.x
+        push 43960000h
+        mov ecx,0b6f028h
+        mov eax,514970h
+        call eax
+    }
+    __asm {
+        mov eax,target
+        fld destination.x
+        fstp dword ptr [eax]
+    }
+    memcpy(&target->y,&destination.y,8);
+    if(m_nPlayerNumber) {
+        *g_aimInternalCameraMode=savedMode;*g_hookCameraModeWord=savedModeWord;
+        AimStuff::ApplyLocalSkills();AimStuff::ApplyLocalCamera();AimStuff::ApplyLocalAim();
+    }
+}
+
+// samp.dll RVA: 0x000b0ce0
+void *CPed::GetCameraAimHit(CVector *position) {
+    if(!m_pGamePed)return 0;
+    BYTE mode=GetCameraMode();
+    if(mode!=53&&mode!=55&&mode!=65)return 0;
+    CVector origin,target;GetCameraAimRay(&origin,&target);
+    BYTE collision[44];void *entity=0;
+    GameProcessLineOfSightRaw(&origin,&target,collision,&entity,0,1,1,1,0,0,0,0);
+    if(entity) {
+        __asm {
+            mov eax,position
+            fld dword ptr collision
+            fstp dword ptr [eax]
+        }
+        memcpy(&position->y,collision+4,8);
+    }
+    return entity;
+}
+
+// samp.dll RVA: 0x000af670
+BOOL CPed::FireWeapon() {
+    BYTE savedMode;WORD savedModeWord;
+    if(m_nPlayerNumber) {
+        savedMode=*g_aimInternalCameraMode;
+        *g_aimInternalCameraMode=AimStuff::GetPlayerCameraMode(m_nPlayerNumber);
+        savedModeWord=*g_hookCameraModeWord;
+        *g_hookCameraModeWord=AimStuff::GetPlayerCameraMode(m_nPlayerNumber);
+        if(*g_hookCameraModeWord==4)*g_hookCameraModeWord=0;
+        AimStuff::UpdateCamera();AimStuff::ApplyPlayerCamera(m_nPlayerNumber);
+        AimStuff::UpdateAim();AimStuff::ApplyPlayerAim(m_nPlayerNumber);
+        AimStuff::UpdateLocalSkills();AimStuff::ApplyPlayerSkills(m_nPlayerNumber);
+    }
+    g_pedFiringContext=this;
+    g_pedFiringData=*(DWORD*)(unknown2fd+44)?unknown2fd:0;
+    CVector origin={0,0,0},muzzle={0,0,0};
+    DWORD weapon;
+    bool sniper=false;
+    if(m_pGamePed&&GamePoolPedGetAt(m_nHandle)) {
+        Scripting::ProcessCommand(&g_pedGetCurrentWeaponCommand,m_nHandle,&weapon);
+        sniper=(BYTE)weapon==34;
+    }
+    if(sniper)GameWeaponFireSniper(GetCurrentWeaponSlot(),m_pGamePed);
+    else {
+        GetWeaponAimOffsets(0,&origin,&muzzle);
+        GameWeaponFireInstantHit(GetCurrentWeaponSlot(),m_pGamePed,&origin,&muzzle,0,0,0,0,1);
+    }
+    g_pedFiringContext=0;g_pedFiringData=0;
+    if(m_nPlayerNumber) {
+        *g_aimInternalCameraMode=savedMode;*g_hookCameraModeWord=savedModeWord;
+        AimStuff::ApplyLocalCamera();AimStuff::ApplyLocalAim();AimStuff::ApplyLocalSkills();
+    }
+    return TRUE;
+}
+
+// samp.dll RVA: 0x000aeb90
+void CPed::DrawBoneIds() {
+    if(!g_deviceLabel)return;
+    g_deviceLabel->Begin();
+    CMatrix matrix;
+    for(int bone=0;bone<64;bone++) {
+        GetBoneMatrixById(&matrix,bone);
+        CVector position;memcpy(&position,&matrix.position,12);
+        char text[256];sprintf(text,g_pedBoneIdFormat,bone);
+        g_deviceLabel->Draw(&position,text,0xffffffff,1,0);
+    }
+    g_deviceLabel->End();
+}
+
+// samp.dll RVA: 0x000aec20
+void CPed::DrawMappedBoneIds() {
+    if(!g_deviceLabel)return;
+    g_deviceLabel->Begin();
+    CMatrix matrix;
+    for(int bone=1;bone<=18;bone++) {
+        GetBoneMatrix(&matrix,bone);
+        CVector position;memcpy(&position,&matrix.position,12);
+        char text[256];sprintf(text,g_pedBoneIdFormat,bone);
+        g_deviceLabel->Draw(&position,text,0xffffffff,1,0);
+    }
+    g_deviceLabel->End();
+}
+
+// samp.dll RVA: 0x000aecf0
+void CPed::DrawAnimationFrameIds() {
+    if(!g_deviceLabel)return;
+    CMatrix matrix;GetMatrix(&matrix);
+    g_deviceLabel->Begin();
+    for(int bone=0;bone<30;bone++) {
+        BYTE *frame=(BYTE*)GetBoneQuaternion(bone);
+        if(!frame)continue;
+        CVector position;GameTransformPoint(&position,&matrix,(CVector*)(frame+0x10));
+        char text[256];sprintf(text,g_pedBoneIdFormat,bone);
+        g_deviceLabel->Draw(&position,text,0xffffffff,1,0);
+    }
+    g_deviceLabel->End();
+}
+
+// samp.dll RVA: 0x000aedf0
+void CPed::UpdateAndDrawBoneIds() {
+    UpdateBoneMatrices();
+    DrawBoneIds();
+}
+
+// samp.dll RVA: 0x000b0d90
+void CPed::ProcessAimMarker() {
+    CVector position;
+    if(GetAimHit(&position)) {
+        if(!unknown2f9) {
+            CVector rotation={0,0,0};srand((unsigned)time(0));
+            CObject *object=g_pGame->NewObject(19282,0,0,0,rotation,200.0f,0,0);
+            unknown2f9=(DWORD)object;
+            object->SetCollisionFlag(0);
+            ((CEntity*)unknown2f9)->Add();
+        }
+        ((CEntity*)unknown2f9)->Teleport(position);
+    } else if(unknown2f9) {
+        delete (CObject*)unknown2f9;
+        unknown2f9=0;
+    }
+}
+
+// samp.dll RVA: 0x000afb10
+void CPed::ClearAimTarget() {
+    void *ped=m_pGamePed;
+    if(!ped)return;
+    if(!*(DWORD*)((BYTE*)ped+0x500)&&!m_lastDanceMove)return;
+    m_lastDanceMove=0;
+    // GTA SA virtual address: native thiscall backend, no arguments.
+    __asm {
+        mov ecx,ped
+        mov eax,5e6010h
+        call eax
+    }
 }
