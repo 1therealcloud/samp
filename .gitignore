@@ -14,3 +14,4 @@
 !/third-party/detours
 !/build.cmd
 !/build-libs.cmd
+!/STATUS.md
