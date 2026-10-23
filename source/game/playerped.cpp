@@ -1787,3 +1787,215 @@ void CPed::AddAccessory(int index,const PedAccessoryState *info) {
     ((CObject*)m_accessoryObjects[index])->SetCollisionFlag(FALSE);
     m_accessoryOccupied[index]=1;
 }
+
+#include "net/playerpool.h"
+#include "net/vehiclepool.h"
+// samp.dll RVA: 0x0011f094
+const Scripting::OpcodeInfo g_pedBehaviorWalkStyleCommand={0x245,"is"};
+// samp.dll RVA: 0x0011f030
+const Scripting::OpcodeInfo g_pedBehaviorDrivebyCommand={0x713,"iiiffffiii"};
+// samp.dll RVA: 0x0011efa4
+const Scripting::OpcodeInfo g_pedBehaviorCreateObjectCommand={0x107,"ifffv"};
+// samp.dll RVA: 0x0011f120
+const Scripting::OpcodeInfo g_pedBehaviorAttachCommand={0x69b,"iiffffff"};
+// samp.dll RVA: 0x0011f134
+const Scripting::OpcodeInfo g_pedBehaviorObjectFlagCommand={0x750,"ii"};
+// samp.dll RVA: 0x0011f170
+const Scripting::OpcodeInfo g_pedBehaviorObjectScalarCommand={0x8d2,"if"};
+// samp.dll RVA: 0x0011f10c
+const Scripting::OpcodeInfo g_pedBehaviorObjectAnimationCommand={0x75a,"issfii"};
+// samp.dll RVA: 0x0011efb8
+const Scripting::OpcodeInfo g_pedBehaviorEffectCommand={0x18c,"fffi"};
+// samp.dll RVA: 0x0011f314
+const char g_pedParachuteOpen[10]="PARA_OPEN";
+// samp.dll RVA: 0x0011f308
+const char g_pedParachuteDecel[11]="PARA_DECEL";
+// samp.dll RVA: 0x0011f2ec
+const char g_pedParachuteFloat[11]="PARA_FLOAT";
+// samp.dll RVA: 0x0011f2d0
+const char g_pedParachuteSteerRight[12]="PARA_STEERR";
+// samp.dll RVA: 0x0011f2b4
+const char g_pedParachuteSteerLeft[12]="PARA_STEERL";
+// samp.dll RVA: 0x0011f294
+const char g_pedParachuteLandWater[16]="PARA_LAND_WATER";
+// samp.dll RVA: 0x0011f268
+const char g_pedParachuteOpenObject[12]="PARA_OPEN_O";
+// samp.dll RVA: 0x0011f2f8
+const char g_pedParachuteDecelObject[13]="PARA_DECEL_O";
+// samp.dll RVA: 0x0011f2dc
+const char g_pedParachuteFloatObject[13]="PARA_FLOAT_O";
+// samp.dll RVA: 0x0011f2c0
+const char g_pedParachuteSteerRightObject[14]="PARA_STEERR_O";
+// samp.dll RVA: 0x0011f2a4
+const char g_pedParachuteSteerLeftObject[14]="PARA_STEERL_O";
+// samp.dll RVA: 0x0011f280
+const char g_pedParachuteLandWaterObject[18]="PARA_LAND_WATER_O";
+// samp.dll RVA: 0x0011a928
+const double g_pedParachuteOne=1.0;
+// samp.dll RVA: 0x0011f278
+const double g_pedParachuteOpeningSpeed=1000.0;
+// samp.dll RVA: 0x0011f260
+const double g_pedDrivebyDistance=300.0;
+
+// samp.dll RVA: 0x000ac470
+BYTE CPed::GetDeathInfo(WORD *killer) {
+    if(g_pNetGame) {
+        BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
+        CVehiclePool *vehicles=*(CVehiclePool**)(pools+0xc);
+        CPlayerPool *players=*(CPlayerPool**)(pools+8);
+        BYTE *ped=(BYTE*)m_pGamePed;
+        if(ped) {
+            BYTE reason=ped[0x760];
+            if(reason==53){*killer=0xffff;return reason;}
+            bool direct=reason<43||reason==50||reason==51;
+            if(direct||reason==49||reason==54) {
+                void *damager=*(void**)(ped+0x764);
+                if(damager) {
+                    if(direct) {
+                        WORD id=players->Find(damager);
+                        if(id!=0xffff){*killer=id;return reason;}
+                        damager=*(void**)((BYTE*)m_pGamePed+0x764);
+                    }
+                    if(vehicles->Find(damager)!=0xffff) {
+                        BYTE *vehicle=*(BYTE**)((BYTE*)m_pGamePed+0x764);
+                        WORD id=players->Find(*(void**)(vehicle+0x460));
+                        if(id!=0xffff){*killer=id;return reason;}
+                    } else if(reason==54){*killer=0xffff;return reason;}
+                }
+            }
+        }
+    }
+    *killer=0xffff;return 0xff;
+}
+// samp.dll RVA: 0x000acbb0
+BOOL CPed::EnablePassengerDrivebyMode() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped||!(*(DWORD*)(ped+0x46c)&0x100)||!*(void**)(ped+0x58c))return FALSE;
+    DWORD weapon=GetCurrentWeapon()&0xff;
+    if(weapon==46){SetArmedWeapon(0,0);return FALSE;}
+    SetArmedWeapon(weapon,0);
+    Scripting::ProcessCommand(&g_pedBehaviorDrivebyCommand,m_nHandle,-1,-1,
+        g_pedParachuteZero,g_pedParachuteZero,g_pedParachuteZero,g_pedDrivebyDistance,8,1,20);
+    return TRUE;
+}
+// samp.dll RVA: 0x000acdf0
+void CPed::SetWalkStyle(const char *name) {
+    if(m_pGamePed)Scripting::ProcessCommand(&g_pedBehaviorWalkStyleCommand,m_nHandle,name);
+}
+// samp.dll RVA: 0x000ad0f0
+BOOL CPed::OpenParachute() {
+    if(m_parachuteObject)return TRUE;
+    CMatrix matrix;GetMatrix(&matrix);
+    Scripting::ProcessCommand(&g_pedBehaviorCreateObjectCommand,3131,
+        (double)matrix.position.x,(double)matrix.position.y,(double)matrix.position.z,&m_parachuteObject);
+    if(!GamePoolObjectGetAt(m_parachuteObject)){m_parachuteObject=0;return FALSE;}
+    Scripting::ProcessCommand(&g_pedBehaviorAttachCommand,m_parachuteObject,m_nHandle,
+        g_pedParachuteZero,g_pedParachuteZero,g_pedParachuteZero,
+        g_pedParachuteZero,g_pedParachuteZero,g_pedParachuteZero);
+    Scripting::ProcessCommand(&g_pedBehaviorObjectFlagCommand,m_parachuteObject,0);
+    Scripting::ProcessCommand(&g_pedBehaviorObjectScalarCommand,m_parachuteObject,g_pedParachuteZero);
+    Scripting::ProcessCommand(&g_pedBehaviorObjectAnimationCommand,m_parachuteObject,
+        g_pedParachuteOpenObject,g_gameParachuteLibrary,g_pedParachuteOpeningSpeed,0,1);
+    Scripting::ProcessCommand(&g_pedBehaviorObjectFlagCommand,m_parachuteObject,1);
+    Scripting::ProcessCommand(&g_pedBehaviorObjectScalarCommand,m_parachuteObject,g_pedParachuteOne);
+    return TRUE;
+}
+// samp.dll RVA: 0x000ad240
+void CPed::ProcessParachuteEvent(const char *name) {
+    if(!m_pGamePed||!GamePoolPedGetAt(m_nHandle))return;
+    DWORD weapon;Scripting::ProcessCommand(&g_pedGetCurrentWeaponCommand,m_nHandle,&weapon);
+    if((BYTE)weapon!=46)return;
+    if(!strcmp(name,g_pedParachuteOpen)) {
+        if(!OpenParachute())return;
+        CMatrix matrix;GetMatrix(&matrix);
+        if(!GameFindLocalPed())return;
+        const float *local=(const float*)(*(BYTE**)((BYTE*)GameFindLocalPed()+0x14)+0x30);
+        const float *position=(const float*)&matrix.position;
+        double effectX,effectY,effectZ;
+        __asm {
+            mov eax,position
+            mov edx,local
+            fld dword ptr [eax]
+            fsub dword ptr [edx]
+            fmul g_objectMutationStep
+            fadd dword ptr [edx]
+            fld dword ptr [eax+4]
+            fsub dword ptr [edx+4]
+            fmul g_objectMutationStep
+            fadd dword ptr [edx+4]
+            fld dword ptr [eax+8]
+            fsub dword ptr [edx+8]
+            fmul g_objectMutationStep
+            fadd dword ptr [edx+8]
+            fstp effectZ
+            fstp effectY
+            fstp effectX
+        }
+        Scripting::ProcessCommand(&g_pedBehaviorEffectCommand,effectX,effectY,effectZ,1039);
+        return;
+    }
+    const char *animation=0;int loop=1;
+    if(!strcmp(name,g_pedParachuteDecel))animation=g_pedParachuteDecelObject;
+    else if(!strcmp(name,g_pedParachuteFloat))animation=g_pedParachuteFloatObject;
+    else if(!strcmp(name,g_pedParachuteSteerRight))animation=g_pedParachuteSteerRightObject;
+    else if(!strcmp(name,g_pedParachuteSteerLeft))animation=g_pedParachuteSteerLeftObject;
+    else if(!strcmp(name,g_pedParachuteLandWater)){animation=g_pedParachuteLandWaterObject;loop=0;}
+    if(animation&&OpenParachute())Scripting::ProcessCommand(&g_pedBehaviorObjectAnimationCommand,
+        m_parachuteObject,animation,g_gameParachuteLibrary,g_pedParachuteOne,loop,1);
+}
+
+// samp.dll RVA: 0x0011f3a8
+const double g_pedStuffOffset1X=0.05000000074505806;
+// samp.dll RVA: 0x0011f3b0
+const double g_pedStuffOffset1Y=0.029999999329447746;
+// samp.dll RVA: 0x0011f3b8
+const double g_pedStuffOffset1Z=-0.30000001192092896;
+// samp.dll RVA: 0x0011f3a0
+const double g_pedStuffOffset2Z=-0.05000000074505806;
+// samp.dll RVA: 0x0011f390
+const double g_pedStuffOffset3X=0.03999999910593033;
+// samp.dll RVA: 0x0011c988
+const double g_pedStuffOffset3Y=0.10000000149011612;
+// samp.dll RVA: 0x0011f398
+const double g_pedStuffOffset3Z=-0.019999999552965164;
+
+// samp.dll RVA: 0x000afcb0
+void CPed::ProcessDancing() {
+    if(!unknown2d2||!m_pGamePed||!CEntity::DoesExist()||m_nPlayerNumber)return;
+    KeyPad *keys=KeyStuff::GetInternalKeys();
+    short vertical=(short)keys->keys2[1],horizontal=(short)keys->keys2[0];
+    if(!PerformingCustomAnimation()) {
+        DWORD style=*(DWORD*)unknown2d6;
+        ApplyAnimation(g_pedDanceNames[style],g_pedDanceLibraries[style],4.0f,1,0,0,0,0);
+    }
+    bool alternate=keys->keys1[16]!=0;int move;
+    if(vertical>0)move=horizontal<0?4:horizontal>0?5:0;
+    else if(vertical<0)move=horizontal<0?6:horizontal>0?7:1;
+    else if(horizontal<0)move=2;
+    else if(horizontal>0)move=3;
+    else return;
+    if(alternate)move+=8;
+    DWORD *last=(DWORD*)(unknown2d6+4);if(*last==(DWORD)move)return;
+    *last=move;const char *animation=GetAnimationForDance(move);
+    if(animation) {
+        DWORD style=*(DWORD*)unknown2d6;
+        ApplyAnimation(animation,g_pedDanceLibraries[style],4.0f,0,0,0,0,0);
+    }
+}
+// samp.dll RVA: 0x000afed0
+void CPed::GiveStuff(int type) {
+    if(m_stuffObject)DropStuff();
+    CMatrix matrix;GetMatrix(&matrix);
+    int model;double x,y,z;
+    if(type==4){model=1485;x=g_pedParachuteZero;y=g_pedParachuteZero;z=g_pedParachuteZero;}
+    else if(type==1){model=1543;x=g_pedStuffOffset1X;y=g_pedStuffOffset1Y;z=g_pedStuffOffset1Z;}
+    else if(type==2){model=1486;x=g_pedStuffOffset1X;y=g_pedStuffOffset1Y;z=g_pedStuffOffset2Z;}
+    else if(type==3){model=1546;x=g_pedStuffOffset3X;y=g_pedStuffOffset3Y;z=g_pedStuffOffset3Z;}
+    else return;
+    Scripting::ProcessCommand(&g_pedBehaviorCreateObjectCommand,model,
+        (double)matrix.position.x,(double)matrix.position.y,(double)matrix.position.z,&m_stuffObject);
+    if(!GamePoolObjectGetAt(m_stuffObject)){m_stuffObject=0;return;}
+    Scripting::ProcessCommand(&g_pedDropStuff,m_nHandle,m_stuffObject,x,y,z,
+        6,16,g_pedNullAnimation,g_pedNullAnimation,-1);
+    m_stuffType=type;
+}

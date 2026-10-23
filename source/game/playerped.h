@@ -13,6 +13,21 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // samp.dll RVA: 0x000afcb0
+    void ProcessDancing();
+    // samp.dll RVA: 0x000afed0
+    void GiveStuff(int type);
+    // samp.dll RVA: 0x000ac470
+    BYTE GetDeathInfo(WORD *killer);
+    // True native entry verified from opcode0713 references; API ACF90 is interior code.
+    // samp.dll RVA: 0x000acbb0
+    BOOL EnablePassengerDrivebyMode();
+    // samp.dll RVA: 0x000acdf0
+    void SetWalkStyle(const char *name);
+    // samp.dll RVA: 0x000ad0f0
+    BOOL OpenParachute();
+    // samp.dll RVA: 0x000ad240
+    void ProcessParachuteEvent(const char *name);
     // samp.dll RVA: 0x000ab900
     BOOL IsOnScreen();
     // samp.dll RVA: 0x000ad5a0
@@ -304,3 +319,93 @@ extern const Scripting::OpcodeInfo g_pedGetPlayerHandleCommand;
 extern const Scripting::OpcodeInfo g_pedCommand03fe;
 // samp.dll RVA: 0x0011f388
 extern const float g_pedSpawnLift;
+
+// samp.dll RVA: 0x0011f094
+extern const Scripting::OpcodeInfo g_pedBehaviorWalkStyleCommand;
+
+// samp.dll RVA: 0x0011f030
+extern const Scripting::OpcodeInfo g_pedBehaviorDrivebyCommand;
+
+// samp.dll RVA: 0x0011efa4
+extern const Scripting::OpcodeInfo g_pedBehaviorCreateObjectCommand;
+
+// samp.dll RVA: 0x0011f120
+extern const Scripting::OpcodeInfo g_pedBehaviorAttachCommand;
+
+// samp.dll RVA: 0x0011f134
+extern const Scripting::OpcodeInfo g_pedBehaviorObjectFlagCommand;
+
+// samp.dll RVA: 0x0011f170
+extern const Scripting::OpcodeInfo g_pedBehaviorObjectScalarCommand;
+
+// samp.dll RVA: 0x0011f10c
+extern const Scripting::OpcodeInfo g_pedBehaviorObjectAnimationCommand;
+
+// samp.dll RVA: 0x0011efb8
+extern const Scripting::OpcodeInfo g_pedBehaviorEffectCommand;
+
+// samp.dll RVA: 0x0011f314
+extern const char g_pedParachuteOpen[10];
+
+// samp.dll RVA: 0x0011f308
+extern const char g_pedParachuteDecel[11];
+
+// samp.dll RVA: 0x0011f2ec
+extern const char g_pedParachuteFloat[11];
+
+// samp.dll RVA: 0x0011f2d0
+extern const char g_pedParachuteSteerRight[12];
+
+// samp.dll RVA: 0x0011f2b4
+extern const char g_pedParachuteSteerLeft[12];
+
+// samp.dll RVA: 0x0011f294
+extern const char g_pedParachuteLandWater[16];
+
+// samp.dll RVA: 0x0011f268
+extern const char g_pedParachuteOpenObject[12];
+
+// samp.dll RVA: 0x0011f2f8
+extern const char g_pedParachuteDecelObject[13];
+
+// samp.dll RVA: 0x0011f2dc
+extern const char g_pedParachuteFloatObject[13];
+
+// samp.dll RVA: 0x0011f2c0
+extern const char g_pedParachuteSteerRightObject[14];
+
+// samp.dll RVA: 0x0011f2a4
+extern const char g_pedParachuteSteerLeftObject[14];
+
+// samp.dll RVA: 0x0011f280
+extern const char g_pedParachuteLandWaterObject[18];
+
+// samp.dll RVA: 0x0011a928
+extern const double g_pedParachuteOne;
+
+// samp.dll RVA: 0x0011f278
+extern const double g_pedParachuteOpeningSpeed;
+
+// samp.dll RVA: 0x0011f260
+extern const double g_pedDrivebyDistance;
+
+// samp.dll RVA: 0x0011f3a8
+extern const double g_pedStuffOffset1X;
+
+// samp.dll RVA: 0x0011f3b0
+extern const double g_pedStuffOffset1Y;
+
+// samp.dll RVA: 0x0011f3b8
+extern const double g_pedStuffOffset1Z;
+
+// samp.dll RVA: 0x0011f3a0
+extern const double g_pedStuffOffset2Z;
+
+// samp.dll RVA: 0x0011f390
+extern const double g_pedStuffOffset3X;
+
+// samp.dll RVA: 0x0011c988
+extern const double g_pedStuffOffset3Y;
+
+// samp.dll RVA: 0x0011f398
+extern const double g_pedStuffOffset3Z;
