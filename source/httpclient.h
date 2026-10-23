@@ -1,0 +1,124 @@
+#ifndef SAMP_HTTPCLIENT_H
+#define SAMP_HTTPCLIENT_H
+#include <winsock.h>
+#pragma pack(push,1)
+//----------------------------------------------------
+//
+//	HTTP/1.0 Client Procedures Header.
+//	(c) 2002-2005 Kye Bitossi
+//
+//  Version: $Id: httpclient.h,v 1.3 2006/03/20 17:44:19 kyeman Exp $
+//
+//----------------------------------------------------
+
+#define HTTP_GET			1
+#define HTTP_POST			2
+#define HTTP_HEAD			3
+
+//----------------------------------------------------
+
+#define MAX_ENTITY_LENGTH	500000
+
+//----------------------------------------------------
+
+#define HTTP_SUCCESS					0
+#define HTTP_ERROR_BAD_HOST				1
+#define HTTP_ERROR_NO_SOCKET			2
+#define HTTP_ERROR_CANT_CONNECT			3
+#define HTTP_ERROR_CANT_WRITE			4
+#define HTTP_ERROR_CONTENT_TOO_BIG		5
+#define HTTP_ERROR_MALFORMED_RESPONSE	6
+
+//----------------------------------------------------
+
+#define CONTENT_TYPE_UNKNOWN		    0
+#define CONTENT_TYPE_TEXT				1
+#define CONTENT_TYPE_HTML				2
+
+//----------------------------------------------------
+
+#define USER_AGENT  "SAMP/0.2.0"
+#define GET_FORMAT  "GET %s HTTP/1.0\r\nAccept: */*\r\nUser-Agent: %s\r\nReferer: http://%s\r\nHost: %s\r\n\r\n"
+#define POST_FORMAT "POST %s HTTP/1.0\r\nAccept: */*\r\nUser-Agent: %s\r\nReferer: http://%s\r\nHost: %s\r\nContent-type: application/x-www-form-urlencoded\r\nContent-length: %u\r\n\r\n%s"
+#define HEAD_FORMAT "HEAD %s HTTP/1.0\r\nAccept: */*\r\nUser-Agent: %s\r\nReferer: http://%s\r\nHost: %s\r\n\r\n"
+
+//----------------------------------------------------
+
+typedef struct{
+	unsigned short port;	/* remote port */
+	int		rtype;			/* request type */
+	char *  host;			/* hostname */
+	char *	file;			/* GET/POST request file */
+	char *	data;			/* POST data (if rtype HTTP_POST) */
+	char *	referer;		/* http referer. */
+} HTTP_REQUEST;
+
+//----------------------------------------------------
+
+typedef struct{
+	char *			header;
+	char *			response;
+	unsigned int	header_len;
+	unsigned long	response_len;
+	unsigned int	response_code;
+	unsigned int	content_type;
+} HTTP_RESPONSE;
+
+//----------------------------------------------------
+
+class CHttpClient
+{
+private:
+
+	int				m_iSocket;
+	HTTP_REQUEST	m_Request;
+	HTTP_RESPONSE	m_Response;
+	int				m_iError;
+
+	// samp.dll RVA: 0x000029d0
+	bool Connect(char *szHost, int iPort);
+	// samp.dll RVA: 0x00002470
+	void CloseConnection();
+	// samp.dll RVA: 0x00002480
+	bool Send(char *szData);
+	// samp.dll RVA: 0x000024c0
+	int  Recv(char *szBuffer, int iBufferSize);
+
+	// samp.dll RVA: 0x000024e0
+    void InitRequest(int iType, char *szURL, char *szPostData, char *szReferer);
+	// samp.dll RVA: 0x000026b0
+	void HandleEntity();
+
+	// samp.dll RVA: 0x00002a90
+	void Process();
+
+public:
+
+	// samp.dll RVA: 0x00002c70
+	int ProcessURL(int iType, char *szURL, char *szData, char *szReferer);
+
+	// samp.dll RVA: 0x000023e0
+	bool GetHeaderValue(char *szHeaderName,char *szReturnBuffer, int iBufSize);
+	// samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+	int GetResponseCode() { return m_Response.response_code; };
+	// samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+	int GetContentType() { return m_Response.content_type; };
+	// samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+	char *GetResponseHeaders() { return m_Response.header; };
+	// samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+	char *GetDocument() { return m_Response.response; };
+	// samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+	int GetDocumentLength() { return m_Response.response_len; };
+
+	// samp.dll RVA: 0x00002310
+	CHttpClient();
+	// samp.dll RVA: 0x00002370
+	~CHttpClient();
+};
+
+//----------------------------------------------------
+#pragma pack(pop)
+typedef char HttpRequestExtent[(sizeof(HTTP_REQUEST)==22)?1:-1];
+typedef char HttpResponseExtent[(sizeof(HTTP_RESPONSE)==24)?1:-1];
+typedef char HttpClientExtent[(sizeof(CHttpClient)==54)?1:-1];
+#endif

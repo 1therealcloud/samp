@@ -1,6 +1,6 @@
 // Utility procedures derived from the supplied SA-MP 0.2x reference.
 // Original copyright (c) 2005 Kye Bitossi.
-// Only functions with independently verified 0.3.DL-R1 machine-code matches.
+// Recovered against 0.3.DL-R1 instructions; verification scope is recorded in analysis.
 
 #include "runutil.h"
 #include <string.h>
@@ -163,4 +163,79 @@ char * K_DecodeString(unsigned char *szInput)
 	}
 
 	return st;
+}
+
+// samp.dll RVA: 0x00118230
+const char g_base64Alphabet[66]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+// samp.dll RVA: 0x0013c4b4
+const char *g_base64Encoding=g_base64Alphabet;
+
+// samp.dll RVA: 0x00017380
+char *Util_stristr(const char *String, const char *Pattern)
+{
+	char *pptri, *sptri, *starti;
+
+      for (starti=(char *)String; *starti != '\0'; starti++)
+      {
+
+            /* find start of pattern in string */
+            for (;((*starti!='\0') && (Util_toupper(*starti) != Util_toupper(*Pattern))); starti++);
+
+            pptri = (char *)Pattern;
+            sptri = (char *)starti;
+
+            while (Util_toupper(*sptri) == Util_toupper(*pptri))
+            {
+                  sptri++;
+                  pptri++;
+
+                  /* if end of pattern then pattern was found */
+                  if ('\0' == *pptri)
+                        return (starti);
+            }
+
+      }
+
+      return(0);
+}
+
+// samp.dll RVA: 0x000176a0
+void Util_Base64Encode( char *cpInput, char *cpOutput )
+{
+int nIdx[ 4 ];
+while ( '\0' != *cpInput )
+{
+  nIdx[0] = ((*cpInput) & 0xFC)>>2;
+  nIdx[1] = ((*cpInput) & 0x03)<<4;
+  cpInput++;
+  if ( '\0' != *cpInput )
+  {
+    nIdx[1] |= ((*cpInput) & 0xF0)>>4;
+    nIdx[2]  = ((*cpInput) & 0x0F)<<2;
+    cpInput++;
+    if ( '\0' != (*cpInput) )
+    {
+      nIdx[2] |= ((*cpInput) & 0xC0) >> 6;
+      nIdx[3]  = (*cpInput) & 0x3F;
+      cpInput++;
+    }
+    else
+      nIdx[3] = 64;
+  }
+  else
+  {
+    nIdx[2] = 64;
+    nIdx[3] = 64;
+  }
+
+  *(cpOutput+0) = *(g_base64Encoding + nIdx[0]);
+  *(cpOutput+1) = *(g_base64Encoding + nIdx[1]);
+  *(cpOutput+2) = *(g_base64Encoding + nIdx[2]);
+  *(cpOutput+3) = *(g_base64Encoding + nIdx[3]);
+  cpOutput += 4;
+}
+
+*cpOutput = '\0';
+
+return;
 }

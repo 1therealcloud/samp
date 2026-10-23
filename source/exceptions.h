@@ -22,7 +22,6 @@ void ClientDumpMemory(const BYTE *data,int count,char *text,BOOL asDwords);
 void ClientDumpNetworkState(char *text);
 // samp.dll RVA: 0x0005fee0
 void ClientDumpLoadedModules(char *text);
-// Dependency on legacy HTTP client/base64, to return at the networking stage.
 // samp.dll RVA: 0x00060260
 void ClientSendCrashReport();
 #endif

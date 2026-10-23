@@ -40,6 +40,7 @@ set "FLAGS=/nologo /c /O2 /Ob2 /Oi /GF /MT /Zp1 /Gy /GX /GR- /DNDEBUG /DWIN32 /D
 set "INCLUDE=%CD%\build\libs\dxut-sdk;%SYSTEM_INCLUDE%;%CD%\source;%CD%\source\gui;%CD%\source\dxut;%CD%\third-party\RakNet\Include;%CD%\third-party\bass;%CD%\third-party\detours;%CD%\third-party\curl\include;%CD%\third-party\zlib;%CD%\third-party\lzma\C;%CD%\third-party\ttmath"
 for %%F in (
     source\runutil.cpp
+    source\httpclient.cpp
     source\gui\chat_dependencies.cpp
     source\cmdwindow.cpp
     source\fontrender.cpp

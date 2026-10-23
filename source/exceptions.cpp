@@ -9,6 +9,18 @@
 #undef Module32Next
 #include <stdio.h>
 #include <string.h>
+#include "httpclient.h"
+#include "runutil.h"
+// samp.dll RVA: 0x00060260
+void ClientSendCrashReport() {
+    CHttpClient http;
+    char url[256],encoded[16384];
+    ClientConstructCrashText(TRUE);
+    strcpy(encoded,"data=");
+    Util_Base64Encode(g_clientCrashText,encoded+5);
+    sprintf(url,"team.sa-mp.com/report_037.php?addr=0x%X&gta=sa",g_clientExceptionContext->Eip);
+    http.ProcessURL(HTTP_POST,url,encoded,"www.sa-mp.com");
+}
 // samp.dll RVA: 0x0015fa68
 CONTEXT *g_clientExceptionContext;
 // samp.dll RVA: 0x0015fa70
