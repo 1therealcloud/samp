@@ -7,6 +7,115 @@
 #include "net/playerpool.h"
 #include "net/localplayer.h"
 #include "game/playerped.h"
+#include "game/camera.h"
+#include "net/gangzonepool.h"
+// samp.dll RVA: 0x000195d0
+void ScrSetPlayerCameraPosition(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVector position,rotation={0,0,0};stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    g_pGame->m_pCamera->Set(position,rotation);
+}
+// samp.dll RVA: 0x000196a0
+void ScrSetPlayerCameraLookAt(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVector position;BYTE style=0;stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(style);
+    if(style<1||style>2)style=2;
+    g_pGame->m_pCamera->PointAt(position,style);
+}
+// samp.dll RVA: 0x00017b90
+void ScrSetCameraBehindPlayer(RPCParameters *parameters) {(void)parameters;g_pGame->m_pCamera->Restore();}
+// samp.dll RVA: 0x00018e50
+void ScrSetPlayerPosition(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+    if(players) {
+        CLocalPlayer *local=players->local;
+        if(local) {
+            CVector position;stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+            *(DWORD*)(local->nativeState+0x2e6)=0;local->SetSurfingEntity(0,0);
+            (*(CPed**)local->nativeState)->Teleport(position);
+        }
+    }
+}
+// samp.dll RVA: 0x00018f70
+void ScrSetPlayerPositionFindZ(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    CVector position;stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    position.z=g_pGame->FindGroundZ(position.x,position.y,position.z)+1.5f;
+    *(DWORD*)(local->nativeState+0x2e6)=0;local->SetSurfingEntity(0,0);
+    (*(CPed**)local->nativeState)->Teleport(position);
+}
+// samp.dll RVA: 0x00018350
+void ScrSetPlayerVelocity(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVector velocity;stream.Read(velocity.x);stream.Read(velocity.y);stream.Read(velocity.z);
+    CPed *ped=g_pGame->GetPlayerPed();
+    if(ped){if(ped->IsOnGround())ped->SetFlags(ped->GetFlags()^3);ped->SetSpeed(velocity);}
+}
+// samp.dll RVA: 0x00019f40
+void ScrSetPlayerWorldBounds(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+5,32,true);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+9,32,true);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0xd,32,true);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x11,32,true);
+}
+// samp.dll RVA: 0x0001a0d0
+void ScrSetPlayerFacingAngle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    float angle;stream.Read(angle);g_pGame->GetPlayerPed()->SetRotation(angle);
+}
+// samp.dll RVA: 0x00017860
+void ScrEnableStuntBonusForPlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool enabled;stream.Read(enabled);g_pGame->EnableStuntBonus((BYTE)enabled);
+}
+// samp.dll RVA: 0x00017be0
+void ScrForceClassSelection(RPCParameters *parameters) {
+    (void)parameters;CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    *(DWORD*)(local->nativeState+0x2fe)=1;
+}
+// samp.dll RVA: 0x00017bb0
+void ScrResetPlayerWeapons(RPCParameters *parameters) {
+    (void)parameters;CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    (*(CPed**)local->nativeState)->ClearWeapons();
+}
+// samp.dll RVA: 0x0001a170
+void ScrGivePlayerWeapon(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int weapon,ammo;stream.Read(weapon);stream.Read(ammo);
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    (*(CPed**)local->nativeState)->GiveWeapon(weapon,ammo);
+}
+// samp.dll RVA: 0x0001cb40
+void ScrGangZoneCreate(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CGangZonePool *zones=((CNetGame*)g_pNetGame)->pools->gangZones;
+    if(zones) {
+        WORD id;float minX,minY,maxX,maxY;DWORD color;
+        stream.Read(id);stream.Read(minX);stream.Read(minY);stream.Read(maxX);stream.Read(maxY);stream.Read(color);
+        zones->Create(id,minX,minY,maxX,maxY,color);
+    }
+}
+// samp.dll RVA: 0x0001cc60
+void ScrGangZoneDestroy(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CGangZonePool *zones=((CNetGame*)g_pNetGame)->pools->gangZones;
+    if(zones){WORD id;stream.Read(id);zones->Delete(id);}
+}
+// samp.dll RVA: 0x0001cd10
+void ScrGangZoneFlash(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CGangZonePool *zones=((CNetGame*)g_pNetGame)->pools->gangZones;
+    if(zones){WORD id;DWORD color;stream.Read(id);stream.Read(color);zones->StartFlashing(id,color);}
+}
+// samp.dll RVA: 0x0001cdd0
+void ScrGangZoneStopFlash(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CGangZonePool *zones=((CNetGame*)g_pNetGame)->pools->gangZones;
+    if(zones){WORD id;stream.Read(id);zones->StopFlashing(id);}
+}
 // samp.dll RVA: 0x000178f0
 void ScrDisableVehicleCollisions(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);

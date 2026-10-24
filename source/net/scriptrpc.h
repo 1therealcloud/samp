@@ -2,6 +2,38 @@
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x000195d0
+void ScrSetPlayerCameraPosition(RPCParameters *parameters);
+// samp.dll RVA: 0x000196a0
+void ScrSetPlayerCameraLookAt(RPCParameters *parameters);
+// samp.dll RVA: 0x00017b90
+void ScrSetCameraBehindPlayer(RPCParameters *parameters);
+// samp.dll RVA: 0x00018e50
+void ScrSetPlayerPosition(RPCParameters *parameters);
+// samp.dll RVA: 0x00018f70
+void ScrSetPlayerPositionFindZ(RPCParameters *parameters);
+// samp.dll RVA: 0x00018350
+void ScrSetPlayerVelocity(RPCParameters *parameters);
+// samp.dll RVA: 0x00019f40
+void ScrSetPlayerWorldBounds(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a0d0
+void ScrSetPlayerFacingAngle(RPCParameters *parameters);
+// samp.dll RVA: 0x00017860
+void ScrEnableStuntBonusForPlayer(RPCParameters *parameters);
+// samp.dll RVA: 0x00017be0
+void ScrForceClassSelection(RPCParameters *parameters);
+// samp.dll RVA: 0x00017bb0
+void ScrResetPlayerWeapons(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a170
+void ScrGivePlayerWeapon(RPCParameters *parameters);
+// samp.dll RVA: 0x0001cb40
+void ScrGangZoneCreate(RPCParameters *parameters);
+// samp.dll RVA: 0x0001cc60
+void ScrGangZoneDestroy(RPCParameters *parameters);
+// samp.dll RVA: 0x0001cd10
+void ScrGangZoneFlash(RPCParameters *parameters);
+// samp.dll RVA: 0x0001cdd0
+void ScrGangZoneStopFlash(RPCParameters *parameters);
 // samp.dll RVA: 0x000178f0
 void ScrDisableVehicleCollisions(RPCParameters *parameters);
 // samp.dll RVA: 0x0001a800
