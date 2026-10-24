@@ -8,6 +8,98 @@
 #include "BitStream.h"
 #include "main.h"
 #include "net/pickuppool.h"
+#include "net/playerpool.h"
+#include "net/localplayer.h"
+#include "net/remoteplayer.h"
+#include "net/playerinfo.h"
+#include "game/playerped.h"
+#include "gui/render_dependencies.h"
+#include "svrnetstats.h"
+#include "chatwindow.h"
+#include "StringCompressor.h"
+#include <string.h>
+// samp.dll RVA: 0x0000f4b0
+void ScrSetPlayerSkillLevel(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD player,value;int skill;stream.Read(player);stream.Read(skill);stream.Read(value);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(pool) {
+        CPed *ped;
+        if(player==pool->localId){ped=g_pGame->GetPlayerPed();if(!ped)return;}
+        else {
+            if(player>=1004||!pool->connected[player]||!pool->players[player])return;
+            CRemotePlayer *remote=pool->players[player]->remote;
+            if(!remote||!remote->IsActive())return;ped=*(CPed**)(remote->nativeState+4);
+        }
+        ped->SetWeaponSkill(skill,value);
+    }
+}
+// samp.dll RVA: 0x0000f5e0
+void ScrCreate3DTextLabel(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CLabelPool *pool=((CNetGame*)g_pNetGame)->pools->labels;
+    if(pool) {
+        char text[2049]={0};WORD id,player,vehicle;DWORD color;CVector position;float distance;BYTE behindWalls=0;
+        stream.Read(id);stream.Read(color);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+        stream.Read(distance);stream.Read(behindWalls);stream.Read(player);stream.Read(vehicle);
+        StringCompressor::Instance()->DecodeString(text,2048,&stream,0);
+        if(id<2048)pool->Create(id,text,color,position,distance,behindWalls,player,vehicle);
+    }
+}
+// samp.dll RVA: 0x0000f790
+void ScrDestroy3DTextLabel(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CLabelPool *pool=((CNetGame*)g_pNetGame)->pools->labels;
+    if(pool){WORD id;stream.Read(id);if(id<2048&&pool->active[id])pool->Delete(id);}
+}
+// samp.dll RVA: 0x0000f850
+void ScrChatBubble(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(!g_pNetGame)return;CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;if(!pool)return;
+    char text[257]={0};WORD player;DWORD color;float distance;int lifespan;BYTE length;
+    stream.Read(player);stream.Read(color);stream.Read(distance);stream.Read(lifespan);stream.Read(length);
+    if(length<145) {
+        stream.Read(text,length);text[length]=0;
+        if(player<1004&&pool->connected[player])g_renderChatBubble->Add(player,text,color,distance,lifespan);
+    }
+}
+// samp.dll RVA: 0x0000f9c0
+void ScrShowDialog(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char title[257]={0},button1[257]={0},button2[257]={0},text[4097]={0};short id;BYTE type,length;
+    stream.Read(id);stream.Read(type);stream.Read(length);stream.Read(title,length);
+    stream.Read(length);stream.Read(button1,length);stream.Read(length);stream.Read(button2,length);
+    StringCompressor::Instance()->DecodeString(text,4096,&stream,0);
+    if(strlen(title)&&strlen(text))g_renderDialog->Show(id,type,title,text,button1,button2,TRUE);
+}
+// samp.dll RVA: 0x0000ee60
+void ScrClientMessage(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char text[256]={0};DWORD color,length;stream.Read(color);stream.Read(length);
+    if(length<256){stream.Read(text,length);text[length]=0;g_pChat->AddMessage(color,text);}
+}
+// samp.dll RVA: 0x0000fbb0
+void ScrServerJoin(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    char name[256]={0};WORD player;DWORD color;BYTE npc=0,length=0;DWORD npcFlag=0;
+    stream.Read(player);stream.Read(color);stream.Read(npc);stream.Read(length);stream.Read(name,length);name[length]=0;
+    if(strlen(name)<25) {
+        if(npc)npcFlag=1;pool->Create(player,name,npcFlag);
+        if(color&&player<1004&&pool->connected[player])pool->GetPlayer(player)->SetColor(color);
+    }
+}
+// samp.dll RVA: 0x0000fd40
+void ScrServerQuit(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    WORD player;BYTE reason;stream.Read(player);stream.Read(reason);pool->Delete(player,reason);
+}
+// samp.dll RVA: 0x0000e450
+void SrvNetStats(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    stream.Read((char*)g_srvNetStatsHistory,0x128);
+}
 // samp.dll RVA: 0x00010040
 void ScrSetCheckpoint(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);

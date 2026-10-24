@@ -2,6 +2,24 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0000f4b0
+void ScrSetPlayerSkillLevel(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f5e0
+void ScrCreate3DTextLabel(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f790
+void ScrDestroy3DTextLabel(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f850
+void ScrChatBubble(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f9c0
+void ScrShowDialog(RPCParameters *parameters);
+// samp.dll RVA: 0x0000ee60
+void ScrClientMessage(RPCParameters *parameters);
+// samp.dll RVA: 0x0000fbb0
+void ScrServerJoin(RPCParameters *parameters);
+// samp.dll RVA: 0x0000fd40
+void ScrServerQuit(RPCParameters *parameters);
+// samp.dll RVA: 0x0000e450
+void SrvNetStats(RPCParameters *parameters);
 // samp.dll RVA: 0x00010040
 void ScrSetCheckpoint(RPCParameters *parameters);
 // samp.dll RVA: 0x00010150

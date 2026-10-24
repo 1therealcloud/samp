@@ -14,6 +14,47 @@
 #include "game/audio.h"
 #include "gui/render_dependencies.h"
 #include "chatwindow.h"
+#include "net/playerinfo.h"
+#include "net/remoteplayer.h"
+#include "gui/device_lifecycle.h"
+// samp.dll RVA: 0x00019420
+void ScrDisplayGametext(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char text[256]={0};int style,time,length;stream.Read(style);stream.Read(time);stream.Read(length);
+    if(length>0&&length<201){stream.Read(text,length);text[length]=0;g_pGame->DisplayGameText(text,time,style);}
+}
+// samp.dll RVA: 0x00017960
+void ScrSetPlayerShopName(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char name[33]={0};stream.Read(name,32);CPed *ped=g_pGame->GetPlayerPed();
+    if(ped){if(strlen(name)){ped->SetBackendShoppingName(name);ped->LoadShoppingDataSubsection(name);}
+        else {ped->SetBackendShoppingName(0);ped->LoadShoppingDataSubsection("");}}
+}
+// samp.dll RVA: 0x00019330
+void ScrSetPlayerColor(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;WORD player;DWORD color;stream.Read(player);stream.Read(color);
+    if(player==pool->localId)pool->local->SetColor(color);
+    // Native admits1004; adjacency beyond players[] remains unproven.
+    else if(player<=1004){CPlayerInfo *info=pool->players[player];if(info&&info->remote)info->remote->SetColor(color);}
+}
+// samp.dll RVA: 0x0001d830
+void ScrDeathMessage(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;WORD killer,victim;BYTE weapon;
+    stream.Read(killer);stream.Read(victim);stream.Read(weapon);if(victim==0xffff)return;
+    const char *killerName=0,*victimName=0;DWORD killerColor=0,victimColor=0;
+    if(killer!=0xffff) {
+        if(killer==pool->localId){killerName=pool->localName.c_str();killerColor=pool->local->GetColorAsARGB();}
+        else if(killer<1004&&pool->connected[killer]){killerName=pool->GetName(killer);killerColor=pool->GetPlayer(killer)->GetColorAsARGB();}
+    }
+    if(victim==pool->localId){victimName=pool->localName.c_str();victimColor=pool->local->GetColorAsARGB();}
+    else if(victim<1004&&pool->connected[victim]) {
+        victimName=pool->GetName(victim);CPlayerInfo *info=pool->players[victim];
+        CRemotePlayer *remote=info?info->remote:0;victimColor=remote->GetColorAsARGB();
+    }
+    if(g_deviceDeathWindow)((CDeathWindow*)g_deviceDeathWindow)->AddMessage(killerName,victimName,killerColor,victimColor,weapon);
+}
 // samp.dll RVA: 0x00118494
 const char g_rpcLargeTextDrawWarning[]="Warning: ignoring large TextDraw size=%u";
 // samp.dll RVA: 0x0001c390

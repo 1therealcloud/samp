@@ -2,6 +2,14 @@
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x00019420
+void ScrDisplayGametext(RPCParameters *parameters);
+// samp.dll RVA: 0x00017960
+void ScrSetPlayerShopName(RPCParameters *parameters);
+// samp.dll RVA: 0x00019330
+void ScrSetPlayerColor(RPCParameters *parameters);
+// samp.dll RVA: 0x0001d830
+void ScrDeathMessage(RPCParameters *parameters);
 // samp.dll RVA: 0x0001c390
 void ScrInitMenu(RPCParameters *parameters);
 // samp.dll RVA: 0x0001c650
