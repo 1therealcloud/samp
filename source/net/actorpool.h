@@ -16,6 +16,12 @@ class CActorPool {
     DWORD state2ee4[1000];
     DWORD state3e84[1000];
 public:
+    // Verified entry; external SAMP-API1615 points inside its first comparison.
+    // samp.dll RVA: 0x00001610
+    CActor *Get(WORD id);
+    // Raw active DWORD, not normalized to bool.
+    // samp.dll RVA: 0x00001640
+    BOOL DoesExist(WORD id);
     // Fourth parameter is copied into native ray records; semantic role unresolved.
     // samp.dll RVA: 0x00001770
     WORD FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord);

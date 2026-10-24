@@ -19,6 +19,19 @@
 #include "StringCompressor.h"
 #include <string.h>
 #include "net/vehiclepool.h"
+#include "net/actorpool.h"
+// samp.dll RVA: 0x0000e940
+void ScrCreateActor(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;
+    if(pool){ActorCreateInfo info={0};stream.Read((char*)&info,31);
+        if(GameIsPedModel(info.model)){pool->Create(&info);(void)pool->Get(info.id);}}
+}
+// samp.dll RVA: 0x00011cd0
+void ScrDestroyActor(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;if(pool){WORD id;stream.Read(id);pool->Delete(id);}
+}
 // samp.dll RVA: 0x00011090
 void DamageVehicle(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);

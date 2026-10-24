@@ -2,6 +2,38 @@
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
 struct RPCParameters;
+namespace Scripting {struct OpcodeInfo;}
+// samp.dll RVA: 0x0011829c
+extern const Scripting::OpcodeInfo g_rpcExplosionCommand;
+// samp.dll RVA: 0x0001b540
+void ScrSetObjectPosition(RPCParameters *parameters);
+// samp.dll RVA: 0x0001b650
+void ScrSetObjectRotation(RPCParameters *parameters);
+// samp.dll RVA: 0x0001b750
+void ScrDestroyObject(RPCParameters *parameters);
+// samp.dll RVA: 0x0001ba30
+void ScrMoveObject(RPCParameters *parameters);
+// samp.dll RVA: 0x0001bbe0
+void ScrStopObject(RPCParameters *parameters);
+// samp.dll RVA: 0x0001d210
+void ScrSetActorAnimation(RPCParameters *parameters);
+// Descriptive name established by RPC174 and the actor ClearTasks call.
+// samp.dll RVA: 0x0001d3f0
+void ScrClearActorAnimations(RPCParameters *parameters);
+// samp.dll RVA: 0x0001d4b0
+void ScrSetActorRotation(RPCParameters *parameters);
+// samp.dll RVA: 0x0001d590
+void ScrSetActorPosition(RPCParameters *parameters);
+// samp.dll RVA: 0x0001d6a0
+void ScrSetActorHealth(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a2c0
+void ScrSetPlayerMapIcon(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a3e0
+void ScrRemovePlayerMapIcon(RPCParameters *parameters);
+// samp.dll RVA: 0x0001b840
+void ScrCreateExplosion(RPCParameters *parameters);
+// samp.dll RVA: 0x0001b950
+void ScrShowPlayerNametagForPlayer(RPCParameters *parameters);
 // samp.dll RVA: 0x000197a0
 void ScrSetVehiclePosition(RPCParameters *parameters);
 // samp.dll RVA: 0x000198b0
@@ -290,7 +322,7 @@ extern const int g_rpcScrStopObjectCameraCollision;
 // samp.dll RVA: 0x001182ec
 extern const int g_rpcScrSetActorAnimation;
 // samp.dll RVA: 0x001182e8
-extern const int g_rpcUnknown001182E8;
+extern const int g_rpcScrClearActorAnimations;
 // samp.dll RVA: 0x001182e4
 extern const int g_rpcScrSetActorRotation;
 // samp.dll RVA: 0x001182e0

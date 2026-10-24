@@ -18,6 +18,104 @@
 #include "net/remoteplayer.h"
 #include "gui/device_lifecycle.h"
 #include "net/vehiclepool.h"
+#include "net/objectpool.h"
+#include "net/actorpool.h"
+#include "game/actor.h"
+// samp.dll RVA: 0x0011829c
+const Scripting::OpcodeInfo g_rpcExplosionCommand={0x948,"fffii"};
+// samp.dll RVA: 0x0001b540
+void ScrSetObjectPosition(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;CVector position;float unusedRotation;stream.Read(id);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(unusedRotation);
+    CEntity *object=((CNetGame*)g_pNetGame)->pools->objects->Get(id);if(object)object->Teleport(position);
+}
+// samp.dll RVA: 0x0001b650
+void ScrSetObjectRotation(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;CVector rotation;stream.Read(id);stream.Read(rotation.x);stream.Read(rotation.y);stream.Read(rotation.z);
+    CObjectPool *pool=((CNetGame*)g_pNetGame)->pools->objects;if(pool){CObject *object=(CObject*)pool->Get(id);if(object)object->SetRotation(&rotation);}
+}
+// samp.dll RVA: 0x0001b750
+void ScrDestroyObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;stream.Read(id);CObjectPool *pool=((CNetGame*)g_pNetGame)->pools->objects;
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;CEntity *object=pool->Get(id);
+    if(object){if(local&&*(CEntity**)(local->nativeState+0x2de)==object){*(CEntity**)(local->nativeState+0x2de)=0;*(DWORD*)(local->nativeState+0x2e6)=0;}pool->Delete(id);}
+}
+// samp.dll RVA: 0x0001ba30
+void ScrMoveObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;CVector origin,position,rotation;float speed;stream.Read(id);
+    stream.Read(origin.x);stream.Read(origin.y);stream.Read(origin.z);
+    stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(speed);
+    stream.Read(rotation.x);stream.Read(rotation.y);stream.Read(rotation.z);
+    CObjectEdit *edit=(CObjectEdit*)g_deviceObjectEdit;if(edit&&edit->unknown80&&edit->objectId==id)return;
+    CObject *object=(CObject*)((CNetGame*)g_pNetGame)->pools->objects->Get(id);if(object)object->Move(position,speed,rotation);
+}
+// samp.dll RVA: 0x0001bbe0
+void ScrStopObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;stream.Read(id);CObject *object=(CObject*)((CNetGame*)g_pNetGame)->pools->objects->Get(id);if(object)object->Stop();
+}
+// samp.dll RVA: 0x0001d210
+void ScrSetActorAnimation(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;
+    if(pool) {
+        char library[256]={0},name[256]={0};BYTE libraryLength,nameLength;WORD id;float speed;bool loop,lockX,lockY,freeze;int time;
+        stream.Read(id);stream.Read(libraryLength);stream.Read(library,libraryLength);stream.Read(nameLength);stream.Read(name,nameLength);
+        stream.Read(speed);stream.Read(loop);stream.Read(lockX);stream.Read(lockY);stream.Read(freeze);stream.Read(time);
+        library[libraryLength]=0;name[nameLength]=0;CActor *actor=pool->Get(id);
+        if(actor)actor->PerformAnimation(name,library,speed,loop,lockX,lockY,freeze,time);
+    }
+}
+// samp.dll RVA: 0x0001d3f0
+void ScrClearActorAnimations(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;stream.Read(id);CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;if(pool){CActor *actor=pool->Get(id);if(actor)actor->ClearTasks();}
+}
+// samp.dll RVA: 0x0001d4b0
+void ScrSetActorRotation(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;float angle;stream.Read(id);stream.Read(angle);CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;
+    if(pool){CActor *actor=pool->Get(id);if(actor)actor->SetRotation(angle);}
+}
+// samp.dll RVA: 0x0001d590
+void ScrSetActorPosition(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;CVector position;stream.Read(id);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;if(pool){CActor *actor=pool->Get(id);if(actor)actor->Teleport(position);}
+}
+// samp.dll RVA: 0x0001d6a0
+void ScrSetActorHealth(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;float health;stream.Read(id);stream.Read(health);CActorPool *pool=((CNetGame*)g_pNetGame)->pools->actors;
+    if(pool){CActor *actor=pool->Get(id);if(actor)actor->SetHealth(health);}
+}
+// samp.dll RVA: 0x0001a2c0
+void ScrSetPlayerMapIcon(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE id,icon,type;CVector position;DWORD color;stream.Read(id);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(icon);stream.Read(color);stream.Read(type);
+    ((CNetGame*)g_pNetGame)->CreateMapIcon(id,position,icon,color,type);
+}
+// samp.dll RVA: 0x0001a3e0
+void ScrRemovePlayerMapIcon(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE id;stream.Read(id);((CNetGame*)g_pNetGame)->RemoveMapIcon(id);
+}
+// samp.dll RVA: 0x0001b840
+void ScrCreateExplosion(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVector position;int type;float radius;stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(type);stream.Read(radius);
+    // Preserve native descriptor "fffii" despite its double-promoted radius argument.
+    Scripting::ProcessCommand(&g_rpcExplosionCommand,(double)position.x,(double)position.y,(double)position.z,type,(double)radius);
+}
+// samp.dll RVA: 0x0001b950
+void ScrShowPlayerNametagForPlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE show;stream.Read(id);stream.Read(show);CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(id<1004&&pool->connected[id]){CRemotePlayer *remote=pool->GetPlayer(id);*(DWORD*)(remote->nativeState+0x10)=show!=0;}
+}
 // samp.dll RVA: 0x000197a0
 void ScrSetVehiclePosition(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
@@ -565,9 +663,8 @@ const int g_rpcScrSetObjectMaterial=84;
 const int g_rpcScrStopObjectCameraCollision=169;
 // samp.dll RVA: 0x001182ec
 const int g_rpcScrSetActorAnimation=173;
-// Handler RVA0x0001d3f0; semantic name not established.
 // samp.dll RVA: 0x001182e8
-const int g_rpcUnknown001182E8=174;
+const int g_rpcScrClearActorAnimations=174;
 // samp.dll RVA: 0x001182e4
 const int g_rpcScrSetActorRotation=175;
 // samp.dll RVA: 0x001182e0
@@ -602,7 +699,7 @@ void UnRegisterScriptRPCs(RakClientInterface *client) {
         &g_rpcScrSetPlayerFacingAngle,&g_rpcScrResetPlayerMoney,&g_rpcScrResetPlayerWeapons,&g_rpcScrGivePlayerWeapon,
         &g_rpcUnknown0011830C,&g_rpcScrLinkVehicleToInterior,&g_rpcScrDeathMessage,&g_rpcScrAttachCameraToObject,
         &g_rpcScrInterpolateCamera,&g_textDrawClickRpc,&g_rpcScrSetObjectMaterial,&g_rpcScrStopObjectCameraCollision,
-        &g_rpcScrSetActorAnimation,&g_rpcUnknown001182E8,&g_rpcScrSetActorRotation,&g_rpcScrSetActorPosition,
+        &g_rpcScrSetActorAnimation,&g_rpcScrClearActorAnimations,&g_rpcScrSetActorRotation,&g_rpcScrSetActorPosition,
         &g_rpcScrSetActorHealth,&g_rpcUnknown001182D8,
     };
     for(unsigned i=0;i<sizeof(ids)/sizeof(ids[0]);i++)client->UnregisterAsRemoteProcedureCall(const_cast<int*>(ids[i]));

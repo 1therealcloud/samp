@@ -2,6 +2,10 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0000e940
+void ScrCreateActor(RPCParameters *parameters);
+// samp.dll RVA: 0x00011cd0
+void ScrDestroyActor(RPCParameters *parameters);
 // samp.dll RVA: 0x00011090
 void DamageVehicle(RPCParameters *parameters);
 // samp.dll RVA: 0x000111c0

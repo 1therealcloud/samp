@@ -1,5 +1,9 @@
 #include "net/actorpool.h"
 #include "game/actor.h"
+// samp.dll RVA: 0x00001610
+CActor *CActorPool::Get(WORD id){return id<1000&&active[id]?actors[id]:0;}
+// samp.dll RVA: 0x00001640
+BOOL CActorPool::DoesExist(WORD id){return id<1000?active[id]:0;}
 // samp.dll RVA: 0x00001660
 void CActorPool::UpdateLargestId(){int largest=0;for(int i=0;i<1000;++i)if(active[i])largest=i;largestId=largest;}
 // samp.dll RVA: 0x000016c0
