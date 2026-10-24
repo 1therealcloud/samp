@@ -3,6 +3,34 @@
 class RakClientInterface;
 struct RPCParameters;
 namespace Scripting {struct OpcodeInfo;}
+// samp.dll RVA: 0x00017a60
+void ScrSetSpawnInfo(RPCParameters *parameters);
+// samp.dll RVA: 0x00018250
+void ScrSetPlayerFightingStyle(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a740
+void ScrSetPlayerAmmo(RPCParameters *parameters);
+// samp.dll RVA: 0x00019240
+void ScrSetPlayerTeam(RPCParameters *parameters);
+// samp.dll RVA: 0x00018c80
+void ScrSetPlayerSkin(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a480
+void ScrApplyAnimation(RPCParameters *parameters);
+// samp.dll RVA: 0x00018090
+void ScrClearAnimations(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c0f0
+void ScrMoveVehicleComponent(RPCParameters *parameters);
+// Descriptive name established by native message/opcode, RPC111.
+// samp.dll RVA: 0x000185c0
+void ScrSetPlayerWidescreen(RPCParameters *parameters);
+// Descriptive name established by the native SetTires call, RPC98.
+// samp.dll RVA: 0x00018670
+void ScrSetVehicleTires(RPCParameters *parameters);
+// samp.dll RVA: 0x00118274
+extern const Scripting::OpcodeInfo g_rpcWidescreenCommand;
+// samp.dll RVA: 0x0011844c
+extern const char g_rpcWidescreenMessage[];
+// samp.dll RVA: 0x0011845c
+extern const char g_rpcInvalidSkinWarning[];
 // samp.dll RVA: 0x0011829c
 extern const Scripting::OpcodeInfo g_rpcExplosionCommand;
 // samp.dll RVA: 0x0001b540
@@ -188,9 +216,9 @@ extern const int g_rpcScrSetPlayerVelocity;
 // samp.dll RVA: 0x001183f8
 extern const int g_rpcScrSetVehicleVelocity;
 // samp.dll RVA: 0x001183f4
-extern const int g_rpcUnknown001183F4;
+extern const int g_rpcScrSetPlayerWidescreen;
 // samp.dll RVA: 0x001183f0
-extern const int g_rpcUnknown001183F0;
+extern const int g_rpcScrSetVehicleTires;
 // samp.dll RVA: 0x001183ec
 extern const int g_rpcUnknown001183EC;
 // samp.dll RVA: 0x001183e8

@@ -21,6 +21,107 @@
 #include "net/objectpool.h"
 #include "net/actorpool.h"
 #include "game/actor.h"
+#include "game/custommodels.h"
+// samp.dll RVA: 0x00118274
+const Scripting::OpcodeInfo g_rpcWidescreenCommand={0x2a3,"i"};
+// samp.dll RVA: 0x0011844c
+const char g_rpcWidescreenMessage[]="Widescreen = %i";
+// samp.dll RVA: 0x0011845c
+const char g_rpcInvalidSkinWarning[]="Warning: SetPlayerSkin %d isn't a valid ped model.";
+// samp.dll RVA: 0x00017a60
+void ScrSetSpawnInfo(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;BYTE info[50];stream.Read((char*)info,50);pool->local->SetSpawnInfo(info);
+}
+// samp.dll RVA: 0x00018250
+void ScrSetPlayerFightingStyle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE style=0;stream.Read(id);stream.Read(style);CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(pool) {
+        CPed *ped;
+        if(id==pool->localId)ped=*(CPed**)pool->local->nativeState;
+        else {if(id>=1004||!pool->connected[id])return;CRemotePlayer *remote=pool->GetPlayer(id);ped=*(CPed**)(remote->nativeState+4);}
+        if(ped)ped->SetFightingStyle(style);
+    }
+}
+// samp.dll RVA: 0x0001a740
+void ScrSetPlayerAmmo(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE weapon;WORD ammo;stream.Read(weapon);stream.Read(ammo);
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;(*(CPed**)local->nativeState)->SetWeaponAmmo(weapon,ammo);
+}
+// samp.dll RVA: 0x00019240
+void ScrSetPlayerTeam(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;WORD id;BYTE team;stream.Read(id);stream.Read(team);
+    if(id==pool->localId)pool->local->nativeState[0x130]=team;
+    else if(id<=1004){CPlayerInfo *info=pool->players[id];if(info&&info->remote)info->remote->nativeState[0x19]=team;}
+}
+// samp.dll RVA: 0x00018c80
+void ScrSetPlayerSkin(RPCParameters *parameters) {
+    int model=0,customModel=0;
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;if(!pool)return;
+    WORD id;stream.Read(id);stream.Read(model);stream.Read(customModel);
+    if(customModel>20000&&(GameIsPedModel(customModel)||(g_customModels&&g_customModels->DoesExist(customModel))))model=customModel;
+    if(!GameIsPedModel(model)){if(g_pChat)g_pChat->AddInfoMessage(g_rpcInvalidSkinWarning,model);return;}
+    if(id==pool->localId)(*(CPed**)pool->local->nativeState)->SetModelIndex(model);
+    else if(id<1004&&pool->connected[id]) {
+        CRemotePlayer *remote=pool->GetPlayer(id);
+        if(*(CPed**)(remote->nativeState+4)&&remote->nativeState[0x1a]) {
+            remote=pool->GetPlayer(id);CPed *ped=*(CPed**)(remote->nativeState+4);if(ped)ped->SetModelIndex(model);
+        }
+    }
+}
+// samp.dll RVA: 0x0001a480
+void ScrApplyAnimation(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char library[256]={0},name[256]={0};WORD id;BYTE libraryLength,nameLength;float speed;bool loop,lockX,lockY,freeze;int time;
+    stream.Read(id);stream.Read(libraryLength);stream.Read(library,libraryLength);stream.Read(nameLength);stream.Read(name,nameLength);
+    stream.Read(speed);stream.Read(loop);stream.Read(lockX);stream.Read(lockY);stream.Read(freeze);stream.Read(time);
+    library[libraryLength]=0;name[nameLength]=0;CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(pool) {
+        CPed *ped;
+        if(id==pool->localId)ped=*(CPed**)pool->local->nativeState;
+        else {
+            if(id>=1004||!pool->connected[id]||!pool->players[id]||!pool->players[id]->remote)return;
+            CRemotePlayer *remote=pool->players[id]->remote;ped=*(CPed**)(remote->nativeState+4);*(DWORD*)(remote->nativeState+0x1cd)=1;
+        }
+        if(ped)ped->ApplyAnimation(name,library,speed,loop,lockX,lockY,freeze,time);
+    }
+}
+// samp.dll RVA: 0x00018090
+void ScrClearAnimations(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;stream.Read(id);CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(pool) {
+        CPed *ped;
+        if(id==pool->localId)ped=*(CPed**)pool->local->nativeState;
+        else {
+            if(id>=1004||!pool->connected[id]||!pool->players[id]||!pool->players[id]->remote)return;
+            CRemotePlayer *remote=pool->players[id]->remote;ped=*(CPed**)(remote->nativeState+4);*(DWORD*)(remote->nativeState+0x1cd)=0;
+        }
+        if(ped){CMatrix matrix;ped->GetMatrix(&matrix);ped->Teleport(matrix.position);}
+    }
+}
+// samp.dll RVA: 0x0001c0f0
+void ScrMoveVehicleComponent(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+    if(pool){WORD id,component;stream.Read(id);stream.Read(component);if(id<2000&&pool->m_bNotEmpty[id])pool->m_pObjects[id]->RemoveComponent(component);}
+}
+// samp.dll RVA: 0x000185c0
+void ScrSetPlayerWidescreen(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE enabled;stream.Read(enabled);g_pChat->AddDebugMessage(g_rpcWidescreenMessage,(int)enabled);
+    Scripting::ProcessCommand(&g_rpcWidescreenCommand,(int)enabled);
+}
+// samp.dll RVA: 0x00018670
+void ScrSetVehicleTires(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE tires;stream.Read(id);stream.Read(tires);CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+    CVehicle *vehicle=pool->Get(id);if(pool&&vehicle)vehicle->SetTires(tires);
+}
 // samp.dll RVA: 0x0011829c
 const Scripting::OpcodeInfo g_rpcExplosionCommand={0x948,"fffii"};
 // samp.dll RVA: 0x0001b540
@@ -523,12 +624,10 @@ const int g_rpcScrSetPlayerFightingStyle=89;
 const int g_rpcScrSetPlayerVelocity=90;
 // samp.dll RVA: 0x001183f8
 const int g_rpcScrSetVehicleVelocity=91;
-// Handler RVA0x000185c0; semantic name not established.
 // samp.dll RVA: 0x001183f4
-const int g_rpcUnknown001183F4=111;
-// Handler RVA0x00018670; semantic name not established.
+const int g_rpcScrSetPlayerWidescreen=111;
 // samp.dll RVA: 0x001183f0
-const int g_rpcUnknown001183F0=98;
+const int g_rpcScrSetVehicleTires=98;
 // Handler RVA0x00018750; semantic name not established.
 // samp.dll RVA: 0x001183ec
 const int g_rpcUnknown001183EC=92;
@@ -682,7 +781,7 @@ void UnRegisterScriptRPCs(RakClientInterface *client) {
         &g_rpcScrHideTextDrawForPlayer,&g_rpcScrTextDrawSetString,&g_rpcScrGangZoneCreate,&g_rpcScrGangZoneDestroy,
         &g_rpcScrGangZoneFlash,&g_rpcScrGangZoneStopFlash,&g_rpcScrApplyAnimation,&g_rpcScrClearAnimations,
         &g_rpcScrSetPlayerSpecialAction,&g_rpcScrEnableStuntBonusForPlayer,&g_rpcScrSetPlayerFightingStyle,&g_rpcScrSetPlayerVelocity,
-        &g_rpcScrSetVehicleVelocity,&g_rpcUnknown001183F4,&g_rpcUnknown001183F0,&g_rpcUnknown001183EC,
+        &g_rpcScrSetVehicleVelocity,&g_rpcScrSetPlayerWidescreen,&g_rpcScrSetVehicleTires,&g_rpcUnknown001183EC,
         &g_rpcUnknown001183E8,&g_rpcScrPlayCrimeReport,&g_rpcScrSetPlayerMapIcon,&g_rpcScrRemovePlayerMapIcon,
         &g_rpcScrSetPlayerAmmo,&g_rpcScrSetGravity,&g_rpcScrSetVehicleHealth,&g_rpcScrAttachTrailerToVehicle,
         &g_rpcScrDetachTrailerFromVehicle,&g_rpcScrCreateObject,&g_rpcScrSetObjectPosition,&g_rpcScrSetObjectRotation,

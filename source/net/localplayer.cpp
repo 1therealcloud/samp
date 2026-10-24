@@ -15,6 +15,12 @@
 #include "game/custommodels.h"
 #include "gui/render_dependencies.h"
 #include "gui/textdraw_texture.h"
+// samp.dll RVA: 0x00003af0
+void CLocalPlayer::SetSpawnInfo(const void *info) {
+    const BYTE *data=(const BYTE*)info;
+    for(int i=0;i<48;i+=4)*(DWORD*)(nativeState+0x14f+i)=*(const DWORD*)(data+i);
+    *(WORD*)(nativeState+0x17f)=*(const WORD*)(data+48);*(DWORD*)(nativeState+0x181)=1;
+}
 // samp.dll RVA: 0x00117880
 int g_localSpawnRpc=52;
 // samp.dll RVA: 0x0013c0a0

@@ -2,6 +2,16 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0000e740
+void EnterEditObject(RPCParameters *parameters);
+// samp.dll RVA: 0x0000e800
+void ScrCancelEdit(RPCParameters *parameters);
+// samp.dll RVA: 0x0000e8b0
+void ScrUpdateCameraTarget(RPCParameters *parameters);
+// samp.dll RVA: 0x000116b0
+void EditAttachedObject(RPCParameters *parameters);
+// samp.dll RVA: 0x00011770
+void EditObject(RPCParameters *parameters);
 // samp.dll RVA: 0x0000e940
 void ScrCreateActor(RPCParameters *parameters);
 // samp.dll RVA: 0x00011cd0

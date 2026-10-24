@@ -20,6 +20,39 @@
 #include <string.h>
 #include "net/vehiclepool.h"
 #include "net/actorpool.h"
+#include "gui/device_lifecycle.h"
+// samp.dll RVA: 0x0000e740
+void EnterEditObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(g_renderTextDrawSelection&&g_renderTextDrawSelection->enabled)g_renderTextDrawSelection->Disable();
+    CObjectEdit *edit=(CObjectEdit*)g_deviceObjectEdit;if(edit&&edit->unknown80)edit->Disable(FALSE);
+    if(g_renderObjectSelection)g_renderObjectSelection->Enable(TRUE);
+}
+// samp.dll RVA: 0x0000e800
+void ScrCancelEdit(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CObjectEdit *edit=(CObjectEdit*)g_deviceObjectEdit;if(edit&&edit->unknown80)edit->Disable(FALSE);
+    if(g_renderObjectSelection&&g_renderObjectSelection->enabled)g_renderObjectSelection->Enable(FALSE);
+}
+// samp.dll RVA: 0x0000e8b0
+void ScrUpdateCameraTarget(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool enabled=false;stream.Read(enabled);if(g_pNetGame)((BYTE*)g_pNetGame)[0x233]=(BYTE)enabled;
+}
+// samp.dll RVA: 0x000116b0
+void EditAttachedObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int index=0;stream.Read(index);if(g_renderObjectSelection&&g_renderObjectSelection->enabled)g_renderObjectSelection->Enable(FALSE);
+    ((CObjectEdit*)g_deviceObjectEdit)->EnterEditAttachedObject(index);
+}
+// samp.dll RVA: 0x00011770
+void EditObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool playerObject=false;WORD id=0xffff;stream.Read(playerObject);stream.Read(id);
+    if(g_renderObjectSelection&&g_renderObjectSelection->enabled)g_renderObjectSelection->Enable(FALSE);
+    if(g_renderTextDrawSelection&&g_renderTextDrawSelection->enabled)g_renderTextDrawSelection->Disable();
+    ((CObjectEdit*)g_deviceObjectEdit)->EnterEditObject(id,playerObject?TRUE:FALSE);
+}
 // samp.dll RVA: 0x0000e940
 void ScrCreateActor(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
