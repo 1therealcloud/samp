@@ -1,9 +1,12 @@
 #ifndef SAMP_MENUPOOL_H
 #define SAMP_MENUPOOL_H
 #include "menu.h"
+struct RPCParameters;
 #pragma pack(push,1)
 // Native allocation is0x402 bytes; current-menu sentinel is128.
 class CMenuPool {
+    // samp.dll RVA: 0x0001c390
+    friend void ScrInitMenu(RPCParameters *parameters);
     CMenu *menus[128];
     DWORD active[128];
     BYTE currentMenu,unknown401;

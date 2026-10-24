@@ -2,6 +2,16 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x00010040
+void ScrSetCheckpoint(RPCParameters *parameters);
+// samp.dll RVA: 0x00010150
+void ScrSetRaceCheckpoint(RPCParameters *parameters);
+// samp.dll RVA: 0x0000ef50
+void ScrCreatePickup(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f010
+void ScrDestroyPickup(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f0b0
+void ScrDestroyWeaponPickup(RPCParameters *parameters);
 // samp.dll RVA: 0x0000edc0
 void ScrSetWorldTime(RPCParameters *parameters);
 // samp.dll RVA: 0x0000f240

@@ -7,6 +7,38 @@
 #include "objectselection.h"
 #include "BitStream.h"
 #include "main.h"
+#include "net/pickuppool.h"
+// samp.dll RVA: 0x00010040
+void ScrSetCheckpoint(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVector position;float radius;stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(radius);
+    CVector size={radius,radius,radius};g_pGame->SetCheckpoint(&position,&size);g_pGame->unknown4d=1;
+}
+// samp.dll RVA: 0x00010150
+void ScrSetRaceCheckpoint(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE type;CVector point;stream.Read(type);
+    stream.Read(point.x);stream.Read(point.y);stream.Read(point.z);CVector position=point;
+    stream.Read(point.x);stream.Read(point.y);stream.Read(point.z);CVector next=point;
+    stream.Read(point.x);
+    g_pGame->SetRacingCheckpoint(type,&position,&next,point.x);g_pGame->unknown29=1;
+}
+// samp.dll RVA: 0x0000ef50
+void ScrCreatePickup(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int id;Pickup pickup;stream.Read(id);stream.Read((char*)&pickup,sizeof(pickup));
+    CPickupPool *pool=((CNetGame*)g_pNetGame)->pools->pickups;if(pool)pool->Create(&pickup,id);
+}
+// samp.dll RVA: 0x0000f010
+void ScrDestroyPickup(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int id;stream.Read(id);CPickupPool *pool=((CNetGame*)g_pNetGame)->pools->pickups;if(pool)pool->Delete(id);
+}
+// samp.dll RVA: 0x0000f0b0
+void ScrDestroyWeaponPickup(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE owner;stream.Read(owner);((CNetGame*)g_pNetGame)->pools->pickups->DeleteWeapon(owner);
+}
 // The original handlers use signed bits/8+1, including an extra byte for aligned data.
 // Read failures are deliberately ignored; uninitialized native output locals stay so.
 // samp.dll RVA: 0x0000edc0

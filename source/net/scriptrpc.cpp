@@ -9,6 +9,86 @@
 #include "game/playerped.h"
 #include "game/camera.h"
 #include "net/gangzonepool.h"
+#include "net/menupool.h"
+#include "net/textdrawpool.h"
+#include "game/audio.h"
+#include "gui/render_dependencies.h"
+#include "chatwindow.h"
+// samp.dll RVA: 0x00118494
+const char g_rpcLargeTextDrawWarning[]="Warning: ignoring large TextDraw size=%u";
+// samp.dll RVA: 0x0001c390
+void ScrInitMenu(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(!g_pNetGame)return;
+    CMenuPool *pool=((CNetGame*)g_pNetGame)->pools->menus;
+    BYTE id;int twoColumns;char text[32];float x,y,width1,width2=0;DWORD interaction[13];
+    stream.Read(id);stream.Read(twoColumns);stream.Read(text,32);
+    stream.Read(x);stream.Read(y);stream.Read(width1);if(twoColumns)stream.Read(width2);
+    stream.Read(interaction[0]);for(int i=1;i<13;i++)stream.Read(interaction[i]);
+    // Native includes ID128 in this probe; adjacent allocation bytes are unproven.
+    if(id<=128&&pool->active[id])pool->Delete(id);
+    CMenu *menu=pool->Create(id,text,x,y,(BYTE)((BYTE)twoColumns+1),width1,width2,interaction);
+    if(menu) {
+        stream.Read(text,32);menu->SetColumnTitle(0,text);BYTE count;stream.Read(count);
+        for(BYTE row=0;row<count;row++){stream.Read(text,32);menu->AddItem(0,row,text);}
+        if(twoColumns) {
+            stream.Read(text,32);menu->SetColumnTitle(1,text);stream.Read(count);
+            for(BYTE row=0;row<count;row++){stream.Read(text,32);menu->AddItem(1,row,text);}
+        }
+    }
+}
+// samp.dll RVA: 0x0001c650
+void ScrShowMenu(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(g_pNetGame){BYTE id;stream.Read(id);((CNetGame*)g_pNetGame)->pools->menus->Show(id);}
+}
+// samp.dll RVA: 0x0001c700
+void ScrHideMenu(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(g_pNetGame){BYTE id;stream.Read(id);((CNetGame*)g_pNetGame)->pools->menus->Hide(id);}
+}
+// samp.dll RVA: 0x0001c850
+void ScrShowTextDraw(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD length=0;CTextDrawPool *pool=((CNetGame*)g_pNetGame)->pools->textDraws;
+    if(pool) {
+        WORD id;TextDrawTransmit info;char text[800];stream.Read(id);stream.Read((char*)&info,63);stream.Read(length);
+        if(length<800){stream.Read(text,length);text[length]=0;pool->Create(id,&info,text);}
+        else if(g_pChat)g_pChat->AddInfoMessage(g_rpcLargeTextDrawWarning,(unsigned)length);
+    }
+}
+// samp.dll RVA: 0x0001c980
+void ScrHideTextDrawForPlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CTextDrawPool *pool=((CNetGame*)g_pNetGame)->pools->textDraws;
+    if(pool){WORD id;stream.Read(id);pool->Delete(id);}
+}
+// samp.dll RVA: 0x0001ca30
+void ScrTextDrawSetString(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD length=0;CTextDrawPool *pool=((CNetGame*)g_pNetGame)->pools->textDraws;
+    if(pool) {
+        WORD id;char text[800];stream.Read(id);stream.Read(length);
+        // Native accepts800 and writes its terminator one byte beyond this buffer.
+        if(length<=800){stream.Read(text,length);text[length]=0;if(id<2304&&pool->active[id]&&pool->draws[id])pool->draws[id]->SetText(text);}
+    }
+}
+// samp.dll RVA: 0x00019e60
+void ScrPlaySound(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int sound;CVector position;stream.Read(sound);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    g_pGame->m_pAudio->Play(sound,position);
+}
+// samp.dll RVA: 0x0001ce80
+void ScrPlayAudioStream(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char url[257]={0};BYTE length=0;CVector position={0,0,0};float radius=0;bool spatial=false;
+    stream.Read(length);stream.Read(url,length);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(radius);
+    stream.ReadBits((BYTE*)&spatial,8,true);
+    if(g_renderAudioStream)g_renderAudioStream->Play(url,position.x,position.y,position.z,radius,spatial);
+}
+// samp.dll RVA: 0x00017c00
+void ScrStopAudioStream(RPCParameters *parameters) {(void)parameters;if(g_renderAudioStream)g_renderAudioStream->Stop(false);}
 // samp.dll RVA: 0x000195d0
 void ScrSetPlayerCameraPosition(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
@@ -185,9 +265,8 @@ const int g_rpcScrSetPlayerWantedLevel=133;
 const int g_rpcScrShowTextDraw=134;
 // samp.dll RVA: 0x00118428
 const int g_rpcScrHideTextDrawForPlayer=135;
-// Handler RVA0x0001ca30; semantic name not established.
 // samp.dll RVA: 0x00118424
-const int g_rpcUnknown00118424=105;
+const int g_rpcScrTextDrawSetString=105;
 // samp.dll RVA: 0x00118420
 const int g_rpcScrGangZoneCreate=108;
 // samp.dll RVA: 0x0011841c
@@ -367,7 +446,7 @@ void UnRegisterScriptRPCs(RakClientInterface *client) {
     const int *ids[]={
         &g_rpcScrDisableVehicleCollisions,&g_rpcScrForceClassSelection,&g_rpcScrAttachObjectToPlayer,&g_rpcScrInitMenu,
         &g_rpcScrShowMenu,&g_rpcScrHideMenu,&g_rpcScrSetPlayerWantedLevel,&g_rpcScrShowTextDraw,
-        &g_rpcScrHideTextDrawForPlayer,&g_rpcUnknown00118424,&g_rpcScrGangZoneCreate,&g_rpcScrGangZoneDestroy,
+        &g_rpcScrHideTextDrawForPlayer,&g_rpcScrTextDrawSetString,&g_rpcScrGangZoneCreate,&g_rpcScrGangZoneDestroy,
         &g_rpcScrGangZoneFlash,&g_rpcScrGangZoneStopFlash,&g_rpcScrApplyAnimation,&g_rpcScrClearAnimations,
         &g_rpcScrSetPlayerSpecialAction,&g_rpcScrEnableStuntBonusForPlayer,&g_rpcScrSetPlayerFightingStyle,&g_rpcScrSetPlayerVelocity,
         &g_rpcScrSetVehicleVelocity,&g_rpcUnknown001183F4,&g_rpcUnknown001183F0,&g_rpcUnknown001183EC,

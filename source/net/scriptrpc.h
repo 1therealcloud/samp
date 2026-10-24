@@ -2,6 +2,27 @@
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0001c390
+void ScrInitMenu(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c650
+void ScrShowMenu(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c700
+void ScrHideMenu(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c850
+void ScrShowTextDraw(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c980
+void ScrHideTextDrawForPlayer(RPCParameters *parameters);
+// Verified entry; external SAMP-API1CF70 points inside the audio-stream handler.
+// samp.dll RVA: 0x0001ca30
+void ScrTextDrawSetString(RPCParameters *parameters);
+// samp.dll RVA: 0x00019e60
+void ScrPlaySound(RPCParameters *parameters);
+// samp.dll RVA: 0x0001ce80
+void ScrPlayAudioStream(RPCParameters *parameters);
+// samp.dll RVA: 0x00017c00
+void ScrStopAudioStream(RPCParameters *parameters);
+// samp.dll RVA: 0x00118494
+extern const char g_rpcLargeTextDrawWarning[];
 // samp.dll RVA: 0x000195d0
 void ScrSetPlayerCameraPosition(RPCParameters *parameters);
 // samp.dll RVA: 0x000196a0
@@ -75,7 +96,7 @@ extern const int g_rpcScrShowTextDraw;
 // samp.dll RVA: 0x00118428
 extern const int g_rpcScrHideTextDrawForPlayer;
 // samp.dll RVA: 0x00118424
-extern const int g_rpcUnknown00118424;
+extern const int g_rpcScrTextDrawSetString;
 // samp.dll RVA: 0x00118420
 extern const int g_rpcScrGangZoneCreate;
 // samp.dll RVA: 0x0011841c

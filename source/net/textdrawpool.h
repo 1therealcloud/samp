@@ -2,8 +2,11 @@
 #define SAMP_TEXTDRAW_POOL_H
 #include <windows.h>
 #include "game/textdraw.h"
+struct RPCParameters;
 #pragma pack(push,1)
 class CTextDrawPool {
+    // samp.dll RVA: 0x0001ca30
+    friend void ScrTextDrawSetString(RPCParameters *parameters);
     DWORD active[2304];
     CTextDraw *draws[2304];
 public:
