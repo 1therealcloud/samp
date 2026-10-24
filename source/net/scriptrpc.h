@@ -2,6 +2,34 @@
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x000197a0
+void ScrSetVehiclePosition(RPCParameters *parameters);
+// samp.dll RVA: 0x000198b0
+void ScrSetVehicleZAngle(RPCParameters *parameters);
+// samp.dll RVA: 0x00019990
+void ScrSetVehicleParamsForPlayer(RPCParameters *parameters);
+// samp.dll RVA: 0x00019a60
+void ScrLinkVehicleToInterior(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a8a0
+void ScrSetVehicleHealth(RPCParameters *parameters);
+// samp.dll RVA: 0x0001a980
+void ScrAttachTrailerToVehicle(RPCParameters *parameters);
+// samp.dll RVA: 0x0001aac0
+void ScrDetachTrailerFromVehicle(RPCParameters *parameters);
+// samp.dll RVA: 0x00018450
+void ScrSetVehicleVelocity(RPCParameters *parameters);
+// samp.dll RVA: 0x0001bd60
+void ScrSetNumberPlate(RPCParameters *parameters);
+// samp.dll RVA: 0x0001be80
+void ScrTogglePlayerSpectating(RPCParameters *parameters);
+// samp.dll RVA: 0x0001bf30
+void ScrPlayerSpectatePlayer(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c010
+void ScrPlayerSpectateVehicle(RPCParameters *parameters);
+// samp.dll RVA: 0x00019130
+void ScrPutPlayerInVehicle(RPCParameters *parameters);
+// samp.dll RVA: 0x00017b00
+void ScrRemovePlayerFromVehicle(RPCParameters *parameters);
 // samp.dll RVA: 0x00019420
 void ScrDisplayGametext(RPCParameters *parameters);
 // samp.dll RVA: 0x00017960

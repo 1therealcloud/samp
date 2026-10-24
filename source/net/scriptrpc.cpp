@@ -17,6 +17,101 @@
 #include "net/playerinfo.h"
 #include "net/remoteplayer.h"
 #include "gui/device_lifecycle.h"
+#include "net/vehiclepool.h"
+// samp.dll RVA: 0x000197a0
+void ScrSetVehiclePosition(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;CVector position;stream.Read(id);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    if(g_pNetGame){CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+        if(pool&&id<2000&&pool->m_bNotEmpty[id])pool->m_pObjects[id]->Teleport(position);}
+}
+// samp.dll RVA: 0x000198b0
+void ScrSetVehicleZAngle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;float angle;stream.Read(id);stream.Read(angle);CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+    if(pool&&id<2000&&pool->m_bNotEmpty[id])pool->m_pObjects[id]->SetRotation(angle);
+}
+// samp.dll RVA: 0x00019990
+void ScrSetVehicleParamsForPlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE objective,locked;stream.Read(id);stream.Read(objective);stream.Read(locked);
+    CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;if(pool)pool->AssignSpecialParams(id,objective,locked);
+}
+// samp.dll RVA: 0x00019a60
+void ScrLinkVehicleToInterior(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE interior;stream.Read(id);stream.Read(interior);((CNetGame*)g_pNetGame)->pools->vehicles->ChangeInterior(id,interior);
+}
+// samp.dll RVA: 0x0001a8a0
+void ScrSetVehicleHealth(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;float health;stream.Read(id);stream.Read(health);CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+    if(pool&&id<2000&&pool->m_bNotEmpty[id]){CVehicle *vehicle=pool->Get(id);if(vehicle)vehicle->SetHealth(health);}
+}
+// samp.dll RVA: 0x0001a980
+void ScrAttachTrailerToVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(!((CNetGame*)g_pNetGame)->pools->vehicles)return;
+    WORD trailerId,tractorId;stream.Read(trailerId);stream.Read(tractorId);
+    CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+    CVehicle *trailer=pool->Get(trailerId),*tractor=pool->Get(tractorId);
+    if(trailer&&tractor){tractor->SetTrailer(trailer);tractor->AttachTrailer();}
+}
+// samp.dll RVA: 0x0001aac0
+void ScrDetachTrailerFromVehicle(RPCParameters *parameters) {
+    unsigned char *input=parameters->input;unsigned bits=parameters->numberOfBitsOfData;
+    if(!((CNetGame*)g_pNetGame)->pools->vehicles)return;
+    RakNet::BitStream stream(input,(int)bits/8+1,false);WORD id;stream.Read(id);
+    CVehicle *vehicle=((CNetGame*)g_pNetGame)->pools->vehicles->Get(id);
+    if(vehicle){vehicle->DetachTrailer();vehicle->SetTrailer(0);}
+}
+// samp.dll RVA: 0x00018450
+void ScrSetVehicleVelocity(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE type=0;CVector velocity;stream.Read(type);stream.Read(velocity.x);stream.Read(velocity.y);stream.Read(velocity.z);
+    CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;CPed *ped=g_pGame->GetPlayerPed();
+    if(ped&&ped->IsInVehicle()) {
+        WORD id=pool->Find(ped->GetVehicle());
+        if(id!=0xffff){CVehicle *vehicle=pool->Get(id);if(vehicle){if(type==0)vehicle->SetSpeed(velocity);else if(type==1)vehicle->SetTurnSpeed(velocity);}}
+    }
+}
+// samp.dll RVA: 0x0001bd60
+void ScrSetNumberPlate(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char text[33]={0};BYTE length=0;WORD id;stream.Read(id);stream.Read(length);
+    if(length<=32){stream.Read(text,length);CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;
+        if(pool&&id<2000&&pool->m_bNotEmpty[id])pool->m_pObjects[id]->SetLicensePlateText(text);}
+}
+// samp.dll RVA: 0x0001be80
+void ScrTogglePlayerSpectating(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BOOL enabled;stream.Read(enabled);((CNetGame*)g_pNetGame)->pools->players->local->ToggleSpectating(enabled);
+}
+// samp.dll RVA: 0x0001bf30
+void ScrPlayerSpectatePlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE mode;stream.Read(id);stream.Read(mode);mode=mode==2?15:mode==3?14:4;
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;local->nativeState[0x312]=mode;local->SpectatePlayer(id);
+}
+// samp.dll RVA: 0x0001c010
+void ScrPlayerSpectateVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE mode;stream.Read(id);stream.Read(mode);mode=mode==2?15:mode==3?14:3;
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;local->nativeState[0x312]=mode;local->SpectateVehicle(id);
+}
+// samp.dll RVA: 0x00019130
+void ScrPutPlayerInVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;BYTE seat;stream.Read(id);stream.Read(seat);
+    DWORD ref=((CNetGame*)g_pNetGame)->pools->vehicles->GetRef((int)id);
+    CVehicle *vehicle=((CNetGame*)g_pNetGame)->pools->vehicles->Get(id);
+    if(ref&&vehicle)g_pGame->GetPlayerPed()->PutIntoVehicle(ref,seat);
+}
+// samp.dll RVA: 0x00017b00
+void ScrRemovePlayerFromVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;(*(CPed**)local->nativeState)->ExitVehicle();
+}
 // samp.dll RVA: 0x00019420
 void ScrDisplayGametext(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);

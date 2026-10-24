@@ -18,6 +18,32 @@
 #include "chatwindow.h"
 #include "StringCompressor.h"
 #include <string.h>
+#include "net/vehiclepool.h"
+// samp.dll RVA: 0x00011090
+void DamageVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;DWORD panels,doors;BYTE lights,tires;stream.Read(id);stream.Read(panels);stream.Read(doors);stream.Read(lights);stream.Read(tires);
+    CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;CVehicle *vehicle=pool->Get(id);
+    if(vehicle){vehicle->UpdateDamage(panels,doors,lights);vehicle->SetTires(tires);}
+}
+// samp.dll RVA: 0x000111c0
+void ScrSetVehicleParamsEx(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(!((CNetGame*)g_pNetGame)->pools->vehicles)return;
+    WORD id;BYTE params[16];stream.Read(id);stream.Read((char*)params,16);
+    CVehicle *vehicle=((CNetGame*)g_pNetGame)->pools->vehicles->Get(id);if(!vehicle)return;
+    if(params[0]<=1)vehicle->SetField50(params[0]);
+    if(params[1]<=1)vehicle->SetField54(params[1]);
+    if(params[3]<=1)vehicle->Lock(params[3]);
+    if(params[6]<=1)((BYTE*)vehicle)[0x64]=params[6];
+    if(params[5]<=1)vehicle->CallBackend6a6ae0(1,0x11,params[5]?0x3f800000:0);
+    if(params[4]<=1)vehicle->CallBackend6a6ae0(0,0x10,params[4]?0x3f800000:0);
+    if(params[2]<=1){vehicle->EnableSiren(params[2]);vehicle->SetBackendWord45c(params[2]?20000:0);}
+    if(params[7]<=1)vehicle->EnableSiren(params[7]);
+    const DWORD component[]={10,8,11,9};
+    for(int i=0;i<4;i++)if(params[8+i]<=1)vehicle->CallBackend6a6ae0(2+i,component[i],params[8+i]?0x3f800000:0);
+    for(int j=0;j<4;j++){if(params[12+j]==0)vehicle->SetWindowOpenFlag((BYTE)component[j]);else if(params[12+j]==1)vehicle->ClearWindowOpenFlag((BYTE)component[j]);}
+}
 // samp.dll RVA: 0x0000f4b0
 void ScrSetPlayerSkillLevel(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
