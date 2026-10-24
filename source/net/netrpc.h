@@ -2,6 +2,36 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0000fea0
+void RequestClass(RPCParameters *parameters);
+// samp.dll RVA: 0x0000ff70
+void RequestSpawn(RPCParameters *parameters);
+// samp.dll RVA: 0x00010410
+void ConnectionRejected(RPCParameters *parameters);
+// samp.dll RVA: 0x000114a0
+void EnterVehicle(RPCParameters *parameters);
+// samp.dll RVA: 0x000115c0
+void ExitVehicle(RPCParameters *parameters);
+// samp.dll RVA: 0x000121c0
+void Chat(RPCParameters *parameters);
+// samp.dll RVA: 0x00010c20
+void ScrWorldPlayerDeath(RPCParameters *parameters);
+// samp.dll RVA: 0x00010ce0
+void ScrWorldPlayerRemove(RPCParameters *parameters);
+// samp.dll RVA: 0x001180c4
+extern const char g_rpcRejectedVersion[];
+// samp.dll RVA: 0x00118098
+extern const char g_rpcRejectedNickname[];
+// samp.dll RVA: 0x00118060
+extern const char g_rpcNicknameLength[];
+// samp.dll RVA: 0x00118040
+extern const char g_rpcNicknameCharacters[];
+// samp.dll RVA: 0x0011800c
+extern const char g_rpcNicknameQuit[];
+// samp.dll RVA: 0x00117fe4
+extern const char g_rpcRejectedMod[];
+// samp.dll RVA: 0x00117fac
+extern const char g_rpcRejectedSlot[];
 // samp.dll RVA: 0x000102b0
 void UpdateScoresPingsIps(RPCParameters *parameters);
 // samp.dll RVA: 0x0000e740

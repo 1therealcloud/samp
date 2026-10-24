@@ -22,6 +22,99 @@
 #include "net/actorpool.h"
 #include "gui/device_lifecycle.h"
 #include "scoreboard.h"
+#include "game/vehicle.h"
+// samp.dll RVA: 0x001180c4
+const char g_rpcRejectedVersion[]="CONNECTION REJECTED: Incorrect Version.";
+// samp.dll RVA: 0x00118098
+const char g_rpcRejectedNickname[]="CONNECTION REJECTED: Unacceptable NickName";
+// samp.dll RVA: 0x00118060
+const char g_rpcNicknameLength[]="Please choose another nick between and 3-20 characters";
+// samp.dll RVA: 0x00118040
+const char g_rpcNicknameCharacters[]="Please use only a-z, A-Z, 0-9";
+// samp.dll RVA: 0x0011800c
+const char g_rpcNicknameQuit[]="Use /quit to exit or press ESC and select Quit Game";
+// samp.dll RVA: 0x00117fe4
+const char g_rpcRejectedMod[]="CONNECTION REJECTED: Bad mod version.";
+// samp.dll RVA: 0x00117fac
+const char g_rpcRejectedSlot[]="CONNECTION REJECTED: Unable to allocate a player slot.";
+// samp.dll RVA: 0x0000fea0
+void RequestClass(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    BYTE outcome=0;BYTE info[50];stream.Read(outcome);stream.Read((char*)info,50);
+    if(outcome)local->SetSpawnInfo(info);
+    local->PrepareForClassSelection_Outcome(outcome!=0);
+}
+// samp.dll RVA: 0x0000ff70
+void RequestSpawn(RPCParameters *parameters) {
+    BYTE outcome=0;
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    stream.Read(outcome);CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    if(outcome==2||(outcome&&*(DWORD*)(local->nativeState+0x306)))local->Spawn();
+    else *(DWORD*)(local->nativeState+0x306)=0;
+}
+// samp.dll RVA: 0x00010410
+void ConnectionRejected(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE reason;stream.Read(reason);
+    if(reason==1)g_pChat->AddDebugMessage(g_rpcRejectedVersion);
+    else if(reason==2){
+        g_pChat->AddDebugMessage(g_rpcRejectedNickname);g_pChat->AddDebugMessage(g_rpcNicknameLength);
+        g_pChat->AddDebugMessage(g_rpcNicknameCharacters);g_pChat->AddDebugMessage(g_rpcNicknameQuit);
+    }else if(reason==3)g_pChat->AddDebugMessage(g_rpcRejectedMod);
+    else if(reason==4)g_pChat->AddDebugMessage(g_rpcRejectedSlot);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Disconnect(500,0);
+}
+// samp.dll RVA: 0x000114a0
+void EnterVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD player;DWORD vehicle=0;BYTE passenger=0;stream.Read(player);
+    stream.ReadBits((unsigned char*)&vehicle,16,true);stream.Read(passenger);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(player<=1004&&pool->players[player]&&pool->players[player]->remote){
+        CRemotePlayer *remote=pool->players[player]->remote;
+        if(remote->GetDistanceToLocalPlayer()<g_vehicleMarkerDistance)remote->EnterVehicle((WORD)vehicle,passenger!=0);
+    }
+}
+// samp.dll RVA: 0x000115c0
+void ExitVehicle(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD player;DWORD vehicle=0;stream.Read(player);stream.ReadBits((unsigned char*)&vehicle,16,true);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(player<=1004&&pool->players[player]&&pool->players[player]->remote){
+        CRemotePlayer *remote=pool->players[player]->remote;
+        if(remote->GetDistanceToLocalPlayer()<g_vehicleMarkerDistance)remote->ExitVehicle();
+    }
+}
+// samp.dll RVA: 0x000121c0
+void Chat(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(*(DWORD*)((BYTE*)g_pNetGame+0x3cd)==5){
+        char text[256]={0};WORD player;BYTE length;stream.Read(player);stream.Read(length);
+        stream.Read(text,length);text[length]=0;
+        CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+        if(player==pool->localId){
+            const char *name=pool->localName.c_str();DWORD color=pool->local->GetColorAsARGB();
+            g_pChat->AddChatMessage(name,color,text);
+        }else if(player<=1004&&pool->players[player]&&pool->players[player]->remote)pool->players[player]->remote->Chat(text);
+    }
+}
+// samp.dll RVA: 0x00010c20
+void ScrWorldPlayerDeath(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;WORD player;stream.Read(player);
+    if(pool&&player<=1004&&pool->players[player]&&pool->players[player]->remote)pool->players[player]->remote->Kill();
+}
+// samp.dll RVA: 0x00010ce0
+void ScrWorldPlayerRemove(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    DWORD player=0;CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    stream.ReadBits((unsigned char*)&player,16,true);
+    if(pool&&(WORD)player<=1004){
+        pool=((CNetGame*)g_pNetGame)->pools->players;
+        if(pool->players[(WORD)player]&&pool->players[(WORD)player]->remote)pool->players[(WORD)player]->remote->Remove();
+    }
+}
 // samp.dll RVA: 0x000102b0
 void UpdateScoresPingsIps(RPCParameters *parameters) {
     unsigned bytes=(int)parameters->numberOfBitsOfData/8;

@@ -5,6 +5,8 @@
 #pragma pack(push,1)
 class CRemotePlayer {public:
     BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x00017120
+    void Chat(char *text);
     // samp.dll RVA: 0x00016250
     CRemotePlayer();
     // samp.dll RVA: 0x000162c0

@@ -8,6 +8,15 @@
 #include "game/quaternion.h"
 #include "game/player_colors.h"
 #include <string.h>
+#include "net/playerpool.h"
+#include "chatwindow.h"
+// samp.dll RVA: 0x00017120
+void CRemotePlayer::Chat(char *text) {
+    WORD id=*(WORD*)nativeState;
+    const char *name=((CNetGame*)g_pNetGame)->pools->players->GetName(id);
+    DWORD color=(PlayerColors::Get(id)>>8)|0xff000000;
+    g_pChat->AddChatMessage(name,color,text);
+}
 // samp.dll RVA: 0x001181e4
 const float g_remoteAbsentDistance=10000.0f;
 // samp.dll RVA: 0x001181e8

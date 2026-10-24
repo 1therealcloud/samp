@@ -15,6 +15,14 @@
 #include "game/custommodels.h"
 #include "gui/render_dependencies.h"
 #include "gui/textdraw_texture.h"
+// samp.dll RVA: 0x00003fb0
+void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome) {
+    if(outcome) {
+        CPed *ped=*(CPed**)nativeState;
+        if(ped){ped->ClearWeapons();(*(CPed**)nativeState)->SetModelIndex(*(int*)(nativeState+0x150));}
+        *(DWORD*)(nativeState+0x143)=1;
+    }
+}
 // samp.dll RVA: 0x00003af0
 void CLocalPlayer::SetSpawnInfo(const void *info) {
     const BYTE *data=(const BYTE*)info;
