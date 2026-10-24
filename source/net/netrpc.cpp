@@ -21,6 +21,25 @@
 #include "net/vehiclepool.h"
 #include "net/actorpool.h"
 #include "gui/device_lifecycle.h"
+#include "scoreboard.h"
+// samp.dll RVA: 0x000102b0
+void UpdateScoresPingsIps(RPCParameters *parameters) {
+    unsigned bytes=(int)parameters->numberOfBitsOfData/8;
+    RakNet::BitStream stream(parameters->input,bytes+1,false);
+    if(bytes) {
+        CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+        unsigned count=bytes/10;
+        WORD id;int score;DWORD ping;
+        for(WORD i=0;(unsigned)i<count;i++) {
+            stream.Read(id);stream.Read(score);stream.Read(ping);
+            if(id<1004) {
+                if(id==pool->localId)pool->localScore=score;else if(pool->players[id])pool->players[id]->score=score;
+                if(id==pool->localId)pool->localPing=ping;else if(pool->players[id])pool->players[id]->ping=ping;
+            }
+        }
+        if(g_deviceScoreboard)g_deviceScoreboard->UpdateList();
+    }
+}
 // samp.dll RVA: 0x0000e740
 void EnterEditObject(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);

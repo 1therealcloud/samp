@@ -22,6 +22,90 @@
 #include "net/actorpool.h"
 #include "game/actor.h"
 #include "game/custommodels.h"
+#include "game/building_removal.h"
+// samp.dll RVA: 0x001182b0
+const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand={0x52c,"ii"};
+// samp.dll RVA: 0x001182c4
+const Scripting::OpcodeInfo g_rpcPlayerOpcode03fdCommand={0x3fd,"ii"};
+// samp.dll RVA: 0x0001da90
+void ScrSetPlayerName(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;WORD id;BYTE length,status;char name[25];stream.Read(id);stream.Read(length);
+    if(length<25){stream.Read(name,length);stream.Read(status);name[length]=0;
+        if(status==1)pool->SetName(id,name);if(pool->localId==id)pool->localName.assign(name,strlen(name));}
+}
+// samp.dll RVA: 0x000188b0
+void ScrSetPlayerDrunkLevel(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    DWORD level;stream.Read(level);CPed *ped=g_pGame->GetPlayerPed();if(ped)ped->SetDrunkLevel(level);
+}
+// samp.dll RVA: 0x00018950
+void ScrSetPlayerArmedWeapon(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPed *ped=g_pGame->GetPlayerPed();if(ped){int weapon;stream.Read(weapon);if(weapon>=0&&weapon<47)ped->SetArmedWeapon(weapon,0);}
+}
+// samp.dll RVA: 0x00019b20
+void ScrAttachCameraToObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;stream.Read(id);CObjectPool *pool=((CNetGame*)g_pNetGame)->pools->objects;
+    if(id<=2100&&pool->active[id]) {
+        CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;*(DWORD*)(local->nativeState+0x318)=1;
+        CEntity *object=((CNetGame*)g_pNetGame)->pools->objects->Get(id);g_pGame->m_pCamera->Attach(object);
+    }
+}
+// samp.dll RVA: 0x00019c20
+void ScrInterpolateCamera(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool move=true;CVector from,to;int time;BYTE mode;stream.Read(move);
+    stream.Read(from.x);stream.Read(from.y);stream.Read(from.z);stream.Read(to.x);stream.Read(to.y);stream.Read(to.z);stream.Read(time);stream.Read(mode);
+    if(mode<1||mode>2)mode=2;
+    if(time>0){CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;*(DWORD*)(local->nativeState+0x318)=1;
+        if(move)g_pGame->m_pCamera->SetMoveVector(&from,&to,time,mode);else g_pGame->m_pCamera->SetTrackVector(&from,&to,time,mode);}
+}
+// samp.dll RVA: 0x0001d110
+void ClickTextDraw(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    bool enabled=false;DWORD color=0;stream.Read(enabled);stream.Read(color);
+    if(g_renderObjectSelection&&g_renderObjectSelection->enabled)g_renderObjectSelection->Enable(FALSE);
+    CObjectEdit *edit=(CObjectEdit*)g_deviceObjectEdit;if(edit&&edit->unknown80)edit->Disable(FALSE);
+    if(g_renderTextDrawSelection){if(enabled)g_renderTextDrawSelection->Enable(color);else g_renderTextDrawSelection->Disable();}
+}
+// samp.dll RVA: 0x0001bca0
+void ScrStopObjectCameraCollision(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id;stream.Read(id);CEntity *object=((CNetGame*)g_pNetGame)->pools->objects->Get(id);if(object)((BYTE*)object)[0x53]=1;
+}
+// samp.dll RVA: 0x0001cff0
+void ScrRemoveBuildingForPlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    int model=0;CVector position={0,0,0};float radius=0;stream.Read(model);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(radius);
+    GameRemoveBuilding(model,position.x,position.y,position.z,radius);
+}
+// samp.dll RVA: 0x00018b40
+void ScrPlayCrimeReport(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD unused;BOOL useVehicle=0;int model=0;DWORD color=0,first=0;CVector position;
+    stream.Read(unused);stream.Read(useVehicle);stream.Read(model);stream.Read(color);stream.Read(first);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    // Native passes a pointer to the three-word vector, not its first DWORD.
+    g_pGame->ApplyPreviewAnimation(first,(DWORD)&position,useVehicle,model,color);
+}
+// samp.dll RVA: 0x00018750
+void ScrPlayerOpcode052C(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    DWORD value;stream.Read(value);if(g_pGame->GetPlayerPed())Scripting::ProcessCommand(&g_rpcPlayerOpcode052cCommand,0,value);
+}
+// samp.dll RVA: 0x00018800
+void ScrPlayerOpcode03FD(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    DWORD value;stream.Read(value);if(g_pGame->GetPlayerPed())Scripting::ProcessCommand(&g_rpcPlayerOpcode03fdCommand,0,value);
+}
+// Native is a bare RET; this empty body is recovered behavior, not a stub.
+// samp.dll RVA: 0x00017bd0
+void ScrRpc125(RPCParameters *parameters) {(void)parameters;}
+// samp.dll RVA: 0x0001a230
+void ScrRpc64(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);WORD ignored;stream.Read(ignored);
+}
 // samp.dll RVA: 0x00118274
 const Scripting::OpcodeInfo g_rpcWidescreenCommand={0x2a3,"i"};
 // samp.dll RVA: 0x0011844c

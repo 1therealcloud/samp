@@ -2,6 +2,8 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x000102b0
+void UpdateScoresPingsIps(RPCParameters *parameters);
 // samp.dll RVA: 0x0000e740
 void EnterEditObject(RPCParameters *parameters);
 // samp.dll RVA: 0x0000e800

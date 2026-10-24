@@ -3,6 +3,39 @@
 class RakClientInterface;
 struct RPCParameters;
 namespace Scripting {struct OpcodeInfo;}
+// samp.dll RVA: 0x0001da90
+void ScrSetPlayerName(RPCParameters *parameters);
+// samp.dll RVA: 0x000188b0
+void ScrSetPlayerDrunkLevel(RPCParameters *parameters);
+// samp.dll RVA: 0x00018950
+void ScrSetPlayerArmedWeapon(RPCParameters *parameters);
+// samp.dll RVA: 0x00019b20
+void ScrAttachCameraToObject(RPCParameters *parameters);
+// samp.dll RVA: 0x00019c20
+void ScrInterpolateCamera(RPCParameters *parameters);
+// samp.dll RVA: 0x0001d110
+void ClickTextDraw(RPCParameters *parameters);
+// samp.dll RVA: 0x0001bca0
+void ScrStopObjectCameraCollision(RPCParameters *parameters);
+// samp.dll RVA: 0x0001cff0
+void ScrRemoveBuildingForPlayer(RPCParameters *parameters);
+// samp.dll RVA: 0x00018b40
+void ScrPlayCrimeReport(RPCParameters *parameters);
+// Opcode-specific names: higher-level native semantics not established.
+// samp.dll RVA: 0x00018750
+void ScrPlayerOpcode052C(RPCParameters *parameters);
+// samp.dll RVA: 0x00018800
+void ScrPlayerOpcode03FD(RPCParameters *parameters);
+// Native is a bare RET, not a reconstruction stub.
+// samp.dll RVA: 0x00017bd0
+void ScrRpc125(RPCParameters *parameters);
+// Native consumes and discards a WORD, with stream construction/destruction.
+// samp.dll RVA: 0x0001a230
+void ScrRpc64(RPCParameters *parameters);
+// samp.dll RVA: 0x001182b0
+extern const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand;
+// samp.dll RVA: 0x001182c4
+extern const Scripting::OpcodeInfo g_rpcPlayerOpcode03fdCommand;
 // samp.dll RVA: 0x00017a60
 void ScrSetSpawnInfo(RPCParameters *parameters);
 // samp.dll RVA: 0x00018250

@@ -1,4 +1,7 @@
 #include "net/playerinfo.h"
+#include <string.h>
+// samp.dll RVA: 0x0001da20
+void CPlayerInfo::SetName(const char *text){name.assign(text,strlen(text));}
 #include "net/remoteplayer.h"
 #include <string.h>
 // samp.dll RVA: 0x00014060

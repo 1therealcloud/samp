@@ -14,6 +14,9 @@ public:
     WORD localId;std::string localName;CLocalPlayer *local;
     int largestId;CPlayerInfo *players[1004];DWORD connected[1004];
     DWORD savedCollision[1004];DWORD localPing;int localScore;
+    // Native admits adjacent ID1004, without a connected-state requirement.
+    // samp.dll RVA: 0x0001da50
+    void SetName(WORD player,const char *text);
     // samp.dll RVA: 0x00013e80
     CPlayerPool();
     // samp.dll RVA: 0x00013fd0

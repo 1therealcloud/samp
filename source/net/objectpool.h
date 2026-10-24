@@ -1,8 +1,11 @@
 #ifndef SAMP_OBJECT_POOL_H
 #define SAMP_OBJECT_POOL_H
 #include "game/object.h"
+struct RPCParameters;
 #pragma pack(push,1)
 class CObjectPool {
+    // samp.dll RVA: 0x00019b20
+    friend void ScrAttachCameraToObject(RPCParameters *parameters);
     int largestId;
     DWORD active[2100];
     CObject *objects[2100];

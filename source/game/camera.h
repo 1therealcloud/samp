@@ -20,9 +20,9 @@ public:
     // samp.dll RVA: 0x0009d3b0
     void TakeControl(void *target,short mode,short switchType);
     // samp.dll RVA: 0x0009d3d0
-    void SetMoveVector(CVector *from,CVector *to,int time,bool smooth);
+    void SetMoveVector(CVector *from,CVector *to,int time,BYTE mode);
     // samp.dll RVA: 0x0009d440
-    void SetTrackVector(CVector *from,CVector *to,int time,bool smooth);
+    void SetTrackVector(CVector *from,CVector *to,int time,BYTE mode);
     // samp.dll RVA: 0x0009d4a0
     void Attach(CEntity *owner);
     // samp.dll RVA: 0x0009d4f0

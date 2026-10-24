@@ -7,6 +7,8 @@ class CRemotePlayer;
 #pragma pack(push,1)
 class CPlayerInfo {public:
     int score;DWORD npc;CRemotePlayer *remote;DWORD ping;std::string name;
+    // samp.dll RVA: 0x0001da20
+    void SetName(const char *text);
     // samp.dll RVA: 0x00014060
     CPlayerInfo(const char *name,DWORD npc);
     // samp.dll RVA: 0x00013e10

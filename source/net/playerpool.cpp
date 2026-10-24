@@ -1,4 +1,9 @@
 #include "net/playerpool.h"
+#include "net/playerinfo.h"
+// samp.dll RVA: 0x0001da50
+void CPlayerPool::SetName(WORD player,const char *text) {
+    if(player<=1004&&players[player])players[player]->SetName(text);
+}
 #include "net/remoteplayer.h"
 #include "net/actorpool.h"
 #include "game/playerped.h"

@@ -17,14 +17,14 @@ void CCamera::SetMatrix(CMatrix matrix) {
 // samp.dll RVA: 0x0009d3b0
 void CCamera::TakeControl(void *target,short mode,short switchType) { ((void (__fastcall*)(void*,void*,void*,int,int,int))0x50c7c0)((void*)0xb6f028,0,target,(int)mode,(int)switchType,1); }
 // samp.dll RVA: 0x0009d3d0
-void CCamera::SetMoveVector(CVector *from,CVector *to,int time,bool smooth) {
+void CCamera::SetMoveVector(CVector *from,CVector *to,int time,BYTE mode) {
     Scripting::ProcessCommand(&g_cameraStop);Scripting::ProcessCommand(&g_cameraPersistPosition,1);
-    Scripting::ProcessCommand(&g_cameraMove,(double)from->x,(double)from->y,(double)from->z,(double)to->x,(double)to->y,(double)to->z,time,(int)smooth);
+    Scripting::ProcessCommand(&g_cameraMove,(double)from->x,(double)from->y,(double)from->z,(double)to->x,(double)to->y,(double)to->z,time,(int)mode);
 }
 // samp.dll RVA: 0x0009d440
-void CCamera::SetTrackVector(CVector *from,CVector *to,int time,bool smooth) {
+void CCamera::SetTrackVector(CVector *from,CVector *to,int time,BYTE mode) {
     Scripting::ProcessCommand(&g_cameraPersistTrack,1);
-    Scripting::ProcessCommand(&g_cameraTrack,(double)from->x,(double)from->y,(double)from->z,(double)to->x,(double)to->y,(double)to->z,time,(int)smooth);
+    Scripting::ProcessCommand(&g_cameraTrack,(double)from->x,(double)from->y,(double)from->z,(double)to->x,(double)to->y,(double)to->z,time,(int)mode);
 }
 // Strict bounds, ordered comparisons. Native returns AL, not a WORD or BOOL.
 // samp.dll RVA: 0x000b46e0
