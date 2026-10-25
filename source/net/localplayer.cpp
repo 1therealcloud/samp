@@ -2,6 +2,7 @@
 #include "net/localplayer.h"
 #include "net/vehiclepool.h"
 #include "net/playerpool.h"
+#include "net/actorpool.h"
 #include "net/objectpool.h"
 #include "game/util.h"
 #include <string.h>
@@ -19,6 +20,7 @@
 #include "net/remoteplayer.h"
 #include "game/aimstuff.h"
 #include "game/quaternion.h"
+#include "gui/device_lifecycle.h"
 // VC7 runtime helper; library entry, not a recovered SA-MP method.
 extern "C" __int64 __cdecl _ftol2();
 #pragma pack(push,1)
@@ -852,4 +854,150 @@ DWORD CLocalPlayer::GetSendRate() {
     CPed *ped=*(CPed**)this;
     if(!ped)return 1000;
     return ped->IsInVehicle()?GetInCarSendRate():GetOnFootSendRate();
+}
+
+// samp.dll RVA: 0x00117888
+const char g_localWorldBoundaryText[]="Stay within the ~r~world boundries";
+// samp.dll RVA: 0x00117968
+int g_localVehicleDamageRpc=106;
+// samp.dll RVA: 0x0011797c
+const float g_localPassengerEntryDistance=8.0f;
+// samp.dll RVA: 0x00002fd0
+void CLocalPlayer::ProcessHead() {
+    CPed *ped=*(CPed**)nativeState;if(!ped)return;
+    if(g_pGame&&!*(DWORD*)((BYTE*)g_pGame+0x59))return;
+    if(ped->GetStuff())return;
+    if(g_deviceObjectEdit&&*(DWORD*)(g_deviceObjectEdit+0x80))return;
+    CMatrix matrix;(*(CPed**)nativeState)->GetMatrix(&matrix);DWORD now=GetTickCount();CLocalPlayer *self=this;
+    if(now-*(DWORD*)(nativeState+0x120)>1000) {
+        CameraAim *aim=AimStuff::GetInternalAim();float z;
+        __asm {
+            mov eax,aim
+            fld dword ptr [eax]
+            fmul dword ptr [g_remoteHeadDistance]
+            fadd dword ptr [matrix+48]
+            fld dword ptr [eax+4]
+            fmul dword ptr [g_remoteHeadDistance]
+            fadd dword ptr [matrix+52]
+            fld dword ptr [eax+8]
+            mov ecx,self
+            mov edx,now
+            mov [ecx+120h],edx
+            fmul dword ptr [g_remoteHeadDistance]
+            fadd dword ptr [matrix+56]
+            fstp dword ptr [z]
+            fxch st(1)
+            fsub dword ptr [matrix+48]
+            fstp dword ptr [ecx+114h]
+            fsub dword ptr [matrix+52]
+            fstp dword ptr [ecx+118h]
+            fld dword ptr [z]
+            fsub dword ptr [matrix+56]
+            fstp dword ptr [ecx+11ch]
+        }
+    }
+    if(now-*(DWORD*)(nativeState+0x124)>200) {
+        CVector target;ped=*(CPed**)nativeState;
+        __asm {
+            mov ecx,self
+            fld dword ptr [matrix+48]
+            fadd dword ptr [ecx+114h]
+            fstp dword ptr [target]
+            fld dword ptr [matrix+52]
+            fadd dword ptr [ecx+118h]
+            fstp dword ptr [target+4]
+            fld dword ptr [matrix+56]
+            fadd dword ptr [ecx+11ch]
+            fstp dword ptr [target+8]
+        }
+        ped->ApplyCommandTask(g_remoteHeadTask,0,2000,-1,&target,0,0.1f,500,3,0);
+        *(DWORD*)(nativeState+0x124)=now;
+    }
+}
+// samp.dll RVA: 0x00003e40
+void CLocalPlayer::ProcessWorldBoundaries() {
+    if(g_pGame->GetCurrentInterior())return;
+    BYTE *settings=*(BYTE**)((BYTE*)g_pNetGame+0x3d5);
+    if((*(CPed**)nativeState)->EnforceWorldBoundries(*(float*)(settings+5),*(float*)(settings+9),*(float*)(settings+0xd),*(float*)(settings+0x11))) {
+        (*(CPed**)nativeState)->SetArmedWeapon(0,0);
+        g_pGame->DisplayGameText(g_localWorldBoundaryText,1000,5);
+    }
+}
+// samp.dll RVA: 0x00003ea0
+void CLocalPlayer::ProcessVehicleWorldBoundaries() {
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    WORD id=vehicles->Find((*(CPed**)nativeState)->GetVehicle());
+    if(g_pGame->GetCurrentInterior()||id==0xffff||id>=2000||!vehicles->m_bNotEmpty[id])return;
+    CVehicle *vehicle=vehicles->m_pObjects[id];if(!vehicle)return;
+    BYTE *settings=*(BYTE**)((BYTE*)g_pNetGame+0x3d5);
+    if(vehicle->EnforceWorldBoundries(*(float*)(settings+5),*(float*)(settings+9),*(float*)(settings+0xd),*(float*)(settings+0x11)))
+        g_pGame->DisplayGameText(g_localWorldBoundaryText,1000,5);
+}
+// samp.dll RVA: 0x00003f60
+void CLocalPlayer::PrepareForClassSelection() {
+    CPed *ped=*(CPed**)nativeState;*(DWORD*)(nativeState+0x143)=0;
+    if(ped) {
+        ped->SetInitialState();(*(CPed**)nativeState)->SetHealth(100.0f);(*(CPed**)nativeState)->SetControllable(FALSE);
+    }
+    DWORD (WINAPI *tick)()=GetTickCount;
+    *(DWORD*)(nativeState+0x14b)=tick();*(DWORD*)(nativeState+0x147)=tick();
+}
+// samp.dll RVA: 0x00005c20
+void CLocalPlayer::ProcessVehicleDamage(WORD id) {
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    if(id>=2000||!vehicles->m_bNotEmpty[id])return;
+    CVehicle *vehicle=vehicles->m_pObjects[id];if(!vehicle)return;
+    if(id!=*(WORD*)(nativeState+0x31c)) {
+        *(DWORD*)(nativeState+0x31e)=vehicle->GetPanelsDamage();
+        *(DWORD*)(nativeState+0x322)=vehicle->GetDoorsDamage();
+        nativeState[0x326]=vehicle->GetLightsDamage();nativeState[0x327]=vehicle->GetTires();
+        *(WORD*)(nativeState+0x31c)=id;return;
+    }
+    if(*(DWORD*)(nativeState+0x31e)==vehicle->GetPanelsDamage()&&*(DWORD*)(nativeState+0x322)==vehicle->GetDoorsDamage()&&nativeState[0x326]==vehicle->GetLightsDamage()&&nativeState[0x327]==vehicle->GetTires())return;
+    *(DWORD*)(nativeState+0x31e)=vehicle->GetPanelsDamage();
+    *(DWORD*)(nativeState+0x322)=vehicle->GetDoorsDamage();
+    nativeState[0x326]=vehicle->GetLightsDamage();nativeState[0x327]=vehicle->GetTires();
+    RakNet::BitStream stream;
+    WORD sentId=*(WORD*)(nativeState+0x31c);stream.WriteBits((const unsigned char*)&sentId,16,true);
+    DWORD panels=*(DWORD*)(nativeState+0x31e);stream.WriteBits((const unsigned char*)&panels,32,true);
+    DWORD doors=*(DWORD*)(nativeState+0x322);stream.WriteBits((const unsigned char*)&doors,32,true);
+    BYTE lights=nativeState[0x326];stream.WriteBits(&lights,8,true);
+    BYTE tires=nativeState[0x327];stream.WriteBits(&tires,8,true);
+    typedef char VehicleDamageReliability[(HIGH_PRIORITY==1&&RELIABLE==8)?1:-1];
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localVehicleDamageRpc,&stream,HIGH_PRIORITY,RELIABLE,0,false);
+}
+// samp.dll RVA: 0x00006de0
+void CLocalPlayer::ProcessPassengerEntry() {
+    BYTE *keys=(BYTE*)KeyStuff::GetInternalKeys();WORD enter=*(WORD*)(keys+0x10);
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    if(!enter||*(WORD*)(keys+0x40))return;
+    WORD id=vehicles->FindNearestToLocalPlayer();if(id>=2000||!vehicles->m_bNotEmpty[id])return;
+    CVehicle *vehicle=vehicles->Get(id);BYTE nearEnough=0;
+    __asm {
+        mov ecx,vehicle
+        call CEntity::GetDistanceToLocalPlayer
+        fcomp dword ptr [g_localPassengerEntryDistance]
+        fnstsw ax
+        test ah,5
+        jp passenger_too_far
+        mov nearEnough,1
+    passenger_too_far:
+    }
+    if(!nearEnough)return;
+    if((BYTE)(*(CPed**)nativeState)->GetCurrentWeapon()==46)(*(CPed**)nativeState)->SetArmedWeapon(0,0);
+    (*(CPed**)nativeState)->EnterVehicle(vehicle->m_nHandle,TRUE);EnterVehicle(id,TRUE);
+}
+// samp.dll RVA: 0x00004a30
+WORD CLocalPlayer::GetAimedPlayer() {
+    CPed *ped=*(CPed**)nativeState;if(!ped)return 0xffff;
+    void *target=ped->GetAimedPed();if(!target)return 0xffff;
+    CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+    return players?players->Find(target):0xffff;
+}
+// samp.dll RVA: 0x00004a60
+WORD CLocalPlayer::GetAimedActor() {
+    CPed *ped=*(CPed**)nativeState;if(!ped)return 0xffff;
+    void *target=ped->GetAimedPed();if(!target)return 0xffff;
+    CActorPool *actors=((CNetGame*)g_pNetGame)->pools->actors;
+    return actors?(WORD)actors->Find(target):0xffff;
 }

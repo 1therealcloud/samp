@@ -1,6 +1,14 @@
 #include "gui/device_objects.h"
 #include "archive/provider.h"
 #include "main.h"
+#include <new>
+#include <string.h>
+// samp.dll RVA: 0x00070630
+void CSpawnScreen::SetText(const char *value) {
+    char *&text=*(char**)(unknown00+4);
+    if(text)::operator delete(text);text=0;
+    if(value){text=(char*)::operator new(strlen(value)+1);strcpy(text,value);}
+}
 // samp.dll RVA: 0x002aca2c
 CFonts *g_deviceFonts;
 // samp.dll RVA: 0x000702d0

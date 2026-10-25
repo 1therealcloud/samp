@@ -35,6 +35,8 @@ public:
 };
 class CSpawnScreen {
 public:
+    // samp.dll RVA: 0x00070630
+    void SetText(const char *text);
     // samp.dll RVA: 0x00070990
     CSpawnScreen(IDirect3DDevice9 *device);
     BYTE unknown00[8];CFonts *fonts;IDirect3DDevice9 *device;IDirect3DTexture9 *texture;

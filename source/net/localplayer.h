@@ -9,6 +9,22 @@ struct PedBulletData;
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
+    // samp.dll RVA: 0x00002fd0
+    void ProcessHead();
+    // samp.dll RVA: 0x00003e40
+    void ProcessWorldBoundaries();
+    // samp.dll RVA: 0x00003ea0
+    void ProcessVehicleWorldBoundaries();
+    // samp.dll RVA: 0x00003f60
+    void PrepareForClassSelection();
+    // samp.dll RVA: 0x00005c20
+    void ProcessVehicleDamage(WORD vehicle);
+    // samp.dll RVA: 0x00006de0
+    void ProcessPassengerEntry();
+    // samp.dll RVA: 0x00004a30
+    WORD GetAimedPlayer();
+    // samp.dll RVA: 0x00004a60
+    WORD GetAimedActor();
     // samp.dll RVA: 0x00003390
     BYTE GetSpecialAction();
     // samp.dll RVA: 0x00004db0
@@ -120,6 +136,12 @@ extern const float g_localAimZoomScale;
 extern const float g_localAimAspectScale;
 // samp.dll RVA: 0x00117950
 extern int g_localWastedRpc;
+// samp.dll RVA: 0x00117968
+extern int g_localVehicleDamageRpc;
+// samp.dll RVA: 0x0011797c
+extern const float g_localPassengerEntryDistance;
+// samp.dll RVA: 0x00117888
+extern const char g_localWorldBoundaryText[];
 // samp.dll RVA: 0x00117944
 extern const float g_localQuaternionSyncThreshold;
 #endif
