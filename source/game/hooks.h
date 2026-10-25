@@ -219,4 +219,11 @@ void GameInstallHook(DWORD address,DWORD function,DWORD storage,const BYTE *jump
 void GamePrepareHooks();
 // samp.dll RVA: 0x000a6020
 void GameInstallHooks();
+// Raw GTA callback; not an ordinary void() call interface.
+// samp.dll RVA: 0x000a5bf0
+void GameHook_000a5bf0();
+// samp.dll RVA: 0x000a6d30
+void GameInstallModelInfoHook();
+// samp.dll RVA: 0x00151a60
+extern BYTE g_gameCustomModelHookJump[6];
 #endif

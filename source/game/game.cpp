@@ -826,6 +826,8 @@ void *g_gameCustomModelInfo[32768];
 DWORD g_gameUseCustomModelInfo;
 // samp.dll RVA: 0x00152ae0
 void **g_gameModelInfoTable=g_gameCustomModelInfo;
+// samp.dll RVA: 0x001a0448
+DWORD g_gameCustomModelPrefix[32767];
 // samp.dll RVA: 0x0011e664
 const Scripting::OpcodeInfo g_gameRequestModelCommand={0x247,"i"};
 // samp.dll RVA: 0x0011e678

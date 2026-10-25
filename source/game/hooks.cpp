@@ -2,6 +2,28 @@
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/frame_limit.h"
+// samp.dll RVA: 0x00151a60
+BYTE g_gameCustomModelHookJump[6]={0xff,0x25,0xd7,0x87,0x40,0x00};
+// samp.dll RVA: 0x000a5bf0
+__declspec(naked) void GameHook_000a5bf0() {
+    __asm {
+        cmp ebp,0
+        jl custom_model_negative
+        push esi
+        push edi
+        lea edi,[ebp+ebp*4]
+        mov eax,0x4087f0
+        jmp eax
+    custom_model_negative:
+        pop ebp
+        pop ebx
+        ret
+    }
+}
+// samp.dll RVA: 0x000a6d30
+void GameInstallModelInfoHook() {
+    GameInstallHook(0x4087ea,(DWORD)GameHook_000a5bf0,0x4087d7,g_gameCustomModelHookJump,6);
+}
 // samp.dll RVA: 0x0018f624
 CPlayerPool *g_hookDamagePlayerPool;
 // samp.dll RVA: 0x00151afc

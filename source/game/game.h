@@ -273,6 +273,37 @@ extern void *g_gameCustomModelInfo[32768];
 extern DWORD g_gameUseCustomModelInfo;
 // samp.dll RVA: 0x00152ae0
 extern void **g_gameModelInfoTable;
+// Opaque native storage cleared immediately before the established model bank.
+// samp.dll RVA: 0x001a0448
+extern DWORD g_gameCustomModelPrefix[32767];
+#pragma pack(push,1)
+struct GameModelReferencePatch {DWORD address;BYTE opcode;};
+#pragma pack(pop)
+typedef char NativeModelReferencePatchExtent[(sizeof(GameModelReferencePatch)==5)?1:-1];
+// Addresses stored in these records are GTA SA virtual addresses.
+// samp.dll RVA: 0x00152ae8
+extern const GameModelReferencePatch g_gameModelReferencePatchesUS[707];
+// samp.dll RVA: 0x001538b8
+extern const GameModelReferencePatch g_gameModelReferencePatchesEU[707];
+// samp.dll RVA: 0x000a7560
+BOOL GamePatchModelInfoReferences();
+// samp.dll RVA: 0x000a75f0
+BOOL GameInitializeCustomModelInfo();
+// samp.dll RVA: 0x000b6390
+void * __cdecl GameCreateCollisionModel();
+// samp.dll RVA: 0x000b63c0
+BOOL __cdecl GameLoadCollisionData(const void *data,DWORD length,void *collision);
+// Raw plugin callback: only its first two stack words are consumed by native code.
+// samp.dll RVA: 0x000a78b0
+DWORD __cdecl GameReadCustomCollision(void *stream,DWORD length);
+// samp.dll RVA: 0x000a7980
+void GameRegisterCustomCollisionPlugin();
+// samp.dll RVA: 0x0011edc8
+extern const char g_customCollisionWrongType[];
+// samp.dll RVA: 0x0011ed9c
+extern const char g_customCollisionLoadFailed[];
+// samp.dll RVA: 0x0011ed68
+extern const char g_customCollisionAllocationFailed[];
 // samp.dll RVA: 0x0011e664
 extern const Scripting::OpcodeInfo g_gameRequestModelCommand;
 // samp.dll RVA: 0x0011e678

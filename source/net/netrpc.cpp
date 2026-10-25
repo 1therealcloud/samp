@@ -27,6 +27,24 @@
 #include "game/game.h"
 #include "game/patches.h"
 #include "game/custommodels.h"
+// samp.dll RVA: 0x00011d80
+void ScrCustomModelRecord(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE record[94]={0};DWORD index=0,count=0;
+    if(!g_customModels) {
+        CCustomModels *models=new CCustomModels;g_customModels=models;models->Initialize();if(!g_customModels)return;
+    }
+    stream.ReadBits((BYTE*)&index,32,true);stream.ReadBits((BYTE*)&count,32,true);
+    stream.ReadBits(record+7,8,true);stream.ReadBits(record+8,32,true);stream.ReadBits(record+0xc,32,true);stream.ReadBits(record+0x10,32,true);
+    stream.ReadBits(record+0x46,32,true);stream.ReadBits(record+0x4a,32,true);stream.ReadBits(record+0x4e,32,true);stream.ReadBits(record+0x52,32,true);
+    stream.ReadBits(record+0x56,8,true);stream.ReadBits(record+0x57,8,true);
+    g_customModels->AddRecord(index,record);g_customModels->SetExpectedRecordCount(count);
+}
+// samp.dll RVA: 0x0000ea40
+void ScrCustomModelsReset(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CCustomModels *models=g_customModels;if(models){models->Initialize();g_customModels->DeleteRecord(0);}
+}
 // samp.dll RVA: 0x0000ead0
 void ScrCustomModelsComplete(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
@@ -638,10 +656,10 @@ const int g_rpcClientCheck=103;
 const int g_rpcScrCreateActor=171;
 // samp.dll RVA: 0x00117f14
 const int g_rpcScrDestroyActor=172;
-// Handler RVA0x00011d80; semantic name not established.
+// Custom-model record handler RVA0x00011d80; legacy registry name retained.
 // samp.dll RVA: 0x00117f10
 const int g_rpcUnknown00117F10=179;
-// Handler RVA0x0000ea40; semantic name not established.
+// Custom-model reset handler RVA0x0000ea40; legacy registry name retained.
 // samp.dll RVA: 0x00117f0c
 const int g_rpcUnknown00117F0C=180;
 // Handler RVA0x00011f80; semantic name not established.

@@ -2,9 +2,13 @@
 #define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #include <windows.h>
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
-// Constructor is recovered; directory/worker startup and complete ownership remain open.
+// Constructor and directory/model initialization are recovered; worker startup/ownership remain open.
 class CCustomModels {public:
     BYTE nativeState[0x206d];
+    // samp.dll RVA: 0x0000b9c0
+    DWORD SanitizeCacheHost(char *output,DWORD capacity,const char *host);
+    // samp.dll RVA: 0x0000ba40
+    void Initialize();
     // Eight copied digits are deliberately not explicitly terminated.
     // samp.dll RVA: 0x0000c0b0
     DWORD ParseCacheHash(const char *filename);
@@ -127,4 +131,8 @@ extern const char g_customFindTempPattern[];
 extern const char g_customFindDffPattern[];
 // samp.dll RVA: 0x00117d0c
 extern const char g_customFindTxdPattern[];
+// samp.dll RVA: 0x00117c30
+extern const char g_customServerCachePattern[];
+// samp.dll RVA: 0x00117c3c
+extern const char g_customLocalCachePattern[];
 #endif

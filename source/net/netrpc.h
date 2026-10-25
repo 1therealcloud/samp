@@ -2,6 +2,10 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x00011d80
+void ScrCustomModelRecord(RPCParameters *parameters);
+// samp.dll RVA: 0x0000ea40
+void ScrCustomModelsReset(RPCParameters *parameters);
 // samp.dll RVA: 0x0000ead0
 void ScrCustomModelsComplete(RPCParameters *parameters);
 // samp.dll RVA: 0x00010530
