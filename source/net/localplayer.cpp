@@ -22,6 +22,149 @@
 // VC7 runtime helper; library entry, not a recovered SA-MP method.
 extern "C" __int64 __cdecl _ftol2();
 #pragma pack(push,1)
+struct LocalOnfootSyncData {
+    WORD leftRight,upDown,keys;CVector position;GameQuaternion rotation;
+    BYTE health,armour,weaponAim,specialAction;CVector speed,surfingOffset;WORD surfingVehicle;DWORD animation;
+};
+struct LocalIncarSyncData {
+    WORD vehicle,leftRight,upDown,keys;GameQuaternion rotation;CVector position,speed;float health;
+    BYTE pedHealth,armour,weaponAim,siren,landingGear;WORD trailer;DWORD modelData;
+};
+#pragma pack(pop)
+typedef char LocalOnfootSyncExtent[(sizeof(LocalOnfootSyncData)==68)?1:-1];
+typedef char LocalIncarSyncExtent[(sizeof(LocalIncarSyncData)==63)?1:-1];
+// samp.dll RVA: 0x00117944
+const float g_localQuaternionSyncThreshold=0.00001f;
+// samp.dll RVA: 0x00003390
+BYTE CLocalPlayer::GetSpecialAction() {
+    if(GetPed()->HasJetpack())return 2;
+    if(GetPed()->DoesDancing()) {DWORD style=*(DWORD*)((BYTE*)GetPed()+0x2d6);if(style<=3)return (BYTE)(style+5);}
+    if(GetPed()->DoesHandsUp())return 10;
+    if(GetPed()->UsingCellphone())return 11;
+    if(GetPed()->DoesUrinating())return 68;
+    if(GetPed()->IsDucking())return 1;
+    if(GetPed()->GetVehicleTransitionTaskState())return 3;
+    if(GetPed()->HasTaskType704())return 4;
+    if(GetPed()->GetStuff()) {
+        if(GetPed()->GetStuff()==1)return 20;
+        if(GetPed()->GetStuff()==2)return 22;
+        if(GetPed()->GetStuff()==3)return 23;
+        if(GetPed()->GetStuff()==4)return 21;
+    }
+    if(GetPed()->HasDanceState())return 24;
+    return GetPed()->HasDanceStyle()?25:0;
+}
+// samp.dll RVA: 0x00004db0
+void CLocalPlayer::SendOnfootData() {
+    RakNet::BitStream stream;WORD leftRight,upDown;WORD keys=GetPed()->GetKeys(&leftRight,&upDown);
+    BYTE aim=GetPed()->GetAim();CMatrix matrix;CVector speed;GetPed()->GetMatrix(&matrix);GetPed()->GetSpeed(&speed);
+    LocalOnfootSyncData data;data.leftRight=leftRight;data.upDown=upDown;data.keys=keys;data.position=matrix.position;
+    data.weaponAim=(BYTE)(aim<<6);GameQuaternionFromMatrixComponents(&matrix,&data.rotation);GameQuaternionNormalize(&data.rotation);
+    float *current=(float*)&data.rotation;float *previous=(float*)(nativeState+0x4c);int keepPrevious=1;
+    for(int i=0;i<4;++i) {
+        // Push the native float words unchanged, including exceptional bit patterns.
+        DWORD first=((DWORD*)current)[i],second=((DWORD*)previous)[i];int close=0;
+        __asm {
+            push second
+            push first
+            call FloatOffset
+            add esp,8
+            fcomp dword ptr [g_localQuaternionSyncThreshold]
+            fnstsw ax
+            test ah,5
+            jp onfoot_component_different
+            mov close,1
+        onfoot_component_different:
+        }
+        if(!close){keepPrevious=0;break;}
+    }
+    if(keepPrevious)memcpy(&data.rotation,previous,16);
+    CLocalPlayer *self=this;DWORD health,armour;
+    __asm {
+        mov ecx,self
+        mov ecx,[ecx]
+        call CPed::GetHealth
+        call _ftol2
+        mov health,eax
+        mov ecx,self
+        mov ecx,[ecx]
+        call CPed::GetArmour
+        call _ftol2
+        mov armour,eax
+    }
+    data.health=(BYTE)health;data.armour=(BYTE)armour;data.weaponAim|=(BYTE)(GetPed()->GetCurrentWeapon()&0x3f);
+    data.specialAction=GetSpecialAction();data.speed=speed;
+    if(*(DWORD*)(nativeState+0x2e6)){memcpy(&data.surfingOffset,nativeState+0x2ea,12);data.surfingVehicle=*(WORD*)(nativeState+0x2d8);}
+    else {data.surfingOffset.x=0;data.surfingOffset.y=0;data.surfingOffset.z=0;data.surfingVehicle=0;}
+    data.animation=*(DWORD*)(nativeState+0x100);*(DWORD*)(nativeState+0x104)=1;
+    if(HasDataChanged(nativeState+0x3a,&data,68)) {
+        stream.Write((BYTE)207);stream.Write((char*)&data,68);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,1);
+        memcpy(nativeState+0x3a,&data,68);
+    }
+}
+// samp.dll RVA: 0x00006e80
+void CLocalPlayer::SendIncarData() {
+    RakNet::BitStream stream;CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    WORD leftRight,upDown;WORD keys=GetPed()->GetKeys(&leftRight,&upDown);BYTE aim=GetPed()->GetAim();
+    LocalIncarSyncData data={0};if(!GetPed())return;
+    data.vehicle=vehicles->Find(GetPed()->GetVehicle());if(data.vehicle==0xffff)return;
+    data.leftRight=leftRight;data.upDown=upDown;data.keys=keys;data.weaponAim=(BYTE)(aim<<6);
+    CVehicle *vehicle=vehicles->Get(data.vehicle);if(!vehicle)return;
+    CMatrix matrix;CVector speed;GameQuaternion rotation;vehicle->GetMatrix(&matrix);vehicle->GetSpeed(&speed);
+    GameQuaternionFromMatrixComponents(&matrix,&rotation);GameQuaternionNormalize(&rotation);data.rotation=rotation;
+    float *current=(float*)&data.rotation;float *previous=(float*)(nativeState+0x9e);int keepPrevious=1;
+    for(int i=0;i<4;++i) {
+        // Push the native float words unchanged, including exceptional bit patterns.
+        DWORD first=((DWORD*)current)[i],second=((DWORD*)previous)[i];int close=0;
+        __asm {
+            push second
+            push first
+            call FloatOffset
+            add esp,8
+            fcomp dword ptr [g_localQuaternionSyncThreshold]
+            fnstsw ax
+            test ah,5
+            jp incar_component_different
+            mov close,1
+        incar_component_different:
+        }
+        if(!close){keepPrevious=0;break;}
+    }
+    if(keepPrevious)memcpy(&data.rotation,previous,16);
+    data.position=matrix.position;data.speed=speed;data.health=vehicle->GetHealth();
+    CLocalPlayer *self=this;DWORD health,armour;
+    __asm {
+        mov ecx,self
+        mov ecx,[ecx]
+        call CPed::GetHealth
+        call _ftol2
+        mov health,eax
+        mov ecx,self
+        mov ecx,[ecx]
+        call CPed::GetArmour
+        call _ftol2
+        mov armour,eax
+    }
+    data.pedHealth=(BYTE)health;data.armour=(BYTE)armour;data.weaponAim|=(BYTE)(GetPed()->GetCurrentWeapon()&0x3f);
+    data.trailer=0;CVehicle *trailer=vehicle->GetTrailer();
+    if(trailer&&trailer->m_pGameVehicle&&trailer->GetTractor()==vehicle) {
+        vehicle->SetTrailer(trailer);data.trailer=vehicles->Find(trailer->m_pGameVehicle);
+    }else vehicle->SetTrailer(0);
+    if(vehicle->GetModelIndex()==520)data.modelData=vehicle->GetHydraThrusters();
+    else if(vehicle->GetModelIndex()==538||vehicle->GetModelIndex()==537||vehicle->GetModelIndex()==449)*(float*)&data.modelData=vehicle->GetTrainSpeed();
+    else if(vehicle->GetSubtype()==2||vehicle->GetSubtype()==6)*(float*)&data.modelData=vehicle->GetBackendFloat648();
+    else data.modelData=0;
+    data.siren=vehicle->SirenEnabled()!=0;data.landingGear=vehicle->GetLandingGearState()!=0;
+    if(HasDataChanged(nativeState+0x96,&data,63)) {
+        stream.Write((BYTE)200);stream.Write((char*)&data,63);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,1);
+        memcpy(nativeState+0x96,&data,63);
+    }
+    if(data.trailer&&data.trailer<2000)SendTrailerData(data.trailer);
+    if(vehicle->HasTurret()||GetTickCount()-*(DWORD*)(nativeState+0x13b)>1000){*(DWORD*)(nativeState+0x13b)=GetTickCount();SendAimData();}
+}
+#pragma pack(push,1)
 struct LocalAimSyncData {BYTE cameraMode;BYTE vectors[24];float aimZ;BYTE zoomWeapon,aspect;};
 struct LocalTrailerSyncData {WORD vehicle;CVector position;GameQuaternion rotation;CVector speed,turnSpeed;};
 struct LocalPassengerSyncData {WORD vehicle;BYTE seatFlags,weaponAim,health,armour;WORD leftRight,upDown,keys;CVector position;};

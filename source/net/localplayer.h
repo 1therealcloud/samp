@@ -9,6 +9,12 @@ struct PedBulletData;
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
+    // samp.dll RVA: 0x00003390
+    BYTE GetSpecialAction();
+    // samp.dll RVA: 0x00004db0
+    void SendOnfootData();
+    // samp.dll RVA: 0x00006e80
+    void SendIncarData();
     // samp.dll RVA: 0x000041c0
     DWORD NeedsToSendOnfootData(WORD keys,WORD upDown,WORD leftRight);
     // samp.dll RVA: 0x000041f0
@@ -114,4 +120,6 @@ extern const float g_localAimZoomScale;
 extern const float g_localAimAspectScale;
 // samp.dll RVA: 0x00117950
 extern int g_localWastedRpc;
+// samp.dll RVA: 0x00117944
+extern const float g_localQuaternionSyncThreshold;
 #endif

@@ -308,7 +308,7 @@ void CVehicle::EnableSiren(BYTE enabled) {
 }
 
 // samp.dll RVA: 0x000b70a0
-bool CVehicle::SirenEnabled() {
+BOOL CVehicle::SirenEnabled() {
     return (*(BYTE*)((BYTE*)m_pGameVehicle+0x42d)&0x80)!=0;
 }
 

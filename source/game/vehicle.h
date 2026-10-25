@@ -123,7 +123,7 @@ public:
     // samp.dll RVA: 0x000b7080
     void EnableSiren(BYTE enabled);
     // samp.dll RVA: 0x000b70a0
-    bool SirenEnabled();
+    BOOL SirenEnabled();
     // samp.dll RVA: 0x000b70c0
     void SetBackendWord45c(WORD value);
     // samp.dll RVA: 0x000b71e0
