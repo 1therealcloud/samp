@@ -4,6 +4,23 @@
 // Observed registry prefix only: pointer array at +0, DWORD count at +4.
 // Complete allocation, ownership and loader lifecycle remain open. Never allocate.
 class CCustomModels {public:
+    // samp.dll RVA: 0x0000bb10
+    bool IsDffCached(DWORD hash);
+    // samp.dll RVA: 0x0000bba0
+    bool IsTxdCached(DWORD hash);
+    // samp.dll RVA: 0x0000bd40
+    bool PauseReadyWorker();
+    // samp.dll RVA: 0x0000bde0
+    int CountReadyWorkers();
+    // samp.dll RVA: 0x0000c6e0
+    bool IsDffRequested(DWORD hash);
+    // samp.dll RVA: 0x0000c720
+    bool IsTxdRequested(DWORD hash);
+    // Index and size are deliberately unused by the native request body.
+    // samp.dll RVA: 0x0000d270
+    BOOL RequestResource(DWORD index,BYTE type,DWORD hash,DWORD size);
+    // samp.dll RVA: 0x0000d390
+    void Process();
     // Descriptive request bookkeeping; neither method starts a transfer itself.
     // samp.dll RVA: 0x0000c950
     bool HasEarlierResourceRequest(int endIndex,DWORD hash);
@@ -42,4 +59,14 @@ class CCustomModels {public:
 };
 // samp.dll RVA: 0x002aca28
 extern CCustomModels *g_customModels;
+// samp.dll RVA: 0x00117c48
+extern const char g_customDffCachePattern[];
+// samp.dll RVA: 0x00117c54
+extern const char g_customTxdCachePattern[];
+// samp.dll RVA: 0x00117d60
+extern int g_customRequestDffRpc;
+// samp.dll RVA: 0x00117d5c
+extern int g_customRequestTxdRpc;
+// samp.dll RVA: 0x00117d64
+extern int g_customRequestsCompleteRpc;
 #endif

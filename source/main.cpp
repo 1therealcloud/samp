@@ -273,6 +273,135 @@ void ClientInitializeDeviceAndGui(){
 }
 
 #include "game/device_integrity.h"
+// samp.dll RVA: 0x0015548c
+DWORD g_clientIntegrityFrameMarker=69;
+// samp.dll RVA: 0x002aca78
+DWORD g_clientIntegrityFramePrevious;
+// samp.dll RVA: 0x002aca7c
+DWORD g_clientIntegrityFrameFirst;
+// samp.dll RVA: 0x002aca80
+DWORD g_clientIntegrityFrameCounter;
+// samp.dll RVA: 0x002aca88
+double g_clientTimerPreviousSeconds;
+// samp.dll RVA: 0x002aca90
+__int64 g_clientTimerPreviousCounter;
+// samp.dll RVA: 0x002aca98
+DWORD g_clientTimerFlags;
+// samp.dll RVA: 0x002acaa0
+__int64 g_clientTimerFrequency;
+// samp.dll RVA: 0x002acaa8
+DWORD g_clientTimerUsePerformanceCounter;
+// samp.dll RVA: 0x002acaac
+DWORD g_clientTimerFrequencyAttempted;
+// samp.dll RVA: 0x0011a920
+const double g_clientTimerUnsignedBias=4294967296.0;
+// samp.dll RVA: 0x0011a930
+const double g_clientTimerMillisecondScale=0.001;
+// samp.dll RVA: 0x000c5d90
+DWORD __cdecl ClientIntegrityFrame(BYTE check) {
+    if(g_clientIntegrityFrameMarker==69) {
+        g_clientIntegrityFrameFirst=g_integrityComparisons;g_clientIntegrityFramePrevious=g_integrityComparisons;
+        g_clientIntegrityFrameMarker=70;return ++g_clientIntegrityFrameCounter;
+    }
+    if(check) {
+        if(g_integrityComparisons<=g_clientIntegrityFrameFirst&&GameIntegrityMismatch(0x3b,1,6,12,17,2,50)!=69)exit(0);
+        if(g_clientIntegrityFramePrevious>=g_integrityComparisons&&GameIntegrityMismatch(0x3c,1,6,12,17,2,50)!=69)exit(0);
+        g_clientIntegrityFramePrevious=g_integrityComparisons;
+    }
+    if(g_clientIntegrityFailures>5&&GameIntegrityMismatch(0x41,1,6,12,17,2,50)!=69)exit(0);
+    return ++g_clientIntegrityFrameCounter;
+}
+// Native clock initialization, QPC delta and multimedia fallback; preserve ST0.
+// samp.dll RVA: 0x000c5b00
+__declspec(naked) double __cdecl ClientGetFrameElapsed() {
+    __asm {
+        mov eax, dword ptr [g_clientTimerFrequencyAttempted]
+        sub esp, 8
+        test eax, eax
+        jne timer_c5b42
+        lea eax, [esp]
+        push eax
+        mov dword ptr [g_clientTimerFrequencyAttempted], 1
+        call dword ptr [QueryPerformanceFrequency]
+        test eax, eax
+        mov dword ptr [g_clientTimerUsePerformanceCounter], eax
+        je timer_c5baf
+        mov ecx, dword ptr [esp]
+        mov edx, dword ptr [esp + 4]
+        mov dword ptr [g_clientTimerFrequency], ecx
+        mov dword ptr [g_clientTimerFrequency+4], edx
+        jmp timer_c5b47
+    timer_c5b42:
+        mov eax, dword ptr [g_clientTimerUsePerformanceCounter]
+    timer_c5b47:
+        test eax, eax
+        je timer_c5baf
+        push esi
+        push edi
+        lea eax, [esp + 8]
+        push eax
+        call dword ptr [QueryPerformanceCounter]
+        mov al, byte ptr [g_clientTimerFlags]
+        mov ecx, dword ptr [esp + 8]
+        test al, 1
+        mov eax, dword ptr [esp + 0ch]
+        jne timer_c5b76
+        or dword ptr [g_clientTimerFlags], 1
+        mov esi, ecx
+        mov edx, eax
+        jmp timer_c5b82
+    timer_c5b76:
+        mov edx, dword ptr [g_clientTimerPreviousCounter+4]
+        mov esi, dword ptr [g_clientTimerPreviousCounter]
+    timer_c5b82:
+        mov edi, ecx
+        sub edi, esi
+        mov esi, eax
+        sbb esi, edx
+        mov dword ptr [esp + 8], edi
+        mov dword ptr [esp + 0ch], esi
+        fild qword ptr [esp + 8]
+        fild qword ptr [g_clientTimerFrequency]
+        pop edi
+        mov dword ptr [g_clientTimerPreviousCounter], ecx
+        mov dword ptr [g_clientTimerPreviousCounter+4], eax
+        fdivp st(1),st(0)
+        pop esi
+        add esp, 8
+        ret
+    timer_c5baf:
+        call dword ptr [timeGetTime]
+        test eax, eax
+        mov dword ptr [esp], eax
+        fild dword ptr [esp]
+        jge timer_c5bc5
+        fadd qword ptr [g_clientTimerUnsignedBias]
+    timer_c5bc5:
+        mov cl, byte ptr [g_clientTimerFlags]
+        fmul qword ptr [g_clientTimerMillisecondScale]
+        mov eax, 2
+        test al, cl
+        jne timer_c5bfa
+        mov ecx, dword ptr [g_clientTimerFlags]
+        fld st(0)
+        fld st(1)
+        or ecx, eax
+        fsubrp st(1),st(0)
+        mov dword ptr [g_clientTimerFlags], ecx
+        fxch st(1)
+        fstp qword ptr [g_clientTimerPreviousSeconds]
+        add esp, 8
+        ret
+    timer_c5bfa:
+        fld qword ptr [g_clientTimerPreviousSeconds]
+        fld st(1)
+        fsubrp st(1),st(0)
+        fxch st(1)
+        fstp qword ptr [g_clientTimerPreviousSeconds]
+        add esp, 8
+        ret
+    }
+}
 #include "game/hooks_render.h"
 #include "gui/device_objects.h"
 // samp.dll RVA: 0x002aca60

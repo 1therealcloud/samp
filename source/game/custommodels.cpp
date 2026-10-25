@@ -191,6 +191,102 @@ BOOL __stdcall GameIsObjectModelInfo(void *info) {
 
 #include <stdio.h>
 #include <sys/stat.h>
+#include "BitStream.h"
+#include "RakClientInterface.h"
+#include "net/netgame.h"
+#include "gui/render_dependencies.h"
+// samp.dll RVA: 0x00117c48
+const char g_customDffCachePattern[]="%s/0x%X.dff";
+// samp.dll RVA: 0x00117c54
+const char g_customTxdCachePattern[]="%s/0x%X.txd";
+// samp.dll RVA: 0x00117d60
+int g_customRequestDffRpc=181;
+// samp.dll RVA: 0x00117d5c
+int g_customRequestTxdRpc=182;
+// samp.dll RVA: 0x00117d64
+int g_customRequestsCompleteRpc=184;
+// samp.dll RVA: 0x0000bb10
+bool CCustomModels::IsDffCached(DWORD hash) {
+    char path[264];_snprintf(path,260,g_customDffCachePattern,(char*)this+9,hash);
+    if(GameFileExists(path))return true;
+    _snprintf(path,260,g_customDffCachePattern,(char*)this+0x10e,hash);return GameFileExists(path)!=0;
+}
+// samp.dll RVA: 0x0000bba0
+bool CCustomModels::IsTxdCached(DWORD hash) {
+    char path[264];_snprintf(path,260,g_customTxdCachePattern,(char*)this+9,hash);
+    if(GameFileExists(path))return true;
+    _snprintf(path,260,g_customTxdCachePattern,(char*)this+0x10e,hash);return GameFileExists(path)!=0;
+}
+// samp.dll RVA: 0x0000bd40
+bool CCustomModels::PauseReadyWorker() {
+    BYTE *state=(BYTE*)this;if(!state[0x1344])return false;
+    for(int i=0;i<6;++i) {
+        BYTE *worker=state+0x1349+i*0x230;
+        if(worker[2]&&!worker[0]&&!worker[1]){worker[1]=1;return true;}
+    }
+    return false;
+}
+// samp.dll RVA: 0x0000bde0
+int CCustomModels::CountReadyWorkers() {
+    BYTE *state=(BYTE*)this;int count=0;
+    for(int i=0;i<6;++i) {
+        BYTE *worker=state+0x1349+i*0x230;if(worker[2]&&!worker[0]&&!worker[1])++count;
+    }
+    return count;
+}
+// samp.dll RVA: 0x0000c6e0
+bool CCustomModels::IsDffRequested(DWORD hash) {
+    BYTE *state=(BYTE*)this;DWORD count=*(DWORD*)(state+4);
+    for(DWORD i=0;i<count;++i) {
+        BYTE *entry=(*(BYTE***)state)[i];if(entry&&*(DWORD*)(entry+0x46)==hash&&entry[4])return true;
+    }
+    return false;
+}
+// samp.dll RVA: 0x0000c720
+bool CCustomModels::IsTxdRequested(DWORD hash) {
+    BYTE *state=(BYTE*)this;DWORD count=*(DWORD*)(state+4);
+    for(DWORD i=0;i<count;++i) {
+        BYTE *entry=(*(BYTE***)state)[i];if(entry&&*(DWORD*)(entry+0x4a)==hash&&entry[5])return true;
+    }
+    return false;
+}
+// samp.dll RVA: 0x0000d270
+BOOL CCustomModels::RequestResource(DWORD index,BYTE type,DWORD hash,DWORD size) {
+    (void)index;(void)size;if(!g_pNetGame)return FALSE;
+    if(!*(DWORD*)(g_renderDownloadWindow->nativeState+0x30))g_renderDownloadWindow->Show(MarkResourceRequests());
+    RakNet::BitStream stream;stream.WriteBits((BYTE*)&hash,32,true);
+    if(type==1)(*(RakClientInterface**)(((CNetGame*)g_pNetGame)->nativeState+0x2c))->RPC(&g_customRequestDffRpc,&stream,(PacketPriority)1,(PacketReliability)9,0,false);
+    else if(type==2)(*(RakClientInterface**)(((CNetGame*)g_pNetGame)->nativeState+0x2c))->RPC(&g_customRequestTxdRpc,&stream,(PacketPriority)1,(PacketReliability)9,0,false);
+    *(DWORD*)((BYTE*)this+0x213)=1;PauseReadyWorker();return TRUE;
+}
+// samp.dll RVA: 0x0000d390
+void CCustomModels::Process() {
+    BYTE *state=(BYTE*)this;if(*(DWORD*)(state+0x213)!=2||state[0x220]||!state[0x21f])return;
+    if(state[0x1344]&&!CountReadyWorkers())return;
+    DWORD count=*(DWORD*)(state+4),index=0;
+    if(count)do {
+        BYTE *entry=index<count?(*(BYTE***)state)[index]:0;
+        if(entry&&entry[6]!=1&&(entry[7]==1||(entry[7]==2&&(*(DWORD*)(entry+8)==*(DWORD*)(state+0x217)||*(DWORD*)(entry+8)==0xffffffff)))) {
+            if(!entry[0]) {
+                if(IsDffCached(*(DWORD*)(entry+0x46)))entry[0]=1;
+                else if(!IsDffRequested(*(DWORD*)(entry+0x46))) {
+                    RequestResource(index,1,*(DWORD*)(entry+0x46),*(DWORD*)(entry+0x4e));entry[4]=1;return;
+                }
+            }
+            if(!entry[1]) {
+                if(IsTxdCached(*(DWORD*)(entry+0x4a)))entry[1]=1;
+                else if(!IsTxdRequested(*(DWORD*)(entry+0x4a))) {
+                    RequestResource(index,2,*(DWORD*)(entry+0x4a),*(DWORD*)(entry+0x52));entry[5]=1;return;
+                }
+            }
+        }
+        count=*(DWORD*)(state+4);
+    }while(++index!=count);
+    if(state[0x21f]&&MarkResourceRequests()<=0) {
+        state[0x220]=1;RakNet::BitStream stream;stream.Write(true);
+        if(g_pNetGame)(*(RakClientInterface**)(((CNetGame*)g_pNetGame)->nativeState+0x2c))->RPC(&g_customRequestsCompleteRpc,&stream,(PacketPriority)1,(PacketReliability)9,0,false);
+    }
+}
 
 // samp.dll RVA: 0x000b5900
 BOOL GameFileExists(const char *path) { struct _stat state;return _stat(path,&state)==0; }

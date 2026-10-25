@@ -34,6 +34,24 @@
 #include "archive/name_digest.h"
 #include "archive/provider.h"
 #include "ttmath/ttmathuint.h"
+#include "game/device_integrity.h"
+// samp.dll RVA: 0x0000b290
+void CNetGame::Process() {
+    ClientGetFrameElapsed();DWORD start=ClientIntegrityFrame(1);UpdateNetwork();
+    BYTE *settings=*(BYTE**)(nativeState+0x3d5);
+    if(settings[0x1f])g_pGame->SetWorldTime(settings[0x2c],settings[0x2d]);
+    g_pGame->LoadAnimationsAndModels();
+    if(*(DWORD*)(nativeState+0x3cd)==5) {
+        if(g_customModels&&!((BYTE*)g_customModels)[0x221]){g_customModels->Process();ProcessCustomModelWait();}
+        else {
+            if(g_renderDownloadWindow&&*(DWORD*)(g_renderDownloadWindow->nativeState+0x30))g_renderDownloadWindow->Hide();
+            ProcessPools();
+        }
+    }else SpawnScreen();
+    if(*(DWORD*)(nativeState+0x3cd)==1)Connect();
+    if((int)(ClientIntegrityFrame(0)-start)<1&&GameIntegrityMismatch(69,1,6,12,17,2,50)!=69)exit(0);
+    if(g_clientIntegrityFrameMarker==69&&GameIntegrityMismatch(77,1,6,12,17,2,50)!=69)exit(0);
+}
 // samp.dll RVA: 0x00117bc8
 const char g_netConnectionLostMessage[]="Lost connection to the server. Reconnecting..";
 // samp.dll RVA: 0x00117c08
