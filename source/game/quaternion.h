@@ -32,6 +32,9 @@ extern const float g_quaternionEulerNegativeTwo;
 void GameQuaternionComponentsToMatrix(float w,float x,float y,float z,
     float *m00,float *m01,float *m02,float *m10,float *m11,float *m12,
     float *m20,float *m21,float *m22);
+// Native adapter to the scalar-component builder; no implicit normalization.
+// samp.dll RVA: 0x000b65c0
+void GameQuaternionToMatrixComponents(const GameQuaternion *quaternion,CMatrix *matrix);
 // samp.dll RVA: 0x000b48b0
 void GameMatrixComponentsToQuaternion(float m00,float m01,float m02,
     float m10,float m11,float m12,float m20,float m21,float m22,

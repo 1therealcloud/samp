@@ -13,6 +13,85 @@
 #include "game/game.h"
 #include "game/custommodels.h"
 #include "game/aimstuff.h"
+// samp.dll RVA: 0x0013c4a0
+DWORD g_remoteClampTurnSpeed=1;
+// samp.dll RVA: 0x001181bc
+const float g_remoteTurnSpeedMinimum=-0.02f;
+// samp.dll RVA: 0x00014d80
+void CRemotePlayer::UpdateOnfootRotation() {
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped)return;
+    CMatrix matrix;GameQuaternion current,result;ped->GetMatrix(&matrix);
+    GameQuaternionFromMatrixComponents(&matrix,&current);
+    GameQuaternionSlerp(&result,(GameQuaternion*)(nativeState+0x4e),&current,0.75f);
+    GameQuaternionToMatrixComponents(&result,&matrix);(*(CPed**)(nativeState+4))->SetMatrix(matrix);
+    float angle;
+    __asm {
+        fld dword ptr [matrix+16]
+        fchs
+        fld dword ptr [matrix+20]
+        fpatan
+        fmul dword ptr [g_entityRadiansToDegrees]
+        fst dword ptr [angle]
+        fcomp dword ptr [g_objectScaleLowerBound]
+        fld dword ptr [angle]
+        fnstsw ax
+        test ah,5
+        jp onfoot_heading_nonnegative
+        fadd dword ptr [g_anglePeriod]
+        jmp onfoot_heading_store
+    onfoot_heading_nonnegative:
+        fcomp dword ptr [g_anglePeriod]
+        fnstsw ax
+        test ah,1
+        jne onfoot_heading_ready
+        fld dword ptr [angle]
+        fsub dword ptr [g_anglePeriod]
+    onfoot_heading_store:
+        fstp dword ptr [angle]
+    onfoot_heading_ready:
+    }
+    (*(CPed**)(nativeState+4))->SetRotation(angle);
+}
+// samp.dll RVA: 0x000151c0
+void CRemotePlayer::UpdateIncarRotation() {
+    CVector turnSpeed={0,0,0};CVehicle *vehicle=*(CVehicle**)(nativeState+8);if(!vehicle)return;
+    if(g_remoteClampTurnSpeed) {
+        vehicle->GetTurnSpeed(&turnSpeed);float *values=(float*)&turnSpeed;
+        for(int i=0;i<3;++i) {
+            if(values[i]>g_pedDrunkShakeScale)values[i]=g_pedDrunkShakeScale;
+            else if(values[i]<g_remoteTurnSpeedMinimum)values[i]=g_remoteTurnSpeedMinimum;
+        }
+        (*(CVehicle**)(nativeState+8))->SetTurnSpeed(turnSpeed);
+    }
+    CMatrix matrix;GameQuaternion current,result;(*(CVehicle**)(nativeState+8))->GetMatrix(&matrix);
+    GameQuaternionFromMatrix(&matrix,&current);
+    GameQuaternionSlerp(&result,(GameQuaternion*)(nativeState+0x19c),&current,0.75f);
+    GameQuaternionNormalize(&result);GameQuaternionToMatrix(&result,&matrix);
+    (*(CVehicle**)(nativeState+8))->SetMatrix(matrix);
+}
+// samp.dll RVA: 0x000153a0
+void CRemotePlayer::UpdateTrain(const CMatrix *target,const CVector *targetSpeed,float trainSpeed) {
+    if(!*(CPed**)(nativeState+4)||!*(CVehicle**)(nativeState+8))return;
+    CMatrix current;(*(CVehicle**)(nativeState+8))->GetMatrix(&current);
+    bool moveX=FloatOffset(target->position.x,current.position.x)>g_objectRotationFactor;
+    bool moveY=FloatOffset(target->position.y,current.position.y)>g_objectRotationFactor;
+    if(moveX||moveY)(*(CVehicle**)(nativeState+8))->Teleport(target->position);
+    CVector speed;(*(CVehicle**)(nativeState+8))->GetSpeed(&speed);speed=*targetSpeed;
+    (*(CVehicle**)(nativeState+8))->SetSpeed(speed);(*(CVehicle**)(nativeState+8))->SetTrainSpeed(trainSpeed);
+}
+// samp.dll RVA: 0x00014e50
+void CRemotePlayer::SetOnfootTarget(const CVector *position,const CVector *speed) {
+    for(int i=0;i<12;i+=4)*(DWORD*)(nativeState+0x120+i)=*(const DWORD*)((const BYTE*)position+i);
+    for(int i=0;i<12;i+=4)*(DWORD*)(nativeState+0x12c+i)=*(const DWORD*)((const BYTE*)speed+i);
+    (*(CPed**)(nativeState+4))->SetSpeed(*(CVector*)(nativeState+0x12c));
+}
+// samp.dll RVA: 0x00015330
+void CRemotePlayer::SetIncarTarget(const CMatrix *matrix,const CVector *position,const CVector *speed) {
+    GameQuaternionFromMatrix(matrix,(GameQuaternion*)(nativeState+0x19c));
+    for(int i=0;i<12;i+=4)*(DWORD*)(nativeState+0x138+i)=*(const DWORD*)((const BYTE*)position+i);
+    for(int i=0;i<12;i+=4)*(DWORD*)(nativeState+0x144+i)=*(const DWORD*)((const BYTE*)speed+i);
+    (*(CVehicle**)(nativeState+8))->SetSpeed(*speed);
+}
 // samp.dll RVA: 0x001181c8
 const float g_remoteAimZoomScale=0.01587301678955555f;
 // samp.dll RVA: 0x001181cc

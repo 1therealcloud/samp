@@ -1,4 +1,10 @@
 #include "game/quaternion.h"
+// samp.dll RVA: 0x000b65c0
+void GameQuaternionToMatrixComponents(const GameQuaternion *quaternion,CMatrix *matrix) {
+    GameQuaternionComponentsToMatrix(quaternion->w,quaternion->x,quaternion->y,quaternion->z,
+        &matrix->right.x,&matrix->right.y,&matrix->right.z,&matrix->up.x,&matrix->up.y,&matrix->up.z,
+        &matrix->at.x,&matrix->at.y,&matrix->at.z);
+}
 #include "game/game.h"
 #include <d3dx9.h>
 #include <string.h>

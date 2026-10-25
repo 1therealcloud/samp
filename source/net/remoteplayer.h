@@ -2,10 +2,22 @@
 #define SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
 #include <windows.h>
 struct CVector;
+class CMatrix;
 // Native allocation extent0x1FD; unreviewed state remains opaque.
 #pragma pack(push,1)
 class CRemotePlayer {public:
     BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x00014d80
+    void UpdateOnfootRotation();
+    // samp.dll RVA: 0x000151c0
+    void UpdateIncarRotation();
+    // samp.dll RVA: 0x000153a0
+    void UpdateTrain(const CMatrix *matrix,const CVector *speed,float trainSpeed);
+    // Descriptive names for native target-storage methods; backend is unchecked.
+    // samp.dll RVA: 0x00014e50
+    void SetOnfootTarget(const CVector *position,const CVector *speed);
+    // samp.dll RVA: 0x00015330
+    void SetIncarTarget(const CMatrix *matrix,const CVector *position,const CVector *speed);
     // Team argument is consumed by ABI but not read by this native body.
     // samp.dll RVA: 0x00016c50
     BOOL Spawn(BYTE team,int model,int customModel,const CVector *position,float rotation,DWORD color,BYTE fightingStyle);
@@ -70,4 +82,9 @@ extern const char g_remoteCarJackedText[];
 extern const float g_remoteAimZoomScale;
 // samp.dll RVA: 0x001181cc
 extern const float g_remoteAimAspectScale;
+// Raw native switch, default1. Other native writers remain unreviewed.
+// samp.dll RVA: 0x0013c4a0
+extern DWORD g_remoteClampTurnSpeed;
+// samp.dll RVA: 0x001181bc
+extern const float g_remoteTurnSpeedMinimum;
 #endif
