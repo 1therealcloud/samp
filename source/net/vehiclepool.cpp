@@ -5,6 +5,58 @@
 #include "gui/device_objects.h"
 #include "d3dhook/texture_binding.h"
 #include <string.h>
+#include "net/netgame.h"
+#include "net/playerpool.h"
+#include "net/localplayer.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
+#include "game/game.h"
+// samp.dll RVA: 0x001184f8
+const char g_vehiclePoolNotDeletedMessage[]="Warning: vehicle %u was not deleted";
+// samp.dll RVA: 0x0011851c
+int g_vehiclePoolDestroyRpc=136;
+// samp.dll RVA: 0x0001eb40
+BOOL CVehiclePool::Create(const VehiclePoolQueueEntry *entry) {
+    if(m_pObjects[entry->id]) {
+        g_pChat->AddDebugMessage(g_vehiclePoolNotDeletedMessage,(unsigned)entry->id);Delete(entry->id);
+    }
+    m_pObjects[entry->id]=g_pGame->CreateVehicle(entry->model,entry->position.x,entry->position.y,entry->position.z,entry->rotation,entry->siren);
+    if(!m_pObjects[entry->id])return FALSE;
+    if(entry->primaryColor!=-1||entry->secondaryColor!=-1)m_pObjects[entry->id]->SetColor((BYTE)entry->primaryColor,(BYTE)entry->secondaryColor);
+    m_pObjects[entry->id]->SetHealth(entry->health);
+    m_pGameObjects[entry->id]=m_pObjects[entry->id]->m_pGameVehicle;m_bNotEmpty[entry->id]=TRUE;
+    BYTE *state=(BYTE*)this;
+    *(float*)(state+0x11ad4+entry->id*12)=entry->position.x;
+    *(float*)(state+0x11ad8+entry->id*12)=entry->position.y;
+    *(float*)(state+0x11adc+entry->id*12)=entry->position.z;
+    if(entry->interior&&m_bNotEmpty[entry->id])m_pObjects[entry->id]->ChangeInterior(entry->interior);
+    if(entry->panels||entry->doors||entry->lights)m_pObjects[entry->id]->UpdateDamage(entry->panels,entry->doors,entry->lights);
+    m_pObjects[entry->id]->SetTires(entry->tires);stateBD14[entry->id]=1;
+    *(DWORD*)(state+0xdc54+entry->id*4)=0;*(DWORD*)(state+0xfb94+entry->id*4)=0;
+    UpdateLargestId();return TRUE;
+}
+// samp.dll RVA: 0x0001edc0
+void CVehiclePool::ProcessWaitingList() {
+    for(int i=0;i<100;++i)if(queueActive[i]&&g_pGame->IsModelAvailable(queue[i].model)) {
+        VehiclePoolQueueEntry *entry=queue+i;Create(entry);
+        if(entry->model==537) {
+            ++entry->id;entry->model=569;Create(entry);++entry->id;Create(entry);++entry->id;Create(entry);
+        }
+        if(entry->model==538) {
+            ++entry->id;entry->model=570;Create(entry);++entry->id;Create(entry);++entry->id;Create(entry);
+        }
+        queueActive[i]=0;
+    }
+}
+// samp.dll RVA: 0x0001ecf0
+void CVehiclePool::SendDestroyNotification(WORD id) {
+    CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    if(*(WORD*)(local->nativeState+0xfe)==id) {
+        RakNet::BitStream stream;stream.Write(id);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_vehiclePoolDestroyRpc,&stream,HIGH_PRIORITY,RELIABLE_SEQUENCED,0,false);
+        local=((CNetGame*)g_pNetGame)->pools->players->local;*(WORD*)(local->nativeState+0xfe)=0xffff;
+    }
+}
 
 // samp.dll RVA: 0x0001e470
 void CVehiclePool::UpdateLargestId() {

@@ -2,11 +2,29 @@
 #define SAMP_RECOVERED_VEHICLEPOOL_H
 #include "game/vehicle.h"
 #pragma pack(push,1)
-// Native queue record extent established; semantic fields await the spawn path.
-struct VehiclePoolQueueEntry {DWORD words[10];};
+// Native40-byte record; raw words retained for existing callers.
+struct VehiclePoolQueueEntry {
+    union {
+        DWORD words[10];
+        struct {
+            WORD id;int model;CVector position;float rotation;
+            signed char primaryColor,secondaryColor;float health;BYTE interior;
+            DWORD doors,panels;BYTE lights,tires,siren;
+        };
+    };
+};
 // Allocation extent established; unreviewed tail fields remain opaque.
 class CVehiclePool {
 public:
+    // Native Create indexes the WORD ID without a bounds guard.
+    // samp.dll RVA: 0x0001eb40
+    BOOL Create(const VehiclePoolQueueEntry *entry);
+    // Mutates queued train IDs/models in place and clears active even on failure.
+    // samp.dll RVA: 0x0001edc0
+    void ProcessWaitingList();
+    // Does not consume this; original stack argument is a WORD vehicle ID.
+    // samp.dll RVA: 0x0001ecf0
+    void SendDestroyNotification(WORD id);
     // samp.dll RVA: 0x0001e470
     void UpdateLargestId();
     // samp.dll RVA: 0x0001e4d0
@@ -68,6 +86,14 @@ typedef char VehiclePoolTickOffset[(offsetof(CVehiclePool,lastTick)==0x9dd4)?1:-
 typedef char VehiclePoolStateBD14Offset[(offsetof(CVehiclePool,stateBD14)==0xbd14)?1:-1];
 typedef char VehiclePoolPlateReadyOffset[(offsetof(CVehiclePool,licensePlatesReady)==0x17894)?1:-1];
 typedef char VehiclePoolExtent[(sizeof(CVehiclePool)==0x17898)?1:-1];
+typedef char VehiclePoolQueueExtent[(sizeof(VehiclePoolQueueEntry)==40)?1:-1];
+typedef char VehiclePoolQueueModelOffset[(offsetof(VehiclePoolQueueEntry,model)==2)?1:-1];
+typedef char VehiclePoolQueueHealthOffset[(offsetof(VehiclePoolQueueEntry,health)==0x18)?1:-1];
+typedef char VehiclePoolQueueSirenOffset[(offsetof(VehiclePoolQueueEntry,siren)==0x27)?1:-1];
+// samp.dll RVA: 0x001184f8
+extern const char g_vehiclePoolNotDeletedMessage[];
+// samp.dll RVA: 0x0011851c
+extern int g_vehiclePoolDestroyRpc;
 // samp.dll RVA: 0x001184c4
 extern const char g_vehiclePoolQueueFullMessage[];
 #endif

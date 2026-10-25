@@ -25,6 +25,26 @@
 #include "game/vehicle.h"
 #include "GetTime.h"
 #include "game/game.h"
+// samp.dll RVA: 0x0000e500
+void ScrWorldVehicleAdd(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CVehiclePool *pool=((CNetGame*)g_pNetGame)->pools->vehicles;if(!pool)return;
+    VehiclePoolQueueEntry entry={0};BYTE tuning[23]={0};
+    stream.Read((char*)&entry,40);stream.Read((char*)tuning,23);RakNet::GetTimeNS();
+    if(entry.model<400||entry.model>611)return;
+    pool->Create(&entry);CVehicle *vehicle=pool->Get(entry.id);if(!vehicle)return;
+    if(entry.model==537||entry.model==538) {
+        entry.model=entry.model==537?569:570;
+        ++entry.id;pool->Create(&entry);++entry.id;pool->Create(&entry);++entry.id;pool->Create(&entry);
+    }
+    if(vehicle->GetSubtype()==1) {
+        for(int i=0;i<14;++i)if(tuning[i])vehicle->AddComponent((WORD)(tuning[i]+999));
+        if(tuning[14])vehicle->SetPaintjob((BYTE)(tuning[14]-1));
+    }
+    int first=*(int*)(tuning+15),second=*(int*)(tuning+19);
+    if(first!=-1||second!=-1)vehicle->SetColor((BYTE)first,(BYTE)second);
+    RakNet::GetTimeNS();
+}
 // samp.dll RVA: 0x00010dc0
 void ScrWorldVehicleRemove(RPCParameters *parameters) {
     CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -163,12 +183,12 @@ void RequestSpawn(RPCParameters *parameters) {
 void ConnectionRejected(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
     BYTE reason;stream.Read(reason);
-    if(reason==1)g_pChat->AddDebugMessage(g_rpcRejectedVersion);
+    if(reason==1)g_pChat->AddInfoMessage(g_rpcRejectedVersion);
     else if(reason==2){
-        g_pChat->AddDebugMessage(g_rpcRejectedNickname);g_pChat->AddDebugMessage(g_rpcNicknameLength);
-        g_pChat->AddDebugMessage(g_rpcNicknameCharacters);g_pChat->AddDebugMessage(g_rpcNicknameQuit);
-    }else if(reason==3)g_pChat->AddDebugMessage(g_rpcRejectedMod);
-    else if(reason==4)g_pChat->AddDebugMessage(g_rpcRejectedSlot);
+        g_pChat->AddInfoMessage(g_rpcRejectedNickname);g_pChat->AddInfoMessage(g_rpcNicknameLength);
+        g_pChat->AddInfoMessage(g_rpcNicknameCharacters);g_pChat->AddInfoMessage(g_rpcNicknameQuit);
+    }else if(reason==3)g_pChat->AddInfoMessage(g_rpcRejectedMod);
+    else if(reason==4)g_pChat->AddInfoMessage(g_rpcRejectedSlot);
     (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Disconnect(500,0);
 }
 // samp.dll RVA: 0x000114a0
