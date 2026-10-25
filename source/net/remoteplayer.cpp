@@ -13,6 +13,193 @@
 #include "game/game.h"
 #include "game/custommodels.h"
 #include "game/aimstuff.h"
+#include "net/localplayer.h"
+#include "net/pool_frame.h"
+// samp.dll RVA: 0x0013c498
+float g_remoteOnfootCorrection=0.1f;
+// samp.dll RVA: 0x0013c49c
+float g_remoteIncarCorrection=0.06f;
+// samp.dll RVA: 0x0011797c
+const float g_remoteIncarTeleportDistance=8.0f;
+// samp.dll RVA: 0x000149f0
+void CRemotePlayer::UpdateOnfootSpeedAndPosition() {
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped)return;
+    CMatrix matrix;ped->GetMatrix(&matrix);
+    CVector *target=(CVector*)(nativeState+0x120);
+    if(!(*(CPed**)(nativeState+4))->DoesExist()){matrix.position=*target;(*(CPed**)(nativeState+4))->SetMatrix(matrix);return;}
+    volatile float *delta=(volatile float*)(nativeState+0x190);
+    delta[0]=FloatOffset(target->x,matrix.position.x);delta[1]=FloatOffset(target->y,matrix.position.y);delta[2]=FloatOffset(target->z,matrix.position.z);
+    if(delta[0]<=g_localQuaternionSyncThreshold&&delta[1]<=g_localQuaternionSyncThreshold&&delta[2]<=g_localQuaternionSyncThreshold)return;
+    if(delta[0]>g_quaternionMatrixTwo||delta[1]>g_quaternionMatrixTwo||delta[2]>g_quaternionMatrixOne) {
+        matrix.position=*target;(*(CPed**)(nativeState+4))->SetMatrix(matrix);return;
+    }
+    CVector speed;(*(CPed**)(nativeState+4))->GetSpeed(&speed);CRemotePlayer *self=this;
+    __asm {
+        mov ecx,self
+        fld dword ptr [g_remoteOnfootCorrection]
+        fld dword ptr [ecx+190h]
+        fcomp dword ptr [g_localQuaternionSyncThreshold]
+        fnstsw ax
+        test ah,41h
+        jne onfoot_y_correction
+        fld dword ptr [ecx+120h]
+        fsub dword ptr [matrix+48]
+        fmul st(0),st(1)
+        fadd dword ptr [speed]
+        fstp dword ptr [speed]
+    onfoot_y_correction:
+        fld dword ptr [ecx+194h]
+        fcomp dword ptr [g_localQuaternionSyncThreshold]
+        fnstsw ax
+        test ah,41h
+        jne onfoot_z_correction
+        fld dword ptr [ecx+124h]
+        fsub dword ptr [matrix+52]
+        fmul st(0),st(1)
+        fadd dword ptr [speed+4]
+        fstp dword ptr [speed+4]
+    onfoot_z_correction:
+        fld dword ptr [ecx+198h]
+        fcomp dword ptr [g_localQuaternionSyncThreshold]
+        fnstsw ax
+        test ah,41h
+        jne onfoot_correction_done
+        fld dword ptr [ecx+128h]
+        fsub dword ptr [matrix+56]
+        fmul st(0),st(1)
+        fadd dword ptr [speed+8]
+        fstp dword ptr [speed+8]
+    onfoot_correction_done:
+        fstp st(0)
+    }
+    (*(CPed**)(nativeState+4))->SetSpeed(speed);
+}
+// samp.dll RVA: 0x00014c00
+void CRemotePlayer::UpdateOnfootXYSpeedAndPosition() {
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped)return;
+    CMatrix matrix;ped->GetMatrix(&matrix);CVector *target=(CVector*)(nativeState+0x120);
+    if(!(*(CPed**)(nativeState+4))->DoesExist()) {
+        matrix.position.x=target->x;matrix.position.y=target->y;(*(CPed**)(nativeState+4))->SetMatrix(matrix);return;
+    }
+    volatile float *delta=(volatile float*)(nativeState+0x190);delta[0]=FloatOffset(target->x,matrix.position.x);
+    int action=0;CRemotePlayer *self=this;
+    __asm {
+        mov ecx,self
+        push dword ptr [matrix+52]
+        push dword ptr [ecx+124h]
+        call FloatOffset
+        add esp,8
+        mov ecx,self
+        fst dword ptr [ecx+194h]
+        fld dword ptr [ecx+190h]
+        fcomp dword ptr [g_objectTurnVelocityScale]
+        fnstsw ax
+        test ah,41h
+        jp xy_significant
+        fcom dword ptr [g_objectTurnVelocityScale]
+        fnstsw ax
+        test ah,41h
+        jnp xy_discard_y
+    xy_significant:
+        fld dword ptr [ecx+190h]
+        fcomp dword ptr [g_quaternionMatrixTwo]
+        fnstsw ax
+        test ah,41h
+        je xy_teleport_pop
+        fcomp dword ptr [g_quaternionMatrixTwo]
+        fnstsw ax
+        test ah,41h
+        je xy_teleport
+        mov action,1
+        jmp xy_decided
+    xy_teleport_pop:
+        fstp st(0)
+    xy_teleport:
+        mov action,2
+        jmp xy_decided
+    xy_discard_y:
+        fstp st(0)
+    xy_decided:
+    }
+    if(!action)return;
+    if(action==2){matrix.position.x=target->x;matrix.position.y=target->y;(*(CPed**)(nativeState+4))->SetMatrix(matrix);return;}
+    CVector speed;(*(CPed**)(nativeState+4))->GetSpeed(&speed);
+    for(int i=0;i<2;++i)if(delta[i]>g_objectPoolSecondsPerTick) {
+        float *wanted=(float*)target+i,*current=(float*)&matrix.position+i,*value=(float*)&speed+i;
+        __asm {
+            mov ecx,wanted
+            mov edx,current
+            mov eax,value
+            fld dword ptr [ecx]
+            fsub dword ptr [edx]
+            fmul dword ptr [g_objectMutationStep]
+            fadd dword ptr [eax]
+            fstp dword ptr [eax]
+        }
+    }
+    (*(CPed**)(nativeState+4))->SetSpeed(speed);
+}
+// samp.dll RVA: 0x00014ec0
+void CRemotePlayer::UpdateIncarSpeedAndPosition() {
+    CVector speed={0,0,0};CVehicle *vehicle=*(CVehicle**)(nativeState+8);if(!vehicle)return;
+    CMatrix matrix;vehicle->GetMatrix(&matrix);CVector *target=(CVector*)(nativeState+0x138);
+    if(!(*(CVehicle**)(nativeState+8))->DoesExist()){matrix.position=*target;(*(CVehicle**)(nativeState+8))->SetMatrix(matrix);return;}
+    volatile float *delta=(volatile float*)(nativeState+0x190);
+    delta[0]=FloatOffset(target->x,matrix.position.x);delta[1]=FloatOffset(target->y,matrix.position.y);
+    int significant=0;CRemotePlayer *self=this;
+    __asm {
+        mov ecx,self
+        push dword ptr [matrix+56]
+        push dword ptr [ecx+140h]
+        call FloatOffset
+        add esp,8
+        mov ecx,self
+        fst dword ptr [ecx+198h]
+        fld dword ptr [ecx+190h]
+        fcomp dword ptr [g_pedDrunkSpeedThreshold]
+        fnstsw ax
+        test ah,41h
+        jp incar_significant_pop_z
+        fld dword ptr [ecx+194h]
+        fcomp dword ptr [g_pedDrunkSpeedThreshold]
+        fnstsw ax
+        test ah,41h
+        jp incar_significant_pop_z
+        fcomp dword ptr [g_pedDrunkSpeedThreshold]
+        fnstsw ax
+        test ah,41h
+        jnp incar_significance_done
+        jmp incar_significant
+    incar_significant_pop_z:
+        fstp st(0)
+    incar_significant:
+        mov significant,1
+    incar_significance_done:
+    }
+    if(!significant)return;
+    float zLimit=0.5f;
+    if((*(CVehicle**)(nativeState+8))->GetSubtype()==4||(*(CVehicle**)(nativeState+8))->GetSubtype()==5||(*(CVehicle**)(nativeState+8))->GetSubtype()==3)zLimit=2.0f;
+    if(delta[0]>g_remoteIncarTeleportDistance||delta[1]>g_remoteIncarTeleportDistance||delta[2]>zLimit) {
+        matrix.position=*target;(*(CVehicle**)(nativeState+8))->SetMatrix(matrix);
+        (*(CVehicle**)(nativeState+8))->SetSpeed(*(CVector*)(nativeState+0x144));return;
+    }
+    (*(CVehicle**)(nativeState+8))->GetSpeed(&speed);
+    for(int i=0;i<3;++i)if(delta[i]>g_pedDrunkSpeedThreshold) {
+        float *wanted=(float*)target+i,*current=(float*)&matrix.position+i,*value=(float*)&speed+i;
+        __asm {
+            mov ecx,wanted
+            mov edx,current
+            mov eax,value
+            fld dword ptr [ecx]
+            fsub dword ptr [edx]
+            fmul dword ptr [g_remoteIncarCorrection]
+            fadd dword ptr [eax]
+            fstp dword ptr [eax]
+        }
+    }
+    if(FloatOffset(speed.x,0)>g_objectTurnVelocityScale||FloatOffset(speed.y,0)>g_objectTurnVelocityScale||FloatOffset(speed.z,0)>g_objectTurnVelocityScale)
+        (*(CVehicle**)(nativeState+8))->SetSpeed(speed);
+}
 // samp.dll RVA: 0x0013c4a0
 DWORD g_remoteClampTurnSpeed=1;
 // samp.dll RVA: 0x001181bc

@@ -7,6 +7,13 @@ class CMatrix;
 #pragma pack(push,1)
 class CRemotePlayer {public:
     BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x000149f0
+    void UpdateOnfootSpeedAndPosition();
+    // Descriptive name for native XY-only path.
+    // samp.dll RVA: 0x00014c00
+    void UpdateOnfootXYSpeedAndPosition();
+    // samp.dll RVA: 0x00014ec0
+    void UpdateIncarSpeedAndPosition();
     // samp.dll RVA: 0x00014d80
     void UpdateOnfootRotation();
     // samp.dll RVA: 0x000151c0
@@ -87,4 +94,11 @@ extern const float g_remoteAimAspectScale;
 extern DWORD g_remoteClampTurnSpeed;
 // samp.dll RVA: 0x001181bc
 extern const float g_remoteTurnSpeedMinimum;
+// Raw correction coefficients; native default values, other writers unreviewed.
+// samp.dll RVA: 0x0013c498
+extern float g_remoteOnfootCorrection;
+// samp.dll RVA: 0x0013c49c
+extern float g_remoteIncarCorrection;
+// samp.dll RVA: 0x0011797c
+extern const float g_remoteIncarTeleportDistance;
 #endif

@@ -97,6 +97,9 @@ extern const float g_objectRenderDistanceThreshold;
 extern const float g_objectStreamingNearDistance;
 // samp.dll RVA: 0x00117878
 extern const float g_objectStreamingVehicleMargin;
+// Shared native0.01 constant, also used by remote movement gates.
+// samp.dll RVA: 0x001181b0
+extern const float g_objectTurnVelocityScale;
 // samp.dll RVA: 0x001e04a8
 extern BYTE g_objectRenderFlag;
 // samp.dll RVA: 0x001e0450
