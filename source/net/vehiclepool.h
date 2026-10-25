@@ -16,6 +16,8 @@ struct VehiclePoolQueueEntry {
 // Allocation extent established; unreviewed tail fields remain opaque.
 class CVehiclePool {
 public:
+    // samp.dll RVA: 0x0001ee80
+    void Process();
     // Native Create indexes the WORD ID without a bounds guard.
     // samp.dll RVA: 0x0001eb40
     BOOL Create(const VehiclePoolQueueEntry *entry);

@@ -11,6 +11,59 @@
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/game.h"
+// samp.dll RVA: 0x0001ee80
+void CVehiclePool::Process() {
+    DWORD now=GetTickCount();CLocalPlayer *local=((CNetGame*)g_pNetGame)->pools->players->local;
+    int sent=0;
+    if(m_nLargestId<0)return;
+    WORD id=0;
+    do {
+        if(id<2000&&m_bNotEmpty[id]==1) {
+            CVehicle *vehicle=m_pObjects[id];
+            if(stateBD14[id]) {
+                BYTE *state=(BYTE*)this;
+                if(*(DWORD*)(state+0xdc54+id*4)&&(int)(now-*(DWORD*)(state+0xfb94+id*4))>15000){Delete(id);goto next_vehicle;}
+                vehicle->SetInvulnerable(vehicle->DriverIsPlayerPed()?FALSE:TRUE);
+                int destroyed=0;
+                __asm {
+                    mov ecx,vehicle
+                    call CVehicle::GetHealth
+                    fld dword ptr [g_objectScaleLowerBound]
+                    fucompp
+                    fnstsw ax
+                    test ah,44h
+                    jp health_not_zero
+                    mov destroyed,1
+                health_not_zero:
+                }
+                if(destroyed) {
+                    SendDestroyNotification(id);
+                    if(!*(DWORD*)(state+0xdc54+id*4)){*(DWORD*)(state+0xdc54+id*4)=1;*(DWORD*)(state+0xfb94+id*4)=GetTickCount();}
+                    goto next_vehicle;
+                }
+                volatile float distance=vehicle->GetDistanceToLocalPlayer();
+                if(vehicle->GetSubtype()!=4&&distance<g_vehicleMarkerDistance&&vehicle->IsSunk()){SendDestroyNotification(id);goto next_vehicle;}
+                if(!vehicle->HasPlayerPed()&&(!vehicle->IsTrailer()||!vehicle->GetTractor())&&sent<3&&(int)(now-lastTick[id])>100) {
+                    if(local->ProcessUnoccupiedSync(id,vehicle)){lastTick[id]=GetTickCount();++sent;}
+                }
+                BYTE *settings=*(BYTE**)((BYTE*)g_pNetGame+0x3d5);
+                if(settings[0x2b]) {
+                    vehicle->EnableEngine((int)vehicle->GetField50()>0);vehicle->EnableLights((BYTE)((int)vehicle->GetField54()>0));
+                }else {
+                    if(vehicle->GetField50()==0xffffffff)vehicle->EnableEngine(vehicle->HasDriver()?TRUE:FALSE);
+                    else if(vehicle->GetField50()==0)vehicle->EnableEngine(FALSE);
+                    else if(vehicle->GetField50()==1)vehicle->EnableEngine(TRUE);
+                    if(vehicle->GetField54()==0)vehicle->EnableLights(0);
+                    else if(vehicle->GetField54()==1)vehicle->EnableLights(1);
+                }
+                if(vehicle->m_pGameVehicle!=m_pGameObjects[id])m_pGameObjects[id]=vehicle->m_pGameVehicle;
+                vehicle->UpdateColor();vehicle->ProcessMarkers();
+            }
+        }
+    next_vehicle:
+        ++id;
+    }while((int)id<=m_nLargestId);
+}
 // samp.dll RVA: 0x001184f8
 const char g_vehiclePoolNotDeletedMessage[]="Warning: vehicle %u was not deleted";
 // samp.dll RVA: 0x0011851c

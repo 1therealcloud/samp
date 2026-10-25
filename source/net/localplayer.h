@@ -4,10 +4,16 @@
 // Native allocation extent0x328; unreviewed fields/networking lifecycle remain open.
 class CPed;
 class CEntity;
+class CVehicle;
 struct PedBulletData;
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
+    // samp.dll RVA: 0x00004bd0
+    void SendUnoccupiedData(WORD vehicle,BYTE seat);
+    // Native bool result in AL; deliberately retains player0 selection behavior.
+    // samp.dll RVA: 0x00006c10
+    bool ProcessUnoccupiedSync(WORD id,CVehicle *vehicle);
     // samp.dll RVA: 0x0000e2b0
     void ClearSurfingState();
     // samp.dll RVA: 0x00003fb0
@@ -86,4 +92,6 @@ class CLocalPlayer {public:
 };
 #pragma pack(pop)
 typedef char LocalPlayerExtent[(sizeof(CLocalPlayer)==0x328)?1:-1];
+// samp.dll RVA: 0x00117978
+extern const float g_localUnoccupiedRange;
 #endif

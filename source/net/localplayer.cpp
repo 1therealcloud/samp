@@ -15,6 +15,97 @@
 #include "game/custommodels.h"
 #include "gui/render_dependencies.h"
 #include "gui/textdraw_texture.h"
+#include "net/playerinfo.h"
+#include "net/remoteplayer.h"
+#pragma pack(push,1)
+struct UnoccupiedSyncData {
+    WORD vehicle;BYTE seat;CVector right,up,position,speed,turnSpeed;float health;
+};
+#pragma pack(pop)
+typedef char UnoccupiedSyncExtent[(sizeof(UnoccupiedSyncData)==67)?1:-1];
+// samp.dll RVA: 0x00117978
+const float g_localUnoccupiedRange=90.0f;
+// samp.dll RVA: 0x00004bd0
+void CLocalPlayer::SendUnoccupiedData(WORD id,BYTE seat) {
+    CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;
+    CPlayerPool *players=pools->players;CVehiclePool *vehicles=pools->vehicles;
+    if(id>=2000||!vehicles->m_bNotEmpty[id])return;
+    CVehicle *vehicle=vehicles->m_pObjects[id];RakNet::BitStream stream;
+    CMatrix matrix;CVector speed,turnSpeed;vehicle->GetMatrix(&matrix);vehicle->GetSpeed(&speed);vehicle->GetTurnSpeed(&turnSpeed);
+    UnoccupiedSyncData data;data.right=matrix.right;data.up=matrix.up;data.position=matrix.position;
+    data.speed=speed;data.turnSpeed=turnSpeed;data.vehicle=id;data.seat=seat;data.health=vehicle->GetHealth();
+    stream.Write((BYTE)209);stream.Write((char*)&data,67);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,1);
+    *(WORD*)((BYTE*)vehicles+0x8e34+id*2)=players->localId;*(DWORD*)((BYTE*)vehicle+0x7f)=1;
+}
+// samp.dll RVA: 0x00006c10
+bool CLocalPlayer::ProcessUnoccupiedSync(WORD id,CVehicle *vehicle) {
+    GetTickCount();BYTE *backend=(BYTE*)vehicle->m_pGameVehicle;
+    CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+    if(!backend||!*(CPed**)nativeState||vehicle->IsTrainPart())return false;
+    BYTE *driver=*(BYTE**)(backend+0x460);
+    bool clear=driver&&(*(DWORD*)(driver+0x46c)&0x100);
+    if(!clear) {
+        int outsideRange=0;
+        __asm {
+            mov ecx,vehicle
+            call CEntity::GetDistanceToLocalPlayer
+            fcomp dword ptr [g_localUnoccupiedRange]
+            fnstsw ax
+            test ah,41h
+            jne distance_accepted
+            mov outsideRange,1
+        distance_accepted:
+        }
+        clear=outsideRange||vehicle->IsStationary()||vehicle->GetTractor()!=0;
+    }
+    if(clear){*(DWORD*)((BYTE*)vehicle+0x7f)=0;*(DWORD*)((BYTE*)vehicle+0x83)=0;return false;}
+    for(int seat=0;seat<8;++seat) {
+        BYTE *passenger=*(BYTE**)(backend+0x464+seat*4);
+        if(passenger&&!*(DWORD*)(passenger+0x598)) {
+            if(passenger==*(BYTE**)((BYTE*)*(CPed**)nativeState+0x2a4)) {
+                SendUnoccupiedData(id,(BYTE)(seat+1));return true;
+            }
+            return false;
+        }
+    }
+    int closest=0,largest=players->largestId;
+    if(largest<players->localId)largest=players->localId;
+    float best=100000.0f;
+    for(int index=0;index<=largest;++index) {
+        CPed *ped;
+        if(index==players->localId)ped=*(CPed**)nativeState;
+        else {
+            WORD player=(WORD)index;if(player>1004||!players->players[player]||!players->players[player]->remote)continue;
+            ped=*(CPed**)(players->players[player]->remote->nativeState+4);
+        }
+        if(!ped||!ped->DoesExist())continue;
+        int better=0;
+        __asm {
+            push vehicle
+            mov ecx,ped
+            call CPed::GetDistanceToEntity
+            cmp index,0
+            je seed_distance
+            fcom dword ptr [best]
+            fnstsw ax
+            test ah,5
+            jp reject_distance
+            fstp dword ptr [best]
+            mov better,1
+            jmp distance_done
+        seed_distance:
+            fstp dword ptr [best]
+            jmp distance_done
+        reject_distance:
+            fstp st(0)
+        distance_done:
+        }
+        if(better)closest=index;
+    }
+    if(closest==players->localId&&best<=g_localUnoccupiedRange){SendUnoccupiedData(id,0);return true;}
+    return false;
+}
 // samp.dll RVA: 0x0000e2b0
 void CLocalPlayer::ClearSurfingState() {
     *(DWORD*)(nativeState+0x2e6)=0;SetSurfingEntity(0,0);
