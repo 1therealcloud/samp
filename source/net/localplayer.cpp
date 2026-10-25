@@ -17,6 +17,119 @@
 #include "gui/textdraw_texture.h"
 #include "net/playerinfo.h"
 #include "net/remoteplayer.h"
+#include "game/aimstuff.h"
+#include "game/quaternion.h"
+// VC7 runtime helper; library entry, not a recovered SA-MP method.
+extern "C" __int64 __cdecl _ftol2();
+#pragma pack(push,1)
+struct LocalAimSyncData {BYTE cameraMode;BYTE vectors[24];float aimZ;BYTE zoomWeapon,aspect;};
+struct LocalTrailerSyncData {WORD vehicle;CVector position;GameQuaternion rotation;CVector speed,turnSpeed;};
+struct LocalPassengerSyncData {WORD vehicle;BYTE seatFlags,weaponAim,health,armour;WORD leftRight,upDown,keys;CVector position;};
+#pragma pack(pop)
+typedef char LocalAimSyncExtent[(sizeof(LocalAimSyncData)==31)?1:-1];
+typedef char LocalTrailerSyncExtent[(sizeof(LocalTrailerSyncData)==54)?1:-1];
+typedef char LocalPassengerSyncExtent[(sizeof(LocalPassengerSyncData)==24)?1:-1];
+// samp.dll RVA: 0x00117948
+const float g_localAimZoomScale=63.0f;
+// samp.dll RVA: 0x0011794c
+const float g_localAimAspectScale=255.0f;
+// samp.dll RVA: 0x00117950
+int g_localWastedRpc=53;
+// samp.dll RVA: 0x000041c0
+DWORD CLocalPlayer::NeedsToSendOnfootData(WORD keys,WORD upDown,WORD leftRight) {
+    return keys!=*(WORD*)(nativeState+0x3e)||upDown!=*(WORD*)(nativeState+0x3c)||leftRight!=*(WORD*)(nativeState+0x3a)?1:0;
+}
+// samp.dll RVA: 0x000041f0
+DWORD CLocalPlayer::NeedsToSendIncarData(WORD keys,WORD upDown,WORD leftRight) {
+    return keys!=*(WORD*)(nativeState+0x9c)||upDown!=*(WORD*)(nativeState+0x9a)||leftRight!=*(WORD*)(nativeState+0x98)?1:0;
+}
+// samp.dll RVA: 0x00005090
+void CLocalPlayer::SendAimData() {
+    RakNet::BitStream stream;CameraAim *aim=GetPed()->GetCameraAim();LocalAimSyncData data;
+    BYTE player=*((BYTE*)GetPed()+0x2b0);
+    data.cameraMode=player?AimStuff::GetPlayerCameraMode(player):AimStuff::GetCameraMode();
+    memcpy(data.vectors,aim,24);data.aimZ=GetPed()->GetAimZ();
+    float zoom=AimStuff::GetCameraExtZoom();DWORD aspectValue,zoomValue;
+    __asm {
+        call AimStuff::GetAspectRatio
+        fmul dword ptr [g_localAimAspectScale]
+        call _ftol2
+        mov aspectValue,eax
+        fld dword ptr [zoom]
+        fmul dword ptr [g_localAimZoomScale]
+        call _ftol2
+        mov zoomValue,eax
+    }
+    data.aspect=(BYTE)aspectValue;data.zoomWeapon=(BYTE)(zoomValue&0x3f);
+    DWORD *slot=(DWORD*)GetPed()->GetCurrentWeaponSlot();DWORD weapon;
+    if(slot[1]==2)weapon=3;else {weapon=slot[2];if(weapon>1)weapon=2;}
+    data.zoomWeapon|=(BYTE)(weapon<<6);
+    if(HasDataChanged(nativeState+0xd5,&data,31)) {
+        stream.Write((BYTE)203);stream.Write((char*)&data,31);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,1);
+        memcpy(nativeState+0xd5,&data,31);
+    }
+}
+// samp.dll RVA: 0x00005240
+void CLocalPlayer::SendTrailerData(WORD id) {
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    if(id>=2000||!vehicles->m_bNotEmpty[id])return;
+    CVehicle *vehicle=vehicles->m_pObjects[id];if(!vehicle)return;
+    CMatrix matrix;GameQuaternion rotation;vehicle->GetMatrix(&matrix);
+    GameQuaternionFromMatrixComponents(&matrix,&rotation);GameQuaternionNormalize(&rotation);
+    LocalTrailerSyncData data;data.rotation=rotation;data.position=matrix.position;data.vehicle=id;
+    vehicle->GetSpeed(&data.speed);vehicle->GetTurnSpeed(&data.turnSpeed);
+    if(HasDataChanged(nativeState+4,&data,54)) {
+        RakNet::BitStream stream;stream.Write((BYTE)210);stream.Write((char*)&data,54);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,1);
+        memcpy(nativeState+4,&data,54);
+    }
+}
+// samp.dll RVA: 0x00005400
+void CLocalPlayer::SendPassengerData() {
+    RakNet::BitStream stream;CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    WORD leftRight,upDown;WORD keys=GetPed()->GetKeys(&leftRight,&upDown);BYTE aim=GetPed()->GetAim();
+    LocalPassengerSyncData data={0};data.vehicle=vehicles->Find(GetPed()->GetVehicle());if(data.vehicle==0xffff)return;
+    data.weaponAim=(BYTE)(aim<<6);data.leftRight=leftRight;data.upDown=upDown;data.keys=keys;
+    CLocalPlayer *self=this;DWORD health,armour;
+    __asm {
+        mov ecx,self
+        mov ecx,[ecx]
+        call CPed::GetHealth
+        call _ftol2
+        mov health,eax
+        mov ecx,self
+        mov ecx,[ecx]
+        call CPed::GetArmour
+        call _ftol2
+        mov armour,eax
+    }
+    data.health=(BYTE)health;data.armour=(BYTE)armour;
+    data.seatFlags=(BYTE)(GetPed()->GetVehicleSeatIndex()&0x3f);
+    if(GetPed()->HasDanceState())data.seatFlags|=0x80;
+    data.seatFlags|=(BYTE)((nativeState[0x1cf]&1)<<6);
+    data.weaponAim|=(BYTE)(GetPed()->GetCurrentWeapon()&0x3f);
+    CMatrix matrix;GetPed()->GetMatrix(&matrix);data.position=matrix.position;
+    if(HasDataChanged(nativeState+0x7e,&data,24)) {
+        stream.Write((BYTE)211);stream.Write((char*)&data,24);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,1);
+        memcpy(nativeState+0x7e,&data,24);
+    }
+    DWORD delay=*(DWORD*)(nativeState+0x1cf)?100:1000;
+    if(GetTickCount()-*(DWORD*)(nativeState+0x13b)>delay){*(DWORD*)(nativeState+0x13b)=GetTickCount();SendAimData();}
+}
+// samp.dll RVA: 0x00005660
+void CLocalPlayer::WastedNotification() {
+    RakNet::BitStream stream;WORD killer;BYTE reason=GetPed()->GetDeathInfo(&killer);
+    stream.Write(reason);stream.Write(killer);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localWastedRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+}
+// samp.dll RVA: 0x00005b50
+void CLocalPlayer::SendStats() {
+    RakNet::BitStream stream;int money=g_pGame->GetPlayerMoney();DWORD drunk=GetPed()->GetDrunkLevel();
+    stream.Write((BYTE)205);stream.Write(money);stream.Write(drunk);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE,0);
+}
 #pragma pack(push,1)
 struct UnoccupiedSyncData {
     WORD vehicle;BYTE seat;CVector right,up,position,speed,turnSpeed;float health;

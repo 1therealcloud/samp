@@ -9,6 +9,20 @@ struct PedBulletData;
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
+    // samp.dll RVA: 0x000041c0
+    DWORD NeedsToSendOnfootData(WORD keys,WORD upDown,WORD leftRight);
+    // samp.dll RVA: 0x000041f0
+    DWORD NeedsToSendIncarData(WORD keys,WORD upDown,WORD leftRight);
+    // samp.dll RVA: 0x00005090
+    void SendAimData();
+    // samp.dll RVA: 0x00005240
+    void SendTrailerData(WORD vehicle);
+    // samp.dll RVA: 0x00005400
+    void SendPassengerData();
+    // samp.dll RVA: 0x00005660
+    void WastedNotification();
+    // samp.dll RVA: 0x00005b50
+    void SendStats();
     // samp.dll RVA: 0x00004bd0
     void SendUnoccupiedData(WORD vehicle,BYTE seat);
     // Native bool result in AL; deliberately retains player0 selection behavior.
@@ -94,4 +108,10 @@ class CLocalPlayer {public:
 typedef char LocalPlayerExtent[(sizeof(CLocalPlayer)==0x328)?1:-1];
 // samp.dll RVA: 0x00117978
 extern const float g_localUnoccupiedRange;
+// samp.dll RVA: 0x00117948
+extern const float g_localAimZoomScale;
+// samp.dll RVA: 0x0011794c
+extern const float g_localAimAspectScale;
+// samp.dll RVA: 0x00117950
+extern int g_localWastedRpc;
 #endif
