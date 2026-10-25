@@ -22,6 +22,10 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x0000a420
+    void Packet_OnfootSync(Packet *packet);
+    // samp.dll RVA: 0x0000a6f0
+    void Packet_IncarSync(Packet *packet);
     // samp.dll RVA: 0x00009730
     void Packet_UnoccupiedSync(Packet *packet);
     // samp.dll RVA: 0x00009b10
@@ -168,4 +172,8 @@ extern const char g_netMenuException[];
 extern const char g_netEmptyShoppingSubsection[];
 // samp.dll RVA: 0x00117b10
 extern const char g_netInvalidPasswordMessage[];
+// samp.dll RVA: 0x00117ba0
+extern const double g_netQuaternionReciprocal;
+// samp.dll RVA: 0x00117ba8
+extern const float g_netCompressedVectorScale;
 #endif

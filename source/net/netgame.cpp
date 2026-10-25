@@ -29,6 +29,159 @@
 #include "game/custommodels.h"
 #include <string.h>
 #include "NetworkTypes.h"
+#include "game/quaternion.h"
+#include "game/util.h"
+// samp.dll RVA: 0x00117ba0
+const double g_netQuaternionReciprocal=1.0/65535.0;
+// samp.dll RVA: 0x00117ba8
+const float g_netCompressedVectorScale=1.0f/32767.5f;
+// Source-only wrapper for the two native BitStream<float> instantiations.
+// No fields or virtual interface are added: native ECX remains the base stream.
+class NativeSyncBitStream:public RakNet::BitStream {
+public:
+    // Reconstruction-only forwarding constructor; no standalone native entry.
+    NativeSyncBitStream(unsigned char *data,int length):RakNet::BitStream(data,length,false){}
+    // samp.dll RVA: 0x00009370
+    bool ReadQuaternion(float &w,float &x,float &y,float &z);
+    // samp.dll RVA: 0x0000a0a0
+    bool ReadVelocity(float &x,float &y,float &z);
+};
+typedef char NativeSyncStreamExtent[(sizeof(NativeSyncBitStream)==sizeof(RakNet::BitStream))?1:-1];
+// samp.dll RVA: 0x00009370
+bool NativeSyncBitStream::ReadQuaternion(float &w,float &x,float &y,float &z) {
+    bool wNegative,xNegative,yNegative,zNegative;unsigned short cx,cy,cz;
+    Read(wNegative);Read(xNegative);Read(yNegative);Read(zNegative);
+    Read(cx);Read(cy);if(!Read(cz))return false;
+    x=(float)(cx*g_netQuaternionReciprocal);y=(float)(cy*g_netQuaternionReciprocal);z=(float)(cz*g_netQuaternionReciprocal);
+    if(xNegative)x=-x;if(yNegative)y=-y;if(zNegative)z=-z;
+    // Preserve the unspilled residual and the second, signed store from ST0.
+    __asm {
+        mov eax,x
+        mov ecx,y
+        mov edx,z
+        fld dword ptr [eax]
+        fld dword ptr [ecx]
+        fld dword ptr [edx]
+        fld st(2)
+        fmulp st(3),st(0)
+        fxch st(2)
+        fsubr dword ptr [g_quaternionMatrixOne]
+        fld st(1)
+        fmul st(0),st(2)
+        fsubp st(1),st(0)
+        fld st(2)
+        fmul st(0),st(3)
+        fsubp st(1),st(0)
+        fstp st(2)
+        fstp st(0)
+        fcom dword ptr [g_objectScaleLowerBound]
+        fnstsw ax
+        test ah,5
+        jp quaternion_residual_ready
+        fstp st(0)
+        fld dword ptr [g_objectScaleLowerBound]
+    quaternion_residual_ready:
+        fsqrt
+        mov eax,w
+        fld st(0)
+        fstp dword ptr [eax]
+        cmp wNegative,0
+        je quaternion_positive_w
+        fchs
+        fstp dword ptr [eax]
+        jmp quaternion_w_done
+    quaternion_positive_w:
+        fstp st(0)
+    quaternion_w_done:
+    }
+    return true;
+}
+// samp.dll RVA: 0x0000a0a0
+bool NativeSyncBitStream::ReadVelocity(float &x,float &y,float &z) {
+    float magnitude;if(!Read(magnitude))return false;BYTE positive;
+    __asm {
+        fld magnitude
+        fcomp dword ptr [g_localQuaternionSyncThreshold]
+        fnstsw ax
+        test ah,41h
+        sete positive
+    }
+    if(!positive){x=0.0f;y=0.0f;z=0.0f;return true;}
+    unsigned short compressed;float normalizedX,normalizedY;
+    if(Read(compressed))normalizedX=(float)compressed*g_netCompressedVectorScale-g_quaternionMatrixOne;
+    if(Read(compressed))normalizedY=(float)compressed*g_netCompressedVectorScale-g_quaternionMatrixOne;
+    if(!Read(compressed))return false;
+    // Native keeps the third normalized value in ST0 until its output store.
+    int value=compressed;
+    __asm {
+        fild value
+        fmul dword ptr [g_netCompressedVectorScale]
+        fsub dword ptr [g_quaternionMatrixOne]
+        mov eax,x
+        mov ecx,y
+        mov edx,z
+        fld normalizedX
+        fstp dword ptr [eax]
+        fld normalizedY
+        fstp dword ptr [ecx]
+        fstp dword ptr [edx]
+        fld magnitude
+        fmul dword ptr [eax]
+        fstp dword ptr [eax]
+        fld magnitude
+        fmul dword ptr [ecx]
+        fstp dword ptr [ecx]
+        fld magnitude
+        fmul dword ptr [edx]
+        fstp dword ptr [edx]
+    }
+    return true;
+}
+// samp.dll RVA: 0x0000a420
+void CNetGame::Packet_OnfootSync(Packet *packet) {
+    NativeSyncBitStream stream(packet->data,(int)packet->length);
+    BYTE packetId=0;bool surfing=false,animation=false;
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    BYTE data[68]={0};DWORD timestamp=0;WORD player;bool present;BYTE health,weapon=0;
+    if(packet->data[0]==40){stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&timestamp,32,true);}
+    stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);
+    stream.Read(present);if(present)stream.ReadBits(data,16,true);
+    stream.Read(present);if(present)stream.ReadBits(data+2,16,true);
+    stream.ReadBits(data+4,16,true);stream.Read((char*)data+6,12);
+    stream.ReadQuaternion(*(float*)(data+0x12),*(float*)(data+0x16),*(float*)(data+0x1a),*(float*)(data+0x1e));
+    stream.ReadBits(&health,8,true);
+    BYTE armour=health&15,pedHealth=health>>4;
+    data[0x23]=armour==15?100:armour*7;data[0x22]=pedHealth==15?100:pedHealth*7;
+    stream.ReadBits(&weapon,8,true);data[0x24]=(data[0x24]&0xc0)|(weapon&0x3f);
+    stream.ReadBits(data+0x25,8,true);
+    stream.ReadVelocity(*(float*)(data+0x26),*(float*)(data+0x2a),*(float*)(data+0x2e));
+    stream.Read(surfing);
+    if(surfing){stream.ReadBits(data+0x3e,16,true);stream.Read((char*)data+0x32,12);}
+    else *(WORD*)(data+0x3e)=0xffff;
+    stream.Read(animation);if(animation)stream.ReadBits(data+0x40,32,true);else *(DWORD*)(data+0x40)=0;
+    CRemotePlayer *remote=pools->players->GetPlayer(player);if(remote)remote->UpdateOnfoot(data,timestamp);
+}
+// samp.dll RVA: 0x0000a6f0
+void CNetGame::Packet_IncarSync(Packet *packet) {
+    NativeSyncBitStream stream(packet->data,(int)packet->length);BYTE packetId=0;
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    BYTE data[63]={0};DWORD timestamp=0;WORD player,vehicleHealth;BYTE health,weapon=0;bool present;
+    if(packet->data[0]==40){stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&timestamp,32,true);}
+    stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);
+    stream.ReadBits(data,16,true);stream.ReadBits(data+2,16,true);stream.ReadBits(data+4,16,true);stream.ReadBits(data+6,16,true);
+    stream.ReadQuaternion(*(float*)(data+8),*(float*)(data+0xc),*(float*)(data+0x10),*(float*)(data+0x14));
+    stream.Read((char*)data+0x18,12);
+    stream.ReadVelocity(*(float*)(data+0x24),*(float*)(data+0x28),*(float*)(data+0x2c));
+    stream.ReadBits((BYTE*)&vehicleHealth,16,true);*(float*)(data+0x30)=(float)vehicleHealth;
+    stream.ReadBits(&health,8,true);BYTE armour=health&15,pedHealth=health>>4;
+    data[0x35]=armour==15?100:armour*7;data[0x34]=pedHealth==15?100:pedHealth*7;
+    stream.ReadBits(&weapon,8,true);data[0x36]=(data[0x36]&0xc0)|(weapon&0x3f);
+    stream.Read(present);if(present)data[0x37]=1;
+    stream.Read(present);if(present)data[0x38]=1;
+    stream.Read(present);if(present)stream.ReadBits(data+0x3b,32,true);
+    stream.Read(present);if(present)stream.ReadBits(data+0x39,16,true);
+    CRemotePlayer *remote=pools->players->GetPlayer(player);if(remote)remote->UpdateIncar(data,timestamp);
+}
 typedef char NativePacketLengthOffset[(offsetof(Packet,length)==8)?1:-1];
 typedef char NativePacketDataOffset[(offsetof(Packet,data)==16)?1:-1];
 // samp.dll RVA: 0x00009730
