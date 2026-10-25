@@ -2,6 +2,30 @@
 
 // samp.dll RVA: 0x002aca28
 CCustomModels *g_customModels;
+// samp.dll RVA: 0x0000c950
+bool CCustomModels::HasEarlierResourceRequest(int endIndex,DWORD hash) {
+    BYTE *state=(BYTE*)this;if(!state[0x21f]||endIndex<=0)return false;
+    DWORD count=*(DWORD*)(state+4);
+    for(int i=0;i<endIndex;++i)if((DWORD)i<count) {
+        BYTE *entry=(*(BYTE***)state)[i];if(!entry)continue;
+        if((*(DWORD*)(entry+0x46)==hash&&entry[2])||(*(DWORD*)(entry+0x4a)==hash&&entry[3]))return true;
+    }
+    return false;
+}
+// samp.dll RVA: 0x0000c9b0
+int CCustomModels::MarkResourceRequests() {
+    BYTE *state=(BYTE*)this;if(!state[0x21f])return -1;
+    DWORD index=0,pending=0,count=*(DWORD*)(state+4);if(!count)return 0;
+    do {
+        BYTE *entry=index<count?(*(BYTE***)state)[index]:0;
+        if((entry[7]==1||(entry[7]==2&&(*(DWORD*)(entry+8)==*(DWORD*)(state+0x217)||*(DWORD*)(entry+8)==0xffffffff)))&&!entry[6]) {
+            if(!entry[0]){entry[2]=1;if(!HasEarlierResourceRequest((int)index,*(DWORD*)(entry+0x46)))++pending;}
+            if(!entry[1]){entry[3]=1;if(!HasEarlierResourceRequest((int)index,*(DWORD*)(entry+0x4a)))++pending;}
+        }
+        count=*(DWORD*)(state+4);
+    }while(++index!=count);
+    return (int)pending;
+}
 
 // samp.dll RVA: 0x0000cc80
 bool CCustomModels::IsPedEntry(int model) {

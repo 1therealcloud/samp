@@ -25,6 +25,10 @@
 #include "game/vehicle.h"
 #include "GetTime.h"
 #include "game/game.h"
+// samp.dll RVA: 0x0000e4e0
+void ScrGamemodeRestart(RPCParameters *parameters) {
+    (void)parameters;((CNetGame*)g_pNetGame)->ShutdownForRestart();
+}
 // samp.dll RVA: 0x00118108
 const char g_rpcCouldNotSpawnPlayer[]="Warning: Couldn't spawn player(%u)";
 // samp.dll RVA: 0x000109d0

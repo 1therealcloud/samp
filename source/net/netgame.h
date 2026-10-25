@@ -22,6 +22,13 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x0000a230
+    void ShutdownForRestart();
+    // Descriptive native pool/frame pass with three separate SEH regions.
+    // samp.dll RVA: 0x00008810
+    void ProcessPools();
+    // samp.dll RVA: 0x00008750
+    void ProcessCustomModelWait();
     // samp.dll RVA: 0x00008450
     void InitialNotification();
     // samp.dll RVA: 0x000085e0
@@ -133,6 +140,20 @@ extern const char g_netNoResponseMessage[];
 extern const char g_netStartedMessage[];
 // samp.dll RVA: 0x00117af0
 extern const char g_netDisconnectedMessage[];
+// samp.dll RVA: 0x00117bac
+extern const char g_netRestartingMessage[];
+// samp.dll RVA: 0x00156b2c
+extern DWORD g_netVehicleProcessCounter;
+// samp.dll RVA: 0x00156b30
+extern DWORD g_netPickupProcessCounter;
+// samp.dll RVA: 0x00117a34
+extern const char g_netVehicleException[];
+// samp.dll RVA: 0x00117a2c
+extern const char g_netPickupException[];
+// samp.dll RVA: 0x00117a24
+extern const char g_netMenuException[];
+// samp.dll RVA: 0x00117a39
+extern const char g_netEmptyShoppingSubsection[];
 // samp.dll RVA: 0x00117b10
 extern const char g_netInvalidPasswordMessage[];
 #endif

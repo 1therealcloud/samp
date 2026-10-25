@@ -4,6 +4,12 @@
 // Observed registry prefix only: pointer array at +0, DWORD count at +4.
 // Complete allocation, ownership and loader lifecycle remain open. Never allocate.
 class CCustomModels {public:
+    // Descriptive request bookkeeping; neither method starts a transfer itself.
+    // samp.dll RVA: 0x0000c950
+    bool HasEarlierResourceRequest(int endIndex,DWORD hash);
+    // Returns-1 while disabled; marks flags and counts resources not requested by earlier entries.
+    // samp.dll RVA: 0x0000c9b0
+    int MarkResourceRequests();
     // Native is deliberately a bare RET4; no object unload is performed here.
     // samp.dll RVA: 0x0000cd40
     void ReleaseObjectEntry(int model);

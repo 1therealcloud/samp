@@ -22,6 +22,102 @@
 #include "game/playerped.h"
 #include "game/patches.h"
 #include "gui/render_dependencies.h"
+#include "net/localplayer.h"
+#include "net/remoteplayer.h"
+#include "game/aimstuff.h"
+#include "game/player_colors.h"
+#include "game/custommodels.h"
+#include <string.h>
+// samp.dll RVA: 0x00117bac
+const char g_netRestartingMessage[]="The server is restarting..";
+// samp.dll RVA: 0x00156b2c
+DWORD g_netVehicleProcessCounter;
+// samp.dll RVA: 0x00156b30
+DWORD g_netPickupProcessCounter;
+// samp.dll RVA: 0x00117a34
+const char g_netVehicleException[]="s004";
+// samp.dll RVA: 0x00117a2c
+const char g_netPickupException[]="s005";
+// samp.dll RVA: 0x00117a24
+const char g_netMenuException[]="s006";
+// samp.dll RVA: 0x00117a39
+const char g_netEmptyShoppingSubsection[]="";
+// samp.dll RVA: 0x0000a230
+void CNetGame::ShutdownForRestart() {
+    for(WORD id=0;id<1004;++id) {
+        CRemotePlayer *remote=pools->players->GetPlayer(id);
+        if(remote){remote->nativeState[0x19]=0xff;remote->ResetData();}
+    }
+    pools->players->local->ResetData();pools->players->local->ToggleSpectating(FALSE);
+    AimStuff::ResetLocalSkills();*(DWORD*)(nativeState+0x3cd)=11;
+    pools->players->Deactivate();pools->players->Process();
+    ResetVehiclePool();ResetActorPool();ResetTextDrawPool();ResetGangZonePool();ResetLabelPool();
+    ResetMapIcons();ResetPickupPool();ResetObjectPool();ResetMenuPool();
+    (*(BYTE**)(nativeState+0x3d5))[0x1a]=0;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0x27)=0x42700000;
+    (*(BYTE**)(nativeState+0x3d5))[0x2c]=12;(*(BYTE**)(nativeState+0x3d5))[0x2d]=0;
+    (*(BYTE**)(nativeState+0x3d5))[0x2e]=1;(*(BYTE**)(nativeState+0x3d5))[0x1f]=1;
+    (*(BYTE**)(nativeState+0x3d5))[0x2f]=1;(*(BYTE**)(nativeState+0x3d5))[0]=0;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0x16)=0x3c03126f;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+1)=0;
+    *(DWORD*)((BYTE*)g_pGame+0x4d)=0;*(DWORD*)((BYTE*)g_pGame+0x29)=0;
+    g_pGame->GetPlayerPed()->LinkToInterior(0,TRUE);g_pGame->ResetMoney();
+    g_pGame->GetPlayerPed()->Kill();g_pGame->GetPlayerPed()->SetArmour(0.0f);
+    g_pGame->EnableZoneDisplaying(0);(*(BYTE**)(nativeState+0x3d5))[0x21]=0;
+    PlayerColors::Initialize();g_pGame->SetWorldGravity(*(float*)(*(BYTE**)(nativeState+0x3d5)+0x16));
+    g_pGame->SetWantedLevel(0);g_pGame->EnableClock(false);g_pChat->AddInfoMessage(g_netRestartingMessage);
+}
+// samp.dll RVA: 0x00008810
+void CNetGame::ProcessPools() {
+    if(nativeState[0x3d9]) {
+        if((DWORD)RakNet::GetTime()-*(DWORD*)(nativeState+0x3da)<=1000)return;
+        nativeState[0x3d9]=0;
+        if(*(DWORD*)(pools->players->local->nativeState+0xf4)) {
+            g_pGame->GetPlayerPed()->SetControllable(TRUE);
+            g_pGame->GetPlayerPed()->SetCollisionFlag(TRUE);
+            g_pGame->GetPlayerPed()->SetCollisionProcessed(TRUE);
+        }
+    }
+    if((*(BYTE**)(nativeState+0x3d5))[0x1a]) {
+        CPed *ped=g_pGame->GetPlayerPed();
+        if(ped&&!ped->GetBackendShoppingName()&&strlen(ped->GetLoadedShoppingDataSubsection()))
+            ped->LoadShoppingDataSubsection(g_netEmptyShoppingSubsection);
+    }
+    CPlayerPool *players=pools->players;if(players)players->Process();
+    CVehiclePool *vehicles=pools->vehicles;
+    if(vehicles&&(LONG)g_netVehicleProcessCounter>2) {
+        __try {vehicles->Process();}
+        __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),g_netVehicleException)) {
+            // Native continues to the counter reset after a handled error.
+        }
+        g_netVehicleProcessCounter=0;
+    }else ++g_netVehicleProcessCounter;
+    CPickupPool *pickups=pools->pickups;
+    if(pickups&&(LONG)g_netPickupProcessCounter>5) {
+        __try {pickups->Process();}
+        __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),g_netPickupException)) {
+            // Native continues to the counter reset after a handled error.
+        }
+        g_netPickupProcessCounter=0;
+    }else ++g_netPickupProcessCounter;
+    CMenuPool *menus=pools->menus;
+    if(menus) {
+        __try {menus->Process();}
+        __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),g_netMenuException)) {
+            // Native menu handler returns without additional cleanup.
+        }
+    }
+}
+// samp.dll RVA: 0x00008750
+void CNetGame::ProcessCustomModelWait() {
+    if(g_customModels&&!nativeState[0x3d9]&&*(DWORD*)(pools->players->local->nativeState+0xf4)&&*(DWORD*)((BYTE*)g_customModels+0x217)&&g_customModels->MarkResourceRequests()>0) {
+        nativeState[0x3d9]=1;g_pGame->GetPlayerPed()->SetControllable(FALSE);
+        g_pGame->GetPlayerPed()->SetCollisionFlag(FALSE);g_pGame->GetPlayerPed()->SetCollisionProcessed(FALSE);
+        g_pGame->m_pCamera->Restore();
+    }
+    g_pGame->EnableHUD(FALSE);
+    if(nativeState[0x3d9])*(DWORD*)(nativeState+0x3da)=(DWORD)RakNet::GetTime();
+}
 // samp.dll RVA: 0x001179dc
 const char g_netStartedMessage[]="{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
 // samp.dll RVA: 0x00117af0
