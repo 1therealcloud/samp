@@ -15,6 +15,143 @@
 #include "game/aimstuff.h"
 #include "net/localplayer.h"
 #include "net/pool_frame.h"
+// samp.dll RVA: 0x00118218
+const char g_remoteVendingAnimation[]="VEND_EAT_P";
+// samp.dll RVA: 0x00118224
+const char g_remoteVendingLibrary[]="VENDING";
+// samp.dll RVA: 0x00118204
+const char g_remoteCarryAnimation[]="crry_prtial";
+// samp.dll RVA: 0x00118210
+const char g_remoteCarryLibrary[]="CARRY";
+// samp.dll RVA: 0x00016310
+void CRemotePlayer::Process() {
+    if(!*(CPed**)(nativeState+4))return;
+    if(!nativeState[0x1a]) {
+        ResetData();g_pGame->RemovePed(*(CPed**)(nativeState+4));*(DWORD*)(nativeState+4)=0;return;
+    }
+    DWORD elapsed=GetTickCount()-*(DWORD*)(nativeState+0x1c5);
+    if(nativeState[0x1a]==17&&nativeState[0x1c4]==16&&!(*(CPed**)(nativeState+4))->IsInVehicle()) {
+        if(!HasSurfingTarget()) {
+            SetOnfootTarget((CVector*)(nativeState+0x42),(CVector*)(nativeState+0x62));UpdateOnfootSpeedAndPosition();
+        }else SetOnfootTarget((CVector*)(nativeState+0x42),(CVector*)(nativeState+0x62));
+        if((*(CPed**)(nativeState+4))->DoesExist()) {
+            BYTE weapon=nativeState[0x60]&0x3f;
+            if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+                (*(CPed**)(nativeState+4))->SetArmedWeapon(weapon,0);weapon=nativeState[0x60]&0x3f;
+                if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+                    (*(CPed**)(nativeState+4))->GiveWeapon(weapon,9999);
+                    (*(CPed**)(nativeState+4))->SetArmedWeapon(nativeState[0x60]&0x3f,0);
+                }
+            }
+        }
+        if(nativeState[0x40]&0x80) {
+            if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()==34||(BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()==35||(BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()==36)
+                (*(CPed**)(nativeState+4))->SetState(12);
+        }else if((*(CPed**)(nativeState+4))->GetState()==12)(*(CPed**)(nativeState+4))->SetState(1);
+        DWORD animation=*(DWORD*)(nativeState+0x7c);
+        if(*(DWORD*)(nativeState+0x1c0)!=animation) {
+            if(animation)(*(CPed**)(nativeState+4))->ApplyPackedAnimation(animation);
+            if(!*(DWORD*)(nativeState+0x7c)&&*(DWORD*)(nativeState+0x1c0)==0x1804067c) {
+                (*(CPed**)(nativeState+4))->ApplyAnimation(g_remoteVendingAnimation,g_remoteVendingLibrary,4.0f,0,0,0,0,-1);
+                *(DWORD*)(nativeState+0x7c)=0xffffffff;
+            }
+            animation=*(DWORD*)(nativeState+0x7c);*(DWORD*)(nativeState+0x1c0)=animation;*(DWORD*)(nativeState+0x1cd)=0;
+        }
+        if(!*(DWORD*)(nativeState+0x1cd)&&!animation&&(*(CPed**)(nativeState+4))->HasTaskType401())
+            (*(CPed**)(nativeState+4))->ApplyAnimation(g_remoteCarryAnimation,g_remoteCarryLibrary,4.0f,0,0,0,0,0);
+        *(DWORD*)(nativeState+8)=0;nativeState[0x1c4]=0;
+    }else if(nativeState[0x1a]==19&&nativeState[0x1c4]==17&&(*(CPed**)(nativeState+4))->IsInVehicle()) {
+        CVehicle *vehicle=*(CVehicle**)(nativeState+8);if(!vehicle||!vehicle->DoesExist())return;
+        GameQuaternion *rotation=(GameQuaternion*)(nativeState+0x88);GameQuaternionNormalize(rotation);
+        CMatrix matrix;GameQuaternionToMatrixComponents(rotation,&matrix);matrix.position=*(CVector*)(nativeState+0x98);
+        if((*(CVehicle**)(nativeState+8))->GetModelIndex()==538||(*(CVehicle**)(nativeState+8))->GetModelIndex()==537||(*(CVehicle**)(nativeState+8))->GetModelIndex()==449)
+            UpdateTrain(&matrix,(CVector*)(nativeState+0xa4),*(float*)(nativeState+0xbb));
+        else {SetIncarTarget(&matrix,(CVector*)(nativeState+0x98),(CVector*)(nativeState+0xa4));UpdateIncarSpeedAndPosition();}
+        if((*(CVehicle**)(nativeState+8))->GetModelIndex()==520)(*(CVehicle**)(nativeState+8))->SetHydraThrusters(*(DWORD*)(nativeState+0xbb));
+        if((*(CVehicle**)(nativeState+8))->GetSubtype()==2||(*(CVehicle**)(nativeState+8))->GetSubtype()==6)
+            (*(CVehicle**)(nativeState+8))->SetBackendFloat64c(*(float*)(nativeState+0xbb));
+        (*(CVehicle**)(nativeState+8))->EnableSiren(nativeState[0xb7]);
+        (*(CVehicle**)(nativeState+8))->SetLandingGearState(nativeState[0xb8]);
+        (*(CVehicle**)(nativeState+8))->SetHealth(*(float*)(nativeState+0xb0));
+        WORD trailer=*(WORD*)(nativeState+0xb9);
+        if(!trailer||trailer>=2000) {
+            if((*(CVehicle**)(nativeState+8))->GetTrailer()) {
+                (*(CVehicle**)(nativeState+8))->DetachTrailer();(*(CVehicle**)(nativeState+8))->SetTrailer(0);
+            }
+        }
+        BYTE weapon=nativeState[0xb6]&0x3f;
+        if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+            (*(CPed**)(nativeState+4))->SetArmedWeapon(weapon,0);weapon=nativeState[0xb6]&0x3f;
+            if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+                (*(CPed**)(nativeState+4))->GiveWeapon(weapon,9999);
+                (*(CPed**)(nativeState+4))->SetArmedWeapon(nativeState[0xb6]&0x3f,0);
+            }
+        }
+        nativeState[0x1c4]=0;
+    }else if(nativeState[0x1a]==18&&nativeState[0x1c4]==18&&(*(CPed**)(nativeState+4))->IsInVehicle()) {
+        CVehicle *vehicle=*(CVehicle**)(nativeState+8);if(!vehicle||!vehicle->DoesExist())return;
+        if((*(CPed**)(nativeState+4))->DoesExist()) {
+            BYTE weapon=nativeState[0x27]&0x3f;
+            if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+                (*(CPed**)(nativeState+4))->SetArmedWeapon(weapon,0);weapon=nativeState[0x27]&0x3f;
+                if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+                    (*(CPed**)(nativeState+4))->GiveWeapon(weapon,9999);
+                    (*(CPed**)(nativeState+4))->SetArmedWeapon(nativeState[0x27]&0x3f,0);
+                }
+            }
+        }
+        if((*(CPed**)(nativeState+4))->GetState()==50) {
+            if((nativeState[0x26]&0x40)&&!(*(CPed**)(nativeState+4))->HasTaskType1022()&&(*(CPed**)(nativeState+4))->DoesExist()&&(*(CPed**)(nativeState+4))->EnablePassengerDrivebyMode())
+                *(DWORD*)(nativeState+0x20)=1;
+            if(!(nativeState[0x26]&0x40)&&(*(CPed**)(nativeState+4))->HasTaskType1022()&&(*(CPed**)(nativeState+4))->DoesExist()) {
+                (*(CPed**)(nativeState+4))->StopTaskType1022();*(DWORD*)(nativeState+0x20)=0;
+            }
+        }
+        if((nativeState[0x26]&0x80)&&!(*(CPed**)(nativeState+4))->HasDanceState())(*(CPed**)(nativeState+4))->SetDancePoseState(1);
+        else if(!(nativeState[0x26]&0x80)&&(*(CPed**)(nativeState+4))->HasDanceState())(*(CPed**)(nativeState+4))->SetDancePoseState(0);
+        nativeState[0x1c4]=0;
+    }
+    if(nativeState[0x1a]==17&&!(*(CPed**)(nativeState+4))->IsInVehicle()) {
+        UpdateOnfootRotation();ProcessHead();ProcessSpecialAction();*(DWORD*)(nativeState+0x20)=0;
+        (*(CPed**)(nativeState+4))->SetKeys(*(WORD*)(nativeState+0x40),*(WORD*)(nativeState+0x3c),*(WORD*)(nativeState+0x3e));
+        if(HasSurfingTarget()) {
+            if(*(WORD*)(nativeState+0x7a)<2000){(*(CPed**)(nativeState+4))->SetCollisionProcessed(FALSE);(*(CPed**)(nativeState+4))->SetCollisionFlag(FALSE);}
+        }else {
+            BOOL collision=nativeState[0x18]!=3;(*(CPed**)(nativeState+4))->SetCollisionProcessed(collision);(*(CPed**)(nativeState+4))->SetCollisionFlag(collision);
+        }
+        CVector *speed=(CVector*)(nativeState+0x62);
+        if(speed->x==0&&speed->y==0&&speed->z==0) {
+            (*(CPed**)(nativeState+4))->SetSpeed(*speed);
+            if(*(DWORD*)(nativeState+0x1d1)!=2&&(int)elapsed>=3000)*(DWORD*)(nativeState+0x1d1)=2;
+        }else if(*(DWORD*)(nativeState+0x1d1)!=2&&(int)elapsed>=1500)*(DWORD*)(nativeState+0x1d1)=2;
+        if(GetTickCount()-*(DWORD*)(nativeState+0x1c5)>3000) {
+            *(WORD*)(nativeState+0x3c)=0;*(WORD*)(nativeState+0x3e)=0;CVector zero={0,0,0};(*(CPed**)(nativeState+4))->SetSpeed(zero);
+            CMatrix matrix;(*(CPed**)(nativeState+4))->GetMatrix(&matrix);matrix.position=*(CVector*)(nativeState+0x42);
+            (*(CPed**)(nativeState+4))->SetMatrix(matrix);
+        }
+    }else if(nativeState[0x1a]==19&&(*(CPed**)(nativeState+4))->IsInVehicle()) {
+        if(*(CVehicle**)(nativeState+8)&&(*(CVehicle**)(nativeState+8))->GetModelIndex()!=538&&(*(CVehicle**)(nativeState+8))->GetModelIndex()!=537&&(*(CVehicle**)(nativeState+8))->GetModelIndex()!=449)UpdateIncarRotation();
+        *(DWORD*)(nativeState+0x20)=0;(*(CPed**)(nativeState+4))->DestroyParachute();
+        if(*(CVehicle**)(nativeState+8)&&(*(CVehicle**)(nativeState+8))->IsRC())(*(CPed**)(nativeState+4))->Remove();
+        CVector *speed=(CVector*)(nativeState+0xa4);
+        if(*(DWORD*)(nativeState+0x1c)&&speed->x==0&&speed->y==0&&speed->z==0&&*(CVehicle**)(nativeState+8))
+            (*(CVehicle**)(nativeState+8))->SetSpeed(*speed);
+        (*(CPed**)(nativeState+4))->SetKeys(*(WORD*)(nativeState+0x86),*(WORD*)(nativeState+0x82),*(WORD*)(nativeState+0x84));
+        (*(CPed**)(nativeState+4))->ProcessVehicleHorn();
+        if(speed->x==0&&speed->y==0&&speed->z==0) {
+            if(*(DWORD*)(nativeState+0x1d1)!=2&&(int)elapsed>3000)*(DWORD*)(nativeState+0x1d1)=2;
+        }else if(*(DWORD*)(nativeState+0x1d1)!=2&&(int)elapsed>1500)*(DWORD*)(nativeState+0x1d1)=2;
+        ProcessHead();
+    }else if(nativeState[0x1a]==18&&(*(CPed**)(nativeState+4))->IsInVehicle()) {
+        (*(CPed**)(nativeState+4))->DestroyParachute();(*(CPed**)(nativeState+4))->SetKeys(*(WORD*)(nativeState+0x2e),0,0);
+        if(*(DWORD*)(nativeState+0x1d1)!=2&&(int)elapsed>=3000)*(DWORD*)(nativeState+0x1d1)=2;
+        ProcessHead();
+    }else {
+        CVector zero={0,0,0};(*(CPed**)(nativeState+4))->SetSpeed(zero);(*(CPed**)(nativeState+4))->SetKeys(0,0,0);*(DWORD*)(nativeState+0x20)=0;
+    }
+    if(nativeState[0x1a]!=32)(*(CPed**)(nativeState+4))->SetHealth(1000.0f);
+    if(*(DWORD*)(nativeState+0x1d1)==2&&(int)elapsed<1500)*(DWORD*)(nativeState+0x1d1)=0;
+}
 // samp.dll RVA: 0x00117874
 const float g_remoteHeadDistance=20.0f;
 // samp.dll RVA: 0x00117868

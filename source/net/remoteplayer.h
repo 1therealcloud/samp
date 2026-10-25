@@ -7,6 +7,8 @@ class CMatrix;
 #pragma pack(push,1)
 class CRemotePlayer {public:
     BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x00016310
+    void Process();
     // samp.dll RVA: 0x00014240
     void ProcessHead();
     // Raw DWORD state is retained, not normalized to bool.
@@ -119,4 +121,12 @@ extern const float g_remoteIncarTeleportDistance;
 extern const float g_remoteHeadDistance;
 // samp.dll RVA: 0x00117868
 extern const char g_remoteHeadTask[];
+// samp.dll RVA: 0x00118218
+extern const char g_remoteVendingAnimation[];
+// samp.dll RVA: 0x00118224
+extern const char g_remoteVendingLibrary[];
+// samp.dll RVA: 0x00118204
+extern const char g_remoteCarryAnimation[];
+// samp.dll RVA: 0x00118210
+extern const char g_remoteCarryLibrary[];
 #endif
