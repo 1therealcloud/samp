@@ -31,6 +31,130 @@
 #include "NetworkTypes.h"
 #include "game/quaternion.h"
 #include "game/util.h"
+#include "archive/name_digest.h"
+#include "archive/provider.h"
+#include "ttmath/ttmathuint.h"
+// samp.dll RVA: 0x00117bc8
+const char g_netConnectionLostMessage[]="Lost connection to the server. Reconnecting..";
+// samp.dll RVA: 0x00117c08
+const char g_netJoiningMessage[]="Connected. Joining the game...";
+// samp.dll RVA: 0x00117bfc
+const char g_netClientVersion[]="0.3.DL-R1";
+// samp.dll RVA: 0x00117bf8
+int g_netJoinRpc=25;
+// samp.dll RVA: 0x00057160
+int __cdecl NetHexDigit(int value) {
+    value+=0x30;if(value>0x39)value+=7;return value;
+}
+// samp.dll RVA: 0x00057170
+void __cdecl NetDigestToHex(char *output,const BYTE *digest) {
+    for(int offset=0;offset<40;offset+=2,++digest) {
+        output[offset]=(char)NetHexDigit(*digest>>4);output[offset+1]=(char)NetHexDigit(*digest&15);
+    }
+    output[40]=0;
+}
+// samp.dll RVA: 0x0005fa60
+void __cdecl NetGenerateGpci(char *output,const char *seed,DWORD factor) {
+    ArchiveNameSha1 sha;DWORD digest[5]={0};sha.Input((const BYTE*)seed,(DWORD)strlen(seed));sha.Result(digest);
+    BYTE transformed[20];memcpy(transformed,digest,20);
+    for(int i=0;i<20;++i) {
+        BYTE value=transformed[i],a=value&3,b=(value>>2)&3,c=(value>>4)&3,d=value>>6;
+        BYTE low=a>b?(BYTE)((a<<2)|b):(BYTE)((b<<2)|a);
+        BYTE high=c>d?(BYTE)((c<<2)|d):(BYTE)((d<<2)|c);
+        transformed[i]=(BYTE)((high<<4)|low);
+    }
+    if(!g_pNetGame)--factor;
+    char hex[41];NetDigestToHex(hex,transformed);
+    ttmath::UInt<100> value;value.FromString(hex,16,0,0);value.MulInt(factor);
+    std::string text;value.ToString(text,16);strcpy(output,text.c_str());
+}
+// samp.dll RVA: 0x000571b0
+void __cdecl NetGenerateAuthKey(char *output,const char *challenge) {
+    ArchiveNameSha1 sha;if(!g_pGame||!GameFindLocalPed())return;
+    CVector position={1093.0f,-2036.0f,90.0f},rotation={0,0,0},target={384.0f,-1557.0f,20.0f};
+    g_pGame->GetCamera()->Set(position,rotation);g_pGame->GetCamera()->PointAt(target,2);
+    DWORD digest[5]={0};sha.Input((const BYTE*)challenge,(DWORD)strlen(challenge));sha.Result(digest);
+    BYTE result[20];memcpy(result,digest,20);
+    g_pGame->GetPlayerPed()->GetDistanceToCamera();
+    DWORD index=g_pArchive->GetFileIndex((DWORD)0xbaddea6b);
+    if(index!=0xffffffff) {
+        BYTE *data=g_pArchive->GetFileData(index);
+        for(int group=0;group<4;++group)for(int i=group*5;i<(group+1)*5;++i) {
+            BYTE value=result[i];BYTE key=group==0?0x2f:group==1?0x45:group==2?0x6f:0xdb;
+            for(int j=0;j<100;++j)value=(BYTE)(data[j]^value^key);
+            result[i]=value;
+        }
+        // GTA SA virtual address: 0x004d3aa0; native changes protection and leaves it changed.
+        GameUnprotect((void*)0x4d3aa0,20);BYTE code[20];memcpy(code,(const void*)0x4d3aa0,20);
+        for(int i=0;i<20;++i)result[i]^=code[i];
+    }
+    NetDigestToHex(output,result);
+}
+// samp.dll RVA: 0x00009df0
+void CNetGame::Packet_AuthKey(Packet *packet) {
+    RakNet::BitStream input(packet->data,(int)packet->length,false);BYTE packetId=0;
+    int state=*(int*)(nativeState+0x3cd);if(state<1||state>6)return;
+    BYTE length=0;char challenge[260],response[256];
+    input.ReadBits(&packetId,8,true);input.ReadBits(&length,8,true);input.Read(challenge,length);challenge[length]=0;
+    NetGenerateAuthKey(response,challenge);BYTE responseLength=(BYTE)strlen(response);
+    RakNet::BitStream output;packetId=12;output.WriteBits(&packetId,8,true);output.WriteBits(&responseLength,8,true);output.Write(response,responseLength);
+    (*(RakClientInterface**)(nativeState+0x2c))->Send(&output,(PacketPriority)0,(PacketReliability)8,0);
+}
+// samp.dll RVA: 0x0000aa60
+void CNetGame::Packet_ConnectionSucceeded(Packet *packet) {
+    RakNet::BitStream input(packet->data,(int)packet->length,true);char serial[101]={0};
+    BYTE packetId=0;DWORD address=0,port=0,player=0,challenge=0;
+    input.ReadBits(&packetId,8,true);input.ReadBits((BYTE*)&address,32,true);
+    input.ReadBits((BYTE*)&port,16,true);input.ReadBits((BYTE*)&player,16,true);input.ReadBits((BYTE*)&challenge,32,true);
+    challenge^=0xfde;if(g_pChat)g_pChat->AddDebugMessage(g_netJoiningMessage);
+    *(DWORD*)(nativeState+0x3cd)=6;size_t length=strlen(pools->players->localName.c_str());
+    RakNet::BitStream output;DWORD version=0xfde;BYTE byte=1;
+    output.WriteBits((BYTE*)&version,32,true);output.WriteBits(&byte,8,true);
+    byte=(BYTE)length;output.WriteBits(&byte,8,true);output.Write(pools->players->localName.c_str(),byte);
+    output.WriteBits((BYTE*)&challenge,32,true);
+    // GTA SA virtual address: 0x00c9236c, original serial seed string.
+    NetGenerateGpci(serial,(const char*)0xc9236c,1001);byte=(BYTE)strlen(serial);
+    output.WriteBits(&byte,8,true);output.Write(serial,byte);byte=9;
+    output.WriteBits(&byte,8,true);output.Write(g_netClientVersion,9);output.WriteBits((BYTE*)&challenge,32,true);
+    (*(RakClientInterface**)(nativeState+0x2c))->RPC(&g_netJoinRpc,&output,(PacketPriority)1,(PacketReliability)8,0,false);
+}
+// samp.dll RVA: 0x0000a9d0
+void CNetGame::Packet_ConnectionLost(Packet *packet) {
+    (void)packet;RakClientInterface *client=*(RakClientInterface**)(nativeState+0x2c);if(client)client->Disconnect(0,0);
+    g_pChat->AddDebugMessage(g_netConnectionLostMessage);ShutdownForRestart();
+    if(pools->players)for(DWORD i=0;i!=1004;++i) {
+        CPlayerPool *players=pools->players;if(players->connected[(WORD)i])players->Delete((WORD)i,0);
+    }
+    if(g_renderAudioStream)g_renderAudioStream->Stop(true);*(DWORD*)(nativeState+0x3cd)=1;
+}
+// samp.dll RVA: 0x0000af40
+void CNetGame::UpdateNetwork() {
+    Packet *packet=(*(RakClientInterface**)(nativeState+0x2c))->Receive();
+    while(packet) {
+        BYTE id=packet->data[0];if(id==40)id=packet->data[5];
+        switch(id) {
+        case 12:Packet_AuthKey(packet);break;
+        case 29:g_pChat->AddDebugMessage(g_netNoResponseMessage);*(DWORD*)(nativeState+0x3cd)=1;break;
+        case 31:g_pChat->AddDebugMessage(g_netServerFullMessage);*(DWORD*)(nativeState+0x3cd)=1;break;
+        case 32:Packet_DisconnectionNotification(packet);break;
+        case 33:Packet_ConnectionLost(packet);break;
+        case 34:Packet_ConnectionSucceeded(packet);break;
+        case 35:g_pChat->AddDebugMessage(g_netEncryptionFailedMessage);break;
+        case 36:g_pChat->AddDebugMessage(g_netConnectionBannedMessage);break;
+        case 37:g_pChat->AddDebugMessage(g_netInvalidPasswordMessage);(*(RakClientInterface**)(nativeState+0x2c))->Disconnect(0,0);break;
+        case 200:Packet_IncarSync(packet);break;
+        case 203:Packet_AimSync(packet);break;
+        case 206:Packet_BulletSync(packet);break;
+        case 207:Packet_OnfootSync(packet);break;
+        case 208:Packet_MarkersSync(packet);break;
+        case 209:Packet_UnoccupiedSync(packet);break;
+        case 210:Packet_TrailerSync(packet);break;
+        case 211:Packet_PassengerSync(packet);break;
+        }
+        (*(RakClientInterface**)(nativeState+0x2c))->DeallocatePacket(packet);
+        packet=(*(RakClientInterface**)(nativeState+0x2c))->Receive();
+    }
+}
 // samp.dll RVA: 0x00117ba0
 const double g_netQuaternionReciprocal=1.0/65535.0;
 // samp.dll RVA: 0x00117ba8

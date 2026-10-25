@@ -22,6 +22,14 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x0000af40
+    void UpdateNetwork();
+    // samp.dll RVA: 0x00009df0
+    void Packet_AuthKey(Packet *packet);
+    // samp.dll RVA: 0x0000aa60
+    void Packet_ConnectionSucceeded(Packet *packet);
+    // samp.dll RVA: 0x0000a9d0
+    void Packet_ConnectionLost(Packet *packet);
     // samp.dll RVA: 0x0000a420
     void Packet_OnfootSync(Packet *packet);
     // samp.dll RVA: 0x0000a6f0
@@ -176,4 +184,20 @@ extern const char g_netInvalidPasswordMessage[];
 extern const double g_netQuaternionReciprocal;
 // samp.dll RVA: 0x00117ba8
 extern const float g_netCompressedVectorScale;
+// samp.dll RVA: 0x00057160
+int __cdecl NetHexDigit(int value);
+// samp.dll RVA: 0x00057170
+void __cdecl NetDigestToHex(char *output,const BYTE *digest);
+// samp.dll RVA: 0x000571b0
+void __cdecl NetGenerateAuthKey(char *output,const char *challenge);
+// samp.dll RVA: 0x0005fa60
+void __cdecl NetGenerateGpci(char *output,const char *seed,DWORD factor);
+// samp.dll RVA: 0x00117bc8
+extern const char g_netConnectionLostMessage[];
+// samp.dll RVA: 0x00117c08
+extern const char g_netJoiningMessage[];
+// samp.dll RVA: 0x00117bfc
+extern const char g_netClientVersion[];
+// samp.dll RVA: 0x00117bf8
+extern int g_netJoinRpc;
 #endif
