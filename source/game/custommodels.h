@@ -1,10 +1,32 @@
 #ifndef SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #include <windows.h>
+#pragma pack(push,1)
+struct CustomModelDownload {
+    void *file;BYTE type;DWORD downloaded,total,crc,hash,index;char temporaryPath[261];
+};
+#pragma pack(pop)
+typedef char NativeCustomDownloadExtent[(sizeof(CustomModelDownload)==0x11e)?1:-1];
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 // Constructor and directory/model initialization are recovered; worker startup/ownership remain open.
 class CCustomModels {public:
     BYTE nativeState[0x206d];
+    // samp.dll RVA: 0x0000c7e0
+    int FindResourceIndex(BYTE type,DWORD hash);
+    // samp.dll RVA: 0x0000c830
+    bool FillDownloadInfo(BYTE type,DWORD hash,CustomModelDownload *download);
+    // Null download selects the embedded descriptor at222.
+    // samp.dll RVA: 0x0000bc30
+    void WriteDownload(CustomModelDownload *download,const void *data,DWORD length);
+    // samp.dll RVA: 0x0000c760
+    void AbortDownload(CustomModelDownload *download,int error,const char *detail);
+    // samp.dll RVA: 0x0000d1c0
+    BOOL BeginDirectDownload(BYTE type,DWORD hash);
+    // Includes null-file matches; does not check slot flags.
+    // samp.dll RVA: 0x0000bca0
+    int FindWorkerByFile(void *file);
+    // samp.dll RVA: 0x0000c8e0
+    int CountMissingResources();
     // samp.dll RVA: 0x0000b9c0
     DWORD SanitizeCacheHost(char *output,DWORD capacity,const char *host);
     // samp.dll RVA: 0x0000ba40
@@ -135,4 +157,23 @@ extern const char g_customFindTxdPattern[];
 extern const char g_customServerCachePattern[];
 // samp.dll RVA: 0x00117c3c
 extern const char g_customLocalCachePattern[];
+// samp.dll RVA: 0x00140378
+extern const DWORD g_customCrcTable[256];
+// samp.dll RVA: 0x000628a0
+DWORD __cdecl CustomModelCrc(DWORD seed,const void *data,DWORD length);
+// Native loops on FILE EOF flag, without an ferror escape.
+// samp.dll RVA: 0x000628e0
+DWORD __cdecl CustomModelFileCrc(const char *filename);
+// samp.dll RVA: 0x00156b44
+extern CCustomModels *g_customDownloadManager;
+// samp.dll RVA: 0x0000bcd0
+DWORD __cdecl CustomModelDownloadWrite(void *data,DWORD size,DWORD count,void *download);
+// samp.dll RVA: 0x00117cfc
+extern const char g_customTemporaryPathPattern[];
+// samp.dll RVA: 0x00117d30
+extern const char g_customDownloadWriteMode[];
+// samp.dll RVA: 0x00117d34
+extern const char g_customFillDownloadError[];
+// samp.dll RVA: 0x00118e1c
+extern const char g_customDownloadReadMode[];
 #endif
