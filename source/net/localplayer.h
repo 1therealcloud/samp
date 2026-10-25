@@ -6,6 +6,7 @@ class CPed;
 class CEntity;
 class CVehicle;
 struct PedBulletData;
+namespace Scripting {struct OpcodeInfo;}
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
@@ -25,6 +26,12 @@ class CLocalPlayer {public:
     WORD GetAimedPlayer();
     // samp.dll RVA: 0x00004a60
     WORD GetAimedActor();
+    // samp.dll RVA: 0x00005f40
+    void ProcessClassSelection();
+    // samp.dll RVA: 0x000060d0
+    void UpdateWeapons();
+    // samp.dll RVA: 0x00006360
+    void ProcessSpectating();
     // samp.dll RVA: 0x00003390
     BYTE GetSpecialAction();
     // samp.dll RVA: 0x00004db0
@@ -142,6 +149,8 @@ extern int g_localVehicleDamageRpc;
 extern const float g_localPassengerEntryDistance;
 // samp.dll RVA: 0x00117888
 extern const char g_localWorldBoundaryText[];
+// samp.dll RVA: 0x00117854
+extern const Scripting::OpcodeInfo g_localPedCameraCommand;
 // samp.dll RVA: 0x00117944
 extern const float g_localQuaternionSyncThreshold;
 #endif

@@ -21,6 +21,8 @@
 #include "game/aimstuff.h"
 #include "game/quaternion.h"
 #include "gui/device_lifecycle.h"
+#include "cmdwindow.h"
+#include "game/gta_globals.h"
 // VC7 runtime helper; library entry, not a recovered SA-MP method.
 extern "C" __int64 __cdecl _ftol2();
 #pragma pack(push,1)
@@ -1000,4 +1002,119 @@ WORD CLocalPlayer::GetAimedActor() {
     void *target=ped->GetAimedPed();if(!target)return 0xffff;
     CActorPool *actors=((CNetGame*)g_pNetGame)->pools->actors;
     return actors?(WORD)actors->Find(target):0xffff;
+}
+// samp.dll RVA: 0x00117854
+const Scripting::OpcodeInfo g_localPedCameraCommand={0x159,"iii"};
+// samp.dll RVA: 0x00005f40
+void CLocalPlayer::ProcessClassSelection() {
+    if(!g_pGame->IsMenuVisible()) {g_pGame->EnableHUD(FALSE);g_pGame->SetCursorMode(2,FALSE);}
+    if(g_renderDialog&&g_renderDialog->active)return;
+    if(!*(DWORD*)(nativeState+0x30a)) {
+        *((BYTE*)g_renderSecondDialog+0x13)=1;RECT rectangle;
+        GetClientRect(g_inputGameWindow,&rectangle);
+        BYTE *dialog=(BYTE*)g_renderSecondDialog;
+        int y=rectangle.bottom-*(int*)(dialog+0x122)-50;
+        int x=rectangle.right/2-*(int*)(dialog+0x11e)/2;
+        *(int*)(dialog+0x11a)=y;*(int*)(dialog+0x116)=x;
+        *(DWORD*)(nativeState+0x30a)=1;RequestClass(*(int*)(nativeState+0x302));return;
+    }
+    DWORD (WINAPI *tick)()=GetTickCount;
+    if(tick()-*(DWORD*)(nativeState+0x14b)<2000)return;
+    SHORT (WINAPI *keyState)(int)=GetAsyncKeyState;
+    if(!*(DWORD*)(nativeState+0x306)) {
+        if(!*(DWORD*)(nativeState+0x143))return;
+        if(keyState(VK_SHIFT)<0&&!g_pInput->m_bEnabled){RequestSpawn();return;}
+    }
+    if(!*(DWORD*)(nativeState+0x143))return;
+    DWORD elapsed=tick()-*(DWORD*)(nativeState+0x147);
+    if(keyState(VK_LEFT)<0&&elapsed>250){*(DWORD*)(nativeState+0x147)=tick();PrevClass();return;}
+    if(keyState(VK_RIGHT)<0&&elapsed>250){*(DWORD*)(nativeState+0x147)=tick();NextClass();}
+}
+// samp.dll RVA: 0x000060d0
+void CLocalPlayer::UpdateWeapons() {
+    BYTE weapon=(BYTE)(*(CPed**)nativeState)->GetCurrentWeapon();bool changed=false;
+    WORD player=GetAimedPlayer();WORD actor=GetAimedActor();
+    if(player!=*(WORD*)(nativeState+0x189)||actor!=*(WORD*)(nativeState+0x18b)) {
+        *(WORD*)(nativeState+0x189)=player;*(WORD*)(nativeState+0x18b)=actor;changed=true;
+    }else if(weapon==nativeState[0x18d]&&GetTickCount()-*(DWORD*)(nativeState+0x185)<100)return;
+    if(weapon!=nativeState[0x18d])nativeState[0x18d]=weapon;
+    RakNet::BitStream stream;BYTE packet=204;stream.WriteBits(&packet,8,true);
+    WORD target=*(WORD*)(nativeState+0x189);stream.WriteBits((const unsigned char*)&target,16,true);
+    target=*(WORD*)(nativeState+0x18b);stream.WriteBits((const unsigned char*)&target,16,true);
+    for(BYTE index=0;index<13;++index) {
+        BYTE *backend=(BYTE*)(*(CPed**)nativeState)->m_pGamePed;
+        BYTE *slot=backend+index*0x1c;
+        if((DWORD)nativeState[0x18e+index]!=*(DWORD*)(slot+0x5a0)||*(DWORD*)(nativeState+0x19b+index*4)!=*(DWORD*)(slot+0x5ac)) {
+            nativeState[0x18e+index]=*(BYTE*)(slot+0x5a0);
+            backend=(BYTE*)(*(CPed**)nativeState)->m_pGamePed;
+            *(DWORD*)(nativeState+0x19b+index*4)=*(DWORD*)(backend+index*0x1c+0x5ac);
+            BYTE sentIndex=index;stream.WriteBits(&sentIndex,8,true);
+            BYTE type=nativeState[0x18e+index];stream.WriteBits(&type,8,true);
+            WORD ammo=*(WORD*)(nativeState+0x19b+index*4);stream.WriteBits((const unsigned char*)&ammo,16,true);
+            changed=true;
+        }
+    }
+    if(changed) {
+        *(DWORD*)(nativeState+0x185)=GetTickCount();
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE,0);
+    }
+}
+// samp.dll RVA: 0x00006360
+void CLocalPlayer::ProcessSpectating() {
+    RakNet::BitStream stream;WORD leftRight,upDown;
+    WORD keys=(*(CPed**)nativeState)->GetKeys(&leftRight,&upDown);
+    CMatrix matrix;g_pGame->m_pCamera->GetMatrix(&matrix);
+    CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;
+    CPlayerPool *players=pools->players;CVehiclePool *vehicles=pools->vehicles;
+    if(!players||!vehicles)return;
+    BYTE data[18];*(WORD*)data=leftRight;*(WORD*)(data+2)=upDown;*(WORD*)(data+4)=keys;
+    memcpy(data+6,&matrix.position,12);
+    DWORD rate=GetOnFootSendRate();DWORD (WINAPI *tick)()=GetTickCount;
+    if(tick()-*(DWORD*)(nativeState+0x137)>rate) {
+        *(DWORD*)(nativeState+0x137)=tick();BYTE packet=212;stream.WriteBits(&packet,8,true);
+        stream.Write((const char*)data,18);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->Send(&stream,HIGH_PRIORITY,UNRELIABLE,1);
+        rate=GetOnFootSendRate()*2;
+        if(tick()-*(DWORD*)(nativeState+0x13b)>rate){*(DWORD*)(nativeState+0x13b)=tick();SendAimData();}
+    }
+    g_pGame->EnableHUD(FALSE);(*(CPed**)nativeState)->SetHealth(100.0f);
+    CVector position=*(CVector*)(data+6);
+    // Native loads received Z before adding20; retain operand order for NaNs.
+    __asm {
+        fld dword ptr [position+8]
+        fadd dword ptr [g_remoteHeadDistance]
+        fstp dword ptr [position+8]
+    }
+    (*(CPed**)nativeState)->Teleport(position);
+    if(nativeState[0x313]==1) {
+        WORD id=*(WORD*)(nativeState+0x314);
+        if(id>=1004||!players->connected[id]){nativeState[0x313]=0;*(DWORD*)(nativeState+0x318)=0;}
+    }
+    if(nativeState[0x313]==1) {
+        WORD id=*(WORD*)(nativeState+0x314);
+        if(id<1004&&players->connected[id]) {
+            CRemotePlayer *remote=players->GetPlayer(id);
+            if(!*(CPed**)(remote->nativeState+4)||!remote->nativeState[0x1a]||players->GetPlayer(id)->nativeState[0x1a]==32) {
+                nativeState[0x313]=0;*(DWORD*)(nativeState+0x318)=0;
+            }
+        }
+    }
+    if(*(DWORD*)(nativeState+0x318))return;
+    if(!nativeState[0x313]) {
+        (*(CPed**)nativeState)->WarpFromVehicle(0.0f,0.0f,10.0f);
+        CVector cameraPosition={50.0f,50.0f,50.0f},rotation={0,0,0};
+        g_pGame->m_pCamera->Set(cameraPosition,rotation);
+        CVector target={60.0f,60.0f,50.0f};g_pGame->m_pCamera->PointAt(target,2);
+        *(DWORD*)(nativeState+0x318)=1;
+    }else if(nativeState[0x313]==1) {
+        WORD id=*(WORD*)(nativeState+0x314);if(!players->IsConnected(id))return;
+        CPed *ped=*(CPed**)(players->GetPlayer(id)->nativeState+4);if(!ped)return;
+        Scripting::ProcessCommand(&g_localPedCameraCommand,ped->m_nHandle,(DWORD)nativeState[0x312],2);
+        *(DWORD*)(nativeState+0x318)=1;
+    }else if(nativeState[0x313]==2) {
+        WORD id=*(WORD*)(nativeState+0x314);if(!vehicles->DoesExist(id))return;
+        CVehicle *vehicle=vehicles->Get(id);if(!vehicle)return;
+        Scripting::ProcessCommand(&g_localTrainCameraCommand,vehicle->m_nHandle,(DWORD)nativeState[0x312],2);
+        *(DWORD*)(nativeState+0x318)=1;
+    }
 }
