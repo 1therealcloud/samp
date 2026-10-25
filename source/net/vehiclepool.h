@@ -16,6 +16,9 @@ struct VehiclePoolQueueEntry {
 // Allocation extent established; unreviewed tail fields remain opaque.
 class CVehiclePool {
 public:
+    // Fourth raw word is copied into both native ray records.
+    // samp.dll RVA: 0x0001e9f0
+    WORD FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord);
     // samp.dll RVA: 0x0001ee80
     void Process();
     // Native Create indexes the WORD ID without a bounds guard.

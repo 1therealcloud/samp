@@ -8,9 +8,15 @@ class CRemotePlayer;
 class CLocalPlayer;
 class CObject;
 class CPlayerInfo;
+struct CVector;
 #pragma pack(push,1)
 class CPlayerPool {
 public:
+    // samp.dll RVA: 0x000136c0
+    BOOL Process();
+    // Fourth raw word is copied into both native ray records.
+    // samp.dll RVA: 0x00013c50
+    WORD FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord);
     WORD localId;std::string localName;CLocalPlayer *local;
     int largestId;CPlayerInfo *players[1004];DWORD connected[1004];
     DWORD savedCollision[1004];DWORD localPing;int localScore;
@@ -77,4 +83,10 @@ typedef char PlayerPoolPlayersOffset[(offsetof(CPlayerPool,players)==0x26)?1:-1]
 typedef char PlayerPoolConnectedOffset[(offsetof(CPlayerPool,connected)==0xfd6)?1:-1];
 typedef char PlayerPoolCollisionOffset[(offsetof(CPlayerPool,savedCollision)==0x1f86)?1:-1];
 typedef char PlayerPoolExtent[(sizeof(CPlayerPool)==0x2f3e)?1:-1];
+// samp.dll RVA: 0x00156b84
+extern DWORD g_playerPoolProcessCount;
+// samp.dll RVA: 0x0011817c
+extern const char g_playerPoolRemoteException[];
+// samp.dll RVA: 0x00118174
+extern const char g_playerPoolLocalException[];
 #endif

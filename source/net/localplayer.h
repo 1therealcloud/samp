@@ -10,6 +10,8 @@ namespace Scripting {struct OpcodeInfo;}
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
+    // samp.dll RVA: 0x000072d0
+    BOOL Process();
     // samp.dll RVA: 0x00002fd0
     void ProcessHead();
     // samp.dll RVA: 0x00003e40
@@ -32,6 +34,13 @@ class CLocalPlayer {public:
     void UpdateWeapons();
     // samp.dll RVA: 0x00006360
     void ProcessSpectating();
+    // Native returns true in AL; this pointer is unused.
+    // samp.dll RVA: 0x00004300
+    bool GetCameraTarget(WORD *targets);
+    // samp.dll RVA: 0x000045c0
+    void UpdateCameraTarget();
+    // samp.dll RVA: 0x00004710
+    void DrawCameraTargetLabels();
     // samp.dll RVA: 0x00003390
     BYTE GetSpecialAction();
     // samp.dll RVA: 0x00004db0
@@ -151,6 +160,22 @@ extern const float g_localPassengerEntryDistance;
 extern const char g_localWorldBoundaryText[];
 // samp.dll RVA: 0x00117854
 extern const Scripting::OpcodeInfo g_localPedCameraCommand;
+// samp.dll RVA: 0x001178ac
+extern const float g_localCameraRayLength;
+// samp.dll RVA: 0x001178b0
+extern int g_localCameraTargetRpc;
+// samp.dll RVA: 0x00117920
+extern const char g_localCameraTargetObjectText[];
+// samp.dll RVA: 0x001178fc
+extern const char g_localCameraTargetVehicleText[];
+// samp.dll RVA: 0x001178d8
+extern const char g_localCameraTargetPlayerText[];
+// samp.dll RVA: 0x001178b4
+extern const char g_localCameraTargetActorText[];
+// samp.dll RVA: 0x0013c0b0
+extern DWORD g_localAimSendRate;
+// samp.dll RVA: 0x00117980
+extern const char g_localClassSelectionMessage[];
 // samp.dll RVA: 0x00117944
 extern const float g_localQuaternionSyncThreshold;
 #endif

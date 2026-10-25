@@ -9,6 +9,73 @@ void CPlayerPool::SetName(WORD player,const char *text) {
 #include "game/playerped.h"
 #include "net/playerinfo.h"
 #include "net/localplayer.h"
+#include "game/game.h"
+// samp.dll RVA: 0x00156b84
+DWORD g_playerPoolProcessCount;
+// samp.dll RVA: 0x0011817c
+const char g_playerPoolRemoteException[]="s001";
+// samp.dll RVA: 0x00118174
+const char g_playerPoolLocalException[]="s002";
+// samp.dll RVA: 0x000136c0
+BOOL CPlayerPool::Process() {
+    ++g_playerPoolProcessCount;
+    for(WORD id=0;id<1004;++id)if(connected[id]==1) {
+        __try {GetPlayer(id)->Process();}
+        __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),g_playerPoolRemoteException)) {
+            if(GetPlayer(id))GetPlayer(id)->Remove();
+        }
+    }
+    __try {if(local)local->Process();}
+    __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),g_playerPoolLocalException)) {
+        // Native local-player handler performs no cleanup and returns normally.
+    }
+    return TRUE;
+}
+// samp.dll RVA: 0x00013c50
+WORD CPlayerPool::FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord) {
+    struct RayPoint {CVector point;DWORD word;};
+    RayPoint from={*origin,rayWord},to={*end,rayWord};
+    WORD selected=0xffff;float closest=100000.0f;
+    for(int i=0;i<=largestId;++i) {
+        if(!connected[i])continue;
+        // Native GetPlayer admits low-WORD ID1004; remote itself is not guarded.
+        CRemotePlayer *remote=GetPlayer((WORD)i);CPed *ped=*(CPed**)(remote->nativeState+4);
+        if(!ped||!ped->DoesExist())continue;
+        BYTE nearer;
+        __asm {
+            mov ecx,ped
+            call CEntity::GetDistanceToCamera
+            fcomp maxCameraDistance
+            fnstsw ax
+            test ah,5
+            setnp nearer
+        }
+        if(!nearer)continue;
+        CVector centre;ped->GetBoundCentre(&centre);
+        if(!GameTestEntityLineSphere(&from.point,&to.point,ped->m_pGameEntity,&centre,1.5f,1))continue;
+        __asm {
+            mov eax,origin
+            push dword ptr [eax+8]
+            push dword ptr [eax+4]
+            push dword ptr [eax]
+            mov ecx,ped
+            call CEntity::GetDistanceToPoint
+            fcom closest
+            fnstsw ax
+            test ah,5
+            jp player_ray_not_closer
+            fstp closest
+            mov nearer,1
+            jmp player_ray_distance_done
+        player_ray_not_closer:
+            fstp st(0)
+            mov nearer,0
+        player_ray_distance_done:
+        }
+        if(nearer)selected=(WORD)i;
+    }
+    return selected;
+}
 // samp.dll RVA: 0x000139f0
 void CPlayerPool::Deactivate() {
     *(DWORD*)(local->nativeState+0xf4)=0;*(DWORD*)(this->local->nativeState+0x302)=0;

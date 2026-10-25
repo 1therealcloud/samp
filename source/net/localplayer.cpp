@@ -23,6 +23,10 @@
 #include "gui/device_lifecycle.h"
 #include "cmdwindow.h"
 #include "game/gta_globals.h"
+#include "cmdprocs.h"
+#include "game/actor.h"
+#include <stdio.h>
+#include "chatwindow.h"
 // VC7 runtime helper; library entry, not a recovered SA-MP method.
 extern "C" __int64 __cdecl _ftol2();
 #pragma pack(push,1)
@@ -1117,4 +1121,245 @@ void CLocalPlayer::ProcessSpectating() {
         Scripting::ProcessCommand(&g_localTrainCameraCommand,vehicle->m_nHandle,(DWORD)nativeState[0x312],2);
         *(DWORD*)(nativeState+0x318)=1;
     }
+}
+// samp.dll RVA: 0x001178ac
+const float g_localCameraRayLength=70.0f;
+// samp.dll RVA: 0x001178b0
+int g_localCameraTargetRpc=168;
+// samp.dll RVA: 0x00117920
+const char g_localCameraTargetObjectText[]="CAMERA_TARGET_TYPE_OBJECT: ID(%u)";
+// samp.dll RVA: 0x001178fc
+const char g_localCameraTargetVehicleText[]="CAMERA_TARGET_TYPE_VEHICLE: ID(%u)";
+// samp.dll RVA: 0x001178d8
+const char g_localCameraTargetPlayerText[]="CAMERA_TARGET_TYPE_PLAYER: ID(%u)";
+// samp.dll RVA: 0x001178b4
+const char g_localCameraTargetActorText[]="CAMERA_TARGET_TYPE_ACTOR: ID(%u)";
+// samp.dll RVA: 0x00004300
+bool CLocalPlayer::GetCameraTarget(WORD *targets) {
+    CameraAim *aim=AimStuff::GetInternalAim();CVector origin,end;void *entity=0;BYTE collision[0x2c];
+    // Retain the native overwritten endpoint calculations and output write order.
+    __asm {
+        mov esi,aim
+        fld dword ptr [esi]
+        fadd dword ptr [esi+0ch]
+        fstp dword ptr [origin]
+        fld dword ptr [esi+4]
+        fadd dword ptr [esi+10h]
+        fstp dword ptr [origin+4]
+        fld dword ptr [esi+8]
+        fadd dword ptr [esi+14h]
+        fstp dword ptr [origin+8]
+        fld dword ptr [esi]
+        fmul dword ptr [g_localCameraRayLength]
+        fadd dword ptr [origin]
+        fstp dword ptr [end]
+        fld dword ptr [esi+4]
+        fmul dword ptr [g_localCameraRayLength]
+        fadd dword ptr [origin+4]
+        fstp dword ptr [end+4]
+        fld dword ptr [esi+8]
+        mov edx,targets
+        mov word ptr [edx],0ffffh
+        fmul dword ptr [g_localCameraRayLength]
+        mov word ptr [edx+2],0ffffh
+        mov word ptr [edx+4],0ffffh
+        mov word ptr [edx+6],0ffffh
+        fadd dword ptr [origin+8]
+        fstp dword ptr [end+8]
+    }
+    for(int stage=0;stage<3;++stage) {
+        __asm {
+            mov eax,aim
+            fld dword ptr [eax]
+            fmul dword ptr [g_localCameraRayLength]
+            fadd dword ptr [eax+0ch]
+            fstp dword ptr [end]
+            fld dword ptr [eax+4]
+            fmul dword ptr [g_localCameraRayLength]
+            fadd dword ptr [eax+10h]
+            fstp dword ptr [end+4]
+            fld dword ptr [eax+8]
+            fmul dword ptr [g_localCameraRayLength]
+            fadd dword ptr [eax+14h]
+            fstp dword ptr [end+8]
+        }
+        // Native ignores AL and keeps the same entity/collision storage for all3 calls.
+        GameProcessLineOfSightRaw(&origin,&end,collision,&entity,1,stage==2,0,stage!=0,0,0,0,0);
+        if(entity)memcpy(&end,collision,12);
+        CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;WORD id;
+        if(stage==0) {
+            id=pools->objects->FindInRay(40.0f,&origin,&end);if(id!=0xffff)targets[0]=id;
+        }else if(stage==1) {
+            id=pools->vehicles->FindInRay(40.0f,&origin,&end,0x3f800000);if(id!=0xffff)targets[1]=id;
+        }else {
+            id=pools->players->FindInRay(20.0f,&origin,&end,0x3f400000);if(id!=0xffff)targets[2]=id;
+            id=((CNetGame*)g_pNetGame)->pools->actors->FindInRay(20.0f,&origin,&end,0x3f400000);if(id!=0xffff)targets[3]=id;
+        }
+    }
+    return true;
+}
+// samp.dll RVA: 0x000045c0
+void CLocalPlayer::UpdateCameraTarget() {
+    if(!*((BYTE*)g_pNetGame+0x233)) {
+        *(WORD*)(nativeState+0x108)=0xffff;*(WORD*)(nativeState+0x10a)=0xffff;
+        *(WORD*)(nativeState+0x10c)=0xffff;*(WORD*)(nativeState+0x10e)=0xffff;return;
+    }
+    DWORD (WINAPI *tick)()=GetTickCount;if(tick()-*(DWORD*)(nativeState+0x110)<=100)return;
+    WORD targets[4];GetCameraTarget(targets);
+    if(targets[0]!=*(WORD*)(nativeState+0x108)||targets[1]!=*(WORD*)(nativeState+0x10a)||targets[2]!=*(WORD*)(nativeState+0x10c)||targets[3]!=*(WORD*)(nativeState+0x10e)) {
+        RakNet::BitStream stream;stream.Write((const char*)targets,8);
+        (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(&g_localCameraTargetRpc,&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+        memcpy(nativeState+0x108,targets,8);
+    }
+    *(DWORD*)(nativeState+0x110)=tick();
+}
+// samp.dll RVA: 0x00004710
+void CLocalPlayer::DrawCameraTargetLabels() {
+    if(!g_commandCameraTargetLabels)return;
+    char text[257]={0};g_deviceLabel->Begin();
+    const char *formats[4]={g_localCameraTargetObjectText,g_localCameraTargetVehicleText,g_localCameraTargetPlayerText,g_localCameraTargetActorText};
+    for(int kind=0;kind<4;++kind) {
+        WORD id=*(WORD*)(nativeState+0x108+kind*2);if(id==0xffff)continue;
+        sprintf(text,formats[kind],(unsigned)id);
+        CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;
+        id=*(WORD*)(nativeState+0x108+kind*2);CEntity *entity=0;
+        if(kind==0)entity=pools->objects->Get(id);
+        else if(kind==1)entity=pools->vehicles->Get(id);
+        else if(kind==2) {
+            CRemotePlayer *remote=pools->players->GetPlayer(id);
+            if(remote)entity=*(CPed**)(remote->nativeState+4);
+        }else entity=pools->actors->Get(id);
+        if(!entity)continue;
+        CMatrix matrix;entity->GetMatrix(&matrix);
+        if(g_deviceObjectEdit)((CObjectEdit*)g_deviceObjectEdit)->RenderAxes(&matrix,1.0f);
+        CVector position=matrix.position;g_deviceLabel->Draw(&position,text,0xffd47b75,TRUE,FALSE);
+    }
+    g_deviceLabel->End();
+}
+// samp.dll RVA: 0x0013c0b0
+DWORD g_localAimSendRate=30;
+// samp.dll RVA: 0x00117980
+const char g_localClassSelectionMessage[]="Returning to class selection after next death";
+// samp.dll RVA: 0x000072d0
+BOOL CLocalPlayer::Process() {
+    if(*(DWORD*)(nativeState+0xf4)&&*(CPed**)nativeState) {
+        g_deviceSpawnScreen->SetText(0);
+        if((!*(DWORD*)(nativeState+0xf8)&&(*(CPed**)nativeState)->GetState()==54)||(*(CPed**)nativeState)->IsDead()) {
+            DWORD classSelection=*(DWORD*)(nativeState+0x2fe);
+            if(*(DWORD*)(nativeState+0x12c)&&!classSelection)Spawn();
+            else if(classSelection){*(DWORD*)(nativeState+0xf4)=0;*(DWORD*)(nativeState+0x181)=0;}
+            *(DWORD*)(nativeState+0x12c)=0;nativeState[0x313]=0;
+            *(DWORD*)(nativeState+0x314)=0xffffffff;*(DWORD*)(nativeState+0x318)=0;
+            if((*(CPed**)nativeState)->DoesDancing())(*(CPed**)nativeState)->StopDancing();
+            if((*(CPed**)nativeState)->UsingCellphone())(*(CPed**)nativeState)->EnableCellphone(FALSE);
+            if((*(CPed**)nativeState)->DoesUrinating())(*(CPed**)nativeState)->StopUrinating();
+            if((*(CPed**)nativeState)->GetStuff())(*(CPed**)nativeState)->DropStuff();
+            (*(CPed**)nativeState)->SetDrunkLevel(0);(*(CPed**)nativeState)->SetControllable(TRUE);
+            if(*(DWORD*)(nativeState+0x1d4)){*(DWORD*)(nativeState+0x1d4)=0;(*(CPed**)nativeState)->Add();}
+            if((*(CPed**)nativeState)->IsInVehicle()&&!(*(CPed**)nativeState)->IsPassenger()) {
+                SendIncarData();CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+                *(WORD*)(nativeState+0xfe)=vehicles->Find((*(CPed**)nativeState)->GetVehicle());
+            }
+            (*(CPed**)nativeState)->CallBackend730AndVehicle490();WastedNotification();
+            *(DWORD*)(nativeState+0xf4)=0;*(DWORD*)(nativeState+0xf8)=1;g_pGame->EnableZoneDisplaying(0);return TRUE;
+        }
+        WORD leftRight,upDown;WORD keys=(*(CPed**)nativeState)->GetKeys(&leftRight,&upDown);
+        DrawCameraTargetLabels();
+        if((*(CPed**)nativeState)->DoesDancing()) {
+            g_pGame->EnableHUD(FALSE);(*(CPed**)nativeState)->ProcessDancing();
+            if(*(WORD*)((BYTE*)KeyStuff::GetInternalKeys()+0x1e))(*(CPed**)nativeState)->StopDancing();
+        }
+        if((*(CPed**)nativeState)->HasDanceState())(*(CPed**)nativeState)->ProcessDancePoseWeapon();
+        if((*(CPed**)nativeState)->HasDanceStyle())(*(CPed**)nativeState)->ProcessSecondaryPoseWeapon();
+        if((*(CPed**)nativeState)->DoesHandsUp()&&*(WORD*)((BYTE*)KeyStuff::GetInternalKeys()+0x1e))(*(CPed**)nativeState)->SetControllable(TRUE);
+        if((( *(CPed**)nativeState)->DoesUrinating()&&*(WORD*)((BYTE*)KeyStuff::GetInternalKeys()+0x1e))||
+           ((*(CPed**)nativeState)->DoesUrinating()&&(*(CPed**)nativeState)->IsInVehicle()))(*(CPed**)nativeState)->StopUrinating();
+        if((*(CPed**)nativeState)->GetStuff()) {
+            if(!*(WORD*)((BYTE*)KeyStuff::GetInternalKeys()+0x1e)&&!(*(CPed**)nativeState)->IsInVehicle())(*(CPed**)nativeState)->ApplyStuff();
+            else (*(CPed**)nativeState)->DropStuff();
+        }
+        (*(CPed**)nativeState)->ProcessDrunk();
+        if((*(CPed**)nativeState)->IsInVehicle()&&(*(CPed**)nativeState)->DoesDancing())(*(CPed**)nativeState)->StopDancing();
+        (*(CPed**)nativeState)->ResetLocalControlWord();DWORD animation=(*(CPed**)nativeState)->GetPackedAnimation();
+        if(animation){*(DWORD*)(nativeState+0x100)=animation;*(DWORD*)(nativeState+0x104)=0;}
+        else if(*(DWORD*)(nativeState+0x100)&&*(DWORD*)(nativeState+0x104))*(DWORD*)(nativeState+0x100)=0;
+        DWORD (WINAPI *tick)()=GetTickCount;DWORD now=tick();
+        if(g_localTrainCameraTick!=0xffffffff&&now-g_localTrainCameraTick>5000&&!(*(CPed**)nativeState)->IsInVehicle()) {
+            g_pGame->m_pCamera->Restore();g_localTrainCameraTick=0xffffffff;
+        }
+        if((int)now>=*(int*)(nativeState+0x30e))g_pGame->EnableZoneDisplaying(*(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x21));
+        g_pGame->ProcessCheckpoints();
+        if(now-*(DWORD*)(nativeState+0x13f)>1000){SendStats();*(DWORD*)(nativeState+0x13f)=now;}
+        UpdateWeapons();BYTE interior=g_pGame->GetCurrentInterior();
+        if(interior!=nativeState[0x1d3])SendInteriorChange(interior);
+        UpdateCameraTarget();
+        if(*(DWORD*)(nativeState+0x12c)){ProcessSpectating();*(DWORD*)(nativeState+0x1cf)=0;}
+        else if((*(CPed**)nativeState)->GetState()==50&&!(*(CPed**)nativeState)->IsPassenger()) {
+            (*(CPed**)nativeState)->RemoveWeaponWhenEnteringVehicle();ProcessHead();ProcessVehicleWorldBoundaries();
+            if(now-*(DWORD*)(nativeState+0x13b)>1000){*(DWORD*)(nativeState+0x13b)=now;SendAimData();}
+            CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+            if(vehicles)*(WORD*)(nativeState+0xfc)=vehicles->Find((*(CPed**)nativeState)->GetVehicle());
+            WORD id=*(WORD*)(nativeState+0xfc);CVehicle *vehicle=vehicles->Get(id);ProcessVehicleDamage(id);
+            if(vehicle&&!*(DWORD*)(nativeState+0x1d4)&&vehicle->IsRC()) {
+                (*(CPed**)nativeState)->Remove();*(DWORD*)(nativeState+0x1d4)=1;
+            }
+            if(*(DWORD*)(nativeState+0x1d4)) {
+                if(!vehicle){(*(CPed**)nativeState)->SetHealth(0.0f);(*(CPed**)nativeState)->Kill();}
+                if(*(DWORD*)(nativeState+0x1d4)&&vehicle&&vehicle->GetHealth()==0.0f){(*(CPed**)nativeState)->SetHealth(0.0f);(*(CPed**)nativeState)->Kill();}
+            }
+            DWORD rate=GetInCarSendRate();if(now-*(DWORD*)(nativeState+0x133)>rate){*(DWORD*)(nativeState+0x133)=tick();SendIncarData();}
+            *(DWORD*)(nativeState+0x1cf)=0;
+        }else if((*(CPed**)nativeState)->GetState()==1||(*(CPed**)nativeState)->GetState()==12) {
+            ProcessSurfing();ProcessHead();
+            if(*(DWORD*)(nativeState+0x1d4)){*(DWORD*)(nativeState+0x1d4)=0;(*(CPed**)nativeState)->Add();}
+            ProcessPassengerEntry();ProcessWorldBoundaries();
+            if(*(WORD*)(nativeState+0xfc)!=0xffff){*(WORD*)(nativeState+0xfe)=*(WORD*)(nativeState+0xfc);*(WORD*)(nativeState+0xfc)=0xffff;}
+            if(NeedsToSendOnfootData(keys,upDown,leftRight)||now-*(DWORD*)(nativeState+0x133)>GetOnFootSendRate()) {
+                *(DWORD*)(nativeState+0x133)=tick();SendOnfootData();
+            }
+            DWORD aimRate=!(keys&0x84)?1000:(g_netStatsShotCompMode==2?g_localAimSendRate:100);
+            if(now-*(DWORD*)(nativeState+0x13b)>aimRate){*(DWORD*)(nativeState+0x13b)=now;SendAimData();}
+            *(DWORD*)(nativeState+0x1cf)=0;
+        }else if((*(CPed**)nativeState)->GetState()==50&&(*(CPed**)nativeState)->IsPassenger()) {
+            ProcessHead();if(*(DWORD*)(nativeState+0x1d4)){*(DWORD*)(nativeState+0x1d4)=0;(*(CPed**)nativeState)->Add();}
+            BYTE *pad=(BYTE*)KeyStuff::GetInternalKeys();(*(CPed**)nativeState)->GetCurrentWeapon();
+            if(!*(DWORD*)(nativeState+0x1cf)) {
+                if(*(WORD*)(pad+0x24)&&(*(CPed**)nativeState)->EnablePassengerDrivebyMode())*(DWORD*)(nativeState+0x1cf)=1;
+            }else if((BYTE)(*(CPed**)nativeState)->GetCurrentWeapon()==0||!(*(CPed**)nativeState)->CurrentWeaponHasAmmo()) {
+                if(*(DWORD*)(nativeState+0x1cf)){(*(CPed**)nativeState)->StopTaskType1022();*(DWORD*)(nativeState+0x1cf)=0;}
+            }
+            DWORD rate=GetInCarSendRate();if(now-*(DWORD*)(nativeState+0x133)>rate){*(DWORD*)(nativeState+0x133)=tick();SendPassengerData();}
+        }
+    }
+    if(!*(DWORD*)(nativeState+0xf4)&&*(CPed**)nativeState&&(int)(*(CPed**)nativeState)->GetDrunkLevel()>0) {
+        (*(CPed**)nativeState)->SetDrunkLevel(0);(*(CPed**)nativeState)->ProcessDrunk();
+    }
+    if(*(DWORD*)(nativeState+0x12c)&&!*(DWORD*)(nativeState+0xf4)) {
+        if(*(DWORD*)(nativeState+0x30a)==1) {
+            *(DWORD*)(nativeState+0x30a)=0;if(g_renderSecondDialog)*((BYTE*)g_renderSecondDialog+0x13)=0;
+            g_pGame->SetCursorMode(0,FALSE);
+        }
+        ProcessSpectating();return TRUE;
+    }
+    if(!*(DWORD*)(nativeState+0x2fe)&&GetAsyncKeyState(VK_F4)!=0){*(DWORD*)(nativeState+0x2fe)=1;g_pChat->AddInfoMessage(g_localClassSelectionMessage);}
+    if(*(DWORD*)(nativeState+0xf8)&&(*(CPed**)nativeState)->GetState()!=55&&(*(CPed**)nativeState)->GetState()!=54) {
+        if((*(CPed**)nativeState)->HasAccessory())(*(CPed**)nativeState)->DeleteAllAccessories();
+        if((*(CPed**)nativeState)->HasDanceState())(*(CPed**)nativeState)->SetDancePoseState(0);
+        if(*(DWORD*)(nativeState+0x143)&&!*(DWORD*)(nativeState+0x2fe)&&*(DWORD*)((BYTE*)g_pNetGame+0x3cd)==5) {
+            CPed *ped=*(CPed**)nativeState;BYTE alive;
+            __asm {
+                mov ecx,ped
+                call CPed::GetHealth
+                fcomp dword ptr [g_objectScaleLowerBound]
+                fnstsw ax
+                test ah,41h
+                setz alive
+            }
+            if(alive)Spawn();
+            return TRUE;
+        }
+        *(DWORD*)(nativeState+0xf8)=0;PrepareForClassSelection();*(DWORD*)(nativeState+0x2fe)=0;return TRUE;
+    }
+    if((*(CPed**)nativeState)->GetState()!=55&&(*(CPed**)nativeState)->GetState()!=54&&*(DWORD*)((BYTE*)g_pNetGame+0x3cd)==5&&!*(DWORD*)(nativeState+0xf4)&&!*(DWORD*)(nativeState+0x12c))ProcessClassSelection();
+    return TRUE;
 }

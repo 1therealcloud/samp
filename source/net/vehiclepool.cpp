@@ -10,6 +10,49 @@
 #include "net/localplayer.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
+// samp.dll RVA: 0x0001e9f0
+WORD CVehiclePool::FindInRay(float maxCameraDistance,const CVector *origin,const CVector *end,DWORD rayWord) {
+    struct RayPoint {CVector point;DWORD word;};
+    RayPoint from={*origin,rayWord},to={*end,rayWord};
+    WORD selected=0xffff;float closest=100000.0f;
+    for(int i=0;i<=m_nLargestId;++i) {
+        if(!m_bNotEmpty[i])continue;
+        CVehicle *vehicle=m_pObjects[i];if(!vehicle||!vehicle->CEntity::DoesExist())continue;
+        BYTE nearer;
+        __asm {
+            mov ecx,vehicle
+            call CEntity::GetDistanceToCamera
+            fcomp maxCameraDistance
+            fnstsw ax
+            test ah,5
+            setnp nearer
+        }
+        if(!nearer||vehicle->HasPlayerPed())continue;
+        CVector centre;vehicle->GetBoundCentre(&centre);
+        if(!GameTestEntityLineSphere(&from.point,&to.point,vehicle->m_pGameEntity,&centre,1.0f,1))continue;
+        __asm {
+            mov eax,origin
+            push dword ptr [eax+8]
+            push dword ptr [eax+4]
+            push dword ptr [eax]
+            mov ecx,vehicle
+            call CEntity::GetDistanceToPoint
+            fcom closest
+            fnstsw ax
+            test ah,5
+            jp vehicle_ray_not_closer
+            fstp closest
+            mov nearer,1
+            jmp vehicle_ray_distance_done
+        vehicle_ray_not_closer:
+            fstp st(0)
+            mov nearer,0
+        vehicle_ray_distance_done:
+        }
+        if(nearer)selected=(WORD)i;
+    }
+    return selected;
+}
 #include "game/game.h"
 // samp.dll RVA: 0x0001ee80
 void CVehiclePool::Process() {
