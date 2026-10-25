@@ -2,6 +2,12 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0000e910
+unsigned char ClientCheckChecksum(const void *data,unsigned short length);
+// samp.dll RVA: 0x00011860
+void SendClientCheckResponse(unsigned char type,unsigned long argument,unsigned char result);
+// samp.dll RVA: 0x00011930
+void ClientCheck(RPCParameters *parameters);
 // samp.dll RVA: 0x0000fea0
 void RequestClass(RPCParameters *parameters);
 // samp.dll RVA: 0x0000ff70

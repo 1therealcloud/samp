@@ -23,6 +23,74 @@
 #include "gui/device_lifecycle.h"
 #include "scoreboard.h"
 #include "game/vehicle.h"
+#include "GetTime.h"
+#include "game/game.h"
+// samp.dll RVA: 0x0000e910
+BYTE ClientCheckChecksum(const void *data,WORD length) {
+    BYTE result=0;const BYTE *bytes=(const BYTE*)data;
+    for(unsigned i=0;i<length;++i)result^=bytes[i]&0xcc;
+    return result;
+}
+// samp.dll RVA: 0x00011860
+void SendClientCheckResponse(BYTE type,DWORD argument,BYTE result) {
+    RakNet::BitStream stream;stream.Write(type);stream.Write(argument);stream.Write(result);
+    (*(RakClientInterface**)((BYTE*)g_pNetGame+0x2c))->RPC(const_cast<int*>(&g_rpcClientCheck),&stream,HIGH_PRIORITY,RELIABLE_ORDERED,0,false);
+}
+// samp.dll RVA: 0x00011930
+void ClientCheck(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    BYTE type=0,result=0;DWORD argument=0,offset=0,length=0;
+    stream.Read(type);stream.Read(argument);
+    stream.ReadBits((unsigned char*)&offset,16,true);stream.ReadBits((unsigned char*)&length,16,true);
+    if((WORD)offset>256||(WORD)length>256||(WORD)length<2)return;
+    if(type==0x46) {
+        if(GameHasModelInfo(argument)) {
+            void *info=GameGetModelInfo(argument);
+            if(info)result=ClientCheckChecksum((void*)((DWORD)info+(WORD)offset),(WORD)length);
+        }
+        SendClientCheckResponse(0x46,argument,result);
+    }else if(type==2) {
+        if(g_pGame->GetPlayerPed()) {
+            if(g_pGame->GetPlayerPed()->IsInVehicle()&&!g_pGame->GetPlayerPed()->IsPassenger()) {
+                BYTE *backend=*(BYTE**)((BYTE*)g_pGame->GetPlayerPed()+0x2a4);
+                BYTE *vehicle=*(BYTE**)(backend+0x58c);
+                if(vehicle){argument=*(DWORD*)(vehicle+0x40);result=2;}
+            }else {
+                BYTE *backend=*(BYTE**)((BYTE*)g_pGame->GetPlayerPed()+0x2a4);
+                if(backend){argument=*(DWORD*)(backend+0x40);result=1;}
+            }
+        }
+        SendClientCheckResponse(2,argument,result);
+    }else if(type==0x47) {
+        if(GameHasModelInfo(argument)) {
+            int waits=0;
+            if(!g_pGame->IsModelAvailable(argument)) {
+                g_pGame->RequestModel(argument,2);g_pGame->LoadRequestedModels();
+                while(!g_pGame->IsModelAvailable(argument)) {
+                    if(++waits>1000)break;
+                    Sleep(1);
+                }
+            }
+            if(g_pGame->IsModelAvailable(argument)) {
+                void *collision=GameGetModelCollision(argument);
+                if(collision)result=ClientCheckChecksum((void*)((DWORD)collision+(WORD)offset),(WORD)length);
+                if(!GameGetModelReferenceCount(argument))g_pGame->ReleaseModel(argument,0);
+            }
+        }
+        SendClientCheckResponse(0x47,argument,result);
+    }else if(type==5) {
+        if(argument<0x400000||argument>0x856e00)return;
+        if(argument)result=ClientCheckChecksum((void*)(argument+(WORD)offset),(WORD)length);
+        SendClientCheckResponse(5,argument,result);
+    }else if(type==0x45) {
+        if(argument>800000)return;
+        DWORD address=(DWORD)g_clientModule+argument;
+        if(address)result=ClientCheckChecksum((void*)(address+(WORD)offset),(WORD)length);
+        SendClientCheckResponse(0x45,argument,result);
+    }else if(type==0x48) {
+        SendClientCheckResponse(0x48,RakNet::GetTime(),0);
+    }
+}
 // samp.dll RVA: 0x001180c4
 const char g_rpcRejectedVersion[]="CONNECTION REJECTED: Incorrect Version.";
 // samp.dll RVA: 0x00118098
