@@ -7,6 +7,10 @@ class CMatrix;
 #pragma pack(push,1)
 class CRemotePlayer {public:
     BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x00015600
+    void UpdateUnoccupied(const void *data);
+    // samp.dll RVA: 0x00015950
+    void UpdateTrailer(const void *data);
     // samp.dll RVA: 0x00016010
     void UpdateBullet(const void *data);
     // samp.dll RVA: 0x00016230
@@ -137,4 +141,10 @@ extern const char g_remoteCarryLibrary[];
 extern const float g_remoteBulletOffsetMinimum;
 // samp.dll RVA: 0x00118200
 extern const float g_remoteBulletOffsetMaximum;
+// samp.dll RVA: 0x001181dc
+extern const float g_remoteVehicleAxisTeleportDistance;
+// samp.dll RVA: 0x001181d0
+extern const double g_remoteUnoccupiedCorrectionThreshold;
+// samp.dll RVA: 0x001181e0
+extern const float g_remoteTrailerCorrection;
 #endif

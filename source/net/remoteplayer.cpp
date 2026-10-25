@@ -15,6 +15,159 @@
 #include "game/aimstuff.h"
 #include "net/localplayer.h"
 #include "net/pool_frame.h"
+#include "game/frame_limit.h"
+// samp.dll RVA: 0x001181dc
+const float g_remoteVehicleAxisTeleportDistance=6.0f;
+// samp.dll RVA: 0x001181d0
+const double g_remoteUnoccupiedCorrectionThreshold=0.05;
+// samp.dll RVA: 0x001181e0
+const float g_remoteTrailerCorrection=0.025f;
+// samp.dll RVA: 0x00015600
+void CRemotePlayer::UpdateUnoccupied(const void *data) {
+    const BYTE *input=(const BYTE*)data;WORD id=*(const WORD*)input;if(!id||id==0xffff)return;
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;if(!vehicles)return;
+    CVehicle *vehicle=vehicles->Get(id);
+    // Native publishes the owner even for an invalid/nonexistent vehicle index.
+    *(WORD*)((BYTE*)vehicles+0x8e34+id*2)=*(WORD*)nativeState;
+    if(!vehicle||vehicle->HasDriver()||vehicle->GetTractor())return;
+    CMatrix matrix;vehicle->GetMatrix(&matrix);
+    memcpy(&matrix.right,input+3,12);memcpy(&matrix.up,input+0xf,12);
+    const CVector *target=(const CVector*)(input+0x1b);bool significant=false,teleport=false;
+    for(int axis=0;axis<3;++axis) {
+        DWORD wanted=((const DWORD*)target)[axis],current=((DWORD*)&matrix.position)[axis];BYTE changed;
+        __asm {
+            push current
+            push wanted
+            call FloatOffset
+            fcomp dword ptr [g_objectMutationStep]
+            add esp,8
+            fnstsw ax
+            test ah,41h
+            setp changed
+        }
+        if(changed){significant=true;break;}
+    }
+    if(!significant)return;
+    for(int axis=0;axis<3;++axis) {
+        DWORD wanted=((const DWORD*)target)[axis],current=((DWORD*)&matrix.position)[axis];BYTE distant;
+        const float *limit=axis<2?&g_remoteVehicleAxisTeleportDistance:&g_frameScaleMultiplier;
+        __asm {
+            push current
+            push wanted
+            call FloatOffset
+            mov ecx,limit
+            fcomp dword ptr [ecx]
+            add esp,8
+            fnstsw ax
+            test ah,41h
+            sete distant
+        }
+        if(distant){teleport=true;break;}
+    }
+    if(teleport) {
+        matrix.position=*target;vehicle->SetMatrix(matrix);
+        vehicle->SetSpeed(*(const CVector*)(input+0x27));vehicle->SetTurnSpeed(*(const CVector*)(input+0x33));return;
+    }
+    vehicle->SetMatrix(matrix);vehicle->SetSpeed(*(const CVector*)(input+0x27));vehicle->SetTurnSpeed(*(const CVector*)(input+0x33));
+    CVector speed={0,0,0};vehicle->GetSpeed(&speed);
+    for(int axis=0;axis<3;++axis) {
+        const float *wanted=&target->x+axis,*current=&matrix.position.x+axis;float *value=&speed.x+axis;
+        __asm {
+            mov ecx,current
+            push dword ptr [ecx]
+            mov edx,wanted
+            push dword ptr [edx]
+            call FloatOffset
+            fcomp qword ptr [g_remoteUnoccupiedCorrectionThreshold]
+            add esp,8
+            fnstsw ax
+            test ah,41h
+            jne unoccupied_axis_done
+            mov ecx,wanted
+            mov edx,current
+            mov eax,value
+            fld dword ptr [ecx]
+            fsub dword ptr [edx]
+            fmul dword ptr [g_remoteIncarCorrection]
+            fadd dword ptr [eax]
+            fstp dword ptr [eax]
+        unoccupied_axis_done:
+        }
+    }
+    vehicle->SetSpeed(speed);*(DWORD*)((BYTE*)vehicle+0x83)=1;
+}
+// samp.dll RVA: 0x00015950
+void CRemotePlayer::UpdateTrailer(const void *data) {
+    const BYTE *input=(const BYTE*)data;WORD id=*(const WORD*)input;if(!id||id==0xffff)return;
+    CVehicle *trailer=((CNetGame*)g_pNetGame)->pools->vehicles->Get(id);
+    CVehicle *tractor=*(CVehicle**)(nativeState+8);if(!tractor||!trailer)return;
+    if(!trailer->IsTrailer()&&!tractor->IsTowtruck())return;
+    if(tractor->GetTrailer()!=trailer){tractor->SetTrailer(trailer);tractor->AttachTrailer();}
+    CMatrix matrix;trailer->GetMatrix(&matrix);GameQuaternionToMatrixComponents((const GameQuaternion*)(input+0xe),&matrix);
+    const CVector *target=(const CVector*)(input+2);bool significant=false,teleport=false;
+    for(int axis=0;axis<3;++axis) {
+        DWORD wanted=((const DWORD*)target)[axis],current=((DWORD*)&matrix.position)[axis];BYTE changed;
+        __asm {
+            push current
+            push wanted
+            call FloatOffset
+            fcomp dword ptr [g_textDrawHalf]
+            add esp,8
+            fnstsw ax
+            test ah,41h
+            setp changed
+        }
+        if(changed){significant=true;break;}
+    }
+    if(!significant)return;
+    for(int axis=0;axis<3;++axis) {
+        DWORD wanted=((const DWORD*)target)[axis],current=((DWORD*)&matrix.position)[axis];BYTE distant;
+        const float *limit=axis<2?&g_remoteVehicleAxisTeleportDistance:&g_frameScaleMultiplier;
+        __asm {
+            push current
+            push wanted
+            call FloatOffset
+            mov ecx,limit
+            fcomp dword ptr [ecx]
+            add esp,8
+            fnstsw ax
+            test ah,41h
+            sete distant
+        }
+        if(distant){teleport=true;break;}
+    }
+    if(teleport) {
+        matrix.position=*target;trailer->SetMatrix(matrix);
+        trailer->SetSpeed(*(const CVector*)(input+0x1e));trailer->SetTurnSpeed(*(const CVector*)(input+0x2a));return;
+    }
+    trailer->SetMatrix(matrix);trailer->SetTurnSpeed(*(const CVector*)(input+0x2a));
+    CVector speed={0,0,0};trailer->GetSpeed(&speed);
+    for(int axis=0;axis<3;++axis) {
+        const float *wanted=&target->x+axis,*current=&matrix.position.x+axis;float *value=&speed.x+axis;
+        __asm {
+            mov ecx,current
+            push dword ptr [ecx]
+            mov edx,wanted
+            push dword ptr [edx]
+            call FloatOffset
+            fcomp dword ptr [g_pedDrunkSpeedThreshold]
+            add esp,8
+            fnstsw ax
+            test ah,41h
+            jne trailer_axis_done
+            mov ecx,wanted
+            mov edx,current
+            mov eax,value
+            fld dword ptr [ecx]
+            fsub dword ptr [edx]
+            fmul dword ptr [g_remoteTrailerCorrection]
+            fadd dword ptr [eax]
+            fstp dword ptr [eax]
+        trailer_axis_done:
+        }
+    }
+    trailer->SetSpeed(speed);
+}
 // samp.dll RVA: 0x001181fc
 const float g_remoteBulletOffsetMinimum=-300.0f;
 // samp.dll RVA: 0x00118200

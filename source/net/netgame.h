@@ -22,6 +22,10 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x00009730
+    void Packet_UnoccupiedSync(Packet *packet);
+    // samp.dll RVA: 0x00009b10
+    void Packet_TrailerSync(Packet *packet);
     // samp.dll RVA: 0x00009830
     void Packet_BulletSync(Packet *packet);
     // samp.dll RVA: 0x00009930

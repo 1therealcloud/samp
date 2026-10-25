@@ -31,6 +31,20 @@
 #include "NetworkTypes.h"
 typedef char NativePacketLengthOffset[(offsetof(Packet,length)==8)?1:-1];
 typedef char NativePacketDataOffset[(offsetof(Packet,data)==16)?1:-1];
+// samp.dll RVA: 0x00009730
+void CNetGame::Packet_UnoccupiedSync(Packet *packet) {
+    RakNet::BitStream stream(packet->data,(int)packet->length,false);BYTE packetId=0;
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    WORD player;BYTE data[67]={0};stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);stream.Read((char*)data,67);
+    CRemotePlayer *remote=pools->players->GetPlayer(player);if(remote)remote->UpdateUnoccupied(data);
+}
+// samp.dll RVA: 0x00009b10
+void CNetGame::Packet_TrailerSync(Packet *packet) {
+    RakNet::BitStream stream(packet->data,(int)packet->length,false);
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    BYTE packetId=0,data[54];WORD player;stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);stream.Read((char*)data,54);
+    CRemotePlayer *remote=pools->players->GetPlayer(player);if(remote)remote->UpdateTrailer(data);
+}
 // samp.dll RVA: 0x00009830
 void CNetGame::Packet_BulletSync(Packet *packet) {
     RakNet::BitStream stream(packet->data,(int)packet->length,false);
