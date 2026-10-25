@@ -3,6 +3,24 @@
 class RakClientInterface;
 struct RPCParameters;
 namespace Scripting {struct OpcodeInfo;}
+namespace RakNet {class BitStream;}
+class CObject;
+// Reads count material records from an existing borrowed stream.
+// samp.dll RVA: 0x0001aba0
+void ObjectReadMaterials(unsigned char count,CObject *object,RakNet::BitStream *stream);
+// samp.dll RVA: 0x0001ae70
+void ScrCreateObject(RPCParameters *parameters);
+// samp.dll RVA: 0x0001b1d0
+void ScrSetObjectMaterial(RPCParameters *parameters);
+// samp.dll RVA: 0x0001c1d0
+void ScrAttachObjectToPlayer(RPCParameters *parameters);
+// samp.dll RVA: 0x00018a00
+void ScrSetPlayerAttachedObject(RPCParameters *parameters);
+// Native updates custom-model state; higher-level name remains unestablished.
+// samp.dll RVA: 0x0001d780
+void ScrRpc48(RPCParameters *parameters);
+// samp.dll RVA: 0x00118288
+extern const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand;
 // samp.dll RVA: 0x0001da90
 void ScrSetPlayerName(RPCParameters *parameters);
 // samp.dll RVA: 0x000188b0
@@ -204,6 +222,10 @@ void ScrResetPlayerMoney(RPCParameters *parameters);
 void ScrSetPlayerSpecialAction(RPCParameters *parameters);
 // samp.dll RVA: 0x00019dc0
 void ScrTogglePlayerControllable(RPCParameters *parameters);
+// samp.dll RVA: 0x001184c0
+extern const int g_rpcScrSetPlayerArmor;
+// samp.dll RVA: 0x0001dbf0
+void RegisterScriptRPCs(RakClientInterface *client);
 // samp.dll RVA: 0x00017c20
 void UnRegisterScriptRPCs(RakClientInterface *client);
 // samp.dll RVA: 0x00118448

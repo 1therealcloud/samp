@@ -23,6 +23,114 @@
 #include "game/actor.h"
 #include "game/custommodels.h"
 #include "game/building_removal.h"
+#include "StringCompressor.h"
+#include <string.h>
+// samp.dll RVA: 0x00118288
+const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand={0x69b,"iiffffff"};
+// samp.dll RVA: 0x0001aba0
+void ObjectReadMaterials(BYTE count,CObject *object,RakNet::BitStream *stream) {
+    DWORD color=0;BYTE length=0,type,index,size,fontSize,bold,alignment;WORD model;
+    DWORD fontColor,backgroundColor;
+    char dictionary[257],texture[257],font[257],text[2049];
+    for(unsigned left=count;left;--left) {
+        memset(dictionary,0,sizeof(dictionary));memset(texture,0,sizeof(texture));
+        memset(font,0,sizeof(font));memset(text,0,sizeof(text));
+        stream->Read(type);
+        if(type==1) {
+            stream->Read(index);stream->Read(model);stream->Read(length);stream->Read(dictionary,length);
+            stream->Read(length);stream->Read(texture,length);stream->Read(color);
+            if(strlen(dictionary)<32&&strlen(texture)<32) {
+                int materialModel=model;if(model==0xffff||model>20000)materialModel=-1;
+                if(object)object->SetMaterial(materialModel,index,dictionary,texture,color);
+            }
+        }else if(type==2) {
+            stream->Read(index);stream->Read(size);stream->Read(length);stream->Read(font,length);
+            stream->Read(fontSize);stream->Read(bold);stream->Read(fontColor);stream->Read(backgroundColor);stream->Read(alignment);
+            StringCompressor::Instance()->DecodeString(text,2048,stream,0);
+            if(strlen(font)<32&&strlen(text)&&object)object->SetMaterialText(index,text,size,font,fontSize,bold,fontColor,backgroundColor,alignment);
+        }
+    }
+}
+// samp.dll RVA: 0x0001ae70
+void ScrCreateObject(RPCParameters *parameters) {
+    WORD id=0xffff,vehicle=0xffff,attachedObject=0xffff;int model=-1;
+    CVector position={0,0,0},rotation={0,0,0},offset={0,0,0},attachedRotation={0,0,0};
+    float distance=0;BYTE noCameraCollision=0,syncRotation=0,materials=0;
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    stream.Read(id);stream.Read(model);stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);
+    stream.Read(rotation.x);stream.Read(rotation.y);stream.Read(rotation.z);stream.Read(distance);
+    stream.Read(noCameraCollision);stream.Read(vehicle);stream.Read(attachedObject);
+    if(vehicle!=0xffff||attachedObject!=0xffff) {
+        stream.Read(offset.x);stream.Read(offset.y);stream.Read(offset.z);
+        stream.Read(attachedRotation.x);stream.Read(attachedRotation.y);stream.Read(attachedRotation.z);stream.Read(syncRotation);
+    }
+    stream.Read(materials);CObjectPool *pool=((CNetGame*)g_pNetGame)->pools->objects;
+    pool->Create(id,model,position,rotation,distance);CObject *object=(CObject*)pool->Get(id);
+    if(vehicle!=0xffff){if(object)object->SetAttachedVehicle(vehicle,&offset,&attachedRotation);}
+    else if(attachedObject!=0xffff&&object)object->SetAttachedObject(attachedObject,&offset,&attachedRotation,syncRotation);
+    if(materials)ObjectReadMaterials(materials,object,&stream);
+    if(object&&noCameraCollision)((BYTE*)object)[0x53]=1;
+}
+// samp.dll RVA: 0x0001b1d0
+void ScrSetObjectMaterial(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CObjectPool *pool=((CNetGame*)g_pNetGame)->pools->objects;WORD id;stream.Read(id);
+    CObject *object=(CObject*)pool->Get(id);
+    char dictionary[257]={0},texture[257]={0},font[257]={0},text[2049]={0};
+    BYTE length=0,type,index,size,fontSize,bold,alignment;DWORD color=0,fontColor,backgroundColor;WORD model;
+    stream.Read(type);
+    if(type==1) {
+        stream.Read(index);stream.Read(model);stream.Read(length);stream.Read(dictionary,length);
+        stream.Read(length);stream.Read(texture,length);stream.Read(color);
+        if(strlen(dictionary)<32&&strlen(texture)<32) {
+            int materialModel=model;if(model==0xffff)materialModel=-1;
+            if(object)object->SetMaterial(materialModel,index,dictionary,texture,color);
+        }
+    }else if(type==2) {
+        stream.Read(index);stream.Read(size);stream.Read(length);stream.Read(font,length);
+        stream.Read(fontSize);stream.Read(bold);stream.Read(fontColor);stream.Read(backgroundColor);stream.Read(alignment);
+        StringCompressor::Instance()->DecodeString(text,2048,&stream,0);
+        if(strlen(font)<32&&strlen(text)&&object)object->SetMaterialText(index,text,size,font,fontSize,bold,fontColor,backgroundColor,alignment);
+    }
+}
+// samp.dll RVA: 0x0001c1d0
+void ScrAttachObjectToPlayer(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD id,player;CVector offset,rotation;stream.Read(id);stream.Read(player);
+    stream.Read(offset.x);stream.Read(offset.y);stream.Read(offset.z);
+    stream.Read(rotation.x);stream.Read(rotation.y);stream.Read(rotation.z);
+    CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;
+    CObject *object=(CObject*)pools->objects->Get(id);if(!object)return;
+    CPlayerPool *players=pools->players;CPed *ped;
+    if(player==players->localId)ped=*(CPed**)players->local->nativeState;
+    else {
+        if(player>1004||!players->players[player]||!players->players[player]->remote)return;
+        ped=*(CPed**)(players->players[player]->remote->nativeState+4);
+    }
+    Scripting::ProcessCommand(&g_rpcAttachObjectToPlayerCommand,*(DWORD*)((BYTE*)object+0x44),*(DWORD*)((BYTE*)ped+0x44),
+        (double)offset.x,(double)offset.y,(double)offset.z,(double)rotation.x,(double)rotation.y,(double)rotation.z);
+}
+// samp.dll RVA: 0x00018a00
+void ScrSetPlayerAttachedObject(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    PedAccessoryState info={0};WORD player;int index;bool create;
+    stream.Read(player);stream.Read(index);stream.Read(create);if(create)stream.Read((char*)&info,52);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;if(!pool)return;
+    CPed *ped;
+    if(player==pool->localId)ped=*(CPed**)pool->local->nativeState;
+    else {
+        if(player>=1004||!pool->connected[player])return;
+        CRemotePlayer *remote=pool->players[player]?pool->players[player]->remote:0;
+        ped=*(CPed**)(remote->nativeState+4);
+    }
+    if(ped){if(create)ped->AddAccessory(index,&info);else ped->DeleteAccessory(index);}
+}
+// samp.dll RVA: 0x0001d780
+void ScrRpc48(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    DWORD value=0;stream.Read(value);BYTE *models=(BYTE*)g_customModels;
+    if(models&&*(DWORD*)(models+0x217)!=value){*(DWORD*)(models+0x217)=value;models[0x221]=0;models[0x220]=0;}
+}
 // samp.dll RVA: 0x001182b0
 const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand={0x52c,"ii"};
 // samp.dll RVA: 0x001182c4
@@ -857,6 +965,106 @@ const int g_rpcScrSetActorHealth=178;
 // Handler RVA0x0001d780; semantic name not established.
 // samp.dll RVA: 0x001182d8
 const int g_rpcUnknown001182D8=48;
+// samp.dll RVA: 0x001184c0
+const int g_rpcScrSetPlayerArmor=66;
+// samp.dll RVA: 0x0001dbf0
+void RegisterScriptRPCs(RakClientInterface *client) {
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDisableVehicleCollisions),ScrDisableVehicleCollisions);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerMapIcon),ScrSetPlayerMapIcon);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrRemovePlayerMapIcon),ScrRemovePlayerMapIcon);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerAmmo),ScrSetPlayerAmmo);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetGravity),ScrSetGravity);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleHealth),ScrSetVehicleHealth);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrAttachTrailerToVehicle),ScrAttachTrailerToVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDetachTrailerFromVehicle),ScrDetachTrailerFromVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreateObject),ScrCreateObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetObjectPosition),ScrSetObjectPosition);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetObjectRotation),ScrSetObjectRotation);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroyObject),ScrDestroyObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreateExplosion),ScrCreateExplosion);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrShowPlayerNametagForPlayer),ScrShowPlayerNametagForPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrMoveObject),ScrMoveObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrStopObject),ScrStopObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetNumberPlate),ScrSetNumberPlate);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrTogglePlayerSpectating),ScrTogglePlayerSpectating);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183A0),ScrRpc125);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayerSpectatePlayer),ScrPlayerSpectatePlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayerSpectateVehicle),ScrPlayerSpectateVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrMoveVehicleComponent),ScrMoveVehicleComponent);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrForceClassSelection),ScrForceClassSelection);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrAttachObjectToPlayer),ScrAttachObjectToPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrInitMenu),ScrInitMenu);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrShowMenu),ScrShowMenu);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrHideMenu),ScrHideMenu);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerWantedLevel),ScrSetPlayerWantedLevel);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrShowTextDraw),ScrShowTextDraw);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrHideTextDrawForPlayer),ScrHideTextDrawForPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrTextDrawSetString),ScrTextDrawSetString);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGangZoneCreate),ScrGangZoneCreate);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGangZoneDestroy),ScrGangZoneDestroy);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGangZoneFlash),ScrGangZoneFlash);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGangZoneStopFlash),ScrGangZoneStopFlash);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrApplyAnimation),ScrApplyAnimation);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrClearAnimations),ScrClearAnimations);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerSpecialAction),ScrSetPlayerSpecialAction);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrEnableStuntBonusForPlayer),ScrEnableStuntBonusForPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerFightingStyle),ScrSetPlayerFightingStyle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerVelocity),ScrSetPlayerVelocity);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleVelocity),ScrSetVehicleVelocity);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerWidescreen),ScrSetPlayerWidescreen);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleTires),ScrSetVehicleTires);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183EC),ScrPlayerOpcode052C);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183E8),ScrPlayerOpcode03FD);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayCrimeReport),ScrPlayCrimeReport);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetSpawnInfo),ScrSetSpawnInfo);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerTeam),ScrSetPlayerTeam);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerSkin),ScrSetPlayerSkin);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerName),ScrSetPlayerName);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerPosition),ScrSetPlayerPosition);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerPositionFindZ),ScrSetPlayerPositionFindZ);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerHealth),ScrSetPlayerHealth);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPutPlayerInVehicle),ScrPutPlayerInVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrRemovePlayerFromVehicle),ScrRemovePlayerFromVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerColor),ScrSetPlayerColor);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDisplayGametext),ScrDisplayGametext);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerInterior),ScrSetPlayerInterior);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerCameraPosition),ScrSetPlayerCameraPosition);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerCameraLookAt),ScrSetPlayerCameraLookAt);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehiclePosition),ScrSetVehiclePosition);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleZAngle),ScrSetVehicleZAngle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleParamsForPlayer),ScrSetVehicleParamsForPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetCameraBehindPlayer),ScrSetCameraBehindPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrTogglePlayerControllable),ScrTogglePlayerControllable);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlaySound),ScrPlaySound);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerWorldBounds),ScrSetPlayerWorldBounds);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGivePlayerMoney),ScrGivePlayerMoney);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerFacingAngle),ScrSetPlayerFacingAngle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrResetPlayerMoney),ScrResetPlayerMoney);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrResetPlayerWeapons),ScrResetPlayerWeapons);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGivePlayerWeapon),ScrGivePlayerWeapon);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown0011830C),ScrRpc64);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrLinkVehicleToInterior),ScrLinkVehicleToInterior);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerArmor),ScrSetPlayerArmor);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDeathMessage),ScrDeathMessage);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerShopName),ScrSetPlayerShopName);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerDrunkLevel),ScrSetPlayerDrunkLevel);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerArmedWeapon),ScrSetPlayerArmedWeapon);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerAttachedObject),ScrSetPlayerAttachedObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayAudioStream),ScrPlayAudioStream);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrStopAudioStream),ScrStopAudioStream);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrRemoveBuildingForPlayer),ScrRemoveBuildingForPlayer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrAttachCameraToObject),ScrAttachCameraToObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrInterpolateCamera),ScrInterpolateCamera);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_textDrawClickRpc),ClickTextDraw);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetObjectMaterial),ScrSetObjectMaterial);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrStopObjectCameraCollision),ScrStopObjectCameraCollision);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorAnimation),ScrSetActorAnimation);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrClearActorAnimations),ScrClearActorAnimations);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorRotation),ScrSetActorRotation);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorPosition),ScrSetActorPosition);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorHealth),ScrSetActorHealth);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001182D8),ScrRpc48);
+}
 // samp.dll RVA: 0x00017c20
 void UnRegisterScriptRPCs(RakClientInterface *client) {
     const int *ids[]={
