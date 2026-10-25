@@ -5,6 +5,24 @@
 // Constructor is recovered; directory/worker startup and complete ownership remain open.
 class CCustomModels {public:
     BYTE nativeState[0x206d];
+    // Eight copied digits are deliberately not explicitly terminated.
+    // samp.dll RVA: 0x0000c0b0
+    DWORD ParseCacheHash(const char *filename);
+    // samp.dll RVA: 0x0000c100
+    BOOL DeleteCachedDff(DWORD hash);
+    // samp.dll RVA: 0x0000c140
+    BOOL DeleteCachedTxd(DWORD hash);
+    // samp.dll RVA: 0x0000c180
+    BOOL DeleteTemporaryFile(const char *filename);
+    // Disabled manifests deliberately report every hash as present.
+    // samp.dll RVA: 0x0000ca40
+    bool HasResourceHash(DWORD hash);
+    // samp.dll RVA: 0x0000ca90
+    void PurgeUnusedCache();
+    // samp.dll RVA: 0x0000cbf0
+    void RefreshCachedResources();
+    // samp.dll RVA: 0x0000d030
+    void SetExpectedRecordCount(DWORD count);
     // samp.dll RVA: 0x0000d890
     CCustomModels();
     // Clears transfer/worker storage only; neither frees nor clears the record array.
@@ -97,4 +115,16 @@ extern int g_customRequestDffRpc;
 extern int g_customRequestTxdRpc;
 // samp.dll RVA: 0x00117d64
 extern int g_customRequestsCompleteRpc;
+// samp.dll RVA: 0x00117cd8
+extern const char g_customDeleteDffPattern[];
+// samp.dll RVA: 0x00117ce4
+extern const char g_customDeleteTxdPattern[];
+// samp.dll RVA: 0x00117cf0
+extern const char g_customDeleteTempPattern[];
+// samp.dll RVA: 0x00117d24
+extern const char g_customFindTempPattern[];
+// samp.dll RVA: 0x00117d18
+extern const char g_customFindDffPattern[];
+// samp.dll RVA: 0x00117d0c
+extern const char g_customFindTxdPattern[];
 #endif

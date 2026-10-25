@@ -1,6 +1,23 @@
 #include "game/custommodels.h"
 #include <stdlib.h>
 #include <string.h>
+// samp.dll RVA: 0x00117cd8
+const char g_customDeleteDffPattern[]="%s\\0x%X.dff";
+// samp.dll RVA: 0x00117ce4
+const char g_customDeleteTxdPattern[]="%s\\0x%X.txd";
+// samp.dll RVA: 0x00117cf0
+const char g_customDeleteTempPattern[]="%s\\%s";
+// samp.dll RVA: 0x00117d24
+const char g_customFindTempPattern[]="%s/*.temp";
+// samp.dll RVA: 0x00117d18
+const char g_customFindDffPattern[]="%s/*.dff";
+// samp.dll RVA: 0x00117d0c
+const char g_customFindTxdPattern[]="%s/*.txd";
+// samp.dll RVA: 0x0000c0b0
+DWORD CCustomModels::ParseCacheHash(const char *filename) {
+    if(filename[0]!='0'||filename[1]!='x')return 0;
+    char digits[12];strncpy(digits,filename+2,8);return strtoul(digits,0,16);
+}
 // samp.dll RVA: 0x0000b990
 void CCustomModels::ClearTransferStorage() {
     memset(nativeState+0x222,0,0x11e);memset(nativeState+0x1345,0,0xd20);
@@ -268,6 +285,79 @@ int g_customRequestDffRpc=181;
 int g_customRequestTxdRpc=182;
 // samp.dll RVA: 0x00117d64
 int g_customRequestsCompleteRpc=184;
+// Cache mutation and manifest completion stay with the same manager class.
+// samp.dll RVA: 0x0000c100
+BOOL CCustomModels::DeleteCachedDff(DWORD hash) {
+    char path[264];_snprintf(path,260,g_customDeleteDffPattern,(char*)this+9,hash);return DeleteFileA(path);
+}
+// samp.dll RVA: 0x0000c140
+BOOL CCustomModels::DeleteCachedTxd(DWORD hash) {
+    char path[264];_snprintf(path,260,g_customDeleteTxdPattern,(char*)this+9,hash);return DeleteFileA(path);
+}
+// samp.dll RVA: 0x0000c180
+BOOL CCustomModels::DeleteTemporaryFile(const char *filename) {
+    char path[264];_snprintf(path,260,g_customDeleteTempPattern,(char*)this+9,filename);return DeleteFileA(path);
+}
+// samp.dll RVA: 0x0000ca40
+bool CCustomModels::HasResourceHash(DWORD hash) {
+    if(!nativeState[0x21f])return true;
+    int count=*(int*)(nativeState+4);
+    for(int i=0;i<count;++i) {
+        BYTE *entry=(*(BYTE***)nativeState)[i];
+        if(entry&&(*(DWORD*)(entry+0x46)==hash||*(DWORD*)(entry+0x4a)==hash))return true;
+    }
+    return false;
+}
+// samp.dll RVA: 0x0000ca90
+void CCustomModels::PurgeUnusedCache() {
+    char temp[264],dff[264],txd[264];const char *directory=(char*)this+9;
+    _snprintf(temp,260,g_customFindTempPattern,directory);
+    _snprintf(dff,260,g_customFindDffPattern,directory);
+    _snprintf(txd,260,g_customFindTxdPattern,directory);
+    WIN32_FIND_DATAA file;HANDLE search=FindFirstFileA(temp,&file);
+    if(search!=INVALID_HANDLE_VALUE) {
+        do {if(!(file.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))DeleteTemporaryFile(file.cFileName);}while(FindNextFileA(search,&file));
+        FindClose(search);
+    }
+    search=FindFirstFileA(dff,&file);
+    if(search!=INVALID_HANDLE_VALUE) {
+        do {
+            if(!(file.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)) {
+                DWORD hash=ParseCacheHash(file.cFileName);if(hash&&!HasResourceHash(hash))DeleteCachedDff(hash);
+            }
+        }while(FindNextFileA(search,&file));
+        FindClose(search);
+    }
+    search=FindFirstFileA(txd,&file);
+    if(search!=INVALID_HANDLE_VALUE) {
+        do {
+            if(!(file.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)) {
+                DWORD hash=ParseCacheHash(file.cFileName);if(hash&&!HasResourceHash(hash))DeleteCachedTxd(hash);
+            }
+        }while(FindNextFileA(search,&file));
+        FindClose(search);
+    }
+}
+// samp.dll RVA: 0x0000cbf0
+void CCustomModels::RefreshCachedResources() {
+    if(!nativeState[0x21f])return;DWORD count=*(DWORD*)(nativeState+4),index=0;
+    if(count)do {
+        BYTE *entry=index<count?(*(BYTE***)nativeState)[index]:0;
+        if(entry[7]==1||(entry[7]==2&&(*(DWORD*)(entry+8)==*(DWORD*)(nativeState+0x217)||*(DWORD*)(entry+8)==0xffffffff))) {
+            if(!entry[0]&&IsDffCached(*(DWORD*)(entry+0x46)))entry[0]=1;
+            if(!entry[1]&&IsTxdCached(*(DWORD*)(entry+0x4a)))entry[1]=1;
+        }
+        count=*(DWORD*)(nativeState+4);
+    }while(++index!=count);
+    PurgeUnusedCache();
+}
+// samp.dll RVA: 0x0000d030
+void CCustomModels::SetExpectedRecordCount(DWORD count) {
+    *(DWORD*)(nativeState+0x21b)=count;
+    if(*(DWORD*)(nativeState+4)==count) {
+        nativeState[0x21f]=1;RefreshCachedResources();if(!*(DWORD*)(nativeState+0x213))*(DWORD*)(nativeState+0x213)=2;
+    }
+}
 // samp.dll RVA: 0x0000bb10
 bool CCustomModels::IsDffCached(DWORD hash) {
     char path[264];_snprintf(path,260,g_customDffCachePattern,(char*)this+9,hash);
