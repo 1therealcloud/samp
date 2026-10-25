@@ -22,6 +22,14 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x00009830
+    void Packet_BulletSync(Packet *packet);
+    // samp.dll RVA: 0x00009930
+    void Packet_AimSync(Packet *packet);
+    // samp.dll RVA: 0x00009a20
+    void Packet_PassengerSync(Packet *packet);
+    // samp.dll RVA: 0x00009c00
+    void Packet_MarkersSync(Packet *packet);
     // samp.dll RVA: 0x0000a230
     void ShutdownForRestart();
     // Descriptive native pool/frame pass with three separate SEH regions.

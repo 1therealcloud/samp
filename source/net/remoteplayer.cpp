@@ -15,6 +15,75 @@
 #include "game/aimstuff.h"
 #include "net/localplayer.h"
 #include "net/pool_frame.h"
+// samp.dll RVA: 0x001181fc
+const float g_remoteBulletOffsetMinimum=-300.0f;
+// samp.dll RVA: 0x00118200
+const float g_remoteBulletOffsetMaximum=300.0f;
+// samp.dll RVA: 0x00016010
+void CRemotePlayer::UpdateBullet(const void *data) {
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped||!ped->DoesExist())return;
+    const BYTE *input=(const BYTE*)data;PedBulletData bullet={0};
+    memcpy(&bullet.origin,input+3,12);memcpy(&bullet.target,input+0xf,12);memcpy(&bullet.offset,input+0x1b,12);
+    BYTE type=input[0];
+    if(type) {
+        for(int axis=0;axis<3;++axis) {
+            float *component=&bullet.offset.x+axis;BYTE accepted=0;
+            // Native accepts unordered offsets and includes both +/-300 endpoints.
+            __asm {
+                mov eax,component
+                fld dword ptr [eax]
+                fcomp dword ptr [g_remoteBulletOffsetMaximum]
+                fnstsw ax
+                test ah,41h
+                jz bullet_offset_done
+                mov eax,component
+                fld dword ptr [eax]
+                fcomp dword ptr [g_remoteBulletOffsetMinimum]
+                fnstsw ax
+                test ah,5
+                jnp bullet_offset_done
+                mov accepted,1
+            bullet_offset_done:
+            }
+            if(!accepted)return;
+        }
+        if(type==1) {
+            CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+            if(players) {
+                WORD player=*(WORD*)(input+1);
+                if(player==players->localId)bullet.entity=g_pGame->GetPlayerPed()->m_pGamePed;
+                else {
+                    if(player==*(WORD*)nativeState)return;
+                    if(players->IsConnected(player)) {
+                        CPed *target=*(CPed**)(players->GetPlayer(player)->nativeState+4);
+                        if(target)bullet.entity=target->m_pGamePed;
+                    }
+                }
+            }
+        }else if(type==2) {
+            CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+            if(vehicles) {
+                WORD vehicle=*(WORD*)(input+1);
+                if(vehicles->DoesExist(vehicle))bullet.entity=vehicles->Get(vehicle)->m_pGameVehicle;
+            }
+        }
+    }
+    if((*(CPed**)(nativeState+4))->DoesExist()) {
+        BYTE weapon=input[0x27];
+        if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+            (*(CPed**)(nativeState+4))->SetArmedWeapon(weapon,1);weapon=input[0x27];
+            if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+                (*(CPed**)(nativeState+4))->GiveWeapon(weapon,9999);
+                (*(CPed**)(nativeState+4))->SetArmedWeapon(input[0x27],1);
+            }
+        }
+    }
+    (*(CPed**)(nativeState+4))->SetBulletData(&bullet);(*(CPed**)(nativeState+4))->FireWeapon();
+}
+// samp.dll RVA: 0x00016230
+void CRemotePlayer::SetState(BYTE state) {
+    BYTE previous=nativeState[0x1a];if(state!=previous){ChangeState(state,previous);nativeState[0x1a]=state;}
+}
 // samp.dll RVA: 0x00118218
 const char g_remoteVendingAnimation[]="VEND_EAT_P";
 // samp.dll RVA: 0x00118224

@@ -28,6 +28,50 @@
 #include "game/player_colors.h"
 #include "game/custommodels.h"
 #include <string.h>
+#include "NetworkTypes.h"
+typedef char NativePacketLengthOffset[(offsetof(Packet,length)==8)?1:-1];
+typedef char NativePacketDataOffset[(offsetof(Packet,data)==16)?1:-1];
+// samp.dll RVA: 0x00009830
+void CNetGame::Packet_BulletSync(Packet *packet) {
+    RakNet::BitStream stream(packet->data,(int)packet->length,false);
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    BYTE packetId=0,data[40];DWORD player=0;
+    stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);stream.Read((char*)data,40);
+    CPlayerPool *players=pools->players;
+    if(player<1004&&players->connected[player]) {
+        CRemotePlayer *remote=players->GetPlayer((WORD)player);if(remote)remote->UpdateBullet(data);
+    }
+}
+// samp.dll RVA: 0x00009930
+void CNetGame::Packet_AimSync(Packet *packet) {
+    RakNet::BitStream stream(packet->data,(int)packet->length,false);BYTE packetId=0;
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    WORD player;BYTE data[31];stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);stream.Read((char*)data,31);
+    CRemotePlayer *remote=pools->players->GetPlayer(player);if(remote)remote->UpdateAim(data);
+}
+// samp.dll RVA: 0x00009a20
+void CNetGame::Packet_PassengerSync(Packet *packet) {
+    RakNet::BitStream stream(packet->data,(int)packet->length,false);BYTE packetId=0;
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    WORD player;BYTE data[24];stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&player,16,true);stream.Read((char*)data,24);
+    CRemotePlayer *remote=pools->players->GetPlayer(player);if(remote)remote->UpdatePassenger(data);
+}
+// samp.dll RVA: 0x00009c00
+void CNetGame::Packet_MarkersSync(Packet *packet) {
+    RakNet::BitStream stream(packet->data,(int)packet->length,false);
+    if(*(DWORD*)(nativeState+0x3cd)!=5)return;
+    CPlayerPool *players=pools->players;BYTE packetId=0;DWORD count=0,index=0;
+    stream.ReadBits(&packetId,8,true);stream.ReadBits((BYTE*)&count,32,true);
+    BYTE active=packetId;WORD player;short x,y,z;
+    if(count)do {
+        stream.ReadBits((BYTE*)&player,16,true);stream.Read(*(bool*)&active);
+        if(active){stream.ReadBits((BYTE*)&x,16,true);stream.ReadBits((BYTE*)&y,16,true);stream.ReadBits((BYTE*)&z,16,true);}
+        if(player<1004&&players->connected[player]) {
+            CRemotePlayer *remote=players->GetPlayer(player);
+            if(active)remote->SetMarkerPosition(x,y,z);else remote->SetMarkerState(FALSE);
+        }
+    }while(++index!=count);
+}
 // samp.dll RVA: 0x00117bac
 const char g_netRestartingMessage[]="The server is restarting..";
 // samp.dll RVA: 0x00156b2c
