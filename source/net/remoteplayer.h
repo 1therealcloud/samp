@@ -7,6 +7,20 @@ class CMatrix;
 #pragma pack(push,1)
 class CRemotePlayer {public:
     BYTE nativeState[0x1fd];
+    // samp.dll RVA: 0x00014240
+    void ProcessHead();
+    // Raw DWORD state is retained, not normalized to bool.
+    // samp.dll RVA: 0x00014390
+    void SetMarkerState(BOOL enabled);
+    // samp.dll RVA: 0x000143d0
+    void SetMarkerPosition(short x,short y,short z);
+    // Descriptive name: includes encoded object IDs as well as vehicle IDs.
+    // samp.dll RVA: 0x00014470
+    BOOL HasSurfingTarget();
+    // samp.dll RVA: 0x000144a0
+    BOOL SurfingOnObject();
+    // samp.dll RVA: 0x00014780
+    void ProcessSpecialAction();
     // samp.dll RVA: 0x000149f0
     void UpdateOnfootSpeedAndPosition();
     // Descriptive name for native XY-only path.
@@ -101,4 +115,8 @@ extern float g_remoteOnfootCorrection;
 extern float g_remoteIncarCorrection;
 // samp.dll RVA: 0x0011797c
 extern const float g_remoteIncarTeleportDistance;
+// samp.dll RVA: 0x00117874
+extern const float g_remoteHeadDistance;
+// samp.dll RVA: 0x00117868
+extern const char g_remoteHeadTask[];
 #endif

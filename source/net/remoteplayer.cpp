@@ -15,6 +15,117 @@
 #include "game/aimstuff.h"
 #include "net/localplayer.h"
 #include "net/pool_frame.h"
+// samp.dll RVA: 0x00117874
+const float g_remoteHeadDistance=20.0f;
+// samp.dll RVA: 0x00117868
+const char g_remoteHeadTask[]="FollowPedSA";
+// samp.dll RVA: 0x00014240
+void CRemotePlayer::ProcessHead() {
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped||!ped->DoesExist()||*(DWORD*)(nativeState+0x1c))return;
+    if(g_pGame&&!*(DWORD*)((BYTE*)g_pGame+0x59))return;
+    if((*(CPed**)(nativeState+4))->GetStuff())return;
+    CMatrix matrix;(*(CPed**)(nativeState+4))->GetMatrix(&matrix);DWORD now=GetTickCount();CRemotePlayer *self=this;
+    if(now-*(DWORD*)(nativeState+0x1e1)>1000) {
+        CameraAim *aim=AimStuff::GetPlayerAim(*((BYTE*)*(CPed**)(nativeState+4)+0x2b0));float z;
+        __asm {
+            mov eax,aim
+            fld dword ptr [eax]
+            fmul dword ptr [g_remoteHeadDistance]
+            fadd dword ptr [matrix+48]
+            fld dword ptr [eax+4]
+            fmul dword ptr [g_remoteHeadDistance]
+            fadd dword ptr [matrix+52]
+            fld dword ptr [eax+8]
+            mov ecx,self
+            mov edx,now
+            mov [ecx+1e1h],edx
+            fmul dword ptr [g_remoteHeadDistance]
+            fadd dword ptr [matrix+56]
+            fstp dword ptr [z]
+            fxch st(1)
+            fsub dword ptr [matrix+48]
+            fstp dword ptr [ecx+1d5h]
+            fsub dword ptr [matrix+52]
+            fstp dword ptr [ecx+1d9h]
+            fld dword ptr [z]
+            fsub dword ptr [matrix+56]
+            fstp dword ptr [ecx+1ddh]
+        }
+    }
+    if(now-*(DWORD*)(nativeState+0x1e5)>200) {
+        CVector target;ped=*(CPed**)(nativeState+4);
+        __asm {
+            mov ecx,self
+            fld dword ptr [matrix+48]
+            fadd dword ptr [ecx+1d5h]
+            fstp dword ptr [target]
+            fld dword ptr [matrix+52]
+            fadd dword ptr [ecx+1d9h]
+            fstp dword ptr [target+4]
+            fld dword ptr [matrix+56]
+            fadd dword ptr [ecx+1ddh]
+            fstp dword ptr [target+8]
+        }
+        ped->ApplyCommandTask(g_remoteHeadTask,0,1000,-1,&target,0,0.1f,500,3,0);
+        *(DWORD*)(nativeState+0x1e5)=now;
+    }
+}
+// samp.dll RVA: 0x00014390
+void CRemotePlayer::SetMarkerState(BOOL enabled) {
+    if(!enabled) {
+        DWORD marker=*(DWORD*)(nativeState+0x1f9);
+        if(marker){g_pGame->DeleteMarker(marker);*(DWORD*)(nativeState+0x1f9)=0;}
+    }
+    *(BOOL*)(nativeState+0x1e9)=enabled;
+}
+// samp.dll RVA: 0x000143d0
+void CRemotePlayer::SetMarkerPosition(short x,short y,short z) {
+    *(DWORD*)(nativeState+0x1e9)=1;DWORD marker=*(DWORD*)(nativeState+0x1f9);
+    if(marker){g_pGame->DeleteMarker(marker);*(DWORD*)(nativeState+0x1f9)=0;}
+    if(*(CPed**)(nativeState+4))return;
+    marker=g_pGame->CreateMarker(0,(float)x,(float)y,(float)z,*(WORD*)nativeState,0);
+    *(int*)(nativeState+0x1f5)=z;*(int*)(nativeState+0x1ed)=x;*(int*)(nativeState+0x1f1)=y;*(DWORD*)(nativeState+0x1f9)=marker;
+}
+// samp.dll RVA: 0x00014470
+BOOL CRemotePlayer::HasSurfingTarget() {
+    WORD id=*(WORD*)(nativeState+0x7a);return nativeState[0x1a]==17&&id&&id!=0xffff&&id<4100?TRUE:FALSE;
+}
+// samp.dll RVA: 0x000144a0
+BOOL CRemotePlayer::SurfingOnObject() {
+    WORD id=*(WORD*)(nativeState+0x7a);return nativeState[0x1a]==17&&id&&id!=0xffff&&id>=2000&&id<4100?TRUE:FALSE;
+}
+// samp.dll RVA: 0x00014780
+void CRemotePlayer::ProcessSpecialAction() {
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped||!ped->DoesExist())return;
+    if(nativeState[0x18]==1&&!(*(CPed**)(nativeState+4))->IsDucking()){(*(CPed**)(nativeState+4))->ClearTasksIfOnFoot();return;}
+    if(nativeState[0x18]!=1&&(*(CPed**)(nativeState+4))->IsDucking())(*(CPed**)(nativeState+4))->ClearDuckingFlag();
+    if(nativeState[0x18]==11&&!(*(CPed**)(nativeState+4))->UsingCellphone()){(*(CPed**)(nativeState+4))->EnableCellphone(TRUE);return;}
+    if(nativeState[0x18]!=11&&(*(CPed**)(nativeState+4))->UsingCellphone()){(*(CPed**)(nativeState+4))->EnableCellphone(FALSE);return;}
+    if(nativeState[0x18]==2&&!(*(CPed**)(nativeState+4))->HasJetpack()) {
+        *(DWORD*)(nativeState+0x14)=1;(*(CPed**)(nativeState+4))->EnableJetpack();return;
+    }
+    if(nativeState[0x18]!=2&&(*(CPed**)(nativeState+4))->HasJetpack()) {
+        *(DWORD*)(nativeState+0x14)=0;(*(CPed**)(nativeState+4))->DisableJetpack();return;
+    }
+    if(nativeState[0x18]==10&&!(*(CPed**)(nativeState+4))->DoesHandsUp())(*(CPed**)(nativeState+4))->HandsUp();
+    if(nativeState[0x18]!=10&&(*(CPed**)(nativeState+4))->DoesHandsUp())(*(CPed**)(nativeState+4))->StopDancing();
+    if(!(*(CPed**)(nativeState+4))->DoesUrinating()&&nativeState[0x18]==68)(*(CPed**)(nativeState+4))->StartUrinating();
+    if((*(CPed**)(nativeState+4))->DoesUrinating()&&nativeState[0x18]!=68)(*(CPed**)(nativeState+4))->StopUrinating();
+    if(nativeState[0x18]==20&&(*(CPed**)(nativeState+4))->GetStuff()!=1)(*(CPed**)(nativeState+4))->GiveStuff(1);
+    if(nativeState[0x18]==22&&(*(CPed**)(nativeState+4))->GetStuff()!=2)(*(CPed**)(nativeState+4))->GiveStuff(2);
+    if(nativeState[0x18]==23&&(*(CPed**)(nativeState+4))->GetStuff()!=3)(*(CPed**)(nativeState+4))->GiveStuff(3);
+    if(nativeState[0x18]==21&&(*(CPed**)(nativeState+4))->GetStuff()!=4)(*(CPed**)(nativeState+4))->GiveStuff(4);
+    if((*(CPed**)(nativeState+4))->GetStuff()) {
+        BYTE action=nativeState[0x18];
+        if(action==20||action==22||action==23||action==21)(*(CPed**)(nativeState+4))->ApplyStuff();
+        else (*(CPed**)(nativeState+4))->DropStuff();
+    }
+    if(!(*(CPed**)(nativeState+4))->HasDanceState()&&nativeState[0x18]==24)(*(CPed**)(nativeState+4))->SetDancePoseState(1);
+    if((*(CPed**)(nativeState+4))->HasDanceState()&&nativeState[0x18]!=24&&nativeState[0x18]!=3&&nativeState[0x18]!=4)(*(CPed**)(nativeState+4))->SetDancePoseState(0);
+    if(!(*(CPed**)(nativeState+4))->HasDanceStyle()&&nativeState[0x18]==25)(*(CPed**)(nativeState+4))->SetSecondaryPoseState(1);
+    if((*(CPed**)(nativeState+4))->HasDanceStyle()&&nativeState[0x18]!=25&&nativeState[0x18]!=3&&nativeState[0x18]!=4)(*(CPed**)(nativeState+4))->SetSecondaryPoseState(0);
+    (*(CPed**)(nativeState+4))->CheckParachuteWeapon();
+}
 // samp.dll RVA: 0x0013c498
 float g_remoteOnfootCorrection=0.1f;
 // samp.dll RVA: 0x0013c49c
