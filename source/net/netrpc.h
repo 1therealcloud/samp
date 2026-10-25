@@ -2,6 +2,13 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x00010530
+void ScrInitGame(RPCParameters *parameters);
+// Broader role of the fourth initialization DWORD is not established.
+// samp.dll RVA: 0x0013c0b4
+extern unsigned long g_rpcInitValue13C0B4;
+// samp.dll RVA: 0x001180ec
+extern const char g_rpcConnectedFormat[];
 // samp.dll RVA: 0x0000e4e0
 void ScrGamemodeRestart(RPCParameters *parameters);
 // samp.dll RVA: 0x000109d0

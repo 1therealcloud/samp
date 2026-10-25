@@ -1,6 +1,30 @@
 #include "game/patches.h"
 #include "game/game.h"
 #include <string.h>
+#include "game/hooks.h"
+// samp.dll RVA: 0x000a6f00
+void GameInstallVehicleDamageFilter() {
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD oldProtection,ignoredProtection;BYTE *site=(BYTE*)0x6d7c90;
+    protect(site,5,PAGE_EXECUTE_READWRITE,&oldProtection);
+    site[0]=0xe9;*(DWORD*)(site+1)=(DWORD)GameHook_000a5090-0x6d7c95;
+    protect(site,5,oldProtection,&ignoredProtection);
+}
+// samp.dll RVA: 0x000a6d50
+void GameInstallShotHooks() {
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD oldProtection,ignoredProtection;
+    // GTA SA virtual addresses; each original call has its own protection pair.
+    const DWORD sites[]={0x742495,0x7424ec,0x742548,0x740721,0x740b69,0x736247,0x7424cb,0x73ac4b};
+    const DWORD targets[]={(DWORD)GameHook_000a5540,(DWORD)GameHook_000a5540,(DWORD)GameHook_000a5540,
+        (DWORD)GameProcessShotLineOfSight,(DWORD)GameProcessShotLineOfSight,(DWORD)GameProcessShotLineOfSight,
+        (DWORD)GameHook_000a5600,(DWORD)GameHook_000a5650};
+    for(int i=0;i<8;++i) {
+        BYTE *site=(BYTE*)sites[i];protect(site,5,PAGE_EXECUTE_READWRITE,&oldProtection);
+        site[0]=0xe8;*(DWORD*)(site+1)=targets[i]-sites[i]-5;
+        protect(site,5,oldProtection,&ignoredProtection);
+    }
+}
 // samp.dll RVA: 0x002a9278
 DWORD g_gameVehicleControlPatched=0;
 // samp.dll RVA: 0x002a927c

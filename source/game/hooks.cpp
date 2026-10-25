@@ -1,5 +1,35 @@
 #include "game/hooks.h"
 #include "game/game.h"
+#include "game/playerped.h"
+#include "game/frame_limit.h"
+// samp.dll RVA: 0x0018f624
+CPlayerPool *g_hookDamagePlayerPool;
+// samp.dll RVA: 0x00151afc
+WORD g_hookDamagePlayerId=0xffff;
+// samp.dll RVA: 0x0018f628
+DWORD g_hookVehicleDamageAttacker;
+// samp.dll RVA: 0x0018f62c
+DWORD g_hookVehicleDamageReceiver;
+// samp.dll RVA: 0x0018f630
+DWORD g_hookVehicleDamageWord;
+// samp.dll RVA: 0x0018f634
+DWORD g_hookVehicleDamageBlocked;
+// samp.dll RVA: 0x0018f638
+DWORD g_hookVehicleDamageReturn;
+// samp.dll RVA: 0x0018f644
+void *g_hookBulletHitEntity;
+// samp.dll RVA: 0x0018e590
+PedBulletData g_hookBulletHitData;
+// samp.dll RVA: 0x0018e828
+CMatrix g_hookBulletInverseMatrix;
+// samp.dll RVA: 0x0018ea60
+CMatrix g_hookBulletOrthoMatrix;
+// samp.dll RVA: 0x0018f66c
+DWORD g_hookShotArguments[8];
+// samp.dll RVA: 0x0018eb7c
+CVector g_hookAdjustedShotPoint;
+// samp.dll RVA: 0x0018f648
+DWORD g_hookShotLineResult;
 
 // Raw installed callback: EAX returns the preview-ped backing storage.
 // samp.dll RVA: 0x000a3ec0
@@ -2986,6 +3016,362 @@ __declspec(naked) void GameHook_000a56b0() {
     hook_a56b0_a581d:
         pop esi
         pop ebp
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a4fa0
+BOOL GameShouldBlockVehicleDamage(void *vehicle,void *attacker,DWORD unused) {
+    (void)unused;
+    if(!g_pNetGame||!g_pGame||!g_pGame->GetPlayerPed()||!g_pGame->GetPlayerPed()->IsInVehicle()||g_pGame->GetPlayerPed()->IsPassenger()||g_pGame->GetPlayerPed()->GetVehicle()!=vehicle)return FALSE;
+    WORD id=GameResolveDamagePlayer(attacker);g_hookDamagePlayerId=id;if(id==0xffff)return FALSE;
+    CNetGame *net=(CNetGame*)g_pNetGame;CPlayerPool *players=net->pools->players;
+    g_hookDamagePlayerPool=players;if(!players)return FALSE;
+    if(!(*(BYTE**)(net->nativeState+0x3d5))[0x22])return FALSE;
+    BYTE team=players->local->nativeState[0x130];if(team==0xff)return FALSE;
+    return net->pools->players->GetPlayer(id)->nativeState[0x19]==team?TRUE:FALSE;
+}
+// samp.dll RVA: 0x000a5090
+__declspec(naked) void GameHook_000a5090() {
+    __asm {
+        mov g_hookVehicleDamageReceiver,ecx
+        mov eax,[esp]
+        mov g_hookVehicleDamageReturn,eax
+        mov eax,[esp+4]
+        mov g_hookVehicleDamageAttacker,eax
+        mov eax,[esp+8]
+        mov g_hookVehicleDamageWord,eax
+        pushad
+        push g_hookVehicleDamageWord
+        push g_hookVehicleDamageAttacker
+        push g_hookVehicleDamageReceiver
+        call GameShouldBlockVehicleDamage
+        add esp,0ch
+        mov g_hookVehicleDamageBlocked,eax
+        popad
+        cmp g_hookVehicleDamageBlocked,0
+        je vehicle_damage_continue
+        xor eax,eax
+        ret 18h
+    vehicle_damage_continue:
+        cmp g_gameVersion,1
+        jne vehicle_damage_eu
+        push -1
+        mov eax,404cdch
+        jmp eax
+    vehicle_damage_eu:
+        push -1
+        mov eax,404ce3h
+        jmp eax
+    }
+}
+// samp.dll RVA: 0x000a5170
+void __stdcall GameRecordBulletHit(const CVector *origin,const CVector *target,const CVector *collision,void **entity) {
+    (void)target;
+    memset(&g_hookBulletHitData,0,sizeof(g_hookBulletHitData));
+    memcpy(&g_hookBulletHitData.origin,origin,12);memcpy(&g_hookBulletHitData.target,collision,12);
+    if(entity) {
+        void *hit=*entity;g_hookBulletHitEntity=hit;
+        if(hit&&*(CMatrix**)((BYTE*)hit+0x14)) {
+            if(!g_netStatsShotCompMode) {
+                memset(&g_hookBulletInverseMatrix,0,sizeof(g_hookBulletInverseMatrix));
+                memset(&g_hookBulletOrthoMatrix,0,sizeof(g_hookBulletOrthoMatrix));
+                GameOrthoNormalizeRwMatrix(&g_hookBulletOrthoMatrix,*(CMatrix**)((BYTE*)hit+0x14));
+                GameInvertRwMatrix(&g_hookBulletInverseMatrix,&g_hookBulletOrthoMatrix);
+                GameTransformPoint(&g_hookBulletHitData.offset,&g_hookBulletInverseMatrix,collision);
+                hit=g_hookBulletHitEntity;
+            }else {
+                __asm {
+                    mov edx,hit
+                    mov esi,collision
+                    mov eax,[edx+14h]
+                    fld dword ptr [esi]
+                    fsub dword ptr [eax+30h]
+                    fstp dword ptr [g_hookBulletHitData+28]
+                    mov ecx,[edx+14h]
+                    fld dword ptr [esi+4]
+                    fsub dword ptr [ecx+34h]
+                    fstp dword ptr [g_hookBulletHitData+32]
+                    mov eax,[edx+14h]
+                    fld dword ptr [esi+8]
+                    fsub dword ptr [eax+38h]
+                    fstp dword ptr [g_hookBulletHitData+36]
+                }
+            }
+            g_hookBulletHitData.entity=hit;
+        }
+    }
+    g_pGame->GetPlayerPed()->SetBulletData(&g_hookBulletHitData);
+}
+// samp.dll RVA: 0x000a5540
+__declspec(naked) void GameHook_000a5540() {
+    __asm {
+        mov eax,[esp+4]
+        mov g_hookShotArguments,eax
+        mov eax,[esp+8]
+        mov [g_hookShotArguments+4],eax
+        mov eax,[esp+0ch]
+        mov [g_hookShotArguments+8],eax
+        mov eax,[esp+10h]
+        mov [g_hookShotArguments+12],eax
+        mov eax,[esp+14h]
+        mov [g_hookShotArguments+16],eax
+        mov eax,[esp+18h]
+        mov [g_hookShotArguments+20],eax
+        mov eax,[esp+1ch]
+        mov [g_hookShotArguments+24],eax
+        mov eax,[esp+20h]
+        mov [g_hookShotArguments+28],eax
+        pushad
+        call GameFindLocalPed
+        cmp g_hookShotArguments,eax
+        je shot_with_collision
+        popad
+        ret 20h
+    shot_with_collision:
+        mov eax,g_pNetGame
+        test eax,eax
+        je shot_fire_local
+        mov eax,[eax+3deh]
+        mov ecx,[eax+8]
+        test ecx,ecx
+        je shot_fire_local
+        call CPlayerPool::ForceCollision
+    shot_fire_local:
+        mov ecx,g_pGame
+        test ecx,ecx
+        je shot_restore_collision
+        call CGame::GetPlayerPed
+        test eax,eax
+        je shot_restore_collision
+        mov ecx,g_pGame
+        call CGame::GetPlayerPed
+        mov ecx,eax
+        call CPed::FireWeapon
+    shot_restore_collision:
+        mov eax,g_pNetGame
+        test eax,eax
+        je shot_finished
+        mov ecx,[eax+3deh]
+        mov ecx,[ecx+8]
+        test ecx,ecx
+        je shot_finished
+        call CPlayerPool::RestoreCollision
+    shot_finished:
+        popad
+        ret 20h
+    }
+}
+// samp.dll RVA: 0x000a5600
+__declspec(naked) void GameHook_000a5600() {
+    __asm {
+        mov eax,[esp+4]
+        mov g_hookShotArguments,eax
+        pushad
+        call GameFindLocalPed
+        cmp g_hookShotArguments,eax
+        je shot_three_local
+        popad
+        ret 0ch
+    shot_three_local:
+        mov ecx,g_pGame
+        test ecx,ecx
+        je shot_three_finished
+        call CGame::GetPlayerPed
+        test eax,eax
+        je shot_three_finished
+        mov ecx,g_pGame
+        call CGame::GetPlayerPed
+        mov ecx,eax
+        call CPed::FireWeapon
+    shot_three_finished:
+        popad
+        ret 0ch
+    }
+}
+// samp.dll RVA: 0x000a5650
+__declspec(naked) void GameHook_000a5650() {
+    __asm {
+        push ebp
+        mov ebp,esp
+        fld dword ptr [ebp+1ch]
+        fmul dword ptr [g_frameScaleNumerator]
+        fstp dword ptr [ebp+1ch]
+        fld dword ptr [ebp+20h]
+        fmul dword ptr [g_frameScaleNumerator]
+        fstp dword ptr [ebp+20h]
+        fld dword ptr [ebp+24h]
+        fmul dword ptr [g_frameScaleNumerator]
+        fstp dword ptr [ebp+24h]
+        push dword ptr [ebp+24h]
+        push dword ptr [ebp+20h]
+        push dword ptr [ebp+1ch]
+        push dword ptr [ebp+18h]
+        push dword ptr [ebp+14h]
+        push dword ptr [ebp+10h]
+        push dword ptr [ebp+0ch]
+        push dword ptr [ebp+8]
+        mov edx,736010h
+        call edx
+        add esp,20h
+        mov edx,7360d0h
+        call edx
+        pop ebp
+        ret
+    }
+}
+// samp.dll RVA: 0x000a5360
+__declspec(naked) DWORD GameProcessShotLineOfSight(const CVector *origin,CVector *target,void *collision,void **entity,
+    DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough) {
+    __asm {
+        cmp g_netStatsShotCompMode,2
+        push ebx
+        mov ebx,[esp+0ch]
+        push ebp
+        mov ebp,[esp+0ch]
+        push esi
+        push edi
+        je shot_los_backend
+        mov eax,g_pedFiringContext
+        test eax,eax
+        je shot_los_backend
+        mov ecx,g_pGame
+        call CGame::GetPlayerPed
+        cmp g_pedFiringContext,eax
+        je shot_los_backend
+        mov eax,g_pedFiringData
+        test eax,eax
+        je shot_los_backend
+        mov ecx,[eax+28h]
+        test ecx,ecx
+        je shot_los_backend
+        cmp dword ptr [ecx],863c40h
+        je shot_los_backend
+        mov ecx,[ecx+14h]
+        test ecx,ecx
+        je shot_los_backend
+        mov edx,g_netStatsShotCompMode
+        test edx,edx
+        jne shot_los_translation
+        add eax,1ch
+        push eax
+        push ecx
+        push offset g_hookAdjustedShotPoint
+        call GameTransformPoint
+        add esp,0ch
+        jmp shot_los_endpoint
+    shot_los_translation:
+        mov ecx,[eax+28h]
+        mov edx,[ecx+14h]
+        fld dword ptr [edx+30h]
+        fadd dword ptr [eax+1ch]
+        fstp dword ptr [g_hookAdjustedShotPoint]
+        mov ecx,[eax+28h]
+        mov edx,[ecx+14h]
+        fld dword ptr [edx+34h]
+        fadd dword ptr [eax+20h]
+        fstp dword ptr [g_hookAdjustedShotPoint+4]
+        mov ecx,[eax+28h]
+        mov edx,[ecx+14h]
+        fld dword ptr [edx+38h]
+        fadd dword ptr [eax+24h]
+        fstp dword ptr [g_hookAdjustedShotPoint+8]
+    shot_los_endpoint:
+        fld dword ptr [g_hookAdjustedShotPoint]
+        fsub dword ptr [ebp]
+        fadd dword ptr [g_hookAdjustedShotPoint]
+        fstp dword ptr [ebx]
+        fld dword ptr [g_hookAdjustedShotPoint+4]
+        fsub dword ptr [ebp+4]
+        fadd dword ptr [g_hookAdjustedShotPoint+4]
+        fstp dword ptr [ebx+4]
+        fld dword ptr [g_hookAdjustedShotPoint+8]
+        fsub dword ptr [ebp+8]
+        fadd dword ptr [g_hookAdjustedShotPoint+8]
+        fstp dword ptr [ebx+8]
+    shot_los_backend:
+        mov eax,[esp+40h]
+        mov ecx,[esp+3ch]
+        mov edx,[esp+38h]
+        mov edi,[esp+20h]
+        mov esi,[esp+1ch]
+        push eax
+        mov eax,[esp+38h]
+        push ecx
+        mov ecx,[esp+38h]
+        push edx
+        mov edx,[esp+38h]
+        push eax
+        mov eax,[esp+38h]
+        push ecx
+        mov ecx,[esp+38h]
+        push edx
+        push eax
+        push ecx
+        push edi
+        push esi
+        push ebx
+        push ebp
+        call GameProcessLineOfSightRaw
+        mov g_hookShotLineResult,eax
+        mov eax,g_netStatsShotCompMode
+        add esp,30h
+        cmp eax,2
+        je shot_los_record_local
+        mov eax,g_pedFiringContext
+        test eax,eax
+        je shot_los_return
+        mov ecx,g_pGame
+        call CGame::GetPlayerPed
+        cmp g_pedFiringContext,eax
+        je shot_los_record_local
+        mov eax,g_pedFiringData
+        test eax,eax
+        je shot_los_record_local
+        mov ecx,[eax+28h]
+        test ecx,ecx
+        jne shot_los_record_local
+        call GameFindLocalPed
+        cmp [edi],eax
+        je shot_los_clear_hit
+        call GameFindLocalPed
+        mov ecx,[eax+46ch]
+        test ch,1
+        je shot_los_record_local
+        call GameFindLocalPed
+        mov edx,[edi]
+        cmp edx,[eax+58ch]
+        jne shot_los_record_local
+    shot_los_clear_hit:
+        xor eax,eax
+        mov [edi],eax
+        pop edi
+        mov [esi],eax
+        mov [esi+4],eax
+        mov [esi+8],eax
+        pop esi
+        pop ebp
+        pop ebx
+        ret
+    shot_los_record_local:
+        mov eax,g_pedFiringContext
+        test eax,eax
+        je shot_los_return
+        mov ecx,g_pGame
+        call CGame::GetPlayerPed
+        cmp g_pedFiringContext,eax
+        jne shot_los_return
+        push edi
+        push esi
+        push ebx
+        push ebp
+        call GameRecordBulletHit
+    shot_los_return:
+        mov eax,g_hookShotLineResult
+        pop edi
+        pop esi
+        pop ebp
+        pop ebx
         ret
     }
 }

@@ -1,6 +1,10 @@
 #ifndef SAMP_RECOVERED_GAME_PATCHES_H
 #define SAMP_RECOVERED_GAME_PATCHES_H
 #include <windows.h>
+// samp.dll RVA: 0x000a6f00
+void GameInstallVehicleDamageFilter();
+// samp.dll RVA: 0x000a6d50
+void GameInstallShotHooks();
 // samp.dll RVA: 0x002a9278
 extern DWORD g_gameVehicleControlPatched;
 // samp.dll RVA: 0x002a927c

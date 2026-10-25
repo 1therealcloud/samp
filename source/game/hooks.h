@@ -1,6 +1,57 @@
 #ifndef SAMP_GAME_HOOKS_H
 #define SAMP_GAME_HOOKS_H
 #include <windows.h>
+class CPlayerPool;
+class CMatrix;
+struct CVector;
+struct PedBulletData;
+// samp.dll RVA: 0x0018f624
+extern CPlayerPool *g_hookDamagePlayerPool;
+// samp.dll RVA: 0x00151afc
+extern WORD g_hookDamagePlayerId;
+// samp.dll RVA: 0x0018f628
+extern DWORD g_hookVehicleDamageAttacker;
+// samp.dll RVA: 0x0018f62c
+extern DWORD g_hookVehicleDamageReceiver;
+// samp.dll RVA: 0x0018f630
+extern DWORD g_hookVehicleDamageWord;
+// samp.dll RVA: 0x0018f634
+extern DWORD g_hookVehicleDamageBlocked;
+// samp.dll RVA: 0x0018f638
+extern DWORD g_hookVehicleDamageReturn;
+// samp.dll RVA: 0x0018f644
+extern void *g_hookBulletHitEntity;
+// samp.dll RVA: 0x0018e590
+extern PedBulletData g_hookBulletHitData;
+// samp.dll RVA: 0x0018e828
+extern CMatrix g_hookBulletInverseMatrix;
+// samp.dll RVA: 0x0018ea60
+extern CMatrix g_hookBulletOrthoMatrix;
+// Shared native DWORD slots at18F66C..18F688; the three-argument hook reuses slot0.
+// samp.dll RVA: 0x0018f66c
+extern DWORD g_hookShotArguments[8];
+// samp.dll RVA: 0x0018eb7c
+extern CVector g_hookAdjustedShotPoint;
+// samp.dll RVA: 0x0018f648
+extern DWORD g_hookShotLineResult;
+// samp.dll RVA: 0x000a4fa0
+BOOL GameShouldBlockVehicleDamage(void *vehicle,void *attacker,DWORD unused);
+// Second pointer is deliberately unused; native RET16.
+// samp.dll RVA: 0x000a5170
+void __stdcall GameRecordBulletHit(const CVector *origin,const CVector *target,const CVector *collision,void **entity);
+// Raw cdecl GTA adapter retains the full backend EAX result.
+// samp.dll RVA: 0x000a5360
+DWORD GameProcessShotLineOfSight(const CVector *origin,CVector *target,void *collision,void **entity,
+    DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough);
+// Raw GTA callback ABIs; address-only declarations, never ordinary void() calls.
+// samp.dll RVA: 0x000a5090
+void GameHook_000a5090();
+// samp.dll RVA: 0x000a5540
+void GameHook_000a5540();
+// samp.dll RVA: 0x000a5600
+void GameHook_000a5600();
+// samp.dll RVA: 0x000a5650
+void GameHook_000a5650();
 // samp.dll RVA: 0x002ac9cc
 extern DWORD g_gameLoopAddress;
 // samp.dll RVA: 0x0018f56c

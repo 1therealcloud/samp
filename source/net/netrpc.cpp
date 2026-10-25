@@ -25,6 +25,59 @@
 #include "game/vehicle.h"
 #include "GetTime.h"
 #include "game/game.h"
+#include "game/patches.h"
+// samp.dll RVA: 0x0013c0b4
+DWORD g_rpcInitValue13C0B4=2;
+// samp.dll RVA: 0x001180ec
+const char g_rpcConnectedFormat[]="Connected to {B9C9BF}%.64s";
+// samp.dll RVA: 0x00010530
+void ScrInitGame(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+    DWORD mode=0;WORD player;BYTE stunt,holdTime,length,models[212];
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x21));
+    stream.Read(*(bool*)*(BYTE**)((BYTE*)g_pNetGame+0x3d5));
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x15));
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x39));
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x34,32,true);
+    stream.Read(*(bool*)&stunt);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x27,32,true);
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x1a));
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x2f));
+    (*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x2f]=1;
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x2b));
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x23,32,true);
+    stream.ReadBits((BYTE*)&player,16,true);
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x38));
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x30,32,true);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x2c,8,true);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x2e,8,true);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x16,32,true);
+    stream.Read(*(bool*)&holdTime);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+1,32,true);
+    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x20));
+    stream.ReadBits((BYTE*)&g_localOnFootSendRate,32,true);stream.ReadBits((BYTE*)&g_localInCarSendRate,32,true);
+    stream.ReadBits((BYTE*)&g_localAimSendRate,32,true);stream.ReadBits((BYTE*)&g_rpcInitValue13C0B4,32,true);
+    stream.ReadBits((BYTE*)&mode,32,true);
+    if(mode==1||mode==2) {
+        g_netStatsShotCompMode=mode==1?0:1;GameInstallShotHooks();
+        if(g_pGame)g_pGame->DisableAutoAiming();
+    }else g_netStatsShotCompMode=2;
+    stream.ReadBits(&length,8,true);
+    if(length){memset((BYTE*)g_pNetGame+0x131,0,257);stream.Read((char*)g_pNetGame+0x131,length);}
+    *((BYTE*)g_pNetGame+0x131+length)=0;
+    stream.Read((char*)models,212);g_pGame->SetRequiredVehicleModels(models);
+    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x1b,32,true);
+    players->localId=player;g_pGame->EnableStuntBonus(stunt);
+    if(holdTime)*(DWORD*)((BYTE*)g_pNetGame+0x239)=1;
+    ((CNetGame*)g_pNetGame)->InitializeGameLogic();
+    g_pGame->SetWorldGravity(*(float*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x16));
+    if((*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x1a])g_pGame->DisableEnterExits();
+    if(*(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x1b))GameInstallVehicleDamageFilter();
+    g_pGame->SetWorldWeather((*(BYTE**)((BYTE*)g_pNetGame+0x3d5))[0x2e]);
+    g_pChat->AddDebugMessage(g_rpcConnectedFormat,(char*)g_pNetGame+0x131);
+    *(DWORD*)((BYTE*)g_pNetGame+0x3cd)=5;players->local->PrepareForClassSelection();
+}
 // samp.dll RVA: 0x0000e4e0
 void ScrGamemodeRestart(RPCParameters *parameters) {
     (void)parameters;((CNetGame*)g_pNetGame)->ShutdownForRestart();
