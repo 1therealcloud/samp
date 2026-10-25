@@ -4,6 +4,44 @@
 #include "main.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
+#include "net/netgame.h"
+#include "net/playerpool.h"
+#include "net/localplayer.h"
+#include "net/remoteplayer.h"
+#include "net/local_rpc.h"
+#include "game/playerped.h"
+// samp.dll RVA: 0x00001aa0
+void GameProcessIncomingEvent(WORD player,DWORD eventType,WORD vehicle,DWORD param2,DWORD param3) {
+    if(!g_pNetGame||g_localSkipInitialState)return;
+    CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;
+    CVehiclePool *vehicles=pools->vehicles;CPlayerPool *players=pools->players;
+    if(!players||!vehicles)return;
+    CVehicle *car;
+    switch(eventType) {
+    case 1:car=vehicles->Get(vehicle);if(car)car->SetPaintjob((BYTE)param2);break;
+    case 2:car=vehicles->Get(vehicle);if(car)car->AddComponent((WORD)param2);break;
+    case 3:car=vehicles->Get(vehicle);if(car)car->SetColor((BYTE)param2,(BYTE)param3);break;
+    case 4:
+        if(player<=1004) {
+            CRemotePlayer *remote=players->GetPlayer(player);CLocalPlayer *local=players->local;
+            car=vehicles->Get(vehicle);if(!car||!remote||!local)return;
+            CPed *localPed=*(CPed**)local->nativeState;
+            CPed *remotePed=*(CPed**)(remote->nativeState+4);
+            if(!localPed||!remotePed)return;
+            if(!remotePed->IsInVehicle()||!localPed->IsInVehicle()||remotePed->IsPassenger()||!localPed->IsPassenger())return;
+            DWORD remoteRef=remotePed->GetVehicleRef();if(remoteRef!=localPed->GetVehicleRef())return;
+            CVehicle *remoteVehicle=*(CVehicle**)(remote->nativeState+8);
+            if(param2) {
+                if(remoteVehicle)remoteVehicle->ChangeInterior(param3);
+                localPed->LinkToInterior((BYTE)param3,FALSE);localPed->SetControllable(FALSE);
+            }else {
+                if(remoteVehicle)remoteVehicle->ChangeInterior(0);
+                localPed->LinkToInterior(0,FALSE);localPed->SetControllable(TRUE);
+            }
+        }
+        break;
+    }
+}
 #pragma pack(push,1)
 // Partial pointer views; allocation/lifecycle and other members remain unrecovered.
 struct ScmPoolsView { BYTE unknown00[0xc];CVehiclePool *vehicles; };

@@ -25,6 +25,44 @@
 #include "game/vehicle.h"
 #include "GetTime.h"
 #include "game/game.h"
+// samp.dll RVA: 0x00010dc0
+void ScrWorldVehicleRemove(RPCParameters *parameters) {
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    if(!vehicles)return;
+    WORD id;stream.Read(id);CVehicle *vehicle=vehicles->Get(id);
+    CPlayerPool *players=((CNetGame*)g_pNetGame)->pools->players;
+    if(!vehicle||!players)return;
+    CLocalPlayer *local=players->local;
+    if(g_pGame->GetPlayerPed()->IsInVehicle()) {
+        if(vehicles->Find(g_pGame->GetPlayerPed()->GetVehicle())==id) {
+            CMatrix matrix;g_pGame->GetPlayerPed()->GetMatrix(&matrix);
+            g_pGame->GetPlayerPed()->WarpFromVehicle(matrix.position.x,matrix.position.y,matrix.position.z);
+            g_clientSkipGameFrame=1;
+        }
+    }
+    if(local) {
+        CEntity *surfing=*(CEntity**)(local->nativeState+0x2de);
+        if(surfing==vehicles->Get(id))local->ClearSurfingState();
+    }
+    for(WORD player=0;player<1004;++player)if(players->connected[player]) {
+        CRemotePlayer *remote=players->players[player]?players->players[player]->remote:0;
+        if(*(CPed**)(remote->nativeState+4)&&remote->nativeState[0x1a]&&*(CVehicle**)(remote->nativeState+8)==vehicle)remote->OnExitVehicle();
+    }
+    for(WORD other=1;other<2000;++other)if(vehicles->m_bNotEmpty[other]&&other!=id) {
+        CVehicle *car=vehicles->Get(other);
+        if(car->m_pTrailer==vehicle){vehicles->Get(other)->DetachTrailer();vehicles->Get(other)->SetTrailer(0);}
+    }
+    int model=vehicles->Get(id)->GetModelIndex();vehicles->Delete(id);
+    if(model==537||model==538){vehicles->Delete((WORD)(id+1));vehicles->Delete((WORD)(id+2));vehicles->Delete((WORD)(id+3));}
+}
+// samp.dll RVA: 0x0000f150
+void ScmEvent(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    WORD player;DWORD eventType,vehicle,param2,param3;
+    stream.Read(player);stream.Read(eventType);stream.Read(vehicle);stream.Read(param2);stream.Read(param3);
+    GameProcessIncomingEvent(player,eventType,(WORD)vehicle,param2,param3);
+}
 // samp.dll RVA: 0x0000e910
 BYTE ClientCheckChecksum(const void *data,WORD length) {
     BYTE result=0;const BYTE *bytes=(const BYTE*)data;

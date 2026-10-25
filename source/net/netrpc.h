@@ -2,6 +2,10 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x00010dc0
+void ScrWorldVehicleRemove(RPCParameters *parameters);
+// samp.dll RVA: 0x0000f150
+void ScmEvent(RPCParameters *parameters);
 // samp.dll RVA: 0x0000e910
 unsigned char ClientCheckChecksum(const void *data,unsigned short length);
 // samp.dll RVA: 0x00011860

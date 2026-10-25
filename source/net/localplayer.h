@@ -8,6 +8,8 @@ struct PedBulletData;
 #pragma pack(push,1)
 class CLocalPlayer {public:
     BYTE nativeState[0x328];
+    // samp.dll RVA: 0x0000e2b0
+    void ClearSurfingState();
     // samp.dll RVA: 0x00003fb0
     void PrepareForClassSelection_Outcome(BOOL outcome);
     // Copies the raw50-byte spawn record forward and marks it available.

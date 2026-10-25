@@ -15,6 +15,10 @@
 #include "game/custommodels.h"
 #include "gui/render_dependencies.h"
 #include "gui/textdraw_texture.h"
+// samp.dll RVA: 0x0000e2b0
+void CLocalPlayer::ClearSurfingState() {
+    *(DWORD*)(nativeState+0x2e6)=0;SetSurfingEntity(0,0);
+}
 // samp.dll RVA: 0x00003fb0
 void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome) {
     if(outcome) {

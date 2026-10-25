@@ -9,6 +9,14 @@ void CPlayerPool::SetName(WORD player,const char *text) {
 #include "game/playerped.h"
 #include "net/playerinfo.h"
 #include "net/localplayer.h"
+// samp.dll RVA: 0x000139f0
+void CPlayerPool::Deactivate() {
+    *(DWORD*)(local->nativeState+0xf4)=0;*(DWORD*)(this->local->nativeState+0x302)=0;
+    for(WORD id=0;id<1004;++id)if(connected[id]==1) {
+        CRemotePlayer *remote=players[id]?players[id]->remote:0;
+        remote->nativeState[0x1a]=0;*(DWORD*)(remote->nativeState+0x10)=1;
+    }
+}
 // samp.dll RVA: 0x00013e80
 CPlayerPool::CPlayerPool() {
     for(WORD id=0;id<1004;id++){players[id]=0;connected[id]=0;}

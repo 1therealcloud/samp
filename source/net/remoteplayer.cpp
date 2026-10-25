@@ -10,6 +10,15 @@
 #include <string.h>
 #include "net/playerpool.h"
 #include "chatwindow.h"
+// samp.dll RVA: 0x00014730
+void CRemotePlayer::OnExitVehicle() {
+    CPed *ped=*(CPed**)(nativeState+4);
+    if(ped&&ped->IsInVehicle()) {
+        CMatrix matrix;(*(CPed**)(nativeState+4))->GetMatrix(&matrix);
+        (*(CPed**)(nativeState+4))->WarpFromVehicle(matrix.position.x,matrix.position.y,matrix.position.z);
+        *(DWORD*)(nativeState+8)=0;
+    }
+}
 // samp.dll RVA: 0x00017120
 void CRemotePlayer::Chat(char *text) {
     WORD id=*(WORD*)nativeState;
