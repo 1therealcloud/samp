@@ -26,6 +26,12 @@
 #include "GetTime.h"
 #include "game/game.h"
 #include "game/patches.h"
+#include "game/custommodels.h"
+// samp.dll RVA: 0x0000ead0
+void ScrCustomModelsComplete(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CCustomModels *models=g_customModels;if(models){models->nativeState[0x221]=1;models->StopWorkers();}
+}
 // samp.dll RVA: 0x0013c0b4
 DWORD g_rpcInitValue13C0B4=2;
 // samp.dll RVA: 0x001180ec
@@ -641,7 +647,7 @@ const int g_rpcUnknown00117F0C=180;
 // Handler RVA0x00011f80; semantic name not established.
 // samp.dll RVA: 0x00117f08
 const int g_rpcUnknown00117F08=183;
-// Handler RVA0x0000ead0; semantic name not established.
+// Custom-model completion handler RVA0x0000ead0; legacy registry name retained.
 // samp.dll RVA: 0x00117f04
 const int g_rpcUnknown00117F04=185;
 // samp.dll RVA: 0x0000eb60

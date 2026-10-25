@@ -1,4 +1,67 @@
 #include "game/custommodels.h"
+#include <stdlib.h>
+#include <string.h>
+// samp.dll RVA: 0x0000b990
+void CCustomModels::ClearTransferStorage() {
+    memset(nativeState+0x222,0,0x11e);memset(nativeState+0x1345,0,0xd20);
+}
+// samp.dll RVA: 0x0000d890
+CCustomModels::CCustomModels() {
+    *(DWORD*)nativeState=0;*(DWORD*)(nativeState+4)=0;nativeState[8]=0;
+    memset(nativeState+9,0,261);
+    *(DWORD*)(nativeState+0x213)=0;nativeState[0x21f]=0;nativeState[0x221]=0;nativeState[0x220]=0;
+    *(DWORD*)(nativeState+0x21b)=0;*(DWORD*)(nativeState+0x217)=0;
+    ClearTransferStorage();*(DWORD*)(nativeState+0x2065)=0;*(DWORD*)(nativeState+0x2069)=0;nativeState[0x1344]=0;
+}
+// samp.dll RVA: 0x0000c4e0
+bool CCustomModels::ResizeRecords(DWORD count) {
+    BYTE **&records=*(BYTE***)nativeState;DWORD &previous=*(DWORD*)(nativeState+4);
+    if(!count){if(records){free(records);records=0;}previous=0;return true;}
+    BYTE **replacement=(BYTE**)realloc(records,count*4);if(!replacement)return false;
+    records=replacement;for(DWORD i=previous;i<count;++i)records[i]=0;previous=count;return true;
+}
+// samp.dll RVA: 0x0000c6a0
+void CCustomModels::TrimRecords() {
+    DWORD count=*(DWORD*)(nativeState+4),last=0xffffffff;BYTE **records=*(BYTE***)nativeState;
+    for(DWORD i=0;i<count;++i)if(records[i])last=i;
+    ResizeRecords(last==0xffffffff?0:last+1);
+}
+// samp.dll RVA: 0x0000cfc0
+bool CCustomModels::EraseRecord(DWORD index) {
+    if(index>=*(DWORD*)(nativeState+4))return false;
+    (*(BYTE***)nativeState)[index]=0;TrimRecords();return true;
+}
+// samp.dll RVA: 0x0000cff0
+bool CCustomModels::SetRecord(DWORD index,void *record) {
+    if(index>=*(DWORD*)(nativeState+4)&&!ResizeRecords(index+1))return false;
+    (*(void***)nativeState)[index]=record;return true;
+}
+// samp.dll RVA: 0x0000d550
+DWORD CCustomModels::AddRecord(DWORD index,const void *record) {
+    void *copy=calloc(1,94);int base=*(const int*)((const BYTE*)record+0xc);
+    if(base<0||base>20000)return 0xffffffff;
+    memcpy(copy,record,94);SetRecord(index,copy);return index;
+}
+// samp.dll RVA: 0x0000d5a0
+DWORD CCustomModels::DeleteRecord(DWORD index) {
+    if(index>=*(DWORD*)(nativeState+4))return 0xffffffff;
+    void *record=(*(void***)nativeState)[index];if(!record)return 0xffffffff;
+    free(record);EraseRecord(index);return index;
+}
+// samp.dll RVA: 0x0000d5e0
+void CCustomModels::ClearRecords() {ResizeRecords(0);}
+// samp.dll RVA: 0x0000bd10
+void CCustomModels::StopWorkers() {
+    for(int i=0;i<6;++i)nativeState[0x134c+i*0x230]=1;nativeState[0x1344]=0;
+}
+// samp.dll RVA: 0x0000bd90
+void CCustomModels::ResumeReadyWorker() {
+    if(!nativeState[0x1344])return;
+    for(int i=0;i<6;++i) {
+        BYTE *worker=nativeState+0x1349+i*0x230;
+        if(worker[2]&&!worker[0]&&worker[1]){worker[1]=0;return;}
+    }
+}
 
 // samp.dll RVA: 0x002aca28
 CCustomModels *g_customModels;

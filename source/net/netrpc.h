@@ -2,6 +2,8 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x0000ead0
+void ScrCustomModelsComplete(RPCParameters *parameters);
 // samp.dll RVA: 0x00010530
 void ScrInitGame(RPCParameters *parameters);
 // Broader role of the fourth initialization DWORD is not established.

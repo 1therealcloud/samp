@@ -1,9 +1,36 @@
 #ifndef SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #include <windows.h>
-// Observed registry prefix only: pointer array at +0, DWORD count at +4.
-// Complete allocation, ownership and loader lifecycle remain open. Never allocate.
+// Native allocation extent0x206D; fields remain opaque except observed accesses.
+// Constructor is recovered; directory/worker startup and complete ownership remain open.
 class CCustomModels {public:
+    BYTE nativeState[0x206d];
+    // samp.dll RVA: 0x0000d890
+    CCustomModels();
+    // Clears transfer/worker storage only; neither frees nor clears the record array.
+    // samp.dll RVA: 0x0000b990
+    void ClearTransferStorage();
+    // samp.dll RVA: 0x0000c4e0
+    bool ResizeRecords(DWORD count);
+    // samp.dll RVA: 0x0000c6a0
+    void TrimRecords();
+    // Clears a slot and trims; does not free the record itself.
+    // samp.dll RVA: 0x0000cfc0
+    bool EraseRecord(DWORD index);
+    // samp.dll RVA: 0x0000cff0
+    bool SetRecord(DWORD index,void *record);
+    // Allocates before validation; invalid base IDs deliberately leak that allocation.
+    // samp.dll RVA: 0x0000d550
+    DWORD AddRecord(DWORD index,const void *record);
+    // samp.dll RVA: 0x0000d5a0
+    DWORD DeleteRecord(DWORD index);
+    // samp.dll RVA: 0x0000d5e0
+    void ClearRecords();
+    // Signals six workers; does not join threads or free their storage.
+    // samp.dll RVA: 0x0000bd10
+    void StopWorkers();
+    // samp.dll RVA: 0x0000bd90
+    void ResumeReadyWorker();
     // samp.dll RVA: 0x0000bb10
     bool IsDffCached(DWORD hash);
     // samp.dll RVA: 0x0000bba0
@@ -57,6 +84,7 @@ class CCustomModels {public:
     // samp.dll RVA: 0x0000c2e0
     BOOL LoadObjectModel(DWORD base,DWORD model,DWORD dffHash,DWORD txdHash);
 };
+typedef char NativeCustomModelsExtent[(sizeof(CCustomModels)==0x206d)?1:-1];
 // samp.dll RVA: 0x002aca28
 extern CCustomModels *g_customModels;
 // samp.dll RVA: 0x00117c48
