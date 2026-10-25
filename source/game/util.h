@@ -23,6 +23,11 @@ float __cdecl GameNormalizeAngle(float angle);
 void GameTransformPoint(CVector *out,const CMatrix *matrix,const CVector *delta);
 // samp.dll RVA: 0x000b44b0
 float FloatOffset(float first,float second);
+// Descriptive native helper; preserves repeated input reads when output aliases it.
+// samp.dll RVA: 0x000b6440
+void __stdcall GameBuildAimUpVector(const CVector *direction,CVector *up);
+// samp.dll RVA: 0x0011e3a0
+extern const double g_aimVectorHalfPi;
 #endif
 
 #ifndef SAMP_RW_TRANSFORM_H

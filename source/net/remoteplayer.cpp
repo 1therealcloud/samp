@@ -10,6 +10,106 @@
 #include <string.h>
 #include "net/playerpool.h"
 #include "chatwindow.h"
+#include "game/game.h"
+#include "game/custommodels.h"
+#include "game/aimstuff.h"
+// samp.dll RVA: 0x001181c8
+const float g_remoteAimZoomScale=0.01587301678955555f;
+// samp.dll RVA: 0x001181cc
+const float g_remoteAimAspectScale=0.003921568859368563f;
+// samp.dll RVA: 0x00016c50
+BOOL CRemotePlayer::Spawn(BYTE team,int model,int customModel,const CVector *position,float rotation,DWORD color,BYTE fightingStyle) {
+    (void)team;if(!g_pGame->IsStarted())return FALSE;
+    CPed *ped=*(CPed**)(nativeState+4);
+    if(ped){g_pGame->RemovePed(ped);*(DWORD*)(nativeState+4)=0;}
+    ped=g_pGame->CreatePed(model,*position,rotation,1,*(BOOL*)(nativeState+0x1c));
+    if(!ped){if(nativeState[0x1a])nativeState[0x1a]=0;return FALSE;}
+    if(g_customModels&&customModel>20000) {
+        if(GameIsPedModel(customModel)||g_customModels->DoesExist(customModel))ped->SetModelIndex(customModel);
+    }
+    if(color)PlayerColors::Set(*(WORD*)nativeState,color);
+    DWORD marker=*(DWORD*)(nativeState+0x1f9);
+    if(marker){g_pGame->DeleteMarker(marker);*(DWORD*)(nativeState+0x1f9)=0;}
+    if(*(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame+0x3d5)+0x30))ped->CreateArrow(*(WORD*)nativeState);
+    *(CPed**)(nativeState+4)=ped;*(float*)(nativeState+0x1b0)=100.0f;ped->SetKeys(0,0,0);
+    if(fightingStyle!=4)ped->SetFightingStyle(fightingStyle);
+    if(nativeState[0x1a]!=33)nativeState[0x1a]=33;
+    return TRUE;
+}
+// samp.dll RVA: 0x00014660
+void CRemotePlayer::OnEnterVehicle() {
+    CVehiclePool *vehicles=((CNetGame*)g_pNetGame)->pools->vehicles;
+    CPed *ped=*(CPed**)(nativeState+4);if(!ped||ped->IsInVehicle())return;
+    CVehicle *vehicle=vehicles->Get(*(WORD*)(nativeState+2));if(!vehicle)return;
+    BYTE weapon=(nativeState[0x1b]?nativeState[0x27]:nativeState[0xb6])&0x3f;
+    if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+        (*(CPed**)(nativeState+4))->SetArmedWeapon(weapon,0);
+        if((BYTE)(*(CPed**)(nativeState+4))->GetCurrentWeapon()!=weapon) {
+            (*(CPed**)(nativeState+4))->GiveWeapon(weapon,9999);(*(CPed**)(nativeState+4))->SetArmedWeapon(weapon,0);
+        }
+    }
+    DWORD ref=vehicles->GetRef((int)*(WORD*)(nativeState+2));BYTE seat=nativeState[0x1b];
+    (*(CPed**)(nativeState+4))->PutIntoVehicle(ref,seat);
+}
+// samp.dll RVA: 0x00016da0
+void CRemotePlayer::UpdateOnfoot(const void *data,DWORD timestamp) {
+    const BYTE *input=(const BYTE*)data;*(DWORD*)(nativeState+8)=0;
+    if(timestamp&&(int)(timestamp-*(DWORD*)(nativeState+0x1c9))<0)return;
+    *(DWORD*)(nativeState+0x1c9)=timestamp;
+    for(int i=0;i<68;i+=4)*(DWORD*)(nativeState+0x3c+i)=*(const DWORD*)(input+i);
+    *(float*)(nativeState+0x1b0)=(float)input[0x22];*(float*)(nativeState+0x1ac)=(float)input[0x23];
+    nativeState[0x1c4]=16;*(DWORD*)(nativeState+0x1c5)=GetTickCount();nativeState[0x18]=input[0x25];
+    if(*(int*)(nativeState+0x7c)<0)*(DWORD*)(nativeState+0x7c)=0;
+    CPed *ped=*(CPed**)(nativeState+4);
+    if(ped&&ped->IsInVehicle()&&nativeState[0x18]!=3&&nativeState[0x18]!=4&&!(*(CPed**)(nativeState+4))->HasTaskType704())OnExitVehicle();
+    if(nativeState[0x1a]!=17)nativeState[0x1a]=17;
+}
+// samp.dll RVA: 0x00016e70
+void CRemotePlayer::UpdateIncar(const void *data,DWORD timestamp) {
+    const BYTE *input=(const BYTE*)data;
+    if(timestamp&&(int)(timestamp-*(DWORD*)(nativeState+0x1c9))<0)return;
+    *(DWORD*)(nativeState+0x1c9)=timestamp;
+    for(int i=0;i<60;i+=4)*(DWORD*)(nativeState+0x80+i)=*(const DWORD*)(input+i);
+    *(WORD*)(nativeState+0xbc)=*(const WORD*)(input+60);nativeState[0xbe]=input[62];
+    *(WORD*)(nativeState+2)=*(const WORD*)input;
+    *(CVehicle**)(nativeState+8)=((CNetGame*)g_pNetGame)->pools->vehicles->Get(*(const WORD*)input);
+    nativeState[0x1b]=0;*(float*)(nativeState+0x1b0)=(float)input[0x34];*(float*)(nativeState+0x1ac)=(float)input[0x35];
+    nativeState[0x1c4]=17;*(DWORD*)(nativeState+0x1c5)=GetTickCount();nativeState[0x18]=0;
+    CPed *ped=*(CPed**)(nativeState+4);if(ped&&!ped->IsInVehicle())OnEnterVehicle();
+    BYTE oldState=nativeState[0x1a];if(oldState!=19){ChangeState(19,oldState);nativeState[0x1a]=19;}
+}
+// samp.dll RVA: 0x00016f60
+void CRemotePlayer::UpdatePassenger(const void *data) {
+    const BYTE *input=(const BYTE*)data;
+    for(int i=0;i<24;i+=4)*(DWORD*)(nativeState+0x24+i)=*(const DWORD*)(input+i);
+    *(WORD*)(nativeState+2)=*(const WORD*)input;nativeState[0x1b]=input[2]&0x3f;
+    *(CVehicle**)(nativeState+8)=((CNetGame*)g_pNetGame)->pools->vehicles->Get(*(WORD*)(nativeState+2));
+    *(float*)(nativeState+0x1b0)=(float)input[4];*(float*)(nativeState+0x1ac)=(float)input[5];
+    nativeState[0x1c4]=18;*(DWORD*)(nativeState+0x1c5)=GetTickCount();nativeState[0x18]=0;
+    CPed *ped=*(CPed**)(nativeState+4);if(ped&&!ped->IsInVehicle())OnEnterVehicle();
+    if(nativeState[0x1a]!=18)nativeState[0x1a]=18;
+}
+// samp.dll RVA: 0x000154a0
+void CRemotePlayer::UpdateAim(const void *data) {
+    const BYTE *input=(const BYTE*)data;CPed *ped=*(CPed**)(nativeState+4);if(!ped)return;
+    AimStuff::SetPlayerCameraMode(input[0],*((BYTE*)ped+0x2b0));
+    CameraAim aim;memcpy(&aim.front,input+1,12);CVector direction;memcpy(&direction,input+1,12);CVector up={0,0,0};
+    GameBuildAimUpVector(&direction,&up);memcpy(&aim.up,&up,12);
+    memcpy(&aim.source,input+13,12);memcpy(&aim.sourceBeforeLookBehind,input+13,12);
+    (*(CPed**)(nativeState+4))->SetAim(&aim);(*(CPed**)(nativeState+4))->SetAimZ(*(const float*)(input+25));
+    int aspect=input[30],zoom=input[29]&0x3f;float aspectValue,zoomValue;
+    __asm {
+        fild dword ptr [aspect]
+        fmul dword ptr [g_remoteAimAspectScale]
+        fstp dword ptr [aspectValue]
+        fild dword ptr [zoom]
+        fmul dword ptr [g_remoteAimZoomScale]
+        fstp dword ptr [zoomValue]
+    }
+    ped=*(CPed**)(nativeState+4);AimStuff::SetPlayerCamera(*((BYTE*)ped+0x2b0),zoomValue,aspectValue);
+    DWORD *slot=(DWORD*)(*(CPed**)(nativeState+4))->GetCurrentWeaponSlot();BYTE weapon=input[29]>>6;
+    if(weapon==3)slot[1]=2;else if(weapon!=2)slot[2]=weapon;else if(slot[2]<2)slot[2]=2;
+}
 // samp.dll RVA: 0x00014730
 void CRemotePlayer::OnExitVehicle() {
     CPed *ped=*(CPed**)(nativeState+4);
@@ -165,8 +265,8 @@ void CRemotePlayer::ExitVehicle() {
     (*(CPed**)(state+4))->ExitVehicle();
 }
 // samp.dll RVA: 0x00015f10
-void CRemotePlayer::ChangeState(BYTE oldState,BYTE newState) {
-    if(oldState!=19||newState!=17)return;
+void CRemotePlayer::ChangeState(BYTE newState,BYTE oldState) {
+    if(newState!=19||oldState!=17)return;
     CPed *ped=g_pGame->GetPlayerPed();
     if(!ped||!ped->IsInVehicle()||ped->IsPassenger())return;
     CVehiclePool *vehicles=*(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0xc);

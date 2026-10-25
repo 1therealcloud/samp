@@ -1,4 +1,39 @@
 #include "game/util.h"
+// samp.dll RVA: 0x0011e3a0
+const double g_aimVectorHalfPi=1.5707963705062866;
+// samp.dll RVA: 0x000b6440
+__declspec(naked) void __stdcall GameBuildAimUpVector(const CVector *direction,CVector *up) {
+    __asm {
+        mov ecx,[esp+4]
+        fld dword ptr [ecx]
+        mov eax,[esp+8]
+        fld dword ptr [ecx+4]
+        fpatan
+        fsub qword ptr [g_aimVectorHalfPi]
+        fld st(0)
+        fsin
+        fxch st(1)
+        fcos
+        fld dword ptr [ecx+4]
+        fmul dword ptr [g_objectScaleLowerBound]
+        fld st(1)
+        fmul dword ptr [ecx+8]
+        fsubp st(1),st(0)
+        fstp dword ptr [eax]
+        fld st(1)
+        fmul dword ptr [ecx+8]
+        fld dword ptr [ecx]
+        fmul dword ptr [g_objectScaleLowerBound]
+        fsubp st(1),st(0)
+        fstp dword ptr [eax+4]
+        fmul dword ptr [ecx]
+        fxch st(1)
+        fmul dword ptr [ecx+4]
+        fsubp st(1),st(0)
+        fstp dword ptr [eax+8]
+        ret 8
+    }
+}
 // samp.dll RVA: 0x001181ac
 extern const float g_objectMutationStep=0.1f;
 // samp.dll RVA: 0x001181c4

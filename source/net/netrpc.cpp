@@ -25,6 +25,24 @@
 #include "game/vehicle.h"
 #include "GetTime.h"
 #include "game/game.h"
+// samp.dll RVA: 0x00118108
+const char g_rpcCouldNotSpawnPlayer[]="Warning: Couldn't spawn player(%u)";
+// samp.dll RVA: 0x000109d0
+void ScrWorldPlayerAdd(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    WORD id;BYTE team=0,style=4;int model=0,customModel=0;CVector position;float rotation=0;DWORD color=0;WORD skills[11];
+    stream.Read(id);stream.Read(team);stream.Read(model);stream.Read(customModel);
+    stream.Read(position.x);stream.Read(position.y);stream.Read(position.z);stream.Read(rotation);stream.Read(color);stream.Read(style);stream.Read((char*)skills,22);
+    if(!pool||id>=1004||!pool->connected[id]||!pool->players[id]||!pool->players[id]->remote)return;
+    CRemotePlayer *remote=pool->players[id]->remote;
+    if(!remote->Spawn(team,model,customModel,&position,rotation,color,style)) {
+        if(g_pChat)g_pChat->AddDebugMessage(g_rpcCouldNotSpawnPlayer,(unsigned)id);return;
+    }
+    CPed *ped=*(CPed**)(remote->nativeState+4);if(ped)for(int i=0;i<11;++i)ped->SetWeaponSkill(i,skills[i]);
+    if(team!=0xff)remote->nativeState[0x19]=team;
+    if(pool->GetPlayerInfoFlag(id)) {ped=*(CPed**)(remote->nativeState+4);if(ped)ped->SetImmunities(0,1,1,0,0);}
+}
 // samp.dll RVA: 0x0000e500
 void ScrWorldVehicleAdd(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);

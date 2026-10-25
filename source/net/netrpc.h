@@ -2,6 +2,10 @@
 #define SAMP_NETRPC_H
 class RakClientInterface;
 struct RPCParameters;
+// samp.dll RVA: 0x000109d0
+void ScrWorldPlayerAdd(RPCParameters *parameters);
+// samp.dll RVA: 0x00118108
+extern const char g_rpcCouldNotSpawnPlayer[];
 // samp.dll RVA: 0x0000e500
 void ScrWorldVehicleAdd(RPCParameters *parameters);
 // samp.dll RVA: 0x00010dc0
