@@ -1018,8 +1018,11 @@ public:
 
     void PumpMessage();
 
+    // samp.dll RVA: 0x0008F480
     virtual void RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading );
+    // samp.dll RVA: 0x0008FAA0
     virtual void RenderComposition( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    // samp.dll RVA: 0x000900E0
     virtual void RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
 
 protected:

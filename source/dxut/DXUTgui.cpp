@@ -6413,6 +6413,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008F480
 void CDXUTIMEEditBox::RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading )
 {
     RECT rc;
@@ -6478,66 +6479,14 @@ void CDXUTIMEEditBox::RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice
         nSingleLineHeight = nHeightRequired = rc.bottom - rc.top;
     }
 
-    // Now that we have the dimension, calculate the location for the candidate window.
-    // We attempt to fit the window in this order:
-    // bottom, top, right, left.
-
-    bool bHasPosition = false;
-
-    // Bottom
+    // Native keeps the window below the composition line, even when it
+    // extends past the dialog bottom. Only the right edge is adjusted.
     SetRect( &rc, s_ptCompString.x + nXComp, s_ptCompString.y + m_rcText.bottom - m_rcText.top,
                   s_ptCompString.x + nXComp + nWidthRequired, s_ptCompString.y + m_rcText.bottom - m_rcText.top + nHeightRequired );
-    // if the right edge is cut off, move it left.
     if( rc.right > m_pDialog->GetWidth() )
     {
         rc.left -= rc.right - m_pDialog->GetWidth();
         rc.right = m_pDialog->GetWidth();
-    }
-    if( rc.bottom <= m_pDialog->GetHeight() )
-        bHasPosition = true;
-
-    // Top
-    if( !bHasPosition )
-    {
-        SetRect( &rc, s_ptCompString.x + nXComp, s_ptCompString.y - nHeightRequired,
-                      s_ptCompString.x + nXComp + nWidthRequired, s_ptCompString.y );
-        // if the right edge is cut off, move it left.
-        if( rc.right > m_pDialog->GetWidth() )
-        {
-            rc.left -= rc.right - m_pDialog->GetWidth();
-            rc.right = m_pDialog->GetWidth();
-        }
-        if( rc.top >= 0 )
-            bHasPosition = true;
-    }
-
-    // Right
-    if( !bHasPosition )
-    {
-        int nXCompTrail;
-        s_CompString.CPtoX( s_nCompCaret, TRUE, &nXCompTrail );
-        SetRect( &rc, s_ptCompString.x + nXCompTrail, 0,
-                      s_ptCompString.x + nXCompTrail + nWidthRequired, nHeightRequired );
-        if( rc.right <= m_pDialog->GetWidth() )
-            bHasPosition = true;
-    }
-
-    // Left
-    if( !bHasPosition )
-    {
-        SetRect( &rc, s_ptCompString.x + nXComp - nWidthRequired, 0,
-                      s_ptCompString.x + nXComp, nHeightRequired );
-        if( rc.right >= 0 )
-            bHasPosition = true;
-    }
-
-    if( !bHasPosition )
-    {
-        // The dialog is too small for the candidate window.
-        // Fall back to render at 0, 0.  Some part of the window
-        // will be cut off.
-        rc.left = 0;
-        rc.right = nWidthRequired;
     }
 
     // If we are rendering the candidate window, save the position
@@ -6595,6 +6544,7 @@ void CDXUTIMEEditBox::RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008FAA0
 void CDXUTIMEEditBox::RenderComposition( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     RECT rcCaret = { 0, 0, 0, 0 };
@@ -6758,6 +6708,7 @@ void CDXUTIMEEditBox::RenderComposition( IDirect3DDevice9* pd3dDevice, float fEl
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000900E0
 void CDXUTIMEEditBox::RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     CDXUTElement *pElement = m_Elements.GetAt( 9 );
