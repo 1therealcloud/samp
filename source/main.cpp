@@ -128,6 +128,24 @@ int ClientFindScreenshotFilename(std::string *path) {
 #ifdef GetSystemMetrics
 #undef GetSystemMetrics
 #endif
+// samp.dll RVA: 0x00073b80
+int ClientSaveRenderTarget(IDirect3DDevice9 *device,const char *filename) {
+    IDirect3DSurface9 *target=0,*surface=0;
+    POINT origin={0,0};RECT rect;
+    ClientToScreen(g_inputGameWindow,&origin);
+    GetClientRect(g_inputGameWindow,&rect);
+    rect.left+=origin.x;rect.right+=origin.x;
+    rect.top+=origin.y;rect.bottom+=origin.y;
+    if(FAILED(device->GetRenderTarget(0,&target)))return 1;
+    D3DSURFACE_DESC desc;
+    if(FAILED(target->GetDesc(&desc)))return 2;
+    if(FAILED(device->CreateOffscreenPlainSurface(desc.Width,desc.Height,desc.Format,
+        D3DPOOL_SYSTEMMEM,&surface,0)))return 3;
+    if(FAILED(device->GetRenderTargetData(target,surface)))return 4;
+    D3DXSaveSurfaceToFileA(filename,D3DXIFF_PNG,surface,0,&rect);
+    target->Release();surface->Release();
+    return 0;
+}
 // samp.dll RVA: 0x00075040
 void ClientCaptureScreenshot() {
     g_renderScreenshotRequested=0;

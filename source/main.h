@@ -97,6 +97,9 @@ const char *ClientGetCacheDirectory();
 int ClientFindScreenshotFilename(std::string *path);
 // samp.dll RVA: 0x00075040
 void ClientCaptureScreenshot();
+// Render-target capture; returns 1..4 for surface-operation failure, otherwise 0.
+// samp.dll RVA: 0x00073b80
+int ClientSaveRenderTarget(IDirect3DDevice9 *device,const char *filename);
 // samp.dll RVA: 0x0011b928
 extern const char g_screenshotFilenamePattern[];
 // samp.dll RVA: 0x0011c7dc

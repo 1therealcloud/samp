@@ -1,6 +1,9 @@
 #ifndef SAMP_OBJECT_MATH_H
 #define SAMP_OBJECT_MATH_H
 #include "game/entity.h"
+// Raw RenderWare engine callback at slot24; backend observes EBX=C97B24.
+// samp.dll RVA: 0x000c5510
+DWORD GameRwInvokeEngineSlot24(DWORD first,DWORD second);
 // samp.dll RVA: 0x0011ee7c
 extern const float g_objectMotionRotationSentinel;
 // samp.dll RVA: 0x001181ac

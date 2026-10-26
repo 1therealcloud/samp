@@ -1,4 +1,21 @@
 #include "game/util.h"
+// samp.dll RVA: 0x000c5510
+__declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first,DWORD second) {
+    __asm {
+        push ebp
+        mov ebp,esp
+        push ebx
+        push dword ptr [ebp+0xc]
+        push dword ptr [ebp+8]
+        mov ebx,0xc97b24
+        mov eax,dword ptr [ebx]
+        call dword ptr [eax+0x24]
+        add esp,8
+        pop ebx
+        pop ebp
+        ret
+    }
+}
 #include "main.h"
 #include "chatwindow.h"
 // samp.dll RVA: 0x0011e3a0
