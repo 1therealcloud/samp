@@ -13,6 +13,9 @@ struct SpawnScreenVertex {
     // Native deliberately leaves all vertex bytes untouched.
     // samp.dll RVA: 0x000705c0
     SpawnScreenVertex();
+    // Copies raw float words, including NaN payloads.
+    // samp.dll RVA: 0x000705d0
+    SpawnScreenVertex(const CVector &position,float w,DWORD color,float tu,float tv);
 };
 class CObjectMaterialText {
 public:

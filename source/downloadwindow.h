@@ -10,6 +10,12 @@ struct DownloadRecord {
 };
 typedef char NativeDownloadRecordExtent[(sizeof(DownloadRecord)==18)?1:-1];
 class CDownloadWindow {public:
+    // Initializes only the pointer/count prefix; does not free previous storage.
+    // samp.dll RVA: 0x0006a410
+    CDownloadWindow *InitializeRecordStorage();
+    // Separate prefix-release entry; preserves ResizeRecords' result in AL.
+    // samp.dll RVA: 0x0006aa00
+    bool ReleaseRecordStorage();
     BYTE nativeState[0x260];
     // First two window DWORDs are a specialized pointer-array view.
     // Descriptive helpers retain its observed allocation behavior.

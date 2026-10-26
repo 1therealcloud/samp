@@ -1,4 +1,6 @@
 #include "game/util.h"
+// samp.dll RVA: 0x00065ee0
+DWORD GameGetScreenHeight() {return *(DWORD*)0xc17048;}
 // samp.dll RVA: 0x000c5510
 __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first,DWORD second) {
     __asm {

@@ -1,5 +1,15 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
 #include "fontrender.h"
+// samp.dll RVA: 0x0006b270
+DWORD __stdcall FontLightenColor(DWORD color,BYTE amount) {
+    unsigned red=((color>>16)&255)+amount;
+    unsigned green=((color>>8)&255)+amount;
+    unsigned blue=(color&255)+amount;
+    if(red>=255)red=255;
+    if(green>=255)green=255;
+    if(blue>=255)blue=255;
+    return (color&0xff000000)|(red<<16)|(green<<8)|blue;
+}
 // samp.dll RVA: 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color,BYTE amount) {
     BYTE red=(BYTE)(color>>16),green=(BYTE)(color>>8),blue=(BYTE)color;

@@ -1,4 +1,11 @@
 #include "downloadwindow.h"
+// samp.dll RVA: 0x0006a410
+CDownloadWindow *CDownloadWindow::InitializeRecordStorage() {
+    *(DWORD*)nativeState=0;*(DWORD*)(nativeState+4)=0;
+    return this;
+}
+// samp.dll RVA: 0x0006aa00
+bool CDownloadWindow::ReleaseRecordStorage() {return ResizeRecords(0);}
 // samp.dll RVA: 0x0006a440
 int CDownloadWindow::GetFilesCount() {return *(int*)(nativeState+4);}
 #include "fontrender.h"

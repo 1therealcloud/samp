@@ -1,4 +1,5 @@
 #include "gui/device_objects.h"
+#include "game/entity.h"
 #include "archive/provider.h"
 #include "main.h"
 #include <new>
@@ -8,6 +9,12 @@
 const char g_spawnVersionText[]="SA-MP 0.3.DL-R1";
 // samp.dll RVA: 0x000705c0
 SpawnScreenVertex::SpawnScreenVertex() {}
+// samp.dll RVA: 0x000705d0
+SpawnScreenVertex::SpawnScreenVertex(const CVector &position,float w,DWORD color,float tu,float tv) {
+    memcpy(&x,&position,12);
+    memcpy(&rhw,&w,4);this->color=color;
+    memcpy(&u,&tu,4);memcpy(&v,&tv,4);
+}
 // samp.dll RVA: 0x00070340
 CObjectMaterialText::~CObjectMaterialText() {OnLostDevice();}
 // samp.dll RVA: 0x0006d420
