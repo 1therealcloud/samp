@@ -26,3 +26,8 @@ void K_EncodeString(char *szInput, char *szOutput);
 char *K_DecodeString(unsigned char *szInput);
 
 #endif
+
+// samp.dll RVA: 0x000b55e0
+bool Util_IsDecimal(const char *text);
+// samp.dll RVA: 0x000b5920
+void Util_SanitizeAscii(char *text);

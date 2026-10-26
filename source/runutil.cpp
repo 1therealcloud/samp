@@ -239,3 +239,12 @@ while ( '\0' != *cpInput )
 
 return;
 }
+
+// samp.dll RVA: 0x000b55e0
+bool Util_IsDecimal(const char *text) {
+    while(*text){if(*text<'0'||*text>'9')return false;++text;}return true;
+}
+// samp.dll RVA: 0x000b5920
+void Util_SanitizeAscii(char *text) {
+    while(*text){unsigned char value=(unsigned char)*text;if(value<0x20||value>0x7f)*text=' ';++text;}
+}

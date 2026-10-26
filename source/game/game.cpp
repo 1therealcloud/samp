@@ -1841,3 +1841,9 @@ void CGame::ApplyPreviewAnimation(DWORD first,DWORD second,BOOL useVehicle,int m
     }
     if(vehicle)delete vehicle;
 }
+
+// samp.dll RVA: 0x000b1d20
+void * GameRwGetClumpSkin(void *clump) {
+    void *atomic=GameRwGetFirstAtomic(clump);
+    return GameRwGetGeometrySkin(*(void**)((BYTE*)atomic+0x18));
+}

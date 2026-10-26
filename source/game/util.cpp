@@ -1,4 +1,6 @@
 #include "game/util.h"
+#include "main.h"
+#include "chatwindow.h"
 // samp.dll RVA: 0x0011e3a0
 const double g_aimVectorHalfPi=1.5707963705062866;
 // samp.dll RVA: 0x000b6440
@@ -739,4 +741,85 @@ DWORD __stdcall GameTestCameraSphere(const CVector *centre,float radius) {
     void *camera=*(void**)0xc1703c;if(!camera)return 0;
     DWORD target=g_gameVersion==1?0x7ee2d0:0x7ee310;
     return ((DWORD(__cdecl*)(void*,const void*))target)(camera,sphere);
+}
+
+// samp.dll RVA: 0x000b1170
+void __stdcall GameRwReplaceField34(void *object,void *replacement) {
+    if(!object)return;
+    void *previous=*(void**)((BYTE*)object+0x34);
+    if(!previous)return;
+    DWORD target=*(DWORD*)(*(BYTE**)previous+8);
+    ((DWORD(__stdcall*)(void*))target)(previous);
+    *(void**)((BYTE*)object+0x34)=replacement;
+}
+// samp.dll RVA: 0x000b11c0
+void * GameRwDumpAtomicMaterials(void *object,void *data) {
+    BYTE *atomic=(BYTE*)object;
+    if(atomic[0]!=1||!*(void**)(atomic+0x18))return object;
+    int count=*(int*)(*(BYTE**)(atomic+0x18)+0x24);
+    CChat *chat=g_pChat;
+    if(chat){chat->AddDebugMessage(g_rwMaterialCountText,count);chat=g_pChat;}
+    for(int i=0;i<count;++i) {
+        BYTE *geometry=*(BYTE**)(atomic+0x18);
+        BYTE *material=(*(BYTE***)(geometry+0x20))[i];
+        if(!material)continue;
+        BYTE *texture=*(BYTE**)material;
+        if(chat) {
+            if(texture)chat->AddDebugMessage(g_rwMaterialNameText,i,(char*)texture+0x10);
+            else chat->AddDebugMessage(g_rwMaterialNullText,i);
+            chat=g_pChat;
+        }
+    }
+    return object;
+}
+// samp.dll RVA: 0x000b1260
+void * __stdcall GameRwDumpObjectFrameMaterials(void *object) {
+    void *frame=*(void**)((BYTE*)object+4);
+    return frame?GameRwForAllFrameObjects(frame,GameRwDumpAtomicMaterials,0):0;
+}
+// samp.dll RVA: 0x000b1280
+void * GameRwKeepType1Object(void *object,void *data) {
+    return *(BYTE*)object==1?object:0;
+}
+// samp.dll RVA: 0x000b12a0
+void * __stdcall GameRwEnumerateObjectFrameType1(void *object) {
+    void *frame=*(void**)((BYTE*)object+4);
+    return frame?GameRwForAllFrameObjects(frame,GameRwKeepType1Object,0):0;
+}
+// samp.dll RVA: 0x000b1970
+void * GameRwGetObjectFrame(const void *object) {
+    return object?*(void**)((const BYTE*)object+4):0;
+}
+// samp.dll RVA: 0x000b1e90
+void * GameRwGetClumpWord8Minus64(void *clump,int index) {
+    int count=GameRwCountClumpAtomics(clump);
+    if(!count||index>count)return 0;
+    return (void*)(*(DWORD*)((BYTE*)clump+8)-0x40);
+}
+
+// samp.dll RVA: 0x0011f414
+const char g_rwMaterialCountText[]="NumMaterials = %d";
+// samp.dll RVA: 0x0011f3f0
+const char g_rwMaterialNameText[]="Material Index: %d TextureName: %s";
+// samp.dll RVA: 0x0011f3cc
+const char g_rwMaterialNullText[]="Material Index: %d Texture: NULL";
+// Native x87 intermediate precision, spill locations and input bit pattern matter.
+// samp.dll RVA: 0x000b55a0
+__declspec(naked) float GameApproximateSqrt(float value) {
+    __asm {
+        fld dword ptr [esp+4]
+        mov eax,dword ptr [esp+4]
+        fld dword ptr [esp+4]
+        sar eax,1
+        fmul g_textDrawHalf
+        mov ecx,0x5f3759d5
+        sub ecx,eax
+        mov dword ptr [esp+4],ecx
+        fmul dword ptr [esp+4]
+        fmul dword ptr [esp+4]
+        fsubr g_dialogLineScale
+        fmul dword ptr [esp+4]
+        fmulp st(1),st
+        ret
+    }
 }

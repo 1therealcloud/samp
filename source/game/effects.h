@@ -62,3 +62,6 @@ void *GameRwGetClumpAnimHierarchy(void *clump);
 // samp.dll RVA: 0x000b1d70
 void *GameRwCreateHierarchyAnimation(void *hierarchy);
 #endif
+
+// samp.dll RVA: 0x000b1d20
+void * GameRwGetClumpSkin(void *clump);

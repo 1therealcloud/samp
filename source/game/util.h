@@ -217,3 +217,33 @@ extern BYTE g_entityCollisionScratch[0x1044];
 
 // samp.dll RVA: 0x000b3e40
 DWORD __stdcall GameTestCameraSphere(const CVector *centre,float radius);
+
+// samp.dll RVA: 0x000b1170
+void __stdcall GameRwReplaceField34(void *object,void *replacement);
+// samp.dll RVA: 0x000b11c0
+void * GameRwDumpAtomicMaterials(void *object,void *data);
+// samp.dll RVA: 0x000b1260
+void * __stdcall GameRwDumpObjectFrameMaterials(void *object);
+// samp.dll RVA: 0x000b1280
+void * GameRwKeepType1Object(void *object,void *data);
+// samp.dll RVA: 0x000b12a0
+void * __stdcall GameRwEnumerateObjectFrameType1(void *object);
+// samp.dll RVA: 0x000b1970
+void * GameRwGetObjectFrame(const void *object);
+// samp.dll RVA: 0x000b1e90
+void * GameRwGetClumpWord8Minus64(void *clump,int index);
+
+// Shared original float storage, already defined by textdraw/dialog units.
+// samp.dll RVA: 0x00117884
+extern const float g_textDrawHalf;
+// samp.dll RVA: 0x00118490
+extern const float g_dialogLineScale;
+// Native Newton approximation, not CRT sqrt; preserves signed bit shift and x87.
+// samp.dll RVA: 0x000b55a0
+float GameApproximateSqrt(float value);
+// samp.dll RVA: 0x0011f414
+extern const char g_rwMaterialCountText[];
+// samp.dll RVA: 0x0011f3f0
+extern const char g_rwMaterialNameText[];
+// samp.dll RVA: 0x0011f3cc
+extern const char g_rwMaterialNullText[];
