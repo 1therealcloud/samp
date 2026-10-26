@@ -22,6 +22,13 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x00002e50
+    CActorPool *GetActorPool();
+    // samp.dll RVA: 0x00002e60
+    DWORD GetState();
+    // Returns the raw DWORD at239, without bool normalization.
+    // samp.dll RVA: 0x00002e70
+    BOOL LanMode();
     // samp.dll RVA: 0x0000af40
     void UpdateNetwork();
     // samp.dll RVA: 0x00009df0

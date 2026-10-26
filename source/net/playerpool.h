@@ -12,6 +12,18 @@ struct CVector;
 #pragma pack(push,1)
 class CPlayerPool {
 public:
+    // Descriptive name: native returns a raw player-info pointer, not a BOOL.
+    // Native accepts adjacent ID1004 without checking connected state.
+    // samp.dll RVA: 0x000010d0
+    CPlayerInfo *GetPlayerInfo(WORD player);
+    // samp.dll RVA: 0x0000a1d0
+    const char *GetLocalPlayerName();
+    // Native adjusts this by2 to the embedded VC7 string; external B580 anchor does not.
+    // samp.dll RVA: 0x0000b5e0
+    void SetLocalPlayerName(const char *text);
+    // Raw slot write, including adjacent ID1004; no ownership/connected-state change.
+    // samp.dll RVA: 0x00013630
+    void SetAt(WORD player,CPlayerInfo *info);
     // samp.dll RVA: 0x000136c0
     BOOL Process();
     // Fourth raw word is copied into both native ray records.

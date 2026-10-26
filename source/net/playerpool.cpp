@@ -1,5 +1,19 @@
 #include "net/playerpool.h"
 #include "net/playerinfo.h"
+#include <string.h>
+// samp.dll RVA: 0x000010d0
+CPlayerInfo *CPlayerPool::GetPlayerInfo(WORD player) {
+    if(player>1004)return 0;
+    return *(CPlayerInfo**)((BYTE*)this+0x26+(DWORD)player*4);
+}
+// samp.dll RVA: 0x0000a1d0
+const char *CPlayerPool::GetLocalPlayerName() {return localName.c_str();}
+// samp.dll RVA: 0x0000b5e0
+void CPlayerPool::SetLocalPlayerName(const char *text) {localName.assign(text,strlen(text));}
+// samp.dll RVA: 0x00013630
+void CPlayerPool::SetAt(WORD player,CPlayerInfo *info) {
+    if(player<=1004)*(CPlayerInfo**)((BYTE*)this+0x26+(DWORD)player*4)=info;
+}
 // samp.dll RVA: 0x0001da50
 void CPlayerPool::SetName(WORD player,const char *text) {
     if(player<=1004&&players[player])players[player]->SetName(text);

@@ -1,4 +1,10 @@
 #include "net/netgame.h"
+// samp.dll RVA: 0x00002e50
+CActorPool *CNetGame::GetActorPool() {return pools->actors;}
+// samp.dll RVA: 0x00002e60
+DWORD CNetGame::GetState() {return *(DWORD*)(nativeState+0x3cd);}
+// samp.dll RVA: 0x00002e70
+BOOL CNetGame::LanMode() {return *(BOOL*)(nativeState+0x239);}
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "main.h"
