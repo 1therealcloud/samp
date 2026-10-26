@@ -1,4 +1,5 @@
 #include "game/debug.h"
+#include "game/util.h"
 #include "game/game.h"
 #include "game/vehicle.h"
 #include "game/playerped.h"
@@ -100,4 +101,56 @@ DWORD __stdcall GameCountUnusedModelSlots() {
     for(DWORD address=0xa9c068;address<0xaae948;address+=4)
         if(!*(DWORD*)address)++count;
     return count;
+}
+
+// samp.dll RVA: 0x0018dc20
+BYTE g_nativeDebugFlag18DC20=0;
+// samp.dll RVA: 0x0018dd50
+float g_debugHeightmapStartX=0;
+// samp.dll RVA: 0x0018dde4
+float g_debugHeightmapStartY=0;
+// samp.dll RVA: 0x0018de18
+DWORD g_debugHeightmapStage=0;
+// samp.dll RVA: 0x0018de28
+DWORD g_debugHeightmapFlagCopy=0;
+// samp.dll RVA: 0x0018de2c
+FILE *g_debugHeightmapFile=0;
+// samp.dll RVA: 0x0011e50c
+const char g_debugHeightmapFilename[]="c:\\blocks\\SA2_bos.hmap";
+// samp.dll RVA: 0x0009d3a0
+void __stdcall GameSetNativeDebugFlag18DC20(BYTE value) {g_nativeDebugFlag18DC20=value;}
+// Ignores GTA result and returns raw collision-position Z, even on failure.
+// samp.dll RVA: 0x0009dc80
+float GameDebugGroundHeight(const CVector *position) {
+    CVector end;memcpy(&end,position,8);end.z=-100.0f;
+    BYTE collision[52];void *entity=(void*)position;
+    GameProcessLineOfSightRaw(position,&end,collision,&entity,1,0,0,1,1,1,0,0);
+    return *(float*)(collision+8);
+}
+// samp.dll RVA: 0x0009dda0
+void GameDebugOpenHeightmap() {
+    g_debugHeightmapFile=fopen(g_debugHeightmapFilename,g_customDownloadWriteMode);
+    g_debugHeightmapFlagCopy=g_debugSelectionFlagA;
+    g_debugHeightmapStage=1;
+}
+// samp.dll RVA: 0x0009dcd0
+void GameDebugWriteHeightmap() {
+    DWORD firstX;memcpy(&firstX,&g_debugHeightmapStartX,4);
+    if(!g_debugHeightmapFile)return;
+    CVector start;memcpy(&start.y,&g_debugHeightmapStartY,4);start.z=530.0f;
+    for(int row=0;row<200;++row) {
+        __asm {
+            fld dword ptr firstX
+            fstp dword ptr start
+        }
+        for(int column=0;column<200;++column) {
+            CVector end;end.x=start.x;memcpy(&end.y,&start.y,4);end.z=-100.0f;
+            BYTE collision[52];void *entity;
+            GameProcessLineOfSightRaw(&start,&end,collision,&entity,1,0,0,1,1,1,0,0);
+            DWORD height;memcpy(&height,collision+8,4);
+            fwrite(&height,1,4,g_debugHeightmapFile);
+            start.x+=1.0f;
+        }
+        start.y-=1.0f;
+    }
 }

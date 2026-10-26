@@ -254,3 +254,7 @@ float GameReadFloat859524();
 // GTA SA virtual address: 0x00859520; raw float semantics unresolved.
 // samp.dll RVA: 0x000b26e0
 float GameReadFloat859520();
+
+// Opaque GTA entity/clump/hierarchy layout, not SA-MP wrapper pointers.
+// samp.dll RVA: 0x000b62f0
+BOOL GameCopyBackendBoneMatrix(void *entity,CMatrix *out,int bone);

@@ -834,3 +834,15 @@ float GameReadFloat859524() {
 float GameReadFloat859520() {
     return *(const float*)0x859520;
 }
+
+// samp.dll RVA: 0x000b62f0
+BOOL GameCopyBackendBoneMatrix(void *entity,CMatrix *out,int bone) {
+    if(!entity||*(DWORD*)entity==0x863c40)return FALSE;
+    void *clump=*(void**)((BYTE*)entity+0x18);if(!clump)return FALSE;
+    // GTA SA virtual addresses; select index backend before the first callback.
+    DWORD indexTarget=g_gameVersion==1?0x7c51a0:0x7c51e0;
+    void *hierarchy=((void*(__cdecl*)(void*))0x734a40)(clump);
+    DWORD index=((DWORD(__cdecl*)(void*,int))indexTarget)(hierarchy,bone);
+    DWORD matrices=*(DWORD*)((BYTE*)hierarchy+8);
+    memcpy(out,(void*)(matrices+(index<<6)),64);return TRUE;
+}
