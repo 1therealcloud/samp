@@ -15,6 +15,13 @@ DWORD __stdcall GameReadBackendDword(const void *backend);
 // samp.dll vtable RVA: 0x0011e30c
 class CEntity {
 public:
+    // Five history vectors occupy existing bytes04..3F; in-place shift order retained.
+    // samp.dll RVA: 0x0009eb80
+    void SetAveragedSpeed(CVector speed);
+    // Native x87 sine/cosine; writes nine coefficients, preserving matrix padding/position.
+    // samp.dll RVA: 0x0009f630
+    void SetEulerRotation(float x,float y,float z);
+
     // Descriptive raw flag names; invalid GTA backend vtable is excluded.
     // Clearing bit40000 invokes virtual Add afterwards.
     // samp.dll RVA: 0x0009f500
@@ -182,4 +189,18 @@ BYTE GameQueryBackend410ce0(const void *data);
 BYTE GameProcessLineOfSightRaw(const CVector *origin,const CVector *target,void *colPoint,
     void **entity,DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,
     DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough);
+#endif
+
+#ifndef SAMP_ENTITY_DETACH_H
+#define SAMP_ENTITY_DETACH_H
+// Shared original constants; definitions already maintained by chatbubble/object.
+// samp.dll RVA: 0x0011bcc8
+extern const float g_chatBubbleHeightLift;
+// samp.dll RVA: 0x0011e648
+extern const float g_objectDegreesToRadians;
+// samp.dll RVA: 0x0011e64c
+extern const char g_entityDetachExceptionLabel[5];
+// Original owner/name unknown; ECX unused, two cdecl stack arguments.
+// samp.dll RVA: 0x0009f8b0
+void __cdecl GameDetachBackendRwObject(void *entity,void *object);
 #endif

@@ -911,3 +911,196 @@ int CEntity::GetModelAtomicCount() {
     if(!clump)return -1;
     return GameRwCountClumpAtomics((void*)clump);
 }
+
+// Native x87 precision/spill boundaries and repeated backend loads are significant.
+// History moves from last toward first in place: overlapping copies deliberately cascade.
+// samp.dll RVA: 0x0009eb80
+__declspec(naked) void CEntity::SetAveragedSpeed(CVector speed) {
+    __asm {
+        push esi
+        lea esi, [ecx + 0x28]
+        push edi
+        mov eax, esi
+        mov edx, 4
+        lea esp, [esp]
+    native_0009eb90:
+        mov edi, dword ptr [eax + 0xc]
+        mov dword ptr [eax], edi
+        mov edi, dword ptr [eax + 0x10]
+        mov dword ptr [eax + 4], edi
+        mov edi, dword ptr [eax + 0x14]
+        mov dword ptr [eax + 8], edi
+        sub eax, 0xc
+        dec edx
+        jne native_0009eb90
+        mov eax, dword ptr [esp + 0xc]
+        mov edx, dword ptr [esp + 0x10]
+        mov dword ptr [ecx + 0x34], eax
+        mov eax, dword ptr [esp + 0x14]
+        mov dword ptr [ecx + 0x3c], eax
+        mov dword ptr [ecx + 0x38], edx
+        fld dword ptr [ecx + 4]
+        fld dword ptr [ecx + 8]
+        mov edx, dword ptr [ecx + 0xc]
+        fxch st(1)
+        mov dword ptr [esp + 0x14], edx
+        fadd dword ptr [ecx + 0x10]
+        mov eax, dword ptr [ecx + 0x40]
+        pop edi
+        fstp dword ptr [esp + 8]
+        fadd dword ptr [ecx + 0x14]
+        fld dword ptr [esp + 0x10]
+        fadd dword ptr [ecx + 0x18]
+        fld dword ptr [esp + 8]
+        fadd dword ptr [ecx + 0x1c]
+        fstp dword ptr [esp + 8]
+        fxch st(1)
+        fadd dword ptr [ecx + 0x20]
+        fstp dword ptr [esp + 0xc]
+        fadd dword ptr [ecx + 0x24]
+        fld dword ptr [esp + 8]
+        fadd dword ptr [esi]
+        pop esi
+        fld dword ptr [esp + 8]
+        fadd dword ptr [ecx + 0x2c]
+        fstp dword ptr [esp + 8]
+        fxch st(1)
+        fadd dword ptr [ecx + 0x30]
+        fstp dword ptr [esp + 0xc]
+        fadd dword ptr [ecx + 0x34]
+        fld dword ptr [esp + 8]
+        fadd dword ptr [ecx + 0x38]
+        fstp dword ptr [esp + 8]
+        fld dword ptr [esp + 0xc]
+        fadd dword ptr [ecx + 0x3c]
+        fstp dword ptr [esp + 0xc]
+        fmul g_chatBubbleHeightLift
+        fld dword ptr [esp + 8]
+        fmul g_chatBubbleHeightLift
+        fld dword ptr [esp + 0xc]
+        fmul g_chatBubbleHeightLift
+        fstp dword ptr [esp + 0xc]
+        fxch st(1)
+        fstp dword ptr [eax + 0x44]
+        mov edx, dword ptr [ecx + 0x40]
+        fstp dword ptr [edx + 0x48]
+        mov eax, dword ptr [ecx + 0x40]
+        mov ecx, dword ptr [esp + 0xc]
+        mov dword ptr [eax + 0x4c], ecx
+        ret 0xc
+    }
+}
+// Native x87 precision/spill boundaries and repeated backend loads are significant.
+// samp.dll RVA: 0x0009f630
+__declspec(naked) void CEntity::SetEulerRotation(float x,float y,float z) {
+    __asm {
+        fld dword ptr [esp + 4]
+        mov eax, dword ptr [ecx + 0x40]
+        fmul g_objectDegreesToRadians
+        mov edx, dword ptr [eax + 0x14]
+        fld dword ptr [esp + 8]
+        fmul g_objectDegreesToRadians
+        fstp dword ptr [esp + 8]
+        fld dword ptr [esp + 0xc]
+        fmul g_objectDegreesToRadians
+        fstp dword ptr [esp + 0xc]
+        fld st(0)
+        fcos
+        fstp dword ptr [esp + 4]
+        fsin
+        fld dword ptr [esp + 8]
+        fcos
+        fld dword ptr [esp + 8]
+        fsin
+        fld dword ptr [esp + 0xc]
+        fcos
+        fld dword ptr [esp + 0xc]
+        fsin
+        fst dword ptr [esp + 8]
+        fmul st,st(4)
+        fld st(1)
+        fmul st,st(5)
+        fstp dword ptr [esp + 0xc]
+        fld st(1)
+        fmul st,st(4)
+        fld st(1)
+        fmul st,st(4)
+        fsubp st(1),st
+        fstp dword ptr [edx]
+        mov eax, dword ptr [ecx + 0x40]
+        fld dword ptr [esp + 0xc]
+        mov edx, dword ptr [eax + 0x14]
+        fmul st,st(3)
+        fld dword ptr [esp + 8]
+        fmul st,st(5)
+        faddp st(1),st
+        fstp dword ptr [edx + 4]
+        mov eax, dword ptr [ecx + 0x40]
+        mov edx, dword ptr [eax + 0x14]
+        fld st(2)
+        fmul dword ptr [esp + 4]
+        fchs
+        fstp dword ptr [edx + 8]
+        mov eax, dword ptr [ecx + 0x40]
+        fld dword ptr [esp + 8]
+        mov edx, dword ptr [eax + 0x14]
+        fmul dword ptr [esp + 4]
+        fchs
+        fstp dword ptr [edx + 0x10]
+        mov eax, dword ptr [ecx + 0x40]
+        mov edx, dword ptr [eax + 0x14]
+        fld st(1)
+        fmul dword ptr [esp + 4]
+        fstp dword ptr [edx + 0x14]
+        mov eax, dword ptr [ecx + 0x40]
+        mov edx, dword ptr [eax + 0x14]
+        fxch st(4)
+        fstp dword ptr [edx + 0x18]
+        fxch st(3)
+        fmul st,st(2)
+        fxch st(3)
+        fmul st,st(1)
+        faddp st(3),st
+        mov eax, dword ptr [ecx + 0x40]
+        fxch st(2)
+        mov edx, dword ptr [eax + 0x14]
+        fstp dword ptr [edx + 0x20]
+        mov eax, dword ptr [ecx + 0x40]
+        fld dword ptr [esp + 8]
+        mov edx, dword ptr [eax + 0x14]
+        fmul st,st(2)
+        fld dword ptr [esp + 0xc]
+        fmul st,st(2)
+        fsubp st(1),st
+        fstp dword ptr [edx + 0x24]
+        mov eax, dword ptr [ecx + 0x40]
+        mov ecx, dword ptr [eax + 0x14]
+        fstp st(1)
+        fmul dword ptr [esp + 4]
+        fstp dword ptr [ecx + 0x28]
+        ret 0xc
+    }
+}
+
+// samp.dll RVA: 0x0011e64c
+const char g_entityDetachExceptionLabel[5]="s113";
+// Incoming ECX is unused; original owner/name is not established.
+// GTA SA virtual addresses: 0x00733160 and 0x00553260.
+// samp.dll RVA: 0x0009f8b0
+void __cdecl GameDetachBackendRwObject(void *entity,void *object) {
+    if(!entity||!object)return;
+    __try {
+        BYTE *vtable=*(BYTE**)entity;
+        short model=*(short*)((BYTE*)entity+0x22);
+        if(model>=400&&model<=611)((void(__cdecl*)(void*))0x733160)(object);
+        __asm {
+            mov ecx,entity
+            mov eax,vtable
+            call dword ptr [eax+0x44]
+            mov ecx,entity
+            mov eax,vtable
+            call dword ptr [eax+0x48]
+        }
+        ((void(__cdecl*)(void*))0x553260)(entity);
+    } __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),g_entityDetachExceptionLabel)) {}
+}
