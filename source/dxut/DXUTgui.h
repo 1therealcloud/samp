@@ -997,7 +997,9 @@ protected:
     static DWORD (APIENTRY * _GetFileVersionInfoSizeA)( LPSTR, LPDWORD );
 
 public:
+    // samp.dll RVA: 0x0008F370
     CDXUTIMEEditBox( CDXUTDialog *pDialog = NULL );
+    // samp.dll RVA: 0x0008F470
     virtual ~CDXUTIMEEditBox();
 
     static void Initialize();
@@ -1006,12 +1008,14 @@ public:
     static  HRESULT StaticOnCreateDevice();
     static  bool StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
 
+    // samp.dll RVA: 0x00085940
     static  void EnableImeSystem( bool bEnable );
 
     // samp.dll RVA: 0x00090230
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    // samp.dll RVA: 0x00085490
     virtual void UpdateRects();
     virtual void OnFocusIn();
     virtual void OnFocusOut();

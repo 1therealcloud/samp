@@ -4962,6 +4962,7 @@ bool      CDXUTIMEEditBox::m_bIMEStaticMsgProcCalled = false;
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008F370
 CDXUTIMEEditBox::CDXUTIMEEditBox( CDXUTDialog *pDialog )
 {
     CDXUTIMEEditBox::Initialize(); // ensure static vars are properly init'ed first
@@ -4969,30 +4970,31 @@ CDXUTIMEEditBox::CDXUTIMEEditBox( CDXUTDialog *pDialog )
     m_Type = DXUT_CONTROL_IMEEDITBOX;
     m_pDialog = pDialog;
 
-    s_bEnableImeSystem = true;
+    s_bEnableImeSystem = false;
     m_nIndicatorWidth = 0;
-    m_ReadingColor = D3DCOLOR_ARGB( 188, 255, 255, 255 );
-    m_ReadingWinColor = D3DCOLOR_ARGB( 128, 0, 0, 0 );
+    m_ReadingColor = D3DCOLOR_ARGB( 240, 255, 255, 255 );
+    m_ReadingWinColor = D3DCOLOR_ARGB( 240, 0, 0, 0 );
     m_ReadingSelColor = D3DCOLOR_ARGB( 255, 255, 0, 0 );
-    m_ReadingSelBkColor = D3DCOLOR_ARGB( 128, 80, 80, 80 );
+    m_ReadingSelBkColor = D3DCOLOR_ARGB( 240, 80, 80, 80 );
     m_CandidateColor = D3DCOLOR_ARGB( 255, 200, 200, 200 );
-    m_CandidateWinColor = D3DCOLOR_ARGB( 128, 0, 0, 0 );
+    m_CandidateWinColor = D3DCOLOR_ARGB( 240, 0, 0, 0 );
     m_CandidateSelColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
-    m_CandidateSelBkColor = D3DCOLOR_ARGB( 128, 158, 158, 158 );
+    m_CandidateSelBkColor = D3DCOLOR_ARGB( 240, 158, 158, 158 );
     m_CompColor = D3DCOLOR_ARGB( 255, 200, 200, 255 );
-    m_CompWinColor = D3DCOLOR_ARGB( 198, 0, 0, 0 );
+    m_CompWinColor = D3DCOLOR_ARGB( 240, 0, 0, 0 );
     m_CompCaretColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
     m_CompTargetColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
     m_CompTargetBkColor = D3DCOLOR_ARGB( 255, 150, 150, 150 );
     m_CompTargetNonColor = D3DCOLOR_ARGB( 255, 255, 255, 0 );
     m_CompTargetNonBkColor = D3DCOLOR_ARGB( 255, 150, 150, 150 );
-    m_IndicatorImeColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
-    m_IndicatorEngColor = D3DCOLOR_ARGB( 255, 0, 0, 0 );
-    m_IndicatorBkColor = D3DCOLOR_ARGB( 255, 128, 128, 128 );
+    m_IndicatorImeColor = D3DCOLOR_ARGB( 255, 200, 200, 255 );
+    m_IndicatorEngColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
+    m_IndicatorBkColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
 }
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008F470
 CDXUTIMEEditBox::~CDXUTIMEEditBox()
 {
 }
@@ -5020,8 +5022,15 @@ HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085490
 void CDXUTIMEEditBox::UpdateRects()
 {
+    if( !s_bEnableImeSystem )
+    {
+        CDXUTEditBox::UpdateRects();
+        return;
+    }
+
     // Temporary adjust m_width so that CDXUTEditBox can compute
     // the correct rects for its rendering since we need to make space
     // for the indicator button
@@ -5236,6 +5245,7 @@ void CDXUTIMEEditBox::CheckToggleState()
 //--------------------------------------------------------------------------------------
 // Enable/disable the entire IME system.  When disabled, the default IME handling
 // kicks in.
+// samp.dll RVA: 0x00085940
 void CDXUTIMEEditBox::EnableImeSystem( bool bEnable )
 {
     s_bEnableImeSystem = bEnable;
