@@ -30,3 +30,7 @@ float __stdcall GameDistanceBetweenPoints(float x,float y,float z,float otherX,f
 // samp.dll RVA: 0x0009cae0
 BOOL GameShouldSuppressMarker(int model,float x,float y,float z);
 #endif
+
+// Fixed native pool spans, without metadata/null/occupied-slot guards.
+// samp.dll RVA: 0x0009cdd0
+void GameHideAllWorldEntities();

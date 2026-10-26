@@ -20,6 +20,9 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // samp.dll RVA: 0x000ab670
+    PedBulletData *GetBulletData();
+
     // samp.dll RVA: 0x000acd70
     WORD GetCurrentWeaponTotalAmmo();
     // samp.dll RVA: 0x000b0ef0
@@ -588,6 +591,6 @@ BYTE __stdcall GameFindPlayerIndexByClump(void *clump);
 // samp.dll RVA: 0x000b40b0
 DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player);
 
-// Opaque native BSS words, retained to preserve unchecked table adjacency.
+// Shared raw raster snapshot words (+14/+0C), retaining native table adjacency.
 // samp.dll RVA: 0x002a9d98
 extern DWORD g_gamePlayerTableUnknown2A9D98[2];

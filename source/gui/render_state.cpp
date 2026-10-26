@@ -29,3 +29,22 @@ void ClientProcessMenuTransition() {
 }
 // samp.dll RVA: 0x0009e2d0
 void GameDebugDraw() { if(g_gameDebugStage==10)GameDrawDebugEntities(); }
+
+// samp.dll RVA: 0x0018e1d0
+HWND g_gameInputCooperativeWindow;
+// samp.dll RVA: 0x000a02a0
+void GameReacquireInputDevice() {
+    // GTA SA virtual addresses: DirectInput device slot and main HWND.
+    g_gameLastReleasedResource=*(IUnknown**)0xc8cfa4;
+    g_gameInputCooperativeWindow=*(HWND*)0xc97c1c;
+    if(g_gameLastReleasedResource&&g_gameInputCooperativeWindow) {
+        // Native COM slots20/34/1C: Unacquire, SetCooperativeLevel, Acquire.
+        IUnknown *device=g_gameLastReleasedResource;
+        ((HRESULT(WINAPI*)(IUnknown*))(*(DWORD**)device)[8])(device);
+        device=g_gameLastReleasedResource;
+        ((HRESULT(WINAPI*)(IUnknown*,HWND,DWORD))(*(DWORD**)device)[13])(
+            device,g_gameInputCooperativeWindow,6);
+        device=g_gameLastReleasedResource;
+        ((HRESULT(WINAPI*)(IUnknown*))(*(DWORD**)device)[7])(device);
+    }
+}

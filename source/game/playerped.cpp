@@ -21,7 +21,7 @@
 // samp.dll RVA: 0x002a9a50
 DWORD g_gamePlayerFlags[210];
 #pragma bss_seg(".pstate$b")
-// Opaque original BSS words between flags and known matrix caches.
+// Shared raw raster snapshots (+14 and +0C), between flags and matrix caches.
 // samp.dll RVA: 0x002a9d98
 DWORD g_gamePlayerTableUnknown2A9D98[2];
 #pragma bss_seg(".pstate$c")
@@ -3066,3 +3066,8 @@ BYTE __stdcall GameFindPlayerIndexByClump(void *clump) {
 // Native byte index is unchecked, unlike the existing bounded flags getter.
 // samp.dll RVA: 0x000b40b0
 DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player) { return g_gamePlayerFlags[player]; }
+
+// samp.dll RVA: 0x000ab670
+PedBulletData *CPed::GetBulletData() {
+    return *(DWORD*)(unknown2fd+44)?(PedBulletData*)unknown2fd:0;
+}

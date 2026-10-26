@@ -139,3 +139,18 @@ BOOL GameShouldSuppressMarker(int model,float x,float y,float z) {
     }
     return FALSE;
 }
+
+#include "game/hooks_render.h"
+// samp.dll RVA: 0x0009cdd0
+void GameHideAllWorldEntities() {
+    BYTE *cursor=(BYTE*)GamePoolBuildingGetArray();
+    for(int count=20000;count;--count,cursor+=56)
+        if(*(DWORD*)cursor&&*(DWORD*)cursor!=0x863c40)GameHideBuildingEntity(cursor);
+    cursor=(BYTE*)GamePoolDummyGetArray();
+    for(int count=16000;count;--count,cursor+=56)
+        if(*(DWORD*)cursor&&*(DWORD*)cursor!=0x863c40)GameHideBuildingEntity(cursor);
+    cursor=(BYTE*)GamePoolObjectGetArray();
+    for(int count=3100;count;--count,cursor+=412)
+        if(*(DWORD*)cursor&&*(DWORD*)cursor!=0x863c40)GameHideObjectEntity(cursor);
+    g_hookSuppressAllMarkers=1;
+}

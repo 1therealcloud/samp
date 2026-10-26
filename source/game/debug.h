@@ -113,3 +113,32 @@ void GameDebugSelectHeightmapBlock(int index);
 void GameDebugMoveToHeightmapBlock();
 // samp.dll RVA: 0x0009ddd0
 void GameDebugProcessHeightmap();
+
+// samp.dll RVA: 0x002aae10
+extern void *g_debugRasterImage;
+// samp.dll RVA: 0x002abe40
+extern void *g_debugRasterSource;
+// samp.dll RVA: 0x002abe44
+extern void *g_debugRasterResult;
+// samp.dll RVA: 0x002abe48
+extern void *g_debugRasterAlternate;
+// samp.dll RVA: 0x002a9a40
+extern DWORD g_debugRasterWord10;
+// samp.dll RVA: 0x0011e370
+extern const char g_debugAllBuildingsFilename[];
+// samp.dll RVA: 0x0011f594
+extern const char g_debugRasterMissingText[];
+// samp.dll RVA: 0x0011f5cc
+extern const char g_debugRasterFirstFilename[];
+// samp.dll RVA: 0x0011f5a0
+extern const char g_debugRasterSecondFilename[];
+// samp.dll RVA: 0x0011f5ac
+extern const char g_debugRasterDimensionsFormat[];
+// samp.dll RVA: 0x0009cf80
+void GameDebugExportWorldPlacements();
+// samp.dll RVA: 0x000b5610
+void GameDebugBindRasterResult();
+// samp.dll RVA: 0x000b5690
+void GameDebugWriteRasterImage(void *raster,const char *filename);
+// samp.dll RVA: 0x000b5700
+void GameDebugDumpRasterImages();

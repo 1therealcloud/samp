@@ -22,6 +22,10 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // Raw first settings byte, zero-extended; no settings pointer guard.
+    // samp.dll RVA: 0x000a21f0
+    DWORD GetSettingsByte0();
+
     // samp.dll RVA: 0x0000e3e0
     CLabelPool * GetLabelPool();
     // samp.dll RVA: 0x0000e3f0

@@ -72,4 +72,9 @@ void ClientDrawPlayerTags();
 // samp.dll RVA: 0x00074dc0
 void ClientDrawLabels();
 #include "game/debug.h"
+
+// samp.dll RVA: 0x0018e1d0
+extern HWND g_gameInputCooperativeWindow;
+// samp.dll RVA: 0x000a02a0
+void GameReacquireInputDevice();
 #endif

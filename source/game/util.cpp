@@ -85,8 +85,10 @@ float FloatOffset(float first,float second) {
 #include "game/game.h"
 // samp.dll RVA: 0x001553d8
 const CVector g_rwRotationAxes[3]={{1.0f,0.0f,0.0f},{0.0f,1.0f,0.0f},{0.0f,0.0f,1.0f}};
+#pragma bss_seg(".pstate$h")
 // samp.dll RVA: 0x002aae14
 float g_rwQueryAngle;
+#pragma bss_seg()
 
 // GTA SA virtual addresses: USA 7EB7C0; all other version values use 7EB800.
 // samp.dll RVA: 0x000b5320

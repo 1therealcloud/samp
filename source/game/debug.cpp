@@ -339,3 +339,87 @@ void GameDebugProcessHeightmap() {
     }
     --g_debugHeightmapWaitFrames;
 }
+
+#include "game/hooks_render.h"
+#pragma bss_seg(".pstate$g")
+// samp.dll RVA: 0x002aae10
+void *g_debugRasterImage;
+#pragma bss_seg()
+// samp.dll RVA: 0x002abe40
+void *g_debugRasterSource;
+// samp.dll RVA: 0x002abe44
+void *g_debugRasterResult;
+// samp.dll RVA: 0x002abe48
+void *g_debugRasterAlternate;
+// samp.dll RVA: 0x002a9a40
+DWORD g_debugRasterWord10;
+// samp.dll RVA: 0x0011e370
+const char g_debugAllBuildingsFilename[]="c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
+// samp.dll RVA: 0x0011f594
+const char g_debugRasterMissingText[]="No texture!";
+// samp.dll RVA: 0x0011f5cc
+const char g_debugRasterFirstFilename[]="Raster1.bmp";
+// samp.dll RVA: 0x0011f5a0
+const char g_debugRasterSecondFilename[]="Raster2.bmp";
+// samp.dll RVA: 0x0011f5ac
+const char g_debugRasterDimensionsFormat[]="Width %u Height: %u Depth: %u";
+// samp.dll RVA: 0x0009cf80
+void GameDebugExportWorldPlacements() {
+    FILE *file=fopen(g_debugAllBuildingsFilename,(const char*)&g_renderMapClickRpc);
+    if(!file)return;
+    BYTE *cursor=(BYTE*)GamePoolBuildingGetArray();
+    for(int count=20000;count;--count,cursor+=56)
+        if(*(DWORD*)cursor&&*(DWORD*)cursor!=0x863c40)GameDebugWriteEntityPlacement(cursor,file);
+    cursor=(BYTE*)GamePoolDummyGetArray();
+    for(int count=16000;count;--count,cursor+=56)
+        if(*(DWORD*)cursor&&*(DWORD*)cursor!=0x863c40)GameDebugWriteEntityPlacement(cursor,file);
+    cursor=(BYTE*)GamePoolObjectGetArray();
+    for(int count=3100;count;--count,cursor+=412)
+        if(*(DWORD*)cursor&&*(DWORD*)cursor!=0x863c40)GameDebugWriteEntityPlacement(cursor,file);
+    fclose(file);
+}
+// samp.dll RVA: 0x000b5610
+void GameDebugBindRasterResult() {
+    g_debugRasterSource=*(void**)0xc402d8;
+    g_debugRasterResult=((void*(__cdecl*)(void*))0x7f37c0)(g_debugRasterSource);
+    if(!g_debugRasterResult)g_pChat->AddDebugMessage(g_debugRasterMissingText);
+    // Native live result reloads: raw GTA globals, including publication of NULL.
+    *(void**)0xb4e690=g_debugRasterResult;*(void**)0xb4e68c=g_debugRasterResult;
+    *(void**)0xb4e47c=g_debugRasterResult;*(void**)0xb4e3ec=g_debugRasterResult;
+    *(DWORD*)0x8a7780=0x40000000;
+}
+// samp.dll RVA: 0x000b5690
+void GameDebugWriteRasterImage(void *raster,const char *filename) {
+    // Observed argument order from native snapshot globals; APIs remain unchecked.
+    g_debugRasterImage=((void*(__cdecl*)(DWORD,DWORD,DWORD))0x8026e0)(
+        g_gamePlayerTableUnknown2A9D98[1],g_debugRasterWord10,g_gamePlayerTableUnknown2A9D98[0]);
+    ((void*(__cdecl*)(void*))0x8027a0)(g_debugRasterImage);
+    ((void*(__cdecl*)(void*,void*))0x804250)(g_debugRasterImage,raster);
+    ((void*(__cdecl*)(void*,const char*))0x7ce990)(g_debugRasterImage,filename);
+    ((DWORD(__cdecl*)(void*))0x802740)(g_debugRasterImage);
+}
+// samp.dll RVA: 0x000b5700
+void GameDebugDumpRasterImages() {
+    g_debugRasterSource=*(void**)0xc402d8;
+    BYTE *raster=(BYTE*)g_debugRasterSource;
+    // Native dereferences the first pointer BEFORE checking it for null.
+    g_gamePlayerTableUnknown2A9D98[0]=*(DWORD*)(raster+0x14);
+    g_debugRasterWord10=*(DWORD*)(raster+0x10);
+    g_gamePlayerTableUnknown2A9D98[1]=*(DWORD*)(raster+0xc);
+    if(g_debugRasterSource) {
+        GameDebugWriteRasterImage(g_debugRasterSource,g_debugRasterFirstFilename);
+        g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat,g_gamePlayerTableUnknown2A9D98[1],
+            g_debugRasterWord10,g_gamePlayerTableUnknown2A9D98[0]);
+    }
+    if(g_debugRasterAlternate) {
+        raster=(BYTE*)g_debugRasterAlternate;
+        g_gamePlayerTableUnknown2A9D98[0]=*(DWORD*)(raster+0x14);
+        g_debugRasterWord10=*(DWORD*)(raster+0x10);
+        g_gamePlayerTableUnknown2A9D98[1]=*(DWORD*)(raster+0xc);
+        if(g_debugRasterAlternate) {
+            GameDebugWriteRasterImage(g_debugRasterAlternate,g_debugRasterSecondFilename);
+            g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat,g_gamePlayerTableUnknown2A9D98[1],
+                g_debugRasterWord10,g_gamePlayerTableUnknown2A9D98[0]);
+        }
+    }
+}

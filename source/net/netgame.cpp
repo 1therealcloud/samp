@@ -732,3 +732,6 @@ CLabelPool * CNetGame::GetLabelPool() {
 void CNetGame::SetLanMode(DWORD value) {
     *(DWORD*)(nativeState+0x239)=value;
 }
+
+// samp.dll RVA: 0x000a21f0
+DWORD CNetGame::GetSettingsByte0() {return **(BYTE**)(nativeState+0x3d5);}
