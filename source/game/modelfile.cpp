@@ -868,3 +868,135 @@ CModelMeshArray::~CModelMeshArray() {
 CModelGeometryArray::~CModelGeometryArray() {
     Resize(0);
 }
+
+// samp.dll RVA: 0x0011f8d8
+const float g_modelCollisionVertexScale=128.0f;
+// samp.dll RVA: 0x0011f8dc
+const float g_modelCollisionVertexInvScale=0.0078125f;
+extern "C" __int64 __cdecl _ftol2();
+// samp.dll RVA: 0x000b95d0
+DWORD CModelCollisionFile::SetInitialHeaderSize() {*(DWORD*)(nativeState+4)=0x74;return 1;}
+// samp.dll RVA: 0x000b95e0
+DWORD CModelCollisionFile::CalculateGeometryBounds(const CModelGeometry *geometry,float *minimum,float *maximum) {
+    minimum[0]=minimum[1]=minimum[2]=100000.0f;
+    maximum[0]=maximum[1]=maximum[2]=-100000.0f;
+    if(!geometry->vertices)return 0;
+    for(DWORD i=0;i!=(DWORD)geometry->vertexCount;++i) {
+        if(((float*)geometry->vertices)[i*3]<minimum[0])minimum[0]=((float*)geometry->vertices)[i*3];
+        if(((float*)geometry->vertices)[i*3+1]<minimum[1])minimum[1]=((float*)geometry->vertices)[i*3+1];
+        if(((float*)geometry->vertices)[i*3+2]<minimum[2])minimum[2]=((float*)geometry->vertices)[i*3+2];
+        if(((float*)geometry->vertices)[i*3]>maximum[0])maximum[0]=((float*)geometry->vertices)[i*3];
+        if(((float*)geometry->vertices)[i*3+1]>maximum[1])maximum[1]=((float*)geometry->vertices)[i*3+1];
+        if(((float*)geometry->vertices)[i*3+2]>maximum[2])maximum[2]=((float*)geometry->vertices)[i*3+2];
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000b96e0
+DWORD CModelCollisionFile::SetGeometryBounds(const CModelGeometry *geometry) {
+    CalculateGeometryBounds(geometry,(float*)(nativeState+0x20),(float*)(nativeState+0x2c));
+    memcpy(nativeState+0x44,geometry->sphere+3,4);
+    return 1;
+}
+// samp.dll RVA: 0x000b9710
+DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry *geometry) {
+    CalculateGeometryBounds(geometry,(float*)(nativeState+0x20),(float*)(nativeState+0x2c));
+    memcpy(nativeState+0x44,geometry->sphere+3,4);
+    if(!geometry->hasVertices)return 0;
+    if(*(void**)(nativeState+0x88)){free(*(void**)(nativeState+0x88));*(void**)(nativeState+0x88)=0;}
+    *(void**)(nativeState+0x88)=calloc(geometry->triangleCount,8);
+    *(DWORD*)(nativeState+0x8c)=geometry->triangleCount;
+    for(DWORD i=0;i!=(DWORD)geometry->triangleCount;++i) {
+        (*(ModelCollisionTriangle**)(nativeState+0x88))[i].vertices[0]=((WORD*)geometry->triangles)[i*4+3];
+        (*(ModelCollisionTriangle**)(nativeState+0x88))[i].vertices[1]=((WORD*)geometry->triangles)[i*4];
+        (*(ModelCollisionTriangle**)(nativeState+0x88))[i].vertices[2]=((WORD*)geometry->triangles)[i*4+1];
+        (*(ModelCollisionTriangle**)(nativeState+0x88))[i].surface=0;
+        (*(ModelCollisionTriangle**)(nativeState+0x88))[i].lighting=255;
+    }
+    if(*(void**)(nativeState+0x90)){free(*(void**)(nativeState+0x90));*(void**)(nativeState+0x90)=0;}
+    *(void**)(nativeState+0x90)=calloc(geometry->vertexCount,6);
+    *(DWORD*)(nativeState+0x94)=geometry->vertexCount;
+    for(DWORD i=0;i!=(DWORD)geometry->vertexCount;++i)for(int axis=0;axis<3;++axis) {
+        const float *coordinate=(const float*)geometry->vertices+i*3+axis;
+        SHORT converted;
+        // Native keeps FMUL extended until the real CRT truncation helper.
+        __asm {
+            mov eax,coordinate
+            fld dword ptr [eax]
+            fmul dword ptr g_modelCollisionVertexScale
+            call _ftol2
+            mov converted,ax
+        }
+        (*(ModelCollisionVertex**)(nativeState+0x90))[i].values[axis]=converted;
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000b98a0
+bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex *vertex,const ModelCollisionBounds *bounds) {
+    float x=vertex->values[0]*g_modelCollisionVertexInvScale;
+    float y=vertex->values[1]*g_modelCollisionVertexInvScale;
+    float z=vertex->values[2]*g_modelCollisionVertexInvScale;
+    return x>=bounds->minimum[0]&&x<=bounds->maximum[0]&&
+        y>=bounds->minimum[1]&&y<=bounds->maximum[1]&&
+        z>=bounds->minimum[2]&&z<=bounds->maximum[2];
+}
+// samp.dll RVA: 0x000b9950
+bool CModelCollisionFile::TriangleHasVertexInBounds(const ModelCollisionTriangle *triangle,const ModelCollisionBounds *bounds) {
+    ModelCollisionVertex *vertices=*(ModelCollisionVertex**)(nativeState+0x90);
+    return ContainsVertex(vertices+triangle->vertices[0],bounds)||
+        ContainsVertex(vertices+triangle->vertices[1],bounds)||
+        ContainsVertex(vertices+triangle->vertices[2],bounds);
+}
+// samp.dll RVA: 0x000b99c0
+void __stdcall ModelCollisionMinVertex(ModelCollisionVertex *target,const ModelCollisionVertex *value) {
+    if(value->values[0]<target->values[0])target->values[0]=value->values[0];
+    if(value->values[1]<target->values[1])target->values[1]=value->values[1];
+    if(value->values[2]<target->values[2])target->values[2]=value->values[2];
+}
+// samp.dll RVA: 0x000b9a00
+void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex *target,const ModelCollisionVertex *value) {
+    if(value->values[0]>target->values[0])target->values[0]=value->values[0];
+    if(value->values[1]>target->values[1])target->values[1]=value->values[1];
+    if(value->values[2]>target->values[2])target->values[2]=value->values[2];
+}
+// samp.dll RVA: 0x000b9a40
+void *CModelCollisionArrayA::Get(DWORD index) {return index<count?items[index]:0;}
+// samp.dll RVA: 0x000b9a60
+DWORD CModelCollisionArrayA::GetCount() {return count;}
+// samp.dll RVA: 0x000b9b70
+bool CModelCollisionArrayA::Resize(DWORD size) {
+    if(!size) {if(items){free(items);items=0;}count=0;return true;}
+    void **resized=(void**)realloc(items,size*4);
+    if(!resized)return false;
+    items=resized;
+    for(DWORD i=count;i<size;++i)items[i]=0;
+    count=size;return true;
+}
+// samp.dll RVA: 0x000ba040
+DWORD CModelCollisionArrayA::Insert(void *value) {
+    DWORD oldCount=count,index=0;
+    while(index<oldCount&&items[index])++index;
+    if((LONG)index>=0&&index<oldCount){items[index]=value;return index;}
+    if(!Resize(oldCount+1))return 0xffffffff;
+    items[oldCount]=value;return oldCount;
+}
+// samp.dll RVA: 0x000b9a70
+void *CModelCollisionArrayB::Get(DWORD index) {return index<count?items[index]:0;}
+// samp.dll RVA: 0x000b9a90
+DWORD CModelCollisionArrayB::GetCount() {return count;}
+// samp.dll RVA: 0x000b9be0
+bool CModelCollisionArrayB::Resize(DWORD size) {
+    if(!size) {if(items){free(items);items=0;}count=0;return true;}
+    void **resized=(void**)realloc(items,size*4);
+    if(!resized)return false;
+    items=resized;
+    for(DWORD i=count;i<size;++i)items[i]=0;
+    count=size;return true;
+}
+// samp.dll RVA: 0x000ba0a0
+DWORD CModelCollisionArrayB::Insert(void *value) {
+    DWORD oldCount=count,index=0;
+    while(index<oldCount&&items[index])++index;
+    if((LONG)index>=0&&index<oldCount){items[index]=value;return index;}
+    if(!Resize(oldCount+1))return 0xffffffff;
+    items[oldCount]=value;return oldCount;
+}

@@ -251,7 +251,69 @@ struct CDffFile {
     // samp.dll RVA: 0x000bbf00
     DWORD ReadGeometries();
 };
+// Collision conversion records; coordinates are signed fixed-point /128.
+struct ModelCollisionVertex {SHORT values[3];};
+struct ModelCollisionTriangle {WORD vertices[3];BYTE surface,lighting;};
+struct ModelCollisionBounds {float minimum[3],maximum[3];};
+// Observed collision-file view only. Full construction/allocation and file/BVH
+// lifecycle are not established here; do not allocate this prefix as a full type.
+class CModelCollisionFile {public:
+    BYTE nativeState[0xa0];
+    // samp.dll RVA: 0x000b95d0
+    DWORD SetInitialHeaderSize();
+    // Native entry does not consume this. Writes sentinel bounds before checking vertices.
+    // samp.dll RVA: 0x000b95e0
+    DWORD CalculateGeometryBounds(const CModelGeometry *geometry,float *minimum,float *maximum);
+    // samp.dll RVA: 0x000b96e0
+    DWORD SetGeometryBounds(const CModelGeometry *geometry);
+    // samp.dll RVA: 0x000b9710
+    DWORD BuildGeometry(const CModelGeometry *geometry);
+    // samp.dll RVA: 0x000b98a0
+    bool ContainsVertex(const ModelCollisionVertex *vertex,const ModelCollisionBounds *bounds);
+    // Tests any vertex inside, not full triangle/box intersection.
+    // samp.dll RVA: 0x000b9950
+    bool TriangleHasVertexInBounds(const ModelCollisionTriangle *triangle,const ModelCollisionBounds *bounds);
+};
+// The two native pointer-array specializations have identical layout/logic;
+// original template names and precise element ownership remain unestablished.
+struct CModelCollisionArrayA {
+    void **items;DWORD count;
+    // samp.dll RVA: 0x000b9a40
+    void *Get(DWORD index);
+    // samp.dll RVA: 0x000b9a60
+    DWORD GetCount();
+    // samp.dll RVA: 0x000b9b70
+    bool Resize(DWORD size);
+    // samp.dll RVA: 0x000ba040
+    DWORD Insert(void *value);
+};
+struct CModelCollisionArrayB {
+    void **items;DWORD count;
+    // samp.dll RVA: 0x000b9a70
+    void *Get(DWORD index);
+    // samp.dll RVA: 0x000b9a90
+    DWORD GetCount();
+    // samp.dll RVA: 0x000b9be0
+    bool Resize(DWORD size);
+    // samp.dll RVA: 0x000ba0a0
+    DWORD Insert(void *value);
+};
+// Incoming ECX is unused; original owner/name not established.
+// samp.dll RVA: 0x000b99c0
+void __stdcall ModelCollisionMinVertex(ModelCollisionVertex *target,const ModelCollisionVertex *value);
+// samp.dll RVA: 0x000b9a00
+void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex *target,const ModelCollisionVertex *value);
 #pragma pack(pop)
+
+typedef char NativeCollisionVertexExtent[(sizeof(ModelCollisionVertex)==6)?1:-1];
+typedef char NativeCollisionTriangleExtent[(sizeof(ModelCollisionTriangle)==8)?1:-1];
+typedef char NativeCollisionBoundsExtent[(sizeof(ModelCollisionBounds)==24)?1:-1];
+typedef char NativeCollisionArrayAExtent[(sizeof(CModelCollisionArrayA)==8)?1:-1];
+typedef char NativeCollisionArrayBExtent[(sizeof(CModelCollisionArrayB)==8)?1:-1];
+// samp.dll RVA: 0x0011f8d8
+extern const float g_modelCollisionVertexScale;
+// samp.dll RVA: 0x0011f8dc
+extern const float g_modelCollisionVertexInvScale;
 typedef char NativeModelStreamExtent[(sizeof(CModelFileStream)==0x17)?1:-1];
 typedef char NativeModelChunkExtent[(sizeof(CModelFileChunk)==0x23)?1:-1];
 typedef char NativeTxdFileExtent[(sizeof(CTxdFile)==0x2b)?1:-1];
