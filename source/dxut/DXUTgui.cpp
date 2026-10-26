@@ -337,6 +337,7 @@ void CDXUTDialog::Refresh()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00090360
 HRESULT CDXUTDialog::OnRender( float fElapsedTime )
 {   
     // If this assert triggers, you need to call CDXUTDialogResourceManager::On*Device() from inside
@@ -366,6 +367,9 @@ HRESULT CDXUTDialog::OnRender( float fElapsedTime )
 
     // Set up a state block here and restore it when finished drawing all the controls
     m_pManager->m_pStateBlock->Capture();
+
+    // Native begins the sprite before configuring and drawing the dialog background.
+    m_pManager->m_pSprite->Begin( D3DXSPRITE_DONOTSAVESTATE );
 
     pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
     pd3dDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
@@ -404,7 +408,6 @@ HRESULT CDXUTDialog::OnRender( float fElapsedTime )
     DXUTTextureNode* pTextureNode = GetTexture( 0 );
     pd3dDevice->SetTexture( 0, pTextureNode->pTexture );
 
-    m_pManager->m_pSprite->Begin( D3DXSPRITE_DONOTSAVESTATE );
 
     // Render the caption if it's enabled.
     if( m_bCaption )
@@ -432,11 +435,11 @@ HRESULT CDXUTDialog::OnRender( float fElapsedTime )
             if( pControl == s_pControlFocus )
                 continue;
 
-            pControl->Render( pd3dDevice, 1.0f );
+            pControl->Render( pd3dDevice, fElapsedTime );
         }
 
         if( s_pControlFocus != NULL && s_pControlFocus->m_pDialog == this )
-            s_pControlFocus->Render( pd3dDevice, 1.0f );
+            s_pControlFocus->Render( pd3dDevice, fElapsedTime );
     }
 
     m_pManager->m_pSprite->End();

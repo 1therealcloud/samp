@@ -222,6 +222,7 @@ public:
 
     // Device state notification
     void Refresh();
+    // samp.dll RVA: 0x00090360
     HRESULT OnRender( float fElapsedTime );    
 
     // Shared resource access. Indexed fonts and textures are shared among
