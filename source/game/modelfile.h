@@ -33,6 +33,8 @@ struct CModelFileStream {
     BYTE *Current();
     // samp.dll RVA: 0x000bc4a0
     DWORD Remaining();
+    // samp.dll RVA: 0x000b36c0
+    DWORD Skip(DWORD count);
 };
 struct CModelFileChunk {
     DWORD type,length;WORD build,version;CModelFileStream stream;
@@ -76,17 +78,25 @@ struct CModelMaterialArray {
     void **items;DWORD count;
     // samp.dll RVA: 0x0000c550
     bool Resize(DWORD size);
+    // samp.dll RVA: 0x000bcdb0
+    DWORD Insert(void *material);
 };
 struct CModelMeshArray {
     BYTE **items;DWORD count;
     // samp.dll RVA: 0x0000c5c0
     bool Resize(DWORD size);
+    // samp.dll RVA: 0x000bce10
+    DWORD Insert(BYTE *mesh);
+};
+struct CModelMaterialRecord {
+    DWORD values[7];
+    struct Texture {DWORD flags;char name[32],mask[32];} textures[2];
 };
 struct CModelGeometry {
     BYTE modified,modifiedOther;DWORD error,detail;WORD flags,textureSets;
     int triangleCount,vertexCount,morphCount;BYTE hasColors,unknown1b;
     void *colors,*unknown20,*uv,*triangles;float sphere[4];DWORD hasVertices,hasNormals;
-    void *vertices,*normals;CModelFileChunk *material,*extension;DWORD unknown54;
+    void *vertices,*normals;CModelFileChunk *material,*extension;int materialCount;
     CModelMaterialArray materials;BYTE unknown60;DWORD unknown61,unknown65,unknown69;
     CModelMeshArray meshes;BYTE opaque75[44];
     // samp.dll RVA: 0x000bbe80
@@ -103,6 +113,12 @@ struct CModelGeometry {
     void SetError(DWORD value);
     // samp.dll RVA: 0x000bc4d0
     void SetDetail(DWORD value);
+    // samp.dll RVA: 0x000bc600
+    CModelFileChunk *ReadChunk(CModelFileStream *input);
+    // samp.dll RVA: 0x000bd180
+    bool ReadMaterial(CModelFileStream *input);
+    // samp.dll RVA: 0x000bd5f0
+    bool ReadMaterials(CModelFileStream *input);
 };
 struct CDffFile {
     DWORD error,detail;CModelFileStream stream;DWORD fileLength;BYTE hasCollision;
@@ -142,6 +158,7 @@ typedef char NativeModelChunkExtent[(sizeof(CModelFileChunk)==0x23)?1:-1];
 typedef char NativeTxdFileExtent[(sizeof(CTxdFile)==0x2b)?1:-1];
 typedef char NativeDffFileExtent[(sizeof(CDffFile)==0x4c)?1:-1];
 typedef char NativeModelGeometryExtent[(sizeof(CModelGeometry)==0xa1)?1:-1];
+typedef char NativeModelMaterialRecordExtent[(sizeof(CModelMaterialRecord)==0xa4)?1:-1];
 typedef char NativeModelGeometryMaterialsOffset[(offsetof(CModelGeometry,materials)==0x58)?1:-1];
 typedef char NativeModelGeometryMeshesOffset[(offsetof(CModelGeometry,meshes)==0x6d)?1:-1];
 typedef char NativeDffFramesOffset[(offsetof(CDffFile,frames)==0x34)?1:-1];

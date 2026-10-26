@@ -305,7 +305,7 @@ CModelGeometry::CModelGeometry() {
     error=0;detail=0;flags=0;textureSets=0;triangleCount=0;vertexCount=0;morphCount=0;
     hasColors=0;colors=0;unknown1b=0;unknown20=0;uv=0;triangles=0;
     memset(sphere,0,16);hasVertices=0;hasNormals=0;vertices=0;normals=0;
-    unknown54=0;unknown60=0;unknown61=0;unknown65=0;unknown69=0;
+    materialCount=0;unknown60=0;unknown61=0;unknown65=0;unknown69=0;
     modified=0;modifiedOther=0;memset(opaque75,0,44);material=0;extension=0;
 }
 // samp.dll RVA: 0x0000d620
@@ -360,4 +360,101 @@ CDffFile::~CDffFile() {
     for(DWORD i=0;(int)i<count;++i)if(i<geometries.count&&geometries.items[i])delete geometries.items[i];
     geometries.Resize(0);geometries.Resize(0);
     if(stream.owned&&stream.data){free(stream.data);stream.data=0;}
+}
+// samp.dll RVA: 0x000bc600
+CModelFileChunk *CModelGeometry::ReadChunk(CModelFileStream *input) {
+    if(!input->length||input->ended)return 0;
+    CModelFileChunk *chunk=(CModelFileChunk*)::operator new(0x23);
+    if(chunk) {
+        chunk->stream.data=0;chunk->stream.length=0;chunk->stream.position=0;chunk->stream.ended=0;chunk->stream.owned=0;
+        chunk->stream.compressed=0;chunk->stream.scratchLength=0;chunk->stream.scratch=0;
+        chunk->type=0;chunk->length=0;chunk->build=0xffff;chunk->version=0x1803;
+    }
+    DWORD word=0;input->Read(&word,4);chunk->type=word;
+    word=0;input->Read(&word,4);chunk->length=word;
+    word=0;input->Read(&word,2);chunk->build=(WORD)word;
+    word=0;input->Read(&word,2);chunk->version=(WORD)word;
+    chunk->stream.length=chunk->length;chunk->stream.data=input->data+input->position;
+    chunk->stream.position=0;chunk->stream.ended=0;chunk->stream.owned=0;
+    DWORD next=input->position+chunk->length;
+    if(next<input->length)input->position=next;
+    else {input->position=input->length;input->ended=1;}
+    return chunk;
+}
+// samp.dll RVA: 0x000bcdb0
+DWORD CModelMaterialArray::Insert(void *entry) {
+    DWORD previous=count,index=0;
+    while(index!=previous&&items[index])++index;
+    if(index!=previous&&(int)index>=0){items[index]=entry;return index;}
+    if(!Resize(previous+1))return 0xffffffff;
+    items[previous]=entry;return previous;
+}
+// samp.dll RVA: 0x000bce10
+DWORD CModelMeshArray::Insert(BYTE *entry) {
+    DWORD previous=count,index=0;
+    while(index!=previous&&items[index])++index;
+    if(index!=previous&&(int)index>=0){items[index]=entry;return index;}
+    if(!Resize(previous+1))return 0xffffffff;
+    items[previous]=entry;return previous;
+}
+// samp.dll RVA: 0x000b36c0
+DWORD CModelFileStream::Skip(DWORD count) {
+    DWORD next=position+count;
+    if(next<length){position=next;return next;}
+    position=length;ended=1;return length;
+}
+// samp.dll RVA: 0x000bd180
+bool CModelGeometry::ReadMaterial(CModelFileStream *input) {
+    CModelMaterialRecord *record=(CModelMaterialRecord*)calloc(1,0xa4);
+    DWORD header[3],nested[3],failure=9,remaining=0;
+    input->Read(header,12);
+    if(header[0]!=1||header[1]!=28)goto malformed;
+    for(unsigned field=0;field<7;++field){DWORD value=0;input->Read(&value,4);record->values[field]=value;}
+    if(record->values[3]>2) {
+        if(!error)error=0xabe8;detail=record->values[3];free(record);return false;
+    }
+    for(DWORD i=0;i!=record->values[3];++i) {
+        input->Read(header,12);if(header[0]!=6)continue;
+        input->Read(header,12);
+        if(header[0]!=1||header[1]!=4){failure=4;goto malformed;}
+        DWORD value=0;input->Read(&value,4);record->textures[i].flags=value;
+        input->Read(header,12);
+        if(header[0]!=2||header[1]>32){failure=5;goto malformed;}
+        input->Read(record->textures[i].name,header[1]);
+        input->Read(header,12);
+        if(header[0]!=2||header[1]>32){failure=6;goto malformed;}
+        input->Read(record->textures[i].mask,header[1]);
+        input->Read(header,12);
+        if(header[0]==3){if(header[1])input->Skip(header[1]);}
+        else if(header[1]){failure=7;goto malformed;}
+    }
+    input->Read(header,12);
+    if(header[0]!=3){failure=8;goto malformed;}
+    remaining=header[1];
+    while(remaining) {
+        input->Read(nested,12);remaining-=12;
+        if(nested[0]!=0x253f2fc&&nested[0]!=0x253f2f6&&nested[0]!=0x120&&nested[0]!=0x135) {
+            if(!error)error=0xabe2;detail=nested[0];free(record);return false;
+        }
+        input->Skip(nested[1]);remaining-=nested[1];
+    }
+    materials.Insert(record);return true;
+malformed:
+    if(!error)error=0xabe7;detail=failure;if(record)free(record);return false;
+}
+// samp.dll RVA: 0x000bd5f0
+bool CModelGeometry::ReadMaterials(CModelFileStream *input) {
+    material=ReadChunk(input);
+    if(material->type!=8){if(!error)error=0xabf3;return false;}
+    DWORD header[3];material->stream.Read(header,12);
+    if(header[0]==1) {
+        DWORD count=0;material->stream.Read(&count,4);materialCount=(int)count;
+        material->stream.Skip(header[1]-4);
+        if(materialCount<=0||materialCount>=256){if(!error)error=0xabe9;return false;}
+        for(int i=0;i<materialCount;++i) {
+            material->stream.Read(header,12);
+            if(header[0]==7&&!ReadMaterial(&material->stream)){if(!error)error=0xabe9;return false;}
+        }
+    }
+    return true;
 }
