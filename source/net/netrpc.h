@@ -127,6 +127,8 @@ void ScrDisableCheckpoint(RPCParameters *parameters);
 void ScrDisableRaceCheckpoint(RPCParameters *parameters);
 // samp.dll RVA: 0x0000eb60
 void UnRegisterRPCs(RakClientInterface *client);
+// samp.dll RVA: 0x00011f80
+void ScrCustomModelDownload(RPCParameters *parameters);
 // samp.dll RVA: 0x00117fa8
 extern const int g_rpcScrSetIngameTimer;
 // samp.dll RVA: 0x00117fa4

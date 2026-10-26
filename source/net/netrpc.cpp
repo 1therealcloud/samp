@@ -27,6 +27,28 @@
 #include "game/game.h"
 #include "game/patches.h"
 #include "game/custommodels.h"
+// samp.dll RVA: 0x00011f80
+void ScrCustomModelDownload(RPCParameters *parameters) {
+    RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
+    char url[257]={0};BYTE status=0,type=0,urlLength=0,stage=0;
+    DWORD hash=0,unpackedLength=0;int length=0;BYTE chunk[4096];
+    stream.ReadBits(&status,8,true);
+    if(status==0) {
+        g_customModels->ResumeReadyWorker();g_customModels->AbortDownload(0,6001,0);
+    }else if(status==2)g_customModels->FinishDownload(0);
+    else if(status==6) {
+        stream.ReadBits(&type,8,true);stream.ReadBits((BYTE*)&hash,32,true);stream.ReadBits(&urlLength,8,true);
+        stream.Read(url,(int)urlLength);
+        g_customModels->ResumeReadyWorker();g_customModels->BeginUrlDownload(type,hash,url);
+    }else if(status==5) {
+        stream.ReadBits(&type,8,true);stream.ReadBits((BYTE*)&hash,32,true);
+        g_customModels->ResumeReadyWorker();g_customModels->BeginDirectDownload(type,hash);
+    }else if(status==1) {
+        stream.ReadBits(&stage,8,true);stream.ReadBits((BYTE*)&unpackedLength,32,true);stream.ReadBits((BYTE*)&length,32,true);
+        if(length<0||length>4096)return;
+        stream.Read((char*)chunk,length);g_customModels->ProcessCompressedChunk(stage,unpackedLength,chunk,(DWORD)length);
+    }
+}
 // samp.dll RVA: 0x00011d80
 void ScrCustomModelRecord(RPCParameters *parameters) {
     RakNet::BitStream stream(parameters->input,(int)parameters->numberOfBitsOfData/8+1,false);
@@ -662,7 +684,7 @@ const int g_rpcUnknown00117F10=179;
 // Custom-model reset handler RVA0x0000ea40; legacy registry name retained.
 // samp.dll RVA: 0x00117f0c
 const int g_rpcUnknown00117F0C=180;
-// Handler RVA0x00011f80; semantic name not established.
+// Custom-model download handler RVA0x00011f80; legacy registry name retained.
 // samp.dll RVA: 0x00117f08
 const int g_rpcUnknown00117F08=183;
 // Custom-model completion handler RVA0x0000ead0; legacy registry name retained.

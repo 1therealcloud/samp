@@ -1,16 +1,38 @@
 #ifndef SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #include <windows.h>
+#include <stddef.h>
 #pragma pack(push,1)
 struct CustomModelDownload {
     void *file;BYTE type;DWORD downloaded,total,crc,hash,index;char temporaryPath[261];
 };
+struct CustomModelWorker {
+    DWORD id;BYTE active,paused,enabled,stop;DWORD thread;char url[257];BYTE failed;DWORD result;CustomModelDownload download;
+};
 #pragma pack(pop)
 typedef char NativeCustomDownloadExtent[(sizeof(CustomModelDownload)==0x11e)?1:-1];
+typedef char NativeCustomWorkerExtent[(sizeof(CustomModelWorker)==0x230)?1:-1];
+typedef char NativeCustomWorkerDownloadOffset[(offsetof(CustomModelWorker,download)==0x112)?1:-1];
+typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker,failed)==0x10d)?1:-1];
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
-// Constructor and directory/model initialization are recovered; worker startup/ownership remain open.
+// Worker startup is recovered; file validation/parser backends remain open.
 class CCustomModels {public:
     BYTE nativeState[0x206d];
+    // samp.dll RVA: 0x0000d070
+    void ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const void *data,DWORD length);
+    // Native validators are declaration-only until their parser backends are recovered.
+    // samp.dll RVA: 0x0000da80
+    bool VerifyDff(const char *filename,DWORD hash);
+    // samp.dll RVA: 0x0000bfd0
+    bool VerifyTxd(const char *filename,DWORD hash);
+    // samp.dll RVA: 0x0000dbd0
+    void FinishDownload(CustomModelDownload *download);
+    // samp.dll RVA: 0x0000dff0
+    bool StartWorkers();
+    // samp.dll RVA: 0x0000e0a0
+    void QueueUrl(CustomModelDownload *download,const char *url);
+    // samp.dll RVA: 0x0000e180
+    void BeginUrlDownload(BYTE type,DWORD hash,const char *url);
     // samp.dll RVA: 0x0000c7e0
     int FindResourceIndex(BYTE type,DWORD hash);
     // samp.dll RVA: 0x0000c830
@@ -176,4 +198,35 @@ extern const char g_customDownloadWriteMode[];
 extern const char g_customFillDownloadError[];
 // samp.dll RVA: 0x00118e1c
 extern const char g_customDownloadReadMode[];
+// Selected LZMA allocator g_Alloc supplies native allocator-table role155478.
+// samp.dll RVA: 0x000c50d0
+int __stdcall CustomModelLzmaDecode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD *sourceLength,const BYTE *properties,DWORD propertySize);
+// samp.dll RVA: 0x00117e1c
+extern const char g_customDownloadSizeError[];
+// samp.dll RVA: 0x00117de8
+extern const char g_customDownloadCrcError[];
+// samp.dll RVA: 0x0000de60
+BOOL __cdecl CustomModelFetchUrl(CustomModelWorker *worker,const char *proxy);
+// samp.dll RVA: 0x0000df90
+void __cdecl CustomModelDownloadThread(void *worker);
+// samp.dll RVA: 0x000c52d0
+const char *CustomModelGetProxy();
+// samp.dll RVA: 0x002ac390
+extern char g_customProxy[261];
+// samp.dll RVA: 0x0011f9c0
+extern const char g_customRegistryKey[];
+// samp.dll RVA: 0x0011f9dc
+extern const char g_customProxyValue[];
+// samp.dll RVA: 0x00117e58
+extern const char g_customUserAgent[];
+// samp.dll RVA: 0x00117e9c
+extern const char g_customLogUrlsOption[];
+// samp.dll RVA: 0x00117e8c
+extern const char g_customUrlLogFormat[];
+// samp.dll RVA: 0x00117e64
+extern const char g_customNoFreeWorkerError[];
+// samp.dll RVA: 0x00117ed8
+extern const char g_customUrlInfoError[];
+// samp.dll RVA: 0x00117ea4
+extern const char g_customUrlOpenError[];
 #endif

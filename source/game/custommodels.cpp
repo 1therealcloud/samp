@@ -604,6 +604,165 @@ void CCustomModels::Initialize() {
 #include "RakClientInterface.h"
 #include "net/netgame.h"
 #include "gui/render_dependencies.h"
+#include "LzmaDec.h"
+#include "Alloc.h"
+#include "config.h"
+#include <process.h>
+#include <curl/curl.h>
+typedef char NativeLzmaSizeExtent[(sizeof(SizeT)==4)?1:-1];
+// samp.dll RVA: 0x00117e1c
+const char g_customDownloadSizeError[]="[error] file 0x%X bad length got:%u expected:%u. Deleting..";
+// samp.dll RVA: 0x00117de8
+const char g_customDownloadCrcError[]="[error] file 0x%X bad checksum (0x%X). Deleting..";
+// samp.dll RVA: 0x002ac390
+char g_customProxy[261];
+// samp.dll RVA: 0x0011f9c0
+const char g_customRegistryKey[]="Software\\SAMP";
+// samp.dll RVA: 0x0011f9dc
+const char g_customProxyValue[]="artwork_proxy";
+// samp.dll RVA: 0x00117e58
+const char g_customUserAgent[]="SAMP/0.3";
+// samp.dll RVA: 0x00117e9c
+const char g_customLogUrlsOption[]="logurls";
+// samp.dll RVA: 0x00117e8c
+const char g_customUrlLogFormat[]="[url 0x%X]: %s";
+// samp.dll RVA: 0x00117e64
+const char g_customNoFreeWorkerError[]="[error] AddURLRequest: No free slots!";
+// samp.dll RVA: 0x00117ed8
+const char g_customUrlInfoError[]="DownloadRedirect: Can't fill download info!";
+// samp.dll RVA: 0x00117ea4
+const char g_customUrlOpenError[]="DownloadRedirect: Can't open temp file for writing!";
+// samp.dll RVA: 0x000c52d0
+const char *CustomModelGetProxy() {
+    memset(g_customProxy,0,261);HKEY key;DWORD length=260,type;
+    if(RegOpenKeyExA(HKEY_CURRENT_USER,g_customRegistryKey,0,0x20019,&key))return 0;
+    // Native intentionally does not close the opened key.
+    return RegQueryValueExA(key,g_customProxyValue,0,&type,(BYTE*)g_customProxy,&length)==0?g_customProxy:0;
+}
+// samp.dll RVA: 0x0000de60
+BOOL __cdecl CustomModelFetchUrl(CustomModelWorker *worker,const char *proxy) {
+    CURL *curl=curl_easy_init();if(!curl)return FALSE;
+    worker->failed=0;worker->result=0;
+    curl_easy_setopt(curl,(CURLoption)10002,worker->url);
+    curl_easy_setopt(curl,(CURLoption)10102,g_netEmptyShoppingSubsection);
+    curl_easy_setopt(curl,(CURLoption)10018,g_customUserAgent);
+    curl_easy_setopt(curl,(CURLoption)43,1L);
+    curl_easy_setopt(curl,(CURLoption)20011,CustomModelDownloadWrite);
+    curl_easy_setopt(curl,(CURLoption)10001,&worker->download);
+    curl_easy_setopt(curl,(CURLoption)45,1L);
+    if(proxy&&strlen(proxy))curl_easy_setopt(curl,(CURLoption)10004,proxy);
+    CURLcode result=curl_easy_perform(curl);
+    if(result){worker->failed=1;worker->result=result;}
+    curl_easy_cleanup(curl);
+    if(worker->failed) {
+        const char *detail=curl_easy_strerror(result);g_customDownloadManager->AbortDownload(&worker->download,(int)worker->result,detail);
+    }else g_customDownloadManager->FinishDownload(&worker->download);
+    return TRUE;
+}
+// samp.dll RVA: 0x0000df90
+void __cdecl CustomModelDownloadThread(void *argument) {
+    const char *proxy=CustomModelGetProxy();curl_global_init(3);
+    CustomModelWorker *worker=(CustomModelWorker*)argument;
+    while(!worker->stop) {
+        if(worker->active){CustomModelFetchUrl(worker,proxy);worker->active=0;}
+        Sleep(1);
+    }
+    curl_global_cleanup();worker->enabled=0;
+}
+// samp.dll RVA: 0x0000dff0
+bool CCustomModels::StartWorkers() {
+    for(int i=0;i<6;++i) {
+        CustomModelWorker *worker=(CustomModelWorker*)(nativeState+0x1345+i*0x230);if(worker->enabled)continue;
+        worker->thread=(DWORD)_beginthread(CustomModelDownloadThread,0,worker);
+        if(worker->thread==0xffffffff){worker->enabled=0;worker->failed=1;worker->result=0xffffffff;return false;}
+        worker->id=i+1;worker->enabled=1;worker->stop=0;worker->active=0;worker->failed=0;worker->result=0xffffffff;
+        memset(worker->url,0,257);memset(&worker->download,0,0x11e);
+    }
+    nativeState[0x1344]=1;return true;
+}
+// samp.dll RVA: 0x0000e0a0
+void CCustomModels::QueueUrl(CustomModelDownload *download,const char *url) {
+    if(g_pChat&&g_pConfig&&g_pConfig->GetIntValue(g_customLogUrlsOption))g_pChat->AddInfoMessage(g_customUrlLogFormat,download->hash,url);
+    g_customDownloadManager=this;if(!nativeState[0x1344])StartWorkers();
+    for(int i=0;i<6;++i) {
+        CustomModelWorker *worker=(CustomModelWorker*)(nativeState+0x1345+i*0x230);
+        if(worker->enabled&&!worker->active) {
+            worker->download=*download;strncpy(worker->url,url,256);worker->active=1;worker->paused=0;return;
+        }
+    }
+    if(g_pChat)g_pChat->AddDebugMessage(g_customNoFreeWorkerError);
+}
+// samp.dll RVA: 0x0000e180
+void CCustomModels::BeginUrlDownload(BYTE type,DWORD hash,const char *url) {
+    CustomModelDownload download;
+    if(!FillDownloadInfo(type,hash,&download)){if(g_pChat)g_pChat->AddDebugMessage(g_customUrlInfoError);return;}
+    *(DWORD*)(nativeState+0x1340)=0;download.file=fopen(download.temporaryPath,g_customDownloadWriteMode);
+    if(!download.file){if(g_pChat)g_pChat->AddDebugMessage(g_customUrlOpenError);return;}
+    QueueUrl(&download,url);
+    if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download.type,download.hash,0,0,download.total,-1,0);
+    *(DWORD*)(nativeState+0x213)=1;if(CountReadyWorkers()>0)*(DWORD*)(nativeState+0x213)=2;
+}
+// samp.dll RVA: 0x000c50d0
+int __stdcall CustomModelLzmaDecode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD *sourceLength,const BYTE *properties,DWORD propertySize) {
+    ELzmaStatus status;
+    return LzmaDecode(destination,(SizeT*)destinationLength,source,(SizeT*)sourceLength,properties,propertySize,LZMA_FINISH_ANY,&status,&g_Alloc);
+}
+// samp.dll RVA: 0x0000d070
+void CCustomModels::ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const void *data,DWORD length) {
+    BYTE properties[5]={0x5d,0,0,1,0},output[4096];DWORD outputLength=4096;
+    if(unpackedLength>4096)return;
+    DWORD &compressed=*(DWORD*)(nativeState+0x1340);if(compressed+length>4096)return;
+    memcpy(nativeState+0x340+compressed,data,length);compressed+=length;
+    if(stage==2) {
+        int result=CustomModelLzmaDecode(output,&outputLength,nativeState+0x340,&compressed,properties,5);
+        if(result!=0&&result!=6){AbortDownload(0,5001,0);compressed=0;return;}
+        WriteDownload(0,output,unpackedLength);
+        DWORD unpacked=*(DWORD*)(nativeState+0x2065)+unpackedLength,packed=*(DWORD*)(nativeState+0x2069)+compressed;
+        compressed=0;*(DWORD*)(nativeState+0x2065)=unpacked;*(DWORD*)(nativeState+0x2069)=packed;
+    }else if(stage!=1)AbortDownload(0,5002,0);
+}
+// samp.dll RVA: 0x0000dbd0
+void CCustomModels::FinishDownload(CustomModelDownload *download) {
+    if(!download)download=(CustomModelDownload*)(nativeState+0x222);
+    BYTE *record=download->index<*(DWORD*)(nativeState+4)?(*(BYTE***)nativeState)[download->index]:0;
+    if(download->file){fclose((FILE*)download->file);download->file=0;}
+    if(download->downloaded!=download->total) {
+        if(g_pChat)g_pChat->AddDebugMessage(g_customDownloadSizeError,download->hash,download->downloaded,download->total);
+        DeleteFileA(download->temporaryPath);record[6]=1;
+        if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download->type,download->hash,3,download->downloaded,0,100,0);
+        *(DWORD*)(nativeState+0x213)=2;return;
+    }
+    if(download->crc!=download->hash) {
+        if(g_pChat)g_pChat->AddDebugMessage(g_customDownloadCrcError,download->hash,download->crc);
+        DeleteFileA(download->temporaryPath);record[6]=1;
+        if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download->type,download->hash,3,download->downloaded,0,101,0);
+        *(DWORD*)(nativeState+0x213)=2;return;
+    }
+    char destination[264];
+    if(download->type==1) {
+        if(!VerifyDff(download->temporaryPath,download->hash)) {
+            DeleteFileA(download->temporaryPath);record[6]=1;
+            if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download->type,download->hash,3,download->downloaded,0,102,0);
+            *(DWORD*)(nativeState+0x213)=2;return;
+        }
+    }else if(download->type==2) {
+        if(!VerifyTxd(download->temporaryPath,download->hash)) {
+            DeleteFileA(download->temporaryPath);record[6]=1;
+            if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download->type,download->hash,3,download->downloaded,0,103,0);
+            *(DWORD*)(nativeState+0x213)=2;return;
+        }
+    }else {
+        DeleteFileA(download->temporaryPath);record[6]=1;
+        if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download->type,download->hash,3,download->downloaded,0,104,0);
+        *(DWORD*)(nativeState+0x213)=2;return;
+    }
+    if(download->type==1)_snprintf(destination,260,g_customDffCachePattern,(char*)this+9,download->hash);
+    else if(download->type==2)_snprintf(destination,260,g_customTxdCachePattern,(char*)this+9,download->hash);
+    MoveFileA(download->temporaryPath,destination);
+    if(download->type==1)record[0]=1;else if(download->type==2)record[1]=1;
+    if(g_renderDownloadWindow)g_renderDownloadWindow->UpdateRecord(download->type,download->hash,4,download->downloaded,0,-1,0);
+    *(DWORD*)(nativeState+0x213)=2;
+}
 // samp.dll RVA: 0x00140378
 const DWORD g_customCrcTable[256]={
     0x00000000,0x77073096,0xee0e612c,0x990951ba,0x076dc419,0x706af48f,0xe963a535,0x9e6495a3,
