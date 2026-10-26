@@ -7,6 +7,14 @@
 #pragma pack(push,1)
 struct CModelFileStream {
     BYTE *data;DWORD position,length;BYTE ended,owned;BYTE *scratch;DWORD scratchLength;BYTE compressed;
+    // samp.dll RVA: 0x0000b800
+    CModelFileStream();
+    // samp.dll RVA: 0x0000b820
+    ~CModelFileStream();
+    // samp.dll RVA: 0x000bc250
+    int Compress();
+    // samp.dll RVA: 0x000bc300
+    int Decompress(DWORD outputLength);
     // samp.dll RVA: 0x000bc060
     DWORD WriteFileChunks(FILE *file);
     // samp.dll RVA: 0x000bc0c0
@@ -185,5 +193,11 @@ extern const char g_customTxdCountError[];
 extern const char g_customDffVerifyError[];
 // samp.dll RVA: 0x00117d68
 extern const char g_customDffParseError[];
-// Stream compression and other model editing/writing paths remain under recovery.
+// samp.dll RVA: 0x00155470
+extern const BYTE g_modelLzmaProperties[5];
+// Uses the selected LZMA backend and allocator; preserves the native stdcall adapter.
+// samp.dll RVA: 0x000c5040
+int __stdcall ModelLzmaEncode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD sourceLength,
+    BYTE *properties,DWORD *propertySize,int level,DWORD dictionary,int lc,int lp,int pb,int fastBytes,int threads);
+// Other model editing/writing paths remain under recovery.
 #endif

@@ -3,6 +3,41 @@
 #include <stdlib.h>
 #include <string.h>
 #include <new>
+#include "LzmaEnc.h"
+#include "Alloc.h"
+// samp.dll RVA: 0x00155470
+const BYTE g_modelLzmaProperties[5]={0x5d,0,0,1,0};
+// samp.dll RVA: 0x000c5040
+int __stdcall ModelLzmaEncode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD sourceLength,
+    BYTE *properties,DWORD *propertySize,int level,DWORD dictionary,int lc,int lp,int pb,int fastBytes,int threads) {
+    CLzmaEncProps options;LzmaEncProps_Init(&options);
+    options.level=level;options.dictSize=dictionary;options.lc=lc;options.lp=lp;options.pb=pb;
+    options.fb=fastBytes;options.numThreads=threads;
+    return LzmaEncode(destination,(SizeT*)destinationLength,source,sourceLength,&options,properties,(SizeT*)propertySize,0,0,&g_Alloc,&g_Alloc);
+}
+// samp.dll RVA: 0x0000b800
+CModelFileStream::CModelFileStream() {
+    data=0;length=0;position=0;ended=0;owned=0;compressed=0;scratchLength=0;scratch=0;
+}
+// samp.dll RVA: 0x0000b820
+CModelFileStream::~CModelFileStream() {if(owned&&data){free(data);data=0;}}
+// samp.dll RVA: 0x000bc250
+int CModelFileStream::Compress() {
+    BYTE properties[5];DWORD propertySize=5;scratchLength=length;
+    if(compressed)return -1;
+    scratch=(BYTE*)malloc(length);
+    int result=ModelLzmaEncode(scratch,&scratchLength,data,length,properties,&propertySize,1,0x10000,3,0,2,32,1);
+    if(result){free(scratch);compressed=0;return result;}
+    if(owned)free(data);data=scratch;owned=1;length=scratchLength;compressed=1;return result;
+}
+// samp.dll RVA: 0x000bc300
+int CModelFileStream::Decompress(DWORD outputLength) {
+    if(!compressed)return -1;
+    scratch=(BYTE*)malloc(outputLength);
+    int result=CustomModelLzmaDecode(scratch,&outputLength,data,&length,g_modelLzmaProperties,5);
+    if(result){free(scratch);compressed=1;return result;}
+    if(owned)free(data);length=outputLength;data=scratch;owned=1;compressed=0;return result;
+}
 // samp.dll RVA: 0x00117c9c
 const char g_customTxdVerifyError[]="[warning] Could not verify 0x%X.txd. Error(%d) Deleting..";
 // samp.dll RVA: 0x00117c60
@@ -78,7 +113,7 @@ BYTE *CModelFileStream::Current() {return data+position;}
 DWORD CModelFileStream::Remaining() {return length-position;}
 // samp.dll RVA: 0x0000b850
 CModelFileChunk::~CModelFileChunk() {
-    if(stream.owned&&stream.data){free(stream.data);stream.data=0;}
+    // The stream member performs the native owned-buffer cleanup.
 }
 // samp.dll RVA: 0x0000b8a0
 DWORD CModelFileChunk::GetType() {return type;}
@@ -86,15 +121,13 @@ DWORD CModelFileChunk::GetType() {return type;}
 DWORD CModelFileChunk::GetLength() {return length;}
 // samp.dll RVA: 0x0000b8c0
 CTxdFile::CTxdFile() {
-    stream.data=0;stream.length=0;stream.position=0;stream.ended=0;stream.owned=0;
-    stream.compressed=0;stream.scratchLength=0;stream.scratch=0;error=0;fileLength=0;
+    error=0;fileLength=0;
     root=0;structure=0;textureCount=0;parsedCount=0;
 }
 // samp.dll RVA: 0x0000b8f0
 CTxdFile::~CTxdFile() {
     if(structure){delete structure;structure=0;}
     if(root){delete root;root=0;}
-    if(stream.owned&&stream.data){free(stream.data);stream.data=0;}
 }
 // samp.dll RVA: 0x0000b970
 DWORD CTxdFile::GetTextureCount() {return textureCount;}
@@ -346,8 +379,7 @@ void CModelGeometry::SetError(DWORD value) {if(!error)error=value;}
 void CModelGeometry::SetDetail(DWORD value) {detail=value;}
 // samp.dll RVA: 0x0000d820
 CDffFile::CDffFile() {
-    stream.data=0;stream.length=0;stream.position=0;stream.ended=0;stream.owned=0;
-    stream.compressed=0;stream.scratchLength=0;stream.scratch=0;geometries.items=0;geometries.count=0;
+    geometries.items=0;geometries.count=0;
     error=0;detail=0;fileLength=0;root=0;structure=0;frames=0;geometryList=0;atomic=0;extension=0;
     hasCollision=0;unknown44=0;frameData=0;
 }
@@ -363,7 +395,6 @@ CDffFile::~CDffFile() {
     int count=(int)geometries.count;
     for(DWORD i=0;(int)i<count;++i)if(i<geometries.count&&geometries.items[i])delete geometries.items[i];
     geometries.Resize(0);geometries.Resize(0);
-    if(stream.owned&&stream.data){free(stream.data);stream.data=0;}
 }
 // samp.dll RVA: 0x000bc600
 CModelFileChunk *CModelGeometry::ReadChunk(CModelFileStream *input) {
