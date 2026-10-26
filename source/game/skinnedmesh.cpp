@@ -4,6 +4,11 @@
 #include <new>
 #include <string.h>
 #include <stdio.h>
+#include "game/util.h"
+#include "d3dhook/texture_binding.h"
+
+// samp.dll RVA: 0x000b9340
+CSkinHierarchyAllocator::CSkinHierarchyAllocator() {}
 
 // samp.dll RVA: 0x0011f860
 const char g_skinTextureDirectory[]="C:\\Users\\New\\Desktop\\SAMP_037_Desktop\\Matite2014\\newskins\\ponz\\";
@@ -122,4 +127,188 @@ HRESULT __stdcall CSkinHierarchyAllocator::DestroyMeshContainer(D3DXMESHCONTAINE
     if(container->pSkinInfo){container->pSkinInfo->Release();container->pSkinInfo=0;}
     ::operator delete(container);
     return S_OK;
+}
+
+// samp.dll RVA: 0x0011f8a4
+const char g_skinBoneNameFormat[]="Bone(%u) name: %s";
+// samp.dll RVA: 0x0011f8b8
+const char g_skinBoneCountFormat[]="Num bones: %u";
+
+// samp.dll RVA: 0x000b8bc0
+CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9 *inputDevice) {
+    device=inputDevice;center=D3DXVECTOR3(0,0,0);
+    root=0;boneMatrices=0;radius=0;currentAnimation=0xffffffff;
+    animationCapacity=0;maximumBones=0;controller=0;mesh=0;
+}
+// samp.dll RVA: 0x000b9510
+CSkinnedMesh::~CSkinnedMesh() {
+    if(controller){controller->Release();controller=0;}
+    if(root){CSkinHierarchyAllocator allocator;D3DXFrameDestroy(root,&allocator);root=0;}
+    if(boneMatrices){::operator delete[](boneMatrices);boneMatrices=0;}
+    device=0;
+}
+// samp.dll RVA: 0x000b8c30
+void CSkinnedMesh::SetupBonePointers(SkinFrame *frame,const D3DXMATRIX *parent) {
+    do {
+        SkinMeshContainer *container=(SkinMeshContainer*)frame->pMeshContainer;
+        if(container) {
+            if(!mesh)mesh=container;
+            if(container->pSkinInfo) {
+                typedef HRESULT (WINAPI *CloneFunction)(ID3DXMesh*,DWORD,DWORD,IDirect3DDevice9*,ID3DXMesh**);
+                CloneFunction clone=(CloneFunction)(*(void***)container->MeshData.pMesh)[11];
+                IDirect3DDevice9 *cloneDevice=device;
+                DWORD fvf=container->MeshData.pMesh->GetFVF();
+                clone(container->MeshData.pMesh,0x220,fvf,cloneDevice,&container->workingMesh);
+                if(maximumBones<container->pSkinInfo->GetNumBones())
+                    maximumBones=container->pSkinInfo->GetNumBones();
+                for(DWORD i=0;i<container->pSkinInfo->GetNumBones();++i) {
+                    const char *name=container->pSkinInfo->GetBoneName(i);
+                    D3DXFRAME *found=D3DXFrameFind(root,name);
+                    container->boneFrames[i]=(D3DXMATRIX*)((DWORD)found+0x50);
+                }
+            }
+        }
+        if(frame->pFrameSibling)SetupBonePointers((SkinFrame*)frame->pFrameSibling,parent);
+        parent=&frame->combined;
+        frame=(SkinFrame*)frame->pFrameFirstChild;
+    } while(frame);
+}
+// samp.dll RVA: 0x000b8d10
+void CSkinnedMesh::SetAnimation(DWORD index) {
+    if(index==currentAnimation||index>=animationCapacity)return;
+    ID3DXAnimationSet *set=0;
+    currentAnimation=index;
+    controller->GetAnimationSet(index,&set);
+    controller->SetTrackAnimationSet(0,set);
+    if(set)set->Release();
+}
+// samp.dll RVA: 0x000b9190
+void CSkinnedMesh::DrawFrame(SkinFrame *frame) {
+    do {
+        for(SkinMeshContainer *container=(SkinMeshContainer*)frame->pMeshContainer;
+            container;container=(SkinMeshContainer*)container->pNextMeshContainer) {
+            ID3DXMesh *draw=container->pSkinInfo?container->workingMesh:container->MeshData.pMesh;
+            for(DWORD i=0;i<container->NumMaterials;++i) {
+                device->SetMaterial(container->materialStorage+i);
+                device->SetTexture(0,container->textures[i]);
+                draw->DrawSubset(i);
+            }
+        }
+        if(frame->pFrameSibling)DrawFrame((SkinFrame*)frame->pFrameSibling);
+        frame=(SkinFrame*)frame->pFrameFirstChild;
+    } while(frame);
+}
+// samp.dll RVA: 0x000b9250
+void CSkinnedMesh::NativeNoOp3Words(DWORD,DWORD,DWORD) {}
+// samp.dll RVA: 0x000b9260
+void CSkinnedMesh::DumpBones() {
+    if(!root||!mesh||!mesh->pSkinInfo)return;
+    SkinMeshContainer *container=mesh;
+    DWORD count=container->pSkinInfo->GetNumBones();
+    if(g_pChat)g_pChat->AddDebugMessage(g_skinBoneCountFormat,count);
+    for(DWORD i=0;i<count;++i)if(g_pChat) {
+        const char *name=container->pSkinInfo->GetBoneName(i);
+        g_pChat->AddDebugMessage(g_skinBoneNameFormat,i,name);
+    }
+}
+// samp.dll RVA: 0x000b92e0
+void CSkinnedMesh::UpdateFrameMatrices(SkinFrame *frame,const D3DXMATRIX *parent) {
+    do {
+        if(parent)D3DXMatrixMultiply(&frame->combined,&frame->TransformationMatrix,parent);
+        else memcpy(&frame->combined,&frame->TransformationMatrix,64);
+        if(frame->pFrameSibling)UpdateFrameMatrices((SkinFrame*)frame->pFrameSibling,parent);
+        parent=&frame->combined;
+        frame=(SkinFrame*)frame->pFrameFirstChild;
+    } while(frame);
+}
+// samp.dll RVA: 0x000b9350
+int CSkinnedMesh::Load(const char *filename) {
+    CSkinHierarchyAllocator allocator;
+    if(FAILED(D3DXLoadMeshHierarchyFromXA(filename,0x220,device,&allocator,0,
+        (D3DXFRAME**)&root,&controller)))return 1;
+    if(controller)animationCapacity=controller->GetMaxNumAnimationSets();
+    if(root) {
+        SetupBonePointers(root,0);
+        boneMatrices=new D3DXMATRIX[maximumBones];
+        memset(boneMatrices,0,maximumBones*64);
+        D3DXFrameCalculateBoundingSphere(root,&center,&radius);
+    }
+    return 0;
+}
+// samp.dll RVA: 0x000b9450
+void CSkinnedMesh::UpdateSkin(DWORD) {
+    if(!root)return;
+    UpdateFrameMatrices(root,0);
+    SkinMeshContainer *container=mesh;
+    if(!container||!container->pSkinInfo)return;
+    DWORD count=container->pSkinInfo->GetNumBones();
+    for(DWORD i=0;i<count;++i)
+        D3DXMatrixMultiply(boneMatrices+i,container->boneOffsets+i,container->boneFrames[i]);
+    void *source,*destination;
+    container->MeshData.pMesh->LockVertexBuffer(0x10,&source);
+    container->workingMesh->LockVertexBuffer(0,&destination);
+    container->pSkinInfo->UpdateSkinnedMesh(boneMatrices,0,source,destination);
+    container->workingMesh->UnlockVertexBuffer();
+    container->MeshData.pMesh->UnlockVertexBuffer();
+}
+// samp.dll RVA: 0x000b8d60
+int CSkinnedMesh::Render(const CMatrix *matrix) {
+    if(!device)return 1;
+    SkinMeshContainer *container=mesh;
+    if(!container)return 2;
+    DWORD oldRenderState=0;
+    GameRwInvokeEngineSlot24(30,(DWORD)&oldRenderState);
+    ClientSetRenderState(6,1);ClientSetRenderState(8,1);
+    ClientSetRenderState(7,2);ClientSetRenderState(20,0);
+    float angle;
+    __asm {
+        mov ecx,matrix
+        fld dword ptr [ecx+0x10]
+        fchs
+        fld dword ptr [ecx+0x14]
+        fpatan
+        fmul dword ptr g_entityRadiansToDegrees
+        fcom dword ptr g_objectScaleLowerBound
+        fnstsw ax
+        test ah,5
+        jp skin_render_check_upper
+        fadd dword ptr g_anglePeriod
+        jmp skin_render_angle_done
+    skin_render_check_upper:
+        fcom dword ptr g_anglePeriod
+        fnstsw ax
+        test ah,1
+        jne skin_render_angle_done
+        fsub dword ptr g_anglePeriod
+    skin_render_angle_done:
+        fmul dword ptr g_objectDegreesToRadians
+        fstp angle
+    }
+    D3DXMATRIX rotation,translation,product,world,oldWorld;
+    D3DXMatrixIdentity(&rotation);D3DXMatrixRotationZ(&rotation,angle);
+    D3DXMatrixIdentity(&translation);
+    D3DXMatrixTranslation(&translation,matrix->position.x,matrix->position.y,matrix->position.z);
+    D3DXMatrixIdentity(&product);D3DXMatrixMultiply(&product,&rotation,&translation);
+    memcpy(&world,&product,64);
+    device->GetTransform(D3DTS_WORLD,&oldWorld);
+    device->SetTransform(D3DTS_WORLD,&world);
+    do {
+        ID3DXMesh *draw=container->pSkinInfo?container->workingMesh:container->MeshData.pMesh;
+        for(DWORD i=0;i<container->NumMaterials;++i) {
+            D3DMATERIAL9 *material=container->materialStorage+i;
+            material->Ambient.r=1.0f;material->Ambient.g=1.0f;
+            material->Ambient.b=1.0f;material->Ambient.a=1.0f;
+            material->Diffuse.r=1.0f;material->Diffuse.g=1.0f;
+            material->Diffuse.b=1.0f;material->Diffuse.a=1.0f;
+            material->Emissive.r=1.0f;material->Emissive.g=1.0f;
+            material->Emissive.b=1.0f;material->Emissive.a=1.0f;
+            device->SetMaterial(container->materialStorage+i);
+            device->SetTexture(0,container->textures[i]);
+            draw->DrawSubset(i);
+        }
+        container=(SkinMeshContainer*)container->pNextMeshContainer;
+    } while(container);
+    device->SetTransform(D3DTS_WORLD,&oldWorld);
+    ClientSetRenderState(30,oldRenderState);
+    return 0;
 }
