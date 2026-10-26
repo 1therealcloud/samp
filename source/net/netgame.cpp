@@ -723,3 +723,12 @@ CObjectPool *CNetGame::GetObjectPool() {return *(CObjectPool**)(*(BYTE**)(native
 CVehiclePool *CNetGame::GetVehiclePool() { return *(CVehiclePool**)(*(BYTE**)(nativeState+0x3de)+0xc); }
 // samp.dll RVA: 0x00001170
 CPlayerPool *CNetGame::GetPlayerPool() { return *(CPlayerPool**)(*(BYTE**)(nativeState+0x3de)+8); }
+
+// samp.dll RVA: 0x0000e3e0
+CLabelPool * CNetGame::GetLabelPool() {
+    return pools->labels;
+}
+// samp.dll RVA: 0x0000e3f0
+void CNetGame::SetLanMode(DWORD value) {
+    *(DWORD*)(nativeState+0x239)=value;
+}

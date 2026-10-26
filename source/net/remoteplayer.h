@@ -6,6 +6,21 @@ class CMatrix;
 // Native allocation extent0x1FD; unreviewed state remains opaque.
 #pragma pack(push,1)
 class CRemotePlayer {public:
+    // samp.dll RVA: 0x00002dc0
+    BYTE GetState();
+    // samp.dll RVA: 0x000135d0
+    void SetId(WORD id);
+    // samp.dll RVA: 0x000135e0
+    WORD GetId();
+    // samp.dll RVA: 0x000135f0
+    void SetRawFlag1C(DWORD value);
+    // samp.dll RVA: 0x00013600
+    void ResetStateAndLabels();
+    // samp.dll RVA: 0x00014220
+    BYTE GetSpecialAction();
+    // samp.dll RVA: 0x00014230
+    DWORD GetRawFlag1C();
+
     BYTE nativeState[0x1fd];
     // samp.dll RVA: 0x00015600
     void UpdateUnoccupied(const void *data);

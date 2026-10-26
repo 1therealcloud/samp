@@ -279,3 +279,12 @@ const char *CPlayerPool::GetName(WORD player) {
     if(!entry)return 0;
     return *(DWORD*)(entry+0x28)>=16?*(char**)(entry+0x14):(char*)entry+0x14;
 }
+
+// samp.dll RVA: 0x00002dd0
+int CPlayerPool::GetLargestId() {
+    return largestId;
+}
+// samp.dll RVA: 0x00002de0
+WORD CPlayerPool::GetLocalId() {
+    return localId;
+}

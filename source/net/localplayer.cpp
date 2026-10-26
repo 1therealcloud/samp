@@ -1363,3 +1363,12 @@ BOOL CLocalPlayer::Process() {
     if((*(CPed**)nativeState)->GetState()!=55&&(*(CPed**)nativeState)->GetState()!=54&&*(DWORD*)((BYTE*)g_pNetGame+0x3cd)==5&&!*(DWORD*)(nativeState+0xf4)&&!*(DWORD*)(nativeState+0x12c))ProcessClassSelection();
     return TRUE;
 }
+
+// samp.dll RVA: 0x00002db0
+DWORD CLocalPlayer::GetSpawnPermission() {
+    return *(DWORD*)(nativeState+0x143);
+}
+// samp.dll RVA: 0x000135c0
+DWORD CLocalPlayer::IsSpectating() {
+    return *(DWORD*)(nativeState+0x12c);
+}

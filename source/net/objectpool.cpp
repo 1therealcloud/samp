@@ -242,3 +242,21 @@ void DrawObjectPoolCollisionDebug() {
     CVector position;memcpy(&position,g_objectPoolRayEnd.words,12);
     g_objectPoolRayDebugObject->Teleport(position);
 }
+
+// samp.dll RVA: 0x00012670
+int CObjectPool::GetLargestId() {
+    return largestId;
+}
+// samp.dll RVA: 0x00012680
+DWORD CObjectPool::IsActive(WORD id) {
+    return id<=2100?active[id]:0;
+}
+// samp.dll RVA: 0x000129d0
+void CObjectPool::UpdateAttachedObjectRotations() {
+    BYTE *state=(BYTE*)this;
+    if(*(LONG*)state<0)return;
+    DWORD i=0;
+    do {
+        if(*(DWORD*)(state+4+i*4))(*(CObject**)(state+0x20d4+i*4))->UpdateAttachedObjectRotation();
+    } while((LONG)++i<=*(LONG*)state);
+}

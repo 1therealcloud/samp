@@ -9,6 +9,11 @@ struct PedBulletData;
 namespace Scripting {struct OpcodeInfo;}
 #pragma pack(push,1)
 class CLocalPlayer {public:
+    // samp.dll RVA: 0x00002db0
+    DWORD GetSpawnPermission();
+    // samp.dll RVA: 0x000135c0
+    DWORD IsSpectating();
+
     BYTE nativeState[0x328];
     // samp.dll RVA: 0x000072d0
     BOOL Process();

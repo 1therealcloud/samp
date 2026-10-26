@@ -1078,3 +1078,32 @@ int CRemotePlayer::GetStatus() {
     if((*(CPed**)(state+4))->HasTaskType704())return 0;
     return *(int*)(state+0x1d1);
 }
+
+// samp.dll RVA: 0x00002dc0
+BYTE CRemotePlayer::GetState() {
+    return nativeState[0x1a];
+}
+// samp.dll RVA: 0x000135d0
+void CRemotePlayer::SetId(WORD id) {
+    *(WORD*)nativeState=id;
+}
+// samp.dll RVA: 0x000135e0
+WORD CRemotePlayer::GetId() {
+    return *(WORD*)nativeState;
+}
+// samp.dll RVA: 0x000135f0
+void CRemotePlayer::SetRawFlag1C(DWORD value) {
+    *(DWORD*)(nativeState+0x1c)=value;
+}
+// samp.dll RVA: 0x00013600
+void CRemotePlayer::ResetStateAndLabels() {
+    nativeState[0x1a]=0;*(DWORD*)(nativeState+0x10)=1;
+}
+// samp.dll RVA: 0x00014220
+BYTE CRemotePlayer::GetSpecialAction() {
+    return nativeState[0x18];
+}
+// samp.dll RVA: 0x00014230
+DWORD CRemotePlayer::GetRawFlag1C() {
+    return *(DWORD*)(nativeState+0x1c);
+}

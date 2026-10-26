@@ -10,6 +10,13 @@ class CObjectPool {
     DWORD active[2100];
     CObject *objects[2100];
 public:
+    // samp.dll RVA: 0x00012670
+    int GetLargestId();
+    // samp.dll RVA: 0x00012680
+    DWORD IsActive(WORD id);
+    // samp.dll RVA: 0x000129d0
+    void UpdateAttachedObjectRotations();
+
     // Descriptive name. Native snapshots the ray, but reloads origin for distances.
     // samp.dll RVA: 0x00012d70
     WORD FindInRay(float maxDistance,const CVector *origin,const CVector *end);

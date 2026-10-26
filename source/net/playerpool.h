@@ -12,6 +12,11 @@ struct CVector;
 #pragma pack(push,1)
 class CPlayerPool {
 public:
+    // samp.dll RVA: 0x00002dd0
+    int GetLargestId();
+    // samp.dll RVA: 0x00002de0
+    WORD GetLocalId();
+
     // Descriptive name: native returns a raw player-info pointer, not a BOOL.
     // Native accepts adjacent ID1004 without checking connected state.
     // samp.dll RVA: 0x000010d0

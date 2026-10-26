@@ -22,6 +22,11 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // samp.dll RVA: 0x0000e3e0
+    CLabelPool * GetLabelPool();
+    // samp.dll RVA: 0x0000e3f0
+    void SetLanMode(DWORD value);
+
     // samp.dll RVA: 0x00002e50
     CActorPool *GetActorPool();
     // samp.dll RVA: 0x00002e60

@@ -1203,3 +1203,8 @@ BYTE CCustomModels::GetObjectLastHour(int model) {
     }
     return 0;
 }
+
+// samp.dll RVA: 0x0000c430
+DWORD CCustomModels::GetCount() {
+    return *(DWORD*)(nativeState+4);
+}
