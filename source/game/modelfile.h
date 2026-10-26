@@ -65,12 +65,54 @@ struct CTxdFile {
     DWORD LoadFile(const char *filename);
 };
 struct CModelGeometry;
-// Field ownership/cleanup is still being recovered; no implicit initialization.
+struct CModelGeometryArray {
+    CModelGeometry **items;DWORD count;
+    // samp.dll RVA: 0x0000c630
+    bool Resize(DWORD size);
+    // samp.dll RVA: 0x000bbe20
+    DWORD Insert(CModelGeometry *geometry);
+};
+struct CModelMaterialArray {
+    void **items;DWORD count;
+    // samp.dll RVA: 0x0000c550
+    bool Resize(DWORD size);
+};
+struct CModelMeshArray {
+    BYTE **items;DWORD count;
+    // samp.dll RVA: 0x0000c5c0
+    bool Resize(DWORD size);
+};
+struct CModelGeometry {
+    BYTE modified,modifiedOther;DWORD error,detail;WORD flags,textureSets;
+    int triangleCount,vertexCount,morphCount;BYTE hasColors,unknown1b;
+    void *colors,*unknown20,*uv,*triangles;float sphere[4];DWORD hasVertices,hasNormals;
+    void *vertices,*normals;CModelFileChunk *material,*extension;DWORD unknown54;
+    CModelMaterialArray materials;BYTE unknown60;DWORD unknown61,unknown65,unknown69;
+    CModelMeshArray meshes;BYTE opaque75[44];
+    // samp.dll RVA: 0x000bbe80
+    CModelGeometry();
+    // samp.dll RVA: 0x0000d620
+    ~CModelGeometry();
+    // samp.dll RVA: 0x000bb110
+    bool IsModified();
+    // samp.dll RVA: 0x000bb130
+    DWORD GetError();
+    // samp.dll RVA: 0x000bb140
+    DWORD GetDetail();
+    // samp.dll RVA: 0x000bc4b0
+    void SetError(DWORD value);
+    // samp.dll RVA: 0x000bc4d0
+    void SetDetail(DWORD value);
+};
 struct CDffFile {
     DWORD error,detail;CModelFileStream stream;DWORD fileLength;BYTE hasCollision;
-    CModelGeometry **geometries;DWORD geometryCount;
+    CModelGeometryArray geometries;
     CModelFileChunk *root,*structure,*frames,*geometryList,*atomic,*extension;
     DWORD unknown44;void *frameData;
+    // samp.dll RVA: 0x0000d820
+    CDffFile();
+    // samp.dll RVA: 0x0000d8f0
+    ~CDffFile();
     // samp.dll RVA: 0x000bb170
     CModelFileChunk *ReadChunk(CModelFileStream *input);
     // samp.dll RVA: 0x000bb280
@@ -99,6 +141,9 @@ typedef char NativeModelStreamExtent[(sizeof(CModelFileStream)==0x17)?1:-1];
 typedef char NativeModelChunkExtent[(sizeof(CModelFileChunk)==0x23)?1:-1];
 typedef char NativeTxdFileExtent[(sizeof(CTxdFile)==0x2b)?1:-1];
 typedef char NativeDffFileExtent[(sizeof(CDffFile)==0x4c)?1:-1];
+typedef char NativeModelGeometryExtent[(sizeof(CModelGeometry)==0xa1)?1:-1];
+typedef char NativeModelGeometryMaterialsOffset[(offsetof(CModelGeometry,materials)==0x58)?1:-1];
+typedef char NativeModelGeometryMeshesOffset[(offsetof(CModelGeometry,meshes)==0x6d)?1:-1];
 typedef char NativeDffFramesOffset[(offsetof(CDffFile,frames)==0x34)?1:-1];
 typedef char NativeModelStreamOwnedOffset[(offsetof(CModelFileStream,owned)==0xd)?1:-1];
 // samp.dll RVA: 0x00117c9c

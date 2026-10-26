@@ -273,3 +273,91 @@ CModelFileChunk *CDffFile::ReadChunk(CModelFileStream *input) {
     else {input->position=input->length;input->ended=1;}
     return chunk;
 }
+// samp.dll RVA: 0x0000c550
+bool CModelMaterialArray::Resize(DWORD size) {
+    if(!size){if(items){free(items);items=0;}count=0;return true;}
+    void **replacement=(void**)realloc(items,size*4);if(!replacement)return false;
+    items=replacement;for(DWORD i=count;i<size;++i)items[i]=0;count=size;return true;
+}
+// samp.dll RVA: 0x0000c5c0
+bool CModelMeshArray::Resize(DWORD size) {
+    if(!size){if(items){free(items);items=0;}count=0;return true;}
+    BYTE **replacement=(BYTE**)realloc(items,size*4);if(!replacement)return false;
+    items=replacement;for(DWORD i=count;i<size;++i)items[i]=0;count=size;return true;
+}
+// samp.dll RVA: 0x0000c630
+bool CModelGeometryArray::Resize(DWORD size) {
+    if(!size){if(items){free(items);items=0;}count=0;return true;}
+    CModelGeometry **replacement=(CModelGeometry**)realloc(items,size*4);if(!replacement)return false;
+    items=replacement;for(DWORD i=count;i<size;++i)items[i]=0;count=size;return true;
+}
+// samp.dll RVA: 0x000bbe20
+DWORD CModelGeometryArray::Insert(CModelGeometry *geometry) {
+    DWORD previous=count,index=0;
+    while(index!=previous&&items[index])++index;
+    if(index!=previous&&(int)index>=0){items[index]=geometry;return index;}
+    if(!Resize(previous+1))return 0xffffffff;
+    items[previous]=geometry;return previous;
+}
+// samp.dll RVA: 0x000bbe80
+CModelGeometry::CModelGeometry() {
+    materials.items=0;materials.count=0;meshes.items=0;meshes.count=0;
+    error=0;detail=0;flags=0;textureSets=0;triangleCount=0;vertexCount=0;morphCount=0;
+    hasColors=0;colors=0;unknown1b=0;unknown20=0;uv=0;triangles=0;
+    memset(sphere,0,16);hasVertices=0;hasNormals=0;vertices=0;normals=0;
+    unknown54=0;unknown60=0;unknown61=0;unknown65=0;unknown69=0;
+    modified=0;modifiedOther=0;memset(opaque75,0,44);material=0;extension=0;
+}
+// samp.dll RVA: 0x0000d620
+CModelGeometry::~CModelGeometry() {
+    // These plugin buffer roles remain opaque; only the native ownership is established.
+    void **buffers[]={&normals,&vertices,&triangles,&uv,&colors,&unknown20,
+        (void**)(opaque75+4),(void**)(opaque75+8),(void**)(opaque75+12),(void**)(opaque75+16),
+        (void**)(opaque75+32),(void**)(opaque75+36),(void**)(opaque75+40)};
+    for(unsigned i=0;i<sizeof(buffers)/sizeof(buffers[0]);++i) {
+        if(*buffers[i]){free(*buffers[i]);*buffers[i]=0;}
+    }
+    DWORD materialCount=materials.count;
+    for(DWORD j=0;j!=materialCount;++j)if(j<materials.count&&materials.items[j])free(materials.items[j]);
+    DWORD meshCount=meshes.count;
+    for(DWORD k=0;k!=meshCount;++k) {
+        if(k<meshes.count&&meshes.items[k]) {
+            BYTE *mesh=meshes.items[k];void *&indices=*(void**)(mesh+8);
+            if(indices){free(indices);indices=0;}free(mesh);
+        }
+    }
+    if(material){delete material;material=0;}
+    if(extension){delete extension;extension=0;}
+    meshes.Resize(0);materials.Resize(0);
+}
+// samp.dll RVA: 0x000bb110
+bool CModelGeometry::IsModified() {return modified!=0||modifiedOther!=0;}
+// samp.dll RVA: 0x000bb130
+DWORD CModelGeometry::GetError() {return error;}
+// samp.dll RVA: 0x000bb140
+DWORD CModelGeometry::GetDetail() {return detail;}
+// samp.dll RVA: 0x000bc4b0
+void CModelGeometry::SetError(DWORD value) {if(!error)error=value;}
+// samp.dll RVA: 0x000bc4d0
+void CModelGeometry::SetDetail(DWORD value) {detail=value;}
+// samp.dll RVA: 0x0000d820
+CDffFile::CDffFile() {
+    stream.data=0;stream.length=0;stream.position=0;stream.ended=0;stream.owned=0;
+    stream.compressed=0;stream.scratchLength=0;stream.scratch=0;geometries.items=0;geometries.count=0;
+    error=0;detail=0;fileLength=0;root=0;structure=0;frames=0;geometryList=0;atomic=0;extension=0;
+    hasCollision=0;unknown44=0;frameData=0;
+}
+// samp.dll RVA: 0x0000d8f0
+CDffFile::~CDffFile() {
+    if(extension){delete extension;extension=0;}
+    if(atomic){delete atomic;atomic=0;}
+    if(geometryList){delete geometryList;geometryList=0;}
+    if(frames){delete frames;frames=0;}
+    if(structure){delete structure;structure=0;}
+    if(root){delete root;root=0;}
+    if(frameData){::operator delete(frameData);frameData=0;}
+    int count=(int)geometries.count;
+    for(DWORD i=0;(int)i<count;++i)if(i<geometries.count&&geometries.items[i])delete geometries.items[i];
+    geometries.Resize(0);geometries.Resize(0);
+    if(stream.owned&&stream.data){free(stream.data);stream.data=0;}
+}
