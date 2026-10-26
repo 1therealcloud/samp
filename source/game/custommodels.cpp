@@ -1217,6 +1217,14 @@ void * CCustomModels::GetRecord(DWORD index) {
 DWORD CCustomModels::GetActiveVirtualWorld() {
     return *(DWORD*)(nativeState+0x217);
 }
+// samp.dll RVA: 0x00017820
+void CCustomModels::SetActiveVirtualWorld(DWORD world) {
+    if(*(DWORD*)(nativeState+0x217)!=world) {
+        *(DWORD*)(nativeState+0x217)=world;
+        nativeState[0x221]=0;
+        nativeState[0x220]=0;
+    }
+}
 // samp.dll RVA: 0x00008210
 BYTE CCustomModels::GetStopFlag() {
     return nativeState[0x221];

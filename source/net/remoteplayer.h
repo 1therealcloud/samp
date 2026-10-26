@@ -8,6 +8,10 @@ class CMatrix;
 class CPed;
 class CVehicle;
 class CRemotePlayer {public:
+    // samp.dll RVA: 0x00008180
+    void SetTeam(BYTE team);
+    // samp.dll RVA: 0x000a21e0
+    BYTE GetTeam();
     // samp.dll RVA: 0x00001070
     CPed * GetPed();
     // samp.dll RVA: 0x000010a0

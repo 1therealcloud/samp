@@ -13,6 +13,9 @@ struct TextLabel {
 };
 class CLabelPool {
 public:
+    // Returns the raw activity DWORD; out-of-range IDs return zero.
+    // samp.dll RVA: 0x0000e3c0
+    DWORD IsActive(WORD id);
     TextLabel labels[2048];
     DWORD active[2048];
     // samp.dll RVA: 0x00001190

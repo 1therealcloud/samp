@@ -11,6 +11,10 @@
 #include "main.h"
 #include <stdlib.h>
 #include <string.h>
+// samp.dll RVA: 0x0000e3c0
+DWORD CLabelPool::IsActive(WORD id) {
+    return id<2048?active[id]:0;
+}
 // samp.dll RVA: 0x00001190
 CLabelPool::CLabelPool() {
     for(int id=0;id<2048;id++) {memset(&labels[id],0,sizeof(TextLabel));active[id]=0;}

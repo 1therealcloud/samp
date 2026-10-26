@@ -28,6 +28,9 @@ class CCustomModels {public:
     void * GetRecord(DWORD index);
     // samp.dll RVA: 0x00008200
     DWORD GetActiveVirtualWorld();
+    // Unchanged worlds retain both completion/stop flags.
+    // samp.dll RVA: 0x00017820
+    void SetActiveVirtualWorld(DWORD world);
     // samp.dll RVA: 0x00008210
     BYTE GetStopFlag();
     // samp.dll RVA: 0x0000e400

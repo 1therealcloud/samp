@@ -1,4 +1,8 @@
 #include "net/remoteplayer.h"
+// samp.dll RVA: 0x00008180
+void CRemotePlayer::SetTeam(BYTE team) {nativeState[0x19]=team;}
+// samp.dll RVA: 0x000a21e0
+BYTE CRemotePlayer::GetTeam() {return nativeState[0x19];}
 #include "net/vehiclepool.h"
 #include "net/objectpool.h"
 #include "game/playerped.h"

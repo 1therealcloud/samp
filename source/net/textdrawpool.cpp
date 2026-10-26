@@ -1,6 +1,11 @@
 #include "net/textdrawpool.h"
 #include "gui/device_lifecycle.h"
 #include "gui/textdraw_texture.h"
+// samp.dll RVA: 0x000177d0
+CTextDraw *CTextDrawPool::Get(WORD id) {
+    if(id>=2304||!active[id])return 0;
+    return draws[id];
+}
 // samp.dll RVA: 0x0001e260
 CTextDrawPool::CTextDrawPool() {
     for(int i=0;i<2304;++i){draws[i]=0;active[i]=0;}

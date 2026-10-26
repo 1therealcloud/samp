@@ -9,6 +9,18 @@ struct PedBulletData;
 namespace Scripting {struct OpcodeInfo;}
 #pragma pack(push,1)
 class CLocalPlayer {public:
+    // Returns the raw DWORD, without bool normalization.
+    // samp.dll RVA: 0x00008170
+    DWORD GetActiveState();
+    // samp.dll RVA: 0x0000e2a0
+    CEntity *GetSurfingEntity();
+    // Clears only the entity and mode, retaining lock and offset state.
+    // samp.dll RVA: 0x00017760
+    void ClearSurfingEntityAndMode();
+    // samp.dll RVA: 0x00017780
+    void SetTeam(BYTE team);
+    // samp.dll RVA: 0x000a21d0
+    BYTE GetTeam();
     // samp.dll RVA: 0x00004230
     BYTE GetAimTargetOffset(WORD *id,CVector *offset);
 

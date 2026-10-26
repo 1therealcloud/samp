@@ -1,4 +1,8 @@
 #include "net/netgame.h"
+// samp.dll RVA: 0x00017800
+CTextDrawPool *CNetGame::GetTextDrawPool() {return pools->textDraws;}
+// samp.dll RVA: 0x00017810
+CGangZonePool *CNetGame::GetGangZonePool() {return pools->gangZones;}
 // samp.dll RVA: 0x00002e50
 CActorPool *CNetGame::GetActorPool() {return pools->actors;}
 // samp.dll RVA: 0x00002e60

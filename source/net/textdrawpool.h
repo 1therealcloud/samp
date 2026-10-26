@@ -10,6 +10,8 @@ class CTextDrawPool {
     DWORD active[2304];
     CTextDraw *draws[2304];
 public:
+    // samp.dll RVA: 0x000177d0
+    CTextDraw *Get(WORD id);
     // samp.dll RVA: 0x0001e260
     CTextDrawPool();
     // samp.dll RVA: 0x0001e390

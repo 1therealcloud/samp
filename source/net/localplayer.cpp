@@ -1,5 +1,18 @@
 #include "net/local_rpc.h"
 #include "net/localplayer.h"
+// samp.dll RVA: 0x00008170
+DWORD CLocalPlayer::GetActiveState() {return *(DWORD*)(nativeState+0xf4);}
+// samp.dll RVA: 0x0000e2a0
+CEntity *CLocalPlayer::GetSurfingEntity() {return *(CEntity**)(nativeState+0x2de);}
+// samp.dll RVA: 0x00017760
+void CLocalPlayer::ClearSurfingEntityAndMode() {
+    *(CEntity**)(nativeState+0x2de)=0;
+    *(DWORD*)(nativeState+0x2e6)=0;
+}
+// samp.dll RVA: 0x00017780
+void CLocalPlayer::SetTeam(BYTE team) {nativeState[0x130]=team;}
+// samp.dll RVA: 0x000a21d0
+BYTE CLocalPlayer::GetTeam() {return nativeState[0x130];}
 #include "net/vehiclepool.h"
 #include "net/playerpool.h"
 #include "net/actorpool.h"
