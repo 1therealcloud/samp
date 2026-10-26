@@ -184,7 +184,10 @@ if not exist "%SRC%" (
 set "UNIT=%SRC:\=_%"
 for %%U in ("%UNIT%") do set "UNIT=%%~nU"
 echo [CL] %SRC%
-"%SAMP_VC%\bin\cl.exe" %FLAGS% /Fo"%OBJDIR%\%UNIT%.obj" "%SRC%" >"%LOGDIR%\%UNIT%.log" 2>&1
+set "UNIT_FLAGS="
+rem SocketLayer requires Winsock2 before the forced DXUT header includes windows.h.
+if /i "%SRC%"=="source\net\netgame.cpp" set "UNIT_FLAGS=/FIwinsock2.h"
+"%SAMP_VC%\bin\cl.exe" %UNIT_FLAGS% %FLAGS% /Fo"%OBJDIR%\%UNIT%.obj" "%SRC%" >"%LOGDIR%\%UNIT%.log" 2>&1
 if errorlevel 1 (
     type "%LOGDIR%\%UNIT%.log"
     exit /b 1

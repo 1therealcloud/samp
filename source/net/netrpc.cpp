@@ -709,3 +709,57 @@ void UnRegisterRPCs(RakClientInterface *client) {
     };
     for(unsigned i=0;i<sizeof(ids)/sizeof(ids[0]);i++)client->UnregisterAsRemoteProcedureCall(const_cast<int*>(ids[i]));
 }
+
+// samp.dll RVA: 0x00012310
+void RegisterRPCs(RakClientInterface *client) {
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerSkillLevel),ScrSetPlayerSkillLevel);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreate3DTextLabel),ScrCreate3DTextLabel);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroy3DTextLabel),ScrDestroy3DTextLabel);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrChatBubble),ScrChatBubble);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrShowDialog),ScrShowDialog);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetCheckpoint),ScrSetCheckpoint);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDisableCheckpoint),ScrDisableCheckpoint);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetRaceCheckpoint),ScrSetRaceCheckpoint);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDisableRaceCheckpoint),ScrDisableRaceCheckpoint);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_netPlayersInfoRpc),UpdateScoresPingsIps);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcSrvNetStats),SrvNetStats);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGamemodeRestart),ScrGamemodeRestart);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcConnectionRejected),ConnectionRejected);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrClientMessage),ScrClientMessage);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetWorldTime),ScrSetWorldTime);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreatePickup),ScrCreatePickup);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroyPickup),ScrDestroyPickup);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroyWeaponPickup),ScrDestroyWeaponPickup);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_scmEventRpcId),ScmEvent);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetWeather),ScrSetWeather);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerTime),ScrSetPlayerTime);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrToggleClock),ScrToggleClock);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetIngameTimer),ScrSetIngameTimer);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrWorldPlayerAdd),ScrWorldPlayerAdd);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrWorldPlayerDeath),ScrWorldPlayerDeath);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrWorldPlayerRemove),ScrWorldPlayerRemove);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrWorldVehicleAdd),ScrWorldVehicleAdd);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrWorldVehicleRemove),ScrWorldVehicleRemove);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcDamageVehicle),DamageVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleParamsEx),ScrSetVehicleParamsEx);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_localEnterVehicleRpc),EnterVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_localExitVehicleRpc),ExitVehicle);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrServerJoin),ScrServerJoin);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrServerQuit),ScrServerQuit);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrInitGame),ScrInitGame);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_localChatRpc),Chat);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_localRequestClassRpc),RequestClass);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_localSpawnRequestRpc),RequestSpawn);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_objectEditAttachedRpc),EditAttachedObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_objectEditRpc),EditObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_objectSelectionRpc),EnterEditObject);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCancelEdit),ScrCancelEdit);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrUpdateCameraTarget),ScrUpdateCameraTarget);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcClientCheck),ClientCheck);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreateActor),ScrCreateActor);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroyActor),ScrDestroyActor);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F10),ScrCustomModelRecord);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F0C),ScrCustomModelsReset);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F08),ScrCustomModelDownload);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F04),ScrCustomModelsComplete);
+}

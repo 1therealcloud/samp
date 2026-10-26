@@ -162,6 +162,10 @@ extern const char g_netServerFullMessage[];
 extern const char g_netNoResponseMessage[];
 // samp.dll RVA: 0x001179dc
 extern const char g_netStartedMessage[];
+// samp.dll RVA: 0x00117c28
+extern const char g_netDefaultHostName[];
+// samp.dll RVA: 0x00117b6c
+extern const char g_netNoNameTagStatusOption[];
 // samp.dll RVA: 0x00117af0
 extern const char g_netDisconnectedMessage[];
 // samp.dll RVA: 0x00117bac

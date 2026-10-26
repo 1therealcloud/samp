@@ -35,6 +35,39 @@
 #include "archive/provider.h"
 #include "ttmath/ttmathuint.h"
 #include "game/device_integrity.h"
+#include "SocketLayer.h"
+// samp.dll RVA: 0x00117c28
+const char g_netDefaultHostName[]="SA-MP";
+// samp.dll RVA: 0x00117b6c
+const char g_netNoNameTagStatusOption[]="nonametagstatus";
+// samp.dll RVA: 0x0000b610
+CNetGame::CNetGame(const char *host,int port,const char *nickname,const char *password) {
+    *(BYTE**)(nativeState+0x3d5)=(BYTE*)calloc(1,0x3a);
+    memset(nativeState+0x131,0,256);memset(nativeState+0x30,0,256);
+    memcpy(nativeState+0x131,g_netDefaultHostName,6);strncpy((char*)nativeState+0x30,host,257);
+    *(int*)(nativeState+0x235)=port;
+    *(RakClientInterface**)(nativeState+0x2c)=RakNetworkFactory::GetRakClientInterface();InitializePools();
+    pools->players->localName.assign(nickname,strlen(nickname));
+    // Native helper RVA 0x0001f1d0 sets the datagram port key to port XOR 0xCCCC.
+    SocketLayer::Instance()->SetDatagramPort((unsigned short)port);
+    RegisterRPCs(*(RakClientInterface**)(nativeState+0x2c));
+    RegisterScriptRPCs(*(RakClientInterface**)(nativeState+0x2c));
+    (*(RakClientInterface**)(nativeState+0x2c))->SetPassword(password);
+    memset(nativeState+0x23d,0,100*4);g_pGame->EnableClock(false);g_pGame->EnableZoneDisplaying(0);
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+1)=0;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0x23)=0;
+    (*(BYTE**)(nativeState+0x3d5))[0x2f]=1;(*(BYTE**)(nativeState+0x3d5))[0x1f]=1;
+    (*(BYTE**)(nativeState+0x3d5))[0]=0;(*(BYTE**)(nativeState+0x3d5))[0x1a]=0;
+    (*(BYTE**)(nativeState+0x3d5))[0x21]=0;(*(BYTE**)(nativeState+0x3d5))[0x20]=0;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0x27)=0x42700000;
+    (*(BYTE**)(nativeState+0x3d5))[0x22]=1;(*(BYTE**)(nativeState+0x3d5))[0x2c]=12;
+    (*(BYTE**)(nativeState+0x3d5))[0x2d]=0;(*(BYTE**)(nativeState+0x3d5))[0x2e]=1;
+    *(DWORD*)(*(BYTE**)(nativeState+0x3d5)+0x16)=0x3c03126f;
+    nativeState[0x234]=1;if(g_pConfig&&g_pConfig->GetIntValue(g_netNoNameTagStatusOption))nativeState[0x234]=0;
+    nativeState[0x232]=0;nativeState[0x233]=0;*(DWORD*)(nativeState+0x3d1)=GetTickCount();
+    *(DWORD*)(nativeState+0x3cd)=1;*(DWORD*)(nativeState+0x239)=0;nativeState[0x3d9]=0;
+    if(g_pChat)g_pChat->AddDebugMessage(g_netStartedMessage);
+}
 // samp.dll RVA: 0x0000b290
 void CNetGame::Process() {
     ClientGetFrameElapsed();DWORD start=ClientIntegrityFrame(1);UpdateNetwork();
