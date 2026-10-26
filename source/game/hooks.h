@@ -230,3 +230,8 @@ extern BYTE g_gameCustomModelHookJump[6];
 
 // samp.dll RVA: 0x000a4200
 void GameReleaseCachedRasterBuffer();
+
+// samp.dll RVA: 0x000a2690
+void GameDisablePedRemoteCall();
+// samp.dll RVA: 0x000a26b0
+void GameRestorePedRemoteCall();

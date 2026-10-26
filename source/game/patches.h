@@ -66,3 +66,10 @@ void GameIncreasePoolLimits();
 
 // samp.dll RVA: 0x000a9d10
 void _patch(DWORD address,BYTE *data,int byteCount);
+
+// Legacy entry: patches the raw IPL allocation pointer at native GTA sites.
+// samp.dll RVA: 0x000a9d60
+void SetIPLs(int iIPLs,int iGtaVersion);
+// Native36-byte records; allocation, initialization and pointer/count patches.
+// samp.dll RVA: 0x000a9e70
+void SetTimedObjects(int iTimedObjects);

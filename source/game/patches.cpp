@@ -72,7 +72,7 @@ void GameApplyInGamePatches()
 {
   DWORD *patch;
   int remaining;
-  
+
   if (g_gameVersion == 1) {
     g_gameVersionAddressA = 0x7ee2a0;
     g_gameVersionAddressB = 0x7ee2a9;
@@ -512,3 +512,76 @@ void _patch(DWORD address,BYTE *data,int byteCount) {
     }
     VirtualProtect((void*)address,byteCount,oldProtection,&ignoredProtection);
 }
+
+#include <stdlib.h>
+// Legacy allocation patches; native retains these allocations indefinitely.
+#define patch(a,b) _patch(a,b,sizeof(b))
+#define memadd(num,arr) dwAlloc+=num;cBytes=(char*)&dwAlloc;for(int i=0;i<4;i++)arr[i]=cBytes[i]
+// samp.dll RVA: 0x000a9d60
+void SetIPLs(int iIPLs, int iGtaVersion)
+{
+	DWORD dwAlloc = (DWORD) malloc((DWORD)iIPLs+4);
+	if(dwAlloc)
+	{
+		memset((void*)dwAlloc,0x0,(DWORD)iIPLs+4);
+		char* cBytes = (char*)&dwAlloc;
+
+		BYTE bIPLs[] = { cBytes[0], cBytes[1], cBytes[2], cBytes[3] };
+
+		if(iGtaVersion == 1)
+		{
+			patch(0x1569777,bIPLs);
+			patch(0x15649FA,bIPLs);
+			patch(0x1561160,bIPLs);
+		}
+		else
+		{
+			patch(0x1569717,bIPLs);
+			patch(0x156495A,bIPLs);
+			patch(0x156115C,bIPLs);
+		}
+		patch(0x40619B,bIPLs);
+		patch(0x405C3D,bIPLs);
+	}
+}
+
+
+
+// samp.dll RVA: 0x000a9e70
+void SetTimedObjects(int iTimedObjects)
+{
+	DWORD dwAlloc = (DWORD) malloc((0x24*(DWORD)iTimedObjects)+4);
+	if(dwAlloc)
+	{
+		memset((LPVOID)dwAlloc,0x00,(0x24*(DWORD)iTimedObjects)+4);
+		for(DWORD i=dwAlloc+4;i<(dwAlloc+4+(0x24*(DWORD)iTimedObjects));i+=0x24)
+		{
+			*(BYTE*) i = 0xB0;
+			*(BYTE*) (i+1) = 0xBC;
+			*(BYTE*) (i+2) = 0x85;
+			*(BYTE*) (i+10) = 0xFF;
+			*(BYTE*) (i+11) = 0xFF;
+			*(BYTE*) (i+34) = 0xFF;
+			*(BYTE*) (i+35) = 0xFF;
+		}
+		char* cBytes = (char*)&dwAlloc;
+		BYTE bTimedObjects[] = { cBytes[0], cBytes[1], cBytes[2], cBytes[3] };
+		patch(0x4C66B1,bTimedObjects);
+		patch(0x4C66C2,bTimedObjects);
+		patch(0x84BC51,bTimedObjects);
+		patch(0x856261,bTimedObjects);
+		patch(0x4C683B,bTimedObjects);
+		memadd(4,bTimedObjects);
+		patch(0x4C6464,bTimedObjects);
+		patch(0x4C66BD,bTimedObjects);
+		cBytes = (char*)&iTimedObjects;
+		BYTE pushTimedObjects[] = { 0x68, cBytes[0], cBytes[1], cBytes[2], cBytes[3] };
+		patch(0x4C58A5,pushTimedObjects);
+	}
+}
+
+
+
+
+#undef patch
+#undef memadd

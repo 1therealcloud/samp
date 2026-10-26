@@ -3405,3 +3405,17 @@ void GameReleaseCachedRasterBuffer() {
     if(g_hookCachedBuffer)((DWORD(__cdecl*)(DWORD))target)(g_hookCachedBuffer);
     g_hookCachedBuffer=0;
 }
+
+#include "game/ped_control.h"
+// samp.dll RVA: 0x000a2690
+void GameDisablePedRemoteCall() {
+    // GTA SA virtual address: five-byte call site; page remains writable.
+    GameUnprotect((void*)0x5e92f4,5);
+    *(DWORD*)0x5e92f4=0x90909090;*(BYTE*)0x5e92f8=0x90;
+}
+// samp.dll RVA: 0x000a26b0
+void GameRestorePedRemoteCall() {
+    // Native restore does not call VirtualProtect or flush the instruction cache.
+    *(DWORD*)0x5e92f4=*(const DWORD*)g_hookPedRemoteRestore;
+    *(BYTE*)0x5e92f8=g_hookPedRemoteRestore[4];
+}
