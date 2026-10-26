@@ -127,6 +127,14 @@ struct CModelSkin {
     void *unknown20,*unknown24,*unknown28;
 };
 struct CModelGeometry {
+    // samp.dll RVA: 0x000bc900
+    CModelFileChunk * BuildStructure();
+    // samp.dll RVA: 0x000bca90
+    bool RemoveExtension(DWORD type);
+    // samp.dll RVA: 0x000bcbc0
+    bool CopySecondaryColors(const CModelGeometry *other);
+    // samp.dll RVA: 0x000bcc40
+    CModelFileChunk * BuildChunk();
     BYTE modified,modifiedOther;DWORD error,detail;WORD flags,textureSets;
     int triangleCount,vertexCount,morphCount;BYTE hasColors,unknown1b;
     void *colors,*unknown20,*uv,*triangles;float sphere[4];DWORD hasVertices,hasNormals;
@@ -170,6 +178,12 @@ struct CModelGeometry {
     bool Read(CModelFileStream *input,WORD version);
 };
 struct CDffFile {
+    // samp.dll RVA: 0x000bbcc0
+    bool RebuildGeometryList();
+    // samp.dll RVA: 0x000bb640
+    DWORD SaveFile(const char *filename);
+    // samp.dll RVA: 0x000bb820
+    DWORD SaveCompressedFile(const char *filename);
     // samp.dll RVA: 0x000bb150
     void SetError(DWORD value);
     // samp.dll RVA: 0x000bb160

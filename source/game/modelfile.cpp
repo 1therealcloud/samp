@@ -713,3 +713,123 @@ DWORD __stdcall ModelSaveChunk(const CModelFileChunk *chunk,const char *filename
     output.Write(chunk,12);output.Write(chunk->stream.data,chunk->stream.length);
     return output.SaveFile(filename);
 }
+
+// samp.dll RVA: 0x000bcbc0
+bool CModelGeometry::CopySecondaryColors(const CModelGeometry *other) {
+    if(!other->hasColors)return false;
+    if(unknown20){free(unknown20);unknown20=0;}
+    unknown20=calloc(vertexCount,4);
+    memcpy(unknown20,colors,(DWORD)vertexCount*4);
+    int count=other->vertexCount;
+    if(count>vertexCount)count=vertexCount;
+    memcpy(unknown20,other->colors,(DWORD)count*4);
+    unknown1b=1;modified=1;return true;
+}
+
+// samp.dll RVA: 0x000bc900
+CModelFileChunk *CModelGeometry::BuildStructure() {
+    CModelFileChunk *chunk=new CModelFileChunk;
+    chunk->type=1;
+    DWORD value=flags;chunk->stream.Write(&value,2);
+    value=textureSets;chunk->stream.Write(&value,2);
+    value=(DWORD)triangleCount;chunk->stream.Write(&value,4);
+    value=(DWORD)vertexCount;chunk->stream.Write(&value,4);
+    value=(DWORD)morphCount;chunk->stream.Write(&value,4);
+    if((flags&8)&&hasColors)chunk->stream.Write(colors,(DWORD)vertexCount*4);
+    if(flags&0x84)chunk->stream.Write(uv,(DWORD)vertexCount*8);
+    chunk->stream.Write(triangles,(DWORD)triangleCount*8);
+    chunk->stream.Write(sphere,16);
+    value=hasVertices;chunk->stream.Write(&value,4);
+    value=hasNormals;chunk->stream.Write(&value,4);
+    if(hasVertices&&vertices)chunk->stream.Write(vertices,(DWORD)vertexCount*12);
+    if((flags&0x10)&&normals)chunk->stream.Write(normals,(DWORD)vertexCount*12);
+    chunk->length=chunk->stream.length;return chunk;
+}
+
+// samp.dll RVA: 0x000bca90
+bool CModelGeometry::RemoveExtension(DWORD type) {
+    CModelFileChunk *replacement=new CModelFileChunk;
+    replacement->type=3;
+    extension->stream.Reset();
+    while(extension->stream.Remaining()>=12) {
+        DWORD header[3];extension->stream.Read(header,12);
+        if(header[0]!=type) {
+            replacement->stream.Write(header,12);
+            replacement->stream.Write(extension->stream.Current(),header[1]);
+        }
+        extension->stream.Skip(header[1]);
+    }
+    replacement->length=replacement->stream.length;
+    if(extension){delete extension;extension=0;}
+    extension=replacement;return true;
+}
+
+// samp.dll RVA: 0x000bcc40
+CModelFileChunk *CModelGeometry::BuildChunk() {
+    CModelFileChunk *chunk=new CModelFileChunk;
+    CModelFileChunk *structure=BuildStructure();
+    chunk->type=0xf;
+    ModelAppendChunk(chunk,structure);
+    if(structure)delete structure;
+    ModelAppendChunk(chunk,material);
+    if(unknown20) {
+        CModelFileChunk *secondary=new CModelFileChunk;
+        secondary->type=0x253f2f9;
+        DWORD marker=0x37505050;secondary->stream.Write(&marker,4);
+        secondary->stream.Write(unknown20,(DWORD)vertexCount*4);
+        secondary->length=secondary->stream.length;
+        RemoveExtension(0x253f2f9);
+        ModelAppendChunk(extension,secondary);
+        delete secondary;
+    }
+    ModelAppendChunk(chunk,extension);return chunk;
+}
+
+// samp.dll RVA: 0x000bbcc0
+bool CDffFile::RebuildGeometryList() {
+    if(!geometries.count)return false;
+    CModelGeometry *geometry=geometries.items[0];
+    if(!geometry||!geometry->IsModified())return false;
+    CModelFileChunk *replacement=new CModelFileChunk;
+    CModelFileChunk *structure=new CModelFileChunk;
+    replacement->type=0x1a;structure->type=1;
+    DWORD count=1;structure->stream.Write(&count,4);
+    structure->length=structure->stream.length;
+    CModelFileChunk *body=geometry->BuildChunk();
+    AppendChunk(replacement,structure);AppendChunk(replacement,body);
+    delete structure;
+    if(body)delete body;
+    if(geometryList){delete geometryList;geometryList=0;}
+    geometryList=replacement;return true;
+}
+
+// samp.dll RVA: 0x000bb640
+DWORD CDffFile::SaveFile(const char *filename) {
+    CModelFileStream output;
+    if(!root)return 0;
+    root->length=geometryList->length+extension->length+frames->length+
+        structure->length+atomic->length+60;
+    output.Write(root,12);
+    structure->length=12;output.Write(structure,12);
+    structure->stream.Reset();
+    DWORD value=0;structure->stream.Read(&value,4);output.Write(&value,4);
+    value=0;output.Write(&value,4);value=0;output.Write(&value,4);
+    output.Write(frames,12);output.Write(frames->stream.data,frames->stream.length);
+    output.Write(geometryList,12);output.Write(geometryList->stream.data,geometryList->stream.length);
+    output.Write(atomic,12);output.Write(atomic->stream.data,atomic->stream.length);
+    output.Write(extension,12);output.Write(extension->stream.data,extension->stream.length);
+    return output.SaveFile(filename);
+}
+
+// samp.dll RVA: 0x000bb820
+DWORD CDffFile::SaveCompressedFile(const char *filename) {
+    CModelFileStream output;
+    if(!root)return 0;
+    DWORD value=0x504d4153;output.Write(&value,4);
+    BYTE mode=1;output.Write(&mode,1);
+    value=root->stream.length;output.Write(&value,4);
+    root->stream.Compress();
+    value=root->stream.length;output.Write(&value,4);
+    output.Write(root->stream.data,root->stream.length);
+    return output.SaveFile(filename);
+}
