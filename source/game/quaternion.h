@@ -46,3 +46,10 @@ void GameQuaternionFromVectors(GameQuaternion *out,const CVector *from,const CVe
 // samp.dll RVA: 0x0011f588
 extern const float g_quaternionOppositeThreshold;
 #endif
+
+// Shared original double1 storage from ped code.
+// samp.dll RVA: 0x0011a928
+extern const double g_pedParachuteOne;
+// Native double scalar helper; saturation intentionally uses FSIN, not copysign.
+// samp.dll RVA: 0x0009d040
+void GameQuaternionDoubleToEuler(double x,double y,double z,double w,double *roll,double *pitch,double *yaw);

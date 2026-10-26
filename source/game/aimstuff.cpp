@@ -1,4 +1,6 @@
 #include "game/aimstuff.h"
+#include "game/util.h"
+#include <d3dx9.h>
 #include <string.h>
 // samp.dll RVA: 0x0011e32c
 static const float g_aimCameraZoomRange=35.0f;
@@ -101,4 +103,28 @@ void __stdcall AimStuff::ApplyPlayerSkills(int player) { memcpy((BYTE*)g_aimInte
 // samp.dll RVA: 0x00002d20
 void __stdcall AimStuff::GetCameraExtZoomAndAspectRatio(float *zoom,float *aspect) {
     *zoom=GetCameraExtZoom();*aspect=GetAspectRatio();
+}
+
+// samp.dll RVA: 0x0009c4f0
+void GameAimLookAtPartial(CameraAim *aim,float x,float y,float z) {
+    D3DXVECTOR3 eye,target(x,y,z),vertical(0,0,1);
+    memcpy(&eye,&aim->source,12);
+    D3DXMATRIX matrix;D3DXMatrixLookAtRH(&matrix,&eye,&target,&vertical);
+    CVector direction,up;
+    __asm {
+        lea eax,matrix
+        fld dword ptr [eax+8]
+        fchs
+        fstp direction.x
+        fld dword ptr [eax+0x18]
+        fchs
+        fstp direction.y
+        fld dword ptr [eax+0x28]
+        fchs
+        fstp direction.z
+    }
+    GameBuildAimUpVector(&direction,&up);
+    // Preserve the four observed DWORD publications, including shifted Y sources.
+    memcpy(&aim->front.x,&direction.y,4);memcpy(&aim->front.z,&direction.z,4);
+    memcpy(&aim->up.x,&up.y,4);memcpy(&aim->up.z,&up.z,4);
 }

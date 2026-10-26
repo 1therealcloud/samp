@@ -64,3 +64,33 @@ void GameDebugWriteHeightmap();
 void GameDebugOpenHeightmap();
 // samp.dll RVA: 0x0009d3a0
 void __stdcall GameSetNativeDebugFlag18DC20(BYTE value);
+
+#ifndef SAMP_GAME_DEBUG_PLACEMENT_H
+#define SAMP_GAME_DEBUG_PLACEMENT_H
+#pragma pack(push,1)
+struct GameDebugPlacementRecord {
+    float x,y,z,qx,qy,qz,qw;
+    int model;DWORD unknown20;int raw24;
+};
+#pragma pack(pop)
+// samp.dll RVA: 0x0018dc1c
+extern FILE *g_debugPlacementFile;
+// samp.dll RVA: 0x0011e3d8
+extern const char g_debugPlacementFilename[];
+// samp.dll RVA: 0x0011e3a8
+extern const char g_debugPlacementFormat[];
+// samp.dll RVA: 0x0011e340
+extern const char g_debugEntityPlacementFormat[];
+// samp.dll RVA: 0x0011d7c0
+extern const double g_debugEulerNegativeOne;
+// samp.dll RVA: 0x0011e36c
+extern const float g_debugPlacementMaxDrawDistance;
+// samp.dll RVA: 0x0011e368
+extern const float g_debugPlacementMaxZ;
+// Raw GTA backend entity; not a SA-MP CEntity wrapper pointer.
+// samp.dll RVA: 0x0009ce60
+void GameDebugWriteEntityPlacement(void *entity,FILE *file);
+// samp.dll RVA: 0x0009d100
+int GameDebugWritePlacementRecord(const GameDebugPlacementRecord *record);
+
+#endif

@@ -83,3 +83,7 @@ namespace AimStuff {
     void __stdcall ApplyPlayerSkills(int player);
 }
 #endif
+
+// Native writes only front.x/front.z and up.x/up.z; other aim words are untouched.
+// samp.dll RVA: 0x0009c4f0
+void GameAimLookAtPartial(CameraAim *aim,float x,float y,float z);

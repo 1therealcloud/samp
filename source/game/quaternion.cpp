@@ -650,3 +650,67 @@ __declspec(naked) void GameQuaternionComponentsToMatrix(float w,float x,float y,
         ret
     }
 }
+
+// Native scalar x,y,z,w inputs; double output order and x87 spill boundaries matter.
+// samp.dll RVA: 0x0009d040
+__declspec(naked) void GameQuaternionDoubleToEuler(double x,double y,double z,double w,double *roll,double *pitch,double *yaw) {
+    __asm {
+        sub esp, 0x10
+        fld qword ptr [esp + 0x1c]
+        mov eax, dword ptr [esp + 0x34]
+        fmul qword ptr [esp + 0x1c]
+        fstp qword ptr [esp + 8]
+        fld qword ptr [esp + 0x1c]
+        fmul qword ptr [esp + 0x24]
+        fld qword ptr [esp + 0x14]
+        fmul qword ptr [esp + 0x2c]
+        faddp st(1),st
+        fadd st(0), st(0)
+        fld qword ptr [esp + 0x14]
+        fmul qword ptr [esp + 0x14]
+        fadd qword ptr [esp + 8]
+        fadd st(0), st(0)
+        fsubr g_pedParachuteOne
+        fpatan
+        fstp qword ptr [eax]
+        fld qword ptr [esp + 0x1c]
+        fmul qword ptr [esp + 0x2c]
+        fld qword ptr [esp + 0x14]
+        fmul qword ptr [esp + 0x24]
+        fsubp st(1),st
+        fadd st(0), st(0)
+        fst qword ptr [esp]
+        fabs
+        fcomp g_pedParachuteOne
+        fld qword ptr [esp]
+        fnstsw ax
+        test ah, 1
+        jne native_0009d0b8
+        fsin
+        mov ecx, dword ptr [esp + 0x38]
+        fmul g_aimVectorHalfPi
+        fstp qword ptr [ecx]
+        jmp native_0009d0c3
+    native_0009d0b8:
+        call _CIasin
+        mov edx, dword ptr [esp + 0x38]
+        fstp qword ptr [edx]
+    native_0009d0c3:
+        fld qword ptr [esp + 0x14]
+        mov eax, dword ptr [esp + 0x3c]
+        fmul qword ptr [esp + 0x1c]
+        fld qword ptr [esp + 0x24]
+        fmul qword ptr [esp + 0x2c]
+        faddp st(1),st
+        fadd st(0), st(0)
+        fld qword ptr [esp + 0x24]
+        fmul qword ptr [esp + 0x24]
+        fadd qword ptr [esp + 8]
+        fadd st(0), st(0)
+        fsubr g_pedParachuteOne
+        fpatan
+        fstp qword ptr [eax]
+        add esp, 0x10
+        ret
+    }
+}

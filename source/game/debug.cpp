@@ -1,4 +1,5 @@
 #include "game/debug.h"
+#include "game/quaternion.h"
 #include "game/util.h"
 #include "game/game.h"
 #include "game/vehicle.h"
@@ -153,4 +154,107 @@ void GameDebugWriteHeightmap() {
         }
         start.y-=1.0f;
     }
+}
+
+// samp.dll RVA: 0x0018dc1c
+FILE *g_debugPlacementFile=0;
+// samp.dll RVA: 0x0011e3d8
+const char g_debugPlacementFilename[]="c:\\0\\lc2sa_LoadObjectInstance_1_noipllods_Zonly_Q2E.txt";
+// samp.dll RVA: 0x0011e3a8
+const char g_debugPlacementFormat[]="%d,%.7f,%.7f,%.7f,%.5f,%.5f,%.5f,%.2f,%u,%X\n";
+// samp.dll RVA: 0x0011e340
+const char g_debugEntityPlacementFormat[]="%u,%.5f,%.5f,%.5f,0.0,0.0,%.5f,%.5f\n";
+// samp.dll RVA: 0x0011d7c0
+const double g_debugEulerNegativeOne=-1.0;
+// samp.dll RVA: 0x0011e36c
+const float g_debugPlacementMaxDrawDistance=299.0f;
+// samp.dll RVA: 0x0011e368
+const float g_debugPlacementMaxZ=500.0f;
+// samp.dll RVA: 0x0009ce60
+void GameDebugWriteEntityPlacement(void *entity,FILE *file) {
+    if(!entity)return;
+    BYTE *backend=(BYTE*)entity;float heading;CVector position;
+    void *matrix=*(void**)(backend+0x14);
+    if(matrix) {
+        __asm {
+            mov ecx,matrix
+            fld dword ptr [ecx+0x10]
+            fchs
+            fld dword ptr [ecx+0x14]
+            fpatan
+            fmul g_entityRadiansToDegrees
+            fst heading
+            fcomp g_objectScaleLowerBound
+            fld heading
+            fnstsw ax
+            test ah,5
+            jp nonnegative_heading
+            fadd g_anglePeriod
+            fstp heading
+            jmp heading_done
+        nonnegative_heading:
+            fcomp g_anglePeriod
+            fnstsw ax
+            test ah,1
+            jne heading_done
+            fld heading
+            fsub g_anglePeriod
+            fstp heading
+        heading_done:
+        }
+        matrix=*(void**)(backend+0x14);
+        memcpy(&position,(BYTE*)matrix+0x30,12);
+    } else {
+        __asm {
+            mov eax,backend
+            fld dword ptr [eax+0x10]
+            fmul g_entityRadiansToDegrees
+            fstp heading
+        }
+        memcpy(&position,backend+4,12);
+    }
+    void *info=GameGetModelInfo(*(short*)(backend+0x22));
+    float distance;BYTE withinDistance;
+    // Native compares ST0 before the stored float distance is reloaded for output.
+    __asm {
+        push info
+        call GameGetModelDrawDistance
+        fst distance
+        fcomp g_debugPlacementMaxDrawDistance
+        fnstsw ax
+        test ah,0x41
+        setnp withinDistance
+    }
+    if(withinDistance&&position.z<g_debugPlacementMaxZ)
+        fprintf(file,g_debugEntityPlacementFormat,(DWORD)(int)*(short*)(backend+0x22),
+            (double)position.x,(double)position.y,(double)position.z,(double)heading,(double)distance);
+}
+// samp.dll RVA: 0x0009d100
+int GameDebugWritePlacementRecord(const GameDebugPlacementRecord *record) {
+    if(!g_debugPlacementFile) {
+        // Native mode address11BBD4 shares its bytes with RPC integer119 ("w").
+        g_debugPlacementFile=fopen(g_debugPlacementFilename,(const char*)&g_renderMapClickRpc);
+        if(!g_debugPlacementFile)return 0;
+    }
+    double roll,pitch,yaw;
+    GameQuaternionDoubleToEuler(record->qx,record->qy,record->qz,record->qw,&roll,&pitch,&yaw);
+    float heading;
+    __asm {
+        fld yaw
+        fmul g_debugEulerNegativeOne
+        fstp heading
+    }
+    float distance=GameGetModelDrawDistance(GameGetModelInfo(record->model));
+    WORD flags=GameGetModelFlagsWord(record->model);
+    DWORD nonnegative=record->raw24>=0?1:0;
+    double angle;
+    __asm {
+        fld heading
+        fmul g_entityRadiansToDegrees
+        fstp angle
+    }
+    fprintf(g_debugPlacementFile,g_debugPlacementFormat,record->model,
+        (double)record->x,(double)record->y,(double)record->z,g_pedParachuteZero,g_pedParachuteZero,
+        angle,(double)distance,nonnegative,(DWORD)flags);
+    return 0;
 }
