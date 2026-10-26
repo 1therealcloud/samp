@@ -928,18 +928,6 @@ void __stdcall GameRemoveDriverByState598(void *vehicle) {
     *(void**)((BYTE*)vehicle+0x460)=0;
 }
 
-// Two native delete thunks resolve to the same operator delete implementation.
-// Pointee is cleared only when nonnull; no typed object destructor is called.
-// samp.dll RVA: 0x000b86b0
-DWORD __stdcall GameDeletePointerRecord(DWORD unused,void **record) {
-    (void)unused;
-    if(*record) {
-        ::operator delete(*record);
-        *record=0;
-    }
-    ::operator delete(record);
-    return 0;
-}
 
 #include "gui/device_objects.h"
 #include "d3dhook/texture_binding.h"

@@ -84,6 +84,7 @@ for %%F in (
     source\game\debugscript.cpp
     source\game\pad.cpp
     source\game\vehicle.cpp
+    source\game\skinnedmesh.cpp
     source\net\vehiclepool.cpp
     source\game\custommodels.cpp
     source\game\camera.cpp

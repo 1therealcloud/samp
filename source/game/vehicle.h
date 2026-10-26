@@ -200,9 +200,6 @@ extern const float g_vehicleTrainSpeedMaximum;
 extern const float g_vehicleMarkerDistance;
 // samp.dll RVA: 0x000b3eb0
 void __stdcall GameRemoveDriverByState598(void *vehicle);
-// Raw heap callback; record must be nonnull. First argument is unused natively.
-// samp.dll RVA: 0x000b86b0
-DWORD __stdcall GameDeletePointerRecord(DWORD unused,void **record);
 // samp.dll RVA: 0x002abe64
 extern void *g_vehicleTrainCursor;
 // samp.dll RVA: 0x002abe68
