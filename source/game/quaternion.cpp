@@ -794,3 +794,18 @@ __declspec(naked) float GameQuaternionLengthSquared(const GameQuaternion *quater
         ret
     }
 }
+
+// Separate identical native adapter; original distinct name is unresolved.
+// samp.dll RVA: 0x000b4da0
+void GameQuaternionFromMatrixComponents4DA0(const CMatrix *matrix,GameQuaternion *out) {
+    GameMatrixComponentsToQuaternion(matrix->right.x,matrix->right.y,matrix->right.z,
+        matrix->up.x,matrix->up.y,matrix->up.z,matrix->at.x,matrix->at.y,matrix->at.z,
+        &out->w,&out->x,&out->y,&out->z);
+}
+// Separate identical native adapter, no implicit normalization.
+// samp.dll RVA: 0x000b4f60
+void GameQuaternionToMatrixComponents4F60(const GameQuaternion *quaternion,CMatrix *matrix) {
+    GameQuaternionComponentsToMatrix(quaternion->w,quaternion->x,quaternion->y,quaternion->z,
+        &matrix->right.x,&matrix->right.y,&matrix->right.z,&matrix->up.x,&matrix->up.y,&matrix->up.z,
+        &matrix->at.x,&matrix->at.y,&matrix->at.z);
+}

@@ -1209,3 +1209,39 @@ __declspec(naked) float GameHeadingToRadiansBounded(float heading) {
         ret
     }
 }
+
+// samp.dll RVA: 0x000b38d0
+DWORD GameCountNonzeroPoolBytesB7449C() {
+    // GTA SA virtual address: pool global. Bytes are inline at +4, not indirect.
+    BYTE *pool=*(BYTE**)0xb7449c;int capacity=*(int*)(pool+8);DWORD count=0;
+    for(int index=0;index<capacity;++index)if(pool[index+4])++count;
+    return count;
+}
+// samp.dll RVA: 0x000b3900
+DWORD GameCountNonzeroPoolBytesC8800C() {
+    // GTA SA virtual address: pool global. Preserve the same raw inline-byte scan.
+    BYTE *pool=*(BYTE**)0xc8800c;int capacity=*(int*)(pool+8);DWORD count=0;
+    for(int index=0;index<capacity;++index)if(pool[index+4])++count;
+    return count;
+}
+// samp.dll RVA: 0x000b4130
+void __stdcall GameReplaceBackendVtable85BBF0(void *entity) {
+    // GTA SA virtual addresses: source and replacement vtables.
+    if(entity&&*(DWORD*)entity==0x85bbf0)*(DWORD*)entity=0x85bd30;
+}
+// samp.dll RVA: 0x000b42c0
+void GameWriteGlobal9689E0(DWORD value) {
+    // GTA SA virtual address; semantic meaning of this raw DWORD is unresolved.
+    *(DWORD*)0x9689e0=value;
+}
+// CRT helper consumes and returns ST0, not a C stack argument.
+// samp.dll RVA: 0x000fce60
+extern "C" void __cdecl _CIasin();
+// samp.dll RVA: 0x000b3620
+__declspec(naked) float GameAsin(float value) {
+    __asm {
+        fld dword ptr [esp+4]
+        call _CIasin
+        ret
+    }
+}

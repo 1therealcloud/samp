@@ -323,3 +323,15 @@ void GameScaleVector(CVector *out,const CVector *vector,float scale);
 // Native inclusive0..360 gate accepts NaN; preserves branch arithmetic.
 // samp.dll RVA: 0x000b5520
 float GameHeadingToRadiansBounded(float heading);
+
+// Raw inline pool bytes at +4; signed capacity at +8; no null check.
+// samp.dll RVA: 0x000b38d0
+DWORD GameCountNonzeroPoolBytesB7449C();
+// samp.dll RVA: 0x000b3900
+DWORD GameCountNonzeroPoolBytesC8800C();
+// samp.dll RVA: 0x000b4130
+void __stdcall GameReplaceBackendVtable85BBF0(void *entity);
+// samp.dll RVA: 0x000b42c0
+void GameWriteGlobal9689E0(DWORD value);
+// samp.dll RVA: 0x000b3620
+float GameAsin(float value);

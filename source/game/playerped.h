@@ -575,3 +575,15 @@ extern const char g_pedBoneIdFormat[3];
 BYTE *__stdcall GameGetPlayerControlFlags(BYTE player);
 // samp.dll RVA: 0x000b3a20
 int __stdcall GameGetWeaponModel(int weapon);
+
+// samp.dll RVA: 0x000b3f00
+void GameInitializePlayerPedTables();
+// Native has no bound check; adjacency outside210 records remains unproven.
+// samp.dll RVA: 0x000b3f50
+void *__stdcall GameGetPlayerPedUnchecked(BYTE player);
+// samp.dll RVA: 0x000b3f90
+void __stdcall GameSetPlayerControllerWords(BYTE player,DWORD first,DWORD second,DWORD third,DWORD fourth);
+// samp.dll RVA: 0x000b3ff0
+BYTE __stdcall GameFindPlayerIndexByClump(void *clump);
+// samp.dll RVA: 0x000b40b0
+DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player);

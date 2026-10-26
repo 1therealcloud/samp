@@ -3015,3 +3015,35 @@ void CPed::ProcessCameraAimMarker() {
         delete (CObject*)unknown2f9;unknown2f9=0;
     }
 }
+
+// samp.dll RVA: 0x000b3f00
+void GameInitializePlayerPedTables() {
+    memset(g_gamePlayerPeds,0,sizeof(g_gamePlayerPeds));
+    memset(g_gamePlayerControllerState,0,sizeof(g_gamePlayerControllerState));
+}
+// Native byte index is unchecked. Storage adjacency for210..255 is unproven.
+// samp.dll RVA: 0x000b3f50
+void *__stdcall GameGetPlayerPedUnchecked(BYTE player) { return g_gamePlayerPeds[player]; }
+// samp.dll RVA: 0x000b3f90
+void __stdcall GameSetPlayerControllerWords(BYTE player,DWORD first,DWORD second,DWORD third,DWORD fourth) {
+    if(player<210) {
+        DWORD *words=(DWORD*)g_gamePlayerControllerState[player];
+        words[0]=first;words[1]=second;words[2]=third;words[3]=fourth;
+    }
+}
+// samp.dll RVA: 0x000b3ff0
+BYTE __stdcall GameFindPlayerIndexByClump(void *clump) {
+    BYTE player=0;
+    do {
+        void *ped=g_gamePlayerPeds[player];
+        if(ped) {
+            void *object=*(void**)((BYTE*)ped+0x18);
+            if(object&&object==clump)return player;
+        }
+        ++player;
+    }while(player!=210);
+    return 0;
+}
+// Native byte index is unchecked, unlike the existing bounded flags getter.
+// samp.dll RVA: 0x000b40b0
+DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player) { return g_gamePlayerFlags[player]; }

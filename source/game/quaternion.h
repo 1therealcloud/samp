@@ -61,3 +61,9 @@ void GameQuaternionFromVectorsHalf(GameQuaternion *out,const CVector *from,const
 // x squared plus y squared plus z squared then w squared.
 // samp.dll RVA: 0x000b4cc0
 float GameQuaternionLengthSquared(const GameQuaternion *quaternion);
+
+// Separate original adapters; distinct original names are unresolved.
+// samp.dll RVA: 0x000b4da0
+void GameQuaternionFromMatrixComponents4DA0(const CMatrix *matrix,GameQuaternion *out);
+// samp.dll RVA: 0x000b4f60
+void GameQuaternionToMatrixComponents4F60(const GameQuaternion *quaternion,CMatrix *matrix);
