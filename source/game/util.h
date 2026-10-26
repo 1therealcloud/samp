@@ -247,3 +247,10 @@ extern const char g_rwMaterialCountText[];
 extern const char g_rwMaterialNameText[];
 // samp.dll RVA: 0x0011f3cc
 extern const char g_rwMaterialNullText[];
+
+// GTA SA virtual address: 0x00859524; raw float semantics unresolved.
+// samp.dll RVA: 0x000b26d0
+float GameReadFloat859524();
+// GTA SA virtual address: 0x00859520; raw float semantics unresolved.
+// samp.dll RVA: 0x000b26e0
+float GameReadFloat859520();

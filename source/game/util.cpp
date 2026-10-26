@@ -823,3 +823,14 @@ __declspec(naked) float GameApproximateSqrt(float value) {
         ret
     }
 }
+
+// GTA SA virtual address: 0x00859524; raw float semantics unresolved.
+// samp.dll RVA: 0x000b26d0
+float GameReadFloat859524() {
+    return *(const float*)0x859524;
+}
+// GTA SA virtual address: 0x00859520; raw float semantics unresolved.
+// samp.dll RVA: 0x000b26e0
+float GameReadFloat859520() {
+    return *(const float*)0x859520;
+}

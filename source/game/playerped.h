@@ -20,6 +20,11 @@ typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity {
 public:
+    // samp.dll RVA: 0x000acd70
+    WORD GetCurrentWeaponTotalAmmo();
+    // samp.dll RVA: 0x000b0ef0
+    void ProcessCameraAimMarker();
+
     // samp.dll RVA: 0x000ade70
     void ProcessVehicleHorn();
     // samp.dll RVA: 0x000ae050

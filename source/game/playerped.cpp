@@ -2989,3 +2989,29 @@ int __stdcall GameGetWeaponModel(int weapon) {
     };
     return (DWORD)weapon-1u<46?models[(DWORD)weapon-1u]:-1;
 }
+
+// samp.dll RVA: 0x000acd70
+WORD CPed::GetCurrentWeaponTotalAmmo() {
+    BYTE *ped=(BYTE*)m_pGamePed;
+    if(!ped)return 0;
+    DWORD slot=(DWORD)ped+0x5a0+(DWORD)ped[0x718]*28;
+    if(!slot)return 0xffff;
+    DWORD weapon=*(DWORD*)slot;
+    if(weapon<=15||weapon==46)return 0xffff;
+    return *(WORD*)(slot+0xc);
+}
+// samp.dll RVA: 0x000b0ef0
+void CPed::ProcessCameraAimMarker() {
+    CVector position;
+    if(GetCameraAimHit(&position)) {
+        if(!unknown2f9) {
+            CVector rotation={0,0,0};srand((unsigned)time(0));
+            CObject *object=g_pGame->NewObject(3065,0,0,0,rotation,200.0f,0,0);
+            unknown2f9=(DWORD)object;object->SetCollisionFlag(0);
+            ((CEntity*)unknown2f9)->Add();
+        }
+        ((CEntity*)unknown2f9)->Teleport(position);
+    } else if(unknown2f9) {
+        delete (CObject*)unknown2f9;unknown2f9=0;
+    }
+}

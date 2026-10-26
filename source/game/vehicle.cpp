@@ -990,3 +990,9 @@ float CVehicle::GetBackendFloat94C() {
 float CVehicle::GetBackendFloat950() {
     return *(float*)((BYTE*)m_pGameVehicle+0x950);
 }
+
+// samp.dll RVA: 0x000b73e0
+void CVehicle::SetBackendFloat94CAnd950(float first,float second) {
+    memcpy((BYTE*)m_pGameVehicle+0x94c,&first,4);
+    memcpy((BYTE*)m_pGameVehicle+0x950,&second,4);
+}
