@@ -871,6 +871,7 @@ public:
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual void UpdateRects();
     virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
+    // samp.dll RVA: 0x0008ee80
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
     virtual void OnFocusIn();
 
@@ -1006,6 +1007,7 @@ public:
 
     static  void EnableImeSystem( bool bEnable );
 
+    // samp.dll RVA: 0x00090230
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );

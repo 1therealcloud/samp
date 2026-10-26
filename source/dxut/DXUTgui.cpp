@@ -4758,109 +4758,55 @@ bool CDXUTEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008ee80
 void CDXUTEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
-    if( m_bVisible == false )
-        return;
-
-    HRESULT hr;
-    int nSelStartX = 0, nCaretX = 0;  // Left and right X cordinates of the selection region
-
-    CDXUTElement* pElement = GetElement( 0 );
-    if( pElement )
-    {
-        m_Buffer.SetFontNode( m_pDialog->GetFont( pElement->iFont ) );
-        PlaceCaret( m_nCaret );  // Call PlaceCaret now that we have the font info (node),
-                                 // so that scrolling can be handled.
+    (void)pd3dDevice;
+    if(!m_bVisible)return;
+    int selectionX=0,caretX=0;
+    CDXUTElement *element=m_Elements.GetAt(0);
+    if(element) {
+        m_Buffer.SetFontNode(m_pDialog->GetFont(element->iFont));
+        PlaceCaret(m_nCaret);
     }
-
-    // Render the control graphics
-    for( int e = 0; e < 9; ++e )
-    {
-        pElement = m_Elements.GetAt( e );
-        pElement->TextureColor.Blend( DXUT_STATE_NORMAL, fElapsedTime );
-
-        m_pDialog->DrawSprite( pElement, &m_rcRender[e] );
+    for(int e=0;e<9;++e) {
+        element=m_Elements.GetAt(e);
+        element->TextureColor.Blend(DXUT_STATE_NORMAL,fElapsedTime,0.7f);
+        m_pDialog->DrawSprite(element,&m_rcRender[e]);
     }
-
-    //
-    // Compute the X coordinates of the first visible character.
-    //
-    int nXFirst;
-    m_Buffer.CPtoX( m_nFirstVisible, FALSE, &nXFirst );
-
-    //
-    // Compute the X coordinates of the selection rectangle
-    //
-    hr = m_Buffer.CPtoX( m_nCaret, FALSE, &nCaretX );
-    if( m_nCaret != m_nSelStart )
-        hr = m_Buffer.CPtoX( m_nSelStart, FALSE, &nSelStartX );
-    else
-        nSelStartX = nCaretX;
-
-    //
-    // Render the selection rectangle
-    //
-    RECT rcSelection;  // Make this available for rendering selected text
-    if( m_nCaret != m_nSelStart )
-    {
-        int nSelLeftX = nCaretX, nSelRightX = nSelStartX;
-        // Swap if left is bigger than right
-        if( nSelLeftX > nSelRightX )
-            { int nTemp = nSelLeftX; nSelLeftX = nSelRightX; nSelRightX = nTemp; }
-
-        SetRect( &rcSelection, nSelLeftX, m_rcText.top, nSelRightX, m_rcText.bottom );
-        OffsetRect( &rcSelection, m_rcText.left - nXFirst, 0 );
-        IntersectRect( &rcSelection, &m_rcText, &rcSelection );
-        m_pDialog->DrawRect( &rcSelection, m_SelBkColor );
+    int firstX;
+    m_Buffer.CPtoX(m_nFirstVisible,FALSE,&firstX);
+    m_Buffer.CPtoX(m_nCaret,FALSE,&caretX);
+    if(m_nCaret!=m_nSelStart)m_Buffer.CPtoX(m_nSelStart,FALSE,&selectionX);
+    else selectionX=caretX;
+    RECT selection;
+    if(m_nCaret!=m_nSelStart) {
+        int left=caretX,right=selectionX;if(left>right){int temporary=left;left=right;right=temporary;}
+        SetRect(&selection,left,m_rcText.top,right,m_rcText.bottom);
+        OffsetRect(&selection,m_rcText.left-firstX,0);
+        IntersectRect(&selection,&m_rcText,&selection);
+        m_pDialog->DrawRect(&selection,m_SelBkColor);
     }
-
-    //
-    // Render the text
-    //
-    // Element 0 for text
-    m_Elements.GetAt( 0 )->FontColor.Current = m_TextColor;
-    m_pDialog->DrawText( m_Buffer.GetBuffer() + m_nFirstVisible, m_Elements.GetAt( 0 ), &m_rcText );
-
-    // Render the selected text
-    if( m_nCaret != m_nSelStart )
-    {
-        int nFirstToRender = __max( m_nFirstVisible, __min( m_nSelStart, m_nCaret ) );
-        int nNumChatToRender = __max( m_nSelStart, m_nCaret ) - nFirstToRender;
-        m_Elements.GetAt( 0 )->FontColor.Current = m_SelTextColor;
-        m_pDialog->DrawText( m_Buffer.GetBuffer() + nFirstToRender,
-                             m_Elements.GetAt( 0 ), &rcSelection, false, nNumChatToRender );
+    m_Elements.GetAt(0)->FontColor.Current=D3DXCOLOR(m_TextColor);
+    const WCHAR *text=m_Buffer.GetBuffer()+m_nFirstVisible;
+    if(m_nativeFlag126)text=InputMaskWideText(text);
+    m_pDialog->DrawText(text,m_Elements.GetAt(0),&m_rcText,false,-1);
+    if(m_nCaret!=m_nSelStart) {
+        int first=__max(m_nFirstVisible,__min(m_nSelStart,m_nCaret));
+        int count=__max(m_nSelStart,m_nCaret)-first;
+        m_Elements.GetAt(0)->FontColor.Current=D3DXCOLOR(m_SelTextColor);
+        text=m_Buffer.GetBuffer()+first;
+        if(m_nativeFlag126)text=InputMaskWideText(text);
+        m_pDialog->DrawText(text,m_Elements.GetAt(0),&selection,false,count);
     }
-
-    //
-    // Blink the caret
-    //
-    if( DXUTGetGlobalTimer()->GetAbsoluteTime() - m_dfLastBlink >= m_dfBlink )
-    {
-        m_bCaretOn = !m_bCaretOn;
-        m_dfLastBlink = DXUTGetGlobalTimer()->GetAbsoluteTime();
-    }
-
-    //
-    // Render the caret if this control has the focus
-    //
-    if( m_bHasFocus && m_bCaretOn && !s_bHideCaret )
-    {
-        // Start the rectangle with insert mode caret
-        RECT rcCaret = { m_rcText.left - nXFirst + nCaretX - 1, m_rcText.top,
-                         m_rcText.left - nXFirst + nCaretX + 1, m_rcText.bottom };
-
-        // If we are in overwrite mode, adjust the caret rectangle
-        // to fill the entire character.
-        if( !m_bInsertMode )
-        {
-            // Obtain the right edge X coord of the current character
-            int nRightEdgeX;
-            m_Buffer.CPtoX( m_nCaret, TRUE, &nRightEdgeX );
-            rcCaret.right = m_rcText.left - nXFirst + nRightEdgeX;
+    // Original gates on visible/enabled, without the SDK focus/blink/hide-caret gate.
+    if(m_bVisible&&m_bEnabled) {
+        RECT caret={m_rcText.left-firstX+caretX-1,m_rcText.top,m_rcText.left-firstX+caretX+1,m_rcText.bottom};
+        if(!m_bInsertMode) {
+            int right;m_Buffer.CPtoX(m_nCaret,TRUE,&right);
+            caret.right=m_rcText.left-firstX+right;
         }
-
-        m_pDialog->DrawRect( &rcCaret, m_CaretColor );
+        m_pDialog->DrawRect(&caret,m_CaretColor);
     }
 }
 
@@ -6828,6 +6774,7 @@ void CDXUTIMEEditBox::RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElap
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00090230
 void CDXUTIMEEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     if( m_bVisible == false )
@@ -6860,7 +6807,7 @@ void CDXUTIMEEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
     //
     // Now render the IME elements
     //
-    if( m_bHasFocus )
+    if( s_bEnableImeSystem )
     {
         // Render the input locale indicator
         RenderIndicator( pd3dDevice, fElapsedTime );
