@@ -9,6 +9,9 @@ struct PedBulletData;
 namespace Scripting {struct OpcodeInfo;}
 #pragma pack(push,1)
 class CLocalPlayer {public:
+    // samp.dll RVA: 0x00004230
+    BYTE GetAimTargetOffset(WORD *id,CVector *offset);
+
     // samp.dll RVA: 0x00002db0
     DWORD GetSpawnPermission();
     // samp.dll RVA: 0x000135c0

@@ -1372,3 +1372,23 @@ DWORD CLocalPlayer::GetSpawnPermission() {
 DWORD CLocalPlayer::IsSpectating() {
     return *(DWORD*)(nativeState+0x12c);
 }
+
+// samp.dll RVA: 0x00004230
+BYTE CLocalPlayer::GetAimTargetOffset(WORD *id,CVector *offset) {
+    CVector hit;void *entity=(*(CPed**)nativeState)->GetCameraAimHit(&hit);
+    if(!entity)return 0;
+    CNetGamePools *pools=((CNetGame*)g_pNetGame)->pools;
+    CObjectPool *objects=pools->objects;CPlayerPool *players=pools->players;CVehiclePool *vehicles=pools->vehicles;
+    BYTE kind=0;WORD selected=players->Find(entity);
+    if(selected!=0xffff)kind=1;
+    else {
+        selected=vehicles->Find(entity);
+        if(selected!=0xffff)kind=2;
+        else {selected=objects->GetId(entity);if(selected!=0xffff)kind=3;}
+    }
+    if(selected==0)return 0;
+    offset->x=hit.x-(*(CMatrix**)((BYTE*)entity+0x14))->position.x;
+    offset->y=hit.y-(*(CMatrix**)((BYTE*)entity+0x14))->position.y;
+    offset->z=hit.z-(*(CMatrix**)((BYTE*)entity+0x14))->position.z;
+    *id=selected;return kind;
+}

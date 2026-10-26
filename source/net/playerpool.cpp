@@ -1,4 +1,6 @@
 #include "net/playerpool.h"
+#include "net/netgame.h"
+#include "main.h"
 #include "net/playerinfo.h"
 #include <string.h>
 // samp.dll RVA: 0x000010d0
@@ -292,4 +294,42 @@ WORD CPlayerPool::GetLocalId() {
 // samp.dll RVA: 0x0000e330
 void CPlayerPool::SetLocalId(WORD id) {
     localId=id;
+}
+
+// samp.dll RVA: 0x0000e340
+void CPlayerPool::SetScore(WORD id,int value) {
+    if(id==localId){localScore=value;return;}
+    if(id>1004)return;
+    CPlayerInfo *info=*(CPlayerInfo**)((BYTE*)this+0x26+(DWORD)id*4);
+    if(info)info->score=value;
+}
+// samp.dll RVA: 0x0000e380
+void CPlayerPool::SetPing(WORD id,DWORD value) {
+    if(id==localId){localPing=value;return;}
+    if(id>1004)return;
+    CPlayerInfo *info=*(CPlayerInfo**)((BYTE*)this+0x26+(DWORD)id*4);
+    if(info)info->ping=value;
+}
+
+// samp.dll RVA: 0x00156ac0
+DWORD g_cachedActivePlayerCount=0;
+// samp.dll RVA: 0x00156ac4
+DWORD g_activePlayerCountCountdown=0;
+// ECX and stack arguments unused; original class ownership is not established.
+// samp.dll RVA: 0x00003ff0
+DWORD GetCachedActivePlayerCount() {
+    CPlayerPool *pool=((CNetGame*)g_pNetGame)->pools->players;
+    if(g_activePlayerCountCountdown){--g_activePlayerCountCountdown;return g_cachedActivePlayerCount;}
+    g_activePlayerCountCountdown=30;g_cachedActivePlayerCount=0;
+    if(!pool)return 0;
+    int largest=pool->largestId;DWORD count=0;
+    for(WORD id=0;(int)id<=largest;++id) {
+        if(id<1004&&pool->connected[id]) {
+            CPlayerInfo *info=pool->players[id];
+            CRemotePlayer *remote=info?info->remote:0;
+            // The native body deliberately has no null-remote guard here.
+            if(*(void**)((BYTE*)remote+4)&&remote->GetState())g_cachedActivePlayerCount=++count;
+        }
+    }
+    return count;
 }

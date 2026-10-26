@@ -12,6 +12,11 @@ struct CVector;
 #pragma pack(push,1)
 class CPlayerPool {
 public:
+    // samp.dll RVA: 0x0000e340
+    void SetScore(WORD id,int value);
+    // samp.dll RVA: 0x0000e380
+    void SetPing(WORD id,DWORD value);
+
     // samp.dll RVA: 0x0000e330
     void SetLocalId(WORD id);
 
@@ -109,4 +114,15 @@ extern DWORD g_playerPoolProcessCount;
 extern const char g_playerPoolRemoteException[];
 // samp.dll RVA: 0x00118174
 extern const char g_playerPoolLocalException[];
+#endif
+
+#ifndef SAMP_CACHED_ACTIVE_PLAYER_COUNT_H
+#define SAMP_CACHED_ACTIVE_PLAYER_COUNT_H
+// samp.dll RVA: 0x00156ac0
+extern DWORD g_cachedActivePlayerCount;
+// samp.dll RVA: 0x00156ac4
+extern DWORD g_activePlayerCountCountdown;
+// No this pointer consumed; original class ownership not established.
+// samp.dll RVA: 0x00003ff0
+DWORD GetCachedActivePlayerCount();
 #endif

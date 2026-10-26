@@ -316,3 +316,13 @@ void CVehiclePool::ShutdownLicensePlates() {
         } while((int)(WORD)++counter<=m_nLargestId);
     }
 }
+
+// samp.dll RVA: 0x0001e970
+WORD CVehiclePool::FindInLine(DWORD unused,const CVector *origin,const CVector *end) {
+    BYTE collision[52];void *entity=0;
+    GameProcessLineOfSightRaw(origin,end,collision,&entity,0,1,0,0,0,0,0,0);
+    if(!entity)return 0xffff;
+    int largest=m_nLargestId;
+    for(int id=1;id<=largest;++id)if(m_pGameObjects[id]==entity)return (WORD)id;
+    return 0xffff;
+}
