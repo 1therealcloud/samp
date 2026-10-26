@@ -3435,3 +3435,231 @@ void GameWriteProtectedRelativeBranch(DWORD address,DWORD target,BYTE opcode) {
     *(BYTE*)address=opcode;*(DWORD*)(address+1)=target-address-5;
     protect((void*)address,5,oldProtection,&ignoredProtection);
 }
+
+#include "game/patches.h"
+#include "game/ped_control.h"
+#include <stdlib.h>
+// samp.dll RVA: 0x0018f4d0
+DWORD g_hookGate18F4D0;
+// samp.dll RVA: 0x0018eb2c
+DWORD g_hookRandomReturn;
+// samp.dll RVA: 0x0018e8b8
+DWORD g_hookRecordReturn18E8B8;
+// samp.dll RVA: 0x0018f5c8
+DWORD g_hookRecordEcx18F5C8;
+
+// samp.dll RVA: 0x000a22a0
+__declspec(naked) void GameRestoreHudDraw() {
+    __asm {
+        mov eax, dword ptr [g_hookHudScaleX]
+        mov dword ptr ds:[0x859520], eax
+        mov ecx, dword ptr [g_hookHudScaleY]
+        mov dword ptr ds:[0x859524], ecx
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a2630
+__declspec(naked) void GameDisablePedControlCalls() {
+    __asm {
+        mov eax, 0x90909090
+        mov ecx, 0x6884c4
+        mov dword ptr [ecx], eax
+        mov word ptr [ecx + 4], ax
+        mov edx, eax
+        mov eax, 0x688200
+        mov dword ptr [eax], edx
+        mov word ptr [eax + 4], dx
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a2650
+__declspec(naked) void GameRestorePedControlCalls() {
+    __asm {
+        mov ecx, dword ptr [g_hookPedRestoreA]
+        mov eax, 0x6884c4
+        mov dword ptr [eax], ecx
+        mov dx, word ptr [g_hookPedRestoreA+4]
+        mov word ptr [eax + 4], dx
+        mov ecx, dword ptr [g_hookPedRestoreB]
+        mov eax, 0x688200
+        mov dword ptr [eax], ecx
+        mov dx, word ptr [g_hookPedRestoreB+4]
+        mov word ptr [eax + 4], dx
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a3780
+__declspec(naked) void GameHook_000a3780() {
+    __asm {
+        pushad
+        cmp dword ptr [g_hookGate18F4D0], 0
+        jne hook_a378e
+        popad
+        xor eax, eax
+        ret
+    hook_a378e:
+        popad
+        mov eax, 0x421446
+        jmp eax
+    }
+}
+
+// samp.dll RVA: 0x000a37e0
+__declspec(naked) void GameHook_000a37e0() {
+    __asm {
+        fld dword ptr [g_gameFarClipDistance]
+        push esi
+        mov esi, dword ptr [esp + 8]
+        mov edx, dword ptr [g_gameVersionAddressB]
+        jmp edx
+    }
+}
+
+// samp.dll RVA: 0x000a3b40
+__declspec(naked) void GameHook_000a3b40() {
+    __asm {
+        mov eax, dword ptr ds:[0xc17054]
+        test eax, eax
+        je hook_a3b50
+        push 0x746929
+        ret
+    hook_a3b50:
+        xor eax, eax
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a3d50
+__declspec(naked) void GameHook_000a3d50() {
+    __asm {
+        push esi
+        test ecx, ecx
+        je hook_a3d64
+        mov esi, dword ptr ss:[esp + 8]
+        mov eax, dword ptr ds:[esi]
+        mov edx, 0x63a047
+        jmp edx
+    hook_a3d64:
+        mov esi, 0x63a04d
+        jmp esi
+    }
+}
+
+// samp.dll RVA: 0x000a3d70
+__declspec(naked) void GameHook_000a3d70() {
+    __asm {
+        test eax, eax
+        je hook_a3d82
+        mov ecx, 0x47eab8
+        mov cl, byte ptr ds:[0xa43c7c]
+        jmp ecx
+    hook_a3d82:
+        mov esi, 0x47eaca
+        jmp esi
+    }
+}
+
+// samp.dll RVA: 0x000a3e40
+__declspec(naked) void GameHook_000a3e40() {
+    __asm {
+        mov eax, dword ptr [esp]
+        mov dword ptr [g_hookRandomReturn], eax
+        call rand
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a4240
+__declspec(naked) void *GameAllocateHookBuffer() {
+    __asm {
+        cmp dword ptr [g_gameVersion], 1
+        push ebx
+        jne hook_a4254
+        mov dword ptr [g_hookAllocateFunction], 0x7fb230
+    hook_a4254:
+        push 0x604
+        push 0x20
+        push 0x10
+        push 0x40
+        mov ebx, dword ptr [g_hookAllocateFunction]
+        call ebx
+        mov dword ptr [g_hookCachedBuffer], eax
+        pop ebx
+        pop ebx
+        pop ebx
+        pop ebx
+        pop ebx
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a4c10
+__declspec(naked) void GameHook_000a4c10() {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        push eax
+        mov eax, 0x5618d0
+        call eax
+        pop edx
+        pushad
+        mov ecx, dword ptr [g_pGame]
+        test ecx, ecx
+        je hook_a4c2d
+        call CGame::ProcessFrameLimiter
+    hook_a4c2d:
+        popad
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a4c90
+__declspec(naked) void GameHook_000a4c90() {
+    __asm {
+        mov ecx, dword ptr [g_pGame]
+        call CGame::IsMenuVisible
+        test eax, eax
+        je hook_a4ca0
+        ret
+    hook_a4ca0:
+        mov edx, 0x69efc0
+        jmp edx
+    }
+}
+
+// samp.dll RVA: 0x000a4cb0
+__declspec(naked) void GameHook_000a4cb0() {
+    __asm {
+        pushad
+        popad
+        mov eax, 0x61e3f0
+        jmp eax
+    }
+}
+
+// samp.dll RVA: 0x000a4170
+__declspec(naked) void GameHook_000a4170() {
+    __asm {
+        mov eax, dword ptr [esp]
+        mov dword ptr [g_hookRecordReturn18E8B8], eax
+        pushad
+        popad
+        mov eax, 0x4c95c0
+        jmp eax
+    }
+}
+
+// samp.dll RVA: 0x000a48a0
+__declspec(naked) void GameHook_000a48a0() {
+    __asm {
+        mov eax, dword ptr [esp]
+        mov dword ptr [g_hookRenderReturn], eax
+        mov dword ptr [g_hookRecordEcx18F5C8], ecx
+        pushad
+        popad
+        mov eax, 0x5a2bd0
+        jmp eax
+    }
+}

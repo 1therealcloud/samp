@@ -240,3 +240,44 @@ void GameRestorePedRemoteCall();
 void GameWriteProtectedDword(DWORD address,DWORD value);
 // samp.dll RVA: 0x000a5df0
 void GameWriteProtectedRelativeBranch(DWORD address,DWORD target,BYTE opcode);
+
+// Raw GameHook_* declarations below are installation addresses, not ordinary
+// C++ call interfaces: native register inputs, stack prologues and tail jumps.
+// samp.dll RVA: 0x000a22a0
+void GameRestoreHudDraw();
+// samp.dll RVA: 0x000a2630
+void GameDisablePedControlCalls();
+// samp.dll RVA: 0x000a2650
+void GameRestorePedControlCalls();
+// samp.dll RVA: 0x000a3780
+void GameHook_000a3780();
+// samp.dll RVA: 0x000a37e0
+void GameHook_000a37e0();
+// samp.dll RVA: 0x000a3b40
+void GameHook_000a3b40();
+// samp.dll RVA: 0x000a3d50
+void GameHook_000a3d50();
+// samp.dll RVA: 0x000a3d70
+void GameHook_000a3d70();
+// samp.dll RVA: 0x000a3e40
+void GameHook_000a3e40();
+// samp.dll RVA: 0x000a4240
+void *GameAllocateHookBuffer();
+// samp.dll RVA: 0x000a4c10
+void GameHook_000a4c10();
+// samp.dll RVA: 0x000a4c90
+void GameHook_000a4c90();
+// samp.dll RVA: 0x000a4cb0
+void GameHook_000a4cb0();
+// samp.dll RVA: 0x000a4170
+void GameHook_000a4170();
+// samp.dll RVA: 0x000a48a0
+void GameHook_000a48a0();
+// samp.dll RVA: 0x0018f4d0
+extern DWORD g_hookGate18F4D0;
+// samp.dll RVA: 0x0018eb2c
+extern DWORD g_hookRandomReturn;
+// samp.dll RVA: 0x0018e8b8
+extern DWORD g_hookRecordReturn18E8B8;
+// samp.dll RVA: 0x0018f5c8
+extern DWORD g_hookRecordEcx18F5C8;
