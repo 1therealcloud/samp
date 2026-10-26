@@ -258,3 +258,84 @@ int GameDebugWritePlacementRecord(const GameDebugPlacementRecord *record) {
         angle,(double)distance,nonnegative,(DWORD)flags);
     return 0;
 }
+
+#include "chatwindow.h"
+#include "game/hooks_prerender.h"
+// samp.dll RVA: 0x001518d0
+DWORD g_debugHeightmapTileEnd=900;
+// samp.dll RVA: 0x0018de1c
+DWORD g_debugHeightmapFinished=0;
+// samp.dll RVA: 0x0018de20
+DWORD g_debugHeightmapTilePrepared=0;
+// samp.dll RVA: 0x0018de24
+DWORD g_debugHeightmapWaitFrames=0;
+// samp.dll RVA: 0x0011e4d8
+const char g_debugHeightmapBlockFormat[]="HM Setup Block: %d Row/Col: %d,%d XY: %.2f,%.2f";
+// samp.dll RVA: 0x0011e524
+const char g_debugHeightmapFinishedText[]="Finished HM";
+// samp.dll RVA: 0x0009dba0
+void GameDebugSelectHeightmapBlock(int index) {
+    int row=index>29?index/30:0;
+    int column=(int)((DWORD)index-(DWORD)row*30);
+    int rawX=(int)((DWORD)column*200),rawY=(int)((DWORD)row*200);
+    double displayY;
+    // Native prints Y before a float reload, but X after its float spill.
+    __asm {
+        fild rawX
+        fsub g_hookCollisionBoundHigh
+        fstp g_debugHeightmapStartX
+        fild rawY
+        fsubr g_hookCollisionBoundHigh
+        fst g_debugHeightmapStartY
+        fstp displayY
+    }
+    g_pChat->AddDebugMessage(g_debugHeightmapBlockFormat,index,row,column,
+        (double)g_debugHeightmapStartX,displayY);
+}
+// samp.dll RVA: 0x0009dc30
+void GameDebugMoveToHeightmapBlock() {
+    GameDebugSelectHeightmapBlock((int)g_debugHeightmapFlagCopy);
+    CPed *ped=g_pGame->GetPlayerPed();
+    CVector position;position.z=540.0f;
+    __asm {
+        fld g_debugHeightmapStartY
+        fsub g_vehicleTrainSpeedMaximum
+        fstp position.y
+        fld g_debugHeightmapStartX
+        fadd g_vehicleTrainSpeedMaximum
+        fstp position.x
+    }
+    ped->Teleport(position);
+}
+// samp.dll RVA: 0x0009ddd0
+void GameDebugProcessHeightmap() {
+    if(!g_debugHeightmapStage) {
+        GameDebugOpenHeightmap();
+        return;
+    }
+    if(g_debugHeightmapFinished) {
+        // Native leaves stage, completion flag and the closed FILE pointer intact.
+        g_pChat->AddDebugMessage(g_debugHeightmapFinishedText);
+        fclose(g_debugHeightmapFile);
+        CPed *ped=g_pGame->GetPlayerPed();
+        ped->SetCollisionProcessed(TRUE);ped->SetCollisionFlag(TRUE);
+        return;
+    }
+    CPed *ped=g_pGame->GetPlayerPed();
+    ped->SetCollisionProcessed(FALSE);ped->SetCollisionFlag(FALSE);
+    if(!g_debugHeightmapTilePrepared) {
+        GameDebugMoveToHeightmapBlock();
+        g_debugHeightmapTilePrepared=1;
+        g_debugHeightmapWaitFrames=110;
+        return;
+    }
+    if(!g_debugHeightmapWaitFrames) {
+        GameDebugWriteHeightmap();
+        DWORD next=g_debugHeightmapFlagCopy+1;
+        g_debugHeightmapTilePrepared=0;
+        g_debugHeightmapFlagCopy=next;
+        if(next==g_debugHeightmapTileEnd)g_debugHeightmapFinished=1;
+        return;
+    }
+    --g_debugHeightmapWaitFrames;
+}

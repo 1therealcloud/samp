@@ -94,3 +94,22 @@ void GameDebugWriteEntityPlacement(void *entity,FILE *file);
 int GameDebugWritePlacementRecord(const GameDebugPlacementRecord *record);
 
 #endif
+
+// samp.dll RVA: 0x001518d0
+extern DWORD g_debugHeightmapTileEnd;
+// samp.dll RVA: 0x0018de1c
+extern DWORD g_debugHeightmapFinished;
+// samp.dll RVA: 0x0018de20
+extern DWORD g_debugHeightmapTilePrepared;
+// samp.dll RVA: 0x0018de24
+extern DWORD g_debugHeightmapWaitFrames;
+// samp.dll RVA: 0x0011e4d8
+extern const char g_debugHeightmapBlockFormat[];
+// samp.dll RVA: 0x0011e524
+extern const char g_debugHeightmapFinishedText[];
+// samp.dll RVA: 0x0009dba0
+void GameDebugSelectHeightmapBlock(int index);
+// samp.dll RVA: 0x0009dc30
+void GameDebugMoveToHeightmapBlock();
+// samp.dll RVA: 0x0009ddd0
+void GameDebugProcessHeightmap();
