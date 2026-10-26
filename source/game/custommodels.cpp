@@ -1,4 +1,5 @@
 #include "game/custommodels.h"
+#include "game/modelfile.h"
 #include <stdlib.h>
 #include <string.h>
 // samp.dll RVA: 0x00117cd8
@@ -720,6 +721,13 @@ void CCustomModels::ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const
         DWORD unpacked=*(DWORD*)(nativeState+0x2065)+unpackedLength,packed=*(DWORD*)(nativeState+0x2069)+compressed;
         compressed=0;*(DWORD*)(nativeState+0x2065)=unpacked;*(DWORD*)(nativeState+0x2069)=packed;
     }else if(stage!=1)AbortDownload(0,5002,0);
+}
+// samp.dll RVA: 0x0000bfd0
+bool CCustomModels::VerifyTxd(const char *filename,DWORD hash) {
+    CTxdFile file;
+    if(!file.LoadFile(filename)){g_pChat->AddInfoMessage(g_customTxdVerifyError,hash,file.error);return false;}
+    if(file.textureCount>1024){g_pChat->AddInfoMessage(g_customTxdCountError,hash,(DWORD)file.textureCount);return false;}
+    return true;
 }
 // samp.dll RVA: 0x0000dbd0
 void CCustomModels::FinishDownload(CustomModelDownload *download) {

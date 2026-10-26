@@ -20,7 +20,7 @@ class CCustomModels {public:
     BYTE nativeState[0x206d];
     // samp.dll RVA: 0x0000d070
     void ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const void *data,DWORD length);
-    // Native validators are declaration-only until their parser backends are recovered.
+    // DFF validator remains declaration-only until its parser backend is recovered.
     // samp.dll RVA: 0x0000da80
     bool VerifyDff(const char *filename,DWORD hash);
     // samp.dll RVA: 0x0000bfd0

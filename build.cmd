@@ -77,6 +77,7 @@ for %%F in (
     source\game\font.cpp
     source\game\util.cpp
     source\game\quaternion.cpp
+    source\game\modelfile.cpp
     source\game\weapon_backend.cpp
     source\game\game.cpp
     source\game\debug.cpp
