@@ -105,6 +105,11 @@ struct CTxdFile {
 };
 struct CModelGeometry;
 struct CModelGeometryArray {
+    // samp.dll RVA: 0x0000cf80
+    void Clear();
+    // samp.dll RVA: 0x0000d610
+    ~CModelGeometryArray();
+
     CModelGeometry **items;DWORD count;
     // samp.dll RVA: 0x0000c630
     bool Resize(DWORD size);
@@ -112,6 +117,11 @@ struct CModelGeometryArray {
     DWORD Insert(CModelGeometry *geometry);
 };
 struct CModelMaterialArray {
+    // samp.dll RVA: 0x0000cfa0
+    void Clear();
+    // samp.dll RVA: 0x0000d5f0
+    ~CModelMaterialArray();
+
     void **items;DWORD count;
     // samp.dll RVA: 0x0000c550
     bool Resize(DWORD size);
@@ -119,6 +129,11 @@ struct CModelMaterialArray {
     DWORD Insert(void *material);
 };
 struct CModelMeshArray {
+    // samp.dll RVA: 0x0000cfb0
+    void Clear();
+    // samp.dll RVA: 0x0000d600
+    ~CModelMeshArray();
+
     BYTE **items;DWORD count;
     // samp.dll RVA: 0x0000c5c0
     bool Resize(DWORD size);

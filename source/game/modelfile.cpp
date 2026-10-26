@@ -401,7 +401,7 @@ CModelGeometry::~CModelGeometry() {
     }
     if(material){delete material;material=0;}
     if(extension){delete extension;extension=0;}
-    meshes.Resize(0);materials.Resize(0);
+    // Member destructors clear meshes, then materials, matching native order.
 }
 // samp.dll RVA: 0x000bb110
 bool CModelGeometry::IsModified() {return modified!=0||modifiedOther!=0;}
@@ -430,7 +430,8 @@ CDffFile::~CDffFile() {
     if(frameData){::operator delete(frameData);frameData=0;}
     int count=(int)geometries.count;
     for(DWORD i=0;(int)i<count;++i)if(i<geometries.count&&geometries.items[i])delete geometries.items[i];
-    geometries.Resize(0);geometries.Resize(0);
+    // Native explicit clear precedes the geometry-array member destructor.
+    geometries.Resize(0);
 }
 // samp.dll RVA: 0x000bc600
 CModelFileChunk *CModelGeometry::ReadChunk(CModelFileStream *input) {
@@ -842,3 +843,28 @@ CModelFileStream::CModelFileStream(BYTE *buffer,DWORD size) {
 float CModelFileStream::ReadFloat() {float value=0;Read(&value,4);return value;}
 // samp.dll RVA: 0x000b3680
 int CModelFileStream::ReadInt() {int value=0;Read(&value,4);return value;}
+
+// samp.dll RVA: 0x0000cf80
+void CModelGeometryArray::Clear() {
+    Resize(0);
+}
+// samp.dll RVA: 0x0000cfa0
+void CModelMaterialArray::Clear() {
+    Resize(0);
+}
+// samp.dll RVA: 0x0000cfb0
+void CModelMeshArray::Clear() {
+    Resize(0);
+}
+// samp.dll RVA: 0x0000d5f0
+CModelMaterialArray::~CModelMaterialArray() {
+    Resize(0);
+}
+// samp.dll RVA: 0x0000d600
+CModelMeshArray::~CModelMeshArray() {
+    Resize(0);
+}
+// samp.dll RVA: 0x0000d610
+CModelGeometryArray::~CModelGeometryArray() {
+    Resize(0);
+}

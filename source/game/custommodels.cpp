@@ -1225,3 +1225,20 @@ BYTE CCustomModels::GetStopFlag() {
 void CCustomModels::RequestStop() {
     nativeState[0x221]=1;StopWorkers();
 }
+
+// samp.dll RVA: 0x0000cf90
+void CCustomModels::ClearRecordStorage() {
+    ResizeRecords(0);
+}
+// samp.dll RVA: 0x0000beb0
+DWORD CCustomModels::CountEnabledActiveWorkers() {
+    CustomModelWorker *workers=(CustomModelWorker*)(nativeState+0x1345);DWORD count=0;
+    for(int i=0;i<6;++i)if(workers[i].enabled&&workers[i].active)++count;
+    return count;
+}
+// samp.dll RVA: 0x0000bf40
+DWORD CCustomModels::CountEnabledPausedWorkers() {
+    CustomModelWorker *workers=(CustomModelWorker*)(nativeState+0x1345);DWORD count=0;
+    for(int i=0;i<6;++i)if(workers[i].enabled&&workers[i].paused)++count;
+    return count;
+}
