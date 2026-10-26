@@ -281,3 +281,129 @@ extern DWORD g_hookRandomReturn;
 extern DWORD g_hookRecordReturn18E8B8;
 // samp.dll RVA: 0x0018f5c8
 extern DWORD g_hookRecordEcx18F5C8;
+
+// Additional raw hook entries: address-only declarations, not C++ call interfaces.
+// samp.dll RVA: 0x0011ebe4
+extern const char g_hookPedSayFormat[];
+// samp.dll RVA: 0x0011ec04
+extern const char g_hookGamepadAimFormat[];
+// samp.dll RVA: 0x00151aac
+extern DWORD g_hookCapture00151AAC;
+// samp.dll RVA: 0x00151ab0
+extern DWORD g_hookCapture00151AB0;
+// samp.dll RVA: 0x00151ab4
+extern WORD g_hookCapture00151AB4;
+// samp.dll RVA: 0x00151ac4
+extern WORD g_hookCapture00151AC4;
+// samp.dll RVA: 0x0018e540
+extern DWORD g_hookCapture0018E540;
+// samp.dll RVA: 0x0018e544
+extern DWORD g_hookCapture0018E544;
+// samp.dll RVA: 0x0018e564
+extern DWORD g_hookCapture0018E564;
+// samp.dll RVA: 0x0018e588
+extern DWORD g_hookCapture0018E588;
+// samp.dll RVA: 0x0018e58c
+extern DWORD g_hookCapture0018E58C;
+// samp.dll RVA: 0x0018e5c4
+extern DWORD g_hookCapture0018E5C4;
+// samp.dll RVA: 0x0018e5d8
+extern DWORD g_hookCapture0018E5D8;
+// samp.dll RVA: 0x0018e800
+extern CVector g_hookAimRayTarget;
+// samp.dll RVA: 0x0018e814
+extern DWORD g_hookCapture0018E814;
+// samp.dll RVA: 0x0018e818
+extern DWORD g_hookCapture0018E818;
+// samp.dll RVA: 0x0018e86c
+extern DWORD g_hookCapture0018E86C;
+// samp.dll RVA: 0x0018e874
+extern DWORD g_hookCapture0018E874;
+// samp.dll RVA: 0x0018e8c8
+extern DWORD g_hookCapture0018E8C8;
+// samp.dll RVA: 0x0018e8d4
+extern DWORD g_hookCapture0018E8D4;
+// samp.dll RVA: 0x0018e924
+extern DWORD g_hookCapture0018E924;
+// samp.dll RVA: 0x0018e928
+extern DWORD g_hookCapture0018E928;
+// samp.dll RVA: 0x0018ea40
+extern CVector g_hookAimRayOrigin;
+// samp.dll RVA: 0x0018eaa0
+extern DWORD g_hookCapture0018EAA0;
+// samp.dll RVA: 0x0018eaa4
+extern DWORD g_hookCapture0018EAA4;
+// samp.dll RVA: 0x0018eaa8
+extern DWORD g_hookCapture0018EAA8;
+// samp.dll RVA: 0x0018eab0
+extern DWORD g_hookCapture0018EAB0;
+// samp.dll RVA: 0x0018eb1c
+extern DWORD g_hookCapture0018EB1C;
+// samp.dll RVA: 0x0018eb70
+extern DWORD g_hookCapture0018EB70;
+// samp.dll RVA: 0x0018eb78
+extern DWORD g_hookCapture0018EB78;
+// samp.dll RVA: 0x0018eb8c
+extern DWORD g_hookCapture0018EB8C;
+// samp.dll RVA: 0x0018f33c
+extern DWORD g_hookCapture0018F33C;
+// samp.dll RVA: 0x0018f340
+extern DWORD g_hookCapture0018F340;
+// samp.dll RVA: 0x0018f34c
+extern DWORD g_hookCapture0018F34C;
+// samp.dll RVA: 0x0018f350
+extern DWORD g_hookCapture0018F350;
+// samp.dll RVA: 0x0018f354
+extern DWORD g_hookCapture0018F354;
+// samp.dll RVA: 0x0018f360
+extern DWORD g_hookCapture0018F360;
+// samp.dll RVA: 0x0018f368
+extern DWORD g_hookCapture0018F368;
+// samp.dll RVA: 0x0018f37c
+extern DWORD g_hookCapture0018F37C;
+// samp.dll RVA: 0x0018f558
+extern DWORD g_hookCapture0018F558;
+// samp.dll RVA: 0x0018f55c
+extern DWORD g_hookCapture0018F55C;
+// samp.dll RVA: 0x0018f594
+extern DWORD g_hookCapture0018F594;
+// samp.dll RVA: 0x0018f598
+extern DWORD g_hookCapture0018F598;
+// samp.dll RVA: 0x0018f59c
+extern DWORD g_hookCapture0018F59C;
+// samp.dll RVA: 0x0018f5a0
+extern DWORD g_hookCapture0018F5A0;
+// samp.dll RVA: 0x0018f5e4
+extern DWORD g_hookCapture0018F5E4;
+// samp.dll RVA: 0x0018f658
+extern DWORD g_hookCapture0018F658;
+// samp.dll RVA: 0x0018f65c
+extern DWORD g_hookCapture0018F65C;
+// samp.dll RVA: 0x0018f660
+extern DWORD g_hookCapture0018F660;
+// samp.dll RVA: 0x000a2cd0
+void GameHook_000a2cd0();
+// samp.dll RVA: 0x000a3b60
+void GameHook_000a3b60();
+// samp.dll RVA: 0x000a3bc0
+void GameHook_000a3bc0();
+// samp.dll RVA: 0x000a3e70
+void GameHook_000a3e70();
+// samp.dll RVA: 0x000a40a0
+void GameHook_000a40a0();
+// samp.dll RVA: 0x000a4110
+void GameHook_000a4110();
+// samp.dll RVA: 0x000a43d0
+void GameHook_000a43d0();
+// samp.dll RVA: 0x000a4450
+void GameHook_000a4450();
+// samp.dll RVA: 0x000a4aa0
+void GameHook_000a4aa0();
+// samp.dll RVA: 0x000a4b20
+void GameHook_000a4b20();
+// samp.dll RVA: 0x000a4b80
+void GameHook_000a4b80();
+// samp.dll RVA: 0x000a5290
+void GameHook_000a5290();
+// samp.dll RVA: 0x000a52d0
+void GameHook_000a52d0();

@@ -3663,3 +3663,534 @@ __declspec(naked) void GameHook_000a48a0() {
         jmp eax
     }
 }
+
+#include "game/animation.h"
+#include "chatwindow.h"
+#include "net/netgame.h"
+#include "net/playerpool.h"
+#include "net/localplayer.h"
+#include "net/vehiclepool.h"
+// samp.dll RVA: 0x0011ebe4
+const char g_hookPedSayFormat[]="CPed::Say(%u,%u,%f,%u,%u,%u)";
+// samp.dll RVA: 0x0011ec04
+const char g_hookGamepadAimFormat[]="Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
+// samp.dll RVA: 0x00151aac
+DWORD g_hookCapture00151AAC=0x4d4417;
+// samp.dll RVA: 0x00151ab0
+DWORD g_hookCapture00151AB0=0x4d3b30;
+// samp.dll RVA: 0x00151ab4
+WORD g_hookCapture00151AB4=0xffff;
+// samp.dll RVA: 0x00151ac4
+WORD g_hookCapture00151AC4=0xffff;
+// samp.dll RVA: 0x0018e540
+DWORD g_hookCapture0018E540;
+// samp.dll RVA: 0x0018e544
+DWORD g_hookCapture0018E544;
+// samp.dll RVA: 0x0018e564
+DWORD g_hookCapture0018E564;
+// samp.dll RVA: 0x0018e588
+DWORD g_hookCapture0018E588;
+// samp.dll RVA: 0x0018e58c
+DWORD g_hookCapture0018E58C;
+// samp.dll RVA: 0x0018e5c4
+DWORD g_hookCapture0018E5C4;
+// samp.dll RVA: 0x0018e5d8
+DWORD g_hookCapture0018E5D8;
+// samp.dll RVA: 0x0018e800
+CVector g_hookAimRayTarget;
+// samp.dll RVA: 0x0018e814
+DWORD g_hookCapture0018E814;
+// samp.dll RVA: 0x0018e818
+DWORD g_hookCapture0018E818;
+// samp.dll RVA: 0x0018e86c
+DWORD g_hookCapture0018E86C;
+// samp.dll RVA: 0x0018e874
+DWORD g_hookCapture0018E874;
+// samp.dll RVA: 0x0018e8c8
+DWORD g_hookCapture0018E8C8;
+// samp.dll RVA: 0x0018e8d4
+DWORD g_hookCapture0018E8D4;
+// samp.dll RVA: 0x0018e924
+DWORD g_hookCapture0018E924;
+// samp.dll RVA: 0x0018e928
+DWORD g_hookCapture0018E928;
+// samp.dll RVA: 0x0018ea40
+CVector g_hookAimRayOrigin;
+// samp.dll RVA: 0x0018eaa0
+DWORD g_hookCapture0018EAA0;
+// samp.dll RVA: 0x0018eaa4
+DWORD g_hookCapture0018EAA4;
+// samp.dll RVA: 0x0018eaa8
+DWORD g_hookCapture0018EAA8;
+// samp.dll RVA: 0x0018eab0
+DWORD g_hookCapture0018EAB0;
+// samp.dll RVA: 0x0018eb1c
+DWORD g_hookCapture0018EB1C;
+// samp.dll RVA: 0x0018eb70
+DWORD g_hookCapture0018EB70;
+// samp.dll RVA: 0x0018eb78
+DWORD g_hookCapture0018EB78;
+// samp.dll RVA: 0x0018eb8c
+DWORD g_hookCapture0018EB8C;
+// samp.dll RVA: 0x0018f33c
+DWORD g_hookCapture0018F33C;
+// samp.dll RVA: 0x0018f340
+DWORD g_hookCapture0018F340;
+// samp.dll RVA: 0x0018f34c
+DWORD g_hookCapture0018F34C;
+// samp.dll RVA: 0x0018f350
+DWORD g_hookCapture0018F350;
+// samp.dll RVA: 0x0018f354
+DWORD g_hookCapture0018F354;
+// samp.dll RVA: 0x0018f360
+DWORD g_hookCapture0018F360;
+// samp.dll RVA: 0x0018f368
+DWORD g_hookCapture0018F368;
+// samp.dll RVA: 0x0018f37c
+DWORD g_hookCapture0018F37C;
+// samp.dll RVA: 0x0018f558
+DWORD g_hookCapture0018F558;
+// samp.dll RVA: 0x0018f55c
+DWORD g_hookCapture0018F55C;
+// samp.dll RVA: 0x0018f594
+DWORD g_hookCapture0018F594;
+// samp.dll RVA: 0x0018f598
+DWORD g_hookCapture0018F598;
+// samp.dll RVA: 0x0018f59c
+DWORD g_hookCapture0018F59C;
+// samp.dll RVA: 0x0018f5a0
+DWORD g_hookCapture0018F5A0;
+// samp.dll RVA: 0x0018f5e4
+DWORD g_hookCapture0018F5E4;
+// samp.dll RVA: 0x0018f658
+DWORD g_hookCapture0018F658;
+// samp.dll RVA: 0x0018f65c
+DWORD g_hookCapture0018F65C;
+// samp.dll RVA: 0x0018f660
+DWORD g_hookCapture0018F660;
+
+// samp.dll RVA: 0x000a2cd0
+__declspec(naked) void GameHook_000a2cd0() {
+    __asm {
+        mov dword ptr [g_hookPedControlThis], ecx
+        mov eax, dword ptr [esp + 4]
+        mov dword ptr [g_hookCameraPed], eax
+        push 4
+        push 0x858ef0
+        call GameUnprotect
+        mov eax, dword ptr ds:[0x858ef0]
+        mov dword ptr [g_hookCapture0018E588], eax
+        add esp, 8
+        mov dword ptr ds:[0x858ef0], 0x40000000
+        mov ecx, dword ptr [g_hookPedControlThis]
+        push dword ptr [g_hookCameraPed]
+        mov eax, 0x62a380
+        call eax
+        mov dword ptr [g_hookCapture0018F37C], eax
+        mov ecx, dword ptr [g_hookCapture0018E588]
+        mov dword ptr ds:[0x858ef0], ecx
+        mov eax, dword ptr [g_hookCapture0018F37C]
+        ret 4
+    }
+}
+
+// samp.dll RVA: 0x000a3b60
+__declspec(naked) void GameHook_000a3b60() {
+    __asm {
+        mov edi, dword ptr [esp + 4]
+        mov dword ptr [g_hookPickupBackend], edi
+        mov dword ptr [g_hookCapture0018EB8C], ecx
+        pushad
+        mov edx, dword ptr [edi]
+        mov ecx, edi
+        call dword ptr [edx + 4]
+        mov dword ptr [g_hookCapture0018E58C], eax
+        popad
+        mov eax, dword ptr fs:[0]
+        mov edx, 0x4c3876
+        jmp edx
+    }
+}
+
+// samp.dll RVA: 0x000a3bc0
+__declspec(naked) void GameHook_000a3bc0() {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018E8C8], eax
+        mov eax, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018F340], eax
+        mov eax, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookCapture0018EAA4], eax
+        mov eax, dword ptr [esp + 0x10]
+        mov dword ptr [g_hookCapture0018F33C], eax
+        mov eax, dword ptr [esp + 0x14]
+        mov dword ptr [g_hookCapture0018E544], eax
+        mov eax, dword ptr [esp + 0x18]
+        mov dword ptr [g_hookCapture0018E928], eax
+        pushad
+        cmp dword ptr [g_hookCapture0018E8C8], 0x2d
+        je raw_a3c4a
+        cmp dword ptr [g_pChat], 0
+        je raw_a3c4a
+        mov eax, dword ptr [g_hookCapture0018E928]
+        push eax
+        mov ecx, dword ptr [g_hookCapture0018E544]
+        push ecx
+        mov edx, dword ptr [g_hookCapture0018F33C]
+        push edx
+        fld dword ptr [g_hookCapture0018EAA4]
+        sub esp, 8
+        fstp qword ptr [esp]
+        mov eax, dword ptr [g_hookCapture0018F340]
+        push eax
+        mov ecx, dword ptr [g_hookCapture0018E8C8]
+        push ecx
+        push offset g_hookPedSayFormat
+        mov edx, dword ptr [g_pChat]
+        push edx
+        call CChat::AddDebugMessage
+        add esp, 0x24
+    raw_a3c4a:
+        popad
+        mov eax, dword ptr [esp + 4]
+        test ax, ax
+        mov edx, 0x5effe7
+        jmp edx
+    }
+}
+
+// samp.dll RVA: 0x000a3e70
+__declspec(naked) void GameHook_000a3e70() {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018EAB0], eax
+        mov eax, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018F350], eax
+        push 1
+        push 0x6d64f0
+        call GameUnprotect
+        add esp, 8
+        mov byte ptr ds:[0x6d64f0], 0xc3
+        push 0
+        push dword ptr [g_hookCapture0018EAB0]
+        mov edx, 0x811c80
+        call edx
+        pop edx
+        pop edx
+        mov edx, 0x4c8848
+        cmp byte ptr [esp + 8], 0xff
+        jmp edx
+    }
+}
+
+// samp.dll RVA: 0x000a40a0
+__declspec(naked) void GameHook_000a40a0() {
+    __asm {
+        mov edx, dword ptr [esp]
+        mov dword ptr [g_hookAnimationReturn], edx
+        mov edx, dword ptr [esp + 4]
+        mov dword ptr [g_hookAnimationClump], edx
+        mov edx, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018EB1C], edx
+        mov edx, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookAnimationId], edx
+        mov edx, dword ptr [esp + 0x10]
+        mov dword ptr [g_hookAnimationBlend], edx
+        pushad
+        call GameFindLocalPed
+        mov dword ptr [g_hookAnimationPed], eax
+        cmp dword ptr [g_hookAnimationPed], 0
+        je raw_a40f5
+        mov eax, dword ptr [g_hookAnimationPed]
+        mov ecx, dword ptr [eax + 0x18]
+        mov dword ptr [g_hookAnimationLocalClump], ecx
+        jmp raw_a40ff
+    raw_a40f5:
+        mov dword ptr [g_hookAnimationLocalClump], 0
+    raw_a40ff:
+        popad
+        push -1
+        push 0x83bd6b
+        jmp dword ptr [g_hookCapture00151AAC]
+    }
+}
+
+// samp.dll RVA: 0x000a4110
+__declspec(naked) void GameHook_000a4110() {
+    __asm {
+        mov edx, dword ptr [esp + 4]
+        mov dword ptr [g_hookAnimationClump], edx
+        mov edx, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018F558], edx
+        mov edx, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookAnimationGroup], edx
+        mov edx, dword ptr [esp + 0x10]
+        mov dword ptr [g_hookAnimationId], edx
+        pushad
+        mov eax, dword ptr [g_hookAnimationId]
+        push eax
+        mov ecx, dword ptr [g_hookAnimationGroup]
+        push ecx
+        call GameGetAnimationGroupKey
+        mov dword ptr [g_hookCapture0018F55C], eax
+        mov edx, dword ptr [g_hookCapture0018F55C]
+        push edx
+        call GameFindAnimationByKey
+        add esp, 4
+        mov word ptr [g_hookCapture00151AB4], ax
+        popad
+        jmp dword ptr [g_hookCapture00151AB0]
+    }
+}
+
+// samp.dll RVA: 0x000a43d0
+__declspec(naked) void GameHook_000a43d0() {
+    __asm {
+        mov eax, dword ptr [esp]
+        mov dword ptr [g_hookCapture0018EAA8], eax
+        mov eax, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018F594], eax
+        mov eax, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018EB78], eax
+        mov eax, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookCapture0018E5C4], eax
+        mov eax, dword ptr [esp + 0x10]
+        mov dword ptr [g_hookCapture0018E5D8], eax
+        mov eax, dword ptr [esp + 0x14]
+        mov dword ptr [g_hookCapture0018F354], eax
+        pushad
+        call GameFindLocalPed
+        cmp dword ptr [g_hookCapture0018F594], eax
+        jne raw_a4444
+        cmp dword ptr [g_pNetGame], 0
+        je raw_a4444
+        mov ecx, dword ptr [g_pNetGame]
+        call CNetGame::GetPlayerPool
+        mov ecx, eax
+        call CPlayerPool::GetLocalPlayer
+        mov ecx, eax
+        call CLocalPlayer::GetPed
+        mov ecx, eax
+        call CPed::HasDanceState
+        test eax, eax
+        je raw_a4444
+        popad
+        ret 0x14
+    raw_a4444:
+        popad
+        mov eax, 0x6a6ae0
+        jmp eax
+    }
+}
+
+// samp.dll RVA: 0x000a4450
+__declspec(naked) void GameHook_000a4450() {
+    __asm {
+        mov dword ptr [g_hookCapture0018F598], esi
+        pushad
+        cmp dword ptr [g_pNetGame], 0
+        je raw_a4505
+        mov ecx, dword ptr [g_pNetGame]
+        call CNetGame::GetVehiclePool
+        mov dword ptr [g_hookCapture0018F59C], eax
+        mov eax, dword ptr [g_hookCapture0018F598]
+        push eax
+        mov ecx, dword ptr [g_hookCapture0018F59C]
+        call CVehiclePool::Find
+        mov word ptr [g_hookCapture00151AC4], ax
+        movzx ecx, word ptr [g_hookCapture00151AC4]
+        cmp ecx, 0xffff
+        je raw_a4505
+        mov dx, word ptr [g_hookCapture00151AC4]
+        push edx
+        mov ecx, dword ptr [g_hookCapture0018F59C]
+        call CVehiclePool::Get
+        mov dword ptr [g_hookCapture0018F5A0], eax
+        cmp dword ptr [g_hookCapture0018F5A0], 0
+        je raw_a4505
+        mov ecx, dword ptr [g_hookCapture0018F5A0]
+        call CVehicle::GetField54
+        test eax, eax
+        je raw_a44e7
+        mov eax, dword ptr [g_hookCapture0018F598]
+        movzx ecx, byte ptr [eax + 0x428]
+        or ecx, 0x40
+        mov edx, dword ptr [g_hookCapture0018F598]
+        mov byte ptr [edx + 0x428], cl
+        jmp raw_a4505
+    raw_a44e7:
+        mov eax, dword ptr [g_hookCapture0018F598]
+        movzx ecx, byte ptr [eax + 0x428]
+        and ecx, 0xbf
+        mov edx, dword ptr [g_hookCapture0018F598]
+        mov byte ptr [edx + 0x428], cl
+    raw_a4505:
+        popad
+        mov eax, 0x6d55c0
+        jmp eax
+    }
+}
+
+// samp.dll RVA: 0x000a4aa0
+__declspec(naked) void GameHook_000a4aa0() {
+    __asm {
+        mov dword ptr [g_hookCapture0018E540], ecx
+        mov eax, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018F360], eax
+        mov eax, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018EAA0], eax
+        mov eax, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookCapture0018E874], eax
+        mov eax, dword ptr [esp + 0x10]
+        mov dword ptr [g_hookCapture0018EB70], eax
+        mov eax, dword ptr [esp + 0x14]
+        mov dword ptr [g_hookCapture0018E818], eax
+        mov eax, dword ptr [esp + 0x18]
+        mov dword ptr [g_hookCapture0018E924], eax
+        pushad
+        popad
+        push dword ptr [g_hookCapture0018E924]
+        push dword ptr [g_hookCapture0018E818]
+        push dword ptr [g_hookCapture0018EB70]
+        push dword ptr [g_hookCapture0018E874]
+        push dword ptr [g_hookCapture0018EAA0]
+        push dword ptr [g_hookCapture0018F360]
+        mov ecx, dword ptr [g_hookCapture0018E540]
+        mov eax, 0x514970
+        call eax
+        pushad
+        popad
+        ret 0x18
+    }
+}
+
+// samp.dll RVA: 0x000a4b20
+__declspec(naked) void GameHook_000a4b20() {
+    __asm {
+        mov ebx, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018F5E4], ebx
+        mov ebx, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018E564], ebx
+        mov ebx, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookCapture0018E814], ebx
+        pushad
+        cmp dword ptr [g_pGame], 0
+        je raw_a4b73
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        test eax, eax
+        je raw_a4b73
+        push offset g_hookAimRayTarget
+        push offset g_hookAimRayOrigin
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        mov ecx, eax
+        call CPed::GetCameraAimRay
+    raw_a4b73:
+        popad
+        mov ebx, 0x742300
+        jmp ebx
+    }
+}
+
+// samp.dll RVA: 0x000a4b80
+__declspec(naked) void GameHook_000a4b80() {
+    __asm {
+        mov ebx, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018F5E4], ebx
+        mov ebx, dword ptr [esp + 8]
+        mov dword ptr [g_hookCapture0018E564], ebx
+        mov ebx, dword ptr [esp + 0xc]
+        mov dword ptr [g_hookCapture0018E814], ebx
+        mov ebx, dword ptr [esp + 0x10]
+        mov dword ptr [g_hookCapture0018E8D4], ebx
+        mov ebx, dword ptr [esp + 0x14]
+        mov dword ptr [g_hookCapture0018F34C], ebx
+        mov ebx, dword ptr [esp + 0x18]
+        mov dword ptr [g_hookCapture0018E86C], ebx
+        mov ebx, dword ptr [esp + 0x1c]
+        mov dword ptr [g_hookCapture0018F368], ebx
+        pushad
+        cmp dword ptr [g_pGame], 0
+        je raw_a4bfb
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        test eax, eax
+        je raw_a4bfb
+        push offset g_hookAimRayTarget
+        push offset g_hookAimRayOrigin
+        mov ecx, dword ptr [g_pGame]
+        call CGame::GetPlayerPed
+        mov ecx, eax
+        call CPed::GetCameraAimRay
+    raw_a4bfb:
+        popad
+        mov ebx, 0x73fb10
+        jmp ebx
+    }
+}
+
+// samp.dll RVA: 0x000a5290
+__declspec(naked) void GameHook_000a5290() {
+    __asm {
+        mov dword ptr [g_hookCapture0018F658], ecx
+        pushad
+        mov ecx, dword ptr [g_pGame]
+        test ecx, ecx
+        je raw_a52b2
+        call CGame::UsingGamepad
+        test eax, eax
+        je raw_a52b2
+        popad
+        mov ecx, dword ptr [g_hookCapture0018F658]
+        ret
+    raw_a52b2:
+        mov ecx, dword ptr [g_hookCapture0018F658]
+        mov edx, 0x60dc50
+        call edx
+        popad
+        mov ecx, dword ptr [g_hookCapture0018F658]
+        ret
+    }
+}
+
+// samp.dll RVA: 0x000a52d0
+__declspec(naked) void GameHook_000a52d0() {
+    __asm {
+        mov dword ptr [g_hookCapture0018F660], ecx
+        mov eax, dword ptr [esp + 4]
+        mov dword ptr [g_hookCapture0018F65C], eax
+        pushad
+        mov eax, dword ptr [g_pNetGame]
+        test eax, eax
+        je raw_a5333
+        mov eax, dword ptr [g_pChat]
+        test eax, eax
+        je raw_a5333
+        mov eax, dword ptr [g_hookCapture0018F65C]
+        fld dword ptr [eax + 8]
+        mov ecx, dword ptr [g_pGame]
+        sub esp, 0x18
+        fstp qword ptr [esp + 0x10]
+        fld dword ptr [eax + 4]
+        fstp qword ptr [esp + 8]
+        fld dword ptr [eax]
+        mov eax, dword ptr [g_hookLocalPedControl]
+        fstp qword ptr [esp]
+        push eax
+        call CGame::UsingGamepad
+        mov ecx, dword ptr [g_pChat]
+        push eax
+        push offset g_hookGamepadAimFormat
+        push ecx
+        call CChat::AddDebugMessage
+        add esp, 0x28
+    raw_a5333:
+        mov ecx, dword ptr [g_hookCapture0018F660]
+        push dword ptr [g_hookCapture0018F65C]
+        mov eax, 0x50cb10
+        call eax
+        popad
+        ret 4
+    }
+}
