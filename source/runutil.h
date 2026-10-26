@@ -31,3 +31,12 @@ char *K_DecodeString(unsigned char *szInput);
 bool Util_IsDecimal(const char *text);
 // samp.dll RVA: 0x000b5920
 void Util_SanitizeAscii(char *text);
+
+// Last matching D3D9 base is XOR-encoded; unchanged when no module matches.
+// samp.dll RVA: 0x0018dc3c
+extern unsigned long g_clientD3D9BaseEncoded;
+// samp.dll RVA: 0x0018dc40
+extern unsigned long g_clientD3D9ImageSize;
+// Dynamic ANSI Toolhelp lookup of current process, with native failure behavior.
+// samp.dll RVA: 0x0009d8c0
+unsigned long Util_RefreshD3D9ModuleInfo();

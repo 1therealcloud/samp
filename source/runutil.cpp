@@ -248,3 +248,52 @@ bool Util_IsDecimal(const char *text) {
 void Util_SanitizeAscii(char *text) {
     while(*text){unsigned char value=(unsigned char)*text;if(value<0x20||value>0x7f)*text=' ';++text;}
 }
+
+#include <windows.h>
+// Explicit ANSI x86 Toolhelp layout, independent of production UNICODE defines.
+// Observed native entry size548, module-name offset32 and base/size offsets20/24.
+struct NativeModuleEntry32A {
+    DWORD size,moduleId,processId,globalReferences,processReferences;
+    DWORD baseAddress,baseSize,moduleHandle;
+    char moduleName[256];
+    char executablePath[260];
+};
+// samp.dll RVA: 0x0018dc3c
+unsigned long g_clientD3D9BaseEncoded;
+// samp.dll RVA: 0x0018dc40
+unsigned long g_clientD3D9ImageSize;
+// samp.dll RVA: 0x0009d8c0
+unsigned long Util_RefreshD3D9ModuleInfo() {
+    unsigned char d3d9[]={0x8c,0x66,0x8c,0x27,0xc5,0x8c,0x8d,0x8d,0x0};
+    char *d3d9Name=K_DecodeString(d3d9);
+    unsigned char kernel[]={0x6d,0xac,0x4e,0xcd,0xac,0x8d,0x66,0x46,0xc5,0x8c,0x8d,0x8d,0x0};
+    char *kernelName=K_DecodeString(kernel);
+    unsigned char snapshot[]={0x68,0x4e,0xac,0x2c,0x8e,0xac,0x8a,0xed,0xed,0x8d,0xd,0xac,0x8d,0xe,0x66,0x46,0x6a,0xcd,0x2c,0xe,0x6e,0xd,0xed,0x8e,0x0};
+    unsigned char first[]={0xa9,0xed,0x8c,0xae,0x8d,0xac,0x66,0x46,0xc8,0x2d,0x4e,0x6e,0x8e,0x0};
+    unsigned char next[]={0xa9,0xed,0x8c,0xae,0x8d,0xac,0x66,0x46,0xc9,0xac,0xf,0x8e,0x0};
+    HMODULE kernelModule=GetModuleHandleA(kernelName);
+    char *snapshotName=K_DecodeString(snapshot);
+    FARPROC (WINAPI *resolve)(HMODULE,LPCSTR)=GetProcAddress;
+    typedef HANDLE (WINAPI *SnapshotFunction)(DWORD,DWORD);
+    typedef BOOL (WINAPI *ModuleFunction)(HANDLE,NativeModuleEntry32A*);
+    SnapshotFunction createSnapshot=(SnapshotFunction)resolve(kernelModule,snapshotName);
+    ModuleFunction firstModule=(ModuleFunction)resolve(kernelModule,K_DecodeString(first));
+    ModuleFunction nextModule=(ModuleFunction)resolve(kernelModule,K_DecodeString(next));
+    HANDLE handle=createSnapshot(8,GetCurrentProcessId());
+    if(handle==INVALID_HANDLE_VALUE)return 0;
+    NativeModuleEntry32A entry;entry.size=0x224;
+    if(!firstModule(handle,&entry)) {CloseHandle(handle);return 0;}
+    unsigned long matches=0;
+    char moduleName[MAX_PATH];
+    do {
+        // Native keeps this unbounded intermediate copy before its exact strcmp.
+        strcpy(moduleName,entry.moduleName);
+        if(!strcmp(d3d9Name,moduleName)) {
+            g_clientD3D9BaseEncoded=entry.baseAddress^0xacacacac;
+            g_clientD3D9ImageSize=entry.baseSize;
+            ++matches;
+        }
+    }while(nextModule(handle,&entry));
+    CloseHandle(handle);
+    return matches;
+}
