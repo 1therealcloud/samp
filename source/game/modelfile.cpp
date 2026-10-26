@@ -166,3 +166,110 @@ DWORD CTxdFile::LoadFile(const char *filename) {
     }
     return 1;
 }
+// samp.dll RVA: 0x000bb280
+DWORD CDffFile::StoreFrames(CModelFileChunk *chunk) {if(frames)return 0;frames=chunk;return 1;}
+// samp.dll RVA: 0x000bb2a0
+DWORD CDffFile::StoreGeometryList(CModelFileChunk *chunk) {if(geometryList)return 0;geometryList=chunk;return 1;}
+// samp.dll RVA: 0x000bb2c0
+DWORD CDffFile::StoreAtomic(CModelFileChunk *chunk) {if(atomic)return 0;atomic=chunk;return 1;}
+// samp.dll RVA: 0x000bb2e0
+DWORD CDffFile::StoreStructure(CModelFileChunk *chunk) {if(structure)return 0;structure=chunk;return 1;}
+// samp.dll RVA: 0x000bb300
+DWORD CDffFile::StoreExtension(CModelFileChunk *chunk) {if(extension)return 0;extension=chunk;return 1;}
+// samp.dll RVA: 0x000bb320
+DWORD CDffFile::ReadChildren(CModelFileChunk *parent) {
+    CModelFileStream *input=&parent->stream;CModelFileChunk *chunk=ReadChunk(input);
+    while(chunk) {
+        DWORD retained=0,failure=0;
+        switch(chunk->type) {
+        case 1:retained=StoreStructure(chunk);break;
+        case 3:retained=StoreExtension(chunk);break;
+        case 14:retained=StoreFrames(chunk);if(!retained)failure=0xabf0;break;
+        case 20:retained=StoreAtomic(chunk);if(!retained)failure=0xabf1;break;
+        case 26:retained=StoreGeometryList(chunk);if(!retained)failure=0xabef;break;
+        }
+        if(!retained)delete chunk;
+        if(failure){if(!error)error=failure;return 0;}
+        chunk=ReadChunk(input);
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000bb460
+DWORD CDffFile::LoadFile(const char *filename) {
+    if(!stream.LoadFile(filename))return 0xffffffff;
+    fileLength=stream.length;root=ReadChunk(&stream);
+    if(root) {
+        if(root->type==0x2b){delete root;root=0;root=ReadChunk(&stream);}
+        // Native does not recheck root after skipping the leading chunk.
+        if(root->type!=0x10){if(!error)error=44000;return 0;}
+        if(!ReadChildren(root))return 0;
+        if(extension&&extension->length) {
+            CModelFileChunk *chunk=ReadChunk(&extension->stream);
+            if(chunk&&chunk->type==0x253f2ff)hasCollision=1;
+            // The collision probe chunk is deliberately not deleted by native.
+        }
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000bb520
+DWORD CDffFile::LoadCollisionFile(const char *filename) {
+    if(!stream.LoadFile(filename))return 0xffffffff;
+    fileLength=stream.length;root=ReadChunk(&stream);
+    if(root&&root->type==0x10) {
+        ReadChildren(root);
+        if(extension&&extension->length) {
+            CModelFileChunk *chunk=ReadChunk(&extension->stream);
+            if(chunk&&chunk->type==0x253f2ff)hasCollision=1;
+        }
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000bbaa0
+DWORD CDffFile::VerifyFrameExtension(CModelFileChunk *chunk) {
+    while(!chunk->stream.ended) {
+        DWORD header[3];chunk->stream.Read(header,12);
+        if(header[0]==0x253f2fe&&header[1]>=24)return 0;
+        DWORD next=chunk->stream.position+header[1];
+        if(next<chunk->stream.length)chunk->stream.position=next;
+        else {chunk->stream.position=chunk->stream.length;chunk->stream.ended=1;}
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000bbb30
+DWORD CDffFile::ReadFrames() {
+    if(!frames)return 0;
+    frames->stream.position=0;frames->stream.ended=0;
+    DWORD header[3];frames->stream.Read(header,12);
+    if(header[0]!=1){if(!error)error=0xabe7;detail=1;return 0;}
+    DWORD count=0;frames->stream.Read(&count,4);
+    if(count>=256){if(!error)error=0xabec;detail=count;return 0;}
+    frameData=calloc(count,56);frames->stream.Read(frameData,count*56);
+    CModelFileChunk *chunk=ReadChunk(&frames->stream);
+    while(chunk) {
+        if(chunk->type==3&&chunk->length&&!VerifyFrameExtension(chunk)) {
+            delete chunk;if(!error)error=0xabee;return 0;
+        }
+        delete chunk;chunk=ReadChunk(&frames->stream);
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000bb170
+CModelFileChunk *CDffFile::ReadChunk(CModelFileStream *input) {
+    if(!input->length||input->ended)return 0;
+    CModelFileChunk *chunk=(CModelFileChunk*)::operator new(0x23);
+    if(chunk) {
+        chunk->stream.data=0;chunk->stream.length=0;chunk->stream.position=0;chunk->stream.ended=0;chunk->stream.owned=0;
+        chunk->stream.compressed=0;chunk->stream.scratchLength=0;chunk->stream.scratch=0;
+        chunk->type=0;chunk->length=0;chunk->build=0xffff;chunk->version=0x1803;
+    }
+    DWORD word=0;input->Read(&word,4);chunk->type=word;
+    word=0;input->Read(&word,4);chunk->length=word;
+    word=0;input->Read(&word,2);chunk->build=(WORD)word;
+    word=0;input->Read(&word,2);chunk->version=(WORD)word;
+    chunk->stream.length=chunk->length;chunk->stream.data=input->data+input->position;
+    chunk->stream.position=0;chunk->stream.ended=0;chunk->stream.owned=0;
+    DWORD next=input->position+chunk->length;
+    if(next<input->length)input->position=next;
+    else {input->position=input->length;input->ended=1;}
+    return chunk;
+}

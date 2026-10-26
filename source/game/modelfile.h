@@ -64,10 +64,42 @@ struct CTxdFile {
     // samp.dll RVA: 0x000bde10
     DWORD LoadFile(const char *filename);
 };
+struct CModelGeometry;
+// Field ownership/cleanup is still being recovered; no implicit initialization.
+struct CDffFile {
+    DWORD error,detail;CModelFileStream stream;DWORD fileLength;BYTE hasCollision;
+    CModelGeometry **geometries;DWORD geometryCount;
+    CModelFileChunk *root,*structure,*frames,*geometryList,*atomic,*extension;
+    DWORD unknown44;void *frameData;
+    // samp.dll RVA: 0x000bb170
+    CModelFileChunk *ReadChunk(CModelFileStream *input);
+    // samp.dll RVA: 0x000bb280
+    DWORD StoreFrames(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bb2a0
+    DWORD StoreGeometryList(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bb2c0
+    DWORD StoreAtomic(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bb2e0
+    DWORD StoreStructure(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bb300
+    DWORD StoreExtension(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bb320
+    DWORD ReadChildren(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bb460
+    DWORD LoadFile(const char *filename);
+    // samp.dll RVA: 0x000bb520
+    DWORD LoadCollisionFile(const char *filename);
+    // samp.dll RVA: 0x000bbaa0
+    DWORD VerifyFrameExtension(CModelFileChunk *chunk);
+    // samp.dll RVA: 0x000bbb30
+    DWORD ReadFrames();
+};
 #pragma pack(pop)
 typedef char NativeModelStreamExtent[(sizeof(CModelFileStream)==0x17)?1:-1];
 typedef char NativeModelChunkExtent[(sizeof(CModelFileChunk)==0x23)?1:-1];
 typedef char NativeTxdFileExtent[(sizeof(CTxdFile)==0x2b)?1:-1];
+typedef char NativeDffFileExtent[(sizeof(CDffFile)==0x4c)?1:-1];
+typedef char NativeDffFramesOffset[(offsetof(CDffFile,frames)==0x34)?1:-1];
 typedef char NativeModelStreamOwnedOffset[(offsetof(CModelFileStream,owned)==0xd)?1:-1];
 // samp.dll RVA: 0x00117c9c
 extern const char g_customTxdVerifyError[];
