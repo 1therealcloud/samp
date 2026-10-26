@@ -722,6 +722,15 @@ void CCustomModels::ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const
         compressed=0;*(DWORD*)(nativeState+0x2065)=unpacked;*(DWORD*)(nativeState+0x2069)=packed;
     }else if(stage!=1)AbortDownload(0,5002,0);
 }
+// samp.dll RVA: 0x0000da80
+bool CCustomModels::VerifyDff(const char *filename,DWORD hash) {
+    CDffFile file;
+    if(!file.LoadFile(filename)){g_pChat->AddInfoMessage(g_customDffVerifyError,hash,file.error);return false;}
+    if(!file.ReadFrames()||!file.ReadGeometries()) {
+        g_pChat->AddInfoMessage(g_customDffParseError,hash,file.error,file.detail);return false;
+    }
+    return true;
+}
 // samp.dll RVA: 0x0000bfd0
 bool CCustomModels::VerifyTxd(const char *filename,DWORD hash) {
     CTxdFile file;

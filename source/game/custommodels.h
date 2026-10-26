@@ -15,12 +15,11 @@ typedef char NativeCustomWorkerExtent[(sizeof(CustomModelWorker)==0x230)?1:-1];
 typedef char NativeCustomWorkerDownloadOffset[(offsetof(CustomModelWorker,download)==0x112)?1:-1];
 typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker,failed)==0x10d)?1:-1];
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
-// Worker startup is recovered; file validation/parser backends remain open.
+// Download/validation paths are recovered; full native class coverage is not established.
 class CCustomModels {public:
     BYTE nativeState[0x206d];
     // samp.dll RVA: 0x0000d070
     void ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const void *data,DWORD length);
-    // DFF validator remains declaration-only until its parser backend is recovered.
     // samp.dll RVA: 0x0000da80
     bool VerifyDff(const char *filename,DWORD hash);
     // samp.dll RVA: 0x0000bfd0

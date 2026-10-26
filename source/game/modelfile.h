@@ -92,13 +92,18 @@ struct CModelMaterialRecord {
     DWORD values[7];
     struct Texture {DWORD flags;char name[32],mask[32];} textures[2];
 };
+struct CModelSkin {
+    BYTE boneCount,usedBoneCount,maxWeights,unknown3;
+    void *usedBones,*indices,*weights,*matrices;DWORD unknown14,unknown18,unknown1c;
+    void *unknown20,*unknown24,*unknown28;
+};
 struct CModelGeometry {
     BYTE modified,modifiedOther;DWORD error,detail;WORD flags,textureSets;
     int triangleCount,vertexCount,morphCount;BYTE hasColors,unknown1b;
     void *colors,*unknown20,*uv,*triangles;float sphere[4];DWORD hasVertices,hasNormals;
     void *vertices,*normals;CModelFileChunk *material,*extension;int materialCount;
     CModelMaterialArray materials;BYTE unknown60;DWORD unknown61,unknown65,unknown69;
-    CModelMeshArray meshes;BYTE opaque75[44];
+    CModelMeshArray meshes;union {BYTE opaque75[44];CModelSkin skin;};
     // samp.dll RVA: 0x000bbe80
     CModelGeometry();
     // samp.dll RVA: 0x0000d620
@@ -119,6 +124,12 @@ struct CModelGeometry {
     bool ReadMaterial(CModelFileStream *input);
     // samp.dll RVA: 0x000bd5f0
     bool ReadMaterials(CModelFileStream *input);
+    // samp.dll RVA: 0x000bc760
+    bool ReadSkin(CModelFileStream *input);
+    // samp.dll RVA: 0x000bce70
+    bool ReadExtensions(CModelFileStream *input);
+    // samp.dll RVA: 0x000bd700
+    bool Read(CModelFileStream *input,WORD version);
 };
 struct CDffFile {
     DWORD error,detail;CModelFileStream stream;DWORD fileLength;BYTE hasCollision;
@@ -151,6 +162,8 @@ struct CDffFile {
     DWORD VerifyFrameExtension(CModelFileChunk *chunk);
     // samp.dll RVA: 0x000bbb30
     DWORD ReadFrames();
+    // samp.dll RVA: 0x000bbf00
+    DWORD ReadGeometries();
 };
 #pragma pack(pop)
 typedef char NativeModelStreamExtent[(sizeof(CModelFileStream)==0x17)?1:-1];
@@ -159,6 +172,7 @@ typedef char NativeTxdFileExtent[(sizeof(CTxdFile)==0x2b)?1:-1];
 typedef char NativeDffFileExtent[(sizeof(CDffFile)==0x4c)?1:-1];
 typedef char NativeModelGeometryExtent[(sizeof(CModelGeometry)==0xa1)?1:-1];
 typedef char NativeModelMaterialRecordExtent[(sizeof(CModelMaterialRecord)==0xa4)?1:-1];
+typedef char NativeModelSkinExtent[(sizeof(CModelSkin)==44)?1:-1];
 typedef char NativeModelGeometryMaterialsOffset[(offsetof(CModelGeometry,materials)==0x58)?1:-1];
 typedef char NativeModelGeometryMeshesOffset[(offsetof(CModelGeometry,meshes)==0x6d)?1:-1];
 typedef char NativeDffFramesOffset[(offsetof(CDffFile,frames)==0x34)?1:-1];
@@ -167,5 +181,9 @@ typedef char NativeModelStreamOwnedOffset[(offsetof(CModelFileStream,owned)==0xd
 extern const char g_customTxdVerifyError[];
 // samp.dll RVA: 0x00117c60
 extern const char g_customTxdCountError[];
-// Stream compression and the DFF parser remain under recovery.
+// samp.dll RVA: 0x00117dac
+extern const char g_customDffVerifyError[];
+// samp.dll RVA: 0x00117d68
+extern const char g_customDffParseError[];
+// Stream compression and other model editing/writing paths remain under recovery.
 #endif

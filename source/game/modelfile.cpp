@@ -7,6 +7,10 @@
 const char g_customTxdVerifyError[]="[warning] Could not verify 0x%X.txd. Error(%d) Deleting..";
 // samp.dll RVA: 0x00117c60
 const char g_customTxdCountError[]="[warning] Too many textures in 0x%X.txd. (%u) Deleting..";
+// samp.dll RVA: 0x00117dac
+const char g_customDffVerifyError[]="[warning] Could not validate 0x%X.dff. Error(%d) Deleting..";
+// samp.dll RVA: 0x00117d68
+const char g_customDffParseError[]="[warning] Could not validate 0x%X.dff. Error(%d:0x%X) Deleting..";
 // samp.dll RVA: 0x000bc060
 DWORD CModelFileStream::WriteFileChunks(FILE *file) {
     BYTE *buffer=data;DWORD offset=0;
@@ -457,4 +461,127 @@ bool CModelGeometry::ReadMaterials(CModelFileStream *input) {
         }
     }
     return true;
+}
+// samp.dll RVA: 0x000bc760
+bool CModelGeometry::ReadSkin(CModelFileStream *input) {
+    if(vertexCount<=0)return false;
+    BYTE value=0;input->Read(&value,1);skin.boneCount=value;
+    value=0;input->Read(&value,1);skin.usedBoneCount=value;
+    value=0;input->Read(&value,1);skin.maxWeights=value;
+    value=0;input->Read(&value,1);skin.unknown3=value;
+    if(skin.boneCount>=64||skin.usedBoneCount>skin.boneCount)return false;
+    skin.usedBones=calloc(skin.usedBoneCount,1);input->Read(skin.usedBones,skin.usedBoneCount);
+    skin.indices=calloc(vertexCount,4);input->Read(skin.indices,(DWORD)vertexCount*4);
+    skin.weights=calloc(vertexCount,16);input->Read(skin.weights,(DWORD)vertexCount*16);
+    skin.matrices=calloc(skin.boneCount,64);input->Read(skin.matrices,(DWORD)skin.boneCount*64);
+    DWORD word=0;input->Read(&word,4);skin.unknown14=word;
+    word=0;input->Read(&word,4);skin.unknown18=word;
+    word=0;input->Read(&word,4);skin.unknown1c=word;
+    return !skin.unknown14&&!skin.unknown18&&!skin.unknown1c;
+}
+// samp.dll RVA: 0x000bce70
+bool CModelGeometry::ReadExtensions(CModelFileStream *input) {
+    extension=ReadChunk(input);
+    if(extension->type!=3){if(!error)error=0xabf2;detail=0;return false;}
+    while(extension->stream.Remaining()>12) {
+        DWORD header[3];extension->stream.Read(header,12);
+        switch(header[0]) {
+        case 0x50e: {
+            unknown60=1;DWORD value=0;extension->stream.Read(&value,4);unknown61=value;
+            value=0;extension->stream.Read(&value,4);unknown65=value;
+            value=0;extension->stream.Read(&value,4);unknown69=value;
+            if(unknown65>=100000){if(!error)error=0xabe5;return false;}
+            for(DWORD i=0;i<unknown65;++i) {
+                BYTE *mesh=(BYTE*)calloc(1,12);value=0;extension->stream.Read(&value,4);*(DWORD*)mesh=value;
+                value=0;extension->stream.Read(&value,4);*(DWORD*)(mesh+4)=value;
+                void *indices=calloc(*(DWORD*)mesh,4);*(void**)(mesh+8)=indices;
+                extension->stream.Read(indices,*(DWORD*)mesh*4);meshes.Insert(mesh);
+            }
+            break;
+        }
+        case 0x253f2fd:extension->stream.Skip(header[1]);break;
+        case 0x253f2f9:
+            if(((header[1]-4)>>2)==(DWORD)vertexCount) {
+                unknown1b=1;extension->stream.Skip(4);unknown20=calloc(vertexCount,4);
+                if(!unknown20||extension->stream.Remaining()<(DWORD)vertexCount*4) {
+                    if(!error)error=0xabe1;detail=0x253f2f9;return false;
+                }
+                extension->stream.Read(unknown20,(DWORD)vertexCount*4);
+            }
+            break;
+        case 0x116: {
+            DWORD previous=extension->stream.position;
+            if(!ReadSkin(&extension->stream)||extension->stream.position-previous!=header[1]) {
+                if(!error)error=0xabe7;detail=0x116;return false;
+            }
+            break;
+        }
+        case 0x105:case 0x253f2f8:extension->stream.Skip(header[1]);break;
+        default:if(!error)error=0xabe2;detail=header[0];return false;
+        }
+    }
+    return true;
+}
+// samp.dll RVA: 0x000bd700
+bool CModelGeometry::Read(CModelFileStream *input,WORD version) {
+    DWORD value=0;input->Read(&value,2);flags=(WORD)value;
+    value=0;input->Read(&value,2);textureSets=(WORD)value;
+    value=0;input->Read(&value,4);triangleCount=(int)value;
+    value=0;input->Read(&value,4);vertexCount=(int)value;
+    value=0;input->Read(&value,4);morphCount=(int)value;
+    if((WORD)((version>>6)+0x300)<0x340) {
+        value=0;input->Read(&value,4);value=0;input->Read(&value,4);value=0;input->Read(&value,4);
+    }
+    if(input->ended)goto incomplete;
+    if(triangleCount<0||triangleCount>100000){if(!error)error=0xabe5;return false;}
+    if(vertexCount<0||vertexCount>200000){if(!error)error=0xabe4;return false;}
+    if(flags&8) {
+        hasColors=1;colors=calloc(vertexCount,4);
+        if(!colors||input->Remaining()<(DWORD)vertexCount*4)goto incomplete;
+        input->Read(colors,(DWORD)vertexCount*4);
+    }
+    if(flags&0x84) {
+        uv=calloc(vertexCount,8);if(!uv||input->Remaining()<(DWORD)vertexCount*8)goto incomplete;
+        input->Read(uv,(DWORD)vertexCount*8);
+    }
+    triangles=calloc(triangleCount,8);if(!triangles||input->Remaining()<(DWORD)triangleCount*8)goto incomplete;
+    input->Read(triangles,(DWORD)triangleCount*8);if(input->ended)goto incomplete;
+    input->Read(sphere,16);hasVertices=input->ReadDword();hasNormals=input->ReadDword();
+    if(hasVertices) {
+        vertices=calloc(vertexCount,12);if(!vertices||input->Remaining()<(DWORD)vertexCount*12)goto incomplete;
+        input->Read(vertices,(DWORD)vertexCount*12);
+    }
+    if(flags&0x10) {
+        normals=calloc(vertexCount,12);if(!normals||input->Remaining()<(DWORD)vertexCount*12)goto incomplete;
+        input->Read(normals,(DWORD)vertexCount*12);
+    }
+    if(!ReadMaterials(input)){if(!error)error=0xabea;return false;}
+    if(!ReadExtensions(input)){if(!error)error=0xabeb;return false;}
+    return true;
+incomplete:
+    if(!error)error=0xabe1;return false;
+}
+// samp.dll RVA: 0x000bbf00
+DWORD CDffFile::ReadGeometries() {
+    if(!geometryList)return 0;
+    geometryList->stream.position=0;geometryList->stream.ended=0;
+    DWORD header[3];geometryList->stream.Read(header,12);
+    if(header[0]!=1||header[1]!=4){if(!error)error=0xabe7;return 0;}
+    DWORD count=0;geometryList->stream.Read(&count,4);
+    if(count!=1){if(!error)error=0xabe6;return 0;}
+    CModelFileChunk *chunk=ReadChunk(&geometryList->stream);
+    if(chunk) {
+        if(chunk->type==15) {
+            chunk->stream.Read(header,12);
+            if(header[0]==1) {
+                CModelGeometry *geometry=new CModelGeometry;
+                if(!geometry->Read(&chunk->stream,chunk->version)) {
+                    if(!error)error=geometry->error;detail=geometry->detail;delete geometry;return 0;
+                }
+                geometries.Insert(geometry);
+            }
+        }
+        delete chunk;
+    }
+    return 1;
 }
