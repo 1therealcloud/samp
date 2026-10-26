@@ -1208,3 +1208,20 @@ BYTE CCustomModels::GetObjectLastHour(int model) {
 DWORD CCustomModels::GetCount() {
     return *(DWORD*)(nativeState+4);
 }
+
+// samp.dll RVA: 0x0000c410
+void * CCustomModels::GetRecord(DWORD index) {
+    return index<*(DWORD*)(nativeState+4)?(*(void***)nativeState)[index]:0;
+}
+// samp.dll RVA: 0x00008200
+DWORD CCustomModels::GetActiveVirtualWorld() {
+    return *(DWORD*)(nativeState+0x217);
+}
+// samp.dll RVA: 0x00008210
+BYTE CCustomModels::GetStopFlag() {
+    return nativeState[0x221];
+}
+// samp.dll RVA: 0x0000e400
+void CCustomModels::RequestStop() {
+    nativeState[0x221]=1;StopWorkers();
+}

@@ -12,6 +12,9 @@ struct CVector;
 #pragma pack(push,1)
 class CPlayerPool {
 public:
+    // samp.dll RVA: 0x0000e330
+    void SetLocalId(WORD id);
+
     // samp.dll RVA: 0x00002dd0
     int GetLargestId();
     // samp.dll RVA: 0x00002de0

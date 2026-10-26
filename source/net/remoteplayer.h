@@ -5,7 +5,14 @@ struct CVector;
 class CMatrix;
 // Native allocation extent0x1FD; unreviewed state remains opaque.
 #pragma pack(push,1)
+class CPed;
+class CVehicle;
 class CRemotePlayer {public:
+    // samp.dll RVA: 0x00001070
+    CPed * GetPed();
+    // samp.dll RVA: 0x000010a0
+    CVehicle * GetVehicle();
+
     // samp.dll RVA: 0x00002dc0
     BYTE GetState();
     // samp.dll RVA: 0x000135d0

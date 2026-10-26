@@ -17,6 +17,15 @@ typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker,failed)
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 // Download/validation paths are recovered; full native class coverage is not established.
 class CCustomModels {public:
+    // samp.dll RVA: 0x0000c410
+    void * GetRecord(DWORD index);
+    // samp.dll RVA: 0x00008200
+    DWORD GetActiveVirtualWorld();
+    // samp.dll RVA: 0x00008210
+    BYTE GetStopFlag();
+    // samp.dll RVA: 0x0000e400
+    void RequestStop();
+
     // samp.dll RVA: 0x0000c430
     DWORD GetCount();
 

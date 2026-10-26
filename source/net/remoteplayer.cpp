@@ -1107,3 +1107,12 @@ BYTE CRemotePlayer::GetSpecialAction() {
 DWORD CRemotePlayer::GetRawFlag1C() {
     return *(DWORD*)(nativeState+0x1c);
 }
+
+// samp.dll RVA: 0x00001070
+CPed * CRemotePlayer::GetPed() {
+    return *(CPed**)(nativeState+4);
+}
+// samp.dll RVA: 0x000010a0
+CVehicle * CRemotePlayer::GetVehicle() {
+    return *(CVehicle**)(nativeState+8);
+}

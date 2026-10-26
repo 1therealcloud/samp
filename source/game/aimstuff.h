@@ -33,6 +33,9 @@ extern float g_aimLocalSkills[11];
 // samp.dll RVA: 0x00184d90
 extern float g_aimPlayerSkills[210][11];
 namespace AimStuff {
+    // samp.dll RVA: 0x00002d20
+    void __stdcall GetCameraExtZoomAndAspectRatio(float *zoom,float *aspect);
+
     // samp.dll RVA: 0x0009c240
     void __stdcall UpdateCamera();
     // samp.dll RVA: 0x0009c260

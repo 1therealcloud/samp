@@ -288,3 +288,8 @@ int CPlayerPool::GetLargestId() {
 WORD CPlayerPool::GetLocalId() {
     return localId;
 }
+
+// samp.dll RVA: 0x0000e330
+void CPlayerPool::SetLocalId(WORD id) {
+    localId=id;
+}

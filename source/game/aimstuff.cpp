@@ -97,3 +97,8 @@ void __stdcall AimStuff::ApplyLocalSkills() { memcpy((BYTE*)g_aimInternalStats+0
 void __stdcall AimStuff::ResetLocalSkills() { for(int i=0;i<11;i++)*(float*)((BYTE*)g_aimInternalStats+0x114+i*4)=999.0f;UpdateLocalSkills(); }
 // samp.dll RVA: 0x0009c7a0
 void __stdcall AimStuff::ApplyPlayerSkills(int player) { memcpy((BYTE*)g_aimInternalStats+0x114,g_aimPlayerSkills[player],sizeof(g_aimLocalSkills)); }
+
+// samp.dll RVA: 0x00002d20
+void __stdcall AimStuff::GetCameraExtZoomAndAspectRatio(float *zoom,float *aspect) {
+    *zoom=GetCameraExtZoom();*aspect=GetAspectRatio();
+}
