@@ -652,3 +652,64 @@ DWORD CDffFile::ReadGeometries() {
     }
     return 1;
 }
+
+// samp.dll RVA: 0x000bb040
+void CModelFileStream::SetBuffer(BYTE *buffer,DWORD size) {
+    data=buffer;length=size;position=0;ended=0;owned=0;
+}
+// samp.dll RVA: 0x000bb060
+DWORD CModelFileStream::WriteByte(BYTE value) {
+    return Write(&value,1);
+}
+// samp.dll RVA: 0x000bb070
+WORD CModelFileStream::ReadWord() {
+    WORD value=0;Read(&value,2);return value;
+}
+// samp.dll RVA: 0x000bb090
+BYTE * CModelFileStream::GetBuffer() {
+    return data;
+}
+// samp.dll RVA: 0x000bb0a0
+DWORD CModelFileStream::GetLength() {
+    return length;
+}
+// samp.dll RVA: 0x000bb0b0
+CModelFileChunk::CModelFileChunk() {
+    type=0;length=0;build=0xffff;version=0x1803;
+}
+// samp.dll RVA: 0x000bb0e0
+void CModelFileChunk::SetBuffer(BYTE *buffer,DWORD size) {
+    stream.data=buffer;stream.length=size;stream.position=0;stream.ended=0;stream.owned=0;
+}
+// samp.dll RVA: 0x000bb100
+void CModelFileChunk::UpdateLength() {
+    length=stream.length;
+}
+// samp.dll RVA: 0x000bb150
+void CDffFile::SetError(DWORD value) {
+    if(!error)error=value;
+}
+// samp.dll RVA: 0x000bb160
+void CDffFile::SetDetail(DWORD value) {
+    detail=value;
+}
+// samp.dll RVA: 0x000bb940
+DWORD CDffFile::AppendChunk(CModelFileChunk *parent,const CModelFileChunk *child) {
+    if(!parent||!child)return 0;
+    parent->stream.Write(child,12);parent->stream.Write(child->stream.data,child->stream.length);
+    parent->length+=child->stream.length+12;return 1;
+}
+// samp.dll RVA: 0x000bb990
+DWORD CDffFile::AppendCollisionFile(const char *filename) {
+    CModelFileChunk chunk;
+    if(!root||!extension)return (DWORD)-1;
+    if(!chunk.stream.LoadFile(filename))return (DWORD)-2;
+    chunk.length=chunk.stream.length;chunk.type=0x253f2ff;
+    return AppendChunk(extension,&chunk);
+}
+// samp.dll RVA: 0x000bb5a0
+DWORD __stdcall ModelSaveChunk(const CModelFileChunk *chunk,const char *filename) {
+    CModelFileStream output;
+    output.Write(chunk,12);output.Write(chunk->stream.data,chunk->stream.length);
+    return output.SaveFile(filename);
+}

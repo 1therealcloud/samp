@@ -6,6 +6,16 @@
 // Descriptive names for the native model-file parser types.
 #pragma pack(push,1)
 struct CModelFileStream {
+    // samp.dll RVA: 0x000bb040
+    void SetBuffer(BYTE *buffer,DWORD size);
+    // samp.dll RVA: 0x000bb060
+    DWORD WriteByte(BYTE value);
+    // samp.dll RVA: 0x000bb070
+    WORD ReadWord();
+    // samp.dll RVA: 0x000bb090
+    BYTE * GetBuffer();
+    // samp.dll RVA: 0x000bb0a0
+    DWORD GetLength();
     BYTE *data;DWORD position,length;BYTE ended,owned;BYTE *scratch;DWORD scratchLength;BYTE compressed;
     // samp.dll RVA: 0x0000b800
     CModelFileStream();
@@ -50,6 +60,12 @@ struct CModelFileStream {
     BYTE HasEnded();
 };
 struct CModelFileChunk {
+    // samp.dll RVA: 0x000bb0b0
+    CModelFileChunk();
+    // samp.dll RVA: 0x000bb0e0
+    void SetBuffer(BYTE *buffer,DWORD size);
+    // samp.dll RVA: 0x000bb100
+    void UpdateLength();
     DWORD type,length;WORD build,version;CModelFileStream stream;
     // samp.dll RVA: 0x0000b850
     ~CModelFileChunk();
@@ -154,6 +170,14 @@ struct CModelGeometry {
     bool Read(CModelFileStream *input,WORD version);
 };
 struct CDffFile {
+    // samp.dll RVA: 0x000bb150
+    void SetError(DWORD value);
+    // samp.dll RVA: 0x000bb160
+    void SetDetail(DWORD value);
+    // samp.dll RVA: 0x000bb940
+    DWORD AppendChunk(CModelFileChunk *parent,const CModelFileChunk *child);
+    // samp.dll RVA: 0x000bb990
+    DWORD AppendCollisionFile(const char *filename);
     DWORD error,detail;CModelFileStream stream;DWORD fileLength;BYTE hasCollision;
     CModelGeometryArray geometries;
     CModelFileChunk *root,*structure,*frames,*geometryList,*atomic,*extension;
@@ -219,5 +243,8 @@ int __stdcall ModelLzmaEncode(BYTE *destination,DWORD *destinationLength,const B
 // Stack ABI is stdcall-compatible; incoming ECX is unused. Original owner/name unknown.
 // samp.dll RVA: 0x000bc710
 DWORD __stdcall ModelAppendChunk(CModelFileChunk *parent,const CModelFileChunk *child);
+// Incoming ECX is unused; original owner/name is not established.
+// samp.dll RVA: 0x000bb5a0
+DWORD __stdcall ModelSaveChunk(const CModelFileChunk *chunk,const char *filename);
 // Other model editing/writing paths remain under recovery.
 #endif
