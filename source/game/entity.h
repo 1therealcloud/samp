@@ -15,6 +15,22 @@ DWORD __stdcall GameReadBackendDword(const void *backend);
 // samp.dll vtable RVA: 0x0011e30c
 class CEntity {
 public:
+    // Descriptive raw flag names; invalid GTA backend vtable is excluded.
+    // Clearing bit40000 invokes virtual Add afterwards.
+    // samp.dll RVA: 0x0009f500
+    void SetBackendFlag40000(BOOL enabled);
+    // samp.dll RVA: 0x0009f540
+    void SetBackendFlags80400();
+    // Nonzero argument clears bit2000; zero sets it.
+    // samp.dll RVA: 0x0009f580
+    void SetBackendFlag2000(BOOL clear);
+    // samp.dll RVA: 0x0009f610
+    DWORD GetRwObjectWord38();
+    // samp.dll RVA: 0x0009f7a0
+    void GetRwMatrixAngles(float *x,float *y,float *z);
+    // samp.dll RVA: 0x0009f870
+    int GetModelAtomicCount();
+
     BYTE unknown04[60];
     void *m_pGameEntity;
     DWORD m_nHandle;

@@ -833,3 +833,12 @@ DWORD CDffFile::SaveCompressedFile(const char *filename) {
     output.Write(root->stream.data,root->stream.length);
     return output.SaveFile(filename);
 }
+
+// samp.dll RVA: 0x000b3630
+CModelFileStream::CModelFileStream(BYTE *buffer,DWORD size) {
+    data=buffer;length=size;position=0;ended=0;owned=0;compressed=0;scratchLength=0;scratch=0;
+}
+// samp.dll RVA: 0x000b3660
+float CModelFileStream::ReadFloat() {float value=0;Read(&value,4);return value;}
+// samp.dll RVA: 0x000b3680
+int CModelFileStream::ReadInt() {int value=0;Read(&value,4);return value;}

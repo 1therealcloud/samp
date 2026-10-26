@@ -1,4 +1,5 @@
 #include "game/entity.h"
+#include "game/game.h"
 #include "game/scripting.h"
 #include <string.h>
 // samp.dll RVA: 0x0009bce0
@@ -865,4 +866,48 @@ __declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector *origin,const CVe
         mov eax,0x56ba00
         jmp eax
     }
+}
+
+// samp.dll RVA: 0x0009f500
+void CEntity::SetBackendFlag40000(BOOL enabled) {
+    if(!m_pGameEntity||*(DWORD*)m_pGameEntity==0x863c40)return;
+    if(enabled)*(DWORD*)((BYTE*)m_pGameEntity+0x1c)|=0x40000;
+    else {*(DWORD*)((BYTE*)m_pGameEntity+0x1c)&=~0x40000u;Add();}
+}
+// samp.dll RVA: 0x0009f540
+void CEntity::SetBackendFlags80400() {
+    if(m_pGameEntity&&*(DWORD*)m_pGameEntity!=0x863c40)
+        *(DWORD*)((BYTE*)m_pGameEntity+0x1c)|=0x80400;
+}
+// samp.dll RVA: 0x0009f580
+void CEntity::SetBackendFlag2000(BOOL clear) {
+    void *backend=m_pGameEntity;
+    if(!backend||*(DWORD*)backend==0x863c40)return;
+    DWORD &flags=*(DWORD*)((BYTE*)backend+0x40);
+    if(!clear)flags|=0x2000;else flags&=~0x2000u;
+}
+// samp.dll RVA: 0x0009f610
+DWORD CEntity::GetRwObjectWord38() {
+    void *backend=m_pGameEntity;
+    if(!backend)return 0;
+    BYTE *object=*(BYTE**)((BYTE*)backend+0x18);
+    if(!object||*(DWORD*)backend==0x863c40)return 0;
+    return *(DWORD*)(object+0x38);
+}
+// samp.dll RVA: 0x0009f7a0
+void CEntity::GetRwMatrixAngles(float *x,float *y,float *z) {
+    if(!m_pGameEntity)return;
+    CMatrix *matrix=*(CMatrix**)((BYTE*)m_pGameEntity+0x14);
+    if(!matrix)return;
+    float angle=0;
+    GameQueryRwMatrixAngle(matrix,0,&angle);*x=angle;
+    GameQueryRwMatrixAngle(matrix,1,&angle);*y=angle;
+    GameQueryRwMatrixAngle(matrix,2,&angle);*z=angle;
+}
+// samp.dll RVA: 0x0009f870
+int CEntity::GetModelAtomicCount() {
+    if(!m_pGameEntity)return -1;
+    DWORD clump=GameGetModelData1c(*(short*)((BYTE*)m_pGameEntity+0x22));
+    if(!clump)return -1;
+    return GameRwCountClumpAtomics((void*)clump);
 }

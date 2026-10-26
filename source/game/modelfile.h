@@ -6,6 +6,14 @@
 // Descriptive names for the native model-file parser types.
 #pragma pack(push,1)
 struct CModelFileStream {
+    // Borrowed buffer; scratch/compression fields start cleared.
+    // samp.dll RVA: 0x000b3630
+    CModelFileStream(BYTE *buffer,DWORD size);
+    // samp.dll RVA: 0x000b3660
+    float ReadFloat();
+    // samp.dll RVA: 0x000b3680
+    int ReadInt();
+
     // samp.dll RVA: 0x000bb040
     void SetBuffer(BYTE *buffer,DWORD size);
     // samp.dll RVA: 0x000bb060
