@@ -267,3 +267,59 @@ DWORD GameCall59C790(DWORD first,DWORD second,DWORD third);
 // Native scans14000 records of56 bytes starting at the building pool's +4 slot.
 // samp.dll RVA: 0x000b4360
 void GameReplaceBuildingPoolModels(int model,int replacement);
+
+// Returns the unspilled extended difference.
+// samp.dll RVA: 0x000b44a0
+float GameSubtractFloats(float first,float second);
+
+// dy squared plus dx squared, no intermediate float spill.
+// samp.dll RVA: 0x000b4510
+float __stdcall GameSquaredDistance2D(float x,float y,float otherX,float otherY);
+
+// Square root of dy squared plus dx squared.
+// samp.dll RVA: 0x000b4540
+float __stdcall GameDistance2D(float x,float y,float otherX,float otherY);
+
+// dz squared plus dy squared then dx squared.
+// samp.dll RVA: 0x000b45b0
+float __stdcall GameSquaredDistance3D(float x,float y,float z,float otherX,float otherY,float otherZ);
+
+// dx squared plus dy squared then dz squared; RET8.
+// samp.dll RVA: 0x000b45f0
+float __stdcall GameSquaredDistanceVectors(const CVector *first,const CVector *second);
+
+// x squared plus y squared then z squared.
+// samp.dll RVA: 0x000b4640
+float GameVectorLengthSquared(const CVector *vector);
+
+// Inclusive signed unit bounds for all components; unordered values rejected.
+// samp.dll RVA: 0x000b4670
+bool GameIsVectorWithinUnitBounds(const CVector *vector);
+
+// Sequential stores and input reloads preserve native alias behavior.
+// samp.dll RVA: 0x000b47b0
+void GameVectorCrossProductLocal(CVector *out,const CVector *left,const CVector *right);
+
+// Square root of x squared plus y squared then z squared.
+// samp.dll RVA: 0x000b47f0
+float GameVectorLength(const CVector *vector);
+
+// Separate native entry, same arithmetic as RVA000B4640; original name unknown.
+// samp.dll RVA: 0x000b4820
+float GameVectorLengthSquared4820(const CVector *vector);
+
+// x squared plus y squared then z squared; cdecl.
+// samp.dll RVA: 0x000b4b20
+float GameLengthSquared3D(float x,float y,float z);
+
+// z products plus y products then x products.
+// samp.dll RVA: 0x000b4b40
+float GameVectorDotProduct(const CVector *first,const CVector *second);
+
+// Three sequential component stores; native input/output alias behavior.
+// samp.dll RVA: 0x000b4cf0
+void GameScaleVector(CVector *out,const CVector *vector,float scale);
+
+// Native inclusive0..360 gate accepts NaN; preserves branch arithmetic.
+// samp.dll RVA: 0x000b5520
+float GameHeadingToRadiansBounded(float heading);

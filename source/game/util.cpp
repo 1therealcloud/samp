@@ -873,3 +873,339 @@ void GameReplaceBuildingPoolModels(int model,int replacement) {
         }
     }
 }
+
+#include "game/quaternion.h"
+
+// Returns the unspilled extended difference.
+// samp.dll RVA: 0x000b44a0
+__declspec(naked) float GameSubtractFloats(float first,float second) {
+    __asm {
+        fld dword ptr [esp + 4]
+        fsub dword ptr [esp + 8]
+        ret
+    }
+}
+
+// dy squared plus dx squared, no intermediate float spill.
+// samp.dll RVA: 0x000b4510
+__declspec(naked) float __stdcall GameSquaredDistance2D(float x,float y,float otherX,float otherY) {
+    __asm {
+        fld dword ptr [esp + 4]
+        fsub dword ptr [esp + 0xc]
+        fld dword ptr [esp + 8]
+        fsub dword ptr [esp + 0x10]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fstp st(2)
+        fstp st(0)
+        ret 0x10
+    }
+}
+
+// Square root of dy squared plus dx squared.
+// samp.dll RVA: 0x000b4540
+__declspec(naked) float __stdcall GameDistance2D(float x,float y,float otherX,float otherY) {
+    __asm {
+        fld dword ptr [esp + 4]
+        fsub dword ptr [esp + 0xc]
+        fld dword ptr [esp + 8]
+        fsub dword ptr [esp + 0x10]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fsqrt
+        fstp st(2)
+        fstp st(0)
+        ret 0x10
+    }
+}
+
+// dz squared plus dy squared then dx squared.
+// samp.dll RVA: 0x000b45b0
+__declspec(naked) float __stdcall GameSquaredDistance3D(float x,float y,float z,float otherX,float otherY,float otherZ) {
+    __asm {
+        fld dword ptr [esp + 4]
+        fsub dword ptr [esp + 0x10]
+        fld dword ptr [esp + 8]
+        fsub dword ptr [esp + 0x14]
+        fld dword ptr [esp + 0xc]
+        fsub dword ptr [esp + 0x18]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st
+        fstp st(3)
+        fstp st(0)
+        fstp st(0)
+        ret 0x18
+    }
+}
+
+// dx squared plus dy squared then dz squared; RET8.
+// samp.dll RVA: 0x000b45f0
+__declspec(naked) float __stdcall GameSquaredDistanceVectors(const CVector *first,const CVector *second) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        mov ecx, dword ptr [esp + 8]
+        fld dword ptr [eax + 8]
+        fsub dword ptr [ecx + 8]
+        fld dword ptr [eax + 4]
+        fsub dword ptr [ecx + 4]
+        fld dword ptr [eax]
+        fsub dword ptr [ecx]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st
+        fstp st(3)
+        fstp st(0)
+        fstp st(0)
+        ret 8
+    }
+}
+
+// x squared plus y squared then z squared.
+// samp.dll RVA: 0x000b4640
+__declspec(naked) float GameVectorLengthSquared(const CVector *vector) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        fld dword ptr [eax + 8]
+        fld dword ptr [eax + 4]
+        fld dword ptr [eax]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st
+        fstp st(3)
+        fstp st(0)
+        fstp st(0)
+        ret
+    }
+}
+
+// Inclusive signed unit bounds for all components; unordered values rejected.
+// samp.dll RVA: 0x000b4670
+__declspec(naked) bool GameIsVectorWithinUnitBounds(const CVector *vector) {
+    __asm {
+        mov ecx, dword ptr [esp + 4]
+        fld dword ptr [ecx]
+        fcomp g_quaternionMatrixOne
+        fnstsw ax
+        test ah, 0x41
+        jp math_b46d5
+        fld dword ptr [ecx]
+        fcomp g_entityEulerSign
+        fnstsw ax
+        test ah, 1
+        jne math_b46d5
+        fld dword ptr [ecx + 4]
+        fcomp g_quaternionMatrixOne
+        fnstsw ax
+        test ah, 0x41
+        jp math_b46d5
+        fld dword ptr [ecx + 4]
+        fcomp g_entityEulerSign
+        fnstsw ax
+        test ah, 1
+        jne math_b46d5
+        fld dword ptr [ecx + 8]
+        fcomp g_quaternionMatrixOne
+        fnstsw ax
+        test ah, 0x41
+        jp math_b46d5
+        fld dword ptr [ecx + 8]
+        fcomp g_entityEulerSign
+        fnstsw ax
+        test ah, 1
+        jne math_b46d5
+        mov al, 1
+        ret
+    math_b46d5:
+        xor al, al
+        ret
+    }
+}
+
+// Sequential stores and input reloads preserve native alias behavior.
+// samp.dll RVA: 0x000b47b0
+__declspec(naked) void GameVectorCrossProductLocal(CVector *out,const CVector *left,const CVector *right) {
+    __asm {
+        mov ecx, dword ptr [esp + 0xc]
+        mov eax, dword ptr [esp + 8]
+        fld dword ptr [ecx + 8]
+        fmul dword ptr [eax + 4]
+        mov edx, dword ptr [esp + 4]
+        fld dword ptr [ecx + 4]
+        fmul dword ptr [eax + 8]
+        fsubp st(1),st
+        fstp dword ptr [edx]
+        fld dword ptr [ecx]
+        fmul dword ptr [eax + 8]
+        fld dword ptr [ecx + 8]
+        fmul dword ptr [eax]
+        fsubp st(1),st
+        fstp dword ptr [edx + 4]
+        fld dword ptr [ecx + 4]
+        fmul dword ptr [eax]
+        fld dword ptr [ecx]
+        fmul dword ptr [eax + 4]
+        fsubp st(1),st
+        fstp dword ptr [edx + 8]
+        ret
+    }
+}
+
+// Square root of x squared plus y squared then z squared.
+// samp.dll RVA: 0x000b47f0
+__declspec(naked) float GameVectorLength(const CVector *vector) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        fld dword ptr [eax + 8]
+        fld dword ptr [eax + 4]
+        fld dword ptr [eax]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st
+        fsqrt
+        fstp st(3)
+        fstp st(0)
+        fstp st(0)
+        ret
+    }
+}
+
+// Separate native entry, same arithmetic as RVA000B4640; original name unknown.
+// samp.dll RVA: 0x000b4820
+__declspec(naked) float GameVectorLengthSquared4820(const CVector *vector) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        fld dword ptr [eax + 8]
+        fld dword ptr [eax + 4]
+        fld dword ptr [eax]
+        fld st(0)
+        fmul st(0),st(1)
+        fld st(2)
+        fmul st(0),st(3)
+        faddp st(1),st
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st
+        fstp st(3)
+        fstp st(0)
+        fstp st(0)
+        ret
+    }
+}
+
+// x squared plus y squared then z squared; cdecl.
+// samp.dll RVA: 0x000b4b20
+__declspec(naked) float GameLengthSquared3D(float x,float y,float z) {
+    __asm {
+        fld dword ptr [esp + 4]
+        fmul dword ptr [esp + 4]
+        fld dword ptr [esp + 8]
+        fmul dword ptr [esp + 8]
+        faddp st(1),st
+        fld dword ptr [esp + 0xc]
+        fmul dword ptr [esp + 0xc]
+        faddp st(1),st
+        ret
+    }
+}
+
+// z products plus y products then x products.
+// samp.dll RVA: 0x000b4b40
+__declspec(naked) float GameVectorDotProduct(const CVector *first,const CVector *second) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        mov ecx, dword ptr [esp + 8]
+        fld dword ptr [eax + 8]
+        fmul dword ptr [ecx + 8]
+        fld dword ptr [eax + 4]
+        fmul dword ptr [ecx + 4]
+        faddp st(1),st
+        fld dword ptr [eax]
+        fmul dword ptr [ecx]
+        faddp st(1),st
+        ret
+    }
+}
+
+// Three sequential component stores; native input/output alias behavior.
+// samp.dll RVA: 0x000b4cf0
+__declspec(naked) void GameScaleVector(CVector *out,const CVector *vector,float scale) {
+    __asm {
+        mov eax, dword ptr [esp + 8]
+        fld dword ptr [esp + 0xc]
+        fmul dword ptr [eax]
+        mov ecx, dword ptr [esp + 4]
+        fstp dword ptr [ecx]
+        fld dword ptr [esp + 0xc]
+        fmul dword ptr [eax + 4]
+        fstp dword ptr [ecx + 4]
+        fld dword ptr [esp + 0xc]
+        fmul dword ptr [eax + 8]
+        fstp dword ptr [ecx + 8]
+        ret
+    }
+}
+
+// Native inclusive0..360 gate accepts NaN; preserves branch arithmetic.
+// samp.dll RVA: 0x000b5520
+__declspec(naked) float GameHeadingToRadiansBounded(float heading) {
+    __asm {
+        fld dword ptr [esp + 4]
+        fcomp g_anglePeriod
+        fnstsw ax
+        test ah, 0x41
+        je math_b558b
+        fld dword ptr [esp + 4]
+        fcomp g_objectScaleLowerBound
+        fnstsw ax
+        test ah, 5
+        jnp math_b558b
+        fld dword ptr [esp + 4]
+        fcomp g_angleUpperBound
+        fld dword ptr [esp + 4]
+        fnstsw ax
+        test ah, 0x41
+        jne math_b5578
+        fsub g_angleUpperBound
+        fmul g_headingPi
+        fmul g_headingInverseHalfTurn
+        fsubr g_headingPi
+        fchs
+        fmul g_entityEulerSign
+        ret
+    math_b5578:
+        fmul g_headingPi
+        fmul g_headingInverseHalfTurn
+        fmul g_entityEulerSign
+        ret
+    math_b558b:
+        fld g_objectScaleLowerBound
+        ret
+    }
+}

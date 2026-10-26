@@ -57,3 +57,7 @@ void GameQuaternionDoubleToEuler(double x,double y,double z,double w,double *rol
 // No near-opposite fallback; input snapshot precedes output and normalization.
 // samp.dll RVA: 0x000b6530
 void GameQuaternionFromVectorsHalf(GameQuaternion *out,const CVector *from,const CVector *to);
+
+// x squared plus y squared plus z squared then w squared.
+// samp.dll RVA: 0x000b4cc0
+float GameQuaternionLengthSquared(const GameQuaternion *quaternion);

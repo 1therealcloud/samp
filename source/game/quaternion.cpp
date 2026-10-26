@@ -766,3 +766,31 @@ __declspec(naked) void GameQuaternionFromVectorsHalf(GameQuaternion *out,const C
         ret
     }
 }
+
+// x squared plus y squared plus z squared then w squared.
+// samp.dll RVA: 0x000b4cc0
+__declspec(naked) float GameQuaternionLengthSquared(const GameQuaternion *quaternion) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        fld dword ptr [eax + 0xc]
+        fld dword ptr [eax + 8]
+        fld dword ptr [eax + 4]
+        fld dword ptr [eax]
+        fld st(1)
+        fmul st(0),st(2)
+        fld st(3)
+        fmul st(0),st(4)
+        faddp st(1),st
+        fld st(4)
+        fmul st(0),st(5)
+        faddp st(1),st
+        fld st(1)
+        fmul st(0),st(2)
+        faddp st(1),st
+        fstp st(4)
+        fstp st(0)
+        fstp st(0)
+        fstp st(0)
+        ret
+    }
+}
