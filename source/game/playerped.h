@@ -457,7 +457,7 @@ extern const float g_pedDrunkSpeedThreshold;
 BOOL __stdcall GameIsBackendOnScreen(void *backend);
 
 // Opaque player flag table; factory-selected slots are2..209.
-// The byte-index setter has no native bounds check; adjacency beyond210 is unproven.
+// Byte indices210..255 reach the verified adjacent gap/cache/ped storage.
 // samp.dll RVA: 0x002a9a50
 extern DWORD g_gamePlayerFlags[210];
 // samp.dll RVA: 0x000b40c0
@@ -578,7 +578,7 @@ int __stdcall GameGetWeaponModel(int weapon);
 
 // samp.dll RVA: 0x000b3f00
 void GameInitializePlayerPedTables();
-// Native has no bound check; adjacency outside210 records remains unproven.
+// Native has no bound check;210..255 reaches adjacent controller state.
 // samp.dll RVA: 0x000b3f50
 void *__stdcall GameGetPlayerPedUnchecked(BYTE player);
 // samp.dll RVA: 0x000b3f90
@@ -587,3 +587,7 @@ void __stdcall GameSetPlayerControllerWords(BYTE player,DWORD first,DWORD second
 BYTE __stdcall GameFindPlayerIndexByClump(void *clump);
 // samp.dll RVA: 0x000b40b0
 DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player);
+
+// Opaque native BSS words, retained to preserve unchecked table adjacency.
+// samp.dll RVA: 0x002a9d98
+extern DWORD g_gamePlayerTableUnknown2A9D98[2];

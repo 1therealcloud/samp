@@ -1245,3 +1245,59 @@ __declspec(naked) float GameAsin(float value) {
         ret
     }
 }
+
+// Raw GTA backend, sequential position publication and live matrix reloads.
+// samp.dll RVA: 0x000b6260
+__declspec(naked) void GameGetBackendPositionAndHeading(void *entity,CVector *position,float *heading) {
+    __asm {
+        mov eax, dword ptr [esp + 4]
+        mov ecx, dword ptr [eax + 0x14]
+        test ecx, ecx
+        je placement_b62cd
+        mov edx, dword ptr [ecx + 0x30]
+        mov ecx, dword ptr [esp + 8]
+        mov dword ptr [ecx], edx
+        mov edx, dword ptr [eax + 0x14]
+        mov edx, dword ptr [edx + 0x34]
+        mov dword ptr [ecx + 4], edx
+        mov edx, dword ptr [eax + 0x14]
+        mov edx, dword ptr [edx + 0x38]
+        mov dword ptr [ecx + 8], edx
+        mov eax, dword ptr [eax + 0x14]
+        fld dword ptr [eax + 0x10]
+        fchs
+        fld dword ptr [eax + 0x14]
+        fpatan
+        fmul g_entityRadiansToDegrees
+        fcom g_objectScaleLowerBound
+        fnstsw ax
+        test ah, 5
+        jp placement_b62b3
+        fadd g_anglePeriod
+        mov eax, dword ptr [esp + 0xc]
+        fstp dword ptr [eax]
+        ret
+    placement_b62b3:
+        fcom g_anglePeriod
+        fnstsw ax
+        test ah, 1
+        jne placement_b62c6
+        fsub g_anglePeriod
+    placement_b62c6:
+        mov eax, dword ptr [esp + 0xc]
+        fstp dword ptr [eax]
+        ret
+    placement_b62cd:
+        mov edx, dword ptr [eax + 4]
+        mov ecx, dword ptr [esp + 8]
+        mov dword ptr [ecx], edx
+        mov edx, dword ptr [eax + 8]
+        mov dword ptr [ecx + 4], edx
+        mov edx, dword ptr [eax + 0xc]
+        mov dword ptr [ecx + 8], edx
+        mov eax, dword ptr [eax + 0x10]
+        mov ecx, dword ptr [esp + 0xc]
+        mov dword ptr [ecx], eax
+        ret
+    }
+}

@@ -16,10 +16,30 @@
 #include <time.h>
 #include "gui/device_lifecycle.h"
 #include <string.h>
+// Linker orders these BSS subsections by suffix, preserving native adjacency.
+#pragma bss_seg(".pstate$a")
+// samp.dll RVA: 0x002a9a50
+DWORD g_gamePlayerFlags[210];
+#pragma bss_seg(".pstate$b")
+// Opaque original BSS words between flags and known matrix caches.
+// samp.dll RVA: 0x002a9d98
+DWORD g_gamePlayerTableUnknown2A9D98[2];
+#pragma bss_seg(".pstate$c")
+// samp.dll RVA: 0x002a9da0
+DWORD g_gameLocalPedMatrix;
+#pragma bss_seg(".pstate$d")
+// samp.dll RVA: 0x002a9da4
+DWORD g_gameVehicleMatrix;
+#pragma bss_seg(".pstate$e")
 // samp.dll RVA: 0x002a9da8
 void *g_gamePlayerPeds[210];
+#pragma bss_seg(".pstate$f")
 // samp.dll RVA: 0x002aa0f0
 BYTE g_gamePlayerControllerState[210][16];
+#pragma bss_seg()
+
+
+
 // samp.dll RVA: 0x000b3860
 void *__stdcall GameFindLocalPed() { return *(void**)0xb7cd98; }
 // samp.dll RVA: 0x000b3f20
@@ -1726,8 +1746,7 @@ void CPed::SetCameraExtZoomAndAspectRatio(float zoom,float aspect) {AimStuff::Se
 // samp.dll RVA: 0x00002d00
 BYTE CPed::GetCameraMode() {return m_nPlayerNumber?AimStuff::GetPlayerCameraMode(m_nPlayerNumber):AimStuff::GetCameraMode();}
 
-// samp.dll RVA: 0x002a9a50
-DWORD g_gamePlayerFlags[210];
+
 // samp.dll RVA: 0x000b40c0
 void __stdcall GameSetPlayerFlag(BYTE player,DWORD value) {g_gamePlayerFlags[player]=value;}
 // samp.dll RVA: 0x0011eea0
@@ -3021,7 +3040,7 @@ void GameInitializePlayerPedTables() {
     memset(g_gamePlayerPeds,0,sizeof(g_gamePlayerPeds));
     memset(g_gamePlayerControllerState,0,sizeof(g_gamePlayerControllerState));
 }
-// Native byte index is unchecked. Storage adjacency for210..255 is unproven.
+// Native byte index is unchecked;210..255 reaches the adjacent controller state.
 // samp.dll RVA: 0x000b3f50
 void *__stdcall GameGetPlayerPedUnchecked(BYTE player) { return g_gamePlayerPeds[player]; }
 // samp.dll RVA: 0x000b3f90

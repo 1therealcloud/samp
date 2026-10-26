@@ -1351,10 +1351,8 @@ int g_gameVehicleModel;
 DWORD g_gameLinkedVehicle;
 // samp.dll RVA: 0x002a9a4c
 float g_gameVehicleDistanceSquared;
-// samp.dll RVA: 0x002a9da0
-DWORD g_gameLocalPedMatrix;
-// samp.dll RVA: 0x002a9da4
-DWORD g_gameVehicleMatrix;
+
+
 // samp.dll RVA: 0x0011f5dc
 const float g_gameStreamingDistanceSquared=40000.0f;
 // samp.dll RVA: 0x000b3f60
@@ -3418,4 +3416,22 @@ void GameRestorePedRemoteCall() {
     // Native restore does not call VirtualProtect or flush the instruction cache.
     *(DWORD*)0x5e92f4=*(const DWORD*)g_hookPedRemoteRestore;
     *(BYTE*)0x5e92f8=g_hookPedRemoteRestore[4];
+}
+
+// samp.dll RVA: 0x000a5d40
+void GameWriteProtectedDword(DWORD address,DWORD value) {
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD oldProtection,ignoredProtection;
+    protect((void*)address,4,PAGE_EXECUTE_READWRITE,&oldProtection);
+    *(DWORD*)address=value;
+    protect((void*)address,4,oldProtection,&ignoredProtection);
+}
+// Opcode byte is passed through without restricting it to CALL/JMP.
+// samp.dll RVA: 0x000a5df0
+void GameWriteProtectedRelativeBranch(DWORD address,DWORD target,BYTE opcode) {
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD oldProtection,ignoredProtection;
+    protect((void*)address,5,PAGE_EXECUTE_READWRITE,&oldProtection);
+    *(BYTE*)address=opcode;*(DWORD*)(address+1)=target-address-5;
+    protect((void*)address,5,oldProtection,&ignoredProtection);
 }

@@ -512,3 +512,7 @@ bool GameCopyEightByteName(void *output);
 // Backing storage returned by the installed GTA preview hook.
 // samp.dll RVA: 0x0018eb98
 extern DWORD g_gamePreviewPed[488];
+
+// Unchecked index; native reloads selected table after the real CRT free.
+// samp.dll RVA: 0x000a7720
+void GameFreeModelInfo(int model);

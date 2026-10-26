@@ -335,3 +335,7 @@ void __stdcall GameReplaceBackendVtable85BBF0(void *entity);
 void GameWriteGlobal9689E0(DWORD value);
 // samp.dll RVA: 0x000b3620
 float GameAsin(float value);
+
+// Position12 bytes and float heading; null backend is not checked natively.
+// samp.dll RVA: 0x000b6260
+void GameGetBackendPositionAndHeading(void *entity,CVector *position,float *heading);

@@ -73,3 +73,13 @@ void SetIPLs(int iIPLs,int iGtaVersion);
 // Native36-byte records; allocation, initialization and pointer/count patches.
 // samp.dll RVA: 0x000a9e70
 void SetTimedObjects(int iTimedObjects);
+
+// Mutable native operand address table; seven entries.
+// samp.dll RVA: 0x001546d0
+extern DWORD g_gameCount44OperandSites[7];
+// samp.dll RVA: 0x000aa0d0
+void GamePatchCount44(DWORD count);
+// samp.dll RVA: 0x000aa130
+void GameSetFontPatchBytes3();
+// samp.dll RVA: 0x000aaa50
+void GameApplyDebugInitializationPatches();

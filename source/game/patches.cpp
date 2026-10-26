@@ -585,3 +585,41 @@ void SetTimedObjects(int iTimedObjects)
 
 #undef patch
 #undef memadd
+
+// samp.dll RVA: 0x001546d0
+DWORD g_gameCount44OperandSites[7]={0x410dbb,0x410de5,0x410f68,0x410aa4,0x410cc4,0x410ead,0x411505};
+// samp.dll RVA: 0x000aa0d0
+void GamePatchCount44(DWORD count) {
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD ignoredProtection;
+    protect((void*)0x411458,4,PAGE_EXECUTE_READWRITE,&ignoredProtection);
+    *(DWORD*)0x411458=count;
+    DWORD bytes=count*44;
+    for(int index=0;index<7;++index) {
+        protect((void*)(g_gameCount44OperandSites[index]+2),4,PAGE_EXECUTE_READWRITE,&ignoredProtection);
+        // Original reloads the mutable table entry after VirtualProtect.
+        *(DWORD*)(g_gameCount44OperandSites[index]+2)=bytes;
+    }
+}
+// samp.dll RVA: 0x000aa130
+void GameSetFontPatchBytes3() {
+    // GTA SA virtual addresses; native does not call VirtualProtect here.
+    *(BYTE*)0x71a223=3;*(BYTE*)0x71a5d5=3;*(BYTE*)0x71a247=3;
+    *(BYTE*)0x71a282=3;*(BYTE*)0x71a26a=3;*(BYTE*)0x71a2e5=3;
+    *(BYTE*)0x71a3ac=3;*(BYTE*)0x71a4b9=3;*(BYTE*)0x71a53c=3;
+    *(BYTE*)0x71a37f=3;*(BYTE*)0x71a518=3;*(BYTE*)0x71a525=3;
+    *(BYTE*)0x71a54b=3;*(BYTE*)0x71a5b6=3;*(BYTE*)0x71a3bb=3;
+}
+// samp.dll RVA: 0x000aaa50
+void GameApplyDebugInitializationPatches() {
+    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
+    DWORD ignoredProtection;
+    protect((void*)0x704e8a,5,PAGE_EXECUTE_READWRITE,&ignoredProtection);
+    *(DWORD*)0x704e8a=0x90909090;*(BYTE*)0x704e8e=0x90;
+    protect((void*)0x609a4e,6,PAGE_EXECUTE_READWRITE,&ignoredProtection);
+    *(DWORD*)0x609a4e=0x90909090;*(WORD*)0x609a52=0x9090;
+    GamePrepareHooks();GameRelocateScanList();GameRelocatePedModels();
+    GameRelocateModelFlags();GameRelocateModelRecords();GameIncreasePoolLimits();
+    protect((void*)0x47bf54,4,PAGE_EXECUTE_READWRITE,&ignoredProtection);
+    GameInstallEventOpcodes();
+}

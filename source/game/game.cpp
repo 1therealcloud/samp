@@ -1847,3 +1847,9 @@ void * GameRwGetClumpSkin(void *clump) {
     void *atomic=GameRwGetFirstAtomic(clump);
     return GameRwGetGeometrySkin(*(void**)((BYTE*)atomic+0x18));
 }
+
+// samp.dll RVA: 0x000a7720
+void GameFreeModelInfo(int model) {
+    void *info=g_gameModelInfoTable[model];
+    if(info) {free(info);g_gameModelInfoTable[model]=0;}
+}

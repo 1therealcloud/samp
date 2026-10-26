@@ -235,3 +235,8 @@ void GameReleaseCachedRasterBuffer();
 void GameDisablePedRemoteCall();
 // samp.dll RVA: 0x000a26b0
 void GameRestorePedRemoteCall();
+
+// samp.dll RVA: 0x000a5d40
+void GameWriteProtectedDword(DWORD address,DWORD value);
+// samp.dll RVA: 0x000a5df0
+void GameWriteProtectedRelativeBranch(DWORD address,DWORD target,BYTE opcode);
