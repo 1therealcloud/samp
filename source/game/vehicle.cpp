@@ -1,4 +1,6 @@
 #include "game/vehicle.h"
+// samp.dll RVA: 0x0000e290
+void CVehicle::SetObjective(BYTE objective) {*((BYTE*)this+0x64)=objective;}
 // samp.dll RVA: 0x000b37d0
 void *__stdcall GamePoolVehicleGetAt(int handle) {
     void *result;

@@ -15,6 +15,11 @@ class CMatrix;
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
+    // Raw DWORD setters; no marker creation/deletion or bool normalization.
+    // samp.dll RVA: 0x000080f0
+    void SetCheckpointEnabled(DWORD enabled);
+    // samp.dll RVA: 0x00008100
+    void SetRacingCheckpointEnabled(DWORD enabled);
     // Uses the native preview-ped buffer and a temporary vehicle when requested.
     // samp.dll RVA: 0x000a15b0
     void ApplyPreviewAnimation(DWORD first,DWORD second,BOOL useVehicle,int model,DWORD color);

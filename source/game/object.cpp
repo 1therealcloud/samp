@@ -1,4 +1,6 @@
 #include "game/object.h"
+// samp.dll RVA: 0x00017750
+void CObject::DisableCameraCollision() {*((BYTE*)this+0x53)=1;}
 #include "game/scripting.h"
 // samp.dll RVA: 0x0011edfc
 const Scripting::OpcodeInfo g_objectSetRotationCommand={0x453,"ifff"};

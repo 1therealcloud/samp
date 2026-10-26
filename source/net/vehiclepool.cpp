@@ -1,4 +1,8 @@
 #include "net/vehiclepool.h"
+// samp.dll RVA: 0x00002df0
+void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle,WORD player) {
+    *(WORD*)((BYTE*)this+0x8e34+vehicle*2)=player;
+}
 #include "game/util.h"
 #include "chatwindow.h"
 #include "main.h"

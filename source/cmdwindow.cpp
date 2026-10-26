@@ -1,4 +1,7 @@
 #include "gui/chat_dependencies.h"
+#include "cmdwindow.h"
+// samp.dll RVA: 0x00002e80
+DWORD CInput::GetEnabledState() {return m_bEnabled;}
 #include "gui/input_native.h"
 // samp.dll RVA: 0x00068e10
 CInput::CInput(IDirect3DDevice9 *device) {

@@ -8,6 +8,9 @@
 #pragma pack(push,1)
 class CVehicle : public CEntity {
 public:
+    // Stores the raw byte; does not reset/create the objective blip.
+    // samp.dll RVA: 0x0000e290
+    void SetObjective(BYTE objective);
     // samp.dll RVA: 0x000b73e0
     void SetBackendFloat94CAnd950(float first,float second);
 

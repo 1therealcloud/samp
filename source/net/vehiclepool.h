@@ -16,6 +16,9 @@ struct VehiclePoolQueueEntry {
 // Allocation extent established; unreviewed tail fields remain opaque.
 class CVehiclePool {
 public:
+    // Unchecked WORD index into the native unoccupied-sync owner table.
+    // samp.dll RVA: 0x00002df0
+    void SetUnoccupiedSyncOwner(WORD vehicle,WORD player);
     // First native stack word unused; endpoints are the second and third words.
     // samp.dll RVA: 0x0001e970
     WORD FindInLine(DWORD unused,const CVector *origin,const CVector *end);

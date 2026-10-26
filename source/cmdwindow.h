@@ -11,6 +11,9 @@ struct InputRect : RECT { InputRect() { left=0;top=0;right=0;bottom=0; } };
 #pragma pack(push,1)
 class CInput {
 public:
+    // Returns the raw DWORD; distinct from the AL bool getter IsActive.
+    // samp.dll RVA: 0x00002e80
+    DWORD GetEnabledState();
     IDirect3DDevice9 *m_pDevice;
     CDXUTDialog *m_pGameUi;
     InputEditBox *m_pEditbox;

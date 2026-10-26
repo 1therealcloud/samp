@@ -11,6 +11,9 @@ class CMenuPool {
     DWORD active[128];
     BYTE currentMenu,unknown401;
 public:
+    // Native includes ID128, reading a DWORD at400 across the allocation edge.
+    // samp.dll RVA: 0x000177b0
+    DWORD GetActiveState(BYTE id);
     // samp.dll RVA: 0x00007ef0
     void Process();
     // samp.dll RVA: 0x00007d50

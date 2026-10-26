@@ -8,6 +8,8 @@ class CVehicle;
 class CObject : public CEntity {
     BYTE nativeState[0x1154];
 public:
+    // samp.dll RVA: 0x00017750
+    void DisableCameraCollision();
     // Native eleven-word entry; flag1193 retains its raw byte.
     // samp.dll RVA: 0x000a8d00
     CObject(int model,CVector position,CVector rotation,float drawDistance,

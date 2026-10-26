@@ -1,4 +1,9 @@
 #include "net/menupool.h"
+// samp.dll RVA: 0x000177b0
+DWORD CMenuPool::GetActiveState(BYTE id) {
+    if(id>128)return 0;
+    return *(DWORD*)((BYTE*)this+0x200+id*4);
+}
 #include <stdlib.h>
 // samp.dll RVA: 0x00007b40
 CMenuPool::CMenuPool(){for(int i=0;i<128;++i){active[i]=0;menus[i]=0;}currentMenu=128;}

@@ -1,5 +1,7 @@
 #include "net/local_rpc.h"
 #include "net/localplayer.h"
+// samp.dll RVA: 0x0009e940
+DWORD CLocalPlayer::GetRCModeState() {return *(DWORD*)(nativeState+0x1d4);}
 // samp.dll RVA: 0x00008170
 DWORD CLocalPlayer::GetActiveState() {return *(DWORD*)(nativeState+0xf4);}
 // samp.dll RVA: 0x0000e2a0

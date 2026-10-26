@@ -1,4 +1,8 @@
 #include "game/game.h"
+// samp.dll RVA: 0x000080f0
+void CGame::SetCheckpointEnabled(DWORD enabled) {unknown4d=enabled;}
+// samp.dll RVA: 0x00008100
+void CGame::SetRacingCheckpointEnabled(DWORD enabled) {unknown29=enabled;}
 #include <string.h>
 // samp.dll RVA: 0x0018e1d8
 BOOL g_gameUsedPlayerSlots[210];
