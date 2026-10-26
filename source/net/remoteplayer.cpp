@@ -1,4 +1,8 @@
 #include "net/remoteplayer.h"
+// samp.dll RVA: 0x000739c0
+float CRemotePlayer::GetReportedHealth() {return *(float*)(nativeState+0x1b0);}
+// samp.dll RVA: 0x000739d0
+float CRemotePlayer::GetReportedArmour() {return *(float*)(nativeState+0x1ac);}
 // samp.dll RVA: 0x00008180
 void CRemotePlayer::SetTeam(BYTE team) {nativeState[0x19]=team;}
 // samp.dll RVA: 0x000a21e0

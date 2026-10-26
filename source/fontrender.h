@@ -3,6 +3,9 @@
 #include <windows.h>
 #include <d3dx9.h>
 #include <stddef.h>
+// Native green-underflow branch clears red and retains green; not generic saturation.
+// samp.dll RVA: 0x0006b210
+DWORD __stdcall FontDarkenColor(DWORD color,BYTE amount);
 // samp.dll RVA: unknown (inline layout helper; no standalone entry established)
 struct FontSize { long cx,cy; FontSize() { cx=0;cy=0; } };
 class CFonts {

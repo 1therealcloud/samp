@@ -1,6 +1,13 @@
 // Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
 // Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
 #include "chatwindow.h"
+// samp.dll RVA: 0x00067f20
+void CChat::SetTimestamps(BYTE enabled) {
+    *((BYTE*)this+offsetof(CChat,m_bTimestamps))=enabled;
+    m_bRedraw=TRUE;
+}
+// samp.dll RVA: 0x00067f40
+BYTE CChat::GetTimestamps() {return *((BYTE*)this+offsetof(CChat,m_bTimestamps));}
 #include "gui/chat_dependencies.h"
 #include <stdio.h>
 #include <string.h>

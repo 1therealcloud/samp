@@ -8,6 +8,11 @@ class CMatrix;
 class CPed;
 class CVehicle;
 class CRemotePlayer {public:
+    // Synchronization caches, not queries to the GTA ped backend.
+    // samp.dll RVA: 0x000739c0
+    float GetReportedHealth();
+    // samp.dll RVA: 0x000739d0
+    float GetReportedArmour();
     // samp.dll RVA: 0x00008180
     void SetTeam(BYTE team);
     // samp.dll RVA: 0x000a21e0

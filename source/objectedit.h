@@ -5,6 +5,8 @@ class CMatrix;
 struct CVector;
 #pragma pack(push,1)
 class CObjectEdit {public:
+    // samp.dll RVA: 0x00017850
+    WORD GetObjectId();
     BYTE unknown00[0x78];DWORD unknown78,unknown7c,unknown80,unknown84;WORD objectId;
     BYTE unknown8a[0x14];DWORD lastTick;BYTE flags[5],unknowna7[0x5c];
     IDirect3DDevice9 *device;ID3DXLine *line;ID3DXFont *smallFont,*largeFont;DWORD unknown113;

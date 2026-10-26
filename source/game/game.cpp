@@ -1,4 +1,6 @@
 #include "game/game.h"
+// samp.dll RVA: 0x00067f10
+void CGame::SetHeadMovement(BOOL enabled) {m_bHeadMove=enabled;}
 // samp.dll RVA: 0x000080f0
 void CGame::SetCheckpointEnabled(DWORD enabled) {unknown4d=enabled;}
 // samp.dll RVA: 0x00008100

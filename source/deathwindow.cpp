@@ -1,4 +1,6 @@
 #include "deathwindow.h"
+// samp.dll RVA: 0x0006c720
+BOOL CDeathWindow::AreAuxiliaryFontsInitialized() {return auxiliaryFontsInitialized;}
 #include "fontrender.h"
 #include "playertags.h"
 #include <string.h>

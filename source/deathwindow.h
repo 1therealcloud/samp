@@ -9,6 +9,9 @@ struct DeathWindowEntry {
     BYTE weapon;
 };
 class CDeathWindow {public:
+    // Raw initialization DWORD, without normalization.
+    // samp.dll RVA: 0x0006c720
+    BOOL AreAuxiliaryFontsInitialized();
     // samp.dll RVA: 0x00069580
     ~CDeathWindow();
     // samp.dll RVA: 0x000695f0

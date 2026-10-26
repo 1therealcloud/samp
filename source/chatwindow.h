@@ -14,6 +14,11 @@ class CDXUTScrollBar;
 #pragma pack(push, 1)
 class CChat {
 public:
+    // Stores the raw timestamp byte and always requests redraw.
+    // samp.dll RVA: 0x00067f20
+    void SetTimestamps(BYTE enabled);
+    // samp.dll RVA: 0x00067f40
+    BYTE GetTimestamps();
     enum EntryType { ENTRY_TYPE_NONE=0, ENTRY_TYPE_CHAT=2, ENTRY_TYPE_INFO=4, ENTRY_TYPE_DEBUG=8 };
     enum DisplayMode { DISPLAY_MODE_OFF=0, DISPLAY_MODE_NOSHADOW=1, DISPLAY_MODE_NORMAL=2 };
     enum { MAX_MESSAGES=100, MAX_LINE_LENGTH=72, MAX_MESSAGE_LENGTH=144 };

@@ -8,6 +8,9 @@ class CVehicle;
 class CObject : public CEntity {
     BYTE nativeState[0x1154];
 public:
+    // Direct pointer to the internal Euler vector; no copy or backend query.
+    // samp.dll RVA: 0x000715c0
+    CVector *GetRotation();
     // samp.dll RVA: 0x00017750
     void DisableCameraCollision();
     // Native eleven-word entry; flag1193 retains its raw byte.

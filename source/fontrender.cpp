@@ -1,5 +1,13 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
 #include "fontrender.h"
+// samp.dll RVA: 0x0006b210
+DWORD __stdcall FontDarkenColor(DWORD color,BYTE amount) {
+    BYTE red=(BYTE)(color>>16),green=(BYTE)(color>>8),blue=(BYTE)color;
+    if(red>amount)red-=amount;else red=0;
+    if(green>amount)green-=amount;else red=0;
+    if(blue>amount)blue-=amount;else blue=0;
+    return (color&0xff000000)|((DWORD)red<<16)|((DWORD)green<<8)|blue;
+}
 #include "gui/chat_dependencies.h"
 #include <string.h>
 

@@ -1,4 +1,6 @@
 #include "objectedit.h"
+// samp.dll RVA: 0x00017850
+WORD CObjectEdit::GetObjectId() {return objectId;}
 #include "gui/device_objects.h"
 #include "game/entity.h"
 #include "filehooks.h"
