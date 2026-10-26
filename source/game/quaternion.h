@@ -53,3 +53,7 @@ extern const double g_pedParachuteOne;
 // Native double scalar helper; saturation intentionally uses FSIN, not copysign.
 // samp.dll RVA: 0x0009d040
 void GameQuaternionDoubleToEuler(double x,double y,double z,double w,double *roll,double *pitch,double *yaw);
+
+// No near-opposite fallback; input snapshot precedes output and normalization.
+// samp.dll RVA: 0x000b6530
+void GameQuaternionFromVectorsHalf(GameQuaternion *out,const CVector *from,const CVector *to);

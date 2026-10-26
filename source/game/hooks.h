@@ -227,3 +227,6 @@ void GameInstallModelInfoHook();
 // samp.dll RVA: 0x00151a60
 extern BYTE g_gameCustomModelHookJump[6];
 #endif
+
+// samp.dll RVA: 0x000a4200
+void GameReleaseCachedRasterBuffer();

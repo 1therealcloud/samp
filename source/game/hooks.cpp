@@ -3397,3 +3397,11 @@ __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector *origin,CVector
         ret
     }
 }
+
+// Native leaves the cache published during the hooked raster-destroy call.
+// samp.dll RVA: 0x000a4200
+void GameReleaseCachedRasterBuffer() {
+    DWORD target=g_gameVersion==1?0x7fb020:0x7fb060;
+    if(g_hookCachedBuffer)((DWORD(__cdecl*)(DWORD))target)(g_hookCachedBuffer);
+    g_hookCachedBuffer=0;
+}

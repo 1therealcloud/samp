@@ -63,3 +63,6 @@ void GameRelocateModelFlags();
 // samp.dll RVA: 0x000aa180
 void GameIncreasePoolLimits();
 #endif
+
+// samp.dll RVA: 0x000a9d10
+void _patch(DWORD address,BYTE *data,int byteCount);

@@ -714,3 +714,55 @@ __declspec(naked) void GameQuaternionDoubleToEuler(double x,double y,double z,do
         ret
     }
 }
+
+// Half cross-product and half(1+dot), then normalization; no opposite fallback.
+// samp.dll RVA: 0x000b6530
+__declspec(naked) void GameQuaternionFromVectorsHalf(GameQuaternion *out,const CVector *from,const CVector *to) {
+    __asm {
+        sub esp, 0xc
+        mov ecx, dword ptr [esp + 0x18]
+        mov eax, dword ptr [esp + 0x14]
+        fld dword ptr [ecx + 8]
+        fmul dword ptr [eax + 4]
+        fld dword ptr [ecx + 4]
+        fmul dword ptr [eax + 8]
+        fsubp st(1),st
+        fld dword ptr [ecx]
+        fmul dword ptr [eax + 8]
+        fld dword ptr [ecx + 8]
+        fmul dword ptr [eax]
+        fsubp st(1),st
+        fld dword ptr [ecx + 4]
+        fmul dword ptr [eax]
+        fld dword ptr [ecx]
+        fmul dword ptr [eax + 4]
+        fsubp st(1),st
+        fstp dword ptr [esp + 8]
+        fld dword ptr [eax]
+        fmul dword ptr [ecx]
+        fld dword ptr [ecx + 8]
+        fmul dword ptr [eax + 8]
+        faddp st(1),st
+        fld dword ptr [ecx + 4]
+        fmul dword ptr [eax + 4]
+        mov eax, dword ptr [esp + 0x10]
+        push eax
+        faddp st(1),st
+        fstp dword ptr [esp + 0x18]
+        fxch st(1)
+        fmul g_textDrawHalf
+        fstp dword ptr [eax + 4]
+        fmul g_textDrawHalf
+        fstp dword ptr [eax + 8]
+        fld dword ptr [esp + 0xc]
+        fmul g_textDrawHalf
+        fstp dword ptr [eax + 0xc]
+        fld dword ptr [esp + 0x18]
+        fadd g_quaternionMatrixOne
+        fmul g_textDrawHalf
+        fstp dword ptr [eax]
+        call GameQuaternionNormalize
+        add esp, 0x10
+        ret
+    }
+}

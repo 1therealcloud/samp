@@ -492,3 +492,23 @@ void GameIncreasePoolLimits() {
     GameUnprotect((void*)0x54f3a1,4);*(DWORD*)0x54f3a1=20000;
     GameUnprotect((void*)0x551106,5);memcpy((void*)0x551106,g_gamePoolPatchTwo,5);
 }
+
+// Legacy helper name retained from the 0.2x source; API failures are ignored.
+// samp.dll RVA: 0x000a9d10
+void _patch(DWORD address,BYTE *data,int byteCount) {
+    DWORD oldProtection,ignoredProtection;
+    VirtualProtect((void*)address,byteCount,PAGE_EXECUTE_READWRITE,&oldProtection);
+    // Native forward DWORD/byte copy, including its behavior for overlap.
+    __asm {
+        mov esi,data
+        mov edi,address
+        mov edx,byteCount
+        mov ecx,edx
+        shr ecx,2
+        rep movsd
+        mov ecx,edx
+        and ecx,3
+        rep movsb
+    }
+    VirtualProtect((void*)address,byteCount,oldProtection,&ignoredProtection);
+}

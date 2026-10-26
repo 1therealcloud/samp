@@ -846,3 +846,30 @@ BOOL GameCopyBackendBoneMatrix(void *entity,CMatrix *out,int bone) {
     DWORD matrices=*(DWORD*)((BYTE*)hierarchy+8);
     memcpy(out,(void*)(matrices+(index<<6)),64);return TRUE;
 }
+
+// Preserves raw EAX from the fixed GTA backend; argument meaning unresolved.
+// GTA SA virtual address: 0x00705B60.
+// samp.dll RVA: 0x000b14a0
+DWORD GameCall705B60(DWORD argument) {
+    return ((DWORD(__cdecl*)(DWORD))0x705b60)(argument);
+}
+// Backend consumes three stack DWORDs (RET12); semantic types are unknown.
+// GTA SA virtual address: 0x0059C790.
+// samp.dll RVA: 0x000b4770
+DWORD GameCall59C790(DWORD first,DWORD second,DWORD third) {
+    return ((DWORD(__stdcall*)(DWORD,DWORD,DWORD))0x59c790)(first,second,third);
+}
+// samp.dll RVA: 0x000b4360
+void GameReplaceBuildingPoolModels(int model,int replacement) {
+    CEntity temporary;
+    // GTA SA virtual address: pool global0x00B74498; native starts at pool+4.
+    // Preserve this observed slot instead of substituting the pool array getter.
+    DWORD cursor=*(DWORD*)(*(DWORD*)0xb74498+4);
+    for(int remaining=0x36b0;remaining;--remaining,cursor+=0x38) {
+        if(cursor&&*(short*)(cursor+0x22)==model) {
+            temporary.m_pGameEntity=(void*)cursor;
+            temporary.Remove();
+            temporary.SetModelIndex(replacement);
+        }
+    }
+}

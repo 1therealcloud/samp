@@ -258,3 +258,12 @@ float GameReadFloat859520();
 // Opaque GTA entity/clump/hierarchy layout, not SA-MP wrapper pointers.
 // samp.dll RVA: 0x000b62f0
 BOOL GameCopyBackendBoneMatrix(void *entity,CMatrix *out,int bone);
+
+// Opaque DWORD arguments/results; backend semantics are not established.
+// samp.dll RVA: 0x000b14a0
+DWORD GameCall705B60(DWORD argument);
+// samp.dll RVA: 0x000b4770
+DWORD GameCall59C790(DWORD first,DWORD second,DWORD third);
+// Native scans14000 records of56 bytes starting at the building pool's +4 slot.
+// samp.dll RVA: 0x000b4360
+void GameReplaceBuildingPoolModels(int model,int replacement);
