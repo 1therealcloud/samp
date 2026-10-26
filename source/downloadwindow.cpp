@@ -1,4 +1,6 @@
 #include "downloadwindow.h"
+// samp.dll RVA: 0x0006a440
+int CDownloadWindow::GetFilesCount() {return *(int*)(nativeState+4);}
 #include "fontrender.h"
 #include "gui/device_lifecycle.h"
 #include "game/gta_globals.h"

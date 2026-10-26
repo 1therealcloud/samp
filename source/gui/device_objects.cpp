@@ -3,6 +3,56 @@
 #include "main.h"
 #include <new>
 #include <string.h>
+#include "gui/textdraw_texture.h"
+// samp.dll RVA: 0x0011c74c
+const char g_spawnVersionText[]="SA-MP 0.3.DL-R1";
+// samp.dll RVA: 0x000705c0
+SpawnScreenVertex::SpawnScreenVertex() {}
+// samp.dll RVA: 0x00070340
+CObjectMaterialText::~CObjectMaterialText() {OnLostDevice();}
+// samp.dll RVA: 0x0006d420
+CLicensePlate::~CLicensePlate() {OnLostDevice();}
+// samp.dll RVA: 0x000709d0
+CSpawnScreen::~CSpawnScreen() {
+    char *text=*(char**)(unknown00+4);if(text)::operator delete(text);
+    if(texture||states[1]||states[0])OnLostDevice();
+    CFonts *ownedFonts=fonts;if(ownedFonts!=g_deviceFonts&&ownedFonts){delete ownedFonts;fonts=0;}
+}
+// samp.dll RVA: 0x00070a30
+void CSpawnScreen::Draw() {
+    if(!fonts||!*(char**)(unknown00+4))return;
+    FontSize measured;fonts->GetTextScreenSize(&measured,*(char**)(unknown00+4),0);
+    // GTA SA virtual address: screen height 0x00C17048. Integer arithmetic wraps.
+    LONG bottom=(LONG)(*(DWORD*)0xc17048-30),top=(LONG)((DWORD)bottom-(DWORD)measured.cy);
+    RECT textRect={20,top,(LONG)(20u+(DWORD)measured.cx),bottom};
+    fonts->DrawText(0,*(char**)(unknown00+4),textRect,0xffffffff,TRUE);
+    int imageTop=(int)((DWORD)top-103),imageBottom=(int)((DWORD)imageTop+73);
+    if(texture) {
+        SpawnScreenVertex vertices[4];float topY,bottomY;
+        __asm {
+            fild imageTop
+            fsub g_textDrawHalf
+            fild imageBottom
+            fadd g_textDrawHalf
+            fstp bottomY
+            fstp topY
+        }
+        for(int i=0;i<4;++i){vertices[i].z=0.1f;vertices[i].rhw=1.0f;vertices[i].color=0xffffffff;}
+        vertices[0].x=19.5f;vertices[0].y=bottomY;vertices[0].u=0;vertices[0].v=1;
+        vertices[1].x=19.5f;vertices[1].y=topY;vertices[1].u=0;vertices[1].v=0;
+        vertices[2].x=205.5f;vertices[2].y=bottomY;vertices[2].u=1;vertices[2].v=1;
+        vertices[3].x=205.5f;vertices[3].y=topY;vertices[3].u=1;vertices[3].v=0;
+        states[0]->Capture();states[1]->Apply();
+        device->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR);
+        device->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR);
+        device->SetFVF(0x144);device->SetPixelShader(0);
+        device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,2,vertices,28);states[0]->Apply();
+    }
+    FontSize versionSize;FontSize *size=fonts->GetTextScreenSize(&versionSize,g_spawnVersionText,0);
+    LONG left=(LONG)(20u+(DWORD)((int)(185u-(DWORD)size->cx)/2));
+    RECT versionRect={left,imageBottom,(LONG)((DWORD)left+(DWORD)size->cx),(LONG)((DWORD)imageBottom+(DWORD)size->cy)};
+    fonts->DrawText(0,g_spawnVersionText,versionRect,0xff27abfa,TRUE);
+}
 // samp.dll RVA: 0x00070630
 void CSpawnScreen::SetText(const char *value) {
     char *&text=*(char**)(unknown00+4);

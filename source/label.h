@@ -8,6 +8,8 @@ class CLabel {
 public:
     // samp.dll RVA: 0x0006b5f0
     CLabel(IDirect3DDevice9 *device);
+    // samp.dll RVA: 0x0006b610
+    ~CLabel();
     IDirect3DDevice9 *device;ID3DXSprite *sprite;
     // samp.dll RVA: 0x0006b630
     void OnLostDevice();

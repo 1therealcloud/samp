@@ -78,6 +78,7 @@ BOOL CConfig::Free(const char *name) {
 int CConfig::GetValueType(const char *name) {
     int i = GetIndex(name); return i < 0 ? VALUE_TYPE_NONE : entries[i].type;
 }
+// samp.dll RVA: 0x000659b0
 CConfig::ConfigEntry *CConfig::GetEntry(int index) {
     return index >= 0 && index < MAX_ENTRIES && occupied[index] ? &entries[index] : 0;
 }

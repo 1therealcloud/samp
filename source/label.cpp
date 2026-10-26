@@ -10,6 +10,8 @@ const Scripting::OpcodeInfo g_labelLineOfSightCommand={0x6bd,"ffffffiiiii"};
 
 // samp.dll RVA: 0x0006b5f0
 CLabel::CLabel(IDirect3DDevice9 *value) { device=value;D3DXCreateSprite(device,&sprite); }
+// samp.dll RVA: 0x0006b610
+CLabel::~CLabel() {if(sprite){::operator delete(sprite);sprite=0;}}
 
 // samp.dll RVA: 0x0006b630
 void CLabel::OnLostDevice() { if(sprite)sprite->OnLostDevice(); }

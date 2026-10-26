@@ -15,6 +15,8 @@ class CDownloadWindow {public:
     // Descriptive helpers retain its observed allocation behavior.
     // samp.dll RVA: 0x0006a420
     DownloadRecord *GetRecord(DWORD index);
+    // samp.dll RVA: 0x0006a440
+    int GetFilesCount();
     // samp.dll RVA: 0x0006a450
     bool ResizeRecords(DWORD count);
     // samp.dll RVA: 0x0006a4c0
