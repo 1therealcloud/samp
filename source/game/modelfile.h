@@ -43,6 +43,11 @@ struct CModelFileStream {
     DWORD Remaining();
     // samp.dll RVA: 0x000b36c0
     DWORD Skip(DWORD count);
+    // samp.dll RVA: 0x000b36f0
+    void Reset();
+    // Returns the raw BYTE EOF flag.
+    // samp.dll RVA: 0x000b3700
+    BYTE HasEnded();
 };
 struct CModelFileChunk {
     DWORD type,length;WORD build,version;CModelFileStream stream;
@@ -126,6 +131,15 @@ struct CModelGeometry {
     void SetError(DWORD value);
     // samp.dll RVA: 0x000bc4d0
     void SetDetail(DWORD value);
+    // samp.dll RVA: 0x000bc4e0
+    int GetVertexCount();
+    // samp.dll RVA: 0x000bc4f0
+    BYTE HasVertexColors();
+    // samp.dll RVA: 0x000bc500
+    void *GetVertexColors();
+    // Descriptive name: each input's first four bytes are repeated for all vertices.
+    // samp.dll RVA: 0x000bc510
+    DWORD SetRepeatedVertexColors(const BYTE *first,const BYTE *second);
     // samp.dll RVA: 0x000bc600
     CModelFileChunk *ReadChunk(CModelFileStream *input);
     // samp.dll RVA: 0x000bd180
@@ -148,6 +162,9 @@ struct CDffFile {
     CDffFile();
     // samp.dll RVA: 0x0000d8f0
     ~CDffFile();
+    // Native dereferences every indexed geometry without a null check.
+    // samp.dll RVA: 0x000bbc80
+    bool IsModified();
     // samp.dll RVA: 0x000bb170
     CModelFileChunk *ReadChunk(CModelFileStream *input);
     // samp.dll RVA: 0x000bb280
@@ -199,5 +216,8 @@ extern const BYTE g_modelLzmaProperties[5];
 // samp.dll RVA: 0x000c5040
 int __stdcall ModelLzmaEncode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD sourceLength,
     BYTE *properties,DWORD *propertySize,int level,DWORD dictionary,int lc,int lp,int pb,int fastBytes,int threads);
+// Stack ABI is stdcall-compatible; incoming ECX is unused. Original owner/name unknown.
+// samp.dll RVA: 0x000bc710
+DWORD __stdcall ModelAppendChunk(CModelFileChunk *parent,const CModelFileChunk *child);
 // Other model editing/writing paths remain under recovery.
 #endif

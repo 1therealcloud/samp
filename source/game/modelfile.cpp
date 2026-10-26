@@ -7,6 +7,42 @@
 #include "Alloc.h"
 // samp.dll RVA: 0x00155470
 const BYTE g_modelLzmaProperties[5]={0x5d,0,0,1,0};
+// samp.dll RVA: 0x000b36f0
+void CModelFileStream::Reset() {position=0;ended=0;}
+// samp.dll RVA: 0x000b3700
+BYTE CModelFileStream::HasEnded() {return ended;}
+// samp.dll RVA: 0x000bc4e0
+int CModelGeometry::GetVertexCount() {return vertexCount;}
+// samp.dll RVA: 0x000bc4f0
+BYTE CModelGeometry::HasVertexColors() {return hasColors;}
+// samp.dll RVA: 0x000bc500
+void *CModelGeometry::GetVertexColors() {return colors;}
+// samp.dll RVA: 0x000bc510
+DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE *first,const BYTE *second) {
+    modified=1;flags=(WORD)((flags&0xffdf)|8);
+    if(colors){free(colors);colors=0;}
+    if(unknown20){free(unknown20);unknown20=0;}
+    hasColors=1;unknown1b=1;colors=calloc(vertexCount,4);unknown20=calloc(vertexCount,4);
+    for(DWORD i=0;i!=(DWORD)vertexCount;++i) {
+        ((BYTE*)colors)[i*4]=first[0];((BYTE*)colors)[i*4+1]=first[1];
+        ((BYTE*)colors)[i*4+2]=first[2];((BYTE*)colors)[i*4+3]=first[3];
+        ((BYTE*)unknown20)[i*4]=second[0];((BYTE*)unknown20)[i*4+1]=second[1];
+        ((BYTE*)unknown20)[i*4+2]=second[2];((BYTE*)unknown20)[i*4+3]=second[3];
+    }
+    return 1;
+}
+// samp.dll RVA: 0x000bbc80
+bool CDffFile::IsModified() {
+    DWORD count=geometries.count;
+    for(DWORD i=0;i!=count;++i)if(geometries.items[i]->IsModified())return true;
+    return false;
+}
+// samp.dll RVA: 0x000bc710
+DWORD __stdcall ModelAppendChunk(CModelFileChunk *parent,const CModelFileChunk *child) {
+    if(!parent||!child)return 0;
+    parent->stream.Write(child,12);parent->stream.Write(child->stream.data,child->stream.length);
+    parent->length+=child->stream.length+12;return 1;
+}
 // samp.dll RVA: 0x000c5040
 int __stdcall ModelLzmaEncode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD sourceLength,
     BYTE *properties,DWORD *propertySize,int level,DWORD dictionary,int lc,int lp,int pb,int fastBytes,int threads) {
