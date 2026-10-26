@@ -73,3 +73,58 @@ extern const float g_playerTagOuterLeft;
 // samp.dll RVA: 0x0011797c
 extern const float g_playerTagArmourOffset;
 #endif
+
+#ifndef SAMP_LEGACY_PLAYER_TAGS_H
+#define SAMP_LEGACY_PLAYER_TAGS_H
+// Separate original legacy renderer; descriptive name distinguishes current tags.
+class CLegacyPlayerTags
+{
+private:
+	struct NameTextVertex_s
+	{
+		float x, y, z, tu, tv;
+		// samp.dll RVA: 0x0006d8b0
+		void Initialise(float fX,float fY,float fTu,float fTv);
+	};
+
+	IDirect3DDevice9* m_pDevice;
+	IDirect3DTexture9* m_pTexture;
+	IDirect3DVertexBuffer9* m_pVB;
+	IDirect3DStateBlock9* m_pOldStates;
+	IDirect3DStateBlock9* m_pNewStates;
+
+	float m_fCharWidth;
+	float m_fCharHeight;
+	float m_fScale;
+public:
+	// samp.dll RVA: 0x0006d8e0
+	CLegacyPlayerTags(IDirect3DDevice9* pDevice);
+	// samp.dll RVA: 0x0006d910
+	~CLegacyPlayerTags();
+
+	// samp.dll RVA: 0x0006df10
+	void Begin();
+	// samp.dll RVA: 0x0006df50
+	void End();
+	// samp.dll RVA: 0x0006df80
+	void Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD dwColor, float fHealth);
+	// samp.dll RVA: 0x0006d950
+	void InitQuad(char c, float x, float y2, NameTextVertex_s* pVB);
+	// samp.dll RVA: 0x0006da80
+	void DeleteDeviceObjects();
+	// samp.dll RVA: 0x0006dad0
+	void RestoreDeviceObjects();
+};
+
+
+// Contiguous health vertices192 bytes followed by metrics256. Signed character
+// indexing reaches the preceding mutable vertices in the original binary.
+// samp.dll RVA: 0x00140998
+extern BYTE g_legacyPlayerTagStorage[448];
+// samp.dll RVA: 0x0011c6bc
+extern const char g_legacyPlayerTagTextureName[];
+// samp.dll RVA: 0x0011c6b4
+extern const float g_legacyPlayerTagInv256;
+// samp.dll RVA: 0x0011c6b8
+extern const float g_legacyPlayerTagInv16;
+#endif
