@@ -1148,6 +1148,7 @@ public:
 
     // samp.dll RVA: 0x00085460
     static  HRESULT StaticOnCreateDevice();
+    // samp.dll RVA: 0x0008C2C0
     static  bool StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
 
     // samp.dll RVA: 0x00085940
@@ -1175,15 +1176,21 @@ public:
     virtual void RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
 
 protected:
+    // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
     static WORD GetLanguage() { return LOWORD( s_hklCurrent ); }
+    // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
     static WORD GetPrimaryLanguage() { return PRIMARYLANGID( LOWORD( s_hklCurrent ) ); }
+    // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
     static WORD GetSubLanguage() { return SUBLANGID( LOWORD( s_hklCurrent ) ); }
+    // samp.dll RVA: 0x00085430
     static void SendKey( BYTE nVirtKey );
+    // samp.dll RVA: 0x00085500
     static DWORD GetImeId( UINT uIndex = 0 );
     // samp.dll RVA: 0x00085760
     static void CheckInputLocale();
     // samp.dll RVA: 0x00085860
     static void CheckToggleState();
+    // samp.dll RVA: 0x00085950
     static void SetupImeApi();
     // samp.dll RVA: 0x000859E0
     static void ResetCompositionString();
@@ -1191,7 +1198,9 @@ protected:
     void TruncateCompString( bool bUseBackSpace = true, int iNewStrLen = 0 );
     // samp.dll RVA: 0x00085B70
     void FinalizeString( bool bSend );
+    // samp.dll RVA: 0x0008AC70
     static void GetReadingWindowOrientation( DWORD dwId );
+    // samp.dll RVA: 0x0008ADD0
     static void GetPrivateReadingString();
 
     // samp.dll RVA: 0x00085B20
@@ -1255,12 +1264,17 @@ protected:
     // samp.dll RVA: 0x0017F6B8
     static BYTE    s_abCompStringAttr[MAX_COMPSTRING_SIZE];
     static DWORD   s_adwCompStringClause[MAX_COMPSTRING_SIZE];
+    // samp.dll RVA: 0x001803C0
     static WCHAR   s_wszReadingString[32];// Used only with horizontal reading window (why?)
+    // samp.dll RVA: 0x00180640
     static CCandList s_CandList;          // Data relevant to the candidate list
+    // samp.dll RVA: 0x0017F696
     static bool    s_bShowReadingWindow;  // Indicates whether reading window is visible
+    // samp.dll RVA: 0x001803BA
     static bool    s_bHorizontalReading;  // Indicates whether the reading window is vertical or horizontal
     // samp.dll RVA: 0x001803B9
     static bool    s_bChineseIME;
+    // samp.dll RVA: 0x00180620
     static CGrowableArray< CInputLocale > s_Locale; // Array of loaded keyboard layout on system
 
     // Color of various IME elements

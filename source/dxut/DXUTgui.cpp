@@ -4952,12 +4952,17 @@ CUniBuffer CDXUTIMEEditBox::s_CompString = CUniBuffer( 0 );
 // samp.dll RVA: 0x0017F6B8
 BYTE      CDXUTIMEEditBox::s_abCompStringAttr[MAX_COMPSTRING_SIZE];
 DWORD     CDXUTIMEEditBox::s_adwCompStringClause[MAX_COMPSTRING_SIZE];
+// samp.dll RVA: 0x001803C0
 WCHAR     CDXUTIMEEditBox::s_wszReadingString[32];
+// samp.dll RVA: 0x00180640
 CDXUTIMEEditBox::CCandList CDXUTIMEEditBox::s_CandList;       // Data relevant to the candidate list
+// samp.dll RVA: 0x0017F696
 bool      CDXUTIMEEditBox::s_bShowReadingWindow; // Indicates whether reading window is visible
+// samp.dll RVA: 0x001803BA
 bool      CDXUTIMEEditBox::s_bHorizontalReading; // Indicates whether the reading window is vertical or horizontal
 // samp.dll RVA: 0x001803B9
 bool      CDXUTIMEEditBox::s_bChineseIME;
+// samp.dll RVA: 0x00180620
 CGrowableArray< CDXUTIMEEditBox::CInputLocale > CDXUTIMEEditBox::s_Locale; // Array of loaded keyboard layout on system
 #if defined(DEBUG) | defined(_DEBUG)
 bool      CDXUTIMEEditBox::m_bIMEStaticMsgProcCalled = false;
@@ -5004,6 +5009,7 @@ CDXUTIMEEditBox::~CDXUTIMEEditBox()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085430
 void CDXUTIMEEditBox::SendKey( BYTE nVirtKey )
 {
     keybd_event( nVirtKey, 0, 0,               0 );
@@ -5075,9 +5081,12 @@ void CDXUTIMEEditBox::UpdateRects()
 // For more information, see the CompareString() reference.
 #define LCID_INVARIANT MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
 
+// samp.dll RVA: 0x00085500
 DWORD CDXUTIMEEditBox::GetImeId( UINT uIndex )
 {
+    // samp.dll RVA: 0x00181A84
     static HKL hklPrev = 0;
+    // samp.dll RVA: 0x00181A7C
     static DWORD dwID[2] = { 0, 0 };  // Cache the result
     
     DWORD   dwVerSize;
@@ -5263,6 +5272,7 @@ void CDXUTIMEEditBox::EnableImeSystem( bool bEnable )
 //--------------------------------------------------------------------------------------
 // Sets up IME-specific APIs for the IME edit controls.  This is called every time
 // the input locale changes.
+// samp.dll RVA: 0x00085950
 void CDXUTIMEEditBox::SetupImeApi()
 {
     char szImeFile[MAX_PATH + 1];
@@ -5396,21 +5406,22 @@ void CDXUTIMEEditBox::FinalizeString( bool bSend )
 
 //--------------------------------------------------------------------------------------
 // Determine whether the reading window should be vertical or horizontal.
+// samp.dll RVA: 0x0008AC70
 void CDXUTIMEEditBox::GetReadingWindowOrientation( DWORD dwId )
 {
     s_bHorizontalReading = ( s_hklCurrent == _CHS_HKL ) || ( s_hklCurrent == _CHT_HKL2 ) || ( dwId == 0 );
     if( !s_bHorizontalReading && ( dwId & 0x0000FFFF ) == LANG_CHT )
     {
-        WCHAR wszRegPath[MAX_PATH];
+        char szRegPath[MAX_PATH];
         HKEY hKey;
         DWORD dwVer = dwId & 0xFFFF0000;
-        StringCchCopy( wszRegPath, MAX_PATH, L"software\\microsoft\\windows\\currentversion\\" );
-        StringCchCat( wszRegPath, MAX_PATH, ( dwVer >= MAKEIMEVERSION( 5, 1 ) ) ? L"MSTCIPH" : L"TINTLGNT" );
-        LONG lRc = RegOpenKeyExW( HKEY_CURRENT_USER, wszRegPath, 0, KEY_READ, &hKey );
+        StringCchCopyA( szRegPath, MAX_PATH, "software\\microsoft\\windows\\currentversion\\" );
+        StringCchCatA( szRegPath, MAX_PATH, ( dwVer >= MAKEIMEVERSION( 5, 1 ) ) ? "MSTCIPH" : "TINTLGNT" );
+        LONG lRc = RegOpenKeyExA( HKEY_CURRENT_USER, szRegPath, 0, KEY_READ, &hKey );
         if (lRc == ERROR_SUCCESS)
         {
             DWORD dwSize = sizeof(DWORD), dwMapping, dwType;
-            lRc = RegQueryValueExW( hKey, L"Keyboard Mapping", NULL, &dwType, (PBYTE)&dwMapping, &dwSize );
+            lRc = RegQueryValueExA( hKey, "Keyboard Mapping", NULL, &dwType, (PBYTE)&dwMapping, &dwSize );
             if (lRc == ERROR_SUCCESS)
             {
                 if ( ( dwVer <= MAKEIMEVERSION( 5, 0 ) && 
@@ -5431,6 +5442,7 @@ void CDXUTIMEEditBox::GetReadingWindowOrientation( DWORD dwId )
 
 //--------------------------------------------------------------------------------------
 // Obtain the reading string upon WM_IME_NOTIFY/INM_PRIVATE notification.
+// samp.dll RVA: 0x0008ADD0
 void CDXUTIMEEditBox::GetPrivateReadingString()
 {
     DWORD dwId = GetImeId();
@@ -5441,7 +5453,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
     }
 
     HIMC hImc;
-    hImc = _ImmGetContext( DXUTGetHWND() );
+    hImc = _ImmGetContext( g_inputGameWindow );
     if( !hImc )
     {
         s_bShowReadingWindow = false;
@@ -5467,7 +5479,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
             if( !pwszReadingStringBuffer )
             {
                 // Out of memory. Exit.
-                _ImmReleaseContext( DXUTGetHWND(), hImc );
+                _ImmReleaseContext( g_inputGameWindow, hImc );
                 return;
             }
 
@@ -5612,7 +5624,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
         _ImmUnlockIMC( hImc );
         GetReadingWindowOrientation( dwId );
     }
-    _ImmReleaseContext( DXUTGetHWND(), hImc );
+    _ImmReleaseContext( g_inputGameWindow, hImc );
 
     if( pwszReadingStringBuffer )
         HeapFree( GetProcessHeap(), 0, pwszReadingStringBuffer );
@@ -5629,8 +5641,8 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
         for( UINT i = 0; i < s_CandList.dwCount; ++i )
         {
             if( s_CandList.dwSelection == i )
-                s_CandList.nReadingError = lstrlen( s_wszReadingString );
-            StringCchCat( s_wszReadingString, 32, s_CandList.awszCandidate[i] );
+                s_CandList.nReadingError = lstrlenW( s_wszReadingString );
+            StringCchCatW( s_wszReadingString, 32, s_CandList.awszCandidate[i] );
         }
     }
 
@@ -5702,6 +5714,7 @@ void CDXUTIMEEditBox::OnFocusOut()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008C2C0
 bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     HIMC hImc;
@@ -5813,10 +5826,10 @@ bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                 SetupImeApi();
                 if( _ShowReadingWindow )
                 {
-                    if ( NULL != ( hImc = _ImmGetContext( DXUTGetHWND() ) ) )
+                    if ( NULL != ( hImc = _ImmGetContext( g_inputGameWindow ) ) )
                     {
                         _ShowReadingWindow( hImc, false );
-                        _ImmReleaseContext( DXUTGetHWND(), hImc );
+                        _ImmReleaseContext( g_inputGameWindow, hImc );
                     }
                 }
             }
