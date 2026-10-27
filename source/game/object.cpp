@@ -229,28 +229,26 @@ bool CObject::GetMaterialSize(int code,int *width,int *height) {
 }
 // samp.dll RVA: 0x000a9ad0
 void CObject::ConstructMaterialText() {
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<16;i++) {
-        BYTE *type=state+0x2db+i*4;
-        BYTE *record=state+0x431+i*0xd7;
-        if(*(DWORD*)(type-0xc4) && *(DWORD*)type==2 && !*(DWORD*)(type+0x40)) {
+    for(int i=0;i<16;++i) {
+        ObjectMaterialTextInfo &info=materials.textInfo[i];
+        if(materials.textures[i] && materials.types[i]==2 && !materials.textProcessed[i]) {
             int width,height;
-            if(GetMaterialSize(record[-0x4c],&width,&height)) {
-                IDirect3DTexture9 *created=g_deviceMaterialText->Create(*(char**)(type+0xdf0),(char*)record-0x4b,record[-10],width,height,*(DWORD*)(record-8),*(DWORD*)(record-4),record[-9],*record);
-                *(IDirect3DTexture9**)(type+0xe70)=created;
-                *(DWORD*)(type+0x40)=1;
+            if(GetMaterialSize(info.size,&width,&height)) {
+                materials.renderedText[i]=g_deviceMaterialText->Create(materials.text[i],info.font,
+                    info.fontSize,width,height,info.fontColor,info.backgroundColor,info.bold,info.alignment);
+                // Native records the attempt even if Create returned NULL.
+                materials.textProcessed[i]=1;
             }
         }
     }
 }
 // samp.dll RVA: 0x000a8ac0
 void CObject::ShutdownMaterialText() {
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<16;i++) {
-        IDirect3DTexture9 **texture=(IDirect3DTexture9**)(state+0x114b+i*4);
-        if(*texture) {
-            (*texture)->Release();*texture=0;
-            *(DWORD*)(state+0x31b+i*4)=0;
+    for(int i=0;i<16;++i) {
+        IDirect3DTexture9 *&texture=materials.renderedText[i];
+        if(texture) {
+            texture->Release();texture=0;
+            materials.textProcessed[i]=0;
         }
     }
 }
@@ -521,12 +519,12 @@ CObject::~CObject() {
     if(hasMaterials) {
         ShutdownMaterialText();
         for(int i=0;i<16;++i) {
-            void **texture=(void**)(state+0x217+i*4);
+            void **texture=&materials.textures[i];
             if(*texture && *texture!=g_objectSharedMaterialTexture) {
                 GameDestroyTextDrawTexture(*texture);*texture=0;
-                if(*(DWORD*)(state+0x110b+i*4))*(DWORD*)(state+0x110b+i*4)=0;
+                if(materials.rasterField34[i])materials.rasterField34[i]=0;
             }
-            void **text=(void**)(state+0x10cb+i*4);
+            char **text=&materials.text[i];
             if(*text){free(*text);*text=0;}
         }
         if(g_deviceMaterialOverrides==state) {
@@ -580,15 +578,15 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
         renderReady=0;*(DWORD*)(state+0x4a)=0;
         *(float*)(state+0x58)=GameGetModelCollisionRadius(model);UpdateCachedCentre();
     }
-    *(DWORD*)(state+0x118f)=0;*(DWORD*)(state+0x1c3)=0;hasMaterials=0;
-    *(DWORD*)(state+0x1c7)=0;*(DWORD*)(state+0x1d3)=0;*(DWORD*)(state+0x1cb)=0;
-    *(DWORD*)(state+0x1cf)=0;*(DWORD*)(state+0x2d7)=0;*(DWORD*)(state+0x1195)=0;
+    materialPassState=0;materials.frameObjectsProcessed=0;hasMaterials=0;
+    materials.snapshotValid=0;materials.rwObject=0;materials.texturesChanged=0;
+    materials.colorsChanged=0;materials.savedGeometryFlags=0;*(DWORD*)(state+0x1195)=0;
     for(int i=0;i<16;++i) {
-        *(DWORD*)(state+0x1d7+i*4)=0;*(DWORD*)(state+0x217+i*4)=0;
-        *(DWORD*)(state+0x257+i*4)=0;*(DWORD*)(state+0x297+i*4)=0;
-        *(DWORD*)(state+0x2db+i*4)=0;*(DWORD*)(state+0x31b+i*4)=0;
-        memset(state+0x35b+i*0xd7,0,0xd7);
-        *(DWORD*)(state+0x10cb+i*4)=0;*(DWORD*)(state+0x110b+i*4)=0;*(DWORD*)(state+0x114b+i*4)=0;
+        materials.savedTextures[i]=0;materials.textures[i]=0;
+        materials.colors[i]=0;materials.savedColors[i]=0;
+        materials.types[i]=0;materials.textProcessed[i]=0;
+        memset(&materials.textInfo[i],0,sizeof(materials.textInfo[i]));
+        materials.text[i]=0;materials.rasterField34[i]=0;materials.renderedText[i]=0;
     }
 }
 
@@ -718,11 +716,11 @@ void CObject::ProcessMaterials() {
     BYTE *state=(BYTE*)this;
     if(!hasMaterials)return;
     BYTE *rw=(BYTE*)GetRwObject();if(!rw)return;
-    if(*(void**)(state+0x1d3)!=rw) {
-        *(DWORD*)(state+0x1c7)=0;
+    if(materials.rwObject!=rw) {
+        materials.snapshotValid=0;
         void *frame=*(void**)(rw+4);if(!frame)return;
         GameRwForAllFrameObjects(frame,ObjectSaveMaterials,this);
-        *(void**)(state+0x1d3)=rw;*(DWORD*)(state+0x118f)=0;
+        materials.rwObject=rw;materialPassState=0;
         return;
     }
     g_deviceMaterialOverrideEnabled=1;g_deviceMaterialOverrides=state;
@@ -785,18 +783,18 @@ void CObject::SetMaterial(int model,int index,const char *dictionary,const char 
 // samp.dll RVA: 0x000a9a20
 void CObject::BeforeMaterialRender() {
     BYTE *state=(BYTE*)this;
-    if(hasMaterials && *(DWORD*)(state+0x118f)) {
+    if(hasMaterials && materialPassState) {
         ProcessMaterials();if(state[0x1193])NativeA8C30();
     }
-    *(DWORD*)(state+0x118f)=1;
+    materialPassState=1;
 }
 // samp.dll RVA: 0x000a9a60
 void CObject::AfterMaterialRender() {
     BYTE *state=(BYTE*)this;if(!hasMaterials)return;
     if(state[0x1193])NativeA8C70();
     g_deviceMaterialOverrideEnabled=0;g_deviceMaterialOverrides=0;
-    if(!*(DWORD*)(state+0x1cb) && !*(DWORD*)(state+0x1cf))return;
-    BYTE *rw=(BYTE*)GetRwObject();if(!rw || *(void**)(state+0x1d3)!=rw)return;
+    if(!materials.texturesChanged && !materials.colorsChanged)return;
+    BYTE *rw=(BYTE*)GetRwObject();if(!rw || materials.rwObject!=rw)return;
     void *frame=*(void**)(rw+4);if(frame)GameRwForAllFrameObjects(frame,ObjectRestoreMaterials,this);
 }
 
@@ -859,26 +857,26 @@ void CObject::Render() {
         ClientSetRenderState(30,alpha);
     }
     ClientSetRenderState(20,(GameGetModelFlagsByte(*(int*)(state+0x4e))&0x40)?2:1);
-    if(hasMaterials && *(DWORD*)(state+0x118f))ProcessMaterials();
+    if(hasMaterials && materialPassState)ProcessMaterials();
     GameSetupD3DFog(1);
-    if(hasMaterials && *(DWORD*)(state+0x1cf)) {
+    if(hasMaterials && materials.colorsChanged) {
         if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold) {
             NativeA8C30();GameRwRenderObject(GetRwObject());NativeA8C70();
         } else GameRwRenderObject(GetRwObject());
     } else if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold)NativeA8B50();
     else GameRwRenderObject(GetRwObject());
-    if(hasMaterials && *(DWORD*)(state+0x118f))AfterMaterialRender();
-    g_objectRenderFlag=0;*(DWORD*)(state+0x118f)=1;
+    if(hasMaterials && materialPassState)AfterMaterialRender();
+    g_objectRenderFlag=0;materialPassState=1;
 }
 
 // samp.dll RVA: 0x000a8b00
 void *__cdecl ObjectFrameIdentity(void *object,void *) {return object;}
 // samp.dll RVA: 0x000a8b10
 void CObject::ProcessFrameObjectsOnce() {
-    BYTE *rw=(BYTE*)GetRwObject();if(!rw || *(DWORD*)((BYTE*)this+0x1c3))return;
+    BYTE *rw=(BYTE*)GetRwObject();if(!rw || materials.frameObjectsProcessed)return;
     void *frame=*(void**)(rw+4);if(!frame)return;
     GameRwForAllFrameObjects(frame,ObjectFrameIdentity,this);
-    *(DWORD*)((BYTE*)this+0x1c3)=1;
+    materials.frameObjectsProcessed=1;
 }
 // samp.dll RVA: 0x000a7f30
 void CObject::AttachToBackend(void *target,const CVector *offset,const CVector *rotation) {

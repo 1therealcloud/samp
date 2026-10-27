@@ -4,7 +4,31 @@
 // Native allocation extent is established; observed pool flags are named below.
 // Remaining storage and its untouched bytes stay explicitly unknown.
 class CVehicle;
+struct IDirect3DTexture9;
 #pragma pack(push,1)
+// Observed contiguous native records; unknown bytes retain their original storage.
+struct ObjectMaterialTextInfo {
+    BYTE unknown00,index;
+    BYTE unknown02[0x88];
+    BYTE size;
+    char font[65];
+    BYTE fontSize,bold;
+    DWORD fontColor,backgroundColor;
+    BYTE alignment;
+};
+// Descriptive grouping of the verified render/material table region.
+struct ObjectMaterialState {
+    DWORD frameObjectsProcessed,snapshotValid,texturesChanged,colorsChanged;
+    void *rwObject;
+    void *savedTextures[16];
+    void *textures[16];
+    DWORD colors[16],savedColors[16],savedGeometryFlags;
+    DWORD types[16],textProcessed[16];
+    ObjectMaterialTextInfo textInfo[16];
+    char *text[16];
+    DWORD rasterField34[16];
+    IDirect3DTexture9 *renderedText[16];
+};
 class CObject : public CEntity {
     friend class CObjectPool;
     BYTE unknown48;
@@ -13,10 +37,12 @@ class CObject : public CEntity {
     BYTE cameraCollisionDisabled;
     BYTE unknown54[0x18];
     BYTE drawLast;
-    BYTE unknown6d[0x111e];
+    BYTE unknown6d[0x156];
+    ObjectMaterialState materials;
     // Native raw DWORD gate shared by ordinary and text materials.
     DWORD hasMaterials;
-    BYTE unknown118f[0x0d];
+    DWORD materialPassState;
+    BYTE unknown1193[9];
 public:
     // Direct pointer to the internal Euler vector; no copy or backend query.
     // samp.dll RVA: 0x000715c0
@@ -105,6 +131,19 @@ public:
     void Move(CVector position,float speed,CVector rotation);
 };
 #pragma pack(pop)
+typedef char ObjectTextInfoExtent[(sizeof(ObjectMaterialTextInfo)==0xd7)?1:-1];
+typedef char ObjectTextInfoSize[(offsetof(ObjectMaterialTextInfo,size)==0x8a)?1:-1];
+typedef char ObjectTextInfoFont[(offsetof(ObjectMaterialTextInfo,font)==0x8b)?1:-1];
+typedef char ObjectTextInfoColor[(offsetof(ObjectMaterialTextInfo,fontColor)==0xce)?1:-1];
+typedef char ObjectTextInfoAlignment[(offsetof(ObjectMaterialTextInfo,alignment)==0xd6)?1:-1];
+typedef char ObjectMaterialStateExtent[(sizeof(ObjectMaterialState)==0xfc8)?1:-1];
+typedef char ObjectMaterialTextures[(offsetof(ObjectMaterialState,textures)==0x54)?1:-1];
+typedef char ObjectMaterialColors[(offsetof(ObjectMaterialState,colors)==0x94)?1:-1];
+typedef char ObjectMaterialTypes[(offsetof(ObjectMaterialState,types)==0x118)?1:-1];
+typedef char ObjectMaterialRecords[(offsetof(ObjectMaterialState,textInfo)==0x198)?1:-1];
+typedef char ObjectMaterialText[(offsetof(ObjectMaterialState,text)==0xf08)?1:-1];
+typedef char ObjectMaterialRaster[(offsetof(ObjectMaterialState,rasterField34)==0xf48)?1:-1];
+typedef char ObjectMaterialRendered[(offsetof(ObjectMaterialState,renderedText)==0xf88)?1:-1];
 typedef char NativeObjectAllocationExtent[(sizeof(CObject)==0x119c)?1:-1];
 // samp.dll RVA: 0x0011ee80
 extern const float g_objectRenderDistanceThreshold;
