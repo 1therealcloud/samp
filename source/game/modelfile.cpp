@@ -347,6 +347,25 @@ CModelFileChunk *CDffFile::ReadChunk(CModelFileStream *input) {
     else {input->position=input->length;input->ended=1;}
     return chunk;
 }
+// samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+CModelGeometryArray::CModelGeometryArray() {items=0;count=0;}
+// samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+CModelGeometry *CModelGeometryArray::Get(DWORD index) {return index<count?items[index]:0;}
+// samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+DWORD CModelGeometryArray::GetCount() {return count;}
+// samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+CModelMaterialArray::CModelMaterialArray() {items=0;count=0;}
+// samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+void *CModelMaterialArray::Get(DWORD index) {return index<count?items[index]:0;}
+// samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+DWORD CModelMaterialArray::GetCount() {return count;}
+// samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+CModelMeshArray::CModelMeshArray() {items=0;count=0;}
+// samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+BYTE *CModelMeshArray::Get(DWORD index) {return index<count?items[index]:0;}
+// samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+DWORD CModelMeshArray::GetCount() {return count;}
+
 // samp.dll RVA: 0x0000c550
 bool CModelMaterialArray::Resize(DWORD size) {
     if(!size){if(items){free(items);items=0;}count=0;return true;}
@@ -375,7 +394,6 @@ DWORD CModelGeometryArray::Insert(CModelGeometry *geometry) {
 }
 // samp.dll RVA: 0x000bbe80
 CModelGeometry::CModelGeometry() {
-    materials.items=0;materials.count=0;meshes.items=0;meshes.count=0;
     error=0;detail=0;flags=0;textureSets=0;triangleCount=0;vertexCount=0;morphCount=0;
     hasColors=0;colors=0;unknown1b=0;unknown20=0;uv=0;triangles=0;
     memset(sphere,0,16);hasVertices=0;hasNormals=0;vertices=0;normals=0;
@@ -416,7 +434,6 @@ void CModelGeometry::SetError(DWORD value) {if(!error)error=value;}
 void CModelGeometry::SetDetail(DWORD value) {detail=value;}
 // samp.dll RVA: 0x0000d820
 CDffFile::CDffFile() {
-    geometries.items=0;geometries.count=0;
     error=0;detail=0;fileLength=0;root=0;structure=0;frames=0;geometryList=0;atomic=0;extension=0;
     hasCollision=0;unknown44=0;frameData=0;
 }
