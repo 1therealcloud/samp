@@ -16,12 +16,6 @@ class CDXUTDialogDL {public:
     HRESULT AddButton(int id,const char *text,int x,int y,int width,int height,
         UINT hotkey=0,bool isDefault=false,CDXUTButtonDL **created=0);
 };
-struct CDXUTEditBoxDL {
-    BYTE control[0x4d];
-    const wchar_t *wideText;
-    // samp.dll RVA: 0x000850d0
-    const char *GetText();
-};
 // Native ANSI controls share the established packed SDK base, not its wide text.
 struct CDXUTStaticDL : CDXUTControl {
     char text[260];

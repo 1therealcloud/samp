@@ -911,33 +911,53 @@ typedef char NativeUniBufferExtent[(sizeof(CUniBuffer)==0x13)?1:-1];
 class CDXUTEditBox : public CDXUTControl
 {
 public:
+    // samp.dll RVA: 0x0008ed00
     CDXUTEditBox( CDXUTDialog *pDialog = NULL );
+    // samp.dll RVA: 0x0008ee30
     virtual ~CDXUTEditBox();
 
+    // samp.dll RVA: 0x00088970
     virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    // samp.dll RVA: 0x00088be0
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
     // samp.dll RVA: 0x00088da0
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    // samp.dll RVA: 0x00085130
     virtual void UpdateRects();
+    // samp.dll RVA: 0x0008ee00
     virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
     // samp.dll RVA: 0x0008ee80
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    // samp.dll RVA: 0x00088d90
     virtual void OnFocusIn();
 
+    // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
     void SetText( LPCWSTR wszText, bool bSelected = false );
     // samp.dll RVA: 0x00085000
     void SetText( const char *text, bool bSelected = false );
-    LPCWSTR GetText() { return m_Buffer.GetBuffer(); }
+    // samp.dll RVA: 0x000850d0
+    const char *GetText();
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int GetTextLength() { return m_Buffer.GetTextSize(); }  // Returns text length in chars excluding NULL.
+    // samp.dll RVA: 0x00088950
     HRESULT GetTextCopy( LPWSTR strDest, UINT bufferCount );
+    // samp.dll RVA: 0x00084fd0
     void ClearText();
+    // samp.dll RVA: 0x0008ee20
     virtual void SetTextColor( D3DCOLOR Color ) { m_TextColor = Color; }  // Text color
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetSelectedTextColor( D3DCOLOR Color ) { m_SelTextColor = Color; }  // Selected text color
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetSelectedBackColor( D3DCOLOR Color ) { m_SelBkColor = Color; }  // Selected background color
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetCaretColor( D3DCOLOR Color ) { m_CaretColor = Color; }  // Caret color
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetBorderWidth( int nBorder ) { m_nBorder = nBorder; UpdateRects(); }  // Border of the window
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetSpacing( int nSpacing ) { m_nSpacing = nSpacing; UpdateRects(); }
+    // samp.dll RVA: 0x00089000
     void ParseFloatArray( float *pNumbers, int nCount );
+    // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
     void SetTextFloatArray( const float *pNumbers, int nCount );
 
 protected:
@@ -974,6 +994,7 @@ protected:
     bool m_bMouseDrag;       // True to indicate drag in progress
 
     // Static
+    // samp.dll RVA: 0x0017f694
     static bool s_bHideCaret;   // If true, we don't render the caret.
 };
 

@@ -8,8 +8,6 @@
 #include <DXUT.h>
 #include <DXUTmisc.h>
 #include <DXUTgui.h>
-// samp.dll RVA: 0x000850d0
-class InputEditBox : public CDXUTEditBox { public: const char *GetText(); };
 #pragma pack(push,1)
 struct InputEditColors { char unknown[0x12b]; D3DCOLOR selectedText,selectedBackground,caret; };
 #pragma pack(pop)

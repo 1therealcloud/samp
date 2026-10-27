@@ -354,7 +354,7 @@ void CDialog::Close(char response) {
     int selection=-1;
     BYTE length=0;
     if(type==1 || type==3) {
-        strncpy(reply,((CDXUTEditBoxDL*)input)->GetText(),128);
+        strncpy(reply,input->GetText(),128);
         length=(BYTE)strlen(reply);
     } else if(type==2 || type==4 || type==5) {
         selection=list->GetSelectedIndex(-1);

@@ -4212,6 +4212,7 @@ HRESULT (WINAPI *CUniBuffer::_ScriptStringFree)( SCRIPT_STRING_ANALYSIS* ) = Dum
 const SCRIPT_LOGATTR* (WINAPI *CUniBuffer::_ScriptString_pLogAttr)( SCRIPT_STRING_ANALYSIS ) = Dummy_ScriptString_pLogAttr;
 // samp.dll RVA: 0x00140c14
 const int* (WINAPI *CUniBuffer::_ScriptString_pcOutChars)( SCRIPT_STRING_ANALYSIS ) = Dummy_ScriptString_pcOutChars;
+// samp.dll RVA: 0x0017f694
 bool CDXUTEditBox::s_bHideCaret;   // If true, we don't render the caret.
 
 
@@ -4225,6 +4226,7 @@ bool CDXUTEditBox::s_bHideCaret;   // If true, we don't render the caret.
 #define EDITBOX_SCROLLEXTENT 4
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008ed00
 CDXUTEditBox::CDXUTEditBox( CDXUTDialog *pDialog )
 {
     m_Type = DXUT_CONTROL_EDITBOX;
@@ -4238,19 +4240,20 @@ CDXUTEditBox::CDXUTEditBox( CDXUTDialog *pDialog )
     m_dfLastBlink = DXUTGetGlobalTimer()->GetAbsoluteTime();
     s_bHideCaret = false;
     m_nFirstVisible = 0;
+    m_nSelStart = 0;
+    m_nCaret = 0;
+    m_bMouseDrag = false;
     m_nativeFlag126 = false;
     m_TextColor = D3DCOLOR_ARGB( 255, 16, 16, 16 );
     m_SelTextColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
     m_SelBkColor = D3DCOLOR_ARGB( 255, 40, 50, 92 );
     m_CaretColor = D3DCOLOR_ARGB( 255, 0, 0, 0 );
-    m_nCaret = m_nSelStart = 0;
     m_bInsertMode = true;
-
-    m_bMouseDrag = false;
 }
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008ee30
 CDXUTEditBox::~CDXUTEditBox()
 {
 }
@@ -4309,6 +4312,7 @@ void CDXUTEditBox::PlaceCaret( int nCP )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00084fd0
 void CDXUTEditBox::ClearText()
 {
     m_Buffer.Clear();
@@ -4319,6 +4323,7 @@ void CDXUTEditBox::ClearText()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
 void CDXUTEditBox::SetText( LPCWSTR wszText, bool bSelected )
 {
     assert( wszText != NULL );
@@ -4331,7 +4336,21 @@ void CDXUTEditBox::SetText( LPCWSTR wszText, bool bSelected )
 }
 
 
+// samp.dll RVA: 0x00085000
+void CDXUTEditBox::SetText(const char *text, bool selected) {
+    m_Buffer.SetText(text);
+    m_nFirstVisible = 0;
+    PlaceCaret(m_Buffer.GetTextSize());
+    m_nSelStart = selected ? 0 : m_nCaret;
+}
+
+// samp.dll RVA: 0x000850d0
+const char *CDXUTEditBox::GetText() {
+    return InputWideToAnsi(m_Buffer.GetBuffer());
+}
+
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00088950
 HRESULT CDXUTEditBox::GetTextCopy( LPWSTR strDest, UINT bufferCount )
 {
     assert( strDest );
@@ -4358,6 +4377,7 @@ void CDXUTEditBox::DeleteSelectionText()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085130
 void CDXUTEditBox::UpdateRects()
 {
     CDXUTControl::UpdateRects();
@@ -4442,6 +4462,7 @@ void CDXUTEditBox::PasteFromClipboard()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00088970
 bool CDXUTEditBox::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -4569,6 +4590,7 @@ bool CDXUTEditBox::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00088be0
 bool CDXUTEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -4631,6 +4653,7 @@ bool CDXUTEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPara
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00088d90
 void CDXUTEditBox::OnFocusIn()
 {
     CDXUTControl::OnFocusIn();
@@ -4744,6 +4767,7 @@ void CDXUTEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 #define IN_FLOAT_CHARSET( c ) \
     ( (c) == L'-' || (c) == L'.' || ( (c) >= L'0' && (c) <= L'9' ) )
 
+// samp.dll RVA: 0x00089000
 void CDXUTEditBox::ParseFloatArray( float *pNumbers, int nCount )
 {
     int nWritten = 0;  // Number of floats written
@@ -4776,6 +4800,7 @@ void CDXUTEditBox::ParseFloatArray( float *pNumbers, int nCount )
 }
 
 
+// samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
 void CDXUTEditBox::SetTextFloatArray( const float *pNumbers, int nCount )
 {
     WCHAR wszBuffer[512] = {0};
@@ -6996,6 +7021,15 @@ bool CUniBuffer::InsertString( int nIndex, const WCHAR *pStr, int nCount )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009ba00
+bool CUniBuffer::SetText(const char *text) {
+    if (lstrlenA(text) > 1024) return false;
+    wchar_t converted[2048];
+    InputBufferAnsiToWide(text, converted, 2048);
+    SetText(converted); // Native ignores wide SetText's result.
+    return true;
+}
+
 // samp.dll RVA: 0x0009b9a0
 bool CUniBuffer::SetText( LPCWSTR wszText )
 {

@@ -4,7 +4,7 @@
 #include <d3d9.h>
 #include <stddef.h>
 class CDXUTDialog;
-class InputEditBox;
+class CDXUTEditBox;
 typedef void (__cdecl *InputCommand)(char *);
 // samp.dll RVA: unknown (inline layout helper; no standalone entry established)
 struct InputRect : RECT { InputRect() { left=0;top=0;right=0;bottom=0; } };
@@ -16,7 +16,7 @@ public:
     DWORD GetEnabledState();
     IDirect3DDevice9 *m_pDevice;
     CDXUTDialog *m_pGameUi;
-    InputEditBox *m_pEditbox;
+    CDXUTEditBox *m_pEditbox;
     InputCommand m_pCommandProc[144];
     char m_szCommandName[144][33];
     int m_nCommandCount;

@@ -432,9 +432,6 @@ HRESULT CDXUTDialogDL::AddButton(int id,const char *text,int x,int y,int width,
     return S_OK;
 }
 
-// samp.dll RVA: 0x000850d0
-const char *CDXUTEditBoxDL::GetText() { return InputWideToAnsi(wideText); }
-
 // samp.dll RVA: 0x000875c0
 HRESULT CDXUTStaticDL::SetText(const char *value) {
     if(!value){text[0]=0;return S_OK;}
