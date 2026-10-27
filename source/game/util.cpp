@@ -1,5 +1,6 @@
 #include "game/util.h"
 #include <d3dx9math.h>
+#include <math.h>
 typedef char VectorD3dxExtent[(sizeof(CVector)==sizeof(D3DXVECTOR3))?1:-1];
 typedef char VectorD3dxX[(offsetof(CVector,x)==offsetof(D3DXVECTOR3,x))?1:-1];
 typedef char VectorD3dxY[(offsetof(CVector,y)==offsetof(D3DXVECTOR3,y))?1:-1];
@@ -894,51 +895,20 @@ void GameReplaceBuildingPoolModels(int model,int replacement) {
 
 // Returns the unspilled extended difference.
 // samp.dll RVA: 0x000b44a0
-__declspec(naked) float GameSubtractFloats(float first,float second) {
-    __asm {
-        fld dword ptr [esp + 4]
-        fsub dword ptr [esp + 8]
-        ret
-    }
+float GameSubtractFloats(float first,float second) {
+    return first-second;
 }
 
 // dy squared plus dx squared, no intermediate float spill.
 // samp.dll RVA: 0x000b4510
-__declspec(naked) float __stdcall GameSquaredDistance2D(float x,float y,float otherX,float otherY) {
-    __asm {
-        fld dword ptr [esp + 4]
-        fsub dword ptr [esp + 0xc]
-        fld dword ptr [esp + 8]
-        fsub dword ptr [esp + 0x10]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fstp st(2)
-        fstp st(0)
-        ret 0x10
-    }
+float __stdcall GameSquaredDistance2D(float x,float y,float otherX,float otherY) {
+    return (y-otherY)*(y-otherY)+(x-otherX)*(x-otherX);
 }
 
 // Square root of dy squared plus dx squared.
 // samp.dll RVA: 0x000b4540
-__declspec(naked) float __stdcall GameDistance2D(float x,float y,float otherX,float otherY) {
-    __asm {
-        fld dword ptr [esp + 4]
-        fsub dword ptr [esp + 0xc]
-        fld dword ptr [esp + 8]
-        fsub dword ptr [esp + 0x10]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fsqrt
-        fstp st(2)
-        fstp st(0)
-        ret 0x10
-    }
+float __stdcall GameDistance2D(float x,float y,float otherX,float otherY) {
+    return (float)sqrt((y-otherY)*(y-otherY)+(x-otherX)*(x-otherX));
 }
 
 // dz squared plus dy squared then dx squared.
@@ -1001,45 +971,8 @@ float GameVectorLengthSquared(const CVector *vector) {
 
 // Inclusive signed unit bounds for all components; unordered values rejected.
 // samp.dll RVA: 0x000b4670
-__declspec(naked) bool GameIsVectorWithinUnitBounds(const CVector *vector) {
-    __asm {
-        mov ecx, dword ptr [esp + 4]
-        fld dword ptr [ecx]
-        fcomp g_quaternionMatrixOne
-        fnstsw ax
-        test ah, 0x41
-        jp math_b46d5
-        fld dword ptr [ecx]
-        fcomp g_entityEulerSign
-        fnstsw ax
-        test ah, 1
-        jne math_b46d5
-        fld dword ptr [ecx + 4]
-        fcomp g_quaternionMatrixOne
-        fnstsw ax
-        test ah, 0x41
-        jp math_b46d5
-        fld dword ptr [ecx + 4]
-        fcomp g_entityEulerSign
-        fnstsw ax
-        test ah, 1
-        jne math_b46d5
-        fld dword ptr [ecx + 8]
-        fcomp g_quaternionMatrixOne
-        fnstsw ax
-        test ah, 0x41
-        jp math_b46d5
-        fld dword ptr [ecx + 8]
-        fcomp g_entityEulerSign
-        fnstsw ax
-        test ah, 1
-        jne math_b46d5
-        mov al, 1
-        ret
-    math_b46d5:
-        xor al, al
-        ret
-    }
+bool GameIsVectorWithinUnitBounds(const CVector *vector) {
+    return vector->x<=1.0f && vector->x>=-1.0f && vector->y<=1.0f && vector->y>=-1.0f && vector->z<=1.0f && vector->z>=-1.0f;
 }
 
 // Sequential stores and input reloads preserve native alias behavior.
@@ -1085,18 +1018,8 @@ float GameVectorLengthSquared4820(const CVector *vector) {
 
 // x squared plus y squared then z squared; cdecl.
 // samp.dll RVA: 0x000b4b20
-__declspec(naked) float GameLengthSquared3D(float x,float y,float z) {
-    __asm {
-        fld dword ptr [esp + 4]
-        fmul dword ptr [esp + 4]
-        fld dword ptr [esp + 8]
-        fmul dword ptr [esp + 8]
-        faddp st(1),st
-        fld dword ptr [esp + 0xc]
-        fmul dword ptr [esp + 0xc]
-        faddp st(1),st
-        ret
-    }
+float GameLengthSquared3D(float x,float y,float z) {
+    return (x*x+y*y)+z*z;
 }
 
 // z products plus y products then x products.
@@ -1107,21 +1030,8 @@ float GameVectorDotProduct(const CVector *first,const CVector *second) {
 
 // Three sequential component stores; native input/output alias behavior.
 // samp.dll RVA: 0x000b4cf0
-__declspec(naked) void GameScaleVector(CVector *out,const CVector *vector,float scale) {
-    __asm {
-        mov eax, dword ptr [esp + 8]
-        fld dword ptr [esp + 0xc]
-        fmul dword ptr [eax]
-        mov ecx, dword ptr [esp + 4]
-        fstp dword ptr [ecx]
-        fld dword ptr [esp + 0xc]
-        fmul dword ptr [eax + 4]
-        fstp dword ptr [ecx + 4]
-        fld dword ptr [esp + 0xc]
-        fmul dword ptr [eax + 8]
-        fstp dword ptr [ecx + 8]
-        ret
-    }
+void GameScaleVector(CVector *out,const CVector *vector,float scale) {
+    out->x=scale*vector->x;out->y=scale*vector->y;out->z=scale*vector->z;
 }
 
 // Native inclusive0..360 gate accepts NaN; preserves branch arithmetic.
@@ -1190,12 +1100,8 @@ void GameWriteGlobal9689E0(DWORD value) {
 // samp.dll RVA: 0x000fce60
 extern "C" void __cdecl _CIasin();
 // samp.dll RVA: 0x000b3620
-__declspec(naked) float GameAsin(float value) {
-    __asm {
-        fld dword ptr [esp+4]
-        call _CIasin
-        ret
-    }
+float GameAsin(float value) {
+    return (float)asin(value);
 }
 
 // Raw GTA backend, sequential position publication and live matrix reloads.
