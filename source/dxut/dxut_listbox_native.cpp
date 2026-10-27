@@ -18,88 +18,6 @@ void CDXUTListBoxDL::SetColumnWidth(int column,int value) {columnWidths[column]=
 // samp.dll RVA: 0x0006ee90
 int CDXUTListBoxDL::GetColumnWidth(int column) {return columnWidths[column];}
 
-// samp.dll RVA: 0x0008e750
-CDXUTScrollBarDL::CDXUTScrollBarDL(CDXUTDialog *parent):CDXUTControl(0) {
-    m_Type=DXUT_CONTROL_SCROLLBAR;m_pDialog=parent;showThumb=true;
-    SetRect(&up,0,0,0,0);SetRect(&down,0,0,0,0);
-    SetRect(&track,0,0,0,0);SetRect(&thumb,0,0,0,0);
-    position=0;pageSize=1;start=0;end=1;arrowState=0;arrowTimestamp=0.0;
-}
-
-// samp.dll RVA: 0x0008e800
-CDXUTScrollBarDL::~CDXUTScrollBarDL() {}
-
-// samp.dll RVA: 0x00088250
-bool CDXUTScrollBarDL::HandleMouse(UINT message,POINT point,WPARAM,LPARAM) {
-    lastMouse=point;
-    switch(message) {
-    case WM_LBUTTONDOWN:
-    case WM_LBUTTONDBLCLK:
-        if(PtInRect(&up,point)) {
-            SetCapture(DXUTGetHWND());
-            if(position>start)--position;
-            UpdateThumbRect();arrowState=1;arrowTimestamp=DXUTGetTime();return true;
-        }
-        if(PtInRect(&down,point)) {
-            SetCapture(DXUTGetHWND());
-            if(position+pageSize<end)++position;
-            UpdateThumbRect();arrowState=2;arrowTimestamp=DXUTGetTime();return true;
-        }
-        if(PtInRect(&thumb,point)) {
-            SetCapture(DXUTGetHWND());
-            g_dxutScrollThumbOffsetY=point.y-thumb.top;g_dxutScrollDragging=true;return true;
-        }
-        if(thumb.left<=point.x && thumb.right>point.x) {
-            SetCapture(DXUTGetHWND());
-            if(thumb.top>point.y && track.top<=point.y){Scroll(1-pageSize);return true;}
-            if(thumb.bottom<=point.y && track.bottom>point.y){Scroll(pageSize-1);return true;}
-        }
-        break;
-    case WM_LBUTTONUP:
-        g_dxutScrollDragging=false;ReleaseCapture();UpdateThumbRect();arrowState=0;break;
-    case WM_MOUSEMOVE:
-        if(g_dxutScrollDragging) {
-            thumb.bottom+=point.y-g_dxutScrollThumbOffsetY-thumb.top;
-            thumb.top=point.y-g_dxutScrollThumbOffsetY;
-            if(thumb.top<track.top)OffsetRect(&thumb,0,track.top-thumb.top);
-            else if(thumb.bottom>track.bottom)OffsetRect(&thumb,0,track.bottom-thumb.bottom);
-            int maxFirst=end-start-pageSize;
-            int maxThumb=(track.bottom-track.top)-(thumb.bottom-thumb.top);
-            position=start+(thumb.top-track.top+maxThumb/(maxFirst*2))*maxFirst/maxThumb;
-            return true;
-        }
-        break;
-    }
-    return false;
-}
-
-// samp.dll RVA: 0x000884d0
-void CDXUTScrollBarDL::Render(IDirect3DDevice9 *,float elapsed) {
-    if(arrowState) {
-        double now=DXUTGetTime();
-        if(PtInRect(&up,lastMouse)) {
-            if(arrowState==1 && 0.33<now-arrowTimestamp){Scroll(-1);arrowState=3;arrowTimestamp=now;}
-            else if(arrowState==3 && 0.05<now-arrowTimestamp){Scroll(-1);arrowTimestamp=now;}
-        } else if(PtInRect(&down,lastMouse)) {
-            if(arrowState==2 && 0.33<now-arrowTimestamp){Scroll(1);arrowState=4;arrowTimestamp=now;}
-            else if(arrowState==4 && 0.05<now-arrowTimestamp){Scroll(1);arrowTimestamp=now;}
-        }
-    }
-    UINT state=DXUT_STATE_NORMAL;
-    if(!m_bVisible)state=DXUT_STATE_HIDDEN;
-    else if(!m_bEnabled || !showThumb)state=DXUT_STATE_DISABLED;
-    else if(m_bMouseOver)state=DXUT_STATE_MOUSEOVER;
-    else if(m_bHasFocus)state=DXUT_STATE_FOCUS;
-    CDXUTElement *element=m_Elements.GetAt(0);
-    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&track);
-    element=m_Elements.GetAt(1);
-    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&up);
-    element=m_Elements.GetAt(2);
-    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&down);
-    element=m_Elements.GetAt(3);
-    element->TextureColor.Blend(state,elapsed,0.8f);m_pDialog->DrawSprite(element,&thumb);
-}
-
 // Reconstruction-only access to the shared base layout/nonvirtual body;
 // no fields, virtual overrides or established standalone native entry.
 struct DLControlAccess : CDXUTControl {
@@ -107,24 +25,6 @@ struct DLControlAccess : CDXUTControl {
     using CDXUTControl::m_rcBoundingBox;
     using CDXUTControl::m_bEnabled;
 };
-
-// samp.dll RVA: 0x000881b0
-void CDXUTScrollBarDL::UpdateRects() {
-    DLControlAccess *base=(DLControlAccess*)this;
-    base->DLControlAccess::UpdateRects();
-    const RECT &bounds=base->m_rcBoundingBox;
-    SetRect(&up,bounds.left,bounds.top,bounds.right,bounds.top+bounds.right-bounds.left);
-    SetRect(&down,bounds.left,bounds.bottom-(bounds.right-bounds.left),bounds.right,bounds.bottom);
-    SetRect(&track,up.left,up.bottom,down.right,down.top);
-    thumb.left=up.left;thumb.right=up.right;
-    UpdateThumbRect();
-}
-
-// samp.dll RVA: 0x00088230
-void CDXUTScrollBarDL::Scroll(int delta) {position+=delta;Cap();UpdateThumbRect();}
-
-// samp.dll RVA: 0x00084e70
-bool CDXUTScrollBarDL::HandleKeyboard(UINT,WPARAM,LPARAM) {return false;}
 
 // samp.dll RVA: 0x0008e810
 CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog *parent):CDXUTControl(0),scrollBar(parent) {
@@ -152,8 +52,8 @@ bool CDXUTListBoxDL::HandleKeyboard(UINT message,WPARAM key,LPARAM lparam) {
     switch(key) {
     case VK_UP:--selected;break;
     case VK_DOWN:++selected;break;
-    case VK_NEXT:selected+=scrollBar.pageSize-1;break;
-    case VK_PRIOR:selected-=scrollBar.pageSize-1;break;
+    case VK_NEXT:selected+=scrollBar.m_nPageSize-1;break;
+    case VK_PRIOR:selected-=scrollBar.m_nPageSize-1;break;
     case VK_HOME:selected=0;break;
     case VK_END:selected=count-1;break;
     }
@@ -185,9 +85,9 @@ bool CDXUTListBoxDL::HandleMouse(UINT message,POINT point,WPARAM keys,LPARAM lpa
     case WM_LBUTTONDOWN:
     case WM_LBUTTONDBLCLK:
         if(items.GetSize()>0 && PtInRect(&selectionRect,point)) {
-            int clicked=textHeight?scrollBar.position+(point.y-textRect.top)/textHeight:-1;
-            if(clicked<scrollBar.position || clicked>=items.GetSize() ||
-                clicked>=scrollBar.position+scrollBar.pageSize)return true;
+            int clicked=textHeight?scrollBar.m_nPosition+(point.y-textRect.top)/textHeight:-1;
+            if(clicked<scrollBar.m_nPosition || clicked>=items.GetSize() ||
+                clicked>=scrollBar.m_nPosition+scrollBar.m_nPageSize)return true;
             SetCapture(DXUTGetHWND());
             if(message==WM_LBUTTONDBLCLK){m_pDialog->SendEvent(0x701,true,this);return true;}
             selected=clicked;if(!(keys&MK_SHIFT))selectionStart=clicked;
@@ -227,12 +127,12 @@ bool CDXUTListBoxDL::HandleMouse(UINT message,POINT point,WPARAM keys,LPARAM lpa
         break;
     case WM_MOUSEMOVE:
         if(drag) {
-            int item=textHeight?scrollBar.position+(point.y-textRect.top)/textHeight:-1;
-            if(item>=scrollBar.position && item<items.GetSize() &&
-                item<scrollBar.position+scrollBar.pageSize)selected=item;
-            else if(item<scrollBar.position){scrollBar.Scroll(-1);selected=scrollBar.position;}
-            else if(item>=scrollBar.position+scrollBar.pageSize) {
-                scrollBar.Scroll(1);int last=scrollBar.position+scrollBar.pageSize;
+            int item=textHeight?scrollBar.m_nPosition+(point.y-textRect.top)/textHeight:-1;
+            if(item>=scrollBar.m_nPosition && item<items.GetSize() &&
+                item<scrollBar.m_nPosition+scrollBar.m_nPageSize)selected=item;
+            else if(item<scrollBar.m_nPosition){scrollBar.Scroll(-1);selected=scrollBar.m_nPosition;}
+            else if(item>=scrollBar.m_nPosition+scrollBar.m_nPageSize) {
+                scrollBar.Scroll(1);int last=scrollBar.m_nPosition+scrollBar.m_nPageSize;
                 if(items.GetSize()<last)last=items.GetSize();selected=last-1;
             } else break;
             m_pDialog->SendEvent(0x702,true,this);
@@ -261,13 +161,13 @@ void CDXUTListBoxDL::Render(IDirect3DDevice9 *device,float elapsed) {
         RECT text=textRect,highlight=selectionRect;
         text.bottom=text.top+m_pDialog->GetFont(normal->iFont)->nHeight;
         textHeight=text.bottom-text.top;
-        if(scrollBar.position<0){scrollBar.position=0;scrollBar.Cap();scrollBar.UpdateThumbRect();}
+        if(scrollBar.m_nPosition<0){scrollBar.m_nPosition=0;scrollBar.Cap();scrollBar.UpdateThumbRect();}
         if(!g_dxutListScrollInitialized) {
-            scrollBar.pageSize=textHeight?(textRect.bottom-textRect.top)/textHeight:textRect.bottom-textRect.top;
+            scrollBar.m_nPageSize=textHeight?(textRect.bottom-textRect.top)/textHeight:textRect.bottom-textRect.top;
             scrollBar.Cap();scrollBar.UpdateThumbRect();g_dxutListScrollInitialized=true;
         }
         text.right=textRect.right;
-        for(int i=scrollBar.position;i<items.GetSize();++i) {
+        for(int i=scrollBar.m_nPosition;i<items.GetSize();++i) {
             if(text.bottom>textRect.bottom)break;
             DXUTListBoxItemDL *item=items[i];bool selectedStyle=false;
             if(!(style&1) && i==selected)selectedStyle=true;
@@ -324,7 +224,7 @@ void CDXUTListBoxDL::UpdateRects() {
     ((CDXUTControl*)&scrollBar)->SetSize(scrollBarWidth,base->m_height);
     DXUTFontNode *font=base->m_pDialog->GetFont(base->GetElement(0)->iFont);
     if(font && font->nHeight) {
-        scrollBar.pageSize=(textRect.bottom-textRect.top)/font->nHeight;
+        scrollBar.m_nPageSize=(textRect.bottom-textRect.top)/font->nHeight;
         scrollBar.Cap();scrollBar.UpdateThumbRect();scrollBar.ShowItem(selected);
     }
 }
@@ -452,49 +352,6 @@ HRESULT CDXUTStaticDL::SetText(const char *value) {
     return S_OK;
 }
 
-// samp.dll RVA: 0x00084e80
-void CDXUTScrollBarDL::Cap() {
-    if(position<start || end-start<=pageSize)position=start;
-    else if(position+pageSize>end)position=end-pageSize;
-}
-
-// samp.dll RVA: 0x00084da0
-void CDXUTScrollBarDL::UpdateThumbRect() {
-    int range=end-start;
-    if(range>pageSize) {
-        int size=__max((track.bottom-track.top)*pageSize/range,8);
-        int top=(track.bottom-track.top-size)*(position-start)/(range-pageSize)+track.top;
-        showThumb=true;thumb.top=top;thumb.bottom=top+size;
-    } else {
-        showThumb=false;thumb.bottom=thumb.top;
-    }
-}
-
-// samp.dll RVA: 0x000886d0
-void CDXUTScrollBarDL::SetTrackRange(int first,int last) {
-    start=first;end=last;Cap();UpdateThumbRect();
-}
-
-// samp.dll RVA: 0x00066b50
-void CDXUTScrollBarDL::SetTrackPos(int value) {
-    position=value;Cap();UpdateThumbRect();
-}
-// samp.dll RVA: 0x00066b40
-int CDXUTScrollBarDL::GetTrackPos() {return position;}
-// samp.dll RVA: 0x00066b70
-void CDXUTScrollBarDL::SetPageSize(int value) {
-    pageSize=value;Cap();UpdateThumbRect();
-}
-
-// samp.dll RVA: 0x00084e30
-void CDXUTScrollBarDL::ShowItem(int index) {
-    if(index<0)index=0;
-    if(index>=end)index=end-1;
-    if(position>index)position=index;
-    else if(position+pageSize<=index)position=index-pageSize+1;
-    UpdateThumbRect();
-}
-
 // samp.dll RVA: 0x0008a270
 HRESULT CDXUTListBoxDL::AddItem(const char *value,void *data,int row) {
     DXUTListBoxItemDL *item=new DXUTListBoxItemDL;
@@ -540,7 +397,7 @@ DXUTListBoxItemDL *CDXUTListBoxDL::GetSelectedItem(int previous) {
     return GetItem(GetSelectedIndex(previous));
 }
 // samp.dll RVA: 0x0006e260
-CDXUTScrollBarDL *CDXUTListBoxDL::GetScrollBar() {return &scrollBar;}
+CDXUTScrollBar *CDXUTListBoxDL::GetScrollBar() {return &scrollBar;}
 
 // samp.dll RVA: 0x0008c270
 void CDXUTListBoxDL::RemoveAllItems() {

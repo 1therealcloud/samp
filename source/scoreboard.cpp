@@ -83,8 +83,8 @@ void CScoreboard::UpdateList() {
     CPlayerPool *players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
     if(!players||!enabled||!dialog)return;
     int selected=list->GetSelectedIndex(-1);
-    CDXUTScrollBarDL *scroll=&list->scrollBar;
-    int position=list->scrollBar.position;
+    CDXUTScrollBar *scroll=&list->scrollBar;
+    int position=list->scrollBar.GetTrackPos();
     list->RemoveAllItems();
     players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
     int count=players->GetCount(FALSE)+1;
@@ -124,7 +124,7 @@ void CScoreboard::UpdateList() {
         }
     }
     list->SelectItem(selected>=0?selected:-1);
-    free(rows);scroll->position=position;scroll->Cap();scroll->UpdateThumbRect();
+    free(rows);scroll->SetTrackPos(position);
 }
 
 // samp.dll RVA: 0x0006eaf0

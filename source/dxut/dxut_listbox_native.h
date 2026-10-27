@@ -64,43 +64,7 @@ struct DXUTListBoxItemDL {
     DWORD color;
     bool flag;
 };
-class CDXUTScrollBarDL : public CDXUTControl {
-public:
-    bool showThumb;
-    RECT up,down,track,thumb;
-    int position,pageSize,start,end;
-    POINT lastMouse;
-    int arrowState;
-    double arrowTimestamp;
-    // samp.dll RVA: 0x0008e750
-    CDXUTScrollBarDL(CDXUTDialog *parent);
-    // samp.dll RVA: 0x0008e800
-    virtual ~CDXUTScrollBarDL();
-    // samp.dll RVA: 0x00088250
-    virtual bool HandleMouse(UINT message,POINT point,WPARAM wparam,LPARAM lparam);
-    // samp.dll RVA: 0x000884d0
-    virtual void Render(IDirect3DDevice9 *device,float elapsed);
-    // samp.dll RVA: 0x000881b0
-    virtual void UpdateRects();
-    // samp.dll RVA: 0x00088230
-    void Scroll(int delta);
-    // samp.dll RVA: 0x00084e70
-    virtual bool HandleKeyboard(UINT message,WPARAM wparam,LPARAM lparam);
-    // samp.dll RVA: 0x00084e80
-    void Cap();
-    // samp.dll RVA: 0x00084da0
-    void UpdateThumbRect();
-    // samp.dll RVA: 0x000886d0
-    void SetTrackRange(int first,int last);
-    // samp.dll RVA: 0x00066b50
-    void SetTrackPos(int value);
-    // samp.dll RVA: 0x00066b40
-    int GetTrackPos();
-    // samp.dll RVA: 0x00066b70
-    void SetPageSize(int value);
-    // samp.dll RVA: 0x00084e30
-    void ShowItem(int index);
-};
+
 // These public SDK aliases resolve to its original function-local storage.
 // samp.dll RVA: 0x00181a8d
 extern bool g_dxutScrollDragging;
@@ -109,11 +73,13 @@ extern int g_dxutScrollThumbOffsetY;
 // samp.dll RVA: 0x00181a95
 extern bool g_dxutListScrollInitialized;
 class CDXUTListBoxDL : public CDXUTControl {
+    typedef char ScrollPositionOffset[(offsetof(CDXUTScrollBar,m_nPosition)==0x8e)?1:-1];
+    typedef char ScrollArrowOffset[(offsetof(CDXUTScrollBar,m_dArrowTS)==0xaa)?1:-1];
     friend class CDialog;
 public:
     int columnCount;
     int columnWidths[3];
-    CDXUTScrollBarDL scrollBar;
+    CDXUTScrollBar scrollBar;
     RECT textRect,selectionRect;
     int scrollBarWidth,border,margin,textHeight;
     DWORD style;
@@ -165,7 +131,7 @@ public:
     // samp.dll RVA: 0x0006e240
     DXUTListBoxItemDL *GetSelectedItem(int previous=-1);
     // samp.dll RVA: 0x0006e260
-    CDXUTScrollBarDL *GetScrollBar();
+    CDXUTScrollBar *GetScrollBar();
 
 };
 #pragma pack(pop)
@@ -174,9 +140,7 @@ typedef char DLControlExtent[(sizeof(CDXUTControl)==0x4d)?1:-1];
 typedef char DLStaticExtent[(sizeof(CDXUTStaticDL)==0x151)?1:-1];
 typedef char DLButtonExtent[(sizeof(CDXUTButtonDL)==0x152)?1:-1];
 typedef char DLListItemData[(offsetof(DXUTListBoxItemDL,data)==0x284)?1:-1];
-typedef char DLScrollExtent[(sizeof(CDXUTScrollBarDL)==0xb2)?1:-1];
-typedef char DLScrollPosition[(offsetof(CDXUTScrollBarDL,position)==0x8e)?1:-1];
-typedef char DLScrollArrow[(offsetof(CDXUTScrollBarDL,arrowTimestamp)==0xaa)?1:-1];
+typedef char DLScrollExtent[(sizeof(CDXUTScrollBar)==0xb2)?1:-1];
 typedef char DLListExtent[(sizeof(CDXUTListBoxDL)==0x158)?1:-1];
 typedef char DLListScroll[(offsetof(CDXUTListBoxDL,scrollBar)==0x5d)?1:-1];
 typedef char DLListTextRect[(offsetof(CDXUTListBoxDL,textRect)==0x10f)?1:-1];

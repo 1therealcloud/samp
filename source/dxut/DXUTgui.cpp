@@ -3243,6 +3243,7 @@ void CDXUTSlider::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008E750
 CDXUTScrollBar::CDXUTScrollBar( CDXUTDialog *pDialog )
 {
     m_Type = DXUT_CONTROL_SCROLLBAR;
@@ -3264,12 +3265,14 @@ CDXUTScrollBar::CDXUTScrollBar( CDXUTDialog *pDialog )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008E800
 CDXUTScrollBar::~CDXUTScrollBar()
 {
 }
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000881B0
 void CDXUTScrollBar::UpdateRects()
 {
     CDXUTControl::UpdateRects();
@@ -3291,6 +3294,7 @@ void CDXUTScrollBar::UpdateRects()
 
 //--------------------------------------------------------------------------------------
 // Compute the dimension of the scroll thumb
+// samp.dll RVA: 0x00084DA0
 void CDXUTScrollBar::UpdateThumbRect()
 {
     if( m_nEnd - m_nStart > m_nPageSize )
@@ -3315,6 +3319,7 @@ void CDXUTScrollBar::UpdateThumbRect()
 //--------------------------------------------------------------------------------------
 // Scroll() scrolls by nDelta items.  A positive value scrolls down, while a negative
 // value scrolls up.
+// samp.dll RVA: 0x00088230
 void CDXUTScrollBar::Scroll( int nDelta )
 {
     // Perform scroll
@@ -3329,6 +3334,7 @@ void CDXUTScrollBar::Scroll( int nDelta )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00084E30
 void CDXUTScrollBar::ShowItem( int nIndex )
 {
     // Cap the index
@@ -3352,6 +3358,7 @@ void CDXUTScrollBar::ShowItem( int nIndex )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00084E70
 bool CDXUTScrollBar::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return false;
@@ -3359,6 +3366,7 @@ bool CDXUTScrollBar::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00088250
 bool CDXUTScrollBar::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam )
 {
 
@@ -3399,8 +3407,8 @@ bool CDXUTScrollBar::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPa
             if( PtInRect( &m_rcThumb, pt ) )
             {
                 SetCapture( DXUTGetHWND() );
-                g_dxutScrollDragging = true;
                 g_dxutScrollThumbOffsetY = pt.y - m_rcThumb.top;
+                g_dxutScrollDragging = true;
                 return true;
             }
 
@@ -3470,6 +3478,7 @@ bool CDXUTScrollBar::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPa
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000884D0
 void CDXUTScrollBar::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     // Check if the arrow button has been held for a while.
@@ -3568,6 +3577,7 @@ void CDXUTScrollBar::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000886D0
 void CDXUTScrollBar::SetTrackRange( int nStart, int nEnd )
 {
     m_nStart = nStart; m_nEnd = nEnd;
@@ -3577,6 +3587,7 @@ void CDXUTScrollBar::SetTrackRange( int nStart, int nEnd )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00084E80
 void CDXUTScrollBar::Cap()  // Clips position at boundaries. Ensures it stays within legal range.
 {
     if( m_nPosition < m_nStart ||

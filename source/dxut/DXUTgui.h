@@ -617,23 +617,39 @@ protected:
 //-----------------------------------------------------------------------------
 class CDXUTScrollBar : public CDXUTControl
 {
+    friend class CDXUTListBoxDL;
 public:
+    // samp.dll RVA: 0x0008E750
     CDXUTScrollBar( CDXUTDialog *pDialog = NULL );
+    // samp.dll RVA: 0x0008E800
     virtual ~CDXUTScrollBar();
 
+    // samp.dll RVA: 0x00084E70
     virtual bool    HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    // samp.dll RVA: 0x00088250
     virtual bool    HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
 
+    // samp.dll RVA: 0x000884D0
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    // samp.dll RVA: 0x000881B0
     virtual void    UpdateRects();
 
+    // samp.dll RVA: 0x000886D0
     void SetTrackRange( int nStart, int nEnd );
+    // samp.dll RVA: 0x00066B40
     int GetTrackPos() { return m_nPosition; }
+    // samp.dll RVA: 0x00066B50
+    // samp.dll RVA: 0x00084DA0
+    // samp.dll RVA: 0x00084E80
     void SetTrackPos( int nPosition ) { m_nPosition = nPosition; Cap(); UpdateThumbRect(); }
+    // samp.dll RVA: 0x00084190
     int GetPageSize() { return m_nPageSize; }
+    // samp.dll RVA: 0x00066B70
     void SetPageSize( int nPageSize ) { m_nPageSize = nPageSize; Cap(); UpdateThumbRect(); }
 
+    // samp.dll RVA: 0x00088230
     void Scroll( int nDelta );    // Scroll by nDelta items (plus or minus)
+    // samp.dll RVA: 0x00084E30
     void ShowItem( int nIndex );  // Ensure that item nIndex is displayed, scroll if necessary
 
 protected:
