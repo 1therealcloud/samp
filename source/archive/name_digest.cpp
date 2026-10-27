@@ -95,3 +95,28 @@ void ArchiveComputeFileDigest(const char *filename,DWORD *digest) {
         fclose(file);free(buffer);sha.Result(digest);
     }
 }
+
+
+// samp.dll RVA: 0x00063da0
+void ArchiveNameSha1::Input(const char *data,DWORD length) {Input((const BYTE*)data,length);}
+// samp.dll RVA: 0x00063db0
+void ArchiveNameSha1::Input(BYTE value) {Input(&value,1);}
+// samp.dll RVA: 0x00063dc0
+void ArchiveNameSha1::Input(char value) {Input((const BYTE*)&value,1);}
+// samp.dll RVA: 0x00063dd0
+ArchiveNameSha1 &ArchiveNameSha1::operator<<(const char *text) {
+    while(*text){Input(*text);++text;}return *this;
+}
+// samp.dll RVA: 0x00063e00
+ArchiveNameSha1 &ArchiveNameSha1::operator<<(const BYTE *text) {
+    while(*text){Input(*text);++text;}return *this;
+}
+// samp.dll RVA: 0x00063e30
+ArchiveNameSha1 &ArchiveNameSha1::operator<<(char value) {Input((const BYTE*)&value,1);return *this;}
+// samp.dll RVA: 0x00063e50
+ArchiveNameSha1 &ArchiveNameSha1::operator<<(BYTE value) {Input(&value,1);return *this;}
+// samp.dll RVA: 0x000635a0
+DWORD ArchiveNameSha1::CircularShift(int bits,DWORD word) {
+    DWORD amount=(DWORD)bits&31;
+    return (word<<amount)|(word>>((0-amount)&31));
+}
