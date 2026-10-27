@@ -1,5 +1,7 @@
-#include "game/game.h"
 #include "game/playerped.h"
+// samp.dll RVA: 0x00013570
+void *CPed::GetGtaActor() { return m_pGamePed; }
+#include "game/game.h"
 #include "game/scripting.h"
 #include "game/debug.h"
 #include "game/animation.h"

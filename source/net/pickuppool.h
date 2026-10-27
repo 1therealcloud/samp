@@ -5,12 +5,13 @@
 struct Pickup {int model,type;float x,y,z;};
 struct WeaponPickupState {BYTE enabled;WORD owner;};
 class CPickupPool {
+    enum { Capacity=4096 };
     int count;
-    DWORD handles[4096];
-    int indices[4096];
-    DWORD cooldown[4096];
-    WeaponPickupState weapons[4096];
-    Pickup pickups[4096];
+    DWORD handles[Capacity];
+    int indices[Capacity];
+    DWORD cooldown[Capacity];
+    WeaponPickupState weapons[Capacity];
+    Pickup pickups[Capacity];
 public:
     // samp.dll RVA: 0x00013080
     void CreateWeapon(int model,float x,float y,float z,int ammo,WORD owner);

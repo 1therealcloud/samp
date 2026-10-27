@@ -187,6 +187,9 @@ public:
     BOOL m_accessoryOccupied[10];
     PedAccessoryState m_accessoryInfo[10];
     void *m_accessoryObjects[10];
+    // Raw backend accessor; name follows0.2x; class binding inferred from verified2A4 layout and adjacent accessory entry.
+    // samp.dll RVA: 0x00013570
+    void *GetGtaActor();
     void *m_pGamePed;
     DWORD unknown2a8,unknown2ac;
     BYTE m_nPlayerNumber;
