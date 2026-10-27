@@ -1,4 +1,6 @@
 #include "net/netgame.h"
+// samp.dll RVA: 0x00001a90
+RakClientInterface *CNetGame::GetRakClient() {return *(RakClientInterface**)(nativeState+0x2c);}
 // samp.dll RVA: 0x00017800
 CTextDrawPool *CNetGame::GetTextDrawPool() {return pools->textDraws;}
 // samp.dll RVA: 0x00017810

@@ -30,6 +30,19 @@ void Util_UrlUnencode(char *enc)
 // samp.dll RVA: 0x00017360
 char Util_toupper(char c) {return ((c>(char)0x60) && (c<(char)0x7b))? c-0x20:c;}
 
+// samp.dll RVA: 0x00017440
+void Util_strupr(char *text) {while(*text){*text=Util_toupper(*text);++text;}}
+// samp.dll RVA: 0x00017510
+int Util_strnicmp(const char *first,const char *second,size_t count) {
+    if(count==0)return 0;
+    do {
+        if(Util_toupper((unsigned char)*first)!=Util_toupper((unsigned char)*second++))
+            return (int)Util_toupper((unsigned char)*first)-(int)Util_toupper((unsigned char)*--second);
+        if(*first++==0)break;
+    } while(--count!=0);
+    return 0;
+}
+
 // samp.dll RVA: 0x00017470
 int Util_wildcmp(char *wild, char *string)
 {

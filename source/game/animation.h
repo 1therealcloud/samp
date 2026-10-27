@@ -5,8 +5,6 @@
 extern char g_animationNames[1812][36];
 // samp.dll RVA: 0x001871a8
 extern DWORD g_animationKeys[1812];
-// samp.dll RVA: 0x00017440
-void GameUppercaseAscii(char *text);
 // samp.dll RVA: 0x0009c870
 WORD GameFindAnimation(const char *library,const char *name);
 // samp.dll RVA: 0x0009c950

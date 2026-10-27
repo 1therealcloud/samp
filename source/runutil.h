@@ -1,5 +1,11 @@
 #ifndef SAMP_RUNUTIL_H
 #define SAMP_RUNUTIL_H
+#include <stddef.h>
+// Signed ASCII comparison; zero length reads neither input.
+// samp.dll RVA: 0x00017510
+int Util_strnicmp(const char *first,const char *second,size_t count);
+// samp.dll RVA: 0x00017440
+void Util_strupr(char *text);
 // samp.dll RVA: 0x00017380
 char *Util_stristr(const char *string,const char *pattern);
 // C-string encoder, not a counted binary encoder.

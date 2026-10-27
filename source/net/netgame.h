@@ -13,6 +13,7 @@ class CPickupPool;
 class CGangZonePool;
 class CLabelPool;
 class CTextDrawPool;
+class RakClientInterface;
 struct Packet;
 struct CVector;
 #pragma pack(push,1)
@@ -22,6 +23,9 @@ struct CNetGamePools {
 };
 class CNetGame {
 public:
+    // Raw selected client pointer; no initialization or connection-state gate.
+    // samp.dll RVA: 0x00001a90
+    RakClientInterface *GetRakClient();
     // samp.dll RVA: 0x00017800
     CTextDrawPool *GetTextDrawPool();
     // samp.dll RVA: 0x00017810

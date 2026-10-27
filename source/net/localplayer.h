@@ -9,6 +9,9 @@ struct PedBulletData;
 namespace Scripting {struct OpcodeInfo;}
 #pragma pack(push,1)
 class CLocalPlayer {public:
+    // Requests next class selection; does not spawn or change active state.
+    // samp.dll RVA: 0x00017770
+    void ReturnToClassSelection();
     // Raw DWORD flag used while the local ped is removed for RC driving.
     // samp.dll RVA: 0x0009e940
     DWORD GetRCModeState();

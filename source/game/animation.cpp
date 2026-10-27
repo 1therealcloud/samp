@@ -1,4 +1,5 @@
 #include "game/animation.h"
+#include "runutil.h"
 #include <stdio.h>
 #include <string.h>
 // samp.dll RVA: 0x001419d0
@@ -7,13 +8,11 @@ char g_animationNames[1812][36]={
 };
 // samp.dll RVA: 0x001871a8
 DWORD g_animationKeys[1812];
-// samp.dll RVA: 0x00017440
-void GameUppercaseAscii(char *text) { while(*text) { if(*text>'`' && *text<'{')*text-=32;text++; } }
 // samp.dll RVA: 0x0009c870
 WORD GameFindAnimation(const char *library,const char *name) {
     if(!library || !name)return 0xffff;
     if(strlen(library)+strlen(name)>36)return 0xffff;
-    char combined[40];sprintf(combined,"%s:%s",library,name);GameUppercaseAscii(combined);
+    char combined[40];sprintf(combined,"%s:%s",library,name);Util_strupr(combined);
     for(int i=0;i<1812;i++)if(!strcmp(combined,g_animationNames[i]))return (WORD)(i+1);
     return 0xffff;
 }
