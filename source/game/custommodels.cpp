@@ -1213,6 +1213,35 @@ DWORD CCustomModels::GetCount() {
 void * CCustomModels::GetRecord(DWORD index) {
     return index<*(DWORD*)(nativeState+4)?(*(void***)nativeState)[index]:0;
 }
+// samp.dll RVA: 0x0000c400
+CCustomModels *CCustomModels::InitializeRecordStorage() {
+    *(void***)nativeState=0;*(DWORD*)(nativeState+4)=0;return this;
+}
+// samp.dll RVA: 0x0000cdb0
+DWORD CCustomModels::GetObjectDffHash(int model) {
+    DWORD count=*(DWORD*)(nativeState+4),index=0;
+    if(count)do {
+        BYTE *entry=index<count?(*(BYTE***)nativeState)[index]:0;
+        if(entry&&*(int*)(entry+0x10)==model&&entry[7]==2)return *(DWORD*)(entry+0x46);
+    }while(++index!=count);
+    return 0;
+}
+// samp.dll RVA: 0x0000cd50
+void CCustomModels::ProcessDelayedReleases() {
+    DWORD count=*(DWORD*)(nativeState+4),index=0;
+    if(count)do {
+        BYTE *entry=index<count?(*(BYTE***)nativeState)[index]:0;
+        if(entry[0x58]&&entry[0x59]) {
+            DWORD delay=*(DWORD*)(entry+0x5a);
+            if(delay) *(DWORD*)(entry+0x5a)=delay-1;
+            else {
+                GameCleanupModelAndTxd(*(int*)(entry+0x10));
+                entry[0x59]=0;entry[0x58]=0;
+            }
+        }
+        count=*(DWORD*)(nativeState+4);
+    }while(++index!=count);
+}
 // samp.dll RVA: 0x00008200
 DWORD CCustomModels::GetActiveVirtualWorld() {
     return *(DWORD*)(nativeState+0x217);
