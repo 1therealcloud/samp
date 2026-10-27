@@ -12,6 +12,8 @@ class CDXUTDialogDL;
 class CDXUTButtonDL;
 // ANSI factory view of the same parent, not a separately constructed dialog.
 class CDXUTDialogDL {public:
+    // samp.dll RVA: 0x0006ee60
+    CDXUTButtonDL *GetButton(int id);
     // samp.dll RVA: 0x00090790
     HRESULT AddButton(int id,const char *text,int x,int y,int width,int height,
         UINT hotkey=0,bool isDefault=false,CDXUTButtonDL **created=0);
@@ -118,6 +120,15 @@ public:
     int selected,selectionStart;
     bool drag;
     CGrowableArray<DXUTListBoxItemDL*> items;
+    // Native column accessors are unchecked, including negative indices.
+    // samp.dll RVA: 0x0006a170
+    void SetColumnCount(int value);
+    // samp.dll RVA: 0x0006ee80
+    int GetColumnCount();
+    // samp.dll RVA: 0x0006a180
+    void SetColumnWidth(int column,int value);
+    // samp.dll RVA: 0x0006ee90
+    int GetColumnWidth(int column);
     // samp.dll RVA: 0x0008e810
     CDXUTListBoxDL(CDXUTDialog *parent);
     // samp.dll RVA: 0x0008e8d0

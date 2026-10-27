@@ -5,6 +5,19 @@
 #include "gui/input_text.h"
 #include <new>
 
+// samp.dll RVA: 0x0006ee60
+CDXUTButtonDL *CDXUTDialogDL::GetButton(int id) {
+    return (CDXUTButtonDL*)((CDXUTDialog*)this)->GetControl(id,DXUT_CONTROL_BUTTON);
+}
+// samp.dll RVA: 0x0006a170
+void CDXUTListBoxDL::SetColumnCount(int value) {columnCount=value;}
+// samp.dll RVA: 0x0006ee80
+int CDXUTListBoxDL::GetColumnCount() {return columnCount;}
+// samp.dll RVA: 0x0006a180
+void CDXUTListBoxDL::SetColumnWidth(int column,int value) {columnWidths[column]=value;}
+// samp.dll RVA: 0x0006ee90
+int CDXUTListBoxDL::GetColumnWidth(int column) {return columnWidths[column];}
+
 // samp.dll RVA: 0x0008e750
 CDXUTScrollBarDL::CDXUTScrollBarDL(CDXUTDialog *parent):CDXUTControl(0) {
     m_Type=DXUT_CONTROL_SCROLLBAR;m_pDialog=parent;showThumb=true;
