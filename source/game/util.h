@@ -1,6 +1,10 @@
 #ifndef SAMP_OBJECT_MATH_H
 #define SAMP_OBJECT_MATH_H
 #include "game/entity.h"
+#include <d3d9.h>
+// GTA SA VA: 0x00c97c28; returns the current global, including an installed proxy.
+// samp.dll RVA: 0x000c5110
+IDirect3DDevice9 *GameGetCurrentD3DDevice();
 // GTA SA global C17048; no device or viewport query.
 // samp.dll RVA: 0x00065ee0
 DWORD GameGetScreenHeight();

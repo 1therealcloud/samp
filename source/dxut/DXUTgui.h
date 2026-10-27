@@ -1,4 +1,5 @@
-namespace Commands { void SetChatFontSize(char *); }
+// samp.dll RVA: 0x000c6af0
+void ClientRefreshGuiFonts();
 //--------------------------------------------------------------------------------------
 // File: DXUTgui.h
 //
@@ -255,7 +256,8 @@ private:
     // Initialize default Elements
     // samp.dll RVA: 0x0008d1c0
     void InitFont();
-    friend void Commands::SetChatFontSize(char *);
+    // samp.dll RVA: 0x000c6af0
+    friend void ClientRefreshGuiFonts();
     // samp.dll RVA: 0x0008d200
     void InitDefaultElements();
 

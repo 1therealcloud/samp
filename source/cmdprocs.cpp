@@ -191,14 +191,7 @@ void Commands::SetChatFontSize(char *params){
             if(g_deviceFonts)g_deviceFonts->Reset();
             if(g_pChat){g_pChat->OnResetDevice();g_pChat->UpdateScrollbar();}
             if(g_deviceDeathWindow)((CDeathWindow*)g_deviceDeathWindow)->ResetFonts();
-            // Native shared refresh tail begins at RVA 0x000c6af0.
-            if(g_guiScoreboardDialog)g_guiScoreboardDialog->InitFont();
-            if(g_renderFirstDialog)g_renderFirstDialog->InitFont();
-            if(g_renderSecondDialog)g_renderSecondDialog->InitFont();
-            if(g_guiServerDialog)g_guiServerDialog->InitFont();
-            if(g_guiPanelDialog)g_guiPanelDialog->InitFont();
-            if(g_guiDownloadDialog)g_guiDownloadDialog->InitFont();
-            if(g_renderDownloadWindow)g_renderDownloadWindow->ResetFonts();
+            ClientRefreshGuiFonts();
             return;
         }
     }

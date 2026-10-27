@@ -10,6 +10,8 @@ extern CDXUTDialog *g_guiServerDialog;
 extern CDXUTDialog *g_guiPanelDialog;
 // samp.dll RVA: 0x002acac8
 extern CDXUTDialog *g_guiDownloadDialog;
+// samp.dll RVA: 0x000c6af0
+void ClientRefreshGuiFonts();
 // samp.dll RVA: 0x000c6ce0
 void ClientInitializeGui();
 // samp.dll RVA: 0x000c6c30

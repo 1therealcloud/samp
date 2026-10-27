@@ -3,7 +3,8 @@
 #include <windows.h>
 #pragma pack(push,1)
 class CTextDrawSelection {public:
-    // Inline coordinator initialization; no standalone native constructor entry established.
+    // samp.dll RVA: 0x000c5120
+    CTextDrawSelection();
     DWORD enabled,unknown04;WORD unknown08;
     // samp.dll RVA: 0x00070ee0
     void Enable(DWORD color);

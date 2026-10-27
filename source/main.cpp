@@ -1,4 +1,5 @@
 #include "main.h"
+#include "game/util.h"
 #include <string.h>
 // Native BSS storage and command-line settings. DLL startup remains open.
 // samp.dll RVA: 0x002aca3c
@@ -237,7 +238,7 @@ void ClientInitializeDeviceAndGui(){
     sprintf(g_clientChatFilename,"%s\\chatlog.txt",g_clientDataDirectory);
     g_pConfig=new CConfig(g_clientConfigFilename);
     timeBeginPeriod(1);GameMarkStartupStage();ClientInstallWindowProcedure();
-    g_clientSavedGameDevice=*(IDirect3DDevice9**)0xc97c28;
+    g_clientSavedGameDevice=GameGetCurrentD3DDevice();
     g_gameD3DDevice=g_pGame->GetDevice();
     *(IDirect3DDevice9**)0xc97c28=new IDirect3DDevice9Hook;
     g_gameD3DDevice->ShowCursor(FALSE);
@@ -264,14 +265,12 @@ void ClientInitializeDeviceAndGui(){
     g_deviceLabel=new CLabel(g_gameD3DDevice);
     g_deviceObjectEdit=(BYTE*)new CObjectEdit(g_gameD3DDevice);
     g_renderObjectSelection=new CObjectSelection;
-    g_renderTextDrawSelection=(CTextDrawSelection*)operator new(sizeof(CTextDrawSelection));
-    if(g_renderTextDrawSelection){g_renderTextDrawSelection->enabled=0;g_renderTextDrawSelection->unknown08=0xffff;g_renderTextDrawSelection->unknown04=0xffffffff;}
+    g_renderTextDrawSelection=new CTextDrawSelection;
     g_devicePlateManager=(BYTE*)new CLicensePlate(g_gameD3DDevice);
     g_deviceMaterialText=new CObjectMaterialText(g_gameD3DDevice);
     g_modelPreview=new CModelPreview;
     ClientInitializeGui();Commands::Setup();
-    g_clientPreviousRenderState=*(DWORD*)(*(BYTE**)0xc97b24+0x20);
-    *(DWORD*)(*(BYTE**)0xc97b24+0x20)=(DWORD)ClientRenderStateHook;
+    ClientInstallRenderStateHook();
     g_pGame->SetMaxStats();g_pGame->LetTimeGo(0);
     if(g_clientSettings.debug){
         CCamera *camera=g_pGame->m_pCamera;camera->Detach();camera->Restore();
@@ -547,6 +546,15 @@ DWORD g_clientRenderCaller;
 DWORD g_clientRenderState;
 // samp.dll RVA: 0x002aca5c
 DWORD g_clientRenderValue;
+// samp.dll RVA: 0x00061940
+void ClientRefreshWindowProcedure() {
+    HWND window=g_inputGameWindow;
+    if(window) {
+        g_clientPreviousWindowProcedure=(WNDPROC)GetWindowLongA(window,GWL_WNDPROC);
+        if(g_clientPreviousWindowProcedure!=ClientWindowProcedure)
+            SetWindowLongA(window,GWL_WNDPROC,(LONG)ClientWindowProcedure);
+    }
+}
 // samp.dll RVA: 0x00061970
 BOOL ClientInstallWindowProcedure() {
     HWND window=g_inputGameWindow;
@@ -559,6 +567,13 @@ BOOL ClientInstallWindowProcedure() {
             SetWindowLongA(current,GWL_WNDPROC,(LONG)ClientWindowProcedure);
     }
     SetWindowTextA(window,"GTA:SA:MP");IsWindowUnicode(window);return TRUE;
+}
+// samp.dll RVA: 0x000c54c0
+void ClientInstallRenderStateHook() {
+    // GTA SA VA: 0x00c97b24; capture the engine table once, as native does.
+    BYTE *table=*(BYTE**)0xc97b24;
+    g_clientPreviousRenderState=*(DWORD*)(table+0x20);
+    *(DWORD*)(table+0x20)=(DWORD)ClientRenderStateHook;
 }
 // samp.dll RVA: 0x000c5450
 __declspec(naked) void ClientRenderStateHook() {

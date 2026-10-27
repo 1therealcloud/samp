@@ -1024,6 +1024,8 @@ DWORD CModelCollisionSphereArray::Insert(void *value) {
 // Shared native half constant, already maintained by textdraw.
 // samp.dll RVA: 0x00117884
 extern const float g_textDrawHalf;
+// samp.dll RVA: 0x000bab60
+CModelCollisionNode::CModelCollisionNode() {right=0;left=0;}
 // samp.dll RVA: 0x000ba750
 CModelCollisionNode::~CModelCollisionNode() {delete left;delete right;}
 // samp.dll RVA: 0x000b9d10
@@ -1069,10 +1071,8 @@ void CModelCollisionNode::WriteLeaves(CModelCollisionFile *file) {
 // samp.dll RVA: 0x000babf0
 void CModelCollisionNode::Split(CModelCollisionFile *file) {
     CModelCollisionNode *first=new CModelCollisionNode;
-    if(first){first->right=0;first->left=0;}
     left=first;
     CModelCollisionNode *second=new CModelCollisionNode;
-    if(second){second->right=0;second->left=0;}
     right=second;
     memcpy(&left->bounds,&bounds,24);memcpy(&right->bounds,&bounds,24);
     float delta[3];
@@ -1110,7 +1110,6 @@ void CModelCollisionNode::Split(CModelCollisionFile *file) {
 // samp.dll RVA: 0x000baec0
 DWORD CModelCollisionFile::BuildFaceGroups() {
     CModelCollisionNode root;
-    root.right=0;root.left=0;
     for(DWORD i=0;i<*(DWORD*)(nativeState+0x8c);++i)
         root.triangles.push_back((*(ModelCollisionTriangle**)(nativeState+0x88))[i]);
     memcpy(&root.bounds.maximum,nativeState+0x2c,12);

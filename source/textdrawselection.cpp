@@ -1,6 +1,8 @@
 #include "textdrawselection.h"
 #include "main.h"
 #include "cmdwindow.h"
+// samp.dll RVA: 0x000c5120
+CTextDrawSelection::CTextDrawSelection() {enabled=0;unknown08=0xffff;unknown04=0xffffffff;}
 // samp.dll RVA: 0x00071010
 BOOL CTextDrawSelection::MsgProc(UINT message,WPARAM,LPARAM) {if(enabled&&message==WM_LBUTTONUP){if(unknown08!=0xffff)SendNotification();return TRUE;}return FALSE;}
 // samp.dll RVA: 0x00070fc0

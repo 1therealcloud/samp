@@ -1,4 +1,6 @@
 #include "game/util.h"
+// samp.dll RVA: 0x000c5110
+IDirect3DDevice9 *GameGetCurrentD3DDevice() {return *(IDirect3DDevice9**)0xc97c28;}
 // samp.dll RVA: 0x00065ee0
 DWORD GameGetScreenHeight() {return *(DWORD*)0xc17048;}
 // samp.dll RVA: 0x000c5510

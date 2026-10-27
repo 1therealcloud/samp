@@ -123,6 +123,8 @@ BOOL ClientPathExists(const char *path);
 void ClientInitializeCacheDirectory();
 // samp.dll RVA: 0x000c5340
 void ClientInitializePaths();
+// samp.dll RVA: 0x00061940
+void ClientRefreshWindowProcedure();
 // samp.dll RVA: 0x00061970
 BOOL ClientInstallWindowProcedure();
 // Native message routing; downstream input/UI dependencies remain explicit.
@@ -139,6 +141,9 @@ void ClientToggleWindowedMode();
 // Keyboard release dispatcher remains a dependency.
 // samp.dll RVA: 0x00060de0
 BOOL ClientHandleKeyRelease(unsigned int key);
+// Installs the recovered callback into the current RenderWare engine table.
+// samp.dll RVA: 0x000c54c0
+void ClientInstallRenderStateHook();
 // Naked two-word GTA render-state callback; tail-jumps through original target.
 // samp.dll RVA: 0x000c5450
 void ClientRenderStateHook();

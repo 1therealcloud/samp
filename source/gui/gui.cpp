@@ -116,3 +116,14 @@ void ClientInitializeDialogResources() {
     g_deviceDialogResources->OnCreateDevice(g_gameD3DDevice);
     g_deviceDialogResources->OnResetDevice();
 }
+
+// samp.dll RVA: 0x000c6af0
+void ClientRefreshGuiFonts() {
+    if(g_guiScoreboardDialog)g_guiScoreboardDialog->InitFont();
+    if(g_renderFirstDialog)g_renderFirstDialog->InitFont();
+    if(g_renderSecondDialog)g_renderSecondDialog->InitFont();
+    if(g_guiServerDialog)g_guiServerDialog->InitFont();
+    if(g_guiPanelDialog)g_guiPanelDialog->InitFont();
+    if(g_guiDownloadDialog)g_guiDownloadDialog->InitFont();
+    if(g_renderDownloadWindow)g_renderDownloadWindow->ResetFonts();
+}

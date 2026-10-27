@@ -299,7 +299,9 @@ struct CModelCollisionNode {
     DWORD unknown18;
     CModelCollisionNode *left,*right;
     ModelCollisionTriangleVector triangles;
-    // Caller initializes child pointers; no standalone constructor entry established.
+    // Leaves bounds, unknown18 and vector allocator byte untouched.
+    // samp.dll RVA: 0x000bab60
+    CModelCollisionNode();
     // samp.dll RVA: 0x000ba750
     ~CModelCollisionNode();
     // Asymmetric traversal assumes paired children; no added null-right guard.
