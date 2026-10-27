@@ -24,10 +24,10 @@ public:
 		SeekEnd,
 	};
 
-	// samp.dll RVA: 0x00063e80
+	// samp.dll RVA: 0x00063e70
 	CAbstractStream() {}
 
-	// samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+	// samp.dll RVA: 0x00063e80
 	virtual ~CAbstractStream() {}
 
 	// samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
@@ -214,7 +214,7 @@ protected:
 	bool m_bCopy;
 
 public:
-	// samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+	// samp.dll RVA: 0x00063fb0
 	CMemoryStream(unsigned char *pbBuffer, unsigned int nLength, bool bCopy = true)
 	{
 		m_bCopy = bCopy;

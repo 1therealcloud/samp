@@ -660,21 +660,6 @@ DWORD GameReadStream(void *stream,void *buffer,DWORD length) {
 }
 
 #include "game/effects.h"
-// samp.dll RVA: 0x000b36a0
-BYTE GameBufferReader::ReadByte() {
-    BYTE result=0;
-    Read(&result,1);
-    return result;
-}
-// samp.dll RVA: 0x000bc1d0
-DWORD GameBufferReader::Read(void *out,DWORD count) {
-    memset(out,0,count);
-    if(position+count>length)count=length-position;
-    if(!count)return 0;
-    memcpy(out,data+position,count);
-    if(position+count<length)position+=count;else { position=length;eof=true; }
-    return count;
-}
 // samp.dll RVA: 0x000b3480
 int GameTxdFind(const char *name) { return ((int(__cdecl*)(const char*))0x731850)(name); }
 // samp.dll RVA: 0x000b3510
@@ -701,12 +686,12 @@ void *GameLoadDictionaryTexture(const char *dictionary,const char *name) {
 }
 // samp.dll RVA: 0x000b6610
 void GameParseStreamData(const void *data,DWORD length,void *destination) {
-    GameBufferReader *reader=new GameBufferReader(data,length);
+    CModelFileStream *reader=new CModelFileStream((BYTE*)data,length);
     DWORD count=0;reader->Read(&count,4);
     if(count==0 || count>128) { delete reader;return; }
     DWORD selected=0;
     for(DWORD i=0;i<count;i++) {
-        if(reader->eof)break;
+        if(reader->ended)break;
         BYTE position[12];DWORD type=0,size=0;
         reader->Read(position,12);reader->Read(&type,4);reader->Read(&size,4);
         if((type==0 && (size==76 || size==80)) || (type==10 && size==40))++selected;
@@ -714,11 +699,11 @@ void GameParseStreamData(const void *data,DWORD length,void *destination) {
     }
     if(!selected)return; // Native leaks the reader on this path; preserve it.
     BYTE *result=(BYTE*)calloc(1,selected*64+4);*(DWORD*)result=selected;
-    reader->position=0;reader->eof=false;
+    reader->position=0;reader->ended=false;
     DWORD ignoredCount=0;reader->Read(&ignoredCount,4);
     DWORD written=0;BYTE *record=result+4;
     do {
-        if(reader->eof)break;
+        if(reader->ended)break;
         BYTE position[12];DWORD type=0,size=0;
         reader->Read(position,12);reader->Read(&type,4);reader->Read(&size,4);
         if(type==0 && (size==76 || size==80)) {

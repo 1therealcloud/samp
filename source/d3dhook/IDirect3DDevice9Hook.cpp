@@ -4,6 +4,8 @@
 #include "d3dhook/texture_binding.h"
 #include "net/vehiclepool.h"
 #include <string.h>
+// samp.dll RVA: 0x000c5e60
+IDirect3DDevice9Hook::IDirect3DDevice9Hook() {}
 // samp.dll RVA: 0x0017ec00
 D3DMATRIX g_deviceViewMatrix;
 // samp.dll RVA: 0x0017ec40

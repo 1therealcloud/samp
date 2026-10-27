@@ -2,6 +2,9 @@
 #include "gui/chat_dependencies.h"
 #include <string.h>
 
+// samp.dll RVA: 0x0006b310
+CFontWrapper::CFontWrapper() {}
+
 // samp.dll RVA: 0x00073770
 HRESULT STDMETHODCALLTYPE CFontWrapper::QueryInterface(REFIID iid, void **output) {
     return font->QueryInterface(iid, output);
@@ -176,6 +179,8 @@ void FontNextGlyphColor() {
 // Native vtable RVA 0x0011c76c. State is shared, as in the DLL.
 class CFontColorSprite : public ID3DXSprite {
 public:
+    // samp.dll RVA: 0x00073960
+    CFontColorSprite();
     // samp.dll RVA: 0x00073880
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **output);
     // samp.dll RVA: 0x00073890
@@ -205,6 +210,9 @@ public:
     // samp.dll RVA: 0x00073940
     virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
 };
+// samp.dll RVA: 0x00073960
+CFontColorSprite::CFontColorSprite() {}
+
 typedef char FontColorSpriteSize[(sizeof(CFontColorSprite) == 4) ? 1 : -1];
 // samp.dll RVA: 0x00140bd8
 static CFontColorSprite g_fontColorSprite;

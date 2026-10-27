@@ -4,6 +4,8 @@
 // Four-byte native proxy; the real device is a shared global.
 class IDirect3DDevice9Hook : public IDirect3DDevice9 {
 public:
+    // samp.dll RVA: 0x000c5e60
+    IDirect3DDevice9Hook();
     // samp.dll RVA: 0x00073f60
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppvObj);
     // samp.dll RVA: 0x00073f70

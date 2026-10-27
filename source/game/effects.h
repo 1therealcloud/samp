@@ -1,26 +1,9 @@
 #ifndef SAMP_RECOVERED_GAME_EFFECTS_H
 #define SAMP_RECOVERED_GAME_EFFECTS_H
 #include <windows.h>
-#include <stdlib.h>
-#include <string.h>
-#pragma pack(push,1)
-class GameBufferReader {
-public:
-    const BYTE *data;DWORD position,length;bool eof,owns;
-    DWORD unknown0e,unknown12;bool unknown16;
-    // samp.dll RVA: unknown (inline reader initialization in native parser RVA 0x000b6610; standalone entry not established)
-    GameBufferReader(const void *p,DWORD n) : data((const BYTE*)p),position(0),length(n),eof(false),owns(false),unknown0e(0),unknown12(0),unknown16(false) {}
-    // samp.dll RVA: unknown (inline reader cleanup in native parser RVA 0x000b6610; standalone entry not established)
-    ~GameBufferReader() { if(owns && data) { free((void*)data);data=0; } }
-    // samp.dll RVA: 0x000bc1d0
-    DWORD Read(void *out,DWORD count);
-    // samp.dll RVA: 0x000b36c0
-    DWORD Skip(DWORD count) { if(position+count<length)position+=count;else { position=length;eof=true; } return position; }
-    // samp.dll RVA: 0x000b36a0
-    BYTE ReadByte();
-};
-#pragma pack(pop)
-typedef char GameBufferReaderExtent[(sizeof(GameBufferReader)==23)?1:-1];
+#include "game/modelfile.h"
+// The effects parser uses the same23-byte native stream as DFF/TXD parsing.
+// Its single implementation,including borrowed-buffer lifecycle,is in modelfile.
 // samp.dll RVA: 0x000b2790
 BOOL GameLoadTextureDictionary(const char *name,const char *filename,BYTE fromSamp);
 // samp.dll RVA: 0x000b2860

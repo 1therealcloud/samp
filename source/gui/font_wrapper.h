@@ -5,6 +5,9 @@
 // Native vtable RVA 0x0011c438. No added destructor or reference count.
 class CFontWrapper : public ID3DXFont {
 public:
+    // Initializes only the COM vptr; wrapped font pointer is untouched.
+    // samp.dll RVA: 0x0006b310
+    CFontWrapper();
     ID3DXFont *font;
     // samp.dll RVA: 0x00073770
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **output);
