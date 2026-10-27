@@ -1024,65 +1024,115 @@ class CDXUTIMEEditBox : public CDXUTEditBox
 {
 protected:
     // Empty implementation of the IMM32 API
+    // samp.dll RVA: 0x00084250
     static INPUTCONTEXT* WINAPI Dummy_ImmLockIMC( HIMC ) { return NULL; }
+    // samp.dll RVA: 0x00084260
     static BOOL WINAPI Dummy_ImmUnlockIMC( HIMC ) { return FALSE; }
+    // samp.dll RVA: 0x00084270
     static LPVOID WINAPI Dummy_ImmLockIMCC( HIMCC ) { return NULL; }
+    // samp.dll RVA: 0x00084280
     static BOOL WINAPI Dummy_ImmUnlockIMCC( HIMCC ) { return FALSE; }
+    // samp.dll RVA: 0x00084290
     static BOOL WINAPI Dummy_ImmDisableTextFrameService( DWORD ) { return TRUE; }
+    // samp.dll RVA: 0x000842a0
     static LONG WINAPI Dummy_ImmGetCompositionStringW( HIMC, DWORD, LPVOID, DWORD ) { return IMM_ERROR_GENERAL; }
+    // samp.dll RVA: 0x000842b0
     static DWORD WINAPI Dummy_ImmGetCandidateListW( HIMC, DWORD, LPCANDIDATELIST, DWORD ) { return 0; }
+    // samp.dll RVA: 0x000842c0
     static HIMC WINAPI Dummy_ImmGetContext( HWND ) { return NULL; }
+    // samp.dll RVA: 0x000842d0
     static BOOL WINAPI Dummy_ImmReleaseContext( HWND, HIMC ) { return FALSE; }
+    // samp.dll RVA: 0x000842e0
     static HIMC WINAPI Dummy_ImmAssociateContext( HWND, HIMC ) { return NULL; }
+    // samp.dll RVA: 0x000842f0
     static BOOL WINAPI Dummy_ImmGetOpenStatus( HIMC ) { return 0; }
+    // samp.dll RVA: 0x00084300
     static BOOL WINAPI Dummy_ImmSetOpenStatus( HIMC, BOOL ) { return 0; }
+    // samp.dll RVA: 0x00084310
     static BOOL WINAPI Dummy_ImmGetConversionStatus( HIMC, LPDWORD, LPDWORD ) { return 0; }
+    // samp.dll RVA: 0x00084320
     static HWND WINAPI Dummy_ImmGetDefaultIMEWnd( HWND ) { return NULL; }
+    // samp.dll RVA: 0x00084330
     static UINT WINAPI Dummy_ImmGetIMEFileNameA( HKL, LPSTR, UINT ) { return 0; }
+    // samp.dll RVA: 0x00084340
     static UINT WINAPI Dummy_ImmGetVirtualKey( HWND ) { return 0; }
+    // samp.dll RVA: 0x00084350
     static BOOL WINAPI Dummy_ImmNotifyIME( HIMC, DWORD, DWORD, DWORD ) { return FALSE; }
+    // samp.dll RVA: 0x00084360
     static BOOL WINAPI Dummy_ImmSetConversionStatus( HIMC, DWORD, DWORD ) { return FALSE; }
+    // samp.dll RVA: 0x00084370
     static BOOL WINAPI Dummy_ImmSimulateHotKey( HWND, DWORD ) { return FALSE; }
+    // samp.dll RVA: 0x00084380
     static BOOL WINAPI Dummy_ImmIsIME( HKL ) { return FALSE; }
 
     // Traditional Chinese IME
+    // samp.dll RVA: 0x00084390
     static UINT WINAPI Dummy_GetReadingString( HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT ) { return 0; }
+    // samp.dll RVA: 0x000843a0
     static BOOL WINAPI Dummy_ShowReadingWindow( HIMC, BOOL ) { return FALSE; }
 
     // Verion library imports
+    // samp.dll RVA: 0x000843b0
     static BOOL APIENTRY Dummy_VerQueryValueA( const LPVOID, LPSTR, LPVOID *, PUINT ) { return 0; }
+    // samp.dll RVA: 0x000843c0
     static BOOL APIENTRY Dummy_GetFileVersionInfoA( LPSTR, DWORD, DWORD, LPVOID ) { return 0; }
+    // samp.dll RVA: 0x000843d0
     static DWORD APIENTRY Dummy_GetFileVersionInfoSizeA( LPSTR, LPDWORD ) { return 0; }
 
     // Function pointers: IMM32
+    // samp.dll RVA: 0x00140c18
     static INPUTCONTEXT* (WINAPI * _ImmLockIMC)( HIMC );
+    // samp.dll RVA: 0x00140c1c
     static BOOL (WINAPI * _ImmUnlockIMC)( HIMC );
+    // samp.dll RVA: 0x00140c20
     static LPVOID (WINAPI * _ImmLockIMCC)( HIMCC );
+    // samp.dll RVA: 0x00140c24
     static BOOL (WINAPI * _ImmUnlockIMCC)( HIMCC );
+    // samp.dll RVA: 0x00140c28
     static BOOL (WINAPI * _ImmDisableTextFrameService)( DWORD );
+    // samp.dll RVA: 0x00140c2c
     static LONG (WINAPI * _ImmGetCompositionStringW)( HIMC, DWORD, LPVOID, DWORD );
+    // samp.dll RVA: 0x00140c30
     static DWORD (WINAPI * _ImmGetCandidateListW)( HIMC, DWORD, LPCANDIDATELIST, DWORD );
+    // samp.dll RVA: 0x00140c34
     static HIMC (WINAPI * _ImmGetContext)( HWND );
+    // samp.dll RVA: 0x00140c38
     static BOOL (WINAPI * _ImmReleaseContext)( HWND, HIMC );
+    // samp.dll RVA: 0x00140c3c
     static HIMC (WINAPI * _ImmAssociateContext)( HWND, HIMC );
+    // samp.dll RVA: 0x00140c40
     static BOOL (WINAPI * _ImmGetOpenStatus)( HIMC );
+    // samp.dll RVA: 0x00140c44
     static BOOL (WINAPI * _ImmSetOpenStatus)( HIMC, BOOL );
+    // samp.dll RVA: 0x00140c48
     static BOOL (WINAPI * _ImmGetConversionStatus)( HIMC, LPDWORD, LPDWORD );
+    // samp.dll RVA: 0x00140c4c
     static HWND (WINAPI * _ImmGetDefaultIMEWnd)( HWND );
+    // samp.dll RVA: 0x00140c50
     static UINT (WINAPI * _ImmGetIMEFileNameA)( HKL, LPSTR, UINT );
+    // samp.dll RVA: 0x00140c54
     static UINT (WINAPI * _ImmGetVirtualKey)( HWND );
+    // samp.dll RVA: 0x00140c58
     static BOOL (WINAPI * _ImmNotifyIME)( HIMC, DWORD, DWORD, DWORD );
+    // samp.dll RVA: 0x00140c5c
     static BOOL (WINAPI * _ImmSetConversionStatus)( HIMC, DWORD, DWORD );
+    // samp.dll RVA: 0x00140c60
     static BOOL (WINAPI * _ImmSimulateHotKey)( HWND, DWORD );
+    // samp.dll RVA: 0x00140c64
     static BOOL (WINAPI * _ImmIsIME)( HKL );
 
     // Function pointers: Traditional Chinese IME
+    // samp.dll RVA: 0x00140c68
     static UINT (WINAPI * _GetReadingString)( HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT );
+    // samp.dll RVA: 0x00140c6c
     static BOOL (WINAPI * _ShowReadingWindow)( HIMC, BOOL );
 
     // Function pointers: Verion library imports
+    // samp.dll RVA: 0x00140c70
     static BOOL (APIENTRY * _VerQueryValueA)( const LPVOID, LPSTR, LPVOID *, PUINT );
+    // samp.dll RVA: 0x00140c74
     static BOOL (APIENTRY * _GetFileVersionInfoA)( LPSTR, DWORD, DWORD, LPVOID );
+    // samp.dll RVA: 0x00140c78
     static DWORD (APIENTRY * _GetFileVersionInfoSizeA)( LPSTR, LPDWORD );
 
 public:
@@ -1091,7 +1141,9 @@ public:
     // samp.dll RVA: 0x0008F470
     virtual ~CDXUTIMEEditBox();
 
+    // samp.dll RVA: 0x0008bcc0
     static void Initialize();
+    // samp.dll RVA: 0x00085d10
     static void Uninitialize();
 
     static  HRESULT StaticOnCreateDevice();
@@ -1161,7 +1213,9 @@ protected:
     };
 
     // Application-wide data
+    // samp.dll RVA: 0x00180604
     static HINSTANCE s_hDllImm32;         // IMM32 DLL handle
+    // samp.dll RVA: 0x0017f6a4
     static HINSTANCE s_hDllVer;           // Version DLL handle
     static HIMC      s_hImcDef;           // Default input context
 
@@ -1170,12 +1224,14 @@ protected:
     static LPWSTR  s_wszCurrIndicator;    // Points to an indicator string that corresponds to current input locale
     static WCHAR   s_aszIndicator[5][3];  // String to draw to indicate current input locale
     static bool    s_bInsertOnType;       // Insert the character as soon as a key is pressed (Korean behavior)
+    // samp.dll RVA: 0x0017f6b4
     static HINSTANCE s_hDllIme;           // Instance handle of the current IME module
     static IMESTATE  s_ImeState;          // IME global state
     static bool    s_bEnableImeSystem;    // Whether the IME system is active
     static POINT   s_ptCompString;        // Composition string position. Updated every frame.
     static int     s_nCompCaret;          // Caret position of the composition string
     static int     s_nFirstTargetConv;    // Index of the first target converted char in comp string.  If none, -1.
+    // samp.dll RVA: 0x0018062c
     static CUniBuffer s_CompString;       // Buffer to hold the composition string (we fix its length)
     static BYTE    s_abCompStringAttr[MAX_COMPSTRING_SIZE];
     static DWORD   s_adwCompStringClause[MAX_COMPSTRING_SIZE];

@@ -4862,33 +4862,60 @@ void CDXUTEditBox::SetTextFloatArray( const float *pNumbers, int nCount )
 #define IMEID_CHS_VER53 ( LANG_CHS | MAKEIMEVERSION( 5, 3 ) )   // MSPY3    // WinXP
 
 // Function pointers
+// samp.dll RVA: 0x00140c18
 INPUTCONTEXT* (WINAPI * CDXUTIMEEditBox::_ImmLockIMC)( HIMC ) = CDXUTIMEEditBox::Dummy_ImmLockIMC;
+// samp.dll RVA: 0x00140c1c
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmUnlockIMC)( HIMC ) = CDXUTIMEEditBox::Dummy_ImmUnlockIMC;
+// samp.dll RVA: 0x00140c20
 LPVOID (WINAPI * CDXUTIMEEditBox::_ImmLockIMCC)( HIMCC ) = CDXUTIMEEditBox::Dummy_ImmLockIMCC;
+// samp.dll RVA: 0x00140c24
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmUnlockIMCC)( HIMCC ) = CDXUTIMEEditBox::Dummy_ImmUnlockIMCC;
+// samp.dll RVA: 0x00140c28
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmDisableTextFrameService)( DWORD ) = CDXUTIMEEditBox::Dummy_ImmDisableTextFrameService;
+// samp.dll RVA: 0x00140c2c
 LONG (WINAPI * CDXUTIMEEditBox::_ImmGetCompositionStringW)( HIMC, DWORD, LPVOID, DWORD ) = CDXUTIMEEditBox::Dummy_ImmGetCompositionStringW;
+// samp.dll RVA: 0x00140c30
 DWORD (WINAPI * CDXUTIMEEditBox::_ImmGetCandidateListW)( HIMC, DWORD, LPCANDIDATELIST, DWORD ) = CDXUTIMEEditBox::Dummy_ImmGetCandidateListW;
+// samp.dll RVA: 0x00140c34
 HIMC (WINAPI * CDXUTIMEEditBox::_ImmGetContext)( HWND ) = CDXUTIMEEditBox::Dummy_ImmGetContext;
+// samp.dll RVA: 0x00140c38
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmReleaseContext)( HWND, HIMC ) = CDXUTIMEEditBox::Dummy_ImmReleaseContext;
+// samp.dll RVA: 0x00140c3c
 HIMC (WINAPI * CDXUTIMEEditBox::_ImmAssociateContext)( HWND, HIMC ) = CDXUTIMEEditBox::Dummy_ImmAssociateContext;
+// samp.dll RVA: 0x00140c40
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmGetOpenStatus)( HIMC ) = CDXUTIMEEditBox::Dummy_ImmGetOpenStatus;
+// samp.dll RVA: 0x00140c44
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmSetOpenStatus)( HIMC, BOOL ) = CDXUTIMEEditBox::Dummy_ImmSetOpenStatus;
+// samp.dll RVA: 0x00140c48
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmGetConversionStatus)( HIMC, LPDWORD, LPDWORD ) = CDXUTIMEEditBox::Dummy_ImmGetConversionStatus;
+// samp.dll RVA: 0x00140c4c
 HWND (WINAPI * CDXUTIMEEditBox::_ImmGetDefaultIMEWnd)( HWND ) = CDXUTIMEEditBox::Dummy_ImmGetDefaultIMEWnd;
+// samp.dll RVA: 0x00140c50
 UINT (WINAPI * CDXUTIMEEditBox::_ImmGetIMEFileNameA)( HKL, LPSTR, UINT ) = CDXUTIMEEditBox::Dummy_ImmGetIMEFileNameA;
+// samp.dll RVA: 0x00140c54
 UINT (WINAPI * CDXUTIMEEditBox::_ImmGetVirtualKey)( HWND ) = CDXUTIMEEditBox::Dummy_ImmGetVirtualKey;
+// samp.dll RVA: 0x00140c58
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmNotifyIME)( HIMC, DWORD, DWORD, DWORD ) = CDXUTIMEEditBox::Dummy_ImmNotifyIME;
+// samp.dll RVA: 0x00140c5c
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmSetConversionStatus)( HIMC, DWORD, DWORD ) = CDXUTIMEEditBox::Dummy_ImmSetConversionStatus;
+// samp.dll RVA: 0x00140c60
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmSimulateHotKey)( HWND, DWORD ) = CDXUTIMEEditBox::Dummy_ImmSimulateHotKey;
+// samp.dll RVA: 0x00140c64
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmIsIME)( HKL ) = CDXUTIMEEditBox::Dummy_ImmIsIME;
+// samp.dll RVA: 0x00140c68
 UINT (WINAPI * CDXUTIMEEditBox::_GetReadingString)( HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT ) = CDXUTIMEEditBox::Dummy_GetReadingString; // Traditional Chinese IME
+// samp.dll RVA: 0x00140c6c
 BOOL (WINAPI * CDXUTIMEEditBox::_ShowReadingWindow)( HIMC, BOOL ) = CDXUTIMEEditBox::Dummy_ShowReadingWindow; // Traditional Chinese IME
+// samp.dll RVA: 0x00140c70
 BOOL (APIENTRY * CDXUTIMEEditBox::_VerQueryValueA)( const LPVOID, LPSTR, LPVOID *, PUINT ) = CDXUTIMEEditBox::Dummy_VerQueryValueA;
+// samp.dll RVA: 0x00140c74
 BOOL (APIENTRY * CDXUTIMEEditBox::_GetFileVersionInfoA)( LPSTR, DWORD, DWORD, LPVOID )= CDXUTIMEEditBox::Dummy_GetFileVersionInfoA;
+// samp.dll RVA: 0x00140c78
 DWORD (APIENTRY * CDXUTIMEEditBox::_GetFileVersionInfoSizeA)( LPSTR, LPDWORD ) = CDXUTIMEEditBox::Dummy_GetFileVersionInfoSizeA;
 
+// samp.dll RVA: 0x00180604
 HINSTANCE CDXUTIMEEditBox::s_hDllImm32;      // IMM32 DLL handle
+// samp.dll RVA: 0x0017f6a4
 HINSTANCE CDXUTIMEEditBox::s_hDllVer;        // Version DLL handle
 HKL       CDXUTIMEEditBox::s_hklCurrent;     // Current keyboard layout of the process
 bool      CDXUTIMEEditBox::s_bVerticalCand;  // Indicates that the candidates are listed vertically
@@ -4902,6 +4929,7 @@ WCHAR     CDXUTIMEEditBox::s_aszIndicator[5][3] = // String to draw to indicate 
             };
 LPWSTR    CDXUTIMEEditBox::s_wszCurrIndicator = CDXUTIMEEditBox::s_aszIndicator[0];  // Points to an indicator string that corresponds to current input locale
 bool      CDXUTIMEEditBox::s_bInsertOnType;     // Insert the character as soon as a key is pressed (Korean behavior)
+// samp.dll RVA: 0x0017f6b4
 HINSTANCE CDXUTIMEEditBox::s_hDllIme;           // Instance handle of the current IME module
 HIMC      CDXUTIMEEditBox::s_hImcDef;           // Default input context
 CDXUTIMEEditBox::IMESTATE  CDXUTIMEEditBox::s_ImeState = IMEUI_STATE_OFF;
@@ -4909,6 +4937,7 @@ bool      CDXUTIMEEditBox::s_bEnableImeSystem;  // Whether the IME system is act
 POINT     CDXUTIMEEditBox::s_ptCompString;      // Composition string position. Updated every frame.
 int       CDXUTIMEEditBox::s_nCompCaret;
 int       CDXUTIMEEditBox::s_nFirstTargetConv;  // Index of the first target converted char in comp string.  If none, -1.
+// samp.dll RVA: 0x0018062c
 CUniBuffer CDXUTIMEEditBox::s_CompString = CUniBuffer( 0 );
 BYTE      CDXUTIMEEditBox::s_abCompStringAttr[MAX_COMPSTRING_SIZE];
 DWORD     CDXUTIMEEditBox::s_adwCompStringClause[MAX_COMPSTRING_SIZE];
@@ -7197,6 +7226,7 @@ void CDXUTEditBox::ResetCaretBlink()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008bcc0
 void CDXUTIMEEditBox::Initialize()
 {
     if( s_hDllImm32 ) // Only need to do once
@@ -7207,11 +7237,11 @@ void CDXUTIMEEditBox::Initialize()
 
     s_CompString.SetBufferSize( MAX_COMPSTRING_SIZE );
 
-    WCHAR wszPath[MAX_PATH+1];
-    if( !::GetSystemDirectory( wszPath, MAX_PATH+1 ) )
+    char path[MAX_PATH+1];
+    if( !GetSystemDirectoryA( path, MAX_PATH+1 ) )
         return;
-    StringCchCat( wszPath, MAX_PATH, IMM32_DLLNAME );
-    s_hDllImm32 = LoadLibrary( wszPath );
+    StringCchCatA( path, MAX_PATH, "\\imm32.dll" );
+    s_hDllImm32 = LoadLibraryA( path );
     if( s_hDllImm32 )
     {
         GETPROCADDRESS( s_hDllImm32, ImmLockIMC, Temp );
@@ -7236,10 +7266,10 @@ void CDXUTIMEEditBox::Initialize()
         GETPROCADDRESS( s_hDllImm32, ImmIsIME, Temp );
     }
 
-    if( !::GetSystemDirectory( wszPath, MAX_PATH+1 ) )
+    if( !GetSystemDirectoryA( path, MAX_PATH+1 ) )
         return;
-    StringCchCat( wszPath, MAX_PATH, VER_DLLNAME );
-    s_hDllVer = LoadLibrary( wszPath );
+    StringCchCatA( path, MAX_PATH, "\\version.dll" );
+    s_hDllVer = LoadLibraryA( path );
     if( s_hDllVer )
     {
         GETPROCADDRESS( s_hDllVer, VerQueryValueA, Temp );
@@ -7250,6 +7280,7 @@ void CDXUTIMEEditBox::Initialize()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085d10
 void CDXUTIMEEditBox::Uninitialize()
 {
     if( s_hDllImm32 )
