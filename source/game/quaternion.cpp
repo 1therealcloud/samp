@@ -7,6 +7,7 @@ void GameQuaternionToMatrixComponents(const GameQuaternion *quaternion,CMatrix *
 }
 #include "game/game.h"
 #include <d3dx9.h>
+#include <math.h>
 #include <string.h>
 // samp.dll RVA: 0x000b4d50
 void GameQuaternionFromMatrix(const CMatrix *matrix,GameQuaternion *out) {
@@ -316,127 +317,27 @@ extern "C" double __cdecl _copysign(double magnitude,double sign);
 // Square-root terms are clamped with the original x87 status tests, then signs
 // are copied from the three antisymmetric differences by the selected CRT.
 // samp.dll RVA: 0x000b48b0
-__declspec(naked) void GameMatrixComponentsToQuaternion(float m00,float m01,float m02,
-    float m10,float m11,float m12,float m20,float m21,float m22,
-    float *w,float *x,float *y,float *z) {
-    __asm {
-        push ecx
-        fld float ptr [esp + 0x8]
-        fadd float ptr [esp + 0x18]
-        fadd float ptr [esp + 0x28]
-        fadd float ptr g_quaternionMatrixOne
-        fcom float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b48d8
-        fstp st(0)
-        fld float ptr g_objectScaleLowerBound
-q_100b48d8:
-        fsqrt
-        fmul float ptr g_textDrawHalf
-        fstp float ptr [esp]
-        fld float ptr [esp + 0x8]
-        fadd float ptr g_quaternionMatrixOne
-        fsub float ptr [esp + 0x18]
-        fsub float ptr [esp + 0x28]
-        fcom float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b490a
-        fstp st(0)
-        fld float ptr g_objectScaleLowerBound
-q_100b490a:
-        fsqrt
-        fmul float ptr g_textDrawHalf
-        fld float ptr g_quaternionMatrixOne
-        fsub float ptr [esp + 0x8]
-        fld float ptr [esp + 0x18]
-        fadd st(0),st(1)
-        fsub float ptr [esp + 0x28]
-        fcom float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b493b
-        fstp st(0)
-        fld float ptr g_objectScaleLowerBound
-q_100b493b:
-        fsqrt
-        fmul float ptr g_textDrawHalf
-        fstp float ptr [esp + 0x8]
-        fsub float ptr [esp + 0x18]
-        fadd float ptr [esp + 0x28]
-        fcom float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b4964
-        fstp st(0)
-        fld float ptr g_objectScaleLowerBound
-q_100b4964:
-        fsqrt
-        fmul float ptr g_textDrawHalf
-        fstp float ptr [esp + 0x18]
-        fld float ptr [esp]
-        fcomp float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b4987
-        mov dword ptr [esp],0x0
-q_100b4987:
-        fcom float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b499c
-        fstp st(0)
-        fld float ptr g_objectScaleLowerBound
-q_100b499c:
-        fld float ptr [esp + 0x8]
-        fcomp float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b49b5
-        mov dword ptr [esp + 0x8],0x0
-q_100b49b5:
-        fld float ptr [esp + 0x18]
-        fcomp float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jp q_100b49ce
-        mov dword ptr [esp + 0x18],0x0
-q_100b49ce:
-        fld float ptr [esp + 0x24]
-        sub esp,0x10
-        fsub float ptr [esp + 0x2c]
-        fstp double ptr [esp + 0x8]
-        fstp double ptr [esp]
-        call _copysign
-        fstp float ptr [esp + 0x38]
-        fld float ptr [esp + 0x20]
-        fsub float ptr [esp + 0x30]
-        fstp double ptr [esp + 0x8]
-        fld float ptr [esp + 0x18]
-        fstp double ptr [esp]
-        call _copysign
-        fstp float ptr [esp + 0x18]
-        fld float ptr [esp + 0x24]
-        fsub float ptr [esp + 0x1c]
-        fstp double ptr [esp + 0x8]
-        fld float ptr [esp + 0x28]
-        fstp double ptr [esp]
-        call _copysign
-        mov eax,dword ptr [esp + 0x3c]
-        fld float ptr [esp + 0x10]
-        mov ecx,dword ptr [esp + 0x40]
-        fstp float ptr [eax]
-        fld float ptr [esp + 0x38]
-        mov edx,dword ptr [esp + 0x44]
-        mov eax,dword ptr [esp + 0x48]
-        fstp float ptr [ecx]
-        fld float ptr [esp + 0x18]
-        fstp float ptr [edx]
-        fstp float ptr [eax]
-        add esp,0x14
-        ret
-    }
+void GameMatrixComponentsToQuaternion(float m00,float m01,float m02,float m10,float m11,float m12,float m20,float m21,float m22,float *w,float *x,float *y,float *z) {
+    float term=m00+m11+m22+1.0f;
+    if(term<0.0f)term=0.0f;
+    float qw=(float)(sqrt(term)*0.5f);
+    term=m00+1.0f-m11-m22;
+    if(term<0.0f)term=0.0f;
+    float qx=(float)(sqrt(term)*0.5f);
+    term=1.0f-m00+m11-m22;
+    if(term<0.0f)term=0.0f;
+    float qy=(float)(sqrt(term)*0.5f);
+    term=1.0f-m00-m11+m22;
+    if(term<0.0f)term=0.0f;
+    float qz=(float)(sqrt(term)*0.5f);
+    if(qw<0.0f)qw=0.0f;
+    if(qx<0.0f)qx=0.0f;
+    if(qy<0.0f)qy=0.0f;
+    if(qz<0.0f)qz=0.0f;
+    float sx=(float)_copysign(qx,(double)(m21-m12));
+    float sy=(float)_copysign(qy,(double)(m02-m20));
+    float sz=(float)_copysign(qz,(double)(m10-m01));
+    *w=qw;*x=sx;*y=sy;*z=sz;
 }
 
 // Inputs are passed by value before the conversion publishes w,x,y,z.
@@ -570,85 +471,18 @@ q_vectors_normalize:
 // Keep products in x87 registers until the native output stores. Output order
 // is 00,11,22,10,01,20,02,21,12; output pointers may alias.
 // samp.dll RVA: 0x000b4a50
-__declspec(naked) void GameQuaternionComponentsToMatrix(float w,float x,float y,float z,
-    float *m00,float *m01,float *m02,float *m10,float *m11,float *m12,
-    float *m20,float *m21,float *m22) {
-    __asm {
-        fld float ptr [esp + 0x4]
-        mov eax,dword ptr [esp + 0x14]
-        fmul float ptr [esp + 0x4]
-        mov ecx,dword ptr [esp + 0x24]
-        fld float ptr [esp + 0x8]
-        mov edx,dword ptr [esp + 0x34]
-        fmul float ptr [esp + 0x8]
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp + 0xc]
-        fld float ptr [esp + 0x10]
-        fmul float ptr [esp + 0x10]
-        fld st(2)
-        fsub st(0),st(2)
-        fsub st(0),st(1)
-        fadd st(0),st(4)
-        fstp float ptr [eax]
-        fld st(1)
-        mov eax,dword ptr [esp + 0x20]
-        fsub st(0),st(3)
-        fsub st(0),st(1)
-        fadd st(0),st(4)
-        fstp float ptr [ecx]
-        fxch st(1)
-        mov ecx,dword ptr [esp + 0x18]
-        fadd st(0),st(2)
-        fsubr st(0),st(1)
-        fadd st(0),st(3)
-        fstp float ptr [edx]
-        mov edx,dword ptr [esp + 0x2c]
-        fstp st(0)
-        fstp st(0)
-        fstp st(0)
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp + 0xc]
-        fld float ptr [esp + 0x4]
-        fmul float ptr [esp + 0x10]
-        fld st(0)
-        fadd st(0),st(2)
-        fadd st(0),st(0)
-        fstp float ptr [eax]
-        fxch st(1)
-        mov eax,dword ptr [esp + 0x1c]
-        fsub st(0),st(1)
-        fadd st(0),st(0)
-        fstp float ptr [ecx]
-        mov ecx,dword ptr [esp + 0x30]
-        fstp st(0)
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp + 0x10]
-        fld float ptr [esp + 0x4]
-        fmul float ptr [esp + 0xc]
-        fld st(1)
-        fsub st(0),st(1)
-        fadd st(0),st(0)
-        fstp float ptr [edx]
-        fadd st(0),st(1)
-        fadd st(0),st(0)
-        fstp float ptr [eax]
-        fstp st(0)
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp + 0x10]
-        fld float ptr [esp + 0x4]
-        fmul float ptr [esp + 0x8]
-        fld st(0)
-        fadd st(0),st(2)
-        fadd st(0),st(0)
-        fstp float ptr [ecx]
-        fxch st(1)
-        fsub st(0),st(1)
-        fadd st(0),st(0)
-        mov edx,dword ptr [esp + 0x28]
-        fstp float ptr [edx]
-        fstp st(0)
-        ret
-    }
+void GameQuaternionComponentsToMatrix(float w,float x,float y,float z,
+    float *m00,float *m01,float *m02,float *m10,float *m11,float *m12,float *m20,float *m21,float *m22) {
+    float ww=w*w,xx=x*x,yy=y*y,zz=z*z;
+    *m00=((xx-yy)-zz)+ww;
+    *m11=((yy-xx)-zz)+ww;
+    *m22=(zz-(xx+yy))+ww;
+    float xy=x*y,wz=w*z;
+    *m10=2.0f*(wz+xy);*m01=2.0f*(xy-wz);
+    float xz=x*z,wy=w*y;
+    *m20=2.0f*(xz-wy);*m02=2.0f*(wy+xz);
+    float yz=y*z,wx=w*x;
+    *m21=2.0f*(wx+yz);*m12=2.0f*(yz-wx);
 }
 
 // Native scalar x,y,z,w inputs; double output order and x87 spill boundaries matter.
