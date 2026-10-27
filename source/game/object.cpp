@@ -2,7 +2,7 @@
 // samp.dll RVA: 0x000715c0
 CVector *CObject::GetRotation() {return (CVector*)((BYTE*)this+0xad);}
 // samp.dll RVA: 0x00017750
-void CObject::DisableCameraCollision() {*((BYTE*)this+0x53)=1;}
+void CObject::DisableCameraCollision() {cameraCollisionDisabled=1;}
 #include "game/scripting.h"
 // samp.dll RVA: 0x0011edfc
 const Scripting::OpcodeInfo g_objectSetRotationCommand={0x453,"ifff"};
@@ -275,7 +275,7 @@ void CObject::ClearModelFlag0() {
 }
 // samp.dll RVA: 0x000a9150
 void CObject::ProcessStreaming() {
-    BYTE *state=(BYTE*)this;state[0x49]=0;
+    BYTE *state=(BYTE*)this;renderReady=0;
     bool timeHidden=state[0x1199] && !IsTimeVisible();
     bool outside;
     // Native caches a float but compares the unspilled ST0 result.
@@ -297,7 +297,7 @@ void CObject::ProcessStreaming() {
             SetModelIndex(*(int*)(state+0x4e));
         }
         if(GetRwObject()) {
-            state[0x49]=1;*(DWORD*)(state+0x4a)=0;ClearModelFlag0();
+            renderReady=1;*(DWORD*)(state+0x4a)=0;ClearModelFlag0();
         }
     } else if(GetRwObject()) {
         DWORD count=++*(DWORD*)(state+0x4a);
@@ -323,7 +323,7 @@ extern const float g_objectNegativeTurnVelocityLimit=-0.001f;
 // samp.dll RVA: 0x000a9240
 void CObject::Process(float elapsedSeconds) {
     BYTE *state=(BYTE*)this;
-    if(!*(DWORD*)(state+0x118b) && !(*(float*)(state+0x54)>g_objectStreamingNearDistance) && !state[0x1199]) {
+    if(!hasMaterials && !(*(float*)(state+0x54)>g_objectStreamingNearDistance) && !state[0x1199]) {
         if(!GetRwObject() && g_pGame->GetPlayerPed()->IsInVehicle()) {
             bool within;
             __asm {
@@ -518,7 +518,7 @@ CObject::~CObject() {
     Scripting::ProcessCommand(&g_objectDestroyCommand,m_nHandle);
     int model=*(int*)(state+0x4e);
     if(model<0 || !GameGetModelReferenceCount(model))g_pGame->ReleaseModel(*(int*)(state+0x4e),0);
-    if(*(DWORD*)(state+0x118b)) {
+    if(hasMaterials) {
         ShutdownMaterialText();
         for(int i=0;i<16;++i) {
             void **texture=(void**)(state+0x217+i*4);
@@ -559,7 +559,7 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
     state[0x1199]=state[0x119a]=state[0x119b]=0;
     if(firstHour || lastHour){state[0x1199]=1;state[0x119a]=firstHour;state[0x119b]=lastHour;}
     if(!GameModelQueryB4170(model))model=18631;
-    void *info=GameGetModelInfo(model);state[0x6c]=(GameGetModelFlagsByte(model)>>1)&1;
+    void *info=GameGetModelInfo(model);drawLast=(GameGetModelFlagsByte(model)>>1)&1;
     if(drawDistance!=g_objectScaleLowerBound && info && GameIsObjectModelInfo(info))
         GameSetModelDrawDistance(info,drawDistance);
     if(model<0) {
@@ -577,10 +577,10 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
         else{state[0x52]=0;memcpy(state+0x54,&drawDistance,4);}
         GetMatrix((CMatrix*)(state+0x11b));memcpy(state+0x14b,&position,12);
         SetMatrix(*(CMatrix*)(state+0x11b));SetRotation(&rotation);SetBackendHighFlag();
-        state[0x49]=0;*(DWORD*)(state+0x4a)=0;
+        renderReady=0;*(DWORD*)(state+0x4a)=0;
         *(float*)(state+0x58)=GameGetModelCollisionRadius(model);UpdateCachedCentre();
     }
-    *(DWORD*)(state+0x118f)=0;*(DWORD*)(state+0x1c3)=0;*(DWORD*)(state+0x118b)=0;
+    *(DWORD*)(state+0x118f)=0;*(DWORD*)(state+0x1c3)=0;hasMaterials=0;
     *(DWORD*)(state+0x1c7)=0;*(DWORD*)(state+0x1d3)=0;*(DWORD*)(state+0x1cb)=0;
     *(DWORD*)(state+0x1cf)=0;*(DWORD*)(state+0x2d7)=0;*(DWORD*)(state+0x1195)=0;
     for(int i=0;i<16;++i) {
@@ -716,7 +716,7 @@ void *__cdecl ObjectRestoreMaterials(void *atomic,void *object) {
 // samp.dll RVA: 0x000a87f0
 void CObject::ProcessMaterials() {
     BYTE *state=(BYTE*)this;
-    if(!*(DWORD*)(state+0x118b))return;
+    if(!hasMaterials)return;
     BYTE *rw=(BYTE*)GetRwObject();if(!rw)return;
     if(*(void**)(state+0x1d3)!=rw) {
         *(DWORD*)(state+0x1c7)=0;
@@ -756,7 +756,7 @@ void CObject::SetMaterialText(int index,const char *text,BYTE size,const char *f
     *(DWORD*)(state+0x257+index*4)=0;*(DWORD*)(state+0x2db+index*4)=2;
     void *raster=*(void**)*texture;
     if(raster)*(void**)(state+0x110b+index*4)=GameRwReadField34(raster);
-    *(DWORD*)(state+0x118b)=1;
+    hasMaterials=1;
 }
 
 #include "game/effects.h"
@@ -779,20 +779,20 @@ void CObject::SetMaterial(int model,int index,const char *dictionary,const char 
         *slot=g_objectSharedMaterialTexture;
     }
     *(DWORD*)(state+0x257+index*4)=color;
-    *(DWORD*)(state+0x2db+index*4)=1;*(DWORD*)(state+0x118b)=1;
+    *(DWORD*)(state+0x2db+index*4)=1;hasMaterials=1;
 }
 
 // samp.dll RVA: 0x000a9a20
 void CObject::BeforeMaterialRender() {
     BYTE *state=(BYTE*)this;
-    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f)) {
+    if(hasMaterials && *(DWORD*)(state+0x118f)) {
         ProcessMaterials();if(state[0x1193])NativeA8C30();
     }
     *(DWORD*)(state+0x118f)=1;
 }
 // samp.dll RVA: 0x000a9a60
 void CObject::AfterMaterialRender() {
-    BYTE *state=(BYTE*)this;if(!*(DWORD*)(state+0x118b))return;
+    BYTE *state=(BYTE*)this;if(!hasMaterials)return;
     if(state[0x1193])NativeA8C70();
     g_deviceMaterialOverrideEnabled=0;g_deviceMaterialOverrides=0;
     if(!*(DWORD*)(state+0x1cb) && !*(DWORD*)(state+0x1cf))return;
@@ -853,21 +853,21 @@ void CObject::Render() {
     __asm {test ah,5}
     __asm {setnp closer}
     if(!closer && !GameTestCameraSphere(centre,*radius))return;
-    if(state[0x6c]) {
+    if(drawLast) {
         // GTA SA virtual address: native weather/render state gate.
         DWORD alpha=(*(DWORD*)0xb72914 || (GameGetModelFlagsByte(*(int*)(state+0x4e))&8))?0:100;
         ClientSetRenderState(30,alpha);
     }
     ClientSetRenderState(20,(GameGetModelFlagsByte(*(int*)(state+0x4e))&0x40)?2:1);
-    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f))ProcessMaterials();
+    if(hasMaterials && *(DWORD*)(state+0x118f))ProcessMaterials();
     GameSetupD3DFog(1);
-    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x1cf)) {
+    if(hasMaterials && *(DWORD*)(state+0x1cf)) {
         if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold) {
             NativeA8C30();GameRwRenderObject(GetRwObject());NativeA8C70();
         } else GameRwRenderObject(GetRwObject());
     } else if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold)NativeA8B50();
     else GameRwRenderObject(GetRwObject());
-    if(*(DWORD*)(state+0x118b) && *(DWORD*)(state+0x118f))AfterMaterialRender();
+    if(hasMaterials && *(DWORD*)(state+0x118f))AfterMaterialRender();
     g_objectRenderFlag=0;*(DWORD*)(state+0x118f)=1;
 }
 

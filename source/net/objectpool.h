@@ -4,6 +4,10 @@
 struct RPCParameters;
 #pragma pack(push,1)
 class CObjectPool {
+    typedef char ObjectReadyOffset[(offsetof(CObject,renderReady)==0x49)?1:-1];
+    typedef char ObjectCameraCollisionOffset[(offsetof(CObject,cameraCollisionDisabled)==0x53)?1:-1];
+    typedef char ObjectDrawLastOffset[(offsetof(CObject,drawLast)==0x6c)?1:-1];
+    typedef char ObjectMaterialGateOffset[(offsetof(CObject,hasMaterials)==0x118b)?1:-1];
     // samp.dll RVA: 0x00019b20
     friend void ScrAttachCameraToObject(RPCParameters *parameters);
     int largestId;

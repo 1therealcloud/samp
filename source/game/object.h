@@ -1,12 +1,22 @@
 #ifndef SAMP_OBJECT_WRAPPER_H
 #define SAMP_OBJECT_WRAPPER_H
 #include "game/entity.h"
-// Native allocation extent is established; the tail remains an opaque storage view.
-// Constructor/lifecycle use the native opaque tail; field semantics remain partial.
+// Native allocation extent is established; observed pool flags are named below.
+// Remaining storage and its untouched bytes stay explicitly unknown.
 class CVehicle;
 #pragma pack(push,1)
 class CObject : public CEntity {
-    BYTE nativeState[0x1154];
+    friend class CObjectPool;
+    BYTE unknown48;
+    BYTE renderReady;
+    BYTE unknown4a[9];
+    BYTE cameraCollisionDisabled;
+    BYTE unknown54[0x18];
+    BYTE drawLast;
+    BYTE unknown6d[0x111e];
+    // Native raw DWORD gate shared by ordinary and text materials.
+    DWORD hasMaterials;
+    BYTE unknown118f[0x0d];
 public:
     // Direct pointer to the internal Euler vector; no copy or backend query.
     // samp.dll RVA: 0x000715c0

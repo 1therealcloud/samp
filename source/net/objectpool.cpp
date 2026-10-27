@@ -62,39 +62,36 @@ void CObjectPool::Process() {
         fmul g_objectPoolSecondsPerTick
         fstp seconds
     }
-    BYTE *state=(BYTE*)this;
-    if(*(LONG*)state>=0) {
+    if(largestId>=0) {
         DWORD i=0;
         do {
-            if(*(DWORD*)(state+4+i*4))(*(CObject**)(state+0x20d4+i*4))->Process(seconds);
-        } while((LONG)++i<=*(LONG*)state);
+            if(active[i])(objects[i])->Process(seconds);
+        } while((LONG)++i<=largestId);
     }
     g_objectPoolLastTick=now;
 }
 // samp.dll RVA: 0x00012a10
 void CObjectPool::ConstructMaterials() {
-    BYTE *state=(BYTE*)this;
-    if(*(LONG*)state>=0) {
+    if(largestId>=0) {
         DWORD i=0;
         do {
-            if(*(DWORD*)(state+4+i*4)) {
-                CObject *object=*(CObject**)(state+0x20d4+i*4);
-                if(*(DWORD*)((BYTE*)object+0x118b))object->ConstructMaterialText();
+            if(active[i]) {
+                CObject *object=objects[i];
+                if(object->hasMaterials)object->ConstructMaterialText();
             }
-        } while((LONG)++i<=*(LONG*)state);
+        } while((LONG)++i<=largestId);
     }
 }
 // samp.dll RVA: 0x00012a50
 void CObjectPool::ShutdownMaterials() {
-    BYTE *state=(BYTE*)this;
-    if(*(LONG*)state>=0) {
+    if(largestId>=0) {
         DWORD i=0;
         do {
-            if(*(DWORD*)(state+4+i*4)) {
-                CObject *object=*(CObject**)(state+0x20d4+i*4);
-                if(*(DWORD*)((BYTE*)object+0x118b))object->ShutdownMaterialText();
+            if(active[i]) {
+                CObject *object=objects[i];
+                if(object->hasMaterials)object->ShutdownMaterialText();
             }
-        } while((LONG)++i<=*(LONG*)state);
+        } while((LONG)++i<=largestId);
     }
 }
 
@@ -117,21 +114,17 @@ BOOL CObjectPool::Create(WORD id,int model,CVector position,CVector rotation,flo
 
 // samp.dll RVA: 0x00012a90
 void CObjectPool::Draw() {
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<=*(int*)state;++i)if(*(DWORD*)(state+4+i*4)) {
-        CObject *object=*(CObject**)(state+0x20d4+i*4);
-        BYTE *data=(BYTE*)object;
-        if(data[0x49] && !data[0x6c])object->Render();
+    for(int i=0;i<=largestId;++i)if(active[i]) {
+        CObject *object=objects[i];
+        if(object->renderReady && !object->drawLast)object->Render();
     }
 }
 // samp.dll RVA: 0x00012ad0
 void CObjectPool::DrawLast() {
     float distances[1000]={0};CObject *ordered[1000]={0};int count=0;
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<=*(int*)state;++i)if(*(DWORD*)(state+4+i*4) && count<1000) {
-        CObject *object=*(CObject**)(state+0x20d4+i*4);
-        BYTE *data=(BYTE*)object;
-        if(data[0x49] && data[0x6c]) {
+    for(int i=0;i<=largestId;++i)if(active[i] && count<1000) {
+        CObject *object=objects[i];
+        if(object->renderReady && object->drawLast) {
             ordered[count]=object;
             distances[count]=object->GetDistanceToCamera();++count;
         }
@@ -146,10 +139,10 @@ void CObjectPool::DrawLast() {
 
 // samp.dll RVA: 0x00012ce0
 bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape *first,const GameEntityCollisionShape *second) {
-    BYTE *state=(BYTE*)this;const float limit=200.0f;
-    for(int i=0;i<=*(int*)state;++i)if(*(DWORD*)(state+4+i*4)) {
-        CObject *object=*(CObject**)(state+0x20d4+i*4);
-        if(!object || !object->IsAdded() || ((BYTE*)object)[0x53])continue;
+    const float limit=200.0f;
+    for(int i=0;i<=largestId;++i)if(active[i]) {
+        CObject *object=objects[i];
+        if(!object || !object->IsAdded() || object->cameraCollisionDisabled)continue;
         // Compare extended ST0 directly; rounding to float can change this gate.
         BYTE nearby;
         __asm {
@@ -253,10 +246,9 @@ DWORD CObjectPool::IsActive(WORD id) {
 }
 // samp.dll RVA: 0x000129d0
 void CObjectPool::UpdateAttachedObjectRotations() {
-    BYTE *state=(BYTE*)this;
-    if(*(LONG*)state<0)return;
+    if(largestId<0)return;
     DWORD i=0;
     do {
-        if(*(DWORD*)(state+4+i*4))(*(CObject**)(state+0x20d4+i*4))->UpdateAttachedObjectRotation();
-    } while((LONG)++i<=*(LONG*)state);
+        if(active[i])(objects[i])->UpdateAttachedObjectRotation();
+    } while((LONG)++i<=largestId);
 }
