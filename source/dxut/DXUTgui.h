@@ -794,20 +794,33 @@ protected:
 class CUniBuffer
 {
 public:
+    // samp.dll RVA: 0x0009bbb0
     CUniBuffer( int nInitialSize = 1 );
+    // samp.dll RVA: 0x0009b440
     ~CUniBuffer();
 
+    // samp.dll RVA: 0x0009ba60
     static void Initialize();
+    // samp.dll RVA: 0x0009b1d0
     static void Uninitialize();
 
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int  GetBufferSize() { return m_nBufferSize; }
+    // samp.dll RVA: 0x0009b240
     bool SetBufferSize( int nSize );
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int  GetTextSize()  { return lstrlenW( m_pwszBuffer ); }
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     const WCHAR* GetBuffer() { return m_pwszBuffer; }
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     const WCHAR& operator[]( int n ) const { return m_pwszBuffer[n]; }
+    // samp.dll RVA: 0x0009b470
     WCHAR& operator[]( int n );
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     DXUTFontNode* GetFontNode() { return m_pFontNode; }
+    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetFontNode( DXUTFontNode *pFontNode ) { m_pFontNode = pFontNode; }
+    // samp.dll RVA: 0x0009b480
     void Clear();
 
     // samp.dll RVA: 0x0009b490
@@ -818,19 +831,27 @@ public:
     // Preserves native whole-object assignment in the single-byte path.
     // samp.dll RVA: 0x0009bbf0
     bool OverwriteAnsiChar( int nIndex, char ch );
+    // samp.dll RVA: 0x0009b5d0
     bool RemoveChar( int nIndex );  // Removes the char at specified index. If nIndex == -1, remove the last char.
+    // samp.dll RVA: 0x0009b630
     bool InsertString( int nIndex, const WCHAR *pStr, int nCount = -1 );  // Inserts the first nCount characters of the string pStr at specified index.  If nCount == -1, the entire string is inserted. If nIndex == -1, insert to the end.
+    // samp.dll RVA: 0x0009b9a0
     bool SetText( LPCWSTR wszText );
     // samp.dll RVA: 0x0009ba00
     bool SetText( const char *text );
 
     // Uniscribe
+    // samp.dll RVA: 0x0009b770
     HRESULT CPtoX( int nCP, BOOL bTrail, int *pX );
+    // samp.dll RVA: 0x0009b7b0
     HRESULT XtoCP( int nX, int *pCP, int *pnTrail );
+    // samp.dll RVA: 0x0009b840
     void GetPriorItemPos( int nCP, int *pPrior );
+    // samp.dll RVA: 0x0009b8d0
     void GetNextItemPos( int nCP, int *pPrior );
 
 private:
+    // samp.dll RVA: 0x0009b310
     HRESULT Analyse();      // Uniscribe -- Analyse() analyses the string in the buffer
 
     WCHAR* m_pwszBuffer;    // Buffer to hold text
@@ -846,23 +867,38 @@ private:
 
 private:
     // Empty implementation of the Uniscribe API
+    // samp.dll RVA: 0x000841e0
     static HRESULT WINAPI Dummy_ScriptApplyDigitSubstitution( const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE* ) { return E_NOTIMPL; }
+    // samp.dll RVA: 0x000841f0
     static HRESULT WINAPI Dummy_ScriptStringAnalyse( HDC, const void *, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*, SCRIPT_STRING_ANALYSIS* ) { return E_NOTIMPL; }
+    // samp.dll RVA: 0x00084200
     static HRESULT WINAPI Dummy_ScriptStringCPtoX( SCRIPT_STRING_ANALYSIS, int, BOOL, int* ) { return E_NOTIMPL; }
+    // samp.dll RVA: 0x00084210
     static HRESULT WINAPI Dummy_ScriptStringXtoCP( SCRIPT_STRING_ANALYSIS, int, int*, int* ) { return E_NOTIMPL; }
+    // samp.dll RVA: 0x00084220
     static HRESULT WINAPI Dummy_ScriptStringFree( SCRIPT_STRING_ANALYSIS* ) { return E_NOTIMPL; }
+    // samp.dll RVA: 0x00084230
     static const SCRIPT_LOGATTR* WINAPI Dummy_ScriptString_pLogAttr( SCRIPT_STRING_ANALYSIS ) { return NULL; }
+    // samp.dll RVA: 0x00084240
     static const int* WINAPI Dummy_ScriptString_pcOutChars( SCRIPT_STRING_ANALYSIS ) { return NULL; }
 
     // Function pointers
+    // samp.dll RVA: 0x00140bfc
     static HRESULT (WINAPI *_ScriptApplyDigitSubstitution)( const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE* );
+    // samp.dll RVA: 0x00140c00
     static HRESULT (WINAPI *_ScriptStringAnalyse)( HDC, const void *, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*, SCRIPT_STRING_ANALYSIS* );
+    // samp.dll RVA: 0x00140c04
     static HRESULT (WINAPI *_ScriptStringCPtoX)( SCRIPT_STRING_ANALYSIS, int, BOOL, int* );
+    // samp.dll RVA: 0x00140c08
     static HRESULT (WINAPI *_ScriptStringXtoCP)( SCRIPT_STRING_ANALYSIS, int, int*, int* );
+    // samp.dll RVA: 0x00140c0c
     static HRESULT (WINAPI *_ScriptStringFree)( SCRIPT_STRING_ANALYSIS* );
+    // samp.dll RVA: 0x00140c10
     static const SCRIPT_LOGATTR* (WINAPI *_ScriptString_pLogAttr)( SCRIPT_STRING_ANALYSIS );
+    // samp.dll RVA: 0x00140c14
     static const int* (WINAPI *_ScriptString_pcOutChars)( SCRIPT_STRING_ANALYSIS );
 
+    // samp.dll RVA: 0x00180618
     static HINSTANCE s_hDll;  // Uniscribe DLL handle
 
 };

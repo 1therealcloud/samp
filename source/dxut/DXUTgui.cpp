@@ -4196,13 +4196,21 @@ void CDXUTListBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 
 // Static member initialization
+// samp.dll RVA: 0x00180618
 HINSTANCE CUniBuffer::s_hDll = NULL;
+// samp.dll RVA: 0x00140bfc
 HRESULT (WINAPI *CUniBuffer::_ScriptApplyDigitSubstitution)( const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE* ) = Dummy_ScriptApplyDigitSubstitution;
+// samp.dll RVA: 0x00140c00
 HRESULT (WINAPI *CUniBuffer::_ScriptStringAnalyse)( HDC, const void *, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*, SCRIPT_STRING_ANALYSIS* ) = Dummy_ScriptStringAnalyse;
+// samp.dll RVA: 0x00140c04
 HRESULT (WINAPI *CUniBuffer::_ScriptStringCPtoX)( SCRIPT_STRING_ANALYSIS, int, BOOL, int* ) = Dummy_ScriptStringCPtoX;
+// samp.dll RVA: 0x00140c08
 HRESULT (WINAPI *CUniBuffer::_ScriptStringXtoCP)( SCRIPT_STRING_ANALYSIS, int, int*, int* ) = Dummy_ScriptStringXtoCP;
+// samp.dll RVA: 0x00140c0c
 HRESULT (WINAPI *CUniBuffer::_ScriptStringFree)( SCRIPT_STRING_ANALYSIS* ) = Dummy_ScriptStringFree;
+// samp.dll RVA: 0x00140c10
 const SCRIPT_LOGATTR* (WINAPI *CUniBuffer::_ScriptString_pLogAttr)( SCRIPT_STRING_ANALYSIS ) = Dummy_ScriptString_pLogAttr;
+// samp.dll RVA: 0x00140c14
 const int* (WINAPI *CUniBuffer::_ScriptString_pcOutChars)( SCRIPT_STRING_ANALYSIS ) = Dummy_ScriptString_pcOutChars;
 bool CDXUTEditBox::s_bHideCaret;   // If true, we don't render the caret.
 
@@ -6715,43 +6723,30 @@ void CDXUTIMEEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 
 //--------------------------------------------------------------------------------------
-void CUniBuffer::Initialize()
-{
-    if( s_hDll ) // Only need to do once
-        return;
-
-    WCHAR wszPath[MAX_PATH+1];
-    if( !::GetSystemDirectory( wszPath, MAX_PATH+1 ) )
-        return;
-
-    // Verify whether it is safe to concatenate these strings
-    int len1 = lstrlen(wszPath);
-    int len2 = lstrlen(UNISCRIBE_DLLNAME);
-    if (len1 + len2 > MAX_PATH)
-    {
-        return;
-    }
-
-    // We have verified that the concatenated string will fit into wszPath,
-    // so it is safe to concatenate them.
-    StringCchCat( wszPath, MAX_PATH, UNISCRIBE_DLLNAME );
-
-    s_hDll = LoadLibrary( wszPath );
-    if( s_hDll )
-    {
+// samp.dll RVA: 0x0009ba60
+void CUniBuffer::Initialize() {
+    if(s_hDll)return;
+    char path[MAX_PATH+1];
+    if(!GetSystemDirectoryA(path,MAX_PATH+1))return;
+    int directoryLength=lstrlenA(path),suffixLength=lstrlenA("\\usp10.dll");
+    if(directoryLength+suffixLength>MAX_PATH)return;
+    StringCchCatA(path,MAX_PATH,"\\usp10.dll");
+    s_hDll=LoadLibraryA(path);
+    if(s_hDll) {
         FARPROC Temp;
-        GETPROCADDRESS( s_hDll, ScriptApplyDigitSubstitution, Temp );
-        GETPROCADDRESS( s_hDll, ScriptStringAnalyse, Temp );
-        GETPROCADDRESS( s_hDll, ScriptStringCPtoX, Temp );
-        GETPROCADDRESS( s_hDll, ScriptStringXtoCP, Temp );
-        GETPROCADDRESS( s_hDll, ScriptStringFree, Temp );
-        GETPROCADDRESS( s_hDll, ScriptString_pLogAttr, Temp );
-        GETPROCADDRESS( s_hDll, ScriptString_pcOutChars, Temp );
+        GETPROCADDRESS(s_hDll,ScriptApplyDigitSubstitution,Temp);
+        GETPROCADDRESS(s_hDll,ScriptStringAnalyse,Temp);
+        GETPROCADDRESS(s_hDll,ScriptStringCPtoX,Temp);
+        GETPROCADDRESS(s_hDll,ScriptStringXtoCP,Temp);
+        GETPROCADDRESS(s_hDll,ScriptStringFree,Temp);
+        GETPROCADDRESS(s_hDll,ScriptString_pLogAttr,Temp);
+        GETPROCADDRESS(s_hDll,ScriptString_pcOutChars,Temp);
     }
 }
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b1d0
 void CUniBuffer::Uninitialize()
 {
     if( s_hDll )
@@ -6771,6 +6766,7 @@ void CUniBuffer::Uninitialize()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b240
 bool CUniBuffer::SetBufferSize( int nNewSize )
 {
     // If the current size is already the maximum allowed,
@@ -6806,51 +6802,41 @@ bool CUniBuffer::SetBufferSize( int nNewSize )
 //--------------------------------------------------------------------------------------
 // Uniscribe -- Analyse() analyses the string in the buffer
 //--------------------------------------------------------------------------------------
-HRESULT CUniBuffer::Analyse()
-{
-    if( m_Analysis )
-        _ScriptStringFree( &m_Analysis );
-
-    SCRIPT_CONTROL ScriptControl; // For uniscribe
-    SCRIPT_STATE   ScriptState;   // For uniscribe
-    ZeroMemory( &ScriptControl, sizeof(ScriptControl) );
-    ZeroMemory( &ScriptState, sizeof(ScriptState) );
-    _ScriptApplyDigitSubstitution ( NULL, &ScriptControl, &ScriptState );
-
-    if( !m_pFontNode )
-        return E_FAIL;
-
-    HRESULT hr = _ScriptStringAnalyse( m_pFontNode->pFont ? m_pFontNode->pFont->GetDC() : NULL,
-                                       (m_nativeMaskText ? InputMaskWideText(m_pwszBuffer) : m_pwszBuffer),
-                                       lstrlenW( (m_nativeMaskText ? InputMaskWideText(m_pwszBuffer) : m_pwszBuffer) ) + 1,  // NULL is also analyzed.
-                                       lstrlenW( (m_nativeMaskText ? InputMaskWideText(m_pwszBuffer) : m_pwszBuffer) ) * 3 / 2 + 16,
-                                       -1,
-                                       SSA_BREAK | SSA_GLYPHS | SSA_FALLBACK | SSA_LINK,
-                                       0,
-                                       &ScriptControl,
-                                       &ScriptState,
-                                       NULL,
-                                       NULL,
-                                       NULL,
-                                       &m_Analysis );
-    if( SUCCEEDED( hr ) )
-        m_bAnalyseRequired = false;  // Analysis is up-to-date
-    return hr;
+// samp.dll RVA: 0x0009b310
+HRESULT CUniBuffer::Analyse() {
+    if(m_Analysis)_ScriptStringFree(&m_Analysis);
+    SCRIPT_CONTROL control;SCRIPT_STATE state;
+    ZeroMemory(&control,sizeof(control));ZeroMemory(&state,sizeof(state));
+    _ScriptApplyDigitSubstitution(NULL,&control,&state);
+    if(!m_pFontNode)return E_FAIL;
+    // Native selects its branch before GetDC and captures the DC before lengths.
+    const bool masked=m_nativeMaskText;
+    ID3DXFont *font=m_pFontNode->pFont;
+    HDC dc=font?font->GetDC():NULL;
+    int glyphCount=lstrlenW(masked?InputMaskWideText(m_pwszBuffer):m_pwszBuffer)*3/2+16;
+    int characterCount=lstrlenW(masked?InputMaskWideText(m_pwszBuffer):m_pwszBuffer)+1;
+    const WCHAR *text=masked?InputMaskWideText(m_pwszBuffer):m_pwszBuffer;
+    HRESULT result=_ScriptStringAnalyse(dc,text,characterCount,glyphCount,-1,
+        SSA_BREAK|SSA_GLYPHS|SSA_FALLBACK|SSA_LINK,0,&control,&state,
+        NULL,NULL,NULL,&m_Analysis);
+    if(SUCCEEDED(result))m_bAnalyseRequired=false;
+    return result;
 }
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009bbb0
 CUniBuffer::CUniBuffer( int nInitialSize )
 {
     CUniBuffer::Initialize();  // ensure static vars are properly init'ed first
 
-    m_pendingLeadByte = 0;
-    m_nativeMaskText = false;
     m_nBufferSize = 0;
     m_pwszBuffer = NULL;
     m_bAnalyseRequired = true;
     m_Analysis = NULL;
     m_pFontNode = NULL;
+    m_pendingLeadByte = 0;
+    m_nativeMaskText = false;
     
     if( nInitialSize > 0 )
         SetBufferSize( nInitialSize );
@@ -6858,6 +6844,7 @@ CUniBuffer::CUniBuffer( int nInitialSize )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b440
 CUniBuffer::~CUniBuffer()
 {
     delete[] m_pwszBuffer;
@@ -6867,6 +6854,7 @@ CUniBuffer::~CUniBuffer()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b470
 WCHAR& CUniBuffer::operator[]( int n )  // No param checking
 {
     // This version of operator[] is called only
@@ -6878,6 +6866,7 @@ WCHAR& CUniBuffer::operator[]( int n )  // No param checking
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b480
 void CUniBuffer::Clear()
 {
     *m_pwszBuffer = L'\0';
@@ -6960,6 +6949,7 @@ bool CUniBuffer::InsertChar( int nIndex, WCHAR wChar )
 // Removes the char at specified index.
 // If nIndex == -1, remove the last char.
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b5d0
 bool CUniBuffer::RemoveChar( int nIndex )
 {
     if( !lstrlenW( m_pwszBuffer ) || nIndex < 0 || nIndex >= lstrlenW( m_pwszBuffer ) )
@@ -6976,6 +6966,7 @@ bool CUniBuffer::RemoveChar( int nIndex )
 // If nCount == -1, the entire string is inserted.
 // If nIndex == -1, insert to the end.
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b630
 bool CUniBuffer::InsertString( int nIndex, const WCHAR *pStr, int nCount )
 {
     assert( nIndex >= 0 );
@@ -7005,11 +6996,12 @@ bool CUniBuffer::InsertString( int nIndex, const WCHAR *pStr, int nCount )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b9a0
 bool CUniBuffer::SetText( LPCWSTR wszText )
 {
     assert( wszText != NULL );
 
-    int nRequired = int(wcslen( wszText ) + 1);
+    int nRequired = lstrlenW( wszText ) + 1;
 
     // Check for maximum length allowed
     if( nRequired >= DXUT_MAX_EDITBOXLENGTH )
@@ -7031,6 +7023,7 @@ bool CUniBuffer::SetText( LPCWSTR wszText )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b770
 HRESULT CUniBuffer::CPtoX( int nCP, BOOL bTrail, int *pX )
 {
     assert( pX );
@@ -7048,6 +7041,7 @@ HRESULT CUniBuffer::CPtoX( int nCP, BOOL bTrail, int *pX )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b7b0
 HRESULT CUniBuffer::XtoCP( int nX, int *pCP, int *pnTrail )
 {
     assert( pCP && pnTrail );
@@ -7077,6 +7071,7 @@ HRESULT CUniBuffer::XtoCP( int nX, int *pCP, int *pnTrail )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b840
 void CUniBuffer::GetPriorItemPos( int nCP, int *pPrior )
 {
     *pPrior = nCP;  // Default is the char itself
@@ -7108,6 +7103,7 @@ void CUniBuffer::GetPriorItemPos( int nCP, int *pPrior )
     
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b8d0
 void CUniBuffer::GetNextItemPos( int nCP, int *pPrior )
 {
     *pPrior = nCP;  // Default is the char itself
