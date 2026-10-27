@@ -1146,6 +1146,7 @@ public:
     // samp.dll RVA: 0x00085d10
     static void Uninitialize();
 
+    // samp.dll RVA: 0x00085460
     static  HRESULT StaticOnCreateDevice();
     static  bool StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
 
@@ -1158,9 +1159,12 @@ public:
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
     // samp.dll RVA: 0x00085490
     virtual void UpdateRects();
+    // samp.dll RVA: 0x000890B0
     virtual void OnFocusIn();
+    // samp.dll RVA: 0x00085CC0
     virtual void OnFocusOut();
 
+    // samp.dll RVA: 0x00085C40
     void PumpMessage();
 
     // samp.dll RVA: 0x0008F480
@@ -1176,15 +1180,21 @@ protected:
     static WORD GetSubLanguage() { return SUBLANGID( LOWORD( s_hklCurrent ) ); }
     static void SendKey( BYTE nVirtKey );
     static DWORD GetImeId( UINT uIndex = 0 );
+    // samp.dll RVA: 0x00085760
     static void CheckInputLocale();
+    // samp.dll RVA: 0x00085860
     static void CheckToggleState();
     static void SetupImeApi();
+    // samp.dll RVA: 0x000859E0
     static void ResetCompositionString();
+    // samp.dll RVA: 0x00085A10
     void TruncateCompString( bool bUseBackSpace = true, int iNewStrLen = 0 );
+    // samp.dll RVA: 0x00085B70
     void FinalizeString( bool bSend );
     static void GetReadingWindowOrientation( DWORD dwId );
     static void GetPrivateReadingString();
 
+    // samp.dll RVA: 0x00085B20
     void SendCompString();
 
 protected:
@@ -1217,28 +1227,39 @@ protected:
     static HINSTANCE s_hDllImm32;         // IMM32 DLL handle
     // samp.dll RVA: 0x0017f6a4
     static HINSTANCE s_hDllVer;           // Version DLL handle
+    // samp.dll RVA: 0x0017F6A8
     static HIMC      s_hImcDef;           // Default input context
 
+    // samp.dll RVA: 0x00180600
     static HKL     s_hklCurrent;          // Current keyboard layout of the process
+    // samp.dll RVA: 0x0017F6B1
     static bool    s_bVerticalCand;       // Indicates that the candidates are listed vertically
+    // samp.dll RVA: 0x00140C9C
     static LPWSTR  s_wszCurrIndicator;    // Points to an indicator string that corresponds to current input locale
+    // samp.dll RVA: 0x00140C7C
     static WCHAR   s_aszIndicator[5][3];  // String to draw to indicate current input locale
+    // samp.dll RVA: 0x0017F695
     static bool    s_bInsertOnType;       // Insert the character as soon as a key is pressed (Korean behavior)
     // samp.dll RVA: 0x0017f6b4
     static HINSTANCE s_hDllIme;           // Instance handle of the current IME module
+    // samp.dll RVA: 0x0018061C
     static IMESTATE  s_ImeState;          // IME global state
+    // samp.dll RVA: 0x0017F6B0
     static bool    s_bEnableImeSystem;    // Whether the IME system is active
     static POINT   s_ptCompString;        // Composition string position. Updated every frame.
+    // samp.dll RVA: 0x0017F690
     static int     s_nCompCaret;          // Caret position of the composition string
     static int     s_nFirstTargetConv;    // Index of the first target converted char in comp string.  If none, -1.
     // samp.dll RVA: 0x0018062c
     static CUniBuffer s_CompString;       // Buffer to hold the composition string (we fix its length)
+    // samp.dll RVA: 0x0017F6B8
     static BYTE    s_abCompStringAttr[MAX_COMPSTRING_SIZE];
     static DWORD   s_adwCompStringClause[MAX_COMPSTRING_SIZE];
     static WCHAR   s_wszReadingString[32];// Used only with horizontal reading window (why?)
     static CCandList s_CandList;          // Data relevant to the candidate list
     static bool    s_bShowReadingWindow;  // Indicates whether reading window is visible
     static bool    s_bHorizontalReading;  // Indicates whether the reading window is vertical or horizontal
+    // samp.dll RVA: 0x001803B9
     static bool    s_bChineseIME;
     static CGrowableArray< CInputLocale > s_Locale; // Array of loaded keyboard layout on system
 

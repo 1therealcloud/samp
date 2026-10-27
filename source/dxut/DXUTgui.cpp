@@ -8,6 +8,7 @@
 #include "dxstdafx.h"
 #include "input_password.h"
 #include "input_activity.h"
+#include "game/gta_globals.h"
 #include "gui/input_text.h"
 #include "DXUTgui.h"
 #include "DXUTsettingsDlg.h"
@@ -4917,8 +4918,11 @@ DWORD (APIENTRY * CDXUTIMEEditBox::_GetFileVersionInfoSizeA)( LPSTR, LPDWORD ) =
 HINSTANCE CDXUTIMEEditBox::s_hDllImm32;      // IMM32 DLL handle
 // samp.dll RVA: 0x0017f6a4
 HINSTANCE CDXUTIMEEditBox::s_hDllVer;        // Version DLL handle
+// samp.dll RVA: 0x00180600
 HKL       CDXUTIMEEditBox::s_hklCurrent;     // Current keyboard layout of the process
+// samp.dll RVA: 0x0017F6B1
 bool      CDXUTIMEEditBox::s_bVerticalCand;  // Indicates that the candidates are listed vertically
+// samp.dll RVA: 0x00140C7C
 WCHAR     CDXUTIMEEditBox::s_aszIndicator[5][3] = // String to draw to indicate current input locale
             {
                 L"En",
@@ -4927,24 +4931,32 @@ WCHAR     CDXUTIMEEditBox::s_aszIndicator[5][3] = // String to draw to indicate 
                 L"\xAC00",
                 L"\x3042",
             };
+// samp.dll RVA: 0x00140C9C
 LPWSTR    CDXUTIMEEditBox::s_wszCurrIndicator = CDXUTIMEEditBox::s_aszIndicator[0];  // Points to an indicator string that corresponds to current input locale
+// samp.dll RVA: 0x0017F695
 bool      CDXUTIMEEditBox::s_bInsertOnType;     // Insert the character as soon as a key is pressed (Korean behavior)
 // samp.dll RVA: 0x0017f6b4
 HINSTANCE CDXUTIMEEditBox::s_hDllIme;           // Instance handle of the current IME module
+// samp.dll RVA: 0x0017F6A8
 HIMC      CDXUTIMEEditBox::s_hImcDef;           // Default input context
+// samp.dll RVA: 0x0018061C
 CDXUTIMEEditBox::IMESTATE  CDXUTIMEEditBox::s_ImeState = IMEUI_STATE_OFF;
+// samp.dll RVA: 0x0017F6B0
 bool      CDXUTIMEEditBox::s_bEnableImeSystem;  // Whether the IME system is active
 POINT     CDXUTIMEEditBox::s_ptCompString;      // Composition string position. Updated every frame.
+// samp.dll RVA: 0x0017F690
 int       CDXUTIMEEditBox::s_nCompCaret;
 int       CDXUTIMEEditBox::s_nFirstTargetConv;  // Index of the first target converted char in comp string.  If none, -1.
 // samp.dll RVA: 0x0018062c
 CUniBuffer CDXUTIMEEditBox::s_CompString = CUniBuffer( 0 );
+// samp.dll RVA: 0x0017F6B8
 BYTE      CDXUTIMEEditBox::s_abCompStringAttr[MAX_COMPSTRING_SIZE];
 DWORD     CDXUTIMEEditBox::s_adwCompStringClause[MAX_COMPSTRING_SIZE];
 WCHAR     CDXUTIMEEditBox::s_wszReadingString[32];
 CDXUTIMEEditBox::CCandList CDXUTIMEEditBox::s_CandList;       // Data relevant to the candidate list
 bool      CDXUTIMEEditBox::s_bShowReadingWindow; // Indicates whether reading window is visible
 bool      CDXUTIMEEditBox::s_bHorizontalReading; // Indicates whether the reading window is vertical or horizontal
+// samp.dll RVA: 0x001803B9
 bool      CDXUTIMEEditBox::s_bChineseIME;
 CGrowableArray< CDXUTIMEEditBox::CInputLocale > CDXUTIMEEditBox::s_Locale; // Array of loaded keyboard layout on system
 #if defined(DEBUG) | defined(_DEBUG)
@@ -5002,11 +5014,13 @@ void CDXUTIMEEditBox::SendKey( BYTE nVirtKey )
 //--------------------------------------------------------------------------------------
 // Called by CDXUTResourceCache's OnCreateDevice.  This gives the class a
 // chance to initialize its default input context associated with the app window.
+// samp.dll RVA: 0x00085460
 HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 {
+    _ImmDisableTextFrameService( (DWORD)-1 );
     // Save the default input context
-    s_hImcDef = _ImmGetContext( DXUTGetHWND() );
-    _ImmReleaseContext( DXUTGetHWND(), s_hImcDef );
+    s_hImcDef = _ImmGetContext( g_inputGameWindow );
+    _ImmReleaseContext( g_inputGameWindow, s_hImcDef );
 
     return S_OK;
 }
@@ -5152,8 +5166,10 @@ DWORD CDXUTIMEEditBox::GetImeId( UINT uIndex )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085760
 void CDXUTIMEEditBox::CheckInputLocale()
 {
+    // samp.dll RVA: 0x00181A88
     static HKL hklPrev = 0;
     s_hklCurrent = GetKeyboardLayout( 0 );
     if ( hklPrev == s_hklCurrent )
@@ -5207,6 +5223,7 @@ void CDXUTIMEEditBox::CheckInputLocale()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085860
 void CDXUTIMEEditBox::CheckToggleState()
 {
     CheckInputLocale();
@@ -5214,7 +5231,7 @@ void CDXUTIMEEditBox::CheckToggleState()
     s_bChineseIME = ( GetPrimaryLanguage() == LANG_CHINESE ) && bIme;
 
     HIMC hImc;
-    if( NULL != ( hImc = _ImmGetContext( DXUTGetHWND() ) ) )
+    if( NULL != ( hImc = _ImmGetContext( g_inputGameWindow ) ) )
     {
         if( s_bChineseIME )
         {
@@ -5226,7 +5243,7 @@ void CDXUTIMEEditBox::CheckToggleState()
         {
             s_ImeState = ( bIme && _ImmGetOpenStatus( hImc ) != 0 ) ? IMEUI_STATE_ON : IMEUI_STATE_OFF;
         }
-        _ImmReleaseContext( DXUTGetHWND(), hImc );
+        _ImmReleaseContext( g_inputGameWindow, hImc );
     }
     else
         s_ImeState = IMEUI_STATE_OFF;
@@ -5268,6 +5285,7 @@ void CDXUTIMEEditBox::SetupImeApi()
 
 //--------------------------------------------------------------------------------------
 // Resets the composition string.
+// samp.dll RVA: 0x000859E0
 void CDXUTIMEEditBox::ResetCompositionString()
 {
     s_nCompCaret = 0;
@@ -5278,19 +5296,20 @@ void CDXUTIMEEditBox::ResetCompositionString()
 
 //--------------------------------------------------------------------------------------
 // Truncate composition string by sending keystrokes to the window.
+// samp.dll RVA: 0x00085A10
 void CDXUTIMEEditBox::TruncateCompString( bool bUseBackSpace, int iNewStrLen )
 {
     if( !s_bInsertOnType )
         return;
 
-    int cc = (int) wcslen( s_CompString.GetBuffer() );
+    int cc = lstrlenW( s_CompString.GetBuffer() );
     assert( iNewStrLen == 0 || iNewStrLen >= cc );
 
     // Send right arrow keystrokes to move the caret
     //   to the end of the composition string.
     for (int i = 0; i < cc - s_nCompCaret; ++i )
-        SendMessage( DXUTGetHWND(), WM_KEYDOWN, VK_RIGHT, 0 );
-    SendMessage( DXUTGetHWND(), WM_KEYUP, VK_RIGHT, 0 );
+        SendMessageA( g_inputGameWindow, WM_KEYDOWN, VK_RIGHT, 0 );
+    SendMessageA( g_inputGameWindow, WM_KEYUP, VK_RIGHT, 0 );
 
     if( bUseBackSpace || m_bInsertMode )
         iNewStrLen = 0;
@@ -5306,44 +5325,47 @@ void CDXUTIMEEditBox::TruncateCompString( bool bUseBackSpace, int iNewStrLen )
     {
         for( int i = 0; i < cc - iNewStrLen; ++i )
         {
-            SendMessage( DXUTGetHWND(), WM_KEYDOWN, VK_BACK, 0 );  // Backspace character
-            SendMessageW( DXUTGetHWND(), WM_CHAR, VK_BACK, 0 );
+            SendMessageA( g_inputGameWindow, WM_KEYDOWN, VK_BACK, 0 );  // Backspace character
+            SendMessageW( g_inputGameWindow, WM_CHAR, VK_BACK, 0 );
         }
-        SendMessage( DXUTGetHWND(), WM_KEYUP, VK_BACK, 0 );
+        SendMessageA( g_inputGameWindow, WM_KEYUP, VK_BACK, 0 );
     }
     else
         iNewStrLen = cc;
 
     // Move the caret to the beginning by sending left keystrokes
     for (int i = 0; i < iNewStrLen; ++i )
-        SendMessage( DXUTGetHWND(), WM_KEYDOWN, VK_LEFT, 0 );
-    SendMessage( DXUTGetHWND(), WM_KEYUP, VK_LEFT, 0 );
+        SendMessageA( g_inputGameWindow, WM_KEYDOWN, VK_LEFT, 0 );
+    SendMessageA( g_inputGameWindow, WM_KEYUP, VK_LEFT, 0 );
 }
 
 
 //--------------------------------------------------------------------------------------
 // Sends the current composition string to the application by sending keystroke
 // messages.
+// samp.dll RVA: 0x00085B20
 void CDXUTIMEEditBox::SendCompString()
 {
-    for( int i = 0; i < lstrlen( s_CompString.GetBuffer() ); ++i )
+    for( int i = 0; i < lstrlenW( s_CompString.GetBuffer() ); ++i )
         MsgProc( WM_CHAR, (WPARAM)s_CompString[i], 0 );
 }
 
 
 //--------------------------------------------------------------------------------------
 // Outputs current composition string then cleans up the composition task.
+// samp.dll RVA: 0x00085B70
 void CDXUTIMEEditBox::FinalizeString( bool bSend )
 {
     HIMC hImc;
-    if( NULL == ( hImc = _ImmGetContext( DXUTGetHWND() ) ) )
+    if( NULL == ( hImc = _ImmGetContext( g_inputGameWindow ) ) )
         return;
 
+    // samp.dll RVA: 0x00181A8C
     static bool bProcessing = false;
     if( bProcessing )    // avoid infinite recursion
     {
         DXUTTRACE( L"CDXUTIMEEditBox::FinalizeString: Reentrant detected!\n" );
-        _ImmReleaseContext( DXUTGetHWND(), hImc );
+        _ImmReleaseContext( g_inputGameWindow, hImc );
         return;
     }
     bProcessing = true;
@@ -5351,7 +5373,7 @@ void CDXUTIMEEditBox::FinalizeString( bool bSend )
     if( !s_bInsertOnType && bSend )
     {
         // Send composition string to app.
-        LONG lLength = lstrlen( s_CompString.GetBuffer() );
+        LONG lLength = lstrlenW( s_CompString.GetBuffer() );
         // In case of CHT IME, don't send the trailing double byte space, if it exists.
         if( GetLanguage() == LANG_CHT
             && s_CompString[lLength - 1] == 0x3000 )
@@ -5367,7 +5389,7 @@ void CDXUTIMEEditBox::FinalizeString( bool bSend )
     // the following line is necessary as Korean IME doesn't close cand list
     // when comp string is cancelled.
     _ImmNotifyIME( hImc, NI_CLOSECANDIDATE, 0, 0 ); 
-    _ImmReleaseContext( DXUTGetHWND(), hImc );
+    _ImmReleaseContext( g_inputGameWindow, hImc );
     bProcessing = false;
 }
 
@@ -5619,6 +5641,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
 //--------------------------------------------------------------------------------------
 // This function is used only briefly in CHT IME handling,
 // so accelerator isn't processed.
+// samp.dll RVA: 0x00085C40
 void CDXUTIMEEditBox::PumpMessage()
 {
     MSG msg;
@@ -5637,40 +5660,44 @@ void CDXUTIMEEditBox::PumpMessage()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000890B0
 void CDXUTIMEEditBox::OnFocusIn()
 {
     CDXUTEditBox::OnFocusIn();
 
-    if( s_bEnableImeSystem )
-    {
-        _ImmAssociateContext( DXUTGetHWND(), s_hImcDef );
-        CheckToggleState();
-    } else
-        _ImmAssociateContext( DXUTGetHWND(), NULL );
+    if( !s_bEnableImeSystem )
+        return;
+
+    _ImmAssociateContext( g_inputGameWindow, s_hImcDef );
+    CheckToggleState();
 
     //
     // Set up the IME global state according to the current instance state
     //
     HIMC hImc;
-    if( NULL != ( hImc = _ImmGetContext( DXUTGetHWND() ) ) ) 
+    if( NULL != ( hImc = _ImmGetContext( g_inputGameWindow ) ) )
     {
         if( !s_bEnableImeSystem )
             s_ImeState = IMEUI_STATE_OFF;
 
-        _ImmReleaseContext( DXUTGetHWND(), hImc );
+        _ImmReleaseContext( g_inputGameWindow, hImc );
         CheckToggleState();
     }
 }
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085CC0
 void CDXUTIMEEditBox::OnFocusOut()
 {
     CDXUTEditBox::OnFocusOut();
 
+    if( !s_bEnableImeSystem )
+        return;
+
     FinalizeString( false );  // Don't send the comp string as to match RichEdit behavior
 
-    _ImmAssociateContext( DXUTGetHWND(), NULL );
+    _ImmAssociateContext( g_inputGameWindow, NULL );
 }
 
 
