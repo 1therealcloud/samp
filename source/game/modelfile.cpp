@@ -1000,3 +1000,163 @@ DWORD CModelCollisionArrayB::Insert(void *value) {
     if(!Resize(oldCount+1))return 0xffffffff;
     items[oldCount]=value;return oldCount;
 }
+
+// Shared native half constant, already maintained by textdraw.
+// samp.dll RVA: 0x00117884
+extern const float g_textDrawHalf;
+// samp.dll RVA: 0x000ba750
+CModelCollisionNode::~CModelCollisionNode() {delete left;delete right;}
+// samp.dll RVA: 0x000b9d10
+void CModelCollisionNode::CountLeaves(DWORD *count) {
+    CModelCollisionNode *node=this;
+    while(node->left){node->left->CountLeaves(count);node=node->right;}
+    if(!node->triangles.empty())++*count;
+}
+// samp.dll RVA: 0x000ba320
+void CModelCollisionNode::WriteLeaves(CModelCollisionFile *file) {
+    CModelCollisionNode *node=this;
+    while(node->left){node->left->WriteLeaves(file);node=node->right;}
+    if(node->triangles.empty())return;
+    BYTE *state=file->nativeState;
+    ModelCollisionFaceGroup *groups=*(ModelCollisionFaceGroup**)(state+0x98);
+    DWORD group=*(DWORD*)(state+0x9c);
+    groups[group].first=(WORD)*(DWORD*)(state+0x8c);
+    groups[group].last=(WORD)(groups[group].first+node->triangles.size()-1);
+    ModelCollisionVertex *vertices=*(ModelCollisionVertex**)(state+0x90);
+    ModelCollisionVertex minimum=vertices[node->triangles[0].vertices[0]];
+    ModelCollisionVertex maximum=vertices[node->triangles[0].vertices[0]];
+    for(DWORD i=0;i<node->triangles.size();++i) {
+        ModelCollisionTriangle *output=*(ModelCollisionTriangle**)(state+0x88);
+        memcpy(output+*(DWORD*)(state+0x8c)+i,&node->triangles[i],8);
+        vertices=*(ModelCollisionVertex**)(state+0x90);
+        ModelCollisionTriangle *triangle=&node->triangles[i];
+        ModelCollisionMinVertex(&minimum,vertices+triangle->vertices[0]);
+        ModelCollisionMinVertex(&minimum,vertices+triangle->vertices[1]);
+        ModelCollisionMinVertex(&minimum,vertices+triangle->vertices[2]);
+        ModelCollisionMaxVertex(&maximum,vertices+triangle->vertices[0]);
+        ModelCollisionMaxVertex(&maximum,vertices+triangle->vertices[1]);
+        ModelCollisionMaxVertex(&maximum,vertices+triangle->vertices[2]);
+    }
+    for(int axis=0;axis<3;++axis) {
+        (*(ModelCollisionFaceGroup**)(state+0x98))[*(DWORD*)(state+0x9c)].bounds.minimum[axis]=minimum.values[axis]*g_modelCollisionVertexInvScale;
+    }
+    for(int axis=0;axis<3;++axis) {
+        (*(ModelCollisionFaceGroup**)(state+0x98))[*(DWORD*)(state+0x9c)].bounds.maximum[axis]=maximum.values[axis]*g_modelCollisionVertexInvScale;
+    }
+    ++*(DWORD*)(state+0x9c);
+    *(DWORD*)(state+0x8c)+=node->triangles.size();
+}
+// samp.dll RVA: 0x000babf0
+void CModelCollisionNode::Split(CModelCollisionFile *file) {
+    CModelCollisionNode *first=new CModelCollisionNode;
+    if(first){first->right=0;first->left=0;}
+    left=first;
+    CModelCollisionNode *second=new CModelCollisionNode;
+    if(second){second->right=0;second->left=0;}
+    right=second;
+    memcpy(&left->bounds,&bounds,24);memcpy(&right->bounds,&bounds,24);
+    float delta[3];
+    delta[0]=bounds.maximum[0]-bounds.minimum[0];
+    delta[1]=bounds.maximum[1]-bounds.minimum[1];
+    delta[2]=bounds.maximum[2]-bounds.minimum[2];
+    int axis=(delta[0]>delta[1]&&delta[0]>delta[2])?0:delta[1]>delta[2]?1:2;
+    float *distance=delta+axis,*origin=bounds.minimum+axis;
+    float *firstMaximum=left->bounds.maximum+axis,*secondMinimum=right->bounds.minimum+axis;
+    // Native retains the half extent on x87 across both separate additions/stores.
+    __asm {
+        mov eax,distance
+        fld dword ptr [eax]
+        fmul dword ptr g_textDrawHalf
+        fld st(0)
+        mov edx,origin
+        fadd dword ptr [edx]
+        mov eax,firstMaximum
+        fstp dword ptr [eax]
+        fadd dword ptr [edx]
+        mov eax,secondMinimum
+        fstp dword ptr [eax]
+    }
+    for(DWORD i=0;i<triangles.size();++i) {
+        if(file->TriangleHasVertexInBounds(&triangles[i],&left->bounds))
+            left->triangles.push_back(triangles[i]);
+        else right->triangles.push_back(triangles[i]);
+    }
+    // Native releases capacity as well as elements, with delete before pointer clear.
+    triangles.~ModelCollisionTriangleVector();
+    new(&triangles) ModelCollisionTriangleVector;
+    if(left->triangles.size()>80)left->Split(file);
+    if(right->triangles.size()>80)right->Split(file);
+}
+// samp.dll RVA: 0x000baec0
+DWORD CModelCollisionFile::BuildFaceGroups() {
+    CModelCollisionNode root;
+    root.right=0;root.left=0;
+    for(DWORD i=0;i<*(DWORD*)(nativeState+0x8c);++i)
+        root.triangles.push_back((*(ModelCollisionTriangle**)(nativeState+0x88))[i]);
+    memcpy(&root.bounds.maximum,nativeState+0x2c,12);
+    memcpy(&root.bounds.minimum,nativeState+0x20,12);
+    root.Split(this);
+    DWORD count=0;
+    if(root.left){root.left->CountLeaves(&count);root.right->CountLeaves(&count);}
+    else if(!root.triangles.empty())count=1;
+    *(void**)(nativeState+0x98)=calloc(count,28);
+    *(DWORD*)(nativeState+0x9c)=0;
+    *(DWORD*)(nativeState+0x8c)=0;
+    root.WriteLeaves(this);
+    return count;
+}
+// samp.dll RVA: 0x000b9d50
+DWORD CModelCollisionFile::SaveFile(const char *filename,const char *modelName) {
+    CModelFileStream output;
+    strncpy((char*)nativeState+8,modelName,20);
+    SetInitialHeaderSize();
+    output.Write(nativeState,0x78);
+    DWORD total=*(DWORD*)(nativeState+0x84);
+    if(total) {
+        DWORD offset=output.position-4;
+        *(WORD*)(nativeState+0x48)=(WORD)total;
+        for(DWORD i=0;i!=total;++i)if(i<*(DWORD*)(nativeState+0x84)&&(*(void***)(nativeState+0x80))[i]) {
+            void *entry=i<*(DWORD*)(nativeState+0x84)?(*(void***)(nativeState+0x80))[i]:0;
+            output.Write(entry,20);
+        }
+        *(DWORD*)(nativeState+4)+=output.position-offset-4;
+        *(DWORD*)(nativeState+0x54)=offset;
+    }
+    total=*(DWORD*)(nativeState+0x7c);
+    if(total) {
+        DWORD offset=output.position-4;
+        *(WORD*)(nativeState+0x4a)=(WORD)total;
+        for(DWORD i=0;i!=total;++i)if(i<*(DWORD*)(nativeState+0x7c)&&(*(void***)(nativeState+0x78))[i]) {
+            void *entry=i<*(DWORD*)(nativeState+0x7c)?(*(void***)(nativeState+0x78))[i]:0;
+            output.Write(entry,28);
+        }
+        *(DWORD*)(nativeState+4)+=output.position-offset-4;
+        *(DWORD*)(nativeState+0x58)=offset;
+    }
+    if(*(DWORD*)(nativeState+0x9c)) {
+        DWORD offset=output.position;
+        *(DWORD*)(nativeState+0x50)|=8;
+        output.Write(*(void**)(nativeState+0x98),*(DWORD*)(nativeState+0x9c)*28);
+        *(DWORD*)(nativeState+4)+=output.position-offset;
+        DWORD count=*(DWORD*)(nativeState+0x9c);
+        output.Write(&count,4);*(DWORD*)(nativeState+4)+=4;
+    }
+    if(*(DWORD*)(nativeState+0x8c)) {
+        DWORD offset=output.position-4;
+        DWORD count=*(DWORD*)(nativeState+0x8c);
+        *(WORD*)(nativeState+0x4c)=(WORD)count;
+        output.Write(*(void**)(nativeState+0x88),count*8);
+        *(DWORD*)(nativeState+4)+=output.position-offset-4;
+        *(DWORD*)(nativeState+0x64)=offset;
+    }
+    if(*(DWORD*)(nativeState+0x94)) {
+        DWORD offset=output.position-4;
+        output.Write(*(void**)(nativeState+0x90),*(DWORD*)(nativeState+0x94)*6);
+        *(DWORD*)(nativeState+4)+=output.position-offset-4;
+        *(DWORD*)(nativeState+0x60)=offset;
+    }
+    output.position=0;output.ended=0;
+    output.Write(nativeState,0x78);
+    output.SaveFile(filename);
+    return 1;
+}

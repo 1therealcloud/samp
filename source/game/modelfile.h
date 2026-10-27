@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <vector>
 // Descriptive names for the native model-file parser types.
 #pragma pack(push,1)
 struct CModelFileStream {
@@ -255,10 +256,17 @@ struct CDffFile {
 struct ModelCollisionVertex {SHORT values[3];};
 struct ModelCollisionTriangle {WORD vertices[3];BYTE surface,lighting;};
 struct ModelCollisionBounds {float minimum[3],maximum[3];};
-// Observed collision-file view only. Full construction/allocation and file/BVH
-// lifecycle are not established here; do not allocate this prefix as a full type.
+struct ModelCollisionFaceGroup {ModelCollisionBounds bounds;WORD first,last;};
+// Observed collision-file view only. Full construction/allocation/ownership is
+// not established; writer/group methods do not make this a complete owning type.
 class CModelCollisionFile {public:
     BYTE nativeState[0xa0];
+    // Returns1 even if the final file save fails; secondary API results ignored.
+    // samp.dll RVA: 0x000b9d50
+    DWORD SaveFile(const char *filename,const char *modelName);
+    // Reorders the existing triangle buffer and replaces the group pointer.
+    // samp.dll RVA: 0x000baec0
+    DWORD BuildFaceGroups();
     // samp.dll RVA: 0x000b95d0
     DWORD SetInitialHeaderSize();
     // Native entry does not consume this. Writes sentinel bounds before checking vertices.
@@ -273,6 +281,24 @@ class CModelCollisionFile {public:
     // Tests any vertex inside, not full triangle/box intersection.
     // samp.dll RVA: 0x000b9950
     bool TriangleHasVertexInBounds(const ModelCollisionTriangle *triangle,const ModelCollisionBounds *bounds);
+};
+typedef std::vector<ModelCollisionTriangle> ModelCollisionTriangleVector;
+struct CModelCollisionNode {
+    ModelCollisionBounds bounds;
+    DWORD unknown18;
+    CModelCollisionNode *left,*right;
+    ModelCollisionTriangleVector triangles;
+    // Caller initializes child pointers; no standalone constructor entry established.
+    // samp.dll RVA: 0x000ba750
+    ~CModelCollisionNode();
+    // Asymmetric traversal assumes paired children; no added null-right guard.
+    // samp.dll RVA: 0x000b9d10
+    void CountLeaves(DWORD *count);
+    // samp.dll RVA: 0x000ba320
+    void WriteLeaves(CModelCollisionFile *file);
+    // No added depth limit or progress guard; native recurses for child count>80.
+    // samp.dll RVA: 0x000babf0
+    void Split(CModelCollisionFile *file);
 };
 // The two native pointer-array specializations have identical layout/logic;
 // original template names and precise element ownership remain unestablished.
@@ -308,6 +334,11 @@ void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex *target,const ModelC
 typedef char NativeCollisionVertexExtent[(sizeof(ModelCollisionVertex)==6)?1:-1];
 typedef char NativeCollisionTriangleExtent[(sizeof(ModelCollisionTriangle)==8)?1:-1];
 typedef char NativeCollisionBoundsExtent[(sizeof(ModelCollisionBounds)==24)?1:-1];
+typedef char NativeCollisionGroupExtent[(sizeof(ModelCollisionFaceGroup)==28)?1:-1];
+typedef char NativeCollisionVectorExtent[(sizeof(ModelCollisionTriangleVector)==16)?1:-1];
+typedef char NativeCollisionNodeExtent[(sizeof(CModelCollisionNode)==0x34)?1:-1];
+typedef char NativeCollisionNodeLeftOffset[(offsetof(CModelCollisionNode,left)==0x1c)?1:-1];
+typedef char NativeCollisionNodeVectorOffset[(offsetof(CModelCollisionNode,triangles)==0x24)?1:-1];
 typedef char NativeCollisionArrayAExtent[(sizeof(CModelCollisionArrayA)==8)?1:-1];
 typedef char NativeCollisionArrayBExtent[(sizeof(CModelCollisionArrayB)==8)?1:-1];
 // samp.dll RVA: 0x0011f8d8
