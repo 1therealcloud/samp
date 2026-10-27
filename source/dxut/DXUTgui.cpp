@@ -8,6 +8,7 @@
 #include "dxstdafx.h"
 #include "input_password.h"
 #include "input_activity.h"
+#include "gui/input_text.h"
 #include "DXUTgui.h"
 #include "DXUTsettingsDlg.h"
 
@@ -4251,6 +4252,7 @@ CDXUTEditBox::~CDXUTEditBox()
 // PlaceCaret: Set the caret to a character position, and adjust the scrolling if
 //             necessary.
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00084ef0
 void CDXUTEditBox::PlaceCaret( int nCP )
 {
     assert( nCP >= 0 && nCP <= m_Buffer.GetTextSize() );
@@ -4333,6 +4335,7 @@ HRESULT CDXUTEditBox::GetTextCopy( LPWSTR strDest, UINT bufferCount )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000850e0
 void CDXUTEditBox::DeleteSelectionText()
 {
     int nFirst = __min( m_nCaret, m_nSelStart );
@@ -4372,6 +4375,7 @@ void CDXUTEditBox::UpdateRects()
 }
 
 
+// samp.dll RVA: 0x00085260
 void CDXUTEditBox::CopyToClipboard()
 {
     // Copy the selection text to the clipboard
@@ -4402,6 +4406,7 @@ void CDXUTEditBox::CopyToClipboard()
 }
 
 
+// samp.dll RVA: 0x00085320
 void CDXUTEditBox::PasteFromClipboard()
 {
     DeleteSelectionText();
@@ -4627,136 +4632,50 @@ void CDXUTEditBox::OnFocusIn()
 
 
 //--------------------------------------------------------------------------------------
-bool CDXUTEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-    if( !m_bEnabled || !m_bVisible )
-        return false;
-
-    switch( uMsg )
-    {
-        case WM_CHAR:
-        {
-            switch( (WCHAR)wParam )
-            {
-                // Backspace
-                case VK_BACK:
-                {
-                    // If there's a selection, treat this
-                    // like a delete key.
-                    if( m_nCaret != m_nSelStart )
-                    {
-                        DeleteSelectionText();
-                        m_pDialog->SendEvent( EVENT_EDITBOX_CHANGE, true, this );
-                    }
-                    else
-                    if( m_nCaret > 0 )
-                    {
-                        // Move the caret, then delete the char.
-                        PlaceCaret( m_nCaret - 1 );
-                        m_nSelStart = m_nCaret;
-                        m_Buffer.RemoveChar( m_nCaret );
-                        m_pDialog->SendEvent( EVENT_EDITBOX_CHANGE, true, this );
-                    }
-                    ResetCaretBlink();
-                    break;
-                }
-
-                case 24:        // Ctrl-X Cut
-                case VK_CANCEL: // Ctrl-C Copy
-                {
-                    CopyToClipboard();
-
-                    // If the key is Ctrl-X, delete the selection too.
-                    if( (WCHAR)wParam == 24 )
-                    {
-                        DeleteSelectionText();
-                        m_pDialog->SendEvent( EVENT_EDITBOX_CHANGE, true, this );
-                    }
-
-                    break;
-                }
-
-                // Ctrl-V Paste
-                case 22:
-                {
-                    PasteFromClipboard();
-                    m_pDialog->SendEvent( EVENT_EDITBOX_CHANGE, true, this );
-                    break;
-                }
-
-                // Ctrl-A Select All
-                case 1:
-                    if( m_nSelStart == m_nCaret )
-                    {
-                        m_nSelStart = 0;
-                        PlaceCaret( m_Buffer.GetTextSize() );
-                    }
-                    break;
-
-                case VK_RETURN:
-                    // Invoke the callback when the user presses Enter.
-                    m_pDialog->SendEvent( EVENT_EDITBOX_STRING, true, this );
-                    break;
-
-                // Junk characters we don't want in the string
-                case 26:  // Ctrl Z
-                case 2:   // Ctrl B
-                case 14:  // Ctrl N
-                case 19:  // Ctrl S
-                case 4:   // Ctrl D
-                case 6:   // Ctrl F
-                case 7:   // Ctrl G
-                case 10:  // Ctrl J
-                case 11:  // Ctrl K
-                case 12:  // Ctrl L
-                case 17:  // Ctrl Q
-                case 23:  // Ctrl W
-                case 5:   // Ctrl E
-                case 18:  // Ctrl R
-                case 20:  // Ctrl T
-                case 25:  // Ctrl Y
-                case 21:  // Ctrl U
-                case 9:   // Ctrl I
-                case 15:  // Ctrl O
-                case 16:  // Ctrl P
-                case 27:  // Ctrl [
-                case 29:  // Ctrl ]
-                case 28:  // Ctrl \ 
-                    break;
-
-                default:
-                {
-                    // If there's a selection and the user
-                    // starts to type, the selection should
-                    // be deleted.
-                    if( m_nCaret != m_nSelStart )
-                        DeleteSelectionText();
-
-                    // If we are in overwrite mode and there is already
-                    // a char at the caret's position, simply replace it.
-                    // Otherwise, we insert the char as normal.
-                    if( !m_bInsertMode && m_nCaret < m_Buffer.GetTextSize() )
-                    {
-                        m_Buffer[m_nCaret] = (WCHAR)wParam;
-                        PlaceCaret( m_nCaret + 1 );
-                        m_nSelStart = m_nCaret;
-                    } else
-                    {
-                        // Insert the char
-                        if( m_Buffer.InsertChar( m_nCaret, (WCHAR)wParam ) )
-                        {
-                            PlaceCaret( m_nCaret + 1 );
-                            m_nSelStart = m_nCaret;
-                        }
-                    }
-                    ResetCaretBlink();
-                    m_pDialog->SendEvent( EVENT_EDITBOX_CHANGE, true, this );
-                }
-            }
-            return true;
-        }
+// samp.dll RVA: 0x00088da0
+bool CDXUTEditBox::MsgProc(UINT message,WPARAM wparam,LPARAM lparam) {
+    (void)lparam;
+    if(!m_bEnabled||!m_bVisible)return false;
+    if(message==WM_KEYUP) {
+        if(wparam!=VK_RETURN)return false;
+        m_pDialog->SendEvent(EVENT_EDITBOX_STRING,true,this);return true;
     }
-    return false;
+    if(message!=WM_CHAR)return false;
+    WCHAR value=(WCHAR)wparam;
+    switch(value) {
+    case VK_BACK:
+        if(m_nCaret!=m_nSelStart) {
+            DeleteSelectionText();m_pDialog->SendEvent(EVENT_EDITBOX_CHANGE,true,this);
+        } else if(m_nCaret>0) {
+            PlaceCaret(m_nCaret-1);m_nSelStart=m_nCaret;m_Buffer.RemoveChar(m_nCaret);
+            m_pDialog->SendEvent(EVENT_EDITBOX_CHANGE,true,this);
+        }
+        ResetCaretBlink();break;
+    case 3:case 24:
+        CopyToClipboard();
+        if(value==24){DeleteSelectionText();m_pDialog->SendEvent(EVENT_EDITBOX_CHANGE,true,this);}
+        break;
+    case 22:
+        PasteFromClipboard();m_pDialog->SendEvent(EVENT_EDITBOX_CHANGE,true,this);break;
+    case 1:
+        if(m_nSelStart==m_nCaret){m_nSelStart=0;PlaceCaret(m_Buffer.GetTextSize());}
+        break;
+    default:
+        if(value>=2&&value<=29)break;
+        if(m_nCaret!=m_nSelStart)DeleteSelectionText();
+        if(strlen(InputWideToAnsi(m_Buffer.GetBuffer()))>=128)break;
+        bool inserted;
+        if(!m_bInsertMode&&m_nCaret<m_Buffer.GetTextSize()) {
+            if(value>255){m_Buffer[m_nCaret]=value;inserted=true;}
+            else inserted=m_Buffer.OverwriteAnsiChar(m_nCaret,(char)wparam);
+        } else {
+            if(value>255)inserted=m_Buffer.InsertChar(m_nCaret,value);
+            else inserted=m_Buffer.InsertChar(m_nCaret,(char)wparam);
+        }
+        if(inserted){PlaceCaret(m_nCaret+1);m_nSelStart=m_nCaret;}
+        ResetCaretBlink();m_pDialog->SendEvent(EVENT_EDITBOX_CHANGE,true,this);break;
+    }
+    return true;
 }
 
 
@@ -6925,7 +6844,7 @@ CUniBuffer::CUniBuffer( int nInitialSize )
 {
     CUniBuffer::Initialize();  // ensure static vars are properly init'ed first
 
-    m_nativeFlag8 = false;
+    m_pendingLeadByte = 0;
     m_nativeMaskText = false;
     m_nBufferSize = 0;
     m_pwszBuffer = NULL;
@@ -6970,6 +6889,36 @@ void CUniBuffer::Clear()
 // Inserts the char at specified index.
 // If nIndex == -1, insert to the end.
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0009b520
+bool CUniBuffer::InsertChar(int index,char value) {
+    DWORD wide=0;
+    if(m_pendingLeadByte) {
+        char bytes[3];bytes[0]=(char)m_pendingLeadByte;bytes[1]=value;bytes[2]=0;
+        MultiByteToWideChar(CP_ACP,0,bytes,2,(LPWSTR)&wide,1);
+        InsertChar(index,(WCHAR)wide);
+        m_pendingLeadByte=0;return true;
+    }
+    if(IsDBCSLeadByteEx(CP_ACP,(BYTE)value)) {m_pendingLeadByte=(BYTE)value;return false;}
+    MultiByteToWideChar(CP_ACP,0,&value,1,(LPWSTR)&wide,1);
+    InsertChar(index,(WCHAR)wide);return true;
+}
+// samp.dll RVA: 0x0009bbf0
+bool CUniBuffer::OverwriteAnsiChar(int index,char value) {
+    DWORD wide=0;
+    if(m_pendingLeadByte) {
+        char bytes[3];bytes[0]=(char)m_pendingLeadByte;bytes[1]=value;bytes[2]=0;
+        MultiByteToWideChar(CP_ACP,0,bytes,2,(LPWSTR)&wide,1);
+        InsertChar(index,(WCHAR)wide);
+        m_pendingLeadByte=0;return true;
+    }
+    if(IsDBCSLeadByteEx(CP_ACP,(BYTE)value)) {m_pendingLeadByte=(BYTE)value;return false;}
+    MultiByteToWideChar(CP_ACP,0,&value,1,(LPWSTR)&wide,1);
+    // Native indexes CUniBuffer objects (stride19), then destroys the temporary.
+    this[index]=CUniBuffer((int)(WCHAR)wide);
+    return true;
+}
+
+// samp.dll RVA: 0x0009b490
 bool CUniBuffer::InsertChar( int nIndex, WCHAR wChar )
 {
     assert( nIndex >= 0 );
@@ -7199,6 +7148,7 @@ void CUniBuffer::GetNextItemPos( int nCP, int *pPrior )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085cf0
 void CDXUTEditBox::ResetCaretBlink()
 {
     m_bCaretOn = true;

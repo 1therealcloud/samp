@@ -810,7 +810,14 @@ public:
     void SetFontNode( DXUTFontNode *pFontNode ) { m_pFontNode = pFontNode; }
     void Clear();
 
+    // samp.dll RVA: 0x0009b490
     bool InsertChar( int nIndex, WCHAR wChar ); // Inserts the char at specified index. If nIndex == -1, insert to the end.
+    // Native ANSI/DBCS path: only the first lead byte returns false.
+    // samp.dll RVA: 0x0009b520
+    bool InsertChar( int nIndex, char ch );
+    // Preserves native whole-object assignment in the single-byte path.
+    // samp.dll RVA: 0x0009bbf0
+    bool OverwriteAnsiChar( int nIndex, char ch );
     bool RemoveChar( int nIndex );  // Removes the char at specified index. If nIndex == -1, remove the last char.
     bool InsertString( int nIndex, const WCHAR *pStr, int nCount = -1 );  // Inserts the first nCount characters of the string pStr at specified index.  If nCount == -1, the entire string is inserted. If nIndex == -1, insert to the end.
     bool SetText( LPCWSTR wszText );
@@ -830,7 +837,7 @@ private:
     int    m_nBufferSize;   // Size of the buffer allocated, in characters
 
     // Uniscribe-specific
-    bool m_nativeFlag8; // Native field +8; behavior not yet established.
+    BYTE m_pendingLeadByte; // Native +8 caches the first ANSI/DBCS byte, not a bool.
     DXUTFontNode* m_pFontNode;          // Font node for the font that this buffer uses
     bool m_bAnalyseRequired;            // True if the string has changed since last analysis.
     SCRIPT_STRING_ANALYSIS m_Analysis;
@@ -860,6 +867,8 @@ private:
 
 };
 
+typedef char NativeUniBufferExtent[(sizeof(CUniBuffer)==0x13)?1:-1];
+
 //-----------------------------------------------------------------------------
 // EditBox control
 //-----------------------------------------------------------------------------
@@ -871,6 +880,7 @@ public:
 
     virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    // samp.dll RVA: 0x00088da0
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual void UpdateRects();
     virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
@@ -895,10 +905,15 @@ public:
     void SetTextFloatArray( const float *pNumbers, int nCount );
 
 protected:
+    // samp.dll RVA: 0x00084ef0
     void PlaceCaret( int nCP );
+    // samp.dll RVA: 0x000850e0
     void DeleteSelectionText();
+    // samp.dll RVA: 0x00085cf0
     void ResetCaretBlink();
+    // samp.dll RVA: 0x00085260
     void CopyToClipboard();
+    // samp.dll RVA: 0x00085320
     void PasteFromClipboard();
 
     CUniBuffer m_Buffer;     // Buffer to hold text
