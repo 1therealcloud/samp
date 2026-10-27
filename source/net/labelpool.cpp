@@ -10,6 +10,7 @@
 #include "label.h"
 #include "main.h"
 #include <stdlib.h>
+// Native label text uses the CRT calloc/free entries.
 #include <string.h>
 // samp.dll RVA: 0x0000e3c0
 DWORD CLabelPool::IsActive(WORD id) {

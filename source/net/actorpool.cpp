@@ -18,11 +18,12 @@ BOOL CActorPool::Delete(WORD id){
 CActorPool::~CActorPool(){for(WORD i=0;i<1000;++i)Delete(i);}
 // samp.dll RVA: 0x000018b0
 DWORD CActorPool::Find(void *ped) {
-    BYTE *state=(BYTE*)this;DWORD actor=0;
-    if(*(LONG*)state>=0) {
+    int limit=largestId;
+    DWORD actor=0;
+    if(limit>=0) {
         do {
-            if(*(void**)(state+0x1f44+actor*4)==ped)return actor;
-        } while((LONG)++actor<=*(LONG*)state);
+            if(peds[actor]==ped)return actor;
+        } while((LONG)++actor<=limit);
     }
     // Native OR AX,FFFF preserves the high half of the terminating counter.
     return (actor&0xffff0000)|0xffff;

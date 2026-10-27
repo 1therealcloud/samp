@@ -36,16 +36,13 @@ CTextDraw *CTextDrawPool::Create(WORD id,const TextDrawTransmit *info,const char
 // samp.dll RVA: 0x0001e2f0
 void CTextDrawPool::Draw() {
     if(g_deviceScoreboard && *(DWORD*)g_deviceScoreboard)return;
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<2304;i++)if(*(DWORD*)(state+i*4))(*(CTextDraw**)(state+0x2400+i*4))->Draw();
+    for(int i=0;i<2304;i++)if(active[i])draws[i]->Draw();
 }
 // samp.dll RVA: 0x0001e330
 void CTextDrawPool::Native01E330() {
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<2304;i++)if(*(DWORD*)(state+i*4))(*(CTextDraw**)(state+0x2400+i*4))->Native0B30A0();
+    for(int i=0;i<2304;i++)if(active[i])draws[i]->Native0B30A0();
 }
 // samp.dll RVA: 0x0001e360
 void CTextDrawPool::OnLostDevice() {
-    BYTE *state=(BYTE*)this;
-    for(int i=0;i<2304;i++)if(*(DWORD*)(state+i*4))(*(CTextDraw**)(state+0x2400+i*4))->OnLostDevice();
+    for(int i=0;i<2304;i++)if(active[i])draws[i]->OnLostDevice();
 }
