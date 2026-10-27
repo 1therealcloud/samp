@@ -34,9 +34,13 @@ class CObject : public CEntity {
     friend class CObjectPool;
     BYTE unknown48;
     BYTE renderReady;
-    BYTE unknown4a[9];
+    DWORD streamingHideCount;
+    int modelIndex;
+    BYTE usesModelDrawDistance;
     BYTE cameraCollisionDisabled;
-    BYTE unknown54[0x18];
+    float streamingDistance,collisionRadius;
+    CVector worldCentre;
+    float cameraDistance;
     BYTE drawLast;
     BYTE unknown6d[0x40];
     CVector eulerRotation;
@@ -59,7 +63,8 @@ class CObject : public CEntity {
     // Native raw DWORD gate shared by ordinary and text materials.
     DWORD hasMaterials;
     DWORD materialPassState;
-    BYTE unknown1193[9];
+    BYTE unknown1193[6];
+    BYTE timeVisibilityEnabled,visibilityStartHour,visibilityEndHour;
 public:
     // Direct pointer to the internal Euler vector; no copy or backend query.
     // samp.dll RVA: 0x000715c0

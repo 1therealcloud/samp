@@ -255,10 +255,10 @@ void CObject::ShutdownMaterialText() {
 #include "game/game.h"
 // samp.dll RVA: 0x000a7b40
 bool CObject::IsTimeVisible() {
-    BYTE *state=(BYTE*)this;BYTE hour=0,minute=0;
-    if(!state[0x1199])return false;
+    BYTE hour=0,minute=0;
+    if(!timeVisibilityEnabled)return false;
     if(g_pGame)g_pGame->GetWorldTime(&hour,&minute);
-    BYTE first=state[0x119a],last=state[0x119b];
+    BYTE first=visibilityStartHour,last=visibilityEndHour;
     if(last>first)return hour>=first && hour<last;
     if(last<first)return hour>=first || hour<last;
     return false;
@@ -266,14 +266,14 @@ bool CObject::IsTimeVisible() {
 // samp.dll RVA: 0x000a8b90
 void CObject::ClearModelFlag0() {
     if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40) {
-        BYTE *info=(BYTE*)GameGetModelInfo(*(int*)((BYTE*)this+0x4e));
+        BYTE *info=(BYTE*)GameGetModelInfo(modelIndex);
         if(info)*(DWORD*)(info+0x12)&=0xfffffffe;
     }
 }
 // samp.dll RVA: 0x000a9150
 void CObject::ProcessStreaming() {
     BYTE *state=(BYTE*)this;renderReady=0;
-    bool timeHidden=state[0x1199] && !IsTimeVisible();
+    bool timeHidden=timeVisibilityEnabled && !IsTimeVisible();
     bool outside;
     // Native caches a float but compares the unspilled ST0 result.
     __asm {
@@ -288,21 +288,21 @@ void CObject::ProcessStreaming() {
     }
     if(!outside && !timeHidden) {
         if(!GetRwObject()) {
-            if(!g_pGame->IsModelAvailable(*(int*)(state+0x4e))) {
-                g_pGame->RequestModel(*(int*)(state+0x4e),2);return;
+            if(!g_pGame->IsModelAvailable(modelIndex)) {
+                g_pGame->RequestModel(modelIndex,2);return;
             }
-            SetModelIndex(*(int*)(state+0x4e));
+            SetModelIndex(modelIndex);
         }
         if(GetRwObject()) {
-            renderReady=1;*(DWORD*)(state+0x4a)=0;ClearModelFlag0();
+            renderReady=1;streamingHideCount=0;ClearModelFlag0();
         }
     } else if(GetRwObject()) {
-        DWORD count=++*(DWORD*)(state+0x4a);
+        DWORD count=++streamingHideCount;
         if(count==1000) {
-            DeleteRwObject();*(DWORD*)(state+0x4a)=0;
-            int model=*(int*)(state+0x4e);
+            DeleteRwObject();streamingHideCount=0;
+            int model=modelIndex;
             if(model>0 && !GameGetModelReferenceCount(model))
-                g_pGame->ReleaseModel(*(int*)(state+0x4e),0);
+                g_pGame->ReleaseModel(modelIndex,0);
         }
     }
 }
@@ -320,7 +320,7 @@ extern const float g_objectNegativeTurnVelocityLimit=-0.001f;
 // samp.dll RVA: 0x000a9240
 void CObject::Process(float elapsedSeconds) {
     BYTE *state=(BYTE*)this;
-    if(!hasMaterials && !(*(float*)(state+0x54)>g_objectStreamingNearDistance) && !state[0x1199]) {
+    if(!hasMaterials && !(streamingDistance>g_objectStreamingNearDistance) && !timeVisibilityEnabled) {
         if(!GetRwObject() && g_pGame->GetPlayerPed()->IsInVehicle()) {
             bool within;
             __asm {
@@ -334,8 +334,8 @@ void CObject::Process(float elapsedSeconds) {
                 test ah,0x41
                 sete within
             }
-            if(within && !g_pGame->IsModelAvailable(*(int*)(state+0x4e)))
-                g_pGame->RequestModel(*(int*)(state+0x4e),2);
+            if(within && !g_pGame->IsModelAvailable(modelIndex))
+                g_pGame->RequestModel(modelIndex,2);
         }
     } else ProcessStreaming();
     WORD vehicle=attachedVehicle;
@@ -515,8 +515,8 @@ CObject::~CObject() {
     if(!m_pGameEntity || *(DWORD*)m_pGameEntity==0x863c40 || g_clientQuitRequested)return;
     if(GetRwObject())DeleteRwObject();
     Scripting::ProcessCommand(&g_objectDestroyCommand,m_nHandle);
-    int model=*(int*)(state+0x4e);
-    if(model<0 || !GameGetModelReferenceCount(model))g_pGame->ReleaseModel(*(int*)(state+0x4e),0);
+    int model=modelIndex;
+    if(model<0 || !GameGetModelReferenceCount(model))g_pGame->ReleaseModel(modelIndex,0);
     if(hasMaterials) {
         ShutdownMaterialText();
         for(int i=0;i<16;++i) {
@@ -542,9 +542,9 @@ void CObject::UpdateCachedCentre() {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     if(m_pGameEntity && *(DWORD*)m_pGameEntity!=0x863c40) {
         CMatrix matrix;GetMatrix(&matrix);CVector centre;
-        if(GameGetModelCollisionCentre(*(int*)((BYTE*)this+0x4e),&centre))
-            GameTransformPoint((CVector*)((BYTE*)this+0x5c),&matrix,&centre);
-        else memcpy((BYTE*)this+0x5c,&matrix.position,12);
+        if(GameGetModelCollisionCentre(modelIndex,&centre))
+            GameTransformPoint(&worldCentre,&matrix,&centre);
+        else memcpy(&worldCentre,&matrix.position,12);
     }
 }
 // samp.dll RVA: 0x000a8d00
@@ -555,8 +555,8 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
     state[0x1193]=flag1193;m_pGameEntity=0;m_nHandle=0;
     memset(&attachmentOffset,0,24);attachmentRotationSync=1;state[0x1b4]=0;state[0x1194]=0;
     state[0xb9]=0;*(DWORD*)(state+0xba)=0;state[0x53]=0;
-    state[0x1199]=state[0x119a]=state[0x119b]=0;
-    if(firstHour || lastHour){state[0x1199]=1;state[0x119a]=firstHour;state[0x119b]=lastHour;}
+    timeVisibilityEnabled=visibilityStartHour=visibilityEndHour=0;
+    if(firstHour || lastHour){timeVisibilityEnabled=1;visibilityStartHour=firstHour;visibilityEndHour=lastHour;}
     if(!GameModelQueryB4170(model))model=18631;
     void *info=GameGetModelInfo(model);drawLast=(GameGetModelFlagsByte(model)>>1)&1;
     if(drawDistance!=g_objectScaleLowerBound && info && GameIsObjectModelInfo(info))
@@ -571,13 +571,13 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
     if(handle && GamePoolObjectGetAt(handle)) {
         m_pGameEntity=GamePoolObjectGetAt(handle);m_nHandle=handle;
         state[0x48]=1;motionFlags=0;moveSpeed=0.0f;
-        state[0x1b6]=0;lastMoveTick=0;*(int*)(state+0x4e)=model;
-        if(GameIsObjectModelInfo(info)){state[0x52]=1;*(float*)(state+0x54)=GameGetModelDrawDistance(info);}
-        else{state[0x52]=0;memcpy(state+0x54,&drawDistance,4);}
+        state[0x1b6]=0;lastMoveTick=0;modelIndex=model;
+        if(GameIsObjectModelInfo(info)){usesModelDrawDistance=1;streamingDistance=GameGetModelDrawDistance(info);}
+        else{usesModelDrawDistance=0;memcpy(&streamingDistance,&drawDistance,4);}
         GetMatrix(&baseMatrix);memcpy(&baseMatrix.position,&position,12);
         SetMatrix(baseMatrix);SetRotation(&rotation);SetBackendHighFlag();
-        renderReady=0;*(DWORD*)(state+0x4a)=0;
-        *(float*)(state+0x58)=GameGetModelCollisionRadius(model);UpdateCachedCentre();
+        renderReady=0;streamingHideCount=0;
+        collisionRadius=GameGetModelCollisionRadius(model);UpdateCachedCentre();
     }
     materialPassState=0;materials.frameObjectsProcessed=0;hasMaterials=0;
     materials.snapshotValid=0;materials.rwObject=0;materials.texturesChanged=0;
@@ -835,12 +835,11 @@ void CObject::NativeA8B50() {
 }
 // samp.dll RVA: 0x000a9b80
 void CObject::Render() {
-    BYTE *state=(BYTE*)this;
     // GTA SA virtual address: excluded backend vtable.
     if(!m_pGameEntity || *(DWORD*)m_pGameEntity==0x863c40 || !GetRwObject())return;
     UpdateCachedCentre();
-    CCamera *camera=*(CCamera**)((BYTE*)g_pGame+4);CVector *centre=(CVector*)(state+0x5c);
-    float *radius=(float*)(state+0x58);BYTE closer;
+    CCamera *camera=*(CCamera**)((BYTE*)g_pGame+4);CVector *centre=&worldCentre;
+    float *radius=&collisionRadius;BYTE closer;
     // Compare the camera's unspilled ST0 result, as in the original body.
     __asm {mov ecx,camera}
     __asm {push centre}
@@ -853,17 +852,17 @@ void CObject::Render() {
     if(!closer && !GameTestCameraSphere(centre,*radius))return;
     if(drawLast) {
         // GTA SA virtual address: native weather/render state gate.
-        DWORD alpha=(*(DWORD*)0xb72914 || (GameGetModelFlagsByte(*(int*)(state+0x4e))&8))?0:100;
+        DWORD alpha=(*(DWORD*)0xb72914 || (GameGetModelFlagsByte(modelIndex)&8))?0:100;
         ClientSetRenderState(30,alpha);
     }
-    ClientSetRenderState(20,(GameGetModelFlagsByte(*(int*)(state+0x4e))&0x40)?2:1);
+    ClientSetRenderState(20,(GameGetModelFlagsByte(modelIndex)&0x40)?2:1);
     if(hasMaterials && materialPassState)ProcessMaterials();
     GameSetupD3DFog(1);
     if(hasMaterials && materials.colorsChanged) {
-        if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold) {
+        if(cameraDistance<g_objectRenderDistanceThreshold) {
             NativeA8C30();GameRwRenderObject(GetRwObject());NativeA8C70();
         } else GameRwRenderObject(GetRwObject());
-    } else if(*(float*)(state+0x68)<g_objectRenderDistanceThreshold)NativeA8B50();
+    } else if(cameraDistance<g_objectRenderDistanceThreshold)NativeA8B50();
     else GameRwRenderObject(GetRwObject());
     if(hasMaterials && materialPassState)AfterMaterialRender();
     g_objectRenderFlag=0;materialPassState=1;

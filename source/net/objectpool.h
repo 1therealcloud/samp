@@ -26,6 +26,16 @@ class CObjectPool {
     typedef char ObjectMotionFlagsOffset[(offsetof(CObject,motionFlags)==0x1af)?1:-1];
     typedef char ObjectMoveSpeedOffset[(offsetof(CObject,moveSpeed)==0x1b0)?1:-1];
     typedef char ObjectRotationEnabledOffset[(offsetof(CObject,rotationEnabled)==0x1b5)?1:-1];
+    typedef char ObjectStreamingHideCountOffset[(offsetof(CObject,streamingHideCount)==0x4a)?1:-1];
+    typedef char ObjectModelIndexOffset[(offsetof(CObject,modelIndex)==0x4e)?1:-1];
+    typedef char ObjectUsesModelDrawDistanceOffset[(offsetof(CObject,usesModelDrawDistance)==0x52)?1:-1];
+    typedef char ObjectStreamingDistanceOffset[(offsetof(CObject,streamingDistance)==0x54)?1:-1];
+    typedef char ObjectCollisionRadiusOffset[(offsetof(CObject,collisionRadius)==0x58)?1:-1];
+    typedef char ObjectWorldCentreOffset[(offsetof(CObject,worldCentre)==0x5c)?1:-1];
+    typedef char ObjectCameraDistanceOffset[(offsetof(CObject,cameraDistance)==0x68)?1:-1];
+    typedef char ObjectTimeVisibilityEnabledOffset[(offsetof(CObject,timeVisibilityEnabled)==0x1199)?1:-1];
+    typedef char ObjectVisibilityStartHourOffset[(offsetof(CObject,visibilityStartHour)==0x119a)?1:-1];
+    typedef char ObjectVisibilityEndHourOffset[(offsetof(CObject,visibilityEndHour)==0x119b)?1:-1];
     typedef char ObjectMaterialStateOffset[(offsetof(CObject,materials)==0x1c3)?1:-1];
     typedef char ObjectMaterialPassOffset[(offsetof(CObject,materialPassState)==0x118f)?1:-1];
     typedef char ObjectMaterialGateOffset[(offsetof(CObject,hasMaterials)==0x118b)?1:-1];
