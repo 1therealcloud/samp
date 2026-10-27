@@ -8,6 +8,7 @@
 #pragma once
 
 #include <windows.h>
+#include <stddef.h>
 
 #include "ArchiveCommon.h"
 #include "Obfuscator.h"
@@ -33,7 +34,7 @@ typedef struct _AFS_ENTRYBT_NODE
 	_AFS_ENTRYBT_NODE* pRNode;
 	BYTE* pbData;
 
-	// samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+	// samp.dll RVA: 0x000641f0
 	_AFS_ENTRYBT_NODE()
 	{
 		this->pEntry = NULL;
@@ -42,7 +43,7 @@ typedef struct _AFS_ENTRYBT_NODE
 		this->pbData = NULL;
 	}
 
-	// samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+	// samp.dll RVA: 0x00064200
 	_AFS_ENTRYBT_NODE(SAA_ENTRY* pSAAEntry)
 	{
 		this->pEntry = pSAAEntry;
@@ -103,6 +104,12 @@ typedef struct _AFS_ENTRYBT_NODE
 	}
 
 } AFS_ENTRYBT_NODE;
+
+typedef char NativeAfsEntryNodeExtent[(sizeof(AFS_ENTRYBT_NODE)==16)?1:-1];
+typedef char NativeAfsEntryNodeEntryOffset[(offsetof(AFS_ENTRYBT_NODE,pEntry)==0)?1:-1];
+typedef char NativeAfsEntryNodeLeftOffset[(offsetof(AFS_ENTRYBT_NODE,pLNode)==4)?1:-1];
+typedef char NativeAfsEntryNodeRightOffset[(offsetof(AFS_ENTRYBT_NODE,pRNode)==8)?1:-1];
+typedef char NativeAfsEntryNodeDataOffset[(offsetof(AFS_ENTRYBT_NODE,pbData)==12)?1:-1];
 
 const DWORD FILES_FORCE_FS[] =
 {
