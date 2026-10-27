@@ -1,8 +1,6 @@
 #include "game/util.h"
 // samp.dll RVA: 0x000c5110
 IDirect3DDevice9 *GameGetCurrentD3DDevice() {return *(IDirect3DDevice9**)0xc97c28;}
-// samp.dll RVA: 0x00065ee0
-DWORD GameGetScreenHeight() {return *(DWORD*)0xc17048;}
 // samp.dll RVA: 0x000c5510
 __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first,DWORD second) {
     __asm {
@@ -847,16 +845,6 @@ __declspec(naked) float GameApproximateSqrt(float value) {
     }
 }
 
-// GTA SA virtual address: 0x00859524; raw float semantics unresolved.
-// samp.dll RVA: 0x000b26d0
-float GameReadFloat859524() {
-    return *(const float*)0x859524;
-}
-// GTA SA virtual address: 0x00859520; raw float semantics unresolved.
-// samp.dll RVA: 0x000b26e0
-float GameReadFloat859520() {
-    return *(const float*)0x859520;
-}
 
 // samp.dll RVA: 0x000b62f0
 BOOL GameCopyBackendBoneMatrix(void *entity,CMatrix *out,int bone) {

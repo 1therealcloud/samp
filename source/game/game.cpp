@@ -1,6 +1,12 @@
 #include "game/game.h"
 // samp.dll RVA: 0x000607b0
 int CGame::GetScreenWidth() {return *(int*)0xc17044;}
+// samp.dll RVA: 0x00065ee0
+int CGame::GetScreenHeight() {return *(int*)0xc17048;}
+// samp.dll RVA: 0x000b26d0
+float CGame::GetHudVertScale() {return *(const float*)0x859524;}
+// samp.dll RVA: 0x000b26e0
+float CGame::GetHudHorizScale() {return *(const float*)0x859520;}
 // samp.dll RVA: 0x00060d20
 int CGame::GetCursorMode() {return m_nCursorMode;}
 // samp.dll RVA: 0x0006d430
@@ -1284,24 +1290,7 @@ void CGame::Sleep(int elapsed,int limit) {
         if(elapsed<period)::Sleep((DWORD)period-(DWORD)elapsed-1u);
     }
 }
-// samp.dll RVA: 0x000b3ca0
-DWORD GameGetTaskType(void *task) {
-    DWORD result=0;
-    if(task) {
-        DWORD table=*(DWORD*)task;
-        if(table>=0x800000 && table<=0x900000) {
-            __asm {
-                pushad
-                mov ecx,task
-                mov edx,[ecx]
-                call dword ptr [edx+0x10]
-                mov result,eax
-                popad
-            }
-        }
-    }
-    return result;
-}
+
 // samp.dll RVA: 0x000a1a30
 void CGame::ProcessFrameLimiter() {
     DWORD now=RakNet::GetTime();
@@ -1654,25 +1643,7 @@ CPed *CGame::CreatePed(int model,CVector position,float rotation,DWORD,BOOL play
     return ped;
 }
 
-// samp.dll RVA: 0x000b3c50
-void *GameGetTaskChild(void *task) {
-    void *result=0;
-    if(task) {
-        DWORD table=*(DWORD*)task;
-        if(table>=0x800000&&table<=0x900000) {
-            // GTA SA virtual interface: preserve caller registers across the call.
-            __asm {
-                pushad
-                mov ecx,task
-                mov edx,[ecx]
-                call dword ptr [edx+8]
-                mov result,eax
-                popad
-            }
-        }
-    }
-    return result;
-}
+
 
 // samp.dll RVA: 0x0009fea0
 void CGame::SetTimeScale(float scale) {

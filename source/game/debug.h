@@ -2,6 +2,17 @@
 #define SAMP_GAME_DEBUG_H
 #include <windows.h>
 #include <stdio.h>
+// Names follow the 0.2x task helper family; DL name lookup is disabled natively.
+// The unused task parameter follows that reference; DL consumes no argument.
+// samp.dll RVA: 0x000b3cf0
+const char *GameGetTaskName(void *task);
+// samp.dll RVA: 0x0011f56c
+extern const char g_taskNoneName[5];
+// samp.dll RVA: 0x000b3ca0
+DWORD GameGetTaskType(void *task);
+// Validates the raw GTA vtable range before calling virtual slot +8.
+// samp.dll RVA: 0x000b3c50
+void *GameGetTaskChild(void *task);
 struct CVector;
 struct KeyPad;
 class CCamera;

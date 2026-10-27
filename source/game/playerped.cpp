@@ -1,7 +1,7 @@
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/scripting.h"
-#include "game/frame_limit.h"
+#include "game/debug.h"
 #include "game/animation.h"
 #include "game/hooks_render.h"
 #include "game/hooks_control.h"

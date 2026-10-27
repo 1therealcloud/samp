@@ -9,6 +9,48 @@
 #include "main.h"
 #include <stdio.h>
 #include <string.h>
+// samp.dll RVA: 0x0011f56c
+const char g_taskNoneName[5]="None";
+// Native returns this constant even for a null task; no task dereference.
+// samp.dll RVA: 0x000b3cf0
+const char *GameGetTaskName(void *task) {(void)task;return g_taskNoneName;}
+// samp.dll RVA: 0x000b3ca0
+DWORD GameGetTaskType(void *task) {
+    DWORD result=0;
+    if(task) {
+        DWORD table=*(DWORD*)task;
+        if(table>=0x800000 && table<=0x900000) {
+            __asm {
+                pushad
+                mov ecx,task
+                mov edx,[ecx]
+                call dword ptr [edx+0x10]
+                mov result,eax
+                popad
+            }
+        }
+    }
+    return result;
+}
+// samp.dll RVA: 0x000b3c50
+void *GameGetTaskChild(void *task) {
+    void *result=0;
+    if(task) {
+        DWORD table=*(DWORD*)task;
+        if(table>=0x800000&&table<=0x900000) {
+            // GTA SA virtual interface: preserve caller registers across the call.
+            __asm {
+                pushad
+                mov ecx,task
+                mov edx,[ecx]
+                call dword ptr [edx+8]
+                mov result,eax
+                popad
+            }
+        }
+    }
+    return result;
+}
 // samp.dll RVA: 0x001518d4
 DWORD g_debugSelectedVehicleModel=400;
 // samp.dll RVA: 0x0018dd48

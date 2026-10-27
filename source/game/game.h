@@ -18,6 +18,15 @@ public:
     // GTA SA VA: 0x00c17044; raw screen-width global, without a device query.
     // samp.dll RVA: 0x000607b0
     int GetScreenWidth();
+    // GTA SA VA: 0x00c17048; same raw signed screen metric as the 0.2x wrapper.
+    // samp.dll RVA: 0x00065ee0
+    int GetScreenHeight();
+    // GTA SA VA: 0x00859524; returns the raw HUD vertical scale in ST0.
+    // samp.dll RVA: 0x000b26d0
+    float GetHudVertScale();
+    // GTA SA VA: 0x00859520; returns the raw HUD horizontal scale in ST0.
+    // samp.dll RVA: 0x000b26e0
+    float GetHudHorizScale();
     // samp.dll RVA: 0x00060d20
     int GetCursorMode();
     // Clears the delay only; no immediate cursor/input backend calls.
