@@ -9,7 +9,8 @@ class CMenuPool {
     friend void ScrInitMenu(RPCParameters *parameters);
     CMenu *menus[128];
     DWORD active[128];
-    BYTE currentMenu,unknown401;
+    // pendingClose is intentionally untouched by native construction.
+    BYTE currentMenu,pendingClose;
 public:
     // Native includes ID128, reading a DWORD at400 across the allocation edge.
     // samp.dll RVA: 0x000177b0
