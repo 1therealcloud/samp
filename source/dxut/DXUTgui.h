@@ -242,6 +242,7 @@ public:
     HRESULT       SetFont( UINT index, LPCWSTR strFaceName, LONG height, LONG weight );
     // samp.dll RVA: 0x0008ca50
     HRESULT SetFont( UINT index, const char *face, LONG height, LONG weight );
+    // samp.dll RVA: 0x00086B40
     DXUTFontNode* GetFont( UINT index );
 
     HRESULT          SetTexture( UINT index, LPCWSTR strFilename );
@@ -1156,7 +1157,9 @@ public:
 
     // samp.dll RVA: 0x00090230
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    // samp.dll RVA: 0x0008B300
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    // samp.dll RVA: 0x00089110
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
     // samp.dll RVA: 0x00085490
     virtual void UpdateRects();
@@ -1255,14 +1258,17 @@ protected:
     static IMESTATE  s_ImeState;          // IME global state
     // samp.dll RVA: 0x0017F6B0
     static bool    s_bEnableImeSystem;    // Whether the IME system is active
+    // samp.dll RVA: 0x0017F69C
     static POINT   s_ptCompString;        // Composition string position. Updated every frame.
     // samp.dll RVA: 0x0017F690
     static int     s_nCompCaret;          // Caret position of the composition string
+    // samp.dll RVA: 0x0017F6AC
     static int     s_nFirstTargetConv;    // Index of the first target converted char in comp string.  If none, -1.
     // samp.dll RVA: 0x0018062c
     static CUniBuffer s_CompString;       // Buffer to hold the composition string (we fix its length)
     // samp.dll RVA: 0x0017F6B8
     static BYTE    s_abCompStringAttr[MAX_COMPSTRING_SIZE];
+    // samp.dll RVA: 0x0017F7B8
     static DWORD   s_adwCompStringClause[MAX_COMPSTRING_SIZE];
     // samp.dll RVA: 0x001803C0
     static WCHAR   s_wszReadingString[32];// Used only with horizontal reading window (why?)

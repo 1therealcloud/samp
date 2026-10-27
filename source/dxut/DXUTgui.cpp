@@ -507,6 +507,7 @@ HRESULT CDXUTDialog::SetFont( UINT index, LPCWSTR strFaceName, LONG height, LONG
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00086B40
 DXUTFontNode* CDXUTDialog::GetFont( UINT index )
 {
     if( NULL == m_pManager )
@@ -4943,14 +4944,17 @@ HIMC      CDXUTIMEEditBox::s_hImcDef;           // Default input context
 CDXUTIMEEditBox::IMESTATE  CDXUTIMEEditBox::s_ImeState = IMEUI_STATE_OFF;
 // samp.dll RVA: 0x0017F6B0
 bool      CDXUTIMEEditBox::s_bEnableImeSystem;  // Whether the IME system is active
+// samp.dll RVA: 0x0017F69C
 POINT     CDXUTIMEEditBox::s_ptCompString;      // Composition string position. Updated every frame.
 // samp.dll RVA: 0x0017F690
 int       CDXUTIMEEditBox::s_nCompCaret;
+// samp.dll RVA: 0x0017F6AC
 int       CDXUTIMEEditBox::s_nFirstTargetConv;  // Index of the first target converted char in comp string.  If none, -1.
 // samp.dll RVA: 0x0018062c
 CUniBuffer CDXUTIMEEditBox::s_CompString = CUniBuffer( 0 );
 // samp.dll RVA: 0x0017F6B8
 BYTE      CDXUTIMEEditBox::s_abCompStringAttr[MAX_COMPSTRING_SIZE];
+// samp.dll RVA: 0x0017F7B8
 DWORD     CDXUTIMEEditBox::s_adwCompStringClause[MAX_COMPSTRING_SIZE];
 // samp.dll RVA: 0x001803C0
 WCHAR     CDXUTIMEEditBox::s_wszReadingString[32];
@@ -5864,6 +5868,7 @@ bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00089110
 bool CDXUTIMEEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -5898,12 +5903,12 @@ bool CDXUTIMEEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lP
                 // Now generate keypress events to move the comp string cursor
                 // to the click point.  First, if the candidate window is displayed,
                 // send Esc to close it.
-                HIMC hImc = _ImmGetContext( DXUTGetHWND() );
+                HIMC hImc = _ImmGetContext( g_inputGameWindow );
                 if( !hImc )
                     return true;
 
                 _ImmNotifyIME( hImc, NI_CLOSECANDIDATE, 0, 0 );
-                _ImmReleaseContext( DXUTGetHWND(), hImc );
+                _ImmReleaseContext( g_inputGameWindow, hImc );
 
                 switch( GetPrimaryLanguage() )
                 {
@@ -6039,6 +6044,7 @@ bool CDXUTIMEEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lP
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008B300
 bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -6055,7 +6061,12 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
     bool *trapped = &trappedData;
 
     HIMC hImc;
-    static LPARAM lAlt = 0x80000000, lCtrl = 0x80000000, lShift = 0x80000000;
+    // samp.dll RVA: 0x00140CB8
+    static LPARAM lAlt = 0x80000000;
+    // samp.dll RVA: 0x00140CB4
+    static LPARAM lCtrl = 0x80000000;
+    // samp.dll RVA: 0x00140CB0
+    static LPARAM lShift = 0x80000000;
 
     *trapped = false;
     if( !s_bEnableImeSystem )
@@ -6073,7 +6084,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                 WCHAR wszCompStr[MAX_COMPSTRING_SIZE];
 
                 *trapped = true;
-                if( NULL == ( hImc = _ImmGetContext( DXUTGetHWND() ) ) )
+                if( NULL == ( hImc = _ImmGetContext( g_inputGameWindow ) ) )
                 {
                     break;
                 }
@@ -6134,7 +6145,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                         // Older CHT IME uses composition string for reading string
                         if ( GetLanguage() == LANG_CHT && !GetImeId() )
                         {
-                            if( lstrlen( s_CompString.GetBuffer() ) )
+                            if( lstrlenW( s_CompString.GetBuffer() ) )
                             {
                                 s_CandList.dwCount = 4;             // Maximum possible length for reading string is 4
                                 s_CandList.dwSelection = (DWORD)-1; // don't select any candidate
@@ -6142,7 +6153,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                                 // Copy the reading string to the candidate list
                                 for( int i = 3; i >= 0; --i )
                                 {
-                                    if( i > lstrlen( s_CompString.GetBuffer() ) - 1 )
+                                    if( i > lstrlenW( s_CompString.GetBuffer() ) - 1 )
                                         s_CandList.awszCandidate[i][0] = 0;  // Doesn't exist
                                     else
                                     {
@@ -6170,7 +6181,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                                     for( UINT i = 0; i < s_CandList.dwCount; ++i )
                                     {
                                         if( s_CandList.dwSelection == i )
-                                            s_CandList.nReadingError = lstrlen( s_wszReadingString );
+                                            s_CandList.nReadingError = lstrlenW( s_wszReadingString );
                                         StringCchCat( s_wszReadingString, 32, s_CandList.awszCandidate[i] );
                                     }
                                 }
@@ -6190,11 +6201,11 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                             // It's at the end right now, so compute the number
                             // of times left arrow should be pressed to
                             // send it to the original position.
-                            int nCount = lstrlen( s_CompString.GetBuffer() + s_nCompCaret );
+                            int nCount = lstrlenW( s_CompString.GetBuffer() + s_nCompCaret );
                             // Send left keystrokes
                             for( int i = 0; i < nCount; ++i )
-                                SendMessage( DXUTGetHWND(), WM_KEYDOWN, VK_LEFT, 0 );
-                            SendMessage( DXUTGetHWND(), WM_KEYUP, VK_LEFT, 0 );
+                                SendMessageA( g_inputGameWindow, WM_KEYDOWN, VK_LEFT, 0 );
+                            SendMessageA( g_inputGameWindow, WM_KEYUP, VK_LEFT, 0 );
                         }
                     }
 
@@ -6216,7 +6227,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                     s_adwCompStringClause[lRet / sizeof(DWORD)] = 0;  // Terminate
                 }
 
-                _ImmReleaseContext( DXUTGetHWND(), hImc );
+                _ImmReleaseContext( g_inputGameWindow, hImc );
             }
             break;
 
@@ -6228,6 +6239,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
             s_bHideCaret = false;
             // Hide reading window
             s_bShowReadingWindow = false;
+            g_inputImeActivityTick = GetTickCount();
             break;
 
         case WM_IME_NOTIFY:
@@ -6247,8 +6259,9 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                     DXUTTRACE( wParam == IMN_CHANGECANDIDATE ? L"  IMN_CHANGECANDIDATE\n" : L"  IMN_OPENCANDIDATE\n" );
 
                     s_CandList.bShowWindow = true;
+                    g_inputImeActivityTick = GetTickCount();
                     *trapped = true;
-                    if( NULL == ( hImc = _ImmGetContext( DXUTGetHWND() ) ) )
+                    if( NULL == ( hImc = _ImmGetContext( g_inputGameWindow ) ) )
                         break;
 
                     LPCANDIDATELIST lpCandList = NULL;
@@ -6311,7 +6324,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                             s_CandList.dwCount = lpCandList->dwPageSize;
 
                         HeapFree( GetProcessHeap(), 0, lpCandList );
-                        _ImmReleaseContext( DXUTGetHWND(), hImc );
+                        _ImmReleaseContext( g_inputGameWindow, hImc );
 
                         // Korean and old Chinese IME can't have selection.
                         // User must use the number hotkey or Enter to select
@@ -6340,12 +6353,12 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                                 // If this is the selected entry, mark its char position.
                                 if( s_CandList.dwSelection == i )
                                 {
-                                    s_CandList.nFirstSelected = lstrlen( wszCand );
-                                    s_CandList.nHoriSelectedLen = lstrlen( wszEntry ) - 1;  // Minus space
+                                    s_CandList.nFirstSelected = lstrlenW( wszCand );
+                                    s_CandList.nHoriSelectedLen = lstrlenW( wszEntry ) - 1;  // Minus space
                                 }
                                 StringCchCat( wszCand, 256, wszEntry );
                             }
-                            wszCand[lstrlen(wszCand) - 1] = L'\0';  // Remove the last space
+                            wszCand[lstrlenW(wszCand) - 1] = L'\0';  // Remove the last space
                             s_CandList.HoriCand.SetText( wszCand );
                         }
                     }
@@ -6356,6 +6369,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                 {
                     DXUTTRACE( L"  IMN_CLOSECANDIDATE\n" );
                     s_CandList.bShowWindow = false;
+                    g_inputImeActivityTick = GetTickCount();
                     if( !s_bShowReadingWindow )
                     {
                         s_CandList.dwCount = 0;
