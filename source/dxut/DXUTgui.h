@@ -873,6 +873,7 @@ private:
     bool m_bAnalyseRequired;            // True if the string has changed since last analysis.
     SCRIPT_STRING_ANALYSIS m_Analysis;
     bool m_nativeMaskText; // Native field +18; selects masked analysis text.
+    friend class CDXUTEditBox;
     friend class NativeDxutLayoutProbe;  // Analysis for the current string
 
 private:
@@ -947,6 +948,9 @@ public:
     void SetText( const char *text, bool bSelected = false );
     // samp.dll RVA: 0x000850d0
     const char *GetText();
+    // Updates both native mask flags, without invalidating cached analysis.
+    // samp.dll RVA: 0x0006eeb0
+    void SetPasswordMode(bool enabled);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int GetTextLength() { return m_Buffer.GetTextSize(); }  // Returns text length in chars excluding NULL.
     // samp.dll RVA: 0x00088950
@@ -955,11 +959,11 @@ public:
     void ClearText();
     // samp.dll RVA: 0x0008ee20
     virtual void SetTextColor( D3DCOLOR Color ) { m_TextColor = Color; }  // Text color
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
+    // samp.dll RVA: 0x00068dd0
     void SetSelectedTextColor( D3DCOLOR Color ) { m_SelTextColor = Color; }  // Selected text color
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
+    // samp.dll RVA: 0x00068de0
     void SetSelectedBackColor( D3DCOLOR Color ) { m_SelBkColor = Color; }  // Selected background color
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
+    // samp.dll RVA: 0x00068df0
     void SetCaretColor( D3DCOLOR Color ) { m_CaretColor = Color; }  // Caret color
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetBorderWidth( int nBorder ) { m_nBorder = nBorder; UpdateRects(); }  // Border of the window

@@ -6,6 +6,15 @@
 class CRemotePlayer;
 #pragma pack(push,1)
 class CPlayerInfo {public:
+    // samp.dll RVA: 0x0006e270
+    int GetScore();
+    // samp.dll RVA: 0x0006e280
+    DWORD GetPing();
+    // Native VC7 string length is at info+24; no terminator scan.
+    // samp.dll RVA: 0x0006e300
+    DWORD GetNameLength();
+    // samp.dll RVA: 0x000170c0
+    const char *GetName();
     // samp.dll RVA: 0x0000e2d0
     DWORD GetNpcFlag();
     // samp.dll RVA: 0x0000e2e0

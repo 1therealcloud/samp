@@ -1,5 +1,13 @@
 #include "net/playerinfo.h"
 #include <string.h>
+// samp.dll RVA: 0x0006e270
+int CPlayerInfo::GetScore() {return score;}
+// samp.dll RVA: 0x0006e280
+DWORD CPlayerInfo::GetPing() {return ping;}
+// samp.dll RVA: 0x0006e300
+DWORD CPlayerInfo::GetNameLength() {return (DWORD)name.size();}
+// samp.dll RVA: 0x000170c0
+const char *CPlayerInfo::GetName() {return name.c_str();}
 // samp.dll RVA: 0x0001da20
 void CPlayerInfo::SetName(const char *text){name.assign(text,strlen(text));}
 #include "net/remoteplayer.h"

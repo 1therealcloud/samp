@@ -14,6 +14,8 @@ class CDXUTScrollBar;
 #pragma pack(push, 1)
 class CChat {
 public:
+    // samp.dll RVA: 0x00068e00
+    LONG GetChatWindowBottom();
     // Stores the raw timestamp byte and always requests redraw.
     // samp.dll RVA: 0x00067f20
     void SetTimestamps(BYTE enabled);

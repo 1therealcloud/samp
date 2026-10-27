@@ -8,9 +8,6 @@
 #include <DXUT.h>
 #include <DXUTmisc.h>
 #include <DXUTgui.h>
-#pragma pack(push,1)
-struct InputEditColors { char unknown[0x12b]; D3DCOLOR selectedText,selectedBackground,caret; };
-#pragma pack(pop)
 
 #include "main.h"
 #include "config.h"

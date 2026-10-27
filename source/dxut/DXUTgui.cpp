@@ -4354,6 +4354,10 @@ void CDXUTEditBox::SetText(const char *text, bool selected) {
 const char *CDXUTEditBox::GetText() {
     return InputWideToAnsi(m_Buffer.GetBuffer());
 }
+// samp.dll RVA: 0x0006eeb0
+void CDXUTEditBox::SetPasswordMode(bool enabled) {
+    m_nativeFlag126=enabled;m_Buffer.m_nativeMaskText=enabled;
+}
 
 //--------------------------------------------------------------------------------------
 // samp.dll RVA: 0x00088950

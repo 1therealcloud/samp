@@ -87,9 +87,9 @@ void CInput::ResetDialogControls(CDXUTDialog *dialog) {
         if(g_pConfig->GetIntValue("ime")) { InputEnableIme(true);InputResetIme(); }
         m_pEditbox->m_Elements[0]->TextureColor.Init(0xf0050505,0xc8808080,0);
         m_pEditbox->SetTextColor(0xffffffff);
-        ((InputEditColors*)m_pEditbox)->caret=0xff969696;
-        ((InputEditColors*)m_pEditbox)->selectedBackground=0xffb92228;
-        ((InputEditColors*)m_pEditbox)->selectedText=0xff0a0a0f;
+        m_pEditbox->SetCaretColor(0xff969696);
+        m_pEditbox->SetSelectedBackColor(0xffb92228);
+        m_pEditbox->SetSelectedTextColor(0xff0a0a0f);
         m_pEditbox->SetEnabled(false);m_pEditbox->SetVisible(false);
     }
 }

@@ -92,6 +92,10 @@ public:
     void SetTrackRange(int first,int last);
     // samp.dll RVA: 0x00066b50
     void SetTrackPos(int value);
+    // samp.dll RVA: 0x00066b40
+    int GetTrackPos();
+    // samp.dll RVA: 0x00066b70
+    void SetPageSize(int value);
     // samp.dll RVA: 0x00084e30
     void ShowItem(int index);
 };
@@ -147,6 +151,10 @@ public:
     void SelectItem(int index);
     // samp.dll RVA: 0x000888f0
     int GetSelectedIndex(int previous=-1);
+    // samp.dll RVA: 0x0006e240
+    DXUTListBoxItemDL *GetSelectedItem(int previous=-1);
+    // samp.dll RVA: 0x0006e260
+    CDXUTScrollBarDL *GetScrollBar();
 
 };
 #pragma pack(pop)

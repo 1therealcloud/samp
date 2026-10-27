@@ -466,6 +466,12 @@ void CDXUTScrollBarDL::SetTrackRange(int first,int last) {
 void CDXUTScrollBarDL::SetTrackPos(int value) {
     position=value;Cap();UpdateThumbRect();
 }
+// samp.dll RVA: 0x00066b40
+int CDXUTScrollBarDL::GetTrackPos() {return position;}
+// samp.dll RVA: 0x00066b70
+void CDXUTScrollBarDL::SetPageSize(int value) {
+    pageSize=value;Cap();UpdateThumbRect();
+}
 
 // samp.dll RVA: 0x00084e30
 void CDXUTScrollBarDL::ShowItem(int index) {
@@ -516,6 +522,12 @@ DXUTListBoxItemDL *CDXUTListBoxDL::GetItem(int row) {
     if(row<0 || row>=items.GetSize())return 0;
     return items[row];
 }
+// samp.dll RVA: 0x0006e240
+DXUTListBoxItemDL *CDXUTListBoxDL::GetSelectedItem(int previous) {
+    return GetItem(GetSelectedIndex(previous));
+}
+// samp.dll RVA: 0x0006e260
+CDXUTScrollBarDL *CDXUTListBoxDL::GetScrollBar() {return &scrollBar;}
 
 // samp.dll RVA: 0x0008c270
 void CDXUTListBoxDL::RemoveAllItems() {

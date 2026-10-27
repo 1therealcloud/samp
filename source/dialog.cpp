@@ -270,8 +270,7 @@ void CDialog::Show(int requestId,int style,const char *caption,const char *value
         int editHeight=(int)(dialog->GetFont(1)->nHeight*g_hookHudAspectThreshold+g_dialogEditPadding);
         height=editHeight+textHeight+buttonHeight+captionHeight+25;
         input->SetVisible(true);input->SetEnabled(true);
-        BYTE *flags=(BYTE*)input;
-        flags[0x126]=password;flags[0x5f]=password;
+        input->SetPasswordMode(password);
         input->SetText(g_pedEmptyDanceAnimation,false);
         ((CDXUTControl*)list)->SetVisible(false);((CDXUTControl*)list)->SetEnabled(false);
         break;
@@ -401,9 +400,9 @@ void CDialog::ResetDialogControls(CDXUTDialog *parent) {
     }
     input->GetElement(0)->TextureColor.Init(0xf0050505,0xc8808080,0);
     input->SetTextColor(0xffffffff);
-    ((InputEditColors*)input)->caret=0xff969696;
-    ((InputEditColors*)input)->selectedBackground=0xffb92228;
-    ((InputEditColors*)input)->selectedText=0xff0a0a0f;
+    input->SetCaretColor(0xff969696);
+    input->SetSelectedBackColor(0xffb92228);
+    input->SetSelectedTextColor(0xff0a0a0f);
     input->SetEnabled(false);
     input->SetVisible(false);
 }
