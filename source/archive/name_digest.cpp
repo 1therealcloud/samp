@@ -76,3 +76,22 @@ void ArchivePublishNameDigest(const DWORD *digest) {
         if(word==5&&g_pGame)++g_pGame->unknown55;
     }
 }
+
+
+#include <stdio.h>
+#include <stdlib.h>
+// samp.dll RVA: 0x00062950
+void ArchiveComputeFileDigest(const char *filename,DWORD *digest) {
+    ArchiveNameSha1 sha;
+    BYTE *buffer=(BYTE*)calloc(1,0x8000);
+    memset(digest,0,20);
+    if(!buffer)return;
+    FILE *file=fopen(filename,"rb");
+    if(file) {
+        while(!feof(file)) {
+            int count=(int)fread(buffer,1,0x8000,file);
+            if(count>0)sha.Input(buffer,count);
+        }
+        fclose(file);free(buffer);sha.Result(digest);
+    }
+}

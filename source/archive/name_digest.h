@@ -34,6 +34,9 @@ typedef char ArchiveNameSha1Extent[(sizeof(ArchiveNameSha1)==102)?1:-1];
 extern DWORD g_archiveTrackedNameDigests[3][5];
 // samp.dll RVA: 0x00062500
 void ArchivePublishNameDigest(const DWORD *digest);
+// Leaves output zero on allocation/open failure; failed open leaks the32K buffer.
+// samp.dll RVA: 0x00062950
+void ArchiveComputeFileDigest(const char *filename,DWORD *digest);
 // samp.dll RVA: 0x00062a60
 void ArchiveComputeNameDigest(const void *data,DWORD length,DWORD *digest);
 #endif

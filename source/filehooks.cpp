@@ -141,3 +141,67 @@ DWORD WINAPI Arch_GetFileType(HANDLE file) {
     int slot;if(ArchiveIsCustomHandle((DWORD)file)&&(slot=ArchiveFindRecord(file))!=-1)return FILE_TYPE_DISK;
     typedef DWORD (WINAPI *Original)(HANDLE);return ((Original)g_archiveRealGetFileType)(file);
 }
+
+
+#include "md5.h"
+// samp.dll RVA: 0x0016c358
+BYTE *g_archiveRealCreateFileAValidation;
+// samp.dll RVA: 0x00061df0
+BOOL ArchiveIsIdeOrIplExtension(const char *extension) {
+    if(((BYTE)extension[0]&0xdf)!='I')return FALSE;
+    if(((BYTE)extension[1]&0xdf)=='D')return ((BYTE)extension[2]&0xdf)=='E';
+    if(((BYTE)extension[1]&0xdf)=='P')return ((BYTE)extension[2]&0xdf)=='L';
+    return FALSE;
+}
+// samp.dll RVA: 0x00061f90
+DWORD ArchiveHashLowercaseName(const char *name) {
+    DWORD hash=0;
+    const char *end=name+strlen(name);
+    while(name<end) {
+        int value=*name;
+        if(value>='A'&&value<='Z')value|=0x20;
+        hash+=(DWORD)value;hash*=0x401;
+        hash^=(DWORD)((LONG)hash>>6);++name;
+    }
+    hash*=9;hash^=(DWORD)((LONG)hash>>11);return hash*0x8001;
+}
+// samp.dll RVA: 0x00062470
+char *ArchiveFileExtension(char *path) {
+    if(path[strlen(path)-1]==' ')path[strlen(path)-1]=0;
+    char *search=path+strlen(path);
+    while(search!=path){if(*search=='.')return search+1;--search;}
+    return path;
+}
+// samp.dll RVA: 0x00061e50
+void ArchiveCheckFileDigest(DWORD hash,HANDLE file) {
+    DWORD index=g_pArchive->GetFileIndex((DWORD)0xa848b69a);
+    if(index==0xffffffff)return;
+    BYTE *data=g_pArchive->GetFileData(index);
+    BYTE count=*data++;BYTE node=0;
+    while(node<count) {
+        BYTE *record=data+node*8;
+        LONG key=*(LONG*)record;
+        if(key==(LONG)hash) {
+            BYTE digestIndex=record[6];
+            if(digestIndex>=count)return;
+            // Retain the native comparison reads even though no action follows.
+            volatile BYTE *expected=data+8*((DWORD)count+(DWORD)digestIndex*2);
+            MD5Context context;MD5Init(&context);
+            BYTE buffer[1024],digest[16];DWORD read;
+            while(Arch_ReadFile(file,buffer,1024,&read,0)&&read)MD5Update(&context,buffer,read);
+            MD5Final(digest,&context);
+            LONG high=0;Arch_SetFilePointer(file,0,&high,FILE_BEGIN);
+            for(BYTE i=0;i<16;++i)if(digest[i]!=expected[i])break;
+            return;
+        }
+        node=record[key<(LONG)hash?5:4];
+    }
+}
+// samp.dll RVA: 0x000626b0
+HANDLE WINAPI Arch_CreateFileAWithValidation(LPCSTR name,DWORD access,DWORD share,LPSECURITY_ATTRIBUTES security,DWORD disposition,DWORD flags,HANDLE templateFile) {
+    typedef HANDLE (WINAPI *Original)(LPCSTR,DWORD,DWORD,LPSECURITY_ATTRIBUTES,DWORD,DWORD,HANDLE);
+    HANDLE file=((Original)g_archiveRealCreateFileAValidation)(name,access,share,security,disposition,flags,templateFile);
+    if(ArchiveIsIdeOrIplExtension(ArchiveFileExtension((char*)name)))
+        ArchiveCheckFileDigest(ArchiveHashLowercaseName(ArchiveLowercaseName(ArchiveFileNameOnly((char*)name))),file);
+    return file;
+}
