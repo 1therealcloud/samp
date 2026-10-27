@@ -6,32 +6,32 @@ const Scripting::OpcodeInfo g_actorKillCommand={0x321,"i"};
 // samp.dll RVA: 0x0011e294
 const Scripting::OpcodeInfo g_actorImmunityCommand={0x2ab,"iiiiii"};
 // samp.dll RVA: 0x0009c030
-float CActor::GetHealth(){return actorBackend?*(float*)((BYTE*)actorBackend+0x540):0.0f;}
+float CActor::GetHealth(){return actorBackend?actorBackend->health:0.0f;}
 // samp.dll RVA: 0x0009c050
 void CActor::SetHealth(float health){
     if(!actorBackend)return;
-    memcpy((BYTE*)actorBackend+0x540,&health,4);
-    if(*(float*)((BYTE*)actorBackend+0x540)<=0.0f)Scripting::ProcessCommand(&g_actorKillCommand,m_nHandle);
+    memcpy(&actorBackend->health,&health,4);
+    if(actorBackend->health<=0.0f)Scripting::ProcessCommand(&g_actorKillCommand,m_nHandle);
 }
 // samp.dll RVA: 0x0009c090
-float CActor::GetArmour(){return actorBackend?*(float*)((BYTE*)actorBackend+0x548):0.0f;}
+float CActor::GetArmour(){return actorBackend?actorBackend->armour:0.0f;}
 // samp.dll RVA: 0x0009c0b0
-void CActor::SetArmour(float armour){if(actorBackend)memcpy((BYTE*)actorBackend+0x548,&armour,4);}
+void CActor::SetArmour(float armour){if(actorBackend)memcpy(&actorBackend->armour,&armour,4);}
 // samp.dll RVA: 0x0009c0d0
-DWORD CActor::GetBackendFlags(){return actorBackend?*(DWORD*)((BYTE*)actorBackend+0x46c):0;}
+DWORD CActor::GetBackendFlags(){return actorBackend?actorBackend->flags:0;}
 // samp.dll RVA: 0x0009c0e0
-void CActor::SetBackendFlags(DWORD flags){if(actorBackend)*(DWORD*)((BYTE*)actorBackend+0x46c)=flags;}
+void CActor::SetBackendFlags(DWORD flags){if(actorBackend)actorBackend->flags=flags;}
 // samp.dll RVA: 0x0009c100
-BOOL CActor::IsDead(){return !actorBackend || !(*(float*)((BYTE*)actorBackend+0x540)>0.0f);}
+BOOL CActor::IsDead(){return !actorBackend || !(actorBackend->health>0.0f);}
 // samp.dll RVA: 0x0009c130
-BYTE CActor::GetBackendByte530(){return *((BYTE*)actorBackend+0x530);}
+BYTE CActor::GetBackendByte530(){return *(BYTE*)&actorBackend->state530;}
 // samp.dll RVA: 0x0009c140
-void CActor::SetBackendByte530(BYTE value){if(actorBackend)*(DWORD*)((BYTE*)actorBackend+0x530)=value;}
+void CActor::SetBackendByte530(BYTE value){if(actorBackend)actorBackend->state530=value;}
 // samp.dll RVA: 0x0009c160
-DWORD CActor::HasBackendFlag100(){return actorBackend?(*(DWORD*)((BYTE*)actorBackend+0x46c)>>8)&1:0;}
+DWORD CActor::HasBackendFlag100(){return actorBackend?(actorBackend->flags>>8)&1:0;}
 // samp.dll RVA: 0x0009c180
 void CActor::SetInvulnerable(BYTE enabled){
-    if(!actorBackend)return;((BYTE*)this)[0x55]=enabled;
+    if(!actorBackend)return;invulnerable=enabled;
     if(enabled)Scripting::ProcessCommand(&g_actorImmunityCommand,m_nHandle,1,1,1,1,1);
     else Scripting::ProcessCommand(&g_actorImmunityCommand,m_nHandle,0,0,0,1,0);
 }
@@ -87,7 +87,7 @@ void CActor::PerformAnimation(const char *name,const char *library,float speed,D
 void *g_actorTaskBackend;
 // samp.dll RVA: 0x0009bfb0
 DWORD GameClearActorTasks() {
-    void *tasks=*(void**)((BYTE*)g_actorTaskBackend+0x47c);
+    void *tasks=((ActorBackendPrefix*)g_actorTaskBackend)->tasks;
     // GTA SA virtual address: task clearing backend, thiscall with argument1.
     ((void(__fastcall*)(void*,void*,int))0x601640)(tasks,0,1);return 1;
 }
@@ -105,7 +105,7 @@ const Scripting::OpcodeInfo g_actorConfigurationCommand={0x446,"ii"};
 const Scripting::OpcodeInfo g_actorTaskFlagsCommand={0x60b,"ii"};
 // samp.dll RVA: 0x0009bd30
 CActor::CActor(int model,CVector position,float heading) {
-    actorBackend=0;m_nHandle=0;((BYTE*)this)[0x55]=0;
+    actorBackend=0;m_nHandle=0;invulnerable=0;
     DWORD handle=0;
     if(!g_pGame->IsModelAvailable(model)) {
         g_pGame->RequestModel(model,2);g_pGame->LoadRequestedModels();
@@ -121,7 +121,7 @@ CActor::CActor(int model,CVector position,float heading) {
     __asm {fstp qword ptr loweredZ}
     Scripting::ProcessCommand(&g_actorCreateCommand,5,model,(double)position.x,(double)position.y,loweredZ,&handle);
     Scripting::ProcessCommand(&g_actorHeadingCommand,handle,(double)heading);
-    m_nHandle=handle;actorBackend=GamePoolPedGetAt(handle);m_pGameEntity=actorBackend;
+    m_nHandle=handle;actorBackend=(ActorBackendPrefix*)GamePoolPedGetAt(handle);m_pGameEntity=actorBackend;
     Scripting::ProcessCommand(&g_actorConfigurationCommand,m_nHandle,0);
     Scripting::ProcessCommand(&g_actorTaskFlagsCommand,m_nHandle,0x10006);
 }

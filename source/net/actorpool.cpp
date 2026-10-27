@@ -42,7 +42,7 @@ BOOL CActorPool::Create(const ActorCreateInfo *info) {
     actors[info->id]=new CActor(info->model,info->position,info->heading);
     if(!actors[info->id])return FALSE;
     // Actor backend is distinct from the base CEntity pointer.
-    peds[info->id]=*(void**)((BYTE*)actors[info->id]+0x48);
+    peds[info->id]=actors[info->id]->actorBackend;
     active[info->id]=1;
     actors[info->id]->SetHealth(info->health);
     actors[info->id]->SetInvulnerable(info->invulnerable?1:0);

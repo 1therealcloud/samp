@@ -1,13 +1,14 @@
 #ifndef SAMP_ACTOR_POOL_H
 #define SAMP_ACTOR_POOL_H
 #include <windows.h>
-#include "game/entity.h"
-class CActor;
+#include "game/actor.h"
 #pragma pack(push,1)
 // Packed native creation request; custom model is separate from constructor model.
 struct ActorCreateInfo { WORD id; int model,customModel; CVector position; float heading,health; BYTE invulnerable; };
 typedef char NativeActorCreateInfoExtent[(sizeof(ActorCreateInfo)==31)?1:-1];
 class CActorPool {
+    typedef char ActorBackendOffset[(offsetof(CActor,actorBackend)==0x48)?1:-1];
+    typedef char ActorInvulnerableOffset[(offsetof(CActor,invulnerable)==0x55)?1:-1];
     int largestId;
     CActor *actors[1000];
     DWORD active[1000];
