@@ -290,6 +290,7 @@ float __stdcall GameSquaredDistance3D(float x,float y,float z,float otherX,float
 float __stdcall GameSquaredDistanceVectors(const CVector *first,const CVector *second);
 
 // x squared plus y squared then z squared.
+// April 2005 D3DX inline reproduces this native body; wrapper name is descriptive.
 // samp.dll RVA: 0x000b4640
 float GameVectorLengthSquared(const CVector *vector);
 
@@ -302,10 +303,12 @@ bool GameIsVectorWithinUnitBounds(const CVector *vector);
 void GameVectorCrossProductLocal(CVector *out,const CVector *left,const CVector *right);
 
 // Square root of x squared plus y squared then z squared.
+// April 2005 D3DX inline reproduces this native body; wrapper name is descriptive.
 // samp.dll RVA: 0x000b47f0
 float GameVectorLength(const CVector *vector);
 
 // Separate native entry, same arithmetic as RVA000B4640; original name unknown.
+// April 2005 D3DX inline reproduces this native body; wrapper name is descriptive.
 // samp.dll RVA: 0x000b4820
 float GameVectorLengthSquared4820(const CVector *vector);
 
@@ -314,6 +317,7 @@ float GameVectorLengthSquared4820(const CVector *vector);
 float GameLengthSquared3D(float x,float y,float z);
 
 // z products plus y products then x products.
+// April 2005 D3DX inline reproduces this native body; wrapper name is descriptive.
 // samp.dll RVA: 0x000b4b40
 float GameVectorDotProduct(const CVector *first,const CVector *second);
 

@@ -1,4 +1,9 @@
 #include "game/util.h"
+#include <d3dx9math.h>
+typedef char VectorD3dxExtent[(sizeof(CVector)==sizeof(D3DXVECTOR3))?1:-1];
+typedef char VectorD3dxX[(offsetof(CVector,x)==offsetof(D3DXVECTOR3,x))?1:-1];
+typedef char VectorD3dxY[(offsetof(CVector,y)==offsetof(D3DXVECTOR3,y))?1:-1];
+typedef char VectorD3dxZ[(offsetof(CVector,z)==offsetof(D3DXVECTOR3,z))?1:-1];
 // samp.dll RVA: 0x000c5110
 IDirect3DDevice9 *GameGetCurrentD3DDevice() {return *(IDirect3DDevice9**)0xc97c28;}
 // samp.dll RVA: 0x000c5510
@@ -990,25 +995,8 @@ __declspec(naked) float __stdcall GameSquaredDistanceVectors(const CVector *firs
 
 // x squared plus y squared then z squared.
 // samp.dll RVA: 0x000b4640
-__declspec(naked) float GameVectorLengthSquared(const CVector *vector) {
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        fld dword ptr [eax + 8]
-        fld dword ptr [eax + 4]
-        fld dword ptr [eax]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret
-    }
+float GameVectorLengthSquared(const CVector *vector) {
+    return D3DXVec3LengthSq((const D3DXVECTOR3*)vector);
 }
 
 // Inclusive signed unit bounds for all components; unordered values rejected.
@@ -1085,49 +1073,14 @@ __declspec(naked) void GameVectorCrossProductLocal(CVector *out,const CVector *l
 
 // Square root of x squared plus y squared then z squared.
 // samp.dll RVA: 0x000b47f0
-__declspec(naked) float GameVectorLength(const CVector *vector) {
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        fld dword ptr [eax + 8]
-        fld dword ptr [eax + 4]
-        fld dword ptr [eax]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret
-    }
+float GameVectorLength(const CVector *vector) {
+    return D3DXVec3Length((const D3DXVECTOR3*)vector);
 }
 
 // Separate native entry, same arithmetic as RVA000B4640; original name unknown.
 // samp.dll RVA: 0x000b4820
-__declspec(naked) float GameVectorLengthSquared4820(const CVector *vector) {
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        fld dword ptr [eax + 8]
-        fld dword ptr [eax + 4]
-        fld dword ptr [eax]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret
-    }
+float GameVectorLengthSquared4820(const CVector *vector) {
+    return D3DXVec3LengthSq((const D3DXVECTOR3*)vector);
 }
 
 // x squared plus y squared then z squared; cdecl.
@@ -1148,20 +1101,8 @@ __declspec(naked) float GameLengthSquared3D(float x,float y,float z) {
 
 // z products plus y products then x products.
 // samp.dll RVA: 0x000b4b40
-__declspec(naked) float GameVectorDotProduct(const CVector *first,const CVector *second) {
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        mov ecx, dword ptr [esp + 8]
-        fld dword ptr [eax + 8]
-        fmul dword ptr [ecx + 8]
-        fld dword ptr [eax + 4]
-        fmul dword ptr [ecx + 4]
-        faddp st(1),st
-        fld dword ptr [eax]
-        fmul dword ptr [ecx]
-        faddp st(1),st
-        ret
-    }
+float GameVectorDotProduct(const CVector *first,const CVector *second) {
+    return D3DXVec3Dot((const D3DXVECTOR3*)first,(const D3DXVECTOR3*)second);
 }
 
 // Three sequential component stores; native input/output alias behavior.
