@@ -1673,6 +1673,7 @@ bool CDXUTDialog::OnCycleFocus( bool bForward )
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x0008DCC0
 CDXUTControl::CDXUTControl( CDXUTDialog *pDialog )
 {
     m_Type = DXUT_CONTROL_BUTTON;
@@ -1698,6 +1699,7 @@ CDXUTControl::CDXUTControl( CDXUTDialog *pDialog )
 }
 
 
+// samp.dll RVA: 0x0008DE00
 CDXUTControl::~CDXUTControl()
 {
     for( int i = 0; i < m_Elements.GetSize(); ++i )
@@ -1709,6 +1711,7 @@ CDXUTControl::~CDXUTControl()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00087540
 void CDXUTControl::SetTextColor( D3DCOLOR Color )
 {
     CDXUTElement* pElement = m_Elements.GetAt( 0 );
@@ -1719,6 +1722,7 @@ void CDXUTControl::SetTextColor( D3DCOLOR Color )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00089D50
 HRESULT CDXUTControl::SetElement( UINT iElement, CDXUTElement* pElement )
 {
     HRESULT hr = S_OK;
@@ -1750,6 +1754,7 @@ HRESULT CDXUTControl::SetElement( UINT iElement, CDXUTElement* pElement )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00087560
 void CDXUTControl::Refresh()
 {
     m_bMouseOver = false;
@@ -1764,6 +1769,7 @@ void CDXUTControl::Refresh()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x000848A0
 void CDXUTControl::UpdateRects()
 {
     SetRect( &m_rcBoundingBox, m_x, m_y, m_x + m_width, m_y + m_height );
@@ -7384,6 +7390,7 @@ void CDXUTIMEEditBox::Uninitialize()
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085E90
 void DXUTBlendColor::Init( D3DCOLOR defaultColor, D3DCOLOR disabledColor, D3DCOLOR hiddenColor )
 {
     for( int i=0; i < MAX_CONTROL_STATES; i++ )
@@ -7398,6 +7405,7 @@ void DXUTBlendColor::Init( D3DCOLOR defaultColor, D3DCOLOR disabledColor, D3DCOL
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00085F40
 void DXUTBlendColor::Blend( UINT iState, float fElapsedTime, float fRate )
 {
     D3DXCOLOR destColor = States[ iState ];
@@ -7407,6 +7415,7 @@ void DXUTBlendColor::Blend( UINT iState, float fElapsedTime, float fRate )
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00086010
 void CDXUTElement::SetTexture( UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor )
 {
     this->iTexture = iTexture;
@@ -7421,6 +7430,7 @@ void CDXUTElement::SetTexture( UINT iTexture, RECT* prcTexture, D3DCOLOR default
     
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00086060
 void CDXUTElement::SetFont( UINT iFont, D3DCOLOR defaultFontColor, DWORD dwTextFormat )
 {
     this->iFont = iFont;
@@ -7431,6 +7441,7 @@ void CDXUTElement::SetFont( UINT iFont, D3DCOLOR defaultFontColor, DWORD dwTextF
 
 
 //--------------------------------------------------------------------------------------
+// samp.dll RVA: 0x00086090
 void CDXUTElement::Refresh()
 {
     TextureColor.Current = TextureColor.States[ DXUT_STATE_HIDDEN ];

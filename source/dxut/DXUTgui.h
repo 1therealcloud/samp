@@ -86,7 +86,9 @@ enum DXUT_CONTROL_STATE
 
 struct DXUTBlendColor
 {
+    // samp.dll RVA: 0x00085E90
     void Init( D3DCOLOR defaultColor, D3DCOLOR disabledColor = D3DCOLOR_ARGB(200, 128, 128, 128), D3DCOLOR hiddenColor = 0 );
+    // samp.dll RVA: 0x00085F40
     void Blend( UINT iState, float fElapsedTime, float fRate = 0.7f );
     
     D3DCOLOR  States[ MAX_CONTROL_STATES ]; // Modulate colors for all possible control states
@@ -100,9 +102,12 @@ struct DXUTBlendColor
 class CDXUTElement
 {
 public:
+    // samp.dll RVA: 0x00086010
     void SetTexture( UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor = D3DCOLOR_ARGB(255, 255, 255, 255) );
+    // samp.dll RVA: 0x00086060
     void SetFont( UINT iFont, D3DCOLOR defaultFontColor = D3DCOLOR_ARGB(255, 255, 255, 255), DWORD dwTextFormat = DT_CENTER | DT_VCENTER );
     
+    // samp.dll RVA: 0x00086090
     void Refresh();
     
     UINT iTexture;          // Index of the texture for this Element 
@@ -395,49 +400,81 @@ protected:
 class CDXUTControl
 {
 public:
+    // samp.dll RVA: 0x0008DCC0
     CDXUTControl( CDXUTDialog *pDialog = NULL );
+    // samp.dll RVA: 0x0008DE00
     virtual ~CDXUTControl();
 
+    // samp.dll RVA: 0x0008DD10
     virtual HRESULT OnInit() { return S_OK; }
+    // samp.dll RVA: 0x00087560
     virtual void Refresh();
+    // samp.dll RVA: 0x0008DD20
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime ) { };
 
     // Windows message handler
+    // samp.dll RVA: 0x0008DD30
     virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam ) { return false; }
 
+    // samp.dll RVA: 0x0008DD40
     virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam ) { return false; }
+    // samp.dll RVA: 0x0008DD50
     virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam ) { return false; }
 
+    // samp.dll RVA: 0x0008DD60
     virtual bool CanHaveFocus() { return false; }
+    // samp.dll RVA: 0x000840D0
     virtual void OnFocusIn() { m_bHasFocus = true; }
+    // samp.dll RVA: 0x000840E0
     virtual void OnFocusOut() { m_bHasFocus = false; }
+    // samp.dll RVA: 0x0008DD70
     virtual void OnMouseEnter() { m_bMouseOver = true; }
+    // samp.dll RVA: 0x0008DD80
     virtual void OnMouseLeave() { m_bMouseOver = false; }
+    // samp.dll RVA: 0x0008DD90
     virtual void OnHotkey() {}
 
+    // samp.dll RVA: 0x0008DDA0
     virtual BOOL ContainsPoint( POINT pt ) { return PtInRect( &m_rcBoundingBox, pt ); }
 
+    // samp.dll RVA: 0x0008DDC0
     virtual void SetEnabled( bool bEnabled ) { m_bEnabled = bEnabled; }
+    // samp.dll RVA: 0x0008DDD0
     virtual bool GetEnabled() { return m_bEnabled; }
+    // samp.dll RVA: 0x0008DDE0
     virtual void SetVisible( bool bVisible ) { m_bVisible = bVisible; }
+    // samp.dll RVA: 0x0008DDF0
     virtual bool GetVisible() { return m_bVisible; }
 
+    // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
     UINT GetType() const { return m_Type; }
 
+    // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
     int  GetID() const { return m_ID; }
+    // samp.dll RVA: unknown (identical entries 0x00049ED0/0x00084110; typed native entry not uniquely established)
     void SetID( int ID ) { m_ID = ID; }
 
+    // samp.dll RVA: 0x000848A0
+    // samp.dll RVA: 0x00066B00
     void SetLocation( int x, int y ) { m_x = x; m_y = y; UpdateRects(); }
+    // samp.dll RVA: 0x00066B20
     void SetSize( int width, int height ) { m_width = width; m_height = height; UpdateRects(); }
 
+    // samp.dll RVA: 0x00084120
     void SetHotkey( UINT nHotkey ) { m_nHotkey = nHotkey; }
+    // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
     UINT GetHotkey() { return m_nHotkey; }
 
+    // samp.dll RVA: unknown (inline SDK accessor; standalone native entry not established)
     void SetUserData( void *pUserData ) { m_pUserData = pUserData; }
+    // samp.dll RVA: unknown (inline SDK accessor; standalone native entry not established)
     void *GetUserData() const { return m_pUserData; }
 
+    // samp.dll RVA: 0x00087540
     virtual void SetTextColor( D3DCOLOR Color );
+    // samp.dll RVA: 0x00069270
     CDXUTElement* GetElement( UINT iElement ) { return m_Elements.GetAt( iElement ); }
+    // samp.dll RVA: 0x00089D50
     HRESULT SetElement( UINT iElement, CDXUTElement* pElement);
 
     bool m_bVisible;                // Shown/hidden flag
