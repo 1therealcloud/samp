@@ -8,6 +8,9 @@ class CMatrix;
 class CPed;
 class CVehicle;
 class CRemotePlayer {public:
+    // Any nonzero input byte becomes DWORD1; this is not a raw BOOL copy.
+    // samp.dll RVA: 0x00017790
+    void ShowNameTag(BYTE show);
     // Synchronization caches, not queries to the GTA ped backend.
     // samp.dll RVA: 0x000739c0
     float GetReportedHealth();

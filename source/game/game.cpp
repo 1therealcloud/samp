@@ -1,4 +1,10 @@
 #include "game/game.h"
+// samp.dll RVA: 0x000607b0
+int CGame::GetScreenWidth() {return *(int*)0xc17044;}
+// samp.dll RVA: 0x00060d20
+int CGame::GetCursorMode() {return m_nCursorMode;}
+// samp.dll RVA: 0x0006d430
+void CGame::ResetInputEnableWait() {m_nInputEnableWaitFrames=0;}
 // samp.dll RVA: 0x00067f10
 void CGame::SetHeadMovement(BOOL enabled) {m_bHeadMove=enabled;}
 // samp.dll RVA: 0x000080f0

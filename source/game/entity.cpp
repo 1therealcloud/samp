@@ -4,6 +4,8 @@
 #include <string.h>
 // samp.dll RVA: 0x0009bce0
 CEntity::CEntity() { memset(unknown04,0,sizeof(unknown04)); }
+// samp.dll RVA: 0x0009bd00
+CEntity::~CEntity() {}
 // samp.dll RVA: 0x000b3720
 void __stdcall GameWorldAdd(void *entity) { ((void (__cdecl*)(void*))0x563220)(entity); }
 // samp.dll RVA: 0x000b3740

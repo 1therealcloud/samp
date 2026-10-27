@@ -186,23 +186,31 @@ public:
     HRESULT DrawTextA(const char *text, CDXUTElement *element, RECT *rect, bool shadow=false, int count=-1);
 
     // Attributes
+    // samp.dll RVA: 0x00060d10
     bool GetVisible() { return m_bVisible; }
+    // samp.dll RVA: 0x00002cb0
     void SetVisible( bool bVisible ) { m_bVisible = bVisible; }
     bool GetMinimized() { return m_bMinimized; }
     void SetMinimized( bool bMinimized ) { m_bMinimized = bMinimized; }
     void SetBackgroundColors( D3DCOLOR colorAllCorners ) { SetBackgroundColors( colorAllCorners, colorAllCorners, colorAllCorners, colorAllCorners ); }
     void SetBackgroundColors( D3DCOLOR colorTopLeft, D3DCOLOR colorTopRight, D3DCOLOR colorBottomLeft, D3DCOLOR colorBottomRight );
+    // samp.dll RVA: 0x0006a100
     void EnableCaption( bool bEnable ) { m_bCaption = bEnable; }
+    // samp.dll RVA: 0x0006a110
     int GetCaptionHeight() const { return m_nCaptionHeight; }
+    // samp.dll RVA: 0x0006a120
     void SetCaptionHeight( int nHeight ) { m_nCaptionHeight = nHeight; }
     // samp.dll RVA: unknown (SDK wide compatibility facade; no standalone native entry)
     void SetCaptionText(const WCHAR *text) { m_wszCaption[0]=0; WideCharToMultiByte(CP_ACP,0,text,-1,m_wszCaption,256,0,0); m_wszCaption[255]=0; }
-    // samp.dll RVA: unknown (ANSI caption inline setter; standalone native entry not established)
-    void SetCaptionText(const char *text) { StringCchCopyA(m_wszCaption,256,text); }
+    // samp.dll RVA: 0x0006a130
+    void SetCaptionText(const char *text);
     void GetLocation( POINT &Pt ) const { Pt.x = m_x; Pt.y = m_y; }
+    // samp.dll RVA: 0x00002cc0
     void SetLocation( int x, int y ) { m_x = x; m_y = y; }
     void SetSize( int width, int height ) { m_width = width; m_height = height;  }
+    // samp.dll RVA: 0x00002ce0
     int GetWidth() { return m_width; }
+    // samp.dll RVA: 0x00002cf0
     int GetHeight() { return m_height; }
 
     void SetNextDialog( CDXUTDialog* pNextDialog );
@@ -218,7 +226,9 @@ public:
     // Sets the callback used to notify the app of control events
     void SetCallback( PCALLBACKDXUTGUIEVENT pCallback, void* pUserContext = NULL );
     void EnableNonUserEvents( bool bEnable ) { m_bNonUserEvents = bEnable; }
+    // samp.dll RVA: 0x0006a150
     void EnableKeyboardInput( bool bEnable ) { m_bKeyboardInput = bEnable; }
+    // samp.dll RVA: 0x0006a160
     void EnableMouseInput( bool bEnable ) { m_bMouseInput = bEnable; }
 
     // Device state notification

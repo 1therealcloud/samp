@@ -15,6 +15,14 @@ class CMatrix;
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame {
 public:
+    // GTA SA VA: 0x00c17044; raw screen-width global, without a device query.
+    // samp.dll RVA: 0x000607b0
+    int GetScreenWidth();
+    // samp.dll RVA: 0x00060d20
+    int GetCursorMode();
+    // Clears the delay only; no immediate cursor/input backend calls.
+    // samp.dll RVA: 0x0006d430
+    void ResetInputEnableWait();
     // Stores the raw BOOL DWORD without normalization.
     // samp.dll RVA: 0x00067f10
     void SetHeadMovement(BOOL enabled);

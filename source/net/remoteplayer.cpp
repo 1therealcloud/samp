@@ -1,4 +1,6 @@
 #include "net/remoteplayer.h"
+// samp.dll RVA: 0x00017790
+void CRemotePlayer::ShowNameTag(BYTE show) {*(DWORD*)(nativeState+0x10)=show!=0;}
 // samp.dll RVA: 0x000739c0
 float CRemotePlayer::GetReportedHealth() {return *(float*)(nativeState+0x1b0);}
 // samp.dll RVA: 0x000739d0

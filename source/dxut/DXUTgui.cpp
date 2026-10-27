@@ -12,6 +12,12 @@
 #include "DXUTgui.h"
 #include "DXUTsettingsDlg.h"
 
+// samp.dll RVA: 0x0006a130
+void CDXUTDialog::SetCaptionText(const char *text) {
+    char *output=m_wszCaption;char value;
+    do {value=*text++;*output++=value;} while(value);
+}
+
 // Shared with the recovered DL widgets; a single state instance serves both.
 // samp.dll RVA: 0x00181a8d
 bool g_dxutScrollDragging;

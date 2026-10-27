@@ -43,8 +43,9 @@ public:
     DWORD m_nHandle;
     // samp.dll RVA: 0x0009bce0
     CEntity();
-    // samp.dll RVA: unknown (inline empty base destructor/vptr reset; scalar deleting entry RVA 0x0009bd10, standalone destructor entry not established)
-    virtual ~CEntity() {}
+    // Native only resets the vptr; backend/history storage is untouched.
+    // samp.dll RVA: 0x0009bd00
+    virtual ~CEntity();
     // samp.dll RVA: 0x0009f140
     virtual void Add();
     // samp.dll RVA: 0x0009f240
