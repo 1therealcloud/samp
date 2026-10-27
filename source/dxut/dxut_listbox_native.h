@@ -90,6 +90,8 @@ public:
     void UpdateThumbRect();
     // samp.dll RVA: 0x000886d0
     void SetTrackRange(int first,int last);
+    // samp.dll RVA: 0x00066b50
+    void SetTrackPos(int value);
     // samp.dll RVA: 0x00084e30
     void ShowItem(int index);
 };
@@ -130,12 +132,17 @@ public:
     virtual bool CanHaveFocus();
     // samp.dll RVA: 0x0008a270
     HRESULT AddItem(const char *text,void *data,int row);
+    // Unlike AddItem, native insertion leaves subitems and the final flag untouched.
+    // samp.dll RVA: 0x0008a370
+    HRESULT InsertItem(int index,const char *text,void *data,DWORD color);
     // samp.dll RVA: 0x00088880
     void SetSubItemText(int row,int column,const char *text);
     // samp.dll RVA: 0x0008a440
     DXUTListBoxItemDL *GetItem(int row);
     // samp.dll RVA: 0x0008c270
     void RemoveAllItems();
+    // samp.dll RVA: 0x00088800
+    void RemoveItem(int index);
     // samp.dll RVA: 0x0008a470
     void SelectItem(int index);
     // samp.dll RVA: 0x000888f0

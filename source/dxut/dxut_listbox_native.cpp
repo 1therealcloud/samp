@@ -462,6 +462,11 @@ void CDXUTScrollBarDL::SetTrackRange(int first,int last) {
     start=first;end=last;Cap();UpdateThumbRect();
 }
 
+// samp.dll RVA: 0x00066b50
+void CDXUTScrollBarDL::SetTrackPos(int value) {
+    position=value;Cap();UpdateThumbRect();
+}
+
 // samp.dll RVA: 0x00084e30
 void CDXUTScrollBarDL::ShowItem(int index) {
     if(index<0)index=0;
@@ -486,6 +491,19 @@ HRESULT CDXUTListBoxDL::AddItem(const char *value,void *data,int row) {
     return result;
 }
 
+// samp.dll RVA: 0x0008a370
+HRESULT CDXUTListBoxDL::InsertItem(int index,const char *value,void *data,DWORD color) {
+    DXUTListBoxItemDL *item=new DXUTListBoxItemDL;
+    if(!item)return E_OUTOFMEMORY;
+    StringCchCopyA(item->text,256,value);
+    item->data=data;SetRect(&item->activeRect,0,0,0,0);
+    item->selected=false;item->color=color;
+    HRESULT result=items.Insert(index,item);
+    if(SUCCEEDED(result))scrollBar.SetTrackRange(0,items.GetSize());
+    else delete item;
+    return result;
+}
+
 // samp.dll RVA: 0x00088880
 void CDXUTListBoxDL::SetSubItemText(int row,int column,const char *value) {
     if(row<0 || row>=items.GetSize() || column<0 || column>=columnCount)return;
@@ -503,6 +521,16 @@ DXUTListBoxItemDL *CDXUTListBoxDL::GetItem(int row) {
 void CDXUTListBoxDL::RemoveAllItems() {
     for(int i=0;i<items.GetSize();++i)delete items[i];
     items.RemoveAll();scrollBar.SetTrackRange(0,1);
+}
+
+// samp.dll RVA: 0x00088800
+void CDXUTListBoxDL::RemoveItem(int index) {
+    if(index<0 || index>=items.GetSize())return;
+    delete items[index];
+    items.Remove(index);
+    scrollBar.SetTrackRange(0,items.GetSize());
+    if(selected>=items.GetSize())selected=items.GetSize()-1;
+    m_pDialog->SendEvent(EVENT_LISTBOX_SELECTION,true,this);
 }
 
 // samp.dll RVA: 0x0008a470
