@@ -1,6 +1,7 @@
 #ifndef SAMP_OBJECT_WRAPPER_H
 #define SAMP_OBJECT_WRAPPER_H
 #include "game/entity.h"
+#include "game/quaternion.h"
 // Native allocation extent is established; observed pool flags are named below.
 // Remaining storage and its untouched bytes stay explicitly unknown.
 class CVehicle;
@@ -45,7 +46,15 @@ class CObject : public CEntity {
     CVector attachmentOffset,attachmentRotation;
     BYTE attachmentRotationSync;
     CMatrix targetMatrix,baseMatrix;
-    BYTE unknown15b[0x68];
+    float moveDistance;
+    DWORD moveStartTick,lastMoveTick;
+    GameQuaternion targetQuaternion,interpolatedQuaternion,startQuaternion;
+    // Native GetEulerInverted ordering: normalized input y, x, z.
+    CVector targetEuler,angleDelta;
+    BYTE motionFlags;
+    float moveSpeed;
+    BYTE unknown1b4,rotationEnabled;
+    BYTE unknown1b6[0x0d];
     ObjectMaterialState materials;
     // Native raw DWORD gate shared by ordinary and text materials.
     DWORD hasMaterials;

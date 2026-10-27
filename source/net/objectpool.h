@@ -15,6 +15,17 @@ class CObjectPool {
     typedef char ObjectAttachmentSyncOffset[(offsetof(CObject,attachmentRotationSync)==0xda)?1:-1];
     typedef char ObjectAttachmentTargetMatrixOffset[(offsetof(CObject,targetMatrix)==0xdb)?1:-1];
     typedef char ObjectAttachmentBaseMatrixOffset[(offsetof(CObject,baseMatrix)==0x11b)?1:-1];
+    typedef char ObjectMoveDistanceOffset[(offsetof(CObject,moveDistance)==0x15b)?1:-1];
+    typedef char ObjectMoveStartTickOffset[(offsetof(CObject,moveStartTick)==0x15f)?1:-1];
+    typedef char ObjectLastMoveTickOffset[(offsetof(CObject,lastMoveTick)==0x163)?1:-1];
+    typedef char ObjectTargetQuaternionOffset[(offsetof(CObject,targetQuaternion)==0x167)?1:-1];
+    typedef char ObjectInterpolatedQuaternionOffset[(offsetof(CObject,interpolatedQuaternion)==0x177)?1:-1];
+    typedef char ObjectStartQuaternionOffset[(offsetof(CObject,startQuaternion)==0x187)?1:-1];
+    typedef char ObjectTargetEulerOffset[(offsetof(CObject,targetEuler)==0x197)?1:-1];
+    typedef char ObjectAngleDeltaOffset[(offsetof(CObject,angleDelta)==0x1a3)?1:-1];
+    typedef char ObjectMotionFlagsOffset[(offsetof(CObject,motionFlags)==0x1af)?1:-1];
+    typedef char ObjectMoveSpeedOffset[(offsetof(CObject,moveSpeed)==0x1b0)?1:-1];
+    typedef char ObjectRotationEnabledOffset[(offsetof(CObject,rotationEnabled)==0x1b5)?1:-1];
     typedef char ObjectMaterialStateOffset[(offsetof(CObject,materials)==0x1c3)?1:-1];
     typedef char ObjectMaterialPassOffset[(offsetof(CObject,materialPassState)==0x118f)?1:-1];
     typedef char ObjectMaterialGateOffset[(offsetof(CObject,hasMaterials)==0x118b)?1:-1];

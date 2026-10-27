@@ -37,7 +37,7 @@ void CObject::SetRotation(const CVector *rotation) {
 // samp.dll RVA: 0x0011ee7c
 extern const float g_objectMotionRotationSentinel=-999.0f;
 // samp.dll RVA: 0x000a7c20
-void CObject::Stop(){CVector zero={0,0,0};SetSpeed(zero);SetTurnSpeed(zero);((BYTE*)this)[0x1af]&=0xfe;}
+void CObject::Stop(){CVector zero={0,0,0};SetSpeed(zero);SetTurnSpeed(zero);motionFlags&=0xfe;}
 // samp.dll RVA: 0x000a7bf0
 float CObject::GetAngleDifference(float from,float to){return GameNormalizeAngle(GameNormalizeAngle(to)-from);}
 // samp.dll RVA: 0x0011e648
@@ -177,29 +177,29 @@ void CObject::AttachToObject(CObject *object) {
 
 // samp.dll RVA: 0x000a97c0
 void CObject::Move(CVector position,float speed,CVector rotation) {
-    BYTE *state=(BYTE*)this;CMatrix matrix;GetMatrix(&matrix);
-    if(state[0x1af]&1) {
+    CMatrix matrix;GetMatrix(&matrix);
+    if(motionFlags&1) {
         Stop();memcpy(&matrix.position,&targetMatrix.position,12);
-        if(state[0x1b5])GameQuaternionToMatrix((GameQuaternion*)(state+0x167),&matrix);
+        if(rotationEnabled)GameQuaternionToMatrix(&targetQuaternion,&matrix);
         ApplyMatrix(matrix);
     }
-    DWORD tick=RakNet::GetTime();*(DWORD*)(state+0x15f)=tick;
-    memcpy(&targetMatrix.position.x,&position.x,4);memcpy(state+0x1b0,&speed,4);state[0x1af]|=1;
+    DWORD tick=RakNet::GetTime();moveStartTick=tick;
+    memcpy(&targetMatrix.position.x,&position.x,4);memcpy(&moveSpeed,&speed,4);motionFlags|=1;
     memcpy(&targetMatrix.position.y,&position.y,4);memcpy(&targetMatrix.position.z,&position.z,4);
     if(rotation.x>g_objectMotionRotationSentinel&&rotation.y>g_objectMotionRotationSentinel&&rotation.z>g_objectMotionRotationSentinel) {
-        state[0x1b5]=1;float x,y,z;GetEulerInverted(&x,&y,&z);
-        *(float*)(state+0x197)=GameNormalizeAngle(rotation.y);
-        *(float*)(state+0x19b)=GameNormalizeAngle(rotation.x);
-        *(float*)(state+0x19f)=GameNormalizeAngle(rotation.z);
-        *(float*)(state+0x1a3)=GetAngleDifference(x,*(float*)(state+0x197));
-        *(float*)(state+0x1a7)=GetAngleDifference(y,*(float*)(state+0x19b));
-        *(float*)(state+0x1ab)=GetAngleDifference(z,*(float*)(state+0x19f));
+        rotationEnabled=1;float x,y,z;GetEulerInverted(&x,&y,&z);
+        targetEuler.x=GameNormalizeAngle(rotation.y);
+        targetEuler.y=GameNormalizeAngle(rotation.x);
+        targetEuler.z=GameNormalizeAngle(rotation.z);
+        angleDelta.x=GetAngleDifference(x,targetEuler.x);
+        angleDelta.y=GetAngleDifference(y,targetEuler.y);
+        angleDelta.z=GetAngleDifference(z,targetEuler.z);
         Rotate(rotation);CMatrix rotated;GetMatrix(&rotated);
-        GameQuaternionFromMatrix(&rotated,(GameQuaternion*)(state+0x187));
-        GameQuaternionFromMatrix(&targetMatrix,(GameQuaternion*)(state+0x167));
-        GameQuaternionNormalize((GameQuaternion*)(state+0x187));GameQuaternionNormalize((GameQuaternion*)(state+0x167));
-    }else state[0x1b5]=0;
-    *(float*)(state+0x15b)=GetDistanceToPoint(targetMatrix.position.x,targetMatrix.position.y,targetMatrix.position.z);
+        GameQuaternionFromMatrix(&rotated,&startQuaternion);
+        GameQuaternionFromMatrix(&targetMatrix,&targetQuaternion);
+        GameQuaternionNormalize(&startQuaternion);GameQuaternionNormalize(&targetQuaternion);
+    }else rotationEnabled=0;
+    moveDistance=GetDistanceToPoint(targetMatrix.position.x,targetMatrix.position.y,targetMatrix.position.z);
     if(g_pNetGame){BYTE*pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);BYTE*players=*(BYTE**)(pools+8);if(players)(*(CLocalPlayer**)(players+0x1e))->ProcessSurfing();}
     ClearBackendFlag8();
 }
@@ -354,11 +354,11 @@ void CObject::Process(float elapsedSeconds) {
         if(!pool)return;CObject *attached=(CObject*)pool->Get(object);
         if(attached)AttachToObject(attached);return;
     }
-    if(!(state[0x1af]&1))return;
+    if(!(motionFlags&1))return;
     CVector velocity={0,0,0};CMatrix matrix;GetMatrix(&matrix);
-    float step=elapsedSeconds**(float*)(state+0x1b0);
+    float step=elapsedSeconds*moveSpeed;
     float remaining=GetDistanceToTarget(&matrix);
-    DWORD now=RakNet::GetTime();int elapsedTicks=(int)(now-*(DWORD*)(state+0x15f));
+    DWORD now=RakNet::GetTime();int elapsedTicks=(int)(now-moveStartTick);
     float clockDistance;
     __asm {
         fild elapsedTicks
@@ -370,10 +370,10 @@ void CObject::Process(float elapsedSeconds) {
         fstp clockDistance
     }
     CVector old=matrix.position;
-    float travelled=*(float*)(state+0x15b)-remaining;
+    float travelled=moveDistance-remaining;
     if(step>=remaining) {
         SetSpeed(velocity);SetTurnSpeed(velocity);memcpy(&matrix.position,&targetMatrix.position,12);
-        if(state[0x1b5])GameQuaternionToMatrix((GameQuaternion*)(state+0x167),&matrix);
+        if(rotationEnabled)GameQuaternionToMatrix(&targetQuaternion,&matrix);
         ApplyMatrix(matrix);Stop();return;
     }
     if(!(elapsedSeconds>0.0f))return;
@@ -405,6 +405,8 @@ void CObject::Process(float elapsedSeconds) {
         fld velocity.z
         fadd dword ptr [edx+0x38]
         fstp dword ptr [edx+0x38]
+        // Native A9571 runs with two deferred FloatOffset arguments on stack:
+        // its [esp+28] is the remaining distance, not travelled distance.
         fld remaining
         fdiv dword ptr [esi+0x15b]
         fld g_quaternionMatrixOne
@@ -474,17 +476,17 @@ void CObject::Process(float elapsedSeconds) {
         }
     }
     SetSpeed(velocity);ApplyLinearSpeed();CMatrix current;
-    if(state[0x1b5]) {
+    if(rotationEnabled) {
         float x,y,z;GetEulerInverted(&x,&y,&z);
-        float desired=*(float*)(state+0x19f)-remainingFraction**(float*)(state+0x1ab);
+        float desired=targetEuler.z-remainingFraction*angleDelta.z;
         CVector turn={0,0,GetAngleDifference(z,desired)*g_objectTurnVelocityScale};
         if(turn.z>g_objectPoolSecondsPerTick)turn.z=g_objectPoolSecondsPerTick;
         else if(turn.z<g_objectNegativeTurnVelocityLimit)turn.z=g_objectNegativeTurnVelocityLimit;
         SetTurnSpeed(turn);GetMatrix(&current);
-        GameQuaternionSlerp((GameQuaternion*)(state+0x177),(GameQuaternion*)(state+0x187),
-            (GameQuaternion*)(state+0x167),progress);
-        GameQuaternionNormalize((GameQuaternion*)(state+0x177));
-        GameQuaternionToMatrix((GameQuaternion*)(state+0x177),&current);
+        GameQuaternionSlerp(&interpolatedQuaternion,&startQuaternion,
+            &targetQuaternion,progress);
+        GameQuaternionNormalize(&interpolatedQuaternion);
+        GameQuaternionToMatrix(&interpolatedQuaternion,&current);
     } else GetMatrix(&current);
     ApplyMatrix(current);
 }
@@ -568,8 +570,8 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
     if(model<0)*(BYTE*)0x46977f=0x7d;
     if(handle && GamePoolObjectGetAt(handle)) {
         m_pGameEntity=GamePoolObjectGetAt(handle);m_nHandle=handle;
-        state[0x48]=1;state[0x1af]=0;*(DWORD*)(state+0x1b0)=0;
-        state[0x1b6]=0;*(DWORD*)(state+0x163)=0;*(int*)(state+0x4e)=model;
+        state[0x48]=1;motionFlags=0;moveSpeed=0.0f;
+        state[0x1b6]=0;lastMoveTick=0;*(int*)(state+0x4e)=model;
         if(GameIsObjectModelInfo(info)){state[0x52]=1;*(float*)(state+0x54)=GameGetModelDrawDistance(info);}
         else{state[0x52]=0;memcpy(state+0x54,&drawDistance,4);}
         GetMatrix(&baseMatrix);memcpy(&baseMatrix.position,&position,12);
@@ -648,17 +650,17 @@ void CObject::SetAttachedObject(WORD id,const CVector *offset,const CVector *rot
 }
 // samp.dll RVA: 0x000a80b0
 BOOL CObject::IsMoving() {
-    BYTE *state=(BYTE*)this;WORD object=attachedObject;
+    WORD object=attachedObject;
     if(object!=0xffff) {
         if(!g_pNetGame)return FALSE;
         BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de),*pool=*(BYTE**)(pools+0x14);
         // Native accepts id2100 as well; the adjacent-state layout is unproven.
         if(!pool || object>2100 || !*(DWORD*)(pool+4+object*4))return FALSE;
         BYTE *attached=*(BYTE**)(pool+0x20d4+object*4);
-        return attached && (attached[0x1af]&1)?TRUE:FALSE;
+        return attached && (((CObject*)attached)->motionFlags&1)?TRUE:FALSE;
     }
     if(attachedVehicle!=0xffff)return TRUE;
-    return state[0x1af]&1;
+    return motionFlags&1;
 }
 
 // samp.dll RVA: 0x000a8430
