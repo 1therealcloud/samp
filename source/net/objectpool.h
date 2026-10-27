@@ -7,6 +7,14 @@ class CObjectPool {
     typedef char ObjectReadyOffset[(offsetof(CObject,renderReady)==0x49)?1:-1];
     typedef char ObjectCameraCollisionOffset[(offsetof(CObject,cameraCollisionDisabled)==0x53)?1:-1];
     typedef char ObjectDrawLastOffset[(offsetof(CObject,drawLast)==0x6c)?1:-1];
+    typedef char ObjectAttachmentEulerOffset[(offsetof(CObject,eulerRotation)==0xad)?1:-1];
+    typedef char ObjectAttachmentVehicleOffset[(offsetof(CObject,attachedVehicle)==0xbe)?1:-1];
+    typedef char ObjectAttachmentObjectOffset[(offsetof(CObject,attachedObject)==0xc0)?1:-1];
+    typedef char ObjectAttachmentOffsetOffset[(offsetof(CObject,attachmentOffset)==0xc2)?1:-1];
+    typedef char ObjectAttachmentRotationOffset[(offsetof(CObject,attachmentRotation)==0xce)?1:-1];
+    typedef char ObjectAttachmentSyncOffset[(offsetof(CObject,attachmentRotationSync)==0xda)?1:-1];
+    typedef char ObjectAttachmentTargetMatrixOffset[(offsetof(CObject,targetMatrix)==0xdb)?1:-1];
+    typedef char ObjectAttachmentBaseMatrixOffset[(offsetof(CObject,baseMatrix)==0x11b)?1:-1];
     typedef char ObjectMaterialStateOffset[(offsetof(CObject,materials)==0x1c3)?1:-1];
     typedef char ObjectMaterialPassOffset[(offsetof(CObject,materialPassState)==0x118f)?1:-1];
     typedef char ObjectMaterialGateOffset[(offsetof(CObject,hasMaterials)==0x118b)?1:-1];

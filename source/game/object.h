@@ -37,7 +37,15 @@ class CObject : public CEntity {
     BYTE cameraCollisionDisabled;
     BYTE unknown54[0x18];
     BYTE drawLast;
-    BYTE unknown6d[0x156];
+    BYTE unknown6d[0x40];
+    CVector eulerRotation;
+    BYTE unknownb9;
+    DWORD unknownba;
+    WORD attachedVehicle,attachedObject;
+    CVector attachmentOffset,attachmentRotation;
+    BYTE attachmentRotationSync;
+    CMatrix targetMatrix,baseMatrix;
+    BYTE unknown15b[0x68];
     ObjectMaterialState materials;
     // Native raw DWORD gate shared by ordinary and text materials.
     DWORD hasMaterials;

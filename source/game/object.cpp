@@ -1,6 +1,7 @@
 #include "game/object.h"
+#include <string.h>
 // samp.dll RVA: 0x000715c0
-CVector *CObject::GetRotation() {return (CVector*)((BYTE*)this+0xad);}
+CVector *CObject::GetRotation() {return &eulerRotation;}
 // samp.dll RVA: 0x00017750
 void CObject::DisableCameraCollision() {cameraCollisionDisabled=1;}
 #include "game/scripting.h"
@@ -23,7 +24,7 @@ void *__stdcall GamePoolObjectGetAt(int handle) {
 void CObject::SetRotation(const CVector *rotation) {
     if(m_pGameEntity&&GamePoolObjectGetAt(m_nHandle)) {
         Scripting::ProcessCommand(&g_objectSetRotationCommand,m_nHandle,(double)rotation->x,(double)rotation->y,(double)rotation->z);
-        BYTE *state=(BYTE*)this;*(float*)(state+0xad)=rotation->x;*(float*)(state+0xb1)=rotation->y;*(float*)(state+0xb5)=rotation->z;
+        memcpy(&eulerRotation.x,&rotation->x,4);memcpy(&eulerRotation.y,&rotation->y,4);memcpy(&eulerRotation.z,&rotation->z,4);
     }
 }
 
@@ -64,17 +65,17 @@ void CObject::Rotate(CVector rotation) {
         fmul g_objectDegreesToRadians
         fstp dword ptr [edx + 8]
         fld st(0)
-        fcos 
+        fcos
         fstp dword ptr [edx]
-        fsin 
+        fsin
         fld dword ptr [edx + 4]
-        fcos 
+        fcos
         fld dword ptr [edx + 4]
-        fsin 
+        fsin
         fld dword ptr [edx + 8]
-        fcos 
+        fcos
         fld dword ptr [edx + 8]
-        fsin 
+        fsin
         fst dword ptr [edx + 4]
         fmul st,st(4)
         fld st(1)
@@ -94,11 +95,11 @@ void CObject::Rotate(CVector rotation) {
         fstp dword ptr [esi + 0xdf]
         fld st(2)
         fmul dword ptr [edx]
-        fchs 
+        fchs
         fstp dword ptr [esi + 0xe3]
         fld dword ptr [edx + 4]
         fmul dword ptr [edx]
-        fchs 
+        fchs
         fstp dword ptr [esi + 0xeb]
         fld st(1)
         fmul dword ptr [edx]
@@ -160,19 +161,17 @@ float CObject::GetDistanceToTarget(const CMatrix *matrix) {
 // samp.dll RVA: 0x000a7e30
 void CObject::AttachToVehicle(CVehicle *vehicle) {
     if(!Scripting::ProcessCommand(&g_objectIsAttachedCommand,m_nHandle)) {
-        BYTE *state=(BYTE*)this;
         Scripting::ProcessCommand(&g_objectAttachVehicleCommand,m_nHandle,((CEntity*)vehicle)->m_nHandle,
-            (double)*(float*)(state+0xc2),(double)*(float*)(state+0xc6),(double)*(float*)(state+0xca),
-            (double)*(float*)(state+0xce),(double)*(float*)(state+0xd2),(double)*(float*)(state+0xd6));
+            (double)attachmentOffset.x,(double)attachmentOffset.y,(double)attachmentOffset.z,
+            (double)attachmentRotation.x,(double)attachmentRotation.y,(double)attachmentRotation.z);
     }
 }
 // samp.dll RVA: 0x000a7eb0
 void CObject::AttachToObject(CObject *object) {
     if(!Scripting::ProcessCommand(&g_objectIsAttachedCommand,m_nHandle)) {
-        BYTE *state=(BYTE*)this;
         Scripting::ProcessCommand(&g_objectAttachObjectCommand,m_nHandle,object->m_nHandle,
-            (double)*(float*)(state+0xc2),(double)*(float*)(state+0xc6),(double)*(float*)(state+0xca),
-            (double)*(float*)(state+0xce),(double)*(float*)(state+0xd2),(double)*(float*)(state+0xd6));
+            (double)attachmentOffset.x,(double)attachmentOffset.y,(double)attachmentOffset.z,
+            (double)attachmentRotation.x,(double)attachmentRotation.y,(double)attachmentRotation.z);
     }
 }
 
@@ -180,13 +179,13 @@ void CObject::AttachToObject(CObject *object) {
 void CObject::Move(CVector position,float speed,CVector rotation) {
     BYTE *state=(BYTE*)this;CMatrix matrix;GetMatrix(&matrix);
     if(state[0x1af]&1) {
-        Stop();memcpy(&matrix.position,state+0x10b,12);
+        Stop();memcpy(&matrix.position,&targetMatrix.position,12);
         if(state[0x1b5])GameQuaternionToMatrix((GameQuaternion*)(state+0x167),&matrix);
         ApplyMatrix(matrix);
     }
     DWORD tick=RakNet::GetTime();*(DWORD*)(state+0x15f)=tick;
-    memcpy(state+0x10b,&position.x,4);memcpy(state+0x1b0,&speed,4);state[0x1af]|=1;
-    memcpy(state+0x10f,&position.y,4);memcpy(state+0x113,&position.z,4);
+    memcpy(&targetMatrix.position.x,&position.x,4);memcpy(state+0x1b0,&speed,4);state[0x1af]|=1;
+    memcpy(&targetMatrix.position.y,&position.y,4);memcpy(&targetMatrix.position.z,&position.z,4);
     if(rotation.x>g_objectMotionRotationSentinel&&rotation.y>g_objectMotionRotationSentinel&&rotation.z>g_objectMotionRotationSentinel) {
         state[0x1b5]=1;float x,y,z;GetEulerInverted(&x,&y,&z);
         *(float*)(state+0x197)=GameNormalizeAngle(rotation.y);
@@ -197,10 +196,10 @@ void CObject::Move(CVector position,float speed,CVector rotation) {
         *(float*)(state+0x1ab)=GetAngleDifference(z,*(float*)(state+0x19f));
         Rotate(rotation);CMatrix rotated;GetMatrix(&rotated);
         GameQuaternionFromMatrix(&rotated,(GameQuaternion*)(state+0x187));
-        GameQuaternionFromMatrix((CMatrix*)(state+0xdb),(GameQuaternion*)(state+0x167));
+        GameQuaternionFromMatrix(&targetMatrix,(GameQuaternion*)(state+0x167));
         GameQuaternionNormalize((GameQuaternion*)(state+0x187));GameQuaternionNormalize((GameQuaternion*)(state+0x167));
     }else state[0x1b5]=0;
-    *(float*)(state+0x15b)=GetDistanceToPoint(*(float*)(state+0x10b),*(float*)(state+0x10f),*(float*)(state+0x113));
+    *(float*)(state+0x15b)=GetDistanceToPoint(targetMatrix.position.x,targetMatrix.position.y,targetMatrix.position.z);
     if(g_pNetGame){BYTE*pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);BYTE*players=*(BYTE**)(pools+8);if(players)(*(CLocalPlayer**)(players+0x1e))->ProcessSurfing();}
     ClearBackendFlag8();
 }
@@ -339,7 +338,7 @@ void CObject::Process(float elapsedSeconds) {
                 g_pGame->RequestModel(*(int*)(state+0x4e),2);
         }
     } else ProcessStreaming();
-    WORD vehicle=*(WORD*)(state+0xbe);
+    WORD vehicle=attachedVehicle;
     if(vehicle!=0xffff) {
         if(!g_pNetGame)return;
         BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de),*pool=*(BYTE**)(pools+0xc);
@@ -348,7 +347,7 @@ void CObject::Process(float elapsedSeconds) {
         if(attached && ((CEntity*)attached)->DoesExist())AttachToVehicle(attached);
         return;
     }
-    WORD object=*(WORD*)(state+0xc0);
+    WORD object=attachedObject;
     if(object!=0xffff) {
         if(!g_pNetGame)return;
         BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);CObjectPool *pool=*(CObjectPool**)(pools+0x14);
@@ -373,7 +372,7 @@ void CObject::Process(float elapsedSeconds) {
     CVector old=matrix.position;
     float travelled=*(float*)(state+0x15b)-remaining;
     if(step>=remaining) {
-        SetSpeed(velocity);SetTurnSpeed(velocity);memcpy(&matrix.position,state+0x10b,12);
+        SetSpeed(velocity);SetTurnSpeed(velocity);memcpy(&matrix.position,&targetMatrix.position,12);
         if(state[0x1b5])GameQuaternionToMatrix((GameQuaternion*)(state+0x167),&matrix);
         ApplyMatrix(matrix);Stop();return;
     }
@@ -550,9 +549,9 @@ void CObject::UpdateCachedCentre() {
 CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
     BYTE flag1193,BYTE firstHour,BYTE lastHour):CEntity() {
     BYTE *state=(BYTE*)this;DWORD handle=0;
-    *(WORD*)(state+0xbe)=*(WORD*)(state+0xc0)=0xffff;
+    attachedVehicle=attachedObject=0xffff;
     state[0x1193]=flag1193;m_pGameEntity=0;m_nHandle=0;
-    memset(state+0xc2,0,24);state[0xda]=1;state[0x1b4]=0;state[0x1194]=0;
+    memset(&attachmentOffset,0,24);attachmentRotationSync=1;state[0x1b4]=0;state[0x1194]=0;
     state[0xb9]=0;*(DWORD*)(state+0xba)=0;state[0x53]=0;
     state[0x1199]=state[0x119a]=state[0x119b]=0;
     if(firstHour || lastHour){state[0x1199]=1;state[0x119a]=firstHour;state[0x119b]=lastHour;}
@@ -573,8 +572,8 @@ CObject::CObject(int model,CVector position,CVector rotation,float drawDistance,
         state[0x1b6]=0;*(DWORD*)(state+0x163)=0;*(int*)(state+0x4e)=model;
         if(GameIsObjectModelInfo(info)){state[0x52]=1;*(float*)(state+0x54)=GameGetModelDrawDistance(info);}
         else{state[0x52]=0;memcpy(state+0x54,&drawDistance,4);}
-        GetMatrix((CMatrix*)(state+0x11b));memcpy(state+0x14b,&position,12);
-        SetMatrix(*(CMatrix*)(state+0x11b));SetRotation(&rotation);SetBackendHighFlag();
+        GetMatrix(&baseMatrix);memcpy(&baseMatrix.position,&position,12);
+        SetMatrix(baseMatrix);SetRotation(&rotation);SetBackendHighFlag();
         renderReady=0;*(DWORD*)(state+0x4a)=0;
         *(float*)(state+0x58)=GameGetModelCollisionRadius(model);UpdateCachedCentre();
     }
@@ -631,25 +630,25 @@ bool CObject::HasRwFrameFlag8() {
 
 // samp.dll RVA: 0x000a7d00
 void CObject::SetAttachedVehicle(WORD id,const CVector *offset,const CVector *rotation) {
-    BYTE *state=(BYTE*)this;*(WORD*)(state+0xbe)=id;
-    if(id==0xffff){for(int i=0;i<6;++i)*(DWORD*)(state+0xc2+i*4)=0;return;}
-    for(int i=0;i<3;++i)*(DWORD*)(state+0xc2+i*4)=*(const DWORD*)((const BYTE*)offset+i*4);
-    for(int i=0;i<3;++i)*(DWORD*)(state+0xce+i*4)=*(const DWORD*)((const BYTE*)rotation+i*4);
+    attachedVehicle=id;
+    if(id==0xffff){for(int i=0;i<6;++i)((DWORD*)&attachmentOffset)[i]=0;return;}
+    for(int i=0;i<3;++i)((DWORD*)&attachmentOffset)[i]=*(const DWORD*)((const BYTE*)offset+i*4);
+    for(int i=0;i<3;++i)((DWORD*)&attachmentRotation)[i]=*(const DWORD*)((const BYTE*)rotation+i*4);
 }
 // samp.dll RVA: 0x000a7d90
 void CObject::SetAttachedObject(WORD id,const CVector *offset,const CVector *rotation,BYTE flag) {
-    BYTE *state=(BYTE*)this;*(WORD*)(state+0xc0)=id;
+    attachedObject=id;
     if(id==0xffff) {
-        for(int i=0;i<5;++i)*(DWORD*)(state+0xc2+i*4)=0;
-        state[0xda]=1;*(DWORD*)(state+0xd6)=0;return;
+        for(int i=0;i<5;++i)((DWORD*)&attachmentOffset)[i]=0;
+        attachmentRotationSync=1;*(DWORD*)&attachmentRotation.z=0;return;
     }
-    for(int i=0;i<3;++i)*(DWORD*)(state+0xc2+i*4)=*(const DWORD*)((const BYTE*)offset+i*4);
-    for(int i=0;i<2;++i)*(DWORD*)(state+0xce+i*4)=*(const DWORD*)((const BYTE*)rotation+i*4);
-    DWORD last=*(const DWORD*)((const BYTE*)rotation+8);state[0xda]=flag;*(DWORD*)(state+0xd6)=last;
+    for(int i=0;i<3;++i)((DWORD*)&attachmentOffset)[i]=*(const DWORD*)((const BYTE*)offset+i*4);
+    for(int i=0;i<2;++i)((DWORD*)&attachmentRotation)[i]=*(const DWORD*)((const BYTE*)rotation+i*4);
+    DWORD last=*(const DWORD*)((const BYTE*)rotation+8);attachmentRotationSync=flag;*(DWORD*)&attachmentRotation.z=last;
 }
 // samp.dll RVA: 0x000a80b0
 BOOL CObject::IsMoving() {
-    BYTE *state=(BYTE*)this;WORD object=*(WORD*)(state+0xc0);
+    BYTE *state=(BYTE*)this;WORD object=attachedObject;
     if(object!=0xffff) {
         if(!g_pNetGame)return FALSE;
         BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de),*pool=*(BYTE**)(pools+0x14);
@@ -658,7 +657,7 @@ BOOL CObject::IsMoving() {
         BYTE *attached=*(BYTE**)(pool+0x20d4+object*4);
         return attached && (attached[0x1af]&1)?TRUE:FALSE;
     }
-    if(*(WORD*)(state+0xbe)!=0xffff)return TRUE;
+    if(attachedVehicle!=0xffff)return TRUE;
     return state[0x1af]&1;
 }
 
@@ -804,14 +803,13 @@ CMatrix g_objectAttachmentMatrix;
 CVector g_objectAttachmentZeroSpeed={0,0,0};
 // samp.dll RVA: 0x000a7a10
 void CObject::UpdateAttachedObjectRotation() {
-    BYTE *state=(BYTE*)this;
-    if(*(WORD*)(state+0xc0)==0xffff || state[0xda])return;
+    if(attachedObject==0xffff || attachmentRotationSync)return;
     GetMatrix(&g_objectAttachmentMatrix);
-    DWORD *out=(DWORD*)&g_objectAttachmentMatrix,*in=(DWORD*)(state+0x11b);
+    DWORD *out=(DWORD*)&g_objectAttachmentMatrix,*in=(DWORD*)&baseMatrix;
     for(int column=0;column<3;++column)for(int row=0;row<3;++row)out[column*4+row]=in[column*4+row];
-    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,0,*(float*)(state+0xce));
-    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,1,*(float*)(state+0xd2));
-    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,2,*(float*)(state+0xd6));
+    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,0,attachmentRotation.x);
+    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,1,attachmentRotation.y);
+    GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix,2,attachmentRotation.z);
     SetMatrix(g_objectAttachmentMatrix);
     SetTurnSpeed(g_objectAttachmentZeroSpeed);SetSpeed(g_objectAttachmentZeroSpeed);
 }
