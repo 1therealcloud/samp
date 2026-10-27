@@ -48,6 +48,7 @@ struct CModelFileStream {
     DWORD Read(void *output,DWORD count);
     // samp.dll RVA: 0x000bc390
     DWORD LoadFile(const char *filename);
+    // Equivalent native forwarding entry at RVA 0x000b9590; original duplicate identity unknown.
     // samp.dll RVA: 0x000bc450
     DWORD WriteDword(DWORD value);
     // samp.dll RVA: 0x000bc460
@@ -257,6 +258,8 @@ struct ModelCollisionVertex {SHORT values[3];};
 struct ModelCollisionTriangle {WORD vertices[3];BYTE surface,lighting;};
 struct ModelCollisionBounds {float minimum[3],maximum[3];};
 struct ModelCollisionFaceGroup {ModelCollisionBounds bounds;WORD first,last;};
+struct ModelCollisionBox {ModelCollisionBounds bounds;BYTE data[4];};
+struct ModelCollisionSphere {BYTE data[20];};
 // Observed collision-file view only. Full construction/allocation/ownership is
 // not established; writer/group methods do not make this a complete owning type.
 class CModelCollisionFile {public:
@@ -267,6 +270,14 @@ class CModelCollisionFile {public:
     // Reorders the existing triangle buffer and replaces the group pointer.
     // samp.dll RVA: 0x000baec0
     DWORD BuildFaceGroups();
+    // Pointer publication only; no copy, validation or cleanup on insert failure.
+    // samp.dll RVA: 0x000ba190
+    DWORD AddSphere(ModelCollisionSphere *sphere);
+    // samp.dll RVA: 0x000ba1a0
+    DWORD AddBox(ModelCollisionBox *box);
+    // Creates one28-byte box from bounds; ignores bounds/insert failure results.
+    // samp.dll RVA: 0x000ba240
+    DWORD BuildBoxFromGeometry(const CModelGeometry *geometry);
     // samp.dll RVA: 0x000b95d0
     DWORD SetInitialHeaderSize();
     // Native entry does not consume this. Writes sentinel bounds before checking vertices.
@@ -300,9 +311,9 @@ struct CModelCollisionNode {
     // samp.dll RVA: 0x000babf0
     void Split(CModelCollisionFile *file);
 };
-// The two native pointer-array specializations have identical layout/logic;
-// original template names and precise element ownership remain unestablished.
-struct CModelCollisionArrayA {
+// Native tail adapters establish boxes at78 and spheres at80. Original template
+// identifiers and owning lifecycle remain unestablished; both arrays hold pointers.
+struct CModelCollisionBoxArray {
     void **items;DWORD count;
     // samp.dll RVA: 0x000b9a40
     void *Get(DWORD index);
@@ -313,7 +324,7 @@ struct CModelCollisionArrayA {
     // samp.dll RVA: 0x000ba040
     DWORD Insert(void *value);
 };
-struct CModelCollisionArrayB {
+struct CModelCollisionSphereArray {
     void **items;DWORD count;
     // samp.dll RVA: 0x000b9a70
     void *Get(DWORD index);
@@ -335,12 +346,14 @@ typedef char NativeCollisionVertexExtent[(sizeof(ModelCollisionVertex)==6)?1:-1]
 typedef char NativeCollisionTriangleExtent[(sizeof(ModelCollisionTriangle)==8)?1:-1];
 typedef char NativeCollisionBoundsExtent[(sizeof(ModelCollisionBounds)==24)?1:-1];
 typedef char NativeCollisionGroupExtent[(sizeof(ModelCollisionFaceGroup)==28)?1:-1];
+typedef char NativeCollisionBoxExtent[(sizeof(ModelCollisionBox)==28)?1:-1];
+typedef char NativeCollisionSphereExtent[(sizeof(ModelCollisionSphere)==20)?1:-1];
 typedef char NativeCollisionVectorExtent[(sizeof(ModelCollisionTriangleVector)==16)?1:-1];
 typedef char NativeCollisionNodeExtent[(sizeof(CModelCollisionNode)==0x34)?1:-1];
 typedef char NativeCollisionNodeLeftOffset[(offsetof(CModelCollisionNode,left)==0x1c)?1:-1];
 typedef char NativeCollisionNodeVectorOffset[(offsetof(CModelCollisionNode,triangles)==0x24)?1:-1];
-typedef char NativeCollisionArrayAExtent[(sizeof(CModelCollisionArrayA)==8)?1:-1];
-typedef char NativeCollisionArrayBExtent[(sizeof(CModelCollisionArrayB)==8)?1:-1];
+typedef char NativeCollisionArrayAExtent[(sizeof(CModelCollisionBoxArray)==8)?1:-1];
+typedef char NativeCollisionArrayBExtent[(sizeof(CModelCollisionSphereArray)==8)?1:-1];
 // samp.dll RVA: 0x0011f8d8
 extern const float g_modelCollisionVertexScale;
 // samp.dll RVA: 0x0011f8dc

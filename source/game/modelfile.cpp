@@ -135,6 +135,7 @@ DWORD CModelFileStream::LoadFile(const char *filename) {
     }
     fclose(file);position=0;ended=0;return length;
 }
+// Equivalent native forwarding entry at RVA 0x000b9590; original duplicate identity unknown.
 // samp.dll RVA: 0x000bc450
 DWORD CModelFileStream::WriteDword(DWORD value) {return Write(&value,4);}
 // samp.dll RVA: 0x000bc460
@@ -897,6 +898,25 @@ DWORD CModelCollisionFile::SetGeometryBounds(const CModelGeometry *geometry) {
     memcpy(nativeState+0x44,geometry->sphere+3,4);
     return 1;
 }
+// samp.dll RVA: 0x000ba190
+DWORD CModelCollisionFile::AddSphere(ModelCollisionSphere *sphere) {
+    return ((CModelCollisionSphereArray*)(nativeState+0x80))->Insert(sphere);
+}
+// samp.dll RVA: 0x000ba1a0
+DWORD CModelCollisionFile::AddBox(ModelCollisionBox *box) {
+    return ((CModelCollisionBoxArray*)(nativeState+0x78))->Insert(box);
+}
+// samp.dll RVA: 0x000ba240
+DWORD CModelCollisionFile::BuildBoxFromGeometry(const CModelGeometry *geometry) {
+    CalculateGeometryBounds(geometry,(float*)(nativeState+0x20),(float*)(nativeState+0x2c));
+    memcpy(nativeState+0x44,geometry->sphere+3,4);
+    ModelCollisionBox *box=(ModelCollisionBox*)calloc(1,28);
+    memcpy(box->bounds.minimum,nativeState+0x20,12);
+    memcpy(box->bounds.maximum,nativeState+0x2c,12);
+    box->data[2]=255;box->data[3]=255;box->data[0]=0;
+    AddBox(box);
+    return 1;
+}
 // samp.dll RVA: 0x000b9710
 DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry *geometry) {
     CalculateGeometryBounds(geometry,(float*)(nativeState+0x20),(float*)(nativeState+0x2c));
@@ -959,11 +979,11 @@ void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex *target,const ModelC
     if(value->values[2]>target->values[2])target->values[2]=value->values[2];
 }
 // samp.dll RVA: 0x000b9a40
-void *CModelCollisionArrayA::Get(DWORD index) {return index<count?items[index]:0;}
+void *CModelCollisionBoxArray::Get(DWORD index) {return index<count?items[index]:0;}
 // samp.dll RVA: 0x000b9a60
-DWORD CModelCollisionArrayA::GetCount() {return count;}
+DWORD CModelCollisionBoxArray::GetCount() {return count;}
 // samp.dll RVA: 0x000b9b70
-bool CModelCollisionArrayA::Resize(DWORD size) {
+bool CModelCollisionBoxArray::Resize(DWORD size) {
     if(!size) {if(items){free(items);items=0;}count=0;return true;}
     void **resized=(void**)realloc(items,size*4);
     if(!resized)return false;
@@ -972,7 +992,7 @@ bool CModelCollisionArrayA::Resize(DWORD size) {
     count=size;return true;
 }
 // samp.dll RVA: 0x000ba040
-DWORD CModelCollisionArrayA::Insert(void *value) {
+DWORD CModelCollisionBoxArray::Insert(void *value) {
     DWORD oldCount=count,index=0;
     while(index<oldCount&&items[index])++index;
     if((LONG)index>=0&&index<oldCount){items[index]=value;return index;}
@@ -980,11 +1000,11 @@ DWORD CModelCollisionArrayA::Insert(void *value) {
     items[oldCount]=value;return oldCount;
 }
 // samp.dll RVA: 0x000b9a70
-void *CModelCollisionArrayB::Get(DWORD index) {return index<count?items[index]:0;}
+void *CModelCollisionSphereArray::Get(DWORD index) {return index<count?items[index]:0;}
 // samp.dll RVA: 0x000b9a90
-DWORD CModelCollisionArrayB::GetCount() {return count;}
+DWORD CModelCollisionSphereArray::GetCount() {return count;}
 // samp.dll RVA: 0x000b9be0
-bool CModelCollisionArrayB::Resize(DWORD size) {
+bool CModelCollisionSphereArray::Resize(DWORD size) {
     if(!size) {if(items){free(items);items=0;}count=0;return true;}
     void **resized=(void**)realloc(items,size*4);
     if(!resized)return false;
@@ -993,7 +1013,7 @@ bool CModelCollisionArrayB::Resize(DWORD size) {
     count=size;return true;
 }
 // samp.dll RVA: 0x000ba0a0
-DWORD CModelCollisionArrayB::Insert(void *value) {
+DWORD CModelCollisionSphereArray::Insert(void *value) {
     DWORD oldCount=count,index=0;
     while(index<oldCount&&items[index])++index;
     if((LONG)index>=0&&index<oldCount){items[index]=value;return index;}
