@@ -134,27 +134,27 @@ void ScrInitGame(RPCParameters* parameters)
     DWORD mode = 0;
     WORD player;
     BYTE stunt, holdTime, length, models[212];
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x21));
-    stream.Read(*(bool*)*(BYTE**)((BYTE*)g_pNetGame + 0x3d5));
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x15));
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x39));
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x34, 32, true);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->zoneNames);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->useCJWalk);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->unknown15);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->unknown39);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->unknown34, 32, true);
     stream.Read(*(bool*)&stunt);
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x27, 32, true);
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x1a));
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x2f));
-    (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2f] = 1;
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x2b));
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x23, 32, true);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->nameTagDrawDistance, 32, true);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->disableEnterExits);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight);
+    ((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight = 1;
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->manualVehicleControl);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->spawnsAvailable, 32, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x38));
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x30, 32, true);
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x2c, 8, true);
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x2e, 8, true);
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x16, 32, true);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->showNameTags);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->playerMarkersMode, 32, true);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->worldHour, 8, true);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->weather, 8, true);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->gravity, 32, true);
     stream.Read(*(bool*)&holdTime);
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 1, 32, true);
-    stream.Read(*(bool*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x20));
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->unknown01, 32, true);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->instantKill);
     stream.ReadBits((BYTE*)&g_localOnFootSendRate, 32, true);
     stream.ReadBits((BYTE*)&g_localInCarSendRate, 32, true);
     stream.ReadBits((BYTE*)&g_localAimSendRate, 32, true);
@@ -178,18 +178,18 @@ void ScrInitGame(RPCParameters* parameters)
     *((BYTE*)g_pNetGame + 0x131 + length) = 0;
     stream.Read((char*)models, 212);
     g_pGame->SetRequiredVehicleModels(models);
-    stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x1b, 32, true);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->vehicleDamageFilter, 32, true);
     players->localId = player;
     g_pGame->EnableStuntBonus(stunt);
     if (holdTime)
         *(DWORD*)((BYTE*)g_pNetGame + 0x239) = 1;
     ((CNetGame*)g_pNetGame)->InitializeGameLogic();
-    g_pGame->SetWorldGravity(*(float*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x16));
-    if ((*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x1a])
+    g_pGame->SetWorldGravity(((CNetGame*)g_pNetGame)->settings->gravity);
+    if (((CNetGame*)g_pNetGame)->settings->disableEnterExits)
         g_pGame->DisableEnterExits();
-    if (*(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x1b))
+    if (((CNetGame*)g_pNetGame)->settings->vehicleDamageFilter)
         GameInstallVehicleDamageFilter();
-    g_pGame->SetWorldWeather((*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2e]);
+    g_pGame->SetWorldWeather(((CNetGame*)g_pNetGame)->settings->weather);
     g_pChat->AddDebugMessage(g_rpcConnectedFormat, (char*)g_pNetGame + 0x131);
     *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) = 5;
     players->local->PrepareForClassSelection();
@@ -1040,7 +1040,7 @@ void ScrSetWorldTime(RPCParameters* parameters)
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     BYTE hour;
     stream.Read(hour);
-    (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2c] = hour;
+    ((CNetGame*)g_pNetGame)->settings->worldHour = hour;
 }
 // 0x0000f240
 void ScrSetWeather(RPCParameters* parameters)
@@ -1048,7 +1048,7 @@ void ScrSetWeather(RPCParameters* parameters)
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     BYTE weather;
     stream.Read(weather);
-    (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2e] = weather;
+    ((CNetGame*)g_pNetGame)->settings->weather = weather;
     g_pGame->SetWorldWeather(weather);
 }
 // 0x0000f2f0
@@ -1059,8 +1059,8 @@ void ScrSetPlayerTime(RPCParameters* parameters)
     stream.Read(hour);
     stream.Read(minute);
     g_pGame->SetWorldTime(hour, minute);
-    (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2c] = hour;
-    (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2d] = minute;
+    ((CNetGame*)g_pNetGame)->settings->worldHour = hour;
+    ((CNetGame*)g_pNetGame)->settings->worldMinute = minute;
 }
 // 0x0000f3d0
 void ScrToggleClock(RPCParameters* parameters)
@@ -1070,12 +1070,12 @@ void ScrToggleClock(RPCParameters* parameters)
     stream.ReadBits((unsigned char*)&enabled, 8, true);
     g_pGame->EnableClock(enabled);
     if (enabled)
-        (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x1f] = 0;
+        ((CNetGame*)g_pNetGame)->settings->holdWorldTime = 0;
     else
     {
-        (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x1f] = 1;
-        BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
-        g_pGame->GetWorldTime(settings + 0x2c, settings + 0x2d);
+        ((CNetGame*)g_pNetGame)->settings->holdWorldTime = 1;
+        CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
+        g_pGame->GetWorldTime(&settings->worldHour, &settings->worldMinute);
     }
 }
 // 0x0000fe00

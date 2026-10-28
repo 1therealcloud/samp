@@ -17,6 +17,42 @@ class RakClientInterface;
 struct Packet;
 struct CVector;
 #pragma pack(push, 1)
+// Native settings allocation is 0x3a bytes. Names describe established users;
+// fields without established semantics retain their native offsets explicitly.
+struct CNetGameSettings
+{
+    BYTE useCJWalk;
+    DWORD unknown01;
+    float worldBounds[4];
+    BYTE unknown15;
+    float gravity;
+    BYTE disableEnterExits;
+    DWORD vehicleDamageFilter;
+    BYTE holdWorldTime;
+    BYTE instantKill;
+    BYTE zoneNames;
+    BYTE unknown22;
+    DWORD spawnsAvailable;
+    float nameTagDrawDistance;
+    BYTE manualVehicleControl;
+    BYTE worldHour, worldMinute, weather;
+    BYTE nameTagLineOfSight;
+    DWORD playerMarkersMode;
+    DWORD unknown34;
+    BYTE showNameTags;
+    BYTE unknown39;
+};
+typedef char NetGameSettingsExtent[(sizeof(CNetGameSettings) == 0x3a) ? 1 : -1];
+typedef char NetGameSettingsBoundsOffset[(offsetof(CNetGameSettings, worldBounds) == 5) ? 1 : -1];
+typedef char NetGameSettingsGravityOffset[(offsetof(CNetGameSettings, gravity) == 0x16) ? 1 : -1];
+typedef char NetGameSettingsDamageOffset[(offsetof(CNetGameSettings, vehicleDamageFilter) == 0x1b) ? 1 : -1];
+typedef char NetGameSettingsClockOffset[(offsetof(CNetGameSettings, holdWorldTime) == 0x1f) ? 1 : -1];
+typedef char NetGameSettingsSpawnsOffset[(offsetof(CNetGameSettings, spawnsAvailable) == 0x23) ? 1 : -1];
+typedef char NetGameSettingsTagDistanceOffset[(offsetof(CNetGameSettings, nameTagDrawDistance) == 0x27) ? 1 : -1];
+typedef char NetGameSettingsHourOffset[(offsetof(CNetGameSettings, worldHour) == 0x2c) ? 1 : -1];
+typedef char NetGameSettingsMarkersOffset[(offsetof(CNetGameSettings, playerMarkersMode) == 0x30) ? 1 : -1];
+typedef char NetGameSettingsTagsOffset[(offsetof(CNetGameSettings, showNameTags) == 0x38) ? 1 : -1];
+typedef char NetGameSettingsTailOffset[(offsetof(CNetGameSettings, unknown39) == 0x39) ? 1 : -1];
 struct CNetGamePools
 {
     CMenuPool* menus;
@@ -157,7 +193,9 @@ public:
         BYTE nativeState[0x3e2];
         struct
         {
-            BYTE unknown00[0x3de];
+            BYTE unknown00[0x3d5];
+            CNetGameSettings* settings;
+            BYTE unknown3d9[5];
             CNetGamePools* pools;
         };
     };
@@ -179,6 +217,7 @@ public:
 #pragma pack(pop)
 typedef char NetGamePoolSetExtent[(sizeof(CNetGamePools) == 0x24) ? 1 : -1];
 typedef char NetGamePoolsOffset[(offsetof(CNetGame, pools) == 0x3de) ? 1 : -1];
+typedef char NetGameSettingsOffset[(offsetof(CNetGame, settings) == 0x3d5) ? 1 : -1];
 typedef char NetGameExtent[(sizeof(CNetGame) == 0x3e2) ? 1 : -1];
 // 0x00156b38
 extern DWORD g_netPlayersInfoTick;

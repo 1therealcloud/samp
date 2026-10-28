@@ -1171,9 +1171,9 @@ void CLocalPlayer::NextClass()
     *(DWORD*)(state + 0x143) = 0;
     CMatrix matrix;
     (*(CPed**)state)->GetMatrix(&matrix);
-    BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
+    CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
     DWORD selection = *(DWORD*)(state + 0x302);
-    if (selection == *(DWORD*)(settings + 0x23) - 1)
+    if (selection == settings->spawnsAvailable - 1)
         selection = 0;
     else
         selection++;
@@ -1192,7 +1192,7 @@ void CLocalPlayer::PrevClass()
     (*(CPed**)state)->GetMatrix(&matrix);
     DWORD selection = *(DWORD*)(state + 0x302);
     if (!selection)
-        selection = *(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x23);
+        selection = ((CNetGame*)g_pNetGame)->settings->spawnsAvailable;
     *(DWORD*)(state + 0x302) = selection - 1;
     g_pGame->m_pAudio->Play(1053, matrix.position);
     RequestClass(*(int*)(state + 0x302));
@@ -1522,8 +1522,8 @@ void CLocalPlayer::ProcessWorldBoundaries()
 {
     if (g_pGame->GetCurrentInterior())
         return;
-    BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
-    if ((*(CPed**)nativeState)->EnforceWorldBoundries(*(float*)(settings + 5), *(float*)(settings + 9), *(float*)(settings + 0xd), *(float*)(settings + 0x11)))
+    CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
+    if ((*(CPed**)nativeState)->EnforceWorldBoundries(settings->worldBounds[0], settings->worldBounds[1], settings->worldBounds[2], settings->worldBounds[3]))
     {
         (*(CPed**)nativeState)->SetArmedWeapon(0, 0);
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
@@ -1539,8 +1539,8 @@ void CLocalPlayer::ProcessVehicleWorldBoundaries()
     CVehicle* vehicle = vehicles->m_pObjects[id];
     if (!vehicle)
         return;
-    BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
-    if (vehicle->EnforceWorldBoundries(*(float*)(settings + 5), *(float*)(settings + 9), *(float*)(settings + 0xd), *(float*)(settings + 0x11)))
+    CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
+    if (vehicle->EnforceWorldBoundries(settings->worldBounds[0], settings->worldBounds[1], settings->worldBounds[2], settings->worldBounds[3]))
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
 }
 // 0x00003f60
@@ -2121,7 +2121,7 @@ BOOL CLocalPlayer::Process()
             g_localTrainCameraTick = 0xffffffff;
         }
         if ((int)now >= *(int*)(nativeState + 0x30e))
-            g_pGame->EnableZoneDisplaying(*(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x21));
+            g_pGame->EnableZoneDisplaying(((CNetGame*)g_pNetGame)->settings->zoneNames);
         g_pGame->ProcessCheckpoints();
         if (now - *(DWORD*)(nativeState + 0x13f) > 1000)
         {

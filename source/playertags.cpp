@@ -12,6 +12,7 @@
 #include "gui/device_lifecycle.h"
 #include "gui/device_objects.h"
 #include "main.h"
+#include "net/netgame.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include <new>
@@ -330,7 +331,7 @@ void CPlayerTags::DrawLabel(const CVector* position, const char* text, DWORD col
 // 0x00074dc0
 void ClientDrawLabels()
 {
-    if (!g_pNetGame || !(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x38])
+    if (!g_pNetGame || !((CNetGame*)g_pNetGame)->settings->showNameTags)
         return;
     g_devicePlayerTags->BeginLabel();
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -384,10 +385,10 @@ void ClientDrawLabels()
         memcpy(&g_nametagDrawPosition, &g_nametagBone, 12);
         CameraAim* aim = AimStuff::GetInternalAim();
         DWORD visible = 0;
-        if ((*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2f])
+        if (((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight)
             visible = Scripting::ProcessCommand(&g_nametagLineOfSightCommand, g_nametagDrawPosition.x, g_nametagDrawPosition.y, g_nametagDrawPosition.z, aim->source.x,
                                                 aim->source.y, aim->source.z, 1, 0, 0, 1, 0);
-        if ((*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2f] && !visible)
+        if (((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight && !visible)
             continue;
         sprintf(g_nametagName, g_nametagNameFormat, players->GetName(id), (int)counter);
         if (*(DWORD*)(remoteState + 0x1c))
@@ -404,7 +405,7 @@ void ClientDrawLabels()
 // 0x00073cb0
 void ClientDrawPlayerTags()
 {
-    if (!g_pNetGame || !(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x38])
+    if (!g_pNetGame || !((CNetGame*)g_pNetGame)->settings->showNameTags)
         return;
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     CPlayerPool* players = *(CPlayerPool**)(pools + 8);
@@ -456,10 +457,10 @@ void ClientDrawPlayerTags()
         memcpy(&g_nametagDrawPosition, &g_nametagBone, 12);
         CameraAim* aim = AimStuff::GetInternalAim();
         DWORD visible = 0;
-        if ((*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2f])
+        if (((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight)
             visible = Scripting::ProcessCommand(&g_nametagLineOfSightCommand, g_nametagDrawPosition.x, g_nametagDrawPosition.y, g_nametagDrawPosition.z, aim->source.x,
                                                 aim->source.y, aim->source.z, 1, 0, 0, 1, 0);
-        if ((*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2f] && !visible)
+        if (((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight && !visible)
             continue;
         if (*(DWORD*)(remote + 0x1c))
             continue;

@@ -73,7 +73,7 @@ const char g_netNoNameTagStatusOption[] = "nonametagstatus";
 // 0x0000b610
 CNetGame::CNetGame(const char* host, int port, const char* nickname, const char* password)
 {
-    *(BYTE**)(nativeState + 0x3d5) = (BYTE*)calloc(1, 0x3a);
+    settings = (CNetGameSettings*)calloc(1, sizeof(CNetGameSettings));
     memset(nativeState + 0x131, 0, 256);
     memset(nativeState + 0x30, 0, 256);
     memcpy(nativeState + 0x131, g_netDefaultHostName, 6);
@@ -90,20 +90,20 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
     memset(nativeState + 0x23d, 0, 100 * 4);
     g_pGame->EnableClock(false);
     g_pGame->EnableZoneDisplaying(0);
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 1) = 0;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0x23) = 0;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2f] = 1;
-    (*(BYTE**)(nativeState + 0x3d5))[0x1f] = 1;
-    (*(BYTE**)(nativeState + 0x3d5))[0] = 0;
-    (*(BYTE**)(nativeState + 0x3d5))[0x1a] = 0;
-    (*(BYTE**)(nativeState + 0x3d5))[0x21] = 0;
-    (*(BYTE**)(nativeState + 0x3d5))[0x20] = 0;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0x27) = 0x42700000;
-    (*(BYTE**)(nativeState + 0x3d5))[0x22] = 1;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2c] = 12;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2d] = 0;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2e] = 1;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0x16) = 0x3c03126f;
+    settings->unknown01 = 0;
+    settings->spawnsAvailable = 0;
+    settings->nameTagLineOfSight = 1;
+    settings->holdWorldTime = 1;
+    settings->useCJWalk = 0;
+    settings->disableEnterExits = 0;
+    settings->zoneNames = 0;
+    settings->instantKill = 0;
+    *(DWORD*)&settings->nameTagDrawDistance = 0x42700000;
+    settings->unknown22 = 1;
+    settings->worldHour = 12;
+    settings->worldMinute = 0;
+    settings->weather = 1;
+    *(DWORD*)&settings->gravity = 0x3c03126f;
     nativeState[0x234] = 1;
     if (g_pConfig && g_pConfig->GetIntValue(g_netNoNameTagStatusOption))
         nativeState[0x234] = 0;
@@ -122,9 +122,9 @@ void CNetGame::Process()
     ClientGetFrameElapsed();
     DWORD start = ClientIntegrityFrame(1);
     UpdateNetwork();
-    BYTE* settings = *(BYTE**)(nativeState + 0x3d5);
-    if (settings[0x1f])
-        g_pGame->SetWorldTime(settings[0x2c], settings[0x2d]);
+    CNetGameSettings* settings = this->settings;
+    if (settings->holdWorldTime)
+        g_pGame->SetWorldTime(settings->worldHour, settings->worldMinute);
     g_pGame->LoadAnimationsAndModels();
     if (*(DWORD*)(nativeState + 0x3cd) == 5)
     {
@@ -796,16 +796,16 @@ void CNetGame::ShutdownForRestart()
     ResetPickupPool();
     ResetObjectPool();
     ResetMenuPool();
-    (*(BYTE**)(nativeState + 0x3d5))[0x1a] = 0;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0x27) = 0x42700000;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2c] = 12;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2d] = 0;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2e] = 1;
-    (*(BYTE**)(nativeState + 0x3d5))[0x1f] = 1;
-    (*(BYTE**)(nativeState + 0x3d5))[0x2f] = 1;
-    (*(BYTE**)(nativeState + 0x3d5))[0] = 0;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0x16) = 0x3c03126f;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 1) = 0;
+    settings->disableEnterExits = 0;
+    *(DWORD*)&settings->nameTagDrawDistance = 0x42700000;
+    settings->worldHour = 12;
+    settings->worldMinute = 0;
+    settings->weather = 1;
+    settings->holdWorldTime = 1;
+    settings->nameTagLineOfSight = 1;
+    settings->useCJWalk = 0;
+    *(DWORD*)&settings->gravity = 0x3c03126f;
+    settings->unknown01 = 0;
     *(DWORD*)((BYTE*)g_pGame + 0x4d) = 0;
     *(DWORD*)((BYTE*)g_pGame + 0x29) = 0;
     g_pGame->GetPlayerPed()->LinkToInterior(0, TRUE);
@@ -813,9 +813,9 @@ void CNetGame::ShutdownForRestart()
     g_pGame->GetPlayerPed()->Kill();
     g_pGame->GetPlayerPed()->SetArmour(0.0f);
     g_pGame->EnableZoneDisplaying(0);
-    (*(BYTE**)(nativeState + 0x3d5))[0x21] = 0;
+    settings->zoneNames = 0;
     PlayerColors::Initialize();
-    g_pGame->SetWorldGravity(*(float*)(*(BYTE**)(nativeState + 0x3d5) + 0x16));
+    g_pGame->SetWorldGravity(settings->gravity);
     g_pGame->SetWantedLevel(0);
     g_pGame->EnableClock(false);
     g_pChat->AddInfoMessage(g_netRestartingMessage);
@@ -835,7 +835,7 @@ void CNetGame::ProcessPools()
             g_pGame->GetPlayerPed()->SetCollisionProcessed(TRUE);
         }
     }
-    if ((*(BYTE**)(nativeState + 0x3d5))[0x1a])
+    if (settings->disableEnterExits)
     {
         CPed* ped = g_pGame->GetPlayerPed();
         if (ped && !ped->GetBackendShoppingName() && strlen(ped->GetLoadedShoppingDataSubsection()))
@@ -918,12 +918,12 @@ void CNetGame::InitialNotification()
 // 0x000085e0
 void CNetGame::InitializeGameLogic()
 {
-    if ((*(BYTE**)(nativeState + 0x3d5))[0x2b])
+    if (settings->manualVehicleControl)
         GameApplyManualVehicleControlPatches();
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 5) = 0x469c4000;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 9) = 0xc69c4000;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0xd) = 0x469c4000;
-    *(DWORD*)(*(BYTE**)(nativeState + 0x3d5) + 0x11) = 0xc69c4000;
+    *(DWORD*)&settings->worldBounds[0] = 0x469c4000;
+    *(DWORD*)&settings->worldBounds[1] = 0xc69c4000;
+    *(DWORD*)&settings->worldBounds[2] = 0x469c4000;
+    *(DWORD*)&settings->worldBounds[3] = 0xc69c4000;
 }
 // 0x00008ad0
 void CNetGame::Packet_DisconnectionNotification(Packet* packet)
@@ -1047,11 +1047,11 @@ void CNetGame::Destroy()
         operator delete(pools);
         pools = 0;
     }
-    void* settings = *(void**)(nativeState + 0x3d5);
-    if (settings)
+    void* savedSettings = settings;
+    if (savedSettings)
     {
-        operator delete(settings);
-        *(void**)(nativeState + 0x3d5) = 0;
+        operator delete(savedSettings);
+        settings = 0;
     }
 }
 // 0x00117a0c
@@ -1331,5 +1331,5 @@ void CNetGame::SetLanMode(DWORD value)
 // 0x000a21f0
 DWORD CNetGame::GetSettingsByte0()
 {
-    return **(BYTE**)(nativeState + 0x3d5);
+    return settings->useCJWalk;
 }
