@@ -2,7 +2,7 @@
 // 0x00001a90
 RakClientInterface* CNetGame::GetRakClient()
 {
-    return *(RakClientInterface**)(nativeState + 0x2c);
+    return rakClient;
 }
 // 0x00017800
 CTextDrawPool* CNetGame::GetTextDrawPool()
@@ -22,12 +22,12 @@ CActorPool* CNetGame::GetActorPool()
 // 0x00002e60
 DWORD CNetGame::GetState()
 {
-    return *(DWORD*)(nativeState + 0x3cd);
+    return gameState;
 }
 // 0x00002e70
 BOOL CNetGame::LanMode()
 {
-    return *(BOOL*)(nativeState + 0x239);
+    return (BOOL)lanMode;
 }
 #include "BitStream.h"
 #include "GetTime.h"
@@ -74,20 +74,20 @@ const char g_netNoNameTagStatusOption[] = "nonametagstatus";
 CNetGame::CNetGame(const char* host, int port, const char* nickname, const char* password)
 {
     settings = (CNetGameSettings*)calloc(1, sizeof(CNetGameSettings));
-    memset(nativeState + 0x131, 0, 256);
-    memset(nativeState + 0x30, 0, 256);
-    memcpy(nativeState + 0x131, g_netDefaultHostName, 6);
-    strncpy((char*)nativeState + 0x30, host, 257);
-    *(int*)(nativeState + 0x235) = port;
-    *(RakClientInterface**)(nativeState + 0x2c) = RakNetworkFactory::GetRakClientInterface();
+    memset(hostName, 0, 256);
+    memset(hostOrIp, 0, 256);
+    memcpy(hostName, g_netDefaultHostName, 6);
+    strncpy(hostOrIp, host, 257);
+    serverPort = port;
+    rakClient = RakNetworkFactory::GetRakClientInterface();
     InitializePools();
     pools->players->localName.assign(nickname, strlen(nickname));
     // Native helper RVA 0x0001f1d0 sets the datagram port key to port XOR 0xCCCC.
     SocketLayer::Instance()->SetDatagramPort((unsigned short)port);
-    RegisterRPCs(*(RakClientInterface**)(nativeState + 0x2c));
-    RegisterScriptRPCs(*(RakClientInterface**)(nativeState + 0x2c));
-    (*(RakClientInterface**)(nativeState + 0x2c))->SetPassword(password);
-    memset(nativeState + 0x23d, 0, 100 * 4);
+    RegisterRPCs(rakClient);
+    RegisterScriptRPCs(rakClient);
+    rakClient->SetPassword(password);
+    memset(mapIcons, 0, 100 * 4);
     g_pGame->EnableClock(false);
     g_pGame->EnableZoneDisplaying(0);
     settings->unknown01 = 0;
@@ -104,15 +104,15 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
     settings->worldMinute = 0;
     settings->weather = 1;
     *(DWORD*)&settings->gravity = 0x3c03126f;
-    nativeState[0x234] = 1;
+    showNameTagStatus = 1;
     if (g_pConfig && g_pConfig->GetIntValue(g_netNoNameTagStatusOption))
-        nativeState[0x234] = 0;
-    nativeState[0x232] = 0;
-    nativeState[0x233] = 0;
-    *(DWORD*)(nativeState + 0x3d1) = GetTickCount();
-    *(DWORD*)(nativeState + 0x3cd) = 1;
-    *(DWORD*)(nativeState + 0x239) = 0;
-    nativeState[0x3d9] = 0;
+        showNameTagStatus = 0;
+    disableVehicleCollisions = 0;
+    updateCameraTarget = 0;
+    lastConnectAttempt = GetTickCount();
+    gameState = StateWaitingToConnect;
+    lanMode = 0;
+    modelWaitActive = 0;
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netStartedMessage);
 }
@@ -126,7 +126,7 @@ void CNetGame::Process()
     if (settings->holdWorldTime)
         g_pGame->SetWorldTime(settings->worldHour, settings->worldMinute);
     g_pGame->LoadAnimationsAndModels();
-    if (*(DWORD*)(nativeState + 0x3cd) == 5)
+    if (gameState == StateConnected)
     {
         if (g_customModels && !((BYTE*)g_customModels)[0x221])
         {
@@ -142,7 +142,7 @@ void CNetGame::Process()
     }
     else
         SpawnScreen();
-    if (*(DWORD*)(nativeState + 0x3cd) == 1)
+    if (gameState == StateWaitingToConnect)
         Connect();
     if ((int)(ClientIntegrityFrame(0) - start) < 1 && GameIntegrityMismatch(69, 1, 6, 12, 17, 2, 50) != 69)
         exit(0);
@@ -244,7 +244,7 @@ void CNetGame::Packet_AuthKey(Packet* packet)
 {
     RakNet::BitStream input(packet->data, (int)packet->length, false);
     BYTE packetId = 0;
-    int state = *(int*)(nativeState + 0x3cd);
+    int state = (int)gameState;
     if (state < 1 || state > 6)
         return;
     BYTE length = 0;
@@ -260,7 +260,7 @@ void CNetGame::Packet_AuthKey(Packet* packet)
     output.WriteBits(&packetId, 8, true);
     output.WriteBits(&responseLength, 8, true);
     output.Write(response, responseLength);
-    (*(RakClientInterface**)(nativeState + 0x2c))->Send(&output, (PacketPriority)0, (PacketReliability)8, 0);
+    rakClient->Send(&output, (PacketPriority)0, (PacketReliability)8, 0);
 }
 // 0x0000aa60
 void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
@@ -277,7 +277,7 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     challenge ^= 0xfde;
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netJoiningMessage);
-    *(DWORD*)(nativeState + 0x3cd) = 6;
+    gameState = StateAwaitingInit;
     size_t length = strlen(pools->players->localName.c_str());
     RakNet::BitStream output;
     DWORD version = 0xfde;
@@ -297,13 +297,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     output.WriteBits(&byte, 8, true);
     output.Write(g_netClientVersion, 9);
     output.WriteBits((BYTE*)&challenge, 32, true);
-    (*(RakClientInterface**)(nativeState + 0x2c))->RPC(&g_netJoinRpc, &output, (PacketPriority)1, (PacketReliability)8, 0, false);
+    rakClient->RPC(&g_netJoinRpc, &output, (PacketPriority)1, (PacketReliability)8, 0, false);
 }
 // 0x0000a9d0
 void CNetGame::Packet_ConnectionLost(Packet* packet)
 {
     (void)packet;
-    RakClientInterface* client = *(RakClientInterface**)(nativeState + 0x2c);
+    RakClientInterface* client = rakClient;
     if (client)
         client->Disconnect(0, 0);
     g_pChat->AddDebugMessage(g_netConnectionLostMessage);
@@ -317,12 +317,12 @@ void CNetGame::Packet_ConnectionLost(Packet* packet)
         }
     if (g_renderAudioStream)
         g_renderAudioStream->Stop(true);
-    *(DWORD*)(nativeState + 0x3cd) = 1;
+    gameState = StateWaitingToConnect;
 }
 // 0x0000af40
 void CNetGame::UpdateNetwork()
 {
-    Packet* packet = (*(RakClientInterface**)(nativeState + 0x2c))->Receive();
+    Packet* packet = rakClient->Receive();
     while (packet)
     {
         BYTE id = packet->data[0];
@@ -335,11 +335,11 @@ void CNetGame::UpdateNetwork()
                 break;
             case 29:
                 g_pChat->AddDebugMessage(g_netNoResponseMessage);
-                *(DWORD*)(nativeState + 0x3cd) = 1;
+                gameState = StateWaitingToConnect;
                 break;
             case 31:
                 g_pChat->AddDebugMessage(g_netServerFullMessage);
-                *(DWORD*)(nativeState + 0x3cd) = 1;
+                gameState = StateWaitingToConnect;
                 break;
             case 32:
                 Packet_DisconnectionNotification(packet);
@@ -358,7 +358,7 @@ void CNetGame::UpdateNetwork()
                 break;
             case 37:
                 g_pChat->AddDebugMessage(g_netInvalidPasswordMessage);
-                (*(RakClientInterface**)(nativeState + 0x2c))->Disconnect(0, 0);
+                rakClient->Disconnect(0, 0);
                 break;
             case 200:
                 Packet_IncarSync(packet);
@@ -385,8 +385,8 @@ void CNetGame::UpdateNetwork()
                 Packet_PassengerSync(packet);
                 break;
         }
-        (*(RakClientInterface**)(nativeState + 0x2c))->DeallocatePacket(packet);
-        packet = (*(RakClientInterface**)(nativeState + 0x2c))->Receive();
+        rakClient->DeallocatePacket(packet);
+        packet = rakClient->Receive();
     }
 }
 // 0x00117ba0
@@ -537,7 +537,7 @@ void CNetGame::Packet_OnfootSync(Packet* packet)
     NativeSyncBitStream stream(packet->data, (int)packet->length);
     BYTE packetId = 0;
     bool surfing = false, animation = false;
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     BYTE data[68] = {0};
     DWORD timestamp = 0;
@@ -590,7 +590,7 @@ void CNetGame::Packet_IncarSync(Packet* packet)
 {
     NativeSyncBitStream stream(packet->data, (int)packet->length);
     BYTE packetId = 0;
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     BYTE data[63] = {0};
     DWORD timestamp = 0;
@@ -642,7 +642,7 @@ void CNetGame::Packet_UnoccupiedSync(Packet* packet)
 {
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
     BYTE packetId = 0;
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     WORD player;
     BYTE data[67] = {0};
@@ -657,7 +657,7 @@ void CNetGame::Packet_UnoccupiedSync(Packet* packet)
 void CNetGame::Packet_TrailerSync(Packet* packet)
 {
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     BYTE packetId = 0, data[54];
     WORD player;
@@ -672,7 +672,7 @@ void CNetGame::Packet_TrailerSync(Packet* packet)
 void CNetGame::Packet_BulletSync(Packet* packet)
 {
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     BYTE packetId = 0, data[40];
     DWORD player = 0;
@@ -692,7 +692,7 @@ void CNetGame::Packet_AimSync(Packet* packet)
 {
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
     BYTE packetId = 0;
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     WORD player;
     BYTE data[31];
@@ -708,7 +708,7 @@ void CNetGame::Packet_PassengerSync(Packet* packet)
 {
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
     BYTE packetId = 0;
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     WORD player;
     BYTE data[24];
@@ -723,7 +723,7 @@ void CNetGame::Packet_PassengerSync(Packet* packet)
 void CNetGame::Packet_MarkersSync(Packet* packet)
 {
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
-    if (*(DWORD*)(nativeState + 0x3cd) != 5)
+    if (gameState != StateConnected)
         return;
     CPlayerPool* players = pools->players;
     BYTE packetId = 0;
@@ -784,7 +784,7 @@ void CNetGame::ShutdownForRestart()
     pools->players->local->ResetData();
     pools->players->local->ToggleSpectating(FALSE);
     AimStuff::ResetLocalSkills();
-    *(DWORD*)(nativeState + 0x3cd) = 11;
+    gameState = StateRestarting;
     pools->players->Deactivate();
     pools->players->Process();
     ResetVehiclePool();
@@ -823,11 +823,11 @@ void CNetGame::ShutdownForRestart()
 // 0x00008810
 void CNetGame::ProcessPools()
 {
-    if (nativeState[0x3d9])
+    if (modelWaitActive)
     {
-        if ((DWORD)RakNet::GetTime() - *(DWORD*)(nativeState + 0x3da) <= 1000)
+        if ((DWORD)RakNet::GetTime() - modelWaitTick <= 1000)
             return;
-        nativeState[0x3d9] = 0;
+        modelWaitActive = 0;
         if (*(DWORD*)(pools->players->local->nativeState + 0xf4))
         {
             g_pGame->GetPlayerPed()->SetControllable(TRUE);
@@ -890,18 +890,18 @@ void CNetGame::ProcessPools()
 // 0x00008750
 void CNetGame::ProcessCustomModelWait()
 {
-    if (g_customModels && !nativeState[0x3d9] && *(DWORD*)(pools->players->local->nativeState + 0xf4) && *(DWORD*)((BYTE*)g_customModels + 0x217) &&
+    if (g_customModels && !modelWaitActive && *(DWORD*)(pools->players->local->nativeState + 0xf4) && *(DWORD*)((BYTE*)g_customModels + 0x217) &&
         g_customModels->MarkResourceRequests() > 0)
     {
-        nativeState[0x3d9] = 1;
+        modelWaitActive = 1;
         g_pGame->GetPlayerPed()->SetControllable(FALSE);
         g_pGame->GetPlayerPed()->SetCollisionFlag(FALSE);
         g_pGame->GetPlayerPed()->SetCollisionProcessed(FALSE);
         g_pGame->m_pCamera->Restore();
     }
     g_pGame->EnableHUD(FALSE);
-    if (nativeState[0x3d9])
-        *(DWORD*)(nativeState + 0x3da) = (DWORD)RakNet::GetTime();
+    if (modelWaitActive)
+        modelWaitTick = (DWORD)RakNet::GetTime();
 }
 // 0x001179dc
 const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
@@ -932,21 +932,21 @@ void CNetGame::Packet_DisconnectionNotification(Packet* packet)
     g_pChat->AddDebugMessage(g_netDisconnectedMessage);
     if (g_renderAudioStream)
         g_renderAudioStream->Stop(true);
-    (*(RakClientInterface**)(nativeState + 0x2c))->Disconnect(2000, 0);
+    rakClient->Disconnect(2000, 0);
 }
 // 0x00008b10
 void CNetGame::Packet_InvalidPassword(Packet* packet)
 {
     (void)packet;
     g_pChat->AddDebugMessage(g_netInvalidPasswordMessage);
-    (*(RakClientInterface**)(nativeState + 0x2c))->Disconnect(0, 0);
+    rakClient->Disconnect(0, 0);
 }
 // 0x00009fb0
 void CNetGame::ResetMapIcons()
 {
     for (BYTE index = 0; index < 100; index++)
     {
-        DWORD* icon = (DWORD*)(nativeState + 0x23d + index * 4);
+        DWORD* icon = &mapIcons[index];
         if (*icon)
         {
             Scripting::ProcessCommand(&g_netRemoveMapIconCommand, *icon);
@@ -959,7 +959,7 @@ void CNetGame::CreateMapIcon(BYTE index, CVector position, BYTE icon, DWORD colo
 {
     if (index < 100)
     {
-        DWORD* slot = (DWORD*)(nativeState + 0x23d + index * 4);
+        DWORD* slot = &mapIcons[index];
         if (*slot)
         {
             Scripting::ProcessCommand(&g_netRemoveMapIconCommand, *slot);
@@ -984,10 +984,10 @@ void CNetGame::ResetPools()
 // 0x00009570
 void CNetGame::Destroy()
 {
-    (*(RakClientInterface**)(nativeState + 0x2c))->Disconnect(0, 0);
-    UnRegisterRPCs(*(RakClientInterface**)(nativeState + 0x2c));
-    UnRegisterScriptRPCs(*(RakClientInterface**)(nativeState + 0x2c));
-    RakNetworkFactory::DestroyRakClientInterface(*(RakClientInterface**)(nativeState + 0x2c));
+    rakClient->Disconnect(0, 0);
+    UnRegisterRPCs(rakClient);
+    UnRegisterScriptRPCs(rakClient);
+    RakNetworkFactory::DestroyRakClientInterface(rakClient);
     CPlayerPool* players = pools->players;
     if (players)
     {
@@ -1070,13 +1070,13 @@ const char g_netNoResponseMessage[] = "The server didn't respond. Retrying..";
 void CNetGame::Connect()
 {
     DWORD(WINAPI * tick)() = GetTickCount;
-    if (tick() - *(DWORD*)(nativeState + 0x3d1) > 3000)
+    if (tick() - lastConnectAttempt > 3000)
     {
         if (g_pChat)
-            g_pChat->AddDebugMessage(g_netConnectingMessage, (char*)nativeState + 0x30, *(int*)(nativeState + 0x235));
-        (*(RakClientInterface**)(nativeState + 0x2c))->Connect((char*)nativeState + 0x30, *(WORD*)(nativeState + 0x235), 0, 0, 2);
-        *(DWORD*)(nativeState + 0x3d1) = tick();
-        *(DWORD*)(nativeState + 0x3cd) = 2;
+            g_pChat->AddDebugMessage(g_netConnectingMessage, hostOrIp, serverPort);
+        rakClient->Connect(hostOrIp, (WORD)serverPort, 0, 0, 2);
+        lastConnectAttempt = tick();
+        gameState = StateConnecting;
     }
 }
 // 0x000086a0
@@ -1119,14 +1119,14 @@ void CNetGame::Packet_NoFreeIncomingConnections(Packet* packet)
 {
     (void)packet;
     g_pChat->AddDebugMessage(g_netServerFullMessage);
-    *(DWORD*)(nativeState + 0x3cd) = 1;
+    gameState = StateWaitingToConnect;
 }
 // 0x00008b50
 void CNetGame::Packet_ConnectionAttemptFailed(Packet* packet)
 {
     (void)packet;
     g_pChat->AddDebugMessage(g_netNoResponseMessage);
-    *(DWORD*)(nativeState + 0x3cd) = 1;
+    gameState = StateWaitingToConnect;
 }
 // 0x00008230
 void CNetGame::InitializePools()
@@ -1239,7 +1239,7 @@ void CNetGame::RemoveMapIcon(BYTE index)
 {
     if (index < 100)
     {
-        DWORD* icon = (DWORD*)(nativeState + 0x23d + index * 4);
+        DWORD* icon = &mapIcons[index];
         Scripting::ProcessCommand(&g_netRemoveMapIconCommand, *icon);
         *icon = 0;
     }
@@ -1247,7 +1247,7 @@ void CNetGame::RemoveMapIcon(BYTE index)
 // 0x000081f0
 void CNetGame::SetGameState(DWORD state)
 {
-    *(DWORD*)(nativeState + 0x3cd) = state;
+    gameState = state;
 }
 // 0x000081d0
 CPickupPool* CNetGame::GetPickupPool()
@@ -1265,19 +1265,19 @@ __declspec(naked) __int64 CNetGame::GetCounter()
 // 0x00008b80
 void CNetGame::ToggleNameTagStatus()
 {
-    if (!nativeState[0x234])
+    if (!showNameTagStatus)
     {
         g_pChat->AddInfoMessage("NameTag Player Status: ON");
         if (g_pConfig)
             g_pConfig->WriteIntValue("nonametagstatus", 0, FALSE);
-        nativeState[0x234] = 1;
+        showNameTagStatus = 1;
     }
     else
     {
         g_pChat->AddInfoMessage("NameTag Player Status: OFF");
         if (g_pConfig)
             g_pConfig->WriteIntValue("nonametagstatus", 1, FALSE);
-        nativeState[0x234] = 0;
+        showNameTagStatus = 0;
     }
 }
 // 0x00156b38
@@ -1291,7 +1291,7 @@ void CNetGame::UpdatePlayersInfo()
     {
         g_netPlayersInfoTick = GetTickCount();
         RakNet::BitStream stream;
-        RakClientInterface* client = *(RakClientInterface**)(nativeState + 0x2c);
+        RakClientInterface* client = rakClient;
         if (client)
             client->RPC(&g_netPlayersInfoRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
     }
@@ -1299,22 +1299,22 @@ void CNetGame::UpdatePlayersInfo()
 // 0x000081e0
 CMenuPool* CNetGame::GetMenuPool()
 {
-    return *(CMenuPool**)(*(BYTE**)(nativeState + 0x3de));
+    return pools->menus;
 }
 // 0x00002e40
 CObjectPool* CNetGame::GetObjectPool()
 {
-    return *(CObjectPool**)(*(BYTE**)(nativeState + 0x3de) + 0x14);
+    return pools->objects;
 }
 // 0x00001180
 CVehiclePool* CNetGame::GetVehiclePool()
 {
-    return *(CVehiclePool**)(*(BYTE**)(nativeState + 0x3de) + 0xc);
+    return pools->vehicles;
 }
 // 0x00001170
 CPlayerPool* CNetGame::GetPlayerPool()
 {
-    return *(CPlayerPool**)(*(BYTE**)(nativeState + 0x3de) + 8);
+    return pools->players;
 }
 
 // 0x0000e3e0
@@ -1325,7 +1325,7 @@ CLabelPool* CNetGame::GetLabelPool()
 // 0x0000e3f0
 void CNetGame::SetLanMode(DWORD value)
 {
-    *(DWORD*)(nativeState + 0x239) = value;
+    lanMode = value;
 }
 
 // 0x000a21f0

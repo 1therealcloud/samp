@@ -1548,7 +1548,7 @@ void ScrDisableVehicleCollisions(RPCParameters* parameters)
     bool disabled = false;
     stream.Read(disabled);
     if (g_pNetGame)
-        ((BYTE*)g_pNetGame)[0x232] = (BYTE)disabled;
+        ((CNetGame*)g_pNetGame)->disableVehicleCollisions = (BYTE)disabled;
 }
 // 0x0001a800
 void ScrSetGravity(RPCParameters* parameters)

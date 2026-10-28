@@ -394,7 +394,7 @@ void ClientDrawLabels()
         if (*(DWORD*)(remoteState + 0x1c))
             continue;
         int status = remote->GetStatus();
-        BYTE drawStatus = ((BYTE*)g_pNetGame)[0x234];
+        BYTE drawStatus = ((CNetGame*)g_pNetGame)->showNameTagStatus;
         float distance = ped->GetDistanceToCamera();
         DWORD color = remote->GetColorAsARGB();
         g_devicePlayerTags->DrawLabel(&g_nametagDrawPosition, g_nametagName, color, distance, drawStatus, status);

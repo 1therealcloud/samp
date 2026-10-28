@@ -3,7 +3,7 @@
 #include "game/scripting.h"
 #include <stddef.h>
 #include <windows.h>
-// The pool set and its owning field are established; other state remains opaque.
+// Observed coordinator fields; the unused prefix remains opaque.
 class CVehiclePool;
 class CPlayerPool;
 class CMenuPool;
@@ -68,6 +68,15 @@ struct CNetGamePools
 class CNetGame
 {
 public:
+    // Observed state values; the raw DWORD also retains unrecognized values.
+    enum
+    {
+        StateWaitingToConnect = 1,
+        StateConnecting = 2,
+        StateConnected = 5,
+        StateAwaitingInit = 6,
+        StateRestarting = 11
+    };
     // Raw selected client pointer; no initialization or connection-state gate.
     // 0x00001a90
     RakClientInterface* GetRakClient();
@@ -187,15 +196,28 @@ public:
     CMenuPool* GetMenuPool();
     // 0x00002e40
     CObjectPool* GetObjectPool();
-    // Native coordinator allocation extent; internal layout and lifecycle remain open.
+    // Native coordinator allocation extent. Both strings have an extra byte;
+    // construction clears only 256 bytes, while InitGame clears 257 hostname bytes.
     union
     {
         BYTE nativeState[0x3e2];
         struct
         {
-            BYTE unknown00[0x3d5];
+            BYTE unknown00[0x2c];
+            RakClientInterface* rakClient;
+            char hostOrIp[257];
+            char hostName[257];
+            BYTE disableVehicleCollisions;
+            BYTE updateCameraTarget;
+            BYTE showNameTagStatus;
+            int serverPort;
+            DWORD lanMode;
+            DWORD mapIcons[100];
+            DWORD gameState;
+            DWORD lastConnectAttempt;
             CNetGameSettings* settings;
-            BYTE unknown3d9[5];
+            BYTE modelWaitActive;
+            DWORD modelWaitTick;
             CNetGamePools* pools;
         };
     };
@@ -217,7 +239,20 @@ public:
 #pragma pack(pop)
 typedef char NetGamePoolSetExtent[(sizeof(CNetGamePools) == 0x24) ? 1 : -1];
 typedef char NetGamePoolsOffset[(offsetof(CNetGame, pools) == 0x3de) ? 1 : -1];
+typedef char NetGameClientOffset[(offsetof(CNetGame, rakClient) == 0x2c) ? 1 : -1];
+typedef char NetGameHostOffset[(offsetof(CNetGame, hostOrIp) == 0x30) ? 1 : -1];
+typedef char NetGameHostNameOffset[(offsetof(CNetGame, hostName) == 0x131) ? 1 : -1];
+typedef char NetGameCollisionOffset[(offsetof(CNetGame, disableVehicleCollisions) == 0x232) ? 1 : -1];
+typedef char NetGameCameraTargetOffset[(offsetof(CNetGame, updateCameraTarget) == 0x233) ? 1 : -1];
+typedef char NetGameTagStatusOffset[(offsetof(CNetGame, showNameTagStatus) == 0x234) ? 1 : -1];
+typedef char NetGamePortOffset[(offsetof(CNetGame, serverPort) == 0x235) ? 1 : -1];
+typedef char NetGameLanOffset[(offsetof(CNetGame, lanMode) == 0x239) ? 1 : -1];
+typedef char NetGameMapIconsOffset[(offsetof(CNetGame, mapIcons) == 0x23d) ? 1 : -1];
+typedef char NetGameStateOffset[(offsetof(CNetGame, gameState) == 0x3cd) ? 1 : -1];
+typedef char NetGameConnectTickOffset[(offsetof(CNetGame, lastConnectAttempt) == 0x3d1) ? 1 : -1];
 typedef char NetGameSettingsOffset[(offsetof(CNetGame, settings) == 0x3d5) ? 1 : -1];
+typedef char NetGameModelWaitOffset[(offsetof(CNetGame, modelWaitActive) == 0x3d9) ? 1 : -1];
+typedef char NetGameModelTickOffset[(offsetof(CNetGame, modelWaitTick) == 0x3da) ? 1 : -1];
 typedef char NetGameExtent[(sizeof(CNetGame) == 0x3e2) ? 1 : -1];
 // 0x00156b38
 extern DWORD g_netPlayersInfoTick;

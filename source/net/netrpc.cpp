@@ -172,17 +172,17 @@ void ScrInitGame(RPCParameters* parameters)
     stream.ReadBits(&length, 8, true);
     if (length)
     {
-        memset((BYTE*)g_pNetGame + 0x131, 0, 257);
-        stream.Read((char*)g_pNetGame + 0x131, length);
+        memset(((CNetGame*)g_pNetGame)->hostName, 0, 257);
+        stream.Read(((CNetGame*)g_pNetGame)->hostName, length);
     }
-    *((BYTE*)g_pNetGame + 0x131 + length) = 0;
+    ((CNetGame*)g_pNetGame)->hostName[length] = 0;
     stream.Read((char*)models, 212);
     g_pGame->SetRequiredVehicleModels(models);
     stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->vehicleDamageFilter, 32, true);
     players->localId = player;
     g_pGame->EnableStuntBonus(stunt);
     if (holdTime)
-        *(DWORD*)((BYTE*)g_pNetGame + 0x239) = 1;
+        ((CNetGame*)g_pNetGame)->lanMode = 1;
     ((CNetGame*)g_pNetGame)->InitializeGameLogic();
     g_pGame->SetWorldGravity(((CNetGame*)g_pNetGame)->settings->gravity);
     if (((CNetGame*)g_pNetGame)->settings->disableEnterExits)
@@ -190,8 +190,8 @@ void ScrInitGame(RPCParameters* parameters)
     if (((CNetGame*)g_pNetGame)->settings->vehicleDamageFilter)
         GameInstallVehicleDamageFilter();
     g_pGame->SetWorldWeather(((CNetGame*)g_pNetGame)->settings->weather);
-    g_pChat->AddDebugMessage(g_rpcConnectedFormat, (char*)g_pNetGame + 0x131);
-    *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) = 5;
+    g_pChat->AddDebugMessage(g_rpcConnectedFormat, ((CNetGame*)g_pNetGame)->hostName);
+    ((CNetGame*)g_pNetGame)->gameState = CNetGame::StateConnected;
     players->local->PrepareForClassSelection();
 }
 // 0x0000e4e0
@@ -373,7 +373,7 @@ void SendClientCheckResponse(BYTE type, DWORD argument, BYTE result)
     stream.Write(type);
     stream.Write(argument);
     stream.Write(result);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(const_cast<int*>(&g_rpcClientCheck), &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(const_cast<int*>(&g_rpcClientCheck), &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 // 0x00011930
 void ClientCheck(RPCParameters* parameters)
@@ -530,7 +530,7 @@ void ConnectionRejected(RPCParameters* parameters)
         g_pChat->AddInfoMessage(g_rpcRejectedMod);
     else if (reason == 4)
         g_pChat->AddInfoMessage(g_rpcRejectedSlot);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Disconnect(500, 0);
+    ((CNetGame*)g_pNetGame)->rakClient->Disconnect(500, 0);
 }
 // 0x000114a0
 void EnterVehicle(RPCParameters* parameters)
@@ -570,7 +570,7 @@ void ExitVehicle(RPCParameters* parameters)
 void Chat(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
-    if (*(DWORD*)((BYTE*)g_pNetGame + 0x3cd) == 5)
+    if (((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected)
     {
         char text[256] = {0};
         WORD player;
@@ -676,7 +676,7 @@ void ScrUpdateCameraTarget(RPCParameters* parameters)
     bool enabled = false;
     stream.Read(enabled);
     if (g_pNetGame)
-        ((BYTE*)g_pNetGame)[0x233] = (BYTE)enabled;
+        ((CNetGame*)g_pNetGame)->updateCameraTarget = (BYTE)enabled;
 }
 // 0x000116b0
 void EditAttachedObject(RPCParameters* parameters)

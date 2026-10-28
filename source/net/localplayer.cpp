@@ -217,7 +217,7 @@ void CLocalPlayer::SendOnfootData()
     {
         stream.Write((BYTE)207);
         stream.Write((char*)&data, 68);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
         memcpy(nativeState + 0x3a, &data, 68);
     }
 }
@@ -325,7 +325,7 @@ void CLocalPlayer::SendIncarData()
     {
         stream.Write((BYTE)200);
         stream.Write((char*)&data, 63);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
         memcpy(nativeState + 0x96, &data, 63);
     }
     if (data.trailer && data.trailer < 2000)
@@ -419,7 +419,7 @@ void CLocalPlayer::SendAimData()
     {
         stream.Write((BYTE)203);
         stream.Write((char*)&data, 31);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
         memcpy(nativeState + 0xd5, &data, 31);
     }
 }
@@ -448,7 +448,7 @@ void CLocalPlayer::SendTrailerData(WORD id)
         RakNet::BitStream stream;
         stream.Write((BYTE)210);
         stream.Write((char*)&data, 54);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
         memcpy(nativeState + 4, &data, 54);
     }
 }
@@ -498,7 +498,7 @@ void CLocalPlayer::SendPassengerData()
     {
         stream.Write((BYTE)211);
         stream.Write((char*)&data, 24);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
         memcpy(nativeState + 0x7e, &data, 24);
     }
     DWORD delay = *(DWORD*)(nativeState + 0x1cf) ? 100 : 1000;
@@ -516,7 +516,7 @@ void CLocalPlayer::WastedNotification()
     BYTE reason = GetPed()->GetDeathInfo(&killer);
     stream.Write(reason);
     stream.Write(killer);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localWastedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localWastedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 // 0x00005b50
 void CLocalPlayer::SendStats()
@@ -527,7 +527,7 @@ void CLocalPlayer::SendStats()
     stream.Write((BYTE)205);
     stream.Write(money);
     stream.Write(drunk);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
+    ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
 }
 #pragma pack(push, 1)
 struct UnoccupiedSyncData
@@ -567,7 +567,7 @@ void CLocalPlayer::SendUnoccupiedData(WORD id, BYTE seat)
     data.health = vehicle->GetHealth();
     stream.Write((BYTE)209);
     stream.Write((char*)&data, 67);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
+    ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
     *(WORD*)((BYTE*)vehicles + 0x8e34 + id * 2) = players->localId;
     *(DWORD*)((BYTE*)vehicle + 0x7f) = 1;
 }
@@ -841,7 +841,7 @@ BOOL CLocalPlayer::Spawn()
     *(DWORD*)(state + 0xf4) = 1;
     *(DWORD*)(state + 0x306) = 0;
     RakNet::BitStream stream;
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localSpawnRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localSpawnRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
     *(DWORD*)(state + 0x30e) = GetTickCount() + 1000;
     return TRUE;
 }
@@ -1126,7 +1126,7 @@ void CLocalPlayer::ProcessSurfing()
 void CLocalPlayer::SendSpawnRequest()
 {
     RakNet::BitStream stream;
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localSpawnRequestRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localSpawnRequestRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 // 0x00003f40
 void CLocalPlayer::RequestSpawn()
@@ -1143,7 +1143,7 @@ void CLocalPlayer::RequestClass(int selection)
 {
     RakNet::BitStream stream;
     stream.WriteBits((const unsigned char*)&selection, 32, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localRequestClassRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localRequestClassRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 // 0x000057c0
 void CLocalPlayer::SendInteriorChange(BYTE interior)
@@ -1151,7 +1151,7 @@ void CLocalPlayer::SendInteriorChange(BYTE interior)
     ((BYTE*)this)[0x1d3] = interior;
     RakNet::BitStream stream;
     stream.WriteBits(&interior, 8, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localInteriorChangeRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localInteriorChangeRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 // 0x00005860
 void CLocalPlayer::Chat(char* text)
@@ -1160,7 +1160,7 @@ void CLocalPlayer::Chat(char* text)
     RakNet::BitStream stream;
     stream.WriteBits(&length, 8, true);
     stream.Write(text, length);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localChatRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localChatRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 // 0x00005e30
 void CLocalPlayer::NextClass()
@@ -1218,7 +1218,7 @@ void CLocalPlayer::EnterVehicle(WORD vehicle, BOOL passenger)
     stream.WriteBits((const unsigned char*)&vehicle, 16, true);
     BYTE flag = passenger != 0;
     stream.WriteBits(&flag, 8, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localEnterVehicleRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localEnterVehicleRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
     // Native looks up the vehicle only after sending, even for invalid IDs.
     CVehiclePool* vehicles = *(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0xc);
     if (vehicle < 2000 && vehicles->m_bNotEmpty[vehicle])
@@ -1249,7 +1249,7 @@ void CLocalPlayer::ExitVehicle(int vehicle)
     if (!object->IsRC())
     {
         stream.WriteBits((const unsigned char*)&vehicle, 16, true);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localExitVehicleRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
+        ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localExitVehicleRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
     }
 }
 // 0x000066b0
@@ -1263,7 +1263,7 @@ void CLocalPlayer::SendTakeDamage(WORD player, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&damage, 32, true);
     stream.WriteBits((const unsigned char*)&weapon, 32, true);
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 // 0x000067c0
 void CLocalPlayer::SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart)
@@ -1275,7 +1275,7 @@ void CLocalPlayer::SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&damage, 32, true);
     stream.WriteBits((const unsigned char*)&weapon, 32, true);
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 // 0x000068d0
 void CLocalPlayer::SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD bodyPart)
@@ -1286,7 +1286,7 @@ void CLocalPlayer::SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&damage, 32, true);
     stream.WriteBits((const unsigned char*)&weapon, 32, true);
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localActorDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localActorDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 
 // 0x000069d0
@@ -1354,7 +1354,7 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
     stream.WriteBits(&packet, 8, true);
     stream.Write((const char*)payload, 40);
     typedef char BulletReliability[(HIGH_PRIORITY == 1 && UNRELIABLE_SEQUENCED == 7) ? 1 : -1];
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
+    ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
 }
 
 #include "game/keystuff.h"
@@ -1420,7 +1420,7 @@ DWORD CLocalPlayer::GetInCarSendRate()
 {
     if (!*(CPed**)this)
         return 1000;
-    if (*(DWORD*)((BYTE*)g_pNetGame + 0x239))
+    if (((CNetGame*)g_pNetGame)->lanMode)
         return 15;
     return g_pGame->CountUsedPlayerSlots() + g_localInCarSendRate;
 }
@@ -1429,7 +1429,7 @@ DWORD CLocalPlayer::GetOnFootSendRate()
 {
     if (!*(CPed**)this)
         return 1000;
-    if (*(DWORD*)((BYTE*)g_pNetGame + 0x239))
+    if (((CNetGame*)g_pNetGame)->lanMode)
         return 15;
     return g_pGame->CountUsedPlayerSlots() + g_localOnFootSendRate;
 }
@@ -1595,7 +1595,7 @@ void CLocalPlayer::ProcessVehicleDamage(WORD id)
     BYTE tires = nativeState[0x327];
     stream.WriteBits(&tires, 8, true);
     typedef char VehicleDamageReliability[(HIGH_PRIORITY == 1 && RELIABLE == 8) ? 1 : -1];
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 // 0x00006de0
 void CLocalPlayer::ProcessPassengerEntry()
@@ -1752,7 +1752,7 @@ void CLocalPlayer::UpdateWeapons()
     if (changed)
     {
         *(DWORD*)(nativeState + 0x185) = GetTickCount();
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
     }
 }
 // 0x00006360
@@ -1781,7 +1781,7 @@ void CLocalPlayer::ProcessSpectating()
         BYTE packet = 212;
         stream.WriteBits(&packet, 8, true);
         stream.Write((const char*)data, 18);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 1);
+        ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 1);
         rate = GetOnFootSendRate() * 2;
         if (tick() - *(DWORD*)(nativeState + 0x13b) > rate)
         {
@@ -1960,7 +1960,7 @@ bool CLocalPlayer::GetCameraTarget(WORD* targets)
 // 0x000045c0
 void CLocalPlayer::UpdateCameraTarget()
 {
-    if (!*((BYTE*)g_pNetGame + 0x233))
+    if (!((CNetGame*)g_pNetGame)->updateCameraTarget)
     {
         *(WORD*)(nativeState + 0x108) = 0xffff;
         *(WORD*)(nativeState + 0x10a) = 0xffff;
@@ -1978,7 +1978,7 @@ void CLocalPlayer::UpdateCameraTarget()
     {
         RakNet::BitStream stream;
         stream.Write((const char*)targets, 8);
-        (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localCameraTargetRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+        ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localCameraTargetRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
         memcpy(nativeState + 0x108, targets, 8);
     }
     *(DWORD*)(nativeState + 0x110) = tick();
@@ -2268,7 +2268,7 @@ BOOL CLocalPlayer::Process()
             (*(CPed**)nativeState)->DeleteAllAccessories();
         if ((*(CPed**)nativeState)->HasDanceState())
             (*(CPed**)nativeState)->SetDancePoseState(0);
-        if (*(DWORD*)(nativeState + 0x143) && !*(DWORD*)(nativeState + 0x2fe) && *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) == 5)
+        if (*(DWORD*)(nativeState + 0x143) && !*(DWORD*)(nativeState + 0x2fe) && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected)
         {
             CPed* ped = *(CPed**)nativeState;
             BYTE alive;
@@ -2290,8 +2290,8 @@ BOOL CLocalPlayer::Process()
         *(DWORD*)(nativeState + 0x2fe) = 0;
         return TRUE;
     }
-    if ((*(CPed**)nativeState)->GetState() != 55 && (*(CPed**)nativeState)->GetState() != 54 && *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) == 5 && !*(DWORD*)(nativeState + 0xf4) &&
-        !*(DWORD*)(nativeState + 0x12c))
+    if ((*(CPed**)nativeState)->GetState() != 55 && (*(CPed**)nativeState)->GetState() != 54 && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected &&
+        !*(DWORD*)(nativeState + 0xf4) && !*(DWORD*)(nativeState + 0x12c))
         ProcessClassSelection();
     return TRUE;
 }
