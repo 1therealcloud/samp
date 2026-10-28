@@ -3,7 +3,7 @@
 // 0x000b3080
 void CTextDraw::Draw()
 {
-    if (*(int*)((BYTE*)this + 0x9a3) != -1)
+    if (data.format.textureSlot != -1)
         Native0B2C90();
     else
         Native0B2DA0();
@@ -11,11 +11,10 @@ void CTextDraw::Draw()
 // 0x000b32b0
 void CTextDraw::OnLostDevice()
 {
-    BYTE* state = (BYTE*)this;
-    if (*(DWORD*)(state + 0x987) == 5 && *(int*)(state + 0x9a3) != -1)
+    if (data.format.style == 5 && data.format.textureSlot != -1)
     {
-        GameReleaseTextDrawTexture(*(int*)(state + 0x9a3));
-        *(int*)(state + 0x9a3) = -1;
+        GameReleaseTextDrawTexture(data.format.textureSlot);
+        data.format.textureSlot = -1;
     }
 }
 
@@ -82,7 +81,7 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
 void CTextDraw::Native0B2C90()
 {
     BYTE* state = (BYTE*)this;
-    BYTE highlighted = state[0x9d1];
+    BYTE highlighted = data.hovered;
     float scaleX, scaleY;
     TextDrawRect rect;
     // clang-format off
@@ -110,9 +109,9 @@ void CTextDraw::Native0B2C90()
         fstp rect.bottom
     }
     // clang-format on
-    DWORD* color = (DWORD*)(state + (highlighted ? 0x9d2 : 0x96b));
+    DWORD* color = (highlighted ? &data.hoverColor : &data.format.letterColor);
     // Native has no index validation here; out-of-bank adjacency is not established.
-    GameDrawTextDrawTexture(g_textDrawTextures[*(int*)(state + 0x9a3)], &rect, color);
+    GameDrawTextDrawTexture(g_textDrawTextures[data.format.textureSlot], &rect, color);
     int left, top;
     // clang-format off
     __asm {
@@ -137,7 +136,7 @@ void CTextDraw::Native0B2C90()
         mov [edi+0x9cd],eax
     }
     // clang-format on
-    state[0x9bf] = 1;
+    data.hasSelectableRect = 1;
 }
 // 0x000b2da0
 void CTextDraw::Native0B2DA0()
@@ -145,13 +144,13 @@ void CTextDraw::Native0B2DA0()
     BYTE* state = (BYTE*)this;
     if (!state)
         return;
-    char *text = (char*)state, *end = text;
+    char *text = data.text, *end = text;
     while (*end++)
     {
     }
     if (end == text + 1)
         return;
-    char *buffer = text + 0x321, *from = text, *to = buffer;
+    char *buffer = data.processedText, *from = text, *to = buffer;
     do
     {
         *to++ = *from;
@@ -175,9 +174,9 @@ void CTextDraw::Native0B2DA0()
     }
     // clang-format on
     Font_SetScale(scaleX, scaleY);
-    Font_SetColor(*(DWORD*)(state + (state[0x9d1] ? 0x9d2 : 0x96b)));
+    Font_SetColor(*(data.hovered ? &data.hoverColor : &data.format.letterColor));
     Font_Unk12(0);
-    Font_SetJustify(state[0x986] ? 2 : (state[0x970] ? 0 : 1));
+    Font_SetJustify(data.format.alignRight ? 2 : (data.format.centered ? 0 : 1));
     // clang-format off
     __asm {
         mov eax,state
@@ -198,17 +197,17 @@ void CTextDraw::Native0B2DA0()
     }
     // clang-format on
     Font_SetLineHeight(wrapY);
-    Font_UseBox(state[0x971], 0);
-    Font_UseBoxColor(*(DWORD*)(state + 0x97a));
-    Font_SetProportional(state[0x97e]);
-    Font_SetDropColor(*(DWORD*)(state + 0x97f));
-    if (state[0x984])
-        Font_SetOutline(state[0x984]);
+    Font_UseBox(data.format.box, 0);
+    Font_UseBoxColor(data.format.boxColor);
+    Font_SetProportional(data.format.proportional);
+    Font_SetDropColor(data.format.backgroundColor);
+    if (data.format.outline)
+        Font_SetOutline(data.format.outline);
     else
-        Font_SetShadow(state[0x983]);
-    Font_SetFontStyle(*(int*)(state + 0x987));
+        Font_SetShadow(data.format.shadow);
+    Font_SetFontStyle(data.format.style);
     Font_UnkConv(buffer, -1, -1, -1, -1, -1, -1, buffer);
-    if (state[0x9c0])
+    if (data.hasKeyCodes)
         Font_UnkConv2(buffer);
     // clang-format off
     __asm {
@@ -231,7 +230,7 @@ void CTextDraw::Native0B2DA0()
     // clang-format on
     Font_PrintString(posX, posY, buffer);
     Font_SetOutline(0);
-    if (state[0x986])
+    if (data.format.alignRight)
     {
         // clang-format off
         __asm {
@@ -247,7 +246,7 @@ void CTextDraw::Native0B2DA0()
         }
         // clang-format on
     }
-    else if (state[0x970])
+    else if (data.format.centered)
     {
         int left;
         // clang-format off
@@ -290,7 +289,7 @@ void CTextDraw::Native0B2DA0()
         mov [edi+0x9c5],eax
     }
     // clang-format on
-    if (!state[0x986] && state[0x970])
+    if (!data.format.alignRight && data.format.centered)
     {
         // clang-format off
         __asm {
@@ -314,7 +313,7 @@ void CTextDraw::Native0B2DA0()
         }
         // clang-format on
     }
-    state[0x9bf] = 1;
+    data.hasSelectableRect = 1;
 }
 
 // Native clears usage flags first, then texture words, without releasing them.
@@ -333,10 +332,9 @@ BOOL GameInitializeTextDrawTextures()
 // 0x000b30a0
 void CTextDraw::Native0B30A0()
 {
-    BYTE* state = (BYTE*)this;
-    if (*(DWORD*)(state + 0x987) != 5 || *(int*)(state + 0x9a3) != -1)
+    if (data.format.style != 5 || data.format.textureSlot != -1)
         return;
-    short* model = (short*)(state + 0x9a8);
+    short* model = &data.format.model;
     if (g_customModels)
     {
         if (g_customModels->IsPedEntry(*model))
@@ -354,18 +352,18 @@ void CTextDraw::Native0B30A0()
     {
         if (!GameHasModelInfo(*model))
             *model = 0;
-        created = g_modelPreview->RenderPed(*model, *(DWORD*)(state + 0x97f), (CVector*)(state + 0x9aa), *(float*)(state + 0x9b6));
+        created = g_modelPreview->RenderPed(*model, data.format.backgroundColor, (CVector*)data.format.rotation, data.format.zoom);
     }
     else if (*model >= 400 && *model <= 611)
     {
-        created = g_modelPreview->RenderVehicle(*model, *(DWORD*)(state + 0x97f), (CVector*)(state + 0x9aa), *(float*)(state + 0x9b6), *(short*)(state + 0x9ba),
-                                                *(short*)(state + 0x9bc));
+        created = g_modelPreview->RenderVehicle(*model, data.format.backgroundColor, (CVector*)data.format.rotation, data.format.zoom, data.format.vehicleColor1,
+                                                data.format.vehicleColor2);
     }
     else if ((*model >= 321 && *model <= 373) || *model >= 615)
     {
         if (!GameHasModelInfo(*model))
             *model = 0x48c7;
-        created = g_modelPreview->RenderObject(*model, *(DWORD*)(state + 0x97f), (CVector*)(state + 0x9aa), *(float*)(state + 0x9b6));
+        created = g_modelPreview->RenderObject(*model, data.format.backgroundColor, (CVector*)data.format.rotation, data.format.zoom);
     }
     else
     {
@@ -373,12 +371,12 @@ void CTextDraw::Native0B30A0()
             return;
         if (!GameModelQueryB4170(*model))
             *model = 0x48c7;
-        created = g_modelPreview->RenderObject(*model, *(DWORD*)(state + 0x97f), (CVector*)(state + 0x9aa), *(float*)(state + 0x9b6));
+        created = g_modelPreview->RenderObject(*model, data.format.backgroundColor, (CVector*)data.format.rotation, data.format.zoom);
     }
     if (created)
     {
         int slot = GameAllocateTextDrawTexture();
-        *(int*)(state + 0x9a3) = slot;
+        data.format.textureSlot = slot;
         // Native publishes even slot=-1. Adjacent storage is not established here.
         g_textDrawTextures[slot] = created;
     }
@@ -392,20 +390,18 @@ const char g_textDrawLongKeyString[40] = "Error: can't use k-codes in long strin
 // 0x00070d10
 RECT* CTextDraw::GetSelectableRect()
 {
-    BYTE* state = (BYTE*)this;
-    return state[0x9a7] && state[0x9bf] ? (RECT*)(state + 0x9c1) : 0;
+    return data.format.selectable && data.hasSelectableRect ? &data.selectableRect : 0;
 }
 // 0x00070d30
 void CTextDraw::SetHover(BYTE active, DWORD color)
 {
-    BYTE* state = (BYTE*)this;
-    state[0x9d1] = active;
-    *(DWORD*)(state + 0x9d2) = color;
+    data.hovered = active;
+    data.hoverColor = color;
 }
 // 0x000b2b50
 CTextDraw::~CTextDraw()
 {
-    GameReleaseTextDrawTexture(*(int*)((BYTE*)this + 0x9a3));
+    GameReleaseTextDrawTexture(data.format.textureSlot);
 }
 // 0x000b2b60
 void CTextDraw::SetText(const char* text)
@@ -417,7 +413,7 @@ void CTextDraw::SetText(const char* text)
         return;
     strncpy((char*)state, text, 800);
     state[800] = 0;
-    state[0x9c0] = 0;
+    data.hasKeyCodes = 0;
     bool inside = false, valid = true;
     int length = 0;
     for (char* p = (char*)state; *p; ++p)
@@ -432,7 +428,7 @@ void CTextDraw::SetText(const char* text)
             }
             inside = true;
             if (p[1] == 'k' || p[1] == 'K')
-                state[0x9c0] = 1;
+                data.hasKeyCodes = 1;
         }
         if (inside && ++length > 24)
             valid = false;
@@ -440,17 +436,17 @@ void CTextDraw::SetText(const char* text)
     if (!valid || inside)
     {
         memcpy(state, g_textDrawUnmatchedTilde, 23);
-        state[0x9c0] = 0;
+        data.hasKeyCodes = 0;
     }
-    if (state[0x9c0] && strlen((char*)state) > 255)
+    if (data.hasKeyCodes && strlen((char*)state) > 255)
     {
         memcpy(state, g_textDrawLongKeyString, 40);
-        state[0x9c0] = 0;
+        data.hasKeyCodes = 0;
     }
-    if (*(DWORD*)(state + 0x987) == 4 && *(int*)(state + 0x9a3) != -1)
+    if (data.format.style == 4 && data.format.textureSlot != -1)
     {
-        GameReleaseTextDrawTexture(*(int*)(state + 0x9a3));
-        *(int*)(state + 0x9a3) = GameAllocateTextDrawTexture();
+        GameReleaseTextDrawTexture(data.format.textureSlot);
+        data.format.textureSlot = GameAllocateTextDrawTexture();
         LoadTexture();
     }
 }
@@ -463,14 +459,13 @@ void CTextDraw::SetText(const char* text)
 void CTextDraw::LoadTexture()
 {
     char dictionary[65] = {0}, texture[65] = {0}, selected[65] = {0};
-    const char* text = (const char*)this;
+    const char* text = data.text;
     const char* colon = strchr(text, ':');
     if (!colon || strlen(text) >= 64 || strchr(text, '\\') || strchr(text, '/'))
         return;
     strncpy(dictionary, text, colon - text);
     strcpy(texture, colon + 1);
-    BYTE* state = (BYTE*)this;
-    if (*(int*)(state + 0x9a3) == -1)
+    if (data.format.textureSlot == -1)
         return;
     if (!memcmp(dictionary, "hud", 4))
         strcpy(selected, "hud");
@@ -505,56 +500,54 @@ void CTextDraw::LoadTexture()
             return;
     }
     void* loaded = GameLoadDictionaryTexture(selected, texture);
-    g_textDrawTextures[*(int*)(state + 0x9a3)] = loaded;
+    g_textDrawTextures[data.format.textureSlot] = loaded;
 }
 
 // 0x000b32e0
 CTextDraw::CTextDraw(const TextDrawTransmit* info, const char* text)
 {
-    BYTE* state = (BYTE*)this;
-    const BYTE* input = info->data;
-    memset(state + 0x963, 0, 91);
-    *(DWORD*)(state + 0x963) = *(const DWORD*)(input + 1);
-    *(DWORD*)(state + 0x967) = *(const DWORD*)(input + 5);
-    *(DWORD*)(state + 0x96b) = *(const DWORD*)(input + 9);
-    state[0x96f] = 0;
-    state[0x970] = (input[0] >> 3) & 1;
-    state[0x971] = input[0] & 1;
-    *(DWORD*)(state + 0x972) = *(const DWORD*)(input + 0xd);
-    *(DWORD*)(state + 0x976) = *(const DWORD*)(input + 0x11);
-    *(DWORD*)(state + 0x97a) = *(const DWORD*)(input + 0x15);
-    state[0x97e] = (input[0] >> 4) & 1;
-    *(DWORD*)(state + 0x97f) = *(const DWORD*)(input + 0x1b);
-    state[0x983] = input[0x19];
-    state[0x984] = input[0x1a];
-    state[0x985] = (input[0] >> 1) & 1;
-    state[0x986] = (input[0] >> 2) & 1;
-    *(DWORD*)(state + 0x987) = input[0x1f];
-    *(DWORD*)(state + 0x98b) = *(const DWORD*)(input + 0x21);
-    *(DWORD*)(state + 0x98f) = *(const DWORD*)(input + 0x25);
-    *(DWORD*)(state + 0x99b) = 0xffffffff;
-    *(DWORD*)(state + 0x99f) = 0xffffffff;
-    state[0x9a7] = input[0x20];
-    *(WORD*)(state + 0x9a8) = *(const WORD*)(input + 0x29);
-    *(DWORD*)(state + 0x9aa) = *(const DWORD*)(input + 0x2b);
-    *(DWORD*)(state + 0x9ae) = *(const DWORD*)(input + 0x2f);
-    *(DWORD*)(state + 0x9b2) = *(const DWORD*)(input + 0x33);
-    *(DWORD*)(state + 0x9b6) = *(const DWORD*)(input + 0x37);
-    *(WORD*)(state + 0x9ba) = *(const WORD*)(input + 0x3b);
-    *(WORD*)(state + 0x9bc) = *(const WORD*)(input + 0x3d);
-    state[0x9c0] = 0;
-    *(int*)(state + 0x9a3) = -1;
+    memset(&data.format, 0, sizeof(data.format));
+    *(DWORD*)&data.format.letterWidth = *(const DWORD*)&info->letterWidth;
+    *(DWORD*)&data.format.letterHeight = *(const DWORD*)&info->letterHeight;
+    data.format.letterColor = info->letterColor;
+    data.format.unknown0c = 0;
+    data.format.centered = (info->flags >> 3) & 1;
+    data.format.box = info->flags & 1;
+    *(DWORD*)&data.format.lineWidth = *(const DWORD*)&info->lineWidth;
+    *(DWORD*)&data.format.lineHeight = *(const DWORD*)&info->lineHeight;
+    data.format.boxColor = info->boxColor;
+    data.format.proportional = (info->flags >> 4) & 1;
+    data.format.backgroundColor = info->backgroundColor;
+    data.format.shadow = info->shadow;
+    data.format.outline = info->outline;
+    data.format.alignLeft = (info->flags >> 1) & 1;
+    data.format.alignRight = (info->flags >> 2) & 1;
+    data.format.style = info->style;
+    *(DWORD*)&data.format.x = *(const DWORD*)&info->x;
+    *(DWORD*)&data.format.y = *(const DWORD*)&info->y;
+    data.format.parameter1 = 0xffffffff;
+    data.format.parameter2 = 0xffffffff;
+    data.format.selectable = info->selectable;
+    data.format.model = info->model;
+    *(DWORD*)&data.format.rotation[0] = *(const DWORD*)&info->rotation[0];
+    *(DWORD*)&data.format.rotation[1] = *(const DWORD*)&info->rotation[1];
+    *(DWORD*)&data.format.rotation[2] = *(const DWORD*)&info->rotation[2];
+    *(DWORD*)&data.format.zoom = *(const DWORD*)&info->zoom;
+    data.format.vehicleColor1 = info->vehicleColor1;
+    data.format.vehicleColor2 = info->vehicleColor2;
+    data.hasKeyCodes = 0;
+    data.format.textureSlot = -1;
     SetText(text);
-    if (*(DWORD*)(state + 0x987) == 4)
+    if (data.format.style == 4)
     {
-        *(int*)(state + 0x9a3) = GameAllocateTextDrawTexture();
+        data.format.textureSlot = GameAllocateTextDrawTexture();
         LoadTexture();
     }
-    state[0x9bf] = 0;
-    *(DWORD*)(state + 0x9c1) = 0;
-    *(DWORD*)(state + 0x9c9) = 0;
-    *(DWORD*)(state + 0x9c5) = 0;
-    *(DWORD*)(state + 0x9cd) = 0;
-    state[0x9d1] = 0;
-    *(DWORD*)(state + 0x9d2) = 0;
+    data.hasSelectableRect = 0;
+    data.selectableRect.left = 0;
+    data.selectableRect.right = 0;
+    data.selectableRect.top = 0;
+    data.selectableRect.bottom = 0;
+    data.hovered = 0;
+    data.hoverColor = 0;
 }
