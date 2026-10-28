@@ -3,38 +3,38 @@
 // 0x00017770
 void CLocalPlayer::ReturnToClassSelection()
 {
-    *(DWORD*)(nativeState + 0x2fe) = 1;
+    m_state.wantsAnotherClass = 1;
 }
 // 0x0009e940
 DWORD CLocalPlayer::GetRCModeState()
 {
-    return *(DWORD*)(nativeState + 0x1d4);
+    return m_state.rcMode;
 }
 // 0x00008170
 DWORD CLocalPlayer::GetActiveState()
 {
-    return *(DWORD*)(nativeState + 0xf4);
+    return m_state.active;
 }
 // 0x0000e2a0
 CEntity* CLocalPlayer::GetSurfingEntity()
 {
-    return *(CEntity**)(nativeState + 0x2de);
+    return m_state.surfingEntity;
 }
 // 0x00017760
 void CLocalPlayer::ClearSurfingEntityAndMode()
 {
-    *(CEntity**)(nativeState + 0x2de) = 0;
-    *(DWORD*)(nativeState + 0x2e6) = 0;
+    m_state.surfingEntity = 0;
+    m_state.surfingMode = 0;
 }
 // 0x00017780
 void CLocalPlayer::SetTeam(BYTE team)
 {
-    nativeState[0x130] = team;
+    m_state.team = team;
 }
 // 0x000a21d0
 BYTE CLocalPlayer::GetTeam()
 {
-    return nativeState[0x130];
+    return m_state.team;
 }
 #include "BitStream.h"
 #include "RakClientInterface.h"
@@ -125,7 +125,7 @@ void CLocalPlayer::SendOnfootData()
     GameQuaternionFromMatrixComponents(&matrix, &data.rotation);
     GameQuaternionNormalize(&data.rotation);
     float* current = (float*)&data.rotation;
-    float* previous = (float*)(nativeState + 0x4c);
+    float* previous = (float*)&m_state.onfoot.rotation;
     int keepPrevious = 1;
     for (int i = 0; i < 4; ++i)
     {
@@ -175,10 +175,10 @@ void CLocalPlayer::SendOnfootData()
     data.weaponAim |= (BYTE)(GetPed()->GetCurrentWeapon() & 0x3f);
     data.specialAction = GetSpecialAction();
     data.speed = speed;
-    if (*(DWORD*)(nativeState + 0x2e6))
+    if (m_state.surfingMode)
     {
-        memcpy(&data.surfingOffset, nativeState + 0x2ea, 12);
-        data.surfingVehicle = *(WORD*)(nativeState + 0x2d8);
+        memcpy(&data.surfingOffset, &m_state.surfingOffset, 12);
+        data.surfingVehicle = m_state.surfingId;
     }
     else
     {
@@ -187,14 +187,14 @@ void CLocalPlayer::SendOnfootData()
         data.surfingOffset.z = 0;
         data.surfingVehicle = 0;
     }
-    data.animation = *(DWORD*)(nativeState + 0x100);
-    *(DWORD*)(nativeState + 0x104) = 1;
-    if (HasDataChanged(nativeState + 0x3a, &data, 68))
+    data.animation = m_state.animation;
+    m_state.animationSent = 1;
+    if (HasDataChanged(&m_state.onfoot, &data, 68))
     {
         stream.Write((BYTE)207);
         stream.Write((char*)&data, 68);
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
-        memcpy(nativeState + 0x3a, &data, 68);
+        memcpy(&m_state.onfoot, &data, 68);
     }
 }
 // 0x00006e80
@@ -227,7 +227,7 @@ void CLocalPlayer::SendIncarData()
     GameQuaternionNormalize(&rotation);
     data.rotation = rotation;
     float* current = (float*)&data.rotation;
-    float* previous = (float*)(nativeState + 0x9e);
+    float* previous = (float*)&m_state.incar.rotation;
     int keepPrevious = 1;
     for (int i = 0; i < 4; ++i)
     {
@@ -297,18 +297,18 @@ void CLocalPlayer::SendIncarData()
         data.modelData = 0;
     data.siren = vehicle->SirenEnabled() != 0;
     data.landingGear = vehicle->GetLandingGearState() != 0;
-    if (HasDataChanged(nativeState + 0x96, &data, 63))
+    if (HasDataChanged(&m_state.incar, &data, 63))
     {
         stream.Write((BYTE)200);
         stream.Write((char*)&data, 63);
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
-        memcpy(nativeState + 0x96, &data, 63);
+        memcpy(&m_state.incar, &data, 63);
     }
     if (data.trailer && data.trailer < 2000)
         SendTrailerData(data.trailer);
-    if (vehicle->HasTurret() || GetTickCount() - *(DWORD*)(nativeState + 0x13b) > 1000)
+    if (vehicle->HasTurret() || GetTickCount() - m_state.lastAimSendTick > 1000)
     {
-        *(DWORD*)(nativeState + 0x13b) = GetTickCount();
+        m_state.lastAimSendTick = GetTickCount();
         SendAimData();
     }
 }
@@ -321,12 +321,12 @@ int g_localWastedRpc = 53;
 // 0x000041c0
 DWORD CLocalPlayer::NeedsToSendOnfootData(WORD keys, WORD upDown, WORD leftRight)
 {
-    return keys != *(WORD*)(nativeState + 0x3e) || upDown != *(WORD*)(nativeState + 0x3c) || leftRight != *(WORD*)(nativeState + 0x3a) ? 1 : 0;
+    return keys != m_state.onfoot.keys || upDown != m_state.onfoot.upDown || leftRight != m_state.onfoot.leftRight ? 1 : 0;
 }
 // 0x000041f0
 DWORD CLocalPlayer::NeedsToSendIncarData(WORD keys, WORD upDown, WORD leftRight)
 {
-    return keys != *(WORD*)(nativeState + 0x9c) || upDown != *(WORD*)(nativeState + 0x9a) || leftRight != *(WORD*)(nativeState + 0x98) ? 1 : 0;
+    return keys != m_state.incar.keys || upDown != m_state.incar.upDown || leftRight != m_state.incar.leftRight ? 1 : 0;
 }
 // 0x00005090
 void CLocalPlayer::SendAimData()
@@ -365,12 +365,12 @@ void CLocalPlayer::SendAimData()
             weapon = 2;
     }
     data.zoomWeapon |= (BYTE)(weapon << 6);
-    if (HasDataChanged(nativeState + 0xd5, &data, 31))
+    if (HasDataChanged(&m_state.aim, &data, 31))
     {
         stream.Write((BYTE)203);
         stream.Write((char*)&data, 31);
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
-        memcpy(nativeState + 0xd5, &data, 31);
+        memcpy(&m_state.aim, &data, 31);
     }
 }
 // 0x00005240
@@ -393,13 +393,13 @@ void CLocalPlayer::SendTrailerData(WORD id)
     data.vehicle = id;
     vehicle->GetSpeed(&data.speed);
     vehicle->GetTurnSpeed(&data.turnSpeed);
-    if (HasDataChanged(nativeState + 4, &data, 54))
+    if (HasDataChanged(&m_state.trailer, &data, 54))
     {
         RakNet::BitStream stream;
         stream.Write((BYTE)210);
         stream.Write((char*)&data, 54);
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
-        memcpy(nativeState + 4, &data, 54);
+        memcpy(&m_state.trailer, &data, 54);
     }
 }
 // 0x00005400
@@ -439,22 +439,22 @@ void CLocalPlayer::SendPassengerData()
     data.seatFlags = (BYTE)(GetPed()->GetVehicleSeatIndex() & 0x3f);
     if (GetPed()->HasDanceState())
         data.seatFlags |= 0x80;
-    data.seatFlags |= (BYTE)((nativeState[0x1cf] & 1) << 6);
+    data.seatFlags |= (BYTE)((*(BYTE*)&m_state.passengerDriveby & 1) << 6);
     data.weaponAim |= (BYTE)(GetPed()->GetCurrentWeapon() & 0x3f);
     CMatrix matrix;
     GetPed()->GetMatrix(&matrix);
     data.position = matrix.position;
-    if (HasDataChanged(nativeState + 0x7e, &data, 24))
+    if (HasDataChanged(&m_state.passenger, &data, 24))
     {
         stream.Write((BYTE)211);
         stream.Write((char*)&data, 24);
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
-        memcpy(nativeState + 0x7e, &data, 24);
+        memcpy(&m_state.passenger, &data, 24);
     }
-    DWORD delay = *(DWORD*)(nativeState + 0x1cf) ? 100 : 1000;
-    if (GetTickCount() - *(DWORD*)(nativeState + 0x13b) > delay)
+    DWORD delay = m_state.passengerDriveby ? 100 : 1000;
+    if (GetTickCount() - m_state.lastAimSendTick > delay)
     {
-        *(DWORD*)(nativeState + 0x13b) = GetTickCount();
+        m_state.lastAimSendTick = GetTickCount();
         SendAimData();
     }
 }
@@ -517,7 +517,7 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
     GetTickCount();
     BYTE* backend = (BYTE*)vehicle->m_pGameVehicle;
     CPlayerPool* players = ((CNetGame*)g_pNetGame)->pools->players;
-    if (!backend || !*(CPed**)nativeState || vehicle->IsTrainPart())
+    if (!backend || !m_state.ped || vehicle->IsTrainPart())
         return false;
     BYTE* driver = *(BYTE**)(backend + 0x460);
     bool clear = driver && (*(DWORD*)(driver + 0x46c) & 0x100);
@@ -549,7 +549,7 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
         BYTE* passenger = *(BYTE**)(backend + 0x464 + seat * 4);
         if (passenger && !*(DWORD*)(passenger + 0x598))
         {
-            if (passenger == *(BYTE**)((BYTE*)*(CPed**)nativeState + 0x2a4))
+            if (passenger == *(BYTE**)((BYTE*)m_state.ped + 0x2a4))
             {
                 SendUnoccupiedData(id, (BYTE)(seat + 1));
                 return true;
@@ -565,13 +565,13 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
     {
         CPed* ped;
         if (index == players->localId)
-            ped = *(CPed**)nativeState;
+            ped = m_state.ped;
         else
         {
             WORD player = (WORD)index;
             if (player > 1004 || !players->players[player] || !players->players[player]->remote)
                 continue;
-            ped = *(CPed**)(players->players[player]->remote->nativeState + 4);
+            ped = players->players[player]->remote->m_state.ped;
         }
         if (!ped || !ped->DoesExist())
             continue;
@@ -610,7 +610,7 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
 // 0x0000e2b0
 void CLocalPlayer::ClearSurfingState()
 {
-    *(DWORD*)(nativeState + 0x2e6) = 0;
+    m_state.surfingMode = 0;
     SetSurfingEntity(0, 0);
 }
 // 0x00003fb0
@@ -618,13 +618,13 @@ void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome)
 {
     if (outcome)
     {
-        CPed* ped = *(CPed**)nativeState;
+        CPed* ped = m_state.ped;
         if (ped)
         {
             ped->ClearWeapons();
-            (*(CPed**)nativeState)->SetModelIndex(*(int*)(nativeState + 0x150));
+            m_state.ped->SetModelIndex(m_state.spawnInfo.model);
         }
-        *(DWORD*)(nativeState + 0x143) = 1;
+        m_state.spawnPermission = 1;
     }
 }
 // 0x00003af0
@@ -632,9 +632,9 @@ void CLocalPlayer::SetSpawnInfo(const void* info)
 {
     const BYTE* data = (const BYTE*)info;
     for (int i = 0; i < 48; i += 4)
-        *(DWORD*)(nativeState + 0x14f + i) = *(const DWORD*)(data + i);
-    *(WORD*)(nativeState + 0x17f) = *(const WORD*)(data + 48);
-    *(DWORD*)(nativeState + 0x181) = 1;
+        *(DWORD*)((BYTE*)&m_state.spawnInfo + i) = *(const DWORD*)(data + i);
+    *(WORD*)((BYTE*)&m_state.spawnInfo + 48) = *(const WORD*)(data + 48);
+    m_state.hasSpawnInfo = 1;
 }
 // 0x00117880
 int g_localSpawnRpc = 52;
@@ -715,12 +715,11 @@ void CLocalPlayer::SetSpecialAction(BYTE action)
 // 0x00003b20
 BOOL CLocalPlayer::Spawn()
 {
-    BYTE* state = (BYTE*)this;
-    if (!*(DWORD*)(state + 0x181))
+    if (!m_state.hasSpawnInfo)
         return FALSE;
-    if (*(DWORD*)(state + 0x30a) == 1)
+    if (m_state.rawFlag30a == 1)
     {
-        *(DWORD*)(state + 0x30a) = 0;
+        m_state.rawFlag30a = 0;
         if (g_renderSecondDialog)
             *((BYTE*)g_renderSecondDialog + 0x13) = 0;
         g_pGame->SetCursorMode(0, FALSE);
@@ -734,75 +733,74 @@ BOOL CLocalPlayer::Spawn()
         GetPed()->SetInitialState();
     else
         g_localSkipInitialState = 0;
-    g_pGame->RefreshRenderer(*(float*)(state + 0x159), *(float*)(state + 0x15d));
+    g_pGame->RefreshRenderer(m_state.spawnInfo.position.x, m_state.spawnInfo.position.y);
     if (GetPed()->HasDanceState())
         GetPed()->SetDancePoseState(0);
-    GetPed()->SetSpawnInfo((CVector*)(state + 0x159), *(float*)(state + 0x165));
-    if (g_customModels && *(int*)(state + 0x154) > 20000)
+    GetPed()->SetSpawnInfo(&m_state.spawnInfo.position, m_state.spawnInfo.rotation);
+    if (g_customModels && m_state.spawnInfo.customModel > 20000)
     {
-        if (GameIsPedModel(*(int*)(state + 0x154)))
-            GetPed()->SetModelIndex(*(int*)(state + 0x154));
-        else if (g_customModels->DoesExist(*(int*)(state + 0x154)))
-            GetPed()->SetModelIndex(*(int*)(state + 0x154));
+        if (GameIsPedModel(m_state.spawnInfo.customModel))
+            GetPed()->SetModelIndex(m_state.spawnInfo.customModel);
+        else if (g_customModels->DoesExist(m_state.spawnInfo.customModel))
+            GetPed()->SetModelIndex(m_state.spawnInfo.customModel);
         else
             GetPed()->SetModelIndex(0);
     }
     else
-        GetPed()->SetModelIndex(*(int*)(state + 0x150));
+        GetPed()->SetModelIndex(m_state.spawnInfo.model);
     GetPed()->ClearWeapons();
     GetPed()->ResetDamageEntity();
     SetSpecialAction(0);
-    int weapon = *(int*)(state + 0x171);
-    *(DWORD*)(state + 0x2e6) = 0;
-    *(DWORD*)(state + 0x2ea) = 0;
-    *(DWORD*)(state + 0x2ee) = 0;
-    *(DWORD*)(state + 0x2f2) = 0;
-    *(WORD*)(state + 0x2d8) = 0xffff;
-    *(DWORD*)(state + 0x2de) = 0;
-    *(DWORD*)(state + 0x2e2) = 0;
+    int weapon = m_state.spawnInfo.weapons[2];
+    m_state.surfingMode = 0;
+    *(DWORD*)&m_state.surfingOffset = 0;
+    *(DWORD*)&m_state.surfingOffset.y = 0;
+    *(DWORD*)&m_state.surfingOffset.z = 0;
+    m_state.surfingId = 0xffff;
+    m_state.surfingEntity = 0;
+    m_state.surfingLocked = 0;
     if (weapon != -1)
-        GetPed()->GiveWeapon(weapon, *(int*)(state + 0x17d));
-    weapon = *(int*)(state + 0x16d);
+        GetPed()->GiveWeapon(weapon, m_state.spawnInfo.ammo[2]);
+    weapon = m_state.spawnInfo.weapons[1];
     if (weapon != -1)
-        GetPed()->GiveWeapon(weapon, *(int*)(state + 0x179));
-    weapon = *(int*)(state + 0x169);
+        GetPed()->GiveWeapon(weapon, m_state.spawnInfo.ammo[1]);
+    weapon = m_state.spawnInfo.weapons[0];
     if (weapon != -1)
-        GetPed()->GiveWeapon(weapon, *(int*)(state + 0x175));
+        GetPed()->GiveWeapon(weapon, m_state.spawnInfo.ammo[0]);
     g_pGame->DisableTrainTraffic();
     GameUnprotect((void*)0x50ac20, 3);
     // GTA SA virtual addresses: native three-byte permanent RET8 patch.
     *(BYTE*)0x50ac20 = 0xc2;
     *(BYTE*)0x50ac21 = 8;
     *(BYTE*)0x50ac22 = 0;
-    CVector position = {*(float*)(state + 0x159), *(float*)(state + 0x15d), *(float*)(state + 0x161) + g_textDrawHalf};
+    CVector position = {m_state.spawnInfo.position.x, m_state.spawnInfo.position.y, m_state.spawnInfo.position.z + g_textDrawHalf};
     GetPed()->Teleport(position);
-    GetPed()->SetRotation(*(float*)(state + 0x165));
-    *(DWORD*)(state + 0xf8) = 0;
-    *(DWORD*)(state + 0xf4) = 1;
-    *(DWORD*)(state + 0x306) = 0;
+    GetPed()->SetRotation(m_state.spawnInfo.rotation);
+    m_state.wasted = 0;
+    m_state.active = 1;
+    m_state.waitingForSpawnReply = 0;
     RakNet::BitStream stream;
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localSpawnRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
-    *(DWORD*)(state + 0x30e) = GetTickCount() + 1000;
+    m_state.zoneDisplayTick = GetTickCount() + 1000;
     return TRUE;
 }
 // 0x00004080
 void CLocalPlayer::ToggleSpectating(BOOL enabled)
 {
-    BYTE* state = (BYTE*)this;
-    if (*(DWORD*)(state + 0x12c) && !*(DWORD*)(state + 0x2fe))
+    if (m_state.spectating && !m_state.wantsAnotherClass)
     {
         if (!enabled)
             Spawn();
     }
-    else if (*(DWORD*)(state + 0x2fe) && !enabled)
+    else if (m_state.wantsAnotherClass && !enabled)
     {
-        *(DWORD*)(state + 0xf4) = 0;
-        *(DWORD*)(state + 0x181) = 0;
+        m_state.active = 0;
+        m_state.hasSpawnInfo = 0;
     }
-    *(DWORD*)(state + 0x12c) = enabled;
-    state[0x313] = 0;
-    *(DWORD*)(state + 0x318) = 0;
-    *(DWORD*)(state + 0x314) = 0xffffffff;
+    m_state.spectating = enabled;
+    m_state.spectateType = 0;
+    m_state.spectateProcessed = 0;
+    m_state.spectateId = 0xffffffff;
 }
 // 0x000040f0
 void CLocalPlayer::SpectateVehicle(WORD id)
@@ -810,9 +808,9 @@ void CLocalPlayer::SpectateVehicle(WORD id)
     CVehiclePool* pool = *(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0xc);
     if (pool && id < 2000 && pool->m_bNotEmpty[id])
     {
-        nativeState[0x313] = 2;
-        *(DWORD*)(nativeState + 0x314) = id;
-        *(DWORD*)(nativeState + 0x318) = 0;
+        m_state.spectateType = 2;
+        m_state.spectateId = id;
+        m_state.spectateProcessed = 0;
     }
 }
 // 0x00004140
@@ -825,9 +823,9 @@ void CLocalPlayer::SpectatePlayer(WORD id)
     BYTE state = *((BYTE*)remote + 0x1a);
     if (state && *((BYTE*)pool->GetPlayer(id) + 0x1a) != 32)
     {
-        nativeState[0x313] = 1;
-        *(DWORD*)(nativeState + 0x314) = id;
-        *(DWORD*)(nativeState + 0x318) = 0;
+        m_state.spectateType = 1;
+        m_state.spectateId = id;
+        m_state.spectateProcessed = 0;
     }
 }
 // 0x00003de0
@@ -845,74 +843,72 @@ DWORD CLocalPlayer::GetColorAsRGBA()
 // 0x00002ec0
 void CLocalPlayer::ResetData()
 {
-    BYTE* state = (BYTE*)this;
-    *(DWORD*)(state + 0x181) = 0;
-    *(DWORD*)(state + 0x2fe) = 0;
-    *(DWORD*)(state + 0x306) = 0;
-    *(DWORD*)(state + 0x302) = 0;
-    state[0x1d3] = 0;
-    *(WORD*)(state + 0xfe) = 0xffff;
-    *(DWORD*)(state + 0x1d4) = 0;
-    *(WORD*)(state + 0x31c) = 0xffff;
-    *(WORD*)(state + 0x108) = 0xffff;
-    *(WORD*)(state + 0x10a) = 0xffff;
-    *(WORD*)(state + 0x10c) = 0xffff;
-    memset(state + 0x114, 0, 12);
-    memset(state + 0xd5, 0, 31);
-    memset(state + 4, 0, 54);
-    memset(state + 0x3a, 0, 68);
-    memset(state + 0x96, 0, 63);
+    m_state.hasSpawnInfo = 0;
+    m_state.wantsAnotherClass = 0;
+    m_state.waitingForSpawnReply = 0;
+    *(DWORD*)&m_state.selectedClass = 0;
+    m_state.interior = 0;
+    m_state.lastVehicle = 0xffff;
+    m_state.rcMode = 0;
+    m_state.damageVehicle = 0xffff;
+    m_state.cameraTargets[0] = 0xffff;
+    m_state.cameraTargets[1] = 0xffff;
+    m_state.cameraTargets[2] = 0xffff;
+    memset(&m_state.headDirection, 0, 12);
+    memset(&m_state.aim, 0, 31);
+    memset(&m_state.trailer, 0, 54);
+    memset(&m_state.onfoot, 0, 68);
+    memset(&m_state.incar, 0, 63);
     DWORD(WINAPI * tick)() = GetTickCount;
-    memset(state + 0x7e, 0, 24);
-    *(DWORD*)(state + 0x100) = 0;
-    *(DWORD*)(state + 0x104) = 0;
-    *(WORD*)(state + 0x189) = 0xffff;
-    *(WORD*)(state + 0x18b) = 0xffff;
-    *(DWORD*)(state + 0x185) = tick();
-    state[0x18d] = 0;
+    memset(&m_state.passenger, 0, 24);
+    m_state.animation = 0;
+    m_state.animationSent = 0;
+    m_state.aimedPlayer = 0xffff;
+    m_state.aimedActor = 0xffff;
+    m_state.weaponsUpdateTick = tick();
+    m_state.currentWeapon = 0;
     DWORD last = tick();
-    *(DWORD*)(state + 0x2de) = 0;
-    *(DWORD*)(state + 0x2e2) = 0;
-    *(DWORD*)(state + 0x110) = last;
+    m_state.surfingEntity = 0;
+    m_state.surfingLocked = 0;
+    m_state.cameraTargetTick = last;
 }
 // 0x00004af0
 CLocalPlayer::CLocalPlayer()
 {
-    BYTE* state = (BYTE*)this;
     DWORD(WINAPI * tick)() = GetTickCount;
-    *(DWORD*)(state + 0x147) = tick();
-    *(DWORD*)(state + 0x120) = tick();
-    *(DWORD*)(state + 0x124) = tick();
-    *(DWORD*)(state + 0x1d4) = 0;
-    *(DWORD*)(state + 0x2e6) = 0;
-    *(DWORD*)(state + 0x2da) = tick();
-    *(DWORD*)(state + 0x2fa) = 0;
-    *(CPed**)state = g_pGame->GetPlayerPed();
-    *(DWORD*)(state + 0xf4) = 0;
-    *(DWORD*)(state + 0xf8) = 0;
-    *(WORD*)(state + 0x131) = 0;
-    *(DWORD*)(state + 0x30e) = 0;
-    *(DWORD*)(state + 0x133) = tick();
-    *(DWORD*)(state + 0x137) = tick();
-    *(DWORD*)(state + 0x128) = tick();
-    *(DWORD*)(state + 0x13b) = *(DWORD*)(state + 0x133);
-    *(DWORD*)(state + 0x13f) = *(DWORD*)(state + 0x133);
-    *(DWORD*)(state + 0x12c) = 0;
-    state[0x313] = 0;
-    *(DWORD*)(state + 0x314) = 0xffffffff;
-    *(DWORD*)(state + 0x30a) = 0;
+    m_state.classSelectionTick = tick();
+    m_state.headUpdateTick = tick();
+    m_state.headTaskTick = tick();
+    m_state.rcMode = 0;
+    m_state.surfingMode = 0;
+    m_state.surfingTick = tick();
+    m_state.rawSurfState2fa = 0;
+    m_state.ped = g_pGame->GetPlayerPed();
+    m_state.active = 0;
+    m_state.wasted = 0;
+    m_state.unknown131 = 0;
+    m_state.zoneDisplayTick = 0;
+    m_state.lastSendTick = tick();
+    m_state.lastSpectatorSendTick = tick();
+    m_state.lastChangedDataTick = tick();
+    m_state.lastAimSendTick = m_state.lastSendTick;
+    m_state.lastStatsSendTick = m_state.lastSendTick;
+    m_state.spectating = 0;
+    m_state.spectateType = 0;
+    m_state.spectateId = 0xffffffff;
+    m_state.rawFlag30a = 0;
     ResetData();
     for (int slot = 0; slot < 13; slot++)
     {
-        state[0x18e + slot] = 0;
-        *(DWORD*)(state + 0x19b + slot * 4) = 0;
+        m_state.lastWeapons[slot] = 0;
+        m_state.lastAmmo[slot] = 0;
     }
-    state[0x130] = 0xff;
+    m_state.team = 0xff;
 }
 // 0x00002da0
 CPed* CLocalPlayer::GetPed()
 {
-    return *(CPed**)this;
+    return m_state.ped;
 }
 // 0x00003e20
 DWORD CLocalPlayer::GetColorAsARGB()
@@ -933,10 +929,9 @@ int g_localChatRpc = 101;
 // 0x00003970
 DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DWORD length)
 {
-    BYTE* state = (BYTE*)this;
-    if (GetTickCount() - *(DWORD*)(state + 0x128) > 500 || memcmp(previous, current, length))
+    if (GetTickCount() - m_state.lastChangedDataTick > 500 || memcmp(previous, current, length))
     {
-        *(DWORD*)(state + 0x128) = GetTickCount();
+        m_state.lastChangedDataTick = GetTickCount();
         return 1;
     }
     return 0;
@@ -944,8 +939,7 @@ DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DW
 // 0x00003650
 void CLocalPlayer::ProcessSurfing()
 {
-    BYTE* state = (BYTE*)this;
-    void* floor = (*(CPed**)state)->GetFloor();
+    void* floor = m_state.ped->GetFloor();
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     CVehiclePool* vehicles = *(CVehiclePool**)(pools + 0xc);
     CObjectPool* objects = *(CObjectPool**)(pools + 0x14);
@@ -987,80 +981,80 @@ void CLocalPlayer::ProcessSurfing()
             }
         }
     }
-    if ((*(CPed**)state)->HasTaskType208() || (*(CPed**)state)->HasTaskType704() || (*(CPed**)state)->GetVehicleTransitionTaskState())
+    if (m_state.ped->HasTaskType208() || m_state.ped->HasTaskType704() || m_state.ped->GetVehicleTransitionTaskState())
     {
-        *(DWORD*)(state + 0x2fa) = 0;
-        *(DWORD*)(state + 0x2de) = 0;
-        *(DWORD*)(state + 0x2e2) = 0;
+        m_state.rawSurfState2fa = 0;
+        m_state.surfingEntity = 0;
+        m_state.surfingLocked = 0;
         return;
     }
     if (!mode)
     {
-        if (!*(DWORD*)(state + 0x2e6))
+        if (!m_state.surfingMode)
         {
-            *(DWORD*)(state + 0x2fa) = 0;
-            *(DWORD*)(state + 0x2de) = 0;
-            *(DWORD*)(state + 0x2e2) = 0;
+            m_state.rawSurfState2fa = 0;
+            m_state.surfingEntity = 0;
+            m_state.surfingLocked = 0;
             return;
         }
-        if (*(DWORD*)(state + 0x2e6) == 1 && GetTickCount() - *(DWORD*)(state + 0x2da) >= 2000)
+        if (m_state.surfingMode == 1 && GetTickCount() - m_state.surfingTick >= 2000)
         {
-            *(DWORD*)(state + 0x2e6) = 0;
-            memset(state + 0x2ea, 0, 12);
-            *(WORD*)(state + 0x2d8) = 0xffff;
-            *(DWORD*)(state + 0x2de) = 0;
-            *(DWORD*)(state + 0x2e2) = 0;
-            *(DWORD*)(state + 0x2fa) = 0;
+            m_state.surfingMode = 0;
+            memset(&m_state.surfingOffset, 0, 12);
+            m_state.surfingId = 0xffff;
+            m_state.surfingEntity = 0;
+            m_state.surfingLocked = 0;
+            m_state.rawSurfState2fa = 0;
         }
-        if (*(DWORD*)(state + 0x2e6) == 1 && GetTickCount() - *(DWORD*)(state + 0x2da) < 2000)
+        if (m_state.surfingMode == 1 && GetTickCount() - m_state.surfingTick < 2000)
         {
-            WORD id = *(WORD*)(state + 0x2d8);
+            WORD id = m_state.surfingId;
             CEntity* entity = id < 2000 ? (CEntity*)vehicles->Get(id) : objects->Get((WORD)(id - 2000));
             if (entity)
             {
-                *(CEntity**)(state + 0x2de) = entity;
-                *(DWORD*)(state + 0x2e2) = 1;
+                m_state.surfingEntity = entity;
+                m_state.surfingLocked = 1;
             }
-            *(DWORD*)(state + 0x2fa) = 1;
+            m_state.rawSurfState2fa = 1;
         }
         else
-            *(DWORD*)(state + 0x2fa) = 0xffffffff;
+            m_state.rawSurfState2fa = 0xffffffff;
         return;
     }
     if (mode == 1)
     {
-        *(WORD*)(state + 0x2d8) = vehicleId;
-        *(DWORD*)(state + 0x2da) = GetTickCount();
-        CEntity* entity = vehicles->Get(*(WORD*)(state + 0x2d8));
-        if (!*(DWORD*)(state + 0x2e6))
+        m_state.surfingId = vehicleId;
+        m_state.surfingTick = GetTickCount();
+        CEntity* entity = vehicles->Get(m_state.surfingId);
+        if (!m_state.surfingMode)
         {
-            *(CEntity**)(state + 0x2de) = entity;
-            *(DWORD*)(state + 0x2e2) = 0;
+            m_state.surfingEntity = entity;
+            m_state.surfingLocked = 0;
             ApplySurfingPhysics();
         }
-        *(CEntity**)(state + 0x2de) = entity;
-        *(DWORD*)(state + 0x2e6) = 1;
-        *(DWORD*)(state + 0x2e2) = 1;
+        m_state.surfingEntity = entity;
+        m_state.surfingMode = 1;
+        m_state.surfingLocked = 1;
     }
     else if (mode == 2)
     {
-        *(WORD*)(state + 0x2d8) = (WORD)(objectId + 2000);
-        *(DWORD*)(state + 0x2da) = GetTickCount();
-        CEntity* entity = objects->Get((WORD)(*(WORD*)(state + 0x2d8) - 2000));
+        m_state.surfingId = (WORD)(objectId + 2000);
+        m_state.surfingTick = GetTickCount();
+        CEntity* entity = objects->Get((WORD)(m_state.surfingId - 2000));
         if (entity)
         {
-            if (!*(DWORD*)(state + 0x2e6))
+            if (!m_state.surfingMode)
             {
-                *(CEntity**)(state + 0x2de) = entity;
-                *(DWORD*)(state + 0x2e2) = 0;
+                m_state.surfingEntity = entity;
+                m_state.surfingLocked = 0;
                 ApplySurfingPhysics();
             }
-            *(CEntity**)(state + 0x2de) = entity;
-            *(DWORD*)(state + 0x2e6) = 1;
-            *(DWORD*)(state + 0x2e2) = 1;
+            m_state.surfingEntity = entity;
+            m_state.surfingMode = 1;
+            m_state.surfingLocked = 1;
         }
     }
-    *(DWORD*)(state + 0x2fa) = 2;
+    m_state.rawSurfState2fa = 2;
 }
 // 0x00003a70
 void CLocalPlayer::SendSpawnRequest()
@@ -1071,11 +1065,10 @@ void CLocalPlayer::SendSpawnRequest()
 // 0x00003f40
 void CLocalPlayer::RequestSpawn()
 {
-    BYTE* state = (BYTE*)this;
-    if (*(DWORD*)(state + 0x30a))
+    if (m_state.rawFlag30a)
     {
         SendSpawnRequest();
-        *(DWORD*)(state + 0x306) = 1;
+        m_state.waitingForSpawnReply = 1;
     }
 }
 // 0x00005720
@@ -1105,37 +1098,35 @@ void CLocalPlayer::Chat(char* text)
 // 0x00005e30
 void CLocalPlayer::NextClass()
 {
-    BYTE* state = (BYTE*)this;
-    if (!*(DWORD*)(state + 0x30a))
+    if (!m_state.rawFlag30a)
         return;
-    *(DWORD*)(state + 0x143) = 0;
+    m_state.spawnPermission = 0;
     CMatrix matrix;
-    (*(CPed**)state)->GetMatrix(&matrix);
+    m_state.ped->GetMatrix(&matrix);
     CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
-    DWORD selection = *(DWORD*)(state + 0x302);
+    DWORD selection = *(DWORD*)&m_state.selectedClass;
     if (selection == settings->spawnsAvailable - 1)
         selection = 0;
     else
         selection++;
-    *(DWORD*)(state + 0x302) = selection;
+    *(DWORD*)&m_state.selectedClass = selection;
     g_pGame->m_pAudio->Play(1052, matrix.position);
-    RequestClass(*(int*)(state + 0x302));
+    RequestClass(m_state.selectedClass);
 }
 // 0x00005ec0
 void CLocalPlayer::PrevClass()
 {
-    BYTE* state = (BYTE*)this;
-    if (!*(DWORD*)(state + 0x30a))
+    if (!m_state.rawFlag30a)
         return;
-    *(DWORD*)(state + 0x143) = 0;
+    m_state.spawnPermission = 0;
     CMatrix matrix;
-    (*(CPed**)state)->GetMatrix(&matrix);
-    DWORD selection = *(DWORD*)(state + 0x302);
+    m_state.ped->GetMatrix(&matrix);
+    DWORD selection = *(DWORD*)&m_state.selectedClass;
     if (!selection)
         selection = ((CNetGame*)g_pNetGame)->settings->spawnsAvailable;
-    *(DWORD*)(state + 0x302) = selection - 1;
+    *(DWORD*)&m_state.selectedClass = selection - 1;
     g_pGame->m_pAudio->Play(1053, matrix.position);
-    RequestClass(*(int*)(state + 0x302));
+    RequestClass(m_state.selectedClass);
 }
 // 0x00117960
 int g_localEnterVehicleRpc = 26;
@@ -1183,7 +1174,7 @@ void CLocalPlayer::ExitVehicle(int vehicle)
     if (!object)
         return;
     if (!GetPed()->IsPassenger())
-        *(WORD*)((BYTE*)this + 0xfe) = id;
+        m_state.lastVehicle = id;
     if (object->IsTrainPart())
         g_pGame->m_pCamera->Restore();
     if (!object->IsRC())
@@ -1232,7 +1223,7 @@ void CLocalPlayer::SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD
 // 0x000069d0
 void CLocalPlayer::SendBullet(PedBulletData* data)
 {
-    CPed* ped = *(CPed**)this;
+    CPed* ped = m_state.ped;
     if (!ped)
         return;
     if ((BYTE)ped->GetCurrentWeapon() == 34 && !data->entity)
@@ -1288,7 +1279,7 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
     memcpy(&payload.origin, &data->origin, 12);
     memcpy(&payload.target, &data->target, 12);
     memcpy(&payload.offset, &data->offset, 12);
-    payload.weapon = (BYTE)(*(CPed**)this)->GetCurrentWeapon();
+    payload.weapon = (BYTE)m_state.ped->GetCurrentWeapon();
     RakNet::BitStream stream;
     BYTE packet = 206;
     stream.WriteBits(&packet, 8, true);
@@ -1317,38 +1308,37 @@ CVector g_localSurfEntityTurnSpeed;
 // 0x000034b0
 void CLocalPlayer::ApplySurfingPhysics()
 {
-    BYTE* state = (BYTE*)this;
-    if (!*(CEntity**)(state + 0x2de))
+    if (!m_state.surfingEntity)
         return;
-    (*(CEntity**)(state + 0x2de))->GetMatrix(&g_localSurfEntityMatrix);
-    (*(CPed**)state)->GetMatrix(&g_localSurfPedMatrix);
-    (*(CEntity**)(state + 0x2de))->GetSpeed(&g_localSurfEntitySpeed);
-    (*(CEntity**)(state + 0x2de))->GetTurnSpeed(&g_localSurfEntityTurnSpeed);
+    m_state.surfingEntity->GetMatrix(&g_localSurfEntityMatrix);
+    m_state.ped->GetMatrix(&g_localSurfPedMatrix);
+    m_state.surfingEntity->GetSpeed(&g_localSurfEntitySpeed);
+    m_state.surfingEntity->GetTurnSpeed(&g_localSurfEntityTurnSpeed);
     WORD leftRight, upDown;
-    (*(CPed**)state)->GetKeys(&leftRight, &upDown);
+    m_state.ped->GetKeys(&leftRight, &upDown);
     KeyStuff::GetInternalKeys();
-    if (*(DWORD*)(state + 0x2e2) && !leftRight && !upDown && !(*(CPed**)state)->HasTaskType211())
+    if (m_state.surfingLocked && !leftRight && !upDown && !m_state.ped->HasTaskType211())
     {
-        GameTransformPoint(&g_localSurfPedMatrix.position, &g_localSurfEntityMatrix, (CVector*)(state + 0x2ea));
-        (*(CPed**)state)->ApplyMatrix(g_localSurfPedMatrix);
-        (*(CPed**)state)->GetSpeed(&g_localSurfPedSpeed);
+        GameTransformPoint(&g_localSurfPedMatrix.position, &g_localSurfEntityMatrix, &m_state.surfingOffset);
+        m_state.ped->ApplyMatrix(g_localSurfPedMatrix);
+        m_state.ped->GetSpeed(&g_localSurfPedSpeed);
         memcpy(&g_localSurfPedSpeed.x, &g_localSurfEntitySpeed.x, 8);
-        (*(CPed**)state)->SetSpeed(g_localSurfPedSpeed);
-        (*(CPed**)state)->GetTurnSpeed(&g_localSurfPedTurnSpeed);
+        m_state.ped->SetSpeed(g_localSurfPedSpeed);
+        m_state.ped->GetTurnSpeed(&g_localSurfPedTurnSpeed);
         memcpy(&g_localSurfPedTurnSpeed.z, &g_localSurfEntityTurnSpeed.z, 4);
-        (*(CPed**)state)->SetTurnSpeed(g_localSurfPedTurnSpeed);
+        m_state.ped->SetTurnSpeed(g_localSurfPedTurnSpeed);
     }
     else
     {
         GameInvertRwMatrix(&g_localSurfInverseMatrix, &g_localSurfEntityMatrix);
-        GameTransformPoint((CVector*)(state + 0x2ea), &g_localSurfInverseMatrix, &g_localSurfPedMatrix.position);
+        GameTransformPoint(&m_state.surfingOffset, &g_localSurfInverseMatrix, &g_localSurfPedMatrix.position);
     }
 }
 // 0x00003630
 void CLocalPlayer::SetSurfingEntity(CEntity* entity, DWORD locked)
 {
-    *(CEntity**)((BYTE*)this + 0x2de) = entity;
-    *(DWORD*)((BYTE*)this + 0x2e2) = locked;
+    m_state.surfingEntity = entity;
+    m_state.surfingLocked = locked;
 }
 
 // 0x0013c0a8
@@ -1358,7 +1348,7 @@ DWORD g_localInCarSendRate = 30;
 // 0x000039c0
 DWORD CLocalPlayer::GetInCarSendRate()
 {
-    if (!*(CPed**)this)
+    if (!m_state.ped)
         return 1000;
     if (((CNetGame*)g_pNetGame)->lanMode)
         return 15;
@@ -1367,7 +1357,7 @@ DWORD CLocalPlayer::GetInCarSendRate()
 // 0x00003a00
 DWORD CLocalPlayer::GetOnFootSendRate()
 {
-    if (!*(CPed**)this)
+    if (!m_state.ped)
         return 1000;
     if (((CNetGame*)g_pNetGame)->lanMode)
         return 15;
@@ -1376,7 +1366,7 @@ DWORD CLocalPlayer::GetOnFootSendRate()
 // 0x00003a40
 DWORD CLocalPlayer::GetSendRate()
 {
-    CPed* ped = *(CPed**)this;
+    CPed* ped = m_state.ped;
     if (!ped)
         return 1000;
     return ped->IsInVehicle() ? GetInCarSendRate() : GetOnFootSendRate();
@@ -1391,7 +1381,7 @@ const float g_localPassengerEntryDistance = 8.0f;
 // 0x00002fd0
 void CLocalPlayer::ProcessHead()
 {
-    CPed* ped = *(CPed**)nativeState;
+    CPed* ped = m_state.ped;
     if (!ped)
         return;
     if (g_pGame && !*(DWORD*)((BYTE*)g_pGame + 0x59))
@@ -1401,10 +1391,10 @@ void CLocalPlayer::ProcessHead()
     if (g_deviceObjectEdit && *(DWORD*)(g_deviceObjectEdit + 0x80))
         return;
     CMatrix matrix;
-    (*(CPed**)nativeState)->GetMatrix(&matrix);
+    m_state.ped->GetMatrix(&matrix);
     DWORD now = GetTickCount();
     CLocalPlayer* self = this;
-    if (now - *(DWORD*)(nativeState + 0x120) > 1000)
+    if (now - m_state.headUpdateTick > 1000)
     {
         CameraAim* aim = AimStuff::GetInternalAim();
         float z;
@@ -1435,10 +1425,10 @@ void CLocalPlayer::ProcessHead()
         }
         // clang-format on
     }
-    if (now - *(DWORD*)(nativeState + 0x124) > 200)
+    if (now - m_state.headTaskTick > 200)
     {
         CVector target;
-        ped = *(CPed**)nativeState;
+        ped = m_state.ped;
         // clang-format off
         __asm {
             mov ecx,self
@@ -1454,7 +1444,7 @@ void CLocalPlayer::ProcessHead()
         }
         // clang-format on
         ped->ApplyCommandTask(g_remoteHeadTask, 0, 2000, -1, &target, 0, 0.1f, 500, 3, 0);
-        *(DWORD*)(nativeState + 0x124) = now;
+        m_state.headTaskTick = now;
     }
 }
 // 0x00003e40
@@ -1463,9 +1453,9 @@ void CLocalPlayer::ProcessWorldBoundaries()
     if (g_pGame->GetCurrentInterior())
         return;
     CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
-    if ((*(CPed**)nativeState)->EnforceWorldBoundries(settings->worldBounds[0], settings->worldBounds[1], settings->worldBounds[2], settings->worldBounds[3]))
+    if (m_state.ped->EnforceWorldBoundries(settings->worldBounds[0], settings->worldBounds[1], settings->worldBounds[2], settings->worldBounds[3]))
     {
-        (*(CPed**)nativeState)->SetArmedWeapon(0, 0);
+        m_state.ped->SetArmedWeapon(0, 0);
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
     }
 }
@@ -1473,7 +1463,7 @@ void CLocalPlayer::ProcessWorldBoundaries()
 void CLocalPlayer::ProcessVehicleWorldBoundaries()
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
-    WORD id = vehicles->Find((*(CPed**)nativeState)->GetVehicle());
+    WORD id = vehicles->Find(m_state.ped->GetVehicle());
     if (g_pGame->GetCurrentInterior() || id == 0xffff || id >= 2000 || !vehicles->m_bNotEmpty[id])
         return;
     CVehicle* vehicle = vehicles->m_pObjects[id];
@@ -1486,17 +1476,17 @@ void CLocalPlayer::ProcessVehicleWorldBoundaries()
 // 0x00003f60
 void CLocalPlayer::PrepareForClassSelection()
 {
-    CPed* ped = *(CPed**)nativeState;
-    *(DWORD*)(nativeState + 0x143) = 0;
+    CPed* ped = m_state.ped;
+    m_state.spawnPermission = 0;
     if (ped)
     {
         ped->SetInitialState();
-        (*(CPed**)nativeState)->SetHealth(100.0f);
-        (*(CPed**)nativeState)->SetControllable(FALSE);
+        m_state.ped->SetHealth(100.0f);
+        m_state.ped->SetControllable(FALSE);
     }
     DWORD(WINAPI * tick)() = GetTickCount;
-    *(DWORD*)(nativeState + 0x14b) = tick();
-    *(DWORD*)(nativeState + 0x147) = tick();
+    m_state.initialSelectionTick = tick();
+    m_state.classSelectionTick = tick();
 }
 // 0x00005c20
 void CLocalPlayer::ProcessVehicleDamage(WORD id)
@@ -1507,32 +1497,32 @@ void CLocalPlayer::ProcessVehicleDamage(WORD id)
     CVehicle* vehicle = vehicles->m_pObjects[id];
     if (!vehicle)
         return;
-    if (id != *(WORD*)(nativeState + 0x31c))
+    if (id != m_state.damageVehicle)
     {
-        *(DWORD*)(nativeState + 0x31e) = vehicle->GetPanelsDamage();
-        *(DWORD*)(nativeState + 0x322) = vehicle->GetDoorsDamage();
-        nativeState[0x326] = vehicle->GetLightsDamage();
-        nativeState[0x327] = vehicle->GetTires();
-        *(WORD*)(nativeState + 0x31c) = id;
+        m_state.panelsDamage = vehicle->GetPanelsDamage();
+        m_state.doorsDamage = vehicle->GetDoorsDamage();
+        m_state.lightsDamage = vehicle->GetLightsDamage();
+        m_state.tiresDamage = vehicle->GetTires();
+        m_state.damageVehicle = id;
         return;
     }
-    if (*(DWORD*)(nativeState + 0x31e) == vehicle->GetPanelsDamage() && *(DWORD*)(nativeState + 0x322) == vehicle->GetDoorsDamage() &&
-        nativeState[0x326] == vehicle->GetLightsDamage() && nativeState[0x327] == vehicle->GetTires())
+    if (m_state.panelsDamage == vehicle->GetPanelsDamage() && m_state.doorsDamage == vehicle->GetDoorsDamage() && m_state.lightsDamage == vehicle->GetLightsDamage() &&
+        m_state.tiresDamage == vehicle->GetTires())
         return;
-    *(DWORD*)(nativeState + 0x31e) = vehicle->GetPanelsDamage();
-    *(DWORD*)(nativeState + 0x322) = vehicle->GetDoorsDamage();
-    nativeState[0x326] = vehicle->GetLightsDamage();
-    nativeState[0x327] = vehicle->GetTires();
+    m_state.panelsDamage = vehicle->GetPanelsDamage();
+    m_state.doorsDamage = vehicle->GetDoorsDamage();
+    m_state.lightsDamage = vehicle->GetLightsDamage();
+    m_state.tiresDamage = vehicle->GetTires();
     RakNet::BitStream stream;
-    WORD sentId = *(WORD*)(nativeState + 0x31c);
+    WORD sentId = m_state.damageVehicle;
     stream.WriteBits((const unsigned char*)&sentId, 16, true);
-    DWORD panels = *(DWORD*)(nativeState + 0x31e);
+    DWORD panels = m_state.panelsDamage;
     stream.WriteBits((const unsigned char*)&panels, 32, true);
-    DWORD doors = *(DWORD*)(nativeState + 0x322);
+    DWORD doors = m_state.doorsDamage;
     stream.WriteBits((const unsigned char*)&doors, 32, true);
-    BYTE lights = nativeState[0x326];
+    BYTE lights = m_state.lightsDamage;
     stream.WriteBits(&lights, 8, true);
-    BYTE tires = nativeState[0x327];
+    BYTE tires = m_state.tiresDamage;
     stream.WriteBits(&tires, 8, true);
     typedef char VehicleDamageReliability[(HIGH_PRIORITY == 1 && RELIABLE == 8) ? 1 : -1];
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
@@ -1563,15 +1553,15 @@ void CLocalPlayer::ProcessPassengerEntry()
     }
     // clang-format on
     if (!nearEnough) return;
-    if ((BYTE)(*(CPed**)nativeState)->GetCurrentWeapon() == 46)
-        (*(CPed**)nativeState)->SetArmedWeapon(0, 0);
-    (*(CPed**)nativeState)->EnterVehicle(vehicle->m_nHandle, TRUE);
+    if ((BYTE)m_state.ped->GetCurrentWeapon() == 46)
+        m_state.ped->SetArmedWeapon(0, 0);
+    m_state.ped->EnterVehicle(vehicle->m_nHandle, TRUE);
     EnterVehicle(id, TRUE);
 }
 // 0x00004a30
 WORD CLocalPlayer::GetAimedPlayer()
 {
-    CPed* ped = *(CPed**)nativeState;
+    CPed* ped = m_state.ped;
     if (!ped)
         return 0xffff;
     void* target = ped->GetAimedPed();
@@ -1583,7 +1573,7 @@ WORD CLocalPlayer::GetAimedPlayer()
 // 0x00004a60
 WORD CLocalPlayer::GetAimedActor()
 {
-    CPed* ped = *(CPed**)nativeState;
+    CPed* ped = m_state.ped;
     if (!ped)
         return 0xffff;
     void* target = ped->GetAimedPed();
@@ -1604,7 +1594,7 @@ void CLocalPlayer::ProcessClassSelection()
     }
     if (g_renderDialog && g_renderDialog->active)
         return;
-    if (!*(DWORD*)(nativeState + 0x30a))
+    if (!m_state.rawFlag30a)
     {
         *((BYTE*)g_renderSecondDialog + 0x13) = 1;
         RECT rectangle;
@@ -1614,17 +1604,17 @@ void CLocalPlayer::ProcessClassSelection()
         int x = rectangle.right / 2 - *(int*)(dialog + 0x11e) / 2;
         *(int*)(dialog + 0x11a) = y;
         *(int*)(dialog + 0x116) = x;
-        *(DWORD*)(nativeState + 0x30a) = 1;
-        RequestClass(*(int*)(nativeState + 0x302));
+        m_state.rawFlag30a = 1;
+        RequestClass(m_state.selectedClass);
         return;
     }
     DWORD(WINAPI * tick)() = GetTickCount;
-    if (tick() - *(DWORD*)(nativeState + 0x14b) < 2000)
+    if (tick() - m_state.initialSelectionTick < 2000)
         return;
     SHORT(WINAPI * keyState)(int) = GetAsyncKeyState;
-    if (!*(DWORD*)(nativeState + 0x306))
+    if (!m_state.waitingForSpawnReply)
     {
-        if (!*(DWORD*)(nativeState + 0x143))
+        if (!m_state.spawnPermission)
             return;
         if (keyState(VK_SHIFT) < 0 && !g_pInput->m_bEnabled)
         {
@@ -1632,66 +1622,66 @@ void CLocalPlayer::ProcessClassSelection()
             return;
         }
     }
-    if (!*(DWORD*)(nativeState + 0x143))
+    if (!m_state.spawnPermission)
         return;
-    DWORD elapsed = tick() - *(DWORD*)(nativeState + 0x147);
+    DWORD elapsed = tick() - m_state.classSelectionTick;
     if (keyState(VK_LEFT) < 0 && elapsed > 250)
     {
-        *(DWORD*)(nativeState + 0x147) = tick();
+        m_state.classSelectionTick = tick();
         PrevClass();
         return;
     }
     if (keyState(VK_RIGHT) < 0 && elapsed > 250)
     {
-        *(DWORD*)(nativeState + 0x147) = tick();
+        m_state.classSelectionTick = tick();
         NextClass();
     }
 }
 // 0x000060d0
 void CLocalPlayer::UpdateWeapons()
 {
-    BYTE weapon = (BYTE)(*(CPed**)nativeState)->GetCurrentWeapon();
+    BYTE weapon = (BYTE)m_state.ped->GetCurrentWeapon();
     bool changed = false;
     WORD player = GetAimedPlayer();
     WORD actor = GetAimedActor();
-    if (player != *(WORD*)(nativeState + 0x189) || actor != *(WORD*)(nativeState + 0x18b))
+    if (player != m_state.aimedPlayer || actor != m_state.aimedActor)
     {
-        *(WORD*)(nativeState + 0x189) = player;
-        *(WORD*)(nativeState + 0x18b) = actor;
+        m_state.aimedPlayer = player;
+        m_state.aimedActor = actor;
         changed = true;
     }
-    else if (weapon == nativeState[0x18d] && GetTickCount() - *(DWORD*)(nativeState + 0x185) < 100)
+    else if (weapon == m_state.currentWeapon && GetTickCount() - m_state.weaponsUpdateTick < 100)
         return;
-    if (weapon != nativeState[0x18d])
-        nativeState[0x18d] = weapon;
+    if (weapon != m_state.currentWeapon)
+        m_state.currentWeapon = weapon;
     RakNet::BitStream stream;
     BYTE packet = 204;
     stream.WriteBits(&packet, 8, true);
-    WORD target = *(WORD*)(nativeState + 0x189);
+    WORD target = m_state.aimedPlayer;
     stream.WriteBits((const unsigned char*)&target, 16, true);
-    target = *(WORD*)(nativeState + 0x18b);
+    target = m_state.aimedActor;
     stream.WriteBits((const unsigned char*)&target, 16, true);
     for (BYTE index = 0; index < 13; ++index)
     {
-        BYTE* backend = (BYTE*)(*(CPed**)nativeState)->m_pGamePed;
+        BYTE* backend = (BYTE*)m_state.ped->m_pGamePed;
         BYTE* slot = backend + index * 0x1c;
-        if ((DWORD)nativeState[0x18e + index] != *(DWORD*)(slot + 0x5a0) || *(DWORD*)(nativeState + 0x19b + index * 4) != *(DWORD*)(slot + 0x5ac))
+        if ((DWORD)m_state.lastWeapons[index] != *(DWORD*)(slot + 0x5a0) || m_state.lastAmmo[index] != *(DWORD*)(slot + 0x5ac))
         {
-            nativeState[0x18e + index] = *(BYTE*)(slot + 0x5a0);
-            backend = (BYTE*)(*(CPed**)nativeState)->m_pGamePed;
-            *(DWORD*)(nativeState + 0x19b + index * 4) = *(DWORD*)(backend + index * 0x1c + 0x5ac);
+            m_state.lastWeapons[index] = *(BYTE*)(slot + 0x5a0);
+            backend = (BYTE*)m_state.ped->m_pGamePed;
+            m_state.lastAmmo[index] = *(DWORD*)(backend + index * 0x1c + 0x5ac);
             BYTE sentIndex = index;
             stream.WriteBits(&sentIndex, 8, true);
-            BYTE type = nativeState[0x18e + index];
+            BYTE type = m_state.lastWeapons[index];
             stream.WriteBits(&type, 8, true);
-            WORD ammo = *(WORD*)(nativeState + 0x19b + index * 4);
+            WORD ammo = *(WORD*)&m_state.lastAmmo[index];
             stream.WriteBits((const unsigned char*)&ammo, 16, true);
             changed = true;
         }
     }
     if (changed)
     {
-        *(DWORD*)(nativeState + 0x185) = GetTickCount();
+        m_state.weaponsUpdateTick = GetTickCount();
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
     }
 }
@@ -1700,7 +1690,7 @@ void CLocalPlayer::ProcessSpectating()
 {
     RakNet::BitStream stream;
     WORD leftRight, upDown;
-    WORD keys = (*(CPed**)nativeState)->GetKeys(&leftRight, &upDown);
+    WORD keys = m_state.ped->GetKeys(&leftRight, &upDown);
     CMatrix matrix;
     g_pGame->m_pCamera->GetMatrix(&matrix);
     CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
@@ -1715,22 +1705,22 @@ void CLocalPlayer::ProcessSpectating()
     memcpy(data + 6, &matrix.position, 12);
     DWORD rate = GetOnFootSendRate();
     DWORD(WINAPI * tick)() = GetTickCount;
-    if (tick() - *(DWORD*)(nativeState + 0x137) > rate)
+    if (tick() - m_state.lastSpectatorSendTick > rate)
     {
-        *(DWORD*)(nativeState + 0x137) = tick();
+        m_state.lastSpectatorSendTick = tick();
         BYTE packet = 212;
         stream.WriteBits(&packet, 8, true);
         stream.Write((const char*)data, 18);
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 1);
         rate = GetOnFootSendRate() * 2;
-        if (tick() - *(DWORD*)(nativeState + 0x13b) > rate)
+        if (tick() - m_state.lastAimSendTick > rate)
         {
-            *(DWORD*)(nativeState + 0x13b) = tick();
+            m_state.lastAimSendTick = tick();
             SendAimData();
         }
     }
     g_pGame->EnableHUD(FALSE);
-    (*(CPed**)nativeState)->SetHealth(100.0f);
+    m_state.ped->SetHealth(100.0f);
     CVector position = *(CVector*)(data + 6);
     // clang-format off
     // Native loads received Z before adding20; retain operand order for NaNs.
@@ -1740,61 +1730,61 @@ void CLocalPlayer::ProcessSpectating()
         fstp dword ptr [position+8]
     }
     // clang-format on
-    (*(CPed**)nativeState)->Teleport(position);
-    if (nativeState[0x313] == 1)
+    m_state.ped->Teleport(position);
+    if (m_state.spectateType == 1)
     {
-        WORD id = *(WORD*)(nativeState + 0x314);
+        WORD id = *(WORD*)&m_state.spectateId;
         if (id >= 1004 || !players->connected[id])
         {
-            nativeState[0x313] = 0;
-            *(DWORD*)(nativeState + 0x318) = 0;
+            m_state.spectateType = 0;
+            m_state.spectateProcessed = 0;
         }
     }
-    if (nativeState[0x313] == 1)
+    if (m_state.spectateType == 1)
     {
-        WORD id = *(WORD*)(nativeState + 0x314);
+        WORD id = *(WORD*)&m_state.spectateId;
         if (id < 1004 && players->connected[id])
         {
             CRemotePlayer* remote = players->GetPlayer(id);
-            if (!*(CPed**)(remote->nativeState + 4) || !remote->nativeState[0x1a] || players->GetPlayer(id)->nativeState[0x1a] == 32)
+            if (!remote->m_state.ped || !remote->m_state.playerState || players->GetPlayer(id)->m_state.playerState == 32)
             {
-                nativeState[0x313] = 0;
-                *(DWORD*)(nativeState + 0x318) = 0;
+                m_state.spectateType = 0;
+                m_state.spectateProcessed = 0;
             }
         }
     }
-    if (*(DWORD*)(nativeState + 0x318))
+    if (m_state.spectateProcessed)
         return;
-    if (!nativeState[0x313])
+    if (!m_state.spectateType)
     {
-        (*(CPed**)nativeState)->WarpFromVehicle(0.0f, 0.0f, 10.0f);
+        m_state.ped->WarpFromVehicle(0.0f, 0.0f, 10.0f);
         CVector cameraPosition = {50.0f, 50.0f, 50.0f}, rotation = {0, 0, 0};
         g_pGame->m_pCamera->Set(cameraPosition, rotation);
         CVector target = {60.0f, 60.0f, 50.0f};
         g_pGame->m_pCamera->PointAt(target, 2);
-        *(DWORD*)(nativeState + 0x318) = 1;
+        m_state.spectateProcessed = 1;
     }
-    else if (nativeState[0x313] == 1)
+    else if (m_state.spectateType == 1)
     {
-        WORD id = *(WORD*)(nativeState + 0x314);
+        WORD id = *(WORD*)&m_state.spectateId;
         if (!players->IsConnected(id))
             return;
-        CPed* ped = *(CPed**)(players->GetPlayer(id)->nativeState + 4);
+        CPed* ped = players->GetPlayer(id)->m_state.ped;
         if (!ped)
             return;
-        Scripting::ProcessCommand(&g_localPedCameraCommand, ped->m_nHandle, (DWORD)nativeState[0x312], 2);
-        *(DWORD*)(nativeState + 0x318) = 1;
+        Scripting::ProcessCommand(&g_localPedCameraCommand, ped->m_nHandle, (DWORD)m_state.spectateCameraMode, 2);
+        m_state.spectateProcessed = 1;
     }
-    else if (nativeState[0x313] == 2)
+    else if (m_state.spectateType == 2)
     {
-        WORD id = *(WORD*)(nativeState + 0x314);
+        WORD id = *(WORD*)&m_state.spectateId;
         if (!vehicles->DoesExist(id))
             return;
         CVehicle* vehicle = vehicles->Get(id);
         if (!vehicle)
             return;
-        Scripting::ProcessCommand(&g_localTrainCameraCommand, vehicle->m_nHandle, (DWORD)nativeState[0x312], 2);
-        *(DWORD*)(nativeState + 0x318) = 1;
+        Scripting::ProcessCommand(&g_localTrainCameraCommand, vehicle->m_nHandle, (DWORD)m_state.spectateCameraMode, 2);
+        m_state.spectateProcessed = 1;
     }
 }
 // 0x001178ac
@@ -1902,26 +1892,25 @@ void CLocalPlayer::UpdateCameraTarget()
 {
     if (!((CNetGame*)g_pNetGame)->updateCameraTarget)
     {
-        *(WORD*)(nativeState + 0x108) = 0xffff;
-        *(WORD*)(nativeState + 0x10a) = 0xffff;
-        *(WORD*)(nativeState + 0x10c) = 0xffff;
-        *(WORD*)(nativeState + 0x10e) = 0xffff;
+        m_state.cameraTargets[0] = 0xffff;
+        m_state.cameraTargets[1] = 0xffff;
+        m_state.cameraTargets[2] = 0xffff;
+        m_state.cameraTargets[3] = 0xffff;
         return;
     }
     DWORD(WINAPI * tick)() = GetTickCount;
-    if (tick() - *(DWORD*)(nativeState + 0x110) <= 100)
+    if (tick() - m_state.cameraTargetTick <= 100)
         return;
     WORD targets[4];
     GetCameraTarget(targets);
-    if (targets[0] != *(WORD*)(nativeState + 0x108) || targets[1] != *(WORD*)(nativeState + 0x10a) || targets[2] != *(WORD*)(nativeState + 0x10c) ||
-        targets[3] != *(WORD*)(nativeState + 0x10e))
+    if (targets[0] != m_state.cameraTargets[0] || targets[1] != m_state.cameraTargets[1] || targets[2] != m_state.cameraTargets[2] || targets[3] != m_state.cameraTargets[3])
     {
         RakNet::BitStream stream;
         stream.Write((const char*)targets, 8);
         ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localCameraTargetRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
-        memcpy(nativeState + 0x108, targets, 8);
+        memcpy(m_state.cameraTargets, targets, 8);
     }
-    *(DWORD*)(nativeState + 0x110) = tick();
+    m_state.cameraTargetTick = tick();
 }
 // 0x00004710
 void CLocalPlayer::DrawCameraTargetLabels()
@@ -1933,12 +1922,12 @@ void CLocalPlayer::DrawCameraTargetLabels()
     const char* formats[4] = {g_localCameraTargetObjectText, g_localCameraTargetVehicleText, g_localCameraTargetPlayerText, g_localCameraTargetActorText};
     for (int kind = 0; kind < 4; ++kind)
     {
-        WORD id = *(WORD*)(nativeState + 0x108 + kind * 2);
+        WORD id = m_state.cameraTargets[kind];
         if (id == 0xffff)
             continue;
         sprintf(text, formats[kind], (unsigned)id);
         CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
-        id = *(WORD*)(nativeState + 0x108 + kind * 2);
+        id = m_state.cameraTargets[kind];
         CEntity* entity = 0;
         if (kind == 0)
             entity = pools->objects->Get(id);
@@ -1948,7 +1937,7 @@ void CLocalPlayer::DrawCameraTargetLabels()
         {
             CRemotePlayer* remote = pools->players->GetPlayer(id);
             if (remote)
-                entity = *(CPed**)(remote->nativeState + 4);
+                entity = remote->m_state.ped;
         }
         else
             entity = pools->actors->Get(id);
@@ -1970,226 +1959,225 @@ const char g_localClassSelectionMessage[] = "Returning to class selection after 
 // 0x000072d0
 BOOL CLocalPlayer::Process()
 {
-    if (*(DWORD*)(nativeState + 0xf4) && *(CPed**)nativeState)
+    if (m_state.active && m_state.ped)
     {
         g_deviceSpawnScreen->SetText(0);
-        if ((!*(DWORD*)(nativeState + 0xf8) && (*(CPed**)nativeState)->GetState() == 54) || (*(CPed**)nativeState)->IsDead())
+        if ((!m_state.wasted && m_state.ped->GetState() == 54) || m_state.ped->IsDead())
         {
-            DWORD classSelection = *(DWORD*)(nativeState + 0x2fe);
-            if (*(DWORD*)(nativeState + 0x12c) && !classSelection)
+            DWORD classSelection = m_state.wantsAnotherClass;
+            if (m_state.spectating && !classSelection)
                 Spawn();
             else if (classSelection)
             {
-                *(DWORD*)(nativeState + 0xf4) = 0;
-                *(DWORD*)(nativeState + 0x181) = 0;
+                m_state.active = 0;
+                m_state.hasSpawnInfo = 0;
             }
-            *(DWORD*)(nativeState + 0x12c) = 0;
-            nativeState[0x313] = 0;
-            *(DWORD*)(nativeState + 0x314) = 0xffffffff;
-            *(DWORD*)(nativeState + 0x318) = 0;
-            if ((*(CPed**)nativeState)->DoesDancing())
-                (*(CPed**)nativeState)->StopDancing();
-            if ((*(CPed**)nativeState)->UsingCellphone())
-                (*(CPed**)nativeState)->EnableCellphone(FALSE);
-            if ((*(CPed**)nativeState)->DoesUrinating())
-                (*(CPed**)nativeState)->StopUrinating();
-            if ((*(CPed**)nativeState)->GetStuff())
-                (*(CPed**)nativeState)->DropStuff();
-            (*(CPed**)nativeState)->SetDrunkLevel(0);
-            (*(CPed**)nativeState)->SetControllable(TRUE);
-            if (*(DWORD*)(nativeState + 0x1d4))
+            m_state.spectating = 0;
+            m_state.spectateType = 0;
+            m_state.spectateId = 0xffffffff;
+            m_state.spectateProcessed = 0;
+            if (m_state.ped->DoesDancing())
+                m_state.ped->StopDancing();
+            if (m_state.ped->UsingCellphone())
+                m_state.ped->EnableCellphone(FALSE);
+            if (m_state.ped->DoesUrinating())
+                m_state.ped->StopUrinating();
+            if (m_state.ped->GetStuff())
+                m_state.ped->DropStuff();
+            m_state.ped->SetDrunkLevel(0);
+            m_state.ped->SetControllable(TRUE);
+            if (m_state.rcMode)
             {
-                *(DWORD*)(nativeState + 0x1d4) = 0;
-                (*(CPed**)nativeState)->Add();
+                m_state.rcMode = 0;
+                m_state.ped->Add();
             }
-            if ((*(CPed**)nativeState)->IsInVehicle() && !(*(CPed**)nativeState)->IsPassenger())
+            if (m_state.ped->IsInVehicle() && !m_state.ped->IsPassenger())
             {
                 SendIncarData();
                 CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
-                *(WORD*)(nativeState + 0xfe) = vehicles->Find((*(CPed**)nativeState)->GetVehicle());
+                m_state.lastVehicle = vehicles->Find(m_state.ped->GetVehicle());
             }
-            (*(CPed**)nativeState)->CallBackend730AndVehicle490();
+            m_state.ped->CallBackend730AndVehicle490();
             WastedNotification();
-            *(DWORD*)(nativeState + 0xf4) = 0;
-            *(DWORD*)(nativeState + 0xf8) = 1;
+            m_state.active = 0;
+            m_state.wasted = 1;
             g_pGame->EnableZoneDisplaying(0);
             return TRUE;
         }
         WORD leftRight, upDown;
-        WORD keys = (*(CPed**)nativeState)->GetKeys(&leftRight, &upDown);
+        WORD keys = m_state.ped->GetKeys(&leftRight, &upDown);
         DrawCameraTargetLabels();
-        if ((*(CPed**)nativeState)->DoesDancing())
+        if (m_state.ped->DoesDancing())
         {
             g_pGame->EnableHUD(FALSE);
-            (*(CPed**)nativeState)->ProcessDancing();
+            m_state.ped->ProcessDancing();
             if (*(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e))
-                (*(CPed**)nativeState)->StopDancing();
+                m_state.ped->StopDancing();
         }
-        if ((*(CPed**)nativeState)->HasDanceState())
-            (*(CPed**)nativeState)->ProcessDancePoseWeapon();
-        if ((*(CPed**)nativeState)->HasDanceStyle())
-            (*(CPed**)nativeState)->ProcessSecondaryPoseWeapon();
-        if ((*(CPed**)nativeState)->DoesHandsUp() && *(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e))
-            (*(CPed**)nativeState)->SetControllable(TRUE);
-        if (((*(CPed**)nativeState)->DoesUrinating() && *(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e)) ||
-            ((*(CPed**)nativeState)->DoesUrinating() && (*(CPed**)nativeState)->IsInVehicle()))
-            (*(CPed**)nativeState)->StopUrinating();
-        if ((*(CPed**)nativeState)->GetStuff())
+        if (m_state.ped->HasDanceState())
+            m_state.ped->ProcessDancePoseWeapon();
+        if (m_state.ped->HasDanceStyle())
+            m_state.ped->ProcessSecondaryPoseWeapon();
+        if (m_state.ped->DoesHandsUp() && *(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e))
+            m_state.ped->SetControllable(TRUE);
+        if ((m_state.ped->DoesUrinating() && *(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e)) || (m_state.ped->DoesUrinating() && m_state.ped->IsInVehicle()))
+            m_state.ped->StopUrinating();
+        if (m_state.ped->GetStuff())
         {
-            if (!*(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e) && !(*(CPed**)nativeState)->IsInVehicle())
-                (*(CPed**)nativeState)->ApplyStuff();
+            if (!*(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e) && !m_state.ped->IsInVehicle())
+                m_state.ped->ApplyStuff();
             else
-                (*(CPed**)nativeState)->DropStuff();
+                m_state.ped->DropStuff();
         }
-        (*(CPed**)nativeState)->ProcessDrunk();
-        if ((*(CPed**)nativeState)->IsInVehicle() && (*(CPed**)nativeState)->DoesDancing())
-            (*(CPed**)nativeState)->StopDancing();
-        (*(CPed**)nativeState)->ResetLocalControlWord();
-        DWORD animation = (*(CPed**)nativeState)->GetPackedAnimation();
+        m_state.ped->ProcessDrunk();
+        if (m_state.ped->IsInVehicle() && m_state.ped->DoesDancing())
+            m_state.ped->StopDancing();
+        m_state.ped->ResetLocalControlWord();
+        DWORD animation = m_state.ped->GetPackedAnimation();
         if (animation)
         {
-            *(DWORD*)(nativeState + 0x100) = animation;
-            *(DWORD*)(nativeState + 0x104) = 0;
+            m_state.animation = animation;
+            m_state.animationSent = 0;
         }
-        else if (*(DWORD*)(nativeState + 0x100) && *(DWORD*)(nativeState + 0x104))
-            *(DWORD*)(nativeState + 0x100) = 0;
+        else if (m_state.animation && m_state.animationSent)
+            m_state.animation = 0;
         DWORD(WINAPI * tick)() = GetTickCount;
         DWORD now = tick();
-        if (g_localTrainCameraTick != 0xffffffff && now - g_localTrainCameraTick > 5000 && !(*(CPed**)nativeState)->IsInVehicle())
+        if (g_localTrainCameraTick != 0xffffffff && now - g_localTrainCameraTick > 5000 && !m_state.ped->IsInVehicle())
         {
             g_pGame->m_pCamera->Restore();
             g_localTrainCameraTick = 0xffffffff;
         }
-        if ((int)now >= *(int*)(nativeState + 0x30e))
+        if ((int)now >= *(int*)&m_state.zoneDisplayTick)
             g_pGame->EnableZoneDisplaying(((CNetGame*)g_pNetGame)->settings->zoneNames);
         g_pGame->ProcessCheckpoints();
-        if (now - *(DWORD*)(nativeState + 0x13f) > 1000)
+        if (now - m_state.lastStatsSendTick > 1000)
         {
             SendStats();
-            *(DWORD*)(nativeState + 0x13f) = now;
+            m_state.lastStatsSendTick = now;
         }
         UpdateWeapons();
         BYTE interior = g_pGame->GetCurrentInterior();
-        if (interior != nativeState[0x1d3])
+        if (interior != m_state.interior)
             SendInteriorChange(interior);
         UpdateCameraTarget();
-        if (*(DWORD*)(nativeState + 0x12c))
+        if (m_state.spectating)
         {
             ProcessSpectating();
-            *(DWORD*)(nativeState + 0x1cf) = 0;
+            m_state.passengerDriveby = 0;
         }
-        else if ((*(CPed**)nativeState)->GetState() == 50 && !(*(CPed**)nativeState)->IsPassenger())
+        else if (m_state.ped->GetState() == 50 && !m_state.ped->IsPassenger())
         {
-            (*(CPed**)nativeState)->RemoveWeaponWhenEnteringVehicle();
+            m_state.ped->RemoveWeaponWhenEnteringVehicle();
             ProcessHead();
             ProcessVehicleWorldBoundaries();
-            if (now - *(DWORD*)(nativeState + 0x13b) > 1000)
+            if (now - m_state.lastAimSendTick > 1000)
             {
-                *(DWORD*)(nativeState + 0x13b) = now;
+                m_state.lastAimSendTick = now;
                 SendAimData();
             }
             CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
             if (vehicles)
-                *(WORD*)(nativeState + 0xfc) = vehicles->Find((*(CPed**)nativeState)->GetVehicle());
-            WORD id = *(WORD*)(nativeState + 0xfc);
+                m_state.currentVehicle = vehicles->Find(m_state.ped->GetVehicle());
+            WORD id = m_state.currentVehicle;
             CVehicle* vehicle = vehicles->Get(id);
             ProcessVehicleDamage(id);
-            if (vehicle && !*(DWORD*)(nativeState + 0x1d4) && vehicle->IsRC())
+            if (vehicle && !m_state.rcMode && vehicle->IsRC())
             {
-                (*(CPed**)nativeState)->Remove();
-                *(DWORD*)(nativeState + 0x1d4) = 1;
+                m_state.ped->Remove();
+                m_state.rcMode = 1;
             }
-            if (*(DWORD*)(nativeState + 0x1d4))
+            if (m_state.rcMode)
             {
                 if (!vehicle)
                 {
-                    (*(CPed**)nativeState)->SetHealth(0.0f);
-                    (*(CPed**)nativeState)->Kill();
+                    m_state.ped->SetHealth(0.0f);
+                    m_state.ped->Kill();
                 }
-                if (*(DWORD*)(nativeState + 0x1d4) && vehicle && vehicle->GetHealth() == 0.0f)
+                if (m_state.rcMode && vehicle && vehicle->GetHealth() == 0.0f)
                 {
-                    (*(CPed**)nativeState)->SetHealth(0.0f);
-                    (*(CPed**)nativeState)->Kill();
+                    m_state.ped->SetHealth(0.0f);
+                    m_state.ped->Kill();
                 }
             }
             DWORD rate = GetInCarSendRate();
-            if (now - *(DWORD*)(nativeState + 0x133) > rate)
+            if (now - m_state.lastSendTick > rate)
             {
-                *(DWORD*)(nativeState + 0x133) = tick();
+                m_state.lastSendTick = tick();
                 SendIncarData();
             }
-            *(DWORD*)(nativeState + 0x1cf) = 0;
+            m_state.passengerDriveby = 0;
         }
-        else if ((*(CPed**)nativeState)->GetState() == 1 || (*(CPed**)nativeState)->GetState() == 12)
+        else if (m_state.ped->GetState() == 1 || m_state.ped->GetState() == 12)
         {
             ProcessSurfing();
             ProcessHead();
-            if (*(DWORD*)(nativeState + 0x1d4))
+            if (m_state.rcMode)
             {
-                *(DWORD*)(nativeState + 0x1d4) = 0;
-                (*(CPed**)nativeState)->Add();
+                m_state.rcMode = 0;
+                m_state.ped->Add();
             }
             ProcessPassengerEntry();
             ProcessWorldBoundaries();
-            if (*(WORD*)(nativeState + 0xfc) != 0xffff)
+            if (m_state.currentVehicle != 0xffff)
             {
-                *(WORD*)(nativeState + 0xfe) = *(WORD*)(nativeState + 0xfc);
-                *(WORD*)(nativeState + 0xfc) = 0xffff;
+                m_state.lastVehicle = m_state.currentVehicle;
+                m_state.currentVehicle = 0xffff;
             }
-            if (NeedsToSendOnfootData(keys, upDown, leftRight) || now - *(DWORD*)(nativeState + 0x133) > GetOnFootSendRate())
+            if (NeedsToSendOnfootData(keys, upDown, leftRight) || now - m_state.lastSendTick > GetOnFootSendRate())
             {
-                *(DWORD*)(nativeState + 0x133) = tick();
+                m_state.lastSendTick = tick();
                 SendOnfootData();
             }
             DWORD aimRate = !(keys & 0x84) ? 1000 : (g_netStatsShotCompMode == 2 ? g_localAimSendRate : 100);
-            if (now - *(DWORD*)(nativeState + 0x13b) > aimRate)
+            if (now - m_state.lastAimSendTick > aimRate)
             {
-                *(DWORD*)(nativeState + 0x13b) = now;
+                m_state.lastAimSendTick = now;
                 SendAimData();
             }
-            *(DWORD*)(nativeState + 0x1cf) = 0;
+            m_state.passengerDriveby = 0;
         }
-        else if ((*(CPed**)nativeState)->GetState() == 50 && (*(CPed**)nativeState)->IsPassenger())
+        else if (m_state.ped->GetState() == 50 && m_state.ped->IsPassenger())
         {
             ProcessHead();
-            if (*(DWORD*)(nativeState + 0x1d4))
+            if (m_state.rcMode)
             {
-                *(DWORD*)(nativeState + 0x1d4) = 0;
-                (*(CPed**)nativeState)->Add();
+                m_state.rcMode = 0;
+                m_state.ped->Add();
             }
             BYTE* pad = (BYTE*)KeyStuff::GetInternalKeys();
-            (*(CPed**)nativeState)->GetCurrentWeapon();
-            if (!*(DWORD*)(nativeState + 0x1cf))
+            m_state.ped->GetCurrentWeapon();
+            if (!m_state.passengerDriveby)
             {
-                if (*(WORD*)(pad + 0x24) && (*(CPed**)nativeState)->EnablePassengerDrivebyMode())
-                    *(DWORD*)(nativeState + 0x1cf) = 1;
+                if (*(WORD*)(pad + 0x24) && m_state.ped->EnablePassengerDrivebyMode())
+                    m_state.passengerDriveby = 1;
             }
-            else if ((BYTE)(*(CPed**)nativeState)->GetCurrentWeapon() == 0 || !(*(CPed**)nativeState)->CurrentWeaponHasAmmo())
+            else if ((BYTE)m_state.ped->GetCurrentWeapon() == 0 || !m_state.ped->CurrentWeaponHasAmmo())
             {
-                if (*(DWORD*)(nativeState + 0x1cf))
+                if (m_state.passengerDriveby)
                 {
-                    (*(CPed**)nativeState)->StopTaskType1022();
-                    *(DWORD*)(nativeState + 0x1cf) = 0;
+                    m_state.ped->StopTaskType1022();
+                    m_state.passengerDriveby = 0;
                 }
             }
             DWORD rate = GetInCarSendRate();
-            if (now - *(DWORD*)(nativeState + 0x133) > rate)
+            if (now - m_state.lastSendTick > rate)
             {
-                *(DWORD*)(nativeState + 0x133) = tick();
+                m_state.lastSendTick = tick();
                 SendPassengerData();
             }
         }
     }
-    if (!*(DWORD*)(nativeState + 0xf4) && *(CPed**)nativeState && (int)(*(CPed**)nativeState)->GetDrunkLevel() > 0)
+    if (!m_state.active && m_state.ped && (int)m_state.ped->GetDrunkLevel() > 0)
     {
-        (*(CPed**)nativeState)->SetDrunkLevel(0);
-        (*(CPed**)nativeState)->ProcessDrunk();
+        m_state.ped->SetDrunkLevel(0);
+        m_state.ped->ProcessDrunk();
     }
-    if (*(DWORD*)(nativeState + 0x12c) && !*(DWORD*)(nativeState + 0xf4))
+    if (m_state.spectating && !m_state.active)
     {
-        if (*(DWORD*)(nativeState + 0x30a) == 1)
+        if (m_state.rawFlag30a == 1)
         {
-            *(DWORD*)(nativeState + 0x30a) = 0;
+            m_state.rawFlag30a = 0;
             if (g_renderSecondDialog)
                 *((BYTE*)g_renderSecondDialog + 0x13) = 0;
             g_pGame->SetCursorMode(0, FALSE);
@@ -2197,20 +2185,20 @@ BOOL CLocalPlayer::Process()
         ProcessSpectating();
         return TRUE;
     }
-    if (!*(DWORD*)(nativeState + 0x2fe) && GetAsyncKeyState(VK_F4) != 0)
+    if (!m_state.wantsAnotherClass && GetAsyncKeyState(VK_F4) != 0)
     {
-        *(DWORD*)(nativeState + 0x2fe) = 1;
+        m_state.wantsAnotherClass = 1;
         g_pChat->AddInfoMessage(g_localClassSelectionMessage);
     }
-    if (*(DWORD*)(nativeState + 0xf8) && (*(CPed**)nativeState)->GetState() != 55 && (*(CPed**)nativeState)->GetState() != 54)
+    if (m_state.wasted && m_state.ped->GetState() != 55 && m_state.ped->GetState() != 54)
     {
-        if ((*(CPed**)nativeState)->HasAccessory())
-            (*(CPed**)nativeState)->DeleteAllAccessories();
-        if ((*(CPed**)nativeState)->HasDanceState())
-            (*(CPed**)nativeState)->SetDancePoseState(0);
-        if (*(DWORD*)(nativeState + 0x143) && !*(DWORD*)(nativeState + 0x2fe) && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected)
+        if (m_state.ped->HasAccessory())
+            m_state.ped->DeleteAllAccessories();
+        if (m_state.ped->HasDanceState())
+            m_state.ped->SetDancePoseState(0);
+        if (m_state.spawnPermission && !m_state.wantsAnotherClass && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected)
         {
-            CPed* ped = *(CPed**)nativeState;
+            CPed* ped = m_state.ped;
             BYTE alive;
             // clang-format off
             __asm {
@@ -2225,13 +2213,12 @@ BOOL CLocalPlayer::Process()
             if (alive) Spawn();
             return TRUE;
         }
-        *(DWORD*)(nativeState + 0xf8) = 0;
+        m_state.wasted = 0;
         PrepareForClassSelection();
-        *(DWORD*)(nativeState + 0x2fe) = 0;
+        m_state.wantsAnotherClass = 0;
         return TRUE;
     }
-    if ((*(CPed**)nativeState)->GetState() != 55 && (*(CPed**)nativeState)->GetState() != 54 && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected &&
-        !*(DWORD*)(nativeState + 0xf4) && !*(DWORD*)(nativeState + 0x12c))
+    if (m_state.ped->GetState() != 55 && m_state.ped->GetState() != 54 && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected && !m_state.active && !m_state.spectating)
         ProcessClassSelection();
     return TRUE;
 }
@@ -2239,19 +2226,19 @@ BOOL CLocalPlayer::Process()
 // 0x00002db0
 DWORD CLocalPlayer::GetSpawnPermission()
 {
-    return *(DWORD*)(nativeState + 0x143);
+    return m_state.spawnPermission;
 }
 // 0x000135c0
 DWORD CLocalPlayer::IsSpectating()
 {
-    return *(DWORD*)(nativeState + 0x12c);
+    return m_state.spectating;
 }
 
 // 0x00004230
 BYTE CLocalPlayer::GetAimTargetOffset(WORD* id, CVector* offset)
 {
     CVector hit;
-    void* entity = (*(CPed**)nativeState)->GetCameraAimHit(&hit);
+    void* entity = m_state.ped->GetCameraAimHit(&hit);
     if (!entity)
         return 0;
     CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
