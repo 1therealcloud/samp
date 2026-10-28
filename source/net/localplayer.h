@@ -1,6 +1,108 @@
 #ifndef SAMP_LOCAL_PLAYER_INTERFACE_H
 #define SAMP_LOCAL_PLAYER_INTERFACE_H
+#include "game/quaternion.h"
+#include <stddef.h>
 #include <windows.h>
+// Native synchronization records shared by senders and receivers, as in 0.2x.
+// Plain packed storage; no standalone native constructors are established.
+#pragma pack(push, 1)
+struct LocalOnfootSyncData
+{
+    WORD leftRight, upDown, keys;
+    CVector position;
+    GameQuaternion rotation;
+    BYTE health, armour, weaponAim, specialAction;
+    CVector speed, surfingOffset;
+    WORD surfingVehicle;
+    DWORD animation;
+};
+struct LocalIncarSyncData
+{
+    WORD vehicle, leftRight, upDown, keys;
+    GameQuaternion rotation;
+    CVector position, speed;
+    float health;
+    BYTE pedHealth, armour, weaponAim, siren, landingGear;
+    WORD trailer;
+    DWORD modelData;
+};
+#pragma pack(pop)
+typedef char LocalOnfootSyncExtent[(sizeof(LocalOnfootSyncData) == 68) ? 1 : -1];
+typedef char LocalIncarSyncExtent[(sizeof(LocalIncarSyncData) == 63) ? 1 : -1];
+
+#pragma pack(push, 1)
+struct LocalAimSyncData
+{
+    BYTE cameraMode;
+    BYTE vectors[24];
+    float aimZ;
+    BYTE zoomWeapon, aspect;
+};
+struct LocalTrailerSyncData
+{
+    WORD vehicle;
+    CVector position;
+    GameQuaternion rotation;
+    CVector speed, turnSpeed;
+};
+struct LocalPassengerSyncData
+{
+    WORD vehicle;
+    BYTE seatFlags, weaponAim, health, armour;
+    WORD leftRight, upDown, keys;
+    CVector position;
+};
+#pragma pack(pop)
+typedef char LocalAimSyncExtent[(sizeof(LocalAimSyncData) == 31) ? 1 : -1];
+typedef char LocalTrailerSyncExtent[(sizeof(LocalTrailerSyncData) == 54) ? 1 : -1];
+typedef char LocalPassengerSyncExtent[(sizeof(LocalPassengerSyncData) == 24) ? 1 : -1];
+
+#pragma pack(push, 1)
+struct UnoccupiedSyncData
+{
+    WORD vehicle;
+    BYTE seat;
+    CVector right, up, position, speed, turnSpeed;
+    float health;
+};
+#pragma pack(pop)
+typedef char UnoccupiedSyncExtent[(sizeof(UnoccupiedSyncData) == 67) ? 1 : -1];
+
+#pragma pack(push, 1)
+struct BulletSyncData
+{
+    BYTE type;
+    WORD targetId;
+    CVector origin, target, offset;
+    BYTE weapon;
+};
+#pragma pack(pop)
+typedef char BulletSyncExtent[(sizeof(BulletSyncData) == 40) ? 1 : -1];
+typedef char OnfootPositionOffset[(offsetof(LocalOnfootSyncData, position) == 6) ? 1 : -1];
+typedef char OnfootRotationOffset[(offsetof(LocalOnfootSyncData, rotation) == 0x12) ? 1 : -1];
+typedef char OnfootHealthOffset[(offsetof(LocalOnfootSyncData, health) == 0x22) ? 1 : -1];
+typedef char OnfootSpeedOffset[(offsetof(LocalOnfootSyncData, speed) == 0x26) ? 1 : -1];
+typedef char OnfootSurfingOffset[(offsetof(LocalOnfootSyncData, surfingOffset) == 0x32) ? 1 : -1];
+typedef char OnfootAnimationOffset[(offsetof(LocalOnfootSyncData, animation) == 0x40) ? 1 : -1];
+typedef char IncarRotationOffset[(offsetof(LocalIncarSyncData, rotation) == 8) ? 1 : -1];
+typedef char IncarPositionOffset[(offsetof(LocalIncarSyncData, position) == 0x18) ? 1 : -1];
+typedef char IncarSpeedOffset[(offsetof(LocalIncarSyncData, speed) == 0x24) ? 1 : -1];
+typedef char IncarHealthOffset[(offsetof(LocalIncarSyncData, health) == 0x30) ? 1 : -1];
+typedef char IncarPedHealthOffset[(offsetof(LocalIncarSyncData, pedHealth) == 0x34) ? 1 : -1];
+typedef char IncarTrailerOffset[(offsetof(LocalIncarSyncData, trailer) == 0x39) ? 1 : -1];
+typedef char IncarModelDataOffset[(offsetof(LocalIncarSyncData, modelData) == 0x3b) ? 1 : -1];
+typedef char AimZOffset[(offsetof(LocalAimSyncData, aimZ) == 25) ? 1 : -1];
+typedef char AimZoomWeaponOffset[(offsetof(LocalAimSyncData, zoomWeapon) == 29) ? 1 : -1];
+typedef char TrailerRotationOffset[(offsetof(LocalTrailerSyncData, rotation) == 14) ? 1 : -1];
+typedef char TrailerSpeedOffset[(offsetof(LocalTrailerSyncData, speed) == 30) ? 1 : -1];
+typedef char PassengerKeysOffset[(offsetof(LocalPassengerSyncData, keys) == 10) ? 1 : -1];
+typedef char PassengerPositionOffset[(offsetof(LocalPassengerSyncData, position) == 12) ? 1 : -1];
+typedef char UnoccupiedPositionOffset[(offsetof(UnoccupiedSyncData, position) == 27) ? 1 : -1];
+typedef char UnoccupiedHealthOffset[(offsetof(UnoccupiedSyncData, health) == 63) ? 1 : -1];
+typedef char BulletTargetOffset[(offsetof(BulletSyncData, targetId) == 1) ? 1 : -1];
+typedef char BulletOriginOffset[(offsetof(BulletSyncData, origin) == 3) ? 1 : -1];
+typedef char BulletWeaponOffset[(offsetof(BulletSyncData, weapon) == 39) ? 1 : -1];
+
 // Native allocation extent0x328; unreviewed fields/networking lifecycle remain open.
 class CPed;
 class CEntity;

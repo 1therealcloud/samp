@@ -65,30 +65,6 @@ BYTE CLocalPlayer::GetTeam()
 #include <string.h>
 // VC7 runtime helper; library entry, not a recovered SA-MP method.
 extern "C" __int64 __cdecl _ftol2();
-#pragma pack(push, 1)
-struct LocalOnfootSyncData
-{
-    WORD leftRight, upDown, keys;
-    CVector position;
-    GameQuaternion rotation;
-    BYTE health, armour, weaponAim, specialAction;
-    CVector speed, surfingOffset;
-    WORD surfingVehicle;
-    DWORD animation;
-};
-struct LocalIncarSyncData
-{
-    WORD vehicle, leftRight, upDown, keys;
-    GameQuaternion rotation;
-    CVector position, speed;
-    float health;
-    BYTE pedHealth, armour, weaponAim, siren, landingGear;
-    WORD trailer;
-    DWORD modelData;
-};
-#pragma pack(pop)
-typedef char LocalOnfootSyncExtent[(sizeof(LocalOnfootSyncData) == 68) ? 1 : -1];
-typedef char LocalIncarSyncExtent[(sizeof(LocalIncarSyncData) == 63) ? 1 : -1];
 // 0x00117944
 const float g_localQuaternionSyncThreshold = 0.00001f;
 // 0x00003390
@@ -336,32 +312,6 @@ void CLocalPlayer::SendIncarData()
         SendAimData();
     }
 }
-#pragma pack(push, 1)
-struct LocalAimSyncData
-{
-    BYTE cameraMode;
-    BYTE vectors[24];
-    float aimZ;
-    BYTE zoomWeapon, aspect;
-};
-struct LocalTrailerSyncData
-{
-    WORD vehicle;
-    CVector position;
-    GameQuaternion rotation;
-    CVector speed, turnSpeed;
-};
-struct LocalPassengerSyncData
-{
-    WORD vehicle;
-    BYTE seatFlags, weaponAim, health, armour;
-    WORD leftRight, upDown, keys;
-    CVector position;
-};
-#pragma pack(pop)
-typedef char LocalAimSyncExtent[(sizeof(LocalAimSyncData) == 31) ? 1 : -1];
-typedef char LocalTrailerSyncExtent[(sizeof(LocalTrailerSyncData) == 54) ? 1 : -1];
-typedef char LocalPassengerSyncExtent[(sizeof(LocalPassengerSyncData) == 24) ? 1 : -1];
 // 0x00117948
 const float g_localAimZoomScale = 63.0f;
 // 0x0011794c
@@ -529,16 +479,6 @@ void CLocalPlayer::SendStats()
     stream.Write(drunk);
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
 }
-#pragma pack(push, 1)
-struct UnoccupiedSyncData
-{
-    WORD vehicle;
-    BYTE seat;
-    CVector right, up, position, speed, turnSpeed;
-    float health;
-};
-#pragma pack(pop)
-typedef char UnoccupiedSyncExtent[(sizeof(UnoccupiedSyncData) == 67) ? 1 : -1];
 // 0x00117978
 const float g_localUnoccupiedRange = 90.0f;
 // 0x00004bd0
@@ -1342,17 +1282,17 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
             }
         }
     }
-    BYTE payload[40] = {0};
-    payload[0] = type;
-    memcpy(payload + 1, &id, 2);
-    memcpy(payload + 3, &data->origin, 12);
-    memcpy(payload + 15, &data->target, 12);
-    memcpy(payload + 27, &data->offset, 12);
-    payload[39] = (BYTE)(*(CPed**)this)->GetCurrentWeapon();
+    BulletSyncData payload = {0};
+    payload.type = type;
+    memcpy(&payload.targetId, &id, 2);
+    memcpy(&payload.origin, &data->origin, 12);
+    memcpy(&payload.target, &data->target, 12);
+    memcpy(&payload.offset, &data->offset, 12);
+    payload.weapon = (BYTE)(*(CPed**)this)->GetCurrentWeapon();
     RakNet::BitStream stream;
     BYTE packet = 206;
     stream.WriteBits(&packet, 8, true);
-    stream.Write((const char*)payload, 40);
+    stream.Write((const char*)&payload, 40);
     typedef char BulletReliability[(HIGH_PRIORITY == 1 && UNRELIABLE_SEQUENCED == 7) ? 1 : -1];
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
 }

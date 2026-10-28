@@ -539,7 +539,7 @@ void CNetGame::Packet_OnfootSync(Packet* packet)
     bool surfing = false, animation = false;
     if (gameState != StateConnected)
         return;
-    BYTE data[68] = {0};
+    LocalOnfootSyncData data = {0};
     DWORD timestamp = 0;
     WORD player;
     bool present;
@@ -553,37 +553,37 @@ void CNetGame::Packet_OnfootSync(Packet* packet)
     stream.ReadBits((BYTE*)&player, 16, true);
     stream.Read(present);
     if (present)
-        stream.ReadBits(data, 16, true);
+        stream.ReadBits((BYTE*)&data.leftRight, 16, true);
     stream.Read(present);
     if (present)
-        stream.ReadBits(data + 2, 16, true);
-    stream.ReadBits(data + 4, 16, true);
-    stream.Read((char*)data + 6, 12);
-    stream.ReadQuaternion(*(float*)(data + 0x12), *(float*)(data + 0x16), *(float*)(data + 0x1a), *(float*)(data + 0x1e));
+        stream.ReadBits((BYTE*)&data.upDown, 16, true);
+    stream.ReadBits((BYTE*)&data.keys, 16, true);
+    stream.Read((char*)&data.position, 12);
+    stream.ReadQuaternion(data.rotation.w, data.rotation.x, data.rotation.y, data.rotation.z);
     stream.ReadBits(&health, 8, true);
     BYTE armour = health & 15, pedHealth = health >> 4;
-    data[0x23] = armour == 15 ? 100 : armour * 7;
-    data[0x22] = pedHealth == 15 ? 100 : pedHealth * 7;
+    data.armour = armour == 15 ? 100 : armour * 7;
+    data.health = pedHealth == 15 ? 100 : pedHealth * 7;
     stream.ReadBits(&weapon, 8, true);
-    data[0x24] = (data[0x24] & 0xc0) | (weapon & 0x3f);
-    stream.ReadBits(data + 0x25, 8, true);
-    stream.ReadVelocity(*(float*)(data + 0x26), *(float*)(data + 0x2a), *(float*)(data + 0x2e));
+    data.weaponAim = (data.weaponAim & 0xc0) | (weapon & 0x3f);
+    stream.ReadBits((BYTE*)&data.specialAction, 8, true);
+    stream.ReadVelocity(data.speed.x, data.speed.y, data.speed.z);
     stream.Read(surfing);
     if (surfing)
     {
-        stream.ReadBits(data + 0x3e, 16, true);
-        stream.Read((char*)data + 0x32, 12);
+        stream.ReadBits((BYTE*)&data.surfingVehicle, 16, true);
+        stream.Read((char*)&data.surfingOffset, 12);
     }
     else
-        *(WORD*)(data + 0x3e) = 0xffff;
+        data.surfingVehicle = 0xffff;
     stream.Read(animation);
     if (animation)
-        stream.ReadBits(data + 0x40, 32, true);
+        stream.ReadBits((BYTE*)&data.animation, 32, true);
     else
-        *(DWORD*)(data + 0x40) = 0;
+        data.animation = 0;
     CRemotePlayer* remote = pools->players->GetPlayer(player);
     if (remote)
-        remote->UpdateOnfoot(data, timestamp);
+        remote->UpdateOnfoot(&data, timestamp);
 }
 // 0x0000a6f0
 void CNetGame::Packet_IncarSync(Packet* packet)
@@ -592,7 +592,7 @@ void CNetGame::Packet_IncarSync(Packet* packet)
     BYTE packetId = 0;
     if (gameState != StateConnected)
         return;
-    BYTE data[63] = {0};
+    LocalIncarSyncData data = {0};
     DWORD timestamp = 0;
     WORD player, vehicleHealth;
     BYTE health, weapon = 0;
@@ -604,36 +604,36 @@ void CNetGame::Packet_IncarSync(Packet* packet)
     }
     stream.ReadBits(&packetId, 8, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.ReadBits(data, 16, true);
-    stream.ReadBits(data + 2, 16, true);
-    stream.ReadBits(data + 4, 16, true);
-    stream.ReadBits(data + 6, 16, true);
-    stream.ReadQuaternion(*(float*)(data + 8), *(float*)(data + 0xc), *(float*)(data + 0x10), *(float*)(data + 0x14));
-    stream.Read((char*)data + 0x18, 12);
-    stream.ReadVelocity(*(float*)(data + 0x24), *(float*)(data + 0x28), *(float*)(data + 0x2c));
+    stream.ReadBits((BYTE*)&data.vehicle, 16, true);
+    stream.ReadBits((BYTE*)&data.leftRight, 16, true);
+    stream.ReadBits((BYTE*)&data.upDown, 16, true);
+    stream.ReadBits((BYTE*)&data.keys, 16, true);
+    stream.ReadQuaternion(data.rotation.w, data.rotation.x, data.rotation.y, data.rotation.z);
+    stream.Read((char*)&data.position, 12);
+    stream.ReadVelocity(data.speed.x, data.speed.y, data.speed.z);
     stream.ReadBits((BYTE*)&vehicleHealth, 16, true);
-    *(float*)(data + 0x30) = (float)vehicleHealth;
+    data.health = (float)vehicleHealth;
     stream.ReadBits(&health, 8, true);
     BYTE armour = health & 15, pedHealth = health >> 4;
-    data[0x35] = armour == 15 ? 100 : armour * 7;
-    data[0x34] = pedHealth == 15 ? 100 : pedHealth * 7;
+    data.armour = armour == 15 ? 100 : armour * 7;
+    data.pedHealth = pedHealth == 15 ? 100 : pedHealth * 7;
     stream.ReadBits(&weapon, 8, true);
-    data[0x36] = (data[0x36] & 0xc0) | (weapon & 0x3f);
+    data.weaponAim = (data.weaponAim & 0xc0) | (weapon & 0x3f);
     stream.Read(present);
     if (present)
-        data[0x37] = 1;
+        data.siren = 1;
     stream.Read(present);
     if (present)
-        data[0x38] = 1;
+        data.landingGear = 1;
     stream.Read(present);
     if (present)
-        stream.ReadBits(data + 0x3b, 32, true);
+        stream.ReadBits((BYTE*)&data.modelData, 32, true);
     stream.Read(present);
     if (present)
-        stream.ReadBits(data + 0x39, 16, true);
+        stream.ReadBits((BYTE*)&data.trailer, 16, true);
     CRemotePlayer* remote = pools->players->GetPlayer(player);
     if (remote)
-        remote->UpdateIncar(data, timestamp);
+        remote->UpdateIncar(&data, timestamp);
 }
 typedef char NativePacketLengthOffset[(offsetof(Packet, length) == 8) ? 1 : -1];
 typedef char NativePacketDataOffset[(offsetof(Packet, data) == 16) ? 1 : -1];
@@ -645,13 +645,13 @@ void CNetGame::Packet_UnoccupiedSync(Packet* packet)
     if (gameState != StateConnected)
         return;
     WORD player;
-    BYTE data[67] = {0};
+    UnoccupiedSyncData data = {0};
     stream.ReadBits(&packetId, 8, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.Read((char*)data, 67);
+    stream.Read((char*)&data, 67);
     CRemotePlayer* remote = pools->players->GetPlayer(player);
     if (remote)
-        remote->UpdateUnoccupied(data);
+        remote->UpdateUnoccupied(&data);
 }
 // 0x00009b10
 void CNetGame::Packet_TrailerSync(Packet* packet)
@@ -659,14 +659,15 @@ void CNetGame::Packet_TrailerSync(Packet* packet)
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
     if (gameState != StateConnected)
         return;
-    BYTE packetId = 0, data[54];
+    BYTE packetId = 0;
+    LocalTrailerSyncData data;
     WORD player;
     stream.ReadBits(&packetId, 8, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.Read((char*)data, 54);
+    stream.Read((char*)&data, 54);
     CRemotePlayer* remote = pools->players->GetPlayer(player);
     if (remote)
-        remote->UpdateTrailer(data);
+        remote->UpdateTrailer(&data);
 }
 // 0x00009830
 void CNetGame::Packet_BulletSync(Packet* packet)
@@ -674,17 +675,18 @@ void CNetGame::Packet_BulletSync(Packet* packet)
     RakNet::BitStream stream(packet->data, (int)packet->length, false);
     if (gameState != StateConnected)
         return;
-    BYTE packetId = 0, data[40];
+    BYTE packetId = 0;
+    BulletSyncData data;
     DWORD player = 0;
     stream.ReadBits(&packetId, 8, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.Read((char*)data, 40);
+    stream.Read((char*)&data, 40);
     CPlayerPool* players = pools->players;
     if (player < 1004 && players->connected[player])
     {
         CRemotePlayer* remote = players->GetPlayer((WORD)player);
         if (remote)
-            remote->UpdateBullet(data);
+            remote->UpdateBullet(&data);
     }
 }
 // 0x00009930
@@ -695,13 +697,13 @@ void CNetGame::Packet_AimSync(Packet* packet)
     if (gameState != StateConnected)
         return;
     WORD player;
-    BYTE data[31];
+    LocalAimSyncData data;
     stream.ReadBits(&packetId, 8, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.Read((char*)data, 31);
+    stream.Read((char*)&data, 31);
     CRemotePlayer* remote = pools->players->GetPlayer(player);
     if (remote)
-        remote->UpdateAim(data);
+        remote->UpdateAim(&data);
 }
 // 0x00009a20
 void CNetGame::Packet_PassengerSync(Packet* packet)
@@ -711,13 +713,13 @@ void CNetGame::Packet_PassengerSync(Packet* packet)
     if (gameState != StateConnected)
         return;
     WORD player;
-    BYTE data[24];
+    LocalPassengerSyncData data;
     stream.ReadBits(&packetId, 8, true);
     stream.ReadBits((BYTE*)&player, 16, true);
-    stream.Read((char*)data, 24);
+    stream.Read((char*)&data, 24);
     CRemotePlayer* remote = pools->players->GetPlayer(player);
     if (remote)
-        remote->UpdatePassenger(data);
+        remote->UpdatePassenger(&data);
 }
 // 0x00009c00
 void CNetGame::Packet_MarkersSync(Packet* packet)

@@ -50,8 +50,8 @@ const float g_remoteTrailerCorrection = 0.025f;
 // 0x00015600
 void CRemotePlayer::UpdateUnoccupied(const void* data)
 {
-    const BYTE* input = (const BYTE*)data;
-    WORD id = *(const WORD*)input;
+    const UnoccupiedSyncData* sync = (const UnoccupiedSyncData*)data;
+    WORD id = sync->vehicle;
     if (!id || id == 0xffff)
         return;
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -64,9 +64,9 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
         return;
     CMatrix matrix;
     vehicle->GetMatrix(&matrix);
-    memcpy(&matrix.right, input + 3, 12);
-    memcpy(&matrix.up, input + 0xf, 12);
-    const CVector* target = (const CVector*)(input + 0x1b);
+    memcpy(&matrix.right, &sync->right, 12);
+    memcpy(&matrix.up, &sync->up, 12);
+    const CVector* target = &sync->position;
     bool significant = false, teleport = false;
     for (int axis = 0; axis < 3; ++axis)
     {
@@ -120,13 +120,13 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
     {
         matrix.position = *target;
         vehicle->SetMatrix(matrix);
-        vehicle->SetSpeed(*(const CVector*)(input + 0x27));
-        vehicle->SetTurnSpeed(*(const CVector*)(input + 0x33));
+        vehicle->SetSpeed(sync->speed);
+        vehicle->SetTurnSpeed(sync->turnSpeed);
         return;
     }
     vehicle->SetMatrix(matrix);
-    vehicle->SetSpeed(*(const CVector*)(input + 0x27));
-    vehicle->SetTurnSpeed(*(const CVector*)(input + 0x33));
+    vehicle->SetSpeed(sync->speed);
+    vehicle->SetTurnSpeed(sync->turnSpeed);
     CVector speed = {0, 0, 0};
     vehicle->GetSpeed(&speed);
     for (int axis = 0; axis < 3; ++axis)
@@ -163,8 +163,8 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
 // 0x00015950
 void CRemotePlayer::UpdateTrailer(const void* data)
 {
-    const BYTE* input = (const BYTE*)data;
-    WORD id = *(const WORD*)input;
+    const LocalTrailerSyncData* sync = (const LocalTrailerSyncData*)data;
+    WORD id = sync->vehicle;
     if (!id || id == 0xffff)
         return;
     CVehicle* trailer = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(id);
@@ -180,8 +180,8 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     }
     CMatrix matrix;
     trailer->GetMatrix(&matrix);
-    GameQuaternionToMatrixComponents((const GameQuaternion*)(input + 0xe), &matrix);
-    const CVector* target = (const CVector*)(input + 2);
+    GameQuaternionToMatrixComponents(&sync->rotation, &matrix);
+    const CVector* target = &sync->position;
     bool significant = false, teleport = false;
     for (int axis = 0; axis < 3; ++axis)
     {
@@ -235,12 +235,12 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     {
         matrix.position = *target;
         trailer->SetMatrix(matrix);
-        trailer->SetSpeed(*(const CVector*)(input + 0x1e));
-        trailer->SetTurnSpeed(*(const CVector*)(input + 0x2a));
+        trailer->SetSpeed(sync->speed);
+        trailer->SetTurnSpeed(sync->turnSpeed);
         return;
     }
     trailer->SetMatrix(matrix);
-    trailer->SetTurnSpeed(*(const CVector*)(input + 0x2a));
+    trailer->SetTurnSpeed(sync->turnSpeed);
     CVector speed = {0, 0, 0};
     trailer->GetSpeed(&speed);
     for (int axis = 0; axis < 3; ++axis)
@@ -283,12 +283,12 @@ void CRemotePlayer::UpdateBullet(const void* data)
     CPed* ped = *(CPed**)(nativeState + 4);
     if (!ped || !ped->DoesExist())
         return;
-    const BYTE* input = (const BYTE*)data;
+    const BulletSyncData* sync = (const BulletSyncData*)data;
     PedBulletData bullet = {0};
-    memcpy(&bullet.origin, input + 3, 12);
-    memcpy(&bullet.target, input + 0xf, 12);
-    memcpy(&bullet.offset, input + 0x1b, 12);
-    BYTE type = input[0];
+    memcpy(&bullet.origin, &sync->origin, 12);
+    memcpy(&bullet.target, &sync->target, 12);
+    memcpy(&bullet.offset, &sync->offset, 12);
+    BYTE type = sync->type;
     if (type)
     {
         for (int axis = 0; axis < 3; ++axis)
@@ -321,7 +321,7 @@ void CRemotePlayer::UpdateBullet(const void* data)
             CPlayerPool* players = ((CNetGame*)g_pNetGame)->pools->players;
             if (players)
             {
-                WORD player = *(WORD*)(input + 1);
+                WORD player = sync->targetId;
                 if (player == players->localId)
                     bullet.entity = g_pGame->GetPlayerPed()->m_pGamePed;
                 else
@@ -342,7 +342,7 @@ void CRemotePlayer::UpdateBullet(const void* data)
             CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
             if (vehicles)
             {
-                WORD vehicle = *(WORD*)(input + 1);
+                WORD vehicle = sync->targetId;
                 if (vehicles->DoesExist(vehicle))
                     bullet.entity = vehicles->Get(vehicle)->m_pGameVehicle;
             }
@@ -350,15 +350,15 @@ void CRemotePlayer::UpdateBullet(const void* data)
     }
     if ((*(CPed**)(nativeState + 4))->DoesExist())
     {
-        BYTE weapon = input[0x27];
+        BYTE weapon = sync->weapon;
         if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
         {
             (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 1);
-            weapon = input[0x27];
+            weapon = sync->weapon;
             if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
             {
                 (*(CPed**)(nativeState + 4))->GiveWeapon(weapon, 9999);
-                (*(CPed**)(nativeState + 4))->SetArmedWeapon(input[0x27], 1);
+                (*(CPed**)(nativeState + 4))->SetArmedWeapon(sync->weapon, 1);
             }
         }
     }
@@ -1236,17 +1236,18 @@ void CRemotePlayer::OnEnterVehicle()
 void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
+    const LocalOnfootSyncData* sync = (const LocalOnfootSyncData*)data;
     *(DWORD*)(nativeState + 8) = 0;
     if (timestamp && (int)(timestamp - *(DWORD*)(nativeState + 0x1c9)) < 0)
         return;
     *(DWORD*)(nativeState + 0x1c9) = timestamp;
     for (int i = 0; i < 68; i += 4)
         *(DWORD*)(nativeState + 0x3c + i) = *(const DWORD*)(input + i);
-    *(float*)(nativeState + 0x1b0) = (float)input[0x22];
-    *(float*)(nativeState + 0x1ac) = (float)input[0x23];
+    *(float*)(nativeState + 0x1b0) = (float)sync->health;
+    *(float*)(nativeState + 0x1ac) = (float)sync->armour;
     nativeState[0x1c4] = 16;
     *(DWORD*)(nativeState + 0x1c5) = GetTickCount();
-    nativeState[0x18] = input[0x25];
+    nativeState[0x18] = sync->specialAction;
     if (*(int*)(nativeState + 0x7c) < 0)
         *(DWORD*)(nativeState + 0x7c) = 0;
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -1259,6 +1260,7 @@ void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
 void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
+    const LocalIncarSyncData* sync = (const LocalIncarSyncData*)data;
     if (timestamp && (int)(timestamp - *(DWORD*)(nativeState + 0x1c9)) < 0)
         return;
     *(DWORD*)(nativeState + 0x1c9) = timestamp;
@@ -1266,11 +1268,11 @@ void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
         *(DWORD*)(nativeState + 0x80 + i) = *(const DWORD*)(input + i);
     *(WORD*)(nativeState + 0xbc) = *(const WORD*)(input + 60);
     nativeState[0xbe] = input[62];
-    *(WORD*)(nativeState + 2) = *(const WORD*)input;
-    *(CVehicle**)(nativeState + 8) = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(*(const WORD*)input);
+    *(WORD*)(nativeState + 2) = sync->vehicle;
+    *(CVehicle**)(nativeState + 8) = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(sync->vehicle);
     nativeState[0x1b] = 0;
-    *(float*)(nativeState + 0x1b0) = (float)input[0x34];
-    *(float*)(nativeState + 0x1ac) = (float)input[0x35];
+    *(float*)(nativeState + 0x1b0) = (float)sync->pedHealth;
+    *(float*)(nativeState + 0x1ac) = (float)sync->armour;
     nativeState[0x1c4] = 17;
     *(DWORD*)(nativeState + 0x1c5) = GetTickCount();
     nativeState[0x18] = 0;
@@ -1288,13 +1290,14 @@ void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
 void CRemotePlayer::UpdatePassenger(const void* data)
 {
     const BYTE* input = (const BYTE*)data;
+    const LocalPassengerSyncData* sync = (const LocalPassengerSyncData*)data;
     for (int i = 0; i < 24; i += 4)
         *(DWORD*)(nativeState + 0x24 + i) = *(const DWORD*)(input + i);
-    *(WORD*)(nativeState + 2) = *(const WORD*)input;
-    nativeState[0x1b] = input[2] & 0x3f;
+    *(WORD*)(nativeState + 2) = sync->vehicle;
+    nativeState[0x1b] = sync->seatFlags & 0x3f;
     *(CVehicle**)(nativeState + 8) = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(*(WORD*)(nativeState + 2));
-    *(float*)(nativeState + 0x1b0) = (float)input[4];
-    *(float*)(nativeState + 0x1ac) = (float)input[5];
+    *(float*)(nativeState + 0x1b0) = (float)sync->health;
+    *(float*)(nativeState + 0x1ac) = (float)sync->armour;
     nativeState[0x1c4] = 18;
     *(DWORD*)(nativeState + 0x1c5) = GetTickCount();
     nativeState[0x18] = 0;
@@ -1307,23 +1310,23 @@ void CRemotePlayer::UpdatePassenger(const void* data)
 // 0x000154a0
 void CRemotePlayer::UpdateAim(const void* data)
 {
-    const BYTE* input = (const BYTE*)data;
+    const LocalAimSyncData* sync = (const LocalAimSyncData*)data;
     CPed* ped = *(CPed**)(nativeState + 4);
     if (!ped)
         return;
-    AimStuff::SetPlayerCameraMode(input[0], *((BYTE*)ped + 0x2b0));
+    AimStuff::SetPlayerCameraMode(sync->cameraMode, *((BYTE*)ped + 0x2b0));
     CameraAim aim;
-    memcpy(&aim.front, input + 1, 12);
+    memcpy(&aim.front, sync->vectors, 12);
     CVector direction;
-    memcpy(&direction, input + 1, 12);
+    memcpy(&direction, sync->vectors, 12);
     CVector up = {0, 0, 0};
     GameBuildAimUpVector(&direction, &up);
     memcpy(&aim.up, &up, 12);
-    memcpy(&aim.source, input + 13, 12);
-    memcpy(&aim.sourceBeforeLookBehind, input + 13, 12);
+    memcpy(&aim.source, sync->vectors + 12, 12);
+    memcpy(&aim.sourceBeforeLookBehind, sync->vectors + 12, 12);
     (*(CPed**)(nativeState + 4))->SetAim(&aim);
-    (*(CPed**)(nativeState + 4))->SetAimZ(*(const float*)(input + 25));
-    int aspect = input[30], zoom = input[29] & 0x3f;
+    (*(CPed**)(nativeState + 4))->SetAimZ(sync->aimZ);
+    int aspect = sync->aspect, zoom = sync->zoomWeapon & 0x3f;
     float aspectValue, zoomValue;
     // clang-format off
     __asm {
@@ -1338,7 +1341,7 @@ void CRemotePlayer::UpdateAim(const void* data)
     ped = *(CPed**)(nativeState + 4);
     AimStuff::SetPlayerCamera(*((BYTE*)ped + 0x2b0), zoomValue, aspectValue);
     DWORD* slot = (DWORD*)(*(CPed**)(nativeState + 4))->GetCurrentWeaponSlot();
-    BYTE weapon = input[29] >> 6;
+    BYTE weapon = sync->zoomWeapon >> 6;
     if (weapon == 3)
         slot[1] = 2;
     else if (weapon != 2)
