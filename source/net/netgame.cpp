@@ -779,7 +779,7 @@ void CNetGame::ShutdownForRestart()
         CRemotePlayer* remote = pools->players->GetPlayer(id);
         if (remote)
         {
-            remote->nativeState[0x19] = 0xff;
+            remote->m_state.team = 0xff;
             remote->ResetData();
         }
     }
@@ -830,7 +830,7 @@ void CNetGame::ProcessPools()
         if ((DWORD)RakNet::GetTime() - modelWaitTick <= 1000)
             return;
         modelWaitActive = 0;
-        if (*(DWORD*)(pools->players->local->nativeState + 0xf4))
+        if (pools->players->local->m_state.active)
         {
             g_pGame->GetPlayerPed()->SetControllable(TRUE);
             g_pGame->GetPlayerPed()->SetCollisionFlag(TRUE);
@@ -892,8 +892,7 @@ void CNetGame::ProcessPools()
 // 0x00008750
 void CNetGame::ProcessCustomModelWait()
 {
-    if (g_customModels && !modelWaitActive && *(DWORD*)(pools->players->local->nativeState + 0xf4) && *(DWORD*)((BYTE*)g_customModels + 0x217) &&
-        g_customModels->MarkResourceRequests() > 0)
+    if (g_customModels && !modelWaitActive && pools->players->local->m_state.active && *(DWORD*)((BYTE*)g_customModels + 0x217) && g_customModels->MarkResourceRequests() > 0)
     {
         modelWaitActive = 1;
         g_pGame->GetPlayerPed()->SetControllable(FALSE);

@@ -236,13 +236,13 @@ void CVehiclePool::ProcessWaitingList()
 void CVehiclePool::SendDestroyNotification(WORD id)
 {
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    if (*(WORD*)(local->nativeState + 0xfe) == id)
+    if (local->m_state.lastVehicle == id)
     {
         RakNet::BitStream stream;
         stream.Write(id);
         (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_vehiclePoolDestroyRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
         local = ((CNetGame*)g_pNetGame)->pools->players->local;
-        *(WORD*)(local->nativeState + 0xfe) = 0xffff;
+        local->m_state.lastVehicle = 0xffff;
     }
 }
 

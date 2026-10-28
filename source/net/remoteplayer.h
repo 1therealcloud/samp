@@ -33,7 +33,9 @@ struct RemotePlayerState
     BYTE unknown1b4[12];
     DWORD appliedAnimation;
     BYTE updateType;
-    DWORD lastUpdateTick, lastNetworkTimestamp, unknown1cd;
+    DWORD lastUpdateTick, lastNetworkTimestamp;
+    // Script ApplyAnimation/ClearAnimations RPC flag, stored even without a ped.
+    DWORD scriptedAnimation;
     DWORD status;
     CVector headDirection;
     DWORD lastHeadUpdateTick, lastHeadTaskTick;
@@ -199,6 +201,7 @@ typedef char RemoteAnimationOffset[(offsetof(RemotePlayerState, appliedAnimation
 typedef char RemoteUpdateTypeOffset[(offsetof(RemotePlayerState, updateType) == 0x1c4) ? 1 : -1];
 typedef char RemoteUpdateTickOffset[(offsetof(RemotePlayerState, lastUpdateTick) == 0x1c5) ? 1 : -1];
 typedef char RemoteTimestampOffset[(offsetof(RemotePlayerState, lastNetworkTimestamp) == 0x1c9) ? 1 : -1];
+typedef char RemoteScriptedAnimationOffset[(offsetof(RemotePlayerState, scriptedAnimation) == 0x1cd) ? 1 : -1];
 typedef char RemoteStatusOffset[(offsetof(RemotePlayerState, status) == 0x1d1) ? 1 : -1];
 typedef char RemoteHeadDirectionOffset[(offsetof(RemotePlayerState, headDirection) == 0x1d5) ? 1 : -1];
 typedef char RemoteHeadTickOffset[(offsetof(RemotePlayerState, lastHeadUpdateTick) == 0x1e1) ? 1 : -1];

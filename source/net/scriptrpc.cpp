@@ -192,12 +192,12 @@ void ScrAttachObjectToPlayer(RPCParameters* parameters)
     CPlayerPool* players = pools->players;
     CPed* ped;
     if (player == players->localId)
-        ped = *(CPed**)players->local->nativeState;
+        ped = players->local->m_state.ped;
     else
     {
         if (player > 1004 || !players->players[player] || !players->players[player]->remote)
             return;
-        ped = *(CPed**)(players->players[player]->remote->nativeState + 4);
+        ped = players->players[player]->remote->m_state.ped;
     }
     Scripting::ProcessCommand(&g_rpcAttachObjectToPlayerCommand, *(DWORD*)((BYTE*)object + 0x44), *(DWORD*)((BYTE*)ped + 0x44), (double)offset.x, (double)offset.y,
                               (double)offset.z, (double)rotation.x, (double)rotation.y, (double)rotation.z);
@@ -220,13 +220,13 @@ void ScrSetPlayerAttachedObject(RPCParameters* parameters)
         return;
     CPed* ped;
     if (player == pool->localId)
-        ped = *(CPed**)pool->local->nativeState;
+        ped = pool->local->m_state.ped;
     else
     {
         if (player >= 1004 || !pool->connected[player])
             return;
         CRemotePlayer* remote = pool->players[player] ? pool->players[player]->remote : 0;
-        ped = *(CPed**)(remote->nativeState + 4);
+        ped = remote->m_state.ped;
     }
     if (ped)
     {
@@ -308,7 +308,7 @@ void ScrAttachCameraToObject(RPCParameters* parameters)
     if (id <= 2100 && pool->active[id])
     {
         CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-        *(DWORD*)(local->nativeState + 0x318) = 1;
+        local->m_state.spectateProcessed = 1;
         CEntity* object = ((CNetGame*)g_pNetGame)->pools->objects->Get(id);
         g_pGame->m_pCamera->Attach(object);
     }
@@ -335,7 +335,7 @@ void ScrInterpolateCamera(RPCParameters* parameters)
     if (time > 0)
     {
         CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-        *(DWORD*)(local->nativeState + 0x318) = 1;
+        local->m_state.spectateProcessed = 1;
         if (move)
             g_pGame->m_pCamera->SetMoveVector(&from, &to, time, mode);
         else
@@ -466,13 +466,13 @@ void ScrSetPlayerFightingStyle(RPCParameters* parameters)
     {
         CPed* ped;
         if (id == pool->localId)
-            ped = *(CPed**)pool->local->nativeState;
+            ped = pool->local->m_state.ped;
         else
         {
             if (id >= 1004 || !pool->connected[id])
                 return;
             CRemotePlayer* remote = pool->GetPlayer(id);
-            ped = *(CPed**)(remote->nativeState + 4);
+            ped = remote->m_state.ped;
         }
         if (ped)
             ped->SetFightingStyle(style);
@@ -487,7 +487,7 @@ void ScrSetPlayerAmmo(RPCParameters* parameters)
     stream.Read(weapon);
     stream.Read(ammo);
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    (*(CPed**)local->nativeState)->SetWeaponAmmo(weapon, ammo);
+    local->m_state.ped->SetWeaponAmmo(weapon, ammo);
 }
 // 0x00019240
 void ScrSetPlayerTeam(RPCParameters* parameters)
@@ -499,12 +499,12 @@ void ScrSetPlayerTeam(RPCParameters* parameters)
     stream.Read(id);
     stream.Read(team);
     if (id == pool->localId)
-        pool->local->nativeState[0x130] = team;
+        pool->local->m_state.team = team;
     else if (id <= 1004)
     {
         CPlayerInfo* info = pool->players[id];
         if (info && info->remote)
-            info->remote->nativeState[0x19] = team;
+            info->remote->m_state.team = team;
     }
 }
 // 0x00018c80
@@ -528,14 +528,14 @@ void ScrSetPlayerSkin(RPCParameters* parameters)
         return;
     }
     if (id == pool->localId)
-        (*(CPed**)pool->local->nativeState)->SetModelIndex(model);
+        pool->local->m_state.ped->SetModelIndex(model);
     else if (id < 1004 && pool->connected[id])
     {
         CRemotePlayer* remote = pool->GetPlayer(id);
-        if (*(CPed**)(remote->nativeState + 4) && remote->nativeState[0x1a])
+        if (remote->m_state.ped && remote->m_state.playerState)
         {
             remote = pool->GetPlayer(id);
-            CPed* ped = *(CPed**)(remote->nativeState + 4);
+            CPed* ped = remote->m_state.ped;
             if (ped)
                 ped->SetModelIndex(model);
         }
@@ -569,14 +569,14 @@ void ScrApplyAnimation(RPCParameters* parameters)
     {
         CPed* ped;
         if (id == pool->localId)
-            ped = *(CPed**)pool->local->nativeState;
+            ped = pool->local->m_state.ped;
         else
         {
             if (id >= 1004 || !pool->connected[id] || !pool->players[id] || !pool->players[id]->remote)
                 return;
             CRemotePlayer* remote = pool->players[id]->remote;
-            ped = *(CPed**)(remote->nativeState + 4);
-            *(DWORD*)(remote->nativeState + 0x1cd) = 1;
+            ped = remote->m_state.ped;
+            remote->m_state.scriptedAnimation = 1;
         }
         if (ped)
             ped->ApplyAnimation(name, library, speed, loop, lockX, lockY, freeze, time);
@@ -593,14 +593,14 @@ void ScrClearAnimations(RPCParameters* parameters)
     {
         CPed* ped;
         if (id == pool->localId)
-            ped = *(CPed**)pool->local->nativeState;
+            ped = pool->local->m_state.ped;
         else
         {
             if (id >= 1004 || !pool->connected[id] || !pool->players[id] || !pool->players[id]->remote)
                 return;
             CRemotePlayer* remote = pool->players[id]->remote;
-            ped = *(CPed**)(remote->nativeState + 4);
-            *(DWORD*)(remote->nativeState + 0x1cd) = 0;
+            ped = remote->m_state.ped;
+            remote->m_state.scriptedAnimation = 0;
         }
         if (ped)
         {
@@ -693,10 +693,10 @@ void ScrDestroyObject(RPCParameters* parameters)
     CEntity* object = pool->Get(id);
     if (object)
     {
-        if (local && *(CEntity**)(local->nativeState + 0x2de) == object)
+        if (local && local->m_state.surfingEntity == object)
         {
-            *(CEntity**)(local->nativeState + 0x2de) = 0;
-            *(DWORD*)(local->nativeState + 0x2e6) = 0;
+            local->m_state.surfingEntity = 0;
+            local->m_state.surfingMode = 0;
         }
         pool->Delete(id);
     }
@@ -882,7 +882,7 @@ void ScrShowPlayerNametagForPlayer(RPCParameters* parameters)
     if (id < 1004 && pool->connected[id])
     {
         CRemotePlayer* remote = pool->GetPlayer(id);
-        *(DWORD*)(remote->nativeState + 0x10) = show != 0;
+        remote->m_state.showNameTag = show != 0;
     }
 }
 // 0x000197a0
@@ -1050,7 +1050,7 @@ void ScrPlayerSpectatePlayer(RPCParameters* parameters)
     stream.Read(mode);
     mode = mode == 2 ? 15 : mode == 3 ? 14 : 4;
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    local->nativeState[0x312] = mode;
+    local->m_state.spectateCameraMode = mode;
     local->SpectatePlayer(id);
 }
 // 0x0001c010
@@ -1063,7 +1063,7 @@ void ScrPlayerSpectateVehicle(RPCParameters* parameters)
     stream.Read(mode);
     mode = mode == 2 ? 15 : mode == 3 ? 14 : 3;
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    local->nativeState[0x312] = mode;
+    local->m_state.spectateCameraMode = mode;
     local->SpectateVehicle(id);
 }
 // 0x00019130
@@ -1084,7 +1084,7 @@ void ScrRemovePlayerFromVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    (*(CPed**)local->nativeState)->ExitVehicle();
+    local->m_state.ped->ExitVehicle();
 }
 // 0x00019420
 void ScrDisplayGametext(RPCParameters* parameters)
@@ -1399,9 +1399,9 @@ void ScrSetPlayerPosition(RPCParameters* parameters)
             stream.Read(position.x);
             stream.Read(position.y);
             stream.Read(position.z);
-            *(DWORD*)(local->nativeState + 0x2e6) = 0;
+            local->m_state.surfingMode = 0;
             local->SetSurfingEntity(0, 0);
-            (*(CPed**)local->nativeState)->Teleport(position);
+            local->m_state.ped->Teleport(position);
         }
     }
 }
@@ -1415,9 +1415,9 @@ void ScrSetPlayerPositionFindZ(RPCParameters* parameters)
     stream.Read(position.y);
     stream.Read(position.z);
     position.z = g_pGame->FindGroundZ(position.x, position.y, position.z) + 1.5f;
-    *(DWORD*)(local->nativeState + 0x2e6) = 0;
+    local->m_state.surfingMode = 0;
     local->SetSurfingEntity(0, 0);
-    (*(CPed**)local->nativeState)->Teleport(position);
+    local->m_state.ped->Teleport(position);
 }
 // 0x00018350
 void ScrSetPlayerVelocity(RPCParameters* parameters)
@@ -1465,14 +1465,14 @@ void ScrForceClassSelection(RPCParameters* parameters)
 {
     (void)parameters;
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    *(DWORD*)(local->nativeState + 0x2fe) = 1;
+    local->m_state.wantsAnotherClass = 1;
 }
 // 0x00017bb0
 void ScrResetPlayerWeapons(RPCParameters* parameters)
 {
     (void)parameters;
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    (*(CPed**)local->nativeState)->ClearWeapons();
+    local->m_state.ped->ClearWeapons();
 }
 // 0x0001a170
 void ScrGivePlayerWeapon(RPCParameters* parameters)
@@ -1482,7 +1482,7 @@ void ScrGivePlayerWeapon(RPCParameters* parameters)
     stream.Read(weapon);
     stream.Read(ammo);
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    (*(CPed**)local->nativeState)->GiveWeapon(weapon, ammo);
+    local->m_state.ped->GiveWeapon(weapon, ammo);
 }
 // 0x0001cb40
 void ScrGangZoneCreate(RPCParameters* parameters)
@@ -1576,7 +1576,7 @@ void ScrSetPlayerHealth(RPCParameters* parameters)
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     float health;
     stream.Read(health);
-    (*(CPed**)local->nativeState)->SetHealth(health);
+    local->m_state.ped->SetHealth(health);
 }
 // 0x0001a690
 void ScrSetPlayerArmor(RPCParameters* parameters)
@@ -1585,7 +1585,7 @@ void ScrSetPlayerArmor(RPCParameters* parameters)
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     float armour;
     stream.Read(armour);
-    (*(CPed**)local->nativeState)->SetArmour(armour);
+    local->m_state.ped->SetArmour(armour);
 }
 // 0x00019530
 void ScrSetPlayerInterior(RPCParameters* parameters)

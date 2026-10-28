@@ -234,15 +234,15 @@ void ScrWorldPlayerAdd(RPCParameters* parameters)
             g_pChat->AddDebugMessage(g_rpcCouldNotSpawnPlayer, (unsigned)id);
         return;
     }
-    CPed* ped = *(CPed**)(remote->nativeState + 4);
+    CPed* ped = remote->m_state.ped;
     if (ped)
         for (int i = 0; i < 11; ++i)
             ped->SetWeaponSkill(i, skills[i]);
     if (team != 0xff)
-        remote->nativeState[0x19] = team;
+        remote->m_state.team = team;
     if (pool->GetPlayerInfoFlag(id))
     {
-        ped = *(CPed**)(remote->nativeState + 4);
+        ped = remote->m_state.ped;
         if (ped)
             ped->SetImmunities(0, 1, 1, 0, 0);
     }
@@ -314,7 +314,7 @@ void ScrWorldVehicleRemove(RPCParameters* parameters)
     }
     if (local)
     {
-        CEntity* surfing = *(CEntity**)(local->nativeState + 0x2de);
+        CEntity* surfing = local->m_state.surfingEntity;
         if (surfing == vehicles->Get(id))
             local->ClearSurfingState();
     }
@@ -322,7 +322,7 @@ void ScrWorldVehicleRemove(RPCParameters* parameters)
         if (players->connected[player])
         {
             CRemotePlayer* remote = players->players[player] ? players->players[player]->remote : 0;
-            if (*(CPed**)(remote->nativeState + 4) && remote->nativeState[0x1a] && *(CVehicle**)(remote->nativeState + 8) == vehicle)
+            if (remote->m_state.ped && remote->m_state.playerState && remote->m_state.vehicle == vehicle)
                 remote->OnExitVehicle();
         }
     for (WORD other = 1; other < 2000; ++other)
@@ -506,10 +506,10 @@ void RequestSpawn(RPCParameters* parameters)
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     stream.Read(outcome);
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
-    if (outcome == 2 || (outcome && *(DWORD*)(local->nativeState + 0x306)))
+    if (outcome == 2 || (outcome && local->m_state.waitingForSpawnReply))
         local->Spawn();
     else
-        *(DWORD*)(local->nativeState + 0x306) = 0;
+        local->m_state.waitingForSpawnReply = 0;
 }
 // 0x00010410
 void ConnectionRejected(RPCParameters* parameters)
@@ -820,7 +820,7 @@ void ScrSetPlayerSkillLevel(RPCParameters* parameters)
             CRemotePlayer* remote = pool->players[player]->remote;
             if (!remote || !remote->IsActive())
                 return;
-            ped = *(CPed**)(remote->nativeState + 4);
+            ped = remote->m_state.ped;
         }
         ped->SetWeaponSkill(skill, value);
     }

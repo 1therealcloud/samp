@@ -438,9 +438,9 @@ void CRemotePlayer::Process()
             }
             animation = m_state.onfoot.animation;
             m_state.appliedAnimation = animation;
-            m_state.unknown1cd = 0;
+            m_state.scriptedAnimation = 0;
         }
-        if (!m_state.unknown1cd && !animation && m_state.ped->HasTaskType401())
+        if (!m_state.scriptedAnimation && !animation && m_state.ped->HasTaskType401())
             m_state.ped->ApplyAnimation(g_remoteCarryAnimation, g_remoteCarryLibrary, 4.0f, 0, 0, 0, 0, 0);
         m_state.vehicle = 0;
         m_state.updateType = 0;
@@ -1385,7 +1385,7 @@ CRemotePlayer::CRemotePlayer()
     m_state.marker = 0;
     m_state.specialAction = 0;
     m_state.rawFlag1c = 0;
-    m_state.unknown1cd = 0;
+    m_state.scriptedAnimation = 0;
     m_state.lastHeadUpdateTick = tick();
     m_state.lastHeadTaskTick = tick();
     m_state.lastUpdateTick = tick();

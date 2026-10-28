@@ -3309,7 +3309,7 @@ BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
         return FALSE;
     if (!(*(BYTE**)(net->nativeState + 0x3d5))[0x22])
         return FALSE;
-    BYTE team = players->local->nativeState[0x130];
+    BYTE team = players->local->m_state.team;
     if (team == 0xff)
         return FALSE;
     return net->pools->players->GetPlayer(id)->nativeState[0x19] == team ? TRUE : FALSE;

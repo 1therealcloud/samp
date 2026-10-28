@@ -46,8 +46,8 @@ void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD 
                 car = vehicles->Get(vehicle);
                 if (!car || !remote || !local)
                     return;
-                CPed* localPed = *(CPed**)local->nativeState;
-                CPed* remotePed = *(CPed**)(remote->nativeState + 4);
+                CPed* localPed = local->m_state.ped;
+                CPed* remotePed = remote->m_state.ped;
                 if (!localPed || !remotePed)
                     return;
                 if (!remotePed->IsInVehicle() || !localPed->IsInVehicle() || remotePed->IsPassenger() || !localPed->IsPassenger())
@@ -55,7 +55,7 @@ void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD 
                 DWORD remoteRef = remotePed->GetVehicleRef();
                 if (remoteRef != localPed->GetVehicleRef())
                     return;
-                CVehicle* remoteVehicle = *(CVehicle**)(remote->nativeState + 8);
+                CVehicle* remoteVehicle = remote->m_state.vehicle;
                 if (param2)
                 {
                     if (remoteVehicle)

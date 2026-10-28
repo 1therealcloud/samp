@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <string>
 #include <windows.h>
-// Native allocation extent0x2F3E; lifecycle and some field semantics remain open.
+// Packed native pool; inclusive ID1004 accesses retain observed adjacent storage behavior.
 class CRemotePlayer;
 class CLocalPlayer;
 class CObject;
@@ -90,10 +90,10 @@ public:
     // Local accessories first, then connected remote-player accessories.
     // 0x00013a40
     CObject* FindAccessory(void* backend);
-    // Observed pose/accessory frame pass; complete pool layout remains unknown.
+    // Local pose/accessories first, then remote slots whose connected DWORD equals1.
     // 0x00013840
     void Native013840();
-    // Observed lookup prefix; no complete allocation layout.
+    // Matches the GTA ped backend and retains live pool reloads after backend calls.
     // 0x000137c0
     WORD Find(void* ped);
     // Native accepts player <=1004; allocation adjacency is not established here.
