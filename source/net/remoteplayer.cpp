@@ -2,27 +2,27 @@
 // 0x00017790
 void CRemotePlayer::ShowNameTag(BYTE show)
 {
-    *(DWORD*)(nativeState + 0x10) = show != 0;
+    m_state.showNameTag = show != 0;
 }
 // 0x000739c0
 float CRemotePlayer::GetReportedHealth()
 {
-    return *(float*)(nativeState + 0x1b0);
+    return m_state.reportedHealth;
 }
 // 0x000739d0
 float CRemotePlayer::GetReportedArmour()
 {
-    return *(float*)(nativeState + 0x1ac);
+    return m_state.reportedArmour;
 }
 // 0x00008180
 void CRemotePlayer::SetTeam(BYTE team)
 {
-    nativeState[0x19] = team;
+    m_state.team = team;
 }
 // 0x000a21e0
 BYTE CRemotePlayer::GetTeam()
 {
-    return nativeState[0x19];
+    return m_state.team;
 }
 #include "chatwindow.h"
 #include "game/aimstuff.h"
@@ -59,7 +59,7 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
         return;
     CVehicle* vehicle = vehicles->Get(id);
     // Native publishes the owner even for an invalid/nonexistent vehicle index.
-    *(WORD*)((BYTE*)vehicles + 0x8e34 + id * 2) = *(WORD*)nativeState;
+    *(WORD*)((BYTE*)vehicles + 0x8e34 + id * 2) = m_state.id;
     if (!vehicle || vehicle->HasDriver() || vehicle->GetTractor())
         return;
     CMatrix matrix;
@@ -168,7 +168,7 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     if (!id || id == 0xffff)
         return;
     CVehicle* trailer = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(id);
-    CVehicle* tractor = *(CVehicle**)(nativeState + 8);
+    CVehicle* tractor = m_state.vehicle;
     if (!tractor || !trailer)
         return;
     if (!trailer->IsTrailer() && !tractor->IsTowtruck())
@@ -280,7 +280,7 @@ const float g_remoteBulletOffsetMaximum = 300.0f;
 // 0x00016010
 void CRemotePlayer::UpdateBullet(const void* data)
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped || !ped->DoesExist())
         return;
     const BulletSyncData* sync = (const BulletSyncData*)data;
@@ -326,11 +326,11 @@ void CRemotePlayer::UpdateBullet(const void* data)
                     bullet.entity = g_pGame->GetPlayerPed()->m_pGamePed;
                 else
                 {
-                    if (player == *(WORD*)nativeState)
+                    if (player == m_state.id)
                         return;
                     if (players->IsConnected(player))
                     {
-                        CPed* target = *(CPed**)(players->GetPlayer(player)->nativeState + 4);
+                        CPed* target = players->GetPlayer(player)->m_state.ped;
                         if (target)
                             bullet.entity = target->m_pGamePed;
                     }
@@ -348,31 +348,31 @@ void CRemotePlayer::UpdateBullet(const void* data)
             }
         }
     }
-    if ((*(CPed**)(nativeState + 4))->DoesExist())
+    if (m_state.ped->DoesExist())
     {
         BYTE weapon = sync->weapon;
-        if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+        if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
         {
-            (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 1);
+            m_state.ped->SetArmedWeapon(weapon, 1);
             weapon = sync->weapon;
-            if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+            if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
             {
-                (*(CPed**)(nativeState + 4))->GiveWeapon(weapon, 9999);
-                (*(CPed**)(nativeState + 4))->SetArmedWeapon(sync->weapon, 1);
+                m_state.ped->GiveWeapon(weapon, 9999);
+                m_state.ped->SetArmedWeapon(sync->weapon, 1);
             }
         }
     }
-    (*(CPed**)(nativeState + 4))->SetBulletData(&bullet);
-    (*(CPed**)(nativeState + 4))->FireWeapon();
+    m_state.ped->SetBulletData(&bullet);
+    m_state.ped->FireWeapon();
 }
 // 0x00016230
 void CRemotePlayer::SetState(BYTE state)
 {
-    BYTE previous = nativeState[0x1a];
+    BYTE previous = m_state.playerState;
     if (state != previous)
     {
         ChangeState(state, previous);
-        nativeState[0x1a] = state;
+        m_state.playerState = state;
     }
 }
 // 0x00118218
@@ -386,233 +386,229 @@ const char g_remoteCarryLibrary[] = "CARRY";
 // 0x00016310
 void CRemotePlayer::Process()
 {
-    if (!*(CPed**)(nativeState + 4))
+    if (!m_state.ped)
         return;
-    if (!nativeState[0x1a])
+    if (!m_state.playerState)
     {
         ResetData();
-        g_pGame->RemovePed(*(CPed**)(nativeState + 4));
-        *(DWORD*)(nativeState + 4) = 0;
+        g_pGame->RemovePed(m_state.ped);
+        m_state.ped = 0;
         return;
     }
-    DWORD elapsed = GetTickCount() - *(DWORD*)(nativeState + 0x1c5);
-    if (nativeState[0x1a] == 17 && nativeState[0x1c4] == 16 && !(*(CPed**)(nativeState + 4))->IsInVehicle())
+    DWORD elapsed = GetTickCount() - m_state.lastUpdateTick;
+    if (m_state.playerState == 17 && m_state.updateType == 16 && !m_state.ped->IsInVehicle())
     {
         if (!HasSurfingTarget())
         {
-            SetOnfootTarget((CVector*)(nativeState + 0x42), (CVector*)(nativeState + 0x62));
+            SetOnfootTarget(&m_state.onfoot.position, &m_state.onfoot.speed);
             UpdateOnfootSpeedAndPosition();
         }
         else
-            SetOnfootTarget((CVector*)(nativeState + 0x42), (CVector*)(nativeState + 0x62));
-        if ((*(CPed**)(nativeState + 4))->DoesExist())
+            SetOnfootTarget(&m_state.onfoot.position, &m_state.onfoot.speed);
+        if (m_state.ped->DoesExist())
         {
-            BYTE weapon = nativeState[0x60] & 0x3f;
-            if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+            BYTE weapon = m_state.onfoot.weaponAim & 0x3f;
+            if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
             {
-                (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 0);
-                weapon = nativeState[0x60] & 0x3f;
-                if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+                m_state.ped->SetArmedWeapon(weapon, 0);
+                weapon = m_state.onfoot.weaponAim & 0x3f;
+                if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
                 {
-                    (*(CPed**)(nativeState + 4))->GiveWeapon(weapon, 9999);
-                    (*(CPed**)(nativeState + 4))->SetArmedWeapon(nativeState[0x60] & 0x3f, 0);
+                    m_state.ped->GiveWeapon(weapon, 9999);
+                    m_state.ped->SetArmedWeapon(m_state.onfoot.weaponAim & 0x3f, 0);
                 }
             }
         }
-        if (nativeState[0x40] & 0x80)
+        if (*(BYTE*)&m_state.onfoot.keys & 0x80)
         {
-            if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() == 34 || (BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() == 35 ||
-                (BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() == 36)
-                (*(CPed**)(nativeState + 4))->SetState(12);
+            if ((BYTE)m_state.ped->GetCurrentWeapon() == 34 || (BYTE)m_state.ped->GetCurrentWeapon() == 35 || (BYTE)m_state.ped->GetCurrentWeapon() == 36)
+                m_state.ped->SetState(12);
         }
-        else if ((*(CPed**)(nativeState + 4))->GetState() == 12)
-            (*(CPed**)(nativeState + 4))->SetState(1);
-        DWORD animation = *(DWORD*)(nativeState + 0x7c);
-        if (*(DWORD*)(nativeState + 0x1c0) != animation)
+        else if (m_state.ped->GetState() == 12)
+            m_state.ped->SetState(1);
+        DWORD animation = m_state.onfoot.animation;
+        if (m_state.appliedAnimation != animation)
         {
             if (animation)
-                (*(CPed**)(nativeState + 4))->ApplyPackedAnimation(animation);
-            if (!*(DWORD*)(nativeState + 0x7c) && *(DWORD*)(nativeState + 0x1c0) == 0x1804067c)
+                m_state.ped->ApplyPackedAnimation(animation);
+            if (!m_state.onfoot.animation && m_state.appliedAnimation == 0x1804067c)
             {
-                (*(CPed**)(nativeState + 4))->ApplyAnimation(g_remoteVendingAnimation, g_remoteVendingLibrary, 4.0f, 0, 0, 0, 0, -1);
-                *(DWORD*)(nativeState + 0x7c) = 0xffffffff;
+                m_state.ped->ApplyAnimation(g_remoteVendingAnimation, g_remoteVendingLibrary, 4.0f, 0, 0, 0, 0, -1);
+                m_state.onfoot.animation = 0xffffffff;
             }
-            animation = *(DWORD*)(nativeState + 0x7c);
-            *(DWORD*)(nativeState + 0x1c0) = animation;
-            *(DWORD*)(nativeState + 0x1cd) = 0;
+            animation = m_state.onfoot.animation;
+            m_state.appliedAnimation = animation;
+            m_state.unknown1cd = 0;
         }
-        if (!*(DWORD*)(nativeState + 0x1cd) && !animation && (*(CPed**)(nativeState + 4))->HasTaskType401())
-            (*(CPed**)(nativeState + 4))->ApplyAnimation(g_remoteCarryAnimation, g_remoteCarryLibrary, 4.0f, 0, 0, 0, 0, 0);
-        *(DWORD*)(nativeState + 8) = 0;
-        nativeState[0x1c4] = 0;
+        if (!m_state.unknown1cd && !animation && m_state.ped->HasTaskType401())
+            m_state.ped->ApplyAnimation(g_remoteCarryAnimation, g_remoteCarryLibrary, 4.0f, 0, 0, 0, 0, 0);
+        m_state.vehicle = 0;
+        m_state.updateType = 0;
     }
-    else if (nativeState[0x1a] == 19 && nativeState[0x1c4] == 17 && (*(CPed**)(nativeState + 4))->IsInVehicle())
+    else if (m_state.playerState == 19 && m_state.updateType == 17 && m_state.ped->IsInVehicle())
     {
-        CVehicle* vehicle = *(CVehicle**)(nativeState + 8);
+        CVehicle* vehicle = m_state.vehicle;
         if (!vehicle || !vehicle->DoesExist())
             return;
-        GameQuaternion* rotation = (GameQuaternion*)(nativeState + 0x88);
+        GameQuaternion* rotation = &m_state.incar.rotation;
         GameQuaternionNormalize(rotation);
         CMatrix matrix;
         GameQuaternionToMatrixComponents(rotation, &matrix);
-        matrix.position = *(CVector*)(nativeState + 0x98);
-        if ((*(CVehicle**)(nativeState + 8))->GetModelIndex() == 538 || (*(CVehicle**)(nativeState + 8))->GetModelIndex() == 537 ||
-            (*(CVehicle**)(nativeState + 8))->GetModelIndex() == 449)
-            UpdateTrain(&matrix, (CVector*)(nativeState + 0xa4), *(float*)(nativeState + 0xbb));
+        matrix.position = m_state.incar.position;
+        if (m_state.vehicle->GetModelIndex() == 538 || m_state.vehicle->GetModelIndex() == 537 || m_state.vehicle->GetModelIndex() == 449)
+            UpdateTrain(&matrix, &m_state.incar.speed, *(float*)&m_state.incar.modelData);
         else
         {
-            SetIncarTarget(&matrix, (CVector*)(nativeState + 0x98), (CVector*)(nativeState + 0xa4));
+            SetIncarTarget(&matrix, &m_state.incar.position, &m_state.incar.speed);
             UpdateIncarSpeedAndPosition();
         }
-        if ((*(CVehicle**)(nativeState + 8))->GetModelIndex() == 520)
-            (*(CVehicle**)(nativeState + 8))->SetHydraThrusters(*(DWORD*)(nativeState + 0xbb));
-        if ((*(CVehicle**)(nativeState + 8))->GetSubtype() == 2 || (*(CVehicle**)(nativeState + 8))->GetSubtype() == 6)
-            (*(CVehicle**)(nativeState + 8))->SetBackendFloat64c(*(float*)(nativeState + 0xbb));
-        (*(CVehicle**)(nativeState + 8))->EnableSiren(nativeState[0xb7]);
-        (*(CVehicle**)(nativeState + 8))->SetLandingGearState(nativeState[0xb8]);
-        (*(CVehicle**)(nativeState + 8))->SetHealth(*(float*)(nativeState + 0xb0));
-        WORD trailer = *(WORD*)(nativeState + 0xb9);
+        if (m_state.vehicle->GetModelIndex() == 520)
+            m_state.vehicle->SetHydraThrusters(m_state.incar.modelData);
+        if (m_state.vehicle->GetSubtype() == 2 || m_state.vehicle->GetSubtype() == 6)
+            m_state.vehicle->SetBackendFloat64c(*(float*)&m_state.incar.modelData);
+        m_state.vehicle->EnableSiren(m_state.incar.siren);
+        m_state.vehicle->SetLandingGearState(m_state.incar.landingGear);
+        m_state.vehicle->SetHealth(m_state.incar.health);
+        WORD trailer = m_state.incar.trailer;
         if (!trailer || trailer >= 2000)
         {
-            if ((*(CVehicle**)(nativeState + 8))->GetTrailer())
+            if (m_state.vehicle->GetTrailer())
             {
-                (*(CVehicle**)(nativeState + 8))->DetachTrailer();
-                (*(CVehicle**)(nativeState + 8))->SetTrailer(0);
+                m_state.vehicle->DetachTrailer();
+                m_state.vehicle->SetTrailer(0);
             }
         }
-        BYTE weapon = nativeState[0xb6] & 0x3f;
-        if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+        BYTE weapon = m_state.incar.weaponAim & 0x3f;
+        if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
         {
-            (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 0);
-            weapon = nativeState[0xb6] & 0x3f;
-            if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+            m_state.ped->SetArmedWeapon(weapon, 0);
+            weapon = m_state.incar.weaponAim & 0x3f;
+            if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
             {
-                (*(CPed**)(nativeState + 4))->GiveWeapon(weapon, 9999);
-                (*(CPed**)(nativeState + 4))->SetArmedWeapon(nativeState[0xb6] & 0x3f, 0);
+                m_state.ped->GiveWeapon(weapon, 9999);
+                m_state.ped->SetArmedWeapon(m_state.incar.weaponAim & 0x3f, 0);
             }
         }
-        nativeState[0x1c4] = 0;
+        m_state.updateType = 0;
     }
-    else if (nativeState[0x1a] == 18 && nativeState[0x1c4] == 18 && (*(CPed**)(nativeState + 4))->IsInVehicle())
+    else if (m_state.playerState == 18 && m_state.updateType == 18 && m_state.ped->IsInVehicle())
     {
-        CVehicle* vehicle = *(CVehicle**)(nativeState + 8);
+        CVehicle* vehicle = m_state.vehicle;
         if (!vehicle || !vehicle->DoesExist())
             return;
-        if ((*(CPed**)(nativeState + 4))->DoesExist())
+        if (m_state.ped->DoesExist())
         {
-            BYTE weapon = nativeState[0x27] & 0x3f;
-            if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+            BYTE weapon = m_state.passenger.weaponAim & 0x3f;
+            if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
             {
-                (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 0);
-                weapon = nativeState[0x27] & 0x3f;
-                if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+                m_state.ped->SetArmedWeapon(weapon, 0);
+                weapon = m_state.passenger.weaponAim & 0x3f;
+                if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
                 {
-                    (*(CPed**)(nativeState + 4))->GiveWeapon(weapon, 9999);
-                    (*(CPed**)(nativeState + 4))->SetArmedWeapon(nativeState[0x27] & 0x3f, 0);
+                    m_state.ped->GiveWeapon(weapon, 9999);
+                    m_state.ped->SetArmedWeapon(m_state.passenger.weaponAim & 0x3f, 0);
                 }
             }
         }
-        if ((*(CPed**)(nativeState + 4))->GetState() == 50)
+        if (m_state.ped->GetState() == 50)
         {
-            if ((nativeState[0x26] & 0x40) && !(*(CPed**)(nativeState + 4))->HasTaskType1022() && (*(CPed**)(nativeState + 4))->DoesExist() &&
-                (*(CPed**)(nativeState + 4))->EnablePassengerDrivebyMode())
-                *(DWORD*)(nativeState + 0x20) = 1;
-            if (!(nativeState[0x26] & 0x40) && (*(CPed**)(nativeState + 4))->HasTaskType1022() && (*(CPed**)(nativeState + 4))->DoesExist())
+            if ((m_state.passenger.seatFlags & 0x40) && !m_state.ped->HasTaskType1022() && m_state.ped->DoesExist() && m_state.ped->EnablePassengerDrivebyMode())
+                m_state.passengerDriveby = 1;
+            if (!(m_state.passenger.seatFlags & 0x40) && m_state.ped->HasTaskType1022() && m_state.ped->DoesExist())
             {
-                (*(CPed**)(nativeState + 4))->StopTaskType1022();
-                *(DWORD*)(nativeState + 0x20) = 0;
+                m_state.ped->StopTaskType1022();
+                m_state.passengerDriveby = 0;
             }
         }
-        if ((nativeState[0x26] & 0x80) && !(*(CPed**)(nativeState + 4))->HasDanceState())
-            (*(CPed**)(nativeState + 4))->SetDancePoseState(1);
-        else if (!(nativeState[0x26] & 0x80) && (*(CPed**)(nativeState + 4))->HasDanceState())
-            (*(CPed**)(nativeState + 4))->SetDancePoseState(0);
-        nativeState[0x1c4] = 0;
+        if ((m_state.passenger.seatFlags & 0x80) && !m_state.ped->HasDanceState())
+            m_state.ped->SetDancePoseState(1);
+        else if (!(m_state.passenger.seatFlags & 0x80) && m_state.ped->HasDanceState())
+            m_state.ped->SetDancePoseState(0);
+        m_state.updateType = 0;
     }
-    if (nativeState[0x1a] == 17 && !(*(CPed**)(nativeState + 4))->IsInVehicle())
+    if (m_state.playerState == 17 && !m_state.ped->IsInVehicle())
     {
         UpdateOnfootRotation();
         ProcessHead();
         ProcessSpecialAction();
-        *(DWORD*)(nativeState + 0x20) = 0;
-        (*(CPed**)(nativeState + 4))->SetKeys(*(WORD*)(nativeState + 0x40), *(WORD*)(nativeState + 0x3c), *(WORD*)(nativeState + 0x3e));
+        m_state.passengerDriveby = 0;
+        m_state.ped->SetKeys(m_state.onfoot.keys, m_state.onfoot.leftRight, m_state.onfoot.upDown);
         if (HasSurfingTarget())
         {
-            if (*(WORD*)(nativeState + 0x7a) < 2000)
+            if (m_state.onfoot.surfingVehicle < 2000)
             {
-                (*(CPed**)(nativeState + 4))->SetCollisionProcessed(FALSE);
-                (*(CPed**)(nativeState + 4))->SetCollisionFlag(FALSE);
+                m_state.ped->SetCollisionProcessed(FALSE);
+                m_state.ped->SetCollisionFlag(FALSE);
             }
         }
         else
         {
-            BOOL collision = nativeState[0x18] != 3;
-            (*(CPed**)(nativeState + 4))->SetCollisionProcessed(collision);
-            (*(CPed**)(nativeState + 4))->SetCollisionFlag(collision);
+            BOOL collision = m_state.specialAction != 3;
+            m_state.ped->SetCollisionProcessed(collision);
+            m_state.ped->SetCollisionFlag(collision);
         }
-        CVector* speed = (CVector*)(nativeState + 0x62);
+        CVector* speed = &m_state.onfoot.speed;
         if (speed->x == 0 && speed->y == 0 && speed->z == 0)
         {
-            (*(CPed**)(nativeState + 4))->SetSpeed(*speed);
-            if (*(DWORD*)(nativeState + 0x1d1) != 2 && (int)elapsed >= 3000)
-                *(DWORD*)(nativeState + 0x1d1) = 2;
+            m_state.ped->SetSpeed(*speed);
+            if (m_state.status != 2 && (int)elapsed >= 3000)
+                m_state.status = 2;
         }
-        else if (*(DWORD*)(nativeState + 0x1d1) != 2 && (int)elapsed >= 1500)
-            *(DWORD*)(nativeState + 0x1d1) = 2;
-        if (GetTickCount() - *(DWORD*)(nativeState + 0x1c5) > 3000)
+        else if (m_state.status != 2 && (int)elapsed >= 1500)
+            m_state.status = 2;
+        if (GetTickCount() - m_state.lastUpdateTick > 3000)
         {
-            *(WORD*)(nativeState + 0x3c) = 0;
-            *(WORD*)(nativeState + 0x3e) = 0;
+            m_state.onfoot.leftRight = 0;
+            m_state.onfoot.upDown = 0;
             CVector zero = {0, 0, 0};
-            (*(CPed**)(nativeState + 4))->SetSpeed(zero);
+            m_state.ped->SetSpeed(zero);
             CMatrix matrix;
-            (*(CPed**)(nativeState + 4))->GetMatrix(&matrix);
-            matrix.position = *(CVector*)(nativeState + 0x42);
-            (*(CPed**)(nativeState + 4))->SetMatrix(matrix);
+            m_state.ped->GetMatrix(&matrix);
+            matrix.position = m_state.onfoot.position;
+            m_state.ped->SetMatrix(matrix);
         }
     }
-    else if (nativeState[0x1a] == 19 && (*(CPed**)(nativeState + 4))->IsInVehicle())
+    else if (m_state.playerState == 19 && m_state.ped->IsInVehicle())
     {
-        if (*(CVehicle**)(nativeState + 8) && (*(CVehicle**)(nativeState + 8))->GetModelIndex() != 538 && (*(CVehicle**)(nativeState + 8))->GetModelIndex() != 537 &&
-            (*(CVehicle**)(nativeState + 8))->GetModelIndex() != 449)
+        if (m_state.vehicle && m_state.vehicle->GetModelIndex() != 538 && m_state.vehicle->GetModelIndex() != 537 && m_state.vehicle->GetModelIndex() != 449)
             UpdateIncarRotation();
-        *(DWORD*)(nativeState + 0x20) = 0;
-        (*(CPed**)(nativeState + 4))->DestroyParachute();
-        if (*(CVehicle**)(nativeState + 8) && (*(CVehicle**)(nativeState + 8))->IsRC())
-            (*(CPed**)(nativeState + 4))->Remove();
-        CVector* speed = (CVector*)(nativeState + 0xa4);
-        if (*(DWORD*)(nativeState + 0x1c) && speed->x == 0 && speed->y == 0 && speed->z == 0 && *(CVehicle**)(nativeState + 8))
-            (*(CVehicle**)(nativeState + 8))->SetSpeed(*speed);
-        (*(CPed**)(nativeState + 4))->SetKeys(*(WORD*)(nativeState + 0x86), *(WORD*)(nativeState + 0x82), *(WORD*)(nativeState + 0x84));
-        (*(CPed**)(nativeState + 4))->ProcessVehicleHorn();
+        m_state.passengerDriveby = 0;
+        m_state.ped->DestroyParachute();
+        if (m_state.vehicle && m_state.vehicle->IsRC())
+            m_state.ped->Remove();
+        CVector* speed = &m_state.incar.speed;
+        if (m_state.rawFlag1c && speed->x == 0 && speed->y == 0 && speed->z == 0 && m_state.vehicle)
+            m_state.vehicle->SetSpeed(*speed);
+        m_state.ped->SetKeys(m_state.incar.keys, m_state.incar.leftRight, m_state.incar.upDown);
+        m_state.ped->ProcessVehicleHorn();
         if (speed->x == 0 && speed->y == 0 && speed->z == 0)
         {
-            if (*(DWORD*)(nativeState + 0x1d1) != 2 && (int)elapsed > 3000)
-                *(DWORD*)(nativeState + 0x1d1) = 2;
+            if (m_state.status != 2 && (int)elapsed > 3000)
+                m_state.status = 2;
         }
-        else if (*(DWORD*)(nativeState + 0x1d1) != 2 && (int)elapsed > 1500)
-            *(DWORD*)(nativeState + 0x1d1) = 2;
+        else if (m_state.status != 2 && (int)elapsed > 1500)
+            m_state.status = 2;
         ProcessHead();
     }
-    else if (nativeState[0x1a] == 18 && (*(CPed**)(nativeState + 4))->IsInVehicle())
+    else if (m_state.playerState == 18 && m_state.ped->IsInVehicle())
     {
-        (*(CPed**)(nativeState + 4))->DestroyParachute();
-        (*(CPed**)(nativeState + 4))->SetKeys(*(WORD*)(nativeState + 0x2e), 0, 0);
-        if (*(DWORD*)(nativeState + 0x1d1) != 2 && (int)elapsed >= 3000)
-            *(DWORD*)(nativeState + 0x1d1) = 2;
+        m_state.ped->DestroyParachute();
+        m_state.ped->SetKeys(m_state.passenger.keys, 0, 0);
+        if (m_state.status != 2 && (int)elapsed >= 3000)
+            m_state.status = 2;
         ProcessHead();
     }
     else
     {
         CVector zero = {0, 0, 0};
-        (*(CPed**)(nativeState + 4))->SetSpeed(zero);
-        (*(CPed**)(nativeState + 4))->SetKeys(0, 0, 0);
-        *(DWORD*)(nativeState + 0x20) = 0;
+        m_state.ped->SetSpeed(zero);
+        m_state.ped->SetKeys(0, 0, 0);
+        m_state.passengerDriveby = 0;
     }
-    if (nativeState[0x1a] != 32)
-        (*(CPed**)(nativeState + 4))->SetHealth(1000.0f);
-    if (*(DWORD*)(nativeState + 0x1d1) == 2 && (int)elapsed < 1500)
-        *(DWORD*)(nativeState + 0x1d1) = 0;
+    if (m_state.playerState != 32)
+        m_state.ped->SetHealth(1000.0f);
+    if (m_state.status == 2 && (int)elapsed < 1500)
+        m_state.status = 0;
 }
 // 0x00117874
 const float g_remoteHeadDistance = 20.0f;
@@ -621,20 +617,20 @@ const char g_remoteHeadTask[] = "FollowPedSA";
 // 0x00014240
 void CRemotePlayer::ProcessHead()
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
-    if (!ped || !ped->DoesExist() || *(DWORD*)(nativeState + 0x1c))
+    CPed* ped = m_state.ped;
+    if (!ped || !ped->DoesExist() || m_state.rawFlag1c)
         return;
     if (g_pGame && !*(DWORD*)((BYTE*)g_pGame + 0x59))
         return;
-    if ((*(CPed**)(nativeState + 4))->GetStuff())
+    if (m_state.ped->GetStuff())
         return;
     CMatrix matrix;
-    (*(CPed**)(nativeState + 4))->GetMatrix(&matrix);
+    m_state.ped->GetMatrix(&matrix);
     DWORD now = GetTickCount();
     CRemotePlayer* self = this;
-    if (now - *(DWORD*)(nativeState + 0x1e1) > 1000)
+    if (now - m_state.lastHeadUpdateTick > 1000)
     {
-        CameraAim* aim = AimStuff::GetPlayerAim(*((BYTE*)*(CPed**)(nativeState + 4) + 0x2b0));
+        CameraAim* aim = AimStuff::GetPlayerAim(*((BYTE*)m_state.ped + 0x2b0));
         float z;
         // clang-format off
         __asm {
@@ -663,10 +659,10 @@ void CRemotePlayer::ProcessHead()
         }
         // clang-format on
     }
-    if (now - *(DWORD*)(nativeState + 0x1e5) > 200)
+    if (now - m_state.lastHeadTaskTick > 200)
     {
         CVector target;
-        ped = *(CPed**)(nativeState + 4);
+        ped = m_state.ped;
         // clang-format off
         __asm {
             mov ecx,self
@@ -682,7 +678,7 @@ void CRemotePlayer::ProcessHead()
         }
         // clang-format on
         ped->ApplyCommandTask(g_remoteHeadTask, 0, 1000, -1, &target, 0, 0.1f, 500, 3, 0);
-        *(DWORD*)(nativeState + 0x1e5) = now;
+        m_state.lastHeadTaskTick = now;
     }
 }
 // 0x00014390
@@ -690,113 +686,113 @@ void CRemotePlayer::SetMarkerState(BOOL enabled)
 {
     if (!enabled)
     {
-        DWORD marker = *(DWORD*)(nativeState + 0x1f9);
+        DWORD marker = m_state.marker;
         if (marker)
         {
             g_pGame->DeleteMarker(marker);
-            *(DWORD*)(nativeState + 0x1f9) = 0;
+            m_state.marker = 0;
         }
     }
-    *(BOOL*)(nativeState + 0x1e9) = enabled;
+    m_state.markerEnabled = enabled;
 }
 // 0x000143d0
 void CRemotePlayer::SetMarkerPosition(short x, short y, short z)
 {
-    *(DWORD*)(nativeState + 0x1e9) = 1;
-    DWORD marker = *(DWORD*)(nativeState + 0x1f9);
+    m_state.markerEnabled = 1;
+    DWORD marker = m_state.marker;
     if (marker)
     {
         g_pGame->DeleteMarker(marker);
-        *(DWORD*)(nativeState + 0x1f9) = 0;
+        m_state.marker = 0;
     }
-    if (*(CPed**)(nativeState + 4))
+    if (m_state.ped)
         return;
-    marker = g_pGame->CreateMarker(0, (float)x, (float)y, (float)z, *(WORD*)nativeState, 0);
-    *(int*)(nativeState + 0x1f5) = z;
-    *(int*)(nativeState + 0x1ed) = x;
-    *(int*)(nativeState + 0x1f1) = y;
-    *(DWORD*)(nativeState + 0x1f9) = marker;
+    marker = g_pGame->CreateMarker(0, (float)x, (float)y, (float)z, m_state.id, 0);
+    m_state.markerZ = z;
+    m_state.markerX = x;
+    m_state.markerY = y;
+    m_state.marker = marker;
 }
 // 0x00014470
 BOOL CRemotePlayer::HasSurfingTarget()
 {
-    WORD id = *(WORD*)(nativeState + 0x7a);
-    return nativeState[0x1a] == 17 && id && id != 0xffff && id < 4100 ? TRUE : FALSE;
+    WORD id = m_state.onfoot.surfingVehicle;
+    return m_state.playerState == 17 && id && id != 0xffff && id < 4100 ? TRUE : FALSE;
 }
 // 0x000144a0
 BOOL CRemotePlayer::SurfingOnObject()
 {
-    WORD id = *(WORD*)(nativeState + 0x7a);
-    return nativeState[0x1a] == 17 && id && id != 0xffff && id >= 2000 && id < 4100 ? TRUE : FALSE;
+    WORD id = m_state.onfoot.surfingVehicle;
+    return m_state.playerState == 17 && id && id != 0xffff && id >= 2000 && id < 4100 ? TRUE : FALSE;
 }
 // 0x00014780
 void CRemotePlayer::ProcessSpecialAction()
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped || !ped->DoesExist())
         return;
-    if (nativeState[0x18] == 1 && !(*(CPed**)(nativeState + 4))->IsDucking())
+    if (m_state.specialAction == 1 && !m_state.ped->IsDucking())
     {
-        (*(CPed**)(nativeState + 4))->ClearTasksIfOnFoot();
+        m_state.ped->ClearTasksIfOnFoot();
         return;
     }
-    if (nativeState[0x18] != 1 && (*(CPed**)(nativeState + 4))->IsDucking())
-        (*(CPed**)(nativeState + 4))->ClearDuckingFlag();
-    if (nativeState[0x18] == 11 && !(*(CPed**)(nativeState + 4))->UsingCellphone())
+    if (m_state.specialAction != 1 && m_state.ped->IsDucking())
+        m_state.ped->ClearDuckingFlag();
+    if (m_state.specialAction == 11 && !m_state.ped->UsingCellphone())
     {
-        (*(CPed**)(nativeState + 4))->EnableCellphone(TRUE);
+        m_state.ped->EnableCellphone(TRUE);
         return;
     }
-    if (nativeState[0x18] != 11 && (*(CPed**)(nativeState + 4))->UsingCellphone())
+    if (m_state.specialAction != 11 && m_state.ped->UsingCellphone())
     {
-        (*(CPed**)(nativeState + 4))->EnableCellphone(FALSE);
+        m_state.ped->EnableCellphone(FALSE);
         return;
     }
-    if (nativeState[0x18] == 2 && !(*(CPed**)(nativeState + 4))->HasJetpack())
+    if (m_state.specialAction == 2 && !m_state.ped->HasJetpack())
     {
-        *(DWORD*)(nativeState + 0x14) = 1;
-        (*(CPed**)(nativeState + 4))->EnableJetpack();
+        m_state.jetpackState = 1;
+        m_state.ped->EnableJetpack();
         return;
     }
-    if (nativeState[0x18] != 2 && (*(CPed**)(nativeState + 4))->HasJetpack())
+    if (m_state.specialAction != 2 && m_state.ped->HasJetpack())
     {
-        *(DWORD*)(nativeState + 0x14) = 0;
-        (*(CPed**)(nativeState + 4))->DisableJetpack();
+        m_state.jetpackState = 0;
+        m_state.ped->DisableJetpack();
         return;
     }
-    if (nativeState[0x18] == 10 && !(*(CPed**)(nativeState + 4))->DoesHandsUp())
-        (*(CPed**)(nativeState + 4))->HandsUp();
-    if (nativeState[0x18] != 10 && (*(CPed**)(nativeState + 4))->DoesHandsUp())
-        (*(CPed**)(nativeState + 4))->StopDancing();
-    if (!(*(CPed**)(nativeState + 4))->DoesUrinating() && nativeState[0x18] == 68)
-        (*(CPed**)(nativeState + 4))->StartUrinating();
-    if ((*(CPed**)(nativeState + 4))->DoesUrinating() && nativeState[0x18] != 68)
-        (*(CPed**)(nativeState + 4))->StopUrinating();
-    if (nativeState[0x18] == 20 && (*(CPed**)(nativeState + 4))->GetStuff() != 1)
-        (*(CPed**)(nativeState + 4))->GiveStuff(1);
-    if (nativeState[0x18] == 22 && (*(CPed**)(nativeState + 4))->GetStuff() != 2)
-        (*(CPed**)(nativeState + 4))->GiveStuff(2);
-    if (nativeState[0x18] == 23 && (*(CPed**)(nativeState + 4))->GetStuff() != 3)
-        (*(CPed**)(nativeState + 4))->GiveStuff(3);
-    if (nativeState[0x18] == 21 && (*(CPed**)(nativeState + 4))->GetStuff() != 4)
-        (*(CPed**)(nativeState + 4))->GiveStuff(4);
-    if ((*(CPed**)(nativeState + 4))->GetStuff())
+    if (m_state.specialAction == 10 && !m_state.ped->DoesHandsUp())
+        m_state.ped->HandsUp();
+    if (m_state.specialAction != 10 && m_state.ped->DoesHandsUp())
+        m_state.ped->StopDancing();
+    if (!m_state.ped->DoesUrinating() && m_state.specialAction == 68)
+        m_state.ped->StartUrinating();
+    if (m_state.ped->DoesUrinating() && m_state.specialAction != 68)
+        m_state.ped->StopUrinating();
+    if (m_state.specialAction == 20 && m_state.ped->GetStuff() != 1)
+        m_state.ped->GiveStuff(1);
+    if (m_state.specialAction == 22 && m_state.ped->GetStuff() != 2)
+        m_state.ped->GiveStuff(2);
+    if (m_state.specialAction == 23 && m_state.ped->GetStuff() != 3)
+        m_state.ped->GiveStuff(3);
+    if (m_state.specialAction == 21 && m_state.ped->GetStuff() != 4)
+        m_state.ped->GiveStuff(4);
+    if (m_state.ped->GetStuff())
     {
-        BYTE action = nativeState[0x18];
+        BYTE action = m_state.specialAction;
         if (action == 20 || action == 22 || action == 23 || action == 21)
-            (*(CPed**)(nativeState + 4))->ApplyStuff();
+            m_state.ped->ApplyStuff();
         else
-            (*(CPed**)(nativeState + 4))->DropStuff();
+            m_state.ped->DropStuff();
     }
-    if (!(*(CPed**)(nativeState + 4))->HasDanceState() && nativeState[0x18] == 24)
-        (*(CPed**)(nativeState + 4))->SetDancePoseState(1);
-    if ((*(CPed**)(nativeState + 4))->HasDanceState() && nativeState[0x18] != 24 && nativeState[0x18] != 3 && nativeState[0x18] != 4)
-        (*(CPed**)(nativeState + 4))->SetDancePoseState(0);
-    if (!(*(CPed**)(nativeState + 4))->HasDanceStyle() && nativeState[0x18] == 25)
-        (*(CPed**)(nativeState + 4))->SetSecondaryPoseState(1);
-    if ((*(CPed**)(nativeState + 4))->HasDanceStyle() && nativeState[0x18] != 25 && nativeState[0x18] != 3 && nativeState[0x18] != 4)
-        (*(CPed**)(nativeState + 4))->SetSecondaryPoseState(0);
-    (*(CPed**)(nativeState + 4))->CheckParachuteWeapon();
+    if (!m_state.ped->HasDanceState() && m_state.specialAction == 24)
+        m_state.ped->SetDancePoseState(1);
+    if (m_state.ped->HasDanceState() && m_state.specialAction != 24 && m_state.specialAction != 3 && m_state.specialAction != 4)
+        m_state.ped->SetDancePoseState(0);
+    if (!m_state.ped->HasDanceStyle() && m_state.specialAction == 25)
+        m_state.ped->SetSecondaryPoseState(1);
+    if (m_state.ped->HasDanceStyle() && m_state.specialAction != 25 && m_state.specialAction != 3 && m_state.specialAction != 4)
+        m_state.ped->SetSecondaryPoseState(0);
+    m_state.ped->CheckParachuteWeapon();
 }
 // 0x0013c498
 float g_remoteOnfootCorrection = 0.1f;
@@ -807,19 +803,19 @@ const float g_remoteIncarTeleportDistance = 8.0f;
 // 0x000149f0
 void CRemotePlayer::UpdateOnfootSpeedAndPosition()
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped)
         return;
     CMatrix matrix;
     ped->GetMatrix(&matrix);
-    CVector* target = (CVector*)(nativeState + 0x120);
-    if (!(*(CPed**)(nativeState + 4))->DoesExist())
+    CVector* target = &m_state.onfootTargetPosition;
+    if (!m_state.ped->DoesExist())
     {
         matrix.position = *target;
-        (*(CPed**)(nativeState + 4))->SetMatrix(matrix);
+        m_state.ped->SetMatrix(matrix);
         return;
     }
-    volatile float* delta = (volatile float*)(nativeState + 0x190);
+    volatile float* delta = (volatile float*)&m_state.positionInaccuracy;
     delta[0] = FloatOffset(target->x, matrix.position.x);
     delta[1] = FloatOffset(target->y, matrix.position.y);
     delta[2] = FloatOffset(target->z, matrix.position.z);
@@ -828,11 +824,11 @@ void CRemotePlayer::UpdateOnfootSpeedAndPosition()
     if (delta[0] > g_quaternionMatrixTwo || delta[1] > g_quaternionMatrixTwo || delta[2] > g_quaternionMatrixOne)
     {
         matrix.position = *target;
-        (*(CPed**)(nativeState + 4))->SetMatrix(matrix);
+        m_state.ped->SetMatrix(matrix);
         return;
     }
     CVector speed;
-    (*(CPed**)(nativeState + 4))->GetSpeed(&speed);
+    m_state.ped->GetSpeed(&speed);
     CRemotePlayer* self = this;
     // clang-format off
     __asm {
@@ -874,25 +870,25 @@ void CRemotePlayer::UpdateOnfootSpeedAndPosition()
         fstp st(0)
     }
     // clang-format on
-    (*(CPed**)(nativeState + 4))->SetSpeed(speed);
+    m_state.ped->SetSpeed(speed);
 }
 // 0x00014c00
 void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped)
         return;
     CMatrix matrix;
     ped->GetMatrix(&matrix);
-    CVector* target = (CVector*)(nativeState + 0x120);
-    if (!(*(CPed**)(nativeState + 4))->DoesExist())
+    CVector* target = &m_state.onfootTargetPosition;
+    if (!m_state.ped->DoesExist())
     {
         matrix.position.x = target->x;
         matrix.position.y = target->y;
-        (*(CPed**)(nativeState + 4))->SetMatrix(matrix);
+        m_state.ped->SetMatrix(matrix);
         return;
     }
-    volatile float* delta = (volatile float*)(nativeState + 0x190);
+    volatile float* delta = (volatile float*)&m_state.positionInaccuracy;
     delta[0] = FloatOffset(target->x, matrix.position.x);
     int action = 0;
     CRemotePlayer* self = this;
@@ -941,11 +937,11 @@ void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
     {
         matrix.position.x = target->x;
         matrix.position.y = target->y;
-        (*(CPed**)(nativeState + 4))->SetMatrix(matrix);
+        m_state.ped->SetMatrix(matrix);
         return;
     }
     CVector speed;
-    (*(CPed**)(nativeState + 4))->GetSpeed(&speed);
+    m_state.ped->GetSpeed(&speed);
     for (int i = 0; i < 2; ++i)
         if (delta[i] > g_objectPoolSecondsPerTick)
         {
@@ -963,25 +959,25 @@ void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
         }
             // clang-format on
         }
-    (*(CPed**)(nativeState + 4))->SetSpeed(speed);
+    m_state.ped->SetSpeed(speed);
 }
 // 0x00014ec0
 void CRemotePlayer::UpdateIncarSpeedAndPosition()
 {
     CVector speed = {0, 0, 0};
-    CVehicle* vehicle = *(CVehicle**)(nativeState + 8);
+    CVehicle* vehicle = m_state.vehicle;
     if (!vehicle)
         return;
     CMatrix matrix;
     vehicle->GetMatrix(&matrix);
-    CVector* target = (CVector*)(nativeState + 0x138);
-    if (!(*(CVehicle**)(nativeState + 8))->DoesExist())
+    CVector* target = &m_state.incarTargetPosition;
+    if (!m_state.vehicle->DoesExist())
     {
         matrix.position = *target;
-        (*(CVehicle**)(nativeState + 8))->SetMatrix(matrix);
+        m_state.vehicle->SetMatrix(matrix);
         return;
     }
-    volatile float* delta = (volatile float*)(nativeState + 0x190);
+    volatile float* delta = (volatile float*)&m_state.positionInaccuracy;
     delta[0] = FloatOffset(target->x, matrix.position.x);
     delta[1] = FloatOffset(target->y, matrix.position.y);
     int significant = 0;
@@ -1019,16 +1015,16 @@ void CRemotePlayer::UpdateIncarSpeedAndPosition()
     // clang-format on
     if (!significant) return;
     float zLimit = 0.5f;
-    if ((*(CVehicle**)(nativeState + 8))->GetSubtype() == 4 || (*(CVehicle**)(nativeState + 8))->GetSubtype() == 5 || (*(CVehicle**)(nativeState + 8))->GetSubtype() == 3)
+    if (m_state.vehicle->GetSubtype() == 4 || m_state.vehicle->GetSubtype() == 5 || m_state.vehicle->GetSubtype() == 3)
         zLimit = 2.0f;
     if (delta[0] > g_remoteIncarTeleportDistance || delta[1] > g_remoteIncarTeleportDistance || delta[2] > zLimit)
     {
         matrix.position = *target;
-        (*(CVehicle**)(nativeState + 8))->SetMatrix(matrix);
-        (*(CVehicle**)(nativeState + 8))->SetSpeed(*(CVector*)(nativeState + 0x144));
+        m_state.vehicle->SetMatrix(matrix);
+        m_state.vehicle->SetSpeed(m_state.incarTargetSpeed);
         return;
     }
-    (*(CVehicle**)(nativeState + 8))->GetSpeed(&speed);
+    m_state.vehicle->GetSpeed(&speed);
     for (int i = 0; i < 3; ++i)
         if (delta[i] > g_pedDrunkSpeedThreshold)
         {
@@ -1047,7 +1043,7 @@ void CRemotePlayer::UpdateIncarSpeedAndPosition()
             // clang-format on
         }
     if (FloatOffset(speed.x, 0) > g_objectTurnVelocityScale || FloatOffset(speed.y, 0) > g_objectTurnVelocityScale || FloatOffset(speed.z, 0) > g_objectTurnVelocityScale)
-        (*(CVehicle**)(nativeState + 8))->SetSpeed(speed);
+        m_state.vehicle->SetSpeed(speed);
 }
 // 0x0013c4a0
 DWORD g_remoteClampTurnSpeed = 1;
@@ -1056,16 +1052,16 @@ const float g_remoteTurnSpeedMinimum = -0.02f;
 // 0x00014d80
 void CRemotePlayer::UpdateOnfootRotation()
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped)
         return;
     CMatrix matrix;
     GameQuaternion current, result;
     ped->GetMatrix(&matrix);
     GameQuaternionFromMatrixComponents(&matrix, &current);
-    GameQuaternionSlerp(&result, (GameQuaternion*)(nativeState + 0x4e), &current, 0.75f);
+    GameQuaternionSlerp(&result, &m_state.onfoot.rotation, &current, 0.75f);
     GameQuaternionToMatrixComponents(&result, &matrix);
-    (*(CPed**)(nativeState + 4))->SetMatrix(matrix);
+    m_state.ped->SetMatrix(matrix);
     float angle;
     // clang-format off
     __asm {
@@ -1094,13 +1090,13 @@ void CRemotePlayer::UpdateOnfootRotation()
     onfoot_heading_ready:
     }
     // clang-format on
-    (*(CPed**)(nativeState + 4))->SetRotation(angle);
+    m_state.ped->SetRotation(angle);
 }
 // 0x000151c0
 void CRemotePlayer::UpdateIncarRotation()
 {
     CVector turnSpeed = {0, 0, 0};
-    CVehicle* vehicle = *(CVehicle**)(nativeState + 8);
+    CVehicle* vehicle = m_state.vehicle;
     if (!vehicle)
         return;
     if (g_remoteClampTurnSpeed)
@@ -1114,52 +1110,52 @@ void CRemotePlayer::UpdateIncarRotation()
             else if (values[i] < g_remoteTurnSpeedMinimum)
                 values[i] = g_remoteTurnSpeedMinimum;
         }
-        (*(CVehicle**)(nativeState + 8))->SetTurnSpeed(turnSpeed);
+        m_state.vehicle->SetTurnSpeed(turnSpeed);
     }
     CMatrix matrix;
     GameQuaternion current, result;
-    (*(CVehicle**)(nativeState + 8))->GetMatrix(&matrix);
+    m_state.vehicle->GetMatrix(&matrix);
     GameQuaternionFromMatrix(&matrix, &current);
-    GameQuaternionSlerp(&result, (GameQuaternion*)(nativeState + 0x19c), &current, 0.75f);
+    GameQuaternionSlerp(&result, &m_state.incarTargetRotation, &current, 0.75f);
     GameQuaternionNormalize(&result);
     GameQuaternionToMatrix(&result, &matrix);
-    (*(CVehicle**)(nativeState + 8))->SetMatrix(matrix);
+    m_state.vehicle->SetMatrix(matrix);
 }
 // 0x000153a0
 void CRemotePlayer::UpdateTrain(const CMatrix* target, const CVector* targetSpeed, float trainSpeed)
 {
-    if (!*(CPed**)(nativeState + 4) || !*(CVehicle**)(nativeState + 8))
+    if (!m_state.ped || !m_state.vehicle)
         return;
     CMatrix current;
-    (*(CVehicle**)(nativeState + 8))->GetMatrix(&current);
+    m_state.vehicle->GetMatrix(&current);
     bool moveX = FloatOffset(target->position.x, current.position.x) > g_objectRotationFactor;
     bool moveY = FloatOffset(target->position.y, current.position.y) > g_objectRotationFactor;
     if (moveX || moveY)
-        (*(CVehicle**)(nativeState + 8))->Teleport(target->position);
+        m_state.vehicle->Teleport(target->position);
     CVector speed;
-    (*(CVehicle**)(nativeState + 8))->GetSpeed(&speed);
+    m_state.vehicle->GetSpeed(&speed);
     speed = *targetSpeed;
-    (*(CVehicle**)(nativeState + 8))->SetSpeed(speed);
-    (*(CVehicle**)(nativeState + 8))->SetTrainSpeed(trainSpeed);
+    m_state.vehicle->SetSpeed(speed);
+    m_state.vehicle->SetTrainSpeed(trainSpeed);
 }
 // 0x00014e50
 void CRemotePlayer::SetOnfootTarget(const CVector* position, const CVector* speed)
 {
     for (int i = 0; i < 12; i += 4)
-        *(DWORD*)(nativeState + 0x120 + i) = *(const DWORD*)((const BYTE*)position + i);
+        *(DWORD*)((BYTE*)&m_state.onfootTargetPosition + i) = *(const DWORD*)((const BYTE*)position + i);
     for (int i = 0; i < 12; i += 4)
-        *(DWORD*)(nativeState + 0x12c + i) = *(const DWORD*)((const BYTE*)speed + i);
-    (*(CPed**)(nativeState + 4))->SetSpeed(*(CVector*)(nativeState + 0x12c));
+        *(DWORD*)((BYTE*)&m_state.onfootTargetSpeed + i) = *(const DWORD*)((const BYTE*)speed + i);
+    m_state.ped->SetSpeed(m_state.onfootTargetSpeed);
 }
 // 0x00015330
 void CRemotePlayer::SetIncarTarget(const CMatrix* matrix, const CVector* position, const CVector* speed)
 {
-    GameQuaternionFromMatrix(matrix, (GameQuaternion*)(nativeState + 0x19c));
+    GameQuaternionFromMatrix(matrix, &m_state.incarTargetRotation);
     for (int i = 0; i < 12; i += 4)
-        *(DWORD*)(nativeState + 0x138 + i) = *(const DWORD*)((const BYTE*)position + i);
+        *(DWORD*)((BYTE*)&m_state.incarTargetPosition + i) = *(const DWORD*)((const BYTE*)position + i);
     for (int i = 0; i < 12; i += 4)
-        *(DWORD*)(nativeState + 0x144 + i) = *(const DWORD*)((const BYTE*)speed + i);
-    (*(CVehicle**)(nativeState + 8))->SetSpeed(*speed);
+        *(DWORD*)((BYTE*)&m_state.incarTargetSpeed + i) = *(const DWORD*)((const BYTE*)speed + i);
+    m_state.vehicle->SetSpeed(*speed);
 }
 // 0x001181c8
 const float g_remoteAimZoomScale = 0.01587301678955555f;
@@ -1171,17 +1167,17 @@ BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* 
     (void)team;
     if (!g_pGame->IsStarted())
         return FALSE;
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (ped)
     {
         g_pGame->RemovePed(ped);
-        *(DWORD*)(nativeState + 4) = 0;
+        m_state.ped = 0;
     }
-    ped = g_pGame->CreatePed(model, *position, rotation, 1, *(BOOL*)(nativeState + 0x1c));
+    ped = g_pGame->CreatePed(model, *position, rotation, 1, (BOOL)m_state.rawFlag1c);
     if (!ped)
     {
-        if (nativeState[0x1a])
-            nativeState[0x1a] = 0;
+        if (m_state.playerState)
+            m_state.playerState = 0;
         return FALSE;
     }
     if (g_customModels && customModel > 20000)
@@ -1190,100 +1186,100 @@ BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* 
             ped->SetModelIndex(customModel);
     }
     if (color)
-        PlayerColors::Set(*(WORD*)nativeState, color);
-    DWORD marker = *(DWORD*)(nativeState + 0x1f9);
+        PlayerColors::Set(m_state.id, color);
+    DWORD marker = m_state.marker;
     if (marker)
     {
         g_pGame->DeleteMarker(marker);
-        *(DWORD*)(nativeState + 0x1f9) = 0;
+        m_state.marker = 0;
     }
     if (*(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x30))
-        ped->CreateArrow(*(WORD*)nativeState);
-    *(CPed**)(nativeState + 4) = ped;
-    *(float*)(nativeState + 0x1b0) = 100.0f;
+        ped->CreateArrow(m_state.id);
+    m_state.ped = ped;
+    m_state.reportedHealth = 100.0f;
     ped->SetKeys(0, 0, 0);
     if (fightingStyle != 4)
         ped->SetFightingStyle(fightingStyle);
-    if (nativeState[0x1a] != 33)
-        nativeState[0x1a] = 33;
+    if (m_state.playerState != 33)
+        m_state.playerState = 33;
     return TRUE;
 }
 // 0x00014660
 void CRemotePlayer::OnEnterVehicle()
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped || ped->IsInVehicle())
         return;
-    CVehicle* vehicle = vehicles->Get(*(WORD*)(nativeState + 2));
+    CVehicle* vehicle = vehicles->Get(m_state.vehicleId);
     if (!vehicle)
         return;
-    BYTE weapon = (nativeState[0x1b] ? nativeState[0x27] : nativeState[0xb6]) & 0x3f;
-    if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+    BYTE weapon = (m_state.seat ? m_state.passenger.weaponAim : m_state.incar.weaponAim) & 0x3f;
+    if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
     {
-        (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 0);
-        if ((BYTE)(*(CPed**)(nativeState + 4))->GetCurrentWeapon() != weapon)
+        m_state.ped->SetArmedWeapon(weapon, 0);
+        if ((BYTE)m_state.ped->GetCurrentWeapon() != weapon)
         {
-            (*(CPed**)(nativeState + 4))->GiveWeapon(weapon, 9999);
-            (*(CPed**)(nativeState + 4))->SetArmedWeapon(weapon, 0);
+            m_state.ped->GiveWeapon(weapon, 9999);
+            m_state.ped->SetArmedWeapon(weapon, 0);
         }
     }
-    DWORD ref = vehicles->GetRef((int)*(WORD*)(nativeState + 2));
-    BYTE seat = nativeState[0x1b];
-    (*(CPed**)(nativeState + 4))->PutIntoVehicle(ref, seat);
+    DWORD ref = vehicles->GetRef((int)m_state.vehicleId);
+    BYTE seat = m_state.seat;
+    m_state.ped->PutIntoVehicle(ref, seat);
 }
 // 0x00016da0
 void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
     const LocalOnfootSyncData* sync = (const LocalOnfootSyncData*)data;
-    *(DWORD*)(nativeState + 8) = 0;
-    if (timestamp && (int)(timestamp - *(DWORD*)(nativeState + 0x1c9)) < 0)
+    m_state.vehicle = 0;
+    if (timestamp && (int)(timestamp - m_state.lastNetworkTimestamp) < 0)
         return;
-    *(DWORD*)(nativeState + 0x1c9) = timestamp;
+    m_state.lastNetworkTimestamp = timestamp;
     for (int i = 0; i < 68; i += 4)
-        *(DWORD*)(nativeState + 0x3c + i) = *(const DWORD*)(input + i);
-    *(float*)(nativeState + 0x1b0) = (float)sync->health;
-    *(float*)(nativeState + 0x1ac) = (float)sync->armour;
-    nativeState[0x1c4] = 16;
-    *(DWORD*)(nativeState + 0x1c5) = GetTickCount();
-    nativeState[0x18] = sync->specialAction;
-    if (*(int*)(nativeState + 0x7c) < 0)
-        *(DWORD*)(nativeState + 0x7c) = 0;
-    CPed* ped = *(CPed**)(nativeState + 4);
-    if (ped && ped->IsInVehicle() && nativeState[0x18] != 3 && nativeState[0x18] != 4 && !(*(CPed**)(nativeState + 4))->HasTaskType704())
+        *(DWORD*)((BYTE*)&m_state.onfoot + i) = *(const DWORD*)(input + i);
+    m_state.reportedHealth = (float)sync->health;
+    m_state.reportedArmour = (float)sync->armour;
+    m_state.updateType = 16;
+    m_state.lastUpdateTick = GetTickCount();
+    m_state.specialAction = sync->specialAction;
+    if (*(int*)&m_state.onfoot.animation < 0)
+        m_state.onfoot.animation = 0;
+    CPed* ped = m_state.ped;
+    if (ped && ped->IsInVehicle() && m_state.specialAction != 3 && m_state.specialAction != 4 && !m_state.ped->HasTaskType704())
         OnExitVehicle();
-    if (nativeState[0x1a] != 17)
-        nativeState[0x1a] = 17;
+    if (m_state.playerState != 17)
+        m_state.playerState = 17;
 }
 // 0x00016e70
 void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
     const LocalIncarSyncData* sync = (const LocalIncarSyncData*)data;
-    if (timestamp && (int)(timestamp - *(DWORD*)(nativeState + 0x1c9)) < 0)
+    if (timestamp && (int)(timestamp - m_state.lastNetworkTimestamp) < 0)
         return;
-    *(DWORD*)(nativeState + 0x1c9) = timestamp;
+    m_state.lastNetworkTimestamp = timestamp;
     for (int i = 0; i < 60; i += 4)
-        *(DWORD*)(nativeState + 0x80 + i) = *(const DWORD*)(input + i);
-    *(WORD*)(nativeState + 0xbc) = *(const WORD*)(input + 60);
-    nativeState[0xbe] = input[62];
-    *(WORD*)(nativeState + 2) = sync->vehicle;
-    *(CVehicle**)(nativeState + 8) = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(sync->vehicle);
-    nativeState[0x1b] = 0;
-    *(float*)(nativeState + 0x1b0) = (float)sync->pedHealth;
-    *(float*)(nativeState + 0x1ac) = (float)sync->armour;
-    nativeState[0x1c4] = 17;
-    *(DWORD*)(nativeState + 0x1c5) = GetTickCount();
-    nativeState[0x18] = 0;
-    CPed* ped = *(CPed**)(nativeState + 4);
+        *(DWORD*)((BYTE*)&m_state.incar + i) = *(const DWORD*)(input + i);
+    *(WORD*)((BYTE*)&m_state.incar.modelData + 1) = *(const WORD*)(input + 60);
+    *((BYTE*)&m_state.incar.modelData + 3) = input[62];
+    m_state.vehicleId = sync->vehicle;
+    m_state.vehicle = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(sync->vehicle);
+    m_state.seat = 0;
+    m_state.reportedHealth = (float)sync->pedHealth;
+    m_state.reportedArmour = (float)sync->armour;
+    m_state.updateType = 17;
+    m_state.lastUpdateTick = GetTickCount();
+    m_state.specialAction = 0;
+    CPed* ped = m_state.ped;
     if (ped && !ped->IsInVehicle())
         OnEnterVehicle();
-    BYTE oldState = nativeState[0x1a];
+    BYTE oldState = m_state.playerState;
     if (oldState != 19)
     {
         ChangeState(19, oldState);
-        nativeState[0x1a] = 19;
+        m_state.playerState = 19;
     }
 }
 // 0x00016f60
@@ -1292,26 +1288,26 @@ void CRemotePlayer::UpdatePassenger(const void* data)
     const BYTE* input = (const BYTE*)data;
     const LocalPassengerSyncData* sync = (const LocalPassengerSyncData*)data;
     for (int i = 0; i < 24; i += 4)
-        *(DWORD*)(nativeState + 0x24 + i) = *(const DWORD*)(input + i);
-    *(WORD*)(nativeState + 2) = sync->vehicle;
-    nativeState[0x1b] = sync->seatFlags & 0x3f;
-    *(CVehicle**)(nativeState + 8) = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(*(WORD*)(nativeState + 2));
-    *(float*)(nativeState + 0x1b0) = (float)sync->health;
-    *(float*)(nativeState + 0x1ac) = (float)sync->armour;
-    nativeState[0x1c4] = 18;
-    *(DWORD*)(nativeState + 0x1c5) = GetTickCount();
-    nativeState[0x18] = 0;
-    CPed* ped = *(CPed**)(nativeState + 4);
+        *(DWORD*)((BYTE*)&m_state.passenger + i) = *(const DWORD*)(input + i);
+    m_state.vehicleId = sync->vehicle;
+    m_state.seat = sync->seatFlags & 0x3f;
+    m_state.vehicle = ((CNetGame*)g_pNetGame)->pools->vehicles->Get(m_state.vehicleId);
+    m_state.reportedHealth = (float)sync->health;
+    m_state.reportedArmour = (float)sync->armour;
+    m_state.updateType = 18;
+    m_state.lastUpdateTick = GetTickCount();
+    m_state.specialAction = 0;
+    CPed* ped = m_state.ped;
     if (ped && !ped->IsInVehicle())
         OnEnterVehicle();
-    if (nativeState[0x1a] != 18)
-        nativeState[0x1a] = 18;
+    if (m_state.playerState != 18)
+        m_state.playerState = 18;
 }
 // 0x000154a0
 void CRemotePlayer::UpdateAim(const void* data)
 {
     const LocalAimSyncData* sync = (const LocalAimSyncData*)data;
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (!ped)
         return;
     AimStuff::SetPlayerCameraMode(sync->cameraMode, *((BYTE*)ped + 0x2b0));
@@ -1324,8 +1320,8 @@ void CRemotePlayer::UpdateAim(const void* data)
     memcpy(&aim.up, &up, 12);
     memcpy(&aim.source, sync->vectors + 12, 12);
     memcpy(&aim.sourceBeforeLookBehind, sync->vectors + 12, 12);
-    (*(CPed**)(nativeState + 4))->SetAim(&aim);
-    (*(CPed**)(nativeState + 4))->SetAimZ(sync->aimZ);
+    m_state.ped->SetAim(&aim);
+    m_state.ped->SetAimZ(sync->aimZ);
     int aspect = sync->aspect, zoom = sync->zoomWeapon & 0x3f;
     float aspectValue, zoomValue;
     // clang-format off
@@ -1338,9 +1334,9 @@ void CRemotePlayer::UpdateAim(const void* data)
         fstp dword ptr [zoomValue]
     }
     // clang-format on
-    ped = *(CPed**)(nativeState + 4);
+    ped = m_state.ped;
     AimStuff::SetPlayerCamera(*((BYTE*)ped + 0x2b0), zoomValue, aspectValue);
-    DWORD* slot = (DWORD*)(*(CPed**)(nativeState + 4))->GetCurrentWeaponSlot();
+    DWORD* slot = (DWORD*)m_state.ped->GetCurrentWeaponSlot();
     BYTE weapon = sync->zoomWeapon >> 6;
     if (weapon == 3)
         slot[1] = 2;
@@ -1352,19 +1348,19 @@ void CRemotePlayer::UpdateAim(const void* data)
 // 0x00014730
 void CRemotePlayer::OnExitVehicle()
 {
-    CPed* ped = *(CPed**)(nativeState + 4);
+    CPed* ped = m_state.ped;
     if (ped && ped->IsInVehicle())
     {
         CMatrix matrix;
-        (*(CPed**)(nativeState + 4))->GetMatrix(&matrix);
-        (*(CPed**)(nativeState + 4))->WarpFromVehicle(matrix.position.x, matrix.position.y, matrix.position.z);
-        *(DWORD*)(nativeState + 8) = 0;
+        m_state.ped->GetMatrix(&matrix);
+        m_state.ped->WarpFromVehicle(matrix.position.x, matrix.position.y, matrix.position.z);
+        m_state.vehicle = 0;
     }
 }
 // 0x00017120
 void CRemotePlayer::Chat(char* text)
 {
-    WORD id = *(WORD*)nativeState;
+    WORD id = m_state.id;
     const char* name = ((CNetGame*)g_pNetGame)->pools->players->GetName(id);
     DWORD color = (PlayerColors::Get(id) >> 8) | 0xff000000;
     g_pChat->AddChatMessage(name, color, text);
@@ -1376,110 +1372,105 @@ const char g_remoteCarJackedText[] = "~r~Car Jacked~w~!";
 // 0x00016250
 CRemotePlayer::CRemotePlayer()
 {
-    BYTE* state = (BYTE*)this;
     DWORD(WINAPI * tick)() = GetTickCount;
-    *(WORD*)(state + 2) = 0;
-    state[0x1a] = 0;
-    *(WORD*)state = 0xffff;
-    *(DWORD*)(state + 4) = 0;
-    state[0x1c4] = 0;
-    state[0x19] = 0xff;
-    *(DWORD*)(state + 0x10) = 1;
-    *(DWORD*)(state + 0xc) = 0;
-    *(DWORD*)(state + 0x14) = 0;
-    *(DWORD*)(state + 0x1f9) = 0;
-    state[0x18] = 0;
-    *(DWORD*)(state + 0x1c) = 0;
-    *(DWORD*)(state + 0x1cd) = 0;
-    *(DWORD*)(state + 0x1e1) = tick();
-    *(DWORD*)(state + 0x1e5) = tick();
-    *(DWORD*)(state + 0x1c5) = tick();
+    m_state.vehicleId = 0;
+    m_state.playerState = 0;
+    m_state.id = 0xffff;
+    m_state.ped = 0;
+    m_state.updateType = 0;
+    m_state.team = 0xff;
+    m_state.showNameTag = 1;
+    m_state.unknown0c = 0;
+    m_state.jetpackState = 0;
+    m_state.marker = 0;
+    m_state.specialAction = 0;
+    m_state.rawFlag1c = 0;
+    m_state.unknown1cd = 0;
+    m_state.lastHeadUpdateTick = tick();
+    m_state.lastHeadTaskTick = tick();
+    m_state.lastUpdateTick = tick();
     ResetData();
 }
 // 0x000162c0
 CRemotePlayer::~CRemotePlayer()
 {
-    BYTE* state = (BYTE*)this;
-    DWORD marker = *(DWORD*)(state + 0x1f9);
+    DWORD marker = m_state.marker;
     if (marker)
     {
         g_pGame->DeleteMarker(marker);
-        *(DWORD*)(state + 0x1f9) = 0;
+        m_state.marker = 0;
     }
-    CPed* ped = *(CPed**)(state + 4);
-    *(DWORD*)(state + 0x1e9) = 0;
+    CPed* ped = m_state.ped;
+    m_state.markerEnabled = 0;
     if (ped)
     {
         g_pGame->RemovePed(ped);
-        *(DWORD*)(state + 4) = 0;
+        m_state.ped = 0;
     }
 }
 // 0x00015c60
 void CRemotePlayer::ResetData()
 {
-    BYTE* state = (BYTE*)this;
-    *(WORD*)(state + 2) = 0;
-    *(DWORD*)(state + 0x1b0) = 0;
-    *(DWORD*)(state + 0x1ac) = 0;
-    *(DWORD*)(state + 8) = 0;
-    state[0x1b] = 0;
-    *(DWORD*)(state + 0x20) = 0;
-    *(DWORD*)(state + 0x1ed) = 0;
-    *(DWORD*)(state + 0x1f1) = 0;
-    *(DWORD*)(state + 0x1f5) = 0;
-    state[0x18] = 0;
-    *(DWORD*)(state + 0x1c0) = 0;
-    *(DWORD*)(state + 0x1d1) = 2;
-    memset(state + 0x3c, 0, 68);
-    memset(state + 0x80, 0, 63);
-    memset(state + 0x24, 0, 24);
-    memset(state + 0xf5, 0, 31);
-    memset(state + 0x1d5, 0, 12);
-    DWORD marker = *(DWORD*)(state + 0x1f9);
+    m_state.vehicleId = 0;
+    *(DWORD*)&m_state.reportedHealth = 0;
+    *(DWORD*)&m_state.reportedArmour = 0;
+    m_state.vehicle = 0;
+    m_state.seat = 0;
+    m_state.passengerDriveby = 0;
+    m_state.markerX = 0;
+    m_state.markerY = 0;
+    m_state.markerZ = 0;
+    m_state.specialAction = 0;
+    m_state.appliedAnimation = 0;
+    m_state.status = 2;
+    memset(&m_state.onfoot, 0, 68);
+    memset(&m_state.incar, 0, 63);
+    memset(&m_state.passenger, 0, 24);
+    memset(m_state.unknownf5, 0, 31);
+    memset(&m_state.headDirection, 0, 12);
+    DWORD marker = m_state.marker;
     if (marker)
     {
         g_pGame->DeleteMarker(marker);
-        *(DWORD*)(state + 0x1f9) = 0;
+        m_state.marker = 0;
     }
-    *(DWORD*)(state + 0x1e9) = 0;
+    m_state.markerEnabled = 0;
     if (g_pNetGame)
-        *(DWORD*)(state + 0x1c9) = (DWORD)((CNetGame*)g_pNetGame)->GetCounter();
+        m_state.lastNetworkTimestamp = (DWORD)((CNetGame*)g_pNetGame)->GetCounter();
 }
 // 0x00017040
 void CRemotePlayer::Remove()
 {
-    BYTE* state = (BYTE*)this;
-    if (*(CPed**)(state + 4))
+    if (m_state.ped)
     {
         ResetData();
-        g_pGame->RemovePed(*(CPed**)(state + 4));
-        *(DWORD*)(state + 4) = 0;
+        g_pGame->RemovePed(m_state.ped);
+        m_state.ped = 0;
     }
-    state[0x1a] = 0;
-    *(DWORD*)(state + 0x10) = 1;
+    m_state.playerState = 0;
+    m_state.showNameTag = 1;
 }
 // 0x00017080
 void CRemotePlayer::Kill()
 {
-    BYTE* state = (BYTE*)this;
-    if (*(CPed**)(state + 4))
+    if (m_state.ped)
     {
-        (*(CPed**)(state + 4))->SetKeys(0, 0, 0);
-        (*(CPed**)(state + 4))->Kill();
+        m_state.ped->SetKeys(0, 0, 0);
+        m_state.ped->Kill();
     }
-    if (state[0x1a] != 32)
-        state[0x1a] = 32;
+    if (m_state.playerState != 32)
+        m_state.playerState = 32;
     ResetData();
 }
 // 0x00015e00
 void CRemotePlayer::SetColor(DWORD color)
 {
-    PlayerColors::Set(*(WORD*)this, color);
+    PlayerColors::Set(m_state.id, color);
 }
 // 0x00015e20
 DWORD CRemotePlayer::GetColorAsRGBA()
 {
-    return PlayerColors::Get(*(WORD*)this);
+    return PlayerColors::Get(m_state.id);
 }
 // 0x00015d50
 __declspec(naked) float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
@@ -1554,25 +1545,23 @@ void CRemotePlayer::EnterVehicle(WORD id, BOOL passenger)
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     CVehiclePool* vehicles = *(CVehiclePool**)(pools + 0xc);
     CVehicle* vehicle = vehicles->Get(id);
-    BYTE* state = (BYTE*)this;
-    CPed* ped = *(CPed**)(state + 4);
+    CPed* ped = m_state.ped;
     if (!ped || !vehicle || ped->IsInVehicle())
         return;
     DWORD ref = vehicles->GetRef((int)id);
     if (!ref || ref == 0xffff)
         return;
-    (*(CPed**)(state + 4))->SetKeys(0, 0, 0);
-    (*(CPed**)(state + 4))->EnterVehicle(ref, passenger);
+    m_state.ped->SetKeys(0, 0, 0);
+    m_state.ped->EnterVehicle(ref, passenger);
 }
 // 0x00015ee0
 void CRemotePlayer::ExitVehicle()
 {
-    BYTE* state = (BYTE*)this;
-    CPed* ped = *(CPed**)(state + 4);
+    CPed* ped = m_state.ped;
     if (!ped || !ped->IsInVehicle())
         return;
-    (*(CPed**)(state + 4))->SetKeys(0, 0, 0);
-    (*(CPed**)(state + 4))->ExitVehicle();
+    m_state.ped->SetKeys(0, 0, 0);
+    m_state.ped->ExitVehicle();
 }
 // 0x00015f10
 void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
@@ -1595,10 +1584,9 @@ void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
 // 0x000144d0
 void CRemotePlayer::ApplySurfingMatrix()
 {
-    BYTE* state = (BYTE*)this;
-    if (state[0x1a] != 17)
+    if (m_state.playerState != 17)
         return;
-    WORD id = *(WORD*)(state + 0x7a);
+    WORD id = m_state.onfoot.surfingVehicle;
     if (!id || id == 0xffff || id >= 4100)
         return;
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -1613,7 +1601,7 @@ void CRemotePlayer::ApplySurfingMatrix()
         return;
     for (int axis = 0; axis < 3; axis++)
     {
-        float* component = (float*)(state + 0x6e) + axis;
+        float* component = (float*)&m_state.onfoot.surfingOffset + axis;
         BYTE accepted;
         // clang-format off
         // Preserve FCOMP unordered acceptance and native +/-100 bounds.
@@ -1643,84 +1631,82 @@ void CRemotePlayer::ApplySurfingMatrix()
     entity->GetMatrix(&entityMatrix);
     entity->GetSpeed(&speed);
     entity->GetTurnSpeed(&turnSpeed);
-    (*(CPed**)(state + 4))->GetMatrix(&pedMatrix);
-    GameTransformPoint(&position, &entityMatrix, (CVector*)(state + 0x6e));
+    m_state.ped->GetMatrix(&pedMatrix);
+    GameTransformPoint(&position, &entityMatrix, &m_state.onfoot.surfingOffset);
     memcpy(&pedMatrix.position, &position, 12);
-    (*(CPed**)(state + 4))->ApplyMatrix(pedMatrix);
+    m_state.ped->ApplyMatrix(pedMatrix);
 }
 
 // 0x00001080
 BOOL CRemotePlayer::IsActive()
 {
-    BYTE* state = (BYTE*)this;
-    return *(CPed**)(state + 4) && state[0x1a] != 0;
+    return m_state.ped && m_state.playerState != 0;
 }
 
 #include "game/player_colors.h"
 // 0x00015e30
 DWORD CRemotePlayer::GetColorAsARGB()
 {
-    return (PlayerColors::Get(*(WORD*)this) >> 8) | 0xff000000;
+    return (PlayerColors::Get(m_state.id) >> 8) | 0xff000000;
 }
 // 0x00015fd0
 int CRemotePlayer::GetStatus()
 {
-    BYTE* state = (BYTE*)this;
-    if (!*(CPed**)(state + 4))
+    if (!m_state.ped)
         return 0;
-    if (!(*(CPed**)(state + 4))->DoesExist())
+    if (!m_state.ped->DoesExist())
         return 0;
-    if ((*(CPed**)(state + 4))->GetVehicleTransitionTaskState())
+    if (m_state.ped->GetVehicleTransitionTaskState())
         return 0;
-    if ((*(CPed**)(state + 4))->HasTaskType704())
+    if (m_state.ped->HasTaskType704())
         return 0;
-    return *(int*)(state + 0x1d1);
+    return (int)m_state.status;
 }
 
 // 0x00002dc0
 BYTE CRemotePlayer::GetState()
 {
-    return nativeState[0x1a];
+    return m_state.playerState;
 }
 // 0x000135d0
 void CRemotePlayer::SetId(WORD id)
 {
-    *(WORD*)nativeState = id;
+    m_state.id = id;
 }
 // 0x000135e0
 WORD CRemotePlayer::GetId()
 {
-    return *(WORD*)nativeState;
+    return m_state.id;
 }
 // 0x000135f0
 void CRemotePlayer::SetRawFlag1C(DWORD value)
 {
-    *(DWORD*)(nativeState + 0x1c) = value;
+    m_state.rawFlag1c = value;
 }
 // 0x00013600
 void CRemotePlayer::ResetStateAndLabels()
 {
-    nativeState[0x1a] = 0;
-    *(DWORD*)(nativeState + 0x10) = 1;
+    m_state.playerState = 0;
+    m_state.showNameTag = 1;
 }
 // 0x00014220
 BYTE CRemotePlayer::GetSpecialAction()
 {
-    return nativeState[0x18];
+    return m_state.specialAction;
 }
 // 0x00014230
 DWORD CRemotePlayer::GetRawFlag1C()
 {
-    return *(DWORD*)(nativeState + 0x1c);
+    return m_state.rawFlag1c;
 }
 
 // 0x00001070
 CPed* CRemotePlayer::GetPed()
 {
-    return *(CPed**)(nativeState + 4);
+    return m_state.ped;
 }
 // 0x000010a0
 CVehicle* CRemotePlayer::GetVehicle()
 {
-    return *(CVehicle**)(nativeState + 8);
+    return m_state.vehicle;
 }
