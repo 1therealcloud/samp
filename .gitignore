@@ -14,4 +14,6 @@
 !/third-party/detours
 !/build.cmd
 !/build-libs.cmd
+!/.clang-format
+!/format.cmd
 /STATUS.md

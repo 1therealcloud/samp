@@ -2,7 +2,9 @@
 #define SAMP_AUDIO_STREAM_NATIVE_H
 #include <windows.h>
 struct CVector;
-class CAudioStream {public:
+class CAudioStream
+{
+public:
     BYTE initialized;
     // samp.dll RVA: 0x00065f00
     BOOL Reset();
@@ -10,10 +12,10 @@ class CAudioStream {public:
     // samp.dll RVA: 0x00066650
     static void Update3D();
     // samp.dll RVA: 0x000663e0
-    BOOL Play(const char *url,float x,float y,float z,float radius,bool spatial);
+    BOOL Play(const char* url, float x, float y, float z, float radius, bool spatial);
     // CRT _beginthread entry; native ignores its argument and returns normally.
     // samp.dll RVA: 0x00066180
-    static void __cdecl Worker(void *argument);
+    static void __cdecl Worker(void* argument);
     // samp.dll RVA: 0x00065fe0
     BOOL Stop(bool wait);
     // Descriptive static helpers; native metadata entry consumes no this pointer.
@@ -21,7 +23,7 @@ class CAudioStream {public:
     static void ReadMetadata();
     // BASS SYNCPROC ABI; all callback arguments are ignored by the original.
     // samp.dll RVA: 0x00066170
-    static void CALLBACK MetadataSync(DWORD handle,DWORD channel,DWORD data,void *user);
+    static void CALLBACK MetadataSync(DWORD handle, DWORD channel, DWORD data, void* user);
     // samp.dll RVA: 0x00066530
     void DrawInfo();
     // samp.dll RVA: 0x00066500
@@ -29,9 +31,9 @@ class CAudioStream {public:
 };
 // Descriptive coordinate adapters; preserve sequential stores when input/output alias.
 // samp.dll RVA: 0x00066610
-void __cdecl AudioStreamSwapYZNegateX(const CVector *input,CVector *output);
+void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output);
 // samp.dll RVA: 0x00066630
-void __cdecl AudioStreamSwapNegateYZ(const CVector *input,CVector *output);
+void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output);
 // Proven 257-byte clear regions in native metadata writers.
 // samp.dll RVA: 0x0016c5c0
 extern char g_audioStreamTitle[257];

@@ -1,13 +1,14 @@
 #ifndef SAMP_RECOVERED_AUDIO_H
 #define SAMP_RECOVERED_AUDIO_H
 #include "game/entity.h"
-#pragma pack(push,1)
-class CAudio {
+#pragma pack(push, 1)
+class CAudio
+{
 public:
     BOOL m_bSoundLoaded;
     bool m_bOutdoorAmbienceTrackDisabled;
     // samp.dll RVA: unknown (inline initialization in CGame RVA 0x0009fdc0; standalone entry not established)
-    CAudio() : m_bSoundLoaded(FALSE),m_bOutdoorAmbienceTrackDisabled(false) {}
+    CAudio() : m_bSoundLoaded(FALSE), m_bOutdoorAmbienceTrackDisabled(false) {}
     // samp.dll RVA: 0x000a2030
     int GetRadioStation();
     // samp.dll RVA: 0x000a2060
@@ -24,10 +25,10 @@ public:
     // samp.dll RVA: 0x000a21c0
     bool IsOutdoorAmbienceTrackDisabled();
     // samp.dll RVA: 0x000a20e0
-    void Play(int sound,CVector position);
+    void Play(int sound, CVector position);
     // samp.dll RVA: 0x000a1ff0
     void Process();
 };
 #pragma pack(pop)
-typedef char AudioExtent[(sizeof(CAudio)==5)?1:-1];
+typedef char AudioExtent[(sizeof(CAudio) == 5) ? 1 : -1];
 #endif

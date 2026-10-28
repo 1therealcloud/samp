@@ -18,13 +18,12 @@ DWORD CHasher::ms_dwHashAlgorithm = CALG_SHA1;
 // samp.dll RVA: 0x000652f0
 CHasher::CHasher(CCryptoContext* pContext)
 {
-	// Save context for later
-	m_pContext = pContext;
+    // Save context for later
+    m_pContext = pContext;
 
-	// Generate a hash container
-	HCRYPTPROV hCryptProv = pContext->GetProvider();
-	CRYPT(CreateHash)(hCryptProv, ms_dwHashAlgorithm, NULL, NULL, &m_hCryptHash);
-
+    // Generate a hash container
+    HCRYPTPROV hCryptProv = pContext->GetProvider();
+    CRYPT(CreateHash)(hCryptProv, ms_dwHashAlgorithm, NULL, NULL, &m_hCryptHash);
 }
 
 //------------------------------------
@@ -32,18 +31,17 @@ CHasher::CHasher(CCryptoContext* pContext)
 // samp.dll RVA: 0x00065320
 CHasher::~CHasher(void)
 {
-	// Destory the hash container
-	CRYPT(DestroyHash)(m_hCryptHash);
+    // Destory the hash container
+    CRYPT(DestroyHash)(m_hCryptHash);
 }
-
 
 //------------------------------------
 
 // samp.dll RVA: 0x00065330
-void CHasher::AddData(DWORD dwDataLength, BYTE *pbData)
+void CHasher::AddData(DWORD dwDataLength, BYTE* pbData)
 {
-	// Add the data to be hashed
-	CRYPT(HashData)(m_hCryptHash, pbData, dwDataLength, 0);
+    // Add the data to be hashed
+    CRYPT(HashData)(m_hCryptHash, pbData, dwDataLength, 0);
 }
 
 //------------------------------------
@@ -51,8 +49,7 @@ void CHasher::AddData(DWORD dwDataLength, BYTE *pbData)
 // samp.dll RVA: 0x00065350
 HCRYPTKEY CHasher::GetContainer()
 {
-	return m_hCryptHash;
+    return m_hCryptHash;
 }
-
 
 //------------------------------------

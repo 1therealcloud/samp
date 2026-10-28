@@ -3,40 +3,40 @@
 #include <stddef.h>
 // Signed ASCII comparison; zero length reads neither input.
 // samp.dll RVA: 0x00017510
-int Util_strnicmp(const char *first,const char *second,size_t count);
+int Util_strnicmp(const char* first, const char* second, size_t count);
 // samp.dll RVA: 0x00017440
-void Util_strupr(char *text);
+void Util_strupr(char* text);
 // samp.dll RVA: 0x00017380
-char *Util_stristr(const char *string,const char *pattern);
+char* Util_stristr(const char* string, const char* pattern);
 // C-string encoder, not a counted binary encoder.
 // samp.dll RVA: 0x000176a0
-void Util_Base64Encode(char *input,char *output);
+void Util_Base64Encode(char* input, char* output);
 // samp.dll RVA: 0x00118230
 extern const char g_base64Alphabet[66];
 // samp.dll RVA: 0x0013c4b4
-extern const char *g_base64Encoding;
+extern const char* g_base64Encoding;
 
 // samp.dll RVA: 0x000172e0
-void Util_UrlUnencode(char *enc);
+void Util_UrlUnencode(char* enc);
 // samp.dll RVA: 0x00017360
 char Util_toupper(char c);
 // samp.dll RVA: 0x00017470
-int Util_wildcmp(char *wild, char *string);
+int Util_wildcmp(char* wild, char* string);
 // samp.dll RVA: 0x000175b0
-char *Util_strrev(char *str);
+char* Util_strrev(char* str);
 // samp.dll RVA: 0x00017600
-char *Util_itoa(int v, char *s, int r);
+char* Util_itoa(int v, char* s, int r);
 // samp.dll RVA: 0x0009d840
-void K_EncodeString(char *szInput, char *szOutput);
+void K_EncodeString(char* szInput, char* szOutput);
 // samp.dll RVA: 0x0009d880
-char *K_DecodeString(unsigned char *szInput);
+char* K_DecodeString(unsigned char* szInput);
 
 #endif
 
 // samp.dll RVA: 0x000b55e0
-bool Util_IsDecimal(const char *text);
+bool Util_IsDecimal(const char* text);
 // samp.dll RVA: 0x000b5920
-void Util_SanitizeAscii(char *text);
+void Util_SanitizeAscii(char* text);
 
 // Last matching D3D9 base is XOR-encoded; unchanged when no module matches.
 // samp.dll RVA: 0x0018dc3c

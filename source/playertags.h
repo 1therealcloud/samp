@@ -1,13 +1,18 @@
 #ifndef SAMP_PLAYERTAGS_H
 #define SAMP_PLAYERTAGS_H
-#include <d3dx9.h>
 #include "game/entity.h"
 #include "game/scripting.h"
-struct PlayerTagVertex {float x,y,z,rhw;DWORD color;};
-class CPlayerTags {
+#include <d3dx9.h>
+struct PlayerTagVertex
+{
+    float x, y, z, rhw;
+    DWORD color;
+};
+class CPlayerTags
+{
 public:
     // samp.dll RVA: 0x0006cae0
-    void DrawHealthBar(const CVector *position,float health,float armour,float distance);
+    void DrawHealthBar(const CVector* position, float health, float armour, float distance);
     // samp.dll RVA: 0x0006d0f0
     void BeginHealthBar();
     // samp.dll RVA: 0x0006c760
@@ -20,10 +25,12 @@ public:
     void EndLabel();
     // Raw status byte and integer words are retained.
     // samp.dll RVA: 0x0006c7e0
-    void DrawLabel(const CVector *position,const char *text,DWORD color,float distance,BYTE drawStatus,int status);
+    void DrawLabel(const CVector* position, const char* text, DWORD color, float distance, BYTE drawStatus, int status);
     // samp.dll RVA: 0x0006c730
-    CPlayerTags(IDirect3DDevice9 *device);
-    IDirect3DDevice9 *device;IDirect3DStateBlock9 *state;ID3DXSprite *sprite;
+    CPlayerTags(IDirect3DDevice9* device);
+    IDirect3DDevice9* device;
+    IDirect3DStateBlock9* state;
+    ID3DXSprite* sprite;
     // samp.dll RVA: 0x0006d090
     void OnLostDevice();
     // samp.dll RVA: 0x0006d0c0
@@ -80,42 +87,42 @@ extern const float g_playerTagArmourOffset;
 class CLegacyPlayerTags
 {
 private:
-	struct NameTextVertex_s
-	{
-		float x, y, z, tu, tv;
-		// samp.dll RVA: 0x0006d8b0
-		void Initialise(float fX,float fY,float fTu,float fTv);
-	};
+    struct NameTextVertex_s
+    {
+        float x, y, z, tu, tv;
+        // samp.dll RVA: 0x0006d8b0
+        void Initialise(float fX, float fY, float fTu, float fTv);
+    };
 
-	IDirect3DDevice9* m_pDevice;
-	IDirect3DTexture9* m_pTexture;
-	IDirect3DVertexBuffer9* m_pVB;
-	IDirect3DStateBlock9* m_pOldStates;
-	IDirect3DStateBlock9* m_pNewStates;
+    IDirect3DDevice9* m_pDevice;
+    IDirect3DTexture9* m_pTexture;
+    IDirect3DVertexBuffer9* m_pVB;
+    IDirect3DStateBlock9* m_pOldStates;
+    IDirect3DStateBlock9* m_pNewStates;
 
-	float m_fCharWidth;
-	float m_fCharHeight;
-	float m_fScale;
+    float m_fCharWidth;
+    float m_fCharHeight;
+    float m_fScale;
+
 public:
-	// samp.dll RVA: 0x0006d8e0
-	CLegacyPlayerTags(IDirect3DDevice9* pDevice);
-	// samp.dll RVA: 0x0006d910
-	~CLegacyPlayerTags();
+    // samp.dll RVA: 0x0006d8e0
+    CLegacyPlayerTags(IDirect3DDevice9* pDevice);
+    // samp.dll RVA: 0x0006d910
+    ~CLegacyPlayerTags();
 
-	// samp.dll RVA: 0x0006df10
-	void Begin();
-	// samp.dll RVA: 0x0006df50
-	void End();
-	// samp.dll RVA: 0x0006df80
-	void Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD dwColor, float fHealth);
-	// samp.dll RVA: 0x0006d950
-	void InitQuad(char c, float x, float y2, NameTextVertex_s* pVB);
-	// samp.dll RVA: 0x0006da80
-	void DeleteDeviceObjects();
-	// samp.dll RVA: 0x0006dad0
-	void RestoreDeviceObjects();
+    // samp.dll RVA: 0x0006df10
+    void Begin();
+    // samp.dll RVA: 0x0006df50
+    void End();
+    // samp.dll RVA: 0x0006df80
+    void Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD dwColor, float fHealth);
+    // samp.dll RVA: 0x0006d950
+    void InitQuad(char c, float x, float y2, NameTextVertex_s* pVB);
+    // samp.dll RVA: 0x0006da80
+    void DeleteDeviceObjects();
+    // samp.dll RVA: 0x0006dad0
+    void RestoreDeviceObjects();
 };
-
 
 // Contiguous health vertices192 bytes followed by metrics256. Signed character
 // indexing reaches the preceding mutable vertices in the original binary.

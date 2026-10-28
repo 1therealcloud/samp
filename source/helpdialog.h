@@ -2,11 +2,13 @@
 #define SAMP_HELPDIALOG_H
 #include <windows.h>
 struct IDirect3DDevice9;
-class CHelpDialog {public:
+class CHelpDialog
+{
+public:
     // Observed allocation extent, not a complete recovered interface.
     BYTE nativeState[0x4];
     // samp.dll RVA: 0x0006b560
-    CHelpDialog(IDirect3DDevice9 *device);
+    CHelpDialog(IDirect3DDevice9* device);
     // samp.dll RVA: 0x0006b570
     void Show();
 };

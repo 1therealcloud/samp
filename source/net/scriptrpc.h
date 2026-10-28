@@ -2,80 +2,86 @@
 #define SAMP_SCRIPTRPC_H
 class RakClientInterface;
 struct RPCParameters;
-namespace Scripting {struct OpcodeInfo;}
-namespace RakNet {class BitStream;}
+namespace Scripting
+{
+struct OpcodeInfo;
+}
+namespace RakNet
+{
+class BitStream;
+}
 class CObject;
 // Reads count material records from an existing borrowed stream.
 // samp.dll RVA: 0x0001aba0
-void ObjectReadMaterials(unsigned char count,CObject *object,RakNet::BitStream *stream);
+void ObjectReadMaterials(unsigned char count, CObject* object, RakNet::BitStream* stream);
 // samp.dll RVA: 0x0001ae70
-void ScrCreateObject(RPCParameters *parameters);
+void ScrCreateObject(RPCParameters* parameters);
 // samp.dll RVA: 0x0001b1d0
-void ScrSetObjectMaterial(RPCParameters *parameters);
+void ScrSetObjectMaterial(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c1d0
-void ScrAttachObjectToPlayer(RPCParameters *parameters);
+void ScrAttachObjectToPlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x00018a00
-void ScrSetPlayerAttachedObject(RPCParameters *parameters);
+void ScrSetPlayerAttachedObject(RPCParameters* parameters);
 // Native updates custom-model state; higher-level name remains unestablished.
 // samp.dll RVA: 0x0001d780
-void ScrRpc48(RPCParameters *parameters);
+void ScrRpc48(RPCParameters* parameters);
 // samp.dll RVA: 0x00118288
 extern const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand;
 // samp.dll RVA: 0x0001da90
-void ScrSetPlayerName(RPCParameters *parameters);
+void ScrSetPlayerName(RPCParameters* parameters);
 // samp.dll RVA: 0x000188b0
-void ScrSetPlayerDrunkLevel(RPCParameters *parameters);
+void ScrSetPlayerDrunkLevel(RPCParameters* parameters);
 // samp.dll RVA: 0x00018950
-void ScrSetPlayerArmedWeapon(RPCParameters *parameters);
+void ScrSetPlayerArmedWeapon(RPCParameters* parameters);
 // samp.dll RVA: 0x00019b20
-void ScrAttachCameraToObject(RPCParameters *parameters);
+void ScrAttachCameraToObject(RPCParameters* parameters);
 // samp.dll RVA: 0x00019c20
-void ScrInterpolateCamera(RPCParameters *parameters);
+void ScrInterpolateCamera(RPCParameters* parameters);
 // samp.dll RVA: 0x0001d110
-void ClickTextDraw(RPCParameters *parameters);
+void ClickTextDraw(RPCParameters* parameters);
 // samp.dll RVA: 0x0001bca0
-void ScrStopObjectCameraCollision(RPCParameters *parameters);
+void ScrStopObjectCameraCollision(RPCParameters* parameters);
 // samp.dll RVA: 0x0001cff0
-void ScrRemoveBuildingForPlayer(RPCParameters *parameters);
+void ScrRemoveBuildingForPlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x00018b40
-void ScrPlayCrimeReport(RPCParameters *parameters);
+void ScrPlayCrimeReport(RPCParameters* parameters);
 // Opcode-specific names: higher-level native semantics not established.
 // samp.dll RVA: 0x00018750
-void ScrPlayerOpcode052C(RPCParameters *parameters);
+void ScrPlayerOpcode052C(RPCParameters* parameters);
 // samp.dll RVA: 0x00018800
-void ScrPlayerOpcode03FD(RPCParameters *parameters);
+void ScrPlayerOpcode03FD(RPCParameters* parameters);
 // Native is a bare RET, not a reconstruction stub.
 // samp.dll RVA: 0x00017bd0
-void ScrRpc125(RPCParameters *parameters);
+void ScrRpc125(RPCParameters* parameters);
 // Native consumes and discards a WORD, with stream construction/destruction.
 // samp.dll RVA: 0x0001a230
-void ScrRpc64(RPCParameters *parameters);
+void ScrRpc64(RPCParameters* parameters);
 // samp.dll RVA: 0x001182b0
 extern const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand;
 // samp.dll RVA: 0x001182c4
 extern const Scripting::OpcodeInfo g_rpcPlayerOpcode03fdCommand;
 // samp.dll RVA: 0x00017a60
-void ScrSetSpawnInfo(RPCParameters *parameters);
+void ScrSetSpawnInfo(RPCParameters* parameters);
 // samp.dll RVA: 0x00018250
-void ScrSetPlayerFightingStyle(RPCParameters *parameters);
+void ScrSetPlayerFightingStyle(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a740
-void ScrSetPlayerAmmo(RPCParameters *parameters);
+void ScrSetPlayerAmmo(RPCParameters* parameters);
 // samp.dll RVA: 0x00019240
-void ScrSetPlayerTeam(RPCParameters *parameters);
+void ScrSetPlayerTeam(RPCParameters* parameters);
 // samp.dll RVA: 0x00018c80
-void ScrSetPlayerSkin(RPCParameters *parameters);
+void ScrSetPlayerSkin(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a480
-void ScrApplyAnimation(RPCParameters *parameters);
+void ScrApplyAnimation(RPCParameters* parameters);
 // samp.dll RVA: 0x00018090
-void ScrClearAnimations(RPCParameters *parameters);
+void ScrClearAnimations(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c0f0
-void ScrMoveVehicleComponent(RPCParameters *parameters);
+void ScrMoveVehicleComponent(RPCParameters* parameters);
 // Descriptive name established by native message/opcode, RPC111.
 // samp.dll RVA: 0x000185c0
-void ScrSetPlayerWidescreen(RPCParameters *parameters);
+void ScrSetPlayerWidescreen(RPCParameters* parameters);
 // Descriptive name established by the native SetTires call, RPC98.
 // samp.dll RVA: 0x00018670
-void ScrSetVehicleTires(RPCParameters *parameters);
+void ScrSetVehicleTires(RPCParameters* parameters);
 // samp.dll RVA: 0x00118274
 extern const Scripting::OpcodeInfo g_rpcWidescreenCommand;
 // samp.dll RVA: 0x0011844c
@@ -85,149 +91,149 @@ extern const char g_rpcInvalidSkinWarning[];
 // samp.dll RVA: 0x0011829c
 extern const Scripting::OpcodeInfo g_rpcExplosionCommand;
 // samp.dll RVA: 0x0001b540
-void ScrSetObjectPosition(RPCParameters *parameters);
+void ScrSetObjectPosition(RPCParameters* parameters);
 // samp.dll RVA: 0x0001b650
-void ScrSetObjectRotation(RPCParameters *parameters);
+void ScrSetObjectRotation(RPCParameters* parameters);
 // samp.dll RVA: 0x0001b750
-void ScrDestroyObject(RPCParameters *parameters);
+void ScrDestroyObject(RPCParameters* parameters);
 // samp.dll RVA: 0x0001ba30
-void ScrMoveObject(RPCParameters *parameters);
+void ScrMoveObject(RPCParameters* parameters);
 // samp.dll RVA: 0x0001bbe0
-void ScrStopObject(RPCParameters *parameters);
+void ScrStopObject(RPCParameters* parameters);
 // samp.dll RVA: 0x0001d210
-void ScrSetActorAnimation(RPCParameters *parameters);
+void ScrSetActorAnimation(RPCParameters* parameters);
 // Descriptive name established by RPC174 and the actor ClearTasks call.
 // samp.dll RVA: 0x0001d3f0
-void ScrClearActorAnimations(RPCParameters *parameters);
+void ScrClearActorAnimations(RPCParameters* parameters);
 // samp.dll RVA: 0x0001d4b0
-void ScrSetActorRotation(RPCParameters *parameters);
+void ScrSetActorRotation(RPCParameters* parameters);
 // samp.dll RVA: 0x0001d590
-void ScrSetActorPosition(RPCParameters *parameters);
+void ScrSetActorPosition(RPCParameters* parameters);
 // samp.dll RVA: 0x0001d6a0
-void ScrSetActorHealth(RPCParameters *parameters);
+void ScrSetActorHealth(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a2c0
-void ScrSetPlayerMapIcon(RPCParameters *parameters);
+void ScrSetPlayerMapIcon(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a3e0
-void ScrRemovePlayerMapIcon(RPCParameters *parameters);
+void ScrRemovePlayerMapIcon(RPCParameters* parameters);
 // samp.dll RVA: 0x0001b840
-void ScrCreateExplosion(RPCParameters *parameters);
+void ScrCreateExplosion(RPCParameters* parameters);
 // samp.dll RVA: 0x0001b950
-void ScrShowPlayerNametagForPlayer(RPCParameters *parameters);
+void ScrShowPlayerNametagForPlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x000197a0
-void ScrSetVehiclePosition(RPCParameters *parameters);
+void ScrSetVehiclePosition(RPCParameters* parameters);
 // samp.dll RVA: 0x000198b0
-void ScrSetVehicleZAngle(RPCParameters *parameters);
+void ScrSetVehicleZAngle(RPCParameters* parameters);
 // samp.dll RVA: 0x00019990
-void ScrSetVehicleParamsForPlayer(RPCParameters *parameters);
+void ScrSetVehicleParamsForPlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x00019a60
-void ScrLinkVehicleToInterior(RPCParameters *parameters);
+void ScrLinkVehicleToInterior(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a8a0
-void ScrSetVehicleHealth(RPCParameters *parameters);
+void ScrSetVehicleHealth(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a980
-void ScrAttachTrailerToVehicle(RPCParameters *parameters);
+void ScrAttachTrailerToVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x0001aac0
-void ScrDetachTrailerFromVehicle(RPCParameters *parameters);
+void ScrDetachTrailerFromVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x00018450
-void ScrSetVehicleVelocity(RPCParameters *parameters);
+void ScrSetVehicleVelocity(RPCParameters* parameters);
 // samp.dll RVA: 0x0001bd60
-void ScrSetNumberPlate(RPCParameters *parameters);
+void ScrSetNumberPlate(RPCParameters* parameters);
 // samp.dll RVA: 0x0001be80
-void ScrTogglePlayerSpectating(RPCParameters *parameters);
+void ScrTogglePlayerSpectating(RPCParameters* parameters);
 // samp.dll RVA: 0x0001bf30
-void ScrPlayerSpectatePlayer(RPCParameters *parameters);
+void ScrPlayerSpectatePlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c010
-void ScrPlayerSpectateVehicle(RPCParameters *parameters);
+void ScrPlayerSpectateVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x00019130
-void ScrPutPlayerInVehicle(RPCParameters *parameters);
+void ScrPutPlayerInVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x00017b00
-void ScrRemovePlayerFromVehicle(RPCParameters *parameters);
+void ScrRemovePlayerFromVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x00019420
-void ScrDisplayGametext(RPCParameters *parameters);
+void ScrDisplayGametext(RPCParameters* parameters);
 // samp.dll RVA: 0x00017960
-void ScrSetPlayerShopName(RPCParameters *parameters);
+void ScrSetPlayerShopName(RPCParameters* parameters);
 // samp.dll RVA: 0x00019330
-void ScrSetPlayerColor(RPCParameters *parameters);
+void ScrSetPlayerColor(RPCParameters* parameters);
 // samp.dll RVA: 0x0001d830
-void ScrDeathMessage(RPCParameters *parameters);
+void ScrDeathMessage(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c390
-void ScrInitMenu(RPCParameters *parameters);
+void ScrInitMenu(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c650
-void ScrShowMenu(RPCParameters *parameters);
+void ScrShowMenu(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c700
-void ScrHideMenu(RPCParameters *parameters);
+void ScrHideMenu(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c850
-void ScrShowTextDraw(RPCParameters *parameters);
+void ScrShowTextDraw(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c980
-void ScrHideTextDrawForPlayer(RPCParameters *parameters);
+void ScrHideTextDrawForPlayer(RPCParameters* parameters);
 // Verified entry; external SAMP-API1CF70 points inside the audio-stream handler.
 // samp.dll RVA: 0x0001ca30
-void ScrTextDrawSetString(RPCParameters *parameters);
+void ScrTextDrawSetString(RPCParameters* parameters);
 // samp.dll RVA: 0x00019e60
-void ScrPlaySound(RPCParameters *parameters);
+void ScrPlaySound(RPCParameters* parameters);
 // samp.dll RVA: 0x0001ce80
-void ScrPlayAudioStream(RPCParameters *parameters);
+void ScrPlayAudioStream(RPCParameters* parameters);
 // samp.dll RVA: 0x00017c00
-void ScrStopAudioStream(RPCParameters *parameters);
+void ScrStopAudioStream(RPCParameters* parameters);
 // samp.dll RVA: 0x00118494
 extern const char g_rpcLargeTextDrawWarning[];
 // samp.dll RVA: 0x000195d0
-void ScrSetPlayerCameraPosition(RPCParameters *parameters);
+void ScrSetPlayerCameraPosition(RPCParameters* parameters);
 // samp.dll RVA: 0x000196a0
-void ScrSetPlayerCameraLookAt(RPCParameters *parameters);
+void ScrSetPlayerCameraLookAt(RPCParameters* parameters);
 // samp.dll RVA: 0x00017b90
-void ScrSetCameraBehindPlayer(RPCParameters *parameters);
+void ScrSetCameraBehindPlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x00018e50
-void ScrSetPlayerPosition(RPCParameters *parameters);
+void ScrSetPlayerPosition(RPCParameters* parameters);
 // samp.dll RVA: 0x00018f70
-void ScrSetPlayerPositionFindZ(RPCParameters *parameters);
+void ScrSetPlayerPositionFindZ(RPCParameters* parameters);
 // samp.dll RVA: 0x00018350
-void ScrSetPlayerVelocity(RPCParameters *parameters);
+void ScrSetPlayerVelocity(RPCParameters* parameters);
 // samp.dll RVA: 0x00019f40
-void ScrSetPlayerWorldBounds(RPCParameters *parameters);
+void ScrSetPlayerWorldBounds(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a0d0
-void ScrSetPlayerFacingAngle(RPCParameters *parameters);
+void ScrSetPlayerFacingAngle(RPCParameters* parameters);
 // samp.dll RVA: 0x00017860
-void ScrEnableStuntBonusForPlayer(RPCParameters *parameters);
+void ScrEnableStuntBonusForPlayer(RPCParameters* parameters);
 // samp.dll RVA: 0x00017be0
-void ScrForceClassSelection(RPCParameters *parameters);
+void ScrForceClassSelection(RPCParameters* parameters);
 // samp.dll RVA: 0x00017bb0
-void ScrResetPlayerWeapons(RPCParameters *parameters);
+void ScrResetPlayerWeapons(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a170
-void ScrGivePlayerWeapon(RPCParameters *parameters);
+void ScrGivePlayerWeapon(RPCParameters* parameters);
 // samp.dll RVA: 0x0001cb40
-void ScrGangZoneCreate(RPCParameters *parameters);
+void ScrGangZoneCreate(RPCParameters* parameters);
 // samp.dll RVA: 0x0001cc60
-void ScrGangZoneDestroy(RPCParameters *parameters);
+void ScrGangZoneDestroy(RPCParameters* parameters);
 // samp.dll RVA: 0x0001cd10
-void ScrGangZoneFlash(RPCParameters *parameters);
+void ScrGangZoneFlash(RPCParameters* parameters);
 // samp.dll RVA: 0x0001cdd0
-void ScrGangZoneStopFlash(RPCParameters *parameters);
+void ScrGangZoneStopFlash(RPCParameters* parameters);
 // samp.dll RVA: 0x000178f0
-void ScrDisableVehicleCollisions(RPCParameters *parameters);
+void ScrDisableVehicleCollisions(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a800
-void ScrSetGravity(RPCParameters *parameters);
+void ScrSetGravity(RPCParameters* parameters);
 // samp.dll RVA: 0x0001c7b0
-void ScrSetPlayerWantedLevel(RPCParameters *parameters);
+void ScrSetPlayerWantedLevel(RPCParameters* parameters);
 // samp.dll RVA: 0x00019080
-void ScrSetPlayerHealth(RPCParameters *parameters);
+void ScrSetPlayerHealth(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a690
-void ScrSetPlayerArmor(RPCParameters *parameters);
+void ScrSetPlayerArmor(RPCParameters* parameters);
 // samp.dll RVA: 0x00019530
-void ScrSetPlayerInterior(RPCParameters *parameters);
+void ScrSetPlayerInterior(RPCParameters* parameters);
 // samp.dll RVA: 0x0001a030
-void ScrGivePlayerMoney(RPCParameters *parameters);
+void ScrGivePlayerMoney(RPCParameters* parameters);
 // samp.dll RVA: 0x00017ba0
-void ScrResetPlayerMoney(RPCParameters *parameters);
+void ScrResetPlayerMoney(RPCParameters* parameters);
 // samp.dll RVA: 0x000181a0
-void ScrSetPlayerSpecialAction(RPCParameters *parameters);
+void ScrSetPlayerSpecialAction(RPCParameters* parameters);
 // samp.dll RVA: 0x00019dc0
-void ScrTogglePlayerControllable(RPCParameters *parameters);
+void ScrTogglePlayerControllable(RPCParameters* parameters);
 // samp.dll RVA: 0x001184c0
 extern const int g_rpcScrSetPlayerArmor;
 // samp.dll RVA: 0x0001dbf0
-void RegisterScriptRPCs(RakClientInterface *client);
+void RegisterScriptRPCs(RakClientInterface* client);
 // samp.dll RVA: 0x00017c20
-void UnRegisterScriptRPCs(RakClientInterface *client);
+void UnRegisterScriptRPCs(RakClientInterface* client);
 // samp.dll RVA: 0x00118448
 extern const int g_rpcScrDisableVehicleCollisions;
 // samp.dll RVA: 0x00118444

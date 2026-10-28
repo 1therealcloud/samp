@@ -1,25 +1,38 @@
 #ifndef SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
-#include <windows.h>
 #include <stddef.h>
-#pragma pack(push,1)
-struct CustomModelDownload {
-    void *file;BYTE type;DWORD downloaded,total,crc,hash,index;char temporaryPath[261];
+#include <windows.h>
+#pragma pack(push, 1)
+struct CustomModelDownload
+{
+    void* file;
+    BYTE type;
+    DWORD downloaded, total, crc, hash, index;
+    char temporaryPath[261];
 };
-struct CustomModelWorker {
-    DWORD id;BYTE active,paused,enabled,stop;DWORD thread;char url[257];BYTE failed;DWORD result;CustomModelDownload download;
+struct CustomModelWorker
+{
+    DWORD id;
+    BYTE active, paused, enabled, stop;
+    DWORD thread;
+    char url[257];
+    BYTE failed;
+    DWORD result;
+    CustomModelDownload download;
 };
 #pragma pack(pop)
-typedef char NativeCustomDownloadExtent[(sizeof(CustomModelDownload)==0x11e)?1:-1];
-typedef char NativeCustomWorkerExtent[(sizeof(CustomModelWorker)==0x230)?1:-1];
-typedef char NativeCustomWorkerDownloadOffset[(offsetof(CustomModelWorker,download)==0x112)?1:-1];
-typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker,failed)==0x10d)?1:-1];
+typedef char NativeCustomDownloadExtent[(sizeof(CustomModelDownload) == 0x11e) ? 1 : -1];
+typedef char NativeCustomWorkerExtent[(sizeof(CustomModelWorker) == 0x230) ? 1 : -1];
+typedef char NativeCustomWorkerDownloadOffset[(offsetof(CustomModelWorker, download) == 0x112) ? 1 : -1];
+typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker, failed) == 0x10d) ? 1 : -1];
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 // Download/validation paths are recovered; full native class coverage is not established.
-class CCustomModels {public:
+class CCustomModels
+{
+public:
     // Record-array prefix initializer; does not free storage or reset download state.
     // samp.dll RVA: 0x0000c400
-    CCustomModels *InitializeRecordStorage();
+    CCustomModels* InitializeRecordStorage();
     // Reloads the live record count after each entry; null entries are unchecked.
     // samp.dll RVA: 0x0000cd50
     void ProcessDelayedReleases();
@@ -34,7 +47,7 @@ class CCustomModels {public:
     DWORD CountEnabledPausedWorkers();
 
     // samp.dll RVA: 0x0000c410
-    void * GetRecord(DWORD index);
+    void* GetRecord(DWORD index);
     // samp.dll RVA: 0x00008200
     DWORD GetActiveVirtualWorld();
     // Unchanged worlds retain both completion/stop flags.
@@ -50,48 +63,48 @@ class CCustomModels {public:
 
     BYTE nativeState[0x206d];
     // samp.dll RVA: 0x0000d070
-    void ProcessCompressedChunk(BYTE stage,DWORD unpackedLength,const void *data,DWORD length);
+    void ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, const void* data, DWORD length);
     // samp.dll RVA: 0x0000da80
-    bool VerifyDff(const char *filename,DWORD hash);
+    bool VerifyDff(const char* filename, DWORD hash);
     // samp.dll RVA: 0x0000bfd0
-    bool VerifyTxd(const char *filename,DWORD hash);
+    bool VerifyTxd(const char* filename, DWORD hash);
     // samp.dll RVA: 0x0000dbd0
-    void FinishDownload(CustomModelDownload *download);
+    void FinishDownload(CustomModelDownload* download);
     // samp.dll RVA: 0x0000dff0
     bool StartWorkers();
     // samp.dll RVA: 0x0000e0a0
-    void QueueUrl(CustomModelDownload *download,const char *url);
+    void QueueUrl(CustomModelDownload* download, const char* url);
     // samp.dll RVA: 0x0000e180
-    void BeginUrlDownload(BYTE type,DWORD hash,const char *url);
+    void BeginUrlDownload(BYTE type, DWORD hash, const char* url);
     // samp.dll RVA: 0x0000c7e0
-    int FindResourceIndex(BYTE type,DWORD hash);
+    int FindResourceIndex(BYTE type, DWORD hash);
     // samp.dll RVA: 0x0000c830
-    bool FillDownloadInfo(BYTE type,DWORD hash,CustomModelDownload *download);
+    bool FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload* download);
     // Null download selects the embedded descriptor at222.
     // samp.dll RVA: 0x0000bc30
-    void WriteDownload(CustomModelDownload *download,const void *data,DWORD length);
+    void WriteDownload(CustomModelDownload* download, const void* data, DWORD length);
     // samp.dll RVA: 0x0000c760
-    void AbortDownload(CustomModelDownload *download,int error,const char *detail);
+    void AbortDownload(CustomModelDownload* download, int error, const char* detail);
     // samp.dll RVA: 0x0000d1c0
-    BOOL BeginDirectDownload(BYTE type,DWORD hash);
+    BOOL BeginDirectDownload(BYTE type, DWORD hash);
     // Includes null-file matches; does not check slot flags.
     // samp.dll RVA: 0x0000bca0
-    int FindWorkerByFile(void *file);
+    int FindWorkerByFile(void* file);
     // samp.dll RVA: 0x0000c8e0
     int CountMissingResources();
     // samp.dll RVA: 0x0000b9c0
-    DWORD SanitizeCacheHost(char *output,DWORD capacity,const char *host);
+    DWORD SanitizeCacheHost(char* output, DWORD capacity, const char* host);
     // samp.dll RVA: 0x0000ba40
     void Initialize();
     // Eight copied digits are deliberately not explicitly terminated.
     // samp.dll RVA: 0x0000c0b0
-    DWORD ParseCacheHash(const char *filename);
+    DWORD ParseCacheHash(const char* filename);
     // samp.dll RVA: 0x0000c100
     BOOL DeleteCachedDff(DWORD hash);
     // samp.dll RVA: 0x0000c140
     BOOL DeleteCachedTxd(DWORD hash);
     // samp.dll RVA: 0x0000c180
-    BOOL DeleteTemporaryFile(const char *filename);
+    BOOL DeleteTemporaryFile(const char* filename);
     // Disabled manifests deliberately report every hash as present.
     // samp.dll RVA: 0x0000ca40
     bool HasResourceHash(DWORD hash);
@@ -114,10 +127,10 @@ class CCustomModels {public:
     // samp.dll RVA: 0x0000cfc0
     bool EraseRecord(DWORD index);
     // samp.dll RVA: 0x0000cff0
-    bool SetRecord(DWORD index,void *record);
+    bool SetRecord(DWORD index, void* record);
     // Allocates before validation; invalid base IDs deliberately leak that allocation.
     // samp.dll RVA: 0x0000d550
-    DWORD AddRecord(DWORD index,const void *record);
+    DWORD AddRecord(DWORD index, const void* record);
     // samp.dll RVA: 0x0000d5a0
     DWORD DeleteRecord(DWORD index);
     // samp.dll RVA: 0x0000d5e0
@@ -141,12 +154,12 @@ class CCustomModels {public:
     bool IsTxdRequested(DWORD hash);
     // Index and size are deliberately unused by the native request body.
     // samp.dll RVA: 0x0000d270
-    BOOL RequestResource(DWORD index,BYTE type,DWORD hash,DWORD size);
+    BOOL RequestResource(DWORD index, BYTE type, DWORD hash, DWORD size);
     // samp.dll RVA: 0x0000d390
     void Process();
     // Descriptive request bookkeeping; neither method starts a transfer itself.
     // samp.dll RVA: 0x0000c950
-    bool HasEarlierResourceRequest(int endIndex,DWORD hash);
+    bool HasEarlierResourceRequest(int endIndex, DWORD hash);
     // Returns-1 while disabled; marks flags and counts resources not requested by earlier entries.
     // samp.dll RVA: 0x0000c9b0
     int MarkResourceRequests();
@@ -176,13 +189,13 @@ class CCustomModels {public:
     BOOL LoadObjectEntry(int model);
     // ECX is this; four DWORD stack arguments, callee pops 16 bytes.
     // samp.dll RVA: 0x0000c1c0
-    BOOL LoadPedModel(DWORD base,DWORD model,DWORD dffHash,DWORD txdHash);
+    BOOL LoadPedModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash);
     // samp.dll RVA: 0x0000c2e0
-    BOOL LoadObjectModel(DWORD base,DWORD model,DWORD dffHash,DWORD txdHash);
+    BOOL LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash);
 };
-typedef char NativeCustomModelsExtent[(sizeof(CCustomModels)==0x206d)?1:-1];
+typedef char NativeCustomModelsExtent[(sizeof(CCustomModels) == 0x206d) ? 1 : -1];
 // samp.dll RVA: 0x002aca28
-extern CCustomModels *g_customModels;
+extern CCustomModels* g_customModels;
 // samp.dll RVA: 0x00117c48
 extern const char g_customDffCachePattern[];
 // samp.dll RVA: 0x00117c54
@@ -212,14 +225,14 @@ extern const char g_customLocalCachePattern[];
 // samp.dll RVA: 0x00140378
 extern const DWORD g_customCrcTable[256];
 // samp.dll RVA: 0x000628a0
-DWORD __cdecl CustomModelCrc(DWORD seed,const void *data,DWORD length);
+DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length);
 // Native loops on FILE EOF flag, without an ferror escape.
 // samp.dll RVA: 0x000628e0
-DWORD __cdecl CustomModelFileCrc(const char *filename);
+DWORD __cdecl CustomModelFileCrc(const char* filename);
 // samp.dll RVA: 0x00156b44
-extern CCustomModels *g_customDownloadManager;
+extern CCustomModels* g_customDownloadManager;
 // samp.dll RVA: 0x0000bcd0
-DWORD __cdecl CustomModelDownloadWrite(void *data,DWORD size,DWORD count,void *download);
+DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void* download);
 // samp.dll RVA: 0x00117cfc
 extern const char g_customTemporaryPathPattern[];
 // samp.dll RVA: 0x00117d30
@@ -230,17 +243,17 @@ extern const char g_customFillDownloadError[];
 extern const char g_customDownloadReadMode[];
 // Selected LZMA allocator g_Alloc supplies native allocator-table role155478.
 // samp.dll RVA: 0x000c50d0
-int __stdcall CustomModelLzmaDecode(BYTE *destination,DWORD *destinationLength,const BYTE *source,DWORD *sourceLength,const BYTE *properties,DWORD propertySize);
+int __stdcall CustomModelLzmaDecode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD* sourceLength, const BYTE* properties, DWORD propertySize);
 // samp.dll RVA: 0x00117e1c
 extern const char g_customDownloadSizeError[];
 // samp.dll RVA: 0x00117de8
 extern const char g_customDownloadCrcError[];
 // samp.dll RVA: 0x0000de60
-BOOL __cdecl CustomModelFetchUrl(CustomModelWorker *worker,const char *proxy);
+BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy);
 // samp.dll RVA: 0x0000df90
-void __cdecl CustomModelDownloadThread(void *worker);
+void __cdecl CustomModelDownloadThread(void* worker);
 // samp.dll RVA: 0x000c52d0
-const char *CustomModelGetProxy();
+const char* CustomModelGetProxy();
 // samp.dll RVA: 0x002ac390
 extern char g_customProxy[261];
 // samp.dll RVA: 0x0011f9c0

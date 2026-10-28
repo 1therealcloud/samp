@@ -6,7 +6,7 @@ class CMatrix;
 struct CVector;
 struct PedBulletData;
 // samp.dll RVA: 0x0018f624
-extern CPlayerPool *g_hookDamagePlayerPool;
+extern CPlayerPool* g_hookDamagePlayerPool;
 // samp.dll RVA: 0x00151afc
 extern WORD g_hookDamagePlayerId;
 // samp.dll RVA: 0x0018f628
@@ -20,7 +20,7 @@ extern DWORD g_hookVehicleDamageBlocked;
 // samp.dll RVA: 0x0018f638
 extern DWORD g_hookVehicleDamageReturn;
 // samp.dll RVA: 0x0018f644
-extern void *g_hookBulletHitEntity;
+extern void* g_hookBulletHitEntity;
 // samp.dll RVA: 0x0018e590
 extern PedBulletData g_hookBulletHitData;
 // samp.dll RVA: 0x0018e828
@@ -35,14 +35,14 @@ extern CVector g_hookAdjustedShotPoint;
 // samp.dll RVA: 0x0018f648
 extern DWORD g_hookShotLineResult;
 // samp.dll RVA: 0x000a4fa0
-BOOL GameShouldBlockVehicleDamage(void *vehicle,void *attacker,DWORD unused);
+BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused);
 // Second pointer is deliberately unused; native RET16.
 // samp.dll RVA: 0x000a5170
-void __stdcall GameRecordBulletHit(const CVector *origin,const CVector *target,const CVector *collision,void **entity);
+void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target, const CVector* collision, void** entity);
 // Raw cdecl GTA adapter retains the full backend EAX result.
 // samp.dll RVA: 0x000a5360
-DWORD GameProcessShotLineOfSight(const CVector *origin,CVector *target,void *collision,void **entity,
-    DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough);
+DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* collision, void** entity, DWORD buildings, DWORD vehicles, DWORD peds, DWORD objects, DWORD dummies,
+                                 DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough);
 // Raw GTA callback ABIs; address-only declarations, never ordinary void() calls.
 // samp.dll RVA: 0x000a5090
 void GameHook_000a5090();
@@ -214,7 +214,7 @@ void GameHook_000a5b90();
 // samp.dll RVA: 0x000a5d20
 void GameHook_000a5d20();
 // samp.dll RVA: 0x000a5d80
-void GameInstallHook(DWORD address,DWORD function,DWORD storage,const BYTE *jumpCode,int size);
+void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size);
 // samp.dll RVA: 0x000a5e30
 void GamePrepareHooks();
 // samp.dll RVA: 0x000a6020
@@ -237,9 +237,9 @@ void GameDisablePedRemoteCall();
 void GameRestorePedRemoteCall();
 
 // samp.dll RVA: 0x000a5d40
-void GameWriteProtectedDword(DWORD address,DWORD value);
+void GameWriteProtectedDword(DWORD address, DWORD value);
 // samp.dll RVA: 0x000a5df0
-void GameWriteProtectedRelativeBranch(DWORD address,DWORD target,BYTE opcode);
+void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode);
 
 // Raw GameHook_* declarations below are installation addresses, not ordinary
 // C++ call interfaces: native register inputs, stack prologues and tail jumps.
@@ -262,7 +262,7 @@ void GameHook_000a3d70();
 // samp.dll RVA: 0x000a3e40
 void GameHook_000a3e40();
 // samp.dll RVA: 0x000a4240
-void *GameAllocateHookBuffer();
+void* GameAllocateHookBuffer();
 // samp.dll RVA: 0x000a4c10
 void GameHook_000a4c10();
 // samp.dll RVA: 0x000a4c90

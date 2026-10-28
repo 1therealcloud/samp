@@ -40,9 +40,17 @@ void GamePlayerDriverOpcode();
 #ifndef SAMP_RECOVERED_GAME_LIMITS_H
 #define SAMP_RECOVERED_GAME_LIMITS_H
 #include "game/limit_data.h"
-#pragma pack(push,1)
-struct GamePedModelRecord { DWORD vtable;BYTE data[64]; };
-struct GameModelRecord32 { DWORD vtable;BYTE data[28]; };
+#pragma pack(push, 1)
+struct GamePedModelRecord
+{
+    DWORD vtable;
+    BYTE data[64];
+};
+struct GameModelRecord32
+{
+    DWORD vtable;
+    BYTE data[28];
+};
 #pragma pack(pop)
 // samp.dll RVA: 0x001e04b0
 extern DWORD g_gameScanList[40000];
@@ -65,11 +73,11 @@ void GameIncreasePoolLimits();
 #endif
 
 // samp.dll RVA: 0x000a9d10
-void _patch(DWORD address,BYTE *data,int byteCount);
+void _patch(DWORD address, BYTE* data, int byteCount);
 
 // Legacy entry: patches the raw IPL allocation pointer at native GTA sites.
 // samp.dll RVA: 0x000a9d60
-void SetIPLs(int iIPLs,int iGtaVersion);
+void SetIPLs(int iIPLs, int iGtaVersion);
 // Native36-byte records; allocation, initialization and pointer/count patches.
 // samp.dll RVA: 0x000a9e70
 void SetTimedObjects(int iTimedObjects);

@@ -1,19 +1,20 @@
 #ifndef SAMP_CLIENT_NETSTATS_H
 #define SAMP_CLIENT_NETSTATS_H
-#include <windows.h>
 #include <stddef.h>
+#include <windows.h>
 struct IDirect3DDevice9;
-class CNetStats {
+class CNetStats
+{
 public:
-    DWORD lastTotalSent,lastTotalReceived,lastUpdateTick,uploadRate,downloadRate;
-    IDirect3DDevice9 *device;
+    DWORD lastTotalSent, lastTotalReceived, lastUpdateTick, uploadRate, downloadRate;
+    IDirect3DDevice9* device;
     // samp.dll RVA: 0x000607c0
-    CNetStats(IDirect3DDevice9 *device);
+    CNetStats(IDirect3DDevice9* device);
     // samp.dll RVA: 0x000607f0
     void Draw();
 };
-typedef char NetStatsExtent[(sizeof(CNetStats)==24)?1:-1];
-typedef char NetStatsTickOffset[(offsetof(CNetStats,lastUpdateTick)==8)?1:-1];
+typedef char NetStatsExtent[(sizeof(CNetStats) == 24) ? 1 : -1];
+typedef char NetStatsTickOffset[(offsetof(CNetStats, lastUpdateTick) == 8) ? 1 : -1];
 // Native buffers have unsafe writes/concatenations; overflow adjacency is unproven.
 // samp.dll RVA: 0x00163a78
 extern char g_netStatsLine[1024];

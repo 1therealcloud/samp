@@ -6,23 +6,24 @@ class CInput;
 class CChat;
 #include "game/game.h"
 // samp.dll RVA: 0x002aca3c
-extern CGame *g_pGame;
+extern CGame* g_pGame;
 // samp.dll RVA: 0x002aca14
-extern CInput *g_pInput;
+extern CInput* g_pInput;
 // samp.dll RVA: 0x002aca10
-extern CChat *g_pChat;
+extern CChat* g_pChat;
 // samp.dll RVA: 0x002aca24
-extern void *g_pNetGame;
-#pragma pack(push,1)
-struct ClientSettings {
-    BOOL debug,online;
+extern void* g_pNetGame;
+#pragma pack(push, 1)
+struct ClientSettings
+{
+    BOOL debug, online;
     DWORD unknown08;
-    char password[257],host[257],port[257],nickname[257],debugScript[257];
+    char password[257], host[257], port[257], nickname[257], debugScript[257];
 };
 #pragma pack(pop)
-typedef char ClientSettingsExtent[(sizeof(ClientSettings)==1297)?1:-1];
-typedef char ClientSettingsHostOffset[(offsetof(ClientSettings,host)==0x10d)?1:-1];
-typedef char ClientSettingsScriptOffset[(offsetof(ClientSettings,debugScript)==0x410)?1:-1];
+typedef char ClientSettingsExtent[(sizeof(ClientSettings) == 1297) ? 1 : -1];
+typedef char ClientSettingsHostOffset[(offsetof(ClientSettings, host) == 0x10d) ? 1 : -1];
+typedef char ClientSettingsScriptOffset[(offsetof(ClientSettings, debugScript) == 0x410) ? 1 : -1];
 // samp.dll RVA: 0x002abe78
 extern ClientSettings g_clientSettings;
 // Opaque native startup marker; callers and write are established, broader
@@ -33,15 +34,16 @@ extern DWORD g_clientStartupMarker;
 void GameMarkStartupStage();
 // CRT _beginthread callback. Native termination is ExitThread, not _endthread.
 // samp.dll RVA: 0x000c5150
-void __cdecl ClientStartupThread(void *argument);
-namespace Settings {
-    // samp.dll RVA: 0x000c5c90
-    void Initialize();
-    // samp.dll RVA: 0x000c5590
-    void GetFromCommandLine(const char *line,char *output);
-    // samp.dll RVA: 0x000c55e0
-    void GetFromQuotes(const char *line,char *output);
-}
+void __cdecl ClientStartupThread(void* argument);
+namespace Settings
+{
+// samp.dll RVA: 0x000c5c90
+void Initialize();
+// samp.dll RVA: 0x000c5590
+void GetFromCommandLine(const char* line, char* output);
+// samp.dll RVA: 0x000c55e0
+void GetFromQuotes(const char* line, char* output);
+} // namespace Settings
 #include "game/gta_globals.h"
 #endif
 
@@ -50,12 +52,12 @@ namespace Settings {
 // samp.dll RVA: 0x002ac9c8
 extern HMODULE g_clientModule;
 // samp.dll RVA: 0x000c6780
-BOOL WINAPI ClientDllMain(HINSTANCE module,DWORD reason,LPVOID reserved);
+BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved);
 // samp.dll RVA: 0x000c6930
-BOOL WINAPI ClientDllMainForward(HINSTANCE module,DWORD reason,LPVOID reserved);
+BOOL WINAPI ClientDllMainForward(HINSTANCE module, DWORD reason, LPVOID reserved);
 // Crash dialog/report dependency details are in client/exceptions.h.
 // samp.dll RVA: 0x00060430
-LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS *exception);
+LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS* exception);
 // Stored callback only; frame/device implementation remains unrecovered.
 // samp.dll RVA: 0x000c66b0
 void ClientGameLoop();
@@ -71,7 +73,7 @@ extern char g_clientConfigFilename[520];
 // samp.dll RVA: 0x002ac6a0
 extern char g_clientChatFilename[264];
 // samp.dll RVA: 0x002abe70
-extern IDirect3DDevice9 *g_clientSavedGameDevice;
+extern IDirect3DDevice9* g_clientSavedGameDevice;
 // samp.dll RVA: 0x002aca40
 extern DWORD g_clientDeviceInitialized;
 // samp.dll RVA: 0x002aca44
@@ -90,16 +92,16 @@ extern char g_clientDataDirectory[261];
 // samp.dll RVA: 0x002ac8b0
 extern char g_clientCacheDirectory[261];
 // samp.dll RVA: 0x000c51a0
-const char *ClientGetDataDirectory();
+const char* ClientGetDataDirectory();
 // samp.dll RVA: 0x000c51b0
-const char *ClientGetCacheDirectory();
+const char* ClientGetCacheDirectory();
 // samp.dll RVA: 0x00061cf0
-int ClientFindScreenshotFilename(std::string *path);
+int ClientFindScreenshotFilename(std::string* path);
 // samp.dll RVA: 0x00075040
 void ClientCaptureScreenshot();
 // Render-target capture; returns 1..4 for surface-operation failure, otherwise 0.
 // samp.dll RVA: 0x00073b80
-int ClientSaveRenderTarget(IDirect3DDevice9 *device,const char *filename);
+int ClientSaveRenderTarget(IDirect3DDevice9* device, const char* filename);
 // samp.dll RVA: 0x0011b928
 extern const char g_screenshotFilenamePattern[];
 // samp.dll RVA: 0x0011c7dc
@@ -118,7 +120,7 @@ extern DWORD g_clientRenderState;
 extern DWORD g_clientRenderValue;
 // Native _stat success test accepts any existing file type.
 // samp.dll RVA: 0x000b5900
-BOOL ClientPathExists(const char *path);
+BOOL ClientPathExists(const char* path);
 // samp.dll RVA: 0x000c51c0
 void ClientInitializeCacheDirectory();
 // samp.dll RVA: 0x000c5340
@@ -129,7 +131,7 @@ void ClientRefreshWindowProcedure();
 BOOL ClientInstallWindowProcedure();
 // Native message routing; downstream input/UI dependencies remain explicit.
 // samp.dll RVA: 0x000610d0
-LRESULT CALLBACK ClientWindowProcedure(HWND window,UINT message,WPARAM wparam,LPARAM lparam);
+LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam);
 // samp.dll RVA: 0x0016be84
 extern DWORD g_clientInputOutsideClick;
 // samp.dll RVA: 0x0016be88

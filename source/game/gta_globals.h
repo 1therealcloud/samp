@@ -4,9 +4,9 @@
 
 #ifdef SAMP_DIRECT_GTA_GLOBALS
 // GTA SA VA: 0x00c17044 (outside samp.dll)
-#define g_chatScreenWidth (*(int *)0x00c17044)
+#define g_chatScreenWidth (*(int*)0x00c17044)
 // GTA SA VA: 0x00c97c1c (outside samp.dll)
-#define g_inputGameWindow (*(HWND *)0x00c97c1c)
+#define g_inputGameWindow (*(HWND*)0x00c97c1c)
 #else
 // External bindings retained for the existing isolated diagnostic profiles.
 // GTA SA VA: 0x00c17044 (outside samp.dll)

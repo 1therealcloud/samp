@@ -6,5 +6,8 @@ extern DWORD g_inputImeActivityTick;
 // samp.dll RVA: 0x00085e60
 bool ChatImeActive();
 // samp.dll RVA: unknown (extracted signed tick arithmetic; no standalone native entry)
-inline bool InputImeRecent(DWORD now, DWORD start) { return (LONG)(now-start)<300; }
+inline bool InputImeRecent(DWORD now, DWORD start)
+{
+    return (LONG)(now - start) < 300;
+}
 #endif

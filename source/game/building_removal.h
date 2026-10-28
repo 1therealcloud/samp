@@ -1,19 +1,23 @@
 #ifndef SAMP_GAME_BUILDING_REMOVAL_H
 #define SAMP_GAME_BUILDING_REMOVAL_H
 #include <windows.h>
-struct BuildingRemovalRecord { int model;float x,y,z,radius; };
-typedef char BuildingRemovalRecordExtent[(sizeof(BuildingRemovalRecord)==20)?1:-1];
+struct BuildingRemovalRecord
+{
+    int model;
+    float x, y, z, radius;
+};
+typedef char BuildingRemovalRecordExtent[(sizeof(BuildingRemovalRecord) == 20) ? 1 : -1];
 // samp.dll RVA: 0x0009ca80
-void GameHideObjectEntity(void *entity);
+void GameHideObjectEntity(void* entity);
 // samp.dll RVA: 0x0009cab0
-void GameHideBuildingEntity(void *entity);
+void GameHideBuildingEntity(void* entity);
 // samp.dll RVA: 0x0009cb50
-void GameRemoveLodBuildings(float x,float y,float z,float radius);
+void GameRemoveLodBuildings(float x, float y, float z, float radius);
 // samp.dll RVA: 0x0009cc10
-void GameRemoveBuildingsInRange(int model,float x,float y,float z,float radius);
+void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radius);
 // Publishes an unbounded record after applying removal to the current world.
 // samp.dll RVA: 0x0009d210
-void GameRemoveBuilding(int model,float x,float y,float z,float radius);
+void GameRemoveBuilding(int model, float x, float y, float z, float radius);
 // samp.dll RVA: 0x0011e338
 extern const float g_buildingRemovalDrop;
 // samp.dll RVA: 0x0011e33c
@@ -26,9 +30,9 @@ extern BuildingRemovalRecord g_buildingRemovalRecords[1000];
 // samp.dll RVA: 0x0018dc18
 extern int g_buildingRemovalCount;
 // samp.dll RVA: 0x000b4570
-float __stdcall GameDistanceBetweenPoints(float x,float y,float z,float otherX,float otherY,float otherZ);
+float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ);
 // samp.dll RVA: 0x0009cae0
-BOOL GameShouldSuppressMarker(int model,float x,float y,float z);
+BOOL GameShouldSuppressMarker(int model, float x, float y, float z);
 #endif
 
 // Fixed native pool spans, without metadata/null/occupied-slot guards.

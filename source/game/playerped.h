@@ -3,25 +3,28 @@
 #include "game/entity.h"
 #include "game/scripting.h"
 struct CameraAim;
-#pragma pack(push,1)
+#pragma pack(push, 1)
 // Observed firing-data extent; the first DWORD is not copied by CPed::SetBulletData.
-struct PedBulletData {
+struct PedBulletData
+{
     DWORD unknown0;
-    CVector origin,target,offset;
-    void *entity;
+    CVector origin, target, offset;
+    void* entity;
 };
-typedef char PedBulletDataExtent[(sizeof(PedBulletData)==44)?1:-1];
-struct PedAccessoryState {
-    int model,bone;
-    CVector offset,rotation,scale;
-    DWORD materialColor1,materialColor2;
+typedef char PedBulletDataExtent[(sizeof(PedBulletData) == 44) ? 1 : -1];
+struct PedAccessoryState
+{
+    int model, bone;
+    CVector offset, rotation, scale;
+    DWORD materialColor1, materialColor2;
 };
-typedef char PedAccessoryExtent[(sizeof(PedAccessoryState)==52)?1:-1];
+typedef char PedAccessoryExtent[(sizeof(PedAccessoryState) == 52) ? 1 : -1];
 // samp.dll vtable RVA: 0x0011f24c
-class CPed : public CEntity {
+class CPed : public CEntity
+{
 public:
     // samp.dll RVA: 0x000ab670
-    PedBulletData *GetBulletData();
+    PedBulletData* GetBulletData();
 
     // samp.dll RVA: 0x000acd70
     WORD GetCurrentWeaponTotalAmmo();
@@ -31,27 +34,27 @@ public:
     // samp.dll RVA: 0x000ade70
     void ProcessVehicleHorn();
     // samp.dll RVA: 0x000ae050
-    void SetWeaponSkill(int skill,WORD value);
+    void SetWeaponSkill(int skill, WORD value);
     // samp.dll RVA: 0x000ae130
-    void UpdateClumpAnimations(float timeStep,DWORD onScreen);
+    void UpdateClumpAnimations(float timeStep, DWORD onScreen);
     // samp.dll RVA: 0x000ae1d0
-    BYTE *GetControlFlags();
+    BYTE* GetControlFlags();
     // Descriptive distance between mapped bone slots5 and6; result remains in ST0.
     // samp.dll RVA: 0x000ae960
     float GetArmBoneDistance();
     // samp.dll RVA: 0x000aee80
-    void SetBulletData(PedBulletData *data);
+    void SetBulletData(PedBulletData* data);
     // samp.dll RVA: 0x000af390
-    void GiveWeapon(int weapon,int ammo);
+    void GiveWeapon(int weapon, int ammo);
     // samp.dll RVA: 0x000afa60
     void EnableGoggles();
     // Returns the raw GTA hit entity; the output stays untouched on a miss.
     // samp.dll RVA: 0x000af490
-    void *GetAimHit(CVector *position);
+    void* GetAimHit(CVector* position);
     // samp.dll RVA: 0x000af870
-    void GetCameraAimRay(CVector *origin,CVector *target);
+    void GetCameraAimRay(CVector* origin, CVector* target);
     // samp.dll RVA: 0x000b0ce0
-    void *GetCameraAimHit(CVector *position);
+    void* GetCameraAimHit(CVector* position);
     // Preserves native publication/clearing of shared firing context; always returns TRUE.
     // samp.dll RVA: 0x000af670
     BOOL FireWeapon();
@@ -69,11 +72,11 @@ public:
     void ClearAimTarget();
     // Opaque task fields, not an established complete GTA animation-task class.
     // samp.dll RVA: 0x000ae1f0
-    DWORD PackAnimationTask(const void *task);
+    DWORD PackAnimationTask(const void* task);
     // samp.dll RVA: 0x000ae2a0
     DWORD PackQueuedAnimation();
     // samp.dll RVA: 0x000ae2e0
-    void *FindAnimationTask();
+    void* FindAnimationTask();
     // samp.dll RVA: 0x000ae390
     DWORD GetPackedAnimation();
     // samp.dll RVA: 0x000ae3d0
@@ -87,14 +90,14 @@ public:
     void UpdateBoneMatrices();
     // Descriptive backend-name accessor, distinct from the global shopping subsection.
     // samp.dll RVA: 0x000adf30
-    const char *GetBackendShoppingName();
+    const char* GetBackendShoppingName();
     // samp.dll RVA: 0x000adf80
-    void SetBackendShoppingName(const char *name);
+    void SetBackendShoppingName(const char* name);
     // samp.dll RVA: 0x000aeae0
-    void GetAimOffsetMatrix(CMatrix *matrix);
+    void GetAimOffsetMatrix(CMatrix* matrix);
     // Native always returns TRUE; invalid output/backend paths are not repaired.
     // samp.dll RVA: 0x000af5c0
-    BOOL GetWeaponAimOffsets(BOOL alternate,CVector *position,CVector *weaponOffsetOut);
+    BOOL GetWeaponAimOffsets(BOOL alternate, CVector* position, CVector* weaponOffsetOut);
     // Descriptive task-state name; original numeric return categories retained.
     // samp.dll RVA: 0x000ac1f0
     int GetVehicleTransitionTaskState();
@@ -140,19 +143,19 @@ public:
     DWORD GetBackendByte72D();
     // Argument/return words established; higher-level semantic name remains unknown.
     // samp.dll RVA: 0x000ae0d0
-    DWORD CallBackend5E01C0(DWORD first,DWORD second);
+    DWORD CallBackend5E01C0(DWORD first, DWORD second);
     // samp.dll RVA: 0x000ae120
     void ResetLocalControlWord();
     // samp.dll RVA: 0x000ae160
-    void ApplyClumpAnimation(int mode,DWORD first,DWORD second,DWORD third);
+    void ApplyClumpAnimation(int mode, DWORD first, DWORD second, DWORD third);
     // samp.dll RVA: 0x000ae5e0
     int GetBoneCount();
     // samp.dll RVA: 0x000ae630
-    CMatrix * GetBoneMatrices();
+    CMatrix* GetBoneMatrices();
     // samp.dll RVA: 0x000ae710
-    void SetBoneMatrixById(const CMatrix *matrix,int bone);
+    void SetBoneMatrixById(const CMatrix* matrix, int bone);
     // samp.dll RVA: 0x000ae850
-    void SetBoneMatrix(const CMatrix *matrix,int bone);
+    void SetBoneMatrix(const CMatrix* matrix, int bone);
     // samp.dll RVA: 0x000aee20
     float GetRootPoseFactor();
     // samp.dll RVA: 0x000afcb0
@@ -160,73 +163,73 @@ public:
     // samp.dll RVA: 0x000afed0
     void GiveStuff(int type);
     // samp.dll RVA: 0x000ac470
-    BYTE GetDeathInfo(WORD *killer);
+    BYTE GetDeathInfo(WORD* killer);
     // True native entry verified from opcode0713 references; API ACF90 is interior code.
     // samp.dll RVA: 0x000acbb0
     BOOL EnablePassengerDrivebyMode();
     // samp.dll RVA: 0x000acdf0
-    void SetWalkStyle(const char *name);
+    void SetWalkStyle(const char* name);
     // samp.dll RVA: 0x000ad0f0
     BOOL OpenParachute();
     // samp.dll RVA: 0x000ad240
-    void ProcessParachuteEvent(const char *name);
+    void ProcessParachuteEvent(const char* name);
     // samp.dll RVA: 0x000ab900
     BOOL IsOnScreen();
     // samp.dll RVA: 0x000ad5a0
-    void *GetContactEntity();
+    void* GetContactEntity();
     // samp.dll RVA: 0x000ad5b0
-    void *GetContactVehicle();
+    void* GetContactVehicle();
     // samp.dll RVA: 0x000141e0
     void SetCameraMode(BYTE mode);
     // samp.dll RVA: 0x00014200
-    void SetCameraExtZoomAndAspectRatio(float zoom,float aspect);
+    void SetCameraExtZoomAndAspectRatio(float zoom, float aspect);
     // samp.dll RVA: 0x00002d00
     BYTE GetCameraMode();
 
     BOOL m_bUsingCellphone;
     BOOL m_accessoryOccupied[10];
     PedAccessoryState m_accessoryInfo[10];
-    void *m_accessoryObjects[10];
+    void* m_accessoryObjects[10];
     // Raw backend accessor; name follows0.2x; class binding inferred from verified2A4 layout and adjacent accessory entry.
     // samp.dll RVA: 0x00013570
-    void *GetGtaActor();
-    void *m_pGamePed;
-    DWORD unknown2a8,unknown2ac;
+    void* GetGtaActor();
+    void* m_pGamePed;
+    DWORD unknown2a8, unknown2ac;
     BYTE m_nPlayerNumber;
     BYTE unknown2b1[8];
     DWORD m_parachuteObject;
     BYTE unknown2bd[4];
-    DWORD m_stuffType,m_stuffObject,m_drunkLevel,m_arrow;
+    DWORD m_stuffType, m_stuffObject, m_drunkLevel, m_arrow;
     BYTE unknown2d1;
     DWORD unknown2d2;
     BYTE unknown2d6[8];
     BOOL m_bDancing;
-    DWORD m_danceStyle,m_lastDanceMove;
+    DWORD m_danceStyle, m_lastDanceMove;
     BYTE unknown2ea[8];
     BOOL m_bUrinating;
-    BYTE unknown2f6,unknown2f7,unknown2f8;
+    BYTE unknown2f6, unknown2f7, unknown2f8;
     DWORD unknown2f9;
     BYTE unknown2fd[48];
     // samp.dll RVA: 0x000ab690
     CPed();
     // samp.dll RVA: 0x000b08e0
-    CPed(int player,int model,CVector position,float rotation);
+    CPed(int player, int model, CVector position, float rotation);
     // samp.dll RVA: 0x000ad9f0
     void ProcessDrunk();
     // samp.dll RVA: 0x000aef40
-    void SetKeys(WORD mask,WORD leftRight,WORD upDown);
+    void SetKeys(WORD mask, WORD leftRight, WORD upDown);
     // samp.dll RVA: 0x000af1d0
-    WORD GetKeys(WORD *leftRight,WORD *upDown);
+    WORD GetKeys(WORD* leftRight, WORD* upDown);
     // samp.dll RVA: 0x000ad8a0
     BOOL ApplyStuff();
     // samp.dll RVA: 0x000abeb0
-    void PutIntoVehicle(int vehicle,int seat);
+    void PutIntoVehicle(int vehicle, int seat);
     // samp.dll RVA: 0x000add00
     void StartUrinating();
     // samp.dll RVA: 0x000ac030
-    void EnterVehicle(int vehicle,BOOL passenger);
+    void EnterVehicle(int vehicle, BOOL passenger);
     // samp.dll RVA: 0x000ac630
-    void *GetFloor();
+    void* GetFloor();
     // samp.dll RVA: 0x000afbd0
     void Kill();
     // samp.dll RVA: 0x000acd10
@@ -234,23 +237,23 @@ public:
     // samp.dll RVA: 0x000ac3b0
     void SetControllable(BOOL enabled);
     // samp.dll RVA: 0x000acf60
-    void LinkToInterior(BYTE interior,BOOL refresh);
+    void LinkToInterior(BYTE interior, BOOL refresh);
     // samp.dll RVA: 0x000ad770
-    const char *GetAnimationForDance(int move);
+    const char* GetAnimationForDance(int move);
     // samp.dll RVA: 0x000ad5e0
     DWORD GetModelTable24();
     // samp.dll RVA: 0x000ad5c0
     DWORD GetModelTable28();
     // samp.dll RVA: 0x000ac6e0
-    void * GetCurrentWeaponInfo();
+    void* GetCurrentWeaponInfo();
     // samp.dll RVA: 0x000abab0
     float GetRotation();
     // samp.dll RVA: 0x000ad6d0
     void StartDancing(int style);
     // samp.dll RVA: 0x000acf20
-    BOOL IsPerformingAnimation(const char *name);
+    BOOL IsPerformingAnimation(const char* name);
     // samp.dll RVA: 0x000ace50
-    void ApplyAnimation(const char *name,const char *library,float speed,DWORD loop,DWORD lockX,DWORD lockY,DWORD freeze,int time);
+    void ApplyAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time);
     // samp.dll RVA: 0x000afb50
     void SetModelIndex(int model);
     // samp.dll RVA: 0x000ac100
@@ -264,9 +267,9 @@ public:
     // samp.dll RVA: 0x000ad000
     void DestroyParachute();
     // samp.dll RVA: 0x000abdc0
-    float GetDistanceToEntity(CEntity *entity);
+    float GetDistanceToEntity(CEntity* entity);
     // samp.dll RVA: 0x000b0710
-    void AddAccessory(int index,const PedAccessoryState *info);
+    void AddAccessory(int index, const PedAccessoryState* info);
     // samp.dll RVA: 0x000aea50
     void DeleteAccessory(int index);
     // samp.dll RVA: 0x000abb80
@@ -280,13 +283,13 @@ public:
     // samp.dll RVA: 0x000adc20
     void DestroyCommandTask();
     // samp.dll RVA: 0x000adbd0
-    void ApplyCommandTask(const char *name,int p1,int p2,int p3,const CVector *p4,int p5,float p6,int p7,int p8,int p9);
+    void ApplyCommandTask(const char* name, int p1, int p2, int p3, const CVector* p4, int p5, float p6, int p7, int p8, int p9);
     // samp.dll RVA: 0x000ad550
     void SetAimZ(float value);
     // samp.dll RVA: 0x000ac7e0
     void HoldObject(DWORD object);
     // samp.dll RVA: 0x000ab920
-    void SetImmunities(DWORD bullet,DWORD fire,DWORD explosion,DWORD collision,DWORD melee);
+    void SetImmunities(DWORD bullet, DWORD fire, DWORD explosion, DWORD collision, DWORD melee);
     // samp.dll RVA: 0x000ac730
     void HandsUp();
     // samp.dll RVA: 0x000ac930
@@ -294,7 +297,7 @@ public:
     // samp.dll RVA: 0x000abc30
     void ClearWeapons();
     // samp.dll RVA: 0x000ae080
-    DWORD GetBonePosition(int bone,CVector *position);
+    DWORD GetBonePosition(int bone, CVector* position);
     // samp.dll RVA: 0x000ad4d0
     void RemoveWeaponModel(int weapon);
     // samp.dll RVA: 0x000abd80
@@ -311,17 +314,17 @@ public:
     BYTE GetAim();
     // Native forwarding entry to the existing internal camera-aim accessor.
     // samp.dll RVA: 0x000ab840
-    CameraAim *GetCameraAim();
+    CameraAim* GetCameraAim();
     // samp.dll RVA: 0x000afc80
-    void SetWeaponAmmo(BYTE weapon,WORD ammo);
+    void SetWeaponAmmo(BYTE weapon, WORD ammo);
     // samp.dll RVA: 0x000acdb0
-    void * GetWeaponSlot(DWORD weapon);
+    void* GetWeaponSlot(DWORD weapon);
     // samp.dll RVA: 0x000aba30
     BOOL IsDead();
     // samp.dll RVA: 0x000ac370
-    void SetSpawnInfo(const CVector *position,float rotation);
+    void SetSpawnInfo(const CVector* position, float rotation);
     // samp.dll RVA: 0x000adf00
-    void LoadShoppingDataSubsection(const char *name);
+    void LoadShoppingDataSubsection(const char* name);
     // samp.dll RVA: 0x000ab8d0
     void DeleteArrow();
     // samp.dll RVA: 0x000adc70
@@ -333,18 +336,18 @@ public:
     // samp.dll RVA: 0x000ad4a0
     void ResetDamageEntity();
     // samp.dll RVA: 0x00013580
-    void * GetAccessory(int index);
+    void* GetAccessory(int index);
     // samp.dll RVA: 0x000715d0
-    PedAccessoryState *GetAccessoryInfo(int index);
+    PedAccessoryState* GetAccessoryInfo(int index);
     // Descriptive names; native output remains untouched when the backend is invalid.
     // samp.dll RVA: 0x000ae680
-    void GetBoneMatrixById(CMatrix *out,int bone);
+    void GetBoneMatrixById(CMatrix* out, int bone);
     // Accesses the backend bone table without bounds/null checks before forwarding.
     // samp.dll RVA: 0x000ae810
-    void GetBoneMatrix(CMatrix *out,int bone);
+    void GetBoneMatrix(CMatrix* out, int bone);
     // Raw animation-frame quaternion; the bone index is unchecked.
     // samp.dll RVA: 0x000ae7b0
-    void *GetBoneQuaternion(int bone);
+    void* GetBoneQuaternion(int bone);
     // Descriptive names for the observed pose/frame bodies.
     // samp.dll RVA: 0x000ae8b0
     void ApplySecondaryPose();
@@ -355,17 +358,17 @@ public:
     // samp.dll RVA: 0x000b0180
     void ProcessAccessories();
     // samp.dll RVA: 0x000aeb60
-    void * GetAimedPed();
+    void* GetAimedPed();
     // samp.dll RVA: 0x000abd30
     void RemoveWeaponWhenEnteringVehicle();
     // samp.dll RVA: 0x000adee0
-    const char * GetLoadedShoppingDataSubsection();
+    const char* GetLoadedShoppingDataSubsection();
     // samp.dll RVA: 0x000ab7f0
     void SetInitialState();
     // samp.dll RVA: 0x000ab850
-    void SetAim(const CameraAim *aim);
+    void SetAim(const CameraAim* aim);
     // samp.dll RVA: 0x000abd60
-    void * GetCurrentWeaponSlot();
+    void* GetCurrentWeaponSlot();
     // samp.dll RVA: 0x000ad480
     BOOL IsOnGround();
     // samp.dll RVA: 0x000aba70
@@ -391,7 +394,7 @@ public:
     // samp.dll RVA: 0x000adbb0
     void SetDrunkLevel(DWORD level);
     // samp.dll RVA: 0x000abc20
-    void * GetVehicle();
+    void* GetVehicle();
     // samp.dll RVA: 0x000aba60
     BYTE GetState();
     // samp.dll RVA: 0x000ade60
@@ -411,7 +414,7 @@ public:
     // samp.dll RVA: 0x000ad800
     void DropStuff();
     // samp.dll RVA: 0x000ac190
-    void WarpFromVehicle(float x,float y,float z);
+    void WarpFromVehicle(float x, float y, float z);
     // samp.dll RVA: 0x000aba90
     BOOL IsInVehicle();
     // samp.dll RVA: 0x000abbe0
@@ -429,24 +432,24 @@ public:
     // samp.dll RVA: 0x000ab870
     DWORD GetCurrentWeapon();
     // samp.dll RVA: 0x000abc80
-    void SetArmedWeapon(DWORD weapon,BYTE direct);
+    void SetArmedWeapon(DWORD weapon, BYTE direct);
 };
 #pragma pack(pop)
-typedef char PedExtent[(sizeof(CPed)==0x32d)?1:-1];
-typedef char PedBackendOffset[(offsetof(CPed,m_pGamePed)==0x2a4)?1:-1];
-typedef char PedPlayerOffset[(offsetof(CPed,m_nPlayerNumber)==0x2b0)?1:-1];
+typedef char PedExtent[(sizeof(CPed) == 0x32d) ? 1 : -1];
+typedef char PedBackendOffset[(offsetof(CPed, m_pGamePed) == 0x2a4) ? 1 : -1];
+typedef char PedPlayerOffset[(offsetof(CPed, m_nPlayerNumber) == 0x2b0) ? 1 : -1];
 // samp.dll RVA: 0x002a9da8
-extern void *g_gamePlayerPeds[210];
+extern void* g_gamePlayerPeds[210];
 // samp.dll RVA: 0x002aa0f0
 extern BYTE g_gamePlayerControllerState[210][16];
 // samp.dll RVA: 0x000b3860
-void *__stdcall GameFindLocalPed();
+void* __stdcall GameFindLocalPed();
 // samp.dll RVA: 0x000b3f20
-void __stdcall GameAssignPlayerPed(BYTE player,void *ped);
+void __stdcall GameAssignPlayerPed(BYTE player, void* ped);
 // samp.dll RVA: 0x000b3770
-void *__stdcall GamePoolPedGetAt(int handle);
+void* __stdcall GamePoolPedGetAt(int handle);
 // samp.dll RVA: 0x002a92a0
-extern void *g_pedCommandTaskSnapshot;
+extern void* g_pedCommandTaskSnapshot;
 // samp.dll RVA: 0x0011f258
 extern const float g_pedFloorRayLength;
 // samp.dll RVA: 0x0018f4a4
@@ -460,14 +463,14 @@ extern const float g_pedDrunkSpeedThreshold;
 #endif
 
 // samp.dll RVA: 0x000b3dc0
-BOOL __stdcall GameIsBackendOnScreen(void *backend);
+BOOL __stdcall GameIsBackendOnScreen(void* backend);
 
 // Opaque player flag table; factory-selected slots are2..209.
 // Byte indices210..255 reach the verified adjacent gap/cache/ped storage.
 // samp.dll RVA: 0x002a9a50
 extern DWORD g_gamePlayerFlags[210];
 // samp.dll RVA: 0x000b40c0
-void __stdcall GameSetPlayerFlag(BYTE player,DWORD value);
+void __stdcall GameSetPlayerFlag(BYTE player, DWORD value);
 // samp.dll RVA: 0x0011eea0
 extern const Scripting::OpcodeInfo g_pedCreatePlayerCommand;
 // samp.dll RVA: 0x0011eeb4
@@ -571,14 +574,14 @@ extern const double g_pedStuffOffset3Z;
 extern char g_pedShoppingName[32];
 
 // samp.dll RVA: 0x0018f664
-extern CPed *g_pedFiringContext;
+extern CPed* g_pedFiringContext;
 // samp.dll RVA: 0x0018f668
-extern void *g_pedFiringData;
+extern void* g_pedFiringData;
 // samp.dll RVA: 0x0011c6d4
 extern const char g_pedBoneIdFormat[3];
 
 // samp.dll RVA: 0x000b3fd0
-BYTE *__stdcall GameGetPlayerControlFlags(BYTE player);
+BYTE* __stdcall GameGetPlayerControlFlags(BYTE player);
 // samp.dll RVA: 0x000b3a20
 int __stdcall GameGetWeaponModel(int weapon);
 
@@ -586,11 +589,11 @@ int __stdcall GameGetWeaponModel(int weapon);
 void GameInitializePlayerPedTables();
 // Native has no bound check;210..255 reaches adjacent controller state.
 // samp.dll RVA: 0x000b3f50
-void *__stdcall GameGetPlayerPedUnchecked(BYTE player);
+void* __stdcall GameGetPlayerPedUnchecked(BYTE player);
 // samp.dll RVA: 0x000b3f90
-void __stdcall GameSetPlayerControllerWords(BYTE player,DWORD first,DWORD second,DWORD third,DWORD fourth);
+void __stdcall GameSetPlayerControllerWords(BYTE player, DWORD first, DWORD second, DWORD third, DWORD fourth);
 // samp.dll RVA: 0x000b3ff0
-BYTE __stdcall GameFindPlayerIndexByClump(void *clump);
+BYTE __stdcall GameFindPlayerIndexByClump(void* clump);
 // samp.dll RVA: 0x000b40b0
 DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player);
 

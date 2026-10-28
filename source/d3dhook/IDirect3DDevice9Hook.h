@@ -2,7 +2,8 @@
 #define SAMP_DIRECT3D_DEVICE9_HOOK_H
 #include <d3d9.h>
 // Four-byte native proxy; the real device is a shared global.
-class IDirect3DDevice9Hook : public IDirect3DDevice9 {
+class IDirect3DDevice9Hook : public IDirect3DDevice9
+{
 public:
     // samp.dll RVA: 0x000c5e60
     IDirect3DDevice9Hook();
@@ -25,7 +26,7 @@ public:
     // samp.dll RVA: 0x00073fe0
     HRESULT __stdcall GetDisplayMode(UINT iSwapChain, D3DDISPLAYMODE* pMode);
     // samp.dll RVA: 0x00073ff0
-    HRESULT __stdcall GetCreationParameters(D3DDEVICE_CREATION_PARAMETERS *pParameters);
+    HRESULT __stdcall GetCreationParameters(D3DDEVICE_CREATION_PARAMETERS* pParameters);
     // samp.dll RVA: 0x00074000
     HRESULT __stdcall SetCursorProperties(UINT XHotSpot, UINT YHotSpot, IDirect3DSurface9* pCursorBitmap);
     // samp.dll RVA: 0x00074010
@@ -56,7 +57,8 @@ public:
     // samp.dll RVA: 0x000740e0
     HRESULT __stdcall CreateTexture(UINT Width, UINT Height, UINT Levels, DWORD Usage, D3DFORMAT Format, D3DPOOL Pool, IDirect3DTexture9** ppTexture, HANDLE* pSharedHandle);
     // samp.dll RVA: 0x000740f0
-    HRESULT __stdcall CreateVolumeTexture(UINT Width, UINT Height, UINT Depth, UINT Levels, DWORD Usage, D3DFORMAT Format, D3DPOOL Pool, IDirect3DVolumeTexture9** ppVolumeTexture, HANDLE* pSharedHandle);
+    HRESULT __stdcall CreateVolumeTexture(UINT Width, UINT Height, UINT Depth, UINT Levels, DWORD Usage, D3DFORMAT Format, D3DPOOL Pool, IDirect3DVolumeTexture9** ppVolumeTexture,
+                                          HANDLE* pSharedHandle);
     // samp.dll RVA: 0x00074100
     HRESULT __stdcall CreateCubeTexture(UINT EdgeLength, UINT Levels, DWORD Usage, D3DFORMAT Format, D3DPOOL Pool, IDirect3DCubeTexture9** ppCubeTexture, HANDLE* pSharedHandle);
     // samp.dll RVA: 0x00074110
@@ -64,9 +66,11 @@ public:
     // samp.dll RVA: 0x00074120
     HRESULT __stdcall CreateIndexBuffer(UINT Length, DWORD Usage, D3DFORMAT Format, D3DPOOL Pool, IDirect3DIndexBuffer9** ppIndexBuffer, HANDLE* pSharedHandle);
     // samp.dll RVA: 0x00074130
-    HRESULT __stdcall CreateRenderTarget(UINT Width, UINT Height, D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, DWORD MultisampleQuality, BOOL Lockable, IDirect3DSurface9** ppSurface, HANDLE* pSharedHandle);
+    HRESULT __stdcall CreateRenderTarget(UINT Width, UINT Height, D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, DWORD MultisampleQuality, BOOL Lockable,
+                                         IDirect3DSurface9** ppSurface, HANDLE* pSharedHandle);
     // samp.dll RVA: 0x00074140
-    HRESULT __stdcall CreateDepthStencilSurface(UINT Width, UINT Height, D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, DWORD MultisampleQuality, BOOL Discard, IDirect3DSurface9** ppSurface, HANDLE* pSharedHandle);
+    HRESULT __stdcall CreateDepthStencilSurface(UINT Width, UINT Height, D3DFORMAT Format, D3DMULTISAMPLE_TYPE MultiSample, DWORD MultisampleQuality, BOOL Discard,
+                                                IDirect3DSurface9** ppSurface, HANDLE* pSharedHandle);
     // samp.dll RVA: 0x00074160
     HRESULT __stdcall UpdateSurface(IDirect3DSurface9* pSourceSurface, CONST RECT* pSourceRect, IDirect3DSurface9* pDestinationSurface, CONST POINT* pDestPoint);
     // samp.dll RVA: 0x00074170
@@ -156,7 +160,7 @@ public:
     // samp.dll RVA: 0x00074800
     HRESULT __stdcall SetCurrentTexturePalette(UINT PaletteNumber);
     // samp.dll RVA: 0x00074820
-    HRESULT __stdcall GetCurrentTexturePalette(UINT *PaletteNumber);
+    HRESULT __stdcall GetCurrentTexturePalette(UINT* PaletteNumber);
     // samp.dll RVA: 0x00074840
     HRESULT __stdcall SetScissorRect(CONST RECT* pRect);
     // samp.dll RVA: 0x00074860
@@ -176,9 +180,11 @@ public:
     // samp.dll RVA: 0x00074940
     HRESULT __stdcall DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT PrimitiveCount, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride);
     // samp.dll RVA: 0x00074960
-    HRESULT __stdcall DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT MinVertexIndex, UINT NumVertices, UINT PrimitiveCount, CONST void* pIndexData, D3DFORMAT IndexDataFormat, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride);
+    HRESULT __stdcall DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT MinVertexIndex, UINT NumVertices, UINT PrimitiveCount, CONST void* pIndexData,
+                                             D3DFORMAT IndexDataFormat, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride);
     // samp.dll RVA: 0x00074980
-    HRESULT __stdcall ProcessVertices(UINT SrcStartIndex, UINT DestIndex, UINT VertexCount, IDirect3DVertexBuffer9* pDestBuffer, IDirect3DVertexDeclaration9* pVertexDecl, DWORD Flags);
+    HRESULT __stdcall ProcessVertices(UINT SrcStartIndex, UINT DestIndex, UINT VertexCount, IDirect3DVertexBuffer9* pDestBuffer, IDirect3DVertexDeclaration9* pVertexDecl,
+                                      DWORD Flags);
     // samp.dll RVA: 0x000749a0
     HRESULT __stdcall CreateVertexDeclaration(CONST D3DVERTEXELEMENT9* pVertexElements, IDirect3DVertexDeclaration9** ppDecl);
     // samp.dll RVA: 0x000749c0
@@ -204,7 +210,7 @@ public:
     // samp.dll RVA: 0x00074b00
     HRESULT __stdcall GetVertexShaderConstantI(UINT StartRegister, int* pConstantData, UINT Vector4iCount);
     // samp.dll RVA: 0x00074b20
-    HRESULT __stdcall SetVertexShaderConstantB(UINT StartRegister, CONST BOOL* pConstantData, UINT  BoolCount);
+    HRESULT __stdcall SetVertexShaderConstantB(UINT StartRegister, CONST BOOL* pConstantData, UINT BoolCount);
     // samp.dll RVA: 0x00074b40
     HRESULT __stdcall GetVertexShaderConstantB(UINT StartRegister, BOOL* pConstantData, UINT BoolCount);
     // samp.dll RVA: 0x00074b60
@@ -234,7 +240,7 @@ public:
     // samp.dll RVA: 0x00074ce0
     HRESULT __stdcall GetPixelShaderConstantI(UINT StartRegister, int* pConstantData, UINT Vector4iCount);
     // samp.dll RVA: 0x00074d00
-    HRESULT __stdcall SetPixelShaderConstantB(UINT StartRegister, CONST BOOL* pConstantData, UINT  BoolCount);
+    HRESULT __stdcall SetPixelShaderConstantB(UINT StartRegister, CONST BOOL* pConstantData, UINT BoolCount);
     // samp.dll RVA: 0x00074d20
     HRESULT __stdcall GetPixelShaderConstantB(UINT StartRegister, BOOL* pConstantData, UINT BoolCount);
     // samp.dll RVA: 0x00074d40
@@ -246,7 +252,7 @@ public:
     // samp.dll RVA: 0x00074da0
     HRESULT __stdcall CreateQuery(D3DQUERYTYPE Type, IDirect3DQuery9** ppQuery);
 };
-typedef char DeviceProxyExtent[(sizeof(IDirect3DDevice9Hook)==4)?1:-1];
+typedef char DeviceProxyExtent[(sizeof(IDirect3DDevice9Hook) == 4) ? 1 : -1];
 // samp.dll RVA: 0x0017ec00
 extern D3DMATRIX g_deviceViewMatrix;
 // samp.dll RVA: 0x0017ec40

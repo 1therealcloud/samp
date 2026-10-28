@@ -7,11 +7,11 @@
 // samp.dll RVA: 0x0018e8c0
 extern DWORD g_hookPedControlField540;
 // samp.dll RVA: 0x0018f378
-extern CPlayerPool *g_hookFaultPlayerPool;
+extern CPlayerPool* g_hookFaultPlayerPool;
 // samp.dll RVA: 0x00151970
 extern WORD g_hookFaultPlayerId;
 // samp.dll RVA: 0x0018e824
-extern CRemotePlayer *g_hookFaultRemotePlayer;
+extern CRemotePlayer* g_hookFaultRemotePlayer;
 // samp.dll RVA: 0x00151a70
 extern const BYTE g_hookPedRestoreA[6];
 // samp.dll RVA: 0x00151a88

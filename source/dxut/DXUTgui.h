@@ -3,7 +3,7 @@ void ClientRefreshGuiFonts();
 //--------------------------------------------------------------------------------------
 // File: DXUTgui.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
@@ -11,27 +11,25 @@ void ClientRefreshGuiFonts();
 #ifndef DXUT_GUI_H
 #define DXUT_GUI_H
 
-#include <usp10.h>
 #include <dimm.h>
-
+#include <usp10.h>
 
 //--------------------------------------------------------------------------------------
-// Defines and macros 
+// Defines and macros
 //--------------------------------------------------------------------------------------
-#define EVENT_BUTTON_CLICKED                0x0101
-#define EVENT_COMBOBOX_SELECTION_CHANGED    0x0201
-#define EVENT_RADIOBUTTON_CHANGED           0x0301
-#define EVENT_CHECKBOX_CHANGED              0x0401
-#define EVENT_SLIDER_VALUE_CHANGED          0x0501
-#define EVENT_EDITBOX_STRING                0x0601
+#define EVENT_BUTTON_CLICKED 0x0101
+#define EVENT_COMBOBOX_SELECTION_CHANGED 0x0201
+#define EVENT_RADIOBUTTON_CHANGED 0x0301
+#define EVENT_CHECKBOX_CHANGED 0x0401
+#define EVENT_SLIDER_VALUE_CHANGED 0x0501
+#define EVENT_EDITBOX_STRING 0x0601
 // EVENT_EDITBOX_CHANGE is sent when the listbox content changes
 // due to user input.
-#define EVENT_EDITBOX_CHANGE                0x0602
-#define EVENT_LISTBOX_ITEM_DBLCLK           0x0701
+#define EVENT_EDITBOX_CHANGE 0x0602
+#define EVENT_LISTBOX_ITEM_DBLCLK 0x0701
 // EVENT_LISTBOX_SELECTION is fired off when the selection changes in
 // a single selection list box.
-#define EVENT_LISTBOX_SELECTION             0x0702
-
+#define EVENT_LISTBOX_SELECTION 0x0702
 
 //--------------------------------------------------------------------------------------
 // Forward declarations
@@ -52,16 +50,15 @@ class CDXUTElement;
 struct DXUTElementHolder;
 struct DXUTTextureNode;
 struct DXUTFontNode;
-typedef VOID (CALLBACK *PCALLBACKDXUTGUIEVENT) ( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
-
+typedef VOID(CALLBACK* PCALLBACKDXUTGUIEVENT)(UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext);
 
 //--------------------------------------------------------------------------------------
 // Enums for pre-defined control types
 //--------------------------------------------------------------------------------------
-enum DXUT_CONTROL_TYPE 
-{ 
-    DXUT_CONTROL_BUTTON, 
-    DXUT_CONTROL_STATIC, 
+enum DXUT_CONTROL_TYPE
+{
+    DXUT_CONTROL_BUTTON,
+    DXUT_CONTROL_STATIC,
     DXUT_CONTROL_CHECKBOX,
     DXUT_CONTROL_RADIOBUTTON,
     DXUT_CONTROL_COMBOBOX,
@@ -87,14 +84,13 @@ enum DXUT_CONTROL_STATE
 struct DXUTBlendColor
 {
     // samp.dll RVA: 0x00085E90
-    void Init( D3DCOLOR defaultColor, D3DCOLOR disabledColor = D3DCOLOR_ARGB(200, 128, 128, 128), D3DCOLOR hiddenColor = 0 );
+    void Init(D3DCOLOR defaultColor, D3DCOLOR disabledColor = D3DCOLOR_ARGB(200, 128, 128, 128), D3DCOLOR hiddenColor = 0);
     // samp.dll RVA: 0x00085F40
-    void Blend( UINT iState, float fElapsedTime, float fRate = 0.7f );
-    
-    D3DCOLOR  States[ MAX_CONTROL_STATES ]; // Modulate colors for all possible control states
+    void Blend(UINT iState, float fElapsedTime, float fRate = 0.7f);
+
+    D3DCOLOR States[MAX_CONTROL_STATES]; // Modulate colors for all possible control states
     D3DXCOLOR Current;
 };
-
 
 //-----------------------------------------------------------------------------
 // Contains all the display tweakables for a sub-control
@@ -103,23 +99,22 @@ class CDXUTElement
 {
 public:
     // samp.dll RVA: 0x00086010
-    void SetTexture( UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor = D3DCOLOR_ARGB(255, 255, 255, 255) );
+    void SetTexture(UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor = D3DCOLOR_ARGB(255, 255, 255, 255));
     // samp.dll RVA: 0x00086060
-    void SetFont( UINT iFont, D3DCOLOR defaultFontColor = D3DCOLOR_ARGB(255, 255, 255, 255), DWORD dwTextFormat = DT_CENTER | DT_VCENTER );
-    
+    void SetFont(UINT iFont, D3DCOLOR defaultFontColor = D3DCOLOR_ARGB(255, 255, 255, 255), DWORD dwTextFormat = DT_CENTER | DT_VCENTER);
+
     // samp.dll RVA: 0x00086090
     void Refresh();
-    
-    UINT iTexture;          // Index of the texture for this Element 
-    UINT iFont;             // Index of the font for this Element
-    DWORD dwTextFormat;     // The format argument to DrawText 
 
-    RECT rcTexture;         // Bounding rect of this element on the composite texture
-    
+    UINT iTexture;      // Index of the texture for this Element
+    UINT iFont;         // Index of the font for this Element
+    DWORD dwTextFormat; // The format argument to DrawText
+
+    RECT rcTexture; // Bounding rect of this element on the composite texture
+
     DXUTBlendColor TextureColor;
     DXUTBlendColor FontColor;
 };
-
 
 //-----------------------------------------------------------------------------
 // All controls must be assigned to a dialog, which handles
@@ -132,130 +127,221 @@ public:
     ~CDXUTDialog();
 
     // Need to call this now
-    void Init( CDXUTDialogResourceManager* pManager );
+    void Init(CDXUTDialogResourceManager* pManager);
 
     // Windows message handler
-    bool MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+    bool MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     // Control creation
-    HRESULT AddStatic( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTStatic** ppCreated=NULL );
-    HRESULT AddButton( int ID, LPCWSTR strText, int x, int y, int width, int height, UINT nHotkey=0, bool bIsDefault=false, CDXUTButton** ppCreated=NULL );
-    HRESULT AddCheckBox( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bChecked=false, UINT nHotkey=0, bool bIsDefault=false, CDXUTCheckBox** ppCreated=NULL );
-    HRESULT AddRadioButton( int ID, UINT nButtonGroup, LPCWSTR strText, int x, int y, int width, int height, bool bChecked=false, UINT nHotkey=0, bool bIsDefault=false, CDXUTRadioButton** ppCreated=NULL );
-    HRESULT AddComboBox( int ID, int x, int y, int width, int height, UINT nHotKey=0, bool bIsDefault=false, CDXUTComboBox** ppCreated=NULL );
-    HRESULT AddSlider( int ID, int x, int y, int width, int height, int min=0, int max=100, int value=50, bool bIsDefault=false, CDXUTSlider** ppCreated=NULL );
-    HRESULT AddEditBox( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTEditBox** ppCreated=NULL );
-    HRESULT AddIMEEditBox( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTIMEEditBox** ppCreated=NULL );
+    HRESULT AddStatic(int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTStatic** ppCreated = NULL);
+    HRESULT AddButton(int ID, LPCWSTR strText, int x, int y, int width, int height, UINT nHotkey = 0, bool bIsDefault = false, CDXUTButton** ppCreated = NULL);
+    HRESULT AddCheckBox(int ID, LPCWSTR strText, int x, int y, int width, int height, bool bChecked = false, UINT nHotkey = 0, bool bIsDefault = false,
+                        CDXUTCheckBox** ppCreated = NULL);
+    HRESULT AddRadioButton(int ID, UINT nButtonGroup, LPCWSTR strText, int x, int y, int width, int height, bool bChecked = false, UINT nHotkey = 0, bool bIsDefault = false,
+                           CDXUTRadioButton** ppCreated = NULL);
+    HRESULT AddComboBox(int ID, int x, int y, int width, int height, UINT nHotKey = 0, bool bIsDefault = false, CDXUTComboBox** ppCreated = NULL);
+    HRESULT AddSlider(int ID, int x, int y, int width, int height, int min = 0, int max = 100, int value = 50, bool bIsDefault = false, CDXUTSlider** ppCreated = NULL);
+    HRESULT AddEditBox(int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTEditBox** ppCreated = NULL);
+    HRESULT AddIMEEditBox(int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTIMEEditBox** ppCreated = NULL);
     // samp.dll RVA: 0x00090b30
-    HRESULT AddIMEEditBox( int ID, const char *strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTIMEEditBox** ppCreated=NULL );
-    HRESULT AddListBox( int ID, int x, int y, int width, int height, DWORD dwStyle=0, CDXUTListBox** ppCreated=NULL );
-    HRESULT AddControl( CDXUTControl* pControl );
-    HRESULT InitControl( CDXUTControl* pControl );
+    HRESULT AddIMEEditBox(int ID, const char* strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTIMEEditBox** ppCreated = NULL);
+    HRESULT AddListBox(int ID, int x, int y, int width, int height, DWORD dwStyle = 0, CDXUTListBox** ppCreated = NULL);
+    HRESULT AddControl(CDXUTControl* pControl);
+    HRESULT InitControl(CDXUTControl* pControl);
 
     // Control retrieval
-    CDXUTStatic*      GetStatic( int ID ) { return (CDXUTStatic*) GetControl( ID, DXUT_CONTROL_STATIC ); }
-    CDXUTButton*      GetButton( int ID ) { return (CDXUTButton*) GetControl( ID, DXUT_CONTROL_BUTTON ); }
-    CDXUTCheckBox*    GetCheckBox( int ID ) { return (CDXUTCheckBox*) GetControl( ID, DXUT_CONTROL_CHECKBOX ); }
-    CDXUTRadioButton* GetRadioButton( int ID ) { return (CDXUTRadioButton*) GetControl( ID, DXUT_CONTROL_RADIOBUTTON ); }
-    CDXUTComboBox*    GetComboBox( int ID ) { return (CDXUTComboBox*) GetControl( ID, DXUT_CONTROL_COMBOBOX ); }
+    CDXUTStatic* GetStatic(int ID)
+    {
+        return (CDXUTStatic*)GetControl(ID, DXUT_CONTROL_STATIC);
+    }
+    CDXUTButton* GetButton(int ID)
+    {
+        return (CDXUTButton*)GetControl(ID, DXUT_CONTROL_BUTTON);
+    }
+    CDXUTCheckBox* GetCheckBox(int ID)
+    {
+        return (CDXUTCheckBox*)GetControl(ID, DXUT_CONTROL_CHECKBOX);
+    }
+    CDXUTRadioButton* GetRadioButton(int ID)
+    {
+        return (CDXUTRadioButton*)GetControl(ID, DXUT_CONTROL_RADIOBUTTON);
+    }
+    CDXUTComboBox* GetComboBox(int ID)
+    {
+        return (CDXUTComboBox*)GetControl(ID, DXUT_CONTROL_COMBOBOX);
+    }
     // samp.dll RVA: 0x000710b0
-    CDXUTSlider*      GetSlider( int ID ) { return (CDXUTSlider*) GetControl( ID, DXUT_CONTROL_SLIDER ); }
-    CDXUTEditBox*     GetEditBox( int ID ) { return (CDXUTEditBox*) GetControl( ID, DXUT_CONTROL_EDITBOX ); }
-    CDXUTIMEEditBox*  GetIMEEditBox( int ID ) { return (CDXUTIMEEditBox*) GetControl( ID, DXUT_CONTROL_IMEEDITBOX ); }
-    CDXUTListBox*     GetListBox( int ID ) { return (CDXUTListBox*) GetControl( ID, DXUT_CONTROL_LISTBOX ); }
+    CDXUTSlider* GetSlider(int ID)
+    {
+        return (CDXUTSlider*)GetControl(ID, DXUT_CONTROL_SLIDER);
+    }
+    CDXUTEditBox* GetEditBox(int ID)
+    {
+        return (CDXUTEditBox*)GetControl(ID, DXUT_CONTROL_EDITBOX);
+    }
+    CDXUTIMEEditBox* GetIMEEditBox(int ID)
+    {
+        return (CDXUTIMEEditBox*)GetControl(ID, DXUT_CONTROL_IMEEDITBOX);
+    }
+    CDXUTListBox* GetListBox(int ID)
+    {
+        return (CDXUTListBox*)GetControl(ID, DXUT_CONTROL_LISTBOX);
+    }
 
-    CDXUTControl* GetControl( int ID );
-    CDXUTControl* GetControl( int ID, UINT nControlType );
-    CDXUTControl* GetControlAtPoint( POINT pt );
+    CDXUTControl* GetControl(int ID);
+    CDXUTControl* GetControl(int ID, UINT nControlType);
+    CDXUTControl* GetControlAtPoint(POINT pt);
 
-    bool GetControlEnabled( int ID );
-    void SetControlEnabled( int ID, bool bEnabled );
+    bool GetControlEnabled(int ID);
+    void SetControlEnabled(int ID, bool bEnabled);
 
-    void ClearRadioButtonGroup( UINT nGroup );
-    void ClearComboBox( int ID );
+    void ClearRadioButtonGroup(UINT nGroup);
+    void ClearComboBox(int ID);
 
     // Access the default display Elements used when adding new controls
-    HRESULT       SetDefaultElement( UINT nControlType, UINT iElement, CDXUTElement* pElement );
-    CDXUTElement* GetDefaultElement( UINT nControlType, UINT iElement );
+    HRESULT SetDefaultElement(UINT nControlType, UINT iElement, CDXUTElement* pElement);
+    CDXUTElement* GetDefaultElement(UINT nControlType, UINT iElement);
 
     // Methods called by controls
-    void SendEvent( UINT nEvent, bool bTriggeredByUser, CDXUTControl* pControl );
-    void RequestFocus( CDXUTControl* pControl );
+    void SendEvent(UINT nEvent, bool bTriggeredByUser, CDXUTControl* pControl);
+    void RequestFocus(CDXUTControl* pControl);
 
     // Render helpers
-    HRESULT DrawRect( RECT* pRect, D3DCOLOR color );
-    HRESULT DrawPolyLine( POINT* apPoints, UINT nNumPoints, D3DCOLOR color );
-    HRESULT DrawSprite( CDXUTElement* pElement, RECT* prcDest );
-    HRESULT CalcTextRect( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, int nCount = -1 );
-    HRESULT DrawText( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow = false, int nCount = -1 );
+    HRESULT DrawRect(RECT* pRect, D3DCOLOR color);
+    HRESULT DrawPolyLine(POINT* apPoints, UINT nNumPoints, D3DCOLOR color);
+    HRESULT DrawSprite(CDXUTElement* pElement, RECT* prcDest);
+    HRESULT CalcTextRect(LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, int nCount = -1);
+    HRESULT DrawText(LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow = false, int nCount = -1);
     // samp.dll RVA: 0x0008cae0
-    HRESULT DrawTextA(const char *text, CDXUTElement *element, RECT *rect, bool shadow=false, int count=-1);
+    HRESULT DrawTextA(const char* text, CDXUTElement* element, RECT* rect, bool shadow = false, int count = -1);
 
     // Attributes
     // samp.dll RVA: 0x00060d10
-    bool GetVisible() { return m_bVisible; }
+    bool GetVisible()
+    {
+        return m_bVisible;
+    }
     // samp.dll RVA: 0x00002cb0
-    void SetVisible( bool bVisible ) { m_bVisible = bVisible; }
-    bool GetMinimized() { return m_bMinimized; }
-    void SetMinimized( bool bMinimized ) { m_bMinimized = bMinimized; }
-    void SetBackgroundColors( D3DCOLOR colorAllCorners ) { SetBackgroundColors( colorAllCorners, colorAllCorners, colorAllCorners, colorAllCorners ); }
-    void SetBackgroundColors( D3DCOLOR colorTopLeft, D3DCOLOR colorTopRight, D3DCOLOR colorBottomLeft, D3DCOLOR colorBottomRight );
+    void SetVisible(bool bVisible)
+    {
+        m_bVisible = bVisible;
+    }
+    bool GetMinimized()
+    {
+        return m_bMinimized;
+    }
+    void SetMinimized(bool bMinimized)
+    {
+        m_bMinimized = bMinimized;
+    }
+    void SetBackgroundColors(D3DCOLOR colorAllCorners)
+    {
+        SetBackgroundColors(colorAllCorners, colorAllCorners, colorAllCorners, colorAllCorners);
+    }
+    void SetBackgroundColors(D3DCOLOR colorTopLeft, D3DCOLOR colorTopRight, D3DCOLOR colorBottomLeft, D3DCOLOR colorBottomRight);
     // samp.dll RVA: 0x0006a100
-    void EnableCaption( bool bEnable ) { m_bCaption = bEnable; }
+    void EnableCaption(bool bEnable)
+    {
+        m_bCaption = bEnable;
+    }
     // samp.dll RVA: 0x0006a110
-    int GetCaptionHeight() const { return m_nCaptionHeight; }
+    int GetCaptionHeight() const
+    {
+        return m_nCaptionHeight;
+    }
     // samp.dll RVA: 0x0006a120
-    void SetCaptionHeight( int nHeight ) { m_nCaptionHeight = nHeight; }
+    void SetCaptionHeight(int nHeight)
+    {
+        m_nCaptionHeight = nHeight;
+    }
     // samp.dll RVA: unknown (SDK wide compatibility facade; no standalone native entry)
-    void SetCaptionText(const WCHAR *text) { m_wszCaption[0]=0; WideCharToMultiByte(CP_ACP,0,text,-1,m_wszCaption,256,0,0); m_wszCaption[255]=0; }
+    void SetCaptionText(const WCHAR* text)
+    {
+        m_wszCaption[0] = 0;
+        WideCharToMultiByte(CP_ACP, 0, text, -1, m_wszCaption, 256, 0, 0);
+        m_wszCaption[255] = 0;
+    }
     // samp.dll RVA: 0x0006a130
-    void SetCaptionText(const char *text);
-    void GetLocation( POINT &Pt ) const { Pt.x = m_x; Pt.y = m_y; }
+    void SetCaptionText(const char* text);
+    void GetLocation(POINT& Pt) const
+    {
+        Pt.x = m_x;
+        Pt.y = m_y;
+    }
     // samp.dll RVA: 0x00002cc0
-    void SetLocation( int x, int y ) { m_x = x; m_y = y; }
-    void SetSize( int width, int height ) { m_width = width; m_height = height;  }
+    void SetLocation(int x, int y)
+    {
+        m_x = x;
+        m_y = y;
+    }
+    void SetSize(int width, int height)
+    {
+        m_width = width;
+        m_height = height;
+    }
     // samp.dll RVA: 0x00002ce0
-    int GetWidth() { return m_width; }
+    int GetWidth()
+    {
+        return m_width;
+    }
     // samp.dll RVA: 0x00002cf0
-    int GetHeight() { return m_height; }
+    int GetHeight()
+    {
+        return m_height;
+    }
 
-    void SetNextDialog( CDXUTDialog* pNextDialog );
+    void SetNextDialog(CDXUTDialog* pNextDialog);
 
-    static void SetRefreshTime( float fTime ){ s_fTimeRefresh = fTime; }
+    static void SetRefreshTime(float fTime)
+    {
+        s_fTimeRefresh = fTime;
+    }
 
-    static CDXUTControl* GetNextControl( CDXUTControl* pControl );
-    static CDXUTControl* GetPrevControl( CDXUTControl* pControl );
+    static CDXUTControl* GetNextControl(CDXUTControl* pControl);
+    static CDXUTControl* GetPrevControl(CDXUTControl* pControl);
 
-    void RemoveControl( int ID );
+    void RemoveControl(int ID);
     void RemoveAllControls();
 
     // Sets the callback used to notify the app of control events
-    void SetCallback( PCALLBACKDXUTGUIEVENT pCallback, void* pUserContext = NULL );
-    void EnableNonUserEvents( bool bEnable ) { m_bNonUserEvents = bEnable; }
+    void SetCallback(PCALLBACKDXUTGUIEVENT pCallback, void* pUserContext = NULL);
+    void EnableNonUserEvents(bool bEnable)
+    {
+        m_bNonUserEvents = bEnable;
+    }
     // samp.dll RVA: 0x0006a150
-    void EnableKeyboardInput( bool bEnable ) { m_bKeyboardInput = bEnable; }
+    void EnableKeyboardInput(bool bEnable)
+    {
+        m_bKeyboardInput = bEnable;
+    }
     // samp.dll RVA: 0x0006a160
-    void EnableMouseInput( bool bEnable ) { m_bMouseInput = bEnable; }
+    void EnableMouseInput(bool bEnable)
+    {
+        m_bMouseInput = bEnable;
+    }
 
     // Device state notification
     void Refresh();
     // samp.dll RVA: 0x00090360
-    HRESULT OnRender( float fElapsedTime );    
+    HRESULT OnRender(float fElapsedTime);
 
     // Shared resource access. Indexed fonts and textures are shared among
     // all the controls.
-    HRESULT       SetFont( UINT index, LPCWSTR strFaceName, LONG height, LONG weight );
+    HRESULT SetFont(UINT index, LPCWSTR strFaceName, LONG height, LONG weight);
     // samp.dll RVA: 0x0008ca50
-    HRESULT SetFont( UINT index, const char *face, LONG height, LONG weight );
+    HRESULT SetFont(UINT index, const char* face, LONG height, LONG weight);
     // samp.dll RVA: 0x00086B40
-    DXUTFontNode* GetFont( UINT index );
+    DXUTFontNode* GetFont(UINT index);
 
-    HRESULT          SetTexture( UINT index, LPCWSTR strFilename );
+    HRESULT SetTexture(UINT index, LPCWSTR strFilename);
     // samp.dll RVA: 0x00089890
-    HRESULT SetTexture(UINT index,const char *filename);
-    DXUTTextureNode* GetTexture( UINT index );
+    HRESULT SetTexture(UINT index, const char* filename);
+    DXUTTextureNode* GetTexture(UINT index);
 
-    CDXUTDialogResourceManager* GetManager() { return m_pManager; }
+    CDXUTDialogResourceManager* GetManager()
+    {
+        return m_pManager;
+    }
 
     static void ClearFocus();
     void FocusDefaultControl();
@@ -279,16 +365,16 @@ private:
     void InitDefaultElements();
 
     // Windows message handlers
-    void OnMouseMove( POINT pt );
-    void OnMouseUp( POINT pt );
+    void OnMouseMove(POINT pt);
+    void OnMouseUp(POINT pt);
 
     // Control events
-    bool OnCycleFocus( bool bForward );
+    bool OnCycleFocus(bool bForward);
 
-    static CDXUTControl* s_pControlFocus;        // The control which has focus
-    static CDXUTControl* s_pControlPressed;      // The control currently pressed
+    static CDXUTControl* s_pControlFocus;   // The control which has focus
+    static CDXUTControl* s_pControlPressed; // The control currently pressed
 
-    CDXUTControl* m_pControlMouseOver;           // The control which is hovered over
+    CDXUTControl* m_pControlMouseOver; // The control which is hovered over
 
     bool m_bVisible;
     bool m_bCaption;
@@ -311,21 +397,20 @@ private:
     void* m_pCallbackEventUserContext;
 
     friend class NativeTextureProbe;
-    CGrowableArray< int > m_Textures;   // Index into m_TextureCache;
+    CGrowableArray<int> m_Textures; // Index into m_TextureCache;
     friend class NativeDialogProbe;
     friend class NativeFontManagerProbe;
-    CGrowableArray< int > m_Fonts;      // Index into m_FontCache;
+    CGrowableArray<int> m_Fonts; // Index into m_FontCache;
 
-    CGrowableArray< CDXUTControl* > m_Controls;
+    CGrowableArray<CDXUTControl*> m_Controls;
     friend class NativeThemeProbe;
-    CGrowableArray< DXUTElementHolder* > m_DefaultElements;
+    CGrowableArray<DXUTElementHolder*> m_DefaultElements;
 
-    CDXUTElement m_CapElement;  // Element for the caption
+    CDXUTElement m_CapElement; // Element for the caption
 
     CDXUTDialog* m_pNextDialog;
     CDXUTDialog* m_pPrevDialog;
 };
-
 
 //--------------------------------------------------------------------------------------
 // Structs for shared resources
@@ -342,10 +427,9 @@ struct DXUTFontNode
 {
     char strFace[MAX_PATH]; // Native font node is ANSI even with UTF-16 edit buffers.
     ID3DXFont* pFont;
-    LONG  nHeight;
-    LONG  nWeight;
+    LONG nHeight;
+    LONG nWeight;
 };
-
 
 //-----------------------------------------------------------------------------
 // Manages shared resources of dialogs
@@ -356,43 +440,51 @@ public:
     CDXUTDialogResourceManager();
     ~CDXUTDialogResourceManager();
 
-    HRESULT     OnCreateDevice( LPDIRECT3DDEVICE9 pd3dDevice );
-    HRESULT     OnResetDevice();
-    void        OnLostDevice();
-    void        OnDestroyDevice();
-    bool        MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    
-    int AddFont( LPCWSTR strFaceName, LONG height, LONG weight );
+    HRESULT OnCreateDevice(LPDIRECT3DDEVICE9 pd3dDevice);
+    HRESULT OnResetDevice();
+    void OnLostDevice();
+    void OnDestroyDevice();
+    bool MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+    int AddFont(LPCWSTR strFaceName, LONG height, LONG weight);
     // samp.dll RVA: 0x0008c8f0
-    int AddFont( const char *face, LONG height, LONG weight );
+    int AddFont(const char* face, LONG height, LONG weight);
     friend class NativeFontManagerProbe;
     friend class NativeDialogProbe;
     friend class CDXUTDialog;
-    int AddTexture( LPCWSTR strFilename );
+    int AddTexture(LPCWSTR strFilename);
     // samp.dll RVA: 0x000897d0
-    int AddTexture(const char *filename);
+    int AddTexture(const char* filename);
     friend class NativeTextureProbe;
 
-    DXUTFontNode*     GetFontNode( int iIndex )     { return m_FontCache.GetAt( iIndex ); };
-    DXUTTextureNode*  GetTextureNode( int iIndex )  { return m_TextureCache.GetAt( iIndex ); };
-    IDirect3DDevice9* GetD3DDevice()                { return m_pd3dDevice; }
+    DXUTFontNode* GetFontNode(int iIndex)
+    {
+        return m_FontCache.GetAt(iIndex);
+    };
+    DXUTTextureNode* GetTextureNode(int iIndex)
+    {
+        return m_TextureCache.GetAt(iIndex);
+    };
+    IDirect3DDevice9* GetD3DDevice()
+    {
+        return m_pd3dDevice;
+    }
 
     // Shared between all dialogs
     IDirect3DStateBlock9* m_pStateBlock;
-    ID3DXSprite*          m_pSprite;          // Sprite used for drawing
+    ID3DXSprite* m_pSprite; // Sprite used for drawing
 
 protected:
-    CGrowableArray< DXUTTextureNode* > m_TextureCache;   // Shared textures
-    CGrowableArray< DXUTFontNode* > m_FontCache;         // Shared fonts
-    
+    CGrowableArray<DXUTTextureNode*> m_TextureCache; // Shared textures
+    CGrowableArray<DXUTFontNode*> m_FontCache;       // Shared fonts
+
     IDirect3DDevice9* m_pd3dDevice;
 
     // Resource creation helpers
-    HRESULT CreateFont( UINT index );
+    HRESULT CreateFont(UINT index);
     // samp.dll RVA: 0x000874b0
-    HRESULT CreateTexture( UINT index );
+    HRESULT CreateTexture(UINT index);
 };
-
 
 //-----------------------------------------------------------------------------
 // Base class for controls
@@ -401,110 +493,185 @@ class CDXUTControl
 {
 public:
     // samp.dll RVA: 0x0008DCC0
-    CDXUTControl( CDXUTDialog *pDialog = NULL );
+    CDXUTControl(CDXUTDialog* pDialog = NULL);
     // samp.dll RVA: 0x0008DE00
     virtual ~CDXUTControl();
 
     // samp.dll RVA: 0x0008DD10
-    virtual HRESULT OnInit() { return S_OK; }
+    virtual HRESULT OnInit()
+    {
+        return S_OK;
+    }
     // samp.dll RVA: 0x00087560
     virtual void Refresh();
     // samp.dll RVA: 0x0008DD20
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime ) { };
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime) {};
 
     // Windows message handler
     // samp.dll RVA: 0x0008DD30
-    virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam ) { return false; }
+    virtual bool MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    {
+        return false;
+    }
 
     // samp.dll RVA: 0x0008DD40
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam ) { return false; }
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    {
+        return false;
+    }
     // samp.dll RVA: 0x0008DD50
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam ) { return false; }
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam)
+    {
+        return false;
+    }
 
     // samp.dll RVA: 0x0008DD60
-    virtual bool CanHaveFocus() { return false; }
+    virtual bool CanHaveFocus()
+    {
+        return false;
+    }
     // samp.dll RVA: 0x000840D0
-    virtual void OnFocusIn() { m_bHasFocus = true; }
+    virtual void OnFocusIn()
+    {
+        m_bHasFocus = true;
+    }
     // samp.dll RVA: 0x000840E0
-    virtual void OnFocusOut() { m_bHasFocus = false; }
+    virtual void OnFocusOut()
+    {
+        m_bHasFocus = false;
+    }
     // samp.dll RVA: 0x0008DD70
-    virtual void OnMouseEnter() { m_bMouseOver = true; }
+    virtual void OnMouseEnter()
+    {
+        m_bMouseOver = true;
+    }
     // samp.dll RVA: 0x0008DD80
-    virtual void OnMouseLeave() { m_bMouseOver = false; }
+    virtual void OnMouseLeave()
+    {
+        m_bMouseOver = false;
+    }
     // samp.dll RVA: 0x0008DD90
     virtual void OnHotkey() {}
 
     // samp.dll RVA: 0x0008DDA0
-    virtual BOOL ContainsPoint( POINT pt ) { return PtInRect( &m_rcBoundingBox, pt ); }
+    virtual BOOL ContainsPoint(POINT pt)
+    {
+        return PtInRect(&m_rcBoundingBox, pt);
+    }
 
     // samp.dll RVA: 0x0008DDC0
-    virtual void SetEnabled( bool bEnabled ) { m_bEnabled = bEnabled; }
+    virtual void SetEnabled(bool bEnabled)
+    {
+        m_bEnabled = bEnabled;
+    }
     // samp.dll RVA: 0x0008DDD0
-    virtual bool GetEnabled() { return m_bEnabled; }
+    virtual bool GetEnabled()
+    {
+        return m_bEnabled;
+    }
     // samp.dll RVA: 0x0008DDE0
-    virtual void SetVisible( bool bVisible ) { m_bVisible = bVisible; }
+    virtual void SetVisible(bool bVisible)
+    {
+        m_bVisible = bVisible;
+    }
     // samp.dll RVA: 0x0008DDF0
-    virtual bool GetVisible() { return m_bVisible; }
+    virtual bool GetVisible()
+    {
+        return m_bVisible;
+    }
 
     // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
-    UINT GetType() const { return m_Type; }
+    UINT GetType() const
+    {
+        return m_Type;
+    }
 
     // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
-    int  GetID() const { return m_ID; }
+    int GetID() const
+    {
+        return m_ID;
+    }
     // samp.dll RVA: unknown (identical entries 0x00049ED0/0x00084110; typed native entry not uniquely established)
-    void SetID( int ID ) { m_ID = ID; }
+    void SetID(int ID)
+    {
+        m_ID = ID;
+    }
 
     // samp.dll RVA: 0x000848A0
     // samp.dll RVA: 0x00066B00
-    void SetLocation( int x, int y ) { m_x = x; m_y = y; UpdateRects(); }
+    void SetLocation(int x, int y)
+    {
+        m_x = x;
+        m_y = y;
+        UpdateRects();
+    }
     // samp.dll RVA: 0x00066B20
-    void SetSize( int width, int height ) { m_width = width; m_height = height; UpdateRects(); }
+    void SetSize(int width, int height)
+    {
+        m_width = width;
+        m_height = height;
+        UpdateRects();
+    }
 
     // samp.dll RVA: 0x00084120
-    void SetHotkey( UINT nHotkey ) { m_nHotkey = nHotkey; }
+    void SetHotkey(UINT nHotkey)
+    {
+        m_nHotkey = nHotkey;
+    }
     // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
-    UINT GetHotkey() { return m_nHotkey; }
+    UINT GetHotkey()
+    {
+        return m_nHotkey;
+    }
 
     // samp.dll RVA: unknown (inline SDK accessor; standalone native entry not established)
-    void SetUserData( void *pUserData ) { m_pUserData = pUserData; }
+    void SetUserData(void* pUserData)
+    {
+        m_pUserData = pUserData;
+    }
     // samp.dll RVA: unknown (inline SDK accessor; standalone native entry not established)
-    void *GetUserData() const { return m_pUserData; }
+    void* GetUserData() const
+    {
+        return m_pUserData;
+    }
 
     // samp.dll RVA: 0x00087540
-    virtual void SetTextColor( D3DCOLOR Color );
+    virtual void SetTextColor(D3DCOLOR Color);
     // samp.dll RVA: 0x00069270
-    CDXUTElement* GetElement( UINT iElement ) { return m_Elements.GetAt( iElement ); }
+    CDXUTElement* GetElement(UINT iElement)
+    {
+        return m_Elements.GetAt(iElement);
+    }
     // samp.dll RVA: 0x00089D50
-    HRESULT SetElement( UINT iElement, CDXUTElement* pElement);
+    HRESULT SetElement(UINT iElement, CDXUTElement* pElement);
 
-    bool m_bVisible;                // Shown/hidden flag
-    bool m_bMouseOver;              // Mouse pointer is above control
-    bool m_bHasFocus;               // Control has input focus
-    bool m_bIsDefault;              // Is the default control
+    bool m_bVisible;   // Shown/hidden flag
+    bool m_bMouseOver; // Mouse pointer is above control
+    bool m_bHasFocus;  // Control has input focus
+    bool m_bIsDefault; // Is the default control
 
     // Size, scale, and positioning members
     int m_x, m_y;
     int m_width, m_height;
 
     // These members are set by the container
-    CDXUTDialog* m_pDialog;    // Parent container
-    UINT m_Index;              // Index within the control list
-    
-    CGrowableArray< CDXUTElement* > m_Elements;  // All display elements
+    CDXUTDialog* m_pDialog; // Parent container
+    UINT m_Index;           // Index within the control list
+
+    CGrowableArray<CDXUTElement*> m_Elements; // All display elements
 
 protected:
     virtual void UpdateRects();
 
-    int  m_ID;                 // ID number
-    DXUT_CONTROL_TYPE m_Type;  // Control type, set once in constructor  
-    UINT m_nHotkey;            // Virtual key code for this control's hotkey
-    void *m_pUserData;         // Data associated with this control that is set by user.
-    
-    bool m_bEnabled;           // Enabled/disabled flag
-    
-    RECT m_rcBoundingBox;      // Rectangle defining the active region of the control
-};
+    int m_ID;                 // ID number
+    DXUT_CONTROL_TYPE m_Type; // Control type, set once in constructor
+    UINT m_nHotkey;           // Virtual key code for this control's hotkey
+    void* m_pUserData;        // Data associated with this control that is set by user.
 
+    bool m_bEnabled; // Enabled/disabled flag
+
+    RECT m_rcBoundingBox; // Rectangle defining the active region of the control
+};
 
 //-----------------------------------------------------------------------------
 // Contains all the display information for a given control type
@@ -517,27 +684,30 @@ struct DXUTElementHolder
     CDXUTElement Element;
 };
 
-
 //-----------------------------------------------------------------------------
 // Static control
 //-----------------------------------------------------------------------------
 class CDXUTStatic : public CDXUTControl
 {
 public:
-    CDXUTStatic( CDXUTDialog *pDialog = NULL );
+    CDXUTStatic(CDXUTDialog* pDialog = NULL);
 
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
-    virtual BOOL ContainsPoint( POINT pt ) { return false; }
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
+    virtual BOOL ContainsPoint(POINT pt)
+    {
+        return false;
+    }
 
-    HRESULT GetTextCopy( LPWSTR strDest, UINT bufferCount );
-    LPCWSTR GetText() { return m_strText; }
-    HRESULT SetText( LPCWSTR strText );
-
+    HRESULT GetTextCopy(LPWSTR strDest, UINT bufferCount);
+    LPCWSTR GetText()
+    {
+        return m_strText;
+    }
+    HRESULT SetText(LPCWSTR strText);
 
 protected:
-    WCHAR m_strText[MAX_PATH];      // Window text  
+    WCHAR m_strText[MAX_PATH]; // Window text
 };
-
 
 //-----------------------------------------------------------------------------
 // Button control
@@ -545,21 +715,30 @@ protected:
 class CDXUTButton : public CDXUTStatic
 {
 public:
-    CDXUTButton( CDXUTDialog *pDialog = NULL );
+    CDXUTButton(CDXUTDialog* pDialog = NULL);
 
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
-    virtual void OnHotkey() { m_pDialog->RequestFocus( this ); m_pDialog->SendEvent( EVENT_BUTTON_CLICKED, true, this ); }
-    
-    virtual BOOL ContainsPoint( POINT pt ) { return PtInRect( &m_rcBoundingBox, pt ); }
-    virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
+    virtual void OnHotkey()
+    {
+        m_pDialog->RequestFocus(this);
+        m_pDialog->SendEvent(EVENT_BUTTON_CLICKED, true, this);
+    }
 
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual BOOL ContainsPoint(POINT pt)
+    {
+        return PtInRect(&m_rcBoundingBox, pt);
+    }
+    virtual bool CanHaveFocus()
+    {
+        return (m_bVisible && m_bEnabled);
+    }
+
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
 
 protected:
     bool m_bPressed;
 };
-
 
 //-----------------------------------------------------------------------------
 // CheckBox control
@@ -567,28 +746,37 @@ protected:
 class CDXUTCheckBox : public CDXUTButton
 {
 public:
-    CDXUTCheckBox( CDXUTDialog *pDialog = NULL );
+    CDXUTCheckBox(CDXUTDialog* pDialog = NULL);
 
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
-    virtual void OnHotkey() { m_pDialog->RequestFocus( this ); SetCheckedInternal( !m_bChecked, true ); }
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
+    virtual void OnHotkey()
+    {
+        m_pDialog->RequestFocus(this);
+        SetCheckedInternal(!m_bChecked, true);
+    }
 
-    virtual BOOL ContainsPoint( POINT pt ); 
-    virtual void UpdateRects(); 
+    virtual BOOL ContainsPoint(POINT pt);
+    virtual void UpdateRects();
 
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
 
-    bool GetChecked() { return m_bChecked; }
-    void SetChecked( bool bChecked ) { SetCheckedInternal( bChecked, false ); }
-    
+    bool GetChecked()
+    {
+        return m_bChecked;
+    }
+    void SetChecked(bool bChecked)
+    {
+        SetCheckedInternal(bChecked, false);
+    }
+
 protected:
-    virtual void SetCheckedInternal( bool bChecked, bool bFromInput );
+    virtual void SetCheckedInternal(bool bChecked, bool bFromInput);
 
     bool m_bChecked;
     RECT m_rcButton;
     RECT m_rcText;
 };
-
 
 //-----------------------------------------------------------------------------
 // RadioButton control
@@ -596,21 +784,33 @@ protected:
 class CDXUTRadioButton : public CDXUTCheckBox
 {
 public:
-    CDXUTRadioButton( CDXUTDialog *pDialog = NULL );
+    CDXUTRadioButton(CDXUTDialog* pDialog = NULL);
 
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
-    virtual void OnHotkey() { m_pDialog->RequestFocus( this ); SetCheckedInternal( true, true, true ); }
-    
-    void SetChecked( bool bChecked, bool bClearGroup=true ) { SetCheckedInternal( bChecked, bClearGroup, false ); }
-    void SetButtonGroup( UINT nButtonGroup ) { m_nButtonGroup = nButtonGroup; }
-    UINT GetButtonGroup() { return m_nButtonGroup; }
-    
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
+    virtual void OnHotkey()
+    {
+        m_pDialog->RequestFocus(this);
+        SetCheckedInternal(true, true, true);
+    }
+
+    void SetChecked(bool bChecked, bool bClearGroup = true)
+    {
+        SetCheckedInternal(bChecked, bClearGroup, false);
+    }
+    void SetButtonGroup(UINT nButtonGroup)
+    {
+        m_nButtonGroup = nButtonGroup;
+    }
+    UINT GetButtonGroup()
+    {
+        return m_nButtonGroup;
+    }
+
 protected:
-    virtual void SetCheckedInternal( bool bChecked, bool bClearGroup, bool bFromInput );
+    virtual void SetCheckedInternal(bool bChecked, bool bClearGroup, bool bFromInput);
     UINT m_nButtonGroup;
 };
-
 
 //-----------------------------------------------------------------------------
 // Scrollbar control
@@ -618,39 +818,56 @@ protected:
 class CDXUTScrollBar : public CDXUTControl
 {
     friend class CDXUTListBoxDL;
+
 public:
     // samp.dll RVA: 0x0008E750
-    CDXUTScrollBar( CDXUTDialog *pDialog = NULL );
+    CDXUTScrollBar(CDXUTDialog* pDialog = NULL);
     // samp.dll RVA: 0x0008E800
     virtual ~CDXUTScrollBar();
 
     // samp.dll RVA: 0x00084E70
-    virtual bool    HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
     // samp.dll RVA: 0x00088250
-    virtual bool    HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
 
     // samp.dll RVA: 0x000884D0
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
     // samp.dll RVA: 0x000881B0
-    virtual void    UpdateRects();
+    virtual void UpdateRects();
 
     // samp.dll RVA: 0x000886D0
-    void SetTrackRange( int nStart, int nEnd );
+    void SetTrackRange(int nStart, int nEnd);
     // samp.dll RVA: 0x00066B40
-    int GetTrackPos() { return m_nPosition; }
+    int GetTrackPos()
+    {
+        return m_nPosition;
+    }
     // samp.dll RVA: 0x00066B50
     // samp.dll RVA: 0x00084DA0
     // samp.dll RVA: 0x00084E80
-    void SetTrackPos( int nPosition ) { m_nPosition = nPosition; Cap(); UpdateThumbRect(); }
+    void SetTrackPos(int nPosition)
+    {
+        m_nPosition = nPosition;
+        Cap();
+        UpdateThumbRect();
+    }
     // samp.dll RVA: 0x00084190
-    int GetPageSize() { return m_nPageSize; }
+    int GetPageSize()
+    {
+        return m_nPageSize;
+    }
     // samp.dll RVA: 0x00066B70
-    void SetPageSize( int nPageSize ) { m_nPageSize = nPageSize; Cap(); UpdateThumbRect(); }
+    void SetPageSize(int nPageSize)
+    {
+        m_nPageSize = nPageSize;
+        Cap();
+        UpdateThumbRect();
+    }
 
     // samp.dll RVA: 0x00088230
-    void Scroll( int nDelta );    // Scroll by nDelta items (plus or minus)
+    void Scroll(int nDelta); // Scroll by nDelta items (plus or minus)
     // samp.dll RVA: 0x00084E30
-    void ShowItem( int nIndex );  // Ensure that item nIndex is displayed, scroll if necessary
+    void ShowItem(int nIndex); // Ensure that item nIndex is displayed, scroll if necessary
 
 protected:
     // ARROWSTATE indicates the state of the arrow buttons.
@@ -659,25 +876,31 @@ protected:
     // CLICKED_DOWN     Down arrow is clicked.
     // HELD_UP          Up arrow is held down for sustained period.
     // HELD_DOWN        Down arrow is held down for sustained period.
-    enum ARROWSTATE { CLEAR, CLICKED_UP, CLICKED_DOWN, HELD_UP, HELD_DOWN };
+    enum ARROWSTATE
+    {
+        CLEAR,
+        CLICKED_UP,
+        CLICKED_DOWN,
+        HELD_UP,
+        HELD_DOWN
+    };
 
     void UpdateThumbRect();
-    void Cap();  // Clips position at boundaries. Ensures it stays within legal range.
+    void Cap(); // Clips position at boundaries. Ensures it stays within legal range.
 
     bool m_bShowThumb;
     RECT m_rcUpButton;
     RECT m_rcDownButton;
     RECT m_rcTrack;
     RECT m_rcThumb;
-    int m_nPosition;  // Position of the first displayed item
-    int m_nPageSize;  // How many items are displayable in one page
-    int m_nStart;     // First item
-    int m_nEnd;       // The index after the last item
-    POINT m_LastMouse;// Last mouse position
+    int m_nPosition;    // Position of the first displayed item
+    int m_nPageSize;    // How many items are displayable in one page
+    int m_nStart;       // First item
+    int m_nEnd;         // The index after the last item
+    POINT m_LastMouse;  // Last mouse position
     ARROWSTATE m_Arrow; // State of the arrows
     double m_dArrowTS;  // Timestamp of last arrow event.
 };
-
 
 //-----------------------------------------------------------------------------
 // ListBox control
@@ -685,44 +908,73 @@ protected:
 struct DXUTListBoxItem
 {
     WCHAR strText[256];
-    void*  pData;
+    void* pData;
 
-    RECT  rcActive;
-    bool  bSelected;
+    RECT rcActive;
+    bool bSelected;
 };
 
 class CDXUTListBox : public CDXUTControl
 {
 public:
-    CDXUTListBox( CDXUTDialog *pDialog = NULL );
+    CDXUTListBox(CDXUTDialog* pDialog = NULL);
     virtual ~CDXUTListBox();
 
-    virtual HRESULT OnInit() { return m_pDialog->InitControl( &m_ScrollBar ); }
-    virtual bool    CanHaveFocus() { return (m_bVisible && m_bEnabled); }
-    virtual bool    HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual bool    HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    virtual HRESULT OnInit()
+    {
+        return m_pDialog->InitControl(&m_ScrollBar);
+    }
+    virtual bool CanHaveFocus()
+    {
+        return (m_bVisible && m_bEnabled);
+    }
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
 
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
-    virtual void    UpdateRects();
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
+    virtual void UpdateRects();
 
-    DWORD GetStyle() const { return m_dwStyle; }
-    int GetSize() const { return m_Items.GetSize(); }
-    void SetStyle( DWORD dwStyle ) { m_dwStyle = dwStyle; }
-    void SetScrollBarWidth( int nWidth ) { m_nSBWidth = nWidth; UpdateRects(); }
-    void SetBorder( int nBorder, int nMargin ) { m_nBorder = nBorder; m_nMargin = nMargin; }
-    HRESULT AddItem( const WCHAR *wszText, void *pData );
-    HRESULT InsertItem( int nIndex, const WCHAR *wszText, void *pData );
-    void RemoveItem( int nIndex );
-    void RemoveItemByText( WCHAR *wszText );
-    void RemoveItemByData( void *pData );
+    DWORD GetStyle() const
+    {
+        return m_dwStyle;
+    }
+    int GetSize() const
+    {
+        return m_Items.GetSize();
+    }
+    void SetStyle(DWORD dwStyle)
+    {
+        m_dwStyle = dwStyle;
+    }
+    void SetScrollBarWidth(int nWidth)
+    {
+        m_nSBWidth = nWidth;
+        UpdateRects();
+    }
+    void SetBorder(int nBorder, int nMargin)
+    {
+        m_nBorder = nBorder;
+        m_nMargin = nMargin;
+    }
+    HRESULT AddItem(const WCHAR* wszText, void* pData);
+    HRESULT InsertItem(int nIndex, const WCHAR* wszText, void* pData);
+    void RemoveItem(int nIndex);
+    void RemoveItemByText(WCHAR* wszText);
+    void RemoveItemByData(void* pData);
     void RemoveAllItems();
 
-    DXUTListBoxItem *GetItem( int nIndex );
-    int GetSelectedIndex( int nPreviousSelected = -1 );
-    DXUTListBoxItem *GetSelectedItem( int nPreviousSelected = -1 ) { return GetItem( GetSelectedIndex( nPreviousSelected ) ); }
-    void SelectItem( int nNewIndex );
+    DXUTListBoxItem* GetItem(int nIndex);
+    int GetSelectedIndex(int nPreviousSelected = -1);
+    DXUTListBoxItem* GetSelectedItem(int nPreviousSelected = -1)
+    {
+        return GetItem(GetSelectedIndex(nPreviousSelected));
+    }
+    void SelectItem(int nNewIndex);
 
-    enum STYLE { MULTISELECTION = 1 };
+    enum STYLE
+    {
+        MULTISELECTION = 1
+    };
 
 protected:
     RECT m_rcText;      // Text rendering bound
@@ -731,15 +983,14 @@ protected:
     int m_nSBWidth;
     int m_nBorder;
     int m_nMargin;
-    int m_nTextHeight;  // Height of a single line of text
-    DWORD m_dwStyle;    // List box style
-    int m_nSelected;    // Index of the selected item for single selection list box
-    int m_nSelStart;    // Index of the item where selection starts (for handling multi-selection)
-    bool m_bDrag;       // Whether the user is dragging the mouse to select
+    int m_nTextHeight; // Height of a single line of text
+    DWORD m_dwStyle;   // List box style
+    int m_nSelected;   // Index of the selected item for single selection list box
+    int m_nSelStart;   // Index of the item where selection starts (for handling multi-selection)
+    bool m_bDrag;      // Whether the user is dragging the mouse to select
 
-    CGrowableArray< DXUTListBoxItem* > m_Items;
+    CGrowableArray<DXUTListBoxItem*> m_Items;
 };
-
 
 //-----------------------------------------------------------------------------
 // ComboBox control
@@ -747,70 +998,87 @@ protected:
 struct DXUTComboBoxItem
 {
     WCHAR strText[256];
-    void*  pData;
+    void* pData;
 
-    RECT  rcActive;
-    bool  bVisible;
+    RECT rcActive;
+    bool bVisible;
 };
-
 
 class CDXUTComboBox : public CDXUTButton
 {
 public:
-    CDXUTComboBox( CDXUTDialog *pDialog = NULL );
+    CDXUTComboBox(CDXUTDialog* pDialog = NULL);
     virtual ~CDXUTComboBox();
-    
-    virtual void SetTextColor( D3DCOLOR Color );
-    virtual HRESULT OnInit() { return m_pDialog->InitControl( &m_ScrollBar ); }
 
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    virtual void SetTextColor(D3DCOLOR Color);
+    virtual HRESULT OnInit()
+    {
+        return m_pDialog->InitControl(&m_ScrollBar);
+    }
+
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
     virtual void OnHotkey();
 
-    virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
+    virtual bool CanHaveFocus()
+    {
+        return (m_bVisible && m_bEnabled);
+    }
     virtual void OnFocusOut();
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
 
-    virtual void UpdateRects(); 
+    virtual void UpdateRects();
 
-    HRESULT AddItem( const WCHAR* strText, void* pData );
-    void    RemoveAllItems();
-    void    RemoveItem( UINT index );
-    bool    ContainsItem( const WCHAR* strText, UINT iStart=0 );
-    int     FindItem( const WCHAR* strText, UINT iStart=0 );
-    void*   GetItemData( const WCHAR* strText );
-    void*   GetItemData( int nIndex );
-    void    SetDropHeight( UINT nHeight ) { m_nDropHeight = nHeight; UpdateRects(); }
-    void    SetScrollBarWidth( int nWidth ) { m_nSBWidth = nWidth; UpdateRects(); }
+    HRESULT AddItem(const WCHAR* strText, void* pData);
+    void RemoveAllItems();
+    void RemoveItem(UINT index);
+    bool ContainsItem(const WCHAR* strText, UINT iStart = 0);
+    int FindItem(const WCHAR* strText, UINT iStart = 0);
+    void* GetItemData(const WCHAR* strText);
+    void* GetItemData(int nIndex);
+    void SetDropHeight(UINT nHeight)
+    {
+        m_nDropHeight = nHeight;
+        UpdateRects();
+    }
+    void SetScrollBarWidth(int nWidth)
+    {
+        m_nSBWidth = nWidth;
+        UpdateRects();
+    }
 
-    void*   GetSelectedData();
+    void* GetSelectedData();
     DXUTComboBoxItem* GetSelectedItem();
 
-    UINT    GetNumItems() { return m_Items.GetSize(); }
-    DXUTComboBoxItem* GetItem( UINT index ) { return m_Items.GetAt( index ); }
+    UINT GetNumItems()
+    {
+        return m_Items.GetSize();
+    }
+    DXUTComboBoxItem* GetItem(UINT index)
+    {
+        return m_Items.GetAt(index);
+    }
 
-    HRESULT SetSelectedByIndex( UINT index );
-    HRESULT SetSelectedByText( const WCHAR* strText );
-    HRESULT SetSelectedByData( void* pData );  
+    HRESULT SetSelectedByIndex(UINT index);
+    HRESULT SetSelectedByText(const WCHAR* strText);
+    HRESULT SetSelectedByData(void* pData);
 
 protected:
-    int     m_iSelected;
-    int     m_iFocused;
-    int     m_nDropHeight;
+    int m_iSelected;
+    int m_iFocused;
+    int m_nDropHeight;
     CDXUTScrollBar m_ScrollBar;
-    int     m_nSBWidth;
+    int m_nSBWidth;
 
-    bool    m_bOpened;
+    bool m_bOpened;
 
     RECT m_rcText;
     RECT m_rcButton;
     RECT m_rcDropdown;
     RECT m_rcDropdownText;
 
-    
-    CGrowableArray< DXUTComboBoxItem* > m_Items;
+    CGrowableArray<DXUTComboBoxItem*> m_Items;
 };
-
 
 //-----------------------------------------------------------------------------
 // Slider control
@@ -818,26 +1086,39 @@ protected:
 class CDXUTSlider : public CDXUTControl
 {
 public:
-    CDXUTSlider( CDXUTDialog *pDialog = NULL );
+    CDXUTSlider(CDXUTDialog* pDialog = NULL);
 
-    virtual BOOL ContainsPoint( POINT pt ); 
-    virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
-    
-    virtual void UpdateRects(); 
+    virtual BOOL ContainsPoint(POINT pt);
+    virtual bool CanHaveFocus()
+    {
+        return (m_bVisible && m_bEnabled);
+    }
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
 
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void UpdateRects();
 
-    void SetValue( int nValue ) { SetValueInternal( nValue, false ); }
-    int  GetValue() const { return m_nValue; };
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
 
-    void GetRange( int &nMin, int &nMax ) const { nMin = m_nMin; nMax = m_nMax; }
-    void SetRange( int nMin, int nMax );
+    void SetValue(int nValue)
+    {
+        SetValueInternal(nValue, false);
+    }
+    int GetValue() const
+    {
+        return m_nValue;
+    };
+
+    void GetRange(int& nMin, int& nMax) const
+    {
+        nMin = m_nMin;
+        nMax = m_nMax;
+    }
+    void SetRange(int nMin, int nMax);
 
 protected:
-    void SetValueInternal( int nValue, bool bFromInput );
-    int  ValueFromPos( int x ); 
+    void SetValueInternal(int nValue, bool bFromInput);
+    int ValueFromPos(int x);
 
     int m_nValue;
 
@@ -852,7 +1133,6 @@ protected:
     RECT m_rcButton;
 };
 
-
 //-----------------------------------------------------------------------------
 // CUniBuffer class for the edit control
 //-----------------------------------------------------------------------------
@@ -860,7 +1140,7 @@ class CUniBuffer
 {
 public:
     // samp.dll RVA: 0x0009bbb0
-    CUniBuffer( int nInitialSize = 1 );
+    CUniBuffer(int nInitialSize = 1);
     // samp.dll RVA: 0x0009b440
     ~CUniBuffer();
 
@@ -870,106 +1150,149 @@ public:
     static void Uninitialize();
 
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    int  GetBufferSize() { return m_nBufferSize; }
+    int GetBufferSize()
+    {
+        return m_nBufferSize;
+    }
     // samp.dll RVA: 0x0009b240
-    bool SetBufferSize( int nSize );
+    bool SetBufferSize(int nSize);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    int  GetTextSize()  { return lstrlenW( m_pwszBuffer ); }
+    int GetTextSize()
+    {
+        return lstrlenW(m_pwszBuffer);
+    }
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    const WCHAR* GetBuffer() { return m_pwszBuffer; }
+    const WCHAR* GetBuffer()
+    {
+        return m_pwszBuffer;
+    }
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    const WCHAR& operator[]( int n ) const { return m_pwszBuffer[n]; }
+    const WCHAR& operator[](int n) const
+    {
+        return m_pwszBuffer[n];
+    }
     // samp.dll RVA: 0x0009b470
-    WCHAR& operator[]( int n );
+    WCHAR& operator[](int n);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    DXUTFontNode* GetFontNode() { return m_pFontNode; }
+    DXUTFontNode* GetFontNode()
+    {
+        return m_pFontNode;
+    }
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    void SetFontNode( DXUTFontNode *pFontNode ) { m_pFontNode = pFontNode; }
+    void SetFontNode(DXUTFontNode* pFontNode)
+    {
+        m_pFontNode = pFontNode;
+    }
     // samp.dll RVA: 0x0009b480
     void Clear();
 
     // samp.dll RVA: 0x0009b490
-    bool InsertChar( int nIndex, WCHAR wChar ); // Inserts the char at specified index. If nIndex == -1, insert to the end.
+    bool InsertChar(int nIndex, WCHAR wChar); // Inserts the char at specified index. If nIndex == -1, insert to the end.
     // Native ANSI/DBCS path: only the first lead byte returns false.
     // samp.dll RVA: 0x0009b520
-    bool InsertChar( int nIndex, char ch );
+    bool InsertChar(int nIndex, char ch);
     // Preserves native whole-object assignment in the single-byte path.
     // samp.dll RVA: 0x0009bbf0
-    bool OverwriteAnsiChar( int nIndex, char ch );
+    bool OverwriteAnsiChar(int nIndex, char ch);
     // samp.dll RVA: 0x0009b5d0
-    bool RemoveChar( int nIndex );  // Removes the char at specified index. If nIndex == -1, remove the last char.
+    bool RemoveChar(int nIndex); // Removes the char at specified index. If nIndex == -1, remove the last char.
     // samp.dll RVA: 0x0009b630
-    bool InsertString( int nIndex, const WCHAR *pStr, int nCount = -1 );  // Inserts the first nCount characters of the string pStr at specified index.  If nCount == -1, the entire string is inserted. If nIndex == -1, insert to the end.
+    bool InsertString(
+        int nIndex, const WCHAR* pStr,
+        int nCount =
+            -1); // Inserts the first nCount characters of the string pStr at specified index.  If nCount == -1, the entire string is inserted. If nIndex == -1, insert to the end.
     // samp.dll RVA: 0x0009b9a0
-    bool SetText( LPCWSTR wszText );
+    bool SetText(LPCWSTR wszText);
     // samp.dll RVA: 0x0009ba00
-    bool SetText( const char *text );
+    bool SetText(const char* text);
 
     // Uniscribe
     // samp.dll RVA: 0x0009b770
-    HRESULT CPtoX( int nCP, BOOL bTrail, int *pX );
+    HRESULT CPtoX(int nCP, BOOL bTrail, int* pX);
     // samp.dll RVA: 0x0009b7b0
-    HRESULT XtoCP( int nX, int *pCP, int *pnTrail );
+    HRESULT XtoCP(int nX, int* pCP, int* pnTrail);
     // samp.dll RVA: 0x0009b840
-    void GetPriorItemPos( int nCP, int *pPrior );
+    void GetPriorItemPos(int nCP, int* pPrior);
     // samp.dll RVA: 0x0009b8d0
-    void GetNextItemPos( int nCP, int *pPrior );
+    void GetNextItemPos(int nCP, int* pPrior);
 
 private:
     // samp.dll RVA: 0x0009b310
-    HRESULT Analyse();      // Uniscribe -- Analyse() analyses the string in the buffer
+    HRESULT Analyse(); // Uniscribe -- Analyse() analyses the string in the buffer
 
-    WCHAR* m_pwszBuffer;    // Buffer to hold text
-    int    m_nBufferSize;   // Size of the buffer allocated, in characters
+    WCHAR* m_pwszBuffer; // Buffer to hold text
+    int m_nBufferSize;   // Size of the buffer allocated, in characters
 
     // Uniscribe-specific
-    BYTE m_pendingLeadByte; // Native +8 caches the first ANSI/DBCS byte, not a bool.
-    DXUTFontNode* m_pFontNode;          // Font node for the font that this buffer uses
-    bool m_bAnalyseRequired;            // True if the string has changed since last analysis.
+    BYTE m_pendingLeadByte;    // Native +8 caches the first ANSI/DBCS byte, not a bool.
+    DXUTFontNode* m_pFontNode; // Font node for the font that this buffer uses
+    bool m_bAnalyseRequired;   // True if the string has changed since last analysis.
     SCRIPT_STRING_ANALYSIS m_Analysis;
     bool m_nativeMaskText; // Native field +18; selects masked analysis text.
     friend class CDXUTEditBox;
-    friend class NativeDxutLayoutProbe;  // Analysis for the current string
+    friend class NativeDxutLayoutProbe; // Analysis for the current string
 
 private:
     // Empty implementation of the Uniscribe API
     // samp.dll RVA: 0x000841e0
-    static HRESULT WINAPI Dummy_ScriptApplyDigitSubstitution( const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE* ) { return E_NOTIMPL; }
+    static HRESULT WINAPI Dummy_ScriptApplyDigitSubstitution(const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE*)
+    {
+        return E_NOTIMPL;
+    }
     // samp.dll RVA: 0x000841f0
-    static HRESULT WINAPI Dummy_ScriptStringAnalyse( HDC, const void *, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*, SCRIPT_STRING_ANALYSIS* ) { return E_NOTIMPL; }
+    static HRESULT WINAPI Dummy_ScriptStringAnalyse(HDC, const void*, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*,
+                                                    SCRIPT_STRING_ANALYSIS*)
+    {
+        return E_NOTIMPL;
+    }
     // samp.dll RVA: 0x00084200
-    static HRESULT WINAPI Dummy_ScriptStringCPtoX( SCRIPT_STRING_ANALYSIS, int, BOOL, int* ) { return E_NOTIMPL; }
+    static HRESULT WINAPI Dummy_ScriptStringCPtoX(SCRIPT_STRING_ANALYSIS, int, BOOL, int*)
+    {
+        return E_NOTIMPL;
+    }
     // samp.dll RVA: 0x00084210
-    static HRESULT WINAPI Dummy_ScriptStringXtoCP( SCRIPT_STRING_ANALYSIS, int, int*, int* ) { return E_NOTIMPL; }
+    static HRESULT WINAPI Dummy_ScriptStringXtoCP(SCRIPT_STRING_ANALYSIS, int, int*, int*)
+    {
+        return E_NOTIMPL;
+    }
     // samp.dll RVA: 0x00084220
-    static HRESULT WINAPI Dummy_ScriptStringFree( SCRIPT_STRING_ANALYSIS* ) { return E_NOTIMPL; }
+    static HRESULT WINAPI Dummy_ScriptStringFree(SCRIPT_STRING_ANALYSIS*)
+    {
+        return E_NOTIMPL;
+    }
     // samp.dll RVA: 0x00084230
-    static const SCRIPT_LOGATTR* WINAPI Dummy_ScriptString_pLogAttr( SCRIPT_STRING_ANALYSIS ) { return NULL; }
+    static const SCRIPT_LOGATTR* WINAPI Dummy_ScriptString_pLogAttr(SCRIPT_STRING_ANALYSIS)
+    {
+        return NULL;
+    }
     // samp.dll RVA: 0x00084240
-    static const int* WINAPI Dummy_ScriptString_pcOutChars( SCRIPT_STRING_ANALYSIS ) { return NULL; }
+    static const int* WINAPI Dummy_ScriptString_pcOutChars(SCRIPT_STRING_ANALYSIS)
+    {
+        return NULL;
+    }
 
     // Function pointers
     // samp.dll RVA: 0x00140bfc
-    static HRESULT (WINAPI *_ScriptApplyDigitSubstitution)( const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE* );
+    static HRESULT(WINAPI* _ScriptApplyDigitSubstitution)(const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE*);
     // samp.dll RVA: 0x00140c00
-    static HRESULT (WINAPI *_ScriptStringAnalyse)( HDC, const void *, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*, SCRIPT_STRING_ANALYSIS* );
+    static HRESULT(WINAPI* _ScriptStringAnalyse)(HDC, const void*, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*,
+                                                 SCRIPT_STRING_ANALYSIS*);
     // samp.dll RVA: 0x00140c04
-    static HRESULT (WINAPI *_ScriptStringCPtoX)( SCRIPT_STRING_ANALYSIS, int, BOOL, int* );
+    static HRESULT(WINAPI* _ScriptStringCPtoX)(SCRIPT_STRING_ANALYSIS, int, BOOL, int*);
     // samp.dll RVA: 0x00140c08
-    static HRESULT (WINAPI *_ScriptStringXtoCP)( SCRIPT_STRING_ANALYSIS, int, int*, int* );
+    static HRESULT(WINAPI* _ScriptStringXtoCP)(SCRIPT_STRING_ANALYSIS, int, int*, int*);
     // samp.dll RVA: 0x00140c0c
-    static HRESULT (WINAPI *_ScriptStringFree)( SCRIPT_STRING_ANALYSIS* );
+    static HRESULT(WINAPI* _ScriptStringFree)(SCRIPT_STRING_ANALYSIS*);
     // samp.dll RVA: 0x00140c10
-    static const SCRIPT_LOGATTR* (WINAPI *_ScriptString_pLogAttr)( SCRIPT_STRING_ANALYSIS );
+    static const SCRIPT_LOGATTR*(WINAPI* _ScriptString_pLogAttr)(SCRIPT_STRING_ANALYSIS);
     // samp.dll RVA: 0x00140c14
-    static const int* (WINAPI *_ScriptString_pcOutChars)( SCRIPT_STRING_ANALYSIS );
+    static const int*(WINAPI* _ScriptString_pcOutChars)(SCRIPT_STRING_ANALYSIS);
 
     // samp.dll RVA: 0x00180618
-    static HINSTANCE s_hDll;  // Uniscribe DLL handle
-
+    static HINSTANCE s_hDll; // Uniscribe DLL handle
 };
 
-typedef char NativeUniBufferExtent[(sizeof(CUniBuffer)==0x13)?1:-1];
+typedef char NativeUniBufferExtent[(sizeof(CUniBuffer) == 0x13) ? 1 : -1];
 
 //-----------------------------------------------------------------------------
 // EditBox control
@@ -978,60 +1301,86 @@ class CDXUTEditBox : public CDXUTControl
 {
 public:
     // samp.dll RVA: 0x0008ed00
-    CDXUTEditBox( CDXUTDialog *pDialog = NULL );
+    CDXUTEditBox(CDXUTDialog* pDialog = NULL);
     // samp.dll RVA: 0x0008ee30
     virtual ~CDXUTEditBox();
 
     // samp.dll RVA: 0x00088970
-    virtual bool HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
     // samp.dll RVA: 0x00088be0
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
     // samp.dll RVA: 0x00088da0
-    virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    virtual bool MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
     // samp.dll RVA: 0x00085130
     virtual void UpdateRects();
     // samp.dll RVA: 0x0008ee00
-    virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }
+    virtual bool CanHaveFocus()
+    {
+        return (m_bVisible && m_bEnabled);
+    }
     // samp.dll RVA: 0x0008ee80
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
     // samp.dll RVA: 0x00088d90
     virtual void OnFocusIn();
 
     // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
-    void SetText( LPCWSTR wszText, bool bSelected = false );
+    void SetText(LPCWSTR wszText, bool bSelected = false);
     // samp.dll RVA: 0x00085000
-    void SetText( const char *text, bool bSelected = false );
+    void SetText(const char* text, bool bSelected = false);
     // samp.dll RVA: 0x000850d0
-    const char *GetText();
+    const char* GetText();
     // Updates both native mask flags, without invalidating cached analysis.
     // samp.dll RVA: 0x0006eeb0
     void SetPasswordMode(bool enabled);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    int GetTextLength() { return m_Buffer.GetTextSize(); }  // Returns text length in chars excluding NULL.
+    int GetTextLength()
+    {
+        return m_Buffer.GetTextSize();
+    } // Returns text length in chars excluding NULL.
     // samp.dll RVA: 0x00088950
-    HRESULT GetTextCopy( LPWSTR strDest, UINT bufferCount );
+    HRESULT GetTextCopy(LPWSTR strDest, UINT bufferCount);
     // samp.dll RVA: 0x00084fd0
     void ClearText();
     // samp.dll RVA: 0x0008ee20
-    virtual void SetTextColor( D3DCOLOR Color ) { m_TextColor = Color; }  // Text color
+    virtual void SetTextColor(D3DCOLOR Color)
+    {
+        m_TextColor = Color;
+    } // Text color
     // samp.dll RVA: 0x00068dd0
-    void SetSelectedTextColor( D3DCOLOR Color ) { m_SelTextColor = Color; }  // Selected text color
+    void SetSelectedTextColor(D3DCOLOR Color)
+    {
+        m_SelTextColor = Color;
+    } // Selected text color
     // samp.dll RVA: 0x00068de0
-    void SetSelectedBackColor( D3DCOLOR Color ) { m_SelBkColor = Color; }  // Selected background color
+    void SetSelectedBackColor(D3DCOLOR Color)
+    {
+        m_SelBkColor = Color;
+    } // Selected background color
     // samp.dll RVA: 0x00068df0
-    void SetCaretColor( D3DCOLOR Color ) { m_CaretColor = Color; }  // Caret color
+    void SetCaretColor(D3DCOLOR Color)
+    {
+        m_CaretColor = Color;
+    } // Caret color
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    void SetBorderWidth( int nBorder ) { m_nBorder = nBorder; UpdateRects(); }  // Border of the window
+    void SetBorderWidth(int nBorder)
+    {
+        m_nBorder = nBorder;
+        UpdateRects();
+    } // Border of the window
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-    void SetSpacing( int nSpacing ) { m_nSpacing = nSpacing; UpdateRects(); }
+    void SetSpacing(int nSpacing)
+    {
+        m_nSpacing = nSpacing;
+        UpdateRects();
+    }
     // samp.dll RVA: 0x00089000
-    void ParseFloatArray( float *pNumbers, int nCount );
+    void ParseFloatArray(float* pNumbers, int nCount);
     // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
-    void SetTextFloatArray( const float *pNumbers, int nCount );
+    void SetTextFloatArray(const float* pNumbers, int nCount);
 
 protected:
     // samp.dll RVA: 0x00084ef0
-    void PlaceCaret( int nCP );
+    void PlaceCaret(int nCP);
     // samp.dll RVA: 0x000850e0
     void DeleteSelectionText();
     // samp.dll RVA: 0x00085cf0
@@ -1042,31 +1391,30 @@ protected:
     void PasteFromClipboard();
 
     CUniBuffer m_Buffer;     // Buffer to hold text
-    int      m_nBorder;      // Border of the window
-    int      m_nSpacing;     // Spacing between the text and the edge of border
-    RECT     m_rcText;       // Bounding rectangle for the text
-    RECT     m_rcRender[9];  // Convenient rectangles for rendering elements
-    double   m_dfBlink;      // Caret blink time in milliseconds
-    double   m_dfLastBlink;  // Last timestamp of caret blink
-    bool     m_bCaretOn;     // Flag to indicate whether caret is currently visible
-    int      m_nCaret;       // Caret position, in characters
-    bool     m_bInsertMode;  // If true, control is in insert mode. Else, overwrite mode.
-    int      m_nSelStart;    // Starting position of the selection. The caret marks the end.
-    int      m_nFirstVisible;// First visible character in the edit control
-    bool m_nativeFlag126; // Native constructor writes false before the colors.
+    int m_nBorder;           // Border of the window
+    int m_nSpacing;          // Spacing between the text and the edge of border
+    RECT m_rcText;           // Bounding rectangle for the text
+    RECT m_rcRender[9];      // Convenient rectangles for rendering elements
+    double m_dfBlink;        // Caret blink time in milliseconds
+    double m_dfLastBlink;    // Last timestamp of caret blink
+    bool m_bCaretOn;         // Flag to indicate whether caret is currently visible
+    int m_nCaret;            // Caret position, in characters
+    bool m_bInsertMode;      // If true, control is in insert mode. Else, overwrite mode.
+    int m_nSelStart;         // Starting position of the selection. The caret marks the end.
+    int m_nFirstVisible;     // First visible character in the edit control
+    bool m_nativeFlag126;    // Native constructor writes false before the colors.
     D3DCOLOR m_TextColor;    // Text color
     D3DCOLOR m_SelTextColor; // Selected text color
     D3DCOLOR m_SelBkColor;   // Selected background color
     D3DCOLOR m_CaretColor;   // Caret color
 
     // Mouse-specific
-    bool m_bMouseDrag;       // True to indicate drag in progress
+    bool m_bMouseDrag; // True to indicate drag in progress
 
     // Static
     // samp.dll RVA: 0x0017f694
-    static bool s_bHideCaret;   // If true, we don't render the caret.
+    static bool s_bHideCaret; // If true, we don't render the caret.
 };
-
 
 //-----------------------------------------------------------------------------
 // IME-enabled EditBox control
@@ -1079,119 +1427,194 @@ class CDXUTIMEEditBox : public CDXUTEditBox
 protected:
     // Empty implementation of the IMM32 API
     // samp.dll RVA: 0x00084250
-    static INPUTCONTEXT* WINAPI Dummy_ImmLockIMC( HIMC ) { return NULL; }
+    static INPUTCONTEXT* WINAPI Dummy_ImmLockIMC(HIMC)
+    {
+        return NULL;
+    }
     // samp.dll RVA: 0x00084260
-    static BOOL WINAPI Dummy_ImmUnlockIMC( HIMC ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmUnlockIMC(HIMC)
+    {
+        return FALSE;
+    }
     // samp.dll RVA: 0x00084270
-    static LPVOID WINAPI Dummy_ImmLockIMCC( HIMCC ) { return NULL; }
+    static LPVOID WINAPI Dummy_ImmLockIMCC(HIMCC)
+    {
+        return NULL;
+    }
     // samp.dll RVA: 0x00084280
-    static BOOL WINAPI Dummy_ImmUnlockIMCC( HIMCC ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmUnlockIMCC(HIMCC)
+    {
+        return FALSE;
+    }
     // samp.dll RVA: 0x00084290
-    static BOOL WINAPI Dummy_ImmDisableTextFrameService( DWORD ) { return TRUE; }
+    static BOOL WINAPI Dummy_ImmDisableTextFrameService(DWORD)
+    {
+        return TRUE;
+    }
     // samp.dll RVA: 0x000842a0
-    static LONG WINAPI Dummy_ImmGetCompositionStringW( HIMC, DWORD, LPVOID, DWORD ) { return IMM_ERROR_GENERAL; }
+    static LONG WINAPI Dummy_ImmGetCompositionStringW(HIMC, DWORD, LPVOID, DWORD)
+    {
+        return IMM_ERROR_GENERAL;
+    }
     // samp.dll RVA: 0x000842b0
-    static DWORD WINAPI Dummy_ImmGetCandidateListW( HIMC, DWORD, LPCANDIDATELIST, DWORD ) { return 0; }
+    static DWORD WINAPI Dummy_ImmGetCandidateListW(HIMC, DWORD, LPCANDIDATELIST, DWORD)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x000842c0
-    static HIMC WINAPI Dummy_ImmGetContext( HWND ) { return NULL; }
+    static HIMC WINAPI Dummy_ImmGetContext(HWND)
+    {
+        return NULL;
+    }
     // samp.dll RVA: 0x000842d0
-    static BOOL WINAPI Dummy_ImmReleaseContext( HWND, HIMC ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmReleaseContext(HWND, HIMC)
+    {
+        return FALSE;
+    }
     // samp.dll RVA: 0x000842e0
-    static HIMC WINAPI Dummy_ImmAssociateContext( HWND, HIMC ) { return NULL; }
+    static HIMC WINAPI Dummy_ImmAssociateContext(HWND, HIMC)
+    {
+        return NULL;
+    }
     // samp.dll RVA: 0x000842f0
-    static BOOL WINAPI Dummy_ImmGetOpenStatus( HIMC ) { return 0; }
+    static BOOL WINAPI Dummy_ImmGetOpenStatus(HIMC)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x00084300
-    static BOOL WINAPI Dummy_ImmSetOpenStatus( HIMC, BOOL ) { return 0; }
+    static BOOL WINAPI Dummy_ImmSetOpenStatus(HIMC, BOOL)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x00084310
-    static BOOL WINAPI Dummy_ImmGetConversionStatus( HIMC, LPDWORD, LPDWORD ) { return 0; }
+    static BOOL WINAPI Dummy_ImmGetConversionStatus(HIMC, LPDWORD, LPDWORD)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x00084320
-    static HWND WINAPI Dummy_ImmGetDefaultIMEWnd( HWND ) { return NULL; }
+    static HWND WINAPI Dummy_ImmGetDefaultIMEWnd(HWND)
+    {
+        return NULL;
+    }
     // samp.dll RVA: 0x00084330
-    static UINT WINAPI Dummy_ImmGetIMEFileNameA( HKL, LPSTR, UINT ) { return 0; }
+    static UINT WINAPI Dummy_ImmGetIMEFileNameA(HKL, LPSTR, UINT)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x00084340
-    static UINT WINAPI Dummy_ImmGetVirtualKey( HWND ) { return 0; }
+    static UINT WINAPI Dummy_ImmGetVirtualKey(HWND)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x00084350
-    static BOOL WINAPI Dummy_ImmNotifyIME( HIMC, DWORD, DWORD, DWORD ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmNotifyIME(HIMC, DWORD, DWORD, DWORD)
+    {
+        return FALSE;
+    }
     // samp.dll RVA: 0x00084360
-    static BOOL WINAPI Dummy_ImmSetConversionStatus( HIMC, DWORD, DWORD ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmSetConversionStatus(HIMC, DWORD, DWORD)
+    {
+        return FALSE;
+    }
     // samp.dll RVA: 0x00084370
-    static BOOL WINAPI Dummy_ImmSimulateHotKey( HWND, DWORD ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmSimulateHotKey(HWND, DWORD)
+    {
+        return FALSE;
+    }
     // samp.dll RVA: 0x00084380
-    static BOOL WINAPI Dummy_ImmIsIME( HKL ) { return FALSE; }
+    static BOOL WINAPI Dummy_ImmIsIME(HKL)
+    {
+        return FALSE;
+    }
 
     // Traditional Chinese IME
     // samp.dll RVA: 0x00084390
-    static UINT WINAPI Dummy_GetReadingString( HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT ) { return 0; }
+    static UINT WINAPI Dummy_GetReadingString(HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x000843a0
-    static BOOL WINAPI Dummy_ShowReadingWindow( HIMC, BOOL ) { return FALSE; }
+    static BOOL WINAPI Dummy_ShowReadingWindow(HIMC, BOOL)
+    {
+        return FALSE;
+    }
 
     // Verion library imports
     // samp.dll RVA: 0x000843b0
-    static BOOL APIENTRY Dummy_VerQueryValueA( const LPVOID, LPSTR, LPVOID *, PUINT ) { return 0; }
+    static BOOL APIENTRY Dummy_VerQueryValueA(const LPVOID, LPSTR, LPVOID*, PUINT)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x000843c0
-    static BOOL APIENTRY Dummy_GetFileVersionInfoA( LPSTR, DWORD, DWORD, LPVOID ) { return 0; }
+    static BOOL APIENTRY Dummy_GetFileVersionInfoA(LPSTR, DWORD, DWORD, LPVOID)
+    {
+        return 0;
+    }
     // samp.dll RVA: 0x000843d0
-    static DWORD APIENTRY Dummy_GetFileVersionInfoSizeA( LPSTR, LPDWORD ) { return 0; }
+    static DWORD APIENTRY Dummy_GetFileVersionInfoSizeA(LPSTR, LPDWORD)
+    {
+        return 0;
+    }
 
     // Function pointers: IMM32
     // samp.dll RVA: 0x00140c18
-    static INPUTCONTEXT* (WINAPI * _ImmLockIMC)( HIMC );
+    static INPUTCONTEXT*(WINAPI* _ImmLockIMC)(HIMC);
     // samp.dll RVA: 0x00140c1c
-    static BOOL (WINAPI * _ImmUnlockIMC)( HIMC );
+    static BOOL(WINAPI* _ImmUnlockIMC)(HIMC);
     // samp.dll RVA: 0x00140c20
-    static LPVOID (WINAPI * _ImmLockIMCC)( HIMCC );
+    static LPVOID(WINAPI* _ImmLockIMCC)(HIMCC);
     // samp.dll RVA: 0x00140c24
-    static BOOL (WINAPI * _ImmUnlockIMCC)( HIMCC );
+    static BOOL(WINAPI* _ImmUnlockIMCC)(HIMCC);
     // samp.dll RVA: 0x00140c28
-    static BOOL (WINAPI * _ImmDisableTextFrameService)( DWORD );
+    static BOOL(WINAPI* _ImmDisableTextFrameService)(DWORD);
     // samp.dll RVA: 0x00140c2c
-    static LONG (WINAPI * _ImmGetCompositionStringW)( HIMC, DWORD, LPVOID, DWORD );
+    static LONG(WINAPI* _ImmGetCompositionStringW)(HIMC, DWORD, LPVOID, DWORD);
     // samp.dll RVA: 0x00140c30
-    static DWORD (WINAPI * _ImmGetCandidateListW)( HIMC, DWORD, LPCANDIDATELIST, DWORD );
+    static DWORD(WINAPI* _ImmGetCandidateListW)(HIMC, DWORD, LPCANDIDATELIST, DWORD);
     // samp.dll RVA: 0x00140c34
-    static HIMC (WINAPI * _ImmGetContext)( HWND );
+    static HIMC(WINAPI* _ImmGetContext)(HWND);
     // samp.dll RVA: 0x00140c38
-    static BOOL (WINAPI * _ImmReleaseContext)( HWND, HIMC );
+    static BOOL(WINAPI* _ImmReleaseContext)(HWND, HIMC);
     // samp.dll RVA: 0x00140c3c
-    static HIMC (WINAPI * _ImmAssociateContext)( HWND, HIMC );
+    static HIMC(WINAPI* _ImmAssociateContext)(HWND, HIMC);
     // samp.dll RVA: 0x00140c40
-    static BOOL (WINAPI * _ImmGetOpenStatus)( HIMC );
+    static BOOL(WINAPI* _ImmGetOpenStatus)(HIMC);
     // samp.dll RVA: 0x00140c44
-    static BOOL (WINAPI * _ImmSetOpenStatus)( HIMC, BOOL );
+    static BOOL(WINAPI* _ImmSetOpenStatus)(HIMC, BOOL);
     // samp.dll RVA: 0x00140c48
-    static BOOL (WINAPI * _ImmGetConversionStatus)( HIMC, LPDWORD, LPDWORD );
+    static BOOL(WINAPI* _ImmGetConversionStatus)(HIMC, LPDWORD, LPDWORD);
     // samp.dll RVA: 0x00140c4c
-    static HWND (WINAPI * _ImmGetDefaultIMEWnd)( HWND );
+    static HWND(WINAPI* _ImmGetDefaultIMEWnd)(HWND);
     // samp.dll RVA: 0x00140c50
-    static UINT (WINAPI * _ImmGetIMEFileNameA)( HKL, LPSTR, UINT );
+    static UINT(WINAPI* _ImmGetIMEFileNameA)(HKL, LPSTR, UINT);
     // samp.dll RVA: 0x00140c54
-    static UINT (WINAPI * _ImmGetVirtualKey)( HWND );
+    static UINT(WINAPI* _ImmGetVirtualKey)(HWND);
     // samp.dll RVA: 0x00140c58
-    static BOOL (WINAPI * _ImmNotifyIME)( HIMC, DWORD, DWORD, DWORD );
+    static BOOL(WINAPI* _ImmNotifyIME)(HIMC, DWORD, DWORD, DWORD);
     // samp.dll RVA: 0x00140c5c
-    static BOOL (WINAPI * _ImmSetConversionStatus)( HIMC, DWORD, DWORD );
+    static BOOL(WINAPI* _ImmSetConversionStatus)(HIMC, DWORD, DWORD);
     // samp.dll RVA: 0x00140c60
-    static BOOL (WINAPI * _ImmSimulateHotKey)( HWND, DWORD );
+    static BOOL(WINAPI* _ImmSimulateHotKey)(HWND, DWORD);
     // samp.dll RVA: 0x00140c64
-    static BOOL (WINAPI * _ImmIsIME)( HKL );
+    static BOOL(WINAPI* _ImmIsIME)(HKL);
 
     // Function pointers: Traditional Chinese IME
     // samp.dll RVA: 0x00140c68
-    static UINT (WINAPI * _GetReadingString)( HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT );
+    static UINT(WINAPI* _GetReadingString)(HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT);
     // samp.dll RVA: 0x00140c6c
-    static BOOL (WINAPI * _ShowReadingWindow)( HIMC, BOOL );
+    static BOOL(WINAPI* _ShowReadingWindow)(HIMC, BOOL);
 
     // Function pointers: Verion library imports
     // samp.dll RVA: 0x00140c70
-    static BOOL (APIENTRY * _VerQueryValueA)( const LPVOID, LPSTR, LPVOID *, PUINT );
+    static BOOL(APIENTRY* _VerQueryValueA)(const LPVOID, LPSTR, LPVOID*, PUINT);
     // samp.dll RVA: 0x00140c74
-    static BOOL (APIENTRY * _GetFileVersionInfoA)( LPSTR, DWORD, DWORD, LPVOID );
+    static BOOL(APIENTRY* _GetFileVersionInfoA)(LPSTR, DWORD, DWORD, LPVOID);
     // samp.dll RVA: 0x00140c78
-    static DWORD (APIENTRY * _GetFileVersionInfoSizeA)( LPSTR, LPDWORD );
+    static DWORD(APIENTRY* _GetFileVersionInfoSizeA)(LPSTR, LPDWORD);
 
 public:
     // samp.dll RVA: 0x0008F370
-    CDXUTIMEEditBox( CDXUTDialog *pDialog = NULL );
+    CDXUTIMEEditBox(CDXUTDialog* pDialog = NULL);
     // samp.dll RVA: 0x0008F470
     virtual ~CDXUTIMEEditBox();
 
@@ -1201,19 +1624,19 @@ public:
     static void Uninitialize();
 
     // samp.dll RVA: 0x00085460
-    static  HRESULT StaticOnCreateDevice();
+    static HRESULT StaticOnCreateDevice();
     // samp.dll RVA: 0x0008C2C0
-    static  bool StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    static bool StaticMsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     // samp.dll RVA: 0x00085940
-    static  void EnableImeSystem( bool bEnable );
+    static void EnableImeSystem(bool bEnable);
 
     // samp.dll RVA: 0x00090230
-    virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
     // samp.dll RVA: 0x0008B300
-    virtual bool MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam );
+    virtual bool MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
     // samp.dll RVA: 0x00089110
-    virtual bool HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam );
+    virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
     // samp.dll RVA: 0x00085490
     virtual void UpdateRects();
     // samp.dll RVA: 0x000890B0
@@ -1225,23 +1648,32 @@ public:
     void PumpMessage();
 
     // samp.dll RVA: 0x0008F480
-    virtual void RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading );
+    virtual void RenderCandidateReadingWindow(IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading);
     // samp.dll RVA: 0x0008FAA0
-    virtual void RenderComposition( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void RenderComposition(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
     // samp.dll RVA: 0x000900E0
-    virtual void RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
+    virtual void RenderIndicator(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
 
 protected:
     // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
-    static WORD GetLanguage() { return LOWORD( s_hklCurrent ); }
+    static WORD GetLanguage()
+    {
+        return LOWORD(s_hklCurrent);
+    }
     // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
-    static WORD GetPrimaryLanguage() { return PRIMARYLANGID( LOWORD( s_hklCurrent ) ); }
+    static WORD GetPrimaryLanguage()
+    {
+        return PRIMARYLANGID(LOWORD(s_hklCurrent));
+    }
     // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
-    static WORD GetSubLanguage() { return SUBLANGID( LOWORD( s_hklCurrent ) ); }
+    static WORD GetSubLanguage()
+    {
+        return SUBLANGID(LOWORD(s_hklCurrent));
+    }
     // samp.dll RVA: 0x00085430
-    static void SendKey( BYTE nVirtKey );
+    static void SendKey(BYTE nVirtKey);
     // samp.dll RVA: 0x00085500
-    static DWORD GetImeId( UINT uIndex = 0 );
+    static DWORD GetImeId(UINT uIndex = 0);
     // samp.dll RVA: 0x00085760
     static void CheckInputLocale();
     // samp.dll RVA: 0x00085860
@@ -1251,11 +1683,11 @@ protected:
     // samp.dll RVA: 0x000859E0
     static void ResetCompositionString();
     // samp.dll RVA: 0x00085A10
-    void TruncateCompString( bool bUseBackSpace = true, int iNewStrLen = 0 );
+    void TruncateCompString(bool bUseBackSpace = true, int iNewStrLen = 0);
     // samp.dll RVA: 0x00085B70
-    void FinalizeString( bool bSend );
+    void FinalizeString(bool bSend);
     // samp.dll RVA: 0x0008AC70
-    static void GetReadingWindowOrientation( DWORD dwId );
+    static void GetReadingWindowOrientation(DWORD dwId);
     // samp.dll RVA: 0x0008ADD0
     static void GetPrivateReadingString();
 
@@ -1263,108 +1695,118 @@ protected:
     void SendCompString();
 
 protected:
-    enum { INDICATOR_NON_IME, INDICATOR_CHS, INDICATOR_CHT, INDICATOR_KOREAN, INDICATOR_JAPANESE };
-    enum IMESTATE { IMEUI_STATE_OFF, IMEUI_STATE_ON, IMEUI_STATE_ENGLISH };
+    enum
+    {
+        INDICATOR_NON_IME,
+        INDICATOR_CHS,
+        INDICATOR_CHT,
+        INDICATOR_KOREAN,
+        INDICATOR_JAPANESE
+    };
+    enum IMESTATE
+    {
+        IMEUI_STATE_OFF,
+        IMEUI_STATE_ON,
+        IMEUI_STATE_ENGLISH
+    };
 
     struct CCandList
     {
         WCHAR awszCandidate[MAX_CANDLIST][256];
-        CUniBuffer HoriCand; // Candidate list string (for horizontal candidate window)
-        int   nFirstSelected; // First character position of the selected string in HoriCand
-        int   nHoriSelectedLen; // Length of the selected string in HoriCand
-        DWORD dwCount;       // Number of valid entries in the candidate list
-        DWORD dwSelection;   // Currently selected candidate entry relative to page top
+        CUniBuffer HoriCand;  // Candidate list string (for horizontal candidate window)
+        int nFirstSelected;   // First character position of the selected string in HoriCand
+        int nHoriSelectedLen; // Length of the selected string in HoriCand
+        DWORD dwCount;        // Number of valid entries in the candidate list
+        DWORD dwSelection;    // Currently selected candidate entry relative to page top
         DWORD dwPageSize;
-        int   nReadingError; // Index of the error character
-        bool  bShowWindow;   // Whether the candidate list window is visible
-        RECT  rcCandidate;   // Candidate rectangle computed and filled each time before rendered
+        int nReadingError; // Index of the error character
+        bool bShowWindow;  // Whether the candidate list window is visible
+        RECT rcCandidate;  // Candidate rectangle computed and filled each time before rendered
     };
 
     struct CInputLocale
     {
-        HKL   m_hKL;            // Keyboard layout
-        WCHAR m_wszLangAbb[3];  // Language abbreviation
-        WCHAR m_wszLang[64];    // Localized language name
+        HKL m_hKL;             // Keyboard layout
+        WCHAR m_wszLangAbb[3]; // Language abbreviation
+        WCHAR m_wszLang[64];   // Localized language name
     };
 
     // Application-wide data
     // samp.dll RVA: 0x00180604
-    static HINSTANCE s_hDllImm32;         // IMM32 DLL handle
+    static HINSTANCE s_hDllImm32; // IMM32 DLL handle
     // samp.dll RVA: 0x0017f6a4
-    static HINSTANCE s_hDllVer;           // Version DLL handle
+    static HINSTANCE s_hDllVer; // Version DLL handle
     // samp.dll RVA: 0x0017F6A8
-    static HIMC      s_hImcDef;           // Default input context
+    static HIMC s_hImcDef; // Default input context
 
     // samp.dll RVA: 0x00180600
-    static HKL     s_hklCurrent;          // Current keyboard layout of the process
+    static HKL s_hklCurrent; // Current keyboard layout of the process
     // samp.dll RVA: 0x0017F6B1
-    static bool    s_bVerticalCand;       // Indicates that the candidates are listed vertically
+    static bool s_bVerticalCand; // Indicates that the candidates are listed vertically
     // samp.dll RVA: 0x00140C9C
-    static LPWSTR  s_wszCurrIndicator;    // Points to an indicator string that corresponds to current input locale
+    static LPWSTR s_wszCurrIndicator; // Points to an indicator string that corresponds to current input locale
     // samp.dll RVA: 0x00140C7C
-    static WCHAR   s_aszIndicator[5][3];  // String to draw to indicate current input locale
+    static WCHAR s_aszIndicator[5][3]; // String to draw to indicate current input locale
     // samp.dll RVA: 0x0017F695
-    static bool    s_bInsertOnType;       // Insert the character as soon as a key is pressed (Korean behavior)
+    static bool s_bInsertOnType; // Insert the character as soon as a key is pressed (Korean behavior)
     // samp.dll RVA: 0x0017f6b4
-    static HINSTANCE s_hDllIme;           // Instance handle of the current IME module
+    static HINSTANCE s_hDllIme; // Instance handle of the current IME module
     // samp.dll RVA: 0x0018061C
-    static IMESTATE  s_ImeState;          // IME global state
+    static IMESTATE s_ImeState; // IME global state
     // samp.dll RVA: 0x0017F6B0
-    static bool    s_bEnableImeSystem;    // Whether the IME system is active
+    static bool s_bEnableImeSystem; // Whether the IME system is active
     // samp.dll RVA: 0x0017F69C
-    static POINT   s_ptCompString;        // Composition string position. Updated every frame.
+    static POINT s_ptCompString; // Composition string position. Updated every frame.
     // samp.dll RVA: 0x0017F690
-    static int     s_nCompCaret;          // Caret position of the composition string
+    static int s_nCompCaret; // Caret position of the composition string
     // samp.dll RVA: 0x0017F6AC
-    static int     s_nFirstTargetConv;    // Index of the first target converted char in comp string.  If none, -1.
+    static int s_nFirstTargetConv; // Index of the first target converted char in comp string.  If none, -1.
     // samp.dll RVA: 0x0018062c
-    static CUniBuffer s_CompString;       // Buffer to hold the composition string (we fix its length)
+    static CUniBuffer s_CompString; // Buffer to hold the composition string (we fix its length)
     // samp.dll RVA: 0x0017F6B8
-    static BYTE    s_abCompStringAttr[MAX_COMPSTRING_SIZE];
+    static BYTE s_abCompStringAttr[MAX_COMPSTRING_SIZE];
     // samp.dll RVA: 0x0017F7B8
-    static DWORD   s_adwCompStringClause[MAX_COMPSTRING_SIZE];
+    static DWORD s_adwCompStringClause[MAX_COMPSTRING_SIZE];
     // samp.dll RVA: 0x001803C0
-    static WCHAR   s_wszReadingString[32];// Used only with horizontal reading window (why?)
+    static WCHAR s_wszReadingString[32]; // Used only with horizontal reading window (why?)
     // samp.dll RVA: 0x00180640
-    static CCandList s_CandList;          // Data relevant to the candidate list
+    static CCandList s_CandList; // Data relevant to the candidate list
     // samp.dll RVA: 0x0017F696
-    static bool    s_bShowReadingWindow;  // Indicates whether reading window is visible
+    static bool s_bShowReadingWindow; // Indicates whether reading window is visible
     // samp.dll RVA: 0x001803BA
-    static bool    s_bHorizontalReading;  // Indicates whether the reading window is vertical or horizontal
+    static bool s_bHorizontalReading; // Indicates whether the reading window is vertical or horizontal
     // samp.dll RVA: 0x001803B9
-    static bool    s_bChineseIME;
+    static bool s_bChineseIME;
     // samp.dll RVA: 0x00180620
-    static CGrowableArray< CInputLocale > s_Locale; // Array of loaded keyboard layout on system
+    static CGrowableArray<CInputLocale> s_Locale; // Array of loaded keyboard layout on system
 
     // Color of various IME elements
-    D3DCOLOR       m_ReadingColor;        // Reading string color
-    D3DCOLOR       m_ReadingWinColor;     // Reading window color
-    D3DCOLOR       m_ReadingSelColor;     // Selected character in reading string
-    D3DCOLOR       m_ReadingSelBkColor;   // Background color for selected char in reading str
-    D3DCOLOR       m_CandidateColor;      // Candidate string color
-    D3DCOLOR       m_CandidateWinColor;   // Candidate window color
-    D3DCOLOR       m_CandidateSelColor;   // Selected candidate string color
-    D3DCOLOR       m_CandidateSelBkColor; // Selected candidate background color
-    D3DCOLOR       m_CompColor;           // Composition string color
-    D3DCOLOR       m_CompWinColor;        // Composition string window color
-    D3DCOLOR       m_CompCaretColor;      // Composition string caret color
-    D3DCOLOR       m_CompTargetColor;     // Composition string target converted color
-    D3DCOLOR       m_CompTargetBkColor;   // Composition string target converted background
-    D3DCOLOR       m_CompTargetNonColor;  // Composition string target non-converted color
-    D3DCOLOR       m_CompTargetNonBkColor;// Composition string target non-converted background
-    D3DCOLOR       m_IndicatorImeColor;   // Indicator text color for IME
-    D3DCOLOR       m_IndicatorEngColor;   // Indicator text color for English
-    D3DCOLOR       m_IndicatorBkColor;    // Indicator text background color
+    D3DCOLOR m_ReadingColor;         // Reading string color
+    D3DCOLOR m_ReadingWinColor;      // Reading window color
+    D3DCOLOR m_ReadingSelColor;      // Selected character in reading string
+    D3DCOLOR m_ReadingSelBkColor;    // Background color for selected char in reading str
+    D3DCOLOR m_CandidateColor;       // Candidate string color
+    D3DCOLOR m_CandidateWinColor;    // Candidate window color
+    D3DCOLOR m_CandidateSelColor;    // Selected candidate string color
+    D3DCOLOR m_CandidateSelBkColor;  // Selected candidate background color
+    D3DCOLOR m_CompColor;            // Composition string color
+    D3DCOLOR m_CompWinColor;         // Composition string window color
+    D3DCOLOR m_CompCaretColor;       // Composition string caret color
+    D3DCOLOR m_CompTargetColor;      // Composition string target converted color
+    D3DCOLOR m_CompTargetBkColor;    // Composition string target converted background
+    D3DCOLOR m_CompTargetNonColor;   // Composition string target non-converted color
+    D3DCOLOR m_CompTargetNonBkColor; // Composition string target non-converted background
+    D3DCOLOR m_IndicatorImeColor;    // Indicator text color for IME
+    D3DCOLOR m_IndicatorEngColor;    // Indicator text color for English
+    D3DCOLOR m_IndicatorBkColor;     // Indicator text background color
 
     // Edit-control-specific data
-    int            m_nIndicatorWidth;     // Width of the indicator symbol
-    RECT           m_rcIndicator;         // Rectangle for drawing the indicator button
+    int m_nIndicatorWidth; // Width of the indicator symbol
+    RECT m_rcIndicator;    // Rectangle for drawing the indicator button
 
 #if defined(DEBUG) | defined(_DEBUG)
-    static bool    m_bIMEStaticMsgProcCalled;
+    static bool m_bIMEStaticMsgProcCalled;
 #endif
 };
-
-
 
 #endif // DXUT_GUI_H

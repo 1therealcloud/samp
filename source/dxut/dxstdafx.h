@@ -15,37 +15,37 @@
 
 // If app hasn't choosen, set to work with Windows 98, Windows Me, Windows 2000, Windows XP and beyond
 #ifndef WINVER
-#define WINVER         0x0410
+#define WINVER 0x0410
 #endif
 #ifndef _WIN32_WINDOWS
-#define _WIN32_WINDOWS 0x0410 
+#define _WIN32_WINDOWS 0x0410
 #endif
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT   0x0500 
+#define _WIN32_WINNT 0x0500
 #endif
 
-#pragma warning( disable : 4100 ) // disable unreference formal parameter warnings for /W4 builds
+#pragma warning(disable : 4100) // disable unreference formal parameter warnings for /W4 builds
 
 #include <windows.h>
+
 #include <assert.h>
-#include <wchar.h>
+#include <commctrl.h> // for InitCommonControls()
+#include <limits.h>
+#include <math.h>
 #include <mmsystem.h>
-#include <commctrl.h> // for InitCommonControls() 
-#include <shellapi.h> // for ExtractIcon()
+#include <multimon.h>
 #include <new.h>      // for placement new
-#include <math.h>      
-#include <limits.h>      
+#include <shellapi.h> // for ExtractIcon()
 #include <stdio.h>
-#include <multimon.h> 
+#include <wchar.h>
 
 // CRT's memory leak detection
 #if defined(DEBUG) | defined(_DEBUG)
 #include <crtdbg.h>
 #endif
 
-
-// Enable extra D3D debugging in debug builds if using the debug DirectX runtime.  
-// This makes D3D objects work well in the debugger watch window, but slows down 
+// Enable extra D3D debugging in debug builds if using the debug DirectX runtime.
+// This makes D3D objects work well in the debugger watch window, but slows down
 // performance slightly.
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef D3D_DEBUG_INFO
@@ -59,12 +59,12 @@
 #include <dxerr9.h>
 
 // DirectSound includes
-#include <mmsystem.h>
-#include <mmreg.h>
 #include <dsound.h>
+#include <mmreg.h>
+#include <mmsystem.h>
 
-// strsafe.h deprecates old unsecure string functions.  If you 
-// really do not want to it to (not recommended), then uncomment the next line 
+// strsafe.h deprecates old unsecure string functions.  If you
+// really do not want to it to (not recommended), then uncomment the next line
 //#define STRSAFE_NO_DEPRECATE
 
 #ifndef STRSAFE_NO_DEPRECATE
@@ -79,37 +79,84 @@
 #include <strsafe.h>
 
 #include "DXUT.h"
+
 #include "DXUTmisc.h"
-#include "DXUTenum.h"
-#include "DXUTmesh.h"
-#include "DXUTgui.h"
-#include "DXUTsettingsDlg.h"
+
 #include "DXUTSound.h"
+#include "DXUTenum.h"
+#include "DXUTgui.h"
+#include "DXUTmesh.h"
+#include "DXUTsettingsDlg.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef V
-#define V(x)           { hr = x; if( FAILED(hr) ) { DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, true ); } }
+#define V(x)                                                                                                                                                                       \
+    {                                                                                                                                                                              \
+        hr = x;                                                                                                                                                                    \
+        if (FAILED(hr))                                                                                                                                                            \
+        {                                                                                                                                                                          \
+            DXUTTrace(__FILE__, (DWORD)__LINE__, hr, L#x, true);                                                                                                                   \
+        }                                                                                                                                                                          \
+    }
 #endif
 #ifndef V_RETURN
-#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, true ); } }
+#define V_RETURN(x)                                                                                                                                                                \
+    {                                                                                                                                                                              \
+        hr = x;                                                                                                                                                                    \
+        if (FAILED(hr))                                                                                                                                                            \
+        {                                                                                                                                                                          \
+            return DXUTTrace(__FILE__, (DWORD)__LINE__, hr, L#x, true);                                                                                                            \
+        }                                                                                                                                                                          \
+    }
 #endif
 #else
 #ifndef V
-#define V(x)           { hr = x; }
+#define V(x)                                                                                                                                                                       \
+    {                                                                                                                                                                              \
+        hr = x;                                                                                                                                                                    \
+    }
 #endif
 #ifndef V_RETURN
-#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return hr; } }
+#define V_RETURN(x)                                                                                                                                                                \
+    {                                                                                                                                                                              \
+        hr = x;                                                                                                                                                                    \
+        if (FAILED(hr))                                                                                                                                                            \
+        {                                                                                                                                                                          \
+            return hr;                                                                                                                                                             \
+        }                                                                                                                                                                          \
+    }
 #endif
 #endif
 
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
-#endif    
+#define SAFE_DELETE(p)                                                                                                                                                             \
+    {                                                                                                                                                                              \
+        if (p)                                                                                                                                                                     \
+        {                                                                                                                                                                          \
+            delete (p);                                                                                                                                                            \
+            (p) = NULL;                                                                                                                                                            \
+        }                                                                                                                                                                          \
+    }
+#endif
 #ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#endif    
+#define SAFE_DELETE_ARRAY(p)                                                                                                                                                       \
+    {                                                                                                                                                                              \
+        if (p)                                                                                                                                                                     \
+        {                                                                                                                                                                          \
+            delete[] (p);                                                                                                                                                          \
+            (p) = NULL;                                                                                                                                                            \
+        }                                                                                                                                                                          \
+    }
+#endif
 #ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
+#define SAFE_RELEASE(p)                                                                                                                                                            \
+    {                                                                                                                                                                              \
+        if (p)                                                                                                                                                                     \
+        {                                                                                                                                                                          \
+            (p)->Release();                                                                                                                                                        \
+            (p) = NULL;                                                                                                                                                            \
+        }                                                                                                                                                                          \
+    }
 #endif
 
 #endif // !defined(DXSDK_STDAFX_H)

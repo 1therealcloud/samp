@@ -1,37 +1,37 @@
 #ifndef SAMP_GAME_DEBUG_H
 #define SAMP_GAME_DEBUG_H
-#include <windows.h>
 #include <stdio.h>
+#include <windows.h>
 // Names follow the 0.2x task helper family; DL name lookup is disabled natively.
 // The unused task parameter follows that reference; DL consumes no argument.
 // samp.dll RVA: 0x000b3cf0
-const char *GameGetTaskName(void *task);
+const char* GameGetTaskName(void* task);
 // samp.dll RVA: 0x0011f56c
 extern const char g_taskNoneName[5];
 // samp.dll RVA: 0x000b3ca0
-DWORD GameGetTaskType(void *task);
+DWORD GameGetTaskType(void* task);
 // Validates the raw GTA vtable range before calling virtual slot +8.
 // samp.dll RVA: 0x000b3c50
-void *GameGetTaskChild(void *task);
+void* GameGetTaskChild(void* task);
 struct CVector;
 struct KeyPad;
 class CCamera;
 class CVehicle;
 // Descriptive recovery names for the native debug-state setters.
 // samp.dll RVA: 0x0009dee0
-void GameSetDebugState(DWORD first,DWORD second,DWORD stage);
+void GameSetDebugState(DWORD first, DWORD second, DWORD stage);
 // samp.dll RVA: 0x0009df00
 void GameClearDebugState();
 // samp.dll RVA: 0x001518d4
 extern DWORD g_debugSelectedVehicleModel;
 // samp.dll RVA: 0x0018dd48
-extern KeyPad *g_debugVehicleKeys;
+extern KeyPad* g_debugVehicleKeys;
 // samp.dll RVA: 0x0018dd4c
-extern CCamera *g_debugVehicleCamera;
+extern CCamera* g_debugVehicleCamera;
 // samp.dll RVA: 0x0018de30
 extern DWORD g_debugVehicleSelectionActive;
 // samp.dll RVA: 0x0018de34
-extern CVehicle *g_debugSelectedVehicle;
+extern CVehicle* g_debugSelectedVehicle;
 // samp.dll RVA: 0x0018ddec
 extern DWORD g_debugSelectionFlagA;
 // samp.dll RVA: 0x0018ddf0
@@ -61,14 +61,14 @@ extern DWORD g_debugHeightmapStage;
 // samp.dll RVA: 0x0018de28
 extern DWORD g_debugHeightmapFlagCopy;
 // samp.dll RVA: 0x0018de2c
-extern FILE *g_debugHeightmapFile;
+extern FILE* g_debugHeightmapFile;
 // samp.dll RVA: 0x0011e50c
 extern const char g_debugHeightmapFilename[];
 // Existing shared mode storage in custommodels.cpp.
 // samp.dll RVA: 0x00117d30
 extern const char g_customDownloadWriteMode[];
 // samp.dll RVA: 0x0009dc80
-float GameDebugGroundHeight(const CVector *position);
+float GameDebugGroundHeight(const CVector* position);
 // samp.dll RVA: 0x0009dcd0
 void GameDebugWriteHeightmap();
 // samp.dll RVA: 0x0009dda0
@@ -78,14 +78,17 @@ void __stdcall GameSetNativeDebugFlag18DC20(BYTE value);
 
 #ifndef SAMP_GAME_DEBUG_PLACEMENT_H
 #define SAMP_GAME_DEBUG_PLACEMENT_H
-#pragma pack(push,1)
-struct GameDebugPlacementRecord {
-    float x,y,z,qx,qy,qz,qw;
-    int model;DWORD unknown20;int raw24;
+#pragma pack(push, 1)
+struct GameDebugPlacementRecord
+{
+    float x, y, z, qx, qy, qz, qw;
+    int model;
+    DWORD unknown20;
+    int raw24;
 };
 #pragma pack(pop)
 // samp.dll RVA: 0x0018dc1c
-extern FILE *g_debugPlacementFile;
+extern FILE* g_debugPlacementFile;
 // samp.dll RVA: 0x0011e3d8
 extern const char g_debugPlacementFilename[];
 // samp.dll RVA: 0x0011e3a8
@@ -100,9 +103,9 @@ extern const float g_debugPlacementMaxDrawDistance;
 extern const float g_debugPlacementMaxZ;
 // Raw GTA backend entity; not a SA-MP CEntity wrapper pointer.
 // samp.dll RVA: 0x0009ce60
-void GameDebugWriteEntityPlacement(void *entity,FILE *file);
+void GameDebugWriteEntityPlacement(void* entity, FILE* file);
 // samp.dll RVA: 0x0009d100
-int GameDebugWritePlacementRecord(const GameDebugPlacementRecord *record);
+int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record);
 
 #endif
 
@@ -126,13 +129,13 @@ void GameDebugMoveToHeightmapBlock();
 void GameDebugProcessHeightmap();
 
 // samp.dll RVA: 0x002aae10
-extern void *g_debugRasterImage;
+extern void* g_debugRasterImage;
 // samp.dll RVA: 0x002abe40
-extern void *g_debugRasterSource;
+extern void* g_debugRasterSource;
 // samp.dll RVA: 0x002abe44
-extern void *g_debugRasterResult;
+extern void* g_debugRasterResult;
 // samp.dll RVA: 0x002abe48
-extern void *g_debugRasterAlternate;
+extern void* g_debugRasterAlternate;
 // samp.dll RVA: 0x002a9a40
 extern DWORD g_debugRasterWord10;
 // samp.dll RVA: 0x0011e370
@@ -150,6 +153,6 @@ void GameDebugExportWorldPlacements();
 // samp.dll RVA: 0x000b5610
 void GameDebugBindRasterResult();
 // samp.dll RVA: 0x000b5690
-void GameDebugWriteRasterImage(void *raster,const char *filename);
+void GameDebugWriteRasterImage(void* raster, const char* filename);
 // samp.dll RVA: 0x000b5700
 void GameDebugDumpRasterImages();

@@ -3,16 +3,23 @@
 #include <windows.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
-#pragma pack(push,1)
+#pragma pack(push, 1)
 // Packed native per-download record; semantic names are descriptive.
-struct DownloadRecord {
-    DWORD row;BYTE type;DWORD id;BYTE status;DWORD downloaded,total;
+struct DownloadRecord
+{
+    DWORD row;
+    BYTE type;
+    DWORD id;
+    BYTE status;
+    DWORD downloaded, total;
 };
-typedef char NativeDownloadRecordExtent[(sizeof(DownloadRecord)==18)?1:-1];
-class CDownloadWindow {public:
+typedef char NativeDownloadRecordExtent[(sizeof(DownloadRecord) == 18) ? 1 : -1];
+class CDownloadWindow
+{
+public:
     // Initializes only the pointer/count prefix; does not free previous storage.
     // samp.dll RVA: 0x0006a410
-    CDownloadWindow *InitializeRecordStorage();
+    CDownloadWindow* InitializeRecordStorage();
     // Separate prefix-release entry; preserves ResizeRecords' result in AL.
     // samp.dll RVA: 0x0006aa00
     bool ReleaseRecordStorage();
@@ -20,7 +27,7 @@ class CDownloadWindow {public:
     // First two window DWORDs are a specialized pointer-array view.
     // Descriptive helpers retain its observed allocation behavior.
     // samp.dll RVA: 0x0006a420
-    DownloadRecord *GetRecord(DWORD index);
+    DownloadRecord* GetRecord(DWORD index);
     // samp.dll RVA: 0x0006a440
     int GetFilesCount();
     // samp.dll RVA: 0x0006a450
@@ -32,32 +39,32 @@ class CDownloadWindow {public:
     // samp.dll RVA: 0x0006a640
     void ResetRecordStorage();
     // samp.dll RVA: 0x0006a650
-    int AddRecord(DownloadRecord *record);
+    int AddRecord(DownloadRecord* record);
     // samp.dll RVA: 0x0006a6b0
     bool RemoveRecord(DWORD index);
     // samp.dll RVA: 0x0006a6e0
     void ClearRecords();
     // samp.dll RVA: 0x0006a720
-    void UpdateRecord(BYTE type,DWORD id,BYTE status,DWORD downloaded,DWORD total,int error,const char *detail);
+    void UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downloaded, DWORD total, int error, const char* detail);
     // samp.dll RVA: 0x0006ab10
     void Hide();
     // samp.dll RVA: 0x0006aa10
-    CDownloadWindow(IDirect3DDevice9 *device);
+    CDownloadWindow(IDirect3DDevice9* device);
     // Native name retained; also lays out the dialog and list control.
     // samp.dll RVA: 0x0006a1a0
     void ResetFonts();
     // samp.dll RVA: 0x0006a280
-    void GetRect(RECT *out);
+    void GetRect(RECT* out);
     // Descriptive name; parameter is copied verbatim to native state +250.
     // samp.dll RVA: 0x0006a2b0
     void Show(DWORD mode);
     // samp.dll RVA: 0x0006a350
     void Draw();
     // samp.dll RVA: 0x0006a500
-    void ResetDialogControls(CDXUTDialog *dialog);
+    void ResetDialogControls(CDXUTDialog* dialog);
 };
 #pragma pack(pop)
-typedef char NativeDownloadWindowExtent[(sizeof(CDownloadWindow)==0x260)?1:-1];
+typedef char NativeDownloadWindowExtent[(sizeof(CDownloadWindow) == 0x260) ? 1 : -1];
 // samp.dll RVA: 0x0011c37c
 extern const char g_downloadWindowTitle[18];
 // samp.dll RVA: 0x0011c414

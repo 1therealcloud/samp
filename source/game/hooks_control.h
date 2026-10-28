@@ -1,13 +1,13 @@
 #ifndef SAMP_GAME_HOOKS_CONTROL_H
 #define SAMP_GAME_HOOKS_CONTROL_H
-#include "game/hooks_render.h"
 #include "exceptions.h"
-#include "gui/textdraw_texture.h"
-#include "game/playerped.h"
 #include "game/aimstuff.h"
+#include "game/hooks_render.h"
 #include "game/keystuff.h"
+#include "game/playerped.h"
+#include "gui/textdraw_texture.h"
 // samp.dll RVA: 0x00151964
-extern WORD * g_hookCameraModeWord;
+extern WORD* g_hookCameraModeWord;
 // samp.dll RVA: 0x0018f4ac
 extern BYTE g_hookSavedPlayer;
 // samp.dll RVA: 0x0018f4b4
@@ -53,11 +53,11 @@ extern DWORD g_gameVehicleMatrix;
 // samp.dll RVA: 0x0011f5dc
 extern const float g_gameStreamingDistanceSquared;
 // samp.dll RVA: 0x000b3f60
-BYTE __stdcall GameFindPlayerPedIndex(void *ped);
+BYTE __stdcall GameFindPlayerPedIndex(void* ped);
 // samp.dll RVA: 0x000b4410
-BOOL __stdcall GameIsTrainVehicle(void *vehicle);
+BOOL __stdcall GameIsTrainVehicle(void* vehicle);
 // samp.dll RVA: 0x000b4460
-BOOL __stdcall GameHasOccupiedLinkedVehicle(void *vehicle);
+BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle);
 // samp.dll RVA: 0x000b6490
-BOOL __stdcall GameIsVehicleInStreamingArea(void *vehicle);
+BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle);
 #endif

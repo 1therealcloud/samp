@@ -5,9 +5,10 @@
 
 // GTA SA virtual address: 0x0073FB10.
 // samp.dll RVA: 0x000b6020
-__declspec(naked) bool __stdcall GameWeaponFireInstantHit(void *weapon,void *shooter,const CVector *origin,
-    const CVector *muzzle,void *victim,const CVector *target,const CVector *driveBy,
-    DWORD crossHair,DWORD effects) {
+__declspec(naked) bool __stdcall GameWeaponFireInstantHit(void* weapon, void* shooter, const CVector* origin, const CVector* muzzle, void* victim, const CVector* target,
+                                                          const CVector* driveBy, DWORD crossHair, DWORD effects)
+{
+    // clang-format off
     __asm {
         push ebp
         mov ebp,esp
@@ -25,11 +26,14 @@ __declspec(naked) bool __stdcall GameWeaponFireInstantHit(void *weapon,void *sho
         pop ebp
         ret 0x24
     }
+    // clang-format on
 }
 
 // GTA SA virtual address: 0x0073AAC0.
 // samp.dll RVA: 0x000b6050
-__declspec(naked) bool __stdcall GameWeaponFireSniper(void *weapon,void *shooter) {
+__declspec(naked) bool __stdcall GameWeaponFireSniper(void* weapon, void* shooter)
+{
+    // clang-format off
     __asm {
         push ebp
         mov ebp,esp
@@ -42,4 +46,5 @@ __declspec(naked) bool __stdcall GameWeaponFireSniper(void *weapon,void *shooter
         pop ebp
         ret 0x8
     }
+    // clang-format on
 }

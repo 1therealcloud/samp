@@ -1,11 +1,13 @@
 #ifndef SAMP_PLAYERINFO_H
 #define SAMP_PLAYERINFO_H
-#include <windows.h>
-#include <string>
 #include <stddef.h>
+#include <string>
+#include <windows.h>
 class CRemotePlayer;
-#pragma pack(push,1)
-class CPlayerInfo {public:
+#pragma pack(push, 1)
+class CPlayerInfo
+{
+public:
     // samp.dll RVA: 0x0006e270
     int GetScore();
     // samp.dll RVA: 0x0006e280
@@ -14,7 +16,7 @@ class CPlayerInfo {public:
     // samp.dll RVA: 0x0006e300
     DWORD GetNameLength();
     // samp.dll RVA: 0x000170c0
-    const char *GetName();
+    const char* GetName();
     // samp.dll RVA: 0x0000e2d0
     DWORD GetNpcFlag();
     // samp.dll RVA: 0x0000e2e0
@@ -22,16 +24,20 @@ class CPlayerInfo {public:
     // samp.dll RVA: 0x0000e2f0
     void SetPing(DWORD value);
 
-    int score;DWORD npc;CRemotePlayer *remote;DWORD ping;std::string name;
+    int score;
+    DWORD npc;
+    CRemotePlayer* remote;
+    DWORD ping;
+    std::string name;
     // samp.dll RVA: 0x0001da20
-    void SetName(const char *text);
+    void SetName(const char* text);
     // samp.dll RVA: 0x00014060
-    CPlayerInfo(const char *name,DWORD npc);
+    CPlayerInfo(const char* name, DWORD npc);
     // samp.dll RVA: 0x00013e10
     ~CPlayerInfo();
 };
 #pragma pack(pop)
-typedef char PlayerInfoStringExtent[(sizeof(std::string)==28)?1:-1];
-typedef char PlayerInfoNameOffset[(offsetof(CPlayerInfo,name)==0x10)?1:-1];
-typedef char PlayerInfoExtent[(sizeof(CPlayerInfo)==0x2c)?1:-1];
+typedef char PlayerInfoStringExtent[(sizeof(std::string) == 28) ? 1 : -1];
+typedef char PlayerInfoNameOffset[(offsetof(CPlayerInfo, name) == 0x10) ? 1 : -1];
+typedef char PlayerInfoExtent[(sizeof(CPlayerInfo) == 0x2c) ? 1 : -1];
 #endif

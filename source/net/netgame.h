@@ -1,8 +1,8 @@
 #ifndef SAMP_NETGAME_H
 #define SAMP_NETGAME_H
-#include <windows.h>
-#include <stddef.h>
 #include "game/scripting.h"
+#include <stddef.h>
+#include <windows.h>
 // The pool set and its owning field are established; other state remains opaque.
 class CVehiclePool;
 class CPlayerPool;
@@ -16,31 +16,40 @@ class CTextDrawPool;
 class RakClientInterface;
 struct Packet;
 struct CVector;
-#pragma pack(push,1)
-struct CNetGamePools {
-    CMenuPool *menus;CActorPool *actors;CPlayerPool *players;CVehiclePool *vehicles;
-    CPickupPool *pickups;CObjectPool *objects;CGangZonePool *gangZones;CLabelPool *labels;CTextDrawPool *textDraws;
+#pragma pack(push, 1)
+struct CNetGamePools
+{
+    CMenuPool* menus;
+    CActorPool* actors;
+    CPlayerPool* players;
+    CVehiclePool* vehicles;
+    CPickupPool* pickups;
+    CObjectPool* objects;
+    CGangZonePool* gangZones;
+    CLabelPool* labels;
+    CTextDrawPool* textDraws;
 };
-class CNetGame {
+class CNetGame
+{
 public:
     // Raw selected client pointer; no initialization or connection-state gate.
     // samp.dll RVA: 0x00001a90
-    RakClientInterface *GetRakClient();
+    RakClientInterface* GetRakClient();
     // samp.dll RVA: 0x00017800
-    CTextDrawPool *GetTextDrawPool();
+    CTextDrawPool* GetTextDrawPool();
     // samp.dll RVA: 0x00017810
-    CGangZonePool *GetGangZonePool();
+    CGangZonePool* GetGangZonePool();
     // Raw first settings byte, zero-extended; no settings pointer guard.
     // samp.dll RVA: 0x000a21f0
     DWORD GetSettingsByte0();
 
     // samp.dll RVA: 0x0000e3e0
-    CLabelPool * GetLabelPool();
+    CLabelPool* GetLabelPool();
     // samp.dll RVA: 0x0000e3f0
     void SetLanMode(DWORD value);
 
     // samp.dll RVA: 0x00002e50
-    CActorPool *GetActorPool();
+    CActorPool* GetActorPool();
     // samp.dll RVA: 0x00002e60
     DWORD GetState();
     // Returns the raw DWORD at239, without bool normalization.
@@ -49,27 +58,27 @@ public:
     // samp.dll RVA: 0x0000af40
     void UpdateNetwork();
     // samp.dll RVA: 0x00009df0
-    void Packet_AuthKey(Packet *packet);
+    void Packet_AuthKey(Packet* packet);
     // samp.dll RVA: 0x0000aa60
-    void Packet_ConnectionSucceeded(Packet *packet);
+    void Packet_ConnectionSucceeded(Packet* packet);
     // samp.dll RVA: 0x0000a9d0
-    void Packet_ConnectionLost(Packet *packet);
+    void Packet_ConnectionLost(Packet* packet);
     // samp.dll RVA: 0x0000a420
-    void Packet_OnfootSync(Packet *packet);
+    void Packet_OnfootSync(Packet* packet);
     // samp.dll RVA: 0x0000a6f0
-    void Packet_IncarSync(Packet *packet);
+    void Packet_IncarSync(Packet* packet);
     // samp.dll RVA: 0x00009730
-    void Packet_UnoccupiedSync(Packet *packet);
+    void Packet_UnoccupiedSync(Packet* packet);
     // samp.dll RVA: 0x00009b10
-    void Packet_TrailerSync(Packet *packet);
+    void Packet_TrailerSync(Packet* packet);
     // samp.dll RVA: 0x00009830
-    void Packet_BulletSync(Packet *packet);
+    void Packet_BulletSync(Packet* packet);
     // samp.dll RVA: 0x00009930
-    void Packet_AimSync(Packet *packet);
+    void Packet_AimSync(Packet* packet);
     // samp.dll RVA: 0x00009a20
-    void Packet_PassengerSync(Packet *packet);
+    void Packet_PassengerSync(Packet* packet);
     // samp.dll RVA: 0x00009c00
-    void Packet_MarkersSync(Packet *packet);
+    void Packet_MarkersSync(Packet* packet);
     // samp.dll RVA: 0x0000a230
     void ShutdownForRestart();
     // Descriptive native pool/frame pass with three separate SEH regions.
@@ -82,13 +91,13 @@ public:
     // samp.dll RVA: 0x000085e0
     void InitializeGameLogic();
     // samp.dll RVA: 0x00008ad0
-    void Packet_DisconnectionNotification(Packet *packet);
+    void Packet_DisconnectionNotification(Packet* packet);
     // samp.dll RVA: 0x00008b10
-    void Packet_InvalidPassword(Packet *packet);
+    void Packet_InvalidPassword(Packet* packet);
     // samp.dll RVA: 0x00009fb0
     void ResetMapIcons();
     // samp.dll RVA: 0x00009ff0
-    void CreateMapIcon(BYTE index,CVector position,BYTE icon,DWORD color,int type);
+    void CreateMapIcon(BYTE index, CVector position, BYTE icon, DWORD color, int type);
     // Native excludes the player pool from this reset sequence.
     // samp.dll RVA: 0x0000a1e0
     void ResetPools();
@@ -98,15 +107,15 @@ public:
     void SpawnScreen();
     // Packet arguments are deliberately ignored by these notification entries.
     // samp.dll RVA: 0x00008a40
-    void Packet_RSAPublicKeyMismatch(Packet *packet);
+    void Packet_RSAPublicKeyMismatch(Packet* packet);
     // samp.dll RVA: 0x00008a60
-    void Packet_ConnectionBanned(Packet *packet);
+    void Packet_ConnectionBanned(Packet* packet);
     // samp.dll RVA: 0x00008a80
-    void Packet_ConnectionRequestAccepted(Packet *packet);
+    void Packet_ConnectionRequestAccepted(Packet* packet);
     // samp.dll RVA: 0x00008aa0
-    void Packet_NoFreeIncomingConnections(Packet *packet);
+    void Packet_NoFreeIncomingConnections(Packet* packet);
     // samp.dll RVA: 0x00008b50
-    void Packet_ConnectionAttemptFailed(Packet *packet);
+    void Packet_ConnectionAttemptFailed(Packet* packet);
     // samp.dll RVA: 0x00008230
     void InitializePools();
     // samp.dll RVA: 0x00008cd0
@@ -132,23 +141,28 @@ public:
     // samp.dll RVA: 0x000081f0
     void SetGameState(DWORD state);
     // samp.dll RVA: 0x000081d0
-    CPickupPool *GetPickupPool();
+    CPickupPool* GetPickupPool();
     // Native tail adapter exposes the complete EDX:EAX counter result.
     // samp.dll RVA: 0x000085d0
     __int64 GetCounter();
     // samp.dll RVA: 0x00008c00
     void UpdatePlayersInfo();
     // samp.dll RVA: 0x000081e0
-    CMenuPool *GetMenuPool();
+    CMenuPool* GetMenuPool();
     // samp.dll RVA: 0x00002e40
-    CObjectPool *GetObjectPool();
+    CObjectPool* GetObjectPool();
     // Native coordinator allocation extent; internal layout and lifecycle remain open.
-    union {
+    union
+    {
         BYTE nativeState[0x3e2];
-        struct {BYTE unknown00[0x3de];CNetGamePools *pools;};
+        struct
+        {
+            BYTE unknown00[0x3de];
+            CNetGamePools* pools;
+        };
     };
     // samp.dll RVA: 0x0000b610
-    CNetGame(const char *host,int port,const char *nickname,const char *password);
+    CNetGame(const char* host, int port, const char* nickname, const char* password);
     // Address-only command dependency.
     // samp.dll RVA: 0x00008b80
     void ToggleNameTagStatus();
@@ -158,14 +172,14 @@ public:
     // samp.dll RVA: 0x00009570
     void Destroy();
     // samp.dll RVA: 0x00001180
-    CVehiclePool *GetVehiclePool();
+    CVehiclePool* GetVehiclePool();
     // samp.dll RVA: 0x00001170
-    CPlayerPool *GetPlayerPool();
+    CPlayerPool* GetPlayerPool();
 };
 #pragma pack(pop)
-typedef char NetGamePoolSetExtent[(sizeof(CNetGamePools)==0x24)?1:-1];
-typedef char NetGamePoolsOffset[(offsetof(CNetGame,pools)==0x3de)?1:-1];
-typedef char NetGameExtent[(sizeof(CNetGame)==0x3e2)?1:-1];
+typedef char NetGamePoolSetExtent[(sizeof(CNetGamePools) == 0x24) ? 1 : -1];
+typedef char NetGamePoolsOffset[(offsetof(CNetGame, pools) == 0x3de) ? 1 : -1];
+typedef char NetGameExtent[(sizeof(CNetGame) == 0x3e2) ? 1 : -1];
 // samp.dll RVA: 0x00156b38
 extern DWORD g_netPlayersInfoTick;
 // samp.dll RVA: 0x00117b98
@@ -215,11 +229,11 @@ extern const float g_netCompressedVectorScale;
 // samp.dll RVA: 0x00057160
 int __cdecl NetHexDigit(int value);
 // samp.dll RVA: 0x00057170
-void __cdecl NetDigestToHex(char *output,const BYTE *digest);
+void __cdecl NetDigestToHex(char* output, const BYTE* digest);
 // samp.dll RVA: 0x000571b0
-void __cdecl NetGenerateAuthKey(char *output,const char *challenge);
+void __cdecl NetGenerateAuthKey(char* output, const char* challenge);
 // samp.dll RVA: 0x0005fa60
-void __cdecl NetGenerateGpci(char *output,const char *seed,DWORD factor);
+void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor);
 // samp.dll RVA: 0x00117bc8
 extern const char g_netConnectionLostMessage[];
 // samp.dll RVA: 0x00117c08

@@ -1,26 +1,26 @@
 #ifndef SAMP_GAME_TASK_EVENTS_H
 #define SAMP_GAME_TASK_EVENTS_H
-#include "game/hooks_control.h"
 #include "game/entity.h"
-#include "net/vehiclepool.h"
+#include "game/hooks_control.h"
 #include "net/localplayer.h"
+#include "net/vehiclepool.h"
 // Native policy helpers; their protocol send methods remain separate dependencies.
 // samp.dll RVA: 0x000a3430
 BOOL GameNotifyEnterVehicle();
 // samp.dll RVA: 0x000a3910
-BOOL __stdcall GameNotifyPedDamage(void *response,void *ped);
+BOOL __stdcall GameNotifyPedDamage(void* response, void* ped);
 // samp.dll RVA: 0x0018f4a8
 extern DWORD g_hookIgnoreNextExit;
 // samp.dll RVA: 0x0018e550
 extern DWORD g_hookExitTask;
 // samp.dll RVA: 0x0018e5d4
-extern CVehiclePool *g_hookEventVehiclePool;
+extern CVehiclePool* g_hookEventVehiclePool;
 // samp.dll RVA: 0x0018e568
 extern WORD g_hookEventVehicleId;
 // samp.dll RVA: 0x0018e868
-extern CVehicle *g_hookExitVehicle;
+extern CVehicle* g_hookExitVehicle;
 // samp.dll RVA: 0x0018eb18
-extern CLocalPlayer *g_hookEventLocalPlayer;
+extern CLocalPlayer* g_hookEventLocalPlayer;
 // samp.dll RVA: 0x0018eb30
 extern CMatrix g_hookExitMatrix;
 // samp.dll RVA: 0x00151aa0
@@ -34,9 +34,9 @@ extern DWORD g_hookDamageResponse;
 // samp.dll RVA: 0x0018f53c
 extern DWORD g_hookDamagePed;
 // samp.dll RVA: 0x000a3840
-WORD GameResolveDamagePlayer(void *entity);
+WORD GameResolveDamagePlayer(void* entity);
 // samp.dll RVA: 0x000a38e0
-DWORD GameResolveDamageActor(void *entity);
+DWORD GameResolveDamageActor(void* entity);
 // samp.dll RVA: 0x0018e81c
-extern CVehicle *g_hookEnterVehicle;
+extern CVehicle* g_hookEnterVehicle;
 #endif

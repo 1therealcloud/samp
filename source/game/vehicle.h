@@ -5,14 +5,15 @@
 #include <stddef.h>
 // Native allocation extent B8 and CEntity prefix/three-slot virtual interface.
 // Opaque bytes retain unknown meaning; lifecycle follows the recovered DL bodies.
-#pragma pack(push,1)
-class CVehicle : public CEntity {
+#pragma pack(push, 1)
+class CVehicle : public CEntity
+{
 public:
     // Stores the raw byte; does not reset/create the objective blip.
     // samp.dll RVA: 0x0000e290
     void SetObjective(BYTE objective);
     // samp.dll RVA: 0x000b73e0
-    void SetBackendFloat94CAnd950(float first,float second);
+    void SetBackendFloat94CAnd950(float first, float second);
 
     // Raw native flag; no unverified higher-level flag name assigned.
     // samp.dll RVA: 0x000b6db0
@@ -28,8 +29,8 @@ public:
     // samp.dll RVA: 0x000b6f10
     BOOL IsWrecked();
 
-    CVehicle *m_pTrailer;
-    void *m_pGameVehicle;
+    CVehicle* m_pTrailer;
+    void* m_pGameVehicle;
     BYTE unknown50[0x21];
     BOOL m_bInModShop;
     BYTE unknown75[4];
@@ -39,7 +40,7 @@ public:
     BYTE unknown7f[0x39];
     // Native constructor with ordinary, train and carriage paths.
     // samp.dll RVA: 0x000b7f00
-    CVehicle(int model,float x,float y,float z,float rotation,DWORD keepLoaded,BOOL siren);
+    CVehicle(int model, float x, float y, float z, float rotation, DWORD keepLoaded, BOOL siren);
     // samp.dll RVA: 0x000b8420
     virtual ~CVehicle();
     // samp.dll RVA: 0x000b8540
@@ -51,9 +52,9 @@ public:
     // samp.dll RVA: 0x000b7220
     void ProcessMarkers();
     // samp.dll RVA: 0x000b77d0
-    CVehicle * GetTrailer();
+    CVehicle* GetTrailer();
     // samp.dll RVA: 0x000b7830
-    CVehicle * GetTractor();
+    CVehicle* GetTractor();
     // samp.dll RVA: 0x000b7a20
     void RemovePassengers();
     // samp.dll RVA: 0x000b7b00
@@ -69,11 +70,11 @@ public:
     // samp.dll RVA: 0x000b7570
     BYTE GetTires();
     // samp.dll RVA: 0x000b7600
-    void UpdateDamage(DWORD panels,DWORD doors,BYTE lights);
+    void UpdateDamage(DWORD panels, DWORD doors, BYTE lights);
     // samp.dll RVA: 0x000b78b0
     BOOL IsTrailer();
     // samp.dll RVA: 0x000b7d80
-    void CallBackend6a6ae0(DWORD first,DWORD second,DWORD third);
+    void CallBackend6a6ae0(DWORD first, DWORD second, DWORD third);
     // samp.dll RVA: 0x000b7440
     void SetTrainSpeed(float speed);
     // samp.dll RVA: 0x000b7e10
@@ -105,7 +106,7 @@ public:
     // samp.dll RVA: 0x000b7c20
     void SetPaintjob(BYTE paintjob);
     // samp.dll RVA: 0x000b7c80
-    void SetLicensePlateText(const char *text);
+    void SetLicensePlateText(const char* text);
     // samp.dll RVA: 0x000b7ca0
     void SetRotation(float angle);
     // samp.dll RVA: 0x000b7de0
@@ -145,7 +146,7 @@ public:
     // samp.dll RVA: 0x000b7720
     BYTE GetLightsDamage();
     // samp.dll RVA: 0x000b77c0
-    void SetTrailer(CVehicle *trailer);
+    void SetTrailer(CVehicle* trailer);
     // samp.dll RVA: 0x000b7910
     bool IsTowtruck();
     // samp.dll RVA: 0x000b7c70
@@ -159,7 +160,7 @@ public:
     // samp.dll RVA: 0x000b7d70
     DWORD GetField54();
     // samp.dll RVA: 0x000b6e20
-    void SetColor(BYTE primary,BYTE secondary);
+    void SetColor(BYTE primary, BYTE secondary);
     // samp.dll RVA: 0x000b6fa0
     BOOL IsTrainPart();
     // samp.dll RVA: 0x000b7940
@@ -180,16 +181,16 @@ public:
     void ShutdownLicensePlate();
 };
 #pragma pack(pop)
-typedef char VehicleExtent[(sizeof(CVehicle)==0xb8)?1:-1];
-typedef char VehicleHandleOffset[(offsetof(CVehicle,m_nHandle)==0x44)?1:-1];
-typedef char VehicleTrailerOffset[(offsetof(CVehicle,m_pTrailer)==0x48)?1:-1];
-typedef char VehicleBackendOffset[(offsetof(CVehicle,m_pGameVehicle)==0x4c)?1:-1];
-typedef char VehicleColorOffset[(offsetof(CVehicle,m_bColorChanged)==0x7b)?1:-1];
+typedef char VehicleExtent[(sizeof(CVehicle) == 0xb8) ? 1 : -1];
+typedef char VehicleHandleOffset[(offsetof(CVehicle, m_nHandle) == 0x44) ? 1 : -1];
+typedef char VehicleTrailerOffset[(offsetof(CVehicle, m_pTrailer) == 0x48) ? 1 : -1];
+typedef char VehicleBackendOffset[(offsetof(CVehicle, m_pGameVehicle) == 0x4c) ? 1 : -1];
+typedef char VehicleColorOffset[(offsetof(CVehicle, m_bColorChanged) == 0x7b) ? 1 : -1];
 // samp.dll RVA: 0x000b37d0
-void *__stdcall GamePoolVehicleGetAt(int handle);
+void* __stdcall GamePoolVehicleGetAt(int handle);
 // GTA SA vtable classification helper; values are native 0..7 tags.
 // samp.dll RVA: 0x000b5d20
-int GameGetVehicleSubtype(void *vehicle);
+int GameGetVehicleSubtype(void* vehicle);
 // samp.dll RVA: 0x0018f5dc
 extern DWORD g_vehicleDetachingTrailer;
 // samp.dll RVA: 0x001181a0
@@ -199,9 +200,9 @@ extern const float g_vehicleTrainSpeedMaximum;
 // samp.dll RVA: 0x0011812c
 extern const float g_vehicleMarkerDistance;
 // samp.dll RVA: 0x000b3eb0
-void __stdcall GameRemoveDriverByState598(void *vehicle);
+void __stdcall GameRemoveDriverByState598(void* vehicle);
 // samp.dll RVA: 0x002abe64
-extern void *g_vehicleTrainCursor;
+extern void* g_vehicleTrainCursor;
 // samp.dll RVA: 0x002abe68
 extern DWORD g_vehicleLastCreatedHandle;
 // samp.dll RVA: 0x0011e33c

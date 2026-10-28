@@ -1,0 +1,82 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+Standard: c++03
+
+IndentWidth: 4
+IndentPPDirectives: None
+TabWidth: 4
+UseTab: Never
+
+ColumnLimit: 180
+BreakConstructorInitializers: AfterColon
+PackConstructorInitializers: BinPack
+ConstructorInitializerIndentWidth: 4
+BinPackArguments: true
+BinPackParameters: true
+ReflowComments: false
+MaxEmptyLinesToKeep: 1
+InsertNewlineAtEOF: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# allman
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeWhile: true # do {} \n while ()
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+NamespaceIndentation: None
+IndentCaseLabels: true
+IndentCaseBlocks: false
+AccessModifierOffset: -4
+
+# const char* data
+PointerAlignment: Left
+DerivePointerAlignment: false
+ReferenceAlignment: Pointer
+
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+
+AlwaysBreakTemplateDeclarations: Yes
+SpaceAfterTemplateKeyword: true
+BreakBeforeBinaryOperators: None
+AlignOperands: Align
+AlignAfterOpenBracket: Align
+AlignTrailingComments: true
+
+Cpp11BracedListStyle: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInAngles: false
+SpaceAfterCStyleCast: false
+
+# stdafx.h stays first, the rest gets sorted
+SortIncludes: CaseSensitive
+IncludeBlocks: Preserve
+IncludeCategories:
+  - Regex: '^"stdafx\.h"$'
+    Priority: -1
+  - Regex: '^".*"$'
+    Priority: 1
+  - Regex: '^<.*>$'
+    Priority: 2
+FixNamespaceComments: true

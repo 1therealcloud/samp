@@ -1,11 +1,13 @@
 #include "game/hooks.h"
+#include "game/frame_limit.h"
 #include "game/game.h"
 #include "game/playerped.h"
-#include "game/frame_limit.h"
 // samp.dll RVA: 0x00151a60
-BYTE g_gameCustomModelHookJump[6]={0xff,0x25,0xd7,0x87,0x40,0x00};
+BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};
 // samp.dll RVA: 0x000a5bf0
-__declspec(naked) void GameHook_000a5bf0() {
+__declspec(naked) void GameHook_000a5bf0()
+{
+    // clang-format off
     __asm {
         cmp ebp,0
         jl custom_model_negative
@@ -19,15 +21,17 @@ __declspec(naked) void GameHook_000a5bf0() {
         pop ebx
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a6d30
-void GameInstallModelInfoHook() {
-    GameInstallHook(0x4087ea,(DWORD)GameHook_000a5bf0,0x4087d7,g_gameCustomModelHookJump,6);
+void GameInstallModelInfoHook()
+{
+    GameInstallHook(0x4087ea, (DWORD)GameHook_000a5bf0, 0x4087d7, g_gameCustomModelHookJump, 6);
 }
 // samp.dll RVA: 0x0018f624
-CPlayerPool *g_hookDamagePlayerPool;
+CPlayerPool* g_hookDamagePlayerPool;
 // samp.dll RVA: 0x00151afc
-WORD g_hookDamagePlayerId=0xffff;
+WORD g_hookDamagePlayerId = 0xffff;
 // samp.dll RVA: 0x0018f628
 DWORD g_hookVehicleDamageAttacker;
 // samp.dll RVA: 0x0018f62c
@@ -39,7 +43,7 @@ DWORD g_hookVehicleDamageBlocked;
 // samp.dll RVA: 0x0018f638
 DWORD g_hookVehicleDamageReturn;
 // samp.dll RVA: 0x0018f644
-void *g_hookBulletHitEntity;
+void* g_hookBulletHitEntity;
 // samp.dll RVA: 0x0018e590
 PedBulletData g_hookBulletHitData;
 // samp.dll RVA: 0x0018e828
@@ -55,11 +59,14 @@ DWORD g_hookShotLineResult;
 
 // Raw installed callback: EAX returns the preview-ped backing storage.
 // samp.dll RVA: 0x000a3ec0
-__declspec(naked) void GameHook_000a3ec0() {
+__declspec(naked) void GameHook_000a3ec0()
+{
+    // clang-format off
     __asm {
         mov eax,offset g_gamePreviewPed
         ret
     }
+    // clang-format on
 }
 #include <string.h>
 // samp.dll RVA: 0x002ac9cc
@@ -67,350 +74,352 @@ DWORD g_gameLoopAddress;
 // samp.dll RVA: 0x0018f56c
 DWORD g_gameHookFarClipReturn;
 // samp.dll RVA: 0x00151a10
-BYTE g_gameHookJump00151a10[10]={0xff,0x25,0x34,0x39,0x4d,0x00,0x90,0x90,0x90,0x90};
+BYTE g_gameHookJump00151a10[10] = {0xff, 0x25, 0x34, 0x39, 0x4d, 0x00, 0x90, 0x90, 0x90, 0x90};
 // samp.dll RVA: 0x00151a1c
-BYTE g_gameHookJump00151a1c[7]={0xff,0x25,0x09,0x46,0x4d,0x00,0x90};
+BYTE g_gameHookJump00151a1c[7] = {0xff, 0x25, 0x09, 0x46, 0x4d, 0x00, 0x90};
 // samp.dll RVA: 0x0015197c
-BYTE g_gameHookJump0015197c[7]={0xff,0x25,0xbb,0x19,0x69,0x00,0x90};
+BYTE g_gameHookJump0015197c[7] = {0xff, 0x25, 0xbb, 0x19, 0x69, 0x00, 0x90};
 // samp.dll RVA: 0x00151984
-BYTE g_gameHookJump00151984[7]={0xff,0x25,0xba,0xb8,0x63,0x00,0x90};
+BYTE g_gameHookJump00151984[7] = {0xff, 0x25, 0xba, 0xb8, 0x63, 0x00, 0x90};
 // samp.dll RVA: 0x00151994
-BYTE g_gameHookJump00151994[7]={0xff,0x25,0xaa,0x85,0x43,0x00,0x90};
+BYTE g_gameHookJump00151994[7] = {0xff, 0x25, 0xaa, 0x85, 0x43, 0x00, 0x90};
 // samp.dll RVA: 0x0015198c
-BYTE g_gameHookJump0015198c[7]={0xff,0x25,0x79,0x4a,0x58,0x00,0x90};
+BYTE g_gameHookJump0015198c[7] = {0xff, 0x25, 0x79, 0x4a, 0x58, 0x00, 0x90};
 // samp.dll RVA: 0x001519b0
-BYTE g_gameHookJump001519b0[7]={0xff,0x25,0xf1,0xc8,0x53,0x00,0x90};
+BYTE g_gameHookJump001519b0[7] = {0xff, 0x25, 0xf1, 0xc8, 0x53, 0x00, 0x90};
 // samp.dll RVA: 0x001519b8
-BYTE g_gameHookJump001519b8[6]={0xff,0x25,0xbc,0x5a,0x4b,0x00};
+BYTE g_gameHookJump001519b8[6] = {0xff, 0x25, 0xbc, 0x5a, 0x4b, 0x00};
 // samp.dll RVA: 0x001519e8
-BYTE g_gameHookJump001519e8[6]={0xff,0x25,0x1b,0x8b,0x73,0x00};
+BYTE g_gameHookJump001519e8[6] = {0xff, 0x25, 0x1b, 0x8b, 0x73, 0x00};
 // samp.dll RVA: 0x001519f0
-BYTE g_gameHookJump001519f0[6]={0xff,0x25,0x5b,0x88,0x73,0x00};
+BYTE g_gameHookJump001519f0[6] = {0xff, 0x25, 0x5b, 0x88, 0x73, 0x00};
 // samp.dll RVA: 0x001519d4
-BYTE g_gameHookJump001519d4[9]={0xff,0x25,0x43,0x00,0x6a,0x00,0x90,0x90,0x90};
+BYTE g_gameHookJump001519d4[9] = {0xff, 0x25, 0x43, 0x00, 0x6a, 0x00, 0x90, 0x90, 0x90};
 // samp.dll RVA: 0x00151a34
-BYTE g_gameHookJump00151a34[6]={0xff,0x25,0x21,0xc7,0x59,0x00};
+BYTE g_gameHookJump00151a34[6] = {0xff, 0x25, 0x21, 0xc7, 0x59, 0x00};
 // samp.dll RVA: 0x00151a3c
-BYTE g_gameHookJump00151a3c[7]={0xff,0x25,0x84,0x80,0x53,0x00,0x90};
+BYTE g_gameHookJump00151a3c[7] = {0xff, 0x25, 0x84, 0x80, 0x53, 0x00, 0x90};
 // samp.dll RVA: 0x00151a44
-BYTE g_gameHookJump00151a44[9]={0xff,0x25,0xa6,0x34,0x55,0x00,0x90,0x90,0x90};
+BYTE g_gameHookJump00151a44[9] = {0xff, 0x25, 0xa6, 0x34, 0x55, 0x00, 0x90, 0x90, 0x90};
 // samp.dll RVA: 0x00151a50
-BYTE g_gameHookJump00151a50[6]={0xff,0x25,0x33,0x34,0x4b,0x00};
+BYTE g_gameHookJump00151a50[6] = {0xff, 0x25, 0x33, 0x34, 0x4b, 0x00};
 // samp.dll RVA: 0x00151a68
-BYTE g_gameHookJump00151a68[6]={0xff,0x25,0xdb,0x74,0x56,0x00};
+BYTE g_gameHookJump00151a68[6] = {0xff, 0x25, 0xdb, 0x74, 0x56, 0x00};
 // samp.dll RVA: 0x000a5d80
-void GameInstallHook(DWORD address,DWORD function,DWORD storage,const BYTE *jumpCode,int size) {
-    DWORD oldProtect,ignored;
-    VirtualProtect((void*)storage,4,PAGE_EXECUTE_READWRITE,&oldProtect);
-    *(DWORD*)storage=function;
-    VirtualProtect((void*)storage,4,oldProtect,&ignored);
-    VirtualProtect((void*)address,size,PAGE_EXECUTE_READWRITE,&oldProtect);
-    memcpy((void*)address,jumpCode,size);
-    VirtualProtect((void*)address,size,oldProtect,&ignored);
+void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size)
+{
+    DWORD oldProtect, ignored;
+    VirtualProtect((void*)storage, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+    *(DWORD*)storage = function;
+    VirtualProtect((void*)storage, 4, oldProtect, &ignored);
+    VirtualProtect((void*)address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
+    memcpy((void*)address, jumpCode, size);
+    VirtualProtect((void*)address, size, oldProtect, &ignored);
 }
 // samp.dll RVA: 0x000a5e30
 void GamePrepareHooks()
 {
-  DWORD local_8;
-  DWORD local_4;
-  
-  GameUnprotect((void*)0x53eb13,4);
-  *(DWORD*)0x0053eb13 = g_gameLoopAddress - 0x53eb17;
-  VirtualProtect((void*)0x0058fc53,5,0x40,&local_8);
-  *(BYTE*)0x0058fc53 = 0xe8;
-  *(DWORD*)0x0058fc54 = (DWORD)GameHook_000a22c0 - 0x58fc58;
-  VirtualProtect((void*)0x0058fc53,5,local_8,&local_4);
-  VirtualProtect((void*)0x0058fbbf,5,0x40,&local_8);
-  *(BYTE*)0x0058fbbf = 0xe8;
-  *(DWORD*)0x0058fbc0 = (DWORD)GameHook_000a22f0 - 0x58fbc4;
-  VirtualProtect((void*)0x0058fbbf,5,local_8,&local_4);
-  VirtualProtect((void*)0x0053c104,5,0x40,&local_8);
-  *(BYTE*)0x0053c104 = 0xe8;
-  *(DWORD*)0x0053c105 = (DWORD)GameHook_000a23a0 - 0x53c109;
-  VirtualProtect((void*)0x0053c104,5,local_8,&local_4);
-  VirtualProtect((void*)0x0053e981,5,0x40,&local_8);
-  *(BYTE*)0x0053e981 = 0xe8;
-  *(DWORD*)0x0053e982 = (DWORD)GameHook_000a23d0 - 0x53e986;
-  VirtualProtect((void*)0x0053e981,5,local_8,&local_4);
-  VirtualProtect((void*)0x0086d1b0,4,0x40,&local_8);
-  *(DWORD*)0x0086d1b0 = (DWORD)GameHook_000a3b90;
-  VirtualProtect((void*)0x0086d1b0,4,local_8,&local_4);
-  VirtualProtect((void*)0x0086c0f0,4,0x40,&local_8);
-  *(DWORD*)0x0086c0f0 = (DWORD)GameHook_000a3b90;
-  VirtualProtect((void*)0x0086c0f0,4,local_8,&local_4);
-  VirtualProtect((void*)0x0086c168,4,0x40,&local_8);
-  *(DWORD*)0x0086c168 = (DWORD)GameHook_000a3b90;
-  VirtualProtect((void*)0x0086c168,4,local_8,&local_4);
-  VirtualProtect((void*)0x0086c248,4,0x40,&local_8);
-  *(DWORD*)0x0086c248 = (DWORD)GameHook_000a3b90;
-  VirtualProtect((void*)0x0086c248,4,local_8,&local_4);
-  VirtualProtect((void*)0x0086c3a0,4,0x40,&local_8);
-  *(DWORD*)0x0086c3a0 = (DWORD)GameHook_000a3b90;
-  VirtualProtect((void*)0x0086c3a0,4,local_8,&local_4);
-  VirtualProtect((void*)0x0053e930,5,0x40,&local_8);
-  *(BYTE*)0x0053e930 = 0xe8;
-  *(DWORD*)0x0053e931 = (DWORD)GameHook_000a2200 - 0x53e935;
-  VirtualProtect((void*)0x0053e930,5,local_8,&local_4);
-  return;
-}
+    DWORD local_8;
+    DWORD local_4;
 
+    GameUnprotect((void*)0x53eb13, 4);
+    *(DWORD*)0x0053eb13 = g_gameLoopAddress - 0x53eb17;
+    VirtualProtect((void*)0x0058fc53, 5, 0x40, &local_8);
+    *(BYTE*)0x0058fc53 = 0xe8;
+    *(DWORD*)0x0058fc54 = (DWORD)GameHook_000a22c0 - 0x58fc58;
+    VirtualProtect((void*)0x0058fc53, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0058fbbf, 5, 0x40, &local_8);
+    *(BYTE*)0x0058fbbf = 0xe8;
+    *(DWORD*)0x0058fbc0 = (DWORD)GameHook_000a22f0 - 0x58fbc4;
+    VirtualProtect((void*)0x0058fbbf, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0053c104, 5, 0x40, &local_8);
+    *(BYTE*)0x0053c104 = 0xe8;
+    *(DWORD*)0x0053c105 = (DWORD)GameHook_000a23a0 - 0x53c109;
+    VirtualProtect((void*)0x0053c104, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0053e981, 5, 0x40, &local_8);
+    *(BYTE*)0x0053e981 = 0xe8;
+    *(DWORD*)0x0053e982 = (DWORD)GameHook_000a23d0 - 0x53e986;
+    VirtualProtect((void*)0x0053e981, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0086d1b0, 4, 0x40, &local_8);
+    *(DWORD*)0x0086d1b0 = (DWORD)GameHook_000a3b90;
+    VirtualProtect((void*)0x0086d1b0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0086c0f0, 4, 0x40, &local_8);
+    *(DWORD*)0x0086c0f0 = (DWORD)GameHook_000a3b90;
+    VirtualProtect((void*)0x0086c0f0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0086c168, 4, 0x40, &local_8);
+    *(DWORD*)0x0086c168 = (DWORD)GameHook_000a3b90;
+    VirtualProtect((void*)0x0086c168, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0086c248, 4, 0x40, &local_8);
+    *(DWORD*)0x0086c248 = (DWORD)GameHook_000a3b90;
+    VirtualProtect((void*)0x0086c248, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0086c3a0, 4, 0x40, &local_8);
+    *(DWORD*)0x0086c3a0 = (DWORD)GameHook_000a3b90;
+    VirtualProtect((void*)0x0086c3a0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0053e930, 5, 0x40, &local_8);
+    *(BYTE*)0x0053e930 = 0xe8;
+    *(DWORD*)0x0053e931 = (DWORD)GameHook_000a2200 - 0x53e935;
+    VirtualProtect((void*)0x0053e930, 5, local_8, &local_4);
+    return;
+}
 
 // samp.dll RVA: 0x000a6020
 void GameInstallHooks()
 {
-  DWORD local_8;
-  DWORD local_4;
-  
-  GamePrepareHooks();
-  GameInstallHook(0x4d3aa0,(DWORD)GameHook_000a3f30,0x4d3934,g_gameHookJump00151a10,10);
-  GameInstallHook(0x4d4610,(DWORD)GameHook_000a3fe0,0x4d4609,g_gameHookJump00151a1c,7);
-  VirtualProtect((void*)0x0086d190,4,0x40,&local_8);
-  *(DWORD*)0x0086d190 = (DWORD)GameHook_000a26d0;
-  VirtualProtect((void*)0x0086d190,4,local_8,&local_4);
-  VirtualProtect((void*)0x0086c0d0,4,0x40,&local_8);
-  *(DWORD*)0x0086c0d0 = (DWORD)GameHook_000a29d0;
-  VirtualProtect((void*)0x0086c0d0,4,local_8,&local_4);
-  VirtualProtect((void*)0x0086d744,4,0x40,&local_8);
-  *(DWORD*)0x0086d744 = (DWORD)GameHook_000a2b50;
-  VirtualProtect((void*)0x0086d744,4,local_8,&local_4);
-  VirtualProtect((void*)0x007330a2,5,0x40,&local_8);
-  *(BYTE*)0x007330a2 = 0xe8;
-  *(DWORD*)0x007330a3 = (DWORD)GameHook_000a2ab0 - 0x7330a7;
-  VirtualProtect((void*)0x007330a2,5,local_8,&local_4);
-  VirtualProtect((void*)0x0086d194,4,0x40,&local_8);
-  *(DWORD*)0x0086d194 = (DWORD)GameHook_000a3e50;
-  VirtualProtect((void*)0x0086d194,4,local_8,&local_4);
-  VirtualProtect((void*)0x005689fd,5,0x40,&local_8);
-  *(BYTE*)0x005689fd = 0xe8;
-  *(DWORD*)0x005689fe = (DWORD)GameHook_000a46b0 - 0x568a02;
-  VirtualProtect((void*)0x005689fd,5,local_8,&local_4);
-  VirtualProtect((void*)0x0053ea03,5,0x40,&local_8);
-  *(BYTE*)0x0053ea03 = 0xe8;
-  *(DWORD*)0x0053ea04 = (DWORD)GameHook_000a2370 - 0x53ea08;
-  VirtualProtect((void*)0x0053ea03,5,local_8,&local_4);
-  VirtualProtect((void*)0x00871148,4,0x40,&local_8);
-  *(DWORD*)0x00871148 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871148,4,local_8,&local_4);
-  VirtualProtect((void*)0x008721c8,4,0x40,&local_8);
-  *(DWORD*)0x008721c8 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x008721c8,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871388,4,0x40,&local_8);
-  *(DWORD*)0x00871388 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871388,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871970,4,0x40,&local_8);
-  *(DWORD*)0x00871970 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871970,4,local_8,&local_4);
-  VirtualProtect((void*)0x008716a8,4,0x40,&local_8);
-  *(DWORD*)0x008716a8 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x008716a8,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871550,4,0x40,&local_8);
-  *(DWORD*)0x00871550 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871550,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871800,4,0x40,&local_8);
-  *(DWORD*)0x00871800 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871800,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871b10,4,0x40,&local_8);
-  *(DWORD*)0x00871b10 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871b10,4,local_8,&local_4);
-  VirtualProtect((void*)0x00872398,4,0x40,&local_8);
-  *(DWORD*)0x00872398 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00872398,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871c50,4,0x40,&local_8);
-  *(DWORD*)0x00871c50 = (DWORD)GameHook_000a2e70;
-  VirtualProtect((void*)0x00871c50,4,local_8,&local_4);
-  VirtualProtect((void*)0x00501b1d,5,0x40,&local_8);
-  *(BYTE*)0x00501b1d = 0xe8;
-  *(DWORD*)0x00501b1e = (DWORD)GameHook_000a33c0 - 0x501b22;
-  VirtualProtect((void*)0x00501b1d,5,local_8,&local_4);
-  VirtualProtect((void*)0x00501b42,5,0x40,&local_8);
-  *(BYTE*)0x00501b42 = 0xe8;
-  *(DWORD*)0x00501b43 = (DWORD)GameHook_000a33c0 - 0x501b47;
-  VirtualProtect((void*)0x00501b42,5,local_8,&local_4);
-  VirtualProtect((void*)0x00501fc2,5,0x40,&local_8);
-  *(BYTE*)0x00501fc2 = 0xe8;
-  *(DWORD*)0x00501fc3 = (DWORD)GameHook_000a33c0 - 0x501fc7;
-  VirtualProtect((void*)0x00501fc2,5,local_8,&local_4);
-  VirtualProtect((void*)0x00502067,5,0x40,&local_8);
-  *(BYTE*)0x00502067 = 0xe8;
-  *(DWORD*)0x00502068 = (DWORD)GameHook_000a33c0 - 0x50206c;
-  VirtualProtect((void*)0x00502067,5,local_8,&local_4);
-  VirtualProtect((void*)0x005021ae,5,0x40,&local_8);
-  *(BYTE*)0x005021ae = 0xe8;
-  *(DWORD*)0x005021af = (DWORD)GameHook_000a33c0 - 0x5021b3;
-  VirtualProtect((void*)0x005021ae,5,local_8,&local_4);
-  VirtualProtect((void*)0x005869bf,5,0x40,&local_8);
-  *(BYTE*)0x005869bf = 0xe8;
-  *(DWORD*)0x005869c0 = (DWORD)GameHook_000a3c60 - 0x5869c4;
-  VirtualProtect((void*)0x005869bf,5,local_8,&local_4);
-  VirtualProtect((void*)0x005759e4,5,0x40,&local_8);
-  *(BYTE*)0x005759e4 = 0xe8;
-  *(DWORD*)0x005759e5 = (DWORD)GameHook_000a3c60 - 0x5759e9;
-  VirtualProtect((void*)0x005759e4,5,local_8,&local_4);
-  VirtualProtect((void*)0x00609a4e,5,0x40,&local_8);
-  *(BYTE*)0x00609a4e = 0xe8;
-  *(DWORD*)0x00609a4f = (DWORD)GameHook_000a3c80 - 0x609a53;
-  VirtualProtect((void*)0x00609a4e,5,local_8,&local_4);
-  VirtualProtect((void*)0x004579c6,5,0x40,&local_8);
-  *(BYTE*)0x004579c6 = 0xe9;
-  *(DWORD*)0x004579c7 = (DWORD)GameHook_000a3ca0 - 0x4579cb;
-  VirtualProtect((void*)0x004579c6,5,local_8,&local_4);
-  VirtualProtect((void*)0x0073c252,5,0x40,&local_8);
-  *(BYTE*)0x0073c252 = 0xe9;
-  *(DWORD*)0x0073c253 = (DWORD)GameHook_000a3ad0 - 0x73c257;
-  VirtualProtect((void*)0x0073c252,5,local_8,&local_4);
-  VirtualProtect((void*)0x0073ace2,5,0x40,&local_8);
-  *(BYTE*)0x0073ace2 = 0xe8;
-  *(DWORD*)0x0073ace3 = (DWORD)GameHook_000a3ac0 - 0x73ace7;
-  VirtualProtect((void*)0x0073ace2,5,local_8,&local_4);
-  VirtualProtect((void*)0x006f8cf8,5,0x40,&local_8);
-  *(BYTE*)0x006f8cf8 = 0xe8;
-  *(DWORD*)0x006f8cf9 = (DWORD)GameHook_000a3b00 - 0x6f8cfd;
-  VirtualProtect((void*)0x006f8cf8,5,local_8,&local_4);
-  GameInstallHook(0x6402f0,(DWORD)GameHook_000a3580,0x6919bb,g_gameHookJump0015197c,7);
-  GameInstallHook(0x63b8c0,(DWORD)GameHook_000a35e0,0x63b8ba,g_gameHookJump00151984,7);
-  GameInstallHook(0x438576,(DWORD)GameHook_000a37c0,0x4385aa,g_gameHookJump00151994,7);
-  GameInstallHook(0x584770,(DWORD)GameHook_000a37a0,0x584a79,g_gameHookJump0015198c,7);
-  GameInstallHook(0x53c900,(DWORD)GameHook_000a3800,0x53c8f1,g_gameHookJump001519b0,7);
-  GameInstallHook(0x4b5ac0,(DWORD)GameHook_000a3a70,0x4b5abc,g_gameHookJump001519b8,6);
-  VirtualProtect((void*)0x004d41c0,5,0x40,&local_8);
-  *(BYTE*)0x004d41c0 = 0xe9;
-  *(DWORD*)0x004d41c1 = (DWORD)GameHook_000a3b20 - 0x4d41c5;
-  VirtualProtect((void*)0x004d41c0,5,local_8,&local_4);
-  VirtualProtect((void*)0x004e7427,5,0x40,&local_8);
-  *(BYTE*)0x004e7427 = 0xe8;
-  *(DWORD*)0x004e7428 = (DWORD)GameHook_000a3ec0 - 0x4e742c;
-  VirtualProtect((void*)0x004e7427,5,local_8,&local_4);
-  GameInstallHook(0x738f3a,(DWORD)GameHook_000a3ce0,0x738b1b,g_gameHookJump001519e8,6);
-  GameInstallHook(0x738877,(DWORD)GameHook_000a3d20,0x73885b,g_gameHookJump001519f0,6);
-  GameInstallHook(0x6a0050,(DWORD)GameHook_000a3d90,0x6a0043,g_gameHookJump001519d4,9);
-  VirtualProtect((void*)0x006fded6,5,0x40,&local_8);
-  *(BYTE*)0x006fded6 = 0xe8;
-  *(DWORD*)0x006fded7 = (DWORD)GameHook_000a4280 - 0x6fdedb;
-  VirtualProtect((void*)0x006fded6,5,local_8,&local_4);
-  if (g_gameVersion == 1) {
-    GameInstallHook(0x7fb020,(DWORD)GameHook_000a4190,0x59c721,g_gameHookJump00151a34,6);
-    g_gameHookFarClipReturn = 0x7fb026;
-  }
-  else {
-    GameInstallHook(0x7fb060,(DWORD)GameHook_000a4190,0x59c721,g_gameHookJump00151a34,6);
-    g_gameHookFarClipReturn = 0x7fb066;
-  }
-  VirtualProtect((void*)0x006d0e7e,5,0x40,&local_8);
-  *(BYTE*)0x006d0e7e = 0xe8;
-  *(DWORD*)0x006d0e7f = (DWORD)GameHook_000a42c0 - 0x6d0e83;
-  VirtualProtect((void*)0x006d0e7e,5,local_8,&local_4);
-  VirtualProtect((void*)0x00866fa8,4,0x40,&local_8);
-  *(DWORD*)0x00866fa8 = (DWORD)GameHook_000a42d0;
-  VirtualProtect((void*)0x00866fa8,4,local_8,&local_4);
-  VirtualProtect((void*)0x00586c0a,5,0x40,&local_8);
-  *(BYTE*)0x00586c0a = 0xe8;
-  *(DWORD*)0x00586c0b = (DWORD)GameHook_000a4770 - 0x586c0f;
-  VirtualProtect((void*)0x00586c0a,5,local_8,&local_4);
-  GameInstallHook(0x538090,(DWORD)GameHook_000a47d0,0x538084,g_gameHookJump00151a3c,7);
-  VirtualProtect((void*)0x00718599,5,0x40,&local_8);
-  *(BYTE*)0x00718599 = 0xe8;
-  *(DWORD*)0x0071859a = (DWORD)GameHook_000a4960 - 0x71859e;
-  VirtualProtect((void*)0x00718599,5,local_8,&local_4);
-  VirtualProtect((void*)0x00866f7c,4,0x40,&local_8);
-  *(DWORD*)0x00866f7c = (DWORD)GameHook_000a4850;
-  VirtualProtect((void*)0x00866f7c,4,local_8,&local_4);
-  VirtualProtect((void*)0x00866f80,4,0x40,&local_8);
-  *(DWORD*)0x00866f80 = (DWORD)GameHook_000a48c0;
-  VirtualProtect((void*)0x00866f80,4,local_8,&local_4);
-  VirtualProtect((void*)0x008585e8,4,0x40,&local_8);
-  *(DWORD*)0x008585e8 = (DWORD)GameHook_000a48c0;
-  VirtualProtect((void*)0x008585e8,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871218,4,0x40,&local_8);
-  *(DWORD*)0x00871218 = (DWORD)GameHook_000a49d0;
-  VirtualProtect((void*)0x00871218,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871778,4,0x40,&local_8);
-  *(DWORD*)0x00871778 = (DWORD)GameHook_000a49d0;
-  VirtualProtect((void*)0x00871778,4,local_8,&local_4);
-  VirtualProtect((void*)0x008718d0,4,0x40,&local_8);
-  *(DWORD*)0x008718d0 = (DWORD)GameHook_000a49d0;
-  VirtualProtect((void*)0x008718d0,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871a40,4,0x40,&local_8);
-  *(DWORD*)0x00871a40 = (DWORD)GameHook_000a49d0;
-  VirtualProtect((void*)0x00871a40,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871be0,4,0x40,&local_8);
-  *(DWORD*)0x00871be0 = (DWORD)GameHook_000a49d0;
-  VirtualProtect((void*)0x00871be0,4,local_8,&local_4);
-  VirtualProtect((void*)0x005648d3,5,0x40,&local_8);
-  *(BYTE*)0x005648d3 = 0xe8;
-  *(DWORD*)0x005648d4 = (DWORD)GameHook_000a4c30 - 0x5648d8;
-  VirtualProtect((void*)0x005648d3,5,local_8,&local_4);
-  VirtualProtect((void*)0x0053dfdd,5,0x40,&local_8);
-  *(BYTE*)0x0053dfdd = 0xe8;
-  *(DWORD*)0x0053dfde = (DWORD)GameHook_000a4df0 - 0x53dfe2;
-  VirtualProtect((void*)0x0053dfdd,5,local_8,&local_4);
-  VirtualProtect((void*)0x0053e019,5,0x40,&local_8);
-  *(BYTE*)0x0053e019 = 0xe8;
-  *(DWORD*)0x0053e01a = (DWORD)GameHook_000a4e30 - 0x53e01e;
-  VirtualProtect((void*)0x0053e019,5,local_8,&local_4);
-  GameInstallHook(0x5534b0,(DWORD)GameHook_000a4e70,0x5534a6,g_gameHookJump00151a44,9);
-  VirtualProtect((void*)0x005342f9,5,0x40,&local_8);
-  *(BYTE*)0x005342f9 = 0xe8;
-  *(DWORD*)0x005342fa = (DWORD)GameHook_000a5150 - 0x5342fe;
-  VirtualProtect((void*)0x005342f9,5,local_8,&local_4);
-  GameInstallHook(0x4b35a0,(DWORD)GameHook_000a5100,0x4b3433,g_gameHookJump00151a50,6);
-  VirtualProtect((void*)0x0041b02e,5,0x40,&local_8);
-  *(BYTE*)0x0041b02e = 0xe8;
-  *(DWORD*)0x0041b02f = (DWORD)GameHook_000a56b0 - 0x41b033;
-  VirtualProtect((void*)0x0041b02e,5,local_8,&local_4);
-  VirtualProtect((void*)0x0041af80,5,0x40,&local_8);
-  *(BYTE*)0x0041af80 = 0xe8;
-  *(DWORD*)0x0041af81 = (DWORD)GameHook_000a5820 - 0x41af85;
-  VirtualProtect((void*)0x0041af80,5,local_8,&local_4);
-  VirtualProtect((void*)0x0041ab78,5,0x40,&local_8);
-  *(BYTE*)0x0041ab78 = 0xe8;
-  *(DWORD*)0x0041ab79 = (DWORD)GameHook_000a5850 - 0x41ab7d;
-  VirtualProtect((void*)0x0041ab78,5,local_8,&local_4);
-  VirtualProtect((void*)0x00871178,4,0x40,&local_8);
-  *(DWORD*)0x00871178 = (DWORD)GameHook_000a5870;
-  VirtualProtect((void*)0x00871178,4,local_8,&local_4);
-  VirtualProtect((void*)0x008716d8,4,0x40,&local_8);
-  *(DWORD*)0x008716d8 = (DWORD)GameHook_000a5870;
-  VirtualProtect((void*)0x008716d8,4,local_8,&local_4);
-  VirtualProtect((void*)0x008719a0,4,0x40,&local_8);
-  *(DWORD*)0x008719a0 = (DWORD)GameHook_000a5870;
-  VirtualProtect((void*)0x008719a0,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871b40,4,0x40,&local_8);
-  *(DWORD*)0x00871b40 = (DWORD)GameHook_000a5870;
-  VirtualProtect((void*)0x00871b40,4,local_8,&local_4);
-  VirtualProtect((void*)0x008713b8,4,0x40,&local_8);
-  *(DWORD*)0x008713b8 = (DWORD)GameHook_000a5910;
-  VirtualProtect((void*)0x008713b8,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871580,4,0x40,&local_8);
-  *(DWORD*)0x00871580 = (DWORD)GameHook_000a5910;
-  VirtualProtect((void*)0x00871580,4,local_8,&local_4);
-  VirtualProtect((void*)0x00871830,4,0x40,&local_8);
-  *(DWORD*)0x00871830 = (DWORD)GameHook_000a59b0;
-  VirtualProtect((void*)0x00871830,4,local_8,&local_4);
-  VirtualProtect((void*)0x008721f8,4,0x40,&local_8);
-  *(DWORD*)0x008721f8 = (DWORD)GameHook_000a5a50;
-  VirtualProtect((void*)0x008721f8,4,local_8,&local_4);
-  VirtualProtect((void*)0x006e0954,5,0x40,&local_8);
-  *(BYTE*)0x006e0954 = 0xe8;
-  *(DWORD*)0x006e0955 = (DWORD)GameHook_000a5af0 - 0x6e0959;
-  VirtualProtect((void*)0x006e0954,5,local_8,&local_4);
-  VirtualProtect((void*)0x006b2bcb,5,0x40,&local_8);
-  *(BYTE*)0x006b2bcb = 0xe8;
-  *(DWORD*)0x006b2bcc = (DWORD)GameHook_000a5af0 - 0x6b2bd0;
-  VirtualProtect((void*)0x006b2bcb,5,local_8,&local_4);
-  VirtualProtect((void*)0x004f77da,5,0x40,&local_8);
-  *(BYTE*)0x004f77da = 0xe8;
-  *(DWORD*)0x004f77db = (DWORD)GameHook_000a5af0 - 0x4f77df;
-  VirtualProtect((void*)0x004f77da,5,local_8,&local_4);
-  VirtualProtect((void*)0x00872a74,4,0x40,&local_8);
-  *(DWORD*)0x00872a74 = (DWORD)GameHook_000a5b90;
-  VirtualProtect((void*)0x00872a74,4,local_8,&local_4);
-  GameInstallHook(0x5674e0,(DWORD)GameHook_000a5d20,0x5674db,g_gameHookJump00151a68,6);
-  return;
+    DWORD local_8;
+    DWORD local_4;
+
+    GamePrepareHooks();
+    GameInstallHook(0x4d3aa0, (DWORD)GameHook_000a3f30, 0x4d3934, g_gameHookJump00151a10, 10);
+    GameInstallHook(0x4d4610, (DWORD)GameHook_000a3fe0, 0x4d4609, g_gameHookJump00151a1c, 7);
+    VirtualProtect((void*)0x0086d190, 4, 0x40, &local_8);
+    *(DWORD*)0x0086d190 = (DWORD)GameHook_000a26d0;
+    VirtualProtect((void*)0x0086d190, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0086c0d0, 4, 0x40, &local_8);
+    *(DWORD*)0x0086c0d0 = (DWORD)GameHook_000a29d0;
+    VirtualProtect((void*)0x0086c0d0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x0086d744, 4, 0x40, &local_8);
+    *(DWORD*)0x0086d744 = (DWORD)GameHook_000a2b50;
+    VirtualProtect((void*)0x0086d744, 4, local_8, &local_4);
+    VirtualProtect((void*)0x007330a2, 5, 0x40, &local_8);
+    *(BYTE*)0x007330a2 = 0xe8;
+    *(DWORD*)0x007330a3 = (DWORD)GameHook_000a2ab0 - 0x7330a7;
+    VirtualProtect((void*)0x007330a2, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0086d194, 4, 0x40, &local_8);
+    *(DWORD*)0x0086d194 = (DWORD)GameHook_000a3e50;
+    VirtualProtect((void*)0x0086d194, 4, local_8, &local_4);
+    VirtualProtect((void*)0x005689fd, 5, 0x40, &local_8);
+    *(BYTE*)0x005689fd = 0xe8;
+    *(DWORD*)0x005689fe = (DWORD)GameHook_000a46b0 - 0x568a02;
+    VirtualProtect((void*)0x005689fd, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0053ea03, 5, 0x40, &local_8);
+    *(BYTE*)0x0053ea03 = 0xe8;
+    *(DWORD*)0x0053ea04 = (DWORD)GameHook_000a2370 - 0x53ea08;
+    VirtualProtect((void*)0x0053ea03, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00871148, 4, 0x40, &local_8);
+    *(DWORD*)0x00871148 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871148, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008721c8, 4, 0x40, &local_8);
+    *(DWORD*)0x008721c8 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x008721c8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871388, 4, 0x40, &local_8);
+    *(DWORD*)0x00871388 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871388, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871970, 4, 0x40, &local_8);
+    *(DWORD*)0x00871970 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871970, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008716a8, 4, 0x40, &local_8);
+    *(DWORD*)0x008716a8 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x008716a8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871550, 4, 0x40, &local_8);
+    *(DWORD*)0x00871550 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871550, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871800, 4, 0x40, &local_8);
+    *(DWORD*)0x00871800 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871800, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871b10, 4, 0x40, &local_8);
+    *(DWORD*)0x00871b10 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871b10, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00872398, 4, 0x40, &local_8);
+    *(DWORD*)0x00872398 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00872398, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871c50, 4, 0x40, &local_8);
+    *(DWORD*)0x00871c50 = (DWORD)GameHook_000a2e70;
+    VirtualProtect((void*)0x00871c50, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00501b1d, 5, 0x40, &local_8);
+    *(BYTE*)0x00501b1d = 0xe8;
+    *(DWORD*)0x00501b1e = (DWORD)GameHook_000a33c0 - 0x501b22;
+    VirtualProtect((void*)0x00501b1d, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00501b42, 5, 0x40, &local_8);
+    *(BYTE*)0x00501b42 = 0xe8;
+    *(DWORD*)0x00501b43 = (DWORD)GameHook_000a33c0 - 0x501b47;
+    VirtualProtect((void*)0x00501b42, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00501fc2, 5, 0x40, &local_8);
+    *(BYTE*)0x00501fc2 = 0xe8;
+    *(DWORD*)0x00501fc3 = (DWORD)GameHook_000a33c0 - 0x501fc7;
+    VirtualProtect((void*)0x00501fc2, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00502067, 5, 0x40, &local_8);
+    *(BYTE*)0x00502067 = 0xe8;
+    *(DWORD*)0x00502068 = (DWORD)GameHook_000a33c0 - 0x50206c;
+    VirtualProtect((void*)0x00502067, 5, local_8, &local_4);
+    VirtualProtect((void*)0x005021ae, 5, 0x40, &local_8);
+    *(BYTE*)0x005021ae = 0xe8;
+    *(DWORD*)0x005021af = (DWORD)GameHook_000a33c0 - 0x5021b3;
+    VirtualProtect((void*)0x005021ae, 5, local_8, &local_4);
+    VirtualProtect((void*)0x005869bf, 5, 0x40, &local_8);
+    *(BYTE*)0x005869bf = 0xe8;
+    *(DWORD*)0x005869c0 = (DWORD)GameHook_000a3c60 - 0x5869c4;
+    VirtualProtect((void*)0x005869bf, 5, local_8, &local_4);
+    VirtualProtect((void*)0x005759e4, 5, 0x40, &local_8);
+    *(BYTE*)0x005759e4 = 0xe8;
+    *(DWORD*)0x005759e5 = (DWORD)GameHook_000a3c60 - 0x5759e9;
+    VirtualProtect((void*)0x005759e4, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00609a4e, 5, 0x40, &local_8);
+    *(BYTE*)0x00609a4e = 0xe8;
+    *(DWORD*)0x00609a4f = (DWORD)GameHook_000a3c80 - 0x609a53;
+    VirtualProtect((void*)0x00609a4e, 5, local_8, &local_4);
+    VirtualProtect((void*)0x004579c6, 5, 0x40, &local_8);
+    *(BYTE*)0x004579c6 = 0xe9;
+    *(DWORD*)0x004579c7 = (DWORD)GameHook_000a3ca0 - 0x4579cb;
+    VirtualProtect((void*)0x004579c6, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0073c252, 5, 0x40, &local_8);
+    *(BYTE*)0x0073c252 = 0xe9;
+    *(DWORD*)0x0073c253 = (DWORD)GameHook_000a3ad0 - 0x73c257;
+    VirtualProtect((void*)0x0073c252, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0073ace2, 5, 0x40, &local_8);
+    *(BYTE*)0x0073ace2 = 0xe8;
+    *(DWORD*)0x0073ace3 = (DWORD)GameHook_000a3ac0 - 0x73ace7;
+    VirtualProtect((void*)0x0073ace2, 5, local_8, &local_4);
+    VirtualProtect((void*)0x006f8cf8, 5, 0x40, &local_8);
+    *(BYTE*)0x006f8cf8 = 0xe8;
+    *(DWORD*)0x006f8cf9 = (DWORD)GameHook_000a3b00 - 0x6f8cfd;
+    VirtualProtect((void*)0x006f8cf8, 5, local_8, &local_4);
+    GameInstallHook(0x6402f0, (DWORD)GameHook_000a3580, 0x6919bb, g_gameHookJump0015197c, 7);
+    GameInstallHook(0x63b8c0, (DWORD)GameHook_000a35e0, 0x63b8ba, g_gameHookJump00151984, 7);
+    GameInstallHook(0x438576, (DWORD)GameHook_000a37c0, 0x4385aa, g_gameHookJump00151994, 7);
+    GameInstallHook(0x584770, (DWORD)GameHook_000a37a0, 0x584a79, g_gameHookJump0015198c, 7);
+    GameInstallHook(0x53c900, (DWORD)GameHook_000a3800, 0x53c8f1, g_gameHookJump001519b0, 7);
+    GameInstallHook(0x4b5ac0, (DWORD)GameHook_000a3a70, 0x4b5abc, g_gameHookJump001519b8, 6);
+    VirtualProtect((void*)0x004d41c0, 5, 0x40, &local_8);
+    *(BYTE*)0x004d41c0 = 0xe9;
+    *(DWORD*)0x004d41c1 = (DWORD)GameHook_000a3b20 - 0x4d41c5;
+    VirtualProtect((void*)0x004d41c0, 5, local_8, &local_4);
+    VirtualProtect((void*)0x004e7427, 5, 0x40, &local_8);
+    *(BYTE*)0x004e7427 = 0xe8;
+    *(DWORD*)0x004e7428 = (DWORD)GameHook_000a3ec0 - 0x4e742c;
+    VirtualProtect((void*)0x004e7427, 5, local_8, &local_4);
+    GameInstallHook(0x738f3a, (DWORD)GameHook_000a3ce0, 0x738b1b, g_gameHookJump001519e8, 6);
+    GameInstallHook(0x738877, (DWORD)GameHook_000a3d20, 0x73885b, g_gameHookJump001519f0, 6);
+    GameInstallHook(0x6a0050, (DWORD)GameHook_000a3d90, 0x6a0043, g_gameHookJump001519d4, 9);
+    VirtualProtect((void*)0x006fded6, 5, 0x40, &local_8);
+    *(BYTE*)0x006fded6 = 0xe8;
+    *(DWORD*)0x006fded7 = (DWORD)GameHook_000a4280 - 0x6fdedb;
+    VirtualProtect((void*)0x006fded6, 5, local_8, &local_4);
+    if (g_gameVersion == 1)
+    {
+        GameInstallHook(0x7fb020, (DWORD)GameHook_000a4190, 0x59c721, g_gameHookJump00151a34, 6);
+        g_gameHookFarClipReturn = 0x7fb026;
+    }
+    else
+    {
+        GameInstallHook(0x7fb060, (DWORD)GameHook_000a4190, 0x59c721, g_gameHookJump00151a34, 6);
+        g_gameHookFarClipReturn = 0x7fb066;
+    }
+    VirtualProtect((void*)0x006d0e7e, 5, 0x40, &local_8);
+    *(BYTE*)0x006d0e7e = 0xe8;
+    *(DWORD*)0x006d0e7f = (DWORD)GameHook_000a42c0 - 0x6d0e83;
+    VirtualProtect((void*)0x006d0e7e, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00866fa8, 4, 0x40, &local_8);
+    *(DWORD*)0x00866fa8 = (DWORD)GameHook_000a42d0;
+    VirtualProtect((void*)0x00866fa8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00586c0a, 5, 0x40, &local_8);
+    *(BYTE*)0x00586c0a = 0xe8;
+    *(DWORD*)0x00586c0b = (DWORD)GameHook_000a4770 - 0x586c0f;
+    VirtualProtect((void*)0x00586c0a, 5, local_8, &local_4);
+    GameInstallHook(0x538090, (DWORD)GameHook_000a47d0, 0x538084, g_gameHookJump00151a3c, 7);
+    VirtualProtect((void*)0x00718599, 5, 0x40, &local_8);
+    *(BYTE*)0x00718599 = 0xe8;
+    *(DWORD*)0x0071859a = (DWORD)GameHook_000a4960 - 0x71859e;
+    VirtualProtect((void*)0x00718599, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00866f7c, 4, 0x40, &local_8);
+    *(DWORD*)0x00866f7c = (DWORD)GameHook_000a4850;
+    VirtualProtect((void*)0x00866f7c, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00866f80, 4, 0x40, &local_8);
+    *(DWORD*)0x00866f80 = (DWORD)GameHook_000a48c0;
+    VirtualProtect((void*)0x00866f80, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008585e8, 4, 0x40, &local_8);
+    *(DWORD*)0x008585e8 = (DWORD)GameHook_000a48c0;
+    VirtualProtect((void*)0x008585e8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871218, 4, 0x40, &local_8);
+    *(DWORD*)0x00871218 = (DWORD)GameHook_000a49d0;
+    VirtualProtect((void*)0x00871218, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871778, 4, 0x40, &local_8);
+    *(DWORD*)0x00871778 = (DWORD)GameHook_000a49d0;
+    VirtualProtect((void*)0x00871778, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008718d0, 4, 0x40, &local_8);
+    *(DWORD*)0x008718d0 = (DWORD)GameHook_000a49d0;
+    VirtualProtect((void*)0x008718d0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871a40, 4, 0x40, &local_8);
+    *(DWORD*)0x00871a40 = (DWORD)GameHook_000a49d0;
+    VirtualProtect((void*)0x00871a40, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871be0, 4, 0x40, &local_8);
+    *(DWORD*)0x00871be0 = (DWORD)GameHook_000a49d0;
+    VirtualProtect((void*)0x00871be0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x005648d3, 5, 0x40, &local_8);
+    *(BYTE*)0x005648d3 = 0xe8;
+    *(DWORD*)0x005648d4 = (DWORD)GameHook_000a4c30 - 0x5648d8;
+    VirtualProtect((void*)0x005648d3, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0053dfdd, 5, 0x40, &local_8);
+    *(BYTE*)0x0053dfdd = 0xe8;
+    *(DWORD*)0x0053dfde = (DWORD)GameHook_000a4df0 - 0x53dfe2;
+    VirtualProtect((void*)0x0053dfdd, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0053e019, 5, 0x40, &local_8);
+    *(BYTE*)0x0053e019 = 0xe8;
+    *(DWORD*)0x0053e01a = (DWORD)GameHook_000a4e30 - 0x53e01e;
+    VirtualProtect((void*)0x0053e019, 5, local_8, &local_4);
+    GameInstallHook(0x5534b0, (DWORD)GameHook_000a4e70, 0x5534a6, g_gameHookJump00151a44, 9);
+    VirtualProtect((void*)0x005342f9, 5, 0x40, &local_8);
+    *(BYTE*)0x005342f9 = 0xe8;
+    *(DWORD*)0x005342fa = (DWORD)GameHook_000a5150 - 0x5342fe;
+    VirtualProtect((void*)0x005342f9, 5, local_8, &local_4);
+    GameInstallHook(0x4b35a0, (DWORD)GameHook_000a5100, 0x4b3433, g_gameHookJump00151a50, 6);
+    VirtualProtect((void*)0x0041b02e, 5, 0x40, &local_8);
+    *(BYTE*)0x0041b02e = 0xe8;
+    *(DWORD*)0x0041b02f = (DWORD)GameHook_000a56b0 - 0x41b033;
+    VirtualProtect((void*)0x0041b02e, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0041af80, 5, 0x40, &local_8);
+    *(BYTE*)0x0041af80 = 0xe8;
+    *(DWORD*)0x0041af81 = (DWORD)GameHook_000a5820 - 0x41af85;
+    VirtualProtect((void*)0x0041af80, 5, local_8, &local_4);
+    VirtualProtect((void*)0x0041ab78, 5, 0x40, &local_8);
+    *(BYTE*)0x0041ab78 = 0xe8;
+    *(DWORD*)0x0041ab79 = (DWORD)GameHook_000a5850 - 0x41ab7d;
+    VirtualProtect((void*)0x0041ab78, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00871178, 4, 0x40, &local_8);
+    *(DWORD*)0x00871178 = (DWORD)GameHook_000a5870;
+    VirtualProtect((void*)0x00871178, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008716d8, 4, 0x40, &local_8);
+    *(DWORD*)0x008716d8 = (DWORD)GameHook_000a5870;
+    VirtualProtect((void*)0x008716d8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008719a0, 4, 0x40, &local_8);
+    *(DWORD*)0x008719a0 = (DWORD)GameHook_000a5870;
+    VirtualProtect((void*)0x008719a0, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871b40, 4, 0x40, &local_8);
+    *(DWORD*)0x00871b40 = (DWORD)GameHook_000a5870;
+    VirtualProtect((void*)0x00871b40, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008713b8, 4, 0x40, &local_8);
+    *(DWORD*)0x008713b8 = (DWORD)GameHook_000a5910;
+    VirtualProtect((void*)0x008713b8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871580, 4, 0x40, &local_8);
+    *(DWORD*)0x00871580 = (DWORD)GameHook_000a5910;
+    VirtualProtect((void*)0x00871580, 4, local_8, &local_4);
+    VirtualProtect((void*)0x00871830, 4, 0x40, &local_8);
+    *(DWORD*)0x00871830 = (DWORD)GameHook_000a59b0;
+    VirtualProtect((void*)0x00871830, 4, local_8, &local_4);
+    VirtualProtect((void*)0x008721f8, 4, 0x40, &local_8);
+    *(DWORD*)0x008721f8 = (DWORD)GameHook_000a5a50;
+    VirtualProtect((void*)0x008721f8, 4, local_8, &local_4);
+    VirtualProtect((void*)0x006e0954, 5, 0x40, &local_8);
+    *(BYTE*)0x006e0954 = 0xe8;
+    *(DWORD*)0x006e0955 = (DWORD)GameHook_000a5af0 - 0x6e0959;
+    VirtualProtect((void*)0x006e0954, 5, local_8, &local_4);
+    VirtualProtect((void*)0x006b2bcb, 5, 0x40, &local_8);
+    *(BYTE*)0x006b2bcb = 0xe8;
+    *(DWORD*)0x006b2bcc = (DWORD)GameHook_000a5af0 - 0x6b2bd0;
+    VirtualProtect((void*)0x006b2bcb, 5, local_8, &local_4);
+    VirtualProtect((void*)0x004f77da, 5, 0x40, &local_8);
+    *(BYTE*)0x004f77da = 0xe8;
+    *(DWORD*)0x004f77db = (DWORD)GameHook_000a5af0 - 0x4f77df;
+    VirtualProtect((void*)0x004f77da, 5, local_8, &local_4);
+    VirtualProtect((void*)0x00872a74, 4, 0x40, &local_8);
+    *(DWORD*)0x00872a74 = (DWORD)GameHook_000a5b90;
+    VirtualProtect((void*)0x00872a74, 4, local_8, &local_4);
+    GameInstallHook(0x5674e0, (DWORD)GameHook_000a5d20, 0x5674db, g_gameHookJump00151a68, 6);
+    return;
 }
 
 #include "game/hooks_independent.h"
-#include "game/playerped.h"
 #include "game/player_colors.h"
+#include "game/playerped.h"
 // samp.dll RVA: 0x0018f4c8
 DWORD g_hookRadarIndex;
 // samp.dll RVA: 0x0018f4cc
@@ -424,17 +433,17 @@ DWORD g_hookRenderEbx;
 // samp.dll RVA: 0x0018f568
 DWORD g_hookFreedBuffer;
 // samp.dll RVA: 0x00151ab8
-DWORD g_hookKeepBuffer=1;
+DWORD g_hookKeepBuffer = 1;
 // samp.dll RVA: 0x0018f560
 DWORD g_hookCachedBuffer;
 // samp.dll RVA: 0x00151abc
-DWORD g_hookAllocateFunction=0x7fb270;
+DWORD g_hookAllocateFunction = 0x7fb270;
 // samp.dll RVA: 0x0018f570
 DWORD g_hookSavedEsi;
 // samp.dll RVA: 0x0018f5c4
 DWORD g_hookRenderReturn;
 // samp.dll RVA: 0x00151ac8
-BYTE g_hookRenderRestore[3]={0xff,0x52,0x20};
+BYTE g_hookRenderRestore[3] = {0xff, 0x52, 0x20};
 // samp.dll RVA: 0x0018f5d4
 DWORD g_hookSavedFontA;
 // samp.dll RVA: 0x0018f5d8
@@ -442,24 +451,32 @@ DWORD g_hookSavedFontB;
 
 // Yield before entering the original game update routine.
 // samp.dll RVA: 0x000a2200
-__declspec(naked) void GameHook_000a2200() {
+__declspec(naked) void GameHook_000a2200()
+{
+    // clang-format off
     __asm { push 1
         call dword ptr [Sleep]
         mov edx,0x561a80
         jmp edx }
+    // clang-format on
 }
 // The original argument remains on the caller's stack; Get consumes its copy.
 // samp.dll RVA: 0x000a37a0
-__declspec(naked) void GameHook_000a37a0() {
+__declspec(naked) void GameHook_000a37a0()
+{
+    // clang-format off
     __asm { mov eax,[esp+4]
         mov g_hookRadarIndex,eax
         mov eax,g_hookRadarIndex
         push eax
         call PlayerColors::Get
         ret }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a37c0
-__declspec(naked) void GameHook_000a37c0() {
+__declspec(naked) void GameHook_000a37c0()
+{
+    // clang-format off
     __asm { mov g_hookCheatFunction,eax
         pushad
         mov edx,0x96918c
@@ -468,12 +485,17 @@ __declspec(naked) void GameHook_000a37c0() {
         mov edx,0x438581
         cmp eax,0
         jmp edx }
+    // clang-format on
 }
+// clang-format off
 // Intentional native one-RET callback, not a replacement for an unknown body.
 // samp.dll RVA: 0x000a3ac0
 __declspec(naked) void GameHook_000a3ac0() { __asm ret }
+// clang-format on
 // samp.dll RVA: 0x000a3ad0
-__declspec(naked) void GameHook_000a3ad0() {
+__declspec(naked) void GameHook_000a3ad0()
+{
+    // clang-format off
     __asm { mov ebx,[esp+8]
         mov g_hookCameraPed,ebx
         pushad
@@ -486,19 +508,25 @@ __declspec(naked) void GameHook_000a3ad0() {
         popad
         mov ebx,0x73c260
         jmp ebx }
+    // clang-format on
 }
 // Preserve the sign bit while replacing the remaining float bits by 1.0f.
 // samp.dll RVA: 0x000a3b00
-__declspec(naked) void GameHook_000a3b00() {
+__declspec(naked) void GameHook_000a3b00()
+{
+    // clang-format off
     __asm { mov eax,[esi+0x5a4]
         and eax,0x80000000
         or eax,0x3f800000
         mov [esi+0x5a4],eax
         ret }
+    // clang-format on
 }
 // The non-null branch continues after GTA's original PUSH EDI prologue.
 // samp.dll RVA: 0x000a3b20
-__declspec(naked) void GameHook_000a3b20() {
+__declspec(naked) void GameHook_000a3b20()
+{
+    // clang-format off
     __asm { push edi
         mov edi,[esp+8]
         test edi,edi
@@ -508,9 +536,12 @@ __declspec(naked) void GameHook_000a3b20() {
     missing:
         pop edi
         ret }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a3ce0
-__declspec(naked) void GameHook_000a3ce0() {
+__declspec(naked) void GameHook_000a3ce0()
+{
+    // clang-format off
     __asm { mov g_hookRenderEsi,esi
         mov g_hookRenderEbx,ebx
         pushad
@@ -532,10 +563,13 @@ __declspec(naked) void GameHook_000a3ce0() {
     resume:
         push 0x738f40
         ret }
+    // clang-format on
 }
 // EBP is an incoming GTA frame pointer, not a compiler-owned C++ frame.
 // samp.dll RVA: 0x000a3d20
-__declspec(naked) void GameHook_000a3d20() {
+__declspec(naked) void GameHook_000a3d20()
+{
+    // clang-format off
     __asm { cmp dword ptr [esi-0x20],0x27
         mov edi,[ebp]
         jne fallback
@@ -547,9 +581,12 @@ __declspec(naked) void GameHook_000a3d20() {
     fallback:
         mov eax,0x7388db
         jmp eax }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a3e50
-__declspec(naked) void GameHook_000a3e50() {
+__declspec(naked) void GameHook_000a3e50()
+{
+    // clang-format off
     __asm { test ecx,ecx
         jnz present
         ret
@@ -562,9 +599,12 @@ __declspec(naked) void GameHook_000a3e50() {
     original:
         mov edx,0x54dfb0
         jmp edx }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a4190
-__declspec(naked) void GameHook_000a4190() {
+__declspec(naked) void GameHook_000a4190()
+{
+    // clang-format off
     __asm { mov eax,[esp+4]
         mov g_hookFreedBuffer,eax
         pushad
@@ -585,10 +625,13 @@ __declspec(naked) void GameHook_000a4190() {
         push esi
         mov edx,g_gameHookFarClipReturn
         jmp edx }
+    // clang-format on
 }
 // Preserve the native sticky allocator selection and four POP EBX operations.
 // samp.dll RVA: 0x000a4280
-__declspec(naked) void GameHook_000a4280() {
+__declspec(naked) void GameHook_000a4280()
+{
+    // clang-format off
     __asm { mov eax,g_hookCachedBuffer
         test eax,eax
         jnz cached
@@ -610,12 +653,17 @@ __declspec(naked) void GameHook_000a4280() {
     cached:
         mov eax,g_hookCachedBuffer
         ret }
+    // clang-format on
 }
+// clang-format off
 // samp.dll RVA: 0x000a42c0
 __declspec(naked) void GameHook_000a42c0() { __asm { mov g_hookSavedEsi,esi
         ret } }
+// clang-format on
 // samp.dll RVA: 0x000a4850
-__declspec(naked) void GameHook_000a4850() {
+__declspec(naked) void GameHook_000a4850()
+{
+    // clang-format off
     __asm { mov eax,[esp]
         mov g_hookRenderReturn,eax
         pushad
@@ -638,9 +686,12 @@ __declspec(naked) void GameHook_000a4850() {
         mov byte ptr [edx+2],cl
         popad
         ret }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a4960
-__declspec(naked) void GameHook_000a4960() {
+__declspec(naked) void GameHook_000a4960()
+{
+    // clang-format off
     __asm { pushad
         push 4
         push 0x858ba4
@@ -665,9 +716,12 @@ __declspec(naked) void GameHook_000a4960() {
         mov dword ptr ds:[0x858f84],eax
         popad
         ret }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5150
-__declspec(naked) void GameHook_000a5150() {
+__declspec(naked) void GameHook_000a5150()
+{
+    // clang-format off
     __asm { mov eax,[esp+4]
         test eax,eax
         jz missing
@@ -675,9 +729,12 @@ __declspec(naked) void GameHook_000a5150() {
         jmp eax
     missing:
         ret }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5850
-__declspec(naked) void GameHook_000a5850() {
+__declspec(naked) void GameHook_000a5850()
+{
+    // clang-format off
     __asm { mov eax,[esp+4]
         test eax,eax
         jz skip
@@ -689,11 +746,14 @@ __declspec(naked) void GameHook_000a5850() {
     skip:
         mov eax,1
         ret }
+    // clang-format on
 }
 // Continue into GTA after its 44-byte local-frame allocation, forwarding the
 // observed argument-byte override rather than translating this into a C++ call.
 // samp.dll RVA: 0x000a5d20
-__declspec(naked) void GameHook_000a5d20() {
+__declspec(naked) void GameHook_000a5d20()
+{
+    // clang-format off
     __asm { mov eax,[esp+0x14]
         test eax,eax
         jz original
@@ -702,10 +762,11 @@ __declspec(naked) void GameHook_000a5d20() {
         sub esp,0x2c
         mov eax,0x407c37
         jmp eax }
+    // clang-format on
 }
 
-#include "game/hooks_render.h"
 #include "game/building_removal.h"
+#include "game/hooks_render.h"
 // samp.dll RVA: 0x0018f504
 DWORD g_hookHudScaleX;
 // samp.dll RVA: 0x0018f508
@@ -715,11 +776,11 @@ float g_hookHudWidth;
 // samp.dll RVA: 0x0018f510
 float g_hookHudHeight;
 // samp.dll RVA: 0x00151a6e
-BYTE g_hookHudAspectFix=1;
+BYTE g_hookHudAspectFix = 1;
 // samp.dll RVA: 0x0011c728
-const float g_hookHudAspectThreshold=1.6f;
+const float g_hookHudAspectThreshold = 1.6f;
 // samp.dll RVA: 0x0011eb68
-const float g_hookHudScaleNumerator=0.00221999991f;
+const float g_hookHudScaleNumerator = 0.00221999991f;
 // samp.dll RVA: 0x002aca6c
 DWORD g_hookFogEnabled;
 // samp.dll RVA: 0x002aca70
@@ -761,13 +822,13 @@ DWORD g_hookQueuedAnimationId;
 // samp.dll RVA: 0x0018f4f8
 DWORD g_hookQueuedAnimationBlend;
 // samp.dll RVA: 0x00151aa4
-DWORD g_hookAnimationContinueA=0x4d3aaa;
+DWORD g_hookAnimationContinueA = 0x4d3aaa;
 // samp.dll RVA: 0x00151aa8
-DWORD g_hookAnimationContinueB=0x4d4617;
+DWORD g_hookAnimationContinueB = 0x4d4617;
 // samp.dll RVA: 0x0018f5cc
 DWORD g_hookRenderObject;
 // samp.dll RVA: 0x00151acc
-BYTE g_hookObjectRestore[5]={0xe8,0x3c,0xff,0xff,0xff};
+BYTE g_hookObjectRestore[5] = {0xe8, 0x3c, 0xff, 0xff, 0xff};
 // samp.dll RVA: 0x0018f5b4
 DWORD g_hookMarker;
 // samp.dll RVA: 0x0018f5b8
@@ -777,11 +838,16 @@ DWORD g_hookSuppressAllMarkers;
 // The comparison and repeated division retain x87 precision until the final
 // float store. A rounded float ratio changes the native 16:10 boundary.
 // samp.dll RVA: 0x000a2220
-void GamePrepareHudDraw() {
-    g_hookHudScaleX=*(DWORD*)0x859520;g_hookHudScaleY=*(DWORD*)0x859524;
-    BYTE enabled=g_hookHudAspectFix;
-    g_hookHudWidth=(float)*(int*)0xc17044;g_hookHudHeight=(float)*(int*)0xc17048;
-    if(enabled) {
+void GamePrepareHudDraw()
+{
+    g_hookHudScaleX = *(DWORD*)0x859520;
+    g_hookHudScaleY = *(DWORD*)0x859524;
+    BYTE enabled = g_hookHudAspectFix;
+    g_hookHudWidth = (float)*(int*)0xc17044;
+    g_hookHudHeight = (float)*(int*)0xc17048;
+    if (enabled)
+    {
+        // clang-format off
         __asm {
             fld g_hookHudWidth
             fdiv g_hookHudHeight
@@ -796,19 +862,25 @@ void GamePrepareHudDraw() {
             fstp dword ptr ds:[0x859520]
         done:
         }
+        // clang-format on
     }
 }
 // samp.dll RVA: 0x000c5400
-void GameSetupD3DFog(DWORD enabled) {
-    if(g_hookDisableFog)enabled=0;
-    if(g_gameD3DDevice) {
-        g_gameD3DDevice->SetRenderState(D3DRS_FOGENABLE,enabled);
-        g_gameD3DDevice->SetRenderState(D3DRS_FOGTABLEMODE,D3DFOG_NONE);
-        g_gameD3DDevice->SetRenderState(D3DRS_FOGVERTEXMODE,D3DFOG_LINEAR);
+void GameSetupD3DFog(DWORD enabled)
+{
+    if (g_hookDisableFog)
+        enabled = 0;
+    if (g_gameD3DDevice)
+    {
+        g_gameD3DDevice->SetRenderState(D3DRS_FOGENABLE, enabled);
+        g_gameD3DDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_NONE);
+        g_gameD3DDevice->SetRenderState(D3DRS_FOGVERTEXMODE, D3DFOG_LINEAR);
     }
 }
 // samp.dll RVA: 0x000a22c0
-__declspec(naked) void GameHook_000a22c0() {
+__declspec(naked) void GameHook_000a22c0()
+{
+    // clang-format off
     __asm {
         pushad
         call GamePrepareHudDraw
@@ -823,9 +895,12 @@ __declspec(naked) void GameHook_000a22c0() {
         popad
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a29d0
-__declspec(naked) void GameHook_000a29d0() {
+__declspec(naked) void GameHook_000a29d0()
+{
+    // clang-format off
     __asm {
         mov g_hookCameraPed,ecx
         pushad
@@ -891,11 +966,14 @@ __declspec(naked) void GameHook_000a29d0() {
         popad
         ret
     }
+    // clang-format on
 }
 // Original thiscall consumes one stack argument and restores only the status
 // byte it saved, leaving the GTA callee's other results intact.
 // samp.dll RVA: 0x000a33c0
-__declspec(naked) void GameHook_000a33c0() {
+__declspec(naked) void GameHook_000a33c0()
+{
+    // clang-format off
     __asm {
         mov g_hookHornThis,ecx
         mov edx,[esp+4]
@@ -925,9 +1003,12 @@ __declspec(naked) void GameHook_000a33c0() {
         mov [edx+0x36],al
         ret 4
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a3b90
-__declspec(naked) void GameHook_000a3b90() {
+__declspec(naked) void GameHook_000a3b90()
+{
+    // clang-format off
     __asm {
         pushad
         push 0
@@ -950,9 +1031,12 @@ __declspec(naked) void GameHook_000a3b90() {
         popad
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a3f30
-__declspec(naked) void GameHook_000a3f30() {
+__declspec(naked) void GameHook_000a3f30()
+{
+    // clang-format off
     __asm {
         mov edx,[esp]
         mov g_hookAnimationReturn,edx
@@ -993,9 +1077,12 @@ __declspec(naked) void GameHook_000a3f30() {
         mov edx,dword ptr ds:[0xb4ea34]
         jmp dword ptr [g_hookAnimationContinueA]
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a3fe0
-__declspec(naked) void GameHook_000a3fe0() {
+__declspec(naked) void GameHook_000a3fe0()
+{
+    // clang-format off
     __asm {
         mov edx,[esp]
         mov g_hookAnimationReturn,edx
@@ -1040,9 +1127,12 @@ __declspec(naked) void GameHook_000a3fe0() {
         mov ecx,[esp+0x18]
         jmp dword ptr [g_hookAnimationContinueB]
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a47d0
-__declspec(naked) void GameHook_000a47d0() {
+__declspec(naked) void GameHook_000a47d0()
+{
+    // clang-format off
     __asm {
         mov eax,[esp+4]
         mov g_hookMarker,eax
@@ -1081,9 +1171,12 @@ __declspec(naked) void GameHook_000a47d0() {
         mov eax,0x538097
         jmp eax
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a48c0
-__declspec(naked) void GameHook_000a48c0() {
+__declspec(naked) void GameHook_000a48c0()
+{
+    // clang-format off
     __asm {
         mov eax,[esp]
         mov g_hookRenderReturn,eax
@@ -1130,12 +1223,13 @@ __declspec(naked) void GameHook_000a48c0() {
         mov eax,0x534030
         jmp eax
     }
+    // clang-format on
 }
 
-#include "game/hooks_boot.h"
 #include "game/aimstuff.h"
-#include "net/playerpool.h"
+#include "game/hooks_boot.h"
 #include "main.h"
+#include "net/playerpool.h"
 
 // samp.dll RVA: 0x0018f514
 BYTE g_hookCameraHudPrepared;
@@ -1148,7 +1242,9 @@ DWORD g_hookAudioArgument1;
 
 // Raw GTA entry ABIs: preserve live registers and native CALL/JMP/RET behavior.
 // samp.dll RVA: 0x000a22f0
-__declspec(naked) void GameHook_000a22f0() {
+__declspec(naked) void GameHook_000a22f0()
+{
+    // clang-format off
     __asm {
         pushad
         mov ecx,g_pGame
@@ -1190,9 +1286,12 @@ __declspec(naked) void GameHook_000a22f0() {
         popad
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a2370
-__declspec(naked) void GameHook_000a2370() {
+__declspec(naked) void GameHook_000a2370()
+{
+    // clang-format off
     __asm {
         mov edx,0x563430
         call edx
@@ -1209,9 +1308,12 @@ __declspec(naked) void GameHook_000a2370() {
         popad
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a23a0
-__declspec(naked) void GameHook_000a23a0() {
+__declspec(naked) void GameHook_000a23a0()
+{
+    // clang-format off
     __asm {
         pushad
         cmp g_pGame,0
@@ -1225,9 +1327,12 @@ __declspec(naked) void GameHook_000a23a0() {
         mov eax,0x52b730
         jmp eax
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5b90
-__declspec(naked) void GameHook_000a5b90() {
+__declspec(naked) void GameHook_000a5b90()
+{
+    // clang-format off
     __asm {
         mov edx,[esp+4]
         mov g_hookAudioArgument0,edx
@@ -1252,67 +1357,92 @@ __declspec(naked) void GameHook_000a5b90() {
         mov dword ptr ds:[0xb72914],edx
         ret 8
     }
+    // clang-format on
 }
 
+#include "chatwindow.h"
 #include "game/hooks_prerender.h"
 #include "game/scripting.h"
-#include "net/vehiclepool.h"
 #include "gui/device_objects.h"
-#include "chatwindow.h"
+#include "net/vehiclepool.h"
 
 // samp.dll RVA: 0x0018de44
-CObjectPool *g_debugObjectPool;
+CObjectPool* g_debugObjectPool;
 
 // samp.dll RVA: 0x000a23d0
-void GameHook_000a23d0() {
-    if(g_pGame)g_pGame->ProcessFrameLimiter();
-    if(g_pNetGame) {
-        CObjectPool *objects=*(CObjectPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0x14);
-        if(objects) {
-            __try { objects->Process(); }
-            __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),"s003")) {}
+void GameHook_000a23d0()
+{
+    if (g_pGame)
+        g_pGame->ProcessFrameLimiter();
+    if (g_pNetGame)
+    {
+        CObjectPool* objects = *(CObjectPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
+        if (objects)
+        {
+            __try
+            {
+                objects->Process();
+            }
+            __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), "s003"))
+            {}
         }
     }
-    if(g_debugObjectPool) {
-        __try { g_debugObjectPool->Process(); }
-        __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),"s003d")) {}
+    if (g_debugObjectPool)
+    {
+        __try
+        {
+            g_debugObjectPool->Process();
+        }
+        __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), "s003d"))
+        {}
     }
-    if(g_pNetGame) {
-        CVehiclePool *vehicles=*(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0xc);
-        if(vehicles)vehicles->ConstructLicensePlates();
+    if (g_pNetGame)
+    {
+        CVehiclePool* vehicles = *(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0xc);
+        if (vehicles)
+            vehicles->ConstructLicensePlates();
     }
-    if(g_pNetGame) {
-        CObjectPool *objects=*(CObjectPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0x14);
-        if(objects)objects->ConstructMaterials();
+    if (g_pNetGame)
+    {
+        CObjectPool* objects = *(CObjectPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
+        if (objects)
+            objects->ConstructMaterials();
     }
-    if(g_pChat)g_pChat->RenderToSurface();
-    __try { ((void (__cdecl*)())0x53bee0)(); }
-    __except(GameExceptionFilter(GetExceptionCode(),GetExceptionInformation(),"s007")) {}
-    if(g_pNetGame) {
-        CTextDrawPool *textdraws=*(CTextDrawPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0x20);
-        if(textdraws)textdraws->Native01E330();
+    if (g_pChat)
+        g_pChat->RenderToSurface();
+    __try
+    {
+        ((void(__cdecl*)())0x53bee0)();
+    }
+    __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), "s007"))
+    {}
+    if (g_pNetGame)
+    {
+        CTextDrawPool* textdraws = *(CTextDrawPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x20);
+        if (textdraws)
+            textdraws->Native01E330();
     }
 }
 
 #include "game/hooks_control.h"
-using AimStuff::UpdateLocalSkills;
-using AimStuff::ApplyPlayerSkills;
-using AimStuff::ApplyLocalSkills;
-using KeyStuff::UpdateKeys;
-using KeyStuff::ApplyPlayerKeys;
-using AimStuff::GetPlayerCameraMode;
-using AimStuff::UpdateCamera;
-using AimStuff::ApplyPlayerCamera;
-using AimStuff::UpdateAim;
-using AimStuff::ApplyPlayerAim;
-using AimStuff::ApplyLocalCamera;
 using AimStuff::ApplyLocalAim;
+using AimStuff::ApplyLocalCamera;
+using AimStuff::ApplyLocalSkills;
+using AimStuff::ApplyPlayerAim;
+using AimStuff::ApplyPlayerCamera;
+using AimStuff::ApplyPlayerSkills;
+using AimStuff::GetPlayerCameraMode;
+using AimStuff::UpdateAim;
+using AimStuff::UpdateCamera;
+using AimStuff::UpdateLocalSkills;
 using KeyStuff::ApplyLocalKeys;
+using KeyStuff::ApplyPlayerKeys;
 using KeyStuff::GetInternalKeys;
+using KeyStuff::UpdateKeys;
 // Raw entry ABI: weapon ECX=ped; ped control ECX=this, [ESP+4]=ped;
 // vehicle ECX=vehicle. Vehicle control preserves PUSHAD registers.
 // samp.dll RVA: 0x00151964
-WORD * g_hookCameraModeWord=(WORD*)0xb6f858;
+WORD* g_hookCameraModeWord = (WORD*)0xb6f858;
 // samp.dll RVA: 0x0018f4ac
 BYTE g_hookSavedPlayer;
 // samp.dll RVA: 0x0018f4b4
@@ -1352,31 +1482,40 @@ DWORD g_gameLinkedVehicle;
 // samp.dll RVA: 0x002a9a4c
 float g_gameVehicleDistanceSquared;
 
-
 // samp.dll RVA: 0x0011f5dc
-const float g_gameStreamingDistanceSquared=40000.0f;
+const float g_gameStreamingDistanceSquared = 40000.0f;
 // samp.dll RVA: 0x000b3f60
-BYTE __stdcall GameFindPlayerPedIndex(void *ped) {
-    for(BYTE player=0;player<210;++player)if(g_gamePlayerPeds[player]==ped)return player;
+BYTE __stdcall GameFindPlayerPedIndex(void* ped)
+{
+    for (BYTE player = 0; player < 210; ++player)
+        if (g_gamePlayerPeds[player] == ped)
+            return player;
     return 0;
 }
 // samp.dll RVA: 0x000b4410
-BOOL __stdcall GameIsTrainVehicle(void *vehicle) {
-    if(!vehicle)return FALSE;
-    g_gameVehicleModel=*(short*)((BYTE*)vehicle+0x22);
-    return g_gameVehicleModel==0x21a || g_gameVehicleModel==0x23a || g_gameVehicleModel==0x219 || g_gameVehicleModel==0x239 || g_gameVehicleModel==0x1c1;
+BOOL __stdcall GameIsTrainVehicle(void* vehicle)
+{
+    if (!vehicle)
+        return FALSE;
+    g_gameVehicleModel = *(short*)((BYTE*)vehicle + 0x22);
+    return g_gameVehicleModel == 0x21a || g_gameVehicleModel == 0x23a || g_gameVehicleModel == 0x219 || g_gameVehicleModel == 0x239 || g_gameVehicleModel == 0x1c1;
 }
 // samp.dll RVA: 0x000b4460
-BOOL __stdcall GameHasOccupiedLinkedVehicle(void *vehicle) {
-    if(!vehicle)return FALSE;
-    BYTE *linked=*(BYTE**)((BYTE*)vehicle+0x4c4);
-    if(!linked)return FALSE;
-    g_gameLinkedVehicle=(DWORD)linked;
-    BYTE *driver=*(BYTE**)(linked+0x460);
-    return driver && (*(DWORD*)(driver+0x46c)&0x100)?TRUE:FALSE;
+BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
+{
+    if (!vehicle)
+        return FALSE;
+    BYTE* linked = *(BYTE**)((BYTE*)vehicle + 0x4c4);
+    if (!linked)
+        return FALSE;
+    g_gameLinkedVehicle = (DWORD)linked;
+    BYTE* driver = *(BYTE**)(linked + 0x460);
+    return driver && (*(DWORD*)(driver + 0x46c) & 0x100) ? TRUE : FALSE;
 }
 // samp.dll RVA: 0x000a2ab0
-__declspec(naked) void GameHook_000a2ab0() {
+__declspec(naked) void GameHook_000a2ab0()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCameraPed],ecx
         mov eax,[g_hookCameraPed]
@@ -1418,9 +1557,12 @@ __declspec(naked) void GameHook_000a2ab0() {
         mov eax,[g_hookWeaponResult]
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a2b50
-__declspec(naked) void GameHook_000a2b50() {
+__declspec(naked) void GameHook_000a2b50()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookPedControlThis],ecx
         mov eax,dword ptr [esp + 0x4]
@@ -1512,9 +1654,12 @@ __declspec(naked) void GameHook_000a2b50() {
     branch_100a2ccb:
         ret 0x4
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a2e70
-__declspec(naked) void GameHook_000a2e70() {
+__declspec(naked) void GameHook_000a2e70()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookControlVehicle],ecx
         mov eax,dword ptr [ecx]
@@ -1857,10 +2002,13 @@ __declspec(naked) void GameHook_000a2e70() {
         popad
         ret
     }
+    // clang-format on
 }
 // Retain the unrounded x87 threshold test and native argument cleanup.
 // samp.dll RVA: 0x000b6490
-__declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void *vehicle) {
+__declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
+{
+    // clang-format off
     __asm {
         push ebp
         mov ebp,esp
@@ -1918,10 +2066,11 @@ __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void *vehicle) {
         pop ebp
         ret 0x4
     }
+    // clang-format on
 }
 
-#include "game/hooks_vehicle.h"
 #include "exceptions.h"
+#include "game/hooks_vehicle.h"
 // samp.dll RVA: 0x0018f690
 DWORD g_hookContactThis;
 // samp.dll RVA: 0x0018f694
@@ -1935,7 +2084,7 @@ BYTE g_hookSirenResult;
 // samp.dll RVA: 0x0018f6a4
 DWORD g_hookSirenOnce;
 // samp.dll RVA: 0x00151b0c
-WORD g_hookSirenVehicleId=0xffff;
+WORD g_hookSirenVehicleId = 0xffff;
 // samp.dll RVA: 0x0018f63c
 DWORD g_hookPedQueryThis;
 // samp.dll RVA: 0x0018f640
@@ -1943,7 +2092,9 @@ DWORD g_hookPedQueryPed;
 
 // Raw GTA collision method ABI; suppression returns with RET8.
 // samp.dll RVA: 0x000a5870
-__declspec(naked) void GameHook_000a5870() {
+__declspec(naked) void GameHook_000a5870()
+{
+    // clang-format off
     __asm {
         mov g_hookContactThis,ecx
         mov edx,[esp]
@@ -1983,11 +2134,14 @@ __declspec(naked) void GameHook_000a5870() {
         mov edx,0x6ace70
         jmp edx
     }
+    // clang-format on
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
 // samp.dll RVA: 0x000a5910
-__declspec(naked) void GameHook_000a5910() {
+__declspec(naked) void GameHook_000a5910()
+{
+    // clang-format off
     __asm {
         mov g_hookContactThis,ecx
         mov edx,[esp]
@@ -2027,11 +2181,14 @@ __declspec(naked) void GameHook_000a5910() {
         mov edx,0x6bdea0
         jmp edx
     }
+    // clang-format on
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
 // samp.dll RVA: 0x000a59b0
-__declspec(naked) void GameHook_000a59b0() {
+__declspec(naked) void GameHook_000a59b0()
+{
+    // clang-format off
     __asm {
         mov g_hookContactThis,ecx
         mov edx,[esp]
@@ -2071,11 +2228,14 @@ __declspec(naked) void GameHook_000a59b0() {
         mov edx,0x6c8ae0
         jmp edx
     }
+    // clang-format on
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
 // samp.dll RVA: 0x000a5a50
-__declspec(naked) void GameHook_000a5a50() {
+__declspec(naked) void GameHook_000a5a50()
+{
+    // clang-format off
     __asm {
         mov g_hookContactThis,ecx
         mov edx,[esp]
@@ -2115,9 +2275,12 @@ __declspec(naked) void GameHook_000a5a50() {
         mov edx,0x546d00
         jmp edx
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5820
-__declspec(naked) void GameHook_000a5820() {
+__declspec(naked) void GameHook_000a5820()
+{
+    // clang-format off
     __asm {
         pushad
         cmp g_pNetGame,0
@@ -2134,9 +2297,12 @@ __declspec(naked) void GameHook_000a5820() {
         mov eax,0x41a990
         jmp eax
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5100
-__declspec(naked) void GameHook_000a5100() {
+__declspec(naked) void GameHook_000a5100()
+{
+    // clang-format off
     __asm {
         mov g_hookPedQueryThis,ecx
         mov eax,[esp+4]
@@ -2163,10 +2329,13 @@ __declspec(naked) void GameHook_000a5100() {
         mov eax,0x4b35a6
         jmp eax
     }
+    // clang-format on
 }
 // Raw siren query returns AL. The one-shot path deliberately leaves upper EAX.
 // samp.dll RVA: 0x000a5af0
-__declspec(naked) void GameHook_000a5af0() {
+__declspec(naked) void GameHook_000a5af0()
+{
+    // clang-format off
     __asm {
         mov eax,g_hookSirenOnce
         test eax,eax
@@ -2212,65 +2381,89 @@ __declspec(naked) void GameHook_000a5af0() {
         mov al,g_hookSirenResult
         ret
     }
+    // clang-format on
 }
 
 #include "game/task_events.h"
+#include "gui/render_dependencies.h"
 #include "net/actorpool.h"
 #include "net/remoteplayer.h"
-#include "gui/render_dependencies.h"
 // samp.dll RVA: 0x0018e81c
-CVehicle *g_hookEnterVehicle;
+CVehicle* g_hookEnterVehicle;
 // samp.dll RVA: 0x000a3430
-BOOL GameNotifyEnterVehicle() {
-    if(!g_pNetGame)return TRUE;
-    BYTE *pools=*(BYTE**)((BYTE*)g_pNetGame+0x3de);
-    g_hookEventVehiclePool=*(CVehiclePool**)(pools+0xc);
-    CPlayerPool *players=*(CPlayerPool**)(pools+8);
-    g_hookEventLocalPlayer=*(CLocalPlayer**)((BYTE*)players+0x1e);
-    g_hookEventVehicleId=g_hookEventVehiclePool->Find((void*)g_hookControlVehicle);
-    WORD id=g_hookEventVehicleId;
-    if(id==0xffff || id>=2000 || !g_hookEventVehiclePool->m_bNotEmpty[id])return FALSE;
-    g_hookEnterVehicle=g_hookEventVehiclePool->m_pObjects[id];
-    if(*(DWORD*)((BYTE*)g_hookEnterVehicle+0x60) ||
-        *(short*)((BYTE*)g_hookEnterVehicle->m_pGameVehicle+0x22)==0x23a)return FALSE;
-    if(g_hookEventLocalPlayer) {
-        CPed *ped=*(CPed**)g_hookEventLocalPlayer;
-        if(ped && ped->HasDanceState())return FALSE;
-        if(g_hookEventLocalPlayer) {
-            ped=*(CPed**)g_hookEventLocalPlayer;
-            if(ped && ped->HasDanceStyle())return FALSE;
+BOOL GameNotifyEnterVehicle()
+{
+    if (!g_pNetGame)
+        return TRUE;
+    BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
+    g_hookEventVehiclePool = *(CVehiclePool**)(pools + 0xc);
+    CPlayerPool* players = *(CPlayerPool**)(pools + 8);
+    g_hookEventLocalPlayer = *(CLocalPlayer**)((BYTE*)players + 0x1e);
+    g_hookEventVehicleId = g_hookEventVehiclePool->Find((void*)g_hookControlVehicle);
+    WORD id = g_hookEventVehicleId;
+    if (id == 0xffff || id >= 2000 || !g_hookEventVehiclePool->m_bNotEmpty[id])
+        return FALSE;
+    g_hookEnterVehicle = g_hookEventVehiclePool->m_pObjects[id];
+    if (*(DWORD*)((BYTE*)g_hookEnterVehicle + 0x60) || *(short*)((BYTE*)g_hookEnterVehicle->m_pGameVehicle + 0x22) == 0x23a)
+        return FALSE;
+    if (g_hookEventLocalPlayer)
+    {
+        CPed* ped = *(CPed**)g_hookEventLocalPlayer;
+        if (ped && ped->HasDanceState())
+            return FALSE;
+        if (g_hookEventLocalPlayer)
+        {
+            ped = *(CPed**)g_hookEventLocalPlayer;
+            if (ped && ped->HasDanceStyle())
+                return FALSE;
         }
     }
-    BYTE *driver=*(BYTE**)((BYTE*)g_hookEnterVehicle->m_pGameVehicle+0x460);
-    if(driver) {
-        if(*(DWORD*)(driver+0x598))return FALSE;
-        WORD player=players->Find(driver);
-        if(players->IsConnected(player) && players->GetPlayerInfoFlag(player))return FALSE;
+    BYTE* driver = *(BYTE**)((BYTE*)g_hookEnterVehicle->m_pGameVehicle + 0x460);
+    if (driver)
+    {
+        if (*(DWORD*)(driver + 0x598))
+            return FALSE;
+        WORD player = players->Find(driver);
+        if (players->IsConnected(player) && players->GetPlayerInfoFlag(player))
+            return FALSE;
     }
     // Native deliberately has no local-player null guard on this final path.
-    CPed *ped=*(CPed**)g_hookEventLocalPlayer;
-    if(ped && ped->GetCurrentWeapon()==46) {
-        ped=*(CPed**)g_hookEventLocalPlayer;ped->SetArmedWeapon(0,0);
+    CPed* ped = *(CPed**)g_hookEventLocalPlayer;
+    if (ped && ped->GetCurrentWeapon() == 46)
+    {
+        ped = *(CPed**)g_hookEventLocalPlayer;
+        ped->SetArmedWeapon(0, 0);
     }
-    g_hookEventLocalPlayer->EnterVehicle(g_hookEventVehicleId,FALSE);
+    g_hookEventLocalPlayer->EnterVehicle(g_hookEventVehicleId, FALSE);
     return TRUE;
 }
 // samp.dll RVA: 0x000a3840
-WORD GameResolveDamagePlayer(void *entity) {
-    if(!entity)return 0xffff;
-    CPlayerPool *players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
-    WORD result=players->Find(entity);
-    if(result==0xffff) {
-        CVehiclePool *vehicles=*(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+0xc);
-        WORD vehicle=vehicles->Find(entity);
-        if(vehicle!=0xffff) {
-            BYTE *state=(BYTE*)players;LONG last=*(LONG*)(state+0x22);
-            for(DWORD slot=0;(LONG)slot<=last;++slot) {
-                WORD player=(WORD)slot;
-                if(player<1004 && *(DWORD*)(state+0xfd6+player*4)) {
-                    BYTE *entry=*(BYTE**)(state+0x26+player*4);
-                    BYTE *remote=entry?*(BYTE**)(entry+8):0;
-                    if(*(WORD*)(remote+2)==vehicle){result=player;break;}
+WORD GameResolveDamagePlayer(void* entity)
+{
+    if (!entity)
+        return 0xffff;
+    CPlayerPool* players = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
+    WORD result = players->Find(entity);
+    if (result == 0xffff)
+    {
+        CVehiclePool* vehicles = *(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0xc);
+        WORD vehicle = vehicles->Find(entity);
+        if (vehicle != 0xffff)
+        {
+            BYTE* state = (BYTE*)players;
+            LONG last = *(LONG*)(state + 0x22);
+            for (DWORD slot = 0; (LONG)slot <= last; ++slot)
+            {
+                WORD player = (WORD)slot;
+                if (player < 1004 && *(DWORD*)(state + 0xfd6 + player * 4))
+                {
+                    BYTE* entry = *(BYTE**)(state + 0x26 + player * 4);
+                    BYTE* remote = entry ? *(BYTE**)(entry + 8) : 0;
+                    if (*(WORD*)(remote + 2) == vehicle)
+                    {
+                        result = player;
+                        break;
+                    }
                 }
             }
         }
@@ -2278,61 +2471,85 @@ WORD GameResolveDamagePlayer(void *entity) {
     return result;
 }
 // samp.dll RVA: 0x000a38e0
-DWORD GameResolveDamageActor(void *entity) {
-    if(!entity)return 0xffff;
-    CActorPool *actors=*(CActorPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+4);
+DWORD GameResolveDamageActor(void* entity)
+{
+    if (!entity)
+        return 0xffff;
+    CActorPool* actors = *(CActorPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 4);
     return actors->Find(entity);
 }
 // Observed first four DWORDs only, not a complete native allocation layout.
-struct GameDamageResponsePrefix { void *entity;float damage;DWORD bodyPart,weapon; };
+struct GameDamageResponsePrefix
+{
+    void* entity;
+    float damage;
+    DWORD bodyPart, weapon;
+};
 // samp.dll RVA: 0x000a3910
-BOOL __stdcall GameNotifyPedDamage(void *response,void *ped) {
-    void *local=GameFindLocalPed();
-    if(!g_pNetGame)return FALSE;
-    GameDamageResponsePrefix *damage=(GameDamageResponsePrefix*)response;
-    void *attacker=damage->entity;
-    if(attacker!=local && ped && *(DWORD*)ped==0x86c0a8)return TRUE;
-    bool taken=ped==local;
-    if(!taken && attacker!=local)return FALSE;
-    CPlayerPool *players=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
+BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
+{
+    void* local = GameFindLocalPed();
+    if (!g_pNetGame)
+        return FALSE;
+    GameDamageResponsePrefix* damage = (GameDamageResponsePrefix*)response;
+    void* attacker = damage->entity;
+    if (attacker != local && ped && *(DWORD*)ped == 0x86c0a8)
+        return TRUE;
+    bool taken = ped == local;
+    if (!taken && attacker != local)
+        return FALSE;
+    CPlayerPool* players = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
     WORD player;
-    if(taken) {
-        BYTE *localPlayer=*(BYTE**)((BYTE*)players+0x1e);
-        BYTE *protectedObject=*(BYTE**)(localPlayer+0x2de);
-        if(protectedObject) {
-            if(*(void**)(protectedObject+0x40)==attacker || damage->weapon==54)return TRUE;
+    if (taken)
+    {
+        BYTE* localPlayer = *(BYTE**)((BYTE*)players + 0x1e);
+        BYTE* protectedObject = *(BYTE**)(localPlayer + 0x2de);
+        if (protectedObject)
+        {
+            if (*(void**)(protectedObject + 0x40) == attacker || damage->weapon == 54)
+                return TRUE;
         }
-        player=GameResolveDamagePlayer(attacker);
-        (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendTakeDamage(player,damage->damage,damage->weapon,damage->bodyPart);
-    } else {
-        player=GameResolveDamagePlayer(ped);
-        if(player==0xffff) {
-            DWORD actor=GameResolveDamageActor(ped);
-            if((WORD)actor!=0xffff) {
-                (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendActorDamage((WORD)actor,damage->damage,damage->weapon,damage->bodyPart);
+        player = GameResolveDamagePlayer(attacker);
+        (*(CLocalPlayer**)((BYTE*)players + 0x1e))->SendTakeDamage(player, damage->damage, damage->weapon, damage->bodyPart);
+    }
+    else
+    {
+        player = GameResolveDamagePlayer(ped);
+        if (player == 0xffff)
+        {
+            DWORD actor = GameResolveDamageActor(ped);
+            if ((WORD)actor != 0xffff)
+            {
+                (*(CLocalPlayer**)((BYTE*)players + 0x1e))->SendActorDamage((WORD)actor, damage->damage, damage->weapon, damage->bodyPart);
                 return TRUE;
             }
-        } else {
-            (*(CLocalPlayer**)((BYTE*)players+0x1e))->SendGiveDamage(player,damage->damage,damage->weapon,damage->bodyPart);
-            if(*(DWORD*)((BYTE*)players->GetPlayer(player)+0x1c))return TRUE;
+        }
+        else
+        {
+            (*(CLocalPlayer**)((BYTE*)players + 0x1e))->SendGiveDamage(player, damage->damage, damage->weapon, damage->bodyPart);
+            if (*(DWORD*)((BYTE*)players->GetPlayer(player) + 0x1c))
+                return TRUE;
         }
     }
-    BYTE *settings=*(BYTE**)((BYTE*)g_pNetGame+0x3d5);
-    if(settings[0x22]) {
-        BYTE team=(*(BYTE**)((BYTE*)players+0x1e))[0x130];
-        if(team!=0xff && player!=0xffff) {
-            CPlayerPool *reloaded=*(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame+0x3de)+8);
-            if(((BYTE*)reloaded->GetPlayer(player))[0x19]==team)return TRUE;
+    BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
+    if (settings[0x22])
+    {
+        BYTE team = (*(BYTE**)((BYTE*)players + 0x1e))[0x130];
+        if (team != 0xff && player != 0xffff)
+        {
+            CPlayerPool* reloaded = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
+            if (((BYTE*)reloaded->GetPlayer(player))[0x19] == team)
+                return TRUE;
         }
     }
     return FALSE;
 }
 
-#include "net/netgame.h"
-#include "net/gangzonepool.h"
-#include "net/pickuppool.h"
-#include "net/menupool.h"
 #include "game/util.h"
+#include "net/gangzonepool.h"
+#include "net/menupool.h"
+#include "net/netgame.h"
+#include "net/pickuppool.h"
 
 // samp.dll RVA: 0x0018e7f8
 DWORD g_hookPickupBackend;
@@ -2343,11 +2560,11 @@ CVector g_hookPassengerCameraPosition;
 // samp.dll RVA: 0x0018e580
 DWORD g_hookTrailerBackend;
 // samp.dll RVA: 0x0018e7fc
-CVehiclePool * g_hookTrailerPool;
+CVehiclePool* g_hookTrailerPool;
 // samp.dll RVA: 0x0018e7f0
 WORD g_hookTrailerId;
 // samp.dll RVA: 0x0018f5e0
-CVehicle * g_hookTrailerVehicle;
+CVehicle* g_hookTrailerVehicle;
 // samp.dll RVA: 0x0018f600
 DWORD g_hookObjectSavedStack;
 // samp.dll RVA: 0x0018f5f8
@@ -2355,17 +2572,19 @@ DWORD g_hookObjectBackend;
 // samp.dll RVA: 0x0018f604
 DWORD g_hookObjectResult;
 // samp.dll RVA: 0x0018f5fc
-CObject * g_hookObjectRotationWrapper;
+CObject* g_hookObjectRotationWrapper;
 // samp.dll RVA: 0x0018f614
-CObjectPool * g_hookObjectDrawPool;
+CObjectPool* g_hookObjectDrawPool;
 // samp.dll RVA: 0x0018f618
 DWORD g_hookObjectDrawBackend;
 // samp.dll RVA: 0x0018f578
-CObject * g_hookObjectDrawWrapper;
+CObject* g_hookObjectDrawWrapper;
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a3c60
-__declspec(naked) void GameHook_000a3c60() {
+__declspec(naked) void GameHook_000a3c60()
+{
+    // clang-format off
     __asm {
         pushad
         mov eax, dword ptr [g_pNetGame]
@@ -2380,11 +2599,14 @@ __declspec(naked) void GameHook_000a3c60() {
         popad
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a3c80
-__declspec(naked) void GameHook_000a3c80() {
+__declspec(naked) void GameHook_000a3c80()
+{
+    // clang-format off
     __asm {
         pushad
         mov eax, dword ptr [g_pNetGame]
@@ -2401,11 +2623,14 @@ __declspec(naked) void GameHook_000a3c80() {
     hook_a3c80_a3c9f:
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a3ca0
-__declspec(naked) void GameHook_000a3ca0() {
+__declspec(naked) void GameHook_000a3ca0()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookPickupBackend], esi
         pushad
@@ -2428,11 +2653,14 @@ __declspec(naked) void GameHook_000a3ca0() {
         push 0x4579cb
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a3d90
-__declspec(naked) void GameHook_000a3d90() {
+__declspec(naked) void GameHook_000a3d90()
+{
+    // clang-format off
     __asm {
         sub esp, 0x20
         push esi
@@ -2484,11 +2712,14 @@ __declspec(naked) void GameHook_000a3d90() {
         mov eax, 0x6a0059
         jmp eax
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a4770
-__declspec(naked) void GameHook_000a4770() {
+__declspec(naked) void GameHook_000a4770()
+{
+    // clang-format off
     __asm {
         cmp dword ptr [g_pGame], 0
         je hook_a4770_a47bb
@@ -2514,11 +2745,14 @@ __declspec(naked) void GameHook_000a4770() {
         mov edx, 0x56e090
         jmp edx
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a49d0
-__declspec(naked) void GameHook_000a49d0() {
+__declspec(naked) void GameHook_000a49d0()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookTrailerBackend], ecx
         pushad
@@ -2567,11 +2801,14 @@ __declspec(naked) void GameHook_000a49d0() {
         mov eax, 0x6a4400
         jmp eax
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a4c30
-__declspec(naked) void GameHook_000a4c30() {
+__declspec(naked) void GameHook_000a4c30()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookObjectSavedStack], esp
         mov dword ptr [g_hookObjectBackend], ecx
@@ -2600,11 +2837,14 @@ __declspec(naked) void GameHook_000a4c30() {
         mov eax, dword ptr [g_hookObjectResult]
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a4df0
-__declspec(naked) void GameHook_000a4df0() {
+__declspec(naked) void GameHook_000a4df0()
+{
+    // clang-format off
     __asm {
         mov eax, 0x553aa0
         call eax
@@ -2625,11 +2865,14 @@ __declspec(naked) void GameHook_000a4df0() {
     hook_a4df0_a4e27:
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a4e30
-__declspec(naked) void GameHook_000a4e30() {
+__declspec(naked) void GameHook_000a4e30()
+{
+    // clang-format off
     __asm {
         mov eax, 0x5531e0
         call eax
@@ -2650,11 +2893,14 @@ __declspec(naked) void GameHook_000a4e30() {
     hook_a4e30_a4e67:
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // samp.dll RVA: 0x000a4e70
-__declspec(naked) void GameHook_000a4e70() {
+__declspec(naked) void GameHook_000a4e70()
+{
+    // clang-format off
     __asm {
         push esi
         mov esi, dword ptr [esp + 8]
@@ -2736,20 +2982,21 @@ __declspec(naked) void GameHook_000a4e70() {
         mov edx, 0x5534b9
         jmp edx
     }
+    // clang-format on
 }
 
-#include "net/remoteplayer.h"
 #include "net/localplayer.h"
+#include "net/remoteplayer.h"
 // samp.dll RVA: 0x0018f580
 DWORD g_hookMaterialReturn;
 // samp.dll RVA: 0x0018f574
 DWORD g_hookMaterialBackend;
 // samp.dll RVA: 0x0018f57c
-CPlayerPool * g_hookMaterialPlayerPool;
+CPlayerPool* g_hookMaterialPlayerPool;
 // samp.dll RVA: 0x0018f5a4
 DWORD g_hookSurfingIndex;
 // samp.dll RVA: 0x0018e7f4
-CRemotePlayer * g_hookSurfingRemote;
+CRemotePlayer* g_hookSurfingRemote;
 // samp.dll RVA: 0x0018eac0
 GameEntityCollisionShape g_hookCollisionFirst;
 // samp.dll RVA: 0x0018e56c
@@ -2757,13 +3004,15 @@ GameEntityCollisionShape g_hookCollisionSecond;
 // samp.dll RVA: 0x0018f68c
 BYTE g_hookCollisionResult;
 // samp.dll RVA: 0x0011e508
-const float g_hookCollisionBoundHigh=3000.0f;
+const float g_hookCollisionBoundHigh = 3000.0f;
 // samp.dll RVA: 0x0011ec3c
-const float g_hookCollisionBoundLow=-3000.0f;
+const float g_hookCollisionBoundLow = -3000.0f;
 
 // Raw installed GTA ABI; void() is an installation-address type only.
 // samp.dll RVA: 0x000a42d0
-__declspec(naked) void GameHook_000a42d0() {
+__declspec(naked) void GameHook_000a42d0()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp]
         mov dword ptr [g_hookMaterialReturn], eax
@@ -2847,11 +3096,14 @@ __declspec(naked) void GameHook_000a42d0() {
         popad
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
 // samp.dll RVA: 0x000a46b0
-__declspec(naked) void GameHook_000a46b0() {
+__declspec(naked) void GameHook_000a46b0()
+{
+    // clang-format off
     __asm {
         mov edx, 0x5647f0
         call edx
@@ -2915,11 +3167,14 @@ __declspec(naked) void GameHook_000a46b0() {
         popad
         ret
     }
+    // clang-format on
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
 // samp.dll RVA: 0x000a56b0
-__declspec(naked) void GameHook_000a56b0() {
+__declspec(naked) void GameHook_000a56b0()
+{
+    // clang-format off
     __asm {
         push ebp
         mov ebp, esp
@@ -3038,21 +3293,36 @@ __declspec(naked) void GameHook_000a56b0() {
         pop ebp
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4fa0
-BOOL GameShouldBlockVehicleDamage(void *vehicle,void *attacker,DWORD unused) {
+BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
+{
     (void)unused;
-    if(!g_pNetGame||!g_pGame||!g_pGame->GetPlayerPed()||!g_pGame->GetPlayerPed()->IsInVehicle()||g_pGame->GetPlayerPed()->IsPassenger()||g_pGame->GetPlayerPed()->GetVehicle()!=vehicle)return FALSE;
-    WORD id=GameResolveDamagePlayer(attacker);g_hookDamagePlayerId=id;if(id==0xffff)return FALSE;
-    CNetGame *net=(CNetGame*)g_pNetGame;CPlayerPool *players=net->pools->players;
-    g_hookDamagePlayerPool=players;if(!players)return FALSE;
-    if(!(*(BYTE**)(net->nativeState+0x3d5))[0x22])return FALSE;
-    BYTE team=players->local->nativeState[0x130];if(team==0xff)return FALSE;
-    return net->pools->players->GetPlayer(id)->nativeState[0x19]==team?TRUE:FALSE;
+    if (!g_pNetGame || !g_pGame || !g_pGame->GetPlayerPed() || !g_pGame->GetPlayerPed()->IsInVehicle() || g_pGame->GetPlayerPed()->IsPassenger() ||
+        g_pGame->GetPlayerPed()->GetVehicle() != vehicle)
+        return FALSE;
+    WORD id = GameResolveDamagePlayer(attacker);
+    g_hookDamagePlayerId = id;
+    if (id == 0xffff)
+        return FALSE;
+    CNetGame* net = (CNetGame*)g_pNetGame;
+    CPlayerPool* players = net->pools->players;
+    g_hookDamagePlayerPool = players;
+    if (!players)
+        return FALSE;
+    if (!(*(BYTE**)(net->nativeState + 0x3d5))[0x22])
+        return FALSE;
+    BYTE team = players->local->nativeState[0x130];
+    if (team == 0xff)
+        return FALSE;
+    return net->pools->players->GetPlayer(id)->nativeState[0x19] == team ? TRUE : FALSE;
 }
 // samp.dll RVA: 0x000a5090
-__declspec(naked) void GameHook_000a5090() {
+__declspec(naked) void GameHook_000a5090()
+{
+    // clang-format off
     __asm {
         mov g_hookVehicleDamageReceiver,ecx
         mov eax,[esp]
@@ -3084,23 +3354,33 @@ __declspec(naked) void GameHook_000a5090() {
         mov eax,404ce3h
         jmp eax
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5170
-void __stdcall GameRecordBulletHit(const CVector *origin,const CVector *target,const CVector *collision,void **entity) {
+void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target, const CVector* collision, void** entity)
+{
     (void)target;
-    memset(&g_hookBulletHitData,0,sizeof(g_hookBulletHitData));
-    memcpy(&g_hookBulletHitData.origin,origin,12);memcpy(&g_hookBulletHitData.target,collision,12);
-    if(entity) {
-        void *hit=*entity;g_hookBulletHitEntity=hit;
-        if(hit&&*(CMatrix**)((BYTE*)hit+0x14)) {
-            if(!g_netStatsShotCompMode) {
-                memset(&g_hookBulletInverseMatrix,0,sizeof(g_hookBulletInverseMatrix));
-                memset(&g_hookBulletOrthoMatrix,0,sizeof(g_hookBulletOrthoMatrix));
-                GameOrthoNormalizeRwMatrix(&g_hookBulletOrthoMatrix,*(CMatrix**)((BYTE*)hit+0x14));
-                GameInvertRwMatrix(&g_hookBulletInverseMatrix,&g_hookBulletOrthoMatrix);
-                GameTransformPoint(&g_hookBulletHitData.offset,&g_hookBulletInverseMatrix,collision);
-                hit=g_hookBulletHitEntity;
-            }else {
+    memset(&g_hookBulletHitData, 0, sizeof(g_hookBulletHitData));
+    memcpy(&g_hookBulletHitData.origin, origin, 12);
+    memcpy(&g_hookBulletHitData.target, collision, 12);
+    if (entity)
+    {
+        void* hit = *entity;
+        g_hookBulletHitEntity = hit;
+        if (hit && *(CMatrix**)((BYTE*)hit + 0x14))
+        {
+            if (!g_netStatsShotCompMode)
+            {
+                memset(&g_hookBulletInverseMatrix, 0, sizeof(g_hookBulletInverseMatrix));
+                memset(&g_hookBulletOrthoMatrix, 0, sizeof(g_hookBulletOrthoMatrix));
+                GameOrthoNormalizeRwMatrix(&g_hookBulletOrthoMatrix, *(CMatrix**)((BYTE*)hit + 0x14));
+                GameInvertRwMatrix(&g_hookBulletInverseMatrix, &g_hookBulletOrthoMatrix);
+                GameTransformPoint(&g_hookBulletHitData.offset, &g_hookBulletInverseMatrix, collision);
+                hit = g_hookBulletHitEntity;
+            }
+            else
+            {
+                // clang-format off
                 __asm {
                     mov edx,hit
                     mov esi,collision
@@ -3117,14 +3397,17 @@ void __stdcall GameRecordBulletHit(const CVector *origin,const CVector *target,c
                     fsub dword ptr [eax+38h]
                     fstp dword ptr [g_hookBulletHitData+36]
                 }
+                // clang-format on
             }
-            g_hookBulletHitData.entity=hit;
+            g_hookBulletHitData.entity = hit;
         }
     }
     g_pGame->GetPlayerPed()->SetBulletData(&g_hookBulletHitData);
 }
 // samp.dll RVA: 0x000a5540
-__declspec(naked) void GameHook_000a5540() {
+__declspec(naked) void GameHook_000a5540()
+{
+    // clang-format off
     __asm {
         mov eax,[esp+4]
         mov g_hookShotArguments,eax
@@ -3181,9 +3464,12 @@ __declspec(naked) void GameHook_000a5540() {
         popad
         ret 20h
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5600
-__declspec(naked) void GameHook_000a5600() {
+__declspec(naked) void GameHook_000a5600()
+{
+    // clang-format off
     __asm {
         mov eax,[esp+4]
         mov g_hookShotArguments,eax
@@ -3208,9 +3494,12 @@ __declspec(naked) void GameHook_000a5600() {
         popad
         ret 0ch
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5650
-__declspec(naked) void GameHook_000a5650() {
+__declspec(naked) void GameHook_000a5650()
+{
+    // clang-format off
     __asm {
         push ebp
         mov ebp,esp
@@ -3239,10 +3528,13 @@ __declspec(naked) void GameHook_000a5650() {
         pop ebp
         ret
     }
+    // clang-format on
 }
 // samp.dll RVA: 0x000a5360
-__declspec(naked) DWORD GameProcessShotLineOfSight(const CVector *origin,CVector *target,void *collision,void **entity,
-    DWORD buildings,DWORD vehicles,DWORD peds,DWORD objects,DWORD dummies,DWORD seeThrough,DWORD cameraIgnore,DWORD shootThrough) {
+__declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* collision, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
+                                                   DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
+{
+    // clang-format off
     __asm {
         cmp g_netStatsShotCompMode,2
         push ebx
@@ -3394,46 +3686,55 @@ __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector *origin,CVector
         pop ebx
         ret
     }
+    // clang-format on
 }
 
 // Native leaves the cache published during the hooked raster-destroy call.
 // samp.dll RVA: 0x000a4200
-void GameReleaseCachedRasterBuffer() {
-    DWORD target=g_gameVersion==1?0x7fb020:0x7fb060;
-    if(g_hookCachedBuffer)((DWORD(__cdecl*)(DWORD))target)(g_hookCachedBuffer);
-    g_hookCachedBuffer=0;
+void GameReleaseCachedRasterBuffer()
+{
+    DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
+    if (g_hookCachedBuffer)
+        ((DWORD(__cdecl*)(DWORD))target)(g_hookCachedBuffer);
+    g_hookCachedBuffer = 0;
 }
 
 #include "game/ped_control.h"
 // samp.dll RVA: 0x000a2690
-void GameDisablePedRemoteCall() {
+void GameDisablePedRemoteCall()
+{
     // GTA SA virtual address: five-byte call site; page remains writable.
-    GameUnprotect((void*)0x5e92f4,5);
-    *(DWORD*)0x5e92f4=0x90909090;*(BYTE*)0x5e92f8=0x90;
+    GameUnprotect((void*)0x5e92f4, 5);
+    *(DWORD*)0x5e92f4 = 0x90909090;
+    *(BYTE*)0x5e92f8 = 0x90;
 }
 // samp.dll RVA: 0x000a26b0
-void GameRestorePedRemoteCall() {
+void GameRestorePedRemoteCall()
+{
     // Native restore does not call VirtualProtect or flush the instruction cache.
-    *(DWORD*)0x5e92f4=*(const DWORD*)g_hookPedRemoteRestore;
-    *(BYTE*)0x5e92f8=g_hookPedRemoteRestore[4];
+    *(DWORD*)0x5e92f4 = *(const DWORD*)g_hookPedRemoteRestore;
+    *(BYTE*)0x5e92f8 = g_hookPedRemoteRestore[4];
 }
 
 // samp.dll RVA: 0x000a5d40
-void GameWriteProtectedDword(DWORD address,DWORD value) {
-    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
-    DWORD oldProtection,ignoredProtection;
-    protect((void*)address,4,PAGE_EXECUTE_READWRITE,&oldProtection);
-    *(DWORD*)address=value;
-    protect((void*)address,4,oldProtection,&ignoredProtection);
+void GameWriteProtectedDword(DWORD address, DWORD value)
+{
+    BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
+    DWORD oldProtection, ignoredProtection;
+    protect((void*)address, 4, PAGE_EXECUTE_READWRITE, &oldProtection);
+    *(DWORD*)address = value;
+    protect((void*)address, 4, oldProtection, &ignoredProtection);
 }
 // Opcode byte is passed through without restricting it to CALL/JMP.
 // samp.dll RVA: 0x000a5df0
-void GameWriteProtectedRelativeBranch(DWORD address,DWORD target,BYTE opcode) {
-    BOOL (WINAPI *protect)(LPVOID,SIZE_T,DWORD,PDWORD)=VirtualProtect;
-    DWORD oldProtection,ignoredProtection;
-    protect((void*)address,5,PAGE_EXECUTE_READWRITE,&oldProtection);
-    *(BYTE*)address=opcode;*(DWORD*)(address+1)=target-address-5;
-    protect((void*)address,5,oldProtection,&ignoredProtection);
+void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
+{
+    BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
+    DWORD oldProtection, ignoredProtection;
+    protect((void*)address, 5, PAGE_EXECUTE_READWRITE, &oldProtection);
+    *(BYTE*)address = opcode;
+    *(DWORD*)(address + 1) = target - address - 5;
+    protect((void*)address, 5, oldProtection, &ignoredProtection);
 }
 
 #include "game/patches.h"
@@ -3449,7 +3750,9 @@ DWORD g_hookRecordReturn18E8B8;
 DWORD g_hookRecordEcx18F5C8;
 
 // samp.dll RVA: 0x000a22a0
-__declspec(naked) void GameRestoreHudDraw() {
+__declspec(naked) void GameRestoreHudDraw()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [g_hookHudScaleX]
         mov dword ptr ds:[0x859520], eax
@@ -3457,10 +3760,13 @@ __declspec(naked) void GameRestoreHudDraw() {
         mov dword ptr ds:[0x859524], ecx
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a2630
-__declspec(naked) void GameDisablePedControlCalls() {
+__declspec(naked) void GameDisablePedControlCalls()
+{
+    // clang-format off
     __asm {
         mov eax, 0x90909090
         mov ecx, 0x6884c4
@@ -3472,10 +3778,13 @@ __declspec(naked) void GameDisablePedControlCalls() {
         mov word ptr [eax + 4], dx
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a2650
-__declspec(naked) void GameRestorePedControlCalls() {
+__declspec(naked) void GameRestorePedControlCalls()
+{
+    // clang-format off
     __asm {
         mov ecx, dword ptr [g_hookPedRestoreA]
         mov eax, 0x6884c4
@@ -3489,10 +3798,13 @@ __declspec(naked) void GameRestorePedControlCalls() {
         mov word ptr [eax + 4], dx
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3780
-__declspec(naked) void GameHook_000a3780() {
+__declspec(naked) void GameHook_000a3780()
+{
+    // clang-format off
     __asm {
         pushad
         cmp dword ptr [g_hookGate18F4D0], 0
@@ -3505,10 +3817,13 @@ __declspec(naked) void GameHook_000a3780() {
         mov eax, 0x421446
         jmp eax
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a37e0
-__declspec(naked) void GameHook_000a37e0() {
+__declspec(naked) void GameHook_000a37e0()
+{
+    // clang-format off
     __asm {
         fld dword ptr [g_gameFarClipDistance]
         push esi
@@ -3516,10 +3831,13 @@ __declspec(naked) void GameHook_000a37e0() {
         mov edx, dword ptr [g_gameVersionAddressB]
         jmp edx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3b40
-__declspec(naked) void GameHook_000a3b40() {
+__declspec(naked) void GameHook_000a3b40()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr ds:[0xc17054]
         test eax, eax
@@ -3530,10 +3848,13 @@ __declspec(naked) void GameHook_000a3b40() {
         xor eax, eax
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3d50
-__declspec(naked) void GameHook_000a3d50() {
+__declspec(naked) void GameHook_000a3d50()
+{
+    // clang-format off
     __asm {
         push esi
         test ecx, ecx
@@ -3546,10 +3867,13 @@ __declspec(naked) void GameHook_000a3d50() {
         mov esi, 0x63a04d
         jmp esi
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3d70
-__declspec(naked) void GameHook_000a3d70() {
+__declspec(naked) void GameHook_000a3d70()
+{
+    // clang-format off
     __asm {
         test eax, eax
         je hook_a3d82
@@ -3560,20 +3884,26 @@ __declspec(naked) void GameHook_000a3d70() {
         mov esi, 0x47eaca
         jmp esi
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3e40
-__declspec(naked) void GameHook_000a3e40() {
+__declspec(naked) void GameHook_000a3e40()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp]
         mov dword ptr [g_hookRandomReturn], eax
         call rand
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4240
-__declspec(naked) void *GameAllocateHookBuffer() {
+__declspec(naked) void* GameAllocateHookBuffer()
+{
+    // clang-format off
     __asm {
         cmp dword ptr [g_gameVersion], 1
         push ebx
@@ -3594,10 +3924,13 @@ __declspec(naked) void *GameAllocateHookBuffer() {
         pop ebx
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4c10
-__declspec(naked) void GameHook_000a4c10() {
+__declspec(naked) void GameHook_000a4c10()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
         push eax
@@ -3613,10 +3946,13 @@ __declspec(naked) void GameHook_000a4c10() {
         popad
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4c90
-__declspec(naked) void GameHook_000a4c90() {
+__declspec(naked) void GameHook_000a4c90()
+{
+    // clang-format off
     __asm {
         mov ecx, dword ptr [g_pGame]
         call CGame::IsMenuVisible
@@ -3627,20 +3963,26 @@ __declspec(naked) void GameHook_000a4c90() {
         mov edx, 0x69efc0
         jmp edx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4cb0
-__declspec(naked) void GameHook_000a4cb0() {
+__declspec(naked) void GameHook_000a4cb0()
+{
+    // clang-format off
     __asm {
         pushad
         popad
         mov eax, 0x61e3f0
         jmp eax
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4170
-__declspec(naked) void GameHook_000a4170() {
+__declspec(naked) void GameHook_000a4170()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp]
         mov dword ptr [g_hookRecordReturn18E8B8], eax
@@ -3649,10 +3991,13 @@ __declspec(naked) void GameHook_000a4170() {
         mov eax, 0x4c95c0
         jmp eax
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a48a0
-__declspec(naked) void GameHook_000a48a0() {
+__declspec(naked) void GameHook_000a48a0()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp]
         mov dword ptr [g_hookRenderReturn], eax
@@ -3662,26 +4007,27 @@ __declspec(naked) void GameHook_000a48a0() {
         mov eax, 0x5a2bd0
         jmp eax
     }
+    // clang-format on
 }
 
-#include "game/animation.h"
 #include "chatwindow.h"
+#include "game/animation.h"
+#include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"
-#include "net/localplayer.h"
 #include "net/vehiclepool.h"
 // samp.dll RVA: 0x0011ebe4
-const char g_hookPedSayFormat[]="CPed::Say(%u,%u,%f,%u,%u,%u)";
+const char g_hookPedSayFormat[] = "CPed::Say(%u,%u,%f,%u,%u,%u)";
 // samp.dll RVA: 0x0011ec04
-const char g_hookGamepadAimFormat[]="Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
+const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
 // samp.dll RVA: 0x00151aac
-DWORD g_hookCapture00151AAC=0x4d4417;
+DWORD g_hookCapture00151AAC = 0x4d4417;
 // samp.dll RVA: 0x00151ab0
-DWORD g_hookCapture00151AB0=0x4d3b30;
+DWORD g_hookCapture00151AB0 = 0x4d3b30;
 // samp.dll RVA: 0x00151ab4
-WORD g_hookCapture00151AB4=0xffff;
+WORD g_hookCapture00151AB4 = 0xffff;
 // samp.dll RVA: 0x00151ac4
-WORD g_hookCapture00151AC4=0xffff;
+WORD g_hookCapture00151AC4 = 0xffff;
 // samp.dll RVA: 0x0018e540
 DWORD g_hookCapture0018E540;
 // samp.dll RVA: 0x0018e544
@@ -3770,7 +4116,9 @@ DWORD g_hookCapture0018F65C;
 DWORD g_hookCapture0018F660;
 
 // samp.dll RVA: 0x000a2cd0
-__declspec(naked) void GameHook_000a2cd0() {
+__declspec(naked) void GameHook_000a2cd0()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookPedControlThis], ecx
         mov eax, dword ptr [esp + 4]
@@ -3792,10 +4140,13 @@ __declspec(naked) void GameHook_000a2cd0() {
         mov eax, dword ptr [g_hookCapture0018F37C]
         ret 4
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3b60
-__declspec(naked) void GameHook_000a3b60() {
+__declspec(naked) void GameHook_000a3b60()
+{
+    // clang-format off
     __asm {
         mov edi, dword ptr [esp + 4]
         mov dword ptr [g_hookPickupBackend], edi
@@ -3810,10 +4161,13 @@ __declspec(naked) void GameHook_000a3b60() {
         mov edx, 0x4c3876
         jmp edx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3bc0
-__declspec(naked) void GameHook_000a3bc0() {
+__declspec(naked) void GameHook_000a3bc0()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCapture0018E8C8], eax
@@ -3857,10 +4211,13 @@ __declspec(naked) void GameHook_000a3bc0() {
         mov edx, 0x5effe7
         jmp edx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a3e70
-__declspec(naked) void GameHook_000a3e70() {
+__declspec(naked) void GameHook_000a3e70()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCapture0018EAB0], eax
@@ -3881,10 +4238,13 @@ __declspec(naked) void GameHook_000a3e70() {
         cmp byte ptr [esp + 8], 0xff
         jmp edx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a40a0
-__declspec(naked) void GameHook_000a40a0() {
+__declspec(naked) void GameHook_000a40a0()
+{
+    // clang-format off
     __asm {
         mov edx, dword ptr [esp]
         mov dword ptr [g_hookAnimationReturn], edx
@@ -3913,10 +4273,13 @@ __declspec(naked) void GameHook_000a40a0() {
         push 0x83bd6b
         jmp dword ptr [g_hookCapture00151AAC]
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4110
-__declspec(naked) void GameHook_000a4110() {
+__declspec(naked) void GameHook_000a4110()
+{
+    // clang-format off
     __asm {
         mov edx, dword ptr [esp + 4]
         mov dword ptr [g_hookAnimationClump], edx
@@ -3941,10 +4304,13 @@ __declspec(naked) void GameHook_000a4110() {
         popad
         jmp dword ptr [g_hookCapture00151AB0]
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a43d0
-__declspec(naked) void GameHook_000a43d0() {
+__declspec(naked) void GameHook_000a43d0()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp]
         mov dword ptr [g_hookCapture0018EAA8], eax
@@ -3981,10 +4347,13 @@ __declspec(naked) void GameHook_000a43d0() {
         mov eax, 0x6a6ae0
         jmp eax
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4450
-__declspec(naked) void GameHook_000a4450() {
+__declspec(naked) void GameHook_000a4450()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCapture0018F598], esi
         pushad
@@ -4029,10 +4398,13 @@ __declspec(naked) void GameHook_000a4450() {
         mov eax, 0x6d55c0
         jmp eax
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4aa0
-__declspec(naked) void GameHook_000a4aa0() {
+__declspec(naked) void GameHook_000a4aa0()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCapture0018E540], ecx
         mov eax, dword ptr [esp + 4]
@@ -4062,10 +4434,13 @@ __declspec(naked) void GameHook_000a4aa0() {
         popad
         ret 0x18
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4b20
-__declspec(naked) void GameHook_000a4b20() {
+__declspec(naked) void GameHook_000a4b20()
+{
+    // clang-format off
     __asm {
         mov ebx, dword ptr [esp + 4]
         mov dword ptr [g_hookCapture0018F5E4], ebx
@@ -4091,10 +4466,13 @@ __declspec(naked) void GameHook_000a4b20() {
         mov ebx, 0x742300
         jmp ebx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4b80
-__declspec(naked) void GameHook_000a4b80() {
+__declspec(naked) void GameHook_000a4b80()
+{
+    // clang-format off
     __asm {
         mov ebx, dword ptr [esp + 4]
         mov dword ptr [g_hookCapture0018F5E4], ebx
@@ -4128,10 +4506,13 @@ __declspec(naked) void GameHook_000a4b80() {
         mov ebx, 0x73fb10
         jmp ebx
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a5290
-__declspec(naked) void GameHook_000a5290() {
+__declspec(naked) void GameHook_000a5290()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCapture0018F658], ecx
         pushad
@@ -4152,10 +4533,13 @@ __declspec(naked) void GameHook_000a5290() {
         mov ecx, dword ptr [g_hookCapture0018F658]
         ret
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a52d0
-__declspec(naked) void GameHook_000a52d0() {
+__declspec(naked) void GameHook_000a52d0()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCapture0018F660], ecx
         mov eax, dword ptr [esp + 4]
@@ -4193,6 +4577,7 @@ __declspec(naked) void GameHook_000a52d0() {
         popad
         ret 4
     }
+    // clang-format on
 }
 
 // Additional native control/camera/patch callbacks and their shared aggregates.
@@ -4201,11 +4586,11 @@ CMatrix g_hookAimOffsetMatrix;
 // samp.dll RVA: 0x0018ead8
 CMatrix g_hookMountedMatrix;
 // samp.dll RVA: 0x00151ad4
-DWORD g_hookPatchOverride151AD4[3]={0x0,0x0,0x41700000};
+DWORD g_hookPatchOverride151AD4[3] = {0x0, 0x0, 0x41700000};
 // samp.dll RVA: 0x00151ae0
-BYTE g_hookRestore5543C0[22]={0x8b,0xce,0xe8,0x79,0x1,0xfe,0xff,0x84,0xc0,0x74,0xb5,0x8b,0xce,0xe8,0xe,0xb7,0x1c,0x0,0x84,0xc0,0x75,0xaa};
+BYTE g_hookRestore5543C0[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
 // samp.dll RVA: 0x00151af8
-WORD g_hookRestore5543DC=0x4774;
+WORD g_hookRestore5543DC = 0x4774;
 // samp.dll RVA: 0x0018e548
 DWORD g_hookCapture0018E548;
 // samp.dll RVA: 0x0018e54c
@@ -4250,7 +4635,9 @@ DWORD g_hookCapture0018F60C;
 DWORD g_hookCapture0018F610;
 
 // samp.dll RVA: 0x000a2d30
-__declspec(naked) void GameHook_000a2d30() {
+__declspec(naked) void GameHook_000a2d30()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCapture0018F48C], ecx
         mov eax, dword ptr [esp + 4]
@@ -4296,10 +4683,13 @@ __declspec(naked) void GameHook_000a2d30() {
     context_a2ddd:
         ret 0xc
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a2de0
-__declspec(naked) void GameHook_000a2de0() {
+__declspec(naked) void GameHook_000a2de0()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCameraPed], eax
@@ -4337,10 +4727,13 @@ __declspec(naked) void GameHook_000a2de0() {
     context_a2e63:
         ret 4
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4510
-__declspec(naked) void GameHook_000a4510() {
+__declspec(naked) void GameHook_000a4510()
+{
+    // clang-format off
     __asm {
         mov dword ptr [g_hookCapture0018E80C], ecx
         mov eax, dword ptr [esp]
@@ -4424,10 +4817,13 @@ __declspec(naked) void GameHook_000a4510() {
         popad
         ret 0x10
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4680
-__declspec(naked) void GameHook_000a4680() {
+__declspec(naked) void GameHook_000a4680()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCapture0018EAAC], eax
@@ -4440,10 +4836,13 @@ __declspec(naked) void GameHook_000a4680() {
         mov eax, 0x40c6b0
         jmp eax
     }
+    // clang-format on
 }
 
 // samp.dll RVA: 0x000a4cc0
-__declspec(naked) void GameHook_000a4cc0() {
+__declspec(naked) void GameHook_000a4cc0()
+{
+    // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
         mov edx, dword ptr [g_hookCapture0018F608]
@@ -4519,4 +4918,5 @@ __declspec(naked) void GameHook_000a4cc0() {
         mov eax, dword ptr [g_hookCapture0018F610]
         ret
     }
+    // clang-format on
 }

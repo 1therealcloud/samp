@@ -4,30 +4,87 @@
 #include <string.h>
 // Native record allocation is malloc; release calls operator delete.
 // samp.dll RVA: 0x001569a0
-BYTE g_gangZoneFlashPhase=0;
+BYTE g_gangZoneFlashPhase = 0;
 // samp.dll RVA: 0x001569a4
-DWORD g_gangZoneFlashTick=0;
+DWORD g_gangZoneFlashTick = 0;
 // samp.dll RVA: 0x00002150
-CGangZonePool::CGangZonePool(){for(int i=0;i<1024;++i){zones[i]=0;active[i]=0;}}
+CGangZonePool::CGangZonePool()
+{
+    for (int i = 0; i < 1024; ++i)
+    {
+        zones[i] = 0;
+        active[i] = 0;
+    }
+}
 // samp.dll RVA: 0x00002180
-CGangZonePool::~CGangZonePool(){for(int i=0;i<1024;++i)if(zones[i]){delete zones[i];zones[i]=0;}}
+CGangZonePool::~CGangZonePool()
+{
+    for (int i = 0; i < 1024; ++i)
+        if (zones[i])
+        {
+            delete zones[i];
+            zones[i] = 0;
+        }
+}
 // samp.dll RVA: 0x000021b0
-void CGangZonePool::Create(WORD id,float minX,float minY,float maxX,float maxY,DWORD color){
-    if(zones[id]){delete zones[id];zones[id]=0;active[id]=0;}
-    GangZone *zone=(GangZone*)malloc(24);if(!zone)return;
-    memcpy(zone->rectangle,&minX,4);memcpy(zone->rectangle+1,&maxY,4);
-    memcpy(zone->rectangle+2,&maxX,4);memcpy(zone->rectangle+3,&minY,4);
-    zone->color=color;zone->flashColor=color;zones[id]=zone;active[id]=1;
+void CGangZonePool::Create(WORD id, float minX, float minY, float maxX, float maxY, DWORD color)
+{
+    if (zones[id])
+    {
+        delete zones[id];
+        zones[id] = 0;
+        active[id] = 0;
+    }
+    GangZone* zone = (GangZone*)malloc(24);
+    if (!zone)
+        return;
+    memcpy(zone->rectangle, &minX, 4);
+    memcpy(zone->rectangle + 1, &maxY, 4);
+    memcpy(zone->rectangle + 2, &maxX, 4);
+    memcpy(zone->rectangle + 3, &minY, 4);
+    zone->color = color;
+    zone->flashColor = color;
+    zones[id] = zone;
+    active[id] = 1;
 }
 // samp.dll RVA: 0x00002230
-void CGangZonePool::StartFlashing(WORD id,DWORD color){if(zones[id])zones[id]->flashColor=color;}
+void CGangZonePool::StartFlashing(WORD id, DWORD color)
+{
+    if (zones[id])
+        zones[id]->flashColor = color;
+}
 // samp.dll RVA: 0x00002250
-void CGangZonePool::StopFlashing(WORD id){if(zones[id])zones[id]->flashColor=zones[id]->color;}
+void CGangZonePool::StopFlashing(WORD id)
+{
+    if (zones[id])
+        zones[id]->flashColor = zones[id]->color;
+}
 // samp.dll RVA: 0x00002270
-void CGangZonePool::Delete(WORD id){if(zones[id]){delete zones[id];zones[id]=0;active[id]=0;}}
+void CGangZonePool::Delete(WORD id)
+{
+    if (zones[id])
+    {
+        delete zones[id];
+        zones[id] = 0;
+        active[id] = 0;
+    }
+}
 // samp.dll RVA: 0x000022a0
-void CGangZonePool::Draw(){
-    DWORD now=GetTickCount();BYTE phase=g_gangZoneFlashPhase;
-    if((LONG)(now-g_gangZoneFlashTick)>=500){phase=(BYTE)~phase;g_gangZoneFlashPhase=phase;g_gangZoneFlashTick=now;}
-    for(int i=0;i<1024;++i)if(active[i]){GangZone *zone=zones[i];g_pGame->DrawGangZone(zone->rectangle,phase?zone->flashColor:zone->color);phase=g_gangZoneFlashPhase;}
+void CGangZonePool::Draw()
+{
+    DWORD now = GetTickCount();
+    BYTE phase = g_gangZoneFlashPhase;
+    if ((LONG)(now - g_gangZoneFlashTick) >= 500)
+    {
+        phase = (BYTE)~phase;
+        g_gangZoneFlashPhase = phase;
+        g_gangZoneFlashTick = now;
+    }
+    for (int i = 0; i < 1024; ++i)
+        if (active[i])
+        {
+            GangZone* zone = zones[i];
+            g_pGame->DrawGangZone(zone->rectangle, phase ? zone->flashColor : zone->color);
+            phase = g_gangZoneFlashPhase;
+        }
 }

@@ -3,54 +3,54 @@
 class RakClientInterface;
 struct RPCParameters;
 // samp.dll RVA: 0x00012310
-void RegisterRPCs(RakClientInterface *client);
+void RegisterRPCs(RakClientInterface* client);
 // samp.dll RVA: 0x00011d80
-void ScrCustomModelRecord(RPCParameters *parameters);
+void ScrCustomModelRecord(RPCParameters* parameters);
 // samp.dll RVA: 0x0000ea40
-void ScrCustomModelsReset(RPCParameters *parameters);
+void ScrCustomModelsReset(RPCParameters* parameters);
 // samp.dll RVA: 0x0000ead0
-void ScrCustomModelsComplete(RPCParameters *parameters);
+void ScrCustomModelsComplete(RPCParameters* parameters);
 // samp.dll RVA: 0x00010530
-void ScrInitGame(RPCParameters *parameters);
+void ScrInitGame(RPCParameters* parameters);
 // Broader role of the fourth initialization DWORD is not established.
 // samp.dll RVA: 0x0013c0b4
 extern unsigned long g_rpcInitValue13C0B4;
 // samp.dll RVA: 0x001180ec
 extern const char g_rpcConnectedFormat[];
 // samp.dll RVA: 0x0000e4e0
-void ScrGamemodeRestart(RPCParameters *parameters);
+void ScrGamemodeRestart(RPCParameters* parameters);
 // samp.dll RVA: 0x000109d0
-void ScrWorldPlayerAdd(RPCParameters *parameters);
+void ScrWorldPlayerAdd(RPCParameters* parameters);
 // samp.dll RVA: 0x00118108
 extern const char g_rpcCouldNotSpawnPlayer[];
 // samp.dll RVA: 0x0000e500
-void ScrWorldVehicleAdd(RPCParameters *parameters);
+void ScrWorldVehicleAdd(RPCParameters* parameters);
 // samp.dll RVA: 0x00010dc0
-void ScrWorldVehicleRemove(RPCParameters *parameters);
+void ScrWorldVehicleRemove(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f150
-void ScmEvent(RPCParameters *parameters);
+void ScmEvent(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e910
-unsigned char ClientCheckChecksum(const void *data,unsigned short length);
+unsigned char ClientCheckChecksum(const void* data, unsigned short length);
 // samp.dll RVA: 0x00011860
-void SendClientCheckResponse(unsigned char type,unsigned long argument,unsigned char result);
+void SendClientCheckResponse(unsigned char type, unsigned long argument, unsigned char result);
 // samp.dll RVA: 0x00011930
-void ClientCheck(RPCParameters *parameters);
+void ClientCheck(RPCParameters* parameters);
 // samp.dll RVA: 0x0000fea0
-void RequestClass(RPCParameters *parameters);
+void RequestClass(RPCParameters* parameters);
 // samp.dll RVA: 0x0000ff70
-void RequestSpawn(RPCParameters *parameters);
+void RequestSpawn(RPCParameters* parameters);
 // samp.dll RVA: 0x00010410
-void ConnectionRejected(RPCParameters *parameters);
+void ConnectionRejected(RPCParameters* parameters);
 // samp.dll RVA: 0x000114a0
-void EnterVehicle(RPCParameters *parameters);
+void EnterVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x000115c0
-void ExitVehicle(RPCParameters *parameters);
+void ExitVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x000121c0
-void Chat(RPCParameters *parameters);
+void Chat(RPCParameters* parameters);
 // samp.dll RVA: 0x00010c20
-void ScrWorldPlayerDeath(RPCParameters *parameters);
+void ScrWorldPlayerDeath(RPCParameters* parameters);
 // samp.dll RVA: 0x00010ce0
-void ScrWorldPlayerRemove(RPCParameters *parameters);
+void ScrWorldPlayerRemove(RPCParameters* parameters);
 // samp.dll RVA: 0x001180c4
 extern const char g_rpcRejectedVersion[];
 // samp.dll RVA: 0x00118098
@@ -66,71 +66,71 @@ extern const char g_rpcRejectedMod[];
 // samp.dll RVA: 0x00117fac
 extern const char g_rpcRejectedSlot[];
 // samp.dll RVA: 0x000102b0
-void UpdateScoresPingsIps(RPCParameters *parameters);
+void UpdateScoresPingsIps(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e740
-void EnterEditObject(RPCParameters *parameters);
+void EnterEditObject(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e800
-void ScrCancelEdit(RPCParameters *parameters);
+void ScrCancelEdit(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e8b0
-void ScrUpdateCameraTarget(RPCParameters *parameters);
+void ScrUpdateCameraTarget(RPCParameters* parameters);
 // samp.dll RVA: 0x000116b0
-void EditAttachedObject(RPCParameters *parameters);
+void EditAttachedObject(RPCParameters* parameters);
 // samp.dll RVA: 0x00011770
-void EditObject(RPCParameters *parameters);
+void EditObject(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e940
-void ScrCreateActor(RPCParameters *parameters);
+void ScrCreateActor(RPCParameters* parameters);
 // samp.dll RVA: 0x00011cd0
-void ScrDestroyActor(RPCParameters *parameters);
+void ScrDestroyActor(RPCParameters* parameters);
 // samp.dll RVA: 0x00011090
-void DamageVehicle(RPCParameters *parameters);
+void DamageVehicle(RPCParameters* parameters);
 // samp.dll RVA: 0x000111c0
-void ScrSetVehicleParamsEx(RPCParameters *parameters);
+void ScrSetVehicleParamsEx(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f4b0
-void ScrSetPlayerSkillLevel(RPCParameters *parameters);
+void ScrSetPlayerSkillLevel(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f5e0
-void ScrCreate3DTextLabel(RPCParameters *parameters);
+void ScrCreate3DTextLabel(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f790
-void ScrDestroy3DTextLabel(RPCParameters *parameters);
+void ScrDestroy3DTextLabel(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f850
-void ScrChatBubble(RPCParameters *parameters);
+void ScrChatBubble(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f9c0
-void ScrShowDialog(RPCParameters *parameters);
+void ScrShowDialog(RPCParameters* parameters);
 // samp.dll RVA: 0x0000ee60
-void ScrClientMessage(RPCParameters *parameters);
+void ScrClientMessage(RPCParameters* parameters);
 // samp.dll RVA: 0x0000fbb0
-void ScrServerJoin(RPCParameters *parameters);
+void ScrServerJoin(RPCParameters* parameters);
 // samp.dll RVA: 0x0000fd40
-void ScrServerQuit(RPCParameters *parameters);
+void ScrServerQuit(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e450
-void SrvNetStats(RPCParameters *parameters);
+void SrvNetStats(RPCParameters* parameters);
 // samp.dll RVA: 0x00010040
-void ScrSetCheckpoint(RPCParameters *parameters);
+void ScrSetCheckpoint(RPCParameters* parameters);
 // samp.dll RVA: 0x00010150
-void ScrSetRaceCheckpoint(RPCParameters *parameters);
+void ScrSetRaceCheckpoint(RPCParameters* parameters);
 // samp.dll RVA: 0x0000ef50
-void ScrCreatePickup(RPCParameters *parameters);
+void ScrCreatePickup(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f010
-void ScrDestroyPickup(RPCParameters *parameters);
+void ScrDestroyPickup(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f0b0
-void ScrDestroyWeaponPickup(RPCParameters *parameters);
+void ScrDestroyWeaponPickup(RPCParameters* parameters);
 // samp.dll RVA: 0x0000edc0
-void ScrSetWorldTime(RPCParameters *parameters);
+void ScrSetWorldTime(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f240
-void ScrSetWeather(RPCParameters *parameters);
+void ScrSetWeather(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f2f0
-void ScrSetPlayerTime(RPCParameters *parameters);
+void ScrSetPlayerTime(RPCParameters* parameters);
 // samp.dll RVA: 0x0000f3d0
-void ScrToggleClock(RPCParameters *parameters);
+void ScrToggleClock(RPCParameters* parameters);
 // samp.dll RVA: 0x0000fe00
-void ScrSetIngameTimer(RPCParameters *parameters);
+void ScrSetIngameTimer(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e430
-void ScrDisableCheckpoint(RPCParameters *parameters);
+void ScrDisableCheckpoint(RPCParameters* parameters);
 // samp.dll RVA: 0x0000e440
-void ScrDisableRaceCheckpoint(RPCParameters *parameters);
+void ScrDisableRaceCheckpoint(RPCParameters* parameters);
 // samp.dll RVA: 0x0000eb60
-void UnRegisterRPCs(RakClientInterface *client);
+void UnRegisterRPCs(RakClientInterface* client);
 // samp.dll RVA: 0x00011f80
-void ScrCustomModelDownload(RPCParameters *parameters);
+void ScrCustomModelDownload(RPCParameters* parameters);
 // samp.dll RVA: 0x00117fa8
 extern const int g_rpcScrSetIngameTimer;
 // samp.dll RVA: 0x00117fa4
