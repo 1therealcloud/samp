@@ -2903,6 +2903,7 @@ int CDXUTSlider::ValueFromPos(int x)
 }
 
 //--------------------------------------------------------------------------------------
+// 0x00087e80
 bool CDXUTSlider::HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (!m_bEnabled || !m_bVisible)

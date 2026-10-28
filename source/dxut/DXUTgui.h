@@ -1089,10 +1089,12 @@ public:
     CDXUTSlider(CDXUTDialog* pDialog = NULL);
 
     virtual BOOL ContainsPoint(POINT pt);
+    // 0x0008e730
     virtual bool CanHaveFocus()
     {
         return (m_bVisible && m_bEnabled);
     }
+    // 0x00087e80
     virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
 
