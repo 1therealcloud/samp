@@ -2,24 +2,24 @@
 #include "game/game.h"
 #include "game/scripting.h"
 #include <string.h>
-// samp.dll RVA: 0x0009bce0
+// 0x0009bce0
 CEntity::CEntity()
 {
     memset(unknown04, 0, sizeof(unknown04));
 }
-// samp.dll RVA: 0x0009bd00
+// 0x0009bd00
 CEntity::~CEntity() {}
-// samp.dll RVA: 0x000b3720
+// 0x000b3720
 void __stdcall GameWorldAdd(void* entity)
 {
     ((void(__cdecl*)(void*))0x563220)(entity);
 }
-// samp.dll RVA: 0x000b3740
+// 0x000b3740
 void __stdcall GameWorldRemove(void* entity)
 {
     ((void(__cdecl*)(void*))0x563280)(entity);
 }
-// samp.dll RVA: 0x0009e950
+// 0x0009e950
 void CEntity::GetMatrix(CMatrix* matrix)
 {
     if (m_pGameEntity && *(void**)((BYTE*)m_pGameEntity + 0x14))
@@ -29,7 +29,7 @@ void CEntity::GetMatrix(CMatrix* matrix)
             memcpy((BYTE*)matrix + i * 16, source + i * 16, 12);
     }
 }
-// samp.dll RVA: 0x0009ee80
+// 0x0009ee80
 void CEntity::Teleport(CVector position)
 {
     void* entity = m_pGameEntity;
@@ -54,7 +54,7 @@ void CEntity::Teleport(CVector position)
         }
     }
 }
-// samp.dll RVA: 0x0009f140
+// 0x0009f140
 void CEntity::Add()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && !*(DWORD*)((BYTE*)m_pGameEntity + 0xb4))
@@ -66,20 +66,20 @@ void CEntity::Add()
         Teleport(matrix.position);
     }
 }
-// samp.dll RVA: 0x0009f240
+// 0x0009f240
 void CEntity::Remove()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0xb4))
         GameWorldRemove(m_pGameEntity);
 }
 
-// samp.dll RVA: 0x001181b8
+// 0x001181b8
 extern const float g_entityRadiansToDegrees = 57.2957763671875f;
-// samp.dll RVA: 0x0011c660
+// 0x0011c660
 extern const float g_entityEulerSign = -1.0f;
-// samp.dll RVA: 0x0011b31c
+// 0x0011b31c
 extern const float g_entityBoundaryLift = 0.03999999910593033f;
-// samp.dll RVA: 0x0009ea00
+// 0x0009ea00
 void CEntity::SetMatrix(CMatrix matrix)
 {
     if (m_pGameEntity && *(void**)((BYTE*)m_pGameEntity + 0x14))
@@ -92,34 +92,34 @@ void CEntity::SetMatrix(CMatrix matrix)
             }
     }
 }
-// samp.dll RVA: 0x0009eb20
+// 0x0009eb20
 void CEntity::GetSpeed(CVector* speed)
 {
     memcpy(speed, (BYTE*)m_pGameEntity + 0x44, 12);
 }
-// samp.dll RVA: 0x0009eb50
+// 0x0009eb50
 void CEntity::SetSpeed(CVector speed)
 {
     memcpy((BYTE*)m_pGameEntity + 0x44, &speed, 12);
 }
-// samp.dll RVA: 0x0009ec70
+// 0x0009ec70
 void CEntity::GetTurnSpeed(CVector* speed)
 {
     memcpy(speed, (BYTE*)m_pGameEntity + 0x50, 12);
 }
-// samp.dll RVA: 0x0009eca0
+// 0x0009eca0
 void CEntity::SetTurnSpeed(CVector speed)
 {
     memcpy((BYTE*)m_pGameEntity + 0x50, &speed, 12);
 }
-// samp.dll RVA: 0x0009ecd0
+// 0x0009ecd0
 void CEntity::ApplyTurnSpeed()
 {
     if (m_pGameEntity)
         ((void(__fastcall*)(void*, void*))0x542e20)(m_pGameEntity, 0);
 }
 // GTA returns raw float bits in EAX, not an ST0 float result.
-// samp.dll RVA: 0x0009ecf0
+// 0x0009ecf0
 float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
 {
     if (!m_pGameEntity)
@@ -129,23 +129,23 @@ float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
     memcpy(&distance, &bits, 4);
     return distance;
 }
-// samp.dll RVA: 0x0009ed30
+// 0x0009ed30
 void CEntity::GetBoundCentre(CVector* centre)
 {
     if (m_pGameEntity)
         ((void(__fastcall*)(void*, void*, CVector*))0x534250)(m_pGameEntity, 0, centre);
 }
-// samp.dll RVA: 0x0009ee70
+// 0x0009ee70
 int CEntity::GetModelIndex()
 {
     return (int)*(short*)((BYTE*)m_pGameEntity + 0x22);
 }
-// samp.dll RVA: 0x0009f210
+// 0x0009f210
 BOOL CEntity::DoesExist()
 {
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0xb4) ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x0009f260
+// 0x0009f260
 BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
     if (!m_pGameEntity)
@@ -193,7 +193,7 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
     SetMatrix(matrix);
     return TRUE;
 }
-// samp.dll RVA: 0x0009f400
+// 0x0009f400
 BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
     if (!m_pGameEntity)
@@ -202,12 +202,12 @@ BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float 
     GetMatrix(&matrix);
     return matrix.position.x > positiveX || matrix.position.x < negativeX || matrix.position.y > positiveY || matrix.position.y < negativeY ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x0009f4a0
+// 0x0009f4a0
 bool CEntity::GetCollisionFlag()
 {
     return !m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40 || (*(DWORD*)((BYTE*)m_pGameEntity + 0x1c) & 1) != 0;
 }
-// samp.dll RVA: 0x0009f470
+// 0x0009f470
 void CEntity::SetCollisionFlag(BOOL enabled)
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
@@ -219,7 +219,7 @@ void CEntity::SetCollisionFlag(BOOL enabled)
             flags &= ~1u;
     }
 }
-// samp.dll RVA: 0x0009f4c0
+// 0x0009f4c0
 void CEntity::SetCollisionProcessed(BOOL processed)
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
@@ -231,7 +231,7 @@ void CEntity::SetCollisionProcessed(BOOL processed)
             flags |= 0x80000002;
     }
 }
-// samp.dll RVA: 0x0009f730
+// 0x0009f730
 void CEntity::GetEulerInverted(float* x, float* y, float* z)
 {
     if (m_pGameEntity)
@@ -261,23 +261,23 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
         // clang-format on
     }
 }
-// samp.dll RVA: 0x0009f8a0
+// 0x0009f8a0
 void* CEntity::GetRwObject()
 {
     return m_pGameEntity ? *(void**)((BYTE*)m_pGameEntity + 0x18) : 0;
 }
-// samp.dll RVA: 0x0009f9f0
+// 0x0009f9f0
 void CEntity::DeleteRwObject()
 {
     if (m_pGameEntity && *(void**)((BYTE*)m_pGameEntity + 0x18))
         ((void(__fastcall*)(void*, void*))(*(DWORD**)m_pGameEntity)[8])(m_pGameEntity, 0);
 }
-// samp.dll RVA: 0x0009fb20
+// 0x0009fb20
 bool CEntity::IsIgnored()
 {
     return m_pGameEntity && m_pGameEntity == *(void**)0xb7cd68;
 }
-// samp.dll RVA: 0x0009fc20
+// 0x0009fc20
 BOOL CEntity::IsStationary()
 {
     if (!DoesExist())
@@ -286,7 +286,7 @@ BOOL CEntity::IsStationary()
     GetSpeed(&speed);
     return speed.x == 0.0f && speed.y == 0.0f && speed.z == 0.0f ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x0009eac0
+// 0x0009eac0
 void CEntity::UpdateRwFrame()
 {
     void* entity = m_pGameEntity;
@@ -303,7 +303,7 @@ void CEntity::UpdateRwFrame()
 }
 
 #include <math.h>
-// samp.dll RVA: 0x0009fb40
+// 0x0009fb40
 void CEntity::ApplyMatrix(CMatrix matrix)
 {
     BYTE* entity = (BYTE*)m_pGameEntity;
@@ -316,7 +316,7 @@ void CEntity::ApplyMatrix(CMatrix matrix)
         ((void(__fastcall*)(void*, void*))vtable[2])(entity, 0);
     }
 }
-// samp.dll RVA: 0x0009f0f0
+// 0x0009f0f0
 float CEntity::GetDistanceToPoint(float x, float y, float z)
 {
     CMatrix matrix;
@@ -347,7 +347,7 @@ float CEntity::GetDistanceToPoint(float x, float y, float z)
     // clang-format on
 }
 
-// samp.dll RVA: 0x0009f5c0
+// 0x0009f5c0
 void CEntity::ClearBackendFlag8()
 {
     if (m_pGameEntity)
@@ -357,7 +357,7 @@ void CEntity::ClearBackendFlag8()
 #include "chatwindow.h"
 #include "game/game.h"
 #include "main.h"
-// samp.dll RVA: 0x0009ed90
+// 0x0009ed90
 BOOL CEntity::SetModelIndex(int model)
 {
     if (!m_pGameEntity)
@@ -389,7 +389,7 @@ BOOL CEntity::SetModelIndex(int model)
 
 // GTA SA virtual address: 0x00403EC0; ECX is the opaque GTA entity.
 // Native forwards the complete argument word; backend reads its low model WORD.
-// samp.dll RVA: 0x000b3990
+// 0x000b3990
 void GameChangeBackendEntityModel(void* entity, DWORD model)
 {
     // clang-format off
@@ -402,7 +402,7 @@ void GameChangeBackendEntityModel(void* entity, DWORD model)
     // clang-format on
 }
 // Caller context/semantic object type is not established; raw first DWORD only.
-// samp.dll RVA: 0x000b4120
+// 0x000b4120
 DWORD __stdcall GameReadBackendDword(const void* backend)
 {
     return *(const DWORD*)backend;
@@ -410,11 +410,11 @@ DWORD __stdcall GameReadBackendDword(const void* backend)
 
 #include "game/camera.h"
 
-// samp.dll RVA: 0x0011e644
+// 0x0011e644
 const float g_entityUnavailableDistance = 100000.0f;
 
 // Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
-// samp.dll RVA: 0x0009ef00
+// 0x0009ef00
 __declspec(naked) float CEntity::GetDistanceToLocalPlayer()
 {
     // clang-format off
@@ -497,7 +497,7 @@ __declspec(naked) float CEntity::GetDistanceToLocalPlayer()
 }
 
 // Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
-// samp.dll RVA: 0x0009efd0
+// 0x0009efd0
 __declspec(naked) float CEntity::GetDistanceToCamera()
 {
     // clang-format off
@@ -540,7 +540,7 @@ __declspec(naked) float CEntity::GetDistanceToCamera()
 }
 
 // Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
-// samp.dll RVA: 0x0009f030
+// 0x0009f030
 __declspec(naked) float CEntity::GetDistanceToLocalPlayerNoHeight()
 {
     // clang-format off
@@ -617,7 +617,7 @@ __declspec(naked) float CEntity::GetDistanceToLocalPlayerNoHeight()
 }
 
 // Descriptive name: native only establishes setting backend +1C bit 31.
-// samp.dll RVA: 0x0009f560
+// 0x0009f560
 void CEntity::SetBackendHighFlag()
 {
     DWORD* backend = (DWORD*)m_pGameEntity;
@@ -625,7 +625,7 @@ void CEntity::SetBackendHighFlag()
         backend[7] |= 0x80000000;
 }
 // GTA vtable slot 10 (+28), ProcessControl. Native does not check backend.
-// samp.dll RVA: 0x0009fa20
+// 0x0009fa20
 void CEntity::ProcessControl()
 {
     void* backend = m_pGameEntity;
@@ -640,7 +640,7 @@ void CEntity::ProcessControl()
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
-// samp.dll RVA: 0x0009ed60
+// 0x0009ed60
 void CEntity::Native009ed60(DWORD argument)
 {
     void* entity = m_pGameEntity;
@@ -659,7 +659,7 @@ void CEntity::Native009ed60(DWORD argument)
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
-// samp.dll RVA: 0x0009f5d0
+// 0x0009f5d0
 void CEntity::Native009f5d0(DWORD argument)
 {
     BYTE* entity = (BYTE*)m_pGameEntity;
@@ -672,7 +672,7 @@ void CEntity::Native009f5d0(DWORD argument)
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
-// samp.dll RVA: 0x0009f810
+// 0x0009f810
 void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6)
 {
     void* entity = m_pGameEntity;
@@ -696,7 +696,7 @@ void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DW
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
-// samp.dll RVA: 0x0009f840
+// 0x0009f840
 void CEntity::Native009f840(DWORD argument)
 {
     BYTE* entity = (BYTE*)m_pGameEntity;
@@ -717,7 +717,7 @@ void CEntity::Native009f840(DWORD argument)
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
-// samp.dll RVA: 0x0009f960
+// 0x0009f960
 void CEntity::Native009f960()
 {
     BYTE* entity = (BYTE*)m_pGameEntity;
@@ -747,7 +747,7 @@ void CEntity::Native009f960()
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
-// samp.dll RVA: 0x0009fba0
+// 0x0009fba0
 __declspec(naked) void CEntity::ApplyLinearSpeed()
 {
     // clang-format off
@@ -795,22 +795,22 @@ __declspec(naked) void CEntity::ApplyLinearSpeed()
 
 #include "game/util.h"
 
-// samp.dll RVA: 0x0018de60
+// 0x0018de60
 GameEntityCollisionShape g_entityCollisionShapeA;
-// samp.dll RVA: 0x0018de4c
+// 0x0018de4c
 GameEntityCollisionShape g_entityCollisionShapeB;
-// samp.dll RVA: 0x0018de7c
+// 0x0018de7c
 void* g_entityCollisionEntity;
-// samp.dll RVA: 0x00155404
+// 0x00155404
 GameEntityCollisionBackend g_entityCollisionBackend = (GameEntityCollisionBackend)0x419f00; // GTA SA virtual address.
-// samp.dll RVA: 0x00155408
+// 0x00155408
 void** g_entityCollisionContextSlot = (void**)0x9655cc; // GTA SA virtual address.
-// samp.dll RVA: 0x002abe5c
+// 0x002abe5c
 void* g_entityCollisionSavedContext;
-// samp.dll RVA: 0x002abe60
+// 0x002abe60
 BYTE g_entityCollisionResult;
 
-// samp.dll RVA: 0x0009fa40
+// 0x0009fa40
 __declspec(naked) bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode)
 {
     // clang-format off
@@ -881,7 +881,7 @@ __declspec(naked) bool CEntity::TestCollisionShapes(const GameEntityCollisionSha
     // clang-format on
 }
 
-// samp.dll RVA: 0x000b5ea0
+// 0x000b5ea0
 __declspec(naked) float __cdecl GameGetModelCollisionRadius(int model)
 {
     // clang-format off
@@ -917,7 +917,7 @@ __declspec(naked) float __cdecl GameGetModelCollisionRadius(int model)
     // clang-format on
 }
 
-// samp.dll RVA: 0x000b6070
+// 0x000b6070
 __declspec(naked) bool __stdcall GameEntityCollisionQueryDirect(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity)
 {
     // clang-format off
@@ -935,7 +935,7 @@ __declspec(naked) bool __stdcall GameEntityCollisionQueryDirect(const GameEntity
     // clang-format on
 }
 
-// samp.dll RVA: 0x000b6090
+// 0x000b6090
 __declspec(naked) bool __stdcall GameEntityCollisionQueryScoped(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity)
 {
     // clang-format off
@@ -963,7 +963,7 @@ __declspec(naked) bool __stdcall GameEntityCollisionQueryScoped(const GameEntity
 }
 
 // GTA SA virtual address: 0x00411E70; exactly two cdecl arguments.
-// samp.dll RVA: 0x000b60e0
+// 0x000b60e0
 BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollisionSphere* second)
 {
     return ((BOOL(__cdecl*)(const GameCollisionSphere*, const GameCollisionSphere*))0x411e70)(first, second);
@@ -971,7 +971,7 @@ BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollis
 
 // GTA SA virtual address: 0x00410CE0; exact query semantics remain unresolved.
 // Native forwards the input pointer plus a literal zero and returns raw AL.
-// samp.dll RVA: 0x000b43f0
+// 0x000b43f0
 BYTE GameQueryBackend410ce0(const void* data)
 {
     return ((BYTE(__cdecl*)(const void*, DWORD))0x410ce0)(data, 0);
@@ -979,7 +979,7 @@ BYTE GameQueryBackend410ce0(const void* data)
 
 // GTA SA virtual address: 0x0056BA00. Native is a transparent tail bridge:
 // preserve caller argument copies and the backend's raw AL return.
-// samp.dll RVA: 0x000b3710
+// 0x000b3710
 __declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, void* colPoint, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
                                                  DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
 {
@@ -991,7 +991,7 @@ __declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector* origin, const CV
     // clang-format on
 }
 
-// samp.dll RVA: 0x0009f500
+// 0x0009f500
 void CEntity::SetBackendFlag40000(BOOL enabled)
 {
     if (!m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40)
@@ -1004,13 +1004,13 @@ void CEntity::SetBackendFlag40000(BOOL enabled)
         Add();
     }
 }
-// samp.dll RVA: 0x0009f540
+// 0x0009f540
 void CEntity::SetBackendFlags80400()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         *(DWORD*)((BYTE*)m_pGameEntity + 0x1c) |= 0x80400;
 }
-// samp.dll RVA: 0x0009f580
+// 0x0009f580
 void CEntity::SetBackendFlag2000(BOOL clear)
 {
     void* backend = m_pGameEntity;
@@ -1022,7 +1022,7 @@ void CEntity::SetBackendFlag2000(BOOL clear)
     else
         flags &= ~0x2000u;
 }
-// samp.dll RVA: 0x0009f610
+// 0x0009f610
 DWORD CEntity::GetRwObjectWord38()
 {
     void* backend = m_pGameEntity;
@@ -1033,7 +1033,7 @@ DWORD CEntity::GetRwObjectWord38()
         return 0;
     return *(DWORD*)(object + 0x38);
 }
-// samp.dll RVA: 0x0009f7a0
+// 0x0009f7a0
 void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
 {
     if (!m_pGameEntity)
@@ -1049,7 +1049,7 @@ void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
     GameQueryRwMatrixAngle(matrix, 2, &angle);
     *z = angle;
 }
-// samp.dll RVA: 0x0009f870
+// 0x0009f870
 int CEntity::GetModelAtomicCount()
 {
     if (!m_pGameEntity)
@@ -1062,7 +1062,7 @@ int CEntity::GetModelAtomicCount()
 
 // Native x87 precision/spill boundaries and repeated backend loads are significant.
 // History moves from last toward first in place: overlapping copies deliberately cascade.
-// samp.dll RVA: 0x0009eb80
+// 0x0009eb80
 __declspec(naked) void CEntity::SetAveragedSpeed(CVector speed)
 {
     // clang-format off
@@ -1142,7 +1142,7 @@ __declspec(naked) void CEntity::SetAveragedSpeed(CVector speed)
     // clang-format on
 }
 // Native x87 precision/spill boundaries and repeated backend loads are significant.
-// samp.dll RVA: 0x0009f630
+// 0x0009f630
 __declspec(naked) void CEntity::SetEulerRotation(float x, float y, float z)
 {
     // clang-format off
@@ -1236,11 +1236,11 @@ __declspec(naked) void CEntity::SetEulerRotation(float x, float y, float z)
     // clang-format on
 }
 
-// samp.dll RVA: 0x0011e64c
+// 0x0011e64c
 const char g_entityDetachExceptionLabel[5] = "s113";
 // Incoming ECX is unused; original owner/name is not established.
 // GTA SA virtual addresses: 0x00733160 and 0x00553260.
-// samp.dll RVA: 0x0009f8b0
+// 0x0009f8b0
 void __cdecl GameDetachBackendRwObject(void* entity, void* object)
 {
     if (!entity || !object)

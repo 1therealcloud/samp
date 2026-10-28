@@ -10,7 +10,7 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
-// samp.dll RVA: 0x00001aa0
+// 0x00001aa0
 void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD param2, DWORD param3)
 {
     if (!g_pNetGame || g_localSkipInitialState)
@@ -90,11 +90,11 @@ struct ScmNetGameView
 };
 #pragma pack(pop)
 typedef char ScmPoolsOffset[(offsetof(ScmNetGameView, pools) == 0x3de) ? 1 : -1];
-// samp.dll RVA: 0x00117690
+// 0x00117690
 int g_scmEventRpcId = 96;
-// samp.dll RVA: 0x00156988
+// 0x00156988
 DWORD g_scmEventParameters[4];
-// samp.dll RVA: 0x00001d10
+// 0x00001d10
 void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, DWORD eventType)
 {
     if (g_pNetGame)
@@ -130,7 +130,7 @@ void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, D
         }
     }
 }
-// samp.dll RVA: 0x000020c0
+// 0x000020c0
 __declspec(naked) void GameSetEventOpcode()
 {
     // clang-format off
@@ -163,13 +163,13 @@ __declspec(naked) void GameSetEventOpcode()
 
 #include "game/patches.h"
 #include "game/playerped.h"
-// samp.dll RVA: 0x00156980
+// 0x00156980
 CPed* g_driverPed;
-// samp.dll RVA: 0x00156998
+// 0x00156998
 BOOL g_driverCompareFlag;
-// samp.dll RVA: 0x0015699c
+// 0x0015699c
 void* g_driverScriptThread;
-// samp.dll RVA: 0x00001c60
+// 0x00001c60
 __declspec(naked) void GamePlayerDriverOpcode()
 {
     // clang-format off

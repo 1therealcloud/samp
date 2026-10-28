@@ -1,6 +1,6 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
 #include "fontrender.h"
-// samp.dll RVA: 0x0006b270
+// 0x0006b270
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
 {
     unsigned red = ((color >> 16) & 255) + amount;
@@ -14,7 +14,7 @@ DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
         blue = 255;
     return (color & 0xff000000) | (red << 16) | (green << 8) | blue;
 }
-// samp.dll RVA: 0x0006b210
+// 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
 {
     BYTE red = (BYTE)(color >> 16), green = (BYTE)(color >> 8), blue = (BYTE)color;
@@ -35,7 +35,7 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
 #include "gui/chat_dependencies.h"
 #include <string.h>
 
-// samp.dll RVA: 0x0006b530
+// 0x0006b530
 CFonts::CFonts(IDirect3DDevice9* device)
 {
     m_pDevice = device;
@@ -54,7 +54,7 @@ CFonts::CFonts(IDirect3DDevice9* device)
         p->Release();                                                                                                                                                              \
         p = 0;                                                                                                                                                                     \
     }
-// samp.dll RVA: 0x0006ab40
+// 0x0006ab40
 CFonts::~CFonts()
 {
     RELEASE_FONT(m_pFont)
@@ -64,7 +64,7 @@ CFonts::~CFonts()
     RELEASE_FONT(m_pDefaultSprite)
     RELEASE_FONT(m_pLicensePlateFont)
 }
-// samp.dll RVA: 0x0006abc0
+// 0x0006abc0
 void CFonts::OnLostDevice()
 {
     m_pFont->OnLostDevice();
@@ -74,7 +74,7 @@ void CFonts::OnLostDevice()
     m_pDefaultSprite->OnLostDevice();
     m_pLicensePlateFont->OnLostDevice();
 }
-// samp.dll RVA: 0x0006ac00
+// 0x0006ac00
 void CFonts::OnResetDevice()
 {
     m_pFont->OnResetDevice();
@@ -84,7 +84,7 @@ void CFonts::OnResetDevice()
     m_pDefaultSprite->OnResetDevice();
     m_pLicensePlateFont->OnResetDevice();
 }
-// samp.dll RVA: 0x0006ac40
+// 0x0006ac40
 FontSize* CFonts::GetTextScreenSize(FontSize* output, const char* text, int format)
 {
     FontSize size;
@@ -102,7 +102,7 @@ FontSize* CFonts::GetTextScreenSize(FontSize* output, const char* text, int form
     *output = size;
     return output;
 }
-// samp.dll RVA: 0x0006acf0
+// 0x0006acf0
 FontSize* CFonts::GetLittleTextScreenSize(FontSize* output, const char* text, int format)
 {
     FontSize size;
@@ -120,7 +120,7 @@ FontSize* CFonts::GetLittleTextScreenSize(FontSize* output, const char* text, in
     *output = size;
     return output;
 }
-// samp.dll RVA: 0x0006ada0
+// 0x0006ada0
 void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR color, BOOL shadow)
 {
     if (!text || !*text)
@@ -154,7 +154,7 @@ void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR
     if (ownSprite)
         sprite->End();
 }
-// samp.dll RVA: 0x0006af20
+// 0x0006af20
 void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, int format, D3DCOLOR color, BOOL shadow)
 {
     if (!text || !*text)
@@ -188,7 +188,7 @@ void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, in
     if (ownSprite)
         sprite->End();
 }
-// samp.dll RVA: 0x0006b090
+// 0x0006b090
 void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
 {
     if (!text || !*text)
@@ -219,7 +219,7 @@ void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
 #include "gui/font_wrapper.h"
 #include <stdlib.h>
 
-// samp.dll RVA: 0x0006b320
+// 0x0006b320
 void CFonts::Reset()
 {
     if (!m_pDevice)
@@ -287,7 +287,7 @@ void CFonts::Reset()
 #include "config.h"
 #include "game/gta_globals.h"
 
-// samp.dll RVA: 0x000c6950
+// 0x000c6950
 int FontGetHeight()
 {
     int height;
@@ -302,7 +302,7 @@ int FontGetHeight()
     return height + g_pConfig->GetIntValue("fontsize") * 2;
 }
 
-// samp.dll RVA: 0x000c69a0
+// 0x000c69a0
 int FontGetDeathWindowHeight()
 {
     int base = g_chatScreenWidth < 1024 ? 12 : 14;
@@ -310,7 +310,7 @@ int FontGetDeathWindowHeight()
     return adjusted < base ? base : adjusted;
 }
 
-// samp.dll RVA: 0x000c6a00
+// 0x000c6a00
 int FontGetWeight()
 {
     int weight = g_pConfig->GetIntValue("fontweight");
@@ -319,7 +319,7 @@ int FontGetWeight()
     return weight == 1 ? 400 : 700;
 }
 
-// samp.dll RVA: 0x000c6a30
+// 0x000c6a30
 const char* FontGetFace()
 {
     if (g_pConfig && g_pConfig->GetStringValue("fontface"))
@@ -327,5 +327,5 @@ const char* FontGetFace()
     return "Arial";
 }
 
-// samp.dll RVA: 0x00118400
+// 0x00118400
 const char g_fontMeasureProbe[2] = "Y";

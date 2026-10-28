@@ -9,24 +9,24 @@ public:
     bool m_bOutdoorAmbienceTrackDisabled;
     // samp.dll RVA: unknown (inline initialization in CGame RVA 0x0009fdc0; standalone entry not established)
     CAudio() : m_bSoundLoaded(FALSE), m_bOutdoorAmbienceTrackDisabled(false) {}
-    // samp.dll RVA: 0x000a2030
+    // 0x000a2030
     int GetRadioStation();
-    // samp.dll RVA: 0x000a2060
+    // 0x000a2060
     void StartRadio(int station);
     // Native wrapper at A2080; external A2260 anchor points into HUD code.
-    // samp.dll RVA: 0x000a2080
+    // 0x000a2080
     void StopRadio();
-    // samp.dll RVA: 0x000a20a0
+    // 0x000a20a0
     float GetRadioVolume();
-    // samp.dll RVA: 0x000a20b0
+    // 0x000a20b0
     void StopOutdoorAmbienceTrack();
-    // samp.dll RVA: 0x000a20c0
+    // 0x000a20c0
     void SetOutdoorAmbienceTrack(int track);
-    // samp.dll RVA: 0x000a21c0
+    // 0x000a21c0
     bool IsOutdoorAmbienceTrackDisabled();
-    // samp.dll RVA: 0x000a20e0
+    // 0x000a20e0
     void Play(int sound, CVector position);
-    // samp.dll RVA: 0x000a1ff0
+    // 0x000a1ff0
     void Process();
 };
 #pragma pack(pop)

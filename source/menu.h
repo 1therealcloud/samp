@@ -23,25 +23,25 @@ public:
     CMenuInteraction interaction;
     BYTE unknown3b2[2];
     DWORD handle;
-    // samp.dll RVA: 0x000a7260
+    // 0x000a7260
     void Hide();
-    // samp.dll RVA: 0x000a72d0
+    // 0x000a72d0
     const char* MS(BYTE row, BYTE column);
-    // samp.dll RVA: 0x000a7300
+    // 0x000a7300
     BYTE GetActiveRow();
-    // samp.dll RVA: 0x000a7330
+    // 0x000a7330
     void Show();
-    // samp.dll RVA: 0x000a7160
+    // 0x000a7160
     CMenu(const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction);
-    // samp.dll RVA: 0x000a7200
+    // 0x000a7200
     void AddItem(BYTE column, BYTE row, const char* text);
-    // samp.dll RVA: 0x000a7230
+    // 0x000a7230
     void SetColumnTitle(BYTE column, const char* text);
-    // samp.dll RVA: 0x000a7280
+    // 0x000a7280
     char* GetItem(BYTE column, BYTE row);
-    // samp.dll RVA: 0x000a72a0
+    // 0x000a72a0
     char* GetTitle();
-    // samp.dll RVA: 0x000a72b0
+    // 0x000a72b0
     char* GetColumnTitle(BYTE column);
 };
 #pragma pack(pop)
@@ -55,8 +55,8 @@ typedef char NativeMenuWidthsOffset[(offsetof(CMenu, widths) == 0x369) ? 1 : -1]
 typedef char NativeMenuColumnCountOffset[(offsetof(CMenu, columns) == 0x371) ? 1 : -1];
 typedef char NativeMenuInteractionOffset[(offsetof(CMenu, interaction) == 0x372) ? 1 : -1];
 typedef char NativeMenuHandleOffset[(offsetof(CMenu, handle) == 0x3b4) ? 1 : -1];
-// samp.dll RVA: 0x0013c0c8
+// 0x0013c0c8
 extern const char g_menuItemKeys[24][32];
-// samp.dll RVA: 0x0011ecf4
+// 0x0011ecf4
 extern const char g_menuDummy[6];
 #endif

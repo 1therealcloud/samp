@@ -7,9 +7,9 @@
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <string.h>
-// samp.dll RVA: 0x0011c75c
+// 0x0011c75c
 const char g_renderPanelTitle[10] = "Transform";
-// samp.dll RVA: 0x00071100
+// 0x00071100
 CRenderPanel::CRenderPanel(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -23,7 +23,7 @@ CRenderPanel::CRenderPanel(IDirect3DDevice9* device)
     state[7] = 38;
 }
 
-// samp.dll RVA: 0x00071140
+// 0x00071140
 void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -51,7 +51,7 @@ void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
     slider[0x76] = 1;
     memcpy(slider + 0x77, color, 16);
 }
-// samp.dll RVA: 0x000712c0
+// 0x000712c0
 void CRenderPanel::UpdateLayout()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -67,7 +67,7 @@ void CRenderPanel::UpdateLayout()
     *(DWORD*)(dialog + 0x116) = state[1];
     *(DWORD*)(dialog + 0x11a) = state[2];
 }
-// samp.dll RVA: 0x00071320
+// 0x00071320
 void CRenderPanel::GetRect(RECT* out)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -76,7 +76,7 @@ void CRenderPanel::GetRect(RECT* out)
     out->top = state[2];
     out->bottom = (LONG)(state[4] + (DWORD)out->top);
 }
-// samp.dll RVA: 0x00071350
+// 0x00071350
 void CRenderPanel::Show()
 {
     SIZE measured;
@@ -90,14 +90,14 @@ void CRenderPanel::Show()
     UpdateLayout();
     state[9] = 1;
 }
-// samp.dll RVA: 0x000713c0
+// 0x000713c0
 void CRenderPanel::Hide()
 {
     DWORD* state = (DWORD*)nativeState;
     ((BYTE*)state[8])[0x13] = 0;
     state[9] = 0;
 }
-// samp.dll RVA: 0x000713d0
+// 0x000713d0
 void CRenderPanel::ProcessControls()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -121,7 +121,7 @@ void CRenderPanel::ProcessControls()
         }
     }
 }
-// samp.dll RVA: 0x00071480
+// 0x00071480
 void CRenderPanel::DrawLabels()
 {
     CObjectEdit* editor = (CObjectEdit*)g_deviceObjectEdit;
@@ -139,7 +139,7 @@ void CRenderPanel::DrawLabels()
     rect.bottom = (LONG)((DWORD)rect.top + 1);
     font->DrawTextA(0, ((CObjectEdit*)g_deviceObjectEdit)->GetRenderChar(2), 1, &rect, 0x105, 0xff99cc99);
 }
-// samp.dll RVA: 0x00071560
+// 0x00071560
 void CRenderPanel::Draw()
 {
     DWORD* state = (DWORD*)nativeState;

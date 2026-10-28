@@ -23,17 +23,17 @@ struct SkinMeshContainer : D3DXMESHCONTAINER
 class CSkinHierarchyAllocator : public ID3DXAllocateHierarchy
 {
 public:
-    // samp.dll RVA: 0x000b9340
+    // 0x000b9340
     CSkinHierarchyAllocator();
-    // samp.dll RVA: 0x000b8ad0
+    // 0x000b8ad0
     HRESULT __stdcall CreateFrame(LPCSTR name, D3DXFRAME** out);
     // Native does not validate mesh type, allocation or mesh/skin API results.
-    // samp.dll RVA: 0x000b8800
+    // 0x000b8800
     HRESULT __stdcall CreateMeshContainer(LPCSTR name, const D3DXMESHDATA* mesh, const D3DXMATERIAL* materials, const D3DXEFFECTINSTANCE* effects, DWORD materialCount,
                                           const DWORD* adjacency, ID3DXSkinInfo* skin, D3DXMESHCONTAINER** out);
-    // samp.dll RVA: 0x000b86b0
+    // 0x000b86b0
     HRESULT __stdcall DestroyFrame(D3DXFRAME* frame);
-    // samp.dll RVA: 0x000b86e0
+    // 0x000b86e0
     HRESULT __stdcall DestroyMeshContainer(D3DXMESHCONTAINER* container);
 };
 
@@ -51,33 +51,33 @@ public:
     float radius;
     DWORD maximumBones, currentAnimation, animationCapacity;
     ID3DXAnimationController* controller;
-    // samp.dll RVA: 0x000b8bc0
+    // 0x000b8bc0
     CSkinnedMesh(IDirect3DDevice9* device);
-    // samp.dll RVA: 0x000b9510
+    // 0x000b9510
     virtual ~CSkinnedMesh();
     // Stores pointers even when FrameFind returns null (native result becomes50).
-    // samp.dll RVA: 0x000b8c30
+    // 0x000b8c30
     void SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent);
     // Guard uses controller capacity, not actual registered animation-set count.
-    // samp.dll RVA: 0x000b8d10
+    // 0x000b8d10
     void SetAnimation(DWORD index);
     // Returns1 without device,2 without mesh,0 after drawing.
-    // samp.dll RVA: 0x000b8d60
+    // 0x000b8d60
     int Render(const CMatrix* matrix);
-    // samp.dll RVA: 0x000b9190
+    // 0x000b9190
     void DrawFrame(SkinFrame* frame);
     // Actual native RET12; original parameter meanings/identifier not established.
-    // samp.dll RVA: 0x000b9250
+    // 0x000b9250
     void NativeNoOp3Words(DWORD first, DWORD second, DWORD third);
-    // samp.dll RVA: 0x000b9260
+    // 0x000b9260
     void DumpBones();
-    // samp.dll RVA: 0x000b92e0
+    // 0x000b92e0
     void UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* parent);
     // Failure1/success0. Existing hierarchy/storage is not cleaned before loading.
-    // samp.dll RVA: 0x000b9350
+    // 0x000b9350
     int Load(const char* filename);
     // Native ignores its one stack word; it does not advance animation time.
-    // samp.dll RVA: 0x000b9450
+    // 0x000b9450
     void UpdateSkin(DWORD unused);
 };
 
@@ -95,16 +95,16 @@ typedef char SkinMaterialExtent[(sizeof(D3DMATERIAL9) == 68) ? 1 : -1];
 typedef char SkinAllocatorExtent[(sizeof(CSkinHierarchyAllocator) == 4) ? 1 : -1];
 
 // Original development path is retained; no alternate texture search is invented.
-// samp.dll RVA: 0x0011f860
+// 0x0011f860
 extern const char g_skinTextureDirectory[];
-// samp.dll RVA: 0x0011f84c
+// 0x0011f84c
 extern const char g_skinTextureFailed[];
-// samp.dll RVA: 0x0011f838
+// 0x0011f838
 extern const char g_skinTextureLoaded[];
-// samp.dll RVA: 0x0011c92c
+// 0x0011c92c
 extern const char g_skinTexturePathFormat[];
-// samp.dll RVA: 0x0011f8a4
+// 0x0011f8a4
 extern const char g_skinBoneNameFormat[];
-// samp.dll RVA: 0x0011f8b8
+// 0x0011f8b8
 extern const char g_skinBoneCountFormat[];
 #endif

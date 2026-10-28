@@ -1,53 +1,53 @@
 #ifndef SAMP_LOCAL_RPC_H
 #define SAMP_LOCAL_RPC_H
 #include "game/scripting.h"
-// samp.dll RVA: 0x0011787c
+// 0x0011787c
 extern int g_localSpawnRequestRpc;
-// samp.dll RVA: 0x00117880
+// 0x00117880
 extern int g_localSpawnRpc;
 // Skip one SetInitialState call when nonzero; broader startup meaning unresolved.
-// samp.dll RVA: 0x0013c0a0
+// 0x0013c0a0
 extern DWORD g_localSkipInitialState;
-// samp.dll RVA: 0x00117954
+// 0x00117954
 extern int g_localRequestClassRpc;
-// samp.dll RVA: 0x00117958
+// 0x00117958
 extern int g_localInteriorChangeRpc;
-// samp.dll RVA: 0x0011795c
+// 0x0011795c
 extern int g_localChatRpc;
-// samp.dll RVA: 0x00117960
+// 0x00117960
 extern int g_localEnterVehicleRpc;
-// samp.dll RVA: 0x00117964
+// 0x00117964
 extern int g_localExitVehicleRpc;
-// samp.dll RVA: 0x0011796c
+// 0x0011796c
 extern int g_localPlayerDamageRpc;
-// samp.dll RVA: 0x00117974
+// 0x00117974
 extern int g_localActorDamageRpc;
-// samp.dll RVA: 0x00117970
+// 0x00117970
 extern const float g_localDamageScale;
-// samp.dll RVA: 0x00117840
+// 0x00117840
 extern const Scripting::OpcodeInfo g_localTrainCameraCommand;
-// samp.dll RVA: 0x0013c0a4
+// 0x0013c0a4
 extern DWORD g_localTrainCameraTick;
 #endif
 
 struct CVector;
 class CMatrix;
-// samp.dll RVA: 0x001569a8
+// 0x001569a8
 extern CVector g_localSurfPedTurnSpeed;
-// samp.dll RVA: 0x001569b8
+// 0x001569b8
 extern CMatrix g_localSurfPedMatrix;
-// samp.dll RVA: 0x001569f8
+// 0x001569f8
 extern CVector g_localSurfEntitySpeed;
-// samp.dll RVA: 0x00156a08
+// 0x00156a08
 extern CMatrix g_localSurfInverseMatrix;
-// samp.dll RVA: 0x00156a48
+// 0x00156a48
 extern CVector g_localSurfPedSpeed;
-// samp.dll RVA: 0x00156a58
+// 0x00156a58
 extern CMatrix g_localSurfEntityMatrix;
-// samp.dll RVA: 0x00156aa4
+// 0x00156aa4
 extern CVector g_localSurfEntityTurnSpeed;
 
-// samp.dll RVA: 0x0013c0a8
+// 0x0013c0a8
 extern DWORD g_localOnFootSendRate;
-// samp.dll RVA: 0x0013c0ac
+// 0x0013c0ac
 extern DWORD g_localInCarSendRate;

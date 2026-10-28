@@ -29,7 +29,7 @@
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x00002310
+// 0x00002310
 CHttpClient::CHttpClient()
 {
     memset(&m_Request, 0, sizeof(HTTP_REQUEST));
@@ -48,7 +48,7 @@ CHttpClient::CHttpClient()
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x00002370
+// 0x00002370
 CHttpClient::~CHttpClient()
 {
     // Deallocate the request data memory
@@ -79,7 +79,7 @@ CHttpClient::~CHttpClient()
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x00002c70
+// 0x00002c70
 int CHttpClient::ProcessURL(int iType, char* szURL, char* szPostData, char* szReferer)
 {
     printf("CHttpClient::ProcessURL %s\n", szURL);
@@ -92,7 +92,7 @@ int CHttpClient::ProcessURL(int iType, char* szURL, char* szPostData, char* szRe
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x000023e0
+// 0x000023e0
 bool CHttpClient::GetHeaderValue(char* szHeaderName, char* szReturnBuffer, int iBufSize)
 {
     char* szHeaderStart;
@@ -126,7 +126,7 @@ bool CHttpClient::GetHeaderValue(char* szHeaderName, char* szReturnBuffer, int i
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x000029d0
+// 0x000029d0
 bool CHttpClient::Connect(char* szHost, int iPort)
 {
     struct sockaddr_in sa;
@@ -164,7 +164,7 @@ bool CHttpClient::Connect(char* szHost, int iPort)
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x00002470
+// 0x00002470
 void CHttpClient::CloseConnection()
 {
 #ifdef WIN32
@@ -176,7 +176,7 @@ void CHttpClient::CloseConnection()
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x00002480
+// 0x00002480
 bool CHttpClient::Send(char* szData)
 {
     if (send(m_iSocket, szData, strlen(szData), 0) < 0)
@@ -189,7 +189,7 @@ bool CHttpClient::Send(char* szData)
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x000024c0
+// 0x000024c0
 int CHttpClient::Recv(char* szBuffer, int iBufferSize)
 {
     return recv(m_iSocket, szBuffer, iBufferSize, 0);
@@ -197,7 +197,7 @@ int CHttpClient::Recv(char* szBuffer, int iBufferSize)
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x000024e0
+// 0x000024e0
 void CHttpClient::InitRequest(int iType, char* szURL, char* szPostData, char* szReferer)
 {
     char* port;             // port string
@@ -256,7 +256,7 @@ void CHttpClient::InitRequest(int iType, char* szURL, char* szPostData, char* sz
 
 //----------------------------------------------------
 
-// samp.dll RVA: 0x00002a90
+// 0x00002a90
 void CHttpClient::Process()
 {
     int header_len;
@@ -304,7 +304,7 @@ void CHttpClient::Process()
 
 #define RECV_BUFFER_SIZE 4096
 
-// samp.dll RVA: 0x000026b0
+// 0x000026b0
 void CHttpClient::HandleEntity()
 {
     int bytes_total = 0;

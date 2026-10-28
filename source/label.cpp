@@ -5,16 +5,16 @@
 #include "game/scripting.h"
 #include "gui/device_objects.h"
 
-// samp.dll RVA: 0x0011c640
+// 0x0011c640
 const Scripting::OpcodeInfo g_labelLineOfSightCommand = {0x6bd, "ffffffiiiii"};
 
-// samp.dll RVA: 0x0006b5f0
+// 0x0006b5f0
 CLabel::CLabel(IDirect3DDevice9* value)
 {
     device = value;
     D3DXCreateSprite(device, &sprite);
 }
-// samp.dll RVA: 0x0006b610
+// 0x0006b610
 CLabel::~CLabel()
 {
     if (sprite)
@@ -24,14 +24,14 @@ CLabel::~CLabel()
     }
 }
 
-// samp.dll RVA: 0x0006b630
+// 0x0006b630
 void CLabel::OnLostDevice()
 {
     if (sprite)
         sprite->OnLostDevice();
 }
 
-// samp.dll RVA: 0x0006b640
+// 0x0006b640
 void CLabel::OnResetDevice()
 {
     if (sprite)
@@ -39,7 +39,7 @@ void CLabel::OnResetDevice()
 }
 
 // Descriptive recovery name; original method spelling is not established.
-// samp.dll RVA: 0x0006b650
+// 0x0006b650
 BOOL CLabel::HasLineOfSight(float x, float y, float z)
 {
     CameraAim* aim = AimStuff::GetInternalAim();
@@ -48,21 +48,21 @@ BOOL CLabel::HasLineOfSight(float x, float y, float z)
     return FALSE;
 }
 
-// samp.dll RVA: 0x0006b6b0
+// 0x0006b6b0
 void CLabel::Begin()
 {
     if (sprite)
         sprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 
-// samp.dll RVA: 0x0006b6c0
+// 0x0006b6c0
 void CLabel::End()
 {
     if (sprite)
         sprite->End();
 }
 
-// samp.dll RVA: 0x0006b6d0
+// 0x0006b6d0
 void CLabel::Draw(const CVector* position, const char* text, DWORD color, BOOL shadow, BOOL status)
 {
     if (!device)

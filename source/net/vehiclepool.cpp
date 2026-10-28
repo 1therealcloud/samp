@@ -1,5 +1,5 @@
 #include "net/vehiclepool.h"
-// samp.dll RVA: 0x00002df0
+// 0x00002df0
 void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 {
     *(WORD*)((BYTE*)this + 0x8e34 + vehicle * 2) = player;
@@ -7,7 +7,7 @@ void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "chatwindow.h"
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
 #include "gui/device_objects.h"
 #include "main.h"
@@ -15,7 +15,7 @@ void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 #include "net/netgame.h"
 #include "net/playerpool.h"
 #include <string.h>
-// samp.dll RVA: 0x0001e9f0
+// 0x0001e9f0
 WORD CVehiclePool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord)
 {
     struct RayPoint
@@ -75,7 +75,7 @@ WORD CVehiclePool::FindInRay(float maxCameraDistance, const CVector* origin, con
     return selected;
 }
 #include "game/game.h"
-// samp.dll RVA: 0x0001ee80
+// 0x0001ee80
 void CVehiclePool::Process()
 {
     DWORD now = GetTickCount();
@@ -166,11 +166,11 @@ void CVehiclePool::Process()
     }
     while ((int)id <= m_nLargestId);
 }
-// samp.dll RVA: 0x001184f8
+// 0x001184f8
 const char g_vehiclePoolNotDeletedMessage[] = "Warning: vehicle %u was not deleted";
-// samp.dll RVA: 0x0011851c
+// 0x0011851c
 int g_vehiclePoolDestroyRpc = 136;
-// samp.dll RVA: 0x0001eb40
+// 0x0001eb40
 BOOL CVehiclePool::Create(const VehiclePoolQueueEntry* entry)
 {
     if (m_pObjects[entry->id])
@@ -201,7 +201,7 @@ BOOL CVehiclePool::Create(const VehiclePoolQueueEntry* entry)
     UpdateLargestId();
     return TRUE;
 }
-// samp.dll RVA: 0x0001edc0
+// 0x0001edc0
 void CVehiclePool::ProcessWaitingList()
 {
     for (int i = 0; i < 100; ++i)
@@ -232,7 +232,7 @@ void CVehiclePool::ProcessWaitingList()
             queueActive[i] = 0;
         }
 }
-// samp.dll RVA: 0x0001ecf0
+// 0x0001ecf0
 void CVehiclePool::SendDestroyNotification(WORD id)
 {
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
@@ -246,7 +246,7 @@ void CVehiclePool::SendDestroyNotification(WORD id)
     }
 }
 
-// samp.dll RVA: 0x0001e470
+// 0x0001e470
 void CVehiclePool::UpdateLargestId()
 {
     int largest = 0;
@@ -255,7 +255,7 @@ void CVehiclePool::UpdateLargestId()
             largest = i;
     m_nLargestId = largest;
 }
-// samp.dll RVA: 0x0001e4d0
+// 0x0001e4d0
 CVehiclePool::CVehiclePool()
 {
     DWORD(WINAPI * tick)() = GetTickCount;
@@ -270,7 +270,7 @@ CVehiclePool::CVehiclePool()
     m_nLargestId = 0;
     licensePlatesReady = 1;
 }
-// samp.dll RVA: 0x0001e540
+// 0x0001e540
 BOOL CVehiclePool::Delete(WORD id)
 {
     if (id >= 2000 || !m_bNotEmpty[id] || !m_pObjects[id])
@@ -284,19 +284,19 @@ BOOL CVehiclePool::Delete(WORD id)
     UpdateLargestId();
     return TRUE;
 }
-// samp.dll RVA: 0x0001eb20
+// 0x0001eb20
 CVehiclePool::~CVehiclePool()
 {
     for (WORD id = 0; id < 2000; id++)
         Delete(id);
 }
-// samp.dll RVA: 0x0001e5c0
+// 0x0001e5c0
 void CVehiclePool::ChangeInterior(WORD id, int interior)
 {
     if (m_bNotEmpty[id])
         m_pObjects[id]->ChangeInterior(interior);
 }
-// samp.dll RVA: 0x0001e5f0
+// 0x0001e5f0
 void CVehiclePool::AssignSpecialParams(WORD id, BYTE objective, BYTE locked)
 {
     if (id >= 2000 || !m_bNotEmpty[id])
@@ -311,7 +311,7 @@ void CVehiclePool::AssignSpecialParams(WORD id, BYTE objective, BYTE locked)
     }
     vehicle->Lock(locked);
 }
-// samp.dll RVA: 0x0001e6c0
+// 0x0001e6c0
 WORD CVehiclePool::FindNearestToLocalPlayer()
 {
     WORD selected = 0xffff;
@@ -347,7 +347,7 @@ WORD CVehiclePool::FindNearestToLocalPlayer()
     while ((int)(WORD)++id <= m_nLargestId);
     return selected;
 }
-// samp.dll RVA: 0x0001e730
+// 0x0001e730
 WORD CVehiclePool::FindNearestToPoint(float x, float y, float z)
 {
     WORD selected = 0xffff;
@@ -386,9 +386,9 @@ WORD CVehiclePool::FindNearestToPoint(float x, float y, float z)
     while ((int)(WORD)++id <= m_nLargestId);
     return selected;
 }
-// samp.dll RVA: 0x001184c4
+// 0x001184c4
 const char g_vehiclePoolQueueFullMessage[] = "All vehicle waiting slots are consumed!";
-// samp.dll RVA: 0x0001e7d0
+// 0x0001e7d0
 void CVehiclePool::Queue(const VehiclePoolQueueEntry* entry)
 {
     int slot = 0;
@@ -402,17 +402,17 @@ void CVehiclePool::Queue(const VehiclePoolQueueEntry* entry)
     queueActive[slot] = 1;
     memcpy(queue + slot, entry, sizeof(*entry));
 }
-// samp.dll RVA: 0x0001e680
+// 0x0001e680
 DWORD CVehiclePool::GetRef(int id)
 {
     return m_pGameObjects[id] ? GamePoolVehicleGetIndex(m_pGameObjects[id]) : 0xffff;
 }
-// samp.dll RVA: 0x0001e6a0
+// 0x0001e6a0
 DWORD CVehiclePool::GetRef(void* backend)
 {
     return backend ? GamePoolVehicleGetIndex(backend) : 0xffff;
 }
-// samp.dll RVA: 0x0001e650
+// 0x0001e650
 WORD CVehiclePool::Find(void* gameObject)
 {
     for (int i = 1; i <= m_nLargestId; i++)
@@ -420,21 +420,21 @@ WORD CVehiclePool::Find(void* gameObject)
             return (WORD)i;
     return 0xffff;
 }
-// samp.dll RVA: 0x00001120
+// 0x00001120
 CVehicle* CVehiclePool::Get(WORD id)
 {
     return id < 2000 && m_bNotEmpty[id] ? m_pObjects[id] : 0;
 }
 
 // Native returns the raw state DWORD; do not normalize it to bool.
-// samp.dll RVA: 0x00001150
+// 0x00001150
 BOOL CVehiclePool::DoesExist(WORD id)
 {
     return id < 2000 ? m_bNotEmpty[id] : FALSE;
 }
 
 #include "game/object.h"
-// samp.dll RVA: 0x0001e8e0
+// 0x0001e8e0
 bool CVehiclePool::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second)
 {
     for (int index = 0; index <= m_nLargestId; index++)
@@ -462,7 +462,7 @@ bool CVehiclePool::TestCollisionShapes(const GameEntityCollisionShape* first, co
     return false;
 }
 
-// samp.dll RVA: 0x0001e830
+// 0x0001e830
 void CVehiclePool::ConstructLicensePlates()
 {
     BYTE* state = (BYTE*)this;
@@ -485,7 +485,7 @@ void CVehiclePool::ConstructLicensePlates()
         while ((int)(WORD)++counter <= m_nLargestId);
     }
 }
-// samp.dll RVA: 0x0001e8a0
+// 0x0001e8a0
 void CVehiclePool::ShutdownLicensePlates()
 {
     BYTE* state = (BYTE*)this;
@@ -502,7 +502,7 @@ void CVehiclePool::ShutdownLicensePlates()
     }
 }
 
-// samp.dll RVA: 0x0001e970
+// 0x0001e970
 WORD CVehiclePool::FindInLine(DWORD unused, const CVector* origin, const CVector* end)
 {
     BYTE collision[52];

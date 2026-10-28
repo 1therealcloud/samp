@@ -1,16 +1,16 @@
 #include "net/actorpool.h"
 #include "game/actor.h"
-// samp.dll RVA: 0x00001610
+// 0x00001610
 CActor* CActorPool::Get(WORD id)
 {
     return id < 1000 && active[id] ? actors[id] : 0;
 }
-// samp.dll RVA: 0x00001640
+// 0x00001640
 BOOL CActorPool::DoesExist(WORD id)
 {
     return id < 1000 ? active[id] : 0;
 }
-// samp.dll RVA: 0x00001660
+// 0x00001660
 void CActorPool::UpdateLargestId()
 {
     int largest = 0;
@@ -19,7 +19,7 @@ void CActorPool::UpdateLargestId()
             largest = i;
     largestId = largest;
 }
-// samp.dll RVA: 0x000016c0
+// 0x000016c0
 CActorPool::CActorPool()
 {
     for (int i = 0; i < 1000; ++i)
@@ -30,7 +30,7 @@ CActorPool::CActorPool()
     }
     largestId = 0;
 }
-// samp.dll RVA: 0x000016f0
+// 0x000016f0
 BOOL CActorPool::Delete(WORD id)
 {
     if (id >= 1000 || !active[id] || !actors[id])
@@ -43,13 +43,13 @@ BOOL CActorPool::Delete(WORD id)
     UpdateLargestId();
     return TRUE;
 }
-// samp.dll RVA: 0x000018e0
+// 0x000018e0
 CActorPool::~CActorPool()
 {
     for (WORD i = 0; i < 1000; ++i)
         Delete(i);
 }
-// samp.dll RVA: 0x000018b0
+// 0x000018b0
 DWORD CActorPool::Find(void* ped)
 {
     int limit = largestId;
@@ -70,7 +70,7 @@ DWORD CActorPool::Find(void* ped)
 #include "chatwindow.h"
 #include "game/custommodels.h"
 #include "main.h"
-// samp.dll RVA: 0x00001900
+// 0x00001900
 BOOL CActorPool::Create(const ActorCreateInfo* info)
 {
     // Native deliberately performs no ID bounds check.
@@ -95,7 +95,7 @@ BOOL CActorPool::Create(const ActorCreateInfo* info)
     return TRUE;
 }
 
-// samp.dll RVA: 0x00001770
+// 0x00001770
 WORD CActorPool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord)
 {
     struct RayPoint

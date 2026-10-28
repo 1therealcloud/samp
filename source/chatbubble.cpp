@@ -7,14 +7,14 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include <string.h>
-// samp.dll RVA: 0x0011bcd0
+// 0x0011bcd0
 const float g_chatBubbleLineDistanceScale = 0.0125f;
-// samp.dll RVA: 0x0011bccc
+// 0x0011bccc
 const float g_chatBubbleDistanceBase = 0.065f;
-// samp.dll RVA: 0x0011bcc8
+// 0x0011bcc8
 const float g_chatBubbleHeightLift = 0.2f;
 
-// samp.dll RVA: 0x000171a0
+// 0x000171a0
 int FormatChatBubbleText(char* text, int width, int tolerance)
 {
     int remaining = (int)strlen(text);
@@ -49,12 +49,12 @@ int FormatChatBubbleText(char* text, int width, int tolerance)
     }
     return rows;
 }
-// samp.dll RVA: 0x00066860
+// 0x00066860
 CChatBubble::CChatBubble()
 {
     memset(entries, 0, sizeof(entries));
 }
-// samp.dll RVA: 0x00066890
+// 0x00066890
 void CChatBubble::Add(WORD player, const char* text, DWORD color, float drawDistance, int lifespan)
 {
     if (player >= 1004)
@@ -78,7 +78,7 @@ void CChatBubble::Add(WORD player, const char* text, DWORD color, float drawDist
     entry->created = GetTickCount();
     entry->active = 1;
 }
-// samp.dll RVA: 0x00066950
+// 0x00066950
 void CChatBubble::Draw()
 {
     if (!g_pGame->GetPlayerPed())

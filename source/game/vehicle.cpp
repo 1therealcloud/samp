@@ -1,10 +1,10 @@
 #include "game/vehicle.h"
-// samp.dll RVA: 0x0000e290
+// 0x0000e290
 void CVehicle::SetObjective(BYTE objective)
 {
     *((BYTE*)this + 0x64) = objective;
 }
-// samp.dll RVA: 0x000b37d0
+// 0x000b37d0
 void* __stdcall GamePoolVehicleGetAt(int handle)
 {
     void* result;
@@ -19,7 +19,7 @@ void* __stdcall GamePoolVehicleGetAt(int handle)
     // clang-format on
     return result;
 }
-// samp.dll RVA: 0x000b6e20
+// 0x000b6e20
 void CVehicle::SetColor(BYTE primary, BYTE secondary)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -36,7 +36,7 @@ void CVehicle::SetColor(BYTE primary, BYTE secondary)
 #include "game/scripting.h"
 #include "main.h"
 
-// samp.dll RVA: 0x000b8420
+// 0x000b8420
 CVehicle::~CVehicle()
 {
     m_pGameVehicle = GamePoolVehicleGetAt(m_nHandle);
@@ -74,7 +74,7 @@ CVehicle::~CVehicle()
 }
 
 // Preserve base qualification and virtual dispatch to an existing trailer.
-// samp.dll RVA: 0x000b8540
+// 0x000b8540
 void CVehicle::Add()
 {
     if (!CEntity::DoesExist())
@@ -87,7 +87,7 @@ void CVehicle::Add()
 }
 
 // Trailer is removed before the qualified base vehicle removal.
-// samp.dll RVA: 0x000b8570
+// 0x000b8570
 void CVehicle::Remove()
 {
     if (CEntity::DoesExist())
@@ -100,23 +100,23 @@ void CVehicle::Remove()
 }
 
 #include "chatwindow.h"
-#include "game/hooks_vehicle.h"
+#include "game/hooks.h"
 #include "game/util.h"
 #include <string.h>
 
-// samp.dll RVA: 0x002abe64
+// 0x002abe64
 void* g_vehicleTrainCursor;
-// samp.dll RVA: 0x002abe68
+// 0x002abe68
 DWORD g_vehicleLastCreatedHandle;
-// samp.dll RVA: 0x0011e33c
+// 0x0011e33c
 const float g_vehicleCreationLift = 0.25f;
-// samp.dll RVA: 0x0011f7e0
+// 0x0011f7e0
 const char g_vehicleBadCarriageWarning[29] = "Warning: bad train carriages";
-// samp.dll RVA: 0x0011f800
+// 0x0011f800
 const char g_vehicleCreationWarning[42] = "Warning: couldn't create vehicle type: %u";
 
 // Preserve base construction, untouched early-return bytes and native global reloads.
-// samp.dll RVA: 0x000b7f00
+// 0x000b7f00
 CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD keepLoaded, BOOL siren)
 {
     DWORD handle = 0;
@@ -271,7 +271,7 @@ initialized:
     memset((BYTE*)this + 0x93, 0, 33);
 }
 
-// samp.dll RVA: 0x000b7940
+// 0x000b7940
 BOOL CVehicle::IsRC()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -281,29 +281,29 @@ BOOL CVehicle::IsRC()
     }
     return FALSE;
 }
-// samp.dll RVA: 0x000b7e60
+// 0x000b7e60
 BOOL CVehicle::HasSiren()
 {
     return *(DWORD*)((BYTE*)this + 0x8b) != 0;
 }
-// samp.dll RVA: 0x000b7e70
+// 0x000b7e70
 BYTE CVehicle::GetMaxPassengers()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
         return *((BYTE*)m_pGameVehicle + 0x488);
     return 0;
 }
-// samp.dll RVA: 0x000b6de0
+// 0x000b6de0
 float CVehicle::GetHealth()
 {
     return m_pGameVehicle ? *(float*)((BYTE*)m_pGameVehicle + 0x4c0) : g_objectScaleLowerBound;
 }
-// samp.dll RVA: 0x000b6ed0
+// 0x000b6ed0
 int CVehicle::GetSubtype()
 {
     return m_pGameVehicle ? GameGetVehicleSubtype(m_pGameVehicle) : 0;
 }
-// samp.dll RVA: 0x000b5d20
+// 0x000b5d20
 int GameGetVehicleSubtype(void* vehicle)
 {
     if (!vehicle)
@@ -331,7 +331,7 @@ int GameGetVehicleSubtype(void* vehicle)
 
 #include "game/playerped.h"
 
-// samp.dll RVA: 0x000b6c00
+// 0x000b6c00
 void CVehicle::ResetPointers()
 {
     if (m_pGameVehicle)
@@ -341,7 +341,7 @@ void CVehicle::ResetPointers()
     }
 }
 
-// samp.dll RVA: 0x000b6c20
+// 0x000b6c20
 BOOL CVehicle::HasDriver()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle)
@@ -353,7 +353,7 @@ BOOL CVehicle::HasDriver()
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b6c70
+// 0x000b6c70
 BOOL CVehicle::IsOccupied()
 {
     BYTE* vehicle = (BYTE*)m_pGameVehicle;
@@ -366,14 +366,14 @@ BOOL CVehicle::IsOccupied()
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b6e00
+// 0x000b6e00
 void CVehicle::SetHealth(float health)
 {
     if (m_pGameVehicle)
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x4c0) = *(DWORD*)&health;
 }
 
-// samp.dll RVA: 0x000b6f30
+// 0x000b6f30
 BOOL CVehicle::DriverIsPlayerPed()
 {
     if (m_pGameVehicle)
@@ -385,7 +385,7 @@ BOOL CVehicle::DriverIsPlayerPed()
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b6f60
+// 0x000b6f60
 BOOL CVehicle::HasPlayerPed()
 {
     if (m_pGameVehicle)
@@ -397,99 +397,99 @@ BOOL CVehicle::HasPlayerPed()
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b7080
+// 0x000b7080
 void CVehicle::EnableSiren(BYTE enabled)
 {
     BYTE* flags = (BYTE*)m_pGameVehicle + 0x42d;
     *flags = (BYTE)((*flags & 0x7f) | (enabled << 7));
 }
 
-// samp.dll RVA: 0x000b70a0
+// 0x000b70a0
 BOOL CVehicle::SirenEnabled()
 {
     return (*(BYTE*)((BYTE*)m_pGameVehicle + 0x42d) & 0x80) != 0;
 }
 
-// samp.dll RVA: 0x000b70c0
+// 0x000b70c0
 void CVehicle::SetBackendWord45c(WORD value)
 {
     *(WORD*)((BYTE*)m_pGameVehicle + 0x45c) = value;
 }
 
-// samp.dll RVA: 0x000b71e0
+// 0x000b71e0
 void CVehicle::SetHydraThrusters(DWORD value)
 {
     if (m_pGameVehicle)
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x86c) = value;
 }
 
-// samp.dll RVA: 0x000b7200
+// 0x000b7200
 DWORD CVehicle::GetHydraThrusters()
 {
     return m_pGameVehicle ? *(DWORD*)((BYTE*)m_pGameVehicle + 0x86c) : 0;
 }
 
-// samp.dll RVA: 0x000b7420
+// 0x000b7420
 float CVehicle::GetTrainSpeed()
 {
     return m_pGameVehicle ? *(float*)((BYTE*)m_pGameVehicle + 0x5a4) : g_objectScaleLowerBound;
 }
 
-// samp.dll RVA: 0x000b76c0
+// 0x000b76c0
 DWORD CVehicle::GetPanelsDamage()
 {
     return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 ? *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b4) : 0;
 }
 
-// samp.dll RVA: 0x000b76f0
+// 0x000b76f0
 DWORD CVehicle::GetDoorsDamage()
 {
     return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 ? *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9) : 0;
 }
 
-// samp.dll RVA: 0x000b7720
+// 0x000b7720
 BYTE CVehicle::GetLightsDamage()
 {
     return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 ? *(BYTE*)((BYTE*)m_pGameVehicle + 0x5b0) : 0;
 }
 
-// samp.dll RVA: 0x000b77c0
+// 0x000b77c0
 void CVehicle::SetTrailer(CVehicle* trailer)
 {
     *(CVehicle**)((BYTE*)this + 0x48) = trailer;
 }
 
-// samp.dll RVA: 0x000b7910
+// 0x000b7910
 bool CVehicle::IsTowtruck()
 {
     return m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && *(short*)((BYTE*)m_pGameVehicle + 0x22) == 0x20d;
 }
 
-// samp.dll RVA: 0x000b7c70
+// 0x000b7c70
 bool CVehicle::DoesExist()
 {
     return GamePoolVehicleGetAt(m_nHandle) != 0;
 }
 
-// samp.dll RVA: 0x000b7d40
+// 0x000b7d40
 void CVehicle::SetField50(DWORD value)
 {
     *(DWORD*)((BYTE*)this + 0x50) = value;
 }
 
-// samp.dll RVA: 0x000b7d50
+// 0x000b7d50
 DWORD CVehicle::GetField50()
 {
     return *(DWORD*)((BYTE*)this + 0x50);
 }
 
-// samp.dll RVA: 0x000b7d60
+// 0x000b7d60
 void CVehicle::SetField54(DWORD value)
 {
     *(DWORD*)((BYTE*)this + 0x54) = value;
 }
 
-// samp.dll RVA: 0x000b7d70
+// 0x000b7d70
 DWORD CVehicle::GetField54()
 {
     return *(DWORD*)((BYTE*)this + 0x54);
@@ -497,17 +497,17 @@ DWORD CVehicle::GetField54()
 
 #include "game/entity.h"
 
-// samp.dll RVA: 0x0018f5dc
+// 0x0018f5dc
 DWORD g_vehicleDetachingTrailer;
 
-// samp.dll RVA: 0x000b6bd0
+// 0x000b6bd0
 void CVehicle::ChangeInterior(int interior)
 {
     if (GamePoolVehicleGetAt(m_nHandle))
         Scripting::ProcessCommand(&g_vehicleChangeInteriorCommand, m_nHandle, interior);
 }
 
-// samp.dll RVA: 0x000b6e70
+// 0x000b6e70
 void CVehicle::UpdateColor()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_bColorChanged && !m_bInModShop)
@@ -520,20 +520,20 @@ void CVehicle::UpdateColor()
     }
 }
 
-// samp.dll RVA: 0x000b6ef0
+// 0x000b6ef0
 DWORD CVehicle::IsSunk()
 {
     return m_pGameVehicle ? Scripting::ProcessCommand(&g_vehicleIsSunkCommand, m_nHandle) : 0;
 }
 
-// samp.dll RVA: 0x000b6fe0
+// 0x000b6fe0
 BOOL CVehicle::HasTurret()
 {
     int model = ((CEntity*)this)->GetModelIndex();
     return model == 0x1b0 || model == 0x234 || model == 0x197 || model == 0x259;
 }
 
-// samp.dll RVA: 0x000b7010
+// 0x000b7010
 void CVehicle::SetBackendBytes1f6And514(BYTE value)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -549,7 +549,7 @@ void CVehicle::SetBackendBytes1f6And514(BYTE value)
     }
 }
 
-// samp.dll RVA: 0x000b7380
+// 0x000b7380
 void CVehicle::Lock(BOOL locked)
 {
     if (locked)
@@ -564,7 +564,7 @@ void CVehicle::Lock(BOOL locked)
     }
 }
 
-// samp.dll RVA: 0x000b73b0
+// 0x000b73b0
 BOOL CVehicle::UpdateLastDrivenTime()
 {
     if (m_pGameVehicle && *(void**)((BYTE*)m_pGameVehicle + 0x460))
@@ -576,7 +576,7 @@ BOOL CVehicle::UpdateLastDrivenTime()
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b7750
+// 0x000b7750
 void CVehicle::AttachTrailer()
 {
     CVehicle* trailer = *(CVehicle**)((BYTE*)this + 0x48);
@@ -584,7 +584,7 @@ void CVehicle::AttachTrailer()
         Scripting::ProcessCommand(&g_vehicleAttachTrailerCommand, trailer->m_nHandle, m_nHandle);
 }
 
-// samp.dll RVA: 0x000b7770
+// 0x000b7770
 void CVehicle::DetachTrailer()
 {
     g_vehicleDetachingTrailer = 1;
@@ -596,7 +596,7 @@ void CVehicle::DetachTrailer()
     g_vehicleDetachingTrailer = 0;
 }
 
-// samp.dll RVA: 0x000b7990
+// 0x000b7990
 void CVehicle::EnableLights(BYTE enabled)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -614,7 +614,7 @@ void CVehicle::EnableLights(BYTE enabled)
     }
 }
 
-// samp.dll RVA: 0x000b79f0
+// 0x000b79f0
 BYTE CVehicle::GetBackendLightsDisabledFlag()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -622,7 +622,7 @@ BYTE CVehicle::GetBackendLightsDisabledFlag()
     return 1;
 }
 
-// samp.dll RVA: 0x000b7be0
+// 0x000b7be0
 BOOL CVehicle::RemoveComponent(WORD component)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -633,7 +633,7 @@ BOOL CVehicle::RemoveComponent(WORD component)
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b7c20
+// 0x000b7c20
 void CVehicle::SetPaintjob(BYTE paintjob)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 && paintjob < 4)
@@ -642,26 +642,26 @@ void CVehicle::SetPaintjob(BYTE paintjob)
     }
 }
 
-// samp.dll RVA: 0x000b7c80
+// 0x000b7c80
 void CVehicle::SetLicensePlateText(const char* text)
 {
     strncpy((char*)this + 0x93, text, 32);
 }
 
-// samp.dll RVA: 0x000b7ca0
+// 0x000b7ca0
 void CVehicle::SetRotation(float angle)
 {
     if (GamePoolVehicleGetAt(m_nHandle))
         Scripting::ProcessCommand(&g_vehicleRotationCommand, m_nHandle, (double)angle);
 }
 
-// samp.dll RVA: 0x000b7de0
+// 0x000b7de0
 float CVehicle::GetBackendFloat648()
 {
     return m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) ? *(float*)((BYTE*)m_pGameVehicle + 0x648) : g_objectScaleLowerBound;
 }
 
-// samp.dll RVA: 0x000b7ea0
+// 0x000b7ea0
 void CVehicle::SetWindowOpenFlag(BYTE window)
 {
     void* backend = m_pGameVehicle;
@@ -679,7 +679,7 @@ void CVehicle::SetWindowOpenFlag(BYTE window)
     }
 }
 
-// samp.dll RVA: 0x000b7ed0
+// 0x000b7ed0
 void CVehicle::ClearWindowOpenFlag(BYTE window)
 {
     void* backend = m_pGameVehicle;
@@ -699,12 +699,12 @@ void CVehicle::ClearWindowOpenFlag(BYTE window)
 
 #include "game/quaternion.h"
 
-// samp.dll RVA: 0x001181a0
+// 0x001181a0
 const float g_vehicleTrainSpeedMinimum = -100.0f;
-// samp.dll RVA: 0x001181a4
+// 0x001181a4
 const float g_vehicleTrainSpeedMaximum = 100.0f;
 
-// samp.dll RVA: 0x000b6cd0
+// 0x000b6cd0
 void CVehicle::SetInvulnerable(BOOL enabled)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && *(DWORD*)m_pGameVehicle != 0x863c40)
@@ -724,7 +724,7 @@ void CVehicle::SetInvulnerable(BOOL enabled)
     }
 }
 
-// samp.dll RVA: 0x000b70e0
+// 0x000b70e0
 void CVehicle::SetLandingGearState(int state)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5)
@@ -769,13 +769,13 @@ skipLower:
     }
 }
 
-// samp.dll RVA: 0x000b7170
+// 0x000b7170
 BOOL CVehicle::GetLandingGearState()
 {
     return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5 && *(float*)((BYTE*)m_pGameVehicle + 0x9cc) != g_objectScaleLowerBound;
 }
 
-// samp.dll RVA: 0x000b7480
+// 0x000b7480
 void CVehicle::SetTires(BYTE tires)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -793,7 +793,7 @@ void CVehicle::SetTires(BYTE tires)
     }
 }
 
-// samp.dll RVA: 0x000b7570
+// 0x000b7570
 BYTE CVehicle::GetTires()
 {
     if (!m_pGameVehicle)
@@ -822,7 +822,7 @@ BYTE CVehicle::GetTires()
     return 0;
 }
 
-// samp.dll RVA: 0x000b7600
+// 0x000b7600
 void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
 {
     if (!m_pGameVehicle)
@@ -853,7 +853,7 @@ void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
     // clang-format on
 }
 
-// samp.dll RVA: 0x000b78b0
+// 0x000b78b0
 BOOL CVehicle::IsTrailer()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -864,7 +864,7 @@ BOOL CVehicle::IsTrailer()
     return FALSE;
 }
 
-// samp.dll RVA: 0x000b7d80
+// 0x000b7d80
 void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -885,7 +885,7 @@ void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
     }
 }
 
-// samp.dll RVA: 0x000b7440
+// 0x000b7440
 void CVehicle::SetTrainSpeed(float speed)
 {
     // clang-format off
@@ -907,7 +907,7 @@ void CVehicle::SetTrainSpeed(float speed)
 rejected:;
 }
 
-// samp.dll RVA: 0x000b7e10
+// 0x000b7e10
 void CVehicle::SetBackendFloat64c(float speed)
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
@@ -933,7 +933,7 @@ rejected:;
 
 #include "net/vehiclepool.h"
 
-// samp.dll RVA: 0x000b77d0
+// 0x000b77d0
 CVehicle* CVehicle::GetTrailer()
 {
     if (!m_pGameVehicle)
@@ -950,7 +950,7 @@ CVehicle* CVehicle::GetTrailer()
     return 0;
 }
 
-// samp.dll RVA: 0x000b7830
+// 0x000b7830
 CVehicle* CVehicle::GetTractor()
 {
     if (!m_pGameVehicle)
@@ -970,7 +970,7 @@ CVehicle* CVehicle::GetTractor()
     return 0;
 }
 
-// samp.dll RVA: 0x000b7a20
+// 0x000b7a20
 void CVehicle::RemovePassengers()
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
@@ -997,7 +997,7 @@ void CVehicle::RemovePassengers()
     }
 }
 
-// samp.dll RVA: 0x000b7b00
+// 0x000b7b00
 BOOL CVehicle::AddComponent(WORD component)
 {
     DWORD result = (DWORD)this;
@@ -1023,12 +1023,12 @@ BOOL CVehicle::AddComponent(WORD component)
     return TRUE;
 }
 
-// samp.dll RVA: 0x0011812c
+// 0x0011812c
 const float g_vehicleMarkerDistance = 200.0f;
 
 // Keep x87 return in ST0: no float spill between distance call and FCOMP.
 // Raw wrapper views do not establish the full allocation extent.
-// samp.dll RVA: 0x000b7220
+// 0x000b7220
 void CVehicle::ProcessMarkers()
 {
     if (!m_pGameVehicle)
@@ -1105,7 +1105,7 @@ void CVehicle::ProcessMarkers()
 
 // GTA SA backend: 0x004FCF40, ECX=original backend+138.
 // GTA SA shared word 0x00B6B990 is saved only around that backend call.
-// samp.dll RVA: 0x000b85a0
+// 0x000b85a0
 void CVehicle::EnableEngine(BOOL enabled)
 {
     BYTE* initial = (BYTE*)m_pGameVehicle;
@@ -1148,7 +1148,7 @@ skipBackend:
 }
 
 // Raw GTA driver interface, no complete ped/vtable allocation is inferred.
-// samp.dll RVA: 0x000b3eb0
+// 0x000b3eb0
 void __stdcall GameRemoveDriverByState598(void* vehicle)
 {
     if (!vehicle)
@@ -1170,10 +1170,10 @@ void __stdcall GameRemoveDriverByState598(void* vehicle)
     *(void**)((BYTE*)vehicle + 0x460) = 0;
 }
 
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "gui/device_objects.h"
 
-// samp.dll RVA: 0x000b7cd0
+// 0x000b7cd0
 void CVehicle::ConstructLicensePlate()
 {
     BYTE* state = (BYTE*)this;
@@ -1190,7 +1190,7 @@ void CVehicle::ConstructLicensePlate()
         }
     }
 }
-// samp.dll RVA: 0x000b7d20
+// 0x000b7d20
 void CVehicle::ShutdownLicensePlate()
 {
     IDirect3DTexture9** texture = (IDirect3DTexture9**)((BYTE*)this + 0x8f);
@@ -1201,23 +1201,23 @@ void CVehicle::ShutdownLicensePlate()
     }
 }
 
-// samp.dll RVA: 0x0011f704
+// 0x0011f704
 const Scripting::OpcodeInfo g_vehicleLockedCommand = {0x519, "ii"};
-// samp.dll RVA: 0x0011f68c
+// 0x0011f68c
 const Scripting::OpcodeInfo g_vehicleWreckedCommand = {0x119, "i"};
-// samp.dll RVA: 0x000b6d70
+// 0x000b6d70
 void CVehicle::SetLocked(BOOL locked)
 {
     if (m_pGameVehicle)
         Scripting::ProcessCommand(&g_vehicleLockedCommand, m_nHandle, locked ? 1 : 0);
 }
-// samp.dll RVA: 0x000b6f10
+// 0x000b6f10
 BOOL CVehicle::IsWrecked()
 {
     return m_pGameVehicle ? (BOOL)Scripting::ProcessCommand(&g_vehicleWreckedCommand, m_nHandle) : FALSE;
 }
 
-// samp.dll RVA: 0x000b6db0
+// 0x000b6db0
 void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
 {
     BYTE* vehicle = (BYTE*)m_pGameVehicle;
@@ -1229,21 +1229,30 @@ void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
         vehicle[0x428] &= 0xdf;
 }
 
-// samp.dll RVA: 0x000b7400
+// 0x000b7400
 float CVehicle::GetBackendFloat94C()
 {
     return *(float*)((BYTE*)m_pGameVehicle + 0x94c);
 }
 
-// samp.dll RVA: 0x000b7410
+// 0x000b7410
 float CVehicle::GetBackendFloat950()
 {
     return *(float*)((BYTE*)m_pGameVehicle + 0x950);
 }
 
-// samp.dll RVA: 0x000b73e0
+// 0x000b73e0
 void CVehicle::SetBackendFloat94CAnd950(float first, float second)
 {
     memcpy((BYTE*)m_pGameVehicle + 0x94c, &first, 4);
     memcpy((BYTE*)m_pGameVehicle + 0x950, &second, 4);
+}
+
+// 0x000b6fa0
+BOOL CVehicle::IsTrainPart()
+{
+    if (!m_pGameVehicle)
+        return FALSE;
+    short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
+    return model == 0x21a || model == 0x23a || model == 0x219 || model == 0x239 || model == 0x1c1;
 }

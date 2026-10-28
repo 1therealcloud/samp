@@ -1,7 +1,7 @@
 #include "game/pad.h"
 // GTA SA virtual addresses: GetPad 0x0053FB70; Clear 0x00541A70.
 // VC7 ABI bridge: GetPad(0), then ECX=pad and two unmodified argument words.
-// samp.dll RVA: 0x000b58e0
+// 0x000b58e0
 __declspec(naked) void GameClearLocalPad(DWORD first, DWORD second)
 {
     // clang-format off

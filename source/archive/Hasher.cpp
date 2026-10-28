@@ -10,12 +10,12 @@
 
 //------------------------------------
 
-// samp.dll RVA: 0x00140788
+// 0x00140788
 DWORD CHasher::ms_dwHashAlgorithm = CALG_SHA1;
 
 //------------------------------------
 
-// samp.dll RVA: 0x000652f0
+// 0x000652f0
 CHasher::CHasher(CCryptoContext* pContext)
 {
     // Save context for later
@@ -28,7 +28,7 @@ CHasher::CHasher(CCryptoContext* pContext)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065320
+// 0x00065320
 CHasher::~CHasher(void)
 {
     // Destory the hash container
@@ -37,7 +37,7 @@ CHasher::~CHasher(void)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065330
+// 0x00065330
 void CHasher::AddData(DWORD dwDataLength, BYTE* pbData)
 {
     // Add the data to be hashed
@@ -46,7 +46,7 @@ void CHasher::AddData(DWORD dwDataLength, BYTE* pbData)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065350
+// 0x00065350
 HCRYPTKEY CHasher::GetContainer()
 {
     return m_hCryptHash;

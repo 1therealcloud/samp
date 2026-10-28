@@ -5,7 +5,7 @@
 #include "runutil.h"
 #include <string.h>
 
-// samp.dll RVA: 0x000172e0
+// 0x000172e0
 void Util_UrlUnencode(char* enc)
 {
     char* write_pos = enc;
@@ -28,13 +28,13 @@ void Util_UrlUnencode(char* enc)
     *write_pos = '\0';
 }
 
-// samp.dll RVA: 0x00017360
+// 0x00017360
 char Util_toupper(char c)
 {
     return ((c > (char)0x60) && (c < (char)0x7b)) ? c - 0x20 : c;
 }
 
-// samp.dll RVA: 0x00017440
+// 0x00017440
 void Util_strupr(char* text)
 {
     while (*text)
@@ -43,7 +43,7 @@ void Util_strupr(char* text)
         ++text;
     }
 }
-// samp.dll RVA: 0x00017510
+// 0x00017510
 int Util_strnicmp(const char* first, const char* second, size_t count)
 {
     if (count == 0)
@@ -59,7 +59,7 @@ int Util_strnicmp(const char* first, const char* second, size_t count)
     return 0;
 }
 
-// samp.dll RVA: 0x00017470
+// 0x00017470
 int Util_wildcmp(char* wild, char* string)
 {
     char *cp, *mp;
@@ -105,7 +105,7 @@ int Util_wildcmp(char* wild, char* string)
     return !*wild;
 }
 
-// samp.dll RVA: 0x000175b0
+// 0x000175b0
 char* Util_strrev(char* str)
 {
     char *p1, *p2;
@@ -121,7 +121,7 @@ char* Util_strrev(char* str)
     return str;
 }
 
-// samp.dll RVA: 0x00017600
+// 0x00017600
 char* Util_itoa(int v, char* s, int r)
 {
     int i, neg = 0;
@@ -167,7 +167,7 @@ char* Util_itoa(int v, char* s, int r)
     return (s);
 }
 
-// samp.dll RVA: 0x0009d840
+// 0x0009d840
 void K_EncodeString(char* szInput, char* szOutput)
 {
     char b;
@@ -187,7 +187,7 @@ void K_EncodeString(char* szInput, char* szOutput)
     *szOutput = 0;
 }
 
-// samp.dll RVA: 0x0009d880
+// 0x0009d880
 char* K_DecodeString(unsigned char* szInput)
 {
     char b;
@@ -208,12 +208,12 @@ char* K_DecodeString(unsigned char* szInput)
     return st;
 }
 
-// samp.dll RVA: 0x00118230
+// 0x00118230
 const char g_base64Alphabet[66] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-// samp.dll RVA: 0x0013c4b4
+// 0x0013c4b4
 const char* g_base64Encoding = g_base64Alphabet;
 
-// samp.dll RVA: 0x00017380
+// 0x00017380
 char* Util_stristr(const char* String, const char* Pattern)
 {
     char *pptri, *sptri, *starti;
@@ -241,7 +241,7 @@ char* Util_stristr(const char* String, const char* Pattern)
     return (0);
 }
 
-// samp.dll RVA: 0x000176a0
+// 0x000176a0
 void Util_Base64Encode(char* cpInput, char* cpOutput)
 {
     int nIdx[4];
@@ -282,7 +282,7 @@ void Util_Base64Encode(char* cpInput, char* cpOutput)
     return;
 }
 
-// samp.dll RVA: 0x000b55e0
+// 0x000b55e0
 bool Util_IsDecimal(const char* text)
 {
     while (*text)
@@ -293,7 +293,7 @@ bool Util_IsDecimal(const char* text)
     }
     return true;
 }
-// samp.dll RVA: 0x000b5920
+// 0x000b5920
 void Util_SanitizeAscii(char* text)
 {
     while (*text)
@@ -315,11 +315,11 @@ struct NativeModuleEntry32A
     char moduleName[256];
     char executablePath[260];
 };
-// samp.dll RVA: 0x0018dc3c
+// 0x0018dc3c
 unsigned long g_clientD3D9BaseEncoded;
-// samp.dll RVA: 0x0018dc40
+// 0x0018dc40
 unsigned long g_clientD3D9ImageSize;
-// samp.dll RVA: 0x0009d8c0
+// 0x0009d8c0
 unsigned long Util_RefreshD3D9ModuleInfo()
 {
     unsigned char d3d9[] = {0x8c, 0x66, 0x8c, 0x27, 0xc5, 0x8c, 0x8d, 0x8d, 0x0};

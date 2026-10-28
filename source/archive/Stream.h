@@ -24,16 +24,16 @@ public:
         SeekEnd,
     };
 
-    // samp.dll RVA: 0x00063e70
+    // 0x00063e70
     CAbstractStream() {}
 
-    // samp.dll RVA: 0x00063e80
+    // 0x00063e80
     virtual ~CAbstractStream() {}
 
     // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes) = 0;
 
-    // samp.dll RVA: 0x00063e90
+    // 0x00063e90
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return Read(pbBuffer, nNumberOfElements * nElementSize);
@@ -42,7 +42,7 @@ public:
     // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes) = 0;
 
-    // samp.dll RVA: 0x00063eb0
+    // 0x00063eb0
     virtual unsigned int Write(const void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return Write(pbBuffer, nNumberOfElements * nElementSize);
@@ -51,7 +51,7 @@ public:
     // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
     virtual void Seek(int nOffset, eSeek seekMode) = 0;
 
-    // samp.dll RVA: 0x00063ed0
+    // 0x00063ed0
     virtual void Seek(int nOffset)
     {
         Seek(nOffset, SeekStart);
@@ -87,21 +87,21 @@ public:
         m_fiFile = NULL;
     }
 
-    // samp.dll RVA: 0x00064bf0
+    // 0x00064bf0
     CFileStream(const char* szFilename, eType type, eMode mode)
     {
         m_fiFile = NULL;
         Open(szFilename, type, mode);
     }
 
-    // samp.dll RVA: 0x00064d50
+    // 0x00064d50
     virtual ~CFileStream()
     {
         if (m_fiFile)
             Close();
     }
 
-    // samp.dll RVA: 0x00063f00
+    // 0x00063f00
     virtual bool Open(const char* szFilename, eType type, eMode mode)
     {
         if (m_fiFile)
@@ -145,13 +145,13 @@ public:
         return true;
     }
 
-    // samp.dll RVA: 0x00064c50
+    // 0x00064c50
     virtual bool IsOpen()
     {
         return (m_fiFile != NULL);
     }
 
-    // samp.dll RVA: 0x00064c60
+    // 0x00064c60
     virtual void Close()
     {
         if (m_fiFile)
@@ -161,31 +161,31 @@ public:
         }
     }
 
-    // samp.dll RVA: 0x00064c80
+    // 0x00064c80
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes)
     {
         return (unsigned int)fread(pbBuffer, 1, nNumberOfBytes, m_fiFile);
     }
 
-    // samp.dll RVA: 0x00064ca0
+    // 0x00064ca0
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return (unsigned int)fread(pbBuffer, nElementSize, nNumberOfElements, m_fiFile);
     }
 
-    // samp.dll RVA: 0x00064cc0
+    // 0x00064cc0
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes)
     {
         return (unsigned int)fwrite(pbBuffer, 1, nNumberOfBytes, m_fiFile);
     }
 
-    // samp.dll RVA: 0x00064ce0
+    // 0x00064ce0
     virtual unsigned int Write(const void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return (unsigned int)fwrite(pbBuffer, nElementSize, nNumberOfElements, m_fiFile);
     }
 
-    // samp.dll RVA: 0x00064d00
+    // 0x00064d00
     virtual void Seek(int nOffset, eSeek seekMode)
     {
         int mode = 0;
@@ -205,7 +205,7 @@ public:
         fseek(m_fiFile, nOffset, seekMode);
     }
 
-    // samp.dll RVA: 0x00064d20
+    // 0x00064d20
     virtual unsigned int Tell()
     {
         return (unsigned int)ftell(m_fiFile);
@@ -221,7 +221,7 @@ protected:
     bool m_bCopy;
 
 public:
-    // samp.dll RVA: 0x00063fb0
+    // 0x00063fb0
     CMemoryStream(unsigned char* pbBuffer, unsigned int nLength, bool bCopy = true)
     {
         m_bCopy = bCopy;
@@ -239,7 +239,7 @@ public:
         }
     }
 
-    // samp.dll RVA: 0x00064120
+    // 0x00064120
     virtual ~CMemoryStream()
     {
         if (m_bCopy && m_pbBuffer)
@@ -248,7 +248,7 @@ public:
         }
     }
 
-    // samp.dll RVA: 0x00064010
+    // 0x00064010
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes)
     {
         if (m_nOffset + nNumberOfBytes > m_nLength)
@@ -260,7 +260,7 @@ public:
         return nNumberOfBytes;
     }
 
-    // samp.dll RVA: 0x00064060
+    // 0x00064060
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes)
     {
         if (m_nOffset + nNumberOfBytes > m_nLength)
@@ -272,7 +272,7 @@ public:
         return nNumberOfBytes;
     }
 
-    // samp.dll RVA: 0x000640b0
+    // 0x000640b0
     virtual void Seek(int nOffset, eSeek seekMode)
     {
         switch (seekMode)
@@ -292,7 +292,7 @@ public:
             m_nOffset = m_nLength;
     }
 
-    // samp.dll RVA: 0x000640f0
+    // 0x000640f0
     virtual unsigned int Tell()
     {
         return m_nOffset;

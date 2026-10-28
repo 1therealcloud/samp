@@ -4,7 +4,7 @@
 #include "cmdwindow.h"
 #include "dxut/dxut_listbox_native.h"
 #include "game/game.h"
-#include "game/hooks_render.h"
+#include "game/hooks.h"
 #include "game/scripting.h"
 #include "gui/chat_dependencies.h"
 #include "gui/device_lifecycle.h"
@@ -23,7 +23,7 @@ struct DialogControlAccess : CDXUTControl
     using CDXUTControl::UpdateRects;
 };
 
-// samp.dll RVA: 0x0006eec0
+// 0x0006eec0
 CDialog::CDialog(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -40,13 +40,13 @@ CDialog::CDialog(IDirect3DDevice9* device)
     memset(nativeState + 0x89, 0, 0x204);
 }
 
-// samp.dll RVA: 0x0006ef10
+// 0x0006ef10
 bool CDialog::MsgProc(UINT message, WPARAM wparam, LPARAM lparam)
 {
     return CDXUTIMEEditBox::StaticMsgProc(message, wparam, lparam) != false;
 }
 
-// samp.dll RVA: 0x0006ef30
+// 0x0006ef30
 bool CDialog::IsInputHidden()
 {
     if (!*(DWORD*)(nativeState + 0x24))
@@ -54,12 +54,12 @@ bool CDialog::IsInputHidden()
     return ChatImeActive();
 }
 
-// samp.dll RVA: 0x0011c304
+// 0x0011c304
 const float g_dialogNegativeLineScale = -1.5f;
-// samp.dll RVA: 0x00118490
+// 0x00118490
 const float g_dialogLineScale = 1.5f;
 
-// samp.dll RVA: 0x0006f0f0
+// 0x0006f0f0
 RECT* CDialog::GetRect(RECT* rect)
 {
     int left = x;
@@ -71,7 +71,7 @@ RECT* CDialog::GetRect(RECT* rect)
     return rect;
 }
 
-// samp.dll RVA: 0x0006f120
+// 0x0006f120
 int CDialog::GetTextWidth(const char* value)
 {
     ID3DXFont* font = dialog->GetFont(1)->pFont;
@@ -87,14 +87,14 @@ int CDialog::GetTextWidth(const char* value)
     return -1;
 }
 
-// samp.dll RVA: 0x0006f1e0
+// 0x0006f1e0
 int CDialog::GetFontHeight()
 {
     return dialog->GetFont(1)->nHeight;
 }
 
 // Descriptive recovery name; the delimiter is returned without consumption.
-// samp.dll RVA: 0x0006f200
+// 0x0006f200
 const char* CDialog::CopyColumn(const char* value, char* output, int limit)
 {
     while (*value == '\t')
@@ -113,7 +113,7 @@ const char* CDialog::CopyColumn(const char* value, char* output, int limit)
 }
 
 // Descriptive recovery name; a newline is returned without consumption.
-// samp.dll RVA: 0x0006f260
+// 0x0006f260
 const char* CDialog::CopyLine(const char* value, char* output, int limit)
 {
     int copied = 0;
@@ -127,7 +127,7 @@ const char* CDialog::CopyLine(const char* value, char* output, int limit)
     return *value ? value : 0;
 }
 
-// samp.dll RVA: 0x0006f2a0
+// 0x0006f2a0
 void CDialog::Hide()
 {
     g_pGame->SetCursorMode(0, FALSE);
@@ -135,7 +135,7 @@ void CDialog::Hide()
     active = FALSE;
 }
 
-// samp.dll RVA: 0x0006ef40
+// 0x0006ef40
 void CDialog::Recalc()
 {
     if (width < buttonWidth * 2 + 30)
@@ -166,7 +166,7 @@ void CDialog::Recalc()
     input->SetLocation(5, contentHeight - editFontOffset - buttonHeight - 24);
 }
 
-// samp.dll RVA: 0x0006f2d0
+// 0x0006f2d0
 void CDialog::Draw()
 {
     if (!active || g_pInput->m_bEnabled || *(DWORD*)g_deviceScoreboard->nativeState)
@@ -197,7 +197,7 @@ void CDialog::Draw()
     }
 }
 
-// samp.dll RVA: 0x0006f630
+// 0x0006f630
 BOOL CDialog::PopulateList(const char* value, SIZE* size)
 {
     list->RemoveAllItems();
@@ -229,7 +229,7 @@ BOOL CDialog::PopulateList(const char* value, SIZE* size)
     return TRUE;
 }
 
-// samp.dll RVA: 0x0006f730
+// 0x0006f730
 int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
 {
     list->RemoveAllItems();
@@ -328,10 +328,10 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
     return 1;
 }
 
-// samp.dll RVA: 0x0011c724
+// 0x0011c724
 const float g_dialogEditPadding = 14.0f;
 
-// samp.dll RVA: 0x0006fa50
+// 0x0006fa50
 void CDialog::Show(int requestId, int style, const char* caption, const char* value, const char* firstButton, const char* secondButton, BOOL remote)
 {
     if (requestId < 0)
@@ -487,10 +487,10 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
     active = TRUE;
 }
 
-// samp.dll RVA: 0x0011c348
+// 0x0011c348
 int g_dialogResponseRpcId = 62;
 
-// samp.dll RVA: 0x000700d0
+// 0x000700d0
 void CDialog::Close(char response)
 {
     if (!active)
@@ -531,7 +531,7 @@ void CDialog::Close(char response)
 
 typedef char DialogRpcEnums[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9) ? 1 : -1];
 
-// samp.dll RVA: 0x0006f460
+// 0x0006f460
 void CDialog::ResetDialogControls(CDXUTDialog* parent)
 {
     dialog = parent;

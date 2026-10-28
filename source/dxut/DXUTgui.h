@@ -1,4 +1,4 @@
-// samp.dll RVA: 0x000c6af0
+// 0x000c6af0
 void ClientRefreshGuiFonts();
 //--------------------------------------------------------------------------------------
 // File: DXUTgui.h
@@ -83,9 +83,9 @@ enum DXUT_CONTROL_STATE
 
 struct DXUTBlendColor
 {
-    // samp.dll RVA: 0x00085E90
+    // 0x00085E90
     void Init(D3DCOLOR defaultColor, D3DCOLOR disabledColor = D3DCOLOR_ARGB(200, 128, 128, 128), D3DCOLOR hiddenColor = 0);
-    // samp.dll RVA: 0x00085F40
+    // 0x00085F40
     void Blend(UINT iState, float fElapsedTime, float fRate = 0.7f);
 
     D3DCOLOR States[MAX_CONTROL_STATES]; // Modulate colors for all possible control states
@@ -98,12 +98,12 @@ struct DXUTBlendColor
 class CDXUTElement
 {
 public:
-    // samp.dll RVA: 0x00086010
+    // 0x00086010
     void SetTexture(UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor = D3DCOLOR_ARGB(255, 255, 255, 255));
-    // samp.dll RVA: 0x00086060
+    // 0x00086060
     void SetFont(UINT iFont, D3DCOLOR defaultFontColor = D3DCOLOR_ARGB(255, 255, 255, 255), DWORD dwTextFormat = DT_CENTER | DT_VCENTER);
 
-    // samp.dll RVA: 0x00086090
+    // 0x00086090
     void Refresh();
 
     UINT iTexture;      // Index of the texture for this Element
@@ -143,7 +143,7 @@ public:
     HRESULT AddSlider(int ID, int x, int y, int width, int height, int min = 0, int max = 100, int value = 50, bool bIsDefault = false, CDXUTSlider** ppCreated = NULL);
     HRESULT AddEditBox(int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTEditBox** ppCreated = NULL);
     HRESULT AddIMEEditBox(int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTIMEEditBox** ppCreated = NULL);
-    // samp.dll RVA: 0x00090b30
+    // 0x00090b30
     HRESULT AddIMEEditBox(int ID, const char* strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTIMEEditBox** ppCreated = NULL);
     HRESULT AddListBox(int ID, int x, int y, int width, int height, DWORD dwStyle = 0, CDXUTListBox** ppCreated = NULL);
     HRESULT AddControl(CDXUTControl* pControl);
@@ -170,7 +170,7 @@ public:
     {
         return (CDXUTComboBox*)GetControl(ID, DXUT_CONTROL_COMBOBOX);
     }
-    // samp.dll RVA: 0x000710b0
+    // 0x000710b0
     CDXUTSlider* GetSlider(int ID)
     {
         return (CDXUTSlider*)GetControl(ID, DXUT_CONTROL_SLIDER);
@@ -212,16 +212,16 @@ public:
     HRESULT DrawSprite(CDXUTElement* pElement, RECT* prcDest);
     HRESULT CalcTextRect(LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, int nCount = -1);
     HRESULT DrawText(LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow = false, int nCount = -1);
-    // samp.dll RVA: 0x0008cae0
+    // 0x0008cae0
     HRESULT DrawTextA(const char* text, CDXUTElement* element, RECT* rect, bool shadow = false, int count = -1);
 
     // Attributes
-    // samp.dll RVA: 0x00060d10
+    // 0x00060d10
     bool GetVisible()
     {
         return m_bVisible;
     }
-    // samp.dll RVA: 0x00002cb0
+    // 0x00002cb0
     void SetVisible(bool bVisible)
     {
         m_bVisible = bVisible;
@@ -239,17 +239,17 @@ public:
         SetBackgroundColors(colorAllCorners, colorAllCorners, colorAllCorners, colorAllCorners);
     }
     void SetBackgroundColors(D3DCOLOR colorTopLeft, D3DCOLOR colorTopRight, D3DCOLOR colorBottomLeft, D3DCOLOR colorBottomRight);
-    // samp.dll RVA: 0x0006a100
+    // 0x0006a100
     void EnableCaption(bool bEnable)
     {
         m_bCaption = bEnable;
     }
-    // samp.dll RVA: 0x0006a110
+    // 0x0006a110
     int GetCaptionHeight() const
     {
         return m_nCaptionHeight;
     }
-    // samp.dll RVA: 0x0006a120
+    // 0x0006a120
     void SetCaptionHeight(int nHeight)
     {
         m_nCaptionHeight = nHeight;
@@ -261,14 +261,14 @@ public:
         WideCharToMultiByte(CP_ACP, 0, text, -1, m_wszCaption, 256, 0, 0);
         m_wszCaption[255] = 0;
     }
-    // samp.dll RVA: 0x0006a130
+    // 0x0006a130
     void SetCaptionText(const char* text);
     void GetLocation(POINT& Pt) const
     {
         Pt.x = m_x;
         Pt.y = m_y;
     }
-    // samp.dll RVA: 0x00002cc0
+    // 0x00002cc0
     void SetLocation(int x, int y)
     {
         m_x = x;
@@ -279,12 +279,12 @@ public:
         m_width = width;
         m_height = height;
     }
-    // samp.dll RVA: 0x00002ce0
+    // 0x00002ce0
     int GetWidth()
     {
         return m_width;
     }
-    // samp.dll RVA: 0x00002cf0
+    // 0x00002cf0
     int GetHeight()
     {
         return m_height;
@@ -309,12 +309,12 @@ public:
     {
         m_bNonUserEvents = bEnable;
     }
-    // samp.dll RVA: 0x0006a150
+    // 0x0006a150
     void EnableKeyboardInput(bool bEnable)
     {
         m_bKeyboardInput = bEnable;
     }
-    // samp.dll RVA: 0x0006a160
+    // 0x0006a160
     void EnableMouseInput(bool bEnable)
     {
         m_bMouseInput = bEnable;
@@ -322,19 +322,19 @@ public:
 
     // Device state notification
     void Refresh();
-    // samp.dll RVA: 0x00090360
+    // 0x00090360
     HRESULT OnRender(float fElapsedTime);
 
     // Shared resource access. Indexed fonts and textures are shared among
     // all the controls.
     HRESULT SetFont(UINT index, LPCWSTR strFaceName, LONG height, LONG weight);
-    // samp.dll RVA: 0x0008ca50
+    // 0x0008ca50
     HRESULT SetFont(UINT index, const char* face, LONG height, LONG weight);
-    // samp.dll RVA: 0x00086B40
+    // 0x00086B40
     DXUTFontNode* GetFont(UINT index);
 
     HRESULT SetTexture(UINT index, LPCWSTR strFilename);
-    // samp.dll RVA: 0x00089890
+    // 0x00089890
     HRESULT SetTexture(UINT index, const char* filename);
     DXUTTextureNode* GetTexture(UINT index);
 
@@ -357,11 +357,11 @@ private:
     double m_fTimeLastRefresh;
 
     // Initialize default Elements
-    // samp.dll RVA: 0x0008d1c0
+    // 0x0008d1c0
     void InitFont();
-    // samp.dll RVA: 0x000c6af0
+    // 0x000c6af0
     friend void ClientRefreshGuiFonts();
-    // samp.dll RVA: 0x0008d200
+    // 0x0008d200
     void InitDefaultElements();
 
     // Windows message handlers
@@ -447,13 +447,13 @@ public:
     bool MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     int AddFont(LPCWSTR strFaceName, LONG height, LONG weight);
-    // samp.dll RVA: 0x0008c8f0
+    // 0x0008c8f0
     int AddFont(const char* face, LONG height, LONG weight);
     friend class NativeFontManagerProbe;
     friend class NativeDialogProbe;
     friend class CDXUTDialog;
     int AddTexture(LPCWSTR strFilename);
-    // samp.dll RVA: 0x000897d0
+    // 0x000897d0
     int AddTexture(const char* filename);
     friend class NativeTextureProbe;
 
@@ -482,7 +482,7 @@ protected:
 
     // Resource creation helpers
     HRESULT CreateFont(UINT index);
-    // samp.dll RVA: 0x000874b0
+    // 0x000874b0
     HRESULT CreateTexture(UINT index);
 };
 
@@ -492,89 +492,89 @@ protected:
 class CDXUTControl
 {
 public:
-    // samp.dll RVA: 0x0008DCC0
+    // 0x0008DCC0
     CDXUTControl(CDXUTDialog* pDialog = NULL);
-    // samp.dll RVA: 0x0008DE00
+    // 0x0008DE00
     virtual ~CDXUTControl();
 
-    // samp.dll RVA: 0x0008DD10
+    // 0x0008DD10
     virtual HRESULT OnInit()
     {
         return S_OK;
     }
-    // samp.dll RVA: 0x00087560
+    // 0x00087560
     virtual void Refresh();
-    // samp.dll RVA: 0x0008DD20
+    // 0x0008DD20
     virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime) {};
 
     // Windows message handler
-    // samp.dll RVA: 0x0008DD30
+    // 0x0008DD30
     virtual bool MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return false;
     }
 
-    // samp.dll RVA: 0x0008DD40
+    // 0x0008DD40
     virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return false;
     }
-    // samp.dll RVA: 0x0008DD50
+    // 0x0008DD50
     virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam)
     {
         return false;
     }
 
-    // samp.dll RVA: 0x0008DD60
+    // 0x0008DD60
     virtual bool CanHaveFocus()
     {
         return false;
     }
-    // samp.dll RVA: 0x000840D0
+    // 0x000840D0
     virtual void OnFocusIn()
     {
         m_bHasFocus = true;
     }
-    // samp.dll RVA: 0x000840E0
+    // 0x000840E0
     virtual void OnFocusOut()
     {
         m_bHasFocus = false;
     }
-    // samp.dll RVA: 0x0008DD70
+    // 0x0008DD70
     virtual void OnMouseEnter()
     {
         m_bMouseOver = true;
     }
-    // samp.dll RVA: 0x0008DD80
+    // 0x0008DD80
     virtual void OnMouseLeave()
     {
         m_bMouseOver = false;
     }
-    // samp.dll RVA: 0x0008DD90
+    // 0x0008DD90
     virtual void OnHotkey() {}
 
-    // samp.dll RVA: 0x0008DDA0
+    // 0x0008DDA0
     virtual BOOL ContainsPoint(POINT pt)
     {
         return PtInRect(&m_rcBoundingBox, pt);
     }
 
-    // samp.dll RVA: 0x0008DDC0
+    // 0x0008DDC0
     virtual void SetEnabled(bool bEnabled)
     {
         m_bEnabled = bEnabled;
     }
-    // samp.dll RVA: 0x0008DDD0
+    // 0x0008DDD0
     virtual bool GetEnabled()
     {
         return m_bEnabled;
     }
-    // samp.dll RVA: 0x0008DDE0
+    // 0x0008DDE0
     virtual void SetVisible(bool bVisible)
     {
         m_bVisible = bVisible;
     }
-    // samp.dll RVA: 0x0008DDF0
+    // 0x0008DDF0
     virtual bool GetVisible()
     {
         return m_bVisible;
@@ -597,15 +597,15 @@ public:
         m_ID = ID;
     }
 
-    // samp.dll RVA: 0x000848A0
-    // samp.dll RVA: 0x00066B00
+    // 0x000848A0
+    // 0x00066B00
     void SetLocation(int x, int y)
     {
         m_x = x;
         m_y = y;
         UpdateRects();
     }
-    // samp.dll RVA: 0x00066B20
+    // 0x00066B20
     void SetSize(int width, int height)
     {
         m_width = width;
@@ -613,7 +613,7 @@ public:
         UpdateRects();
     }
 
-    // samp.dll RVA: 0x00084120
+    // 0x00084120
     void SetHotkey(UINT nHotkey)
     {
         m_nHotkey = nHotkey;
@@ -635,14 +635,14 @@ public:
         return m_pUserData;
     }
 
-    // samp.dll RVA: 0x00087540
+    // 0x00087540
     virtual void SetTextColor(D3DCOLOR Color);
-    // samp.dll RVA: 0x00069270
+    // 0x00069270
     CDXUTElement* GetElement(UINT iElement)
     {
         return m_Elements.GetAt(iElement);
     }
-    // samp.dll RVA: 0x00089D50
+    // 0x00089D50
     HRESULT SetElement(UINT iElement, CDXUTElement* pElement);
 
     bool m_bVisible;   // Shown/hidden flag
@@ -820,43 +820,43 @@ class CDXUTScrollBar : public CDXUTControl
     friend class CDXUTListBoxDL;
 
 public:
-    // samp.dll RVA: 0x0008E750
+    // 0x0008E750
     CDXUTScrollBar(CDXUTDialog* pDialog = NULL);
-    // samp.dll RVA: 0x0008E800
+    // 0x0008E800
     virtual ~CDXUTScrollBar();
 
-    // samp.dll RVA: 0x00084E70
+    // 0x00084E70
     virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // samp.dll RVA: 0x00088250
+    // 0x00088250
     virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
 
-    // samp.dll RVA: 0x000884D0
+    // 0x000884D0
     virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
-    // samp.dll RVA: 0x000881B0
+    // 0x000881B0
     virtual void UpdateRects();
 
-    // samp.dll RVA: 0x000886D0
+    // 0x000886D0
     void SetTrackRange(int nStart, int nEnd);
-    // samp.dll RVA: 0x00066B40
+    // 0x00066B40
     int GetTrackPos()
     {
         return m_nPosition;
     }
-    // samp.dll RVA: 0x00066B50
-    // samp.dll RVA: 0x00084DA0
-    // samp.dll RVA: 0x00084E80
+    // 0x00066B50
+    // 0x00084DA0
+    // 0x00084E80
     void SetTrackPos(int nPosition)
     {
         m_nPosition = nPosition;
         Cap();
         UpdateThumbRect();
     }
-    // samp.dll RVA: 0x00084190
+    // 0x00084190
     int GetPageSize()
     {
         return m_nPageSize;
     }
-    // samp.dll RVA: 0x00066B70
+    // 0x00066B70
     void SetPageSize(int nPageSize)
     {
         m_nPageSize = nPageSize;
@@ -864,9 +864,9 @@ public:
         UpdateThumbRect();
     }
 
-    // samp.dll RVA: 0x00088230
+    // 0x00088230
     void Scroll(int nDelta); // Scroll by nDelta items (plus or minus)
-    // samp.dll RVA: 0x00084E30
+    // 0x00084E30
     void ShowItem(int nIndex); // Ensure that item nIndex is displayed, scroll if necessary
 
 protected:
@@ -1139,14 +1139,14 @@ protected:
 class CUniBuffer
 {
 public:
-    // samp.dll RVA: 0x0009bbb0
+    // 0x0009bbb0
     CUniBuffer(int nInitialSize = 1);
-    // samp.dll RVA: 0x0009b440
+    // 0x0009b440
     ~CUniBuffer();
 
-    // samp.dll RVA: 0x0009ba60
+    // 0x0009ba60
     static void Initialize();
-    // samp.dll RVA: 0x0009b1d0
+    // 0x0009b1d0
     static void Uninitialize();
 
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
@@ -1154,7 +1154,7 @@ public:
     {
         return m_nBufferSize;
     }
-    // samp.dll RVA: 0x0009b240
+    // 0x0009b240
     bool SetBufferSize(int nSize);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int GetTextSize()
@@ -1171,7 +1171,7 @@ public:
     {
         return m_pwszBuffer[n];
     }
-    // samp.dll RVA: 0x0009b470
+    // 0x0009b470
     WCHAR& operator[](int n);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     DXUTFontNode* GetFontNode()
@@ -1183,41 +1183,41 @@ public:
     {
         m_pFontNode = pFontNode;
     }
-    // samp.dll RVA: 0x0009b480
+    // 0x0009b480
     void Clear();
 
-    // samp.dll RVA: 0x0009b490
+    // 0x0009b490
     bool InsertChar(int nIndex, WCHAR wChar); // Inserts the char at specified index. If nIndex == -1, insert to the end.
     // Native ANSI/DBCS path: only the first lead byte returns false.
-    // samp.dll RVA: 0x0009b520
+    // 0x0009b520
     bool InsertChar(int nIndex, char ch);
     // Preserves native whole-object assignment in the single-byte path.
-    // samp.dll RVA: 0x0009bbf0
+    // 0x0009bbf0
     bool OverwriteAnsiChar(int nIndex, char ch);
-    // samp.dll RVA: 0x0009b5d0
+    // 0x0009b5d0
     bool RemoveChar(int nIndex); // Removes the char at specified index. If nIndex == -1, remove the last char.
-    // samp.dll RVA: 0x0009b630
+    // 0x0009b630
     bool InsertString(
         int nIndex, const WCHAR* pStr,
         int nCount =
             -1); // Inserts the first nCount characters of the string pStr at specified index.  If nCount == -1, the entire string is inserted. If nIndex == -1, insert to the end.
-    // samp.dll RVA: 0x0009b9a0
+    // 0x0009b9a0
     bool SetText(LPCWSTR wszText);
-    // samp.dll RVA: 0x0009ba00
+    // 0x0009ba00
     bool SetText(const char* text);
 
     // Uniscribe
-    // samp.dll RVA: 0x0009b770
+    // 0x0009b770
     HRESULT CPtoX(int nCP, BOOL bTrail, int* pX);
-    // samp.dll RVA: 0x0009b7b0
+    // 0x0009b7b0
     HRESULT XtoCP(int nX, int* pCP, int* pnTrail);
-    // samp.dll RVA: 0x0009b840
+    // 0x0009b840
     void GetPriorItemPos(int nCP, int* pPrior);
-    // samp.dll RVA: 0x0009b8d0
+    // 0x0009b8d0
     void GetNextItemPos(int nCP, int* pPrior);
 
 private:
-    // samp.dll RVA: 0x0009b310
+    // 0x0009b310
     HRESULT Analyse(); // Uniscribe -- Analyse() analyses the string in the buffer
 
     WCHAR* m_pwszBuffer; // Buffer to hold text
@@ -1234,61 +1234,61 @@ private:
 
 private:
     // Empty implementation of the Uniscribe API
-    // samp.dll RVA: 0x000841e0
+    // 0x000841e0
     static HRESULT WINAPI Dummy_ScriptApplyDigitSubstitution(const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE*)
     {
         return E_NOTIMPL;
     }
-    // samp.dll RVA: 0x000841f0
+    // 0x000841f0
     static HRESULT WINAPI Dummy_ScriptStringAnalyse(HDC, const void*, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*,
                                                     SCRIPT_STRING_ANALYSIS*)
     {
         return E_NOTIMPL;
     }
-    // samp.dll RVA: 0x00084200
+    // 0x00084200
     static HRESULT WINAPI Dummy_ScriptStringCPtoX(SCRIPT_STRING_ANALYSIS, int, BOOL, int*)
     {
         return E_NOTIMPL;
     }
-    // samp.dll RVA: 0x00084210
+    // 0x00084210
     static HRESULT WINAPI Dummy_ScriptStringXtoCP(SCRIPT_STRING_ANALYSIS, int, int*, int*)
     {
         return E_NOTIMPL;
     }
-    // samp.dll RVA: 0x00084220
+    // 0x00084220
     static HRESULT WINAPI Dummy_ScriptStringFree(SCRIPT_STRING_ANALYSIS*)
     {
         return E_NOTIMPL;
     }
-    // samp.dll RVA: 0x00084230
+    // 0x00084230
     static const SCRIPT_LOGATTR* WINAPI Dummy_ScriptString_pLogAttr(SCRIPT_STRING_ANALYSIS)
     {
         return NULL;
     }
-    // samp.dll RVA: 0x00084240
+    // 0x00084240
     static const int* WINAPI Dummy_ScriptString_pcOutChars(SCRIPT_STRING_ANALYSIS)
     {
         return NULL;
     }
 
     // Function pointers
-    // samp.dll RVA: 0x00140bfc
+    // 0x00140bfc
     static HRESULT(WINAPI* _ScriptApplyDigitSubstitution)(const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE*);
-    // samp.dll RVA: 0x00140c00
+    // 0x00140c00
     static HRESULT(WINAPI* _ScriptStringAnalyse)(HDC, const void*, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*,
                                                  SCRIPT_STRING_ANALYSIS*);
-    // samp.dll RVA: 0x00140c04
+    // 0x00140c04
     static HRESULT(WINAPI* _ScriptStringCPtoX)(SCRIPT_STRING_ANALYSIS, int, BOOL, int*);
-    // samp.dll RVA: 0x00140c08
+    // 0x00140c08
     static HRESULT(WINAPI* _ScriptStringXtoCP)(SCRIPT_STRING_ANALYSIS, int, int*, int*);
-    // samp.dll RVA: 0x00140c0c
+    // 0x00140c0c
     static HRESULT(WINAPI* _ScriptStringFree)(SCRIPT_STRING_ANALYSIS*);
-    // samp.dll RVA: 0x00140c10
+    // 0x00140c10
     static const SCRIPT_LOGATTR*(WINAPI* _ScriptString_pLogAttr)(SCRIPT_STRING_ANALYSIS);
-    // samp.dll RVA: 0x00140c14
+    // 0x00140c14
     static const int*(WINAPI* _ScriptString_pcOutChars)(SCRIPT_STRING_ANALYSIS);
 
-    // samp.dll RVA: 0x00180618
+    // 0x00180618
     static HINSTANCE s_hDll; // Uniscribe DLL handle
 };
 
@@ -1300,63 +1300,63 @@ typedef char NativeUniBufferExtent[(sizeof(CUniBuffer) == 0x13) ? 1 : -1];
 class CDXUTEditBox : public CDXUTControl
 {
 public:
-    // samp.dll RVA: 0x0008ed00
+    // 0x0008ed00
     CDXUTEditBox(CDXUTDialog* pDialog = NULL);
-    // samp.dll RVA: 0x0008ee30
+    // 0x0008ee30
     virtual ~CDXUTEditBox();
 
-    // samp.dll RVA: 0x00088970
+    // 0x00088970
     virtual bool HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // samp.dll RVA: 0x00088be0
+    // 0x00088be0
     virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
-    // samp.dll RVA: 0x00088da0
+    // 0x00088da0
     virtual bool MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // samp.dll RVA: 0x00085130
+    // 0x00085130
     virtual void UpdateRects();
-    // samp.dll RVA: 0x0008ee00
+    // 0x0008ee00
     virtual bool CanHaveFocus()
     {
         return (m_bVisible && m_bEnabled);
     }
-    // samp.dll RVA: 0x0008ee80
+    // 0x0008ee80
     virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
-    // samp.dll RVA: 0x00088d90
+    // 0x00088d90
     virtual void OnFocusIn();
 
     // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
     void SetText(LPCWSTR wszText, bool bSelected = false);
-    // samp.dll RVA: 0x00085000
+    // 0x00085000
     void SetText(const char* text, bool bSelected = false);
-    // samp.dll RVA: 0x000850d0
+    // 0x000850d0
     const char* GetText();
     // Updates both native mask flags, without invalidating cached analysis.
-    // samp.dll RVA: 0x0006eeb0
+    // 0x0006eeb0
     void SetPasswordMode(bool enabled);
     // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int GetTextLength()
     {
         return m_Buffer.GetTextSize();
     } // Returns text length in chars excluding NULL.
-    // samp.dll RVA: 0x00088950
+    // 0x00088950
     HRESULT GetTextCopy(LPWSTR strDest, UINT bufferCount);
-    // samp.dll RVA: 0x00084fd0
+    // 0x00084fd0
     void ClearText();
-    // samp.dll RVA: 0x0008ee20
+    // 0x0008ee20
     virtual void SetTextColor(D3DCOLOR Color)
     {
         m_TextColor = Color;
     } // Text color
-    // samp.dll RVA: 0x00068dd0
+    // 0x00068dd0
     void SetSelectedTextColor(D3DCOLOR Color)
     {
         m_SelTextColor = Color;
     } // Selected text color
-    // samp.dll RVA: 0x00068de0
+    // 0x00068de0
     void SetSelectedBackColor(D3DCOLOR Color)
     {
         m_SelBkColor = Color;
     } // Selected background color
-    // samp.dll RVA: 0x00068df0
+    // 0x00068df0
     void SetCaretColor(D3DCOLOR Color)
     {
         m_CaretColor = Color;
@@ -1373,21 +1373,21 @@ public:
         m_nSpacing = nSpacing;
         UpdateRects();
     }
-    // samp.dll RVA: 0x00089000
+    // 0x00089000
     void ParseFloatArray(float* pNumbers, int nCount);
     // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
     void SetTextFloatArray(const float* pNumbers, int nCount);
 
 protected:
-    // samp.dll RVA: 0x00084ef0
+    // 0x00084ef0
     void PlaceCaret(int nCP);
-    // samp.dll RVA: 0x000850e0
+    // 0x000850e0
     void DeleteSelectionText();
-    // samp.dll RVA: 0x00085cf0
+    // 0x00085cf0
     void ResetCaretBlink();
-    // samp.dll RVA: 0x00085260
+    // 0x00085260
     void CopyToClipboard();
-    // samp.dll RVA: 0x00085320
+    // 0x00085320
     void PasteFromClipboard();
 
     CUniBuffer m_Buffer;     // Buffer to hold text
@@ -1412,7 +1412,7 @@ protected:
     bool m_bMouseDrag; // True to indicate drag in progress
 
     // Static
-    // samp.dll RVA: 0x0017f694
+    // 0x0017f694
     static bool s_bHideCaret; // If true, we don't render the caret.
 };
 
@@ -1426,232 +1426,232 @@ class CDXUTIMEEditBox : public CDXUTEditBox
 {
 protected:
     // Empty implementation of the IMM32 API
-    // samp.dll RVA: 0x00084250
+    // 0x00084250
     static INPUTCONTEXT* WINAPI Dummy_ImmLockIMC(HIMC)
     {
         return NULL;
     }
-    // samp.dll RVA: 0x00084260
+    // 0x00084260
     static BOOL WINAPI Dummy_ImmUnlockIMC(HIMC)
     {
         return FALSE;
     }
-    // samp.dll RVA: 0x00084270
+    // 0x00084270
     static LPVOID WINAPI Dummy_ImmLockIMCC(HIMCC)
     {
         return NULL;
     }
-    // samp.dll RVA: 0x00084280
+    // 0x00084280
     static BOOL WINAPI Dummy_ImmUnlockIMCC(HIMCC)
     {
         return FALSE;
     }
-    // samp.dll RVA: 0x00084290
+    // 0x00084290
     static BOOL WINAPI Dummy_ImmDisableTextFrameService(DWORD)
     {
         return TRUE;
     }
-    // samp.dll RVA: 0x000842a0
+    // 0x000842a0
     static LONG WINAPI Dummy_ImmGetCompositionStringW(HIMC, DWORD, LPVOID, DWORD)
     {
         return IMM_ERROR_GENERAL;
     }
-    // samp.dll RVA: 0x000842b0
+    // 0x000842b0
     static DWORD WINAPI Dummy_ImmGetCandidateListW(HIMC, DWORD, LPCANDIDATELIST, DWORD)
     {
         return 0;
     }
-    // samp.dll RVA: 0x000842c0
+    // 0x000842c0
     static HIMC WINAPI Dummy_ImmGetContext(HWND)
     {
         return NULL;
     }
-    // samp.dll RVA: 0x000842d0
+    // 0x000842d0
     static BOOL WINAPI Dummy_ImmReleaseContext(HWND, HIMC)
     {
         return FALSE;
     }
-    // samp.dll RVA: 0x000842e0
+    // 0x000842e0
     static HIMC WINAPI Dummy_ImmAssociateContext(HWND, HIMC)
     {
         return NULL;
     }
-    // samp.dll RVA: 0x000842f0
+    // 0x000842f0
     static BOOL WINAPI Dummy_ImmGetOpenStatus(HIMC)
     {
         return 0;
     }
-    // samp.dll RVA: 0x00084300
+    // 0x00084300
     static BOOL WINAPI Dummy_ImmSetOpenStatus(HIMC, BOOL)
     {
         return 0;
     }
-    // samp.dll RVA: 0x00084310
+    // 0x00084310
     static BOOL WINAPI Dummy_ImmGetConversionStatus(HIMC, LPDWORD, LPDWORD)
     {
         return 0;
     }
-    // samp.dll RVA: 0x00084320
+    // 0x00084320
     static HWND WINAPI Dummy_ImmGetDefaultIMEWnd(HWND)
     {
         return NULL;
     }
-    // samp.dll RVA: 0x00084330
+    // 0x00084330
     static UINT WINAPI Dummy_ImmGetIMEFileNameA(HKL, LPSTR, UINT)
     {
         return 0;
     }
-    // samp.dll RVA: 0x00084340
+    // 0x00084340
     static UINT WINAPI Dummy_ImmGetVirtualKey(HWND)
     {
         return 0;
     }
-    // samp.dll RVA: 0x00084350
+    // 0x00084350
     static BOOL WINAPI Dummy_ImmNotifyIME(HIMC, DWORD, DWORD, DWORD)
     {
         return FALSE;
     }
-    // samp.dll RVA: 0x00084360
+    // 0x00084360
     static BOOL WINAPI Dummy_ImmSetConversionStatus(HIMC, DWORD, DWORD)
     {
         return FALSE;
     }
-    // samp.dll RVA: 0x00084370
+    // 0x00084370
     static BOOL WINAPI Dummy_ImmSimulateHotKey(HWND, DWORD)
     {
         return FALSE;
     }
-    // samp.dll RVA: 0x00084380
+    // 0x00084380
     static BOOL WINAPI Dummy_ImmIsIME(HKL)
     {
         return FALSE;
     }
 
     // Traditional Chinese IME
-    // samp.dll RVA: 0x00084390
+    // 0x00084390
     static UINT WINAPI Dummy_GetReadingString(HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT)
     {
         return 0;
     }
-    // samp.dll RVA: 0x000843a0
+    // 0x000843a0
     static BOOL WINAPI Dummy_ShowReadingWindow(HIMC, BOOL)
     {
         return FALSE;
     }
 
     // Verion library imports
-    // samp.dll RVA: 0x000843b0
+    // 0x000843b0
     static BOOL APIENTRY Dummy_VerQueryValueA(const LPVOID, LPSTR, LPVOID*, PUINT)
     {
         return 0;
     }
-    // samp.dll RVA: 0x000843c0
+    // 0x000843c0
     static BOOL APIENTRY Dummy_GetFileVersionInfoA(LPSTR, DWORD, DWORD, LPVOID)
     {
         return 0;
     }
-    // samp.dll RVA: 0x000843d0
+    // 0x000843d0
     static DWORD APIENTRY Dummy_GetFileVersionInfoSizeA(LPSTR, LPDWORD)
     {
         return 0;
     }
 
     // Function pointers: IMM32
-    // samp.dll RVA: 0x00140c18
+    // 0x00140c18
     static INPUTCONTEXT*(WINAPI* _ImmLockIMC)(HIMC);
-    // samp.dll RVA: 0x00140c1c
+    // 0x00140c1c
     static BOOL(WINAPI* _ImmUnlockIMC)(HIMC);
-    // samp.dll RVA: 0x00140c20
+    // 0x00140c20
     static LPVOID(WINAPI* _ImmLockIMCC)(HIMCC);
-    // samp.dll RVA: 0x00140c24
+    // 0x00140c24
     static BOOL(WINAPI* _ImmUnlockIMCC)(HIMCC);
-    // samp.dll RVA: 0x00140c28
+    // 0x00140c28
     static BOOL(WINAPI* _ImmDisableTextFrameService)(DWORD);
-    // samp.dll RVA: 0x00140c2c
+    // 0x00140c2c
     static LONG(WINAPI* _ImmGetCompositionStringW)(HIMC, DWORD, LPVOID, DWORD);
-    // samp.dll RVA: 0x00140c30
+    // 0x00140c30
     static DWORD(WINAPI* _ImmGetCandidateListW)(HIMC, DWORD, LPCANDIDATELIST, DWORD);
-    // samp.dll RVA: 0x00140c34
+    // 0x00140c34
     static HIMC(WINAPI* _ImmGetContext)(HWND);
-    // samp.dll RVA: 0x00140c38
+    // 0x00140c38
     static BOOL(WINAPI* _ImmReleaseContext)(HWND, HIMC);
-    // samp.dll RVA: 0x00140c3c
+    // 0x00140c3c
     static HIMC(WINAPI* _ImmAssociateContext)(HWND, HIMC);
-    // samp.dll RVA: 0x00140c40
+    // 0x00140c40
     static BOOL(WINAPI* _ImmGetOpenStatus)(HIMC);
-    // samp.dll RVA: 0x00140c44
+    // 0x00140c44
     static BOOL(WINAPI* _ImmSetOpenStatus)(HIMC, BOOL);
-    // samp.dll RVA: 0x00140c48
+    // 0x00140c48
     static BOOL(WINAPI* _ImmGetConversionStatus)(HIMC, LPDWORD, LPDWORD);
-    // samp.dll RVA: 0x00140c4c
+    // 0x00140c4c
     static HWND(WINAPI* _ImmGetDefaultIMEWnd)(HWND);
-    // samp.dll RVA: 0x00140c50
+    // 0x00140c50
     static UINT(WINAPI* _ImmGetIMEFileNameA)(HKL, LPSTR, UINT);
-    // samp.dll RVA: 0x00140c54
+    // 0x00140c54
     static UINT(WINAPI* _ImmGetVirtualKey)(HWND);
-    // samp.dll RVA: 0x00140c58
+    // 0x00140c58
     static BOOL(WINAPI* _ImmNotifyIME)(HIMC, DWORD, DWORD, DWORD);
-    // samp.dll RVA: 0x00140c5c
+    // 0x00140c5c
     static BOOL(WINAPI* _ImmSetConversionStatus)(HIMC, DWORD, DWORD);
-    // samp.dll RVA: 0x00140c60
+    // 0x00140c60
     static BOOL(WINAPI* _ImmSimulateHotKey)(HWND, DWORD);
-    // samp.dll RVA: 0x00140c64
+    // 0x00140c64
     static BOOL(WINAPI* _ImmIsIME)(HKL);
 
     // Function pointers: Traditional Chinese IME
-    // samp.dll RVA: 0x00140c68
+    // 0x00140c68
     static UINT(WINAPI* _GetReadingString)(HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT);
-    // samp.dll RVA: 0x00140c6c
+    // 0x00140c6c
     static BOOL(WINAPI* _ShowReadingWindow)(HIMC, BOOL);
 
     // Function pointers: Verion library imports
-    // samp.dll RVA: 0x00140c70
+    // 0x00140c70
     static BOOL(APIENTRY* _VerQueryValueA)(const LPVOID, LPSTR, LPVOID*, PUINT);
-    // samp.dll RVA: 0x00140c74
+    // 0x00140c74
     static BOOL(APIENTRY* _GetFileVersionInfoA)(LPSTR, DWORD, DWORD, LPVOID);
-    // samp.dll RVA: 0x00140c78
+    // 0x00140c78
     static DWORD(APIENTRY* _GetFileVersionInfoSizeA)(LPSTR, LPDWORD);
 
 public:
-    // samp.dll RVA: 0x0008F370
+    // 0x0008F370
     CDXUTIMEEditBox(CDXUTDialog* pDialog = NULL);
-    // samp.dll RVA: 0x0008F470
+    // 0x0008F470
     virtual ~CDXUTIMEEditBox();
 
-    // samp.dll RVA: 0x0008bcc0
+    // 0x0008bcc0
     static void Initialize();
-    // samp.dll RVA: 0x00085d10
+    // 0x00085d10
     static void Uninitialize();
 
-    // samp.dll RVA: 0x00085460
+    // 0x00085460
     static HRESULT StaticOnCreateDevice();
-    // samp.dll RVA: 0x0008C2C0
+    // 0x0008C2C0
     static bool StaticMsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // samp.dll RVA: 0x00085940
+    // 0x00085940
     static void EnableImeSystem(bool bEnable);
 
-    // samp.dll RVA: 0x00090230
+    // 0x00090230
     virtual void Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
-    // samp.dll RVA: 0x0008B300
+    // 0x0008B300
     virtual bool MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // samp.dll RVA: 0x00089110
+    // 0x00089110
     virtual bool HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam);
-    // samp.dll RVA: 0x00085490
+    // 0x00085490
     virtual void UpdateRects();
-    // samp.dll RVA: 0x000890B0
+    // 0x000890B0
     virtual void OnFocusIn();
-    // samp.dll RVA: 0x00085CC0
+    // 0x00085CC0
     virtual void OnFocusOut();
 
-    // samp.dll RVA: 0x00085C40
+    // 0x00085C40
     void PumpMessage();
 
-    // samp.dll RVA: 0x0008F480
+    // 0x0008F480
     virtual void RenderCandidateReadingWindow(IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading);
-    // samp.dll RVA: 0x0008FAA0
+    // 0x0008FAA0
     virtual void RenderComposition(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
-    // samp.dll RVA: 0x000900E0
+    // 0x000900E0
     virtual void RenderIndicator(IDirect3DDevice9* pd3dDevice, float fElapsedTime);
 
 protected:
@@ -1670,28 +1670,28 @@ protected:
     {
         return SUBLANGID(LOWORD(s_hklCurrent));
     }
-    // samp.dll RVA: 0x00085430
+    // 0x00085430
     static void SendKey(BYTE nVirtKey);
-    // samp.dll RVA: 0x00085500
+    // 0x00085500
     static DWORD GetImeId(UINT uIndex = 0);
-    // samp.dll RVA: 0x00085760
+    // 0x00085760
     static void CheckInputLocale();
-    // samp.dll RVA: 0x00085860
+    // 0x00085860
     static void CheckToggleState();
-    // samp.dll RVA: 0x00085950
+    // 0x00085950
     static void SetupImeApi();
-    // samp.dll RVA: 0x000859E0
+    // 0x000859E0
     static void ResetCompositionString();
-    // samp.dll RVA: 0x00085A10
+    // 0x00085A10
     void TruncateCompString(bool bUseBackSpace = true, int iNewStrLen = 0);
-    // samp.dll RVA: 0x00085B70
+    // 0x00085B70
     void FinalizeString(bool bSend);
-    // samp.dll RVA: 0x0008AC70
+    // 0x0008AC70
     static void GetReadingWindowOrientation(DWORD dwId);
-    // samp.dll RVA: 0x0008ADD0
+    // 0x0008ADD0
     static void GetPrivateReadingString();
 
-    // samp.dll RVA: 0x00085B20
+    // 0x00085B20
     void SendCompString();
 
 protected:
@@ -1732,52 +1732,52 @@ protected:
     };
 
     // Application-wide data
-    // samp.dll RVA: 0x00180604
+    // 0x00180604
     static HINSTANCE s_hDllImm32; // IMM32 DLL handle
-    // samp.dll RVA: 0x0017f6a4
+    // 0x0017f6a4
     static HINSTANCE s_hDllVer; // Version DLL handle
-    // samp.dll RVA: 0x0017F6A8
+    // 0x0017F6A8
     static HIMC s_hImcDef; // Default input context
 
-    // samp.dll RVA: 0x00180600
+    // 0x00180600
     static HKL s_hklCurrent; // Current keyboard layout of the process
-    // samp.dll RVA: 0x0017F6B1
+    // 0x0017F6B1
     static bool s_bVerticalCand; // Indicates that the candidates are listed vertically
-    // samp.dll RVA: 0x00140C9C
+    // 0x00140C9C
     static LPWSTR s_wszCurrIndicator; // Points to an indicator string that corresponds to current input locale
-    // samp.dll RVA: 0x00140C7C
+    // 0x00140C7C
     static WCHAR s_aszIndicator[5][3]; // String to draw to indicate current input locale
-    // samp.dll RVA: 0x0017F695
+    // 0x0017F695
     static bool s_bInsertOnType; // Insert the character as soon as a key is pressed (Korean behavior)
-    // samp.dll RVA: 0x0017f6b4
+    // 0x0017f6b4
     static HINSTANCE s_hDllIme; // Instance handle of the current IME module
-    // samp.dll RVA: 0x0018061C
+    // 0x0018061C
     static IMESTATE s_ImeState; // IME global state
-    // samp.dll RVA: 0x0017F6B0
+    // 0x0017F6B0
     static bool s_bEnableImeSystem; // Whether the IME system is active
-    // samp.dll RVA: 0x0017F69C
+    // 0x0017F69C
     static POINT s_ptCompString; // Composition string position. Updated every frame.
-    // samp.dll RVA: 0x0017F690
+    // 0x0017F690
     static int s_nCompCaret; // Caret position of the composition string
-    // samp.dll RVA: 0x0017F6AC
+    // 0x0017F6AC
     static int s_nFirstTargetConv; // Index of the first target converted char in comp string.  If none, -1.
-    // samp.dll RVA: 0x0018062c
+    // 0x0018062c
     static CUniBuffer s_CompString; // Buffer to hold the composition string (we fix its length)
-    // samp.dll RVA: 0x0017F6B8
+    // 0x0017F6B8
     static BYTE s_abCompStringAttr[MAX_COMPSTRING_SIZE];
-    // samp.dll RVA: 0x0017F7B8
+    // 0x0017F7B8
     static DWORD s_adwCompStringClause[MAX_COMPSTRING_SIZE];
-    // samp.dll RVA: 0x001803C0
+    // 0x001803C0
     static WCHAR s_wszReadingString[32]; // Used only with horizontal reading window (why?)
-    // samp.dll RVA: 0x00180640
+    // 0x00180640
     static CCandList s_CandList; // Data relevant to the candidate list
-    // samp.dll RVA: 0x0017F696
+    // 0x0017F696
     static bool s_bShowReadingWindow; // Indicates whether reading window is visible
-    // samp.dll RVA: 0x001803BA
+    // 0x001803BA
     static bool s_bHorizontalReading; // Indicates whether the reading window is vertical or horizontal
-    // samp.dll RVA: 0x001803B9
+    // 0x001803B9
     static bool s_bChineseIME;
-    // samp.dll RVA: 0x00180620
+    // 0x00180620
     static CGrowableArray<CInputLocale> s_Locale; // Array of loaded keyboard layout on system
 
     // Color of various IME elements

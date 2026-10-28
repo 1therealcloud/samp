@@ -27,7 +27,7 @@
 #include "scoreboard.h"
 #include "svrnetstats.h"
 #include <string.h>
-// samp.dll RVA: 0x00011f80
+// 0x00011f80
 void ScrCustomModelDownload(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -71,7 +71,7 @@ void ScrCustomModelDownload(RPCParameters* parameters)
         g_customModels->ProcessCompressedChunk(stage, unpackedLength, chunk, (DWORD)length);
     }
 }
-// samp.dll RVA: 0x00011d80
+// 0x00011d80
 void ScrCustomModelRecord(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -100,7 +100,7 @@ void ScrCustomModelRecord(RPCParameters* parameters)
     g_customModels->AddRecord(index, record);
     g_customModels->SetExpectedRecordCount(count);
 }
-// samp.dll RVA: 0x0000ea40
+// 0x0000ea40
 void ScrCustomModelsReset(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -111,7 +111,7 @@ void ScrCustomModelsReset(RPCParameters* parameters)
         g_customModels->DeleteRecord(0);
     }
 }
-// samp.dll RVA: 0x0000ead0
+// 0x0000ead0
 void ScrCustomModelsComplete(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -122,11 +122,11 @@ void ScrCustomModelsComplete(RPCParameters* parameters)
         models->StopWorkers();
     }
 }
-// samp.dll RVA: 0x0013c0b4
+// 0x0013c0b4
 DWORD g_rpcInitValue13C0B4 = 2;
-// samp.dll RVA: 0x001180ec
+// 0x001180ec
 const char g_rpcConnectedFormat[] = "Connected to {B9C9BF}%.64s";
-// samp.dll RVA: 0x00010530
+// 0x00010530
 void ScrInitGame(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -194,15 +194,15 @@ void ScrInitGame(RPCParameters* parameters)
     *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) = 5;
     players->local->PrepareForClassSelection();
 }
-// samp.dll RVA: 0x0000e4e0
+// 0x0000e4e0
 void ScrGamemodeRestart(RPCParameters* parameters)
 {
     (void)parameters;
     ((CNetGame*)g_pNetGame)->ShutdownForRestart();
 }
-// samp.dll RVA: 0x00118108
+// 0x00118108
 const char g_rpcCouldNotSpawnPlayer[] = "Warning: Couldn't spawn player(%u)";
-// samp.dll RVA: 0x000109d0
+// 0x000109d0
 void ScrWorldPlayerAdd(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -247,7 +247,7 @@ void ScrWorldPlayerAdd(RPCParameters* parameters)
             ped->SetImmunities(0, 1, 1, 0, 0);
     }
 }
-// samp.dll RVA: 0x0000e500
+// 0x0000e500
 void ScrWorldVehicleAdd(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -288,7 +288,7 @@ void ScrWorldVehicleAdd(RPCParameters* parameters)
         vehicle->SetColor((BYTE)first, (BYTE)second);
     RakNet::GetTimeNS();
 }
-// samp.dll RVA: 0x00010dc0
+// 0x00010dc0
 void ScrWorldVehicleRemove(RPCParameters* parameters)
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -344,7 +344,7 @@ void ScrWorldVehicleRemove(RPCParameters* parameters)
         vehicles->Delete((WORD)(id + 3));
     }
 }
-// samp.dll RVA: 0x0000f150
+// 0x0000f150
 void ScmEvent(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -357,7 +357,7 @@ void ScmEvent(RPCParameters* parameters)
     stream.Read(param3);
     GameProcessIncomingEvent(player, eventType, (WORD)vehicle, param2, param3);
 }
-// samp.dll RVA: 0x0000e910
+// 0x0000e910
 BYTE ClientCheckChecksum(const void* data, WORD length)
 {
     BYTE result = 0;
@@ -366,7 +366,7 @@ BYTE ClientCheckChecksum(const void* data, WORD length)
         result ^= bytes[i] & 0xcc;
     return result;
 }
-// samp.dll RVA: 0x00011860
+// 0x00011860
 void SendClientCheckResponse(BYTE type, DWORD argument, BYTE result)
 {
     RakNet::BitStream stream;
@@ -375,7 +375,7 @@ void SendClientCheckResponse(BYTE type, DWORD argument, BYTE result)
     stream.Write(result);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(const_cast<int*>(&g_rpcClientCheck), &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
-// samp.dll RVA: 0x00011930
+// 0x00011930
 void ClientCheck(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -472,21 +472,21 @@ void ClientCheck(RPCParameters* parameters)
         SendClientCheckResponse(0x48, RakNet::GetTime(), 0);
     }
 }
-// samp.dll RVA: 0x001180c4
+// 0x001180c4
 const char g_rpcRejectedVersion[] = "CONNECTION REJECTED: Incorrect Version.";
-// samp.dll RVA: 0x00118098
+// 0x00118098
 const char g_rpcRejectedNickname[] = "CONNECTION REJECTED: Unacceptable NickName";
-// samp.dll RVA: 0x00118060
+// 0x00118060
 const char g_rpcNicknameLength[] = "Please choose another nick between and 3-20 characters";
-// samp.dll RVA: 0x00118040
+// 0x00118040
 const char g_rpcNicknameCharacters[] = "Please use only a-z, A-Z, 0-9";
-// samp.dll RVA: 0x0011800c
+// 0x0011800c
 const char g_rpcNicknameQuit[] = "Use /quit to exit or press ESC and select Quit Game";
-// samp.dll RVA: 0x00117fe4
+// 0x00117fe4
 const char g_rpcRejectedMod[] = "CONNECTION REJECTED: Bad mod version.";
-// samp.dll RVA: 0x00117fac
+// 0x00117fac
 const char g_rpcRejectedSlot[] = "CONNECTION REJECTED: Unable to allocate a player slot.";
-// samp.dll RVA: 0x0000fea0
+// 0x0000fea0
 void RequestClass(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -499,7 +499,7 @@ void RequestClass(RPCParameters* parameters)
         local->SetSpawnInfo(info);
     local->PrepareForClassSelection_Outcome(outcome != 0);
 }
-// samp.dll RVA: 0x0000ff70
+// 0x0000ff70
 void RequestSpawn(RPCParameters* parameters)
 {
     BYTE outcome = 0;
@@ -511,7 +511,7 @@ void RequestSpawn(RPCParameters* parameters)
     else
         *(DWORD*)(local->nativeState + 0x306) = 0;
 }
-// samp.dll RVA: 0x00010410
+// 0x00010410
 void ConnectionRejected(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -532,7 +532,7 @@ void ConnectionRejected(RPCParameters* parameters)
         g_pChat->AddInfoMessage(g_rpcRejectedSlot);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Disconnect(500, 0);
 }
-// samp.dll RVA: 0x000114a0
+// 0x000114a0
 void EnterVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -550,7 +550,7 @@ void EnterVehicle(RPCParameters* parameters)
             remote->EnterVehicle((WORD)vehicle, passenger != 0);
     }
 }
-// samp.dll RVA: 0x000115c0
+// 0x000115c0
 void ExitVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -566,7 +566,7 @@ void ExitVehicle(RPCParameters* parameters)
             remote->ExitVehicle();
     }
 }
-// samp.dll RVA: 0x000121c0
+// 0x000121c0
 void Chat(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -590,7 +590,7 @@ void Chat(RPCParameters* parameters)
             pool->players[player]->remote->Chat(text);
     }
 }
-// samp.dll RVA: 0x00010c20
+// 0x00010c20
 void ScrWorldPlayerDeath(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -600,7 +600,7 @@ void ScrWorldPlayerDeath(RPCParameters* parameters)
     if (pool && player <= 1004 && pool->players[player] && pool->players[player]->remote)
         pool->players[player]->remote->Kill();
 }
-// samp.dll RVA: 0x00010ce0
+// 0x00010ce0
 void ScrWorldPlayerRemove(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -614,7 +614,7 @@ void ScrWorldPlayerRemove(RPCParameters* parameters)
             pool->players[(WORD)player]->remote->Remove();
     }
 }
-// samp.dll RVA: 0x000102b0
+// 0x000102b0
 void UpdateScoresPingsIps(RPCParameters* parameters)
 {
     unsigned bytes = (int)parameters->numberOfBitsOfData / 8;
@@ -647,7 +647,7 @@ void UpdateScoresPingsIps(RPCParameters* parameters)
             g_deviceScoreboard->UpdateList();
     }
 }
-// samp.dll RVA: 0x0000e740
+// 0x0000e740
 void EnterEditObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -659,7 +659,7 @@ void EnterEditObject(RPCParameters* parameters)
     if (g_renderObjectSelection)
         g_renderObjectSelection->Enable(TRUE);
 }
-// samp.dll RVA: 0x0000e800
+// 0x0000e800
 void ScrCancelEdit(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -669,7 +669,7 @@ void ScrCancelEdit(RPCParameters* parameters)
     if (g_renderObjectSelection && g_renderObjectSelection->enabled)
         g_renderObjectSelection->Enable(FALSE);
 }
-// samp.dll RVA: 0x0000e8b0
+// 0x0000e8b0
 void ScrUpdateCameraTarget(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -678,7 +678,7 @@ void ScrUpdateCameraTarget(RPCParameters* parameters)
     if (g_pNetGame)
         ((BYTE*)g_pNetGame)[0x233] = (BYTE)enabled;
 }
-// samp.dll RVA: 0x000116b0
+// 0x000116b0
 void EditAttachedObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -688,7 +688,7 @@ void EditAttachedObject(RPCParameters* parameters)
         g_renderObjectSelection->Enable(FALSE);
     ((CObjectEdit*)g_deviceObjectEdit)->EnterEditAttachedObject(index);
 }
-// samp.dll RVA: 0x00011770
+// 0x00011770
 void EditObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -702,7 +702,7 @@ void EditObject(RPCParameters* parameters)
         g_renderTextDrawSelection->Disable();
     ((CObjectEdit*)g_deviceObjectEdit)->EnterEditObject(id, playerObject ? TRUE : FALSE);
 }
-// samp.dll RVA: 0x0000e940
+// 0x0000e940
 void ScrCreateActor(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -718,7 +718,7 @@ void ScrCreateActor(RPCParameters* parameters)
         }
     }
 }
-// samp.dll RVA: 0x00011cd0
+// 0x00011cd0
 void ScrDestroyActor(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -730,7 +730,7 @@ void ScrDestroyActor(RPCParameters* parameters)
         pool->Delete(id);
     }
 }
-// samp.dll RVA: 0x00011090
+// 0x00011090
 void DamageVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -750,7 +750,7 @@ void DamageVehicle(RPCParameters* parameters)
         vehicle->SetTires(tires);
     }
 }
-// samp.dll RVA: 0x000111c0
+// 0x000111c0
 void ScrSetVehicleParamsEx(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -794,7 +794,7 @@ void ScrSetVehicleParamsEx(RPCParameters* parameters)
             vehicle->ClearWindowOpenFlag((BYTE)component[j]);
     }
 }
-// samp.dll RVA: 0x0000f4b0
+// 0x0000f4b0
 void ScrSetPlayerSkillLevel(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -825,7 +825,7 @@ void ScrSetPlayerSkillLevel(RPCParameters* parameters)
         ped->SetWeaponSkill(skill, value);
     }
 }
-// samp.dll RVA: 0x0000f5e0
+// 0x0000f5e0
 void ScrCreate3DTextLabel(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -852,7 +852,7 @@ void ScrCreate3DTextLabel(RPCParameters* parameters)
             pool->Create(id, text, color, position, distance, behindWalls, player, vehicle);
     }
 }
-// samp.dll RVA: 0x0000f790
+// 0x0000f790
 void ScrDestroy3DTextLabel(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -865,7 +865,7 @@ void ScrDestroy3DTextLabel(RPCParameters* parameters)
             pool->Delete(id);
     }
 }
-// samp.dll RVA: 0x0000f850
+// 0x0000f850
 void ScrChatBubble(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -893,7 +893,7 @@ void ScrChatBubble(RPCParameters* parameters)
             g_renderChatBubble->Add(player, text, color, distance, lifespan);
     }
 }
-// samp.dll RVA: 0x0000f9c0
+// 0x0000f9c0
 void ScrShowDialog(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -912,7 +912,7 @@ void ScrShowDialog(RPCParameters* parameters)
     if (strlen(title) && strlen(text))
         g_renderDialog->Show(id, type, title, text, button1, button2, TRUE);
 }
-// samp.dll RVA: 0x0000ee60
+// 0x0000ee60
 void ScrClientMessage(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -927,7 +927,7 @@ void ScrClientMessage(RPCParameters* parameters)
         g_pChat->AddMessage(color, text);
     }
 }
-// samp.dll RVA: 0x0000fbb0
+// 0x0000fbb0
 void ScrServerJoin(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -952,7 +952,7 @@ void ScrServerJoin(RPCParameters* parameters)
             pool->GetPlayer(player)->SetColor(color);
     }
 }
-// samp.dll RVA: 0x0000fd40
+// 0x0000fd40
 void ScrServerQuit(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -963,13 +963,13 @@ void ScrServerQuit(RPCParameters* parameters)
     stream.Read(reason);
     pool->Delete(player, reason);
 }
-// samp.dll RVA: 0x0000e450
+// 0x0000e450
 void SrvNetStats(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     stream.Read((char*)g_srvNetStatsHistory, 0x128);
 }
-// samp.dll RVA: 0x00010040
+// 0x00010040
 void ScrSetCheckpoint(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -983,7 +983,7 @@ void ScrSetCheckpoint(RPCParameters* parameters)
     g_pGame->SetCheckpoint(&position, &size);
     g_pGame->unknown4d = 1;
 }
-// samp.dll RVA: 0x00010150
+// 0x00010150
 void ScrSetRaceCheckpoint(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1002,7 +1002,7 @@ void ScrSetRaceCheckpoint(RPCParameters* parameters)
     g_pGame->SetRacingCheckpoint(type, &position, &next, point.x);
     g_pGame->unknown29 = 1;
 }
-// samp.dll RVA: 0x0000ef50
+// 0x0000ef50
 void ScrCreatePickup(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1014,7 +1014,7 @@ void ScrCreatePickup(RPCParameters* parameters)
     if (pool)
         pool->Create(&pickup, id);
 }
-// samp.dll RVA: 0x0000f010
+// 0x0000f010
 void ScrDestroyPickup(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1024,7 +1024,7 @@ void ScrDestroyPickup(RPCParameters* parameters)
     if (pool)
         pool->Delete(id);
 }
-// samp.dll RVA: 0x0000f0b0
+// 0x0000f0b0
 void ScrDestroyWeaponPickup(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1034,7 +1034,7 @@ void ScrDestroyWeaponPickup(RPCParameters* parameters)
 }
 // The original handlers use signed bits/8+1, including an extra byte for aligned data.
 // Read failures are deliberately ignored; uninitialized native output locals stay so.
-// samp.dll RVA: 0x0000edc0
+// 0x0000edc0
 void ScrSetWorldTime(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1042,7 +1042,7 @@ void ScrSetWorldTime(RPCParameters* parameters)
     stream.Read(hour);
     (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2c] = hour;
 }
-// samp.dll RVA: 0x0000f240
+// 0x0000f240
 void ScrSetWeather(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1051,7 +1051,7 @@ void ScrSetWeather(RPCParameters* parameters)
     (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2e] = weather;
     g_pGame->SetWorldWeather(weather);
 }
-// samp.dll RVA: 0x0000f2f0
+// 0x0000f2f0
 void ScrSetPlayerTime(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1062,7 +1062,7 @@ void ScrSetPlayerTime(RPCParameters* parameters)
     (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2c] = hour;
     (*(BYTE**)((BYTE*)g_pNetGame + 0x3d5))[0x2d] = minute;
 }
-// samp.dll RVA: 0x0000f3d0
+// 0x0000f3d0
 void ScrToggleClock(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1078,7 +1078,7 @@ void ScrToggleClock(RPCParameters* parameters)
         g_pGame->GetWorldTime(settings + 0x2c, settings + 0x2d);
     }
 }
-// samp.dll RVA: 0x0000fe00
+// 0x0000fe00
 void ScrSetIngameTimer(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1086,103 +1086,103 @@ void ScrSetIngameTimer(RPCParameters* parameters)
     stream.Read(timer);
     g_pGame->SetTimer(timer);
 }
-// samp.dll RVA: 0x0000e430
+// 0x0000e430
 void ScrDisableCheckpoint(RPCParameters* parameters)
 {
     (void)parameters;
     g_pGame->unknown4d = 0;
 }
-// samp.dll RVA: 0x0000e440
+// 0x0000e440
 void ScrDisableRaceCheckpoint(RPCParameters* parameters)
 {
     (void)parameters;
     g_pGame->unknown29 = 0;
 }
-// samp.dll RVA: 0x00117fa8
+// 0x00117fa8
 const int g_rpcScrSetIngameTimer = 60;
-// samp.dll RVA: 0x00117fa4
+// 0x00117fa4
 const int g_rpcScrWorldPlayerAdd = 32;
-// samp.dll RVA: 0x00117fa0
+// 0x00117fa0
 const int g_rpcScrWorldPlayerDeath = 166;
-// samp.dll RVA: 0x00117f9c
+// 0x00117f9c
 const int g_rpcScrWorldPlayerRemove = 163;
-// samp.dll RVA: 0x00117f98
+// 0x00117f98
 const int g_rpcScrWorldVehicleAdd = 164;
-// samp.dll RVA: 0x00117f94
+// 0x00117f94
 const int g_rpcScrWorldVehicleRemove = 165;
-// samp.dll RVA: 0x00117f90
+// 0x00117f90
 const int g_rpcScrSetVehicleParamsEx = 24;
-// samp.dll RVA: 0x00117968
+// 0x00117968
 const int g_rpcDamageVehicle = 106;
-// samp.dll RVA: 0x00117f8c
+// 0x00117f8c
 const int g_rpcScrSetPlayerSkillLevel = 34;
-// samp.dll RVA: 0x00117f88
+// 0x00117f88
 const int g_rpcScrCreate3DTextLabel = 36;
-// samp.dll RVA: 0x00117f84
+// 0x00117f84
 const int g_rpcScrDestroy3DTextLabel = 58;
-// samp.dll RVA: 0x00117f80
+// 0x00117f80
 const int g_rpcScrChatBubble = 59;
-// samp.dll RVA: 0x00117f7c
+// 0x00117f7c
 const int g_rpcScrShowDialog = 61;
-// samp.dll RVA: 0x00117f78
+// 0x00117f78
 const int g_rpcScrServerJoin = 137;
-// samp.dll RVA: 0x00117f74
+// 0x00117f74
 const int g_rpcScrServerQuit = 138;
-// samp.dll RVA: 0x00117f70
+// 0x00117f70
 const int g_rpcScrInitGame = 139;
-// samp.dll RVA: 0x00117f6c
+// 0x00117f6c
 const int g_rpcScrSetCheckpoint = 107;
-// samp.dll RVA: 0x00117f68
+// 0x00117f68
 const int g_rpcScrDisableCheckpoint = 37;
-// samp.dll RVA: 0x00117f64
+// 0x00117f64
 const int g_rpcScrSetRaceCheckpoint = 38;
-// samp.dll RVA: 0x00117f60
+// 0x00117f60
 const int g_rpcScrDisableRaceCheckpoint = 39;
-// samp.dll RVA: 0x00117f5c
+// 0x00117f5c
 const int g_rpcSrvNetStats = 102;
-// samp.dll RVA: 0x00117f58
+// 0x00117f58
 const int g_rpcScrGamemodeRestart = 40;
-// samp.dll RVA: 0x00117f54
+// 0x00117f54
 const int g_rpcConnectionRejected = 130;
-// samp.dll RVA: 0x00117f50
+// 0x00117f50
 const int g_rpcScrClientMessage = 93;
-// samp.dll RVA: 0x00117f4c
+// 0x00117f4c
 const int g_rpcScrSetWorldTime = 94;
-// samp.dll RVA: 0x00117f48
+// 0x00117f48
 const int g_rpcScrCreatePickup = 95;
-// samp.dll RVA: 0x00117f44
+// 0x00117f44
 const int g_rpcScrDestroyPickup = 63;
-// samp.dll RVA: 0x00117f40
+// 0x00117f40
 const int g_rpcScrDestroyWeaponPickup = 151;
-// samp.dll RVA: 0x00117f3c
+// 0x00117f3c
 const int g_rpcScrSetWeather = 152;
-// samp.dll RVA: 0x00117f38
+// 0x00117f38
 const int g_rpcScrSetPlayerTime = 29;
-// samp.dll RVA: 0x00117f34
+// 0x00117f34
 const int g_rpcScrToggleClock = 30;
-// samp.dll RVA: 0x00117f24
+// 0x00117f24
 const int g_rpcScrCancelEdit = 28;
-// samp.dll RVA: 0x00117f20
+// 0x00117f20
 const int g_rpcScrUpdateCameraTarget = 170;
-// samp.dll RVA: 0x00117f1c
+// 0x00117f1c
 const int g_rpcClientCheck = 103;
-// samp.dll RVA: 0x00117f18
+// 0x00117f18
 const int g_rpcScrCreateActor = 171;
-// samp.dll RVA: 0x00117f14
+// 0x00117f14
 const int g_rpcScrDestroyActor = 172;
 // Custom-model record handler RVA0x00011d80; legacy registry name retained.
-// samp.dll RVA: 0x00117f10
+// 0x00117f10
 const int g_rpcUnknown00117F10 = 179;
 // Custom-model reset handler RVA0x0000ea40; legacy registry name retained.
-// samp.dll RVA: 0x00117f0c
+// 0x00117f0c
 const int g_rpcUnknown00117F0C = 180;
 // Custom-model download handler RVA0x00011f80; legacy registry name retained.
-// samp.dll RVA: 0x00117f08
+// 0x00117f08
 const int g_rpcUnknown00117F08 = 183;
 // Custom-model completion handler RVA0x0000ead0; legacy registry name retained.
-// samp.dll RVA: 0x00117f04
+// 0x00117f04
 const int g_rpcUnknown00117F04 = 185;
-// samp.dll RVA: 0x0000eb60
+// 0x0000eb60
 void UnRegisterRPCs(RakClientInterface* client)
 {
     const int* ids[] = {
@@ -1241,7 +1241,7 @@ void UnRegisterRPCs(RakClientInterface* client)
         client->UnregisterAsRemoteProcedureCall(const_cast<int*>(ids[i]));
 }
 
-// samp.dll RVA: 0x00012310
+// 0x00012310
 void RegisterRPCs(RakClientInterface* client)
 {
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerSkillLevel), ScrSetPlayerSkillLevel);

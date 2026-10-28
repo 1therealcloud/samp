@@ -1,33 +1,33 @@
 #include "gui/device_lifecycle.h"
 #include "chatwindow.h"
 #include "cmdwindow.h"
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
-#include "game/hooks_independent.h"
+#include "game/hooks.h"
 #include "net/vehiclepool.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
-// samp.dll RVA: 0x002ac9d8
+// 0x002ac9d8
 CPlayerTags* g_devicePlayerTags;
-// samp.dll RVA: 0x002aca20
+// 0x002aca20
 CSpawnScreen* g_deviceSpawnScreen;
-// samp.dll RVA: 0x002ac9ec
+// 0x002ac9ec
 CLabel* g_deviceLabel;
-// samp.dll RVA: 0x002aca34
+// 0x002aca34
 CObjectMaterialText* g_deviceMaterialText;
-// samp.dll RVA: 0x002aca18
+// 0x002aca18
 BYTE* g_deviceDeathWindow;
-// samp.dll RVA: 0x002ac9f0
+// 0x002ac9f0
 BYTE* g_deviceObjectEdit;
-// samp.dll RVA: 0x002ac9dc
+// 0x002ac9dc
 CScoreboard* g_deviceScoreboard;
-// samp.dll RVA: 0x002acab0
+// 0x002acab0
 CDXUTDialogResourceManager* g_deviceDialogResources;
-// samp.dll RVA: 0x002acacc
+// 0x002acacc
 IDirect3DSurface9* g_deviceCursorSurface;
-// samp.dll RVA: 0x0016be80
+// 0x0016be80
 DWORD g_deviceResetMarker;
-// samp.dll RVA: 0x000c5620
+// 0x000c5620
 void ClientDeviceObjectsLost()
 {
     if (g_devicePlayerTags)
@@ -93,7 +93,7 @@ void ClientDeviceObjectsLost()
             (*(CTextDrawPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x20))->OnLostDevice();
     }
 }
-// samp.dll RVA: 0x000c5880
+// 0x000c5880
 void ClientDeviceObjectsReset()
 {
     SetCursor(0);

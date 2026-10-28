@@ -22,7 +22,7 @@ class CInput
 {
 public:
     // Returns the raw DWORD; distinct from the AL bool getter IsActive.
-    // samp.dll RVA: 0x00002e80
+    // 0x00002e80
     DWORD GetEnabledState();
     IDirect3DDevice9* m_pDevice;
     CDXUTDialog* m_pGameUi;
@@ -34,37 +34,37 @@ public:
     char m_szInput[129], m_szRecallBuffer[10][129], m_szCurrentBuffer[129];
     int m_nCurrentRecall, m_nTotalRecall;
     InputCommand m_pDefaultCommand;
-    // samp.dll RVA: 0x00068e10
+    // 0x00068e10
     CInput(IDirect3DDevice9*);
-    // samp.dll RVA: 0x00068e80
+    // 0x00068e80
     InputRect* GetRect(InputRect*);
-    // samp.dll RVA: 0x00068ec0
+    // 0x00068ec0
     void Open();
-    // samp.dll RVA: 0x00068fc0
+    // 0x00068fc0
     void Close();
-    // samp.dll RVA: 0x00069010
+    // 0x00069010
     void AddRecall(const char*);
-    // samp.dll RVA: 0x00069070
+    // 0x00069070
     void RecallUp();
-    // samp.dll RVA: 0x000690e0
+    // 0x000690e0
     void RecallDown();
-    // samp.dll RVA: 0x00069130
+    // 0x00069130
     void EnableCursor();
-    // samp.dll RVA: 0x00069150
+    // 0x00069150
     InputCommand GetCommandHandler(const char*);
-    // samp.dll RVA: 0x000691a0
+    // 0x000691a0
     void SetDefaultCommand(InputCommand);
-    // samp.dll RVA: 0x000691b0
+    // 0x000691b0
     void AddCommand(const char*, InputCommand);
-    // samp.dll RVA: 0x00069210
+    // 0x00069210
     BOOL MsgProc(int, int, int);
-    // samp.dll RVA: 0x00069280
+    // 0x00069280
     void ResetDialogControls(CDXUTDialog*);
-    // samp.dll RVA: 0x00069340
+    // 0x00069340
     void Send(const char*);
-    // samp.dll RVA: 0x00069410
+    // 0x00069410
     void ProcessInput();
-    // samp.dll RVA: 0x00069250
+    // 0x00069250
     bool IsActive();
 };
 #pragma pack(pop)

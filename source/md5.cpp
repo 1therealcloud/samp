@@ -46,7 +46,7 @@ void byteReverse(unsigned char* buf, unsigned longs)
  * Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
  * initialization constants.
  */
-// samp.dll RVA: 0x00062b30
+// 0x00062b30
 void MD5Init(struct MD5Context* ctx)
 {
     ctx->buf[0] = 0x67452301;
@@ -62,7 +62,7 @@ void MD5Init(struct MD5Context* ctx)
  * Update context to reflect the concatenation of another buffer full
  * of bytes.
  */
-// samp.dll RVA: 0x000633e0
+// 0x000633e0
 void MD5Update(struct MD5Context* ctx, unsigned char const* buf, unsigned len)
 {
     uint32 t;
@@ -114,7 +114,7 @@ void MD5Update(struct MD5Context* ctx, unsigned char const* buf, unsigned len)
  * Final wrapup - pad to 64-byte boundary with the bit pattern 
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
-// samp.dll RVA: 0x000634b0
+// 0x000634b0
 void MD5Final(unsigned char digest[16], struct MD5Context* ctx)
 {
     unsigned count;
@@ -177,7 +177,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context* ctx)
  * reflect the addition of 16 longwords of new data.  MD5Update blocks
  * the data and converts bytes into longwords for this routine.
  */
-// samp.dll RVA: 0x00062b60
+// 0x00062b60
 void MD5Transform(uint32 buf[4], uint32 const in[16])
 {
     register uint32 a, b, c, d;

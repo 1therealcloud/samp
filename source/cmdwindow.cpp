@@ -1,12 +1,12 @@
 #include "cmdwindow.h"
 #include "gui/chat_dependencies.h"
-// samp.dll RVA: 0x00002e80
+// 0x00002e80
 DWORD CInput::GetEnabledState()
 {
     return m_bEnabled;
 }
 #include "gui/input_native.h"
-// samp.dll RVA: 0x00068e10
+// 0x00068e10
 CInput::CInput(IDirect3DDevice9* device)
 {
     m_bEnabled = FALSE;
@@ -19,7 +19,7 @@ CInput::CInput(IDirect3DDevice9* device)
     memset(m_szInput, 0, sizeof(m_szInput));
     memset(m_szCurrentBuffer, 0, sizeof(m_szCurrentBuffer));
 }
-// samp.dll RVA: 0x00068e80
+// 0x00068e80
 InputRect* CInput::GetRect(InputRect* rect)
 {
     memset(rect, 0, sizeof(*rect));
@@ -30,7 +30,7 @@ InputRect* CInput::GetRect(InputRect* rect)
     }
     return rect;
 }
-// samp.dll RVA: 0x00068ec0
+// 0x00068ec0
 void CInput::Open()
 {
     if (!m_bEnabled)
@@ -54,7 +54,7 @@ void CInput::Open()
         m_bEnabled = TRUE;
     }
 }
-// samp.dll RVA: 0x00069010
+// 0x00069010
 void CInput::AddRecall(const char* text)
 {
     for (int i = 8; i >= 0; --i)
@@ -63,7 +63,7 @@ void CInput::AddRecall(const char* text)
     if (m_nTotalRecall < 10)
         ++m_nTotalRecall;
 }
-// samp.dll RVA: 0x00069070
+// 0x00069070
 void CInput::RecallUp()
 {
     if (m_nCurrentRecall < m_nTotalRecall - 1)
@@ -77,7 +77,7 @@ void CInput::RecallUp()
         m_pEditbox->SetText(m_szRecallBuffer[m_nCurrentRecall], false);
     }
 }
-// samp.dll RVA: 0x000690e0
+// 0x000690e0
 void CInput::RecallDown()
 {
     --m_nCurrentRecall;
@@ -90,13 +90,13 @@ void CInput::RecallDown()
         m_pEditbox->SetText(m_szCurrentBuffer, false);
     m_nCurrentRecall = -1;
 }
-// samp.dll RVA: 0x00069130
+// 0x00069130
 void CInput::EnableCursor()
 {
     if (m_bEnabled)
         g_pGame->SetCursorMode(2, FALSE);
 }
-// samp.dll RVA: 0x00069150
+// 0x00069150
 InputCommand CInput::GetCommandHandler(const char* name)
 {
     for (int i = 0; i != m_nCommandCount; ++i)
@@ -104,12 +104,12 @@ InputCommand CInput::GetCommandHandler(const char* name)
             return m_pCommandProc[i];
     return 0;
 }
-// samp.dll RVA: 0x000691a0
+// 0x000691a0
 void CInput::SetDefaultCommand(InputCommand command)
 {
     m_pDefaultCommand = command;
 }
-// samp.dll RVA: 0x000691b0
+// 0x000691b0
 void CInput::AddCommand(const char* name, InputCommand command)
 {
     if (m_nCommandCount < 144 && strlen(name) < 32)
@@ -119,14 +119,14 @@ void CInput::AddCommand(const char* name, InputCommand command)
         ++m_nCommandCount;
     }
 }
-// samp.dll RVA: 0x00069210
+// 0x00069210
 BOOL CInput::MsgProc(int message, int wparam, int lparam)
 {
     if (m_bEnabled && m_pEditbox && CDXUTIMEEditBox::StaticMsgProc(message, wparam, lparam))
         return TRUE;
     return FALSE;
 }
-// samp.dll RVA: 0x00069280
+// 0x00069280
 void CInput::ResetDialogControls(CDXUTDialog* dialog)
 {
     m_pGameUi = dialog;
@@ -148,7 +148,7 @@ void CInput::ResetDialogControls(CDXUTDialog* dialog)
     }
 }
 
-// samp.dll RVA: 0x00068fc0
+// 0x00068fc0
 void CInput::Close()
 {
     if (m_bEnabled)
@@ -165,7 +165,7 @@ void CInput::Close()
 }
 
 // Recovered from 0x10069410. Byte identity is not required for register restores.
-// samp.dll RVA: 0x00069410
+// 0x00069410
 void CInput::ProcessInput()
 {
     if (!m_pEditbox)
@@ -233,7 +233,7 @@ void CInput::ProcessInput()
 #include "cmdwindow.h"
 #include <string.h>
 
-// samp.dll RVA: 0x002aca24
+// 0x002aca24
 extern void* g_pNetGame;
 
 // Partial view: only the independently observed client field is described.
@@ -247,11 +247,11 @@ struct InputNetGameView
 typedef char InputClientOffset[(offsetof(InputNetGameView, client) == 0x2c) ? 1 : -1];
 
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
-// samp.dll RVA: 0x0011c310
+// 0x0011c310
 int g_inputCommandRpcId = 50;
 
 // Recovered from 0x10069340. The input length excludes the trailing NUL.
-// samp.dll RVA: 0x00069340
+// 0x00069340
 void CInput::Send(const char* text)
 {
     if (g_pNetGame)
@@ -265,7 +265,7 @@ void CInput::Send(const char* text)
     }
 }
 
-// samp.dll RVA: 0x00069250
+// 0x00069250
 bool CInput::IsActive()
 {
     if (m_pEditbox)

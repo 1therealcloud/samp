@@ -13,7 +13,7 @@
 #include "input_activity.h"
 #include "input_password.h"
 
-// samp.dll RVA: 0x0006a130
+// 0x0006a130
 void CDXUTDialog::SetCaptionText(const char* text)
 {
     char* output = m_wszCaption;
@@ -27,11 +27,11 @@ void CDXUTDialog::SetCaptionText(const char* text)
 }
 
 // Shared with the recovered DL widgets; a single state instance serves both.
-// samp.dll RVA: 0x00181a8d
+// 0x00181a8d
 bool g_dxutScrollDragging;
-// samp.dll RVA: 0x00181a90
+// 0x00181a90
 int g_dxutScrollThumbOffsetY;
-// samp.dll RVA: 0x00181a95
+// 0x00181a95
 bool g_dxutListScrollInitialized;
 #undef min // use __min instead
 #undef max // use __max instead
@@ -337,7 +337,7 @@ void CDXUTDialog::Refresh()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00090360
+// 0x00090360
 HRESULT CDXUTDialog::OnRender(float fElapsedTime)
 {
     // If this assert triggers, you need to call CDXUTDialogResourceManager::On*Device() from inside
@@ -517,7 +517,7 @@ HRESULT CDXUTDialog::SetFont(UINT index, LPCWSTR strFaceName, LONG height, LONG 
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00086B40
+// 0x00086B40
 DXUTFontNode* CDXUTDialog::GetFont(UINT index)
 {
     if (NULL == m_pManager)
@@ -1605,7 +1605,7 @@ bool CDXUTDialog::OnCycleFocus(bool bForward)
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008DCC0
+// 0x0008DCC0
 CDXUTControl::CDXUTControl(CDXUTDialog* pDialog)
 {
     m_Type = DXUT_CONTROL_BUTTON;
@@ -1630,7 +1630,7 @@ CDXUTControl::CDXUTControl(CDXUTDialog* pDialog)
     ZeroMemory(&m_rcBoundingBox, sizeof(m_rcBoundingBox));
 }
 
-// samp.dll RVA: 0x0008DE00
+// 0x0008DE00
 CDXUTControl::~CDXUTControl()
 {
     for (int i = 0; i < m_Elements.GetSize(); ++i)
@@ -1641,7 +1641,7 @@ CDXUTControl::~CDXUTControl()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00087540
+// 0x00087540
 void CDXUTControl::SetTextColor(D3DCOLOR Color)
 {
     CDXUTElement* pElement = m_Elements.GetAt(0);
@@ -1651,7 +1651,7 @@ void CDXUTControl::SetTextColor(D3DCOLOR Color)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00089D50
+// 0x00089D50
 HRESULT CDXUTControl::SetElement(UINT iElement, CDXUTElement* pElement)
 {
     HRESULT hr = S_OK;
@@ -1682,7 +1682,7 @@ HRESULT CDXUTControl::SetElement(UINT iElement, CDXUTElement* pElement)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00087560
+// 0x00087560
 void CDXUTControl::Refresh()
 {
     m_bMouseOver = false;
@@ -1696,7 +1696,7 @@ void CDXUTControl::Refresh()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000848A0
+// 0x000848A0
 void CDXUTControl::UpdateRects()
 {
     SetRect(&m_rcBoundingBox, m_x, m_y, m_x + m_width, m_y + m_height);
@@ -3105,7 +3105,7 @@ void CDXUTSlider::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008E750
+// 0x0008E750
 CDXUTScrollBar::CDXUTScrollBar(CDXUTDialog* pDialog)
 {
     m_Type = DXUT_CONTROL_SCROLLBAR;
@@ -3126,11 +3126,11 @@ CDXUTScrollBar::CDXUTScrollBar(CDXUTDialog* pDialog)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008E800
+// 0x0008E800
 CDXUTScrollBar::~CDXUTScrollBar() {}
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000881B0
+// 0x000881B0
 void CDXUTScrollBar::UpdateRects()
 {
     CDXUTControl::UpdateRects();
@@ -3148,7 +3148,7 @@ void CDXUTScrollBar::UpdateRects()
 
 //--------------------------------------------------------------------------------------
 // Compute the dimension of the scroll thumb
-// samp.dll RVA: 0x00084DA0
+// 0x00084DA0
 void CDXUTScrollBar::UpdateThumbRect()
 {
     if (m_nEnd - m_nStart > m_nPageSize)
@@ -3170,7 +3170,7 @@ void CDXUTScrollBar::UpdateThumbRect()
 //--------------------------------------------------------------------------------------
 // Scroll() scrolls by nDelta items.  A positive value scrolls down, while a negative
 // value scrolls up.
-// samp.dll RVA: 0x00088230
+// 0x00088230
 void CDXUTScrollBar::Scroll(int nDelta)
 {
     // Perform scroll
@@ -3184,7 +3184,7 @@ void CDXUTScrollBar::Scroll(int nDelta)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00084E30
+// 0x00084E30
 void CDXUTScrollBar::ShowItem(int nIndex)
 {
     // Cap the index
@@ -3206,14 +3206,14 @@ void CDXUTScrollBar::ShowItem(int nIndex)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00084E70
+// 0x00084E70
 bool CDXUTScrollBar::HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     return false;
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00088250
+// 0x00088250
 bool CDXUTScrollBar::HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam)
 {
     m_LastMouse = pt;
@@ -3317,7 +3317,7 @@ bool CDXUTScrollBar::HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPar
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000884D0
+// 0x000884D0
 void CDXUTScrollBar::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 {
     // Check if the arrow button has been held for a while.
@@ -3413,7 +3413,7 @@ void CDXUTScrollBar::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000886D0
+// 0x000886D0
 void CDXUTScrollBar::SetTrackRange(int nStart, int nEnd)
 {
     m_nStart = nStart;
@@ -3423,7 +3423,7 @@ void CDXUTScrollBar::SetTrackRange(int nStart, int nEnd)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00084E80
+// 0x00084E80
 void CDXUTScrollBar::Cap() // Clips position at boundaries. Ensures it stays within legal range.
 {
     if (m_nPosition < m_nStart || m_nEnd - m_nStart <= m_nPageSize)
@@ -4041,24 +4041,24 @@ void CDXUTListBox::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 }
 
 // Static member initialization
-// samp.dll RVA: 0x00180618
+// 0x00180618
 HINSTANCE CUniBuffer::s_hDll = NULL;
-// samp.dll RVA: 0x00140bfc
+// 0x00140bfc
 HRESULT(WINAPI* CUniBuffer::_ScriptApplyDigitSubstitution)(const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE*) = Dummy_ScriptApplyDigitSubstitution;
-// samp.dll RVA: 0x00140c00
+// 0x00140c00
 HRESULT(WINAPI* CUniBuffer::_ScriptStringAnalyse)(HDC, const void*, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*,
                                                   SCRIPT_STRING_ANALYSIS*) = Dummy_ScriptStringAnalyse;
-// samp.dll RVA: 0x00140c04
+// 0x00140c04
 HRESULT(WINAPI* CUniBuffer::_ScriptStringCPtoX)(SCRIPT_STRING_ANALYSIS, int, BOOL, int*) = Dummy_ScriptStringCPtoX;
-// samp.dll RVA: 0x00140c08
+// 0x00140c08
 HRESULT(WINAPI* CUniBuffer::_ScriptStringXtoCP)(SCRIPT_STRING_ANALYSIS, int, int*, int*) = Dummy_ScriptStringXtoCP;
-// samp.dll RVA: 0x00140c0c
+// 0x00140c0c
 HRESULT(WINAPI* CUniBuffer::_ScriptStringFree)(SCRIPT_STRING_ANALYSIS*) = Dummy_ScriptStringFree;
-// samp.dll RVA: 0x00140c10
+// 0x00140c10
 const SCRIPT_LOGATTR*(WINAPI* CUniBuffer::_ScriptString_pLogAttr)(SCRIPT_STRING_ANALYSIS) = Dummy_ScriptString_pLogAttr;
-// samp.dll RVA: 0x00140c14
+// 0x00140c14
 const int*(WINAPI* CUniBuffer::_ScriptString_pcOutChars)(SCRIPT_STRING_ANALYSIS) = Dummy_ScriptString_pcOutChars;
-// samp.dll RVA: 0x0017f694
+// 0x0017f694
 bool CDXUTEditBox::s_bHideCaret; // If true, we don't render the caret.
 
 //--------------------------------------------------------------------------------------
@@ -4070,7 +4070,7 @@ bool CDXUTEditBox::s_bHideCaret; // If true, we don't render the caret.
 #define EDITBOX_SCROLLEXTENT 4
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008ed00
+// 0x0008ed00
 CDXUTEditBox::CDXUTEditBox(CDXUTDialog* pDialog)
 {
     m_Type = DXUT_CONTROL_EDITBOX;
@@ -4096,14 +4096,14 @@ CDXUTEditBox::CDXUTEditBox(CDXUTDialog* pDialog)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008ee30
+// 0x0008ee30
 CDXUTEditBox::~CDXUTEditBox() {}
 
 //--------------------------------------------------------------------------------------
 // PlaceCaret: Set the caret to a character position, and adjust the scrolling if
 //             necessary.
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00084ef0
+// 0x00084ef0
 void CDXUTEditBox::PlaceCaret(int nCP)
 {
     assert(nCP >= 0 && nCP <= m_Buffer.GetTextSize());
@@ -4151,7 +4151,7 @@ void CDXUTEditBox::PlaceCaret(int nCP)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00084fd0
+// 0x00084fd0
 void CDXUTEditBox::ClearText()
 {
     m_Buffer.Clear();
@@ -4173,7 +4173,7 @@ void CDXUTEditBox::SetText(LPCWSTR wszText, bool bSelected)
     m_nSelStart = bSelected ? 0 : m_nCaret;
 }
 
-// samp.dll RVA: 0x00085000
+// 0x00085000
 void CDXUTEditBox::SetText(const char* text, bool selected)
 {
     m_Buffer.SetText(text);
@@ -4182,12 +4182,12 @@ void CDXUTEditBox::SetText(const char* text, bool selected)
     m_nSelStart = selected ? 0 : m_nCaret;
 }
 
-// samp.dll RVA: 0x000850d0
+// 0x000850d0
 const char* CDXUTEditBox::GetText()
 {
     return InputWideToAnsi(m_Buffer.GetBuffer());
 }
-// samp.dll RVA: 0x0006eeb0
+// 0x0006eeb0
 void CDXUTEditBox::SetPasswordMode(bool enabled)
 {
     m_nativeFlag126 = enabled;
@@ -4195,7 +4195,7 @@ void CDXUTEditBox::SetPasswordMode(bool enabled)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00088950
+// 0x00088950
 HRESULT CDXUTEditBox::GetTextCopy(LPWSTR strDest, UINT bufferCount)
 {
     assert(strDest);
@@ -4206,7 +4206,7 @@ HRESULT CDXUTEditBox::GetTextCopy(LPWSTR strDest, UINT bufferCount)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000850e0
+// 0x000850e0
 void CDXUTEditBox::DeleteSelectionText()
 {
     int nFirst = __min(m_nCaret, m_nSelStart);
@@ -4220,7 +4220,7 @@ void CDXUTEditBox::DeleteSelectionText()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085130
+// 0x00085130
 void CDXUTEditBox::UpdateRects()
 {
     CDXUTControl::UpdateRects();
@@ -4245,7 +4245,7 @@ void CDXUTEditBox::UpdateRects()
     InflateRect(&m_rcText, -m_nSpacing, -m_nSpacing);
 }
 
-// samp.dll RVA: 0x00085260
+// 0x00085260
 void CDXUTEditBox::CopyToClipboard()
 {
     // Copy the selection text to the clipboard
@@ -4275,7 +4275,7 @@ void CDXUTEditBox::CopyToClipboard()
     }
 }
 
-// samp.dll RVA: 0x00085320
+// 0x00085320
 void CDXUTEditBox::PasteFromClipboard()
 {
     DeleteSelectionText();
@@ -4302,7 +4302,7 @@ void CDXUTEditBox::PasteFromClipboard()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00088970
+// 0x00088970
 bool CDXUTEditBox::HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -4428,7 +4428,7 @@ bool CDXUTEditBox::HandleKeyboard(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00088be0
+// 0x00088be0
 bool CDXUTEditBox::HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -4490,7 +4490,7 @@ bool CDXUTEditBox::HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00088d90
+// 0x00088d90
 void CDXUTEditBox::OnFocusIn()
 {
     CDXUTControl::OnFocusIn();
@@ -4499,7 +4499,7 @@ void CDXUTEditBox::OnFocusIn()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00088da0
+// 0x00088da0
 bool CDXUTEditBox::MsgProc(UINT message, WPARAM wparam, LPARAM lparam)
 {
     (void)lparam;
@@ -4590,7 +4590,7 @@ bool CDXUTEditBox::MsgProc(UINT message, WPARAM wparam, LPARAM lparam)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008ee80
+// 0x0008ee80
 void CDXUTEditBox::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 {
     (void)pd3dDevice;
@@ -4662,7 +4662,7 @@ void CDXUTEditBox::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 
 #define IN_FLOAT_CHARSET(c) ((c) == L'-' || (c) == L'.' || ((c) >= L'0' && (c) <= L'9'))
 
-// samp.dll RVA: 0x00089000
+// 0x00089000
 void CDXUTEditBox::ParseFloatArray(float* pNumbers, int nCount)
 {
     int nWritten = 0; // Number of floats written
@@ -4745,112 +4745,112 @@ void CDXUTEditBox::SetTextFloatArray(const float* pNumbers, int nCount)
 #define IMEID_CHS_VER53 (LANG_CHS | MAKEIMEVERSION(5, 3)) // MSPY3    // WinXP
 
 // Function pointers
-// samp.dll RVA: 0x00140c18
+// 0x00140c18
 INPUTCONTEXT*(WINAPI* CDXUTIMEEditBox::_ImmLockIMC)(HIMC) = CDXUTIMEEditBox::Dummy_ImmLockIMC;
-// samp.dll RVA: 0x00140c1c
+// 0x00140c1c
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmUnlockIMC)(HIMC) = CDXUTIMEEditBox::Dummy_ImmUnlockIMC;
-// samp.dll RVA: 0x00140c20
+// 0x00140c20
 LPVOID(WINAPI* CDXUTIMEEditBox::_ImmLockIMCC)(HIMCC) = CDXUTIMEEditBox::Dummy_ImmLockIMCC;
-// samp.dll RVA: 0x00140c24
+// 0x00140c24
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmUnlockIMCC)(HIMCC) = CDXUTIMEEditBox::Dummy_ImmUnlockIMCC;
-// samp.dll RVA: 0x00140c28
+// 0x00140c28
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmDisableTextFrameService)(DWORD) = CDXUTIMEEditBox::Dummy_ImmDisableTextFrameService;
-// samp.dll RVA: 0x00140c2c
+// 0x00140c2c
 LONG(WINAPI* CDXUTIMEEditBox::_ImmGetCompositionStringW)(HIMC, DWORD, LPVOID, DWORD) = CDXUTIMEEditBox::Dummy_ImmGetCompositionStringW;
-// samp.dll RVA: 0x00140c30
+// 0x00140c30
 DWORD(WINAPI* CDXUTIMEEditBox::_ImmGetCandidateListW)(HIMC, DWORD, LPCANDIDATELIST, DWORD) = CDXUTIMEEditBox::Dummy_ImmGetCandidateListW;
-// samp.dll RVA: 0x00140c34
+// 0x00140c34
 HIMC(WINAPI* CDXUTIMEEditBox::_ImmGetContext)(HWND) = CDXUTIMEEditBox::Dummy_ImmGetContext;
-// samp.dll RVA: 0x00140c38
+// 0x00140c38
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmReleaseContext)(HWND, HIMC) = CDXUTIMEEditBox::Dummy_ImmReleaseContext;
-// samp.dll RVA: 0x00140c3c
+// 0x00140c3c
 HIMC(WINAPI* CDXUTIMEEditBox::_ImmAssociateContext)(HWND, HIMC) = CDXUTIMEEditBox::Dummy_ImmAssociateContext;
-// samp.dll RVA: 0x00140c40
+// 0x00140c40
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmGetOpenStatus)(HIMC) = CDXUTIMEEditBox::Dummy_ImmGetOpenStatus;
-// samp.dll RVA: 0x00140c44
+// 0x00140c44
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmSetOpenStatus)(HIMC, BOOL) = CDXUTIMEEditBox::Dummy_ImmSetOpenStatus;
-// samp.dll RVA: 0x00140c48
+// 0x00140c48
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmGetConversionStatus)(HIMC, LPDWORD, LPDWORD) = CDXUTIMEEditBox::Dummy_ImmGetConversionStatus;
-// samp.dll RVA: 0x00140c4c
+// 0x00140c4c
 HWND(WINAPI* CDXUTIMEEditBox::_ImmGetDefaultIMEWnd)(HWND) = CDXUTIMEEditBox::Dummy_ImmGetDefaultIMEWnd;
-// samp.dll RVA: 0x00140c50
+// 0x00140c50
 UINT(WINAPI* CDXUTIMEEditBox::_ImmGetIMEFileNameA)(HKL, LPSTR, UINT) = CDXUTIMEEditBox::Dummy_ImmGetIMEFileNameA;
-// samp.dll RVA: 0x00140c54
+// 0x00140c54
 UINT(WINAPI* CDXUTIMEEditBox::_ImmGetVirtualKey)(HWND) = CDXUTIMEEditBox::Dummy_ImmGetVirtualKey;
-// samp.dll RVA: 0x00140c58
+// 0x00140c58
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmNotifyIME)(HIMC, DWORD, DWORD, DWORD) = CDXUTIMEEditBox::Dummy_ImmNotifyIME;
-// samp.dll RVA: 0x00140c5c
+// 0x00140c5c
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmSetConversionStatus)(HIMC, DWORD, DWORD) = CDXUTIMEEditBox::Dummy_ImmSetConversionStatus;
-// samp.dll RVA: 0x00140c60
+// 0x00140c60
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmSimulateHotKey)(HWND, DWORD) = CDXUTIMEEditBox::Dummy_ImmSimulateHotKey;
-// samp.dll RVA: 0x00140c64
+// 0x00140c64
 BOOL(WINAPI* CDXUTIMEEditBox::_ImmIsIME)(HKL) = CDXUTIMEEditBox::Dummy_ImmIsIME;
-// samp.dll RVA: 0x00140c68
+// 0x00140c68
 UINT(WINAPI* CDXUTIMEEditBox::_GetReadingString)(HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT) = CDXUTIMEEditBox::Dummy_GetReadingString; // Traditional Chinese IME
-// samp.dll RVA: 0x00140c6c
+// 0x00140c6c
 BOOL(WINAPI* CDXUTIMEEditBox::_ShowReadingWindow)(HIMC, BOOL) = CDXUTIMEEditBox::Dummy_ShowReadingWindow; // Traditional Chinese IME
-// samp.dll RVA: 0x00140c70
+// 0x00140c70
 BOOL(APIENTRY* CDXUTIMEEditBox::_VerQueryValueA)(const LPVOID, LPSTR, LPVOID*, PUINT) = CDXUTIMEEditBox::Dummy_VerQueryValueA;
-// samp.dll RVA: 0x00140c74
+// 0x00140c74
 BOOL(APIENTRY* CDXUTIMEEditBox::_GetFileVersionInfoA)(LPSTR, DWORD, DWORD, LPVOID) = CDXUTIMEEditBox::Dummy_GetFileVersionInfoA;
-// samp.dll RVA: 0x00140c78
+// 0x00140c78
 DWORD(APIENTRY* CDXUTIMEEditBox::_GetFileVersionInfoSizeA)(LPSTR, LPDWORD) = CDXUTIMEEditBox::Dummy_GetFileVersionInfoSizeA;
 
-// samp.dll RVA: 0x00180604
+// 0x00180604
 HINSTANCE CDXUTIMEEditBox::s_hDllImm32; // IMM32 DLL handle
-// samp.dll RVA: 0x0017f6a4
+// 0x0017f6a4
 HINSTANCE CDXUTIMEEditBox::s_hDllVer; // Version DLL handle
-// samp.dll RVA: 0x00180600
+// 0x00180600
 HKL CDXUTIMEEditBox::s_hklCurrent; // Current keyboard layout of the process
-// samp.dll RVA: 0x0017F6B1
+// 0x0017F6B1
 bool CDXUTIMEEditBox::s_bVerticalCand; // Indicates that the candidates are listed vertically
-// samp.dll RVA: 0x00140C7C
+// 0x00140C7C
 WCHAR CDXUTIMEEditBox::s_aszIndicator[5][3] = // String to draw to indicate current input locale
     {
         L"En", L"\x7B80", L"\x7E41", L"\xAC00", L"\x3042",
 };
-// samp.dll RVA: 0x00140C9C
+// 0x00140C9C
 LPWSTR CDXUTIMEEditBox::s_wszCurrIndicator = CDXUTIMEEditBox::s_aszIndicator[0]; // Points to an indicator string that corresponds to current input locale
-// samp.dll RVA: 0x0017F695
+// 0x0017F695
 bool CDXUTIMEEditBox::s_bInsertOnType; // Insert the character as soon as a key is pressed (Korean behavior)
-// samp.dll RVA: 0x0017f6b4
+// 0x0017f6b4
 HINSTANCE CDXUTIMEEditBox::s_hDllIme; // Instance handle of the current IME module
-// samp.dll RVA: 0x0017F6A8
+// 0x0017F6A8
 HIMC CDXUTIMEEditBox::s_hImcDef; // Default input context
-// samp.dll RVA: 0x0018061C
+// 0x0018061C
 CDXUTIMEEditBox::IMESTATE CDXUTIMEEditBox::s_ImeState = IMEUI_STATE_OFF;
-// samp.dll RVA: 0x0017F6B0
+// 0x0017F6B0
 bool CDXUTIMEEditBox::s_bEnableImeSystem; // Whether the IME system is active
-// samp.dll RVA: 0x0017F69C
+// 0x0017F69C
 POINT CDXUTIMEEditBox::s_ptCompString; // Composition string position. Updated every frame.
-// samp.dll RVA: 0x0017F690
+// 0x0017F690
 int CDXUTIMEEditBox::s_nCompCaret;
-// samp.dll RVA: 0x0017F6AC
+// 0x0017F6AC
 int CDXUTIMEEditBox::s_nFirstTargetConv; // Index of the first target converted char in comp string.  If none, -1.
-// samp.dll RVA: 0x0018062c
+// 0x0018062c
 CUniBuffer CDXUTIMEEditBox::s_CompString = CUniBuffer(0);
-// samp.dll RVA: 0x0017F6B8
+// 0x0017F6B8
 BYTE CDXUTIMEEditBox::s_abCompStringAttr[MAX_COMPSTRING_SIZE];
-// samp.dll RVA: 0x0017F7B8
+// 0x0017F7B8
 DWORD CDXUTIMEEditBox::s_adwCompStringClause[MAX_COMPSTRING_SIZE];
-// samp.dll RVA: 0x001803C0
+// 0x001803C0
 WCHAR CDXUTIMEEditBox::s_wszReadingString[32];
-// samp.dll RVA: 0x00180640
+// 0x00180640
 CDXUTIMEEditBox::CCandList CDXUTIMEEditBox::s_CandList; // Data relevant to the candidate list
-// samp.dll RVA: 0x0017F696
+// 0x0017F696
 bool CDXUTIMEEditBox::s_bShowReadingWindow; // Indicates whether reading window is visible
-// samp.dll RVA: 0x001803BA
+// 0x001803BA
 bool CDXUTIMEEditBox::s_bHorizontalReading; // Indicates whether the reading window is vertical or horizontal
-// samp.dll RVA: 0x001803B9
+// 0x001803B9
 bool CDXUTIMEEditBox::s_bChineseIME;
-// samp.dll RVA: 0x00180620
+// 0x00180620
 CGrowableArray<CDXUTIMEEditBox::CInputLocale> CDXUTIMEEditBox::s_Locale; // Array of loaded keyboard layout on system
 #if defined(DEBUG) | defined(_DEBUG)
 bool CDXUTIMEEditBox::m_bIMEStaticMsgProcCalled = false;
 #endif
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008F370
+// 0x0008F370
 CDXUTIMEEditBox::CDXUTIMEEditBox(CDXUTDialog* pDialog)
 {
     CDXUTIMEEditBox::Initialize(); // ensure static vars are properly init'ed first
@@ -4881,11 +4881,11 @@ CDXUTIMEEditBox::CDXUTIMEEditBox(CDXUTDialog* pDialog)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008F470
+// 0x0008F470
 CDXUTIMEEditBox::~CDXUTIMEEditBox() {}
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085430
+// 0x00085430
 void CDXUTIMEEditBox::SendKey(BYTE nVirtKey)
 {
     keybd_event(nVirtKey, 0, 0, 0);
@@ -4895,7 +4895,7 @@ void CDXUTIMEEditBox::SendKey(BYTE nVirtKey)
 //--------------------------------------------------------------------------------------
 // Called by CDXUTResourceCache's OnCreateDevice.  This gives the class a
 // chance to initialize its default input context associated with the app window.
-// samp.dll RVA: 0x00085460
+// 0x00085460
 HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 {
     _ImmDisableTextFrameService((DWORD)-1);
@@ -4907,7 +4907,7 @@ HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085490
+// 0x00085490
 void CDXUTIMEEditBox::UpdateRects()
 {
     if (!s_bEnableImeSystem)
@@ -4954,12 +4954,12 @@ void CDXUTIMEEditBox::UpdateRects()
 // For more information, see the CompareString() reference.
 #define LCID_INVARIANT MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
 
-// samp.dll RVA: 0x00085500
+// 0x00085500
 DWORD CDXUTIMEEditBox::GetImeId(UINT uIndex)
 {
-    // samp.dll RVA: 0x00181A84
+    // 0x00181A84
     static HKL hklPrev = 0;
-    // samp.dll RVA: 0x00181A7C
+    // 0x00181A7C
     static DWORD dwID[2] = {0, 0}; // Cache the result
 
     DWORD dwVerSize;
@@ -5036,10 +5036,10 @@ DWORD CDXUTIMEEditBox::GetImeId(UINT uIndex)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085760
+// 0x00085760
 void CDXUTIMEEditBox::CheckInputLocale()
 {
-    // samp.dll RVA: 0x00181A88
+    // 0x00181A88
     static HKL hklPrev = 0;
     s_hklCurrent = GetKeyboardLayout(0);
     if (hklPrev == s_hklCurrent)
@@ -5092,7 +5092,7 @@ void CDXUTIMEEditBox::CheckInputLocale()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085860
+// 0x00085860
 void CDXUTIMEEditBox::CheckToggleState()
 {
     CheckInputLocale();
@@ -5121,7 +5121,7 @@ void CDXUTIMEEditBox::CheckToggleState()
 //--------------------------------------------------------------------------------------
 // Enable/disable the entire IME system.  When disabled, the default IME handling
 // kicks in.
-// samp.dll RVA: 0x00085940
+// 0x00085940
 void CDXUTIMEEditBox::EnableImeSystem(bool bEnable)
 {
     s_bEnableImeSystem = bEnable;
@@ -5130,7 +5130,7 @@ void CDXUTIMEEditBox::EnableImeSystem(bool bEnable)
 //--------------------------------------------------------------------------------------
 // Sets up IME-specific APIs for the IME edit controls.  This is called every time
 // the input locale changes.
-// samp.dll RVA: 0x00085950
+// 0x00085950
 void CDXUTIMEEditBox::SetupImeApi()
 {
     char szImeFile[MAX_PATH + 1];
@@ -5151,7 +5151,7 @@ void CDXUTIMEEditBox::SetupImeApi()
 
 //--------------------------------------------------------------------------------------
 // Resets the composition string.
-// samp.dll RVA: 0x000859E0
+// 0x000859E0
 void CDXUTIMEEditBox::ResetCompositionString()
 {
     s_nCompCaret = 0;
@@ -5161,7 +5161,7 @@ void CDXUTIMEEditBox::ResetCompositionString()
 
 //--------------------------------------------------------------------------------------
 // Truncate composition string by sending keystrokes to the window.
-// samp.dll RVA: 0x00085A10
+// 0x00085A10
 void CDXUTIMEEditBox::TruncateCompString(bool bUseBackSpace, int iNewStrLen)
 {
     if (!s_bInsertOnType)
@@ -5207,7 +5207,7 @@ void CDXUTIMEEditBox::TruncateCompString(bool bUseBackSpace, int iNewStrLen)
 //--------------------------------------------------------------------------------------
 // Sends the current composition string to the application by sending keystroke
 // messages.
-// samp.dll RVA: 0x00085B20
+// 0x00085B20
 void CDXUTIMEEditBox::SendCompString()
 {
     for (int i = 0; i < lstrlenW(s_CompString.GetBuffer()); ++i)
@@ -5216,14 +5216,14 @@ void CDXUTIMEEditBox::SendCompString()
 
 //--------------------------------------------------------------------------------------
 // Outputs current composition string then cleans up the composition task.
-// samp.dll RVA: 0x00085B70
+// 0x00085B70
 void CDXUTIMEEditBox::FinalizeString(bool bSend)
 {
     HIMC hImc;
     if (NULL == (hImc = _ImmGetContext(g_inputGameWindow)))
         return;
 
-    // samp.dll RVA: 0x00181A8C
+    // 0x00181A8C
     static bool bProcessing = false;
     if (bProcessing) // avoid infinite recursion
     {
@@ -5257,7 +5257,7 @@ void CDXUTIMEEditBox::FinalizeString(bool bSend)
 
 //--------------------------------------------------------------------------------------
 // Determine whether the reading window should be vertical or horizontal.
-// samp.dll RVA: 0x0008AC70
+// 0x0008AC70
 void CDXUTIMEEditBox::GetReadingWindowOrientation(DWORD dwId)
 {
     s_bHorizontalReading = (s_hklCurrent == _CHS_HKL) || (s_hklCurrent == _CHT_HKL2) || (dwId == 0);
@@ -5288,7 +5288,7 @@ void CDXUTIMEEditBox::GetReadingWindowOrientation(DWORD dwId)
 
 //--------------------------------------------------------------------------------------
 // Obtain the reading string upon WM_IME_NOTIFY/INM_PRIVATE notification.
-// samp.dll RVA: 0x0008ADD0
+// 0x0008ADD0
 void CDXUTIMEEditBox::GetPrivateReadingString()
 {
     DWORD dwId = GetImeId();
@@ -5501,7 +5501,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
 //--------------------------------------------------------------------------------------
 // This function is used only briefly in CHT IME handling,
 // so accelerator isn't processed.
-// samp.dll RVA: 0x00085C40
+// 0x00085C40
 void CDXUTIMEEditBox::PumpMessage()
 {
     MSG msg;
@@ -5519,7 +5519,7 @@ void CDXUTIMEEditBox::PumpMessage()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000890B0
+// 0x000890B0
 void CDXUTIMEEditBox::OnFocusIn()
 {
     CDXUTEditBox::OnFocusIn();
@@ -5545,7 +5545,7 @@ void CDXUTIMEEditBox::OnFocusIn()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085CC0
+// 0x00085CC0
 void CDXUTIMEEditBox::OnFocusOut()
 {
     CDXUTEditBox::OnFocusOut();
@@ -5559,7 +5559,7 @@ void CDXUTIMEEditBox::OnFocusOut()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008C2C0
+// 0x0008C2C0
 bool CDXUTIMEEditBox::StaticMsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HIMC hImc;
@@ -5705,7 +5705,7 @@ bool CDXUTIMEEditBox::StaticMsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00089110
+// 0x00089110
 bool CDXUTIMEEditBox::HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -5879,7 +5879,7 @@ bool CDXUTIMEEditBox::HandleMouse(UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPa
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008B300
+// 0x0008B300
 bool CDXUTIMEEditBox::MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -5896,11 +5896,11 @@ bool CDXUTIMEEditBox::MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     bool* trapped = &trappedData;
 
     HIMC hImc;
-    // samp.dll RVA: 0x00140CB8
+    // 0x00140CB8
     static LPARAM lAlt = 0x80000000;
-    // samp.dll RVA: 0x00140CB4
+    // 0x00140CB4
     static LPARAM lCtrl = 0x80000000;
-    // samp.dll RVA: 0x00140CB0
+    // 0x00140CB0
     static LPARAM lShift = 0x80000000;
 
     *trapped = false;
@@ -6298,7 +6298,7 @@ bool CDXUTIMEEditBox::MsgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008F480
+// 0x0008F480
 void CDXUTIMEEditBox::RenderCandidateReadingWindow(IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading)
 {
     RECT rc;
@@ -6428,7 +6428,7 @@ void CDXUTIMEEditBox::RenderCandidateReadingWindow(IDirect3DDevice9* pd3dDevice,
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008FAA0
+// 0x0008FAA0
 void CDXUTIMEEditBox::RenderComposition(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 {
     RECT rcCaret = {0, 0, 0, 0};
@@ -6590,7 +6590,7 @@ void CDXUTIMEEditBox::RenderComposition(IDirect3DDevice9* pd3dDevice, float fEla
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000900E0
+// 0x000900E0
 void CDXUTIMEEditBox::RenderIndicator(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 {
     CDXUTElement* pElement = m_Elements.GetAt(9);
@@ -6609,7 +6609,7 @@ void CDXUTIMEEditBox::RenderIndicator(IDirect3DDevice9* pd3dDevice, float fElaps
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00090230
+// 0x00090230
 void CDXUTIMEEditBox::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 {
     if (m_bVisible == false)
@@ -6665,7 +6665,7 @@ void CDXUTIMEEditBox::Render(IDirect3DDevice9* pd3dDevice, float fElapsedTime)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009ba60
+// 0x0009ba60
 void CUniBuffer::Initialize()
 {
     if (s_hDll)
@@ -6692,7 +6692,7 @@ void CUniBuffer::Initialize()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b1d0
+// 0x0009b1d0
 void CUniBuffer::Uninitialize()
 {
     if (s_hDll)
@@ -6711,7 +6711,7 @@ void CUniBuffer::Uninitialize()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b240
+// 0x0009b240
 bool CUniBuffer::SetBufferSize(int nNewSize)
 {
     // If the current size is already the maximum allowed,
@@ -6746,7 +6746,7 @@ bool CUniBuffer::SetBufferSize(int nNewSize)
 //--------------------------------------------------------------------------------------
 // Uniscribe -- Analyse() analyses the string in the buffer
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b310
+// 0x0009b310
 HRESULT CUniBuffer::Analyse()
 {
     if (m_Analysis)
@@ -6773,7 +6773,7 @@ HRESULT CUniBuffer::Analyse()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009bbb0
+// 0x0009bbb0
 CUniBuffer::CUniBuffer(int nInitialSize)
 {
     CUniBuffer::Initialize(); // ensure static vars are properly init'ed first
@@ -6791,7 +6791,7 @@ CUniBuffer::CUniBuffer(int nInitialSize)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b440
+// 0x0009b440
 CUniBuffer::~CUniBuffer()
 {
     delete[] m_pwszBuffer;
@@ -6800,7 +6800,7 @@ CUniBuffer::~CUniBuffer()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b470
+// 0x0009b470
 WCHAR& CUniBuffer::operator[](int n) // No param checking
 {
     // This version of operator[] is called only
@@ -6811,7 +6811,7 @@ WCHAR& CUniBuffer::operator[](int n) // No param checking
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b480
+// 0x0009b480
 void CUniBuffer::Clear()
 {
     *m_pwszBuffer = L'\0';
@@ -6822,7 +6822,7 @@ void CUniBuffer::Clear()
 // Inserts the char at specified index.
 // If nIndex == -1, insert to the end.
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b520
+// 0x0009b520
 bool CUniBuffer::InsertChar(int index, char value)
 {
     DWORD wide = 0;
@@ -6846,7 +6846,7 @@ bool CUniBuffer::InsertChar(int index, char value)
     InsertChar(index, (WCHAR)wide);
     return true;
 }
-// samp.dll RVA: 0x0009bbf0
+// 0x0009bbf0
 bool CUniBuffer::OverwriteAnsiChar(int index, char value)
 {
     DWORD wide = 0;
@@ -6872,7 +6872,7 @@ bool CUniBuffer::OverwriteAnsiChar(int index, char value)
     return true;
 }
 
-// samp.dll RVA: 0x0009b490
+// 0x0009b490
 bool CUniBuffer::InsertChar(int nIndex, WCHAR wChar)
 {
     assert(nIndex >= 0);
@@ -6913,7 +6913,7 @@ bool CUniBuffer::InsertChar(int nIndex, WCHAR wChar)
 // Removes the char at specified index.
 // If nIndex == -1, remove the last char.
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b5d0
+// 0x0009b5d0
 bool CUniBuffer::RemoveChar(int nIndex)
 {
     if (!lstrlenW(m_pwszBuffer) || nIndex < 0 || nIndex >= lstrlenW(m_pwszBuffer))
@@ -6929,7 +6929,7 @@ bool CUniBuffer::RemoveChar(int nIndex)
 // If nCount == -1, the entire string is inserted.
 // If nIndex == -1, insert to the end.
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b630
+// 0x0009b630
 bool CUniBuffer::InsertString(int nIndex, const WCHAR* pStr, int nCount)
 {
     assert(nIndex >= 0);
@@ -6958,7 +6958,7 @@ bool CUniBuffer::InsertString(int nIndex, const WCHAR* pStr, int nCount)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009ba00
+// 0x0009ba00
 bool CUniBuffer::SetText(const char* text)
 {
     if (lstrlenA(text) > 1024)
@@ -6969,7 +6969,7 @@ bool CUniBuffer::SetText(const char* text)
     return true;
 }
 
-// samp.dll RVA: 0x0009b9a0
+// 0x0009b9a0
 bool CUniBuffer::SetText(LPCWSTR wszText)
 {
     assert(wszText != NULL);
@@ -6995,7 +6995,7 @@ bool CUniBuffer::SetText(LPCWSTR wszText)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b770
+// 0x0009b770
 HRESULT CUniBuffer::CPtoX(int nCP, BOOL bTrail, int* pX)
 {
     assert(pX);
@@ -7012,7 +7012,7 @@ HRESULT CUniBuffer::CPtoX(int nCP, BOOL bTrail, int* pX)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b7b0
+// 0x0009b7b0
 HRESULT CUniBuffer::XtoCP(int nX, int* pCP, int* pnTrail)
 {
     assert(pCP && pnTrail);
@@ -7044,7 +7044,7 @@ HRESULT CUniBuffer::XtoCP(int nX, int* pCP, int* pnTrail)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b840
+// 0x0009b840
 void CUniBuffer::GetPriorItemPos(int nCP, int* pPrior)
 {
     *pPrior = nCP; // Default is the char itself
@@ -7075,7 +7075,7 @@ void CUniBuffer::GetPriorItemPos(int nCP, int* pPrior)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0009b8d0
+// 0x0009b8d0
 void CUniBuffer::GetNextItemPos(int nCP, int* pPrior)
 {
     *pPrior = nCP; // Default is the char itself
@@ -7114,7 +7114,7 @@ void CUniBuffer::GetNextItemPos(int nCP, int* pPrior)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085cf0
+// 0x00085cf0
 void CDXUTEditBox::ResetCaretBlink()
 {
     m_bCaretOn = true;
@@ -7122,7 +7122,7 @@ void CDXUTEditBox::ResetCaretBlink()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x0008bcc0
+// 0x0008bcc0
 void CDXUTIMEEditBox::Initialize()
 {
     if (s_hDllImm32) // Only need to do once
@@ -7175,7 +7175,7 @@ void CDXUTIMEEditBox::Initialize()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085d10
+// 0x00085d10
 void CDXUTIMEEditBox::Uninitialize()
 {
     if (s_hDllImm32)
@@ -7224,7 +7224,7 @@ void CDXUTIMEEditBox::Uninitialize()
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085E90
+// 0x00085E90
 void DXUTBlendColor::Init(D3DCOLOR defaultColor, D3DCOLOR disabledColor, D3DCOLOR hiddenColor)
 {
     for (int i = 0; i < MAX_CONTROL_STATES; i++)
@@ -7238,7 +7238,7 @@ void DXUTBlendColor::Init(D3DCOLOR defaultColor, D3DCOLOR disabledColor, D3DCOLO
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00085F40
+// 0x00085F40
 void DXUTBlendColor::Blend(UINT iState, float fElapsedTime, float fRate)
 {
     D3DXCOLOR destColor = States[iState];
@@ -7246,7 +7246,7 @@ void DXUTBlendColor::Blend(UINT iState, float fElapsedTime, float fRate)
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00086010
+// 0x00086010
 void CDXUTElement::SetTexture(UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor)
 {
     this->iTexture = iTexture;
@@ -7260,7 +7260,7 @@ void CDXUTElement::SetTexture(UINT iTexture, RECT* prcTexture, D3DCOLOR defaultT
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00086060
+// 0x00086060
 void CDXUTElement::SetFont(UINT iFont, D3DCOLOR defaultFontColor, DWORD dwTextFormat)
 {
     this->iFont = iFont;
@@ -7270,7 +7270,7 @@ void CDXUTElement::SetFont(UINT iFont, D3DCOLOR defaultFontColor, DWORD dwTextFo
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00086090
+// 0x00086090
 void CDXUTElement::Refresh()
 {
     TextureColor.Current = TextureColor.States[DXUT_STATE_HIDDEN];

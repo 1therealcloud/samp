@@ -5,27 +5,27 @@
 #include <string.h>
 #include <strsafe.h>
 
-// samp.dll RVA: 0x0006ee60
+// 0x0006ee60
 CDXUTButtonDL* CDXUTDialogDL::GetButton(int id)
 {
     return (CDXUTButtonDL*)((CDXUTDialog*)this)->GetControl(id, DXUT_CONTROL_BUTTON);
 }
-// samp.dll RVA: 0x0006a170
+// 0x0006a170
 void CDXUTListBoxDL::SetColumnCount(int value)
 {
     columnCount = value;
 }
-// samp.dll RVA: 0x0006ee80
+// 0x0006ee80
 int CDXUTListBoxDL::GetColumnCount()
 {
     return columnCount;
 }
-// samp.dll RVA: 0x0006a180
+// 0x0006a180
 void CDXUTListBoxDL::SetColumnWidth(int column, int value)
 {
     columnWidths[column] = value;
 }
-// samp.dll RVA: 0x0006ee90
+// 0x0006ee90
 int CDXUTListBoxDL::GetColumnWidth(int column)
 {
     return columnWidths[column];
@@ -40,7 +40,7 @@ struct DLControlAccess : CDXUTControl
     using CDXUTControl::UpdateRects;
 };
 
-// samp.dll RVA: 0x0008e810
+// 0x0008e810
 CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog* parent) : CDXUTControl(0), scrollBar(parent)
 {
     m_pDialog = parent;
@@ -57,13 +57,13 @@ CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog* parent) : CDXUTControl(0), scrollBar
     columnWidths[0] = columnWidths[1] = columnWidths[2] = 0;
 }
 
-// samp.dll RVA: 0x0008e8d0
+// 0x0008e8d0
 CDXUTListBoxDL::~CDXUTListBoxDL()
 {
     RemoveAllItems();
 }
 
-// samp.dll RVA: 0x0008a500
+// 0x0008a500
 bool CDXUTListBoxDL::HandleKeyboard(UINT message, WPARAM key, LPARAM lparam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -145,7 +145,7 @@ bool CDXUTListBoxDL::HandleKeyboard(UINT message, WPARAM key, LPARAM lparam)
     return true;
 }
 
-// samp.dll RVA: 0x0008a6e0
+// 0x0008a6e0
 bool CDXUTListBoxDL::HandleMouse(UINT message, POINT point, WPARAM keys, LPARAM lparam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -275,7 +275,7 @@ bool CDXUTListBoxDL::HandleMouse(UINT message, POINT point, WPARAM keys, LPARAM 
     return false;
 }
 
-// samp.dll RVA: 0x0008e900
+// 0x0008e900
 void CDXUTListBoxDL::Render(IDirect3DDevice9* device, float elapsed)
 {
     if (!m_bVisible)
@@ -354,20 +354,20 @@ void CDXUTListBoxDL::Render(IDirect3DDevice9* device, float elapsed)
     scrollBar.Render(device, elapsed);
 }
 
-// samp.dll RVA: 0x0008e8c0
+// 0x0008e8c0
 HRESULT CDXUTListBoxDL::OnInit()
 {
     return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
 }
 
-// samp.dll RVA: 0x0008e8a0
+// 0x0008e8a0
 bool CDXUTListBoxDL::CanHaveFocus()
 {
     DLControlAccess* base = (DLControlAccess*)this;
     return base->m_bVisible && base->m_bEnabled;
 }
 
-// samp.dll RVA: 0x00088700
+// 0x00088700
 void CDXUTListBoxDL::UpdateRects()
 {
     DLControlAccess* base = (DLControlAccess*)this;
@@ -389,7 +389,7 @@ void CDXUTListBoxDL::UpdateRects()
     }
 }
 
-// samp.dll RVA: 0x0008de50
+// 0x0008de50
 CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog* parent) : CDXUTControl(0)
 {
     m_pDialog = parent;
@@ -401,16 +401,16 @@ CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog* parent) : CDXUTControl(0)
     m_Elements.RemoveAll();
 }
 
-// samp.dll RVA: 0x0008dec0
+// 0x0008dec0
 CDXUTStaticDL::~CDXUTStaticDL() {}
 
-// samp.dll RVA: 0x0008deb0
+// 0x0008deb0
 BOOL CDXUTStaticDL::ContainsPoint(POINT)
 {
     return FALSE;
 }
 
-// samp.dll RVA: 0x0008ded0
+// 0x0008ded0
 void CDXUTStaticDL::Render(IDirect3DDevice9*, float elapsed)
 {
     if (!m_bVisible)
@@ -421,7 +421,7 @@ void CDXUTStaticDL::Render(IDirect3DDevice9*, float elapsed)
     m_pDialog->DrawTextA(text, element, &m_rcBoundingBox, true, -1);
 }
 
-// samp.dll RVA: 0x0008df20
+// 0x0008df20
 CDXUTButtonDL::CDXUTButtonDL(CDXUTDialog* parent) : CDXUTStaticDL(0)
 {
     m_pDialog = parent;
@@ -430,29 +430,29 @@ CDXUTButtonDL::CDXUTButtonDL(CDXUTDialog* parent) : CDXUTStaticDL(0)
     m_nHotkey = 0;
 }
 
-// samp.dll RVA: 0x0008dfc0
+// 0x0008dfc0
 CDXUTButtonDL::~CDXUTButtonDL() {}
 
-// samp.dll RVA: 0x0008df60
+// 0x0008df60
 BOOL CDXUTButtonDL::ContainsPoint(POINT point)
 {
     return PtInRect(&m_rcBoundingBox, point);
 }
 
-// samp.dll RVA: 0x0008df80
+// 0x0008df80
 bool CDXUTButtonDL::CanHaveFocus()
 {
     return m_bVisible && m_bEnabled;
 }
 
-// samp.dll RVA: 0x0008dfa0
+// 0x0008dfa0
 void CDXUTButtonDL::OnHotkey()
 {
     m_pDialog->RequestFocus(this);
     m_pDialog->SendEvent(0x101, true, this);
 }
 
-// samp.dll RVA: 0x000848d0
+// 0x000848d0
 bool CDXUTButtonDL::HandleKeyboard(UINT message, WPARAM wparam, LPARAM)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -474,7 +474,7 @@ bool CDXUTButtonDL::HandleKeyboard(UINT message, WPARAM wparam, LPARAM)
     return false;
 }
 
-// samp.dll RVA: 0x00084930
+// 0x00084930
 bool CDXUTButtonDL::HandleMouse(UINT message, POINT point, WPARAM, LPARAM)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -503,7 +503,7 @@ bool CDXUTButtonDL::HandleMouse(UINT message, POINT point, WPARAM, LPARAM)
     return false;
 }
 
-// samp.dll RVA: 0x0008dfd0
+// 0x0008dfd0
 void CDXUTButtonDL::Render(IDirect3DDevice9*, float elapsed)
 {
     int offsetX = 0, offsetY = 0;
@@ -541,7 +541,7 @@ void CDXUTButtonDL::Render(IDirect3DDevice9*, float elapsed)
     m_pDialog->DrawTextA(text, element, &rect, false, -1);
 }
 
-// samp.dll RVA: 0x00090790
+// 0x00090790
 HRESULT CDXUTDialogDL::AddButton(int id, const char* text, int x, int y, int width, int height, UINT hotkey, bool isDefault, CDXUTButtonDL** created)
 {
     // This native factory has no constructor-failure cleanup frame.
@@ -564,7 +564,7 @@ HRESULT CDXUTDialogDL::AddButton(int id, const char* text, int x, int y, int wid
     return S_OK;
 }
 
-// samp.dll RVA: 0x000875c0
+// 0x000875c0
 HRESULT CDXUTStaticDL::SetText(const char* value)
 {
     if (!value)
@@ -576,7 +576,7 @@ HRESULT CDXUTStaticDL::SetText(const char* value)
     return S_OK;
 }
 
-// samp.dll RVA: 0x0008a270
+// 0x0008a270
 HRESULT CDXUTListBoxDL::AddItem(const char* value, void* data, int row)
 {
     DXUTListBoxItemDL* item = new DXUTListBoxItemDL;
@@ -601,7 +601,7 @@ HRESULT CDXUTListBoxDL::AddItem(const char* value, void* data, int row)
     return result;
 }
 
-// samp.dll RVA: 0x0008a370
+// 0x0008a370
 HRESULT CDXUTListBoxDL::InsertItem(int index, const char* value, void* data, DWORD color)
 {
     DXUTListBoxItemDL* item = new DXUTListBoxItemDL;
@@ -620,7 +620,7 @@ HRESULT CDXUTListBoxDL::InsertItem(int index, const char* value, void* data, DWO
     return result;
 }
 
-// samp.dll RVA: 0x00088880
+// 0x00088880
 void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
 {
     if (row < 0 || row >= items.GetSize() || column < 0 || column >= columnCount)
@@ -629,25 +629,25 @@ void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
     strncpy(items[row]->subitems[column], value, 128);
 }
 
-// samp.dll RVA: 0x0008a440
+// 0x0008a440
 DXUTListBoxItemDL* CDXUTListBoxDL::GetItem(int row)
 {
     if (row < 0 || row >= items.GetSize())
         return 0;
     return items[row];
 }
-// samp.dll RVA: 0x0006e240
+// 0x0006e240
 DXUTListBoxItemDL* CDXUTListBoxDL::GetSelectedItem(int previous)
 {
     return GetItem(GetSelectedIndex(previous));
 }
-// samp.dll RVA: 0x0006e260
+// 0x0006e260
 CDXUTScrollBar* CDXUTListBoxDL::GetScrollBar()
 {
     return &scrollBar;
 }
 
-// samp.dll RVA: 0x0008c270
+// 0x0008c270
 void CDXUTListBoxDL::RemoveAllItems()
 {
     for (int i = 0; i < items.GetSize(); ++i)
@@ -656,7 +656,7 @@ void CDXUTListBoxDL::RemoveAllItems()
     scrollBar.SetTrackRange(0, 1);
 }
 
-// samp.dll RVA: 0x00088800
+// 0x00088800
 void CDXUTListBoxDL::RemoveItem(int index)
 {
     if (index < 0 || index >= items.GetSize())
@@ -669,7 +669,7 @@ void CDXUTListBoxDL::RemoveItem(int index)
     m_pDialog->SendEvent(EVENT_LISTBOX_SELECTION, true, this);
 }
 
-// samp.dll RVA: 0x0008a470
+// 0x0008a470
 void CDXUTListBoxDL::SelectItem(int index)
 {
     int count = items.GetSize();
@@ -692,7 +692,7 @@ void CDXUTListBoxDL::SelectItem(int index)
     parent->SendEvent(0x702, true, (CDXUTControl*)this);
 }
 
-// samp.dll RVA: 0x000888f0
+// 0x000888f0
 int CDXUTListBoxDL::GetSelectedIndex(int previous)
 {
     if (previous < -1)

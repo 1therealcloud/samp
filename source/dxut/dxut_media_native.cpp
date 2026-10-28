@@ -1,15 +1,15 @@
 #include "dxut/dxut_media_native.h"
 #include "dxstdafx.h"
-// samp.dll RVA: 0x00181ac8
+// 0x00181ac8
 char g_dxutMediaSearchPath[MAX_PATH];
-// samp.dll RVA: 0x00093290
+// 0x00093290
 char* InputDxutMediaSearchPath()
 {
     return g_dxutMediaSearchPath;
 }
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000972b0
+// 0x000972b0
 HRESULT DXUTFindDXSDKMediaFileCch(char* strDestPath, int cchDest, const char* strFilename)
 {
     bool bFound;
@@ -92,7 +92,7 @@ HRESULT DXUTFindDXSDKMediaFileCch(char* strDestPath, int cchDest, const char* st
 //--------------------------------------------------------------------------------------
 // Search a set of typical directories
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x000961c0
+// 0x000961c0
 bool DXUTFindMediaSearchTypicalDirs(char* strSearchPath, int cchSearch, const char* strLeaf, char* strExePath, char* strExeName)
 {
     // Typical directories:
@@ -167,7 +167,7 @@ bool DXUTFindMediaSearchTypicalDirs(char* strSearchPath, int cchSearch, const ch
 // Search parent directories starting at strStartAt, and appending strLeafName
 // at each parent directory.  It stops at the root directory.
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: 0x00096320
+// 0x00096320
 bool DXUTFindMediaSearchParentDirs(char* strSearchPath, int cchSearch, char* strStartAt, char* strLeafName)
 {
     char strFullPath[MAX_PATH] = {0};

@@ -15,12 +15,12 @@ class CDXUTScrollBar;
 class CChat
 {
 public:
-    // samp.dll RVA: 0x00068e00
+    // 0x00068e00
     LONG GetChatWindowBottom();
     // Stores the raw timestamp byte and always requests redraw.
-    // samp.dll RVA: 0x00067f20
+    // 0x00067f20
     void SetTimestamps(BYTE enabled);
-    // samp.dll RVA: 0x00067f40
+    // 0x00067f40
     BYTE GetTimestamps();
     enum EntryType
     {
@@ -75,57 +75,57 @@ public:
     BOOL m_bRedraw;
     long m_nScrollbarPos, m_nCharHeight, m_nTimestampWidth;
 
-    // samp.dll RVA: 0x00067df0
+    // 0x00067df0
     CChat(IDirect3DDevice9*, CFonts*, const char*);
-    // samp.dll RVA: 0x00060d30
+    // 0x00060d30
     int GetMode();
-    // samp.dll RVA: 0x00060d40
+    // 0x00060d40
     void SwitchMode();
-    // samp.dll RVA: 0x00066b90
+    // 0x00066b90
     void RecalcFontSize();
-    // samp.dll RVA: 0x00066c10
+    // 0x00066c10
     void OnLostDevice();
-    // samp.dll RVA: 0x00066c70
+    // 0x00066c70
     void UpdateScrollbar();
-    // samp.dll RVA: 0x00066d10
+    // 0x00066d10
     void SetPageSize(int);
-    // samp.dll RVA: 0x00066d40
+    // 0x00066d40
     void PageUp();
-    // samp.dll RVA: 0x00066da0
+    // 0x00066da0
     void PageDown();
-    // samp.dll RVA: 0x00066e00
+    // 0x00066e00
     void ScrollToBottom();
-    // samp.dll RVA: 0x00066e30
+    // 0x00066e30
     void Scroll(int);
-    // samp.dll RVA: 0x00066e90
+    // 0x00066e90
     void FilterOutInvalidChars(char*);
-    // samp.dll RVA: 0x00066ec0
+    // 0x00066ec0
     void PushBack();
-    // samp.dll RVA: 0x00067240
+    // 0x00067240
     void Log(int, const char*, const char*);
-    // samp.dll RVA: 0x00067310
+    // 0x00067310
     void ResetDialogControls(CDXUTDialog*);
-    // samp.dll RVA: 0x00067650
+    // 0x00067650
     void AddEntry(int, const char*, const char*, D3DCOLOR, D3DCOLOR);
-    // samp.dll RVA: 0x00067a90
+    // 0x00067a90
     void AddChatMessage(const char*, D3DCOLOR, char*);
-    // samp.dll RVA: 0x00067be0
+    // 0x00067be0
     void AddMessage(D3DCOLOR, char*);
-    // samp.dll RVA: 0x00067ae0
+    // 0x00067ae0
     void AddInfoMessage(const char*, ...);
-    // samp.dll RVA: 0x00067b60
+    // 0x00067b60
     void AddDebugMessage(const char*, ...);
 
     // Rendering is reconstructed too; exact-match status is per method.
-    // samp.dll RVA: 0x00066ee0
+    // 0x00066ee0
     void RenderEntry(const char*, RECT, D3DCOLOR);
-    // samp.dll RVA: 0x000673b0
+    // 0x000673b0
     void Render();
-    // samp.dll RVA: 0x00067870
+    // 0x00067870
     void Draw();
-    // samp.dll RVA: 0x00067940
+    // 0x00067940
     void RenderToSurface();
-    // samp.dll RVA: 0x00067c40
+    // 0x00067c40
     void OnResetDevice();
 };
 #pragma pack(pop)

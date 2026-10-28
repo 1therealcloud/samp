@@ -1,16 +1,16 @@
 #include "game/actor.h"
 #include "game/scripting.h"
 #include <string.h>
-// samp.dll RVA: 0x0011e2d0
+// 0x0011e2d0
 const Scripting::OpcodeInfo g_actorKillCommand = {0x321, "i"};
-// samp.dll RVA: 0x0011e294
+// 0x0011e294
 const Scripting::OpcodeInfo g_actorImmunityCommand = {0x2ab, "iiiiii"};
-// samp.dll RVA: 0x0009c030
+// 0x0009c030
 float CActor::GetHealth()
 {
     return actorBackend ? actorBackend->health : 0.0f;
 }
-// samp.dll RVA: 0x0009c050
+// 0x0009c050
 void CActor::SetHealth(float health)
 {
     if (!actorBackend)
@@ -19,50 +19,50 @@ void CActor::SetHealth(float health)
     if (actorBackend->health <= 0.0f)
         Scripting::ProcessCommand(&g_actorKillCommand, m_nHandle);
 }
-// samp.dll RVA: 0x0009c090
+// 0x0009c090
 float CActor::GetArmour()
 {
     return actorBackend ? actorBackend->armour : 0.0f;
 }
-// samp.dll RVA: 0x0009c0b0
+// 0x0009c0b0
 void CActor::SetArmour(float armour)
 {
     if (actorBackend)
         memcpy(&actorBackend->armour, &armour, 4);
 }
-// samp.dll RVA: 0x0009c0d0
+// 0x0009c0d0
 DWORD CActor::GetBackendFlags()
 {
     return actorBackend ? actorBackend->flags : 0;
 }
-// samp.dll RVA: 0x0009c0e0
+// 0x0009c0e0
 void CActor::SetBackendFlags(DWORD flags)
 {
     if (actorBackend)
         actorBackend->flags = flags;
 }
-// samp.dll RVA: 0x0009c100
+// 0x0009c100
 BOOL CActor::IsDead()
 {
     return !actorBackend || !(actorBackend->health > 0.0f);
 }
-// samp.dll RVA: 0x0009c130
+// 0x0009c130
 BYTE CActor::GetBackendByte530()
 {
     return *(BYTE*)&actorBackend->state530;
 }
-// samp.dll RVA: 0x0009c140
+// 0x0009c140
 void CActor::SetBackendByte530(BYTE value)
 {
     if (actorBackend)
         actorBackend->state530 = value;
 }
-// samp.dll RVA: 0x0009c160
+// 0x0009c160
 DWORD CActor::HasBackendFlag100()
 {
     return actorBackend ? (actorBackend->flags >> 8) & 1 : 0;
 }
-// samp.dll RVA: 0x0009c180
+// 0x0009c180
 void CActor::SetInvulnerable(BYTE enabled)
 {
     if (!actorBackend)
@@ -76,7 +76,7 @@ void CActor::SetInvulnerable(BYTE enabled)
 
 #include "game/playerped.h"
 #include "game/util.h"
-// samp.dll RVA: 0x0009be80
+// 0x0009be80
 void CActor::Destroy()
 {
     void* saved = actorBackend;
@@ -97,7 +97,7 @@ void CActor::Destroy()
     actorBackend = 0;
     m_pGameEntity = 0;
 }
-// samp.dll RVA: 0x0009bff0
+// 0x0009bff0
 void CActor::SetRotation(float heading)
 {
     if (!actorBackend || !GamePoolPedGetAt(m_nHandle))
@@ -112,16 +112,16 @@ void CActor::SetRotation(float heading)
     __asm {fstp dword ptr [edx+0x55c]}
     // clang-format on
 }
-// samp.dll RVA: 0x0009c1d0
+// 0x0009c1d0
 CActor::~CActor()
 {
     Destroy();
 }
 
 #include "game/game.h"
-// samp.dll RVA: 0x0011e2e4
+// 0x0011e2e4
 const Scripting::OpcodeInfo g_actorAnimationCommand = {0x812, "issfiiiii"};
-// samp.dll RVA: 0x0009bee0
+// 0x0009bee0
 void CActor::PerformAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time)
 {
     if (!actorBackend || !GamePoolPedGetAt(m_nHandle))
@@ -146,9 +146,9 @@ void CActor::PerformAnimation(const char* name, const char* library, float speed
     }
     Scripting::ProcessCommand(&g_actorAnimationCommand, m_nHandle, name, library, (double)speed, loop, lockX, lockY, freeze, time);
 }
-// samp.dll RVA: 0x00181e5c
+// 0x00181e5c
 void* g_actorTaskBackend;
-// samp.dll RVA: 0x0009bfb0
+// 0x0009bfb0
 DWORD GameClearActorTasks()
 {
     void* tasks = ((ActorBackendPrefix*)g_actorTaskBackend)->tasks;
@@ -156,7 +156,7 @@ DWORD GameClearActorTasks()
     ((void(__fastcall*)(void*, void*, int))0x601640)(tasks, 0, 1);
     return 1;
 }
-// samp.dll RVA: 0x0009bfd0
+// 0x0009bfd0
 void CActor::ClearTasks()
 {
     g_actorTaskBackend = actorBackend;
@@ -165,15 +165,15 @@ void CActor::ClearTasks()
 }
 
 #include "game/quaternion.h"
-// samp.dll RVA: 0x0011e280
+// 0x0011e280
 const Scripting::OpcodeInfo g_actorCreateCommand = {0x9a, "iifffv"};
-// samp.dll RVA: 0x0011e2bc
+// 0x0011e2bc
 const Scripting::OpcodeInfo g_actorHeadingCommand = {0x173, "if"};
-// samp.dll RVA: 0x0011e2a8
+// 0x0011e2a8
 const Scripting::OpcodeInfo g_actorConfigurationCommand = {0x446, "ii"};
-// samp.dll RVA: 0x0011e2f8
+// 0x0011e2f8
 const Scripting::OpcodeInfo g_actorTaskFlagsCommand = {0x60b, "ii"};
-// samp.dll RVA: 0x0009bd30
+// 0x0009bd30
 CActor::CActor(int model, CVector position, float heading)
 {
     actorBackend = 0;

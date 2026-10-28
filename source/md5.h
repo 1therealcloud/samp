@@ -16,13 +16,13 @@ struct MD5Context
     unsigned char in[64];
 };
 
-// samp.dll RVA: 0x00062b30
+// 0x00062b30
 void MD5Init(struct MD5Context* context);
-// samp.dll RVA: 0x000633e0
+// 0x000633e0
 void MD5Update(struct MD5Context* context, unsigned char const* buf, unsigned len);
-// samp.dll RVA: 0x000634b0
+// 0x000634b0
 void MD5Final(unsigned char digest[16], struct MD5Context* context);
-// samp.dll RVA: 0x00062b60
+// 0x00062b60
 void MD5Transform(uint32 buf[4], uint32 const in[16]);
 
 /*

@@ -1,8 +1,8 @@
 #include "game/scripting.h"
 #include <string.h>
-// samp.dll RVA: 0x002a93f0
+// 0x002a93f0
 CRunningScript* g_scriptThread;
-// samp.dll RVA: 0x000b2150
+// 0x000b2150
 void Scripting::Initialize()
 {
     g_scriptThread = (CRunningScript*)operator new(224);
@@ -12,19 +12,19 @@ void Scripting::Initialize()
 #include "chatwindow.h"
 #include "main.h"
 #include <stdarg.h>
-// samp.dll RVA: 0x002a92f0
+// 0x002a92f0
 BYTE g_scriptBuffer[256];
-// samp.dll RVA: 0x002a92a8
+// 0x002a92a8
 DWORD* g_scriptVariables[18];
-// samp.dll RVA: 0x002a93f4
+// 0x002a93f4
 DWORD g_scriptLastOpcode;
-// samp.dll RVA: 0x002a93f8
+// 0x002a93f8
 BOOL g_scriptLocalDebug;
-// samp.dll RVA: 0x00155390
+// 0x00155390
 FARPROC g_scriptProcessOneCommand = (FARPROC)0x469eb0;
-// samp.dll RVA: 0x00163a70
+// 0x00163a70
 int g_gameExceptionCount;
-// samp.dll RVA: 0x00060470
+// 0x00060470
 int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, const char* warning)
 {
     if (g_pChat)
@@ -41,7 +41,7 @@ int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, cons
     }
     return EXCEPTION_CONTINUE_SEARCH;
 }
-// samp.dll RVA: 0x000b1ed0
+// 0x000b1ed0
 DWORD Scripting::ExecBuffer()
 {
     g_scriptLocalDebug = TRUE;
@@ -58,7 +58,7 @@ DWORD Scripting::ExecBuffer()
     g_scriptLocalDebug = FALSE;
     return result;
 }
-// samp.dll RVA: 0x000b1f10
+// 0x000b1f10
 DWORD __cdecl Scripting::ProcessCommand(const OpcodeInfo* command, ...)
 {
     va_list args;

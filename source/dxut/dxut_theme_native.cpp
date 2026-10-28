@@ -3,12 +3,12 @@
 #include "config.h"
 #include "dxstdafx.h"
 #include "fontrender.h"
-// samp.dll RVA: 0x000c69e0
+// 0x000c69e0
 int FontGetDialogHeight()
 {
     return g_pConfig->GetIntValue("fontsize") * 2 + 20;
 }
-// samp.dll RVA: 0x0008d1c0
+// 0x0008d1c0
 void CDXUTDialog::InitFont()
 {
     int height = FontGetDialogHeight();
@@ -16,7 +16,7 @@ void CDXUTDialog::InitFont()
     SetFont(0, FontGetFace(), height, weight);
     SetFont(1, FontGetFace(), height - 2, weight);
 }
-// samp.dll RVA: 0x0008d200
+// 0x0008d200
 void CDXUTDialog::InitDefaultElements()
 {
     SetTexture(0, "sampgui.png");

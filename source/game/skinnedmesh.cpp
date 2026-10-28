@@ -1,25 +1,25 @@
 #include "game/skinnedmesh.h"
 #include "chatwindow.h"
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
 #include "main.h"
 #include <new>
 #include <stdio.h>
 #include <string.h>
 
-// samp.dll RVA: 0x000b9340
+// 0x000b9340
 CSkinHierarchyAllocator::CSkinHierarchyAllocator() {}
 
-// samp.dll RVA: 0x0011f860
+// 0x0011f860
 const char g_skinTextureDirectory[] = "C:\\Users\\New\\Desktop\\SAMP_037_Desktop\\Matite2014\\newskins\\ponz\\";
-// samp.dll RVA: 0x0011f84c
+// 0x0011f84c
 const char g_skinTextureFailed[] = "FAILED texture: %s";
-// samp.dll RVA: 0x0011f838
+// 0x0011f838
 const char g_skinTextureLoaded[] = "LOADED texture: %s";
-// samp.dll RVA: 0x0011c92c
+// 0x0011c92c
 const char g_skinTexturePathFormat[] = "%s%s";
 
-// samp.dll RVA: 0x000b8ad0
+// 0x000b8ad0
 HRESULT __stdcall CSkinHierarchyAllocator::CreateFrame(LPCSTR name, D3DXFRAME** out)
 {
     SkinFrame* frame = (SkinFrame*)::operator new(sizeof(SkinFrame));
@@ -42,7 +42,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::CreateFrame(LPCSTR name, D3DXFRAME** 
     return S_OK;
 }
 
-// samp.dll RVA: 0x000b8800
+// 0x000b8800
 HRESULT __stdcall CSkinHierarchyAllocator::CreateMeshContainer(LPCSTR name, const D3DXMESHDATA* mesh, const D3DXMATERIAL* materials, const D3DXEFFECTINSTANCE* effects,
                                                                DWORD materialCount, const DWORD* adjacency, ID3DXSkinInfo* skin, D3DXMESHCONTAINER** out)
 {
@@ -121,7 +121,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::CreateMeshContainer(LPCSTR name, cons
     return S_OK;
 }
 
-// samp.dll RVA: 0x000b86b0
+// 0x000b86b0
 HRESULT __stdcall CSkinHierarchyAllocator::DestroyFrame(D3DXFRAME* frame)
 {
     if (frame->Name)
@@ -133,7 +133,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::DestroyFrame(D3DXFRAME* frame)
     return S_OK;
 }
 
-// samp.dll RVA: 0x000b86e0
+// 0x000b86e0
 HRESULT __stdcall CSkinHierarchyAllocator::DestroyMeshContainer(D3DXMESHCONTAINER* base)
 {
     SkinMeshContainer* container = (SkinMeshContainer*)base;
@@ -200,12 +200,12 @@ HRESULT __stdcall CSkinHierarchyAllocator::DestroyMeshContainer(D3DXMESHCONTAINE
     return S_OK;
 }
 
-// samp.dll RVA: 0x0011f8a4
+// 0x0011f8a4
 const char g_skinBoneNameFormat[] = "Bone(%u) name: %s";
-// samp.dll RVA: 0x0011f8b8
+// 0x0011f8b8
 const char g_skinBoneCountFormat[] = "Num bones: %u";
 
-// samp.dll RVA: 0x000b8bc0
+// 0x000b8bc0
 CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9* inputDevice)
 {
     device = inputDevice;
@@ -219,7 +219,7 @@ CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9* inputDevice)
     controller = 0;
     mesh = 0;
 }
-// samp.dll RVA: 0x000b9510
+// 0x000b9510
 CSkinnedMesh::~CSkinnedMesh()
 {
     if (controller)
@@ -240,7 +240,7 @@ CSkinnedMesh::~CSkinnedMesh()
     }
     device = 0;
 }
-// samp.dll RVA: 0x000b8c30
+// 0x000b8c30
 void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
 {
     do
@@ -274,7 +274,7 @@ void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
     }
     while (frame);
 }
-// samp.dll RVA: 0x000b8d10
+// 0x000b8d10
 void CSkinnedMesh::SetAnimation(DWORD index)
 {
     if (index == currentAnimation || index >= animationCapacity)
@@ -286,7 +286,7 @@ void CSkinnedMesh::SetAnimation(DWORD index)
     if (set)
         set->Release();
 }
-// samp.dll RVA: 0x000b9190
+// 0x000b9190
 void CSkinnedMesh::DrawFrame(SkinFrame* frame)
 {
     do
@@ -307,9 +307,9 @@ void CSkinnedMesh::DrawFrame(SkinFrame* frame)
     }
     while (frame);
 }
-// samp.dll RVA: 0x000b9250
+// 0x000b9250
 void CSkinnedMesh::NativeNoOp3Words(DWORD, DWORD, DWORD) {}
-// samp.dll RVA: 0x000b9260
+// 0x000b9260
 void CSkinnedMesh::DumpBones()
 {
     if (!root || !mesh || !mesh->pSkinInfo)
@@ -325,7 +325,7 @@ void CSkinnedMesh::DumpBones()
             g_pChat->AddDebugMessage(g_skinBoneNameFormat, i, name);
         }
 }
-// samp.dll RVA: 0x000b92e0
+// 0x000b92e0
 void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* parent)
 {
     do
@@ -341,7 +341,7 @@ void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* paren
     }
     while (frame);
 }
-// samp.dll RVA: 0x000b9350
+// 0x000b9350
 int CSkinnedMesh::Load(const char* filename)
 {
     CSkinHierarchyAllocator allocator;
@@ -358,7 +358,7 @@ int CSkinnedMesh::Load(const char* filename)
     }
     return 0;
 }
-// samp.dll RVA: 0x000b9450
+// 0x000b9450
 void CSkinnedMesh::UpdateSkin(DWORD)
 {
     if (!root)
@@ -377,7 +377,7 @@ void CSkinnedMesh::UpdateSkin(DWORD)
     container->workingMesh->UnlockVertexBuffer();
     container->MeshData.pMesh->UnlockVertexBuffer();
 }
-// samp.dll RVA: 0x000b8d60
+// 0x000b8d60
 int CSkinnedMesh::Render(const CMatrix* matrix)
 {
     if (!device)

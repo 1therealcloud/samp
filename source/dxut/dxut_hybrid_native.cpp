@@ -3,7 +3,7 @@
 #include "gui/font_wrapper.h"
 #include <stdio.h>
 
-// samp.dll RVA: 0x0008c8f0
+// 0x0008c8f0
 int CDXUTDialogResourceManager::AddFont(const char* face, LONG height, LONG weight)
 {
     for (int i = 0; i < m_FontCache.GetSize(); ++i)
@@ -26,7 +26,7 @@ int CDXUTDialogResourceManager::AddFont(const char* face, LONG height, LONG weig
     return index;
 }
 
-// samp.dll RVA: 0x0008ca50
+// 0x0008ca50
 HRESULT CDXUTDialog::SetFont(UINT index, const char* face, LONG height, LONG weight)
 {
     for (UINT i = m_Fonts.GetSize(); i <= index; ++i)
@@ -36,7 +36,7 @@ HRESULT CDXUTDialog::SetFont(UINT index, const char* face, LONG height, LONG wei
     return S_OK;
 }
 
-// samp.dll RVA: 0x0008c170
+// 0x0008c170
 HRESULT CDXUTDialogResourceManager::CreateFont(UINT index)
 {
     DXUTFontNode* node = m_FontCache.GetAt(index);

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// samp.dll RVA: 0x000b5950
+// 0x000b5950
 int ChatIsHexDigit(char value)
 {
     if ((value >= '0' && value <= '9') || (value >= 'A' && value <= 'F') || (value >= 'a' && value <= 'f'))
@@ -11,7 +11,7 @@ int ChatIsHexDigit(char value)
     return 0;
 }
 
-// samp.dll RVA: 0x000b59c0
+// 0x000b59c0
 unsigned long ChatParseColorTag(char* text)
 {
     if (text[0] && text[0] == '{' && text[1] && ChatIsHexDigit(text[1]) && text[2] && ChatIsHexDigit(text[2]) && text[3] && ChatIsHexDigit(text[3]) && text[4] &&
@@ -25,7 +25,7 @@ unsigned long ChatParseColorTag(char* text)
     return 0xffffffff;
 }
 
-// samp.dll RVA: 0x000b5c00
+// 0x000b5c00
 void ChatStripColorTags(char* text)
 {
     while (*text)
@@ -38,7 +38,7 @@ void ChatStripColorTags(char* text)
     *text = 0;
 }
 
-// samp.dll RVA: 0x000b5c40
+// 0x000b5c40
 int ChatPrepareMessage(char* text, int maximumLength)
 {
     char buffer[2049];

@@ -1,9 +1,9 @@
 #include "gui/input_text.h"
 #include <string.h>
 #include <wchar.h>
-// samp.dll RVA: 0x0017fbb8
+// 0x0017fbb8
 char g_inputAnsiText[2049]; // Includes the observed terminator write at index 2048.
-// samp.dll RVA: 0x00085060
+// 0x00085060
 const char* InputWideToAnsi(const wchar_t* text)
 {
     memset(g_inputAnsiText, 0, 2048);

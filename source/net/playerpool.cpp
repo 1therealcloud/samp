@@ -3,30 +3,30 @@
 #include "net/netgame.h"
 #include "net/playerinfo.h"
 #include <string.h>
-// samp.dll RVA: 0x000010d0
+// 0x000010d0
 CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
 {
     if (player > 1004)
         return 0;
     return *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4);
 }
-// samp.dll RVA: 0x0000a1d0
+// 0x0000a1d0
 const char* CPlayerPool::GetLocalPlayerName()
 {
     return localName.c_str();
 }
-// samp.dll RVA: 0x0000b5e0
+// 0x0000b5e0
 void CPlayerPool::SetLocalPlayerName(const char* text)
 {
     localName.assign(text, strlen(text));
 }
-// samp.dll RVA: 0x00013630
+// 0x00013630
 void CPlayerPool::SetAt(WORD player, CPlayerInfo* info)
 {
     if (player <= 1004)
         *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4) = info;
 }
-// samp.dll RVA: 0x0001da50
+// 0x0001da50
 void CPlayerPool::SetName(WORD player, const char* text)
 {
     if (player <= 1004 && players[player])
@@ -38,13 +38,13 @@ void CPlayerPool::SetName(WORD player, const char* text)
 #include "net/localplayer.h"
 #include "net/playerinfo.h"
 #include "net/remoteplayer.h"
-// samp.dll RVA: 0x00156b84
+// 0x00156b84
 DWORD g_playerPoolProcessCount;
-// samp.dll RVA: 0x0011817c
+// 0x0011817c
 const char g_playerPoolRemoteException[] = "s001";
-// samp.dll RVA: 0x00118174
+// 0x00118174
 const char g_playerPoolLocalException[] = "s002";
-// samp.dll RVA: 0x000136c0
+// 0x000136c0
 BOOL CPlayerPool::Process()
 {
     ++g_playerPoolProcessCount;
@@ -72,7 +72,7 @@ BOOL CPlayerPool::Process()
     }
     return TRUE;
 }
-// samp.dll RVA: 0x00013c50
+// 0x00013c50
 WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord)
 {
     struct RayPoint
@@ -133,7 +133,7 @@ WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, cons
     }
     return selected;
 }
-// samp.dll RVA: 0x000139f0
+// 0x000139f0
 void CPlayerPool::Deactivate()
 {
     *(DWORD*)(local->nativeState + 0xf4) = 0;
@@ -146,7 +146,7 @@ void CPlayerPool::Deactivate()
             *(DWORD*)(remote->nativeState + 0x10) = 1;
         }
 }
-// samp.dll RVA: 0x00013e80
+// 0x00013e80
 CPlayerPool::CPlayerPool()
 {
     for (WORD id = 0; id < 1004; id++)
@@ -160,7 +160,7 @@ CPlayerPool::CPlayerPool()
     localId = 0;
     largestId = 0;
 }
-// samp.dll RVA: 0x00014100
+// 0x00014100
 BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
 {
     CPlayerInfo* info = new CPlayerInfo(name, npc);
@@ -181,7 +181,7 @@ BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
     UpdateLargestId();
     return TRUE;
 }
-// samp.dll RVA: 0x00013f40
+// 0x00013f40
 BOOL CPlayerPool::Delete(WORD id, BYTE reason)
 {
     (void)reason;
@@ -195,7 +195,7 @@ BOOL CPlayerPool::Delete(WORD id, BYTE reason)
     UpdateLargestId();
     return TRUE;
 }
-// samp.dll RVA: 0x00013fd0
+// 0x00013fd0
 CPlayerPool::~CPlayerPool()
 {
     if (local)
@@ -204,7 +204,7 @@ CPlayerPool::~CPlayerPool()
     for (WORD id = 0; id < 1004; id++)
         Delete(id, 0);
 }
-// samp.dll RVA: 0x00013650
+// 0x00013650
 void CPlayerPool::UpdateLargestId()
 {
     int largest = 0;
@@ -213,7 +213,7 @@ void CPlayerPool::UpdateLargestId()
             largest = id;
     largestId = largest;
 }
-// samp.dll RVA: 0x00013b50
+// 0x00013b50
 void CPlayerPool::ForceCollision()
 {
     int highest = largestId;
@@ -230,7 +230,7 @@ void CPlayerPool::ForceCollision()
         }
     }
 }
-// samp.dll RVA: 0x00013bd0
+// 0x00013bd0
 void CPlayerPool::RestoreCollision()
 {
     int highest = largestId;
@@ -244,12 +244,12 @@ void CPlayerPool::RestoreCollision()
             ped->SetCollisionFlag(savedCollision[id] != 0);
     }
 }
-// samp.dll RVA: 0x00001a80
+// 0x00001a80
 CLocalPlayer* CPlayerPool::GetLocalPlayer()
 {
     return *(CLocalPlayer**)((BYTE*)this + 0x1e);
 }
-// samp.dll RVA: 0x000138c0
+// 0x000138c0
 int CPlayerPool::GetCount(BOOL includeFlagged)
 {
     int count = 0;
@@ -262,7 +262,7 @@ int CPlayerPool::GetCount(BOOL includeFlagged)
         }
     return count;
 }
-// samp.dll RVA: 0x0006e290
+// 0x0006e290
 int CPlayerPool::GetScore(WORD player)
 {
     if (player > 1004)
@@ -270,7 +270,7 @@ int CPlayerPool::GetScore(WORD player)
     BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
     return entry ? *(int*)entry : 0;
 }
-// samp.dll RVA: 0x0006e2b0
+// 0x0006e2b0
 DWORD CPlayerPool::GetPing(WORD player)
 {
     if (player > 1004)
@@ -278,17 +278,17 @@ DWORD CPlayerPool::GetPing(WORD player)
     BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
     return entry ? *(DWORD*)(entry + 0xc) : 0;
 }
-// samp.dll RVA: 0x0006e2e0
+// 0x0006e2e0
 int CPlayerPool::GetLocalScore()
 {
     return *(int*)((BYTE*)this + 0x2f3a);
 }
-// samp.dll RVA: 0x0006e2f0
+// 0x0006e2f0
 DWORD CPlayerPool::GetLocalPing()
 {
     return *(DWORD*)((BYTE*)this + 0x2f36);
 }
-// samp.dll RVA: 0x000010f0
+// 0x000010f0
 CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
 {
     if (player < 1005)
@@ -299,14 +299,14 @@ CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
     }
     return 0;
 }
-// samp.dll RVA: 0x000010b0
+// 0x000010b0
 DWORD CPlayerPool::IsConnected(WORD player)
 {
     if (player > 1003)
         return 0;
     return *(DWORD*)((BYTE*)this + 0xfd6 + player * 4);
 }
-// samp.dll RVA: 0x0000e300
+// 0x0000e300
 DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
 {
     if (player < 1005)
@@ -317,7 +317,7 @@ DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
     }
     return 0;
 }
-// samp.dll RVA: 0x000137c0
+// 0x000137c0
 WORD CPlayerPool::Find(void* ped)
 {
     BYTE* state = (BYTE*)this;
@@ -341,7 +341,7 @@ WORD CPlayerPool::Find(void* ped)
     return 0xffff;
 }
 
-// samp.dll RVA: 0x00013840
+// 0x00013840
 void CPlayerPool::Native013840()
 {
     BYTE* state = (BYTE*)this;
@@ -369,7 +369,7 @@ void CPlayerPool::Native013840()
     }
 }
 
-// samp.dll RVA: 0x00013a40
+// 0x00013a40
 CObject* CPlayerPool::FindAccessory(void* backend)
 {
     BYTE* state = (BYTE*)this;
@@ -407,7 +407,7 @@ CObject* CPlayerPool::FindAccessory(void* backend)
     return 0;
 }
 
-// samp.dll RVA: 0x000170d0
+// 0x000170d0
 const char* CPlayerPool::GetName(WORD player)
 {
     BYTE* state = (BYTE*)this;
@@ -421,24 +421,24 @@ const char* CPlayerPool::GetName(WORD player)
     return *(DWORD*)(entry + 0x28) >= 16 ? *(char**)(entry + 0x14) : (char*)entry + 0x14;
 }
 
-// samp.dll RVA: 0x00002dd0
+// 0x00002dd0
 int CPlayerPool::GetLargestId()
 {
     return largestId;
 }
-// samp.dll RVA: 0x00002de0
+// 0x00002de0
 WORD CPlayerPool::GetLocalId()
 {
     return localId;
 }
 
-// samp.dll RVA: 0x0000e330
+// 0x0000e330
 void CPlayerPool::SetLocalId(WORD id)
 {
     localId = id;
 }
 
-// samp.dll RVA: 0x0000e340
+// 0x0000e340
 void CPlayerPool::SetScore(WORD id, int value)
 {
     if (id == localId)
@@ -452,7 +452,7 @@ void CPlayerPool::SetScore(WORD id, int value)
     if (info)
         info->score = value;
 }
-// samp.dll RVA: 0x0000e380
+// 0x0000e380
 void CPlayerPool::SetPing(WORD id, DWORD value)
 {
     if (id == localId)
@@ -467,12 +467,12 @@ void CPlayerPool::SetPing(WORD id, DWORD value)
         info->ping = value;
 }
 
-// samp.dll RVA: 0x00156ac0
+// 0x00156ac0
 DWORD g_cachedActivePlayerCount = 0;
-// samp.dll RVA: 0x00156ac4
+// 0x00156ac4
 DWORD g_activePlayerCountCountdown = 0;
 // ECX and stack arguments unused; original class ownership is not established.
-// samp.dll RVA: 0x00003ff0
+// 0x00003ff0
 DWORD GetCachedActivePlayerCount()
 {
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;

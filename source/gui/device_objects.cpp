@@ -5,11 +5,11 @@
 #include "main.h"
 #include <new>
 #include <string.h>
-// samp.dll RVA: 0x0011c74c
+// 0x0011c74c
 const char g_spawnVersionText[] = "SA-MP 0.3.DL-R1";
-// samp.dll RVA: 0x000705c0
+// 0x000705c0
 SpawnScreenVertex::SpawnScreenVertex() {}
-// samp.dll RVA: 0x000705d0
+// 0x000705d0
 SpawnScreenVertex::SpawnScreenVertex(const CVector& position, float w, DWORD color, float tu, float tv)
 {
     memcpy(&x, &position, 12);
@@ -18,17 +18,17 @@ SpawnScreenVertex::SpawnScreenVertex(const CVector& position, float w, DWORD col
     memcpy(&u, &tu, 4);
     memcpy(&v, &tv, 4);
 }
-// samp.dll RVA: 0x00070340
+// 0x00070340
 CObjectMaterialText::~CObjectMaterialText()
 {
     OnLostDevice();
 }
-// samp.dll RVA: 0x0006d420
+// 0x0006d420
 CLicensePlate::~CLicensePlate()
 {
     OnLostDevice();
 }
-// samp.dll RVA: 0x000709d0
+// 0x000709d0
 CSpawnScreen::~CSpawnScreen()
 {
     char* text = *(char**)(unknown00 + 4);
@@ -43,7 +43,7 @@ CSpawnScreen::~CSpawnScreen()
         fonts = 0;
     }
 }
-// samp.dll RVA: 0x00070a30
+// 0x00070a30
 void CSpawnScreen::Draw()
 {
     if (!fonts || !*(char**)(unknown00 + 4))
@@ -106,7 +106,7 @@ void CSpawnScreen::Draw()
     RECT versionRect = {left, imageBottom, (LONG)((DWORD)left + (DWORD)size->cx), (LONG)((DWORD)imageBottom + (DWORD)size->cy)};
     fonts->DrawText(0, g_spawnVersionText, versionRect, 0xff27abfa, TRUE);
 }
-// samp.dll RVA: 0x00070630
+// 0x00070630
 void CSpawnScreen::SetText(const char* value)
 {
     char*& text = *(char**)(unknown00 + 4);
@@ -119,9 +119,9 @@ void CSpawnScreen::SetText(const char* value)
         strcpy(text, value);
     }
 }
-// samp.dll RVA: 0x002aca2c
+// 0x002aca2c
 CFonts* g_deviceFonts;
-// samp.dll RVA: 0x000702d0
+// 0x000702d0
 void CObjectMaterialText::OnLostDevice()
 {
     if (second)
@@ -135,13 +135,13 @@ void CObjectMaterialText::OnLostDevice()
         first = 0;
     }
 }
-// samp.dll RVA: 0x00070300
+// 0x00070300
 void CObjectMaterialText::OnResetDevice()
 {
     D3DXCreateSprite(device, &first);
     D3DXCreateSprite(device, &second);
 }
-// samp.dll RVA: 0x0006d1f0
+// 0x0006d1f0
 void CLicensePlate::OnLostDevice()
 {
     if (surface)
@@ -165,7 +165,7 @@ void CLicensePlate::OnLostDevice()
         defaultTexture = 0;
     }
 }
-// samp.dll RVA: 0x0006d240
+// 0x0006d240
 void CLicensePlate::OnResetDevice()
 {
     device->GetDisplayMode(0, &mode);
@@ -177,7 +177,7 @@ void CLicensePlate::OnResetDevice()
         D3DXCreateRenderToSurface(device, desc.Width, desc.Height, desc.Format, TRUE, D3DFMT_D16, &renderer);
     }
 }
-// samp.dll RVA: 0x00070940
+// 0x00070940
 void CSpawnScreen::OnLostDevice()
 {
     if (texture)
@@ -195,7 +195,7 @@ void CSpawnScreen::OnLostDevice()
         fonts = 0;
     }
 }
-// samp.dll RVA: 0x00070690
+// 0x00070690
 void CSpawnScreen::OnResetDevice()
 {
     if (device)
@@ -250,7 +250,7 @@ void CSpawnScreen::OnResetDevice()
 
 #include "gui/device_objects.h"
 
-// samp.dll RVA: 0x00070320
+// 0x00070320
 CObjectMaterialText::CObjectMaterialText(IDirect3DDevice9* value)
 {
     device = value;
@@ -258,7 +258,7 @@ CObjectMaterialText::CObjectMaterialText(IDirect3DDevice9* value)
     second = 0;
     OnResetDevice();
 }
-// samp.dll RVA: 0x0006d3f0
+// 0x0006d3f0
 CLicensePlate::CLicensePlate(IDirect3DDevice9* value)
 {
     defaultTexture = 0;
@@ -268,7 +268,7 @@ CLicensePlate::CLicensePlate(IDirect3DDevice9* value)
     device = value;
     OnResetDevice();
 }
-// samp.dll RVA: 0x00070990
+// 0x00070990
 CSpawnScreen::CSpawnScreen(IDirect3DDevice9* value)
 {
     device = value;
@@ -284,7 +284,7 @@ CSpawnScreen::CSpawnScreen(IDirect3DDevice9* value)
 #include "fontrender.h"
 #include "gui/device_objects.h"
 
-// samp.dll RVA: 0x0006d2c0
+// 0x0006d2c0
 IDirect3DTexture9* CLicensePlate::Create(const char* text)
 {
     if (!device || !g_deviceFonts || !renderer || !texture || !surface)
@@ -310,7 +310,7 @@ IDirect3DTexture9* CLicensePlate::Create(const char* text)
 #include "gui/font_wrapper.h"
 #include "main.h"
 
-// samp.dll RVA: 0x00070350
+// 0x00070350
 IDirect3DTexture9* CObjectMaterialText::Create(const char* text, const char* face, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold,
                                                unsigned alignment)
 {

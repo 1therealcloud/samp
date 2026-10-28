@@ -18,9 +18,9 @@ private:
     DWORD m_dwLength;
 
 public:
-    // samp.dll RVA: 0x00065440
+    // 0x00065440
     CSigner(void);
-    // samp.dll RVA: 0x00065450
+    // 0x00065450
     ~CSigner(void);
 
 #ifdef ARCTOOL
@@ -32,8 +32,8 @@ public:
     DWORD GetSignatureLength();
 #endif
 
-    // samp.dll RVA: 0x00065460
+    // 0x00065460
     void SetSignature(DWORD dwLength, BYTE* pbSignature);
-    // samp.dll RVA: 0x000654b0
+    // 0x000654b0
     BOOL VerifySignature(CHasher* pHasher, CKeyPair* pKeyPair);
 };

@@ -1,42 +1,42 @@
 #include "game/audio.h"
 #include "game/scripting.h"
-// samp.dll RVA: 0x000a2030
+// 0x000a2030
 int CAudio::GetRadioStation()
 {
     unsigned station = *(BYTE*)0x8cb7e1;
     return station <= 12 ? (int)station : -1;
 }
-// samp.dll RVA: 0x000a2060
+// 0x000a2060
 void CAudio::StartRadio(int station)
 {
     ((void(__fastcall*)(void*, void*, int, int))0x507dc0)((void*)0xb6bc90, 0, station, 0);
 }
-// samp.dll RVA: 0x000a2080
+// 0x000a2080
 void CAudio::StopRadio()
 {
     ((void(__fastcall*)(void*, void*, int, int))0x506f70)((void*)0xb6bc90, 0, 0, 0);
 }
-// samp.dll RVA: 0x000a20a0
+// 0x000a20a0
 float CAudio::GetRadioVolume()
 {
     return *(float*)0xb5fcc8;
 }
-// samp.dll RVA: 0x000a20b0
+// 0x000a20b0
 void CAudio::StopOutdoorAmbienceTrack()
 {
     ((void(__fastcall*)(void*, void*))0x4d6d60)((void*)0x8ac15c, 0);
 }
-// samp.dll RVA: 0x000a20c0
+// 0x000a20c0
 void CAudio::SetOutdoorAmbienceTrack(int track)
 {
     ((void(__fastcall*)(void*, void*, int))0x4d6d50)((void*)0x8ac15c, 0, track);
 }
-// samp.dll RVA: 0x000a21c0
+// 0x000a21c0
 bool CAudio::IsOutdoorAmbienceTrackDisabled()
 {
     return m_bOutdoorAmbienceTrackDisabled;
 }
-// samp.dll RVA: 0x000a20e0
+// 0x000a20e0
 void CAudio::Play(int sound, CVector position)
 {
     if (sound == 0)
@@ -64,7 +64,7 @@ void CAudio::Play(int sound, CVector position)
     }
 }
 
-// samp.dll RVA: 0x000a1ff0
+// 0x000a1ff0
 void CAudio::Process()
 {
     if (m_bSoundLoaded == 1 && Scripting::ProcessCommand(&g_audioIsLoaded, 1))

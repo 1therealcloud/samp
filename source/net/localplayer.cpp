@@ -1,37 +1,37 @@
 #include "net/localplayer.h"
 #include "net/local_rpc.h"
-// samp.dll RVA: 0x00017770
+// 0x00017770
 void CLocalPlayer::ReturnToClassSelection()
 {
     *(DWORD*)(nativeState + 0x2fe) = 1;
 }
-// samp.dll RVA: 0x0009e940
+// 0x0009e940
 DWORD CLocalPlayer::GetRCModeState()
 {
     return *(DWORD*)(nativeState + 0x1d4);
 }
-// samp.dll RVA: 0x00008170
+// 0x00008170
 DWORD CLocalPlayer::GetActiveState()
 {
     return *(DWORD*)(nativeState + 0xf4);
 }
-// samp.dll RVA: 0x0000e2a0
+// 0x0000e2a0
 CEntity* CLocalPlayer::GetSurfingEntity()
 {
     return *(CEntity**)(nativeState + 0x2de);
 }
-// samp.dll RVA: 0x00017760
+// 0x00017760
 void CLocalPlayer::ClearSurfingEntityAndMode()
 {
     *(CEntity**)(nativeState + 0x2de) = 0;
     *(DWORD*)(nativeState + 0x2e6) = 0;
 }
-// samp.dll RVA: 0x00017780
+// 0x00017780
 void CLocalPlayer::SetTeam(BYTE team)
 {
     nativeState[0x130] = team;
 }
-// samp.dll RVA: 0x000a21d0
+// 0x000a21d0
 BYTE CLocalPlayer::GetTeam()
 {
     return nativeState[0x130];
@@ -89,9 +89,9 @@ struct LocalIncarSyncData
 #pragma pack(pop)
 typedef char LocalOnfootSyncExtent[(sizeof(LocalOnfootSyncData) == 68) ? 1 : -1];
 typedef char LocalIncarSyncExtent[(sizeof(LocalIncarSyncData) == 63) ? 1 : -1];
-// samp.dll RVA: 0x00117944
+// 0x00117944
 const float g_localQuaternionSyncThreshold = 0.00001f;
-// samp.dll RVA: 0x00003390
+// 0x00003390
 BYTE CLocalPlayer::GetSpecialAction()
 {
     if (GetPed()->HasJetpack())
@@ -129,7 +129,7 @@ BYTE CLocalPlayer::GetSpecialAction()
         return 24;
     return GetPed()->HasDanceStyle() ? 25 : 0;
 }
-// samp.dll RVA: 0x00004db0
+// 0x00004db0
 void CLocalPlayer::SendOnfootData()
 {
     RakNet::BitStream stream;
@@ -221,7 +221,7 @@ void CLocalPlayer::SendOnfootData()
         memcpy(nativeState + 0x3a, &data, 68);
     }
 }
-// samp.dll RVA: 0x00006e80
+// 0x00006e80
 void CLocalPlayer::SendIncarData()
 {
     RakNet::BitStream stream;
@@ -362,23 +362,23 @@ struct LocalPassengerSyncData
 typedef char LocalAimSyncExtent[(sizeof(LocalAimSyncData) == 31) ? 1 : -1];
 typedef char LocalTrailerSyncExtent[(sizeof(LocalTrailerSyncData) == 54) ? 1 : -1];
 typedef char LocalPassengerSyncExtent[(sizeof(LocalPassengerSyncData) == 24) ? 1 : -1];
-// samp.dll RVA: 0x00117948
+// 0x00117948
 const float g_localAimZoomScale = 63.0f;
-// samp.dll RVA: 0x0011794c
+// 0x0011794c
 const float g_localAimAspectScale = 255.0f;
-// samp.dll RVA: 0x00117950
+// 0x00117950
 int g_localWastedRpc = 53;
-// samp.dll RVA: 0x000041c0
+// 0x000041c0
 DWORD CLocalPlayer::NeedsToSendOnfootData(WORD keys, WORD upDown, WORD leftRight)
 {
     return keys != *(WORD*)(nativeState + 0x3e) || upDown != *(WORD*)(nativeState + 0x3c) || leftRight != *(WORD*)(nativeState + 0x3a) ? 1 : 0;
 }
-// samp.dll RVA: 0x000041f0
+// 0x000041f0
 DWORD CLocalPlayer::NeedsToSendIncarData(WORD keys, WORD upDown, WORD leftRight)
 {
     return keys != *(WORD*)(nativeState + 0x9c) || upDown != *(WORD*)(nativeState + 0x9a) || leftRight != *(WORD*)(nativeState + 0x98) ? 1 : 0;
 }
-// samp.dll RVA: 0x00005090
+// 0x00005090
 void CLocalPlayer::SendAimData()
 {
     RakNet::BitStream stream;
@@ -423,7 +423,7 @@ void CLocalPlayer::SendAimData()
         memcpy(nativeState + 0xd5, &data, 31);
     }
 }
-// samp.dll RVA: 0x00005240
+// 0x00005240
 void CLocalPlayer::SendTrailerData(WORD id)
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -452,7 +452,7 @@ void CLocalPlayer::SendTrailerData(WORD id)
         memcpy(nativeState + 4, &data, 54);
     }
 }
-// samp.dll RVA: 0x00005400
+// 0x00005400
 void CLocalPlayer::SendPassengerData()
 {
     RakNet::BitStream stream;
@@ -508,7 +508,7 @@ void CLocalPlayer::SendPassengerData()
         SendAimData();
     }
 }
-// samp.dll RVA: 0x00005660
+// 0x00005660
 void CLocalPlayer::WastedNotification()
 {
     RakNet::BitStream stream;
@@ -518,7 +518,7 @@ void CLocalPlayer::WastedNotification()
     stream.Write(killer);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localWastedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
-// samp.dll RVA: 0x00005b50
+// 0x00005b50
 void CLocalPlayer::SendStats()
 {
     RakNet::BitStream stream;
@@ -539,9 +539,9 @@ struct UnoccupiedSyncData
 };
 #pragma pack(pop)
 typedef char UnoccupiedSyncExtent[(sizeof(UnoccupiedSyncData) == 67) ? 1 : -1];
-// samp.dll RVA: 0x00117978
+// 0x00117978
 const float g_localUnoccupiedRange = 90.0f;
-// samp.dll RVA: 0x00004bd0
+// 0x00004bd0
 void CLocalPlayer::SendUnoccupiedData(WORD id, BYTE seat)
 {
     CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
@@ -571,7 +571,7 @@ void CLocalPlayer::SendUnoccupiedData(WORD id, BYTE seat)
     *(WORD*)((BYTE*)vehicles + 0x8e34 + id * 2) = players->localId;
     *(DWORD*)((BYTE*)vehicle + 0x7f) = 1;
 }
-// samp.dll RVA: 0x00006c10
+// 0x00006c10
 bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
 {
     GetTickCount();
@@ -667,13 +667,13 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
     }
     return false;
 }
-// samp.dll RVA: 0x0000e2b0
+// 0x0000e2b0
 void CLocalPlayer::ClearSurfingState()
 {
     *(DWORD*)(nativeState + 0x2e6) = 0;
     SetSurfingEntity(0, 0);
 }
-// samp.dll RVA: 0x00003fb0
+// 0x00003fb0
 void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome)
 {
     if (outcome)
@@ -687,7 +687,7 @@ void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome)
         *(DWORD*)(nativeState + 0x143) = 1;
     }
 }
-// samp.dll RVA: 0x00003af0
+// 0x00003af0
 void CLocalPlayer::SetSpawnInfo(const void* info)
 {
     const BYTE* data = (const BYTE*)info;
@@ -696,11 +696,11 @@ void CLocalPlayer::SetSpawnInfo(const void* info)
     *(WORD*)(nativeState + 0x17f) = *(const WORD*)(data + 48);
     *(DWORD*)(nativeState + 0x181) = 1;
 }
-// samp.dll RVA: 0x00117880
+// 0x00117880
 int g_localSpawnRpc = 52;
-// samp.dll RVA: 0x0013c0a0
+// 0x0013c0a0
 DWORD g_localSkipInitialState = 1;
-// samp.dll RVA: 0x00003110
+// 0x00003110
 void CLocalPlayer::SetSpecialAction(BYTE action)
 {
     switch (action)
@@ -772,7 +772,7 @@ void CLocalPlayer::SetSpecialAction(BYTE action)
             break;
     }
 }
-// samp.dll RVA: 0x00003b20
+// 0x00003b20
 BOOL CLocalPlayer::Spawn()
 {
     BYTE* state = (BYTE*)this;
@@ -845,7 +845,7 @@ BOOL CLocalPlayer::Spawn()
     *(DWORD*)(state + 0x30e) = GetTickCount() + 1000;
     return TRUE;
 }
-// samp.dll RVA: 0x00004080
+// 0x00004080
 void CLocalPlayer::ToggleSpectating(BOOL enabled)
 {
     BYTE* state = (BYTE*)this;
@@ -864,7 +864,7 @@ void CLocalPlayer::ToggleSpectating(BOOL enabled)
     *(DWORD*)(state + 0x318) = 0;
     *(DWORD*)(state + 0x314) = 0xffffffff;
 }
-// samp.dll RVA: 0x000040f0
+// 0x000040f0
 void CLocalPlayer::SpectateVehicle(WORD id)
 {
     CVehiclePool* pool = *(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0xc);
@@ -875,7 +875,7 @@ void CLocalPlayer::SpectateVehicle(WORD id)
         *(DWORD*)(nativeState + 0x318) = 0;
     }
 }
-// samp.dll RVA: 0x00004140
+// 0x00004140
 void CLocalPlayer::SpectatePlayer(WORD id)
 {
     CPlayerPool* pool = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
@@ -890,19 +890,19 @@ void CLocalPlayer::SpectatePlayer(WORD id)
         *(DWORD*)(nativeState + 0x318) = 0;
     }
 }
-// samp.dll RVA: 0x00003de0
+// 0x00003de0
 void CLocalPlayer::SetColor(DWORD color)
 {
     CPlayerPool* pool = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
     PlayerColors::Set(*(WORD*)pool, color);
 }
-// samp.dll RVA: 0x00003e00
+// 0x00003e00
 DWORD CLocalPlayer::GetColorAsRGBA()
 {
     CPlayerPool* pool = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
     return PlayerColors::Get(*(WORD*)pool);
 }
-// samp.dll RVA: 0x00002ec0
+// 0x00002ec0
 void CLocalPlayer::ResetData()
 {
     BYTE* state = (BYTE*)this;
@@ -935,7 +935,7 @@ void CLocalPlayer::ResetData()
     *(DWORD*)(state + 0x2e2) = 0;
     *(DWORD*)(state + 0x110) = last;
 }
-// samp.dll RVA: 0x00004af0
+// 0x00004af0
 CLocalPlayer::CLocalPlayer()
 {
     BYTE* state = (BYTE*)this;
@@ -969,12 +969,12 @@ CLocalPlayer::CLocalPlayer()
     }
     state[0x130] = 0xff;
 }
-// samp.dll RVA: 0x00002da0
+// 0x00002da0
 CPed* CLocalPlayer::GetPed()
 {
     return *(CPed**)this;
 }
-// samp.dll RVA: 0x00003e20
+// 0x00003e20
 DWORD CLocalPlayer::GetColorAsARGB()
 {
     CPlayerPool* players = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
@@ -982,15 +982,15 @@ DWORD CLocalPlayer::GetColorAsARGB()
 }
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
 typedef char LocalRpcReliability[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10) ? 1 : -1];
-// samp.dll RVA: 0x0011787c
+// 0x0011787c
 int g_localSpawnRequestRpc = 129;
-// samp.dll RVA: 0x00117954
+// 0x00117954
 int g_localRequestClassRpc = 128;
-// samp.dll RVA: 0x00117958
+// 0x00117958
 int g_localInteriorChangeRpc = 118;
-// samp.dll RVA: 0x0011795c
+// 0x0011795c
 int g_localChatRpc = 101;
-// samp.dll RVA: 0x00003970
+// 0x00003970
 DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DWORD length)
 {
     BYTE* state = (BYTE*)this;
@@ -1001,7 +1001,7 @@ DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DW
     }
     return 0;
 }
-// samp.dll RVA: 0x00003650
+// 0x00003650
 void CLocalPlayer::ProcessSurfing()
 {
     BYTE* state = (BYTE*)this;
@@ -1122,13 +1122,13 @@ void CLocalPlayer::ProcessSurfing()
     }
     *(DWORD*)(state + 0x2fa) = 2;
 }
-// samp.dll RVA: 0x00003a70
+// 0x00003a70
 void CLocalPlayer::SendSpawnRequest()
 {
     RakNet::BitStream stream;
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localSpawnRequestRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
-// samp.dll RVA: 0x00003f40
+// 0x00003f40
 void CLocalPlayer::RequestSpawn()
 {
     BYTE* state = (BYTE*)this;
@@ -1138,14 +1138,14 @@ void CLocalPlayer::RequestSpawn()
         *(DWORD*)(state + 0x306) = 1;
     }
 }
-// samp.dll RVA: 0x00005720
+// 0x00005720
 void CLocalPlayer::RequestClass(int selection)
 {
     RakNet::BitStream stream;
     stream.WriteBits((const unsigned char*)&selection, 32, true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localRequestClassRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
-// samp.dll RVA: 0x000057c0
+// 0x000057c0
 void CLocalPlayer::SendInteriorChange(BYTE interior)
 {
     ((BYTE*)this)[0x1d3] = interior;
@@ -1153,7 +1153,7 @@ void CLocalPlayer::SendInteriorChange(BYTE interior)
     stream.WriteBits(&interior, 8, true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localInteriorChangeRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
-// samp.dll RVA: 0x00005860
+// 0x00005860
 void CLocalPlayer::Chat(char* text)
 {
     BYTE length = (BYTE)strlen(text);
@@ -1162,7 +1162,7 @@ void CLocalPlayer::Chat(char* text)
     stream.Write(text, length);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localChatRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
-// samp.dll RVA: 0x00005e30
+// 0x00005e30
 void CLocalPlayer::NextClass()
 {
     BYTE* state = (BYTE*)this;
@@ -1181,7 +1181,7 @@ void CLocalPlayer::NextClass()
     g_pGame->m_pAudio->Play(1052, matrix.position);
     RequestClass(*(int*)(state + 0x302));
 }
-// samp.dll RVA: 0x00005ec0
+// 0x00005ec0
 void CLocalPlayer::PrevClass()
 {
     BYTE* state = (BYTE*)this;
@@ -1197,21 +1197,21 @@ void CLocalPlayer::PrevClass()
     g_pGame->m_pAudio->Play(1053, matrix.position);
     RequestClass(*(int*)(state + 0x302));
 }
-// samp.dll RVA: 0x00117960
+// 0x00117960
 int g_localEnterVehicleRpc = 26;
-// samp.dll RVA: 0x00117964
+// 0x00117964
 int g_localExitVehicleRpc = 154;
-// samp.dll RVA: 0x0011796c
+// 0x0011796c
 int g_localPlayerDamageRpc = 115;
-// samp.dll RVA: 0x00117974
+// 0x00117974
 int g_localActorDamageRpc = 177;
-// samp.dll RVA: 0x00117970
+// 0x00117970
 const float g_localDamageScale = 0.33f;
-// samp.dll RVA: 0x00117840
+// 0x00117840
 const Scripting::OpcodeInfo g_localTrainCameraCommand = {0x158, "iii"};
-// samp.dll RVA: 0x0013c0a4
+// 0x0013c0a4
 DWORD g_localTrainCameraTick = 0xffffffff;
-// samp.dll RVA: 0x00005920
+// 0x00005920
 void CLocalPlayer::EnterVehicle(WORD vehicle, BOOL passenger)
 {
     RakNet::BitStream stream;
@@ -1231,7 +1231,7 @@ void CLocalPlayer::EnterVehicle(WORD vehicle, BOOL passenger)
         }
     }
 }
-// samp.dll RVA: 0x00005a40
+// 0x00005a40
 void CLocalPlayer::ExitVehicle(int vehicle)
 {
     RakNet::BitStream stream;
@@ -1252,7 +1252,7 @@ void CLocalPlayer::ExitVehicle(int vehicle)
         (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localExitVehicleRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
     }
 }
-// samp.dll RVA: 0x000066b0
+// 0x000066b0
 void CLocalPlayer::SendTakeDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart)
 {
     // Native scales and stores the float before constructing the stream.
@@ -1265,7 +1265,7 @@ void CLocalPlayer::SendTakeDamage(WORD player, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
-// samp.dll RVA: 0x000067c0
+// 0x000067c0
 void CLocalPlayer::SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart)
 {
     damage *= g_localDamageScale;
@@ -1277,7 +1277,7 @@ void CLocalPlayer::SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
-// samp.dll RVA: 0x000068d0
+// 0x000068d0
 void CLocalPlayer::SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD bodyPart)
 {
     RakNet::BitStream stream;
@@ -1289,7 +1289,7 @@ void CLocalPlayer::SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localActorDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 
-// samp.dll RVA: 0x000069d0
+// 0x000069d0
 void CLocalPlayer::SendBullet(PedBulletData* data)
 {
     CPed* ped = *(CPed**)this;
@@ -1359,22 +1359,22 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
 
 #include "game/keystuff.h"
 // Shared native surfing work buffers; matrix.position aliases are not new globals.
-// samp.dll RVA: 0x001569a8
+// 0x001569a8
 CVector g_localSurfPedTurnSpeed;
-// samp.dll RVA: 0x001569b8
+// 0x001569b8
 CMatrix g_localSurfPedMatrix;
-// samp.dll RVA: 0x001569f8
+// 0x001569f8
 CVector g_localSurfEntitySpeed;
-// samp.dll RVA: 0x00156a08
+// 0x00156a08
 CMatrix g_localSurfInverseMatrix;
-// samp.dll RVA: 0x00156a48
+// 0x00156a48
 CVector g_localSurfPedSpeed;
-// samp.dll RVA: 0x00156a58
+// 0x00156a58
 CMatrix g_localSurfEntityMatrix;
-// samp.dll RVA: 0x00156aa4
+// 0x00156aa4
 CVector g_localSurfEntityTurnSpeed;
 
-// samp.dll RVA: 0x000034b0
+// 0x000034b0
 void CLocalPlayer::ApplySurfingPhysics()
 {
     BYTE* state = (BYTE*)this;
@@ -1404,18 +1404,18 @@ void CLocalPlayer::ApplySurfingPhysics()
         GameTransformPoint((CVector*)(state + 0x2ea), &g_localSurfInverseMatrix, &g_localSurfPedMatrix.position);
     }
 }
-// samp.dll RVA: 0x00003630
+// 0x00003630
 void CLocalPlayer::SetSurfingEntity(CEntity* entity, DWORD locked)
 {
     *(CEntity**)((BYTE*)this + 0x2de) = entity;
     *(DWORD*)((BYTE*)this + 0x2e2) = locked;
 }
 
-// samp.dll RVA: 0x0013c0a8
+// 0x0013c0a8
 DWORD g_localOnFootSendRate = 30;
-// samp.dll RVA: 0x0013c0ac
+// 0x0013c0ac
 DWORD g_localInCarSendRate = 30;
-// samp.dll RVA: 0x000039c0
+// 0x000039c0
 DWORD CLocalPlayer::GetInCarSendRate()
 {
     if (!*(CPed**)this)
@@ -1424,7 +1424,7 @@ DWORD CLocalPlayer::GetInCarSendRate()
         return 15;
     return g_pGame->CountUsedPlayerSlots() + g_localInCarSendRate;
 }
-// samp.dll RVA: 0x00003a00
+// 0x00003a00
 DWORD CLocalPlayer::GetOnFootSendRate()
 {
     if (!*(CPed**)this)
@@ -1433,7 +1433,7 @@ DWORD CLocalPlayer::GetOnFootSendRate()
         return 15;
     return g_pGame->CountUsedPlayerSlots() + g_localOnFootSendRate;
 }
-// samp.dll RVA: 0x00003a40
+// 0x00003a40
 DWORD CLocalPlayer::GetSendRate()
 {
     CPed* ped = *(CPed**)this;
@@ -1442,13 +1442,13 @@ DWORD CLocalPlayer::GetSendRate()
     return ped->IsInVehicle() ? GetInCarSendRate() : GetOnFootSendRate();
 }
 
-// samp.dll RVA: 0x00117888
+// 0x00117888
 const char g_localWorldBoundaryText[] = "Stay within the ~r~world boundries";
-// samp.dll RVA: 0x00117968
+// 0x00117968
 int g_localVehicleDamageRpc = 106;
-// samp.dll RVA: 0x0011797c
+// 0x0011797c
 const float g_localPassengerEntryDistance = 8.0f;
-// samp.dll RVA: 0x00002fd0
+// 0x00002fd0
 void CLocalPlayer::ProcessHead()
 {
     CPed* ped = *(CPed**)nativeState;
@@ -1517,7 +1517,7 @@ void CLocalPlayer::ProcessHead()
         *(DWORD*)(nativeState + 0x124) = now;
     }
 }
-// samp.dll RVA: 0x00003e40
+// 0x00003e40
 void CLocalPlayer::ProcessWorldBoundaries()
 {
     if (g_pGame->GetCurrentInterior())
@@ -1529,7 +1529,7 @@ void CLocalPlayer::ProcessWorldBoundaries()
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
     }
 }
-// samp.dll RVA: 0x00003ea0
+// 0x00003ea0
 void CLocalPlayer::ProcessVehicleWorldBoundaries()
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -1543,7 +1543,7 @@ void CLocalPlayer::ProcessVehicleWorldBoundaries()
     if (vehicle->EnforceWorldBoundries(*(float*)(settings + 5), *(float*)(settings + 9), *(float*)(settings + 0xd), *(float*)(settings + 0x11)))
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
 }
-// samp.dll RVA: 0x00003f60
+// 0x00003f60
 void CLocalPlayer::PrepareForClassSelection()
 {
     CPed* ped = *(CPed**)nativeState;
@@ -1558,7 +1558,7 @@ void CLocalPlayer::PrepareForClassSelection()
     *(DWORD*)(nativeState + 0x14b) = tick();
     *(DWORD*)(nativeState + 0x147) = tick();
 }
-// samp.dll RVA: 0x00005c20
+// 0x00005c20
 void CLocalPlayer::ProcessVehicleDamage(WORD id)
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -1597,7 +1597,7 @@ void CLocalPlayer::ProcessVehicleDamage(WORD id)
     typedef char VehicleDamageReliability[(HIGH_PRIORITY == 1 && RELIABLE == 8) ? 1 : -1];
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
-// samp.dll RVA: 0x00006de0
+// 0x00006de0
 void CLocalPlayer::ProcessPassengerEntry()
 {
     BYTE* keys = (BYTE*)KeyStuff::GetInternalKeys();
@@ -1628,7 +1628,7 @@ void CLocalPlayer::ProcessPassengerEntry()
     (*(CPed**)nativeState)->EnterVehicle(vehicle->m_nHandle, TRUE);
     EnterVehicle(id, TRUE);
 }
-// samp.dll RVA: 0x00004a30
+// 0x00004a30
 WORD CLocalPlayer::GetAimedPlayer()
 {
     CPed* ped = *(CPed**)nativeState;
@@ -1640,7 +1640,7 @@ WORD CLocalPlayer::GetAimedPlayer()
     CPlayerPool* players = ((CNetGame*)g_pNetGame)->pools->players;
     return players ? players->Find(target) : 0xffff;
 }
-// samp.dll RVA: 0x00004a60
+// 0x00004a60
 WORD CLocalPlayer::GetAimedActor()
 {
     CPed* ped = *(CPed**)nativeState;
@@ -1652,9 +1652,9 @@ WORD CLocalPlayer::GetAimedActor()
     CActorPool* actors = ((CNetGame*)g_pNetGame)->pools->actors;
     return actors ? (WORD)actors->Find(target) : 0xffff;
 }
-// samp.dll RVA: 0x00117854
+// 0x00117854
 const Scripting::OpcodeInfo g_localPedCameraCommand = {0x159, "iii"};
-// samp.dll RVA: 0x00005f40
+// 0x00005f40
 void CLocalPlayer::ProcessClassSelection()
 {
     if (!g_pGame->IsMenuVisible())
@@ -1707,7 +1707,7 @@ void CLocalPlayer::ProcessClassSelection()
         NextClass();
     }
 }
-// samp.dll RVA: 0x000060d0
+// 0x000060d0
 void CLocalPlayer::UpdateWeapons()
 {
     BYTE weapon = (BYTE)(*(CPed**)nativeState)->GetCurrentWeapon();
@@ -1755,7 +1755,7 @@ void CLocalPlayer::UpdateWeapons()
         (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
     }
 }
-// samp.dll RVA: 0x00006360
+// 0x00006360
 void CLocalPlayer::ProcessSpectating()
 {
     RakNet::BitStream stream;
@@ -1857,19 +1857,19 @@ void CLocalPlayer::ProcessSpectating()
         *(DWORD*)(nativeState + 0x318) = 1;
     }
 }
-// samp.dll RVA: 0x001178ac
+// 0x001178ac
 const float g_localCameraRayLength = 70.0f;
-// samp.dll RVA: 0x001178b0
+// 0x001178b0
 int g_localCameraTargetRpc = 168;
-// samp.dll RVA: 0x00117920
+// 0x00117920
 const char g_localCameraTargetObjectText[] = "CAMERA_TARGET_TYPE_OBJECT: ID(%u)";
-// samp.dll RVA: 0x001178fc
+// 0x001178fc
 const char g_localCameraTargetVehicleText[] = "CAMERA_TARGET_TYPE_VEHICLE: ID(%u)";
-// samp.dll RVA: 0x001178d8
+// 0x001178d8
 const char g_localCameraTargetPlayerText[] = "CAMERA_TARGET_TYPE_PLAYER: ID(%u)";
-// samp.dll RVA: 0x001178b4
+// 0x001178b4
 const char g_localCameraTargetActorText[] = "CAMERA_TARGET_TYPE_ACTOR: ID(%u)";
-// samp.dll RVA: 0x00004300
+// 0x00004300
 bool CLocalPlayer::GetCameraTarget(WORD* targets)
 {
     CameraAim* aim = AimStuff::GetInternalAim();
@@ -1957,7 +1957,7 @@ bool CLocalPlayer::GetCameraTarget(WORD* targets)
     }
     return true;
 }
-// samp.dll RVA: 0x000045c0
+// 0x000045c0
 void CLocalPlayer::UpdateCameraTarget()
 {
     if (!*((BYTE*)g_pNetGame + 0x233))
@@ -1983,7 +1983,7 @@ void CLocalPlayer::UpdateCameraTarget()
     }
     *(DWORD*)(nativeState + 0x110) = tick();
 }
-// samp.dll RVA: 0x00004710
+// 0x00004710
 void CLocalPlayer::DrawCameraTargetLabels()
 {
     if (!g_commandCameraTargetLabels)
@@ -2023,11 +2023,11 @@ void CLocalPlayer::DrawCameraTargetLabels()
     }
     g_deviceLabel->End();
 }
-// samp.dll RVA: 0x0013c0b0
+// 0x0013c0b0
 DWORD g_localAimSendRate = 30;
-// samp.dll RVA: 0x00117980
+// 0x00117980
 const char g_localClassSelectionMessage[] = "Returning to class selection after next death";
-// samp.dll RVA: 0x000072d0
+// 0x000072d0
 BOOL CLocalPlayer::Process()
 {
     if (*(DWORD*)(nativeState + 0xf4) && *(CPed**)nativeState)
@@ -2296,18 +2296,18 @@ BOOL CLocalPlayer::Process()
     return TRUE;
 }
 
-// samp.dll RVA: 0x00002db0
+// 0x00002db0
 DWORD CLocalPlayer::GetSpawnPermission()
 {
     return *(DWORD*)(nativeState + 0x143);
 }
-// samp.dll RVA: 0x000135c0
+// 0x000135c0
 DWORD CLocalPlayer::IsSpectating()
 {
     return *(DWORD*)(nativeState + 0x12c);
 }
 
-// samp.dll RVA: 0x00004230
+// 0x00004230
 BYTE CLocalPlayer::GetAimTargetOffset(WORD* id, CVector* offset)
 {
     CVector hit;

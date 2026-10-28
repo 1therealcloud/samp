@@ -27,25 +27,25 @@ class CActorPool
 
 public:
     // Verified entry; external SAMP-API1615 points inside its first comparison.
-    // samp.dll RVA: 0x00001610
+    // 0x00001610
     CActor* Get(WORD id);
     // Raw active DWORD, not normalized to bool.
-    // samp.dll RVA: 0x00001640
+    // 0x00001640
     BOOL DoesExist(WORD id);
     // Fourth parameter is copied into native ray records; semantic role unresolved.
-    // samp.dll RVA: 0x00001770
+    // 0x00001770
     WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord);
-    // samp.dll RVA: 0x00001900
+    // 0x00001900
     BOOL Create(const ActorCreateInfo* info);
-    // samp.dll RVA: 0x000016c0
+    // 0x000016c0
     CActorPool();
-    // samp.dll RVA: 0x000018e0
+    // 0x000018e0
     ~CActorPool();
-    // samp.dll RVA: 0x00001660
+    // 0x00001660
     void UpdateLargestId();
-    // samp.dll RVA: 0x000016f0
+    // 0x000016f0
     BOOL Delete(WORD id);
-    // samp.dll RVA: 0x000018b0
+    // 0x000018b0
     DWORD Find(void* ped);
 };
 #pragma pack(pop)

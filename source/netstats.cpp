@@ -18,31 +18,31 @@ typedef char NetStatsSentOffset[(offsetof(RakNetStatisticsStruct, totalBitsSent)
 typedef char NetStatsReceivedOffset[(offsetof(RakNetStatisticsStruct, bitsReceived) == 0xd8) ? 1 : -1];
 typedef char NetStatsResentOffset[(offsetof(RakNetStatisticsStruct, messagesTotalBitsResent) == 0x94) ? 1 : -1];
 typedef char NetStatsProcessCountersExtent[(sizeof(PROCESS_MEMORY_COUNTERS) == 40) ? 1 : -1];
-// samp.dll RVA: 0x00163a78
+// 0x00163a78
 char g_netStatsLine[1024];
-// samp.dll RVA: 0x00163e78
+// 0x00163e78
 char g_netStatsScratch[16384];
-// samp.dll RVA: 0x00167e78
+// 0x00167e78
 char g_netStatsDisplay[16384];
-// samp.dll RVA: 0x00156ab0
+// 0x00156ab0
 DWORD g_netStatsShotCompMode;
-// samp.dll RVA: 0x0011b8e4
+// 0x0011b8e4
 const char g_netStatsRatesFormat[49] = "Download Rate: %.2f KB/s\nUpload Rate: %.2f KB/s\n";
-// samp.dll RVA: 0x0011b858
+// 0x0011b858
 const char g_netStatsModelsFormat[140] =
     "Vehicles: %u\nVehicle Models: %u\nVehicle Models Loaded: %u\nRWObjects: %u\nPedSlotsUsed: %u\nObjectSlotsUsed: %u\nShotCompMode: %u\nFreeIDEs: %u\n";
-// samp.dll RVA: 0x0011b83c
+// 0x0011b83c
 const char g_netStatsOnFootFormat[22] = "OnFoot Send Rate: %u\n";
-// samp.dll RVA: 0x0011b824
+// 0x0011b824
 const char g_netStatsInCarFormat[21] = "InCar Send Rate: %u\n";
-// samp.dll RVA: 0x0011b7f4
+// 0x0011b7f4
 const char g_netStatsMemoryFormat[46] = "Streaming Mem: %uMB Total: %uMB System: %uMB\n";
-// samp.dll RVA: 0x0011b7cc
+// 0x0011b7cc
 const char g_netStatsProcessFormat[37] = "Process Mem: %uKB Working Set: %uKB\n";
-// samp.dll RVA: 0x0011b7b4
+// 0x0011b7b4
 const char g_netStatsTitle[21] = "Client Network Stats";
 
-// samp.dll RVA: 0x000607c0
+// 0x000607c0
 CNetStats::CNetStats(IDirect3DDevice9* value)
 {
     lastUpdateTick = GetTickCount();
@@ -52,7 +52,7 @@ CNetStats::CNetStats(IDirect3DDevice9* value)
     uploadRate = 0;
     device = value;
 }
-// samp.dll RVA: 0x000607f0
+// 0x000607f0
 void CNetStats::Draw()
 {
     if (!g_pNetGame)

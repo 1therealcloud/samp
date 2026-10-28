@@ -9,16 +9,16 @@
 #include "main.h"
 #include <stdio.h>
 #include <string.h>
-// samp.dll RVA: 0x0011f56c
+// 0x0011f56c
 const char g_taskNoneName[5] = "None";
 // Native returns this constant even for a null task; no task dereference.
-// samp.dll RVA: 0x000b3cf0
+// 0x000b3cf0
 const char* GameGetTaskName(void* task)
 {
     (void)task;
     return g_taskNoneName;
 }
-// samp.dll RVA: 0x000b3ca0
+// 0x000b3ca0
 DWORD GameGetTaskType(void* task)
 {
     DWORD result = 0;
@@ -41,7 +41,7 @@ DWORD GameGetTaskType(void* task)
     }
     return result;
 }
-// samp.dll RVA: 0x000b3c50
+// 0x000b3c50
 void* GameGetTaskChild(void* task)
 {
     void* result = 0;
@@ -65,45 +65,45 @@ void* GameGetTaskChild(void* task)
     }
     return result;
 }
-// samp.dll RVA: 0x001518d4
+// 0x001518d4
 DWORD g_debugSelectedVehicleModel = 400;
-// samp.dll RVA: 0x0018dd48
+// 0x0018dd48
 KeyPad* g_debugVehicleKeys;
-// samp.dll RVA: 0x0018dd4c
+// 0x0018dd4c
 CCamera* g_debugVehicleCamera;
-// samp.dll RVA: 0x0018de30
+// 0x0018de30
 DWORD g_debugVehicleSelectionActive;
-// samp.dll RVA: 0x0018de34
+// 0x0018de34
 CVehicle* g_debugSelectedVehicle;
-// samp.dll RVA: 0x0018ddec
+// 0x0018ddec
 DWORD g_debugSelectionFlagA;
-// samp.dll RVA: 0x0018ddf0
+// 0x0018ddf0
 DWORD g_debugSelectionFlagB;
-// samp.dll RVA: 0x0011e530
+// 0x0011e530
 const char g_debugVehicleSelectText[15] = "Vehicle Select";
-// samp.dll RVA: 0x0011c198
+// 0x0011c198
 const char g_debugVehicleTypeFormat[8] = "TYPE_%d";
-// samp.dll RVA: 0x0009dee0
+// 0x0009dee0
 void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
 {
     g_gameDebugStage = stage;
     g_debugSelectionFlagA = first;
     g_debugSelectionFlagB = second;
 }
-// samp.dll RVA: 0x0009df00
+// 0x0009df00
 void GameClearDebugState()
 {
     g_gameDebugStage = 0;
 }
 
-// samp.dll RVA: 0x0009df10
+// 0x0009df10
 void GameRebuildDebugVehicle()
 {
     if (g_debugSelectedVehicle)
         delete g_debugSelectedVehicle;
     g_debugSelectedVehicle = g_pGame->CreateVehicle(g_debugSelectedVehicleModel, 5, 5, 500, 0, FALSE);
 }
-// samp.dll RVA: 0x0009df50
+// 0x0009df50
 void GameDrawDebugEntities()
 {
     if (!g_debugVehicleSelectionActive)
@@ -182,7 +182,7 @@ void GameDrawDebugEntities()
         g_debugVehicleSelectionActive = 0;
     }
 }
-// samp.dll RVA: 0x000b3a00
+// 0x000b3a00
 DWORD __stdcall GameCountUnusedModelSlots()
 {
     DWORD count = 0;
@@ -193,27 +193,27 @@ DWORD __stdcall GameCountUnusedModelSlots()
     return count;
 }
 
-// samp.dll RVA: 0x0018dc20
+// 0x0018dc20
 BYTE g_nativeDebugFlag18DC20 = 0;
-// samp.dll RVA: 0x0018dd50
+// 0x0018dd50
 float g_debugHeightmapStartX = 0;
-// samp.dll RVA: 0x0018dde4
+// 0x0018dde4
 float g_debugHeightmapStartY = 0;
-// samp.dll RVA: 0x0018de18
+// 0x0018de18
 DWORD g_debugHeightmapStage = 0;
-// samp.dll RVA: 0x0018de28
+// 0x0018de28
 DWORD g_debugHeightmapFlagCopy = 0;
-// samp.dll RVA: 0x0018de2c
+// 0x0018de2c
 FILE* g_debugHeightmapFile = 0;
-// samp.dll RVA: 0x0011e50c
+// 0x0011e50c
 const char g_debugHeightmapFilename[] = "c:\\blocks\\SA2_bos.hmap";
-// samp.dll RVA: 0x0009d3a0
+// 0x0009d3a0
 void __stdcall GameSetNativeDebugFlag18DC20(BYTE value)
 {
     g_nativeDebugFlag18DC20 = value;
 }
 // Ignores GTA result and returns raw collision-position Z, even on failure.
-// samp.dll RVA: 0x0009dc80
+// 0x0009dc80
 float GameDebugGroundHeight(const CVector* position)
 {
     CVector end;
@@ -224,14 +224,14 @@ float GameDebugGroundHeight(const CVector* position)
     GameProcessLineOfSightRaw(position, &end, collision, &entity, 1, 0, 0, 1, 1, 1, 0, 0);
     return *(float*)(collision + 8);
 }
-// samp.dll RVA: 0x0009dda0
+// 0x0009dda0
 void GameDebugOpenHeightmap()
 {
     g_debugHeightmapFile = fopen(g_debugHeightmapFilename, g_customDownloadWriteMode);
     g_debugHeightmapFlagCopy = g_debugSelectionFlagA;
     g_debugHeightmapStage = 1;
 }
-// samp.dll RVA: 0x0009dcd0
+// 0x0009dcd0
 void GameDebugWriteHeightmap()
 {
     DWORD firstX;
@@ -267,21 +267,21 @@ void GameDebugWriteHeightmap()
     }
 }
 
-// samp.dll RVA: 0x0018dc1c
+// 0x0018dc1c
 FILE* g_debugPlacementFile = 0;
-// samp.dll RVA: 0x0011e3d8
+// 0x0011e3d8
 const char g_debugPlacementFilename[] = "c:\\0\\lc2sa_LoadObjectInstance_1_noipllods_Zonly_Q2E.txt";
-// samp.dll RVA: 0x0011e3a8
+// 0x0011e3a8
 const char g_debugPlacementFormat[] = "%d,%.7f,%.7f,%.7f,%.5f,%.5f,%.5f,%.2f,%u,%X\n";
-// samp.dll RVA: 0x0011e340
+// 0x0011e340
 const char g_debugEntityPlacementFormat[] = "%u,%.5f,%.5f,%.5f,0.0,0.0,%.5f,%.5f\n";
-// samp.dll RVA: 0x0011d7c0
+// 0x0011d7c0
 const double g_debugEulerNegativeOne = -1.0;
-// samp.dll RVA: 0x0011e36c
+// 0x0011e36c
 const float g_debugPlacementMaxDrawDistance = 299.0f;
-// samp.dll RVA: 0x0011e368
+// 0x0011e368
 const float g_debugPlacementMaxZ = 500.0f;
-// samp.dll RVA: 0x0009ce60
+// 0x0009ce60
 void GameDebugWriteEntityPlacement(void* entity, FILE* file)
 {
     if (!entity)
@@ -353,7 +353,7 @@ void GameDebugWriteEntityPlacement(void* entity, FILE* file)
     if (withinDistance && position.z < g_debugPlacementMaxZ) fprintf(file, g_debugEntityPlacementFormat, (DWORD)(int)*(short*)(backend + 0x22), (double)position.x,
                                                                      (double)position.y, (double)position.z, (double)heading, (double)distance);
 }
-// samp.dll RVA: 0x0009d100
+// 0x0009d100
 int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
 {
     if (!g_debugPlacementFile)
@@ -390,20 +390,20 @@ int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
 }
 
 #include "chatwindow.h"
-#include "game/hooks_prerender.h"
-// samp.dll RVA: 0x001518d0
+#include "game/hooks.h"
+// 0x001518d0
 DWORD g_debugHeightmapTileEnd = 900;
-// samp.dll RVA: 0x0018de1c
+// 0x0018de1c
 DWORD g_debugHeightmapFinished = 0;
-// samp.dll RVA: 0x0018de20
+// 0x0018de20
 DWORD g_debugHeightmapTilePrepared = 0;
-// samp.dll RVA: 0x0018de24
+// 0x0018de24
 DWORD g_debugHeightmapWaitFrames = 0;
-// samp.dll RVA: 0x0011e4d8
+// 0x0011e4d8
 const char g_debugHeightmapBlockFormat[] = "HM Setup Block: %d Row/Col: %d,%d XY: %.2f,%.2f";
-// samp.dll RVA: 0x0011e524
+// 0x0011e524
 const char g_debugHeightmapFinishedText[] = "Finished HM";
-// samp.dll RVA: 0x0009dba0
+// 0x0009dba0
 void GameDebugSelectHeightmapBlock(int index)
 {
     int row = index > 29 ? index / 30 : 0;
@@ -424,7 +424,7 @@ void GameDebugSelectHeightmapBlock(int index)
     // clang-format on
     g_pChat->AddDebugMessage(g_debugHeightmapBlockFormat, index, row, column, (double)g_debugHeightmapStartX, displayY);
 }
-// samp.dll RVA: 0x0009dc30
+// 0x0009dc30
 void GameDebugMoveToHeightmapBlock()
 {
     GameDebugSelectHeightmapBlock((int)g_debugHeightmapFlagCopy);
@@ -443,7 +443,7 @@ void GameDebugMoveToHeightmapBlock()
     // clang-format on
     ped->Teleport(position);
 }
-// samp.dll RVA: 0x0009ddd0
+// 0x0009ddd0
 void GameDebugProcessHeightmap()
 {
     if (!g_debugHeightmapStage)
@@ -484,30 +484,30 @@ void GameDebugProcessHeightmap()
     --g_debugHeightmapWaitFrames;
 }
 
-#include "game/hooks_render.h"
+#include "game/hooks.h"
 #pragma bss_seg(".pstate$g")
-// samp.dll RVA: 0x002aae10
+// 0x002aae10
 void* g_debugRasterImage;
 #pragma bss_seg()
-// samp.dll RVA: 0x002abe40
+// 0x002abe40
 void* g_debugRasterSource;
-// samp.dll RVA: 0x002abe44
+// 0x002abe44
 void* g_debugRasterResult;
-// samp.dll RVA: 0x002abe48
+// 0x002abe48
 void* g_debugRasterAlternate;
-// samp.dll RVA: 0x002a9a40
+// 0x002a9a40
 DWORD g_debugRasterWord10;
-// samp.dll RVA: 0x0011e370
+// 0x0011e370
 const char g_debugAllBuildingsFilename[] = "c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
-// samp.dll RVA: 0x0011f594
+// 0x0011f594
 const char g_debugRasterMissingText[] = "No texture!";
-// samp.dll RVA: 0x0011f5cc
+// 0x0011f5cc
 const char g_debugRasterFirstFilename[] = "Raster1.bmp";
-// samp.dll RVA: 0x0011f5a0
+// 0x0011f5a0
 const char g_debugRasterSecondFilename[] = "Raster2.bmp";
-// samp.dll RVA: 0x0011f5ac
+// 0x0011f5ac
 const char g_debugRasterDimensionsFormat[] = "Width %u Height: %u Depth: %u";
-// samp.dll RVA: 0x0009cf80
+// 0x0009cf80
 void GameDebugExportWorldPlacements()
 {
     FILE* file = fopen(g_debugAllBuildingsFilename, (const char*)&g_renderMapClickRpc);
@@ -527,7 +527,7 @@ void GameDebugExportWorldPlacements()
             GameDebugWriteEntityPlacement(cursor, file);
     fclose(file);
 }
-// samp.dll RVA: 0x000b5610
+// 0x000b5610
 void GameDebugBindRasterResult()
 {
     g_debugRasterSource = *(void**)0xc402d8;
@@ -541,7 +541,7 @@ void GameDebugBindRasterResult()
     *(void**)0xb4e3ec = g_debugRasterResult;
     *(DWORD*)0x8a7780 = 0x40000000;
 }
-// samp.dll RVA: 0x000b5690
+// 0x000b5690
 void GameDebugWriteRasterImage(void* raster, const char* filename)
 {
     // Observed argument order from native snapshot globals; APIs remain unchecked.
@@ -551,7 +551,7 @@ void GameDebugWriteRasterImage(void* raster, const char* filename)
     ((void*(__cdecl*)(void*, const char*))0x7ce990)(g_debugRasterImage, filename);
     ((DWORD(__cdecl*)(void*))0x802740)(g_debugRasterImage);
 }
-// samp.dll RVA: 0x000b5700
+// 0x000b5700
 void GameDebugDumpRasterImages()
 {
     g_debugRasterSource = *(void**)0xc402d8;

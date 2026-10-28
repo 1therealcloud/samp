@@ -34,7 +34,7 @@ typedef struct _AFS_ENTRYBT_NODE
     _AFS_ENTRYBT_NODE* pRNode;
     BYTE* pbData;
 
-    // samp.dll RVA: 0x000641f0
+    // 0x000641f0
     _AFS_ENTRYBT_NODE()
     {
         this->pEntry = NULL;
@@ -43,7 +43,7 @@ typedef struct _AFS_ENTRYBT_NODE
         this->pbData = NULL;
     }
 
-    // samp.dll RVA: 0x00064200
+    // 0x00064200
     _AFS_ENTRYBT_NODE(SAA_ENTRY* pSAAEntry)
     {
         this->pEntry = pSAAEntry;
@@ -52,7 +52,7 @@ typedef struct _AFS_ENTRYBT_NODE
         this->pbData = NULL;
     }
 
-    // samp.dll RVA: 0x00064220
+    // 0x00064220
     void AddEntry(SAA_ENTRY* pSAAEntry)
     {
         if (this->pEntry == NULL)
@@ -78,7 +78,7 @@ typedef struct _AFS_ENTRYBT_NODE
         }
     }
 
-    // samp.dll RVA: 0x000642b0
+    // 0x000642b0
     _AFS_ENTRYBT_NODE* FindEntry(DWORD dwHash)
     {
         if (this->pEntry->dwFileNameHash == dwHash)
@@ -104,7 +104,7 @@ typedef struct _AFS_ENTRYBT_NODE
         }
     }
 
-    // samp.dll RVA: 0x00064d80
+    // 0x00064d80
     ~_AFS_ENTRYBT_NODE()
     {
         if (this->pLNode != NULL)
@@ -160,38 +160,38 @@ private:
     DWORD m_dwObfsMask;
     DWORD m_dwNumEntries;
 
-    // samp.dll RVA: 0x00064550
+    // 0x00064550
     void LoadEntries();
 
-    // samp.dll RVA: 0x00140778
+    // 0x00140778
     static DWORD ms_dwHashInit;
-    // samp.dll RVA: 0x00064300
+    // 0x00064300
     DWORD HashString(PCHAR szString);
 
 public:
-    // samp.dll RVA: 0x00064dd0
+    // 0x00064dd0
     CArchiveFS(void);
-    // samp.dll RVA: 0x00064e20
+    // 0x00064e20
     CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize);
-    // samp.dll RVA: 0x00064e80
+    // 0x00064e80
     virtual ~CArchiveFS(void);
 
-    // samp.dll RVA: 0x00064f20
+    // 0x00064f20
     virtual bool Load(char* szFileName);
-    // samp.dll RVA: 0x000647b0
+    // 0x000647b0
     virtual bool Load(BYTE* pbData, DWORD nLength);
-    // samp.dll RVA: 0x00064890
+    // 0x00064890
     virtual void Unload();
 
-    // samp.dll RVA: 0x000648c0
+    // 0x000648c0
     virtual DWORD GetFileIndex(DWORD dwFileHash);
-    // samp.dll RVA: 0x00064940
+    // 0x00064940
     virtual DWORD GetFileIndex(char* szFileName);
-    // samp.dll RVA: 0x000649a0
+    // 0x000649a0
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-    // samp.dll RVA: 0x000649e0
+    // 0x000649e0
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 
-    // samp.dll RVA: 0x00064bd0
+    // 0x00064bd0
     virtual void UnloadData(DWORD dwFileIndex);
 };

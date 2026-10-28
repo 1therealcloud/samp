@@ -11,9 +11,9 @@
 
 #include "config.h"
 #include "main.h"
-// samp.dll RVA: 0x00085940
+// 0x00085940
 void InputEnableIme(bool);
-// samp.dll RVA: 0x00085460
+// 0x00085460
 void InputResetIme();
 
 #endif

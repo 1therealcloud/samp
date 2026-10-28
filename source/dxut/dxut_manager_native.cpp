@@ -2,7 +2,7 @@
 #include <DXUT.h>
 #include <DXUTgui.h>
 // Candidate-only replacements; declarations are supplied by the selected DXUT header.
-// samp.dll RVA: 0x0008c860
+// 0x0008c860
 HRESULT CDXUTDialogResourceManager::OnCreateDevice(IDirect3DDevice9* device)
 {
     m_pd3dDevice = device;
@@ -25,7 +25,7 @@ HRESULT CDXUTDialogResourceManager::OnCreateDevice(IDirect3DDevice9* device)
     InputResetIme();
     return S_OK;
 }
-// samp.dll RVA: 0x00086a00
+// 0x00086a00
 HRESULT CDXUTDialogResourceManager::OnResetDevice()
 {
     for (int i = 0; i < m_FontCache.GetSize(); ++i)

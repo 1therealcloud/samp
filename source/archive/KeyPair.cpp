@@ -16,7 +16,7 @@ DWORD CKeyPair::ms_dwRSAKeySize = 1024;
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065360
+// 0x00065360
 CKeyPair::CKeyPair(CCryptoContext* pContext)
 {
     m_pContext = pContext;
@@ -25,7 +25,7 @@ CKeyPair::CKeyPair(CCryptoContext* pContext)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065430
+// 0x00065430
 CKeyPair::~CKeyPair(void)
 {
     if (m_hCryptKey != NULL)
@@ -46,7 +46,7 @@ void CKeyPair::GenerateKey()
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065380
+// 0x00065380
 void CKeyPair::ReleaseKey()
 {
     // Destroy the key pair
@@ -154,7 +154,7 @@ void CKeyPair::WriteCHeaderFile(PSTR szFileName)
 
 //------------------------------------
 
-// samp.dll RVA: 0x000653a0
+// 0x000653a0
 void CKeyPair::LoadFromMemory(DWORD dwPubKeySize, BYTE* pbPubKeyBlob, BYTE bytXORKey)
 {
     BYTE* pbKeyBlob;
@@ -184,7 +184,7 @@ void CKeyPair::LoadFromMemory(DWORD dwPubKeySize, BYTE* pbPubKeyBlob, BYTE bytXO
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065420
+// 0x00065420
 HCRYPTKEY CKeyPair::GetContainer()
 {
     return m_hCryptKey;

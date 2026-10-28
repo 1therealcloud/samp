@@ -1,18 +1,18 @@
 // Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
 // Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
 #include "chatwindow.h"
-// samp.dll RVA: 0x00068e00
+// 0x00068e00
 LONG CChat::GetChatWindowBottom()
 {
     return m_nWindowBottom;
 }
-// samp.dll RVA: 0x00067f20
+// 0x00067f20
 void CChat::SetTimestamps(BYTE enabled)
 {
     *((BYTE*)this + offsetof(CChat, m_bTimestamps)) = enabled;
     m_bRedraw = TRUE;
 }
-// samp.dll RVA: 0x00067f40
+// 0x00067f40
 BYTE CChat::GetTimestamps()
 {
     return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
@@ -32,18 +32,18 @@ BYTE CChat::GetTimestamps()
 // These declarations do not call back into the original DLL.
 #include "config.h"
 #include "main.h"
-// samp.dll RVA: 0x002aca3c
+// 0x002aca3c
 extern CGame* g_pGame;
-// samp.dll RVA: 0x002aca14
+// 0x002aca14
 extern CInput* g_pInput;
 
-// samp.dll RVA: 0x00060d30
+// 0x00060d30
 int CChat::GetMode()
 {
     return m_nMode;
 }
 
-// samp.dll RVA: 0x00060d40
+// 0x00060d40
 void CChat::SwitchMode()
 {
     int mode = m_nMode;
@@ -62,7 +62,7 @@ void CChat::SwitchMode()
         m_nMode = DISPLAY_MODE_NOSHADOW;
 }
 
-// samp.dll RVA: 0x00066b90
+// 0x00066b90
 void CChat::RecalcFontSize()
 {
     RECT rect;
@@ -72,7 +72,7 @@ void CChat::RecalcFontSize()
     m_nTimestampWidth = rect.right - rect.left;
 }
 
-// samp.dll RVA: 0x00066c10
+// 0x00066c10
 void CChat::OnLostDevice()
 {
     if (m_pSurface)
@@ -92,7 +92,7 @@ void CChat::OnLostDevice()
     }
 }
 
-// samp.dll RVA: 0x00066c70
+// 0x00066c70
 void CChat::UpdateScrollbar()
 {
     if (m_pScrollbar)
@@ -105,7 +105,7 @@ void CChat::UpdateScrollbar()
     }
 }
 
-// samp.dll RVA: 0x00066d10
+// 0x00066d10
 void CChat::SetPageSize(int size)
 {
     if (size >= 10 && size <= 100)
@@ -116,7 +116,7 @@ void CChat::SetPageSize(int size)
     }
 }
 
-// samp.dll RVA: 0x00066d40
+// 0x00066d40
 void CChat::PageUp()
 {
     if (m_nMode && m_pScrollbar && !g_pGame->IsMenuVisible() && !g_pInput->IsActive())
@@ -128,7 +128,7 @@ void CChat::PageUp()
     }
 }
 
-// samp.dll RVA: 0x00066da0
+// 0x00066da0
 void CChat::PageDown()
 {
     if (m_nMode && m_pScrollbar && !g_pGame->IsMenuVisible() && !g_pInput->IsActive())
@@ -144,14 +144,14 @@ void CChat::PageDown()
     }
 }
 
-// samp.dll RVA: 0x00066e00
+// 0x00066e00
 void CChat::ScrollToBottom()
 {
     if (m_pScrollbar)
         m_pScrollbar->SetTrackPos(90);
 }
 
-// samp.dll RVA: 0x00066e30
+// 0x00066e30
 void CChat::Scroll(int delta)
 {
     if (m_nMode && m_pScrollbar)
@@ -162,7 +162,7 @@ void CChat::Scroll(int delta)
     }
 }
 
-// samp.dll RVA: 0x00066e90
+// 0x00066e90
 void CChat::FilterOutInvalidChars(char* text)
 {
     while (*text)
@@ -173,7 +173,7 @@ void CChat::FilterOutInvalidChars(char* text)
     }
 }
 
-// samp.dll RVA: 0x00066ec0
+// 0x00066ec0
 void CChat::PushBack()
 {
     // Native quirk: forward REP MOVSD copies 100 entries, reading one entry
@@ -188,7 +188,7 @@ void CChat::PushBack()
     memcpy(copy.destination, copy.source, sizeof(m_entry));
 }
 
-// samp.dll RVA: 0x00067240
+// 0x00067240
 void CChat::Log(int type, const char* text, const char* prefix)
 {
     time_t now = time(0);
@@ -214,7 +214,7 @@ void CChat::Log(int type, const char* text, const char* prefix)
     }
 }
 
-// samp.dll RVA: 0x00067310
+// 0x00067310
 void CChat::ResetDialogControls(CDXUTDialog* dialog)
 {
     m_pGameUi = dialog;
@@ -228,7 +228,7 @@ void CChat::ResetDialogControls(CDXUTDialog* dialog)
     }
 }
 
-// samp.dll RVA: 0x00067650
+// 0x00067650
 void CChat::AddEntry(int type, const char* text, const char* prefix, D3DCOLOR color, D3DCOLOR prefixColor)
 {
     int split = 0;
@@ -284,14 +284,14 @@ void CChat::AddEntry(int type, const char* text, const char* prefix, D3DCOLOR co
     m_bRedraw = TRUE;
 }
 
-// samp.dll RVA: 0x00067a90
+// 0x00067a90
 void CChat::AddChatMessage(const char* prefix, D3DCOLOR prefixColor, char* text)
 {
     FilterOutInvalidChars(text);
     AddEntry(ENTRY_TYPE_CHAT, text, prefix, m_textColor, prefixColor);
 }
 
-// samp.dll RVA: 0x00067be0
+// 0x00067be0
 void CChat::AddMessage(D3DCOLOR color, char* text)
 {
     if (strlen(text) <= MAX_MESSAGE_LENGTH)
@@ -302,7 +302,7 @@ void CChat::AddMessage(D3DCOLOR color, char* text)
     }
 }
 
-// samp.dll RVA: 0x00067ae0
+// 0x00067ae0
 void CChat::AddInfoMessage(const char* format, ...)
 {
     char text[512];
@@ -315,7 +315,7 @@ void CChat::AddInfoMessage(const char* format, ...)
     AddEntry(ENTRY_TYPE_INFO, text, 0, m_infoColor, 0);
 }
 
-// samp.dll RVA: 0x00067b60
+// 0x00067b60
 void CChat::AddDebugMessage(const char* format, ...)
 {
     char text[512];
@@ -328,7 +328,7 @@ void CChat::AddDebugMessage(const char* format, ...)
     AddEntry(ENTRY_TYPE_DEBUG, text, 0, m_debugColor, 0);
 }
 
-// samp.dll RVA: 0x00067df0
+// 0x00067df0
 CChat::CChat(IDirect3DDevice9* device, CFonts* fonts, const char* path)
 {
     m_pDevice = device;
@@ -370,7 +370,7 @@ CChat::CChat(IDirect3DDevice9* device, CFonts* fonts, const char* path)
     OnResetDevice();
 }
 
-// samp.dll RVA: 0x00067870
+// 0x00067870
 void CChat::Draw()
 {
     if (m_pScrollbar)
@@ -395,7 +395,7 @@ void CChat::Draw()
     }
 }
 
-// samp.dll RVA: 0x00067940
+// 0x00067940
 void CChat::RenderToSurface()
 {
     if (m_bRenderToSurface && m_pDevice && m_pRenderToSurface && m_pTexture && m_pSurface && m_pFontRenderer->m_pFont)
@@ -423,7 +423,7 @@ void CChat::RenderToSurface()
     }
 }
 
-// samp.dll RVA: 0x00067c40
+// 0x00067c40
 void CChat::OnResetDevice()
 {
     m_bRenderToSurface = TRUE;
@@ -477,7 +477,7 @@ void CChat::OnResetDevice()
     m_bRedraw = TRUE;
 }
 
-// samp.dll RVA: 0x000673b0
+// 0x000673b0
 void CChat::Render()
 {
     RECT rect, measure;
@@ -546,7 +546,7 @@ void CChat::Render()
     m_nWindowBottom = rect.bottom;
 }
 
-// samp.dll RVA: 0x00066ee0
+// 0x00066ee0
 void CChat::RenderEntry(const char* text, RECT rect, D3DCOLOR color)
 {
     ID3DXFont* shadow = m_pFontRenderer->m_pShadow;

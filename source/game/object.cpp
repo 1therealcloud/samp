@@ -1,19 +1,19 @@
 #include "game/object.h"
 #include <string.h>
-// samp.dll RVA: 0x000715c0
+// 0x000715c0
 CVector* CObject::GetRotation()
 {
     return &eulerRotation;
 }
-// samp.dll RVA: 0x00017750
+// 0x00017750
 void CObject::DisableCameraCollision()
 {
     cameraCollisionDisabled = 1;
 }
 #include "game/scripting.h"
-// samp.dll RVA: 0x0011edfc
+// 0x0011edfc
 const Scripting::OpcodeInfo g_objectSetRotationCommand = {0x453, "ifff"};
-// samp.dll RVA: 0x000b3830
+// 0x000b3830
 void* __stdcall GamePoolObjectGetAt(int handle)
 {
     void* result;
@@ -29,7 +29,7 @@ void* __stdcall GamePoolObjectGetAt(int handle)
     // clang-format on
     return result;
 }
-// samp.dll RVA: 0x000a7c90
+// 0x000a7c90
 void CObject::SetRotation(const CVector* rotation)
 {
     if (m_pGameEntity && GamePoolObjectGetAt(m_nHandle))
@@ -47,9 +47,9 @@ void CObject::SetRotation(const CVector* rotation)
 #include "net/localplayer.h"
 #include <GetTime.h>
 #include <string.h>
-// samp.dll RVA: 0x0011ee7c
+// 0x0011ee7c
 extern const float g_objectMotionRotationSentinel = -999.0f;
-// samp.dll RVA: 0x000a7c20
+// 0x000a7c20
 void CObject::Stop()
 {
     CVector zero = {0, 0, 0};
@@ -57,16 +57,16 @@ void CObject::Stop()
     SetTurnSpeed(zero);
     motionFlags &= 0xfe;
 }
-// samp.dll RVA: 0x000a7bf0
+// 0x000a7bf0
 float CObject::GetAngleDifference(float from, float to)
 {
     return GameNormalizeAngle(GameNormalizeAngle(to) - from);
 }
-// samp.dll RVA: 0x0011e648
+// 0x0011e648
 extern const float g_objectDegreesToRadians = 0.01745329238474369f;
 // Keep the native x87 trigonometry and float spill boundaries. Only the nine
 // rotation coefficients are written; matrix padding and position are untouched.
-// samp.dll RVA: 0x000a7fb0
+// 0x000a7fb0
 void CObject::Rotate(CVector rotation)
 {
     BYTE* state = (BYTE*)this;
@@ -150,14 +150,14 @@ void CObject::Rotate(CVector rotation)
     // clang-format on
 }
 
-// samp.dll RVA: 0x0011ee24
+// 0x0011ee24
 extern const Scripting::OpcodeInfo g_objectIsAttachedCommand = {0x685, "i"};
-// samp.dll RVA: 0x0011ee10
+// 0x0011ee10
 extern const Scripting::OpcodeInfo g_objectAttachVehicleCommand = {0x681, "iiffffff"};
-// samp.dll RVA: 0x0011ee38
+// 0x0011ee38
 extern const Scripting::OpcodeInfo g_objectAttachObjectCommand = {0x69a, "iiffffff"};
 // Keep differences/products in x87 registers through sqrt, returning ST0.
-// samp.dll RVA: 0x000a7bb0
+// 0x000a7bb0
 float CObject::GetDistanceToTarget(const CMatrix* matrix)
 {
     BYTE* state = (BYTE*)this;
@@ -186,7 +186,7 @@ float CObject::GetDistanceToTarget(const CMatrix* matrix)
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a7e30
+// 0x000a7e30
 void CObject::AttachToVehicle(CVehicle* vehicle)
 {
     if (!Scripting::ProcessCommand(&g_objectIsAttachedCommand, m_nHandle))
@@ -195,7 +195,7 @@ void CObject::AttachToVehicle(CVehicle* vehicle)
                                   (double)attachmentOffset.z, (double)attachmentRotation.x, (double)attachmentRotation.y, (double)attachmentRotation.z);
     }
 }
-// samp.dll RVA: 0x000a7eb0
+// 0x000a7eb0
 void CObject::AttachToObject(CObject* object)
 {
     if (!Scripting::ProcessCommand(&g_objectIsAttachedCommand, m_nHandle))
@@ -205,7 +205,7 @@ void CObject::AttachToObject(CObject* object)
     }
 }
 
-// samp.dll RVA: 0x000a97c0
+// 0x000a97c0
 void CObject::Move(CVector position, float speed, CVector rotation)
 {
     CMatrix matrix;
@@ -259,7 +259,7 @@ void CObject::Move(CVector position, float speed, CVector rotation)
 
 #include "gui/device_lifecycle.h"
 
-// samp.dll RVA: 0x000a8870
+// 0x000a8870
 bool CObject::GetMaterialSize(int code, int* width, int* height)
 {
     switch (code)
@@ -324,7 +324,7 @@ bool CObject::GetMaterialSize(int code, int* width, int* height)
             return false;
     }
 }
-// samp.dll RVA: 0x000a9ad0
+// 0x000a9ad0
 void CObject::ConstructMaterialText()
 {
     for (int i = 0; i < 16; ++i)
@@ -343,7 +343,7 @@ void CObject::ConstructMaterialText()
         }
     }
 }
-// samp.dll RVA: 0x000a8ac0
+// 0x000a8ac0
 void CObject::ShutdownMaterialText()
 {
     for (int i = 0; i < 16; ++i)
@@ -359,7 +359,7 @@ void CObject::ShutdownMaterialText()
 }
 
 #include "game/game.h"
-// samp.dll RVA: 0x000a7b40
+// 0x000a7b40
 bool CObject::IsTimeVisible()
 {
     BYTE hour = 0, minute = 0;
@@ -374,7 +374,7 @@ bool CObject::IsTimeVisible()
         return hour >= first || hour < last;
     return false;
 }
-// samp.dll RVA: 0x000a8b90
+// 0x000a8b90
 void CObject::ClearModelFlag0()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
@@ -384,7 +384,7 @@ void CObject::ClearModelFlag0()
             *(DWORD*)(info + 0x12) &= 0xfffffffe;
     }
 }
-// samp.dll RVA: 0x000a9150
+// 0x000a9150
 void CObject::ProcessStreaming()
 {
     BYTE* state = (BYTE*)this;
@@ -438,15 +438,15 @@ void CObject::ProcessStreaming()
 
 #include "game/playerped.h"
 #include "net/pool_frame.h"
-// samp.dll RVA: 0x00118200
+// 0x00118200
 extern const float g_objectStreamingNearDistance = 300.0f;
-// samp.dll RVA: 0x00117878
+// 0x00117878
 extern const float g_objectStreamingVehicleMargin = 30.0f;
-// samp.dll RVA: 0x001181b0
+// 0x001181b0
 extern const float g_objectTurnVelocityScale = 0.01f;
-// samp.dll RVA: 0x0011ee78
+// 0x0011ee78
 extern const float g_objectNegativeTurnVelocityLimit = -0.001f;
-// samp.dll RVA: 0x000a9240
+// 0x000a9240
 void CObject::Process(float elapsedSeconds)
 {
     BYTE* state = (BYTE*)this;
@@ -674,28 +674,28 @@ void CObject::Process(float elapsedSeconds)
     ApplyMatrix(current);
 }
 
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "gui/textdraw_texture.h"
 #include <stdlib.h>
-// samp.dll RVA: 0x001e0498
+// 0x001e0498
 void* g_objectSharedMaterialTexture = 0;
-// samp.dll RVA: 0x0011ee4c
+// 0x0011ee4c
 extern const Scripting::OpcodeInfo g_objectDestroyCommand = {0x108, "i"};
-// samp.dll RVA: 0x000a79a0
+// 0x000a79a0
 void CObject::Add()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         GameWorldAdd(m_pGameEntity);
 }
-// samp.dll RVA: 0x000a79f0
+// 0x000a79f0
 void CObject::Remove()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         GameWorldRemove(m_pGameEntity);
 }
-// samp.dll RVA: 0x000a9020
+// 0x000a9020
 CObject::~CObject()
 {
     BYTE* state = (BYTE*)this;
@@ -738,9 +738,9 @@ CObject::~CObject()
 }
 
 #include "game/custom_model_io.h"
-// samp.dll RVA: 0x0011ede8
+// 0x0011ede8
 extern const Scripting::OpcodeInfo g_objectCreateCommand = {0x107, "ifffv"};
-// samp.dll RVA: 0x000a8bc0
+// 0x000a8bc0
 void CObject::UpdateCachedCentre()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -755,7 +755,7 @@ void CObject::UpdateCachedCentre()
             memcpy(&worldCentre, &matrix.position, 12);
     }
 }
-// samp.dll RVA: 0x000a8d00
+// 0x000a8d00
 CObject::CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE flag1193, BYTE firstHour, BYTE lastHour) : CEntity()
 {
     BYTE* state = (BYTE*)this;
@@ -847,13 +847,13 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
     }
 }
 
-// samp.dll RVA: 0x000a79c0
+// 0x000a79c0
 BOOL CObject::IsAdded()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && ((BYTE*)this)[0x48] ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x000a8c30
+// 0x000a8c30
 void CObject::NativeA8C30()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -870,7 +870,7 @@ void CObject::NativeA8C30()
         ((BYTE*)this)[0x1194] = 1;
     }
 }
-// samp.dll RVA: 0x000a8c70
+// 0x000a8c70
 void CObject::NativeA8C70()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -886,7 +886,7 @@ void CObject::NativeA8C70()
         ((BYTE*)this)[0x1194] = 0;
     }
 }
-// samp.dll RVA: 0x000a8cc0
+// 0x000a8cc0
 bool CObject::HasRwFrameFlag8()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -902,7 +902,7 @@ bool CObject::HasRwFrameFlag8()
     return data && (data[8] & 8) != 0;
 }
 
-// samp.dll RVA: 0x000a7d00
+// 0x000a7d00
 void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* rotation)
 {
     attachedVehicle = id;
@@ -917,7 +917,7 @@ void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* 
     for (int i = 0; i < 3; ++i)
         ((DWORD*)&attachmentRotation)[i] = *(const DWORD*)((const BYTE*)rotation + i * 4);
 }
-// samp.dll RVA: 0x000a7d90
+// 0x000a7d90
 void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* rotation, BYTE flag)
 {
     attachedObject = id;
@@ -937,7 +937,7 @@ void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* r
     attachmentRotationSync = flag;
     *(DWORD*)&attachmentRotation.z = last;
 }
-// samp.dll RVA: 0x000a80b0
+// 0x000a80b0
 BOOL CObject::IsMoving()
 {
     WORD object = attachedObject;
@@ -957,7 +957,7 @@ BOOL CObject::IsMoving()
     return motionFlags & 1;
 }
 
-// samp.dll RVA: 0x000a8430
+// 0x000a8430
 void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 {
     BYTE *a = (BYTE*)atomic, *state = (BYTE*)object;
@@ -991,7 +991,7 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
     }
     return atomic;
 }
-// samp.dll RVA: 0x000a86c0
+// 0x000a86c0
 void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
 {
     BYTE *a = (BYTE*)atomic, *state = (BYTE*)object;
@@ -1013,7 +1013,7 @@ void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
     *(DWORD*)(state + 0x1c7) = 1;
     return atomic;
 }
-// samp.dll RVA: 0x000a8740
+// 0x000a8740
 void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
 {
     BYTE *a = (BYTE*)atomic, *state = (BYTE*)object;
@@ -1039,7 +1039,7 @@ void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
     return atomic;
 }
 
-// samp.dll RVA: 0x000a87f0
+// 0x000a87f0
 void CObject::ProcessMaterials()
 {
     BYTE* state = (BYTE*)this;
@@ -1067,7 +1067,7 @@ void CObject::ProcessMaterials()
 }
 
 #include "game/rw_preview.h"
-// samp.dll RVA: 0x000a82a0
+// 0x000a82a0
 void CObject::SetMaterialText(int index, const char* text, BYTE size, const char* font, BYTE fontSize, BYTE bold, DWORD fontColor, DWORD backgroundColor, BYTE alignment)
 {
     if (index > 16)
@@ -1131,7 +1131,7 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
 }
 
 #include "game/effects.h"
-// samp.dll RVA: 0x000a8120
+// 0x000a8120
 void CObject::SetMaterial(int model, int index, const char* dictionary, const char* texture, DWORD color)
 {
     if (index > 16)
@@ -1182,7 +1182,7 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
     hasMaterials = 1;
 }
 
-// samp.dll RVA: 0x000a9a20
+// 0x000a9a20
 void CObject::BeforeMaterialRender()
 {
     BYTE* state = (BYTE*)this;
@@ -1194,7 +1194,7 @@ void CObject::BeforeMaterialRender()
     }
     materialPassState = 1;
 }
-// samp.dll RVA: 0x000a9a60
+// 0x000a9a60
 void CObject::AfterMaterialRender()
 {
     BYTE* state = (BYTE*)this;
@@ -1214,11 +1214,11 @@ void CObject::AfterMaterialRender()
         GameRwForAllFrameObjects(frame, ObjectRestoreMaterials, this);
 }
 
-// samp.dll RVA: 0x001e0450
+// 0x001e0450
 CMatrix g_objectAttachmentMatrix;
-// samp.dll RVA: 0x001e049c
+// 0x001e049c
 CVector g_objectAttachmentZeroSpeed = {0, 0, 0};
-// samp.dll RVA: 0x000a7a10
+// 0x000a7a10
 void CObject::UpdateAttachedObjectRotation()
 {
     if (attachedObject == 0xffff || attachmentRotationSync)
@@ -1237,12 +1237,12 @@ void CObject::UpdateAttachedObjectRotation()
 }
 
 #include "game/camera.h"
-#include "game/hooks_render.h"
-// samp.dll RVA: 0x0011ee80
+#include "game/hooks.h"
+// 0x0011ee80
 extern const float g_objectRenderDistanceThreshold = 600.0f;
-// samp.dll RVA: 0x001e04a8
+// 0x001e04a8
 BYTE g_objectRenderFlag;
-// samp.dll RVA: 0x000a8b50
+// 0x000a8b50
 void CObject::NativeA8B50()
 {
     void* backend = m_pGameEntity;
@@ -1257,7 +1257,7 @@ void CObject::NativeA8B50()
     // clang-format on
     ((void(__cdecl*)(void*))0x553260)(backend);
 }
-// samp.dll RVA: 0x000a9b80
+// 0x000a9b80
 void CObject::Render()
 {
     // GTA SA virtual address: excluded backend vtable.
@@ -1312,12 +1312,12 @@ void CObject::Render()
     materialPassState = 1;
 }
 
-// samp.dll RVA: 0x000a8b00
+// 0x000a8b00
 void* __cdecl ObjectFrameIdentity(void* object, void*)
 {
     return object;
 }
-// samp.dll RVA: 0x000a8b10
+// 0x000a8b10
 void CObject::ProcessFrameObjectsOnce()
 {
     BYTE* rw = (BYTE*)GetRwObject();
@@ -1329,7 +1329,7 @@ void CObject::ProcessFrameObjectsOnce()
     GameRwForAllFrameObjects(frame, ObjectFrameIdentity, this);
     materials.frameObjectsProcessed = 1;
 }
-// samp.dll RVA: 0x000a7f30
+// 0x000a7f30
 void CObject::AttachToBackend(void* target, const CVector* offset, const CVector* rotation)
 {
     void* backend = m_pGameEntity;

@@ -1,6 +1,6 @@
 #include "game/textdraw.h"
 
-// samp.dll RVA: 0x000b3080
+// 0x000b3080
 void CTextDraw::Draw()
 {
     if (*(int*)((BYTE*)this + 0x9a3) != -1)
@@ -8,7 +8,7 @@ void CTextDraw::Draw()
     else
         Native0B2DA0();
 }
-// samp.dll RVA: 0x000b32b0
+// 0x000b32b0
 void CTextDraw::OnLostDevice()
 {
     BYTE* state = (BYTE*)this;
@@ -19,28 +19,28 @@ void CTextDraw::OnLostDevice()
     }
 }
 
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/font.h"
 #include "gui/textdraw_texture.h"
 extern "C"
 {
     // MSVC CRT helper, supplied by the selected static runtime, not recovered here.
-    // samp.dll RVA: 0x000f9324
+    // 0x000f9324
     __int64 __cdecl _ftol2();
 }
 
-// samp.dll RVA: 0x002a9400
+// 0x002a9400
 void* g_textDrawTextures[200];
-// samp.dll RVA: 0x002a9720
+// 0x002a9720
 DWORD g_textDrawTextureUsed[200];
-// samp.dll RVA: 0x00117884
+// 0x00117884
 const float g_textDrawHalf = 0.5f;
-// samp.dll RVA: 0x0011f564
+// 0x0011f564
 const float g_textDrawVirtualWidth = 640.0f;
-// samp.dll RVA: 0x0011f568
+// 0x0011f568
 const float g_textDrawVirtualHeight = 448.0f;
 
-// samp.dll RVA: 0x000b2720
+// 0x000b2720
 int GameAllocateTextDrawTexture()
 {
     for (int i = 0; i < 200; i++)
@@ -51,7 +51,7 @@ int GameAllocateTextDrawTexture()
         }
     return -1;
 }
-// samp.dll RVA: 0x000b2750
+// 0x000b2750
 void GameReleaseTextDrawTexture(int slot)
 {
     if (slot >= 0 && slot < 200)
@@ -62,13 +62,13 @@ void GameReleaseTextDrawTexture(int slot)
         g_textDrawTextures[slot] = 0;
     }
 }
-// samp.dll RVA: 0x000b3560
+// 0x000b3560
 void GameDestroyTextDrawTexture(void* texture)
 {
     // GTA SA virtual address; native supplies the address of a local texture word.
     ((void(__fastcall*)(void*, void*))0x7281e0)(&texture, 0);
 }
-// samp.dll RVA: 0x000b28a0
+// 0x000b28a0
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
 {
     if (texture)
@@ -78,7 +78,7 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
         ((void(__fastcall*)(void*, void*, TextDrawRect*, DWORD*))0x728350)(texture, 0, rect, color);
     }
 }
-// samp.dll RVA: 0x000b2c90
+// 0x000b2c90
 void CTextDraw::Native0B2C90()
 {
     BYTE* state = (BYTE*)this;
@@ -139,7 +139,7 @@ void CTextDraw::Native0B2C90()
     // clang-format on
     state[0x9bf] = 1;
 }
-// samp.dll RVA: 0x000b2da0
+// 0x000b2da0
 void CTextDraw::Native0B2DA0()
 {
     BYTE* state = (BYTE*)this;
@@ -318,7 +318,7 @@ void CTextDraw::Native0B2DA0()
 }
 
 // Native clears usage flags first, then texture words, without releasing them.
-// samp.dll RVA: 0x000b26f0
+// 0x000b26f0
 BOOL GameInitializeTextDrawTextures()
 {
     memset(g_textDrawTextureUsed, 0, sizeof(g_textDrawTextureUsed));
@@ -330,7 +330,7 @@ BOOL GameInitializeTextDrawTextures()
 #include "game/game.h"
 #include "game/model_preview.h"
 
-// samp.dll RVA: 0x000b30a0
+// 0x000b30a0
 void CTextDraw::Native0B30A0()
 {
     BYTE* state = (BYTE*)this;
@@ -385,29 +385,29 @@ void CTextDraw::Native0B30A0()
 }
 
 #include <string.h>
-// samp.dll RVA: 0x0011f54c
+// 0x0011f54c
 const char g_textDrawUnmatchedTilde[23] = "Error: unmatched tilde";
-// samp.dll RVA: 0x0011f524
+// 0x0011f524
 const char g_textDrawLongKeyString[40] = "Error: can't use k-codes in long string";
-// samp.dll RVA: 0x00070d10
+// 0x00070d10
 RECT* CTextDraw::GetSelectableRect()
 {
     BYTE* state = (BYTE*)this;
     return state[0x9a7] && state[0x9bf] ? (RECT*)(state + 0x9c1) : 0;
 }
-// samp.dll RVA: 0x00070d30
+// 0x00070d30
 void CTextDraw::SetHover(BYTE active, DWORD color)
 {
     BYTE* state = (BYTE*)this;
     state[0x9d1] = active;
     *(DWORD*)(state + 0x9d2) = color;
 }
-// samp.dll RVA: 0x000b2b50
+// 0x000b2b50
 CTextDraw::~CTextDraw()
 {
     GameReleaseTextDrawTexture(*(int*)((BYTE*)this + 0x9a3));
 }
-// samp.dll RVA: 0x000b2b60
+// 0x000b2b60
 void CTextDraw::SetText(const char* text)
 {
     BYTE* state = (BYTE*)this;
@@ -459,7 +459,7 @@ void CTextDraw::SetText(const char* text)
 #include "game/effects.h"
 #include <stdio.h>
 #include <stdlib.h>
-// samp.dll RVA: 0x000b28d0
+// 0x000b28d0
 void CTextDraw::LoadTexture()
 {
     char dictionary[65] = {0}, texture[65] = {0}, selected[65] = {0};
@@ -508,7 +508,7 @@ void CTextDraw::LoadTexture()
     g_textDrawTextures[*(int*)(state + 0x9a3)] = loaded;
 }
 
-// samp.dll RVA: 0x000b32e0
+// 0x000b32e0
 CTextDraw::CTextDraw(const TextDrawTransmit* info, const char* text)
 {
     BYTE* state = (BYTE*)this;

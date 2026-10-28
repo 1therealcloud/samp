@@ -1,53 +1,53 @@
 #include "game/game.h"
-// samp.dll RVA: 0x000607b0
+// 0x000607b0
 int CGame::GetScreenWidth()
 {
     return *(int*)0xc17044;
 }
-// samp.dll RVA: 0x00065ee0
+// 0x00065ee0
 int CGame::GetScreenHeight()
 {
     return *(int*)0xc17048;
 }
-// samp.dll RVA: 0x000b26d0
+// 0x000b26d0
 float CGame::GetHudVertScale()
 {
     return *(const float*)0x859524;
 }
-// samp.dll RVA: 0x000b26e0
+// 0x000b26e0
 float CGame::GetHudHorizScale()
 {
     return *(const float*)0x859520;
 }
-// samp.dll RVA: 0x00060d20
+// 0x00060d20
 int CGame::GetCursorMode()
 {
     return m_nCursorMode;
 }
-// samp.dll RVA: 0x0006d430
+// 0x0006d430
 void CGame::ResetInputEnableWait()
 {
     m_nInputEnableWaitFrames = 0;
 }
-// samp.dll RVA: 0x00067f10
+// 0x00067f10
 void CGame::SetHeadMovement(BOOL enabled)
 {
     m_bHeadMove = enabled;
 }
-// samp.dll RVA: 0x000080f0
+// 0x000080f0
 void CGame::SetCheckpointEnabled(DWORD enabled)
 {
     unknown4d = enabled;
 }
-// samp.dll RVA: 0x00008100
+// 0x00008100
 void CGame::SetRacingCheckpointEnabled(DWORD enabled)
 {
     unknown29 = enabled;
 }
 #include <string.h>
-// samp.dll RVA: 0x0018e1d8
+// 0x0018e1d8
 BOOL g_gameUsedPlayerSlots[210];
-// samp.dll RVA: 0x0009fdc0
+// 0x0009fdc0
 CGame::CGame()
 {
     m_pAudio = new CAudio;
@@ -66,7 +66,7 @@ CGame::CGame()
     m_bHeadMove = TRUE;
     m_nFrameLimiter = 90;
 }
-// samp.dll RVA: 0x000a1190
+// 0x000a1190
 IDirect3DDevice9* CGame::GetDevice()
 {
     // Legacy 0.2x source matches this native body; both RenderWare calls take no stack arguments.
@@ -89,19 +89,19 @@ IDirect3DDevice9* CGame::GetDevice()
     }
     return device;
 }
-// samp.dll RVA: 0x000a0770
+// 0x000a0770
 BOOL CGame::IsStarted()
 {
     return *(BYTE*)0xba6831 == 0;
 }
-// samp.dll RVA: 0x000a09f0
+// 0x000a09f0
 void CGame::SetFrameLimiter(int value)
 {
     m_nFrameLimiter = value;
     GameUnprotect((void*)0xc1704c, 4);
     *(DWORD*)0xc1704c = 200;
 }
-// samp.dll RVA: 0x000a1280
+// 0x000a1280
 void CGame::EnableClock(bool enable)
 {
     GameUnprotect((void*)0x859a6c, 10);
@@ -119,22 +119,22 @@ void CGame::EnableClock(bool enable)
         memset((void*)0x859a6c, 0, 10);
     }
 }
-// samp.dll RVA: 0x00002d40
+// 0x00002d40
 void* CGame::GetWindowHandle()
 {
     return *(void**)0xc97c1c;
 }
-// samp.dll RVA: 0x00002d50
+// 0x00002d50
 CAudio* CGame::GetAudio()
 {
     return m_pAudio;
 }
-// samp.dll RVA: 0x00002d60
+// 0x00002d60
 CCamera* CGame::GetCamera()
 {
     return m_pCamera;
 }
-// samp.dll RVA: 0x00002d70
+// 0x00002d70
 BOOL CGame::DoesHeadMoves()
 {
     return m_bHeadMove;
@@ -142,7 +142,7 @@ BOOL CGame::DoesHeadMoves()
 
 // GTA SA virtual addresses: fixed range8E6C10..8E7C8C, stride20 (211 records).
 // Tests the entire DWORD, never substitute a live vehicle-pool count.
-// samp.dll RVA: 0x000a1410
+// 0x000a1410
 int CGame::CountBackendVehicleModelRecords()
 {
     int count = 0;
@@ -155,35 +155,35 @@ int CGame::CountBackendVehicleModelRecords()
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// samp.dll RVA: 0x000a0db0
+// 0x000a0db0
 int CGame::GetPlayerMoney()
 {
     return *(int*)0xb7ce50;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// samp.dll RVA: 0x000a13f0
+// 0x000a13f0
 DWORD CGame::GetUsedMemory()
 {
     return *(DWORD*)0x8e4cb4;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// samp.dll RVA: 0x000a1400
+// 0x000a1400
 DWORD CGame::GetStreamingMemory()
 {
     return *(DWORD*)0x8a5a80;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// samp.dll RVA: 0x000a1240
+// 0x000a1240
 void CGame::SetWantedLevel(BYTE level)
 {
     *(BYTE*)0x58db60 = level;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// samp.dll RVA: 0x000a0920
+// 0x000a0920
 void CGame::GetWorldTime(BYTE* hour, BYTE* minute)
 {
     *minute = *(BYTE*)0xb70152;
@@ -192,43 +192,43 @@ void CGame::GetWorldTime(BYTE* hour, BYTE* minute)
 
 #include "game/scripting.h"
 
-// samp.dll RVA: 0x000a0a50
+// 0x000a0a50
 void CGame::DisableTrainTraffic()
 {
     Scripting::ProcessCommand(&g_gameDisableTrainTrafficCommand, 0);
 }
 
-// samp.dll RVA: 0x000a0a90
+// 0x000a0a90
 void CGame::RequestAnimation(const char* name)
 {
     Scripting::ProcessCommand(&g_gameRequestAnimationCommand, name);
 }
 
-// samp.dll RVA: 0x000a0ab0
+// 0x000a0ab0
 DWORD CGame::IsAnimationLoaded(const char* name)
 {
     return Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, name);
 }
 
-// samp.dll RVA: 0x000a0ce0
+// 0x000a0ce0
 void CGame::DeleteMarker(DWORD marker)
 {
     Scripting::ProcessCommand(&g_gameDeleteMarkerCommand, marker);
 }
 
-// samp.dll RVA: 0x000a0d90
+// 0x000a0d90
 void CGame::IncreasePlayerMoney(int amount)
 {
     Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand, 0, amount);
 }
 
-// samp.dll RVA: 0x000a1340
+// 0x000a1340
 void CGame::EnableZoneDisplaying(BYTE enabled)
 {
     Scripting::ProcessCommand(&g_gameZoneDisplayCommand, (DWORD)enabled);
 }
 
-// samp.dll RVA: 0x000a1360
+// 0x000a1360
 void CGame::EnableStuntBonus(BYTE enabled)
 {
     // GTA SA virtual address: 0x00a4a474.
@@ -236,7 +236,7 @@ void CGame::EnableStuntBonus(BYTE enabled)
     *(DWORD*)0xa4a474 = enabled;
 }
 
-// samp.dll RVA: 0x000a1220
+// 0x000a1220
 void CGame::SetWorldGravity(float gravity)
 {
     // GTA SA virtual address: 0x00863984; store raw float bits without x87 conversion.
@@ -244,35 +244,35 @@ void CGame::SetWorldGravity(float gravity)
     *(DWORD*)0x863984 = *(DWORD*)&gravity;
 }
 
-// samp.dll RVA: 0x000a13d0
+// 0x000a13d0
 void CGame::LoadScene(const char* name)
 {
     // GTA SA virtual address: 0x005b8700, cdecl.
     ((void(__cdecl*)(const char*))0x5b8700)(name);
 }
 
-// samp.dll RVA: 0x000a19a0
+// 0x000a19a0
 void CGame::LoadCollisionFile(const char* name)
 {
     // GTA SA virtual address: 0x005b4e60, cdecl; native second argument is zero.
     ((void(__cdecl*)(const char*, int))0x5b4e60)(name, 0);
 }
 
-// samp.dll RVA: 0x000a19c0
+// 0x000a19c0
 void CGame::LoadCullZone(const char* name)
 {
     // GTA SA virtual address: 0x005b4b40, cdecl.
     ((void(__cdecl*)(const char*))0x5b4b40)(name);
 }
 
-// samp.dll RVA: 0x000a1200
+// 0x000a1200
 void* CGame::GetWeaponInfo(int weapon, int skill)
 {
     // GTA SA virtual address: 0x00743c60, cdecl; raw backend pointer.
     return ((void*(__cdecl*)(int, int))0x743c60)(weapon, skill);
 }
 
-// samp.dll RVA: 0x000a19f0
+// 0x000a19f0
 void CGame::DisableAutoAiming()
 {
     // GTA SA virtual addresses: 0x0060dc50 and 0x0060e530..0x0060e532.
@@ -284,7 +284,7 @@ void CGame::DisableAutoAiming()
     *(BYTE*)0x60e532 = 0;
 }
 
-// samp.dll RVA: 0x000a1380
+// 0x000a1380
 void CGame::DisableEnterExits()
 {
     // GTA SA virtual address: 0x0096a7d8; unchecked native array/count prefix.
@@ -299,14 +299,14 @@ void CGame::DisableEnterExits()
     }
 }
 
-// samp.dll RVA: 0x000a0240
+// 0x000a0240
 float CGame::FindGroundZ(float x, float y, float z)
 {
     Scripting::ProcessCommand(&g_gameFindGroundZCommand, (double)x, (double)y, (double)z, &z);
     return z;
 }
 
-// samp.dll RVA: 0x000a0a60
+// 0x000a0a60
 void CGame::RefreshRenderer(float x, float y)
 {
     Scripting::ProcessCommand(&g_gameRefreshRendererCommand, (double)x, (double)y);
@@ -315,7 +315,7 @@ void CGame::RefreshRenderer(float x, float y)
 #include "game/playerped.h"
 #include "game/vehicle.h"
 
-// samp.dll RVA: 0x000a0090
+// 0x000a0090
 CVehicle* CGame::CreateVehicle(int model, float x, float y, float z, float rotation, BOOL siren)
 {
     // Native indexes this+model-0x122 without a model-range check.
@@ -325,7 +325,7 @@ CVehicle* CGame::CreateVehicle(int model, float x, float y, float z, float rotat
     return vehicle->m_pGameVehicle ? vehicle : 0;
 }
 
-// samp.dll RVA: 0x000a0050
+// 0x000a0050
 BOOL CGame::RemovePed(CPed* ped)
 {
     if (!ped)
@@ -336,7 +336,7 @@ BOOL CGame::RemovePed(CPed* ped)
     return TRUE;
 }
 
-// samp.dll RVA: 0x000a1ee0
+// 0x000a1ee0
 void CGame::ResetMoney()
 {
     // GTA SA virtual address: 0x00b7ce50. Modular negation preserves INT_MIN.
@@ -345,7 +345,7 @@ void CGame::ResetMoney()
         Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand, 0, 0u - money);
 }
 
-// samp.dll RVA: 0x000a0b80
+// 0x000a0b80
 void CGame::DeleteRacingCheckpoint()
 {
     if (unknown31)
@@ -372,7 +372,7 @@ typedef char CheckpointRegionSize[(sizeof(GameCheckpointState) == 0x49) ? 1 : -1
 typedef char CheckpointMarkerOffset[(offsetof(GameCheckpointState, marker) == 0x45) ? 1 : -1];
 typedef char RacingMarkerOffset[(offsetof(GameCheckpointState, raceMarker) == 0x21) ? 1 : -1];
 
-// samp.dll RVA: 0x000a0bb0
+// 0x000a0bb0
 DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int type)
 {
     DWORD marker = 0;
@@ -392,7 +392,7 @@ DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int 
     return marker;
 }
 
-// samp.dll RVA: 0x000a1c00
+// 0x000a1c00
 void CGame::SetCheckpoint(const CVector* position, const CVector* size)
 {
     GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
@@ -410,7 +410,7 @@ void CGame::SetCheckpoint(const CVector* position, const CVector* size)
     }
 }
 
-// samp.dll RVA: 0x000a1cc0
+// 0x000a1cc0
 void CGame::CreateRacingCheckpoint()
 {
     GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
@@ -425,7 +425,7 @@ void CGame::CreateRacingCheckpoint()
     s->raceEnabled = 1;
 }
 
-// samp.dll RVA: 0x000a1f20
+// 0x000a1f20
 void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVector* next, float size)
 {
     GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
@@ -446,7 +446,7 @@ void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVecto
     CreateRacingCheckpoint();
 }
 
-// samp.dll RVA: 0x000a1d40
+// 0x000a1d40
 void CGame::ProcessCheckpoints()
 {
     GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
@@ -496,7 +496,7 @@ void CGame::ProcessCheckpoints()
     }
 }
 
-// samp.dll RVA: 0x000a0b20
+// 0x000a0b20
 void CGame::DisplayGameText(const char* text, int time, int style)
 {
     if (style <= 200)
@@ -509,7 +509,7 @@ void CGame::DisplayGameText(const char* text, int time, int style)
     }
 }
 
-// samp.dll RVA: 0x000a1010
+// 0x000a1010
 DWORD CGame::CreatePickup(int model, int type, float x, float y, float z, DWORD* index)
 {
     int selected = model;
@@ -533,7 +533,7 @@ DWORD CGame::CreatePickup(int model, int type, float x, float y, float z, DWORD*
     return (DWORD)model;
 }
 
-// samp.dll RVA: 0x000a1260
+// 0x000a1260
 void CGame::DrawGangZone(const float* position, DWORD color)
 {
     // GTA SA virtual addresses: radar flag0x00ba67a4 and cdecl draw0x005853d0.
@@ -542,7 +542,7 @@ void CGame::DrawGangZone(const float* position, DWORD color)
 
 #include "game/custommodels.h"
 #include "game/util.h"
-// samp.dll RVA: 0x000a07e0
+// 0x000a07e0
 void CGame::ReleaseModel(int model, BYTE force)
 {
     if (model >= 0)
@@ -568,7 +568,7 @@ void CGame::ReleaseModel(int model, BYTE force)
     }
 }
 
-// samp.dll RVA: 0x000a1430
+// 0x000a1430
 void CGame::SetRequiredVehicleModels(BYTE* priorities)
 {
     memset(m_aKeepLoadedVehicleModels, 0, sizeof(m_aKeepLoadedVehicleModels));
@@ -604,7 +604,7 @@ void CGame::SetRequiredVehicleModels(BYTE* priorities)
     }
 }
 
-// samp.dll RVA: 0x000a16c0
+// 0x000a16c0
 void CGame::LoadAnimationsAndModels()
 {
     if (!IsAnimationLoaded(g_gameParachuteLibrary))
@@ -646,38 +646,38 @@ void CGame::LoadAnimationsAndModels()
 }
 
 #include <stddef.h>
-// samp.dll RVA: 0x002ac9d0
+// 0x002ac9d0
 IDirect3DDevice9* g_gameD3DDevice;
-// samp.dll RVA: 0x002ac9b8
+// 0x002ac9b8
 int g_gameVersion;
-// samp.dll RVA: 0x0018e1c8
+// 0x0018e1c8
 DWORD g_gameMouseDummy;
-// samp.dll RVA: 0x00151918
+// 0x00151918
 BYTE g_gameKeyCall[5] = {0xe8, 0x46, 0xf3, 0xfe, 0xff};
-// samp.dll RVA: 0x00151920
+// 0x00151920
 BYTE g_gameMouseCallEU[5] = {0xe8, 0x04, 0x7b, 0x20, 0x00};
-// samp.dll RVA: 0x00151928
+// 0x00151928
 BYTE g_gameMouseCallUS[5] = {0xe8, 0xb4, 0x7a, 0x20, 0x00};
 
-// samp.dll RVA: 0x000aa0b0
+// 0x000aa0b0
 void GameUnprotect(void* address, SIZE_T size)
 {
     DWORD oldProtect;
     VirtualProtect(address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
 }
-// samp.dll RVA: 0x000a02f0
+// 0x000a02f0
 void GameClearMouseDelta()
 {
     *(DWORD*)0xb73424 = 0;
     *(DWORD*)0xb73428 = 0;
     ((void(__cdecl*)())0x541bd0)();
 }
-// samp.dll RVA: 0x000a0310
+// 0x000a0310
 void GameUpdateMouse()
 {
     ((void(__cdecl*)())0x541dd0)();
 }
-// samp.dll RVA: 0x000a0320
+// 0x000a0320
 void GameDisableMousePointers()
 {
     *(DWORD*)0xb7340c = 0;
@@ -690,7 +690,7 @@ void GameDisableMousePointers()
     *(DWORD*)0x53f49a = (DWORD)&g_gameMouseDummy;
     *(DWORD*)0x53f4b3 = (DWORD)&g_gameMouseDummy;
 }
-// samp.dll RVA: 0x000a0370
+// 0x000a0370
 void GameRestoreMousePointers()
 {
     GameUnprotect((void*)0x53f47a, 4);
@@ -700,7 +700,7 @@ void GameRestoreMousePointers()
     *(DWORD*)0x53f49a = 0xb73414;
     *(DWORD*)0x53f4b3 = 0xb7340c;
 }
-// samp.dll RVA: 0x000a03c0
+// 0x000a03c0
 void GameDisableMouseCalls()
 {
     GameUnprotect((void*)0x53f417, 5);
@@ -711,12 +711,12 @@ void GameDisableMouseCalls()
     *(BYTE*)0x53f421 = 0x0f;
     *(BYTE*)0x53f422 = 0x84;
 }
-// samp.dll RVA: 0x000a0760
+// 0x000a0760
 BOOL CGame::IsMenuVisible()
 {
     return *(DWORD*)0xba67a4 != 0;
 }
-// samp.dll RVA: 0x000a0530
+// 0x000a0530
 void CGame::SetCursorMode(int mode, BOOL immediately)
 {
     CGame* state = this;
@@ -773,7 +773,7 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
         state->m_nCursorMode = 0;
     }
 }
-// samp.dll RVA: 0x000a0410
+// 0x000a0410
 void CGame::ProcessInputEnabling()
 {
     CGame* state = this;
@@ -809,9 +809,9 @@ void CGame::ProcessInputEnabling()
 #include "game/keystuff.h"
 #include "game/player_colors.h"
 #include <stdlib.h>
-// samp.dll RVA: 0x0018e1cc
+// 0x0018e1cc
 char* g_gameTextBuffer;
-// samp.dll RVA: 0x000a06d0
+// 0x000a06d0
 void CGame::InitGame()
 {
     g_gameTextBuffer = (char*)calloc(1, 513);
@@ -826,19 +826,19 @@ void CGame::InitGame()
 }
 
 #include <stdio.h>
-// samp.dll RVA: 0x002a9270
+// 0x002a9270
 DWORD g_gamePhysicalMegabytes;
-// samp.dll RVA: 0x002a9274
+// 0x002a9274
 DWORD g_gameStreamingBytes;
-// samp.dll RVA: 0x0011ee84
+// 0x0011ee84
 const char g_gameStartupTitle[6] = "title";
-// samp.dll RVA: 0x0018f388
+// 0x0018f388
 char g_gameFrameNodeError[256];
-// samp.dll RVA: 0x0018f6b4
+// 0x0018f6b4
 bool g_gameCustomStreamRead;
-// samp.dll RVA: 0x0018f6b8
+// 0x0018f6b8
 void* g_gameStreamBuffer;
-// samp.dll RVA: 0x000aa060
+// 0x000aa060
 void GameWaitUnprotect(BYTE* address, SIZE_T size, BYTE expected)
 {
     DWORD oldProtect;
@@ -853,7 +853,7 @@ void GameWaitUnprotect(BYTE* address, SIZE_T size, BYTE expected)
         VirtualProtect(address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
     }
 }
-// samp.dll RVA: 0x000aa300
+// 0x000aa300
 BOOL GameInitializeVersionPatches()
 {
     BYTE* version = (BYTE*)0x747483;
@@ -924,7 +924,7 @@ BOOL GameInitializeVersionPatches()
     *(DWORD*)0x6fa996 = (DWORD)GameDataReadHook;
     return TRUE;
 }
-// samp.dll RVA: 0x000a5c10
+// 0x000a5c10
 DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2)
 {
     if (length > 23)
@@ -942,7 +942,7 @@ DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2)
     }
     return ((DWORD(__cdecl*)(void*, DWORD, void*))0x72fa50)(arg0, length, arg2);
 }
-// samp.dll RVA: 0x000a5c90
+// 0x000a5c90
 DWORD __cdecl GameDataReadHook(void* arg0, DWORD length, void* arg2)
 {
     if (g_gameCustomStreamRead)
@@ -959,7 +959,7 @@ DWORD __cdecl GameDataReadHook(void* arg0, DWORD length, void* arg2)
     }
     return ((DWORD(__cdecl*)(void*, DWORD, void*))0x6f9fd0)(arg0, length, arg2);
 }
-// samp.dll RVA: 0x000b1a40
+// 0x000b1a40
 DWORD GameReadStream(void* stream, void* buffer, DWORD length)
 {
     DWORD address = g_gameVersion == 1 ? 0x7ec9d0 : 0x7eca10;
@@ -967,27 +967,27 @@ DWORD GameReadStream(void* stream, void* buffer, DWORD length)
 }
 
 #include "game/effects.h"
-// samp.dll RVA: 0x000b3480
+// 0x000b3480
 int GameTxdFind(const char* name)
 {
     return ((int(__cdecl*)(const char*))0x731850)(name);
 }
-// samp.dll RVA: 0x000b3510
+// 0x000b3510
 void GameTxdPush()
 {
     ((void(__cdecl*)())0x7316a0)();
 }
-// samp.dll RVA: 0x000b3520
+// 0x000b3520
 void GameTxdPop()
 {
     ((void(__cdecl*)())0x7316b0)();
 }
-// samp.dll RVA: 0x000b3530
+// 0x000b3530
 void GameTxdSetCurrent(int index)
 {
     ((void(__cdecl*)(int))0x7319c0)(index);
 }
-// samp.dll RVA: 0x000b3540
+// 0x000b3540
 void* GameTxdReadTexture(const char* name)
 {
     // Native constructs a one-pointer CSprite2d on the stack; this is an out-object, not the EAX result.
@@ -1000,7 +1000,7 @@ void* GameTxdReadTexture(const char* name)
         // clang-format on
         return texture;
 }
-// samp.dll RVA: 0x000b2860
+// 0x000b2860
 void* GameLoadDictionaryTexture(const char* dictionary, const char* name)
 {
     int index = GameTxdFind(dictionary);
@@ -1012,7 +1012,7 @@ void* GameLoadDictionaryTexture(const char* dictionary, const char* name)
     GameTxdPop();
     return texture;
 }
-// samp.dll RVA: 0x000b6610
+// 0x000b6610
 void GameParseStreamData(const void* data, DWORD length, void* destination)
 {
     CModelFileStream* reader = new CModelFileStream((BYTE*)data, length);
@@ -1130,36 +1130,36 @@ void GameParseStreamData(const void* data, DWORD length, void* destination)
 
 // Texture dictionary reference/slot adapters. Only the native -1 gates are
 // applied; other indices pass through unchanged to their GTA backends.
-// samp.dll RVA: 0x000b34f0
+// 0x000b34f0
 void* GameTxdAddRef(int index)
 {
     return ((void*(__cdecl*)(int))0x731a00)(index);
 }
-// samp.dll RVA: 0x000b3500
+// 0x000b3500
 void GameTxdRemoveRef(int index)
 {
     ((void(__cdecl*)(int))0x731a30)(index);
 }
-// samp.dll RVA: 0x000b35b0
+// 0x000b35b0
 void GameTxdRemove(int index)
 {
     if (index != -1)
         ((void(__cdecl*)(int))0x731e90)(index);
 }
-// samp.dll RVA: 0x000b35d0
+// 0x000b35d0
 void GameTxdRemoveSlot(int index)
 {
     if (index != -1)
         ((void(__cdecl*)(int))0x731cd0)(index);
 }
-// samp.dll RVA: 0x000b35f0
+// 0x000b35f0
 DWORD GameTxdGetReferenceCount(int index)
 {
     return index == -1 ? 0xffffffffu : ((DWORD(__cdecl*)(int))0x731aa0)(index);
 }
 
 // Native performs name lookup, then removes the slot only when it is not -1.
-// samp.dll RVA: 0x000b3580
+// 0x000b3580
 void GameTxdRemoveSlotByName(const char* name)
 {
     int index = GameTxdFind(name);
@@ -1168,7 +1168,7 @@ void GameTxdRemoveSlotByName(const char* name)
 }
 
 // GTA SA virtual addresses: USA7C7550, fallback7C7590. Exactly one argument.
-// samp.dll RVA: 0x000b1ce0
+// 0x000b1ce0
 void* GameRwGetGeometrySkin(void* geometry)
 {
     DWORD target = g_gameVersion == 1 ? 0x7c7550 : 0x7c7590;
@@ -1176,7 +1176,7 @@ void* GameRwGetGeometrySkin(void* geometry)
 }
 // GTA SA virtual addresses: backend74BDD0/+50; initialization flag C97B20.
 // Callback addresses are opaque GTA code pointers; no invented callable types.
-// samp.dll RVA: 0x000b1da0
+// 0x000b1da0
 int GameRwRegisterClumpPlugin(DWORD pluginId)
 {
     DWORD target = g_gameVersion == 1 ? 0x74bdd0 : 0x74be20;
@@ -1187,7 +1187,7 @@ int GameRwRegisterClumpPlugin(DWORD pluginId)
 }
 // GTA SA virtual addresses: backend74BE70/+50, callbacks41B2F0/41B300.
 // Native forces the flag back to1, not to its previous value, even on failure.
-// samp.dll RVA: 0x000b1e00
+// 0x000b1e00
 int GameRwRegisterClumpPluginStream(DWORD pluginId, DWORD readCallback)
 {
     DWORD target = g_gameVersion == 1 ? 0x74be70 : 0x74bec0;
@@ -1197,7 +1197,7 @@ int GameRwRegisterClumpPluginStream(DWORD pluginId, DWORD readCallback)
     return result;
 }
 // GTA SA virtual addresses: USA7F3560, fallback7F35A0; fixed enable argument1.
-// samp.dll RVA: 0x000b1e60
+// 0x000b1e60
 void GameRwEnableAutoMipmapping()
 {
     DWORD target = g_gameVersion == 1 ? 0x7f3560 : 0x7f35a0;
@@ -1205,20 +1205,20 @@ void GameRwEnableAutoMipmapping()
 }
 
 // GTA SA virtual addresses: USA734820, all other version values734880 (+60).
-// samp.dll RVA: 0x000b1ca0
+// 0x000b1ca0
 void* GameRwGetFirstAtomic(void* clump)
 {
     DWORD target = g_gameVersion == 1 ? 0x734820 : 0x734880;
     return ((void*(__cdecl*)(void*))target)(clump);
 }
 // GTA SA virtual address: 0x00734B10, exactly one clump argument.
-// samp.dll RVA: 0x000b1d40
+// 0x000b1d40
 void* GameRwGetClumpAnimHierarchy(void* clump)
 {
     return ((void*(__cdecl*)(void*))0x734b10)(clump);
 }
 // GTA SA virtual address: 0x004D60E0, exactly one hierarchy argument.
-// samp.dll RVA: 0x000b1d70
+// 0x000b1d70
 void* GameRwCreateHierarchyAnimation(void* hierarchy)
 {
     return ((void*(__cdecl*)(void*))0x4d60e0)(hierarchy);
@@ -1227,7 +1227,7 @@ void* GameRwCreateHierarchyAnimation(void* hierarchy)
 #include "game/animation.h"
 #include "game/hooks.h"
 #include "game/patches.h"
-// samp.dll RVA: 0x000a0720
+// 0x000a0720
 void CGame::StartGame()
 {
     GameApplyInGamePatches();
@@ -1240,23 +1240,23 @@ void CGame::StartGame()
     *(BYTE*)0xba677b = 0;
 }
 
-// samp.dll RVA: 0x001c0444
+// 0x001c0444
 void* g_gameCustomModelInfo[32768];
-// samp.dll RVA: 0x001e0444
+// 0x001e0444
 DWORD g_gameUseCustomModelInfo;
-// samp.dll RVA: 0x00152ae0
+// 0x00152ae0
 void** g_gameModelInfoTable = g_gameCustomModelInfo;
-// samp.dll RVA: 0x001a0448
+// 0x001a0448
 DWORD g_gameCustomModelPrefix[32767];
-// samp.dll RVA: 0x0011e664
+// 0x0011e664
 const Scripting::OpcodeInfo g_gameRequestModelCommand = {0x247, "i"};
-// samp.dll RVA: 0x0011e678
+// 0x0011e678
 const Scripting::OpcodeInfo g_gameLoadModelsCommand = {0x38b, ""};
-// samp.dll RVA: 0x0011e6a0
+// 0x0011e6a0
 const Scripting::OpcodeInfo g_gameModelAvailableCommand = {0x248, "i"};
-// samp.dll RVA: 0x0011e618
+// 0x0011e618
 const char g_gameModelTimeoutWarning[41] = "Warning: Model %u wouldn't load in time!";
-// samp.dll RVA: 0x000a7630
+// 0x000a7630
 void* __stdcall GameGetModelInfo(int model)
 {
     if (g_gameUseCustomModelInfo)
@@ -1265,24 +1265,24 @@ void* __stdcall GameGetModelInfo(int model)
         return ((void**)0xa9b0c8)[model];
     return 0;
 }
-// samp.dll RVA: 0x000b41a0
+// 0x000b41a0
 DWORD __stdcall GameGetModelData1c(int model)
 {
     return *(DWORD*)((BYTE*)GameGetModelInfo(model) + 0x1c);
 }
-// samp.dll RVA: 0x000a0780
+// 0x000a0780
 void CGame::RequestModel(int model, int loadingStream)
 {
     (void)loadingStream;
     Scripting::ProcessCommand(&g_gameRequestModelCommand, model);
 }
-// samp.dll RVA: 0x000a07a0
+// 0x000a07a0
 void CGame::LoadRequestedModels()
 {
     Scripting::ProcessCommand(&g_gameLoadModelsCommand);
 }
 // Invalid IDs report TRUE. Preserve the inclusive upper bound and raw result.
-// samp.dll RVA: 0x000a07b0
+// 0x000a07b0
 BOOL CGame::IsModelAvailable(int model)
 {
     if (model >= 0 && model <= 20000)
@@ -1290,12 +1290,12 @@ BOOL CGame::IsModelAvailable(int model)
     return TRUE;
 }
 
-// samp.dll RVA: 0x000b39b0
+// 0x000b39b0
 BOOL __stdcall GameHasModelInfo(int model)
 {
     return GameGetModelInfo(model) != 0;
 }
-// samp.dll RVA: 0x000b39d0
+// 0x000b39d0
 BOOL __stdcall GameIsPedModel(int model)
 {
     if (model >= 0 && model <= 30000)
@@ -1307,7 +1307,7 @@ BOOL __stdcall GameIsPedModel(int model)
     }
     return FALSE;
 }
-// samp.dll RVA: 0x000b4170
+// 0x000b4170
 BOOL __stdcall GameModelQueryB4170(int model)
 {
     void* info = GameGetModelInfo(model);
@@ -1317,7 +1317,7 @@ BOOL __stdcall GameModelQueryB4170(int model)
 #include "main.h"
 // Vtable slot semantics remain unknown; do not relabel this as model type.
 // Both successful lookup checks are native, including the second null guard.
-// samp.dll RVA: 0x000b5d90
+// 0x000b5d90
 DWORD __cdecl GameQueryModelVirtual2c(int model)
 {
     if (!g_pGame || !GameGetModelInfo(model))
@@ -1337,7 +1337,7 @@ DWORD __cdecl GameQueryModelVirtual2c(int model)
     return result;
 }
 
-// samp.dll RVA: 0x000b3d00
+// 0x000b3d00
 DWORD __cdecl GameReadPedModelTable28(int model)
 {
     if (model < 0 || model > 30000)
@@ -1351,7 +1351,7 @@ DWORD __cdecl GameReadPedModelTable28(int model)
     return *(DWORD*)(table + 0x28);
 }
 
-// samp.dll RVA: 0x000b3d40
+// 0x000b3d40
 DWORD __cdecl GameReadPedModelTable2c(int model)
 {
     if (model < 0 || model > 30000)
@@ -1365,7 +1365,7 @@ DWORD __cdecl GameReadPedModelTable2c(int model)
     return *(DWORD*)(table + 0x2c);
 }
 
-// samp.dll RVA: 0x000b3d80
+// 0x000b3d80
 DWORD __cdecl GameReadPedModelTable24(int model)
 {
     if (model < 0 || model > 30000)
@@ -1382,7 +1382,7 @@ DWORD __cdecl GameReadPedModelTable24(int model)
 #include "game/entity.h"
 
 // Preserve the second lookup: its result is deliberately not null-checked again.
-// samp.dll RVA: 0x000b5ef0
+// 0x000b5ef0
 float __cdecl GameSetModelCollisionRadius(int model, float radius)
 {
     if (GameGetModelInfo(model))
@@ -1398,7 +1398,7 @@ float __cdecl GameSetModelCollisionRadius(int model, float radius)
     return g_objectScaleLowerBound;
 }
 // Publish one raw DWORD at a time, preserving alias order and NaN payload bits.
-// samp.dll RVA: 0x000b5f50
+// 0x000b5f50
 BOOL __cdecl GameGetModelCollisionCentre(int model, CVector* centre)
 {
     if (GameGetModelInfo(model))
@@ -1416,14 +1416,14 @@ BOOL __cdecl GameGetModelCollisionCentre(int model, CVector* centre)
     return FALSE;
 }
 // Native exposes only AL; no meaning is assigned to individual flag bits.
-// samp.dll RVA: 0x000b5fe0
+// 0x000b5fe0
 BYTE __stdcall GameGetModelFlagsByte(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
     return info ? *(BYTE*)(info + 0x12) : 0;
 }
 // Native exposes AX; this reads the full overlapping two-byte field.
-// samp.dll RVA: 0x000b6000
+// 0x000b6000
 WORD __stdcall GameGetModelFlagsWord(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1431,12 +1431,12 @@ WORD __stdcall GameGetModelFlagsWord(int model)
 }
 
 // These helpers receive an existing backend model-info pointer, not a model ID.
-// samp.dll RVA: 0x000b4150
+// 0x000b4150
 void __stdcall GameSetModelDrawDistance(void* info, float distance)
 {
     *(float*)((BYTE*)info + 0x18) = distance;
 }
-// samp.dll RVA: 0x000b4160
+// 0x000b4160
 float __stdcall GameGetModelDrawDistance(const void* info)
 {
     return *(const float*)((const BYTE*)info + 0x18);
@@ -1444,7 +1444,7 @@ float __stdcall GameGetModelDrawDistance(const void* info)
 
 // Native writes +1C before invoking the backend virtual slot. Its meaning
 // remains unresolved; preserve the unchecked model lookup and callee-pop call.
-// samp.dll RVA: 0x000b4200
+// 0x000b4200
 void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1460,7 +1460,7 @@ void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 }
 
 // GTA SA virtual address: 0x004C4BC0; ECX=model info, initPairedModel=0.
-// samp.dll RVA: 0x000b4230
+// 0x000b4230
 void __stdcall GameSetModelCollision(int model, void* collision)
 {
     void* info = GameGetModelInfo(model);
@@ -1476,7 +1476,7 @@ void __stdcall GameSetModelCollision(int model, void* collision)
 }
 
 // Native zero-extends the WORD, including FFFF -> 65535; lookup failure -> -1.
-// samp.dll RVA: 0x000b4280
+// 0x000b4280
 DWORD __stdcall GameGetModelTxdIndex(int model)
 {
     const BYTE* info = (const BYTE*)GameGetModelInfo(model);
@@ -1484,13 +1484,13 @@ DWORD __stdcall GameGetModelTxdIndex(int model)
 }
 
 // No null check is present in either of the following native entries.
-// samp.dll RVA: 0x000b42d0
+// 0x000b42d0
 void* __stdcall GameGetModelCollision(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
     return *(void**)(info + 0x14);
 }
-// samp.dll RVA: 0x000b4300
+// 0x000b4300
 WORD __stdcall GameGetModelReferenceCount(int model)
 {
     const BYTE* info = (const BYTE*)GameGetModelInfo(model);
@@ -1499,7 +1499,7 @@ WORD __stdcall GameGetModelReferenceCount(int model)
 
 // Native preserves the first model-info pointer across the second lookup made
 // by the TXD-index helper. Backend call is ECX, no added failure cleanup.
-// samp.dll RVA: 0x000b1c40
+// 0x000b1c40
 BOOL GameCleanupModelAndTxd(int model)
 {
     void* info = GameGetModelInfo(model);
@@ -1522,7 +1522,7 @@ BOOL GameCleanupModelAndTxd(int model)
 }
 
 // Clear the observed collision slot only; no destructor or release is native.
-// samp.dll RVA: 0x000b1070
+// 0x000b1070
 void GameClearModelCollision(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1530,9 +1530,9 @@ void GameClearModelCollision(int model)
         *(void**)(info + 0x14) = 0;
 }
 
-// samp.dll RVA: 0x0011e68c
+// 0x0011e68c
 const Scripting::OpcodeInfo g_gameSetWorldTime = {0xc0, "ii"};
-// samp.dll RVA: 0x000a0980
+// 0x000a0980
 void CGame::SetWorldWeather(int weather)
 {
     BOOL clockEnabled = m_bClockEnabled;
@@ -1544,7 +1544,7 @@ void CGame::SetWorldWeather(int weather)
         *(DWORD*)0xc81320 = weather;
     }
 }
-// samp.dll RVA: 0x000a08f0
+// 0x000a08f0
 void CGame::SetWorldTime(int hour, int minute)
 {
     // GTA SA virtual addresses: minute 0x00b70152, hour 0x00b70153.
@@ -1553,7 +1553,7 @@ void CGame::SetWorldTime(int hour, int minute)
     Scripting::ProcessCommand(&g_gameSetWorldTime, hour, minute);
 }
 
-// samp.dll RVA: 0x000a0a20
+// 0x000a0a20
 void CGame::SetMaxStats()
 {
     ((void(__cdecl*)())0x4399d0)();
@@ -1561,7 +1561,7 @@ void CGame::SetMaxStats()
     GameUnprotect((void*)0x55a070, 1);
     *(BYTE*)0x55a070 = 0xc3;
 }
-// samp.dll RVA: 0x000a0940
+// 0x000a0940
 void CGame::LetTimeGo(char enabled)
 {
     GameUnprotect((void*)0x52cf10, 1);
@@ -1577,174 +1577,174 @@ void CGame::LetTimeGo(char enabled)
     }
 }
 
-// samp.dll RVA: 0x0011e410
+// 0x0011e410
 const Scripting::OpcodeInfo g_cameraFade = {0x16a, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e424
+// 0x0011e424
 const Scripting::OpcodeInfo g_cameraRestoreJumpcut = {0x373, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e438
+// 0x0011e438
 const Scripting::OpcodeInfo g_cameraPointAt = {0x160, {0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e44c
+// 0x0011e44c
 const Scripting::OpcodeInfo g_cameraRestore = {0x2eb, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e460
+// 0x0011e460
 const Scripting::OpcodeInfo g_cameraSet = {0x15f, {0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e474
+// 0x0011e474
 const Scripting::OpcodeInfo g_cameraStop = {0x925, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e488
+// 0x0011e488
 const Scripting::OpcodeInfo g_cameraMove = {0x936, {0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e49c
+// 0x0011e49c
 const Scripting::OpcodeInfo g_cameraTrack = {0x920, {0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e4b0
+// 0x0011e4b0
 const Scripting::OpcodeInfo g_cameraPersistTrack = {0x92f, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011e4c4
+// 0x0011e4c4
 const Scripting::OpcodeInfo g_cameraPersistPosition = {0x930, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011eaf0
+// 0x0011eaf0
 const Scripting::OpcodeInfo g_audioPlay = {0x18c, {0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011eb04
+// 0x0011eb04
 const Scripting::OpcodeInfo g_audioLoad = {0x3cf, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011eb40
+// 0x0011eb40
 const Scripting::OpcodeInfo g_audioUnload = {0x40d, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011eb54
+// 0x0011eb54
 const Scripting::OpcodeInfo g_audioSetPosition = {0x3d7, {0x69, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011eb18
+// 0x0011eb18
 const Scripting::OpcodeInfo g_audioIsLoaded = {0x3d0, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011eb2c
+// 0x0011eb2c
 const Scripting::OpcodeInfo g_audioStart = {0x3d1, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011f7a4
+// 0x0011f7a4
 const Scripting::OpcodeInfo g_vehicleChangeInteriorCommand = {0x840, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f678
+// 0x0011f678
 const Scripting::OpcodeInfo g_vehicleIsSunkCommand = {0x2bf, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f7b8
+// 0x0011f7b8
 const Scripting::OpcodeInfo g_vehicleAttachTrailerCommand = {0x893, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f7cc
+// 0x0011f7cc
 const Scripting::OpcodeInfo g_vehicleDetachTrailerCommand = {0x7ac, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f77c
+// 0x0011f77c
 const Scripting::OpcodeInfo g_vehicleRemoveComponentCommand = {0x6e8, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f72c
+// 0x0011f72c
 const Scripting::OpcodeInfo g_vehiclePaintjobCommand = {0x6ed, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f614
+// 0x0011f614
 const Scripting::OpcodeInfo g_vehicleRotationCommand = {0x175, {0x69, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011f6a0
+// 0x0011f6a0
 const Scripting::OpcodeInfo g_vehicleProofsCommand = {0x2ac, {0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f790
+// 0x0011f790
 const Scripting::OpcodeInfo g_vehicleDamageableCommand = {0x53f, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011f6b4
+// 0x0011f6b4
 const Scripting::OpcodeInfo g_vehicleWarpPedCommand = {0x362, {0x69, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f740
+// 0x0011f740
 const Scripting::OpcodeInfo g_vehicleAddComponentCommand = {0x6e7, {0x69, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f754
+// 0x0011f754
 const Scripting::OpcodeInfo g_vehicleComponentLoadedCommand = {0x6ea, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f768
+// 0x0011f768
 const Scripting::OpcodeInfo g_vehicleRequestComponentCommand = {0x6e9, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011f628
+// 0x0011f628
 const Scripting::OpcodeInfo g_vehicleCreateMarkerCommand = {0x161, {0x69, 0x69, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f63c
+// 0x0011f63c
 const Scripting::OpcodeInfo g_vehicleDestroyMarkerCommand = {0x164, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f650
+// 0x0011f650
 const Scripting::OpcodeInfo g_vehicleMarkerColorCommand = {0x165, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f664
+// 0x0011f664
 const Scripting::OpcodeInfo g_vehicleMarkerModeCommand = {0x168, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011f600
+// 0x0011f600
 const Scripting::OpcodeInfo g_vehicleDestroyCommand = {0xa6, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f6dc
+// 0x0011f6dc
 const Scripting::OpcodeInfo g_vehicleDestroyTrainCommand = {0x7bd, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011f5ec
+// 0x0011f5ec
 const Scripting::OpcodeInfo g_vehicleCreateCommand = {0xa5, {0x69, 0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f6f0
+// 0x0011f6f0
 const Scripting::OpcodeInfo g_vehicleGasTankExplosionCommand = {0x9c4, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f718
+// 0x0011f718
 const Scripting::OpcodeInfo g_vehicleHydraulicsCommand = {0x7ff, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// samp.dll RVA: 0x0011f6c8
+// 0x0011f6c8
 const Scripting::OpcodeInfo g_vehicleCreateTrainCommand = {0x6d8, {0x69, 0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e790
+// 0x0011e790
 const Scripting::OpcodeInfo g_gameDisableTrainTrafficCommand = {0x6d7, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e7e0
+// 0x0011e7e0
 const Scripting::OpcodeInfo g_gameRequestAnimationCommand = {0x4ed, {0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e7f4
+// 0x0011e7f4
 const Scripting::OpcodeInfo g_gameIsAnimationLoadedCommand = {0x4ee, {0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e6b4
+// 0x0011e6b4
 const Scripting::OpcodeInfo g_gameDeleteMarkerCommand = {0x164, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e740
+// 0x0011e740
 const Scripting::OpcodeInfo g_gameIncreaseMoneyCommand = {0x109, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e86c
+// 0x0011e86c
 const Scripting::OpcodeInfo g_gameZoneDisplayCommand = {0x9ba, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e754
+// 0x0011e754
 const Scripting::OpcodeInfo g_gameFindGroundZCommand = {0x2ce, {0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e7cc
+// 0x0011e7cc
 const Scripting::OpcodeInfo g_gameRefreshRendererCommand = {0x4e4, {0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e77c
+// 0x0011e77c
 const Scripting::OpcodeInfo g_gameDeleteRacingCheckpointCommand = {0x6d6, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e6dc
+// 0x0011e6dc
 const Scripting::OpcodeInfo g_gameCreateMarkerCommand = {0x4ce, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e718
+// 0x0011e718
 const Scripting::OpcodeInfo g_gameCreateMarkerType1Command = {0x2a8, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e858
+// 0x0011e858
 const Scripting::OpcodeInfo g_gameCreateMarkerType2Command = {0x570, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e704
+// 0x0011e704
 const Scripting::OpcodeInfo g_gameCreateMarkerType3Command = {0x2a7, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e6c8
+// 0x0011e6c8
 const Scripting::OpcodeInfo g_gameMarkerColorCommand = {0x165, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e6f0
+// 0x0011e6f0
 const Scripting::OpcodeInfo g_gameMarkerModeCommand = {0x168, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e768
+// 0x0011e768
 const Scripting::OpcodeInfo g_gameCreateRacingCheckpointCommand = {0x6d5, {0x69, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e72c
+// 0x0011e72c
 const Scripting::OpcodeInfo g_gameLocateCheckpointCommand = {0xfe, {0x69, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e81c
+// 0x0011e81c
 const Scripting::OpcodeInfo g_gameClearTextCommand = {0xbe, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e830
+// 0x0011e830
 const Scripting::OpcodeInfo g_gameCreatePickupCommand = {0x213, {0x69, 0x69, 0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011e7a4
+// 0x0011e7a4
 const Scripting::OpcodeInfo g_gameReleaseModelCommand = {0x249, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
 
-// samp.dll RVA: 0x0011eae4
+// 0x0011eae4
 const char g_gameParachuteLibrary[10] = {0x50, 0x41, 0x52, 0x41, 0x43, 0x48, 0x55, 0x54, 0x45, 0x0};
 
-// samp.dll RVA: 0x00118224
+// 0x00118224
 const char g_gameVendingLibrary[8] = {0x56, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x0};
 
-// samp.dll RVA: 0x0011eac4
+// 0x0011eac4
 const char g_gameFightBLibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x42, 0x0};
 
-// samp.dll RVA: 0x0011eabc
+// 0x0011eabc
 const char g_gameFightCLibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x43, 0x0};
 
-// samp.dll RVA: 0x0011eab4
+// 0x0011eab4
 const char g_gameFightDLibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x44, 0x0};
 
-// samp.dll RVA: 0x0011eaac
+// 0x0011eaac
 const char g_gameFightELibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x45, 0x0};
 
 #include "game/video_mode.h"
 // GTA SA virtual address: 0x00745C70; no additional validation is native.
-// samp.dll RVA: 0x000b5d10
+// 0x000b5d10
 void GameSetVideoMode(DWORD mode)
 {
     ((void(__cdecl*)(DWORD))0x745c70)(mode);
@@ -1756,24 +1756,24 @@ void GameSetVideoMode(DWORD mode)
 #include "game/playerped.h"
 #include <GetTime.h>
 
-// samp.dll RVA: 0x0018e520
+// 0x0018e520
 BYTE g_frameKeyCycle;
-// samp.dll RVA: 0x0018e524
+// 0x0018e524
 DWORD g_frameKeyCycleTick;
-// samp.dll RVA: 0x0018e528
+// 0x0018e528
 DWORD g_frameSampleCount;
-// samp.dll RVA: 0x0018e52c
+// 0x0018e52c
 DWORD g_frameSampleTick;
-// samp.dll RVA: 0x0018e530
+// 0x0018e530
 DWORD g_frameSleepTick;
-// samp.dll RVA: 0x0018e534
+// 0x0018e534
 float g_frameScale;
-// samp.dll RVA: 0x001181d8
+// 0x001181d8
 const float g_frameScaleMultiplier = 3.0f;
-// samp.dll RVA: 0x0011c664
+// 0x0011c664
 const float g_frameScaleNumerator = 50.0f;
 
-// samp.dll RVA: 0x0009fe50
+// 0x0009fe50
 void GameUpdateKeyCycle()
 {
     DWORD now = RakNet::GetTime();
@@ -1791,7 +1791,7 @@ void GameUpdateKeyCycle()
     }
     *(BYTE*)0xb7356e = g_frameKeyCycle;
 }
-// samp.dll RVA: 0x0009fed0
+// 0x0009fed0
 void CGame::Sleep(int elapsed, int limit)
 {
     if (elapsed && limit)
@@ -1802,7 +1802,7 @@ void CGame::Sleep(int elapsed, int limit)
     }
 }
 
-// samp.dll RVA: 0x000a1a30
+// 0x000a1a30
 void CGame::ProcessFrameLimiter()
 {
     DWORD now = RakNet::GetTime();
@@ -1876,7 +1876,7 @@ void CGame::ProcessFrameLimiter()
     g_frameSleepTick = RakNet::GetTime();
 }
 
-// samp.dll RVA: 0x000a1bd0
+// 0x000a1bd0
 void CGame::EnableHUD(BOOL enabled)
 {
     if (enabled)
@@ -1893,7 +1893,7 @@ void CGame::EnableHUD(BOOL enabled)
 
 #include "game/custom_model_io.h"
 #include <stdio.h>
-// samp.dll RVA: 0x000b2790
+// 0x000b2790
 BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE fromSamp)
 {
     char directory[64], path[136];
@@ -1910,9 +1910,9 @@ BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE from
     return TRUE;
 }
 
-// samp.dll RVA: 0x0011e844
+// 0x0011e844
 const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand = {0x32b, "iiifffv"};
-// samp.dll RVA: 0x000a10f0
+// 0x000a10f0
 DWORD CGame::CreateWeaponPickup(int model, int ammo, float x, float y, float z)
 {
     int selected = model;
@@ -1928,9 +1928,9 @@ DWORD CGame::CreateWeaponPickup(int model, int ammo, float x, float y, float z)
     return (DWORD)model;
 }
 
-// samp.dll RVA: 0x002abe58
+// 0x002abe58
 BYTE g_gameLineSphereResult;
-// samp.dll RVA: 0x000b3df0
+// 0x000b3df0
 int __cdecl GameCameraSphereQuery(const void* sphere)
 {
     void* camera = *(void**)0xc1703c;
@@ -1940,7 +1940,7 @@ int __cdecl GameCameraSphereQuery(const void* sphere)
     Query query = (Query)(g_gameVersion == 1 ? 0x7ee2d0 : 0x7ee310);
     return query(camera, sphere);
 }
-// samp.dll RVA: 0x000b6110
+// 0x000b6110
 BYTE __stdcall GameTestEntityLineSphere(const CVector* origin, const CVector* end, void* backend, const CVector* centre, float scale, BYTE cameraCheck)
 {
     if (!backend || !*(void**)((BYTE*)backend + 0x14))
@@ -2006,7 +2006,7 @@ radius_scale:
 }
 
 #include "game/object.h"
-// samp.dll RVA: 0x000a0170
+// 0x000a0170
 CObject* CGame::NewObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE firstHour, BYTE lastHour)
 {
     CVector position;
@@ -2016,113 +2016,113 @@ CObject* CGame::NewObject(int model, float x, float y, float z, CVector rotation
     return new CObject(model, position, rotation, drawDistance, 0, firstHour, lastHour);
 }
 
-#include "game/ped_control.h"
-// samp.dll RVA: 0x0011e808
+#include "game/hooks.h"
+// 0x0011e808
 const Scripting::OpcodeInfo g_gameReleaseAnimationCommand = {0x4ef, "s"};
-// samp.dll RVA: 0x0011e8e0
+// 0x0011e8e0
 const float g_gameFarClipBase = 1250.0f;
-// samp.dll RVA: 0x0011e8dc
+// 0x0011e8dc
 const float g_gameFarClipMinimum = 700.0f;
-// samp.dll RVA: 0x0015196c
+// 0x0015196c
 float g_gameFarClipDistance = 1400.0f;
-// samp.dll RVA: 0x0011ea9c
+// 0x0011ea9c
 const char g_gameWeaponName01[15] = "Brass Knuckles";
-// samp.dll RVA: 0x0011ea90
+// 0x0011ea90
 const char g_gameWeaponName02[10] = "Golf Club";
-// samp.dll RVA: 0x0011ea84
+// 0x0011ea84
 const char g_gameWeaponName03[11] = "Nite Stick";
-// samp.dll RVA: 0x0011ea7c
+// 0x0011ea7c
 const char g_gameWeaponName04[6] = "Knife";
-// samp.dll RVA: 0x0011ea6c
+// 0x0011ea6c
 const char g_gameWeaponName05[13] = "Baseball Bat";
-// samp.dll RVA: 0x0011ea64
+// 0x0011ea64
 const char g_gameWeaponName06[7] = "Shovel";
-// samp.dll RVA: 0x0011ea58
+// 0x0011ea58
 const char g_gameWeaponName07[9] = "Pool Cue";
-// samp.dll RVA: 0x0011ea50
+// 0x0011ea50
 const char g_gameWeaponName08[7] = "Katana";
-// samp.dll RVA: 0x0011ea44
+// 0x0011ea44
 const char g_gameWeaponName09[9] = "Chainsaw";
-// samp.dll RVA: 0x0011ea3c
+// 0x0011ea3c
 const char g_gameWeaponName10[6] = "Dildo";
-// samp.dll RVA: 0x0011ea30
+// 0x0011ea30
 const char g_gameWeaponName12[9] = "Vibrator";
-// samp.dll RVA: 0x0011ea28
+// 0x0011ea28
 const char g_gameWeaponName14[8] = "Flowers";
-// samp.dll RVA: 0x0011ea20
+// 0x0011ea20
 const char g_gameWeaponName15[5] = "Cane";
-// samp.dll RVA: 0x0011ea18
+// 0x0011ea18
 const char g_gameWeaponName16[8] = "Grenade";
-// samp.dll RVA: 0x0011ea10
+// 0x0011ea10
 const char g_gameWeaponName17[8] = "Teargas";
-// samp.dll RVA: 0x0011ea08
+// 0x0011ea08
 const char g_gameWeaponName18[8] = "Molotov";
-// samp.dll RVA: 0x0011ea00
+// 0x0011ea00
 const char g_gameWeaponName22[8] = "Colt 45";
-// samp.dll RVA: 0x0011e9f0
+// 0x0011e9f0
 const char g_gameWeaponName23[16] = "Silenced Pistol";
-// samp.dll RVA: 0x0011e9e0
+// 0x0011e9e0
 const char g_gameWeaponName24[13] = "Desert Eagle";
-// samp.dll RVA: 0x0011e9d8
+// 0x0011e9d8
 const char g_gameWeaponName25[8] = "Shotgun";
-// samp.dll RVA: 0x0011e9c4
+// 0x0011e9c4
 const char g_gameWeaponName26[17] = "Sawn-off Shotgun";
-// samp.dll RVA: 0x0011e9b4
+// 0x0011e9b4
 const char g_gameWeaponName27[15] = "Combat Shotgun";
-// samp.dll RVA: 0x0011e9b0
+// 0x0011e9b0
 const char g_gameWeaponName28[4] = "UZI";
-// samp.dll RVA: 0x0011e9ac
+// 0x0011e9ac
 const char g_gameWeaponName29[4] = "MP5";
-// samp.dll RVA: 0x0011e9a4
+// 0x0011e9a4
 const char g_gameWeaponName30[5] = "AK47";
-// samp.dll RVA: 0x0011e9a0
+// 0x0011e9a0
 const char g_gameWeaponName31[3] = "M4";
-// samp.dll RVA: 0x0011e998
+// 0x0011e998
 const char g_gameWeaponName32[5] = "TEC9";
-// samp.dll RVA: 0x0011e990
+// 0x0011e990
 const char g_gameWeaponName33[6] = "Rifle";
-// samp.dll RVA: 0x0011e980
+// 0x0011e980
 const char g_gameWeaponName34[13] = "Sniper Rifle";
-// samp.dll RVA: 0x0011e970
+// 0x0011e970
 const char g_gameWeaponName35[16] = "Rocket Launcher";
-// samp.dll RVA: 0x0011e964
+// 0x0011e964
 const char g_gameWeaponName36[12] = "Heat Seaker";
-// samp.dll RVA: 0x0011e954
+// 0x0011e954
 const char g_gameWeaponName37[13] = "Flamethrower";
-// samp.dll RVA: 0x0011e94c
+// 0x0011e94c
 const char g_gameWeaponName38[8] = "Minigun";
-// samp.dll RVA: 0x0011e938
+// 0x0011e938
 const char g_gameWeaponName39[19] = "Satchel Explosives";
-// samp.dll RVA: 0x0011e930
+// 0x0011e930
 const char g_gameWeaponName40[5] = "Bomb";
-// samp.dll RVA: 0x0011e924
+// 0x0011e924
 const char g_gameWeaponName41[10] = "Spray Can";
-// samp.dll RVA: 0x0011e910
+// 0x0011e910
 const char g_gameWeaponName42[18] = "Fire Extinguisher";
-// samp.dll RVA: 0x0011e908
+// 0x0011e908
 const char g_gameWeaponName43[7] = "Camera";
-// samp.dll RVA: 0x0011e8fc
+// 0x0011e8fc
 const char g_gameWeaponName46[10] = "Parachute";
-// samp.dll RVA: 0x0011e8f4
+// 0x0011e8f4
 const char g_gameWeaponName49[8] = "Vehicle";
-// samp.dll RVA: 0x0011e8ec
+// 0x0011e8ec
 const char g_gameWeaponName53[8] = "Drowned";
-// samp.dll RVA: 0x0011e8e4
+// 0x0011e8e4
 const char g_gameWeaponName54[6] = "Splat";
 
-// samp.dll RVA: 0x000a0ad0
+// 0x000a0ad0
 void CGame::ReleaseAnimation(const char* name)
 {
     if (Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, name))
         Scripting::ProcessCommand(&g_gameReleaseAnimationCommand, name);
 }
-// samp.dll RVA: 0x000a0b00
+// 0x000a0b00
 void CGame::EnableRadar(BOOL enabled)
 {
     // GTA SA virtual address: radar-disable byte.
     *(BYTE*)0xbaa3fb = enabled == 0;
 }
-// samp.dll RVA: 0x000a0d20
+// 0x000a0d20
 void CGame::UpdateFarClippingPlane()
 {
     BYTE* ped = (BYTE*)GameFindLocalPed();
@@ -2155,7 +2155,7 @@ far_clip_done:
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a0dc0
+// 0x000a0dc0
 const char* CGame::GetWeaponName(int weapon)
 {
     switch (weapon)
@@ -2261,7 +2261,7 @@ const char* CGame::GetWeaponName(int weapon)
             return g_pedEmptyDanceAnimation;
     }
 }
-// samp.dll RVA: 0x000a11d0
+// 0x000a11d0
 void CGame::Restart()
 {
     // GTA SA virtual addresses: restart flags and three no-argument backend calls.
@@ -2272,23 +2272,23 @@ void CGame::Restart()
     ((void(__cdecl*)())0x53c680)();
     *(BYTE*)0xba6831 = 1;
 }
-// samp.dll RVA: 0x000a1250
+// 0x000a1250
 void CGame::SetNumberOfIntroTextLinesThisFrame(WORD value)
 {
     *(WORD*)0xa44b68 = value;
 }
-// samp.dll RVA: 0x000a1590
+// 0x000a1590
 int CGame::GetTimer()
 {
     return *(int*)0xb7cb84;
 }
-// samp.dll RVA: 0x000a19e0
+// 0x000a19e0
 BOOL CGame::UsingGamepad()
 {
     return *(BYTE*)0xba6818 != 0;
 }
 
-// samp.dll RVA: 0x0009ff50
+// 0x0009ff50
 CPed* CGame::CreatePed(int model, CVector position, float rotation, DWORD, BOOL playerFlag)
 {
     BYTE slot = 2;
@@ -2309,7 +2309,7 @@ CPed* CGame::CreatePed(int model, CVector position, float rotation, DWORD, BOOL 
     return ped;
 }
 
-// samp.dll RVA: 0x0009fea0
+// 0x0009fea0
 void CGame::SetTimeScale(float scale)
 {
     // clang-format off
@@ -2326,7 +2326,7 @@ void CGame::SetTimeScale(float scale)
     // clang-format on
 }
 
-// samp.dll RVA: 0x0009ff00
+// 0x0009ff00
 BYTE CGame::FindFreePlayerSlot()
 {
     for (int player = 2; player < 210; player++)
@@ -2335,7 +2335,7 @@ BYTE CGame::FindFreePlayerSlot()
     return 0;
 }
 
-// samp.dll RVA: 0x0009ff30
+// 0x0009ff30
 BYTE CGame::CountUsedPlayerSlots()
 {
     BYTE count = 0;
@@ -2345,14 +2345,14 @@ BYTE CGame::CountUsedPlayerSlots()
     return count;
 }
 
-// samp.dll RVA: 0x000a0120
+// 0x000a0120
 void CGame::SetEightByteName(const char* name)
 {
     if (name && *name && strlen(name) <= 8)
         GameSetEightByteName(name);
 }
 
-// samp.dll RVA: 0x000a0150
+// 0x000a0150
 BOOL CGame::DeleteEntity(CEntity* entity)
 {
     if (!entity)
@@ -2361,20 +2361,20 @@ BOOL CGame::DeleteEntity(CEntity* entity)
     return TRUE;
 }
 
-// samp.dll RVA: 0x000a0210
+// 0x000a0210
 int CGame::GetWeaponModel(int weapon)
 {
     return GameGetWeaponModel(weapon);
 }
 
-// samp.dll RVA: 0x000a0220
+// 0x000a0220
 BOOL CGame::IsKeyPressed(int key)
 {
     KeyPad* keys = KeyStuff::GetInternalKeys();
     return *((WORD*)keys + key) != 0;
 }
 
-// samp.dll RVA: 0x000a0870
+// 0x000a0870
 BOOL CGame::LoadModelNow(int model)
 {
     if (model < 0 || model > 20000)
@@ -2395,35 +2395,35 @@ BOOL CGame::LoadModelNow(int model)
     return TRUE;
 }
 
-// samp.dll RVA: 0x000a09a0
+// 0x000a09a0
 DWORD CGame::GetWeather()
 {
     // GTA SA virtual address: raw weather DWORD.
     return *(DWORD*)0xc81318;
 }
 
-// samp.dll RVA: 0x000a09b0
+// 0x000a09b0
 BYTE CGame::GetFrontendByteBA6769()
 {
     // GTA SA virtual address: raw frontend byte; semantic name unestablished.
     return *(BYTE*)0xba6769;
 }
 
-// samp.dll RVA: 0x000a09d0
+// 0x000a09d0
 BOOL CGame::IsFrontendFlagBA6794Set()
 {
     // GTA SA virtual address: frontend flag, normalized to BOOL.
     return *(BYTE*)0xba6794 != 0;
 }
 
-// samp.dll RVA: 0x000a09e0
+// 0x000a09e0
 void CGame::SetFrontendFlagBA6794()
 {
     // GTA SA virtual address: native writes exactly one byte.
     *(BYTE*)0xba6794 = 1;
 }
 
-// samp.dll RVA: 0x000a1570
+// 0x000a1570
 void CGame::SetTimer(DWORD value)
 {
     if (m_bClockEnabled)
@@ -2433,7 +2433,7 @@ void CGame::SetTimer(DWORD value)
     g_gameTimerOverridden = 1;
 }
 
-// samp.dll RVA: 0x000a15a0
+// 0x000a15a0
 DWORD CGame::GetBackendWordB71804()
 {
     // GTA SA virtual address: raw DWORD; semantic name unestablished.
@@ -2442,12 +2442,12 @@ DWORD CGame::GetBackendWordB71804()
 
 // Eight bytes are read by the native getter; the wrapper also permits8 chars
 // plus the terminating NUL. Longer native-helper overflow adjacency is unproven.
-// samp.dll RVA: 0x00151950
+// 0x00151950
 char g_gameEightByteName[9] = "SAMP03";
-// samp.dll RVA: 0x0018e53c
+// 0x0018e53c
 BYTE g_gameTimerOverridden;
 
-// samp.dll RVA: 0x000a3ed0
+// 0x000a3ed0
 void GameSetEightByteName(const char* name)
 {
     volatile DWORD* words = (volatile DWORD*)g_gameEightByteName;
@@ -2461,7 +2461,7 @@ void GameSetEightByteName(const char* name)
     }
     while (*name++);
 }
-// samp.dll RVA: 0x000a3f00
+// 0x000a3f00
 bool GameCopyEightByteName(void* output)
 {
     volatile DWORD* out = (volatile DWORD*)output;
@@ -2473,10 +2473,10 @@ bool GameCopyEightByteName(void* output)
     return true;
 }
 
-// samp.dll RVA: 0x0018eb98
+// 0x0018eb98
 DWORD g_gamePreviewPed[488];
 
-// samp.dll RVA: 0x000a15b0
+// 0x000a15b0
 void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, int model, DWORD color)
 {
     memset(g_gamePreviewPed, 0, sizeof(g_gamePreviewPed));
@@ -2516,14 +2516,14 @@ void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, in
         delete vehicle;
 }
 
-// samp.dll RVA: 0x000b1d20
+// 0x000b1d20
 void* GameRwGetClumpSkin(void* clump)
 {
     void* atomic = GameRwGetFirstAtomic(clump);
     return GameRwGetGeometrySkin(*(void**)((BYTE*)atomic + 0x18));
 }
 
-// samp.dll RVA: 0x000a7720
+// 0x000a7720
 void GameFreeModelInfo(int model)
 {
     void* info = g_gameModelInfoTable[model];
@@ -2532,4 +2532,15 @@ void GameFreeModelInfo(int model)
         free(info);
         g_gameModelInfoTable[model] = 0;
     }
+}
+
+// 0x0011e7b8
+const Scripting::OpcodeInfo g_gameCurrentInteriorCommand = {0x77e, "v"};
+
+// 0x000a0d00
+BYTE CGame::GetCurrentInterior()
+{
+    DWORD interior;
+    Scripting::ProcessCommand(&g_gameCurrentInteriorCommand, &interior);
+    return (BYTE)interior;
 }

@@ -4,7 +4,7 @@
 #include "gui/input_text.h"
 #include <wchar.h>
 
-// samp.dll RVA: 0x0009b700
+// 0x0009b700
 void InputBufferAnsiToWide(const char* text, wchar_t* output, int capacity)
 {
     memset(output, 0, capacity * sizeof(wchar_t));
@@ -13,7 +13,7 @@ void InputBufferAnsiToWide(const char* text, wchar_t* output, int capacity)
         MultiByteToWideChar(CP_ACP, 0, text, (int)strlen(text), output, length);
 }
 
-// samp.dll RVA: 0x00090b30
+// 0x00090b30
 HRESULT CDXUTDialog::AddIMEEditBox(int id, const char* text, int x, int y, int width, int height, bool isDefault, CDXUTIMEEditBox** created)
 {
     CDXUTIMEEditBox* edit = new CDXUTIMEEditBox(this);

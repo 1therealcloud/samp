@@ -12,12 +12,12 @@
 #include <stdlib.h>
 // Native label text uses the CRT calloc/free entries.
 #include <string.h>
-// samp.dll RVA: 0x0000e3c0
+// 0x0000e3c0
 DWORD CLabelPool::IsActive(WORD id)
 {
     return id < 2048 ? active[id] : 0;
 }
-// samp.dll RVA: 0x00001190
+// 0x00001190
 CLabelPool::CLabelPool()
 {
     for (int id = 0; id < 2048; id++)
@@ -26,14 +26,14 @@ CLabelPool::CLabelPool()
         active[id] = 0;
     }
 }
-// samp.dll RVA: 0x000015e0
+// 0x000015e0
 CLabelPool::~CLabelPool()
 {
     for (WORD id = 0; id < 2048; id++)
         if (active[id])
             Delete(id);
 }
-// samp.dll RVA: 0x000011d0
+// 0x000011d0
 void CLabelPool::Create(WORD id, const char* text, DWORD color, CVector position, float drawDistance, BYTE behindWalls, WORD player, WORD vehicle)
 {
     if (id >= 2048)
@@ -64,7 +64,7 @@ void CLabelPool::Create(WORD id, const char* text, DWORD color, CVector position
     entry->attachedVehicle = vehicle;
     active[id] = 1;
 }
-// samp.dll RVA: 0x000012e0
+// 0x000012e0
 BOOL CLabelPool::Delete(WORD id)
 {
     if (id >= 2048 || !active[id])
@@ -75,7 +75,7 @@ BOOL CLabelPool::Delete(WORD id)
     active[id] = 0;
     return TRUE;
 }
-// samp.dll RVA: 0x00001350
+// 0x00001350
 void CLabelPool::Draw()
 {
     CPed* local = g_pGame->GetPlayerPed();

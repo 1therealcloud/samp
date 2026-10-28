@@ -4,7 +4,7 @@
 // adapters set ECX and keep the backend callee-pop and raw AL return intact.
 
 // GTA SA virtual address: 0x0073FB10.
-// samp.dll RVA: 0x000b6020
+// 0x000b6020
 __declspec(naked) bool __stdcall GameWeaponFireInstantHit(void* weapon, void* shooter, const CVector* origin, const CVector* muzzle, void* victim, const CVector* target,
                                                           const CVector* driveBy, DWORD crossHair, DWORD effects)
 {
@@ -30,7 +30,7 @@ __declspec(naked) bool __stdcall GameWeaponFireInstantHit(void* weapon, void* sh
 }
 
 // GTA SA virtual address: 0x0073AAC0.
-// samp.dll RVA: 0x000b6050
+// 0x000b6050
 __declspec(naked) bool __stdcall GameWeaponFireSniper(void* weapon, void* shooter)
 {
     // clang-format off

@@ -2,19 +2,19 @@
 #include "game/modelfile.h"
 #include <stdlib.h>
 #include <string.h>
-// samp.dll RVA: 0x00117cd8
+// 0x00117cd8
 const char g_customDeleteDffPattern[] = "%s\\0x%X.dff";
-// samp.dll RVA: 0x00117ce4
+// 0x00117ce4
 const char g_customDeleteTxdPattern[] = "%s\\0x%X.txd";
-// samp.dll RVA: 0x00117cf0
+// 0x00117cf0
 const char g_customDeleteTempPattern[] = "%s\\%s";
-// samp.dll RVA: 0x00117d24
+// 0x00117d24
 const char g_customFindTempPattern[] = "%s/*.temp";
-// samp.dll RVA: 0x00117d18
+// 0x00117d18
 const char g_customFindDffPattern[] = "%s/*.dff";
-// samp.dll RVA: 0x00117d0c
+// 0x00117d0c
 const char g_customFindTxdPattern[] = "%s/*.txd";
-// samp.dll RVA: 0x0000c0b0
+// 0x0000c0b0
 DWORD CCustomModels::ParseCacheHash(const char* filename)
 {
     if (filename[0] != '0' || filename[1] != 'x')
@@ -23,13 +23,13 @@ DWORD CCustomModels::ParseCacheHash(const char* filename)
     strncpy(digits, filename + 2, 8);
     return strtoul(digits, 0, 16);
 }
-// samp.dll RVA: 0x0000b990
+// 0x0000b990
 void CCustomModels::ClearTransferStorage()
 {
     memset(nativeState + 0x222, 0, 0x11e);
     memset(nativeState + 0x1345, 0, 0xd20);
 }
-// samp.dll RVA: 0x0000d890
+// 0x0000d890
 CCustomModels::CCustomModels()
 {
     *(DWORD*)nativeState = 0;
@@ -47,7 +47,7 @@ CCustomModels::CCustomModels()
     *(DWORD*)(nativeState + 0x2069) = 0;
     nativeState[0x1344] = 0;
 }
-// samp.dll RVA: 0x0000c4e0
+// 0x0000c4e0
 bool CCustomModels::ResizeRecords(DWORD count)
 {
     BYTE**& records = *(BYTE***)nativeState;
@@ -71,7 +71,7 @@ bool CCustomModels::ResizeRecords(DWORD count)
     previous = count;
     return true;
 }
-// samp.dll RVA: 0x0000c6a0
+// 0x0000c6a0
 void CCustomModels::TrimRecords()
 {
     DWORD count = *(DWORD*)(nativeState + 4), last = 0xffffffff;
@@ -81,7 +81,7 @@ void CCustomModels::TrimRecords()
             last = i;
     ResizeRecords(last == 0xffffffff ? 0 : last + 1);
 }
-// samp.dll RVA: 0x0000cfc0
+// 0x0000cfc0
 bool CCustomModels::EraseRecord(DWORD index)
 {
     if (index >= *(DWORD*)(nativeState + 4))
@@ -90,7 +90,7 @@ bool CCustomModels::EraseRecord(DWORD index)
     TrimRecords();
     return true;
 }
-// samp.dll RVA: 0x0000cff0
+// 0x0000cff0
 bool CCustomModels::SetRecord(DWORD index, void* record)
 {
     if (index >= *(DWORD*)(nativeState + 4) && !ResizeRecords(index + 1))
@@ -98,7 +98,7 @@ bool CCustomModels::SetRecord(DWORD index, void* record)
     (*(void***)nativeState)[index] = record;
     return true;
 }
-// samp.dll RVA: 0x0000d550
+// 0x0000d550
 DWORD CCustomModels::AddRecord(DWORD index, const void* record)
 {
     void* copy = calloc(1, 94);
@@ -109,7 +109,7 @@ DWORD CCustomModels::AddRecord(DWORD index, const void* record)
     SetRecord(index, copy);
     return index;
 }
-// samp.dll RVA: 0x0000d5a0
+// 0x0000d5a0
 DWORD CCustomModels::DeleteRecord(DWORD index)
 {
     if (index >= *(DWORD*)(nativeState + 4))
@@ -121,19 +121,19 @@ DWORD CCustomModels::DeleteRecord(DWORD index)
     EraseRecord(index);
     return index;
 }
-// samp.dll RVA: 0x0000d5e0
+// 0x0000d5e0
 void CCustomModels::ClearRecords()
 {
     ResizeRecords(0);
 }
-// samp.dll RVA: 0x0000bd10
+// 0x0000bd10
 void CCustomModels::StopWorkers()
 {
     for (int i = 0; i < 6; ++i)
         nativeState[0x134c + i * 0x230] = 1;
     nativeState[0x1344] = 0;
 }
-// samp.dll RVA: 0x0000bd90
+// 0x0000bd90
 void CCustomModels::ResumeReadyWorker()
 {
     if (!nativeState[0x1344])
@@ -149,9 +149,9 @@ void CCustomModels::ResumeReadyWorker()
     }
 }
 
-// samp.dll RVA: 0x002aca28
+// 0x002aca28
 CCustomModels* g_customModels;
-// samp.dll RVA: 0x0000c950
+// 0x0000c950
 bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
 {
     BYTE* state = (BYTE*)this;
@@ -169,7 +169,7 @@ bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
         }
     return false;
 }
-// samp.dll RVA: 0x0000c9b0
+// 0x0000c9b0
 int CCustomModels::MarkResourceRequests()
 {
     BYTE* state = (BYTE*)this;
@@ -202,7 +202,7 @@ int CCustomModels::MarkResourceRequests()
     return (int)pending;
 }
 
-// samp.dll RVA: 0x0000cc80
+// 0x0000cc80
 bool CCustomModels::IsPedEntry(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -215,7 +215,7 @@ bool CCustomModels::IsPedEntry(int model)
     }
     return false;
 }
-// samp.dll RVA: 0x0000ccc0
+// 0x0000ccc0
 bool CCustomModels::IsObjectEntry(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -228,7 +228,7 @@ bool CCustomModels::IsObjectEntry(int model)
     }
     return false;
 }
-// samp.dll RVA: 0x0000cd00
+// 0x0000cd00
 BYTE CCustomModels::GetLoadedFlag(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -241,7 +241,7 @@ BYTE CCustomModels::GetLoadedFlag(int model)
     }
     return 0;
 }
-// samp.dll RVA: 0x0000ce30
+// 0x0000ce30
 BOOL CCustomModels::DoesExist(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -260,7 +260,7 @@ BOOL CCustomModels::DoesExist(int model)
     }
     return FALSE;
 }
-// samp.dll RVA: 0x0000ce90
+// 0x0000ce90
 BOOL CCustomModels::LoadObjectEntry(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -284,7 +284,7 @@ BOOL CCustomModels::LoadObjectEntry(int model)
 }
 
 // The reference entry is exactly RET4; this empty behavior is native.
-// samp.dll RVA: 0x0000cd40
+// 0x0000cd40
 void CCustomModels::ReleaseObjectEntry(int model)
 {
     (void)model;
@@ -300,10 +300,10 @@ void CCustomModels::ReleaseObjectEntry(int model)
 #include <stdlib.h>
 #include <string.h>
 
-// samp.dll RVA: 0x001e0448
+// 0x001e0448
 DWORD g_gameLoadingCustomModel;
 
-// samp.dll RVA: 0x000a7670
+// 0x000a7670
 void* GameClonePedModelInfo(int base, int model)
 {
     void* copy = calloc(0x44, 1);
@@ -317,7 +317,7 @@ void* GameClonePedModelInfo(int base, int model)
     // Native validation failure leaks the allocation.
     return 0;
 }
-// samp.dll RVA: 0x000a76c0
+// 0x000a76c0
 void* GameCloneObjectModelInfo(int base, int model)
 {
     void* existing = g_gameModelInfoTable[model];
@@ -333,7 +333,7 @@ void* GameCloneObjectModelInfo(int base, int model)
     }
     return 0;
 }
-// samp.dll RVA: 0x000a7750
+// 0x000a7750
 BOOL GameAttachModelTxd(int model, const char* name, const char* path)
 {
     int index = GameTxdFind(name);
@@ -349,7 +349,7 @@ BOOL GameAttachModelTxd(int model, const char* name, const char* path)
     GameTxdSetCurrent(index);
     return TRUE;
 }
-// samp.dll RVA: 0x000a77c0
+// 0x000a77c0
 BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* dff, const char* txd)
 {
     if (GameClonePedModelInfo(base, model) && GameAttachModelTxd(model, name, txd))
@@ -363,7 +363,7 @@ BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* df
     }
     return FALSE;
 }
-// samp.dll RVA: 0x000a7820
+// 0x000a7820
 BOOL GameRegisterCustomObject(int base, int model, const char* name, const char* dff, const char* txd)
 {
     g_gameLoadingCustomModel = model;
@@ -384,38 +384,38 @@ BOOL GameRegisterCustomObject(int base, int model, const char* name, const char*
     }
     return FALSE;
 }
-// samp.dll RVA: 0x000b41d0
+// 0x000b41d0
 void __stdcall GamePublishPedClump(int model, void* clump)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
     *(void**)(info + 0x1c) = clump;
     ((void(__fastcall*)(void*, void*, void*))(*(DWORD**)info)[16])(info, 0, clump);
 }
-// samp.dll RVA: 0x000b34a0
+// 0x000b34a0
 int GameTxdAdd(const char* name)
 {
     // GTA SA virtual address.
     return ((int(__cdecl*)(const char*))0x731c80)(name);
 }
-// samp.dll RVA: 0x000b34c0
+// 0x000b34c0
 DWORD GameTxdLoad(int index, const char* path)
 {
     // Native wrapper zero-extends the GTA result's AL.
     return ((BYTE(__cdecl*)(int, const char*))0x7320b0)(index, path);
 }
-// samp.dll RVA: 0x000b4260
+// 0x000b4260
 void __stdcall GameSetModelTxd(int model, int index)
 {
     *(WORD*)((BYTE*)GameGetModelInfo(model) + 0xa) = (WORD)index;
 }
-// samp.dll RVA: 0x000b4330
+// 0x000b4330
 void __stdcall GameSetModelField8(int model, WORD value)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
     if (info)
         *(WORD*)(info + 8) = value;
 }
-// samp.dll RVA: 0x000b40e0
+// 0x000b40e0
 BOOL __stdcall GameIsObjectModelInfo(void* info)
 {
     if (!info)
@@ -427,7 +427,7 @@ BOOL __stdcall GameIsObjectModelInfo(void* info)
 
 #include <stdio.h>
 #include <sys/stat.h>
-// samp.dll RVA: 0x00152ae8
+// 0x00152ae8
 const GameModelReferencePatch g_gameModelReferencePatchesUS[707] = {
     {0x0040122a, 0x8b}, {0x00403da4, 0x8b}, {0x00403ecc, 0x8b}, {0x00405cdf, 0x8b}, {0x00405e50, 0x8b}, {0x004063f1, 0x8b}, {0x00406b11, 0x8b}, {0x00407b21, 0x8b},
     {0x00407b72, 0x8b}, {0x00407b92, 0x8b}, {0x004080b4, 0x8b}, {0x004082f4, 0x8b}, {0x004083a4, 0x8b}, {0x00408894, 0x8b}, {0x004088a8, 0x8b}, {0x00408903, 0x8b},
@@ -519,7 +519,7 @@ const GameModelReferencePatch g_gameModelReferencePatchesUS[707] = {
     {0x0156d089, 0x8b}, {0x0156d0b6, 0x8b}, {0x0156d0e6, 0x8b}, {0x01570248, 0x8b}, {0x01570270, 0x8b}, {0x01570298, 0x8b}, {0x015702c0, 0x8b}, {0x015702e8, 0x8b},
     {0x01570310, 0x8b}, {0x01570404, 0x8b}, {0x0157045d, 0x8b},
 };
-// samp.dll RVA: 0x001538b8
+// 0x001538b8
 const GameModelReferencePatch g_gameModelReferencePatchesEU[707] = {
     {0x0040121f, 0x8b}, {0x00403da4, 0x8b}, {0x00403ecc, 0x8b}, {0x00405cdf, 0x8b}, {0x00405e50, 0x8b}, {0x004063f1, 0x8b}, {0x00406b0d, 0x8b}, {0x00407b21, 0x8b},
     {0x00407b72, 0x8b}, {0x00407b92, 0x8b}, {0x004080b4, 0x8b}, {0x004082f4, 0x8b}, {0x004083a4, 0x8b}, {0x00408894, 0x8b}, {0x004088a8, 0x8b}, {0x00408903, 0x8b},
@@ -611,17 +611,17 @@ const GameModelReferencePatch g_gameModelReferencePatchesEU[707] = {
     {0x0156d0c9, 0x8b}, {0x0156d0f6, 0x8b}, {0x0156d126, 0x8b}, {0x015702d8, 0x8b}, {0x01570300, 0x8b}, {0x01570328, 0x8b}, {0x01570350, 0x8b}, {0x01570378, 0x8b},
     {0x015703a0, 0x8b}, {0x01570494, 0x8b}, {0x015704ed, 0x8b},
 };
-// samp.dll RVA: 0x00117c30
+// 0x00117c30
 const char g_customServerCachePattern[] = "%s\\%s.%d";
-// samp.dll RVA: 0x00117c3c
+// 0x00117c3c
 const char g_customLocalCachePattern[] = "%s\\local";
-// samp.dll RVA: 0x0011edc8
+// 0x0011edc8
 const char g_customCollisionWrongType[] = "[Error] not a COL3 collision";
-// samp.dll RVA: 0x0011ed9c
+// 0x0011ed9c
 const char g_customCollisionLoadFailed[] = "[Error] model loader failed to load col.";
-// samp.dll RVA: 0x0011ed68
+// 0x0011ed68
 const char g_customCollisionAllocationFailed[] = "[Error] model loader failed to allocated a new col.";
-// samp.dll RVA: 0x000a7560
+// 0x000a7560
 BOOL GamePatchModelInfoReferences()
 {
     for (int i = 0; i < 707; ++i)
@@ -644,7 +644,7 @@ BOOL GamePatchModelInfoReferences()
     g_gameUseCustomModelInfo = 1;
     return TRUE;
 }
-// samp.dll RVA: 0x000a75f0
+// 0x000a75f0
 BOOL GameInitializeCustomModelInfo()
 {
     // Native clears65535 DWORDs starting at1A0448, ending before enable1E0444.
@@ -656,7 +656,7 @@ BOOL GameInitializeCustomModelInfo()
     GameInstallModelInfoHook();
     return TRUE;
 }
-// samp.dll RVA: 0x000b6390
+// 0x000b6390
 void* __cdecl GameCreateCollisionModel()
 {
     // GTA SA virtual addresses: allocator0x0040fc30 and thiscall constructor0x0040fb60.
@@ -668,7 +668,7 @@ void* __cdecl GameCreateCollisionModel()
     // clang-format on
     return collision;
 }
-// samp.dll RVA: 0x000b63c0
+// 0x000b63c0
 BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collision)
 {
     DWORD encoded = *((const DWORD*)data + 1);
@@ -678,7 +678,7 @@ BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collisi
     ((void(__cdecl*)(const void*, DWORD, void*, DWORD))0x537ce0)((const BYTE*)data + 0x20, encoded - 0x18, collision, 0);
     return TRUE;
 }
-// samp.dll RVA: 0x000a78b0
+// 0x000a78b0
 DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
 {
     if (length > 0x40000)
@@ -709,13 +709,13 @@ DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
     free(data);
     return 0;
 }
-// samp.dll RVA: 0x000a7980
+// 0x000a7980
 void GameRegisterCustomCollisionPlugin()
 {
     GameRwRegisterClumpPlugin(0x253f2ff);
     GameRwRegisterClumpPluginStream(0x253f2ff, (DWORD)GameReadCustomCollision);
 }
-// samp.dll RVA: 0x0000b9c0
+// 0x0000b9c0
 DWORD CCustomModels::SanitizeCacheHost(char* output, DWORD capacity, const char* host)
 {
     DWORD length = (DWORD)strlen(host), written = 0;
@@ -731,7 +731,7 @@ DWORD CCustomModels::SanitizeCacheHost(char* output, DWORD capacity, const char*
     output[written] = 0;
     return written;
 }
-// samp.dll RVA: 0x0000ba40
+// 0x0000ba40
 void CCustomModels::Initialize()
 {
     if (nativeState[8])
@@ -757,29 +757,29 @@ void CCustomModels::Initialize()
 #include <curl/curl.h>
 #include <process.h>
 typedef char NativeLzmaSizeExtent[(sizeof(SizeT) == 4) ? 1 : -1];
-// samp.dll RVA: 0x00117e1c
+// 0x00117e1c
 const char g_customDownloadSizeError[] = "[error] file 0x%X bad length got:%u expected:%u. Deleting..";
-// samp.dll RVA: 0x00117de8
+// 0x00117de8
 const char g_customDownloadCrcError[] = "[error] file 0x%X bad checksum (0x%X). Deleting..";
-// samp.dll RVA: 0x002ac390
+// 0x002ac390
 char g_customProxy[261];
-// samp.dll RVA: 0x0011f9c0
+// 0x0011f9c0
 const char g_customRegistryKey[] = "Software\\SAMP";
-// samp.dll RVA: 0x0011f9dc
+// 0x0011f9dc
 const char g_customProxyValue[] = "artwork_proxy";
-// samp.dll RVA: 0x00117e58
+// 0x00117e58
 const char g_customUserAgent[] = "SAMP/0.3";
-// samp.dll RVA: 0x00117e9c
+// 0x00117e9c
 const char g_customLogUrlsOption[] = "logurls";
-// samp.dll RVA: 0x00117e8c
+// 0x00117e8c
 const char g_customUrlLogFormat[] = "[url 0x%X]: %s";
-// samp.dll RVA: 0x00117e64
+// 0x00117e64
 const char g_customNoFreeWorkerError[] = "[error] AddURLRequest: No free slots!";
-// samp.dll RVA: 0x00117ed8
+// 0x00117ed8
 const char g_customUrlInfoError[] = "DownloadRedirect: Can't fill download info!";
-// samp.dll RVA: 0x00117ea4
+// 0x00117ea4
 const char g_customUrlOpenError[] = "DownloadRedirect: Can't open temp file for writing!";
-// samp.dll RVA: 0x000c52d0
+// 0x000c52d0
 const char* CustomModelGetProxy()
 {
     memset(g_customProxy, 0, 261);
@@ -790,7 +790,7 @@ const char* CustomModelGetProxy()
     // Native intentionally does not close the opened key.
     return RegQueryValueExA(key, g_customProxyValue, 0, &type, (BYTE*)g_customProxy, &length) == 0 ? g_customProxy : 0;
 }
-// samp.dll RVA: 0x0000de60
+// 0x0000de60
 BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
 {
     CURL* curl = curl_easy_init();
@@ -823,7 +823,7 @@ BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
         g_customDownloadManager->FinishDownload(&worker->download);
     return TRUE;
 }
-// samp.dll RVA: 0x0000df90
+// 0x0000df90
 void __cdecl CustomModelDownloadThread(void* argument)
 {
     const char* proxy = CustomModelGetProxy();
@@ -841,7 +841,7 @@ void __cdecl CustomModelDownloadThread(void* argument)
     curl_global_cleanup();
     worker->enabled = 0;
 }
-// samp.dll RVA: 0x0000dff0
+// 0x0000dff0
 bool CCustomModels::StartWorkers()
 {
     for (int i = 0; i < 6; ++i)
@@ -869,7 +869,7 @@ bool CCustomModels::StartWorkers()
     nativeState[0x1344] = 1;
     return true;
 }
-// samp.dll RVA: 0x0000e0a0
+// 0x0000e0a0
 void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
 {
     if (g_pChat && g_pConfig && g_pConfig->GetIntValue(g_customLogUrlsOption))
@@ -892,7 +892,7 @@ void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
     if (g_pChat)
         g_pChat->AddDebugMessage(g_customNoFreeWorkerError);
 }
-// samp.dll RVA: 0x0000e180
+// 0x0000e180
 void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
 {
     CustomModelDownload download;
@@ -917,13 +917,13 @@ void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
     if (CountReadyWorkers() > 0)
         *(DWORD*)(nativeState + 0x213) = 2;
 }
-// samp.dll RVA: 0x000c50d0
+// 0x000c50d0
 int __stdcall CustomModelLzmaDecode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD* sourceLength, const BYTE* properties, DWORD propertySize)
 {
     ELzmaStatus status;
     return LzmaDecode(destination, (SizeT*)destinationLength, source, (SizeT*)sourceLength, properties, propertySize, LZMA_FINISH_ANY, &status, &g_Alloc);
 }
-// samp.dll RVA: 0x0000d070
+// 0x0000d070
 void CCustomModels::ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, const void* data, DWORD length)
 {
     BYTE properties[5] = {0x5d, 0, 0, 1, 0}, output[4096];
@@ -953,7 +953,7 @@ void CCustomModels::ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, con
     else if (stage != 1)
         AbortDownload(0, 5002, 0);
 }
-// samp.dll RVA: 0x0000da80
+// 0x0000da80
 bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
 {
     CDffFile file;
@@ -969,7 +969,7 @@ bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
     }
     return true;
 }
-// samp.dll RVA: 0x0000bfd0
+// 0x0000bfd0
 bool CCustomModels::VerifyTxd(const char* filename, DWORD hash)
 {
     CTxdFile file;
@@ -985,7 +985,7 @@ bool CCustomModels::VerifyTxd(const char* filename, DWORD hash)
     }
     return true;
 }
-// samp.dll RVA: 0x0000dbd0
+// 0x0000dbd0
 void CCustomModels::FinishDownload(CustomModelDownload* download)
 {
     if (!download)
@@ -1065,7 +1065,7 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 4, download->downloaded, 0, -1, 0);
     *(DWORD*)(nativeState + 0x213) = 2;
 }
-// samp.dll RVA: 0x00140378
+// 0x00140378
 const DWORD g_customCrcTable[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd,
     0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7, 0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec,
@@ -1087,17 +1087,17 @@ const DWORD g_customCrcTable[256] = {
     0x47b2cf7f, 0x30b5ffe9, 0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
 };
-// samp.dll RVA: 0x00156b44
+// 0x00156b44
 CCustomModels* g_customDownloadManager;
-// samp.dll RVA: 0x00117cfc
+// 0x00117cfc
 const char g_customTemporaryPathPattern[] = "%s/%05d_%X.temp";
-// samp.dll RVA: 0x00117d30
+// 0x00117d30
 const char g_customDownloadWriteMode[] = "wb";
-// samp.dll RVA: 0x00118e1c
+// 0x00118e1c
 const char g_customDownloadReadMode[] = "rb";
-// samp.dll RVA: 0x00117d34
+// 0x00117d34
 const char g_customFillDownloadError[] = "Can't fill download info for CRC: 0x%X";
-// samp.dll RVA: 0x000628a0
+// 0x000628a0
 DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
 {
     DWORD crc = ~seed;
@@ -1108,7 +1108,7 @@ DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
     }
     return ~crc;
 }
-// samp.dll RVA: 0x000628e0
+// 0x000628e0
 DWORD __cdecl CustomModelFileCrc(const char* filename)
 {
     FILE* file = fopen(filename, g_customDownloadReadMode);
@@ -1124,7 +1124,7 @@ DWORD __cdecl CustomModelFileCrc(const char* filename)
     fclose(file);
     return crc;
 }
-// samp.dll RVA: 0x0000c7e0
+// 0x0000c7e0
 int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
 {
     DWORD count = *(DWORD*)(nativeState + 4);
@@ -1138,7 +1138,7 @@ int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
     }
     return -1;
 }
-// samp.dll RVA: 0x0000c830
+// 0x0000c830
 bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload* download)
 {
     int index = FindResourceIndex(type, hash);
@@ -1163,7 +1163,7 @@ bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload*
     _snprintf(download->temporaryPath, 260, g_customTemporaryPathPattern, (char*)this + 9, index, download->hash);
     return true;
 }
-// samp.dll RVA: 0x0000bc30
+// 0x0000bc30
 void CCustomModels::WriteDownload(CustomModelDownload* download, const void* data, DWORD length)
 {
     if (!download)
@@ -1176,7 +1176,7 @@ void CCustomModels::WriteDownload(CustomModelDownload* download, const void* dat
     if (g_renderDownloadWindow)
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 1, download->downloaded, 0, -1, 0);
 }
-// samp.dll RVA: 0x0000c760
+// 0x0000c760
 void CCustomModels::AbortDownload(CustomModelDownload* download, int error, const char* detail)
 {
     if (!download)
@@ -1198,7 +1198,7 @@ void CCustomModels::AbortDownload(CustomModelDownload* download, int error, cons
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, error, detail);
     *(DWORD*)(nativeState + 0x213) = 2;
 }
-// samp.dll RVA: 0x0000d1c0
+// 0x0000d1c0
 BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
 {
     CustomModelDownload* download = (CustomModelDownload*)(nativeState + 0x222);
@@ -1217,7 +1217,7 @@ BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
     *(DWORD*)(nativeState + 0x213) = 1;
     return TRUE;
 }
-// samp.dll RVA: 0x0000bca0
+// 0x0000bca0
 int CCustomModels::FindWorkerByFile(void* file)
 {
     for (int i = 0; i < 6; ++i)
@@ -1225,7 +1225,7 @@ int CCustomModels::FindWorkerByFile(void* file)
             return i;
     return -1;
 }
-// samp.dll RVA: 0x0000bcd0
+// 0x0000bcd0
 DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void* download)
 {
     CCustomModels* manager = g_customDownloadManager;
@@ -1233,7 +1233,7 @@ DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void
         manager->WriteDownload((CustomModelDownload*)download, data, size * count);
     return size * count;
 }
-// samp.dll RVA: 0x0000c8e0
+// 0x0000c8e0
 int CCustomModels::CountMissingResources()
 {
     if (!nativeState[0x21f])
@@ -1250,39 +1250,39 @@ int CCustomModels::CountMissingResources()
     }
     return (int)missing;
 }
-// samp.dll RVA: 0x00117c48
+// 0x00117c48
 const char g_customDffCachePattern[] = "%s/0x%X.dff";
-// samp.dll RVA: 0x00117c54
+// 0x00117c54
 const char g_customTxdCachePattern[] = "%s/0x%X.txd";
-// samp.dll RVA: 0x00117d60
+// 0x00117d60
 int g_customRequestDffRpc = 181;
-// samp.dll RVA: 0x00117d5c
+// 0x00117d5c
 int g_customRequestTxdRpc = 182;
-// samp.dll RVA: 0x00117d64
+// 0x00117d64
 int g_customRequestsCompleteRpc = 184;
 // Cache mutation and manifest completion stay with the same manager class.
-// samp.dll RVA: 0x0000c100
+// 0x0000c100
 BOOL CCustomModels::DeleteCachedDff(DWORD hash)
 {
     char path[264];
     _snprintf(path, 260, g_customDeleteDffPattern, (char*)this + 9, hash);
     return DeleteFileA(path);
 }
-// samp.dll RVA: 0x0000c140
+// 0x0000c140
 BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
 {
     char path[264];
     _snprintf(path, 260, g_customDeleteTxdPattern, (char*)this + 9, hash);
     return DeleteFileA(path);
 }
-// samp.dll RVA: 0x0000c180
+// 0x0000c180
 BOOL CCustomModels::DeleteTemporaryFile(const char* filename)
 {
     char path[264];
     _snprintf(path, 260, g_customDeleteTempPattern, (char*)this + 9, filename);
     return DeleteFileA(path);
 }
-// samp.dll RVA: 0x0000ca40
+// 0x0000ca40
 bool CCustomModels::HasResourceHash(DWORD hash)
 {
     if (!nativeState[0x21f])
@@ -1296,7 +1296,7 @@ bool CCustomModels::HasResourceHash(DWORD hash)
     }
     return false;
 }
-// samp.dll RVA: 0x0000ca90
+// 0x0000ca90
 void CCustomModels::PurgeUnusedCache()
 {
     char temp[264], dff[264], txd[264];
@@ -1347,7 +1347,7 @@ void CCustomModels::PurgeUnusedCache()
         FindClose(search);
     }
 }
-// samp.dll RVA: 0x0000cbf0
+// 0x0000cbf0
 void CCustomModels::RefreshCachedResources()
 {
     if (!nativeState[0x21f])
@@ -1369,7 +1369,7 @@ void CCustomModels::RefreshCachedResources()
         while (++index != count);
     PurgeUnusedCache();
 }
-// samp.dll RVA: 0x0000d030
+// 0x0000d030
 void CCustomModels::SetExpectedRecordCount(DWORD count)
 {
     *(DWORD*)(nativeState + 0x21b) = count;
@@ -1381,7 +1381,7 @@ void CCustomModels::SetExpectedRecordCount(DWORD count)
             *(DWORD*)(nativeState + 0x213) = 2;
     }
 }
-// samp.dll RVA: 0x0000bb10
+// 0x0000bb10
 bool CCustomModels::IsDffCached(DWORD hash)
 {
     char path[264];
@@ -1391,7 +1391,7 @@ bool CCustomModels::IsDffCached(DWORD hash)
     _snprintf(path, 260, g_customDffCachePattern, (char*)this + 0x10e, hash);
     return GameFileExists(path) != 0;
 }
-// samp.dll RVA: 0x0000bba0
+// 0x0000bba0
 bool CCustomModels::IsTxdCached(DWORD hash)
 {
     char path[264];
@@ -1401,7 +1401,7 @@ bool CCustomModels::IsTxdCached(DWORD hash)
     _snprintf(path, 260, g_customTxdCachePattern, (char*)this + 0x10e, hash);
     return GameFileExists(path) != 0;
 }
-// samp.dll RVA: 0x0000bd40
+// 0x0000bd40
 bool CCustomModels::PauseReadyWorker()
 {
     BYTE* state = (BYTE*)this;
@@ -1418,7 +1418,7 @@ bool CCustomModels::PauseReadyWorker()
     }
     return false;
 }
-// samp.dll RVA: 0x0000bde0
+// 0x0000bde0
 int CCustomModels::CountReadyWorkers()
 {
     BYTE* state = (BYTE*)this;
@@ -1431,7 +1431,7 @@ int CCustomModels::CountReadyWorkers()
     }
     return count;
 }
-// samp.dll RVA: 0x0000c6e0
+// 0x0000c6e0
 bool CCustomModels::IsDffRequested(DWORD hash)
 {
     BYTE* state = (BYTE*)this;
@@ -1444,7 +1444,7 @@ bool CCustomModels::IsDffRequested(DWORD hash)
     }
     return false;
 }
-// samp.dll RVA: 0x0000c720
+// 0x0000c720
 bool CCustomModels::IsTxdRequested(DWORD hash)
 {
     BYTE* state = (BYTE*)this;
@@ -1457,7 +1457,7 @@ bool CCustomModels::IsTxdRequested(DWORD hash)
     }
     return false;
 }
-// samp.dll RVA: 0x0000d270
+// 0x0000d270
 BOOL CCustomModels::RequestResource(DWORD index, BYTE type, DWORD hash, DWORD size)
 {
     (void)index;
@@ -1476,7 +1476,7 @@ BOOL CCustomModels::RequestResource(DWORD index, BYTE type, DWORD hash, DWORD si
     PauseReadyWorker();
     return TRUE;
 }
-// samp.dll RVA: 0x0000d390
+// 0x0000d390
 void CCustomModels::Process()
 {
     BYTE* state = (BYTE*)this;
@@ -1527,14 +1527,14 @@ void CCustomModels::Process()
     }
 }
 
-// samp.dll RVA: 0x000b5900
+// 0x000b5900
 BOOL GameFileExists(const char* path)
 {
     struct _stat state;
     return _stat(path, &state) == 0;
 }
 
-// samp.dll RVA: 0x0000c1c0
+// 0x0000c1c0
 BOOL CCustomModels::LoadPedModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash)
 {
     char name[28], txd[264], dff[264];
@@ -1557,7 +1557,7 @@ BOOL CCustomModels::LoadPedModel(DWORD base, DWORD model, DWORD dffHash, DWORD t
     return GameRegisterCustomPed(base, model, name, dff, txd) != 0;
 }
 
-// samp.dll RVA: 0x0000c2e0
+// 0x0000c2e0
 BOOL CCustomModels::LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash)
 {
     char name[28], txd[264], dff[264];
@@ -1580,38 +1580,38 @@ BOOL CCustomModels::LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWOR
     return GameRegisterCustomObject(base, model, name, dff, txd) != 0;
 }
 
-// samp.dll RVA: 0x000b19c0
+// 0x000b19c0
 void* GameRwStreamOpen(int type, int access, const void* data)
 {
     // GTA SA virtual addresses; every version other than 1 uses the EU path.
     DWORD target = g_gameVersion == 1 ? 0x7ecef0 : 0x7ecf30;
     return ((void*(__cdecl*)(int, int, const void*))target)(type, access, data);
 }
-// samp.dll RVA: 0x000b1a00
+// 0x000b1a00
 BOOL GameRwStreamClose(void* stream, void* data)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ece20 : 0x7ece60;
     return ((BOOL(__cdecl*)(void*, void*))target)(stream, data);
 }
-// samp.dll RVA: 0x000b1a80
+// 0x000b1a80
 BOOL GameRwFindChunk(void* stream, DWORD type, DWORD* length, DWORD* version)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ed2d0 : 0x7ed310;
     return ((BOOL(__cdecl*)(void*, DWORD, DWORD*, DWORD*))target)(stream, type, length, version);
 }
-// samp.dll RVA: 0x000b1ad0
+// 0x000b1ad0
 void* GameRwReadClump(void* stream)
 {
     DWORD target = g_gameVersion == 1 ? 0x74b420 : 0x74b470;
     return ((void*(__cdecl*)(void*))target)(stream);
 }
-// samp.dll RVA: 0x000b1ba0
+// 0x000b1ba0
 DWORD GameLoadAtomicStream(void* stream, int model)
 {
     // GTA SA virtual address; preserve zero-extension of AL.
     return ((BYTE(__cdecl*)(void*, int))0x5371f0)(stream, model);
 }
-// samp.dll RVA: 0x000b1b10
+// 0x000b1b10
 void* GameLoadPedDff(const char* path)
 {
     void* stream = GameRwStreamOpen(2, 1, path);
@@ -1630,7 +1630,7 @@ void* GameLoadPedDff(const char* path)
     g_gameCustomStreamRead = false;
     return clump;
 }
-// samp.dll RVA: 0x000b1bc0
+// 0x000b1bc0
 BOOL GameLoadObjectDff(const char* path, int model)
 {
     void* stream = GameRwStreamOpen(2, 1, path);
@@ -1654,7 +1654,7 @@ BOOL GameLoadObjectDff(const char* path, int model)
     return TRUE;
 }
 
-// samp.dll RVA: 0x0000cdf0
+// 0x0000cdf0
 DWORD CCustomModels::GetObjectTextureHash(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -1668,7 +1668,7 @@ DWORD CCustomModels::GetObjectTextureHash(int model)
     return 0;
 }
 
-// samp.dll RVA: 0x0000cf00
+// 0x0000cf00
 BYTE CCustomModels::GetObjectFirstHour(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -1682,7 +1682,7 @@ BYTE CCustomModels::GetObjectFirstHour(int model)
     return 0;
 }
 
-// samp.dll RVA: 0x0000cf40
+// 0x0000cf40
 BYTE CCustomModels::GetObjectLastHour(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -1696,25 +1696,25 @@ BYTE CCustomModels::GetObjectLastHour(int model)
     return 0;
 }
 
-// samp.dll RVA: 0x0000c430
+// 0x0000c430
 DWORD CCustomModels::GetCount()
 {
     return *(DWORD*)(nativeState + 4);
 }
 
-// samp.dll RVA: 0x0000c410
+// 0x0000c410
 void* CCustomModels::GetRecord(DWORD index)
 {
     return index < *(DWORD*)(nativeState + 4) ? (*(void***)nativeState)[index] : 0;
 }
-// samp.dll RVA: 0x0000c400
+// 0x0000c400
 CCustomModels* CCustomModels::InitializeRecordStorage()
 {
     *(void***)nativeState = 0;
     *(DWORD*)(nativeState + 4) = 0;
     return this;
 }
-// samp.dll RVA: 0x0000cdb0
+// 0x0000cdb0
 DWORD CCustomModels::GetObjectDffHash(int model)
 {
     DWORD count = *(DWORD*)(nativeState + 4), index = 0;
@@ -1728,7 +1728,7 @@ DWORD CCustomModels::GetObjectDffHash(int model)
         while (++index != count);
     return 0;
 }
-// samp.dll RVA: 0x0000cd50
+// 0x0000cd50
 void CCustomModels::ProcessDelayedReleases()
 {
     DWORD count = *(DWORD*)(nativeState + 4), index = 0;
@@ -1752,12 +1752,12 @@ void CCustomModels::ProcessDelayedReleases()
         }
         while (++index != count);
 }
-// samp.dll RVA: 0x00008200
+// 0x00008200
 DWORD CCustomModels::GetActiveVirtualWorld()
 {
     return *(DWORD*)(nativeState + 0x217);
 }
-// samp.dll RVA: 0x00017820
+// 0x00017820
 void CCustomModels::SetActiveVirtualWorld(DWORD world)
 {
     if (*(DWORD*)(nativeState + 0x217) != world)
@@ -1767,24 +1767,24 @@ void CCustomModels::SetActiveVirtualWorld(DWORD world)
         nativeState[0x220] = 0;
     }
 }
-// samp.dll RVA: 0x00008210
+// 0x00008210
 BYTE CCustomModels::GetStopFlag()
 {
     return nativeState[0x221];
 }
-// samp.dll RVA: 0x0000e400
+// 0x0000e400
 void CCustomModels::RequestStop()
 {
     nativeState[0x221] = 1;
     StopWorkers();
 }
 
-// samp.dll RVA: 0x0000cf90
+// 0x0000cf90
 void CCustomModels::ClearRecordStorage()
 {
     ResizeRecords(0);
 }
-// samp.dll RVA: 0x0000beb0
+// 0x0000beb0
 DWORD CCustomModels::CountEnabledActiveWorkers()
 {
     CustomModelWorker* workers = (CustomModelWorker*)(nativeState + 0x1345);
@@ -1794,7 +1794,7 @@ DWORD CCustomModels::CountEnabledActiveWorkers()
             ++count;
     return count;
 }
-// samp.dll RVA: 0x0000bf40
+// 0x0000bf40
 DWORD CCustomModels::CountEnabledPausedWorkers()
 {
     CustomModelWorker* workers = (CustomModelWorker*)(nativeState + 0x1345);

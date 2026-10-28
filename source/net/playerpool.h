@@ -13,35 +13,35 @@ struct CVector;
 class CPlayerPool
 {
 public:
-    // samp.dll RVA: 0x0000e340
+    // 0x0000e340
     void SetScore(WORD id, int value);
-    // samp.dll RVA: 0x0000e380
+    // 0x0000e380
     void SetPing(WORD id, DWORD value);
 
-    // samp.dll RVA: 0x0000e330
+    // 0x0000e330
     void SetLocalId(WORD id);
 
-    // samp.dll RVA: 0x00002dd0
+    // 0x00002dd0
     int GetLargestId();
-    // samp.dll RVA: 0x00002de0
+    // 0x00002de0
     WORD GetLocalId();
 
     // Descriptive name: native returns a raw player-info pointer, not a BOOL.
     // Native accepts adjacent ID1004 without checking connected state.
-    // samp.dll RVA: 0x000010d0
+    // 0x000010d0
     CPlayerInfo* GetPlayerInfo(WORD player);
-    // samp.dll RVA: 0x0000a1d0
+    // 0x0000a1d0
     const char* GetLocalPlayerName();
     // Native adjusts this by2 to the embedded VC7 string; external B580 anchor does not.
-    // samp.dll RVA: 0x0000b5e0
+    // 0x0000b5e0
     void SetLocalPlayerName(const char* text);
     // Raw slot write, including adjacent ID1004; no ownership/connected-state change.
-    // samp.dll RVA: 0x00013630
+    // 0x00013630
     void SetAt(WORD player, CPlayerInfo* info);
-    // samp.dll RVA: 0x000136c0
+    // 0x000136c0
     BOOL Process();
     // Fourth raw word is copied into both native ray records.
-    // samp.dll RVA: 0x00013c50
+    // 0x00013c50
     WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord);
     WORD localId;
     std::string localName;
@@ -53,59 +53,59 @@ public:
     DWORD localPing;
     int localScore;
     // Connected slots must equal1, not merely be nonzero.
-    // samp.dll RVA: 0x000139f0
+    // 0x000139f0
     void Deactivate();
     // Native admits adjacent ID1004, without a connected-state requirement.
-    // samp.dll RVA: 0x0001da50
+    // 0x0001da50
     void SetName(WORD player, const char* text);
-    // samp.dll RVA: 0x00013e80
+    // 0x00013e80
     CPlayerPool();
-    // samp.dll RVA: 0x00013fd0
+    // 0x00013fd0
     ~CPlayerPool();
     // Native constructs the info before validating the inclusive ID1004.
-    // samp.dll RVA: 0x00014100
+    // 0x00014100
     BOOL Create(WORD id, const char* name, DWORD npc);
     // Native reason word is ignored; this entry pops eight bytes.
-    // samp.dll RVA: 0x00013f40
+    // 0x00013f40
     BOOL Delete(WORD id, BYTE reason);
-    // samp.dll RVA: 0x00013650
+    // 0x00013650
     void UpdateLargestId();
-    // samp.dll RVA: 0x00013b50
+    // 0x00013b50
     void ForceCollision();
-    // samp.dll RVA: 0x00013bd0
+    // 0x00013bd0
     void RestoreCollision();
-    // samp.dll RVA: 0x000138c0
+    // 0x000138c0
     int GetCount(BOOL includeFlagged);
-    // samp.dll RVA: 0x0006e290
+    // 0x0006e290
     int GetScore(WORD player);
-    // samp.dll RVA: 0x0006e2b0
+    // 0x0006e2b0
     DWORD GetPing(WORD player);
-    // samp.dll RVA: 0x0006e2e0
+    // 0x0006e2e0
     int GetLocalScore();
-    // samp.dll RVA: 0x0006e2f0
+    // 0x0006e2f0
     DWORD GetLocalPing();
     // MSVC small-string storage; native accepts the adjacent ID1004 as well.
-    // samp.dll RVA: 0x000170d0
+    // 0x000170d0
     const char* GetName(WORD player);
     // Local accessories first, then connected remote-player accessories.
-    // samp.dll RVA: 0x00013a40
+    // 0x00013a40
     CObject* FindAccessory(void* backend);
     // Observed pose/accessory frame pass; complete pool layout remains unknown.
-    // samp.dll RVA: 0x00013840
+    // 0x00013840
     void Native013840();
     // Observed lookup prefix; no complete allocation layout.
-    // samp.dll RVA: 0x000137c0
+    // 0x000137c0
     WORD Find(void* ped);
     // Native accepts player <=1004; allocation adjacency is not established here.
-    // samp.dll RVA: 0x000010f0
+    // 0x000010f0
     CRemotePlayer* GetPlayer(WORD player);
-    // samp.dll RVA: 0x00001a80
+    // 0x00001a80
     CLocalPlayer* GetLocalPlayer();
     // Returns the raw slot DWORD, not a normalized bool.
-    // samp.dll RVA: 0x000010b0
+    // 0x000010b0
     DWORD IsConnected(WORD player);
     // Raw player-info DWORD +4; broader flag semantics not established.
-    // samp.dll RVA: 0x0000e300
+    // 0x0000e300
     DWORD GetPlayerInfoFlag(WORD player);
 };
 #pragma pack(pop)
@@ -115,21 +115,21 @@ typedef char PlayerPoolPlayersOffset[(offsetof(CPlayerPool, players) == 0x26) ? 
 typedef char PlayerPoolConnectedOffset[(offsetof(CPlayerPool, connected) == 0xfd6) ? 1 : -1];
 typedef char PlayerPoolCollisionOffset[(offsetof(CPlayerPool, savedCollision) == 0x1f86) ? 1 : -1];
 typedef char PlayerPoolExtent[(sizeof(CPlayerPool) == 0x2f3e) ? 1 : -1];
-// samp.dll RVA: 0x00156b84
+// 0x00156b84
 extern DWORD g_playerPoolProcessCount;
-// samp.dll RVA: 0x0011817c
+// 0x0011817c
 extern const char g_playerPoolRemoteException[];
-// samp.dll RVA: 0x00118174
+// 0x00118174
 extern const char g_playerPoolLocalException[];
 #endif
 
 #ifndef SAMP_CACHED_ACTIVE_PLAYER_COUNT_H
 #define SAMP_CACHED_ACTIVE_PLAYER_COUNT_H
-// samp.dll RVA: 0x00156ac0
+// 0x00156ac0
 extern DWORD g_cachedActivePlayerCount;
-// samp.dll RVA: 0x00156ac4
+// 0x00156ac4
 extern DWORD g_activePlayerCountCountdown;
 // No this pointer consumed; original class ownership not established.
-// samp.dll RVA: 0x00003ff0
+// 0x00003ff0
 DWORD GetCachedActivePlayerCount();
 #endif

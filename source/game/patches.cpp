@@ -2,7 +2,7 @@
 #include "game/game.h"
 #include "game/hooks.h"
 #include <string.h>
-// samp.dll RVA: 0x000a6f00
+// 0x000a6f00
 void GameInstallVehicleDamageFilter()
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -13,7 +13,7 @@ void GameInstallVehicleDamageFilter()
     *(DWORD*)(site + 1) = (DWORD)GameHook_000a5090 - 0x6d7c95;
     protect(site, 5, oldProtection, &ignoredProtection);
 }
-// samp.dll RVA: 0x000a6d50
+// 0x000a6d50
 void GameInstallShotHooks()
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -31,11 +31,11 @@ void GameInstallShotHooks()
         protect(site, 5, oldProtection, &ignoredProtection);
     }
 }
-// samp.dll RVA: 0x002a9278
+// 0x002a9278
 DWORD g_gameVehicleControlPatched = 0;
-// samp.dll RVA: 0x002a927c
+// 0x002a927c
 DWORD g_gameManualVehicleControl = 0;
-// samp.dll RVA: 0x000aa800
+// 0x000aa800
 void GameApplyManualVehicleControlPatches()
 {
     if (g_gameVehicleControlPatched)
@@ -62,21 +62,21 @@ void GameApplyManualVehicleControlPatches()
     g_gameVehicleControlPatched = 1;
     g_gameManualVehicleControl = 1;
 }
-// samp.dll RVA: 0x001546c0
+// 0x001546c0
 BYTE g_gamePatchStreamBytes[7] = {0xb8, 0x89, 0x8f, 0x6f, 0x0, 0xff, 0xe0};
-// samp.dll RVA: 0x001546c8
+// 0x001546c8
 DWORD g_gamePatchValue1546c8 = 0x469c4000;
-// samp.dll RVA: 0x001546cc
+// 0x001546cc
 DWORD g_gamePatchValue1546cc = 0xc69c4000;
-// samp.dll RVA: 0x001546f0
+// 0x001546f0
 DWORD g_gamePatchValue1546f0 = 0x40000000;
-// samp.dll RVA: 0x001546f4
+// 0x001546f4
 DWORD g_gamePatchValue1546f4 = 0x461c4000;
-// samp.dll RVA: 0x0018f498
+// 0x0018f498
 DWORD g_gameVersionAddressA;
-// samp.dll RVA: 0x0018f49c
+// 0x0018f49c
 DWORD g_gameVersionAddressB;
-// samp.dll RVA: 0x000aaad0
+// 0x000aaad0
 void GameApplyInGamePatches()
 {
     DWORD* patch;
@@ -438,7 +438,7 @@ void GameApplyInGamePatches()
     return;
 }
 
-// samp.dll RVA: 0x00002130
+// 0x00002130
 void GameInstallEventOpcodes()
 {
     *(DWORD*)0x47bf54 = (DWORD)GameSetEventOpcode;
@@ -446,15 +446,15 @@ void GameInstallEventOpcodes()
 }
 
 #include "game/limit_values.inc"
-// samp.dll RVA: 0x001e04b0
+// 0x001e04b0
 DWORD g_gameScanList[40000];
-// samp.dll RVA: 0x002075b0
+// 0x002075b0
 GamePedModelRecord g_gamePedModels[319];
-// samp.dll RVA: 0x0020ca70
+// 0x0020ca70
 GameModelRecord32 g_gameModelRecords[20000];
-// samp.dll RVA: 0x002a8e70
+// 0x002a8e70
 BYTE g_gameModelFlags[1024];
-// samp.dll RVA: 0x000aa6a0
+// 0x000aa6a0
 void GameRelocateScanList()
 {
     memset(g_gameScanList, 0, sizeof(g_gameScanList));
@@ -502,7 +502,7 @@ void GameRelocateScanList()
     *(DWORD*)0x40936a = (DWORD)(g_gameScanList + 1);
     memset((void*)0xb7d0b8, 0, 0x1c200);
 }
-// samp.dll RVA: 0x000aa5e0
+// 0x000aa5e0
 void GameRelocatePedModels()
 {
     for (int i = 0; i < 319; i++)
@@ -513,7 +513,7 @@ void GameRelocatePedModels()
     GameUnprotect((void*)0x4c67ad, 4);
     *(DWORD*)0x4c67ad = (DWORD)g_gamePedModels;
 }
-// samp.dll RVA: 0x000aa630
+// 0x000aa630
 void GameRelocateModelRecords()
 {
     for (int i = 0; i < 20000; i++)
@@ -527,7 +527,7 @@ void GameRelocateModelRecords()
         *(DWORD*)g_gameModelReferenceSites[j] = (DWORD)g_gameModelRecords;
     }
 }
-// samp.dll RVA: 0x000aa980
+// 0x000aa980
 void GameRelocateModelFlags()
 {
     memcpy(g_gameModelFlags, g_gameDefaultModelFlags, 1024);
@@ -546,7 +546,7 @@ void GameRelocateModelFlags()
     GameUnprotect((void*)0x6a6ffa, 4);
     *(DWORD*)0x6a6ffa = (DWORD)g_gameModelFlags;
 }
-// samp.dll RVA: 0x000aa180
+// 0x000aa180
 void GameIncreasePoolLimits()
 {
     GameWaitUnprotect((BYTE*)0x551024, 7, 0x68);
@@ -578,7 +578,7 @@ void GameIncreasePoolLimits()
 }
 
 // Legacy helper name retained from the 0.2x source; API failures are ignored.
-// samp.dll RVA: 0x000a9d10
+// 0x000a9d10
 void _patch(DWORD address, BYTE* data, int byteCount)
 {
     DWORD oldProtection, ignoredProtection;
@@ -608,7 +608,7 @@ void _patch(DWORD address, BYTE* data, int byteCount)
     cBytes = (char*)&dwAlloc;                                                                                                                                                      \
     for (int i = 0; i < 4; i++)                                                                                                                                                    \
     arr[i] = cBytes[i]
-// samp.dll RVA: 0x000a9d60
+// 0x000a9d60
 void SetIPLs(int iIPLs, int iGtaVersion)
 {
     DWORD dwAlloc = (DWORD)malloc((DWORD)iIPLs + 4);
@@ -636,7 +636,7 @@ void SetIPLs(int iIPLs, int iGtaVersion)
     }
 }
 
-// samp.dll RVA: 0x000a9e70
+// 0x000a9e70
 void SetTimedObjects(int iTimedObjects)
 {
     DWORD dwAlloc = (DWORD)malloc((0x24 * (DWORD)iTimedObjects) + 4);
@@ -672,9 +672,9 @@ void SetTimedObjects(int iTimedObjects)
 #undef patch
 #undef memadd
 
-// samp.dll RVA: 0x001546d0
+// 0x001546d0
 DWORD g_gameCount44OperandSites[7] = {0x410dbb, 0x410de5, 0x410f68, 0x410aa4, 0x410cc4, 0x410ead, 0x411505};
-// samp.dll RVA: 0x000aa0d0
+// 0x000aa0d0
 void GamePatchCount44(DWORD count)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -689,7 +689,7 @@ void GamePatchCount44(DWORD count)
         *(DWORD*)(g_gameCount44OperandSites[index] + 2) = bytes;
     }
 }
-// samp.dll RVA: 0x000aa130
+// 0x000aa130
 void GameSetFontPatchBytes3()
 {
     // GTA SA virtual addresses; native does not call VirtualProtect here.
@@ -709,7 +709,7 @@ void GameSetFontPatchBytes3()
     *(BYTE*)0x71a5b6 = 3;
     *(BYTE*)0x71a3bb = 3;
 }
-// samp.dll RVA: 0x000aaa50
+// 0x000aaa50
 void GameApplyDebugInitializationPatches()
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;

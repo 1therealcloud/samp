@@ -13,7 +13,7 @@
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x00060500
+// 0x00060500
 CFileSystem::CFileSystem()
 {
     m_bLoaded = false;
@@ -24,7 +24,7 @@ CFileSystem::CFileSystem()
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x00060690
+// 0x00060690
 CFileSystem::~CFileSystem()
 {
     if (m_bLoaded)
@@ -33,7 +33,7 @@ CFileSystem::~CFileSystem()
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x000606b0
+// 0x000606b0
 bool CFileSystem::Load(char* szFileName)
 {
     if (m_bLoaded)
@@ -87,7 +87,7 @@ bool CFileSystem::Load(char* szFileName)
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x00060520
+// 0x00060520
 void CFileSystem::Unload()
 {
     if (!m_bLoaded)
@@ -111,7 +111,7 @@ void CFileSystem::Unload()
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x00060580
+// 0x00060580
 DWORD CFileSystem::GetFileIndex(char* szFileName)
 {
     if (!m_bLoaded)
@@ -130,7 +130,7 @@ DWORD CFileSystem::GetFileIndex(char* szFileName)
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x000605e0
+// 0x000605e0
 DWORD CFileSystem::GetFileSize(DWORD dwFileIndex)
 {
     if ((!m_bLoaded) || (dwFileIndex == FS_INVALID_FILE) || (dwFileIndex >= m_dwFileCount))
@@ -141,7 +141,7 @@ DWORD CFileSystem::GetFileSize(DWORD dwFileIndex)
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x00060610
+// 0x00060610
 BYTE* CFileSystem::GetFileData(DWORD dwFileIndex)
 {
     if ((!m_bLoaded) || (dwFileIndex == FS_INVALID_FILE) || (dwFileIndex >= m_dwFileCount))
@@ -152,7 +152,7 @@ BYTE* CFileSystem::GetFileData(DWORD dwFileIndex)
 
 //----------------------------------------------------------
 
-// samp.dll RVA: 0x00060640
+// 0x00060640
 void CFileSystem::DecryptData(BYTE* pData, DWORD dwDataLen, WORD wKey)
 {
     BYTE x, o;

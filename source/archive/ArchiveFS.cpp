@@ -29,12 +29,12 @@ extern void _declspec(noreturn) GameForcedExit(int iReasonCode);
 
 //------------------------------------
 
-// samp.dll RVA: 0x00140778
+// 0x00140778
 DWORD CArchiveFS::ms_dwHashInit = OBFUSCATE_DATA(0x9E3779B9);
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064dd0
+// 0x00064dd0
 CArchiveFS::CArchiveFS(void)
 {
     m_dwNumEntries = SAA_MAX_ENTRIES;
@@ -44,7 +44,7 @@ CArchiveFS::CArchiveFS(void)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064e20
+// 0x00064e20
 CArchiveFS::CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize)
 {
     m_dwNumEntries = dwNumEntries;
@@ -56,12 +56,12 @@ CArchiveFS::CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064e80
+// 0x00064e80
 CArchiveFS::~CArchiveFS(void) {}
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064300
+// 0x00064300
 DWORD CArchiveFS::HashString(PCHAR szString)
 {
     // This is an implementation of the Jenkins hash
@@ -157,7 +157,7 @@ DWORD CArchiveFS::HashString(PCHAR szString)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064550
+// 0x00064550
 void CArchiveFS::LoadEntries()
 {
     // Get the file signature, verify it... use the result to decode the entries table
@@ -234,7 +234,7 @@ void CArchiveFS::LoadEntries()
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064f20
+// 0x00064f20
 bool CArchiveFS::Load(char* szFileName)
 {
     if (m_bLoaded)
@@ -259,7 +259,7 @@ bool CArchiveFS::Load(char* szFileName)
 
 //------------------------------------
 
-// samp.dll RVA: 0x000647b0
+// 0x000647b0
 bool CArchiveFS::Load(BYTE* pbData, DWORD nLength)
 {
     if (m_bLoaded)
@@ -284,7 +284,7 @@ bool CArchiveFS::Load(BYTE* pbData, DWORD nLength)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064890
+// 0x00064890
 void CArchiveFS::Unload()
 {
     if (!m_bLoaded)
@@ -299,7 +299,7 @@ void CArchiveFS::Unload()
 
 //------------------------------------
 
-// samp.dll RVA: 0x000648c0
+// 0x000648c0
 DWORD CArchiveFS::GetFileIndex(DWORD dwFileHash)
 {
     if (!m_bEntriesLoaded)
@@ -330,7 +330,7 @@ DWORD CArchiveFS::GetFileIndex(DWORD dwFileHash)
 
 //------------------------------------
 
-// samp.dll RVA: 0x00064940
+// 0x00064940
 DWORD CArchiveFS::GetFileIndex(char* szFileName)
 {
     // PRE: szFileName must be the filename only (no paths!)
@@ -360,7 +360,7 @@ DWORD CArchiveFS::GetFileIndex(char* szFileName)
 
 //------------------------------------
 
-// samp.dll RVA: 0x000649a0
+// 0x000649a0
 DWORD CArchiveFS::GetFileSize(DWORD dwFileIndex)
 {
     AFS_ENTRYBT_NODE* node = *(reinterpret_cast<AFS_ENTRYBT_NODE**>(&dwFileIndex));
@@ -372,7 +372,7 @@ DWORD CArchiveFS::GetFileSize(DWORD dwFileIndex)
 
 //------------------------------------
 
-// samp.dll RVA: 0x000649e0
+// 0x000649e0
 BYTE* CArchiveFS::GetFileData(DWORD dwFileIndex)
 {
     CTinyEncrypt tinyEnc;
@@ -434,7 +434,7 @@ BYTE* CArchiveFS::GetFileData(DWORD dwFileIndex)
     }
 }
 
-// samp.dll RVA: 0x00064bd0
+// 0x00064bd0
 void CArchiveFS::UnloadData(DWORD dwFileIndex)
 {
     AFS_ENTRYBT_NODE* node = *(reinterpret_cast<AFS_ENTRYBT_NODE**>(&dwFileIndex));

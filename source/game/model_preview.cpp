@@ -1,7 +1,7 @@
 #include "game/model_preview.h"
-#include "d3dhook/texture_binding.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
-#include "game/hooks_render.h"
+#include "game/hooks.h"
 #include "game/object.h"
 #include "game/playerped.h"
 #include "game/util.h"
@@ -9,9 +9,9 @@
 #include "gui/textdraw_texture.h"
 #include "main.h"
 #include <string.h>
-// samp.dll RVA: 0x002aca38
+// 0x002aca38
 CModelPreview* g_modelPreview;
-// samp.dll RVA: 0x0006c700
+// 0x0006c700
 CModelPreview::CModelPreview()
 {
     camera = 0;
@@ -21,7 +21,7 @@ CModelPreview::CModelPreview()
     light = 0;
     Reset();
 }
-// samp.dll RVA: 0x0006b880
+// 0x0006b880
 bool CModelPreview::Reset()
 {
     light = GameRwCreateLight(2);
@@ -52,22 +52,22 @@ bool CModelPreview::Reset()
     return false;
 }
 
-// samp.dll RVA: 0x0011c654
+// 0x0011c654
 const float g_previewPedDistanceScale = -2.25f;
-// samp.dll RVA: 0x0011c658
+// 0x0011c658
 const float g_previewBoatDistance = -5.5f;
-// samp.dll RVA: 0x0011c65c
+// 0x0011c65c
 const float g_previewBoatRadiusScale = 2.5f;
-// samp.dll RVA: 0x0011c660
+// 0x0011c660
 const float g_previewVehicleDistance = -1.0f;
-// samp.dll RVA: 0x0011c664
+// 0x0011c664
 const float g_previewHeight = 50.0f;
-// samp.dll RVA: 0x0011c668
+// 0x0011c668
 const float g_previewObjectDistance = -0.1f;
-// samp.dll RVA: 0x0011c66c
+// 0x0011c66c
 const float g_previewObjectRadiusScale = 2.25f;
 
-// samp.dll RVA: 0x0006b9d0
+// 0x0006b9d0
 void CModelPreview::RenderTestScene(int model)
 {
     if (!g_pGame->IsStarted() || !camera)
@@ -98,7 +98,7 @@ void CModelPreview::RenderTestScene(int model)
     GameRwWorldRemoveLight(light);
 }
 
-// samp.dll RVA: 0x0006bb80
+// 0x0006bb80
 void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotation, float zoom)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -143,7 +143,7 @@ void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotat
     return result;
 }
 
-// samp.dll RVA: 0x0006be00
+// 0x0006be00
 void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* rotation, float zoom, int primary, int secondary)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -216,7 +216,7 @@ void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* r
     return result;
 }
 
-// samp.dll RVA: 0x0006c0b0
+// 0x0006c0b0
 void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVector* rotation, float zoom)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -292,7 +292,7 @@ void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVect
     return result;
 }
 
-// samp.dll RVA: 0x0006c3f0
+// 0x0006c3f0
 void* CModelPreview::RenderObject(int model, DWORD background, const CVector* rotation, float zoom)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -365,7 +365,7 @@ void* CModelPreview::RenderObject(int model, DWORD background, const CVector* ro
     return result;
 }
 
-// samp.dll RVA: 0x0006c6b0
+// 0x0006c6b0
 void CModelPreview::Draw()
 {
     if (texture)
@@ -378,55 +378,55 @@ void CModelPreview::Draw()
 
 #include "game/game.h"
 #include "game/rw_preview.h"
-// samp.dll RVA: 0x0015535c
+// 0x0015535c
 const CVector g_rwPreviewAxes[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-// samp.dll RVA: 0x000b1700
+// 0x000b1700
 void* GameRwCreateLight(int type)
 {
     return ((void*(__cdecl*)(int))(g_gameVersion == 1 ? 0x752110 : 0x752160))(type);
 }
-// samp.dll RVA: 0x000b1770
+// 0x000b1770
 void GameRwSetLightColor(void* light, const float* rgba)
 {
     ((void(__cdecl*)(void*, const float*))(g_gameVersion == 1 ? 0x751a90 : 0x751ae0))(light, rgba);
 }
-// samp.dll RVA: 0x000b12d0
+// 0x000b12d0
 void* GameRwCreateRaster(int width, int height, int depth, int flags)
 {
     return ((void*(__cdecl*)(int, int, int, int))(g_gameVersion == 1 ? 0x7fb230 : 0x7fb270))(width, height, depth, flags);
 }
-// samp.dll RVA: 0x000b1430
+// 0x000b1430
 void* GameRwCreateCamera()
 {
     return ((void*(__cdecl*)())(g_gameVersion == 1 ? 0x7ee4f0 : 0x7ee530))();
 }
-// samp.dll RVA: 0x000b1390
+// 0x000b1390
 void* GameRwCreateFrame()
 {
     return ((void*(__cdecl*)())(g_gameVersion == 1 ? 0x7f0410 : 0x7f0450))();
 }
-// samp.dll RVA: 0x000b18f0
+// 0x000b18f0
 void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
 {
     ((void(__cdecl*)(void*, const CVector*, int))(g_gameVersion == 1 ? 0x7f0e30 : 0x7f0e70))(frame, position, combine);
 }
-// samp.dll RVA: 0x000b1920
+// 0x000b1920
 void GameRwRotateFrame(void* frame, int axis, float angle)
 {
     ((void(__cdecl*)(void*, const CVector*, float, int))(g_gameVersion == 1 ? 0x7f1010 : 0x7f1050))(frame, g_rwPreviewAxes + axis, angle, 1);
 }
-// samp.dll RVA: 0x000b15b0
+// 0x000b15b0
 void GameRwSetCameraRasters(void* camera, void* color, void* depth)
 {
     *(void**)((BYTE*)camera + 0x60) = color;
     *(void**)((BYTE*)camera + 0x64) = depth;
 }
-// samp.dll RVA: 0x000b1580
+// 0x000b1580
 void GameRwSetObjectFrame(void* object, void* frame)
 {
     ((void(__cdecl*)(void*, void*))(g_gameVersion == 1 ? 0x804ef0 : 0x804f30))(object, frame);
 }
-// samp.dll RVA: 0x000b1680
+// 0x000b1680
 void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
 {
     DWORD farAddress, nearAddress;
@@ -443,24 +443,24 @@ void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
     ((void(__cdecl*)(void*, float))farAddress)(camera, farClip);
     ((void(__cdecl*)(void*, float))nearAddress)(camera, nearClip);
 }
-// samp.dll RVA: 0x000b16d0
+// 0x000b16d0
 void GameRwSetViewWindow(void* camera, const float* window)
 {
     ((void(__cdecl*)(void*, const float*))(g_gameVersion == 1 ? 0x7ee410 : 0x7ee450))(camera, window);
 }
-// samp.dll RVA: 0x000b18c0
+// 0x000b18c0
 void GameRwSetProjection(void* camera, int projection)
 {
     ((void(__cdecl*)(void*, int))(g_gameVersion == 1 ? 0x7ee3a0 : 0x7ee3e0))(camera, projection);
 }
-// samp.dll RVA: 0x000b14b0
+// 0x000b14b0
 void GameRwAddCameraToWorld(void* camera)
 {
     void* world = *(void**)0xc17038;
     if (world)
         ((void(__cdecl*)(void*, void*))(g_gameVersion == 1 ? 0x750f20 : 0x750f70))(world, camera);
 }
-// samp.dll RVA: 0x000b1320
+// 0x000b1320
 void* GameRwCreateTexture(void* raster)
 {
     return ((void*(__cdecl*)(void*))(g_gameVersion == 1 ? 0x7f37c0 : 0x7f3800))(raster);

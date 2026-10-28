@@ -11,12 +11,12 @@ public:
         _ImmReleaseContext(window, s_hImcDef);
     }
 };
-// samp.dll RVA: 0x00085460
+// 0x00085460
 void InputResetIme()
 {
     InputImeAccess::ResetDefaultContext(g_inputGameWindow);
 }
-// samp.dll RVA: 0x00085940
+// 0x00085940
 void InputEnableIme(bool enable)
 {
     CDXUTIMEEditBox::EnableImeSystem(enable);

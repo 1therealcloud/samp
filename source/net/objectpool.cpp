@@ -3,7 +3,7 @@
 #include "net/pool_frame.h"
 #include <GetTime.h>
 #include <string.h>
-// samp.dll RVA: 0x00012700
+// 0x00012700
 CObjectPool::CObjectPool()
 {
     for (int i = 0; i < 2100; ++i)
@@ -13,7 +13,7 @@ CObjectPool::CObjectPool()
     }
     largestId = 0;
 }
-// samp.dll RVA: 0x000126a0
+// 0x000126a0
 void CObjectPool::UpdateLargestId()
 {
     int largest = 0;
@@ -22,7 +22,7 @@ void CObjectPool::UpdateLargestId()
             largest = i;
     largestId = largest;
 }
-// samp.dll RVA: 0x00012730
+// 0x00012730
 int CObjectPool::GetCount()
 {
     int count = 0;
@@ -31,7 +31,7 @@ int CObjectPool::GetCount()
             ++count;
     return count;
 }
-// samp.dll RVA: 0x00012750
+// 0x00012750
 BOOL CObjectPool::Delete(WORD id)
 {
     BYTE* state = (BYTE*)this;
@@ -48,13 +48,13 @@ BOOL CObjectPool::Delete(WORD id)
     UpdateLargestId();
     return TRUE;
 }
-// samp.dll RVA: 0x00013060
+// 0x00013060
 CObjectPool::~CObjectPool()
 {
     for (WORD i = 0; i < 2100; ++i)
         Delete(i);
 }
-// samp.dll RVA: 0x000128d0
+// 0x000128d0
 CObject* CObjectPool::Find(void* backend)
 {
     int largest = largestId;
@@ -63,7 +63,7 @@ CObject* CObjectPool::Find(void* backend)
             return objects[i];
     return 0;
 }
-// samp.dll RVA: 0x00012910
+// 0x00012910
 WORD CObjectPool::GetId(void* backend)
 {
     int largest = largestId;
@@ -72,7 +72,7 @@ WORD CObjectPool::GetId(void* backend)
             return (WORD)i;
     return 0xffff;
 }
-// samp.dll RVA: 0x00002e10
+// 0x00002e10
 CEntity* CObjectPool::Get(WORD id)
 {
     BYTE* state = (BYTE*)this;
@@ -80,12 +80,12 @@ CEntity* CObjectPool::Get(WORD id)
         return *(CEntity**)(state + 0x20d4 + id * 4);
     return 0;
 }
-// samp.dll RVA: 0x00156b74
+// 0x00156b74
 DWORD g_objectPoolLastTick;
-// samp.dll RVA: 0x00118130
+// 0x00118130
 const float g_objectPoolSecondsPerTick = 0.001f;
 
-// samp.dll RVA: 0x00012950
+// 0x00012950
 void CObjectPool::Process()
 {
     if (!g_objectPoolLastTick)
@@ -112,7 +112,7 @@ void CObjectPool::Process()
     }
     g_objectPoolLastTick = now;
 }
-// samp.dll RVA: 0x00012a10
+// 0x00012a10
 void CObjectPool::ConstructMaterials()
 {
     if (largestId >= 0)
@@ -130,7 +130,7 @@ void CObjectPool::ConstructMaterials()
         while ((LONG)++i <= largestId);
     }
 }
-// samp.dll RVA: 0x00012a50
+// 0x00012a50
 void CObjectPool::ShutdownMaterials()
 {
     if (largestId >= 0)
@@ -150,7 +150,7 @@ void CObjectPool::ShutdownMaterials()
 }
 
 #include "game/custommodels.h"
-// samp.dll RVA: 0x000127d0
+// 0x000127d0
 BOOL CObjectPool::Create(WORD id, int model, CVector position, CVector rotation, float drawDistance)
 {
     BYTE* state = (BYTE*)this;
@@ -173,7 +173,7 @@ BOOL CObjectPool::Create(WORD id, int model, CVector position, CVector rotation,
     return TRUE;
 }
 
-// samp.dll RVA: 0x00012a90
+// 0x00012a90
 void CObjectPool::Draw()
 {
     for (int i = 0; i <= largestId; ++i)
@@ -184,7 +184,7 @@ void CObjectPool::Draw()
                 object->Render();
         }
 }
-// samp.dll RVA: 0x00012ad0
+// 0x00012ad0
 void CObjectPool::DrawLast()
 {
     float distances[1000] = {0};
@@ -218,7 +218,7 @@ void CObjectPool::DrawLast()
             ordered[j]->Render();
 }
 
-// samp.dll RVA: 0x00012ce0
+// 0x00012ce0
 bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second)
 {
     const float limit = 200.0f;
@@ -247,14 +247,14 @@ bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, con
     return false;
 }
 
-// samp.dll RVA: 0x00156b5c
+// 0x00156b5c
 GameEntityCollisionShape g_objectPoolRayOrigin;
-// samp.dll RVA: 0x00156b48
+// 0x00156b48
 GameEntityCollisionShape g_objectPoolRayEnd;
-// samp.dll RVA: 0x00156b70
+// 0x00156b70
 CObject* g_objectPoolRayDebugObject;
 
-// samp.dll RVA: 0x00012d70
+// 0x00012d70
 WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVector* end)
 {
     GameEntityCollisionShape from, to;
@@ -318,12 +318,12 @@ WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVec
 
 #include "gui/device_lifecycle.h"
 #include "label.h"
-// samp.dll RVA: 0x0011813c
+// 0x0011813c
 const char g_objectPoolRayOriginText[8] = "Sphere1";
-// samp.dll RVA: 0x00118134
+// 0x00118134
 const char g_objectPoolRayEndText[8] = "Sphere2";
 
-// samp.dll RVA: 0x00012f50
+// 0x00012f50
 void DrawObjectPoolCollisionDebug()
 {
     if (!g_deviceLabel)
@@ -345,17 +345,17 @@ void DrawObjectPoolCollisionDebug()
     g_objectPoolRayDebugObject->Teleport(position);
 }
 
-// samp.dll RVA: 0x00012670
+// 0x00012670
 int CObjectPool::GetLargestId()
 {
     return largestId;
 }
-// samp.dll RVA: 0x00012680
+// 0x00012680
 DWORD CObjectPool::IsActive(WORD id)
 {
     return id <= 2100 ? active[id] : 0;
 }
-// samp.dll RVA: 0x000129d0
+// 0x000129d0
 void CObjectPool::UpdateAttachedObjectRotations()
 {
     if (largestId < 0)

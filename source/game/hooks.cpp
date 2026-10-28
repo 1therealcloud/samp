@@ -1,10 +1,37 @@
 #include "game/hooks.h"
+#include "chatwindow.h"
+#include "cmdprocs.h"
+#include "exceptions.h"
+#include "game/aimstuff.h"
+#include "game/animation.h"
+#include "game/building_removal.h"
 #include "game/frame_limit.h"
 #include "game/game.h"
+#include "game/keystuff.h"
+#include "game/patches.h"
+#include "game/player_colors.h"
 #include "game/playerped.h"
-// samp.dll RVA: 0x00151a60
+#include "game/scripting.h"
+#include "game/util.h"
+#include "gui/device_objects.h"
+#include "gui/render_dependencies.h"
+#include "gui/textdraw_texture.h"
+#include "main.h"
+#include "net/actorpool.h"
+#include "net/gangzonepool.h"
+#include "net/localplayer.h"
+#include "net/menupool.h"
+#include "net/netgame.h"
+#include "net/pickuppool.h"
+#include "net/playerpool.h"
+#include "net/remoteplayer.h"
+#include "net/vehiclepool.h"
+#include <stdlib.h>
+#include <string.h>
+
+// 0x00151a60
 BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};
-// samp.dll RVA: 0x000a5bf0
+// 0x000a5bf0
 __declspec(naked) void GameHook_000a5bf0()
 {
     // clang-format off
@@ -23,42 +50,42 @@ __declspec(naked) void GameHook_000a5bf0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a6d30
+// 0x000a6d30
 void GameInstallModelInfoHook()
 {
     GameInstallHook(0x4087ea, (DWORD)GameHook_000a5bf0, 0x4087d7, g_gameCustomModelHookJump, 6);
 }
-// samp.dll RVA: 0x0018f624
+// 0x0018f624
 CPlayerPool* g_hookDamagePlayerPool;
-// samp.dll RVA: 0x00151afc
+// 0x00151afc
 WORD g_hookDamagePlayerId = 0xffff;
-// samp.dll RVA: 0x0018f628
+// 0x0018f628
 DWORD g_hookVehicleDamageAttacker;
-// samp.dll RVA: 0x0018f62c
+// 0x0018f62c
 DWORD g_hookVehicleDamageReceiver;
-// samp.dll RVA: 0x0018f630
+// 0x0018f630
 DWORD g_hookVehicleDamageWord;
-// samp.dll RVA: 0x0018f634
+// 0x0018f634
 DWORD g_hookVehicleDamageBlocked;
-// samp.dll RVA: 0x0018f638
+// 0x0018f638
 DWORD g_hookVehicleDamageReturn;
-// samp.dll RVA: 0x0018f644
+// 0x0018f644
 void* g_hookBulletHitEntity;
-// samp.dll RVA: 0x0018e590
+// 0x0018e590
 PedBulletData g_hookBulletHitData;
-// samp.dll RVA: 0x0018e828
+// 0x0018e828
 CMatrix g_hookBulletInverseMatrix;
-// samp.dll RVA: 0x0018ea60
+// 0x0018ea60
 CMatrix g_hookBulletOrthoMatrix;
-// samp.dll RVA: 0x0018f66c
+// 0x0018f66c
 DWORD g_hookShotArguments[8];
-// samp.dll RVA: 0x0018eb7c
+// 0x0018eb7c
 CVector g_hookAdjustedShotPoint;
-// samp.dll RVA: 0x0018f648
+// 0x0018f648
 DWORD g_hookShotLineResult;
 
 // Raw installed callback: EAX returns the preview-ped backing storage.
-// samp.dll RVA: 0x000a3ec0
+// 0x000a3ec0
 __declspec(naked) void GameHook_000a3ec0()
 {
     // clang-format off
@@ -68,44 +95,43 @@ __declspec(naked) void GameHook_000a3ec0()
     }
     // clang-format on
 }
-#include <string.h>
-// samp.dll RVA: 0x002ac9cc
+// 0x002ac9cc
 DWORD g_gameLoopAddress;
-// samp.dll RVA: 0x0018f56c
+// 0x0018f56c
 DWORD g_gameHookFarClipReturn;
-// samp.dll RVA: 0x00151a10
+// 0x00151a10
 BYTE g_gameHookJump00151a10[10] = {0xff, 0x25, 0x34, 0x39, 0x4d, 0x00, 0x90, 0x90, 0x90, 0x90};
-// samp.dll RVA: 0x00151a1c
+// 0x00151a1c
 BYTE g_gameHookJump00151a1c[7] = {0xff, 0x25, 0x09, 0x46, 0x4d, 0x00, 0x90};
-// samp.dll RVA: 0x0015197c
+// 0x0015197c
 BYTE g_gameHookJump0015197c[7] = {0xff, 0x25, 0xbb, 0x19, 0x69, 0x00, 0x90};
-// samp.dll RVA: 0x00151984
+// 0x00151984
 BYTE g_gameHookJump00151984[7] = {0xff, 0x25, 0xba, 0xb8, 0x63, 0x00, 0x90};
-// samp.dll RVA: 0x00151994
+// 0x00151994
 BYTE g_gameHookJump00151994[7] = {0xff, 0x25, 0xaa, 0x85, 0x43, 0x00, 0x90};
-// samp.dll RVA: 0x0015198c
+// 0x0015198c
 BYTE g_gameHookJump0015198c[7] = {0xff, 0x25, 0x79, 0x4a, 0x58, 0x00, 0x90};
-// samp.dll RVA: 0x001519b0
+// 0x001519b0
 BYTE g_gameHookJump001519b0[7] = {0xff, 0x25, 0xf1, 0xc8, 0x53, 0x00, 0x90};
-// samp.dll RVA: 0x001519b8
+// 0x001519b8
 BYTE g_gameHookJump001519b8[6] = {0xff, 0x25, 0xbc, 0x5a, 0x4b, 0x00};
-// samp.dll RVA: 0x001519e8
+// 0x001519e8
 BYTE g_gameHookJump001519e8[6] = {0xff, 0x25, 0x1b, 0x8b, 0x73, 0x00};
-// samp.dll RVA: 0x001519f0
+// 0x001519f0
 BYTE g_gameHookJump001519f0[6] = {0xff, 0x25, 0x5b, 0x88, 0x73, 0x00};
-// samp.dll RVA: 0x001519d4
+// 0x001519d4
 BYTE g_gameHookJump001519d4[9] = {0xff, 0x25, 0x43, 0x00, 0x6a, 0x00, 0x90, 0x90, 0x90};
-// samp.dll RVA: 0x00151a34
+// 0x00151a34
 BYTE g_gameHookJump00151a34[6] = {0xff, 0x25, 0x21, 0xc7, 0x59, 0x00};
-// samp.dll RVA: 0x00151a3c
+// 0x00151a3c
 BYTE g_gameHookJump00151a3c[7] = {0xff, 0x25, 0x84, 0x80, 0x53, 0x00, 0x90};
-// samp.dll RVA: 0x00151a44
+// 0x00151a44
 BYTE g_gameHookJump00151a44[9] = {0xff, 0x25, 0xa6, 0x34, 0x55, 0x00, 0x90, 0x90, 0x90};
-// samp.dll RVA: 0x00151a50
+// 0x00151a50
 BYTE g_gameHookJump00151a50[6] = {0xff, 0x25, 0x33, 0x34, 0x4b, 0x00};
-// samp.dll RVA: 0x00151a68
+// 0x00151a68
 BYTE g_gameHookJump00151a68[6] = {0xff, 0x25, 0xdb, 0x74, 0x56, 0x00};
-// samp.dll RVA: 0x000a5d80
+// 0x000a5d80
 void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size)
 {
     DWORD oldProtect, ignored;
@@ -116,7 +142,7 @@ void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* j
     memcpy((void*)address, jumpCode, size);
     VirtualProtect((void*)address, size, oldProtect, &ignored);
 }
-// samp.dll RVA: 0x000a5e30
+// 0x000a5e30
 void GamePrepareHooks()
 {
     DWORD local_8;
@@ -162,7 +188,7 @@ void GamePrepareHooks()
     return;
 }
 
-// samp.dll RVA: 0x000a6020
+// 0x000a6020
 void GameInstallHooks()
 {
     DWORD local_8;
@@ -417,40 +443,37 @@ void GameInstallHooks()
     return;
 }
 
-#include "game/hooks_independent.h"
-#include "game/player_colors.h"
-#include "game/playerped.h"
-// samp.dll RVA: 0x0018f4c8
+// 0x0018f4c8
 DWORD g_hookRadarIndex;
-// samp.dll RVA: 0x0018f4cc
+// 0x0018f4cc
 DWORD g_hookCheatFunction;
-// samp.dll RVA: 0x0018f4b0
+// 0x0018f4b0
 DWORD g_hookCameraPed;
-// samp.dll RVA: 0x0018f540
+// 0x0018f540
 DWORD g_hookRenderEsi;
-// samp.dll RVA: 0x0018f544
+// 0x0018f544
 DWORD g_hookRenderEbx;
-// samp.dll RVA: 0x0018f568
+// 0x0018f568
 DWORD g_hookFreedBuffer;
-// samp.dll RVA: 0x00151ab8
+// 0x00151ab8
 DWORD g_hookKeepBuffer = 1;
-// samp.dll RVA: 0x0018f560
+// 0x0018f560
 DWORD g_hookCachedBuffer;
-// samp.dll RVA: 0x00151abc
+// 0x00151abc
 DWORD g_hookAllocateFunction = 0x7fb270;
-// samp.dll RVA: 0x0018f570
+// 0x0018f570
 DWORD g_hookSavedEsi;
-// samp.dll RVA: 0x0018f5c4
+// 0x0018f5c4
 DWORD g_hookRenderReturn;
-// samp.dll RVA: 0x00151ac8
+// 0x00151ac8
 BYTE g_hookRenderRestore[3] = {0xff, 0x52, 0x20};
-// samp.dll RVA: 0x0018f5d4
+// 0x0018f5d4
 DWORD g_hookSavedFontA;
-// samp.dll RVA: 0x0018f5d8
+// 0x0018f5d8
 DWORD g_hookSavedFontB;
 
 // Yield before entering the original game update routine.
-// samp.dll RVA: 0x000a2200
+// 0x000a2200
 __declspec(naked) void GameHook_000a2200()
 {
     // clang-format off
@@ -461,7 +484,7 @@ __declspec(naked) void GameHook_000a2200()
     // clang-format on
 }
 // The original argument remains on the caller's stack; Get consumes its copy.
-// samp.dll RVA: 0x000a37a0
+// 0x000a37a0
 __declspec(naked) void GameHook_000a37a0()
 {
     // clang-format off
@@ -473,7 +496,7 @@ __declspec(naked) void GameHook_000a37a0()
         ret }
     // clang-format on
 }
-// samp.dll RVA: 0x000a37c0
+// 0x000a37c0
 __declspec(naked) void GameHook_000a37c0()
 {
     // clang-format off
@@ -489,10 +512,10 @@ __declspec(naked) void GameHook_000a37c0()
 }
 // clang-format off
 // Intentional native one-RET callback, not a replacement for an unknown body.
-// samp.dll RVA: 0x000a3ac0
+// 0x000a3ac0
 __declspec(naked) void GameHook_000a3ac0() { __asm ret }
 // clang-format on
-// samp.dll RVA: 0x000a3ad0
+// 0x000a3ad0
 __declspec(naked) void GameHook_000a3ad0()
 {
     // clang-format off
@@ -511,7 +534,7 @@ __declspec(naked) void GameHook_000a3ad0()
     // clang-format on
 }
 // Preserve the sign bit while replacing the remaining float bits by 1.0f.
-// samp.dll RVA: 0x000a3b00
+// 0x000a3b00
 __declspec(naked) void GameHook_000a3b00()
 {
     // clang-format off
@@ -523,7 +546,7 @@ __declspec(naked) void GameHook_000a3b00()
     // clang-format on
 }
 // The non-null branch continues after GTA's original PUSH EDI prologue.
-// samp.dll RVA: 0x000a3b20
+// 0x000a3b20
 __declspec(naked) void GameHook_000a3b20()
 {
     // clang-format off
@@ -538,7 +561,7 @@ __declspec(naked) void GameHook_000a3b20()
         ret }
     // clang-format on
 }
-// samp.dll RVA: 0x000a3ce0
+// 0x000a3ce0
 __declspec(naked) void GameHook_000a3ce0()
 {
     // clang-format off
@@ -566,7 +589,7 @@ __declspec(naked) void GameHook_000a3ce0()
     // clang-format on
 }
 // EBP is an incoming GTA frame pointer, not a compiler-owned C++ frame.
-// samp.dll RVA: 0x000a3d20
+// 0x000a3d20
 __declspec(naked) void GameHook_000a3d20()
 {
     // clang-format off
@@ -583,7 +606,7 @@ __declspec(naked) void GameHook_000a3d20()
         jmp eax }
     // clang-format on
 }
-// samp.dll RVA: 0x000a3e50
+// 0x000a3e50
 __declspec(naked) void GameHook_000a3e50()
 {
     // clang-format off
@@ -601,7 +624,7 @@ __declspec(naked) void GameHook_000a3e50()
         jmp edx }
     // clang-format on
 }
-// samp.dll RVA: 0x000a4190
+// 0x000a4190
 __declspec(naked) void GameHook_000a4190()
 {
     // clang-format off
@@ -628,7 +651,7 @@ __declspec(naked) void GameHook_000a4190()
     // clang-format on
 }
 // Preserve the native sticky allocator selection and four POP EBX operations.
-// samp.dll RVA: 0x000a4280
+// 0x000a4280
 __declspec(naked) void GameHook_000a4280()
 {
     // clang-format off
@@ -656,11 +679,11 @@ __declspec(naked) void GameHook_000a4280()
     // clang-format on
 }
 // clang-format off
-// samp.dll RVA: 0x000a42c0
+// 0x000a42c0
 __declspec(naked) void GameHook_000a42c0() { __asm { mov g_hookSavedEsi,esi
         ret } }
 // clang-format on
-// samp.dll RVA: 0x000a4850
+// 0x000a4850
 __declspec(naked) void GameHook_000a4850()
 {
     // clang-format off
@@ -688,7 +711,7 @@ __declspec(naked) void GameHook_000a4850()
         ret }
     // clang-format on
 }
-// samp.dll RVA: 0x000a4960
+// 0x000a4960
 __declspec(naked) void GameHook_000a4960()
 {
     // clang-format off
@@ -718,7 +741,7 @@ __declspec(naked) void GameHook_000a4960()
         ret }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5150
+// 0x000a5150
 __declspec(naked) void GameHook_000a5150()
 {
     // clang-format off
@@ -731,7 +754,7 @@ __declspec(naked) void GameHook_000a5150()
         ret }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5850
+// 0x000a5850
 __declspec(naked) void GameHook_000a5850()
 {
     // clang-format off
@@ -750,7 +773,7 @@ __declspec(naked) void GameHook_000a5850()
 }
 // Continue into GTA after its 44-byte local-frame allocation, forwarding the
 // observed argument-byte override rather than translating this into a C++ call.
-// samp.dll RVA: 0x000a5d20
+// 0x000a5d20
 __declspec(naked) void GameHook_000a5d20()
 {
     // clang-format off
@@ -765,79 +788,77 @@ __declspec(naked) void GameHook_000a5d20()
     // clang-format on
 }
 
-#include "game/building_removal.h"
-#include "game/hooks_render.h"
-// samp.dll RVA: 0x0018f504
+// 0x0018f504
 DWORD g_hookHudScaleX;
-// samp.dll RVA: 0x0018f508
+// 0x0018f508
 DWORD g_hookHudScaleY;
-// samp.dll RVA: 0x0018f50c
+// 0x0018f50c
 float g_hookHudWidth;
-// samp.dll RVA: 0x0018f510
+// 0x0018f510
 float g_hookHudHeight;
-// samp.dll RVA: 0x00151a6e
+// 0x00151a6e
 BYTE g_hookHudAspectFix = 1;
-// samp.dll RVA: 0x0011c728
+// 0x0011c728
 const float g_hookHudAspectThreshold = 1.6f;
-// samp.dll RVA: 0x0011eb68
+// 0x0011eb68
 const float g_hookHudScaleNumerator = 0.00221999991f;
-// samp.dll RVA: 0x002aca6c
+// 0x002aca6c
 DWORD g_hookFogEnabled;
-// samp.dll RVA: 0x002aca70
+// 0x002aca70
 DWORD g_hookDisableFog;
-// samp.dll RVA: 0x0018e560
+// 0x0018e560
 DWORD g_hookCollisionPed;
-// samp.dll RVA: 0x0018e8e0
+// 0x0018e8e0
 DWORD g_hookSavedMatrix[16];
-// samp.dll RVA: 0x0018eab4
+// 0x0018eab4
 DWORD g_hookSavedSpeed[3];
-// samp.dll RVA: 0x0018f52c
+// 0x0018f52c
 DWORD g_hookHornArgument;
-// samp.dll RVA: 0x0018f530
+// 0x0018f530
 DWORD g_hookHornThis;
-// samp.dll RVA: 0x0018eb24
+// 0x0018eb24
 DWORD g_hookHornVehicle;
-// samp.dll RVA: 0x0018f534
+// 0x0018f534
 BYTE g_hookHornStatus;
-// samp.dll RVA: 0x0018f4c4
+// 0x0018f4c4
 DWORD g_hookAnimationReturn;
-// samp.dll RVA: 0x0018e584
+// 0x0018e584
 DWORD g_hookAnimationClump;
-// samp.dll RVA: 0x0018f548
+// 0x0018f548
 DWORD g_hookAnimationGroup;
-// samp.dll RVA: 0x0018f54c
+// 0x0018f54c
 DWORD g_hookAnimationId;
-// samp.dll RVA: 0x0018f550
+// 0x0018f550
 DWORD g_hookAnimationBlend;
-// samp.dll RVA: 0x0018eb90
+// 0x0018eb90
 DWORD g_hookAnimationPed;
-// samp.dll RVA: 0x0018eb88
+// 0x0018eb88
 DWORD g_hookAnimationLocalClump;
-// samp.dll RVA: 0x0018f4ec
+// 0x0018f4ec
 DWORD g_hookAnimationType;
-// samp.dll RVA: 0x0018f4f0
+// 0x0018f4f0
 DWORD g_hookQueuedAnimationGroup;
-// samp.dll RVA: 0x0018f4f4
+// 0x0018f4f4
 DWORD g_hookQueuedAnimationId;
-// samp.dll RVA: 0x0018f4f8
+// 0x0018f4f8
 DWORD g_hookQueuedAnimationBlend;
-// samp.dll RVA: 0x00151aa4
+// 0x00151aa4
 DWORD g_hookAnimationContinueA = 0x4d3aaa;
-// samp.dll RVA: 0x00151aa8
+// 0x00151aa8
 DWORD g_hookAnimationContinueB = 0x4d4617;
-// samp.dll RVA: 0x0018f5cc
+// 0x0018f5cc
 DWORD g_hookRenderObject;
-// samp.dll RVA: 0x00151acc
+// 0x00151acc
 BYTE g_hookObjectRestore[5] = {0xe8, 0x3c, 0xff, 0xff, 0xff};
-// samp.dll RVA: 0x0018f5b4
+// 0x0018f5b4
 DWORD g_hookMarker;
-// samp.dll RVA: 0x0018f5b8
+// 0x0018f5b8
 DWORD g_hookMarkerArgument;
-// samp.dll RVA: 0x0018f5bc
+// 0x0018f5bc
 DWORD g_hookSuppressAllMarkers;
 // The comparison and repeated division retain x87 precision until the final
 // float store. A rounded float ratio changes the native 16:10 boundary.
-// samp.dll RVA: 0x000a2220
+// 0x000a2220
 void GamePrepareHudDraw()
 {
     g_hookHudScaleX = *(DWORD*)0x859520;
@@ -865,7 +886,7 @@ void GamePrepareHudDraw()
         // clang-format on
     }
 }
-// samp.dll RVA: 0x000c5400
+// 0x000c5400
 void GameSetupD3DFog(DWORD enabled)
 {
     if (g_hookDisableFog)
@@ -877,7 +898,7 @@ void GameSetupD3DFog(DWORD enabled)
         g_gameD3DDevice->SetRenderState(D3DRS_FOGVERTEXMODE, D3DFOG_LINEAR);
     }
 }
-// samp.dll RVA: 0x000a22c0
+// 0x000a22c0
 __declspec(naked) void GameHook_000a22c0()
 {
     // clang-format off
@@ -897,7 +918,7 @@ __declspec(naked) void GameHook_000a22c0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a29d0
+// 0x000a29d0
 __declspec(naked) void GameHook_000a29d0()
 {
     // clang-format off
@@ -970,7 +991,7 @@ __declspec(naked) void GameHook_000a29d0()
 }
 // Original thiscall consumes one stack argument and restores only the status
 // byte it saved, leaving the GTA callee's other results intact.
-// samp.dll RVA: 0x000a33c0
+// 0x000a33c0
 __declspec(naked) void GameHook_000a33c0()
 {
     // clang-format off
@@ -1005,7 +1026,7 @@ __declspec(naked) void GameHook_000a33c0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a3b90
+// 0x000a3b90
 __declspec(naked) void GameHook_000a3b90()
 {
     // clang-format off
@@ -1033,7 +1054,7 @@ __declspec(naked) void GameHook_000a3b90()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a3f30
+// 0x000a3f30
 __declspec(naked) void GameHook_000a3f30()
 {
     // clang-format off
@@ -1079,7 +1100,7 @@ __declspec(naked) void GameHook_000a3f30()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a3fe0
+// 0x000a3fe0
 __declspec(naked) void GameHook_000a3fe0()
 {
     // clang-format off
@@ -1129,7 +1150,7 @@ __declspec(naked) void GameHook_000a3fe0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a47d0
+// 0x000a47d0
 __declspec(naked) void GameHook_000a47d0()
 {
     // clang-format off
@@ -1173,7 +1194,7 @@ __declspec(naked) void GameHook_000a47d0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a48c0
+// 0x000a48c0
 __declspec(naked) void GameHook_000a48c0()
 {
     // clang-format off
@@ -1226,22 +1247,17 @@ __declspec(naked) void GameHook_000a48c0()
     // clang-format on
 }
 
-#include "game/aimstuff.h"
-#include "game/hooks_boot.h"
-#include "main.h"
-#include "net/playerpool.h"
-
-// samp.dll RVA: 0x0018f514
+// 0x0018f514
 BYTE g_hookCameraHudPrepared;
-// samp.dll RVA: 0x0018f6a8
+// 0x0018f6a8
 DWORD g_hookAudioSavedState;
-// samp.dll RVA: 0x0018f6ac
+// 0x0018f6ac
 DWORD g_hookAudioArgument0;
-// samp.dll RVA: 0x0018f6b0
+// 0x0018f6b0
 DWORD g_hookAudioArgument1;
 
 // Raw GTA entry ABIs: preserve live registers and native CALL/JMP/RET behavior.
-// samp.dll RVA: 0x000a22f0
+// 0x000a22f0
 __declspec(naked) void GameHook_000a22f0()
 {
     // clang-format off
@@ -1288,7 +1304,7 @@ __declspec(naked) void GameHook_000a22f0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a2370
+// 0x000a2370
 __declspec(naked) void GameHook_000a2370()
 {
     // clang-format off
@@ -1310,7 +1326,7 @@ __declspec(naked) void GameHook_000a2370()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a23a0
+// 0x000a23a0
 __declspec(naked) void GameHook_000a23a0()
 {
     // clang-format off
@@ -1329,7 +1345,7 @@ __declspec(naked) void GameHook_000a23a0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5b90
+// 0x000a5b90
 __declspec(naked) void GameHook_000a5b90()
 {
     // clang-format off
@@ -1360,16 +1376,10 @@ __declspec(naked) void GameHook_000a5b90()
     // clang-format on
 }
 
-#include "chatwindow.h"
-#include "game/hooks_prerender.h"
-#include "game/scripting.h"
-#include "gui/device_objects.h"
-#include "net/vehiclepool.h"
-
-// samp.dll RVA: 0x0018de44
+// 0x0018de44
 CObjectPool* g_debugObjectPool;
 
-// samp.dll RVA: 0x000a23d0
+// 0x000a23d0
 void GameHook_000a23d0()
 {
     if (g_pGame)
@@ -1424,7 +1434,6 @@ void GameHook_000a23d0()
     }
 }
 
-#include "game/hooks_control.h"
 using AimStuff::ApplyLocalAim;
 using AimStuff::ApplyLocalCamera;
 using AimStuff::ApplyLocalSkills;
@@ -1441,50 +1450,50 @@ using KeyStuff::GetInternalKeys;
 using KeyStuff::UpdateKeys;
 // Raw entry ABI: weapon ECX=ped; ped control ECX=this, [ESP+4]=ped;
 // vehicle ECX=vehicle. Vehicle control preserves PUSHAD registers.
-// samp.dll RVA: 0x00151964
+// 0x00151964
 WORD* g_hookCameraModeWord = (WORD*)0xb6f858;
-// samp.dll RVA: 0x0018f4ac
+// 0x0018f4ac
 BYTE g_hookSavedPlayer;
-// samp.dll RVA: 0x0018f4b4
+// 0x0018f4b4
 BYTE g_hookPlayerIndex;
-// samp.dll RVA: 0x0018f4c0
+// 0x0018f4c0
 DWORD g_hookPedControlThis;
-// samp.dll RVA: 0x0018f51c
+// 0x0018f51c
 DWORD g_hookWeaponResult;
-// samp.dll RVA: 0x0018f520
+// 0x0018f520
 DWORD g_hookRestoreSkills;
-// samp.dll RVA: 0x0018f524
+// 0x0018f524
 DWORD g_hookLocalPedControl;
-// samp.dll RVA: 0x0018f528
+// 0x0018f528
 DWORD g_hookRestoreKeys;
-// samp.dll RVA: 0x0018ea58
+// 0x0018ea58
 BYTE g_hookSavedCameraMode;
-// samp.dll RVA: 0x0018e5c8
+// 0x0018e5c8
 WORD g_hookSavedCameraModeWord;
-// samp.dll RVA: 0x0018e810
+// 0x0018e810
 DWORD g_hookVehicleProcess;
-// samp.dll RVA: 0x0018e8d0
+// 0x0018e8d0
 DWORD g_hookControlVehicle;
-// samp.dll RVA: 0x0018ea54
+// 0x0018ea54
 DWORD g_hookVehicleVtable;
-// samp.dll RVA: 0x0018e934
+// 0x0018e934
 DWORD g_hookVehicleKeys;
-// samp.dll RVA: 0x0018e938
+// 0x0018e938
 BYTE g_hookVehicleStatus;
-// samp.dll RVA: 0x0018eb20
+// 0x0018eb20
 DWORD g_hookVehicleLean;
-// samp.dll RVA: 0x0018e8cc
+// 0x0018e8cc
 DWORD g_hookVehicleLeanTarget;
-// samp.dll RVA: 0x002a9a44
+// 0x002a9a44
 int g_gameVehicleModel;
-// samp.dll RVA: 0x002a9a48
+// 0x002a9a48
 DWORD g_gameLinkedVehicle;
-// samp.dll RVA: 0x002a9a4c
+// 0x002a9a4c
 float g_gameVehicleDistanceSquared;
 
-// samp.dll RVA: 0x0011f5dc
+// 0x0011f5dc
 const float g_gameStreamingDistanceSquared = 40000.0f;
-// samp.dll RVA: 0x000b3f60
+// 0x000b3f60
 BYTE __stdcall GameFindPlayerPedIndex(void* ped)
 {
     for (BYTE player = 0; player < 210; ++player)
@@ -1492,7 +1501,7 @@ BYTE __stdcall GameFindPlayerPedIndex(void* ped)
             return player;
     return 0;
 }
-// samp.dll RVA: 0x000b4410
+// 0x000b4410
 BOOL __stdcall GameIsTrainVehicle(void* vehicle)
 {
     if (!vehicle)
@@ -1500,7 +1509,7 @@ BOOL __stdcall GameIsTrainVehicle(void* vehicle)
     g_gameVehicleModel = *(short*)((BYTE*)vehicle + 0x22);
     return g_gameVehicleModel == 0x21a || g_gameVehicleModel == 0x23a || g_gameVehicleModel == 0x219 || g_gameVehicleModel == 0x239 || g_gameVehicleModel == 0x1c1;
 }
-// samp.dll RVA: 0x000b4460
+// 0x000b4460
 BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
 {
     if (!vehicle)
@@ -1512,7 +1521,7 @@ BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
     BYTE* driver = *(BYTE**)(linked + 0x460);
     return driver && (*(DWORD*)(driver + 0x46c) & 0x100) ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x000a2ab0
+// 0x000a2ab0
 __declspec(naked) void GameHook_000a2ab0()
 {
     // clang-format off
@@ -1559,7 +1568,7 @@ __declspec(naked) void GameHook_000a2ab0()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a2b50
+// 0x000a2b50
 __declspec(naked) void GameHook_000a2b50()
 {
     // clang-format off
@@ -1656,7 +1665,7 @@ __declspec(naked) void GameHook_000a2b50()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a2e70
+// 0x000a2e70
 __declspec(naked) void GameHook_000a2e70()
 {
     // clang-format off
@@ -2005,7 +2014,7 @@ __declspec(naked) void GameHook_000a2e70()
     // clang-format on
 }
 // Retain the unrounded x87 threshold test and native argument cleanup.
-// samp.dll RVA: 0x000b6490
+// 0x000b6490
 __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
 {
     // clang-format off
@@ -2069,29 +2078,27 @@ __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
     // clang-format on
 }
 
-#include "exceptions.h"
-#include "game/hooks_vehicle.h"
-// samp.dll RVA: 0x0018f690
+// 0x0018f690
 DWORD g_hookContactThis;
-// samp.dll RVA: 0x0018f694
+// 0x0018f694
 DWORD g_hookContactOther;
-// samp.dll RVA: 0x0018f698
+// 0x0018f698
 DWORD g_hookContactReturn;
-// samp.dll RVA: 0x0018f69c
+// 0x0018f69c
 DWORD g_hookSirenVehicle;
-// samp.dll RVA: 0x0018f6a0
+// 0x0018f6a0
 BYTE g_hookSirenResult;
-// samp.dll RVA: 0x0018f6a4
+// 0x0018f6a4
 DWORD g_hookSirenOnce;
-// samp.dll RVA: 0x00151b0c
+// 0x00151b0c
 WORD g_hookSirenVehicleId = 0xffff;
-// samp.dll RVA: 0x0018f63c
+// 0x0018f63c
 DWORD g_hookPedQueryThis;
-// samp.dll RVA: 0x0018f640
+// 0x0018f640
 DWORD g_hookPedQueryPed;
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// samp.dll RVA: 0x000a5870
+// 0x000a5870
 __declspec(naked) void GameHook_000a5870()
 {
     // clang-format off
@@ -2138,7 +2145,7 @@ __declspec(naked) void GameHook_000a5870()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// samp.dll RVA: 0x000a5910
+// 0x000a5910
 __declspec(naked) void GameHook_000a5910()
 {
     // clang-format off
@@ -2185,7 +2192,7 @@ __declspec(naked) void GameHook_000a5910()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// samp.dll RVA: 0x000a59b0
+// 0x000a59b0
 __declspec(naked) void GameHook_000a59b0()
 {
     // clang-format off
@@ -2232,7 +2239,7 @@ __declspec(naked) void GameHook_000a59b0()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// samp.dll RVA: 0x000a5a50
+// 0x000a5a50
 __declspec(naked) void GameHook_000a5a50()
 {
     // clang-format off
@@ -2277,7 +2284,7 @@ __declspec(naked) void GameHook_000a5a50()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5820
+// 0x000a5820
 __declspec(naked) void GameHook_000a5820()
 {
     // clang-format off
@@ -2299,7 +2306,7 @@ __declspec(naked) void GameHook_000a5820()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5100
+// 0x000a5100
 __declspec(naked) void GameHook_000a5100()
 {
     // clang-format off
@@ -2332,7 +2339,7 @@ __declspec(naked) void GameHook_000a5100()
     // clang-format on
 }
 // Raw siren query returns AL. The one-shot path deliberately leaves upper EAX.
-// samp.dll RVA: 0x000a5af0
+// 0x000a5af0
 __declspec(naked) void GameHook_000a5af0()
 {
     // clang-format off
@@ -2384,13 +2391,9 @@ __declspec(naked) void GameHook_000a5af0()
     // clang-format on
 }
 
-#include "game/task_events.h"
-#include "gui/render_dependencies.h"
-#include "net/actorpool.h"
-#include "net/remoteplayer.h"
-// samp.dll RVA: 0x0018e81c
+// 0x0018e81c
 CVehicle* g_hookEnterVehicle;
-// samp.dll RVA: 0x000a3430
+// 0x000a3430
 BOOL GameNotifyEnterVehicle()
 {
     if (!g_pNetGame)
@@ -2437,7 +2440,7 @@ BOOL GameNotifyEnterVehicle()
     g_hookEventLocalPlayer->EnterVehicle(g_hookEventVehicleId, FALSE);
     return TRUE;
 }
-// samp.dll RVA: 0x000a3840
+// 0x000a3840
 WORD GameResolveDamagePlayer(void* entity)
 {
     if (!entity)
@@ -2470,7 +2473,7 @@ WORD GameResolveDamagePlayer(void* entity)
     }
     return result;
 }
-// samp.dll RVA: 0x000a38e0
+// 0x000a38e0
 DWORD GameResolveDamageActor(void* entity)
 {
     if (!entity)
@@ -2485,7 +2488,7 @@ struct GameDamageResponsePrefix
     float damage;
     DWORD bodyPart, weapon;
 };
-// samp.dll RVA: 0x000a3910
+// 0x000a3910
 BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
 {
     void* local = GameFindLocalPed();
@@ -2545,43 +2548,37 @@ BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
     return FALSE;
 }
 
-#include "game/util.h"
-#include "net/gangzonepool.h"
-#include "net/menupool.h"
-#include "net/netgame.h"
-#include "net/pickuppool.h"
-
-// samp.dll RVA: 0x0018e7f8
+// 0x0018e7f8
 DWORD g_hookPickupBackend;
-// samp.dll RVA: 0x0018e5cc
+// 0x0018e5cc
 DWORD g_hookMenuTextResult;
-// samp.dll RVA: 0x0018f5a8
+// 0x0018f5a8
 CVector g_hookPassengerCameraPosition;
-// samp.dll RVA: 0x0018e580
+// 0x0018e580
 DWORD g_hookTrailerBackend;
-// samp.dll RVA: 0x0018e7fc
+// 0x0018e7fc
 CVehiclePool* g_hookTrailerPool;
-// samp.dll RVA: 0x0018e7f0
+// 0x0018e7f0
 WORD g_hookTrailerId;
-// samp.dll RVA: 0x0018f5e0
+// 0x0018f5e0
 CVehicle* g_hookTrailerVehicle;
-// samp.dll RVA: 0x0018f600
+// 0x0018f600
 DWORD g_hookObjectSavedStack;
-// samp.dll RVA: 0x0018f5f8
+// 0x0018f5f8
 DWORD g_hookObjectBackend;
-// samp.dll RVA: 0x0018f604
+// 0x0018f604
 DWORD g_hookObjectResult;
-// samp.dll RVA: 0x0018f5fc
+// 0x0018f5fc
 CObject* g_hookObjectRotationWrapper;
-// samp.dll RVA: 0x0018f614
+// 0x0018f614
 CObjectPool* g_hookObjectDrawPool;
-// samp.dll RVA: 0x0018f618
+// 0x0018f618
 DWORD g_hookObjectDrawBackend;
-// samp.dll RVA: 0x0018f578
+// 0x0018f578
 CObject* g_hookObjectDrawWrapper;
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a3c60
+// 0x000a3c60
 __declspec(naked) void GameHook_000a3c60()
 {
     // clang-format off
@@ -2603,7 +2600,7 @@ __declspec(naked) void GameHook_000a3c60()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a3c80
+// 0x000a3c80
 __declspec(naked) void GameHook_000a3c80()
 {
     // clang-format off
@@ -2627,7 +2624,7 @@ __declspec(naked) void GameHook_000a3c80()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a3ca0
+// 0x000a3ca0
 __declspec(naked) void GameHook_000a3ca0()
 {
     // clang-format off
@@ -2657,7 +2654,7 @@ __declspec(naked) void GameHook_000a3ca0()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a3d90
+// 0x000a3d90
 __declspec(naked) void GameHook_000a3d90()
 {
     // clang-format off
@@ -2716,7 +2713,7 @@ __declspec(naked) void GameHook_000a3d90()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a4770
+// 0x000a4770
 __declspec(naked) void GameHook_000a4770()
 {
     // clang-format off
@@ -2749,7 +2746,7 @@ __declspec(naked) void GameHook_000a4770()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a49d0
+// 0x000a49d0
 __declspec(naked) void GameHook_000a49d0()
 {
     // clang-format off
@@ -2805,7 +2802,7 @@ __declspec(naked) void GameHook_000a49d0()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a4c30
+// 0x000a4c30
 __declspec(naked) void GameHook_000a4c30()
 {
     // clang-format off
@@ -2841,7 +2838,7 @@ __declspec(naked) void GameHook_000a4c30()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a4df0
+// 0x000a4df0
 __declspec(naked) void GameHook_000a4df0()
 {
     // clang-format off
@@ -2869,7 +2866,7 @@ __declspec(naked) void GameHook_000a4df0()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a4e30
+// 0x000a4e30
 __declspec(naked) void GameHook_000a4e30()
 {
     // clang-format off
@@ -2897,7 +2894,7 @@ __declspec(naked) void GameHook_000a4e30()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// samp.dll RVA: 0x000a4e70
+// 0x000a4e70
 __declspec(naked) void GameHook_000a4e70()
 {
     // clang-format off
@@ -2985,31 +2982,29 @@ __declspec(naked) void GameHook_000a4e70()
     // clang-format on
 }
 
-#include "net/localplayer.h"
-#include "net/remoteplayer.h"
-// samp.dll RVA: 0x0018f580
+// 0x0018f580
 DWORD g_hookMaterialReturn;
-// samp.dll RVA: 0x0018f574
+// 0x0018f574
 DWORD g_hookMaterialBackend;
-// samp.dll RVA: 0x0018f57c
+// 0x0018f57c
 CPlayerPool* g_hookMaterialPlayerPool;
-// samp.dll RVA: 0x0018f5a4
+// 0x0018f5a4
 DWORD g_hookSurfingIndex;
-// samp.dll RVA: 0x0018e7f4
+// 0x0018e7f4
 CRemotePlayer* g_hookSurfingRemote;
-// samp.dll RVA: 0x0018eac0
+// 0x0018eac0
 GameEntityCollisionShape g_hookCollisionFirst;
-// samp.dll RVA: 0x0018e56c
+// 0x0018e56c
 GameEntityCollisionShape g_hookCollisionSecond;
-// samp.dll RVA: 0x0018f68c
+// 0x0018f68c
 BYTE g_hookCollisionResult;
-// samp.dll RVA: 0x0011e508
+// 0x0011e508
 const float g_hookCollisionBoundHigh = 3000.0f;
-// samp.dll RVA: 0x0011ec3c
+// 0x0011ec3c
 const float g_hookCollisionBoundLow = -3000.0f;
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// samp.dll RVA: 0x000a42d0
+// 0x000a42d0
 __declspec(naked) void GameHook_000a42d0()
 {
     // clang-format off
@@ -3100,7 +3095,7 @@ __declspec(naked) void GameHook_000a42d0()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// samp.dll RVA: 0x000a46b0
+// 0x000a46b0
 __declspec(naked) void GameHook_000a46b0()
 {
     // clang-format off
@@ -3171,7 +3166,7 @@ __declspec(naked) void GameHook_000a46b0()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// samp.dll RVA: 0x000a56b0
+// 0x000a56b0
 __declspec(naked) void GameHook_000a56b0()
 {
     // clang-format off
@@ -3296,7 +3291,7 @@ __declspec(naked) void GameHook_000a56b0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4fa0
+// 0x000a4fa0
 BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
 {
     (void)unused;
@@ -3319,7 +3314,7 @@ BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
         return FALSE;
     return net->pools->players->GetPlayer(id)->nativeState[0x19] == team ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x000a5090
+// 0x000a5090
 __declspec(naked) void GameHook_000a5090()
 {
     // clang-format off
@@ -3356,7 +3351,7 @@ __declspec(naked) void GameHook_000a5090()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5170
+// 0x000a5170
 void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target, const CVector* collision, void** entity)
 {
     (void)target;
@@ -3404,7 +3399,7 @@ void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target,
     }
     g_pGame->GetPlayerPed()->SetBulletData(&g_hookBulletHitData);
 }
-// samp.dll RVA: 0x000a5540
+// 0x000a5540
 __declspec(naked) void GameHook_000a5540()
 {
     // clang-format off
@@ -3466,7 +3461,7 @@ __declspec(naked) void GameHook_000a5540()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5600
+// 0x000a5600
 __declspec(naked) void GameHook_000a5600()
 {
     // clang-format off
@@ -3496,7 +3491,7 @@ __declspec(naked) void GameHook_000a5600()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5650
+// 0x000a5650
 __declspec(naked) void GameHook_000a5650()
 {
     // clang-format off
@@ -3530,7 +3525,7 @@ __declspec(naked) void GameHook_000a5650()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x000a5360
+// 0x000a5360
 __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* collision, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
                                                    DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
 {
@@ -3690,7 +3685,7 @@ __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVecto
 }
 
 // Native leaves the cache published during the hooked raster-destroy call.
-// samp.dll RVA: 0x000a4200
+// 0x000a4200
 void GameReleaseCachedRasterBuffer()
 {
     DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
@@ -3699,8 +3694,7 @@ void GameReleaseCachedRasterBuffer()
     g_hookCachedBuffer = 0;
 }
 
-#include "game/ped_control.h"
-// samp.dll RVA: 0x000a2690
+// 0x000a2690
 void GameDisablePedRemoteCall()
 {
     // GTA SA virtual address: five-byte call site; page remains writable.
@@ -3708,7 +3702,7 @@ void GameDisablePedRemoteCall()
     *(DWORD*)0x5e92f4 = 0x90909090;
     *(BYTE*)0x5e92f8 = 0x90;
 }
-// samp.dll RVA: 0x000a26b0
+// 0x000a26b0
 void GameRestorePedRemoteCall()
 {
     // Native restore does not call VirtualProtect or flush the instruction cache.
@@ -3716,7 +3710,7 @@ void GameRestorePedRemoteCall()
     *(BYTE*)0x5e92f8 = g_hookPedRemoteRestore[4];
 }
 
-// samp.dll RVA: 0x000a5d40
+// 0x000a5d40
 void GameWriteProtectedDword(DWORD address, DWORD value)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -3726,7 +3720,7 @@ void GameWriteProtectedDword(DWORD address, DWORD value)
     protect((void*)address, 4, oldProtection, &ignoredProtection);
 }
 // Opcode byte is passed through without restricting it to CALL/JMP.
-// samp.dll RVA: 0x000a5df0
+// 0x000a5df0
 void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -3737,19 +3731,16 @@ void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
     protect((void*)address, 5, oldProtection, &ignoredProtection);
 }
 
-#include "game/patches.h"
-#include "game/ped_control.h"
-#include <stdlib.h>
-// samp.dll RVA: 0x0018f4d0
+// 0x0018f4d0
 DWORD g_hookGate18F4D0;
-// samp.dll RVA: 0x0018eb2c
+// 0x0018eb2c
 DWORD g_hookRandomReturn;
-// samp.dll RVA: 0x0018e8b8
+// 0x0018e8b8
 DWORD g_hookRecordReturn18E8B8;
-// samp.dll RVA: 0x0018f5c8
+// 0x0018f5c8
 DWORD g_hookRecordEcx18F5C8;
 
-// samp.dll RVA: 0x000a22a0
+// 0x000a22a0
 __declspec(naked) void GameRestoreHudDraw()
 {
     // clang-format off
@@ -3763,7 +3754,7 @@ __declspec(naked) void GameRestoreHudDraw()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a2630
+// 0x000a2630
 __declspec(naked) void GameDisablePedControlCalls()
 {
     // clang-format off
@@ -3781,7 +3772,7 @@ __declspec(naked) void GameDisablePedControlCalls()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a2650
+// 0x000a2650
 __declspec(naked) void GameRestorePedControlCalls()
 {
     // clang-format off
@@ -3801,7 +3792,7 @@ __declspec(naked) void GameRestorePedControlCalls()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3780
+// 0x000a3780
 __declspec(naked) void GameHook_000a3780()
 {
     // clang-format off
@@ -3820,7 +3811,7 @@ __declspec(naked) void GameHook_000a3780()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a37e0
+// 0x000a37e0
 __declspec(naked) void GameHook_000a37e0()
 {
     // clang-format off
@@ -3834,7 +3825,7 @@ __declspec(naked) void GameHook_000a37e0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3b40
+// 0x000a3b40
 __declspec(naked) void GameHook_000a3b40()
 {
     // clang-format off
@@ -3851,7 +3842,7 @@ __declspec(naked) void GameHook_000a3b40()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3d50
+// 0x000a3d50
 __declspec(naked) void GameHook_000a3d50()
 {
     // clang-format off
@@ -3870,7 +3861,7 @@ __declspec(naked) void GameHook_000a3d50()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3d70
+// 0x000a3d70
 __declspec(naked) void GameHook_000a3d70()
 {
     // clang-format off
@@ -3887,7 +3878,7 @@ __declspec(naked) void GameHook_000a3d70()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3e40
+// 0x000a3e40
 __declspec(naked) void GameHook_000a3e40()
 {
     // clang-format off
@@ -3900,7 +3891,7 @@ __declspec(naked) void GameHook_000a3e40()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4240
+// 0x000a4240
 __declspec(naked) void* GameAllocateHookBuffer()
 {
     // clang-format off
@@ -3927,7 +3918,7 @@ __declspec(naked) void* GameAllocateHookBuffer()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4c10
+// 0x000a4c10
 __declspec(naked) void GameHook_000a4c10()
 {
     // clang-format off
@@ -3949,7 +3940,7 @@ __declspec(naked) void GameHook_000a4c10()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4c90
+// 0x000a4c90
 __declspec(naked) void GameHook_000a4c90()
 {
     // clang-format off
@@ -3966,7 +3957,7 @@ __declspec(naked) void GameHook_000a4c90()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4cb0
+// 0x000a4cb0
 __declspec(naked) void GameHook_000a4cb0()
 {
     // clang-format off
@@ -3979,7 +3970,7 @@ __declspec(naked) void GameHook_000a4cb0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4170
+// 0x000a4170
 __declspec(naked) void GameHook_000a4170()
 {
     // clang-format off
@@ -3994,7 +3985,7 @@ __declspec(naked) void GameHook_000a4170()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a48a0
+// 0x000a48a0
 __declspec(naked) void GameHook_000a48a0()
 {
     // clang-format off
@@ -4010,112 +4001,106 @@ __declspec(naked) void GameHook_000a48a0()
     // clang-format on
 }
 
-#include "chatwindow.h"
-#include "game/animation.h"
-#include "net/localplayer.h"
-#include "net/netgame.h"
-#include "net/playerpool.h"
-#include "net/vehiclepool.h"
-// samp.dll RVA: 0x0011ebe4
+// 0x0011ebe4
 const char g_hookPedSayFormat[] = "CPed::Say(%u,%u,%f,%u,%u,%u)";
-// samp.dll RVA: 0x0011ec04
+// 0x0011ec04
 const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
-// samp.dll RVA: 0x00151aac
+// 0x00151aac
 DWORD g_hookCapture00151AAC = 0x4d4417;
-// samp.dll RVA: 0x00151ab0
+// 0x00151ab0
 DWORD g_hookCapture00151AB0 = 0x4d3b30;
-// samp.dll RVA: 0x00151ab4
+// 0x00151ab4
 WORD g_hookCapture00151AB4 = 0xffff;
-// samp.dll RVA: 0x00151ac4
+// 0x00151ac4
 WORD g_hookCapture00151AC4 = 0xffff;
-// samp.dll RVA: 0x0018e540
+// 0x0018e540
 DWORD g_hookCapture0018E540;
-// samp.dll RVA: 0x0018e544
+// 0x0018e544
 DWORD g_hookCapture0018E544;
-// samp.dll RVA: 0x0018e564
+// 0x0018e564
 DWORD g_hookCapture0018E564;
-// samp.dll RVA: 0x0018e588
+// 0x0018e588
 DWORD g_hookCapture0018E588;
-// samp.dll RVA: 0x0018e58c
+// 0x0018e58c
 DWORD g_hookCapture0018E58C;
-// samp.dll RVA: 0x0018e5c4
+// 0x0018e5c4
 DWORD g_hookCapture0018E5C4;
-// samp.dll RVA: 0x0018e5d8
+// 0x0018e5d8
 DWORD g_hookCapture0018E5D8;
-// samp.dll RVA: 0x0018e800
+// 0x0018e800
 CVector g_hookAimRayTarget;
-// samp.dll RVA: 0x0018e814
+// 0x0018e814
 DWORD g_hookCapture0018E814;
-// samp.dll RVA: 0x0018e818
+// 0x0018e818
 DWORD g_hookCapture0018E818;
-// samp.dll RVA: 0x0018e86c
+// 0x0018e86c
 DWORD g_hookCapture0018E86C;
-// samp.dll RVA: 0x0018e874
+// 0x0018e874
 DWORD g_hookCapture0018E874;
-// samp.dll RVA: 0x0018e8c8
+// 0x0018e8c8
 DWORD g_hookCapture0018E8C8;
-// samp.dll RVA: 0x0018e8d4
+// 0x0018e8d4
 DWORD g_hookCapture0018E8D4;
-// samp.dll RVA: 0x0018e924
+// 0x0018e924
 DWORD g_hookCapture0018E924;
-// samp.dll RVA: 0x0018e928
+// 0x0018e928
 DWORD g_hookCapture0018E928;
-// samp.dll RVA: 0x0018ea40
+// 0x0018ea40
 CVector g_hookAimRayOrigin;
-// samp.dll RVA: 0x0018eaa0
+// 0x0018eaa0
 DWORD g_hookCapture0018EAA0;
-// samp.dll RVA: 0x0018eaa4
+// 0x0018eaa4
 DWORD g_hookCapture0018EAA4;
-// samp.dll RVA: 0x0018eaa8
+// 0x0018eaa8
 DWORD g_hookCapture0018EAA8;
-// samp.dll RVA: 0x0018eab0
+// 0x0018eab0
 DWORD g_hookCapture0018EAB0;
-// samp.dll RVA: 0x0018eb1c
+// 0x0018eb1c
 DWORD g_hookCapture0018EB1C;
-// samp.dll RVA: 0x0018eb70
+// 0x0018eb70
 DWORD g_hookCapture0018EB70;
-// samp.dll RVA: 0x0018eb78
+// 0x0018eb78
 DWORD g_hookCapture0018EB78;
-// samp.dll RVA: 0x0018eb8c
+// 0x0018eb8c
 DWORD g_hookCapture0018EB8C;
-// samp.dll RVA: 0x0018f33c
+// 0x0018f33c
 DWORD g_hookCapture0018F33C;
-// samp.dll RVA: 0x0018f340
+// 0x0018f340
 DWORD g_hookCapture0018F340;
-// samp.dll RVA: 0x0018f34c
+// 0x0018f34c
 DWORD g_hookCapture0018F34C;
-// samp.dll RVA: 0x0018f350
+// 0x0018f350
 DWORD g_hookCapture0018F350;
-// samp.dll RVA: 0x0018f354
+// 0x0018f354
 DWORD g_hookCapture0018F354;
-// samp.dll RVA: 0x0018f360
+// 0x0018f360
 DWORD g_hookCapture0018F360;
-// samp.dll RVA: 0x0018f368
+// 0x0018f368
 DWORD g_hookCapture0018F368;
-// samp.dll RVA: 0x0018f37c
+// 0x0018f37c
 DWORD g_hookCapture0018F37C;
-// samp.dll RVA: 0x0018f558
+// 0x0018f558
 DWORD g_hookCapture0018F558;
-// samp.dll RVA: 0x0018f55c
+// 0x0018f55c
 DWORD g_hookCapture0018F55C;
-// samp.dll RVA: 0x0018f594
+// 0x0018f594
 DWORD g_hookCapture0018F594;
-// samp.dll RVA: 0x0018f598
+// 0x0018f598
 DWORD g_hookCapture0018F598;
-// samp.dll RVA: 0x0018f59c
+// 0x0018f59c
 DWORD g_hookCapture0018F59C;
-// samp.dll RVA: 0x0018f5a0
+// 0x0018f5a0
 DWORD g_hookCapture0018F5A0;
-// samp.dll RVA: 0x0018f5e4
+// 0x0018f5e4
 DWORD g_hookCapture0018F5E4;
-// samp.dll RVA: 0x0018f658
+// 0x0018f658
 DWORD g_hookCapture0018F658;
-// samp.dll RVA: 0x0018f65c
+// 0x0018f65c
 DWORD g_hookCapture0018F65C;
-// samp.dll RVA: 0x0018f660
+// 0x0018f660
 DWORD g_hookCapture0018F660;
 
-// samp.dll RVA: 0x000a2cd0
+// 0x000a2cd0
 __declspec(naked) void GameHook_000a2cd0()
 {
     // clang-format off
@@ -4143,7 +4128,7 @@ __declspec(naked) void GameHook_000a2cd0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3b60
+// 0x000a3b60
 __declspec(naked) void GameHook_000a3b60()
 {
     // clang-format off
@@ -4164,7 +4149,7 @@ __declspec(naked) void GameHook_000a3b60()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3bc0
+// 0x000a3bc0
 __declspec(naked) void GameHook_000a3bc0()
 {
     // clang-format off
@@ -4214,7 +4199,7 @@ __declspec(naked) void GameHook_000a3bc0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a3e70
+// 0x000a3e70
 __declspec(naked) void GameHook_000a3e70()
 {
     // clang-format off
@@ -4241,7 +4226,7 @@ __declspec(naked) void GameHook_000a3e70()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a40a0
+// 0x000a40a0
 __declspec(naked) void GameHook_000a40a0()
 {
     // clang-format off
@@ -4276,7 +4261,7 @@ __declspec(naked) void GameHook_000a40a0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4110
+// 0x000a4110
 __declspec(naked) void GameHook_000a4110()
 {
     // clang-format off
@@ -4307,7 +4292,7 @@ __declspec(naked) void GameHook_000a4110()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a43d0
+// 0x000a43d0
 __declspec(naked) void GameHook_000a43d0()
 {
     // clang-format off
@@ -4350,7 +4335,7 @@ __declspec(naked) void GameHook_000a43d0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4450
+// 0x000a4450
 __declspec(naked) void GameHook_000a4450()
 {
     // clang-format off
@@ -4401,7 +4386,7 @@ __declspec(naked) void GameHook_000a4450()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4aa0
+// 0x000a4aa0
 __declspec(naked) void GameHook_000a4aa0()
 {
     // clang-format off
@@ -4437,7 +4422,7 @@ __declspec(naked) void GameHook_000a4aa0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4b20
+// 0x000a4b20
 __declspec(naked) void GameHook_000a4b20()
 {
     // clang-format off
@@ -4469,7 +4454,7 @@ __declspec(naked) void GameHook_000a4b20()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4b80
+// 0x000a4b80
 __declspec(naked) void GameHook_000a4b80()
 {
     // clang-format off
@@ -4509,7 +4494,7 @@ __declspec(naked) void GameHook_000a4b80()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a5290
+// 0x000a5290
 __declspec(naked) void GameHook_000a5290()
 {
     // clang-format off
@@ -4536,7 +4521,7 @@ __declspec(naked) void GameHook_000a5290()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a52d0
+// 0x000a52d0
 __declspec(naked) void GameHook_000a52d0()
 {
     // clang-format off
@@ -4581,60 +4566,60 @@ __declspec(naked) void GameHook_000a52d0()
 }
 
 // Additional native control/camera/patch callbacks and their shared aggregates.
-// samp.dll RVA: 0x0018e878
+// 0x0018e878
 CMatrix g_hookAimOffsetMatrix;
-// samp.dll RVA: 0x0018ead8
+// 0x0018ead8
 CMatrix g_hookMountedMatrix;
-// samp.dll RVA: 0x00151ad4
+// 0x00151ad4
 DWORD g_hookPatchOverride151AD4[3] = {0x0, 0x0, 0x41700000};
-// samp.dll RVA: 0x00151ae0
+// 0x00151ae0
 BYTE g_hookRestore5543C0[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
-// samp.dll RVA: 0x00151af8
+// 0x00151af8
 WORD g_hookRestore5543DC = 0x4774;
-// samp.dll RVA: 0x0018e548
+// 0x0018e548
 DWORD g_hookCapture0018E548;
-// samp.dll RVA: 0x0018e54c
+// 0x0018e54c
 DWORD g_hookCapture0018E54C;
-// samp.dll RVA: 0x0018e7e4
+// 0x0018e7e4
 DWORD g_hookCapture0018E7E4;
-// samp.dll RVA: 0x0018e7e8
+// 0x0018e7e8
 DWORD g_hookCapture0018E7E8;
-// samp.dll RVA: 0x0018e7ec
+// 0x0018e7ec
 DWORD g_hookCapture0018E7EC;
-// samp.dll RVA: 0x0018e80c
+// 0x0018e80c
 DWORD g_hookCapture0018E80C;
-// samp.dll RVA: 0x0018e92c
+// 0x0018e92c
 DWORD g_hookCapture0018E92C;
-// samp.dll RVA: 0x0018eaac
+// 0x0018eaac
 DWORD g_hookCapture0018EAAC;
-// samp.dll RVA: 0x0018eb74
+// 0x0018eb74
 DWORD g_hookCapture0018EB74;
-// samp.dll RVA: 0x0018f338
+// 0x0018f338
 DWORD g_hookCapture0018F338;
-// samp.dll RVA: 0x0018f344
+// 0x0018f344
 DWORD g_hookCapture0018F344;
-// samp.dll RVA: 0x0018f348
+// 0x0018f348
 DWORD g_hookCapture0018F348;
-// samp.dll RVA: 0x0018f358
+// 0x0018f358
 DWORD g_hookCapture0018F358;
-// samp.dll RVA: 0x0018f35c
+// 0x0018f35c
 DWORD g_hookCapture0018F35C;
-// samp.dll RVA: 0x0018f364
+// 0x0018f364
 DWORD g_hookCapture0018F364;
-// samp.dll RVA: 0x0018f380
+// 0x0018f380
 DWORD g_hookCapture0018F380;
-// samp.dll RVA: 0x0018f48c
+// 0x0018f48c
 DWORD g_hookCapture0018F48C;
-// samp.dll RVA: 0x0018f490
+// 0x0018f490
 DWORD g_hookCapture0018F490;
-// samp.dll RVA: 0x0018f608
+// 0x0018f608
 DWORD g_hookCapture0018F608;
-// samp.dll RVA: 0x0018f60c
+// 0x0018f60c
 DWORD g_hookCapture0018F60C;
-// samp.dll RVA: 0x0018f610
+// 0x0018f610
 DWORD g_hookCapture0018F610;
 
-// samp.dll RVA: 0x000a2d30
+// 0x000a2d30
 __declspec(naked) void GameHook_000a2d30()
 {
     // clang-format off
@@ -4686,7 +4671,7 @@ __declspec(naked) void GameHook_000a2d30()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a2de0
+// 0x000a2de0
 __declspec(naked) void GameHook_000a2de0()
 {
     // clang-format off
@@ -4730,7 +4715,7 @@ __declspec(naked) void GameHook_000a2de0()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4510
+// 0x000a4510
 __declspec(naked) void GameHook_000a4510()
 {
     // clang-format off
@@ -4820,7 +4805,7 @@ __declspec(naked) void GameHook_000a4510()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4680
+// 0x000a4680
 __declspec(naked) void GameHook_000a4680()
 {
     // clang-format off
@@ -4839,7 +4824,7 @@ __declspec(naked) void GameHook_000a4680()
     // clang-format on
 }
 
-// samp.dll RVA: 0x000a4cc0
+// 0x000a4cc0
 __declspec(naked) void GameHook_000a4cc0()
 {
     // clang-format off
@@ -4916,6 +4901,422 @@ __declspec(naked) void GameHook_000a4cc0()
         mov word ptr ds:[0x5543dc], ax
         popad
         mov eax, dword ptr [g_hookCapture0018F610]
+        ret
+    }
+    // clang-format on
+}
+
+// 0x002aca50
+DWORD g_clientPreviousRenderState;
+
+// 0x002aca54
+DWORD g_clientRenderCaller;
+
+// 0x002aca58
+DWORD g_clientRenderState;
+
+// 0x002aca5c
+DWORD g_clientRenderValue;
+
+// 0x000c54c0
+void ClientInstallRenderStateHook()
+{
+    // GTA SA VA: 0x00c97b24; capture the engine table once, as native does.
+    BYTE* table = *(BYTE**)0xc97b24;
+    g_clientPreviousRenderState = *(DWORD*)(table + 0x20);
+    *(DWORD*)(table + 0x20) = (DWORD)ClientRenderStateHook;
+}
+
+// 0x000c5450
+__declspec(naked) void ClientRenderStateHook()
+{
+    // clang-format off
+    __asm {
+        mov eax,[esp]
+        mov g_clientRenderCaller,eax
+        mov eax,[esp+4]
+        mov g_clientRenderState,eax
+        mov eax,[esp+8]
+        mov g_clientRenderValue,eax
+        cmp g_clientRenderState,14
+        jne forward
+        cmp g_clientRenderValue,0
+        je fog_off
+        push 1
+        call GameSetupD3DFog
+        add esp,4
+        mov g_hookFogEnabled,1
+        jmp clear_fog
+    fog_off:
+        push 0
+        call GameSetupD3DFog
+        add esp,4
+        mov g_hookFogEnabled,0
+    clear_fog:
+        mov byte ptr [esp+8],0
+    forward:
+        mov eax,g_clientPreviousRenderState
+        jmp eax
+    }
+    // clang-format on
+}
+
+// 0x0018f4a8
+DWORD g_hookIgnoreNextExit;
+// 0x0018e550
+DWORD g_hookExitTask;
+// 0x0018e5d4
+CVehiclePool* g_hookEventVehiclePool;
+// 0x0018e568
+WORD g_hookEventVehicleId;
+// 0x0018e868
+CVehicle* g_hookExitVehicle;
+// 0x0018eb18
+CLocalPlayer* g_hookEventLocalPlayer;
+// 0x0018eb30
+CMatrix g_hookExitMatrix;
+// 0x00151aa0
+DWORD g_hookExitTaskArgument = 0xffffffff;
+// 0x0011c65c
+const float g_hookTrainExitOffset = 2.5f;
+// 0x0018e5bc
+DWORD g_hookQuitDeadline;
+// 0x0018f538
+DWORD g_hookDamageResponse;
+// 0x0018f53c
+DWORD g_hookDamagePed;
+// Raw GTA task ABI: continuation jumps and original constructor stack words.
+// 0x000a3580
+__declspec(naked) void GameHook_000a3580()
+{
+    // clang-format off
+    __asm {
+        mov eax,[esp]
+        mov g_hookAnimationReturn,eax
+        mov eax,[esp+4]
+        mov g_hookControlVehicle,eax
+        pushad
+        cmp g_hookAnimationReturn,0x570a20
+        je notify
+        cmp g_hookAnimationReturn,0x570a99
+        jne original
+    notify:
+        call GameNotifyEnterVehicle
+        test eax,eax
+        jne original
+        popad
+        mov ebx,[ecx]
+        test ebx,ebx
+        jz cancelled
+        push 1
+        call dword ptr [ebx]
+    cancelled:
+        pop eax
+        pop eax
+        mov eax,0x570a9e
+        jmp eax
+    original:
+        popad
+        mov eax,[esp+4]
+        push esi
+        push 0
+        mov ebx,0x6402f7
+        jmp ebx
+    }
+    // clang-format on
+}
+// 0x000a35e0
+__declspec(naked) void GameHook_000a35e0()
+{
+    // clang-format off
+    __asm {
+        mov ebp,esp
+        mov g_hookExitTask,ecx
+        mov eax,[ebp]
+        mov g_hookAnimationReturn,eax
+        mov eax,[ebp+4]
+        mov g_hookControlVehicle,eax
+        mov g_hookExitTaskArgument,0xffffffff
+        cmp g_hookIgnoreNextExit,0
+        jne clear_ignore
+        cmp g_hookAnimationReturn,0x5704a1
+        je notify
+        cmp g_hookAnimationReturn,0x5703fc
+        jne clear_ignore
+    notify:
+        cmp g_pNetGame,0
+        je done
+        call GameFindLocalPed
+        mov eax,[eax+0x58c]
+        cmp eax,g_hookControlVehicle
+        jne done
+        mov ecx,g_pNetGame
+        call CNetGame::GetVehiclePool
+        mov g_hookEventVehiclePool,eax
+        call GameFindLocalPed
+        mov ecx,[eax+0x58c]
+        push ecx
+        mov ecx,g_hookEventVehiclePool
+        call CVehiclePool::Find
+        mov g_hookEventVehicleId,ax
+        movzx edx,g_hookEventVehicleId
+        cmp edx,0xffff
+        je done
+        mov ax,g_hookEventVehicleId
+        push eax
+        mov ecx,g_hookEventVehiclePool
+        call CVehiclePool::Get
+        mov g_hookExitVehicle,eax
+        mov ecx,g_pNetGame
+        call CNetGame::GetPlayerPool
+        mov ecx,eax
+        call CPlayerPool::GetLocalPlayer
+        mov g_hookEventLocalPlayer,eax
+        cmp g_hookExitVehicle,0
+        je done
+        cmp g_hookEventLocalPlayer,0
+        je done
+        mov ecx,g_hookExitVehicle
+        call CVehicle::IsTrainPart
+        test eax,eax
+        je send_exit
+        mov g_hookExitTaskArgument,1
+        push offset g_hookExitMatrix
+        mov ecx,g_hookExitVehicle
+        call CEntity::GetMatrix
+        mov ecx,dword ptr [g_hookExitMatrix+0x38]
+        push ecx
+        fld dword ptr [g_hookExitMatrix+0x34]
+        fadd g_hookTrainExitOffset
+        push ecx
+        fstp dword ptr [esp]
+        fld dword ptr [g_hookExitMatrix+0x30]
+        fadd g_hookTrainExitOffset
+        push ecx
+        fstp dword ptr [esp]
+        mov ecx,g_hookEventLocalPlayer
+        call CLocalPlayer::GetPed
+        mov ecx,eax
+        call CPed::WarpFromVehicle
+        jmp done
+    send_exit:
+        mov dx,g_hookEventVehicleId
+        push edx
+        mov ecx,g_hookEventLocalPlayer
+        call CLocalPlayer::ExitVehicle
+        jmp done
+    clear_ignore:
+        mov g_hookIgnoreNextExit,0
+    done:
+        push g_hookExitTaskArgument
+        push 0x841618
+        mov ecx,g_hookExitTask
+        mov edx,0x63b8c0
+        add edx,7
+        jmp edx
+    }
+    // clang-format on
+}
+// 0x000a3a70
+__declspec(naked) void GameHook_000a3a70()
+{
+    // clang-format off
+    __asm {
+        mov eax,fs:[0]
+        test ecx,ecx
+        jz original
+        mov g_hookDamageResponse,ecx
+        mov ebx,[esp+4]
+        test ebx,ebx
+        jz original
+        mov g_hookDamagePed,ebx
+        pushad
+        mov eax,g_hookDamagePed
+        push eax
+        mov ecx,g_hookDamageResponse
+        push ecx
+        call GameNotifyPedDamage
+        test eax,eax
+        jz continue_original
+        popad
+        ret 12
+    continue_original:
+        popad
+    original:
+        mov edx,0x4b5ac6
+        jmp edx
+    }
+    // clang-format on
+}
+// Native does not return. Preserve its unsigned deadline comparison/wrap behavior.
+// 0x000a3800
+__declspec(naked) void GameHook_000a3800()
+{
+    // clang-format off
+    __asm {
+        mov esi,dword ptr [GetTickCount]
+        call esi
+        add eax,2000
+        mov g_hookQuitDeadline,eax
+        call ClientRequestQuit
+        call esi
+        cmp eax,g_hookQuitDeadline
+        jae exit_game
+        mov edi,dword ptr [Sleep]
+    wait_loop:
+        push 100
+        call edi
+        call esi
+        cmp eax,g_hookQuitDeadline
+        jb wait_loop
+    exit_game:
+        push 0
+        call dword ptr [ExitProcess]
+    }
+    // clang-format on
+}
+
+// 0x0018e8c0
+DWORD g_hookPedControlField540;
+// 0x0018f378
+CPlayerPool* g_hookFaultPlayerPool;
+// 0x00151970
+WORD g_hookFaultPlayerId = 0xffff;
+// 0x0018e824
+CRemotePlayer* g_hookFaultRemotePlayer;
+// 0x00151a70
+const BYTE g_hookPedRestoreA[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
+// 0x00151a88
+const BYTE g_hookPedRestoreB[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
+// 0x00151a90
+const BYTE g_hookPedRemoteRestore[5] = {0xe8, 0x17, 0x88, 0xff, 0xff};
+// 0x0011ebcc
+const char g_hookPedExceptionLabel[10] = "playerped";
+// 0x0011ebac
+const char g_hookPedRemovedMessage[32] = "Removed player %u due to error.";
+// 0x000a2530
+void GameRunPedControlBackend()
+{
+    __try
+    {
+        // GTA SA thiscall backend, ECX=the current saved ped.
+        ((void(__fastcall*)(void*, void*))0x60ea90)((void*)g_hookCameraPed, 0);
+    }
+    __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), g_hookPedExceptionLabel))
+    {
+        if (*g_clientCrashPedContext && g_pNetGame)
+        {
+            g_hookFaultPlayerPool = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
+            if (g_hookFaultPlayerPool)
+            {
+                WORD id = g_hookFaultPlayerPool->Find((void*)g_hookCameraPed);
+                g_hookFaultPlayerId = id;
+                if (id != 0xffff)
+                {
+                    g_hookFaultRemotePlayer = g_hookFaultPlayerPool->GetPlayer(id);
+                    if (g_hookFaultRemotePlayer)
+                    {
+                        g_hookFaultRemotePlayer->Remove();
+                        id = g_hookFaultPlayerId;
+                    }
+                    if (g_pChat)
+                        g_pChat->AddDebugMessage(g_hookPedRemovedMessage, (unsigned)id);
+                }
+            }
+        }
+    }
+}
+// Extracted readable body; outer native entry preserves PUSHAD state.
+// samp.dll RVA: unknown (reconstruction-only body helper extracted from A26D0; no standalone native entry)
+void GameProcessPedControlBody()
+{
+    g_hookCollisionPed = g_hookCameraPed;
+    g_hookSavedPlayer = *g_clientCrashPedContext;
+    g_hookPlayerIndex = GameFindPlayerPedIndex((void*)g_hookCameraPed);
+    if (g_hookCameraPed && g_hookPlayerIndex && !g_hookSavedPlayer)
+    {
+        KeyStuff::UpdateKeys();
+        KeyStuff::ApplyPlayerKeys(g_hookPlayerIndex);
+        g_hookSavedCameraMode = *g_aimInternalCameraMode;
+        *g_aimInternalCameraMode = AimStuff::GetPlayerCameraMode(g_hookPlayerIndex);
+        g_hookSavedCameraModeWord = *g_hookCameraModeWord;
+        *g_hookCameraModeWord = AimStuff::GetPlayerCameraMode(g_hookPlayerIndex);
+        if (*g_hookCameraModeWord == 4)
+            *g_hookCameraModeWord = 0;
+        AimStuff::UpdateCamera();
+        AimStuff::ApplyPlayerCamera(g_hookPlayerIndex);
+        AimStuff::UpdateAim();
+        AimStuff::ApplyPlayerAim(g_hookPlayerIndex);
+        AimStuff::UpdateLocalSkills();
+        AimStuff::ApplyPlayerSkills(g_hookPlayerIndex);
+        *g_clientCrashPedContext = g_hookPlayerIndex;
+        g_hookPedControlField540 = *(DWORD*)(g_hookCollisionPed + 0x540);
+        GameUnprotect((void*)0x5e92f4, 5);
+        *(DWORD*)0x5e92f4 = 0x90909090;
+        *(BYTE*)0x5e92f8 = 0x90;
+        GameRunPedControlBackend();
+        memcpy((void*)0x5e92f4, g_hookPedRemoteRestore, 5);
+        AimStuff::ApplyLocalSkills();
+        *g_aimInternalCameraMode = g_hookSavedCameraMode;
+        *g_hookCameraModeWord = g_hookSavedCameraModeWord;
+        AimStuff::ApplyLocalCamera();
+        *g_clientCrashPedContext = 0;
+        KeyStuff::ApplyLocalKeys();
+        AimStuff::ApplyLocalAim();
+    }
+    else
+    {
+        if (g_pNetGame && *(DWORD*)(*(BYTE**)(*(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8) + 0x1e) + 0xf4))
+        {
+            BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
+            float positiveX = *(float*)(settings + 5), negativeX = *(float*)(settings + 9);
+            float positiveY = *(float*)(settings + 0xd), negativeY = *(float*)(settings + 0x11);
+            if (g_pGame->GetPlayerPed()->HasExceededWorldBoundries(positiveX, negativeX, positiveY, negativeY) && !g_pGame->GetCurrentInterior() &&
+                !(*(DWORD*)(g_hookCollisionPed + 0x46c) & 0x100) && (*(DWORD*)(g_hookCollisionPed + 0x46c) & 3))
+            {
+                g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
+                *(WORD*)(g_hookVehicleKeys + 0x1c) = 0xff;
+                *(WORD*)(g_hookVehicleKeys + 0x4c) = 0;
+            }
+        }
+        if (g_pGame->GetPlayerPed())
+        {
+            if (g_pGame->GetPlayerPed()->unknown2f7)
+            {
+                g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
+                *(WORD*)(g_hookVehicleKeys + 0x24) = 0;
+                *(WORD*)(g_hookVehicleKeys + 0x54) = 0;
+            }
+            if (g_pGame->GetPlayerPed()->unknown2f6)
+            {
+                g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
+                *(WORD*)(g_hookVehicleKeys + 0x1c) = 0;
+                *(WORD*)(g_hookVehicleKeys + 0x4c) = 0;
+            }
+            if (g_pGame->GetPlayerPed()->unknown2f8)
+            {
+                g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
+                *(WORD*)(g_hookVehicleKeys + 0x20) = 0;
+                *(WORD*)(g_hookVehicleKeys + 0x50) = 0;
+            }
+        }
+        memcpy((void*)0x6884c4, g_hookPedRestoreA, 6);
+        memcpy((void*)0x688200, g_hookPedRestoreB, 6);
+        ((void(__fastcall*)(void*, void*))0x60ea90)((void*)g_hookCameraPed, 0);
+        memset((void*)0x6884c4, 0x90, 6);
+        memset((void*)0x688200, 0x90, 6);
+    }
+}
+// Raw entry: ECX=GTA ped; original preserves all PUSHAD registers and returns.
+// 0x000a26d0
+__declspec(naked) void GameHook_000a26d0()
+{
+    // clang-format off
+    __asm {
+        mov g_hookCameraPed,ecx
+        pushad
+        call GameProcessPedControlBody
+        popad
         ret
     }
     // clang-format on

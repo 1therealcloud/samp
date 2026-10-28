@@ -1,5 +1,5 @@
 #include "objectedit.h"
-// samp.dll RVA: 0x00017850
+// 0x00017850
 WORD CObjectEdit::GetObjectId()
 {
     return objectId;
@@ -8,7 +8,7 @@ WORD CObjectEdit::GetObjectId()
 #include "game/entity.h"
 #include "gui/device_objects.h"
 #include "main.h"
-// samp.dll RVA: 0x00072ff0
+// 0x00072ff0
 BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
 {
     BYTE* state = (BYTE*)this;
@@ -82,7 +82,7 @@ BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
     }
     return FALSE;
 }
-// samp.dll RVA: 0x00071b40
+// 0x00071b40
 void CObjectEdit::TryChangeProcessType()
 {
     POINT point;
@@ -102,14 +102,14 @@ void CObjectEdit::TryChangeProcessType()
         }
     unknown113 = 0xffffffff;
 }
-// samp.dll RVA: 0x00071c90
+// 0x00071c90
 void CObjectEdit::SetEditMode(int mode)
 {
     if (unknown78 == 1 && mode == 2)
         mode = 0;
     unknown7c = mode;
 }
-// samp.dll RVA: 0x00071e60
+// 0x00071e60
 void CObjectEdit::ResetMousePos()
 {
     RECT rect;
@@ -120,7 +120,7 @@ void CObjectEdit::ResetMousePos()
     *(int*)(state + 0xab) = y;
     SetCursorPos(x, y);
 }
-// samp.dll RVA: 0x00072f00
+// 0x00072f00
 void CObjectEdit::ApplyChanges(int axis, float difference)
 {
     if (unknown78 == 1)
@@ -128,7 +128,7 @@ void CObjectEdit::ApplyChanges(int axis, float difference)
     else if (unknown78 == 2)
         ApplyAttachedChanges(axis, difference);
 }
-// samp.dll RVA: 0x00072f20
+// 0x00072f20
 void CObjectEdit::ProcessMouseMove()
 {
     POINT point;
@@ -156,7 +156,7 @@ void CObjectEdit::ProcessMouseMove()
 #include "game/playerped.h"
 #include "game/util.h"
 #include <string.h>
-// samp.dll RVA: 0x00072cb0
+// 0x00072cb0
 void CObjectEdit::ApplyObjectChanges(int axis, float difference)
 {
     CObjectPool* pool = *(CObjectPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
@@ -189,7 +189,7 @@ void CObjectEdit::ApplyObjectChanges(int axis, float difference)
     SendEditEndNotification(2);
     memcpy((BYTE*)this + 0xc3, &matrix, 64);
 }
-// samp.dll RVA: 0x00071cb0
+// 0x00071cb0
 void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
 {
     int slot = *(int*)((BYTE*)this + 0x8a);
@@ -235,7 +235,7 @@ void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
 }
 
 #include "objectedit.h"
-// samp.dll RVA: 0x00071600
+// 0x00071600
 CObjectEdit::CObjectEdit(IDirect3DDevice9* value)
 {
     device = value;
@@ -258,7 +258,7 @@ CObjectEdit::CObjectEdit(IDirect3DDevice9* value)
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/quaternion.h"
-// samp.dll RVA: 0x000716c0
+// 0x000716c0
 float CObjectEdit::WorldToScreen(const CVector* position, float* screen)
 {
     CVector point;
@@ -283,7 +283,7 @@ float CObjectEdit::WorldToScreen(const CVector* position, float* screen)
     return projected.z;
 }
 
-// samp.dll RVA: 0x000717c0
+// 0x000717c0
 int CObjectEdit::RenderAxes(const CMatrix* matrix, float axisSize)
 {
     if (!line)
@@ -349,9 +349,9 @@ int CObjectEdit::RenderAxes(const CMatrix* matrix, float axisSize)
     return 1;
 }
 
-// samp.dll RVA: 0x0011a7ac
+// 0x0011a7ac
 const float g_cursorRayUnsignedBias = 4294967296.0f;
-// samp.dll RVA: 0x000739e0
+// 0x000739e0
 void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector* end)
 {
     IDirect3DSurface9* surface = 0;
@@ -449,35 +449,35 @@ height_unsigned:
     // clang-format on
 }
 
-// samp.dll RVA: 0x00118388
+// 0x00118388
 const char g_objectEditGlyphMax[4] = "C";
-// samp.dll RVA: 0x0011c340
+// 0x0011c340
 const char g_objectEditGlyphXPosition[4] = "6";
-// samp.dll RVA: 0x0011c33c
+// 0x0011c33c
 const char g_objectEditGlyphXRotation[4] = "3";
-// samp.dll RVA: 0x00118394
+// 0x00118394
 const char g_objectEditGlyphXScale[4] = "9";
-// samp.dll RVA: 0x00118304
+// 0x00118304
 const char g_objectEditGlyphYPosition[4] = "7";
-// samp.dll RVA: 0x00117880
+// 0x00117880
 const char g_objectEditGlyphYRotation[4] = "4";
-// samp.dll RVA: 0x00118308
+// 0x00118308
 const char g_objectEditGlyphYScale[4] = "A";
-// samp.dll RVA: 0x001183e0
+// 0x001183e0
 const char g_objectEditGlyphZPosition[4] = "8";
-// samp.dll RVA: 0x00117950
+// 0x00117950
 const char g_objectEditGlyphZRotation[4] = "5";
-// samp.dll RVA: 0x001184c0
+// 0x001184c0
 const char g_objectEditGlyphZScale[4] = "B";
-// samp.dll RVA: 0x001182d8
+// 0x001182d8
 const char g_objectEditGlyphDefault[4] = "0";
 
-// samp.dll RVA: 0x00071a30
+// 0x00071a30
 const char* CObjectEdit::GetMaxSizeChar()
 {
     return g_objectEditGlyphMax;
 }
-// samp.dll RVA: 0x00071a40
+// 0x00071a40
 const char* CObjectEdit::GetRenderChar(int axis)
 {
     if (axis == 0)
@@ -509,7 +509,7 @@ const char* CObjectEdit::GetRenderChar(int axis)
     }
     return g_objectEditGlyphDefault;
 }
-// samp.dll RVA: 0x00071ae0
+// 0x00071ae0
 void CObjectEdit::CenterButtonRect(RECT* out, const POINT* center)
 {
     LONG width = *(LONG*)unknown00;
@@ -521,7 +521,7 @@ void CObjectEdit::CenterButtonRect(RECT* out, const POINT* center)
     out->top = (LONG)((DWORD)center->y - (DWORD)half);
     out->bottom = (LONG)(*(DWORD*)(unknown00 + 4) + (DWORD)out->top);
 }
-// samp.dll RVA: 0x00071b20
+// 0x00071b20
 void CObjectEdit::ClearButtonRect(RECT* out)
 {
     out->left = 0;
@@ -529,7 +529,7 @@ void CObjectEdit::ClearButtonRect(RECT* out)
     out->top = 0;
     out->bottom = 0;
 }
-// samp.dll RVA: 0x00071ec0
+// 0x00071ec0
 void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
 {
     unknown80 = 1;
@@ -554,7 +554,7 @@ void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
     *(DWORD*)((BYTE*)this + 0x96) = *(DWORD*)(object + 0xb1);
     *(DWORD*)((BYTE*)this + 0x9a) = *(DWORD*)(object + 0xb5);
 }
-// samp.dll RVA: 0x00071f80
+// 0x00071f80
 void CObjectEdit::EnterEditAttachedObject(int index)
 {
     unknown80 = 1;
@@ -569,13 +569,13 @@ void CObjectEdit::EnterEditAttachedObject(int index)
 }
 
 // Also used as the string "2" by the native editor; share the existing RPC storage.
-// samp.dll RVA: 0x0011c310
+// 0x0011c310
 extern int g_inputCommandRpcId;
-// samp.dll RVA: 0x0011c344
+// 0x0011c344
 const char g_objectEditGlyphScale[4] = "1";
-// samp.dll RVA: 0x00118350
+// 0x00118350
 const char g_objectEditGlyphSave[4] = "H";
-// samp.dll RVA: 0x00071fe0
+// 0x00071fe0
 void CObjectEdit::DrawButton(int processType, RECT rect)
 {
     DWORD background = 0x99222222, foreground = 0xff999999;
@@ -619,7 +619,7 @@ void CObjectEdit::DrawButton(int processType, RECT rect)
     font->DrawTextA(0, glyph, 1, &rect, 0x105, foreground);
     CenterButtonRect((RECT*)((BYTE*)this + 8 + slot * 16), (const POINT*)&rect);
 }
-// samp.dll RVA: 0x000726d0
+// 0x000726d0
 BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
 {
     if (!line)
@@ -743,15 +743,15 @@ BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
     DrawButton(3, rect);
     return TRUE;
 }
-// samp.dll RVA: 0x00072ca0
+// 0x00072ca0
 BOOL CObjectEdit::RenderControls(const CMatrix* matrix, float axisSize)
 {
     return RenderControlsForObject(matrix, axisSize);
 }
 
-// samp.dll RVA: 0x0011c768
+// 0x0011c768
 const float g_objectEditDistanceScale = 0.125f;
-// samp.dll RVA: 0x00073220
+// 0x00073220
 void CObjectEdit::Render()
 {
     unknown84 = 0;
@@ -838,11 +838,11 @@ void CObjectEdit::Render()
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "cmdwindow.h"
-// samp.dll RVA: 0x00117f2c
+// 0x00117f2c
 int g_objectEditRpc = 117;
-// samp.dll RVA: 0x00117f30
+// 0x00117f30
 int g_objectEditAttachedRpc = 116;
-// samp.dll RVA: 0x00072350
+// 0x00072350
 void CObjectEdit::SendEditEndNotification(int status)
 {
     BYTE* pool = *(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
@@ -885,7 +885,7 @@ void CObjectEdit::SendEditEndNotification(int status)
     stream.WriteBits((const BYTE*)&value, 32, true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_objectEditRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
-// samp.dll RVA: 0x00072560
+// 0x00072560
 void CObjectEdit::SendAttachedEditEndNotification(int status)
 {
     RakNet::BitStream stream;
@@ -900,7 +900,7 @@ void CObjectEdit::SendAttachedEditEndNotification(int status)
     stream.Write((const char*)info, 52);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_objectEditAttachedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
-// samp.dll RVA: 0x00072660
+// 0x00072660
 void CObjectEdit::Disable(BOOL send)
 {
     BOOL notify = send != 0;

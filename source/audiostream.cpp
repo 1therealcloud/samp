@@ -3,11 +3,11 @@
 #include "config.h"
 #include "game/game.h"
 #include "main.h"
-// samp.dll RVA: 0x0016c7cc
+// 0x0016c7cc
 DWORD g_audioStreamHandle;
-// samp.dll RVA: 0x001407b0
+// 0x001407b0
 char g_audioStreamAgent[10] = "SA-MP/0.3";
-// samp.dll RVA: 0x00065f00
+// 0x00065f00
 BOOL CAudioStream::Reset()
 {
     g_audioStreamHandle = 0;
@@ -28,10 +28,10 @@ BOOL CAudioStream::Reset()
     return TRUE;
 }
 
-// samp.dll RVA: 0x0016c7d0
+// 0x0016c7d0
 BYTE g_audioStreamRadioActive;
 
-// samp.dll RVA: 0x00066500
+// 0x00066500
 void CAudioStream::ControlGameRadio()
 {
     if (initialized && g_audioStreamRadioActive)
@@ -47,13 +47,13 @@ void CAudioStream::ControlGameRadio()
 #include "gui/device_objects.h"
 #include <stdio.h>
 #include <string.h>
-// samp.dll RVA: 0x0016c5c0
+// 0x0016c5c0
 char g_audioStreamTitle[257];
-// samp.dll RVA: 0x0016c3b0
+// 0x0016c3b0
 char g_audioStreamStation[257];
-// samp.dll RVA: 0x0011bbf0
+// 0x0011bbf0
 const char g_audioStreamInfoFormat[8] = "%s - %s";
-// samp.dll RVA: 0x00066530
+// 0x00066530
 void CAudioStream::DrawInfo()
 {
     if (!initialized || !g_audioStreamRadioActive)
@@ -67,7 +67,7 @@ void CAudioStream::DrawInfo()
     RECT rect = {15, (LONG)(height - 20), (LONG)width, (LONG)(height - 20 + 30)};
     g_deviceFonts->DrawLittleText(0, text, rect, 0x100, 0x99ffffff, FALSE);
 }
-// samp.dll RVA: 0x00066610
+// 0x00066610
 void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
 {
     // clang-format off
@@ -84,7 +84,7 @@ void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
     }
     // clang-format on
 }
-// samp.dll RVA: 0x00066630
+// 0x00066630
 void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
 {
     // clang-format off
@@ -104,17 +104,17 @@ void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
 }
 
 #include <stdlib.h>
-// samp.dll RVA: 0x001407ba
+// 0x001407ba
 BYTE g_audioStreamStopRequested;
-// samp.dll RVA: 0x0011bc08
+// 0x0011bc08
 const char g_audioStreamIcyTitleMarker[14] = "StreamTitle='";
-// samp.dll RVA: 0x0011bc00
+// 0x0011bc00
 const char g_audioStreamArtistMarker[8] = "artist=";
-// samp.dll RVA: 0x0011bbf8
+// 0x0011bbf8
 const char g_audioStreamTitleMarker[7] = "title=";
-// samp.dll RVA: 0x001185d8
+// 0x001185d8
 const char g_audioStreamStringFormat[3] = "%s";
-// samp.dll RVA: 0x00065fe0
+// 0x00065fe0
 BOOL CAudioStream::Stop(bool wait)
 {
     if (!initialized || !g_audioStreamRadioActive)
@@ -127,7 +127,7 @@ BOOL CAudioStream::Stop(bool wait)
     g_audioStreamHandle = 0;
     return TRUE;
 }
-// samp.dll RVA: 0x00066040
+// 0x00066040
 void CAudioStream::ReadMetadata()
 {
     memset(g_audioStreamTitle, 0, 257);
@@ -163,7 +163,7 @@ void CAudioStream::ReadMetadata()
     else if (title)
         _snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, title);
 }
-// samp.dll RVA: 0x00066170
+// 0x00066170
 void CALLBACK CAudioStream::MetadataSync(DWORD, DWORD, DWORD, void*)
 {
     ReadMetadata();
@@ -175,31 +175,31 @@ void CALLBACK CAudioStream::MetadataSync(DWORD, DWORD, DWORD, void*)
 #include "game/util.h"
 #include <process.h>
 // MSVC CRT conversion helper, supplied by selected static runtime.
-// samp.dll RVA: 0x000f9324
+// 0x000f9324
 extern "C" __int64 __cdecl _ftol2();
-// samp.dll RVA: 0x0016c4b8
+// 0x0016c4b8
 char g_audioStreamUrl[257];
-// samp.dll RVA: 0x0016c6c8
+// 0x0016c6c8
 char g_audioStreamStationUrl[257];
-// samp.dll RVA: 0x0016c7d4
+// 0x0016c7d4
 CVector g_audioStreamPosition;
-// samp.dll RVA: 0x0016c7e0
+// 0x0016c7e0
 BYTE g_audioStreamSpatial;
-// samp.dll RVA: 0x001407bc
+// 0x001407bc
 float g_audioStreamRadius = 50.0f;
-// samp.dll RVA: 0x0011bbec
+// 0x0011bbec
 const float g_audioStreamVolumeScale = 7000.0f;
-// samp.dll RVA: 0x0011bc18
+// 0x0011bc18
 const float g_audioStreamSpatialVolumeScale = 8000.0f;
-// samp.dll RVA: 0x0011bc28
+// 0x0011bc28
 const char g_audioStreamStationMarker[10] = "icy-name:";
-// samp.dll RVA: 0x0011bc1c
+// 0x0011bc1c
 const char g_audioStreamStationUrlMarker[9] = "icy-url:";
-// samp.dll RVA: 0x0011bc48
+// 0x0011bc48
 const char g_audioStreamMessageOffKey[12] = "audiomsgoff";
-// samp.dll RVA: 0x0011bc34
+// 0x0011bc34
 const char g_audioStreamMessageFormat[17] = "Audio stream: %s";
-// samp.dll RVA: 0x000663e0
+// 0x000663e0
 BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius, bool spatial)
 {
     if (!initialized)
@@ -240,7 +240,7 @@ BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius
     _beginthread(Worker, 0, 0);
     return TRUE;
 }
-// samp.dll RVA: 0x00066180
+// 0x00066180
 void __cdecl CAudioStream::Worker(void*)
 {
     g_audioStreamRadioActive = 1;
@@ -344,14 +344,14 @@ distance_done:
     g_audioStreamRadioActive = 0;
 }
 
-// samp.dll RVA: 0x0011bc98
+// 0x0011bc98
 const char g_audioStreamOffsetFormat[45] = "BASS_ChannelSet3DAttributes offset: %f %f %f";
-// samp.dll RVA: 0x0011bc74
+// 0x0011bc74
 const char g_audioStreamAttributesError[34] = "BASS_ChannelSet3DAttributes Error";
-// samp.dll RVA: 0x0011bc54
+// 0x0011bc54
 const char g_audioStreamPositionError[32] = "BASS_ChannelSet3DPosition Error";
 
-// samp.dll RVA: 0x00066650
+// 0x00066650
 void CAudioStream::Update3D()
 {
     CPed* ped = g_pGame->GetPlayerPed();

@@ -1,17 +1,17 @@
 #include "downloadwindow.h"
-// samp.dll RVA: 0x0006a410
+// 0x0006a410
 CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
 {
     *(DWORD*)nativeState = 0;
     *(DWORD*)(nativeState + 4) = 0;
     return this;
 }
-// samp.dll RVA: 0x0006aa00
+// 0x0006aa00
 bool CDownloadWindow::ReleaseRecordStorage()
 {
     return ResizeRecords(0);
 }
-// samp.dll RVA: 0x0006a440
+// 0x0006a440
 int CDownloadWindow::GetFilesCount()
 {
     return *(int*)(nativeState + 4);
@@ -22,9 +22,9 @@ int CDownloadWindow::GetFilesCount()
 #include "game/gta_globals.h"
 #include "gui/device_lifecycle.h"
 #include <string.h>
-// samp.dll RVA: 0x0011c37c
+// 0x0011c37c
 const char g_downloadWindowTitle[18] = "Updating models..";
-// samp.dll RVA: 0x0006aa10
+// 0x0006aa10
 CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -51,7 +51,7 @@ CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
     state[0x95] = started;
 }
 
-// samp.dll RVA: 0x0006a1a0
+// 0x0006a1a0
 void CDownloadWindow::ResetFonts()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -83,7 +83,7 @@ void CDownloadWindow::ResetFonts()
     list = (CDXUTControl*)state[11];
     list->SetSize((LONG)(state[5] - 4), (LONG)(state[9] - (DWORD)measured.cy - 4));
 }
-// samp.dll RVA: 0x0006a280
+// 0x0006a280
 void CDownloadWindow::GetRect(RECT* out)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -92,7 +92,7 @@ void CDownloadWindow::GetRect(RECT* out)
     out->top = state[4];
     out->bottom = (LONG)(state[6] + (DWORD)out->top);
 }
-// samp.dll RVA: 0x0006a2b0
+// 0x0006a2b0
 void CDownloadWindow::Show(DWORD mode)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -113,7 +113,7 @@ void CDownloadWindow::Show(DWORD mode)
     ResetFonts();
     state[12] = 1;
 }
-// samp.dll RVA: 0x0006a350
+// 0x0006a350
 void CDownloadWindow::Draw()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -133,7 +133,7 @@ void CDownloadWindow::Draw()
         rect.left = (LONG)((DWORD)rect.left + *(DWORD*)(nativeState + 0x23c + column * 4));
     }
 }
-// samp.dll RVA: 0x0006a500
+// 0x0006a500
 void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -161,34 +161,34 @@ void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
 #include "objectedit.h"
 #include <stdio.h>
 #include <stdlib.h>
-// samp.dll RVA: 0x0011c414
+// 0x0011c414
 const char g_downloadModel[6] = "Model";
-// samp.dll RVA: 0x0011c40c
+// 0x0011c40c
 const char g_downloadTexture[8] = "Texture";
-// samp.dll RVA: 0x0011c404
+// 0x0011c404
 const char g_downloadIdFormat[5] = "0x%X";
-// samp.dll RVA: 0x0011c400
+// 0x0011c400
 const char g_downloadZeroFormat[4] = "0%%";
-// samp.dll RVA: 0x0011c3f8
+// 0x0011c3f8
 const char g_downloadPercentFormat[7] = "%.0f%%";
-// samp.dll RVA: 0x0011c3e0
+// 0x0011c3e0
 const char g_downloadDetailFormat[21] = "{CC8888}(%d) %.16s..";
-// samp.dll RVA: 0x0011c3c8
+// 0x0011c3c8
 const char g_downloadErrorFormat[24] = "{CC8888}Error(%d) %d/%d";
-// samp.dll RVA: 0x0011c3b8
+// 0x0011c3b8
 const char g_downloadCompleteFormat[15] = "{77AA77}%.0f%%";
-// samp.dll RVA: 0x0011c390
+// 0x0011c390
 const char g_downloadCaptionFormat[38] = "Updating models.. [%d/%d] (%.2f KB/s)";
 
-// samp.dll RVA: 0x0011b918
+// 0x0011b918
 const float g_downloadKilobytesPerByte = 0.0009765625f;
-// samp.dll RVA: 0x0006a420
+// 0x0006a420
 DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
     return index < state[1] ? ((DownloadRecord**)state[0])[index] : 0;
 }
-// samp.dll RVA: 0x0006a450
+// 0x0006a450
 bool CDownloadWindow::ResizeRecords(DWORD count)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -211,7 +211,7 @@ bool CDownloadWindow::ResizeRecords(DWORD count)
     state[1] = count;
     return true;
 }
-// samp.dll RVA: 0x0006a4c0
+// 0x0006a4c0
 void CDownloadWindow::TrimRecords()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -221,7 +221,7 @@ void CDownloadWindow::TrimRecords()
             last = i;
     ResizeRecords(last == 0xffffffff ? 0 : last + 1);
 }
-// samp.dll RVA: 0x0006a610
+// 0x0006a610
 int CDownloadWindow::FindRecord(DWORD id)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -232,12 +232,12 @@ int CDownloadWindow::FindRecord(DWORD id)
             return (int)i;
     return -1;
 }
-// samp.dll RVA: 0x0006a640
+// 0x0006a640
 void CDownloadWindow::ResetRecordStorage()
 {
     ResizeRecords(0);
 }
-// samp.dll RVA: 0x0006a650
+// 0x0006a650
 int CDownloadWindow::AddRecord(DownloadRecord* record)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -255,7 +255,7 @@ int CDownloadWindow::AddRecord(DownloadRecord* record)
     ((DownloadRecord**)state[0])[count] = record;
     return (int)count;
 }
-// samp.dll RVA: 0x0006a6b0
+// 0x0006a6b0
 bool CDownloadWindow::RemoveRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -265,7 +265,7 @@ bool CDownloadWindow::RemoveRecord(DWORD index)
     TrimRecords();
     return true;
 }
-// samp.dll RVA: 0x0006a6e0
+// 0x0006a6e0
 void CDownloadWindow::ClearRecords()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -282,7 +282,7 @@ void CDownloadWindow::ClearRecords()
         }
     ((CDXUTListBoxDL*)state[11])->RemoveAllItems();
 }
-// samp.dll RVA: 0x0006ab10
+// 0x0006ab10
 void CDownloadWindow::Hide()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -292,7 +292,7 @@ void CDownloadWindow::Hide()
     state[0x93] = 0;
     state[0x94] = 0xffffffff;
 }
-// samp.dll RVA: 0x0006a720
+// 0x0006a720
 void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downloaded, DWORD total, int error, const char* detail)
 {
     DWORD* state = (DWORD*)nativeState;

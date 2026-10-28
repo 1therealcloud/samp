@@ -12,13 +12,13 @@
 class CCryptoContext
 {
 private:
-    // samp.dll RVA: 0x0016c37c
+    // 0x0016c37c
     static DWORD ms_dwRefCount;
-    // samp.dll RVA: 0x0014077c
+    // 0x0014077c
     static DWORD ms_dwProviderType;
-    // samp.dll RVA: 0x0016c380
+    // 0x0016c380
     static LPSTR ms_szProviderName;
-    // samp.dll RVA: 0x00140780
+    // 0x00140780
     static LPSTR ms_szContainerName;
 
     // samp.dll RVA: unknown (native global not established; unused legacy declaration)
@@ -27,12 +27,12 @@ private:
     HCRYPTPROV m_hCryptProv;
 
 public:
-    // samp.dll RVA: 0x00065030
+    // 0x00065030
     CCryptoContext(void);
-    // samp.dll RVA: 0x000650a0
+    // 0x000650a0
     ~CCryptoContext(void);
 
-    // samp.dll RVA: 0x000650e0
+    // 0x000650e0
     HCRYPTPROV GetProvider();
 
 #ifdef ARCTOOL

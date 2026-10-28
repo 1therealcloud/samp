@@ -11,7 +11,7 @@
 #include "runutil.h"
 #include <stdio.h>
 #include <string.h>
-// samp.dll RVA: 0x00060260
+// 0x00060260
 void ClientSendCrashReport()
 {
     CHttpClient http;
@@ -22,15 +22,15 @@ void ClientSendCrashReport()
     sprintf(url, "team.sa-mp.com/report_037.php?addr=0x%X&gta=sa", g_clientExceptionContext->Eip);
     http.ProcessURL(HTTP_POST, url, encoded, "www.sa-mp.com");
 }
-// samp.dll RVA: 0x0015fa68
+// 0x0015fa68
 CONTEXT* g_clientExceptionContext;
-// samp.dll RVA: 0x0015fa70
+// 0x0015fa70
 char g_clientCrashText[16384];
-// samp.dll RVA: 0x00151960
+// 0x00151960
 BYTE* g_clientCrashPedContext = (BYTE*)0xb7cd74; // GTA SA virtual address.
-// samp.dll RVA: 0x0018f584
+// 0x0018f584
 WORD g_clientCrashLastRenderedObject;
-// samp.dll RVA: 0x0005fd50
+// 0x0005fd50
 void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
 {
     char line[16384];
@@ -50,7 +50,7 @@ void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
         strcat(text, line);
     }
 }
-// samp.dll RVA: 0x0005fc20
+// 0x0005fc20
 void ClientDumpNetworkState(char* text)
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -71,7 +71,7 @@ void ClientDumpNetworkState(char* text)
         }
     }
 }
-// samp.dll RVA: 0x0005fee0
+// 0x0005fee0
 void ClientDumpLoadedModules(char* text)
 {
     MODULEENTRY32 entry;
@@ -101,7 +101,7 @@ void ClientDumpLoadedModules(char* text)
     while (Module32Next(snapshot, &entry));
     CloseHandle(snapshot);
 }
-// samp.dll RVA: 0x00060070
+// 0x00060070
 void ClientConstructCrashText(BOOL includeModules)
 {
     char text[16384];
@@ -127,7 +127,7 @@ void ClientConstructCrashText(BOOL includeModules)
         strcat(g_clientCrashText, text);
     }
 }
-// samp.dll RVA: 0x00060330
+// 0x00060330
 INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -161,7 +161,7 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
     }
     return FALSE;
 }
-// samp.dll RVA: 0x00060430
+// 0x00060430
 LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS* exception)
 {
     g_clientExceptionContext = exception->ContextRecord;

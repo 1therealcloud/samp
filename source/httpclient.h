@@ -77,28 +77,28 @@ private:
     HTTP_RESPONSE m_Response;
     int m_iError;
 
-    // samp.dll RVA: 0x000029d0
+    // 0x000029d0
     bool Connect(char* szHost, int iPort);
-    // samp.dll RVA: 0x00002470
+    // 0x00002470
     void CloseConnection();
-    // samp.dll RVA: 0x00002480
+    // 0x00002480
     bool Send(char* szData);
-    // samp.dll RVA: 0x000024c0
+    // 0x000024c0
     int Recv(char* szBuffer, int iBufferSize);
 
-    // samp.dll RVA: 0x000024e0
+    // 0x000024e0
     void InitRequest(int iType, char* szURL, char* szPostData, char* szReferer);
-    // samp.dll RVA: 0x000026b0
+    // 0x000026b0
     void HandleEntity();
 
-    // samp.dll RVA: 0x00002a90
+    // 0x00002a90
     void Process();
 
 public:
-    // samp.dll RVA: 0x00002c70
+    // 0x00002c70
     int ProcessURL(int iType, char* szURL, char* szData, char* szReferer);
 
-    // samp.dll RVA: 0x000023e0
+    // 0x000023e0
     bool GetHeaderValue(char* szHeaderName, char* szReturnBuffer, int iBufSize);
     // samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
     int GetResponseCode()
@@ -126,9 +126,9 @@ public:
         return m_Response.response_len;
     };
 
-    // samp.dll RVA: 0x00002310
+    // 0x00002310
     CHttpClient();
-    // samp.dll RVA: 0x00002370
+    // 0x00002370
     ~CHttpClient();
 };
 

@@ -1,25 +1,25 @@
 #include "net/remoteplayer.h"
-// samp.dll RVA: 0x00017790
+// 0x00017790
 void CRemotePlayer::ShowNameTag(BYTE show)
 {
     *(DWORD*)(nativeState + 0x10) = show != 0;
 }
-// samp.dll RVA: 0x000739c0
+// 0x000739c0
 float CRemotePlayer::GetReportedHealth()
 {
     return *(float*)(nativeState + 0x1b0);
 }
-// samp.dll RVA: 0x000739d0
+// 0x000739d0
 float CRemotePlayer::GetReportedArmour()
 {
     return *(float*)(nativeState + 0x1ac);
 }
-// samp.dll RVA: 0x00008180
+// 0x00008180
 void CRemotePlayer::SetTeam(BYTE team)
 {
     nativeState[0x19] = team;
 }
-// samp.dll RVA: 0x000a21e0
+// 0x000a21e0
 BYTE CRemotePlayer::GetTeam()
 {
     return nativeState[0x19];
@@ -41,13 +41,13 @@ BYTE CRemotePlayer::GetTeam()
 #include "net/pool_frame.h"
 #include "net/vehiclepool.h"
 #include <string.h>
-// samp.dll RVA: 0x001181dc
+// 0x001181dc
 const float g_remoteVehicleAxisTeleportDistance = 6.0f;
-// samp.dll RVA: 0x001181d0
+// 0x001181d0
 const double g_remoteUnoccupiedCorrectionThreshold = 0.05;
-// samp.dll RVA: 0x001181e0
+// 0x001181e0
 const float g_remoteTrailerCorrection = 0.025f;
-// samp.dll RVA: 0x00015600
+// 0x00015600
 void CRemotePlayer::UpdateUnoccupied(const void* data)
 {
     const BYTE* input = (const BYTE*)data;
@@ -160,7 +160,7 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
     vehicle->SetSpeed(speed);
     *(DWORD*)((BYTE*)vehicle + 0x83) = 1;
 }
-// samp.dll RVA: 0x00015950
+// 0x00015950
 void CRemotePlayer::UpdateTrailer(const void* data)
 {
     const BYTE* input = (const BYTE*)data;
@@ -273,11 +273,11 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     }
     trailer->SetSpeed(speed);
 }
-// samp.dll RVA: 0x001181fc
+// 0x001181fc
 const float g_remoteBulletOffsetMinimum = -300.0f;
-// samp.dll RVA: 0x00118200
+// 0x00118200
 const float g_remoteBulletOffsetMaximum = 300.0f;
-// samp.dll RVA: 0x00016010
+// 0x00016010
 void CRemotePlayer::UpdateBullet(const void* data)
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -365,7 +365,7 @@ void CRemotePlayer::UpdateBullet(const void* data)
     (*(CPed**)(nativeState + 4))->SetBulletData(&bullet);
     (*(CPed**)(nativeState + 4))->FireWeapon();
 }
-// samp.dll RVA: 0x00016230
+// 0x00016230
 void CRemotePlayer::SetState(BYTE state)
 {
     BYTE previous = nativeState[0x1a];
@@ -375,15 +375,15 @@ void CRemotePlayer::SetState(BYTE state)
         nativeState[0x1a] = state;
     }
 }
-// samp.dll RVA: 0x00118218
+// 0x00118218
 const char g_remoteVendingAnimation[] = "VEND_EAT_P";
-// samp.dll RVA: 0x00118224
+// 0x00118224
 const char g_remoteVendingLibrary[] = "VENDING";
-// samp.dll RVA: 0x00118204
+// 0x00118204
 const char g_remoteCarryAnimation[] = "crry_prtial";
-// samp.dll RVA: 0x00118210
+// 0x00118210
 const char g_remoteCarryLibrary[] = "CARRY";
-// samp.dll RVA: 0x00016310
+// 0x00016310
 void CRemotePlayer::Process()
 {
     if (!*(CPed**)(nativeState + 4))
@@ -614,11 +614,11 @@ void CRemotePlayer::Process()
     if (*(DWORD*)(nativeState + 0x1d1) == 2 && (int)elapsed < 1500)
         *(DWORD*)(nativeState + 0x1d1) = 0;
 }
-// samp.dll RVA: 0x00117874
+// 0x00117874
 const float g_remoteHeadDistance = 20.0f;
-// samp.dll RVA: 0x00117868
+// 0x00117868
 const char g_remoteHeadTask[] = "FollowPedSA";
-// samp.dll RVA: 0x00014240
+// 0x00014240
 void CRemotePlayer::ProcessHead()
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -685,7 +685,7 @@ void CRemotePlayer::ProcessHead()
         *(DWORD*)(nativeState + 0x1e5) = now;
     }
 }
-// samp.dll RVA: 0x00014390
+// 0x00014390
 void CRemotePlayer::SetMarkerState(BOOL enabled)
 {
     if (!enabled)
@@ -699,7 +699,7 @@ void CRemotePlayer::SetMarkerState(BOOL enabled)
     }
     *(BOOL*)(nativeState + 0x1e9) = enabled;
 }
-// samp.dll RVA: 0x000143d0
+// 0x000143d0
 void CRemotePlayer::SetMarkerPosition(short x, short y, short z)
 {
     *(DWORD*)(nativeState + 0x1e9) = 1;
@@ -717,19 +717,19 @@ void CRemotePlayer::SetMarkerPosition(short x, short y, short z)
     *(int*)(nativeState + 0x1f1) = y;
     *(DWORD*)(nativeState + 0x1f9) = marker;
 }
-// samp.dll RVA: 0x00014470
+// 0x00014470
 BOOL CRemotePlayer::HasSurfingTarget()
 {
     WORD id = *(WORD*)(nativeState + 0x7a);
     return nativeState[0x1a] == 17 && id && id != 0xffff && id < 4100 ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x000144a0
+// 0x000144a0
 BOOL CRemotePlayer::SurfingOnObject()
 {
     WORD id = *(WORD*)(nativeState + 0x7a);
     return nativeState[0x1a] == 17 && id && id != 0xffff && id >= 2000 && id < 4100 ? TRUE : FALSE;
 }
-// samp.dll RVA: 0x00014780
+// 0x00014780
 void CRemotePlayer::ProcessSpecialAction()
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -798,13 +798,13 @@ void CRemotePlayer::ProcessSpecialAction()
         (*(CPed**)(nativeState + 4))->SetSecondaryPoseState(0);
     (*(CPed**)(nativeState + 4))->CheckParachuteWeapon();
 }
-// samp.dll RVA: 0x0013c498
+// 0x0013c498
 float g_remoteOnfootCorrection = 0.1f;
-// samp.dll RVA: 0x0013c49c
+// 0x0013c49c
 float g_remoteIncarCorrection = 0.06f;
-// samp.dll RVA: 0x0011797c
+// 0x0011797c
 const float g_remoteIncarTeleportDistance = 8.0f;
-// samp.dll RVA: 0x000149f0
+// 0x000149f0
 void CRemotePlayer::UpdateOnfootSpeedAndPosition()
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -876,7 +876,7 @@ void CRemotePlayer::UpdateOnfootSpeedAndPosition()
     // clang-format on
     (*(CPed**)(nativeState + 4))->SetSpeed(speed);
 }
-// samp.dll RVA: 0x00014c00
+// 0x00014c00
 void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -965,7 +965,7 @@ void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
         }
     (*(CPed**)(nativeState + 4))->SetSpeed(speed);
 }
-// samp.dll RVA: 0x00014ec0
+// 0x00014ec0
 void CRemotePlayer::UpdateIncarSpeedAndPosition()
 {
     CVector speed = {0, 0, 0};
@@ -1049,11 +1049,11 @@ void CRemotePlayer::UpdateIncarSpeedAndPosition()
     if (FloatOffset(speed.x, 0) > g_objectTurnVelocityScale || FloatOffset(speed.y, 0) > g_objectTurnVelocityScale || FloatOffset(speed.z, 0) > g_objectTurnVelocityScale)
         (*(CVehicle**)(nativeState + 8))->SetSpeed(speed);
 }
-// samp.dll RVA: 0x0013c4a0
+// 0x0013c4a0
 DWORD g_remoteClampTurnSpeed = 1;
-// samp.dll RVA: 0x001181bc
+// 0x001181bc
 const float g_remoteTurnSpeedMinimum = -0.02f;
-// samp.dll RVA: 0x00014d80
+// 0x00014d80
 void CRemotePlayer::UpdateOnfootRotation()
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -1096,7 +1096,7 @@ void CRemotePlayer::UpdateOnfootRotation()
     // clang-format on
     (*(CPed**)(nativeState + 4))->SetRotation(angle);
 }
-// samp.dll RVA: 0x000151c0
+// 0x000151c0
 void CRemotePlayer::UpdateIncarRotation()
 {
     CVector turnSpeed = {0, 0, 0};
@@ -1125,7 +1125,7 @@ void CRemotePlayer::UpdateIncarRotation()
     GameQuaternionToMatrix(&result, &matrix);
     (*(CVehicle**)(nativeState + 8))->SetMatrix(matrix);
 }
-// samp.dll RVA: 0x000153a0
+// 0x000153a0
 void CRemotePlayer::UpdateTrain(const CMatrix* target, const CVector* targetSpeed, float trainSpeed)
 {
     if (!*(CPed**)(nativeState + 4) || !*(CVehicle**)(nativeState + 8))
@@ -1142,7 +1142,7 @@ void CRemotePlayer::UpdateTrain(const CMatrix* target, const CVector* targetSpee
     (*(CVehicle**)(nativeState + 8))->SetSpeed(speed);
     (*(CVehicle**)(nativeState + 8))->SetTrainSpeed(trainSpeed);
 }
-// samp.dll RVA: 0x00014e50
+// 0x00014e50
 void CRemotePlayer::SetOnfootTarget(const CVector* position, const CVector* speed)
 {
     for (int i = 0; i < 12; i += 4)
@@ -1151,7 +1151,7 @@ void CRemotePlayer::SetOnfootTarget(const CVector* position, const CVector* spee
         *(DWORD*)(nativeState + 0x12c + i) = *(const DWORD*)((const BYTE*)speed + i);
     (*(CPed**)(nativeState + 4))->SetSpeed(*(CVector*)(nativeState + 0x12c));
 }
-// samp.dll RVA: 0x00015330
+// 0x00015330
 void CRemotePlayer::SetIncarTarget(const CMatrix* matrix, const CVector* position, const CVector* speed)
 {
     GameQuaternionFromMatrix(matrix, (GameQuaternion*)(nativeState + 0x19c));
@@ -1161,11 +1161,11 @@ void CRemotePlayer::SetIncarTarget(const CMatrix* matrix, const CVector* positio
         *(DWORD*)(nativeState + 0x144 + i) = *(const DWORD*)((const BYTE*)speed + i);
     (*(CVehicle**)(nativeState + 8))->SetSpeed(*speed);
 }
-// samp.dll RVA: 0x001181c8
+// 0x001181c8
 const float g_remoteAimZoomScale = 0.01587301678955555f;
-// samp.dll RVA: 0x001181cc
+// 0x001181cc
 const float g_remoteAimAspectScale = 0.003921568859368563f;
-// samp.dll RVA: 0x00016c50
+// 0x00016c50
 BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* position, float rotation, DWORD color, BYTE fightingStyle)
 {
     (void)team;
@@ -1208,7 +1208,7 @@ BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* 
         nativeState[0x1a] = 33;
     return TRUE;
 }
-// samp.dll RVA: 0x00014660
+// 0x00014660
 void CRemotePlayer::OnEnterVehicle()
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -1232,7 +1232,7 @@ void CRemotePlayer::OnEnterVehicle()
     BYTE seat = nativeState[0x1b];
     (*(CPed**)(nativeState + 4))->PutIntoVehicle(ref, seat);
 }
-// samp.dll RVA: 0x00016da0
+// 0x00016da0
 void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
@@ -1255,7 +1255,7 @@ void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
     if (nativeState[0x1a] != 17)
         nativeState[0x1a] = 17;
 }
-// samp.dll RVA: 0x00016e70
+// 0x00016e70
 void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
@@ -1284,7 +1284,7 @@ void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
         nativeState[0x1a] = 19;
     }
 }
-// samp.dll RVA: 0x00016f60
+// 0x00016f60
 void CRemotePlayer::UpdatePassenger(const void* data)
 {
     const BYTE* input = (const BYTE*)data;
@@ -1304,7 +1304,7 @@ void CRemotePlayer::UpdatePassenger(const void* data)
     if (nativeState[0x1a] != 18)
         nativeState[0x1a] = 18;
 }
-// samp.dll RVA: 0x000154a0
+// 0x000154a0
 void CRemotePlayer::UpdateAim(const void* data)
 {
     const BYTE* input = (const BYTE*)data;
@@ -1346,7 +1346,7 @@ void CRemotePlayer::UpdateAim(const void* data)
     else if (slot[2] < 2)
         slot[2] = 2;
 }
-// samp.dll RVA: 0x00014730
+// 0x00014730
 void CRemotePlayer::OnExitVehicle()
 {
     CPed* ped = *(CPed**)(nativeState + 4);
@@ -1358,7 +1358,7 @@ void CRemotePlayer::OnExitVehicle()
         *(DWORD*)(nativeState + 8) = 0;
     }
 }
-// samp.dll RVA: 0x00017120
+// 0x00017120
 void CRemotePlayer::Chat(char* text)
 {
     WORD id = *(WORD*)nativeState;
@@ -1366,11 +1366,11 @@ void CRemotePlayer::Chat(char* text)
     DWORD color = (PlayerColors::Get(id) >> 8) | 0xff000000;
     g_pChat->AddChatMessage(name, color, text);
 }
-// samp.dll RVA: 0x001181e4
+// 0x001181e4
 const float g_remoteAbsentDistance = 10000.0f;
-// samp.dll RVA: 0x001181e8
+// 0x001181e8
 const char g_remoteCarJackedText[] = "~r~Car Jacked~w~!";
-// samp.dll RVA: 0x00016250
+// 0x00016250
 CRemotePlayer::CRemotePlayer()
 {
     BYTE* state = (BYTE*)this;
@@ -1393,7 +1393,7 @@ CRemotePlayer::CRemotePlayer()
     *(DWORD*)(state + 0x1c5) = tick();
     ResetData();
 }
-// samp.dll RVA: 0x000162c0
+// 0x000162c0
 CRemotePlayer::~CRemotePlayer()
 {
     BYTE* state = (BYTE*)this;
@@ -1411,7 +1411,7 @@ CRemotePlayer::~CRemotePlayer()
         *(DWORD*)(state + 4) = 0;
     }
 }
-// samp.dll RVA: 0x00015c60
+// 0x00015c60
 void CRemotePlayer::ResetData()
 {
     BYTE* state = (BYTE*)this;
@@ -1442,7 +1442,7 @@ void CRemotePlayer::ResetData()
     if (g_pNetGame)
         *(DWORD*)(state + 0x1c9) = (DWORD)((CNetGame*)g_pNetGame)->GetCounter();
 }
-// samp.dll RVA: 0x00017040
+// 0x00017040
 void CRemotePlayer::Remove()
 {
     BYTE* state = (BYTE*)this;
@@ -1455,7 +1455,7 @@ void CRemotePlayer::Remove()
     state[0x1a] = 0;
     *(DWORD*)(state + 0x10) = 1;
 }
-// samp.dll RVA: 0x00017080
+// 0x00017080
 void CRemotePlayer::Kill()
 {
     BYTE* state = (BYTE*)this;
@@ -1468,17 +1468,17 @@ void CRemotePlayer::Kill()
         state[0x1a] = 32;
     ResetData();
 }
-// samp.dll RVA: 0x00015e00
+// 0x00015e00
 void CRemotePlayer::SetColor(DWORD color)
 {
     PlayerColors::Set(*(WORD*)this, color);
 }
-// samp.dll RVA: 0x00015e20
+// 0x00015e20
 DWORD CRemotePlayer::GetColorAsRGBA()
 {
     return PlayerColors::Get(*(WORD*)this);
 }
-// samp.dll RVA: 0x00015d50
+// 0x00015d50
 __declspec(naked) float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
 {
     // clang-format off
@@ -1522,7 +1522,7 @@ __declspec(naked) float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
     }
     // clang-format on
 }
-// samp.dll RVA: 0x00015dd0
+// 0x00015dd0
 __declspec(naked) float CRemotePlayer::GetDistanceToLocalPlayer()
 {
     // clang-format off
@@ -1545,7 +1545,7 @@ __declspec(naked) float CRemotePlayer::GetDistanceToLocalPlayer()
     }
     // clang-format on
 }
-// samp.dll RVA: 0x00015e50
+// 0x00015e50
 void CRemotePlayer::EnterVehicle(WORD id, BOOL passenger)
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -1561,7 +1561,7 @@ void CRemotePlayer::EnterVehicle(WORD id, BOOL passenger)
     (*(CPed**)(state + 4))->SetKeys(0, 0, 0);
     (*(CPed**)(state + 4))->EnterVehicle(ref, passenger);
 }
-// samp.dll RVA: 0x00015ee0
+// 0x00015ee0
 void CRemotePlayer::ExitVehicle()
 {
     BYTE* state = (BYTE*)this;
@@ -1571,7 +1571,7 @@ void CRemotePlayer::ExitVehicle()
     (*(CPed**)(state + 4))->SetKeys(0, 0, 0);
     (*(CPed**)(state + 4))->ExitVehicle();
 }
-// samp.dll RVA: 0x00015f10
+// 0x00015f10
 void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
 {
     if (newState != 19 || oldState != 17)
@@ -1589,7 +1589,7 @@ void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
     ped->WarpFromVehicle(matrix.position.x, matrix.position.y, z);
     g_pGame->DisplayGameText(g_remoteCarJackedText, 1000, 5);
 }
-// samp.dll RVA: 0x000144d0
+// 0x000144d0
 void CRemotePlayer::ApplySurfingMatrix()
 {
     BYTE* state = (BYTE*)this;
@@ -1646,7 +1646,7 @@ void CRemotePlayer::ApplySurfingMatrix()
     (*(CPed**)(state + 4))->ApplyMatrix(pedMatrix);
 }
 
-// samp.dll RVA: 0x00001080
+// 0x00001080
 BOOL CRemotePlayer::IsActive()
 {
     BYTE* state = (BYTE*)this;
@@ -1654,12 +1654,12 @@ BOOL CRemotePlayer::IsActive()
 }
 
 #include "game/player_colors.h"
-// samp.dll RVA: 0x00015e30
+// 0x00015e30
 DWORD CRemotePlayer::GetColorAsARGB()
 {
     return (PlayerColors::Get(*(WORD*)this) >> 8) | 0xff000000;
 }
-// samp.dll RVA: 0x00015fd0
+// 0x00015fd0
 int CRemotePlayer::GetStatus()
 {
     BYTE* state = (BYTE*)this;
@@ -1674,49 +1674,49 @@ int CRemotePlayer::GetStatus()
     return *(int*)(state + 0x1d1);
 }
 
-// samp.dll RVA: 0x00002dc0
+// 0x00002dc0
 BYTE CRemotePlayer::GetState()
 {
     return nativeState[0x1a];
 }
-// samp.dll RVA: 0x000135d0
+// 0x000135d0
 void CRemotePlayer::SetId(WORD id)
 {
     *(WORD*)nativeState = id;
 }
-// samp.dll RVA: 0x000135e0
+// 0x000135e0
 WORD CRemotePlayer::GetId()
 {
     return *(WORD*)nativeState;
 }
-// samp.dll RVA: 0x000135f0
+// 0x000135f0
 void CRemotePlayer::SetRawFlag1C(DWORD value)
 {
     *(DWORD*)(nativeState + 0x1c) = value;
 }
-// samp.dll RVA: 0x00013600
+// 0x00013600
 void CRemotePlayer::ResetStateAndLabels()
 {
     nativeState[0x1a] = 0;
     *(DWORD*)(nativeState + 0x10) = 1;
 }
-// samp.dll RVA: 0x00014220
+// 0x00014220
 BYTE CRemotePlayer::GetSpecialAction()
 {
     return nativeState[0x18];
 }
-// samp.dll RVA: 0x00014230
+// 0x00014230
 DWORD CRemotePlayer::GetRawFlag1C()
 {
     return *(DWORD*)(nativeState + 0x1c);
 }
 
-// samp.dll RVA: 0x00001070
+// 0x00001070
 CPed* CRemotePlayer::GetPed()
 {
     return *(CPed**)(nativeState + 4);
 }
-// samp.dll RVA: 0x000010a0
+// 0x000010a0
 CVehicle* CRemotePlayer::GetVehicle()
 {
     return *(CVehicle**)(nativeState + 8);

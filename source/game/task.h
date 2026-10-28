@@ -12,29 +12,29 @@ public:
     BOOL m_bSelfCreated;
     CPed* m_pPlayerPed;
     BYTE* m_pTaskType;
-    // samp.dll RVA: 0x000b2180
+    // 0x000b2180
     CTask();
-    // samp.dll RVA: 0x000b2560
+    // 0x000b2560
     CTask(DWORD size);
-    // samp.dll RVA: 0x000b2590
+    // 0x000b2590
     CTask(BYTE* task);
-    // samp.dll RVA: 0x000b21a0
+    // 0x000b21a0
     virtual ~CTask();
-    // samp.dll RVA: 0x000b21b0
+    // 0x000b21b0
     void Create(DWORD size);
-    // samp.dll RVA: 0x000b21e0
+    // 0x000b21e0
     void Create(BYTE* task);
-    // samp.dll RVA: 0x000b25b0
+    // 0x000b25b0
     virtual CTask* CreateCopy();
-    // samp.dll RVA: 0x000b2200
+    // 0x000b2200
     virtual void Destroy();
-    // samp.dll RVA: 0x000b2260
+    // 0x000b2260
     virtual void ApplyToPed(CPed* ped);
-    // samp.dll RVA: 0x000b22c0
+    // 0x000b22c0
     virtual DWORD GetID();
-    // samp.dll RVA: 0x000b22e0
+    // 0x000b22e0
     virtual BOOL IsDestroyed();
-    // samp.dll RVA: 0x000b2300
+    // 0x000b2300
     virtual BOOL IsSimple();
 };
 #pragma pack(pop)
@@ -45,20 +45,20 @@ typedef char TaskPedOffset[(offsetof(CTask, m_pPlayerPed) == 8) ? 1 : -1];
 class CTaskJetpack : public CTask
 {
 public:
-    // samp.dll RVA: 0x000b2330
+    // 0x000b2330
     CTaskJetpack();
-    // samp.dll RVA: 0x000b2380
+    // 0x000b2380
     CTaskJetpack(BYTE* task);
-    // samp.dll RVA: 0x000b23b0
+    // 0x000b23b0
     virtual ~CTaskJetpack();
 };
 // samp.dll vtable RVA: 0x0011f46c
 class CTaskTakeDamageFall : public CTask
 {
 public:
-    // samp.dll RVA: 0x000b2410
+    // 0x000b2410
     CTaskTakeDamageFall(DWORD fallType, DWORD number);
-    // samp.dll RVA: 0x000b2630
+    // 0x000b2630
     virtual ~CTaskTakeDamageFall();
 };
 typedef char JetpackWrapperSize[(sizeof(CTaskJetpack) == 16) ? 1 : -1];
@@ -68,9 +68,9 @@ typedef char FallWrapperSize[(sizeof(CTaskTakeDamageFall) == 16) ? 1 : -1];
 class CTaskUseGoggles : public CTask
 {
 public:
-    // samp.dll RVA: 0x000b2460
+    // 0x000b2460
     CTaskUseGoggles();
-    // samp.dll RVA: 0x000b2660
+    // 0x000b2660
     virtual ~CTaskUseGoggles();
 };
 // samp.dll vtable RVA: 0x0011f4a4
@@ -78,9 +78,9 @@ class CTaskGoToPoint : public CTask
 {
 public:
     // Full native DWORD flag words are forwarded without bool normalization.
-    // samp.dll RVA: 0x000b24a0
+    // 0x000b24a0
     CTaskGoToPoint(DWORD moveState, const CVector* target, float radius, DWORD moveTowards, DWORD finalFlag);
-    // samp.dll RVA: 0x000b2690
+    // 0x000b2690
     virtual ~CTaskGoToPoint();
 };
 // samp.dll vtable RVA: 0x0011f4c0
@@ -88,9 +88,9 @@ class CTaskKillPedOnFootArmed : public CTask
 {
 public:
     // Wrapper argument order differs from the GTA constructor. Target is opaque GTA ped.
-    // samp.dll RVA: 0x000b24f0
+    // 0x000b24f0
     CTaskKillPedOnFootArmed(DWORD competence, DWORD duckTime, DWORD duckChance, DWORD duckingConditions, void* target);
-    // samp.dll RVA: 0x000b26c0
+    // 0x000b26c0
     virtual ~CTaskKillPedOnFootArmed();
 };
 typedef char GogglesWrapperSize[(sizeof(CTaskUseGoggles) == 16) ? 1 : -1];

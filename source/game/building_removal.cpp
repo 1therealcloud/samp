@@ -1,11 +1,11 @@
 #include "game/building_removal.h"
 #include "game/util.h"
 #include <string.h>
-// samp.dll RVA: 0x0011e338
+// 0x0011e338
 const float g_buildingRemovalDrop = 2000.0f;
-// samp.dll RVA: 0x0011e33c
+// 0x0011e33c
 const float g_buildingLodCoordinateScale = 0.25f;
-// samp.dll RVA: 0x0009ca80
+// 0x0009ca80
 void GameHideObjectEntity(void* entity)
 {
     // clang-format off
@@ -25,13 +25,13 @@ void GameHideObjectEntity(void* entity)
     }
     // clang-format on
 }
-// samp.dll RVA: 0x0009cab0
+// 0x0009cab0
 void GameHideBuildingEntity(void* entity)
 {
     if (entity)
         GameHideObjectEntity(entity);
 }
-// samp.dll RVA: 0x0009cb50
+// 0x0009cb50
 void GameRemoveLodBuildings(float x, float y, float z, float radius)
 {
     // GTA SA virtual addresses: count0x00c73f98, inline18-byte records0x00c73fa0.
@@ -61,7 +61,7 @@ void GameRemoveLodBuildings(float x, float y, float z, float radius)
         if (inside) for (int word = 0; word < 6; word++)((short*)record)[word] = 0;
     }
 }
-// samp.dll RVA: 0x0009cc10
+// 0x0009cc10
 void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radius)
 {
     BYTE* pool = (BYTE*)GamePoolBuildingGetArray();
@@ -111,7 +111,7 @@ void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radi
         }
     }
 }
-// samp.dll RVA: 0x0009d210
+// 0x0009d210
 void GameRemoveBuilding(int model, float x, float y, float z, float radius)
 {
     GameRemoveBuildingsInRange(model, x, y, z, radius);
@@ -124,13 +124,13 @@ void GameRemoveBuilding(int model, float x, float y, float z, float radius)
     memcpy(&record->radius, &radius, 4);
     g_buildingRemovalCount = (int)((DWORD)count + 1);
 }
-// samp.dll RVA: 0x00188df8
+// 0x00188df8
 BuildingRemovalRecord g_buildingRemovalRecords[1000];
-// samp.dll RVA: 0x0018dc18
+// 0x0018dc18
 int g_buildingRemovalCount;
 // Native ST0 returns an unspilled x87 result. Order is dz^2 + dy^2 + dx^2;
 // reassociation or a float temporary changes radius-boundary comparisons.
-// samp.dll RVA: 0x000b4570
+// 0x000b4570
 __declspec(naked) float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
     // clang-format off
@@ -157,7 +157,7 @@ __declspec(naked) float __stdcall GameDistanceBetweenPoints(float x, float y, fl
     }
     // clang-format on
 }
-// samp.dll RVA: 0x0009cae0
+// 0x0009cae0
 BOOL GameShouldSuppressMarker(int model, float x, float y, float z)
 {
     if (g_buildingRemovalCount)
@@ -178,8 +178,8 @@ BOOL GameShouldSuppressMarker(int model, float x, float y, float z)
     return FALSE;
 }
 
-#include "game/hooks_render.h"
-// samp.dll RVA: 0x0009cdd0
+#include "game/hooks.h"
+// 0x0009cdd0
 void GameHideAllWorldEntities()
 {
     BYTE* cursor = (BYTE*)GamePoolBuildingGetArray();

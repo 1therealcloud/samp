@@ -23,10 +23,10 @@ public:
     CVector position;
     DWORD pad3;
 };
-// samp.dll RVA: 0x000b3990
+// 0x000b3990
 void GameChangeBackendEntityModel(void* entity, DWORD model);
 // Raw helper; no full object type or vtable meaning established.
-// samp.dll RVA: 0x000b4120
+// 0x000b4120
 DWORD __stdcall GameReadBackendDword(const void* backend);
 #pragma pack(push, 1)
 // samp.dll vtable RVA: 0x0011e30c
@@ -34,139 +34,139 @@ class CEntity
 {
 public:
     // Five history vectors occupy existing bytes04..3F; in-place shift order retained.
-    // samp.dll RVA: 0x0009eb80
+    // 0x0009eb80
     void SetAveragedSpeed(CVector speed);
     // Native x87 sine/cosine; writes nine coefficients, preserving matrix padding/position.
-    // samp.dll RVA: 0x0009f630
+    // 0x0009f630
     void SetEulerRotation(float x, float y, float z);
 
     // Descriptive raw flag names; invalid GTA backend vtable is excluded.
     // Clearing bit40000 invokes virtual Add afterwards.
-    // samp.dll RVA: 0x0009f500
+    // 0x0009f500
     void SetBackendFlag40000(BOOL enabled);
-    // samp.dll RVA: 0x0009f540
+    // 0x0009f540
     void SetBackendFlags80400();
     // Nonzero argument clears bit2000; zero sets it.
-    // samp.dll RVA: 0x0009f580
+    // 0x0009f580
     void SetBackendFlag2000(BOOL clear);
-    // samp.dll RVA: 0x0009f610
+    // 0x0009f610
     DWORD GetRwObjectWord38();
-    // samp.dll RVA: 0x0009f7a0
+    // 0x0009f7a0
     void GetRwMatrixAngles(float* x, float* y, float* z);
-    // samp.dll RVA: 0x0009f870
+    // 0x0009f870
     int GetModelAtomicCount();
 
     BYTE unknown04[60];
     void* m_pGameEntity;
     DWORD m_nHandle;
-    // samp.dll RVA: 0x0009bce0
+    // 0x0009bce0
     CEntity();
     // Native only resets the vptr; backend/history storage is untouched.
-    // samp.dll RVA: 0x0009bd00
+    // 0x0009bd00
     virtual ~CEntity();
-    // samp.dll RVA: 0x0009f140
+    // 0x0009f140
     virtual void Add();
-    // samp.dll RVA: 0x0009f240
+    // 0x0009f240
     virtual void Remove();
     // Broader flag meaning is not established; clears backend DWORD +40 mask 0x00000008.
-    // samp.dll RVA: 0x0009f5c0
+    // 0x0009f5c0
     void ClearBackendFlag8();
-    // samp.dll RVA: 0x0009e950
+    // 0x0009e950
     void GetMatrix(CMatrix* matrix);
-    // samp.dll RVA: 0x0009fb40
+    // 0x0009fb40
     void ApplyMatrix(CMatrix matrix);
-    // samp.dll RVA: 0x0009f0f0
+    // 0x0009f0f0
     float GetDistanceToPoint(float x, float y, float z);
-    // samp.dll RVA: 0x0009ea00
+    // 0x0009ea00
     void SetMatrix(CMatrix matrix);
-    // samp.dll RVA: 0x0009eb20
+    // 0x0009eb20
     void GetSpeed(CVector* speed);
-    // samp.dll RVA: 0x0009eb50
+    // 0x0009eb50
     void SetSpeed(CVector speed);
-    // samp.dll RVA: 0x0009ec70
+    // 0x0009ec70
     void GetTurnSpeed(CVector* speed);
-    // samp.dll RVA: 0x0009eca0
+    // 0x0009eca0
     void SetTurnSpeed(CVector speed);
-    // samp.dll RVA: 0x0009ecd0
+    // 0x0009ecd0
     void ApplyTurnSpeed();
-    // samp.dll RVA: 0x0009ecf0
+    // 0x0009ecf0
     float GetDistanceFromCentreOfMassToBaseOfModel();
-    // samp.dll RVA: 0x0009ed30
+    // 0x0009ed30
     void GetBoundCentre(CVector* centre);
-    // samp.dll RVA: 0x0009ee70
+    // 0x0009ee70
     int GetModelIndex();
     // Uses camera position for the two observed local-player mode flags.
-    // samp.dll RVA: 0x0009ef00
+    // 0x0009ef00
     float GetDistanceToLocalPlayer();
-    // samp.dll RVA: 0x0009efd0
+    // 0x0009efd0
     float GetDistanceToCamera();
-    // samp.dll RVA: 0x0009f030
+    // 0x0009f030
     float GetDistanceToLocalPlayerNoHeight();
-    // samp.dll RVA: 0x0009f560
+    // 0x0009f560
     void SetBackendHighFlag();
-    // samp.dll RVA: 0x0009fa20
+    // 0x0009fa20
     void ProcessControl();
     // Additional native wrappers; original names/semantic argument types are unresolved.
-    // samp.dll RVA: 0x0009ed60
+    // 0x0009ed60
     void Native009ed60(DWORD argument);
-    // samp.dll RVA: 0x0009f5d0
+    // 0x0009f5d0
     void Native009f5d0(DWORD argument);
-    // samp.dll RVA: 0x0009f810
+    // 0x0009f810
     void Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6);
-    // samp.dll RVA: 0x0009f840
+    // 0x0009f840
     void Native009f840(DWORD argument);
-    // samp.dll RVA: 0x0009f960
+    // 0x0009f960
     void Native009f960();
-    // samp.dll RVA: 0x0009fba0
+    // 0x0009fba0
     void ApplyLinearSpeed();
-    // samp.dll RVA: 0x0009fa40
+    // 0x0009fa40
     bool TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode);
     // Returns TRUE only when this call requested/loaded the model, not merely
     // when the entity's model was successfully changed.
-    // samp.dll RVA: 0x0009ed90
+    // 0x0009ed90
     BOOL SetModelIndex(int model);
-    // samp.dll RVA: 0x0009f210
+    // 0x0009f210
     BOOL DoesExist();
-    // samp.dll RVA: 0x0009f260
+    // 0x0009f260
     BOOL EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY);
-    // samp.dll RVA: 0x0009f400
+    // 0x0009f400
     BOOL HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY);
     // Native results use AL; the SAMP-API BOOL signature is not ABI evidence.
-    // samp.dll RVA: 0x0009f4a0
+    // 0x0009f4a0
     bool GetCollisionFlag();
-    // samp.dll RVA: 0x0009f470
+    // 0x0009f470
     void SetCollisionFlag(BOOL enabled);
-    // samp.dll RVA: 0x0009f4c0
+    // 0x0009f4c0
     void SetCollisionProcessed(BOOL processed);
-    // samp.dll RVA: 0x0009f730
+    // 0x0009f730
     void GetEulerInverted(float* x, float* y, float* z);
-    // samp.dll RVA: 0x0009f8a0
+    // 0x0009f8a0
     void* GetRwObject();
-    // samp.dll RVA: 0x0009f9f0
+    // 0x0009f9f0
     void DeleteRwObject();
-    // samp.dll RVA: 0x0009fb20
+    // 0x0009fb20
     bool IsIgnored();
-    // samp.dll RVA: 0x0009fc20
+    // 0x0009fc20
     BOOL IsStationary();
-    // samp.dll RVA: 0x0009eac0
+    // 0x0009eac0
     void UpdateRwFrame();
-    // samp.dll RVA: 0x0009ee80
+    // 0x0009ee80
     void Teleport(CVector position);
 };
 #pragma pack(pop)
 typedef char EntityExtent[(sizeof(CEntity) == 72) ? 1 : -1];
 typedef char EntityBackendOffset[(offsetof(CEntity, m_pGameEntity) == 0x40) ? 1 : -1];
-// samp.dll RVA: 0x000b3720
+// 0x000b3720
 void __stdcall GameWorldAdd(void* entity);
-// samp.dll RVA: 0x000b3740
+// 0x000b3740
 void __stdcall GameWorldRemove(void* entity);
-// samp.dll RVA: 0x001181b8
+// 0x001181b8
 extern const float g_entityRadiansToDegrees;
-// samp.dll RVA: 0x0011c660
+// 0x0011c660
 extern const float g_entityEulerSign;
-// samp.dll RVA: 0x0011b31c
+// 0x0011b31c
 extern const float g_entityBoundaryLift;
-// samp.dll RVA: 0x0011e644
+// 0x0011e644
 extern const float g_entityUnavailableDistance;
 #endif
 
@@ -176,25 +176,25 @@ extern const float g_entityUnavailableDistance;
 typedef bool(__cdecl* GameEntityCollisionBackend)(const GameEntityCollisionShape*, const GameEntityCollisionShape*, void*);
 // Opaque native scratch span ends at saved-context RVA 002ABE5C.
 // No typed collision-object layout or broader initialization completeness is claimed.
-// samp.dll RVA: 0x0018de60
+// 0x0018de60
 extern GameEntityCollisionShape g_entityCollisionShapeA;
-// samp.dll RVA: 0x0018de4c
+// 0x0018de4c
 extern GameEntityCollisionShape g_entityCollisionShapeB;
-// samp.dll RVA: 0x0018de7c
+// 0x0018de7c
 extern void* g_entityCollisionEntity;
-// samp.dll RVA: 0x00155404
+// 0x00155404
 extern GameEntityCollisionBackend g_entityCollisionBackend;
-// samp.dll RVA: 0x00155408
+// 0x00155408
 extern void** g_entityCollisionContextSlot;
-// samp.dll RVA: 0x002abe5c
+// 0x002abe5c
 extern void* g_entityCollisionSavedContext;
-// samp.dll RVA: 0x002abe60
+// 0x002abe60
 extern BYTE g_entityCollisionResult;
-// samp.dll RVA: 0x000b5ea0
+// 0x000b5ea0
 float __cdecl GameGetModelCollisionRadius(int model);
-// samp.dll RVA: 0x000b6070
+// 0x000b6070
 bool __stdcall GameEntityCollisionQueryDirect(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity);
-// samp.dll RVA: 0x000b6090
+// 0x000b6090
 bool __stdcall GameEntityCollisionQueryScoped(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity);
 // Only the four-float sphere prefix is read by this GTA query.
 struct GameCollisionSphere
@@ -202,13 +202,13 @@ struct GameCollisionSphere
     CVector centre;
     float radius;
 };
-// samp.dll RVA: 0x000b60e0
+// 0x000b60e0
 BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollisionSphere* second);
 // Semantics unresolved; this is the observed pointer/zero backend adapter.
-// samp.dll RVA: 0x000b43f0
+// 0x000b43f0
 BYTE GameQueryBackend410ce0(const void* data);
 // Raw native flag words are forwarded without bool normalization; result is AL.
-// samp.dll RVA: 0x000b3710
+// 0x000b3710
 BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, void* colPoint, void** entity, DWORD buildings, DWORD vehicles, DWORD peds, DWORD objects,
                                DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough);
 #endif
@@ -216,13 +216,13 @@ BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, voi
 #ifndef SAMP_ENTITY_DETACH_H
 #define SAMP_ENTITY_DETACH_H
 // Shared original constants; definitions already maintained by chatbubble/object.
-// samp.dll RVA: 0x0011bcc8
+// 0x0011bcc8
 extern const float g_chatBubbleHeightLift;
-// samp.dll RVA: 0x0011e648
+// 0x0011e648
 extern const float g_objectDegreesToRadians;
-// samp.dll RVA: 0x0011e64c
+// 0x0011e64c
 extern const char g_entityDetachExceptionLabel[5];
 // Original owner/name unknown; ECX unused, two cdecl stack arguments.
-// samp.dll RVA: 0x0009f8b0
+// 0x0009f8b0
 void __cdecl GameDetachBackendRwObject(void* entity, void* object);
 #endif

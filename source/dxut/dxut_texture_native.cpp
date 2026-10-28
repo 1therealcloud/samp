@@ -1,7 +1,7 @@
 // Native ANSI texture closure; isolated hybrid DXUT candidate.
 #include "dxstdafx.h"
 #include "dxut/dxut_media_native.h"
-// samp.dll RVA: 0x000897d0
+// 0x000897d0
 int CDXUTDialogResourceManager::AddTexture(const char* strFilename)
 {
     // See if this texture already exists
@@ -32,7 +32,7 @@ int CDXUTDialogResourceManager::AddTexture(const char* strFilename)
     return iTexture;
 }
 
-// samp.dll RVA: 0x00089890
+// 0x00089890
 HRESULT CDXUTDialog::SetTexture(UINT index, const char* strFilename)
 {
     // If this assert triggers, you need to call CDXUTDialog::Init() first.  This change
@@ -53,7 +53,7 @@ HRESULT CDXUTDialog::SetTexture(UINT index, const char* strFilename)
     return S_OK;
 }
 
-// samp.dll RVA: 0x000874b0
+// 0x000874b0
 HRESULT CDXUTDialogResourceManager::CreateTexture(UINT iTexture)
 {
     HRESULT hr = S_OK;

@@ -48,24 +48,24 @@ private:
     BYTE** m_pFileData;
 
 public:
-    // samp.dll RVA: 0x00060500
+    // 0x00060500
     CFileSystem();
-    // samp.dll RVA: 0x00060690
+    // 0x00060690
     virtual ~CFileSystem();
 
-    // samp.dll RVA: 0x000606b0
+    // 0x000606b0
     virtual bool Load(char* szFileName);
-    // samp.dll RVA: 0x00060520
+    // 0x00060520
     virtual void Unload();
 
-    // samp.dll RVA: 0x00060580
+    // 0x00060580
     virtual DWORD GetFileIndex(char* szFileName);
-    // samp.dll RVA: 0x000605e0
+    // 0x000605e0
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-    // samp.dll RVA: 0x00060610
+    // 0x00060610
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 
-    // samp.dll RVA: 0x00060640
+    // 0x00060640
     void DecryptData(BYTE* pData, DWORD dwDataLen, WORD wKey);
 };
 

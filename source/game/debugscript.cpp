@@ -9,14 +9,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// samp.dll RVA: 0x0018de38
+// 0x0018de38
 CVector g_debugScriptCameraPosition;
-// samp.dll RVA: 0x0018de44
+// 0x0018de44
 CObjectPool* g_debugScriptObjects;
-// samp.dll RVA: 0x0018de48
+// 0x0018de48
 WORD g_debugScriptObjectCount;
 
-// samp.dll RVA: 0x0009e2f0
+// 0x0009e2f0
 char* DebugScript::GetCommandParams(char* line)
 {
     char *first = strchr(line, '('), *last = strchr(line, ')');
@@ -27,7 +27,7 @@ char* DebugScript::GetCommandParams(char* line)
     line[distance] = 0;
     return line;
 }
-// samp.dll RVA: 0x0009e340
+// 0x0009e340
 void DebugScript::CreateObject(const char* params)
 {
     if (!params)
@@ -46,7 +46,7 @@ void DebugScript::CreateObject(const char* params)
         g_debugScriptObjectCount++;
     }
 }
-// samp.dll RVA: 0x0009e450
+// 0x0009e450
 void DebugScript::CreateVehicle(const char* params)
 {
     if (!params)
@@ -59,7 +59,7 @@ void DebugScript::CreateVehicle(const char* params)
     atoi(strtok(0, ","));
     new CVehicle(model, x, y, z, rotation, 0, FALSE);
 }
-// samp.dll RVA: 0x0009e560
+// 0x0009e560
 void DebugScript::SetPlayerCameraPos(const char* params)
 {
     if (!params)
@@ -70,7 +70,7 @@ void DebugScript::SetPlayerCameraPos(const char* params)
     g_debugScriptCameraPosition.x = x;
     g_debugScriptCameraPosition.y = y;
 }
-// samp.dll RVA: 0x0009e5d0
+// 0x0009e5d0
 void DebugScript::RemoveBuildingForPlayer(const char* params)
 {
     if (!params)
@@ -81,9 +81,9 @@ void DebugScript::RemoveBuildingForPlayer(const char* params)
     float radius = (float)atof(strtok(0, ","));
     GameRemoveBuilding(model, x, y, z, radius);
 }
-// samp.dll RVA: 0x0009e680
+// 0x0009e680
 void DebugScript::SetPlayerCameraLookAt(const char*) {}
-// samp.dll RVA: 0x0009e690
+// 0x0009e690
 void DebugScript::SetPlayerInterior(const char* params)
 {
     if (!params)
@@ -94,7 +94,7 @@ void DebugScript::SetPlayerInterior(const char* params)
     if (ped)
         ped->LinkToInterior((BYTE)interior, TRUE);
 }
-// samp.dll RVA: 0x0009e6e0
+// 0x0009e6e0
 void DebugScript::ProcessLine(const char* line)
 {
     if (!strncmp(line, "CreateObject", 12))
@@ -110,7 +110,7 @@ void DebugScript::ProcessLine(const char* line)
     else if (!strncmp(line, "SetPlayerInterior", 17))
         SetPlayerInterior(GetCommandParams((char*)line));
 }
-// samp.dll RVA: 0x0009e7f0
+// 0x0009e7f0
 void DebugScript::Initialize(const char* filename)
 {
     g_pGame->SetWorldTime(12, 0);

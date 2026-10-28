@@ -2,34 +2,34 @@
 #define SAMP_GAME_DEBUGSCRIPT_H
 #include "game/entity.h"
 class CObjectPool;
-// samp.dll RVA: 0x0018de38
+// 0x0018de38
 extern CVector g_debugScriptCameraPosition;
-// samp.dll RVA: 0x0018de44
+// 0x0018de44
 extern CObjectPool* g_debugScriptObjects;
-// samp.dll RVA: 0x0018de48
+// 0x0018de48
 extern WORD g_debugScriptObjectCount;
 namespace DebugScript
 {
 // Mutates the caller's line; native leaves one old byte before its terminator.
-// samp.dll RVA: 0x0009e2f0
+// 0x0009e2f0
 char* GetCommandParams(char* line);
-// samp.dll RVA: 0x0009e340
+// 0x0009e340
 void CreateObject(const char* params);
-// samp.dll RVA: 0x0009e450
+// 0x0009e450
 void CreateVehicle(const char* params);
-// samp.dll RVA: 0x0009e560
+// 0x0009e560
 void SetPlayerCameraPos(const char* params);
-// samp.dll RVA: 0x0009e5d0
+// 0x0009e5d0
 void RemoveBuildingForPlayer(const char* params);
 // Confirmed native RET; ProcessLine still extracts/mutates params first.
-// samp.dll RVA: 0x0009e680
+// 0x0009e680
 void SetPlayerCameraLookAt(const char* params);
-// samp.dll RVA: 0x0009e690
+// 0x0009e690
 void SetPlayerInterior(const char* params);
 // Input must be writable despite the historical const API spelling.
-// samp.dll RVA: 0x0009e6e0
+// 0x0009e6e0
 void ProcessLine(const char* line);
-// samp.dll RVA: 0x0009e7f0
+// 0x0009e7f0
 void Initialize(const char* filename);
 } // namespace DebugScript
 #endif

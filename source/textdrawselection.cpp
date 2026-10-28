@@ -1,14 +1,14 @@
 #include "textdrawselection.h"
 #include "cmdwindow.h"
 #include "main.h"
-// samp.dll RVA: 0x000c5120
+// 0x000c5120
 CTextDrawSelection::CTextDrawSelection()
 {
     enabled = 0;
     unknown08 = 0xffff;
     unknown04 = 0xffffffff;
 }
-// samp.dll RVA: 0x00071010
+// 0x00071010
 BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
 {
     if (enabled && message == WM_LBUTTONUP)
@@ -19,7 +19,7 @@ BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
     }
     return FALSE;
 }
-// samp.dll RVA: 0x00070fc0
+// 0x00070fc0
 void CTextDrawSelection::Disable()
 {
     enabled = 0;
@@ -34,14 +34,14 @@ void CTextDrawSelection::Disable()
     ResetTextDraws();
 }
 
-// samp.dll RVA: 0x00070ee0
+// 0x00070ee0
 void CTextDrawSelection::Enable(DWORD color)
 {
     enabled = 1;
     unknown04 = ((color & 0xff) << 24) | ((color & 0xff00) << 8) | ((color & 0xff0000) >> 8) | ((color & 0xff000000) >> 24);
     unknown08 = 0xffff;
 }
-// samp.dll RVA: 0x00070d50
+// 0x00070d50
 void CTextDrawSelection::ResetTextDraws()
 {
     if (!g_pNetGame)
@@ -60,7 +60,7 @@ void CTextDrawSelection::ResetTextDraws()
             *(DWORD*)(draw + 0x9d2) = 0;
         }
 }
-// samp.dll RVA: 0x00070db0
+// 0x00070db0
 void CTextDrawSelection::UpdateHovered()
 {
     // GTA SA VA: 0x00c97c1c (game window handle, outside samp.dll).
@@ -96,7 +96,7 @@ void CTextDrawSelection::UpdateHovered()
             *(DWORD*)(draw + 0x9d2) = unknown04;
         }
 }
-// samp.dll RVA: 0x00070eb0
+// 0x00070eb0
 void CTextDrawSelection::Process()
 {
     if (!enabled)
@@ -109,9 +109,9 @@ void CTextDrawSelection::Process()
 #include "BitStream.h"
 #include "RakClientInterface.h"
 typedef char TextDrawClickRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9) ? 1 : -1];
-// samp.dll RVA: 0x001182f8
+// 0x001182f8
 int g_textDrawClickRpc = 83;
-// samp.dll RVA: 0x00070f20
+// 0x00070f20
 void CTextDrawSelection::SendNotification()
 {
     RakNet::BitStream stream;

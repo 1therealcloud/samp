@@ -1,7 +1,7 @@
 // Isolated hybrid DXUT candidate; ANSI body verified against RVA 0x0008cae0.
 #include "dxstdafx.h"
 
-// samp.dll RVA: 0x0008cae0
+// 0x0008cae0
 HRESULT CDXUTDialog::DrawTextA(const char* strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow, int nCount)
 {
     HRESULT hr = S_OK;

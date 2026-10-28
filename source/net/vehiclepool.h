@@ -27,53 +27,53 @@ class CVehiclePool
 {
 public:
     // Unchecked WORD index into the native unoccupied-sync owner table.
-    // samp.dll RVA: 0x00002df0
+    // 0x00002df0
     void SetUnoccupiedSyncOwner(WORD vehicle, WORD player);
     // First native stack word unused; endpoints are the second and third words.
-    // samp.dll RVA: 0x0001e970
+    // 0x0001e970
     WORD FindInLine(DWORD unused, const CVector* origin, const CVector* end);
 
     // Fourth raw word is copied into both native ray records.
-    // samp.dll RVA: 0x0001e9f0
+    // 0x0001e9f0
     WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord);
-    // samp.dll RVA: 0x0001ee80
+    // 0x0001ee80
     void Process();
     // Native Create indexes the WORD ID without a bounds guard.
-    // samp.dll RVA: 0x0001eb40
+    // 0x0001eb40
     BOOL Create(const VehiclePoolQueueEntry* entry);
     // Mutates queued train IDs/models in place and clears active even on failure.
-    // samp.dll RVA: 0x0001edc0
+    // 0x0001edc0
     void ProcessWaitingList();
     // Does not consume this; original stack argument is a WORD vehicle ID.
-    // samp.dll RVA: 0x0001ecf0
+    // 0x0001ecf0
     void SendDestroyNotification(WORD id);
-    // samp.dll RVA: 0x0001e470
+    // 0x0001e470
     void UpdateLargestId();
-    // samp.dll RVA: 0x0001e4d0
+    // 0x0001e4d0
     CVehiclePool();
-    // samp.dll RVA: 0x0001eb20
+    // 0x0001eb20
     ~CVehiclePool();
-    // samp.dll RVA: 0x0001e540
+    // 0x0001e540
     BOOL Delete(WORD id);
     // Native unchecked WORD index.
-    // samp.dll RVA: 0x0001e5c0
+    // 0x0001e5c0
     void ChangeInterior(WORD id, int interior);
-    // samp.dll RVA: 0x0001e5f0
+    // 0x0001e5f0
     void AssignSpecialParams(WORD id, BYTE objective, BYTE locked);
-    // samp.dll RVA: 0x0001e6c0
+    // 0x0001e6c0
     WORD FindNearestToLocalPlayer();
-    // samp.dll RVA: 0x0001e730
+    // 0x0001e730
     WORD FindNearestToPoint(float x, float y, float z);
-    // samp.dll RVA: 0x0001e7d0
+    // 0x0001e7d0
     void Queue(const VehiclePoolQueueEntry* entry);
     // Native ID overload has no bounds check.
-    // samp.dll RVA: 0x0001e680
+    // 0x0001e680
     DWORD GetRef(int id);
     // No this data is consumed by the backend overload.
-    // samp.dll RVA: 0x0001e6a0
+    // 0x0001e6a0
     DWORD GetRef(void* backend);
     // Native unbounded live-largest-ID scan; returns bool in AL.
-    // samp.dll RVA: 0x0001e8e0
+    // 0x0001e8e0
     bool TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second);
     int m_nLargestId;
     VehiclePoolQueueEntry queue[100];
@@ -86,17 +86,17 @@ public:
     DWORD stateBD14[2000];
     BYTE unknownDC54[0x9c40];
     DWORD licensePlatesReady;
-    // samp.dll RVA: 0x00001150
+    // 0x00001150
     BOOL DoesExist(WORD id);
-    // samp.dll RVA: 0x0001e650
+    // 0x0001e650
     WORD Find(void* gameObject);
-    // samp.dll RVA: 0x00001120
+    // 0x00001120
     CVehicle* Get(WORD id);
     // Native unbounded largest-ID loop; complete pool extent remains open.
-    // samp.dll RVA: 0x0001e8a0
+    // 0x0001e8a0
     void ShutdownLicensePlates();
     // Native readiness gate and largest-ID loop.
-    // samp.dll RVA: 0x0001e830
+    // 0x0001e830
     void ConstructLicensePlates();
 };
 #pragma pack(pop)
@@ -112,10 +112,10 @@ typedef char VehiclePoolQueueExtent[(sizeof(VehiclePoolQueueEntry) == 40) ? 1 : 
 typedef char VehiclePoolQueueModelOffset[(offsetof(VehiclePoolQueueEntry, model) == 2) ? 1 : -1];
 typedef char VehiclePoolQueueHealthOffset[(offsetof(VehiclePoolQueueEntry, health) == 0x18) ? 1 : -1];
 typedef char VehiclePoolQueueSirenOffset[(offsetof(VehiclePoolQueueEntry, siren) == 0x27) ? 1 : -1];
-// samp.dll RVA: 0x001184f8
+// 0x001184f8
 extern const char g_vehiclePoolNotDeletedMessage[];
-// samp.dll RVA: 0x0011851c
+// 0x0011851c
 extern int g_vehiclePoolDestroyRpc;
-// samp.dll RVA: 0x001184c4
+// 0x001184c4
 extern const char g_vehiclePoolQueueFullMessage[];
 #endif

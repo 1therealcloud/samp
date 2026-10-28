@@ -16,20 +16,20 @@ class CLabelPool
 {
 public:
     // Returns the raw activity DWORD; out-of-range IDs return zero.
-    // samp.dll RVA: 0x0000e3c0
+    // 0x0000e3c0
     DWORD IsActive(WORD id);
     TextLabel labels[2048];
     DWORD active[2048];
-    // samp.dll RVA: 0x00001190
+    // 0x00001190
     CLabelPool();
-    // samp.dll RVA: 0x000015e0
+    // 0x000015e0
     ~CLabelPool();
     // Native color input is RGBA; attachment flags/IDs are stored raw.
-    // samp.dll RVA: 0x000011d0
+    // 0x000011d0
     void Create(WORD id, const char* text, DWORD color, CVector position, float drawDistance, BYTE behindWalls, WORD player, WORD vehicle);
-    // samp.dll RVA: 0x000012e0
+    // 0x000012e0
     BOOL Delete(WORD id);
-    // samp.dll RVA: 0x00001350
+    // 0x00001350
     void Draw();
 };
 #pragma pack(pop)

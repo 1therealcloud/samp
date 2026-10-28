@@ -2,13 +2,13 @@
 #include "runutil.h"
 #include <stdio.h>
 #include <string.h>
-// samp.dll RVA: 0x001419d0
+// 0x001419d0
 char g_animationNames[1812][36] = {
 #include "game/animation_names.inc"
 };
-// samp.dll RVA: 0x001871a8
+// 0x001871a8
 DWORD g_animationKeys[1812];
-// samp.dll RVA: 0x0009c870
+// 0x0009c870
 WORD GameFindAnimation(const char* library, const char* name)
 {
     if (!library || !name)
@@ -23,17 +23,17 @@ WORD GameFindAnimation(const char* library, const char* name)
             return (WORD)(i + 1);
     return 0xffff;
 }
-// samp.dll RVA: 0x0009c950
+// 0x0009c950
 char* GameGetAnimationName(short index)
 {
     return index > 0 && index < 1813 ? g_animationNames[index - 1] : 0;
 }
-// samp.dll RVA: 0x000b4080
+// 0x000b4080
 DWORD __stdcall GameAnimationKey(const char* name)
 {
     return ((DWORD(__cdecl*)(const char*))0x53cf30)(name);
 }
-// samp.dll RVA: 0x0009c980
+// 0x0009c980
 void GameInitializeAnimationKeys()
 {
     for (int i = 0; i < 1812; i++)
@@ -49,7 +49,7 @@ void GameInitializeAnimationKeys()
     }
 }
 
-// samp.dll RVA: 0x0009ca50
+// 0x0009ca50
 WORD GameFindAnimationByKey(DWORD key)
 {
     for (int i = 0; i < 1812; i++)
@@ -57,7 +57,7 @@ WORD GameFindAnimationByKey(DWORD key)
             return (WORD)(i + 1);
     return 0xffff;
 }
-// samp.dll RVA: 0x000b4030
+// 0x000b4030
 DWORD __stdcall GameGetAnimationGroupKey(int group, int animation)
 {
     // GTA SA virtual address: lookup returns an opaque association descriptor.

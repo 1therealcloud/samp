@@ -1,18 +1,18 @@
 #include "archive/name_digest.h"
 #include "main.h"
 #include <string.h>
-// samp.dll RVA: 0x0014033c
+// 0x0014033c
 DWORD g_archiveTrackedNameDigests[3][5] = {{0x11c714fd, 0x0a46694e, 0x7aec2920, 0x2100e2e4, 0x94f7372e},
                                            {0x0b85a2ad, 0x344bdae1, 0xa19471d5, 0x7d49d3e9, 0x7dde6cbe},
                                            {0x7c425b89, 0xf67763c0, 0xa2e49f0e, 0x93ebf8d2, 0x0e842901}};
-// samp.dll RVA: 0x000635c0
+// 0x000635c0
 ArchiveNameSha1::ArchiveNameSha1()
 {
     Reset();
 }
-// samp.dll RVA: 0x00063550
+// 0x00063550
 ArchiveNameSha1::~ArchiveNameSha1() {}
-// samp.dll RVA: 0x00063560
+// 0x00063560
 void ArchiveNameSha1::Reset()
 {
     lengthLow = lengthHigh = blockIndex = 0;
@@ -23,7 +23,7 @@ void ArchiveNameSha1::Reset()
     state[4] = 0xc3d2e1f0;
     computed = corrupted = false;
 }
-// samp.dll RVA: 0x000635f0
+// 0x000635f0
 void ArchiveNameSha1::ProcessBlock()
 {
     DWORD words[80];
@@ -72,7 +72,7 @@ void ArchiveNameSha1::ProcessBlock()
     state[4] += e;
     blockIndex = 0;
 }
-// samp.dll RVA: 0x00063d30
+// 0x00063d30
 void ArchiveNameSha1::Input(const BYTE* data, DWORD length)
 {
     if (!length)
@@ -100,7 +100,7 @@ void ArchiveNameSha1::Input(const BYTE* data, DWORD length)
     }
     while (length);
 }
-// samp.dll RVA: 0x00063c20
+// 0x00063c20
 void ArchiveNameSha1::Pad()
 {
     DWORD previous = blockIndex;
@@ -123,7 +123,7 @@ void ArchiveNameSha1::Pad()
     block[63] = (BYTE)lengthLow;
     ProcessBlock();
 }
-// samp.dll RVA: 0x00063ce0
+// 0x00063ce0
 bool ArchiveNameSha1::Result(DWORD* digest)
 {
     if (corrupted)
@@ -137,7 +137,7 @@ bool ArchiveNameSha1::Result(DWORD* digest)
         digest[i] = state[i];
     return true;
 }
-// samp.dll RVA: 0x00062a60
+// 0x00062a60
 void ArchiveComputeNameDigest(const void* data, DWORD length, DWORD* digest)
 {
     ArchiveNameSha1 sha;
@@ -148,7 +148,7 @@ void ArchiveComputeNameDigest(const void* data, DWORD length, DWORD* digest)
         sha.Result(digest);
     }
 }
-// samp.dll RVA: 0x00062500
+// 0x00062500
 void ArchivePublishNameDigest(const DWORD* digest)
 {
     for (int entry = 0; entry < 3; entry++)
@@ -163,7 +163,7 @@ void ArchivePublishNameDigest(const DWORD* digest)
 
 #include <stdio.h>
 #include <stdlib.h>
-// samp.dll RVA: 0x00062950
+// 0x00062950
 void ArchiveComputeFileDigest(const char* filename, DWORD* digest)
 {
     ArchiveNameSha1 sha;
@@ -186,22 +186,22 @@ void ArchiveComputeFileDigest(const char* filename, DWORD* digest)
     }
 }
 
-// samp.dll RVA: 0x00063da0
+// 0x00063da0
 void ArchiveNameSha1::Input(const char* data, DWORD length)
 {
     Input((const BYTE*)data, length);
 }
-// samp.dll RVA: 0x00063db0
+// 0x00063db0
 void ArchiveNameSha1::Input(BYTE value)
 {
     Input(&value, 1);
 }
-// samp.dll RVA: 0x00063dc0
+// 0x00063dc0
 void ArchiveNameSha1::Input(char value)
 {
     Input((const BYTE*)&value, 1);
 }
-// samp.dll RVA: 0x00063dd0
+// 0x00063dd0
 ArchiveNameSha1& ArchiveNameSha1::operator<<(const char* text)
 {
     while (*text)
@@ -211,7 +211,7 @@ ArchiveNameSha1& ArchiveNameSha1::operator<<(const char* text)
     }
     return *this;
 }
-// samp.dll RVA: 0x00063e00
+// 0x00063e00
 ArchiveNameSha1& ArchiveNameSha1::operator<<(const BYTE* text)
 {
     while (*text)
@@ -221,19 +221,19 @@ ArchiveNameSha1& ArchiveNameSha1::operator<<(const BYTE* text)
     }
     return *this;
 }
-// samp.dll RVA: 0x00063e30
+// 0x00063e30
 ArchiveNameSha1& ArchiveNameSha1::operator<<(char value)
 {
     Input((const BYTE*)&value, 1);
     return *this;
 }
-// samp.dll RVA: 0x00063e50
+// 0x00063e50
 ArchiveNameSha1& ArchiveNameSha1::operator<<(BYTE value)
 {
     Input(&value, 1);
     return *this;
 }
-// samp.dll RVA: 0x000635a0
+// 0x000635a0
 DWORD ArchiveNameSha1::CircularShift(int bits, DWORD word)
 {
     DWORD amount = (DWORD)bits & 31;

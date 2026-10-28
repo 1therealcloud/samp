@@ -10,20 +10,20 @@
 
 //------------------------------------
 
-// samp.dll RVA: 0x0016c37c
+// 0x0016c37c
 DWORD CCryptoContext::ms_dwRefCount = 0;
-// samp.dll RVA: 0x0014077c
+// 0x0014077c
 DWORD CCryptoContext::ms_dwProviderType = PROV_RSA_FULL;
-// samp.dll RVA: 0x0016c380
+// 0x0016c380
 LPSTR CCryptoContext::ms_szProviderName = NULL;
-// samp.dll RVA: 0x00140780
+// 0x00140780
 LPSTR CCryptoContext::ms_szContainerName = (LPSTR) "SAMP";
 // samp.dll RVA: unknown (native global not established; unused legacy declaration)
 HMODULE CCryptoContext::ms_hAdvApi32 = NULL;
 
 //------------------------------------
 
-// samp.dll RVA: 0x00065030
+// 0x00065030
 CCryptoContext::CCryptoContext(void)
 {
     /*
@@ -47,7 +47,7 @@ CCryptoContext::CCryptoContext(void)
 
 //------------------------------------
 
-// samp.dll RVA: 0x000650a0
+// 0x000650a0
 CCryptoContext::~CCryptoContext(void)
 {
     // Release the context
@@ -69,7 +69,7 @@ CCryptoContext::~CCryptoContext(void)
 
 //------------------------------------
 
-// samp.dll RVA: 0x000650e0
+// 0x000650e0
 HCRYPTPROV CCryptoContext::GetProvider()
 {
     return m_hCryptProv;

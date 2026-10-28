@@ -3,9 +3,9 @@
 #include "game/scripting.h"
 #include <stddef.h>
 #include <string.h>
-// samp.dll RVA: 0x00118158
+// 0x00118158
 const Scripting::OpcodeInfo g_pickupDestroyCommand = {0x215, "i"};
-// samp.dll RVA: 0x00008190
+// 0x00008190
 CPickupPool::CPickupPool()
 {
     typedef char CountOffset[(offsetof(CPickupPool, count) == 0) ? 1 : -1];
@@ -24,7 +24,7 @@ CPickupPool::CPickupPool()
         indices[i] = -1;
     }
 }
-// samp.dll RVA: 0x00013170
+// 0x00013170
 void CPickupPool::Create(const Pickup* pickup, int id)
 {
     if (count >= Capacity || id < 0 || id >= Capacity)
@@ -40,7 +40,7 @@ void CPickupPool::Create(const Pickup* pickup, int id)
     indices[id] = (int)index;
     ++count;
 }
-// samp.dll RVA: 0x00013220
+// 0x00013220
 void CPickupPool::Delete(int id)
 {
     if (count <= 0 || id < 0 || id >= Capacity || !handles[id])
@@ -51,7 +51,7 @@ void CPickupPool::Delete(int id)
     indices[id] = -1;
     --count;
 }
-// samp.dll RVA: 0x00013280
+// 0x00013280
 void CPickupPool::DeleteWeapon(WORD owner)
 {
     for (int i = 0; i < Capacity; ++i)
@@ -65,7 +65,7 @@ void CPickupPool::DeleteWeapon(WORD owner)
         }
     }
 }
-// samp.dll RVA: 0x000132e0
+// 0x000132e0
 int CPickupPool::GetIndex(int index)
 {
     for (int i = 0; i < Capacity; ++i)
@@ -73,7 +73,7 @@ int CPickupPool::GetIndex(int index)
             return i;
     return -1;
 }
-// samp.dll RVA: 0x00013310
+// 0x00013310
 CPickupPool::~CPickupPool()
 {
     for (int i = 0; i < Capacity; ++i)
@@ -87,13 +87,13 @@ CPickupPool::~CPickupPool()
 #include "RakClientInterface.h"
 #include "main.h"
 typedef char PickupRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10) ? 1 : -1];
-// samp.dll RVA: 0x0011816c
+// 0x0011816c
 int g_pickupCollectedRpc = 131;
-// samp.dll RVA: 0x00118170
+// 0x00118170
 int g_weaponPickupCollectedRpc = 97;
-// samp.dll RVA: 0x00118144
+// 0x00118144
 const Scripting::OpcodeInfo g_pickupCollectedCommand = {0x214, "i"};
-// samp.dll RVA: 0x00013340
+// 0x00013340
 void CPickupPool::SendNotification(int index)
 {
     int id = GetIndex(index);
@@ -104,7 +104,7 @@ void CPickupPool::SendNotification(int index)
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_pickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
     cooldown[id] = 15;
 }
-// samp.dll RVA: 0x00013420
+// 0x00013420
 void CPickupPool::Process()
 {
     for (int i = 0; i < Capacity; ++i)
@@ -134,7 +134,7 @@ void CPickupPool::Process()
     }
 }
 
-// samp.dll RVA: 0x00013080
+// 0x00013080
 void CPickupPool::CreateWeapon(int model, float x, float y, float z, int ammo, WORD owner)
 {
     if (count >= Capacity)

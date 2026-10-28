@@ -6,16 +6,16 @@
 #include "gui/render_dependencies.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
-// samp.dll RVA: 0x002acab8
+// 0x002acab8
 CDXUTDialog* g_guiScoreboardDialog;
-// samp.dll RVA: 0x002acac0
+// 0x002acac0
 CDXUTDialog* g_guiServerDialog;
-// samp.dll RVA: 0x002acac4
+// 0x002acac4
 CDXUTDialog* g_guiPanelDialog;
-// samp.dll RVA: 0x002acac8
+// 0x002acac8
 CDXUTDialog* g_guiDownloadDialog;
 typedef char NativeDialogExtent[(sizeof(CDXUTDialog) == 0x1ea) ? 1 : -1];
-// samp.dll RVA: 0x000c6ce0
+// 0x000c6ce0
 void ClientInitializeGui()
 {
     if (g_guiScoreboardDialog)
@@ -162,7 +162,7 @@ typedef char CChatBubbleObservedExtent[(sizeof(CChatBubble) == 0x44a20) ? 1 : -1
 #include <DXUTgui.h>
 // Allocation extent and packed manager layout observed in the original constructor.
 typedef char DialogManagerExtent[(sizeof(CDXUTDialogResourceManager) == 36) ? 1 : -1];
-// samp.dll RVA: 0x000c6a60
+// 0x000c6a60
 void ClientInitializeDialogResources()
 {
     g_deviceDialogResources = new CDXUTDialogResourceManager;
@@ -170,7 +170,7 @@ void ClientInitializeDialogResources()
     g_deviceDialogResources->OnResetDevice();
 }
 
-// samp.dll RVA: 0x000c6af0
+// 0x000c6af0
 void ClientRefreshGuiFonts()
 {
     if (g_guiScoreboardDialog)
