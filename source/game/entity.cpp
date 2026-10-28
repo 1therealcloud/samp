@@ -466,181 +466,90 @@ void CEntity::ProcessControl() {
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // samp.dll RVA: 0x0009ed60
-__declspec(naked) void CEntity::Native009ed60(DWORD argument) {
+void CEntity::Native009ed60(DWORD argument) {
+    void *entity=m_pGameEntity;
+    if(!entity)return;
+    // GTA SA virtual address: 0x00534120; ECX=entity, one callee-popped word.
     __asm {
-        push ebp
-        mov ebp,esp
-        push ecx
-        mov ecx,dword ptr [ecx + 0x40]
-        test ecx,ecx
-        mov dword ptr [ebp + -0x4],ecx
-        jz branch_1009ed7b
-        push dword ptr [ebp + 0x8]
-        mov ecx,dword ptr [ebp + -0x4]
+        push argument
+        mov ecx,entity
         mov edx,0x534120
         call edx
-    branch_1009ed7b:
-        mov esp,ebp
-        pop ebp
-        ret 0x4
     }
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // samp.dll RVA: 0x0009f5d0
-__declspec(naked) void CEntity::Native009f5d0(DWORD argument) {
-    __asm {
-        push ebp
-        mov ebp,esp
-        push ecx
-        mov eax,dword ptr [ecx + 0x40]
-        test eax,eax
-        jz branch_1009f600
-        mov ecx,dword ptr [eax + 0x18]
-        test ecx,ecx
-        jz branch_1009f600
-        cmp dword ptr [eax],0x863c40
-        jz branch_1009f600
-        mov dword ptr [ebp + -0x4],eax
-        mov eax,dword ptr [ebp + -0x4]
-        mov edx,dword ptr [eax + 0x18]
-        push dword ptr [ebp + 0x8]
-        push edx
-        mov eax,0x732b00
-        call eax
-        pop edx
-        pop edx
-    branch_1009f600:
-        mov esp,ebp
-        pop ebp
-        ret 0x4
-    }
+void CEntity::Native009f5d0(DWORD argument) {
+    BYTE *entity=(BYTE*)m_pGameEntity;
+    if(!entity || !*(void*volatile*)(entity+0x18) || *(DWORD*)entity==0x863c40)return;
+    // GTA SA virtual addresses: 0x00863C40 sentinel; 0x00732B00 cdecl backend.
+    // Native reloads the render pointer after its presence/sentinel checks.
+    ((void(__cdecl*)(void*,DWORD))0x732b00)(*(void*volatile*)(entity+0x18),argument);
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // samp.dll RVA: 0x0009f810
-__declspec(naked) void CEntity::Native009f810(DWORD a1,DWORD a2,DWORD a3,DWORD a4,DWORD a5,DWORD a6) {
+void CEntity::Native009f810(DWORD a1,DWORD a2,DWORD a3,DWORD a4,DWORD a5,DWORD a6) {
+    void *entity=m_pGameEntity;
+    if(!entity)return;
+    // GTA SA virtual address: 0x00542A50; six raw words, callee pops 24 bytes.
     __asm {
-        push ebp
-        mov ebp,esp
-        push ecx
-        mov ecx,dword ptr [ecx + 0x40]
-        test ecx,ecx
-        mov dword ptr [ebp + -0x4],ecx
-        jz branch_1009f83a
-        push dword ptr [ebp + 0x1c]
-        push dword ptr [ebp + 0x18]
-        push dword ptr [ebp + 0x14]
-        push dword ptr [ebp + 0x10]
-        push dword ptr [ebp + 0xc]
-        push dword ptr [ebp + 0x8]
+        push a6
+        push a5
+        push a4
+        push a3
+        push a2
+        push a1
         mov eax,0x542a50
-        mov ecx,dword ptr [ebp + -0x4]
+        mov ecx,entity
         call eax
-    branch_1009f83a:
-        mov esp,ebp
-        pop ebp
-        ret 0x18
     }
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // samp.dll RVA: 0x0009f840
-__declspec(naked) void CEntity::Native009f840(DWORD argument) {
+void CEntity::Native009f840(DWORD argument) {
+    BYTE *entity=(BYTE*)m_pGameEntity;
+    if(!entity)return;
+    void *subobject=entity+0x138;
+    // GTA SA virtual address: 0x004F6420; ECX=subobject, argument followed by 0.
     __asm {
-        push ebp
-        mov ebp,esp
-        push ecx
-        mov ecx,dword ptr [ecx + 0x40]
-        test ecx,ecx
-        mov dword ptr [ebp + -0x4],ecx
-        jz branch_1009f863
-        push 0x0
-        push dword ptr [ebp + 0x8]
-        mov edx,dword ptr [ebp + -0x4]
-        lea ecx,[edx + 0x138]
+        push 0
+        push argument
+        mov ecx,subobject
         mov edx,0x4f6420
         call edx
-    branch_1009f863:
-        mov esp,ebp
-        pop ebp
-        ret 0x4
     }
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // samp.dll RVA: 0x0009f960
-__declspec(naked) void CEntity::Native009f960() {
+void CEntity::Native009f960() {
+    BYTE *entity=(BYTE*)m_pGameEntity;
+    // Native reads the vtable before the null test; a null backend must fault.
+    void **vtable=*(void***)entity;
+    void *render=entity?*(void**)(entity+0x18):0;
+    short model=*(short*)(entity+0x22);
+    // GTA SA virtual address: 0x00733160, cdecl render-object prepass.
+    if(model>=400 && model<=611 && render)
+        ((void(__cdecl*)(void*))0x733160)(render);
+    // Keep the captured entity and vtable across the prepass. The slot itself
+    // is read after the prepass, just as in the original indirect call.
     __asm {
-        push ebp
-        mov ebp,esp
-        sub esp,0xc
-        push esi
-        mov esi,ecx
-        mov eax,dword ptr [esi + 0x40]
-        mov ecx,dword ptr [eax]
-        mov dword ptr [ebp + -0xc],ecx
-        mov ecx,eax
-        test ecx,ecx
-        push edi
-        mov dword ptr [ebp + -0x4],ecx
-        jnz branch_1009f97f
-        xor edi,edi
-        jmp branch_1009f982
-    branch_1009f97f:
-        mov edi,dword ptr [eax + 0x18]
-    branch_1009f982:
-        mov ax,word ptr [eax + 0x22]
-        cmp ax,0x190
-        mov dword ptr [ebp + -0x8],edi
-        jl branch_1009f9a4
-        cmp ax,0x263
-        jg branch_1009f9a4
-        test edi,edi
-        jz branch_1009f9a4
-        push dword ptr [ebp + -0x8]
-        mov edx,0x733160
-        call edx
-        pop edx
-    branch_1009f9a4:
-        mov eax,dword ptr [ebp + -0xc]
-        mov ecx,dword ptr [ebp + -0x4]
+        mov eax,vtable
+        mov ecx,entity
         call dword ptr [eax + 0x44]
-        mov edx,dword ptr [esi + 0x40]
-        mov ax,word ptr [edx + 0x22]
-        cmp ax,0x190
-        jl branch_1009f9d5
-        cmp ax,0x263
-        jg branch_1009f9d5
-        test edi,edi
-        jz branch_1009f9e4
-        push dword ptr [ebp + -0x4]
-        mov edx,0x553260
-        call edx
-        pop edx
-        pop edi
-        pop esi
-        mov esp,ebp
-        pop ebp
-        ret
-    branch_1009f9d5:
-        test edi,edi
-        jz branch_1009f9e4
-        push dword ptr [ebp + -0x4]
-        mov edx,0x553260
-        call edx
-        pop edx
-    branch_1009f9e4:
-        pop edi
-        pop esi
-        mov esp,ebp
-        pop ebp
-        ret
     }
+    // Both native model-range branches perform the same render test/call.
+    // Preserve their backend reload and WORD read, including its fault edge.
+    (void)*(volatile short*)((BYTE*)m_pGameEntity+0x22);
+    // GTA SA virtual address: 0x00553260, using the original captured entity.
+    if(render)((void(__cdecl*)(void*))0x553260)(entity);
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
