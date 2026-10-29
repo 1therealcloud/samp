@@ -9,6 +9,7 @@ public:
     CMatrix* m_pMatrix;
     // 0x0009fda0
     CCamera();
+    // Provisional external binding; standalone native destructor identity unverified.
     // 0x0009fdb0
     ~CCamera();
     // 0x0009d280
@@ -42,5 +43,5 @@ public:
 #pragma pack(pop)
 typedef char CameraExtent[(sizeof(CCamera) == 8) ? 1 : -1];
 // 0x000b46e0
-bool __cdecl GameIsCameraPointValid(const CVector* point);
+BYTE __cdecl GameIsCameraPointValid(const CVector* point);
 #endif

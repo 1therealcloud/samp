@@ -1,7 +1,9 @@
 #include "game/camera.h"
 #include "game/scripting.h"
+#include <math.h>
 #include <string.h>
-// Native destructor clears only the low BYTE of the matrix pointer.
+// Provisional SAMP-API attribution: this entry also fits CAudio initialization.
+// No native references establish its class/lifecycle role; keep it unverified.
 // 0x0009fdb0
 CCamera::~CCamera()
 {
@@ -76,7 +78,7 @@ void CCamera::SetTrackVector(CVector* from, CVector* to, int time, BYTE mode)
 }
 // Strict bounds, ordered comparisons. Native returns AL, not a WORD or BOOL.
 // 0x000b46e0
-bool __cdecl GameIsCameraPointValid(const CVector* point)
+BYTE __cdecl GameIsCameraPointValid(const CVector* point)
 {
     return point->x < 20000.0f && point->x > -20000.0f && point->y < 20000.0f && point->y > -20000.0f && point->z < 100000.0f && point->z > -10000.0f;
 }
@@ -103,34 +105,15 @@ void CCamera::SetToOwner()
             SetMoveVector(&matrix.position, &matrix.position, 100, true);
     }
 }
-// Keep native extended intermediates and return the unspilled x87 result.
+// VC7 /O2 keeps these intermediates in x87 and returns the native unspilled result.
 // 0x0009d540
-__declspec(naked) float CCamera::GetDistanceToPoint(CVector* point)
+float CCamera::GetDistanceToPoint(CVector* point)
 {
-    // clang-format off
-    __asm {
-        mov eax,[esp+4]
-        fld dword ptr [eax+8]
-        fsub dword ptr ds:[0xb6f9d4]
-        fld dword ptr [eax+4]
-        fsub dword ptr ds:[0xb6f9d0]
-        fld dword ptr [eax]
-        fsub dword ptr ds:[0xb6f9cc]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 4
-    }
-    // clang-format on
+    // GTA SA camera position VA: 0x00b6f9cc; native read order is Z, Y, X.
+    float z = point->z - *(const float*)0xb6f9d4;
+    float y = point->y - *(const float*)0xb6f9d0;
+    float x = point->x - *(const float*)0xb6f9cc;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 // 0x0009d580
 void CCamera::Restore()

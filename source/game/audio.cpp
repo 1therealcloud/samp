@@ -3,8 +3,19 @@
 // 0x000a2030
 int CAudio::GetRadioStation()
 {
-    unsigned station = *(BYTE*)0x8cb7e1;
-    return station <= 12 ? (int)station : -1;
+    // GTA SA radio manager VA: 0x008cb6f8; station byte is at +0xe9.
+    int station = 0;
+    // clang-format off
+    __asm {
+        mov ecx,0x8cb6f8
+        xor eax,eax
+        mov al,byte ptr [ecx+0xe9]
+        mov station,eax
+    }
+    // clang-format on
+    if (station < 0 || station > 12)
+        return -1;
+    return station;
 }
 // 0x000a2060
 void CAudio::StartRadio(int station)
@@ -96,7 +107,7 @@ void CAudio::Play(int sound, CVector position)
 // 0x000a1ff0
 void CAudio::Process()
 {
-    if (m_bSoundLoaded == 1 && Scripting::ProcessCommand(&g_audioIsLoaded, 1))
+    if (m_bSoundLoaded && m_bSoundLoaded == 1 && Scripting::ProcessCommand(&g_audioIsLoaded, 1))
     {
         Scripting::ProcessCommand(&g_audioStart, 1);
         m_bSoundLoaded = 2;
