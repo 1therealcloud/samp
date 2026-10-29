@@ -794,7 +794,7 @@ extern DWORD g_hookDamagePed;
 // 0x000a3840
 WORD GameResolveDamagePlayer(void* entity);
 // 0x000a38e0
-DWORD GameResolveDamageActor(void* entity);
+WORD GameResolveDamageActor(void* entity);
 // 0x0018e81c
 extern CVehicle* g_hookEnterVehicle;
 #endif

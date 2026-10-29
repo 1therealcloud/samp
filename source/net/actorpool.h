@@ -32,9 +32,9 @@ public:
     // Raw active DWORD, not normalized to bool.
     // 0x00001640
     BOOL DoesExist(WORD id);
-    // Fourth parameter is copied into native ray records; semantic role unresolved.
+    // Fourth float is copied raw into native ray records; semantic role unresolved.
     // 0x00001770
-    WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord);
+    WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, float rayValue);
     // 0x00001900
     BOOL Create(const ActorCreateInfo* info);
     // 0x000016c0
@@ -45,8 +45,9 @@ public:
     void UpdateLargestId();
     // 0x000016f0
     BOOL Delete(WORD id);
+    // ID in AX; native failure preserves the high half of the EAX counter.
     // 0x000018b0
-    DWORD Find(void* ped);
+    WORD Find(void* ped);
 };
 #pragma pack(pop)
 typedef char NativeActorPoolExtent[(sizeof(CActorPool) == 0x4e24) ? 1 : -1];

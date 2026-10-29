@@ -2474,7 +2474,7 @@ WORD GameResolveDamagePlayer(void* entity)
     return result;
 }
 // 0x000a38e0
-DWORD GameResolveDamageActor(void* entity)
+WORD GameResolveDamageActor(void* entity)
 {
     if (!entity)
         return 0xffff;
@@ -2520,10 +2520,10 @@ BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
         player = GameResolveDamagePlayer(ped);
         if (player == 0xffff)
         {
-            DWORD actor = GameResolveDamageActor(ped);
-            if ((WORD)actor != 0xffff)
+            WORD actor = GameResolveDamageActor(ped);
+            if (actor != 0xffff)
             {
-                (*(CLocalPlayer**)((BYTE*)players + 0x1e))->SendActorDamage((WORD)actor, damage->damage, damage->weapon, damage->bodyPart);
+                (*(CLocalPlayer**)((BYTE*)players + 0x1e))->SendActorDamage(actor, damage->damage, damage->weapon, damage->bodyPart);
                 return TRUE;
             }
         }

@@ -209,6 +209,7 @@ if /i "%SRC%"=="source\net\netgame.cpp" set "UNIT_FLAGS=/FIwinsock2.h"
 rem Preserve native out-of-line GetIndex/MS calls; explicit inline templates stay enabled.
 if /i "%SRC%"=="source\net\pickuppool.cpp" set "UNIT_OPT_FLAGS=/Ob1"
 if /i "%SRC%"=="source\menu.cpp" set "UNIT_OPT_FLAGS=/Ob1"
+if /i "%SRC%"=="source\net\actorpool.cpp" set "UNIT_OPT_FLAGS=/Ob1"
 "%SAMP_VC%\bin\cl.exe" %UNIT_FLAGS% %FLAGS% %UNIT_OPT_FLAGS% /Fo"%OBJDIR%\%UNIT%.obj" "%SRC%" >"%LOGDIR%\%UNIT%.log" 2>&1
 if errorlevel 1 (
     type "%LOGDIR%\%UNIT%.log"

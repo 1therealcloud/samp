@@ -1880,7 +1880,7 @@ bool CLocalPlayer::GetCameraTarget(WORD* targets)
             id = pools->players->FindInRay(20.0f, &origin, &end, 0x3f400000);
             if (id != 0xffff)
                 targets[2] = id;
-            id = ((CNetGame*)g_pNetGame)->pools->actors->FindInRay(20.0f, &origin, &end, 0x3f400000);
+            id = ((CNetGame*)g_pNetGame)->pools->actors->FindInRay(20.0f, &origin, &end, 0.75f);
             if (id != 0xffff)
                 targets[3] = id;
         }

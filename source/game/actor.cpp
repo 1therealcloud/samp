@@ -174,7 +174,7 @@ const Scripting::OpcodeInfo g_actorConfigurationCommand = {0x446, "ii"};
 // 0x0011e2f8
 const Scripting::OpcodeInfo g_actorTaskFlagsCommand = {0x60b, "ii"};
 // 0x0009bd30
-CActor::CActor(int model, CVector position, float heading)
+CActor::CActor(int model, float x, float y, float z, float heading)
 {
     actorBackend = 0;
     m_nHandle = 0;
@@ -195,13 +195,14 @@ CActor::CActor(int model, CVector position, float heading)
         }
     }
     double loweredZ;
-    float* z = &position.z;
+    float* positionZ = &z;
     // clang-format off
-    __asm {mov eax,z}
+    __asm {mov eax,positionZ}
     __asm {fld dword ptr [eax]}
     __asm {fsub g_quaternionMatrixOne}
-    __asm {fstp qword ptr loweredZ} // clang-format on
-    Scripting::ProcessCommand(&g_actorCreateCommand, 5, model, (double)position.x, (double)position.y, loweredZ, &handle);
+    __asm {fstp qword ptr loweredZ}
+    // clang-format on
+    Scripting::ProcessCommand(&g_actorCreateCommand, 5, model, (double)x, (double)y, loweredZ, &handle);
     Scripting::ProcessCommand(&g_actorHeadingCommand, handle, (double)heading);
     m_nHandle = handle;
     actorBackend = (ActorBackendPrefix*)GamePoolPedGetAt(handle);

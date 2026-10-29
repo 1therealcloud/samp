@@ -36,8 +36,9 @@ class CActor : public CEntity
     BYTE invulnerable;
 
 public:
+    // Five native stack DWORDs; scalar coordinates preserve the 20-byte ABI.
     // 0x0009bd30
-    CActor(int model, CVector position, float heading);
+    CActor(int model, float x, float y, float z, float heading);
     // 0x0009bee0
     void PerformAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time);
     // 0x0009bfd0
