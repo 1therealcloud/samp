@@ -10,7 +10,7 @@ DWORD g_gangZoneFlashTick = 0;
 // 0x00002150
 CGangZonePool::CGangZonePool()
 {
-    for (int i = 0; i < 1024; ++i)
+    for (WORD i = 0; i < 1024; ++i)
     {
         zones[i] = 0;
         active[i] = 0;
@@ -19,7 +19,7 @@ CGangZonePool::CGangZonePool()
 // 0x00002180
 CGangZonePool::~CGangZonePool()
 {
-    for (int i = 0; i < 1024; ++i)
+    for (WORD i = 0; i < 1024; ++i)
         if (zones[i])
         {
             delete zones[i];
@@ -73,18 +73,15 @@ void CGangZonePool::Delete(WORD id)
 void CGangZonePool::Draw()
 {
     DWORD now = GetTickCount();
-    BYTE phase = g_gangZoneFlashPhase;
     if ((LONG)(now - g_gangZoneFlashTick) >= 500)
     {
-        phase = (BYTE)~phase;
-        g_gangZoneFlashPhase = phase;
+        g_gangZoneFlashPhase = (BYTE)~g_gangZoneFlashPhase;
         g_gangZoneFlashTick = now;
     }
-    for (int i = 0; i < 1024; ++i)
+    for (WORD i = 0; i < 1024; ++i)
         if (active[i])
         {
             GangZone* zone = zones[i];
-            g_pGame->DrawGangZone(zone->rectangle, phase ? zone->flashColor : zone->color);
-            phase = g_gangZoneFlashPhase;
+            g_pGame->DrawGangZone(zone->rectangle, g_gangZoneFlashPhase ? zone->flashColor : zone->color);
         }
 }
