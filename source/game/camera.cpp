@@ -16,21 +16,50 @@ void CCamera::Fade(BOOL in)
 // 0x0009d2a0
 void CCamera::GetMatrix(CMatrix* matrix)
 {
-    for (int row = 0; row < 4; row++)
-        for (int word = 0; word < 3; word++)
-            *(DWORD*)((BYTE*)matrix + row * 16 + word * 4) = *(DWORD*)((BYTE*)m_pMatrix + row * 16 + word * 4);
+    matrix->right.x = m_pMatrix->right.x;
+    matrix->right.y = m_pMatrix->right.y;
+    matrix->right.z = m_pMatrix->right.z;
+    matrix->up.x = m_pMatrix->up.x;
+    matrix->up.y = m_pMatrix->up.y;
+    matrix->up.z = m_pMatrix->up.z;
+    matrix->at.x = m_pMatrix->at.x;
+    matrix->at.y = m_pMatrix->at.y;
+    matrix->at.z = m_pMatrix->at.z;
+    matrix->position.x = m_pMatrix->position.x;
+    matrix->position.y = m_pMatrix->position.y;
+    matrix->position.z = m_pMatrix->position.z;
 }
 // 0x0009d320
 void CCamera::SetMatrix(CMatrix matrix)
 {
-    for (int row = 0; row < 4; row++)
-        for (int word = 0; word < 3; word++)
-            *(DWORD*)((BYTE*)m_pMatrix + row * 16 + word * 4) = *(DWORD*)((BYTE*)&matrix + row * 16 + word * 4);
+    m_pMatrix->right.x = matrix.right.x;
+    m_pMatrix->right.y = matrix.right.y;
+    m_pMatrix->right.z = matrix.right.z;
+    m_pMatrix->up.x = matrix.up.x;
+    m_pMatrix->up.y = matrix.up.y;
+    m_pMatrix->up.z = matrix.up.z;
+    m_pMatrix->at.x = matrix.at.x;
+    m_pMatrix->at.y = matrix.at.y;
+    m_pMatrix->at.z = matrix.at.z;
+    m_pMatrix->position.x = matrix.position.x;
+    m_pMatrix->position.y = matrix.position.y;
+    m_pMatrix->position.z = matrix.position.z;
 }
 // 0x0009d3b0
-void CCamera::TakeControl(void* target, short mode, short switchType)
+void CCamera::TakeControl(void* target, int mode, int switchType)
 {
-    ((void(__fastcall*)(void*, void*, void*, int, int, int))0x50c7c0)((void*)0xb6f028, 0, target, (int)mode, (int)switchType, 1);
+    // The native adapter forwards complete stack DWORDs to GTA's thiscall.
+    // clang-format off
+    __asm {
+        push 1
+        push switchType
+        push mode
+        push target
+        mov ecx,0xb6f028
+        mov edx,0x50c7c0
+        call edx
+    }
+    // clang-format on
 }
 // 0x0009d3d0
 void CCamera::SetMoveVector(CVector* from, CVector* to, int time, BYTE mode)

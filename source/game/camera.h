@@ -19,7 +19,7 @@ public:
     void SetMatrix(CMatrix matrix);
     // Target is a GTA entity pointer, not a recovered CEntity wrapper.
     // 0x0009d3b0
-    void TakeControl(void* target, short mode, short switchType);
+    void TakeControl(void* target, int mode, int switchType);
     // 0x0009d3d0
     void SetMoveVector(CVector* from, CVector* to, int time, BYTE mode);
     // 0x0009d440
