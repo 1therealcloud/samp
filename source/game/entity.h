@@ -24,6 +24,27 @@ public:
     CVector position;
     DWORD pad3;
 };
+// Observed GTA backend prefix only; unknown ranges are not reconstructed fields.
+#pragma pack(push, 1)
+struct EntityBackendPrefix
+{
+    DWORD* vtable;
+    BYTE unknown04[16];
+    CMatrix* matrix;
+    void* rwObject;
+    DWORD flags;
+    BYTE unknown20[2];
+    short model;
+    BYTE unknown24[28];
+    DWORD rawFlags40;
+    CVector speed;
+    CVector turnSpeed;
+};
+#pragma pack(pop)
+typedef char EntityBackendMatrixOffset[(offsetof(EntityBackendPrefix, matrix) == 0x14) ? 1 : -1];
+typedef char EntityBackendSpeedOffset[(offsetof(EntityBackendPrefix, speed) == 0x44) ? 1 : -1];
+typedef char EntityBackendTurnSpeedOffset[(offsetof(EntityBackendPrefix, turnSpeed) == 0x50) ? 1 : -1];
+typedef char EntityBackendPrefixExtent[(sizeof(EntityBackendPrefix) == 0x5c) ? 1 : -1];
 // 0x000b3990
 void GameChangeBackendEntityModel(void* entity, DWORD model);
 // Raw helper; no full object type or vtable meaning established.
@@ -63,7 +84,11 @@ public:
         // Raw view retained for historical native fixtures.
         BYTE unknown04[60];
     };
-    void* m_pGameEntity;
+    union
+    {
+        void* m_pGameEntity;
+        EntityBackendPrefix* m_pEntity;
+    };
     DWORD m_nHandle;
     // 0x0009bce0
     CEntity()
@@ -140,9 +165,9 @@ public:
     BOOL EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY);
     // 0x0009f400
     BOOL HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY);
-    // Native results use AL; the SAMP-API BOOL signature is not ABI evidence.
+    // Native returns the complete masked EAX word (0 or 1).
     // 0x0009f4a0
-    bool GetCollisionFlag();
+    DWORD GetCollisionFlag();
     // 0x0009f470
     void SetCollisionFlag(BOOL enabled);
     // 0x0009f4c0
@@ -160,7 +185,12 @@ public:
     // 0x0009eac0
     void UpdateRwFrame();
     // 0x0009ee80
-    void Teleport(CVector position);
+    void Teleport(float x, float y, float z);
+    // Source adapter only; no established separate native entry.
+    void Teleport(CVector position)
+    {
+        Teleport(position.x, position.y, position.z);
+    }
 };
 #pragma pack(pop)
 typedef char EntityExtent[(sizeof(CEntity) == 72) ? 1 : -1];

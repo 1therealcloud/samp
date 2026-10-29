@@ -2,46 +2,44 @@
 #include "game/game.h"
 #include "game/scripting.h"
 #include <string.h>
-// 0x000b3720
-void __stdcall GameWorldAdd(void* entity)
-{
-    ((void(__cdecl*)(void*))0x563220)(entity);
-}
-// 0x000b3740
-void __stdcall GameWorldRemove(void* entity)
-{
-    ((void(__cdecl*)(void*))0x563280)(entity);
-}
 // 0x0009e950
 void CEntity::GetMatrix(CMatrix* matrix)
 {
-    if (m_pGameEntity && *(void**)((BYTE*)m_pGameEntity + 0x14))
-    {
-        BYTE* source = *(BYTE**)((BYTE*)m_pGameEntity + 0x14);
-        for (int i = 0; i < 4; i++)
-            memcpy((BYTE*)matrix + i * 16, source + i * 16, 12);
-    }
+    if (!m_pEntity || !m_pEntity->matrix)
+        return;
+    matrix->right.x = m_pEntity->matrix->right.x;
+    matrix->right.y = m_pEntity->matrix->right.y;
+    matrix->right.z = m_pEntity->matrix->right.z;
+    matrix->up.x = m_pEntity->matrix->up.x;
+    matrix->up.y = m_pEntity->matrix->up.y;
+    matrix->up.z = m_pEntity->matrix->up.z;
+    matrix->at.x = m_pEntity->matrix->at.x;
+    matrix->at.y = m_pEntity->matrix->at.y;
+    matrix->at.z = m_pEntity->matrix->at.z;
+    matrix->position.x = m_pEntity->matrix->position.x;
+    matrix->position.y = m_pEntity->matrix->position.y;
+    matrix->position.z = m_pEntity->matrix->position.z;
 }
 // 0x0009ee80
-void CEntity::Teleport(CVector position)
+void CEntity::Teleport(float x, float y, float z)
 {
     void* entity = m_pGameEntity;
     if (entity && *(DWORD*)entity != 0x863c40)
     {
         short model = *(short*)((BYTE*)entity + 0x22);
         if (model == 0x21a || model == 0x219 || model == 0x1c1)
-            Scripting::ProcessCommand(&g_entityTeleportCommand, m_nHandle, (double)position.x, (double)position.y, (double)position.z);
+            Scripting::ProcessCommand(&g_entityTeleportCommand, m_nHandle, (double)x, (double)y, (double)z);
         else
         {
             // clang-format off
             __asm {
-                push 0
-                push position.z
-                push position.y
-                push position.x
                 mov ecx,entity
-                mov eax,[ecx]
-                call dword ptr [eax+0x38]
+                mov edx,[ecx]
+                push 0
+                push z
+                push y
+                push x
+                call dword ptr [edx+0x38]
             }
             // clang-format on
         }
@@ -52,11 +50,13 @@ void CEntity::Add()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && !*(DWORD*)((BYTE*)m_pGameEntity + 0xb4))
     {
-        memset((BYTE*)m_pGameEntity + 0x44, 0, 24);
+        CVector zero = {0.0f, 0.0f, 0.0f};
+        SetSpeed(zero);
+        SetTurnSpeed(zero);
         GameWorldAdd(m_pGameEntity);
         CMatrix matrix;
         GetMatrix(&matrix);
-        Teleport(matrix.position);
+        Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
     }
 }
 // 0x0009f240
@@ -75,58 +75,98 @@ extern const float g_entityBoundaryLift = 0.03999999910593033f;
 // 0x0009ea00
 void CEntity::SetMatrix(CMatrix matrix)
 {
-    if (m_pGameEntity && *(void**)((BYTE*)m_pGameEntity + 0x14))
-    {
-        for (int row = 0; row < 4; row++)
-            for (int word = 0; word < 3; word++)
-            {
-                BYTE* target = *(BYTE**)((BYTE*)m_pGameEntity + 0x14);
-                *(DWORD*)(target + row * 16 + word * 4) = *(DWORD*)((BYTE*)&matrix + row * 16 + word * 4);
-            }
-    }
+    if (!m_pEntity || !m_pEntity->matrix)
+        return;
+    m_pEntity->matrix->right.x = matrix.right.x;
+    m_pEntity->matrix->right.y = matrix.right.y;
+    m_pEntity->matrix->right.z = matrix.right.z;
+    m_pEntity->matrix->up.x = matrix.up.x;
+    m_pEntity->matrix->up.y = matrix.up.y;
+    m_pEntity->matrix->up.z = matrix.up.z;
+    m_pEntity->matrix->at.x = matrix.at.x;
+    m_pEntity->matrix->at.y = matrix.at.y;
+    m_pEntity->matrix->at.z = matrix.at.z;
+    m_pEntity->matrix->position.x = matrix.position.x;
+    m_pEntity->matrix->position.y = matrix.position.y;
+    m_pEntity->matrix->position.z = matrix.position.z;
 }
 // 0x0009eb20
 void CEntity::GetSpeed(CVector* speed)
 {
-    memcpy(speed, (BYTE*)m_pGameEntity + 0x44, 12);
+    speed->x = m_pEntity->speed.x;
+    speed->y = m_pEntity->speed.y;
+    speed->z = m_pEntity->speed.z;
 }
 // 0x0009eb50
 void CEntity::SetSpeed(CVector speed)
 {
-    memcpy((BYTE*)m_pGameEntity + 0x44, &speed, 12);
+    m_pEntity->speed.x = speed.x;
+    m_pEntity->speed.y = speed.y;
+    m_pEntity->speed.z = speed.z;
 }
 // 0x0009ec70
 void CEntity::GetTurnSpeed(CVector* speed)
 {
-    memcpy(speed, (BYTE*)m_pGameEntity + 0x50, 12);
+    speed->x = m_pEntity->turnSpeed.x;
+    speed->y = m_pEntity->turnSpeed.y;
+    speed->z = m_pEntity->turnSpeed.z;
 }
 // 0x0009eca0
 void CEntity::SetTurnSpeed(CVector speed)
 {
-    memcpy((BYTE*)m_pGameEntity + 0x50, &speed, 12);
+    m_pEntity->turnSpeed.x = speed.x;
+    m_pEntity->turnSpeed.y = speed.y;
+    m_pEntity->turnSpeed.z = speed.z;
 }
 // 0x0009ecd0
 void CEntity::ApplyTurnSpeed()
 {
-    if (m_pGameEntity)
-        ((void(__fastcall*)(void*, void*))0x542e20)(m_pGameEntity, 0);
+    void* entity = m_pGameEntity;
+    if (!entity)
+        return;
+    // GTA SA virtual address: ECX thiscall backend.
+    // clang-format off
+    __asm {
+        mov ecx,entity
+        mov eax,0x542e20
+        call eax
+    }
+    // clang-format on
 }
 // GTA returns raw float bits in EAX, not an ST0 float result.
 // 0x0009ecf0
 float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
 {
-    if (!m_pGameEntity)
+    void* entity = m_pGameEntity;
+    float distance = 0.0f;
+    if (!entity)
         return 0.0f;
-    DWORD bits = ((DWORD(__fastcall*)(void*, void*))0x536be0)(m_pGameEntity, 0);
-    float distance;
-    memcpy(&distance, &bits, 4);
+    // GTA SA virtual address: result is raw float bits in EAX.
+    // clang-format off
+    __asm {
+        mov ecx,entity
+        mov edx,0x536be0
+        call edx
+        mov distance,eax
+    }
+    // clang-format on
     return distance;
 }
 // 0x0009ed30
 void CEntity::GetBoundCentre(CVector* centre)
 {
-    if (m_pGameEntity)
-        ((void(__fastcall*)(void*, void*, CVector*))0x534250)(m_pGameEntity, 0, centre);
+    void* entity = m_pGameEntity;
+    if (!entity)
+        return;
+    // GTA SA virtual address: ECX entity, one callee-popped pointer.
+    // clang-format off
+    __asm {
+        push centre
+        mov ecx,entity
+        mov edx,0x534250
+        call edx
+    }
+    // clang-format on
 }
 // 0x0009ee70
 int CEntity::GetModelIndex()
@@ -141,11 +181,11 @@ BOOL CEntity::DoesExist()
 // 0x0009f260
 BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
-    if (!m_pGameEntity)
+    if (!m_pEntity)
         return FALSE;
     CMatrix matrix;
-    GetMatrix(&matrix);
     CVector speed;
+    GetMatrix(&matrix);
     GetSpeed(&speed);
     if (matrix.position.x > positiveX)
     {
@@ -154,6 +194,10 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
             speed.x = -0.2f;
             speed.z = 0.1f;
         }
+        SetSpeed(speed);
+        matrix.position.z += g_entityBoundaryLift;
+        SetMatrix(matrix);
+        return TRUE;
     }
     else if (matrix.position.x < negativeX)
     {
@@ -162,6 +206,10 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
             speed.x = 0.2f;
             speed.z = 0.1f;
         }
+        SetSpeed(speed);
+        matrix.position.z += g_entityBoundaryLift;
+        SetMatrix(matrix);
+        return TRUE;
     }
     else if (matrix.position.y > positiveY)
     {
@@ -170,6 +218,10 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
             speed.y = -0.2f;
             speed.z = 0.1f;
         }
+        SetSpeed(speed);
+        matrix.position.z += g_entityBoundaryLift;
+        SetMatrix(matrix);
+        return TRUE;
     }
     else if (matrix.position.y < negativeY)
     {
@@ -178,50 +230,57 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
             speed.y = 0.2f;
             speed.z = 0.1f;
         }
+        SetSpeed(speed);
+        matrix.position.z += g_entityBoundaryLift;
+        SetMatrix(matrix);
+        return TRUE;
     }
-    else
-        return FALSE;
-    SetSpeed(speed);
-    matrix.position.z += g_entityBoundaryLift;
-    SetMatrix(matrix);
-    return TRUE;
+    return FALSE;
 }
 // 0x0009f400
 BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
-    if (!m_pGameEntity)
+    if (!m_pEntity)
         return FALSE;
     CMatrix matrix;
     GetMatrix(&matrix);
-    return matrix.position.x > positiveX || matrix.position.x < negativeX || matrix.position.y > positiveY || matrix.position.y < negativeY ? TRUE : FALSE;
+    if (matrix.position.x > positiveX)
+        return TRUE;
+    else if (matrix.position.x < negativeX)
+        return TRUE;
+    else if (matrix.position.y > positiveY)
+        return TRUE;
+    else if (matrix.position.y < negativeY)
+        return TRUE;
+    return FALSE;
 }
 // 0x0009f4a0
-bool CEntity::GetCollisionFlag()
+DWORD CEntity::GetCollisionFlag()
 {
-    return !m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40 || (*(DWORD*)((BYTE*)m_pGameEntity + 0x1c) & 1) != 0;
+    if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
+        return 1;
+    return *(BYTE*)&m_pEntity->flags & 1;
 }
 // 0x0009f470
 void CEntity::SetCollisionFlag(BOOL enabled)
 {
-    if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
+    if (m_pEntity && (DWORD)m_pEntity->vtable != 0x863c40)
     {
-        DWORD& flags = *(DWORD*)((BYTE*)m_pGameEntity + 0x1c);
         if (enabled)
-            flags |= 1;
+            m_pEntity->flags |= 1;
         else
-            flags &= ~1u;
+            m_pEntity->flags &= ~1u;
     }
 }
 // 0x0009f4c0
 void CEntity::SetCollisionProcessed(BOOL processed)
 {
-    if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
+    if (m_pEntity && (DWORD)m_pEntity->vtable != 0x863c40)
     {
-        DWORD& flags = *(DWORD*)((BYTE*)m_pGameEntity + 0x1c);
         if (processed)
-            flags &= 0x7ffffffd;
+            m_pEntity->flags &= 0x7ffffffd;
         else
-            flags |= 0x80000002;
+            m_pEntity->flags |= 0x80000002;
     }
 }
 // 0x0009f730
@@ -231,7 +290,20 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
     {
         void* matrix = *(void**)((BYTE*)m_pGameEntity + 0x14);
         if (matrix)
-            ((void(__fastcall*)(void*, void*, float*, float*, float*, int))0x59a840)(matrix, 0, x, y, z, 0x15);
+        {
+            // GTA SA virtual address: ECX matrix and four callee-popped words.
+            // clang-format off
+            __asm {
+                push 0x15
+                push z
+                push y
+                push x
+                mov ecx,matrix
+                mov eax,0x59a840
+                call eax
+            }
+            // clang-format on
+        }
         // clang-format off
         // Keep the two native x87 multiplies and the store only at the end.
         __asm {
@@ -257,41 +329,67 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
 // 0x0009f8a0
 void* CEntity::GetRwObject()
 {
-    return m_pGameEntity ? *(void**)((BYTE*)m_pGameEntity + 0x18) : 0;
+    if (!m_pEntity)
+        return 0;
+    return m_pEntity->rwObject;
 }
 // 0x0009f9f0
 void CEntity::DeleteRwObject()
 {
-    if (m_pGameEntity && *(void**)((BYTE*)m_pGameEntity + 0x18))
-        ((void(__fastcall*)(void*, void*))(*(DWORD**)m_pGameEntity)[8])(m_pGameEntity, 0);
+    if (m_pEntity && m_pEntity->rwObject)
+    {
+        void* entity = m_pGameEntity;
+        // GTA SA vtable slot8, ECX entity.
+        // clang-format off
+        __asm {
+            mov ecx,entity
+            mov eax,[ecx]
+            call dword ptr [eax+0x20]
+        }
+        // clang-format on
+    }
 }
 // 0x0009fb20
 bool CEntity::IsIgnored()
 {
-    return m_pGameEntity && m_pGameEntity == *(void**)0xb7cd68;
+    if (m_pGameEntity && m_pGameEntity == *(void**)0xb7cd68)
+        return true;
+    return false;
 }
 // 0x0009fc20
 BOOL CEntity::IsStationary()
 {
     if (!DoesExist())
         return FALSE;
-    CVector speed;
-    GetSpeed(&speed);
-    return speed.x == 0.0f && speed.y == 0.0f && speed.z == 0.0f ? TRUE : FALSE;
+    if (m_pEntity->speed.x == 0.0f && m_pEntity->speed.y == 0.0f && m_pEntity->speed.z == 0.0f)
+        return TRUE;
+    return FALSE;
 }
 // 0x0009eac0
 void CEntity::UpdateRwFrame()
 {
-    void* entity = m_pGameEntity;
-    if (entity && *(DWORD*)entity != 0x863c40)
+    if (m_pEntity && (DWORD)m_pEntity->vtable != 0x863c40)
     {
-        BYTE* object = *(BYTE**)((BYTE*)entity + 0x18);
-        void* matrix = *(void**)((BYTE*)entity + 0x14);
-        if (object && matrix)
-        {
-            ((void(__fastcall*)(void*, void*, void*))0x59ad70)(matrix, 0, *(BYTE**)(object + 4) + 0x10);
-            ((void(__fastcall*)(void*, void*))0x532b00)(entity, 0);
+        void* object = m_pEntity->rwObject;
+        CMatrix* matrix = m_pEntity->matrix;
+        void* entity = m_pGameEntity;
+        if (!entity || !object || !matrix)
+            return;
+        // GTA SA virtual addresses: matrix copy and backend frame update.
+        // clang-format off
+        __asm {
+            mov edx,object
+            mov eax,[edx+4]
+            add eax,0x10
+            push eax
+            mov ecx,matrix
+            mov edx,0x59ad70
+            call edx
+            mov ecx,entity
+            mov edx,0x532b00
+            call edx
         }
+        // clang-format on
     }
 }
 
@@ -299,14 +397,27 @@ void CEntity::UpdateRwFrame()
 // 0x0009fb40
 void CEntity::ApplyMatrix(CMatrix matrix)
 {
-    BYTE* entity = (BYTE*)m_pGameEntity;
-    if (entity && *(void**)(entity + 0x14))
+    if (m_pEntity && m_pEntity->matrix)
     {
-        DWORD* vtable = *(DWORD**)entity;
-        ((void(__fastcall*)(void*, void*))vtable[3])(entity, 0);
+        DWORD* vtable = m_pEntity->vtable;
+        void* entity = m_pGameEntity;
+        // GTA SA virtual slots3 and2 bracket matrix/frame update.
+        // clang-format off
+        __asm {
+            mov eax,vtable
+            mov ecx,entity
+            call dword ptr [eax+0xc]
+        }
+        // clang-format on
         SetMatrix(matrix);
         UpdateRwFrame();
-        ((void(__fastcall*)(void*, void*))vtable[2])(entity, 0);
+        // clang-format off
+        __asm {
+            mov eax,vtable
+            mov ecx,entity
+            call dword ptr [eax+8]
+        }
+        // clang-format on
     }
 }
 // 0x0009f0f0
@@ -314,30 +425,10 @@ float CEntity::GetDistanceToPoint(float x, float y, float z)
 {
     CMatrix matrix;
     GetMatrix(&matrix);
-    // clang-format off
-    // sqrt(dx^2+dy^2+dz^2), retaining unrounded differences and the extended ST0 return.
-    __asm {
-        lea eax,matrix
-        fld dword ptr [eax+38h]
-        fsub z
-        fld dword ptr [eax+34h]
-        fsub y
-        fld dword ptr [eax+30h]
-        fsub x
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-    }
-    // clang-format on
+    float dz = matrix.position.z - z;
+    float dy = matrix.position.y - y;
+    float dx = matrix.position.x - x;
+    return (float)sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 // 0x0009f5c0
@@ -356,11 +447,11 @@ BOOL CEntity::SetModelIndex(int model)
     if (!m_pGameEntity)
         return FALSE;
     BOOL loaded = FALSE;
+    int polls = 0;
     if (!g_pGame->IsModelAvailable(model) && !GameGetModelData1c(model))
     {
         g_pGame->RequestModel(model, 2);
         g_pGame->LoadRequestedModels();
-        int polls = 0;
         while (!g_pGame->IsModelAvailable(model))
         {
             Sleep(1);
@@ -374,9 +465,22 @@ BOOL CEntity::SetModelIndex(int model)
         loaded = TRUE;
     }
     void* entity = m_pGameEntity;
-    ((void(__fastcall*)(void*, void*))(*(DWORD**)entity)[8])(entity, 0);
-    *(short*)((BYTE*)entity + 0x22) = (short)model;
-    ((void(__fastcall*)(void*, void*, int))(*(DWORD**)entity)[5])(entity, 0, model);
+    // GTA SA virtual slots8/5. Native retains the entity and model through both.
+    // clang-format off
+    __asm {
+        mov esi,entity
+        mov edi,model
+        mov edx,[esi]
+        mov ecx,esi
+        call dword ptr [edx+0x20]
+        mov eax,[esi]
+        mov edx,edi
+        push edi
+        mov ecx,esi
+        mov word ptr [esi+0x22],dx
+        call dword ptr [eax+0x14]
+    }
+    // clang-format on
     return loaded;
 }
 
@@ -491,45 +595,17 @@ __declspec(naked) float CEntity::GetDistanceToLocalPlayer()
 
 // Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
 // 0x0009efd0
-__declspec(naked) float CEntity::GetDistanceToCamera()
+float CEntity::GetDistanceToCamera()
 {
-    // clang-format off
-    __asm {
-        mov eax,dword ptr [ecx + 0x40]
-        sub esp,0x40
-        test eax,eax
-        jz branch_1009f025
-        cmp dword ptr [eax],0x863c40
-        jz branch_1009f025
-        lea eax,[esp]
-        push eax
-        call CEntity::GetMatrix
-        fld float ptr [esp + 0x38]
-        fsub dword ptr ds:[0x00b6f9d4]
-        fld float ptr [esp + 0x34]
-        fsub dword ptr ds:[0x00b6f9d0]
-        fld float ptr [esp + 0x30]
-        fsub dword ptr ds:[0x00b6f9cc]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        add esp,0x40
-        ret
-    branch_1009f025:
-        fld float ptr g_entityUnavailableDistance
-        add esp,0x40
-        ret
-    }
-    // clang-format on
+    if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
+        return g_entityUnavailableDistance;
+    CMatrix matrix;
+    GetMatrix(&matrix);
+    // GTA SA camera position; native reads Z, Y, X.
+    float z = matrix.position.z - *(const float*)0xb6f9d4;
+    float y = matrix.position.y - *(const float*)0xb6f9d0;
+    float x = matrix.position.x - *(const float*)0xb6f9cc;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
 // Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
@@ -621,11 +697,13 @@ void CEntity::SetBackendHighFlag()
 // 0x0009fa20
 void CEntity::ProcessControl()
 {
-    void* backend = m_pGameEntity;
+    DWORD* vtable = m_pEntity->vtable;
+    void* entity = m_pGameEntity;
+    // GTA SA vtable slot10; no null check in native.
     // clang-format off
     __asm {
-        mov ecx,backend
-        mov eax,[ecx]
+        mov eax,vtable
+        mov ecx,entity
         call dword ptr [eax+0x28]
     }
     // clang-format on
@@ -655,12 +733,23 @@ void CEntity::Native009ed60(DWORD argument)
 // 0x0009f5d0
 void CEntity::Native009f5d0(DWORD argument)
 {
-    BYTE* entity = (BYTE*)m_pGameEntity;
-    if (!entity || !*(void* volatile*)(entity + 0x18) || *(DWORD*)entity == 0x863c40)
+    if (!m_pEntity || !m_pEntity->rwObject || (DWORD)m_pEntity->vtable == 0x863c40)
         return;
+    void* entity = m_pGameEntity;
     // GTA SA virtual addresses: 0x00863C40 sentinel; 0x00732B00 cdecl backend.
     // Native reloads the render pointer after its presence/sentinel checks.
-    ((void(__cdecl*)(void*, DWORD))0x732b00)(*(void* volatile*)(entity + 0x18), argument);
+    // clang-format off
+    __asm {
+        mov eax,entity
+        mov edx,[eax+0x18]
+        push argument
+        push edx
+        mov eax,0x732b00
+        call eax
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
@@ -692,16 +781,16 @@ void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DW
 // 0x0009f840
 void CEntity::Native009f840(DWORD argument)
 {
-    BYTE* entity = (BYTE*)m_pGameEntity;
+    void* entity = m_pGameEntity;
     if (!entity)
         return;
-    void* subobject = entity + 0x138;
+    // GTA SA virtual address: ECX subobject, two callee-popped words.
     // clang-format off
-    // GTA SA virtual address: 0x004F6420; ECX=subobject, argument followed by 0.
     __asm {
         push 0
         push argument
-        mov ecx,subobject
+        mov edx,entity
+        lea ecx,[edx+0x138]
         mov edx,0x4f6420
         call edx
     }
@@ -720,7 +809,16 @@ void CEntity::Native009f960()
     short model = *(short*)(entity + 0x22);
     // GTA SA virtual address: 0x00733160, cdecl render-object prepass.
     if (model >= 400 && model <= 611 && render)
-        ((void(__cdecl*)(void*))0x733160)(render);
+    {
+        // clang-format off
+        __asm {
+            push render
+            mov edx,0x733160
+            call edx
+            pop edx
+        }
+        // clang-format on
+    }
     // clang-format off
     // Keep the captured entity and vtable across the prepass. The slot itself
     // is read after the prepass, just as in the original indirect call.
@@ -731,11 +829,34 @@ void CEntity::Native009f960()
     }
     // clang-format on
     // Both native model-range branches perform the same render test/call.
-    // Preserve their backend reload and WORD read, including its fault edge.
-    (void)*(volatile short*)((BYTE*)m_pGameEntity + 0x22);
+    // Preserve the repeated backend/model read and the separate GTA bridges.
+    model = m_pEntity->model;
     // GTA SA virtual address: 0x00553260, using the original captured entity.
-    if (render)
-        ((void(__cdecl*)(void*))0x553260)(entity);
+    if (model >= 400 && model <= 611)
+    {
+        if (render)
+        {
+            // clang-format off
+            __asm {
+                push entity
+                mov edx,0x553260
+                call edx
+                pop edx
+            }
+            // clang-format on
+        }
+    }
+    else if (render)
+    {
+        // clang-format off
+        __asm {
+            push entity
+            mov edx,0x553260
+            call edx
+            pop edx
+        }
+        // clang-format on
+    }
 }
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
@@ -1045,12 +1166,13 @@ void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
 // 0x0009f870
 int CEntity::GetModelAtomicCount()
 {
-    if (!m_pGameEntity)
-        return -1;
-    DWORD clump = GameGetModelData1c(*(short*)((BYTE*)m_pGameEntity + 0x22));
-    if (!clump)
-        return -1;
-    return GameRwCountClumpAtomics((void*)clump);
+    if (m_pEntity)
+    {
+        DWORD clump = GameGetModelData1c(m_pEntity->model);
+        if (clump)
+            return GameRwCountClumpAtomics((void*)clump);
+    }
+    return -1;
 }
 
 // Native x87 precision/spill boundaries and repeated backend loads are significant.

@@ -1355,3 +1355,30 @@ __declspec(naked) void GameGetBackendPositionAndHeading(void* entity, CVector* p
     }
     // clang-format on
 }
+
+// 0x000b3720
+void __stdcall GameWorldAdd(void* entity)
+{
+    // GTA SA cdecl backend, one caller-popped pointer.
+    // clang-format off
+    __asm {
+        push entity
+        mov ebx,0x563220
+        call ebx
+        pop ebx
+    }
+    // clang-format on
+}
+// 0x000b3740
+void __stdcall GameWorldRemove(void* entity)
+{
+    // GTA SA cdecl backend, one caller-popped pointer.
+    // clang-format off
+    __asm {
+        push entity
+        mov ebx,0x563280
+        call ebx
+        pop ebx
+    }
+    // clang-format on
+}
