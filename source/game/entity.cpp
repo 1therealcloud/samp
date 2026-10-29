@@ -2,13 +2,6 @@
 #include "game/game.h"
 #include "game/scripting.h"
 #include <string.h>
-// 0x0009bce0
-CEntity::CEntity()
-{
-    memset(m_aSpeedHistory, 0, sizeof(m_aSpeedHistory));
-}
-// 0x0009bd00
-CEntity::~CEntity() {}
 // 0x000b3720
 void __stdcall GameWorldAdd(void* entity)
 {

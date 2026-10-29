@@ -1,6 +1,7 @@
 #ifndef SAMP_RECOVERED_ENTITY_H
 #define SAMP_RECOVERED_ENTITY_H
 #include <stddef.h>
+#include <string.h>
 #include <windows.h>
 // Five raw DWORDs consumed by the native collision adapter; semantic fields unresolved.
 struct GameEntityCollisionShape
@@ -65,10 +66,13 @@ public:
     void* m_pGameEntity;
     DWORD m_nHandle;
     // 0x0009bce0
-    CEntity();
+    CEntity()
+    {
+        memset(m_aSpeedHistory, 0, sizeof(m_aSpeedHistory));
+    }
     // Native only resets the vptr; backend/history storage is untouched.
     // 0x0009bd00
-    virtual ~CEntity();
+    virtual ~CEntity() {}
     // 0x0009f140
     virtual void Add();
     // 0x0009f240

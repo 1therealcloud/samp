@@ -1,5 +1,8 @@
 #include "game/actor.h"
 #include "game/scripting.h"
+#include "game/playerped.h"
+#include "game/util.h"
+#include "game/game.h"
 #include <string.h>
 // 0x0011e2d0
 const Scripting::OpcodeInfo g_actorKillCommand = {0x321, "i"};
@@ -8,7 +11,9 @@ const Scripting::OpcodeInfo g_actorImmunityCommand = {0x2ab, "iiiiii"};
 // 0x0009c030
 float CActor::GetHealth()
 {
-    return actorBackend ? actorBackend->health : 0.0f;
+    if (!actorBackend)
+        return 0.0f;
+    return actorBackend->health;
 }
 // 0x0009c050
 void CActor::SetHealth(float health)
@@ -22,7 +27,9 @@ void CActor::SetHealth(float health)
 // 0x0009c090
 float CActor::GetArmour()
 {
-    return actorBackend ? actorBackend->armour : 0.0f;
+    if (!actorBackend)
+        return 0.0f;
+    return actorBackend->armour;
 }
 // 0x0009c0b0
 void CActor::SetArmour(float armour)
@@ -33,7 +40,9 @@ void CActor::SetArmour(float armour)
 // 0x0009c0d0
 DWORD CActor::GetBackendFlags()
 {
-    return actorBackend ? actorBackend->flags : 0;
+    if (!actorBackend)
+        return 0;
+    return actorBackend->flags;
 }
 // 0x0009c0e0
 void CActor::SetBackendFlags(DWORD flags)
@@ -60,7 +69,9 @@ void CActor::SetBackendByte530(BYTE value)
 // 0x0009c160
 DWORD CActor::HasBackendFlag100()
 {
-    return actorBackend ? (actorBackend->flags >> 8) & 1 : 0;
+    if (!actorBackend)
+        return 0;
+    return (actorBackend->flags >> 8) & 1;
 }
 // 0x0009c180
 void CActor::SetInvulnerable(BYTE enabled)
@@ -74,8 +85,6 @@ void CActor::SetInvulnerable(BYTE enabled)
         Scripting::ProcessCommand(&g_actorImmunityCommand, m_nHandle, 0, 0, 0, 1, 0);
 }
 
-#include "game/playerped.h"
-#include "game/util.h"
 // 0x0009be80
 void CActor::Destroy()
 {
@@ -83,12 +92,12 @@ void CActor::Destroy()
     // GTA SA virtual address: excluded backend vtable.
     if (saved && GamePoolPedGetAt(m_nHandle) && *(DWORD*)actorBackend != 0x863c40)
     {
-        DWORD* table = *(DWORD**)saved;
         // clang-format off
         __asm {mov ecx,saved}
-        __asm {mov eax,table}
+        __asm {mov ebx,[ecx]}
         __asm {push 1}
-        __asm {call dword ptr [eax]} // clang-format on
+        __asm {call dword ptr [ebx]}
+        // clang-format on
         actorBackend = 0;
         m_pGameEntity = 0;
         return;
@@ -102,15 +111,8 @@ void CActor::SetRotation(float heading)
 {
     if (!actorBackend || !GamePoolPedGetAt(m_nHandle))
         return;
-    // clang-format off
-    // Preserve helper's extended ST0 until the native final store; reload backend.
-    __asm {push heading}
-    __asm {call GameHeadingToRadians}
-    __asm {add esp,4}
-    __asm {mov ecx,this}
-    __asm {mov edx,dword ptr [ecx+0x48]}
-    __asm {fstp dword ptr [edx+0x55c]}
-    // clang-format on
+    float radians = GameHeadingToRadians(heading);
+    actorBackend->heading = radians;
 }
 // 0x0009c1d0
 CActor::~CActor()
@@ -118,12 +120,12 @@ CActor::~CActor()
     Destroy();
 }
 
-#include "game/game.h"
 // 0x0011e2e4
 const Scripting::OpcodeInfo g_actorAnimationCommand = {0x812, "issfiiiii"};
 // 0x0009bee0
 void CActor::PerformAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time)
 {
+    int attempts = 0;
     if (!actorBackend || !GamePoolPedGetAt(m_nHandle))
         return;
     if (_stricmp(library, g_pedBlockedAnimationLibrary) == 0)
@@ -133,11 +135,9 @@ void CActor::PerformAnimation(const char* name, const char* library, float speed
         g_pGame->RequestAnimation(library);
         if (!g_pGame->IsAnimationLoaded(library))
         {
-            void(WINAPI* volatile sleep)(DWORD) = ::Sleep;
-            int attempts = 0;
             do
             {
-                sleep(1);
+                ::Sleep(1);
                 if (++attempts == 15)
                     return;
             }
@@ -151,20 +151,26 @@ void* g_actorTaskBackend;
 // 0x0009bfb0
 DWORD GameClearActorTasks()
 {
-    void* tasks = ((ActorBackendPrefix*)g_actorTaskBackend)->tasks;
     // GTA SA virtual address: task clearing backend, thiscall with argument1.
-    ((void(__fastcall*)(void*, void*, int))0x601640)(tasks, 0, 1);
+    // clang-format off
+    __asm {
+        mov edx,g_actorTaskBackend
+        mov ecx,[edx+0x47c]
+        push 1
+        mov eax,0x601640
+        call eax
+    }
+    // clang-format on
     return 1;
 }
 // 0x0009bfd0
 void CActor::ClearTasks()
 {
     g_actorTaskBackend = actorBackend;
-    if (actorBackend)
+    if (g_actorTaskBackend)
         GameClearActorTasks();
 }
 
-#include "game/quaternion.h"
 // 0x0011e280
 const Scripting::OpcodeInfo g_actorCreateCommand = {0x9a, "iifffv"};
 // 0x0011e2bc
@@ -186,23 +192,14 @@ CActor::CActor(int model, float x, float y, float z, float heading)
         g_pGame->LoadRequestedModels();
         if (!g_pGame->IsModelAvailable(model))
         {
-            void(WINAPI* volatile sleep)(DWORD) = ::Sleep;
             do
             {
-                sleep(1);
+                ::Sleep(1);
             }
             while (!g_pGame->IsModelAvailable(model));
         }
     }
-    double loweredZ;
-    float* positionZ = &z;
-    // clang-format off
-    __asm {mov eax,positionZ}
-    __asm {fld dword ptr [eax]}
-    __asm {fsub g_quaternionMatrixOne}
-    __asm {fstp qword ptr loweredZ}
-    // clang-format on
-    Scripting::ProcessCommand(&g_actorCreateCommand, 5, model, (double)x, (double)y, loweredZ, &handle);
+    Scripting::ProcessCommand(&g_actorCreateCommand, 5, model, (double)x, (double)y, (double)(z - 1.0f), &handle);
     Scripting::ProcessCommand(&g_actorHeadingCommand, handle, (double)heading);
     m_nHandle = handle;
     actorBackend = (ActorBackendPrefix*)GamePoolPedGetAt(handle);
