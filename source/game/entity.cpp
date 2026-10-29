@@ -407,7 +407,7 @@ void CEntity::ApplyMatrix(CMatrix matrix)
         __asm {
             mov eax,vtable
             mov ecx,entity
-            mov edx,vtable
+            mov edx,eax
             call dword ptr [eax+0xc]
         }
         // clang-format on
@@ -1172,7 +1172,7 @@ __declspec(naked) void CEntity::SetAveragedSpeed(CVector speed)
         push edi
         mov eax, esi
         mov edx, 4
-        lea esp, [esp]
+        align 16
     native_0009eb90:
         mov edi, dword ptr [eax + 0xc]
         mov dword ptr [eax], edi
