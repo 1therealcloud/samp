@@ -1097,14 +1097,26 @@ void CEntity::SetBackendFlags80400()
 // 0x0009f580
 void CEntity::SetBackendFlag2000(BOOL clear)
 {
-    void* backend = m_pGameEntity;
-    if (!backend || *(DWORD*)backend == 0x863c40)
+    if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
         return;
-    DWORD& flags = *(DWORD*)((BYTE*)backend + 0x40);
+    DWORD entity = (DWORD)m_pEntity;
+    // Observed raw physical DWORD bit13; semantic name remains unconfirmed.
+    // clang-format off
     if (!clear)
-        flags |= 0x2000;
+    {
+        __asm mov edx,entity
+        __asm mov eax,[edx+0x40]
+        __asm or ah,0x20
+        __asm mov [edx+0x40],eax
+    }
     else
-        flags &= ~0x2000u;
+    {
+        __asm mov edx,entity
+        __asm mov eax,[edx+0x40]
+        __asm and ah,0xdf
+        __asm mov [edx+0x40],eax
+    }
+    // clang-format on
 }
 // 0x0009f610
 DWORD CEntity::GetRwObjectWord38()
