@@ -6,8 +6,11 @@ if not "%~2"=="" goto :usage
 if not defined SAMP_VC set "SAMP_VC=C:\Program Files (x86)\Microsoft Visual C++ Toolkit 2003"
 if not defined SAMP_PSDK set "SAMP_PSDK=C:\Program Files\Microsoft Platform SDK"
 if not defined SAMP_DXSDK set "SAMP_DXSDK=C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)"
+if not defined SAMP_CVTRES set "SAMP_CVTRES=%SystemRoot%\Microsoft.NET\Framework\v1.1.4322\cvtres.exe"
 if not exist "%SAMP_VC%\bin\cl.exe" goto :missing_tools
 if not exist "%SAMP_VC%\bin\link.exe" goto :missing_tools
+if not exist "%SAMP_PSDK%\Bin\rc.exe" goto :missing_tools
+if not exist "%SAMP_CVTRES%" goto :missing_tools
 if not exist "%SAMP_PSDK%\Include\windows.h" goto :missing_tools
 if not exist "%SAMP_DXSDK%\Include\d3dx9.h" goto :missing_tools
 set "PATH=%SAMP_VC%\bin;%SAMP_PSDK%\Bin;%PATH%"
@@ -38,6 +41,18 @@ if not exist "%LOGDIR%" goto :failed
 type nul >"%OBJECTS%"
 set "FLAGS=/nologo /c /O2 /Ob2 /Oi /GF /MT /Zp1 /Gy /GX /GR- /DNDEBUG /DWIN32 /DUNICODE /D_UNICODE /DSTRSAFE_NO_DEPRECATE /DCURL_STATICLIB /DSAMP_DIRECT_GTA_GLOBALS /FI"%CD%\build\libs\dxut-sdk\dxstdafx.h""
 set "INCLUDE=%CD%\build\libs\dxut-sdk;%SYSTEM_INCLUDE%;%CD%\source;%CD%\source\gui;%CD%\source\dxut;%CD%\third-party\RakNet\Include;%CD%\third-party\bass;%CD%\third-party\detours;%CD%\third-party\curl\include;%CD%\third-party\zlib;%CD%\third-party\lzma\C;%CD%\third-party\ttmath"
+echo [RC] source\samp.rc
+"%SAMP_PSDK%\Bin\rc.exe" /fo"%OUT%\samp.res" "source\samp.rc" >"%LOGDIR%\resources.log" 2>&1
+if errorlevel 1 (
+    type "%LOGDIR%\resources.log"
+    goto :failed
+)
+echo [CVTRES] build\client\samp.res
+"%SAMP_CVTRES%" /MACHINE:IX86 /OUT:"%OUT%\samp-res.obj" "%OUT%\samp.res" >"%LOGDIR%\resource-object.log" 2>&1
+if errorlevel 1 (
+    type "%LOGDIR%\resource-object.log"
+    goto :failed
+)
 for %%F in (
     source\runutil.cpp
     source\md5.cpp
@@ -147,6 +162,7 @@ if errorlevel 1 (
 )
 if exist "%OUT%\samp-link.dll" del /q "%OUT%\samp-link.dll"
 "%SAMP_VC%\bin\link.exe" /NOLOGO /DLL /MACHINE:X86 /OPT:REF /OUT:"%OUT%\samp-link.dll" /MAP:"%OUT%\samp.map" @"%OBJECTS%" ^
+    "%OUT%\samp-res.obj" ^
     build\libs\RakNet.lib build\libs\zlib.lib build\libs\libcurl.lib ^
     build\libs\lzma.lib build\libs\dxut.lib build\libs\bass.lib build\libs\detours.lib ^
     libcmt.lib libcpmt.lib oldnames.lib kernel32.lib psapi.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib wldap32.lib crypt32.lib secur32.lib version.lib usp10.lib dsound.lib d3d9.lib d3dx9.lib dxguid.lib dxerr9.lib >"%OUT%\link.log" 2>&1
@@ -198,8 +214,9 @@ if errorlevel 1 (
 exit /b 0
 
 :missing_tools
-echo ERROR: VC++ Toolkit 2003, Platform SDK or DirectX April 2005 SDK is missing.
+echo ERROR: VC++ Toolkit 2003, Platform SDK, DirectX April 2005 SDK or CVTRES is missing.
 echo SAMP_VC=%SAMP_VC%
 echo SAMP_PSDK=%SAMP_PSDK%
 echo SAMP_DXSDK=%SAMP_DXSDK%
+echo SAMP_CVTRES=%SAMP_CVTRES%
 exit /b 1

@@ -1,0 +1,48 @@
+// Native PE resources from SA-MP 0.3.DL-R1. Kept as readable RC source.
+// Dialog spelling, styles, control order, font and language are intentional.
+LANGUAGE 9, 1
+
+101 DIALOGEX 0, 0, 282, 180
+STYLE 0x10ca0ac0
+EXSTYLE 0x00000000
+CAPTION "SA:MP An exception occured"
+FONT 8, "MS Sans Serif", 0, 0, 0
+BEGIN
+    EDITTEXT 1000, 7, 44, 268, 110, 0x50b10804
+    LTEXT "SA:MP has crashed. The error report has been generated below.\r\n\r\nUsing the 'Report Crash' button will submit a crash report\r\nthat will help us to fix this problem in future versions.", -1, 7, 7, 239, 36, 0x50020000
+    DEFPUSHBUTTON "Close", 1001, 212, 159, 63, 15, 0x50010001
+    PUSHBUTTON "Report Crash", 1002, 141, 159, 65, 15, 0x50010000
+END
+
+// The original version leaf is en-AU; its string table and translation are en-US.
+LANGUAGE 9, 3
+
+1 VERSIONINFO
+ FILEVERSION 0,3,8,0
+ PRODUCTVERSION 0,3,8,0
+ FILEFLAGSMASK 0x17L
+ FILEFLAGS 0x0L
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "A library that extends GTA: San Andreas to give it multiplayer functionality."
+            VALUE "CompanyName", "SA-MP TEAM"
+            VALUE "FileDescription", "SA-MP Client DLL"
+            VALUE "FileVersion", "0, 3, 8, 0"
+            VALUE "InternalName", "samp"
+            VALUE "LegalCopyright", "Copyright (C) 2004-2017 SA-MP Team"
+            VALUE "OriginalFilename", "samp.dll"
+            VALUE "ProductName", "SA-MP"
+            VALUE "ProductVersion", "0, 3, 8, 0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END
