@@ -9,12 +9,28 @@ int CAudio::GetRadioStation()
 // 0x000a2060
 void CAudio::StartRadio(int station)
 {
-    ((void(__fastcall*)(void*, void*, int, int))0x507dc0)((void*)0xb6bc90, 0, station, 0);
+    // clang-format off
+    __asm {
+        push 0
+        push station
+        mov ecx,0xb6bc90
+        mov edx,0x507dc0
+        call edx
+    }
+    // clang-format on
 }
 // 0x000a2080
 void CAudio::StopRadio()
 {
-    ((void(__fastcall*)(void*, void*, int, int))0x506f70)((void*)0xb6bc90, 0, 0, 0);
+    // clang-format off
+    __asm {
+        push 0
+        push 0
+        mov ecx,0xb6bc90
+        mov edx,0x506f70
+        call edx
+    }
+    // clang-format on
 }
 // 0x000a20a0
 float CAudio::GetRadioVolume()
@@ -24,12 +40,25 @@ float CAudio::GetRadioVolume()
 // 0x000a20b0
 void CAudio::StopOutdoorAmbienceTrack()
 {
-    ((void(__fastcall*)(void*, void*))0x4d6d60)((void*)0x8ac15c, 0);
+    // clang-format off
+    __asm {
+        mov ecx,0x8ac15c
+        mov edx,0x4d6d60
+        call edx
+    }
+    // clang-format on
 }
 // 0x000a20c0
 void CAudio::SetOutdoorAmbienceTrack(int track)
 {
-    ((void(__fastcall*)(void*, void*, int))0x4d6d50)((void*)0x8ac15c, 0, track);
+    // clang-format off
+    __asm {
+        push track
+        mov ecx,0x8ac15c
+        mov edx,0x4d6d50
+        call edx
+    }
+    // clang-format on
 }
 // 0x000a21c0
 bool CAudio::IsOutdoorAmbienceTrackDisabled()

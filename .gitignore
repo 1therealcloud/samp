@@ -16,4 +16,5 @@
 !/build-libs.cmd
 !/.clang-format
 !/format.cmd
+/BYTE-MATCHES.md
 /STATUS.md
