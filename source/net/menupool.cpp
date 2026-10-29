@@ -1,4 +1,10 @@
 #include "net/menupool.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
+#include "game/keystuff.h"
+#include "main.h"
+#include "net/netgame.h"
+#include <string.h>
 // 0x000177b0
 DWORD CMenuPool::GetActiveState(BYTE id)
 {
@@ -9,7 +15,7 @@ DWORD CMenuPool::GetActiveState(BYTE id)
 // 0x00007b40
 CMenuPool::CMenuPool()
 {
-    for (int i = 0; i < 128; ++i)
+    for (BYTE i = 0; i < 128; ++i)
     {
         active[i] = 0;
         menus[i] = 0;
@@ -26,11 +32,13 @@ CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE colu
     }
     active[id] = 0;
     CMenu* menu = new CMenu(title, x, y, columns, width1, width2, interaction);
-    if (!menu)
-        return 0;
-    active[id] = 1;
-    menus[id] = menu;
-    return menu;
+    if (menu)
+    {
+        active[id] = 1;
+        menus[id] = menu;
+        return menu;
+    }
+    return 0;
 }
 // 0x00007c60
 BOOL CMenuPool::Delete(BYTE id)
@@ -66,7 +74,7 @@ CMenuPool::~CMenuPool()
 {
     if (currentMenu != 128)
         menus[currentMenu]->Hide();
-    for (int i = 0; i < 128; ++i)
+    for (BYTE i = 0; i < 128; ++i)
         if (menus[i])
         {
             delete menus[i];
@@ -74,13 +82,6 @@ CMenuPool::~CMenuPool()
         }
 }
 
-#include <string.h>
-// 0x001179bc
-const char g_menuPoolTitleSuffix[4] = "HED";
-// 0x001179b8
-const char g_menuPoolColumn0Suffix[4] = "RW1";
-// 0x001179b4
-const char g_menuPoolColumn1Suffix[4] = "RW2";
 // 0x00007d50
 char* CMenuPool::GetTextPointer(const char* suffix)
 {
@@ -89,11 +90,12 @@ char* CMenuPool::GetTextPointer(const char* suffix)
     CMenu* menu = menus[currentMenu];
     if (!menu)
         return 0;
-    if (!memcmp(suffix, g_menuPoolTitleSuffix, 4))
+    // Native string RVAs: HED 0x001179bc, RW1 0x001179b8, RW2 0x001179b4.
+    if (!strcmp(suffix, "HED"))
         return menu->GetTitle();
-    if (!memcmp(suffix, g_menuPoolColumn0Suffix, 4))
+    if (!strcmp(suffix, "RW1"))
         return menu->GetColumnTitle(0);
-    if (!memcmp(suffix, g_menuPoolColumn1Suffix, 4))
+    if (!strcmp(suffix, "RW2"))
         return menu->GetColumnTitle(1);
     for (BYTE row = 0; row < 12; ++row)
     {
@@ -105,10 +107,6 @@ char* CMenuPool::GetTextPointer(const char* suffix)
     return 0;
 }
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-#include "game/keystuff.h"
-#include "main.h"
 typedef char MenuRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE == 8) ? 1 : -1];
 // 0x001179c4
 int g_menuSelectedRpc = 132;
@@ -119,19 +117,20 @@ void CMenuPool::Process()
 {
     if (currentMenu == 128)
         return;
-    BYTE* keys = (BYTE*)KeyStuff::GetInternalKeys();
-    RakClientInterface* client = *(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c);
-    if (*(WORD*)(keys + 0x20) && !*(WORD*)(keys + 0x50))
+    KeyPad* keys = KeyStuff::GetInternalKeys();
+    RakClientInterface* client = ((CNetGame*)g_pNetGame)->rakClient;
+    if (keys->keys1[16] && !keys->keys2[16])
     {
         BYTE row = menus[currentMenu]->GetActiveRow();
-        if (row == 0xff)
-            return;
-        pendingClose = 1;
-        RakNet::BitStream stream;
-        stream.WriteBits(&row, 8, true);
-        client->RPC(&g_menuSelectedRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+        if (row != 0xff)
+        {
+            pendingClose = 1;
+            RakNet::BitStream stream;
+            stream.Write(row);
+            client->RPC(&g_menuSelectedRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
+        }
     }
-    else if (*(WORD*)(keys + 0x1e) && !*(WORD*)(keys + 0x4e))
+    else if (keys->keys1[15] && !keys->keys2[15])
     {
         pendingClose = 1;
         client->RPC(&g_menuExitedRpc, (RakNet::BitStream*)0, HIGH_PRIORITY, RELIABLE, 0, false);
