@@ -28,10 +28,11 @@ public:
 #pragma pack(push, 1)
 struct EntityBackendPrefix
 {
-    DWORD* vtable;
+    // Raw address and RW word view follow the supplied 0.2x backend representation.
+    DWORD vtable;
     BYTE unknown04[16];
     CMatrix* matrix;
-    void* rwObject;
+    DWORD* rwObject;
     DWORD flags;
     BYTE unknown20[2];
     short model;
@@ -175,7 +176,7 @@ public:
     // 0x0009f730
     void GetEulerInverted(float* x, float* y, float* z);
     // 0x0009f8a0
-    void* GetRwObject();
+    DWORD* GetRwObject();
     // 0x0009f9f0
     void DeleteRwObject();
     // 0x0009fb20

@@ -327,7 +327,7 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
     }
 }
 // 0x0009f8a0
-void* CEntity::GetRwObject()
+DWORD* CEntity::GetRwObject()
 {
     if (!m_pEntity)
         return 0;
@@ -399,13 +399,15 @@ void CEntity::ApplyMatrix(CMatrix matrix)
 {
     if (m_pEntity && m_pEntity->matrix)
     {
-        DWORD* vtable = m_pEntity->vtable;
+        DWORD vtable = m_pEntity->vtable;
         void* entity = m_pGameEntity;
         // GTA SA virtual slots3 and2 bracket matrix/frame update.
+        // Native also supplies the captured table in EDX at the first GTA call.
         // clang-format off
         __asm {
             mov eax,vtable
             mov ecx,entity
+            mov edx,vtable
             call dword ptr [eax+0xc]
         }
         // clang-format on
@@ -697,7 +699,7 @@ void CEntity::SetBackendHighFlag()
 // 0x0009fa20
 void CEntity::ProcessControl()
 {
-    DWORD* vtable = m_pEntity->vtable;
+    DWORD vtable = m_pEntity->vtable;
     void* entity = m_pGameEntity;
     // GTA SA vtable slot10; no null check in native.
     // clang-format off
@@ -802,11 +804,12 @@ void CEntity::Native009f840(DWORD argument)
 // 0x0009f960
 void CEntity::Native009f960()
 {
-    BYTE* entity = (BYTE*)m_pGameEntity;
-    // Native reads the vtable before the null test; a null backend must fault.
-    void** vtable = *(void***)entity;
-    void* render = GetRwObject();
-    short model = *(short*)(entity + 0x22);
+    // Native reads the vtable before capturing the backend/render pointers.
+    // A null backend must fault here, before the getter's nullable branch.
+    DWORD vtable = m_pEntity->vtable;
+    EntityBackendPrefix* entity = m_pEntity;
+    DWORD* render = GetRwObject();
+    short model = entity->model;
     // GTA SA virtual address: 0x00733160, cdecl render-object prepass.
     if (model >= 400 && model <= 611 && render)
     {
