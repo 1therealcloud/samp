@@ -394,34 +394,60 @@ void CEntity::UpdateRwFrame()
 }
 
 #include <math.h>
+// clang-format off
 // 0x0009fb40
-void CEntity::ApplyMatrix(CMatrix matrix)
+__declspec(naked) void CEntity::ApplyMatrix(CMatrix matrix)
 {
-    if (m_pEntity && m_pEntity->matrix)
-    {
-        DWORD vtable = m_pEntity->vtable;
-        void* entity = m_pGameEntity;
-        // GTA SA virtual slots3 and2 bracket matrix/frame update.
-        // Native also supplies the captured table in EDX at the first GTA call.
-        // clang-format off
-        __asm {
-            mov eax,vtable
-            mov ecx,entity
-            mov edx,eax
-            call dword ptr [eax+0xc]
-        }
-        // clang-format on
-        SetMatrix(matrix);
-        UpdateRwFrame();
-        // clang-format off
-        __asm {
-            mov eax,vtable
-            mov ecx,entity
-            call dword ptr [eax+8]
-        }
-        // clang-format on
+    enum {
+        Backend = offsetof(CEntity, m_pGameEntity),
+        Matrix = offsetof(EntityBackendPrefix, matrix),
+        MatrixBytes = sizeof(CMatrix), MatrixWords = sizeof(CMatrix) / sizeof(DWORD),
+        FrameBytes = 8, TableLocal = 8, EntityLocal = 4,
+        Slot3 = 3 * sizeof(DWORD), Slot2 = 2 * sizeof(DWORD)
+    };
+    __asm {
+        push ebp
+        mov ebp,esp
+        sub esp,FrameBytes
+        push ebx
+        mov ebx,ecx
+        mov eax,[ebx+Backend]
+        test eax,eax
+        push esi
+        push edi
+        jz matrix_done
+        mov ecx,[eax+Matrix]
+        test ecx,ecx
+        jz matrix_done
+        mov ecx,eax
+        mov edx,[ecx]
+        mov [ebp-TableLocal],edx
+        mov [ebp-EntityLocal],eax
+        mov eax,[ebp-TableLocal]
+        mov ecx,[ebp-EntityLocal]
+        call dword ptr [eax+Slot3]
+        sub esp,MatrixBytes
+        mov edi,esp
+        mov ecx,MatrixWords
+        lea esi,[ebp+8]
+        rep movsd
+        mov ecx,ebx
+        call CEntity::SetMatrix
+        mov ecx,ebx
+        call CEntity::UpdateRwFrame
+        mov eax,[ebp-TableLocal]
+        mov ecx,[ebp-EntityLocal]
+        call dword ptr [eax+Slot2]
+    matrix_done:
+        pop edi
+        pop esi
+        pop ebx
+        mov esp,ebp
+        pop ebp
+        ret MatrixBytes
     }
 }
+// clang-format on
 // 0x0009f0f0
 float CEntity::GetDistanceToPoint(float x, float y, float z)
 {
@@ -801,66 +827,87 @@ void CEntity::Native009f840(DWORD argument)
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
+// clang-format off
 // 0x0009f960
-void CEntity::Native009f960()
+__declspec(naked) void CEntity::Native009f960()
 {
-    // Native reads the vtable before capturing the backend/render pointers.
-    // A null backend must fault here, before the getter's nullable branch.
-    DWORD vtable = m_pEntity->vtable;
-    EntityBackendPrefix* entity = m_pEntity;
-    DWORD* render = GetRwObject();
-    short model = entity->model;
-    // GTA SA virtual address: 0x00733160, cdecl render-object prepass.
-    if (model >= 400 && model <= 611 && render)
-    {
-        // clang-format off
-        __asm {
-            push render
-            mov edx,0x733160
-            call edx
-            pop edx
-        }
-        // clang-format on
-    }
-    // clang-format off
-    // Keep the captured entity and vtable across the prepass. The slot itself
-    // is read after the prepass, just as in the original indirect call.
+    enum {
+        Backend = offsetof(CEntity, m_pGameEntity),
+        RwObject = offsetof(EntityBackendPrefix, rwObject),
+        Model = offsetof(EntityBackendPrefix, model),
+        FrameBytes = 12, TableLocal = 12, RenderLocal = 8, EntityLocal = 4,
+        Slot17 = 17 * sizeof(DWORD), FirstVehicle = 400, LastVehicle = 611,
+        Backend733160 = 0x733160, Backend553260 = 0x553260
+    };
+    // Preserve native signed model tests and captured pointers across GTA calls.
     __asm {
-        mov eax,vtable
-        mov ecx,entity
-        call dword ptr [eax + 0x44]
-    }
-    // clang-format on
-    // Both native model-range branches perform the same render test/call.
-    // Preserve the repeated backend/model read and the separate GTA bridges.
-    model = m_pEntity->model;
-    // GTA SA virtual address: 0x00553260, using the original captured entity.
-    if (model >= 400 && model <= 611)
-    {
-        if (render)
-        {
-            // clang-format off
-            __asm {
-                push entity
-                mov edx,0x553260
-                call edx
-                pop edx
-            }
-            // clang-format on
-        }
-    }
-    else if (render)
-    {
-        // clang-format off
-        __asm {
-            push entity
-            mov edx,0x553260
-            call edx
-            pop edx
-        }
-        // clang-format on
+        push ebp
+        mov ebp,esp
+        sub esp,FrameBytes
+        push esi
+        mov esi,ecx
+        mov eax,[esi+Backend]
+        mov ecx,[eax]
+        mov [ebp-TableLocal],ecx
+        mov ecx,eax
+        test ecx,ecx
+        push edi
+        mov [ebp-EntityLocal],ecx
+        jnz render_have_backend
+        xor edi,edi
+        jmp render_have_object
+    render_have_backend:
+        mov edi,[eax+RwObject]
+    render_have_object:
+        mov ax,[eax+Model]
+        cmp ax,FirstVehicle
+        mov [ebp-RenderLocal],edi
+        jl render_prepare
+        cmp ax,LastVehicle
+        jg render_prepare
+        test edi,edi
+        jz render_prepare
+        push dword ptr [ebp-RenderLocal]
+        mov edx,Backend733160
+        call edx
+        pop edx
+    render_prepare:
+        mov eax,[ebp-TableLocal]
+        mov ecx,[ebp-EntityLocal]
+        call dword ptr [eax+Slot17]
+        mov edx,[esi+Backend]
+        mov ax,[edx+Model]
+        cmp ax,FirstVehicle
+        jl render_other_model
+        cmp ax,LastVehicle
+        jg render_other_model
+        test edi,edi
+        jz render_done
+        push dword ptr [ebp-EntityLocal]
+        mov edx,Backend553260
+        call edx
+        pop edx
+        pop edi
+        pop esi
+        mov esp,ebp
+        pop ebp
+        ret
+    render_other_model:
+        test edi,edi
+        jz render_done
+        push dword ptr [ebp-EntityLocal]
+        mov edx,Backend553260
+        call edx
+        pop edx
+    render_done:
+        pop edi
+        pop esi
+        mov esp,ebp
+        pop ebp
+        ret
     }
 }
+// clang-format on
 
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
