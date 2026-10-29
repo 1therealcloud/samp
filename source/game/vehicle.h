@@ -3,6 +3,7 @@
 #include "game/entity.h"
 #include "game/scripting.h"
 #include <stddef.h>
+struct IDirect3DTexture9;
 // Native allocation extent B8 and CEntity prefix/three-slot virtual interface.
 // Opaque bytes retain unknown meaning; lifecycle follows the recovered DL bodies.
 #pragma pack(push, 1)
@@ -31,13 +32,20 @@ public:
 
     CVehicle* m_pTrailer;
     void* m_pGameVehicle;
-    BYTE unknown50[0x21];
+    DWORD m_dwField50, m_dwField54;
+    DWORD m_dwInvulnerable, m_dwUnknown5c, m_dwLocked;
+    BYTE m_byteObjective;
+    DWORD m_dwObjectiveMarker, m_dwLastDrivenTime, m_dwHasBeenDriven;
     BOOL m_bInModShop;
-    BYTE unknown75[4];
+    DWORD m_dwEngineOverride75;
     BYTE m_nPrimaryColor;
     BYTE m_nSecondaryColor;
     BOOL m_bColorChanged;
-    BYTE unknown7f[0x39];
+    DWORD m_dwLocalUnoccupiedSync, m_dwRemoteUnoccupiedSync;
+    DWORD m_dwKeepLoaded, m_dwSiren;
+    IDirect3DTexture9* m_pLicensePlateTexture;
+    char m_szLicensePlateText[33];
+    DWORD m_dwMarker;
     // Native constructor with ordinary, train and carriage paths.
     // 0x000b7f00
     CVehicle(int model, float x, float y, float z, float rotation, DWORD keepLoaded, BOOL siren);
@@ -186,6 +194,21 @@ typedef char VehicleHandleOffset[(offsetof(CVehicle, m_nHandle) == 0x44) ? 1 : -
 typedef char VehicleTrailerOffset[(offsetof(CVehicle, m_pTrailer) == 0x48) ? 1 : -1];
 typedef char VehicleBackendOffset[(offsetof(CVehicle, m_pGameVehicle) == 0x4c) ? 1 : -1];
 typedef char VehicleColorOffset[(offsetof(CVehicle, m_bColorChanged) == 0x7b) ? 1 : -1];
+typedef char VehicleField50Offset[(offsetof(CVehicle, m_dwField50) == 0x50) ? 1 : -1];
+typedef char VehicleInvulnerableOffset[(offsetof(CVehicle, m_dwInvulnerable) == 0x58) ? 1 : -1];
+typedef char VehicleLockOffset[(offsetof(CVehicle, m_dwLocked) == 0x60) ? 1 : -1];
+typedef char VehicleObjectiveOffset[(offsetof(CVehicle, m_byteObjective) == 0x64) ? 1 : -1];
+typedef char VehicleObjectiveMarkerOffset[(offsetof(CVehicle, m_dwObjectiveMarker) == 0x65) ? 1 : -1];
+typedef char VehicleDrivenTickOffset[(offsetof(CVehicle, m_dwLastDrivenTime) == 0x69) ? 1 : -1];
+typedef char VehicleModShopOffset[(offsetof(CVehicle, m_bInModShop) == 0x71) ? 1 : -1];
+typedef char VehicleEngineOverrideOffset[(offsetof(CVehicle, m_dwEngineOverride75) == 0x75) ? 1 : -1];
+typedef char VehicleLocalUnoccupiedOffset[(offsetof(CVehicle, m_dwLocalUnoccupiedSync) == 0x7f) ? 1 : -1];
+typedef char VehicleRemoteUnoccupiedOffset[(offsetof(CVehicle, m_dwRemoteUnoccupiedSync) == 0x83) ? 1 : -1];
+typedef char VehicleKeepLoadedOffset[(offsetof(CVehicle, m_dwKeepLoaded) == 0x87) ? 1 : -1];
+typedef char VehicleSirenOffset[(offsetof(CVehicle, m_dwSiren) == 0x8b) ? 1 : -1];
+typedef char VehiclePlateTextureOffset[(offsetof(CVehicle, m_pLicensePlateTexture) == 0x8f) ? 1 : -1];
+typedef char VehiclePlateTextOffset[(offsetof(CVehicle, m_szLicensePlateText) == 0x93) ? 1 : -1];
+typedef char VehicleMarkerOffset[(offsetof(CVehicle, m_dwMarker) == 0xb4) ? 1 : -1];
 // 0x000b37d0
 void* __stdcall GamePoolVehicleGetAt(int handle);
 // GTA SA vtable classification helper; values are native 0..7 tags.

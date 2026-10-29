@@ -5,7 +5,7 @@
 // 0x0009bce0
 CEntity::CEntity()
 {
-    memset(unknown04, 0, sizeof(unknown04));
+    memset(m_aSpeedHistory, 0, sizeof(m_aSpeedHistory));
 }
 // 0x0009bd00
 CEntity::~CEntity() {}

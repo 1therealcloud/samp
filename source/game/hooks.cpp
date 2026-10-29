@@ -2407,7 +2407,7 @@ BOOL GameNotifyEnterVehicle()
     if (id == 0xffff || id >= 2000 || !g_hookEventVehiclePool->m_bNotEmpty[id])
         return FALSE;
     g_hookEnterVehicle = g_hookEventVehiclePool->m_pObjects[id];
-    if (*(DWORD*)((BYTE*)g_hookEnterVehicle + 0x60) || *(short*)((BYTE*)g_hookEnterVehicle->m_pGameVehicle + 0x22) == 0x23a)
+    if (g_hookEnterVehicle->m_dwLocked || *(short*)((BYTE*)g_hookEnterVehicle->m_pGameVehicle + 0x22) == 0x23a)
         return FALSE;
     if (g_hookEventLocalPlayer)
     {

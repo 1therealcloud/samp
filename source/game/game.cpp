@@ -37,12 +37,12 @@ void CGame::SetHeadMovement(BOOL enabled)
 // 0x000080f0
 void CGame::SetCheckpointEnabled(DWORD enabled)
 {
-    unknown4d = enabled;
+    m_checkpoints.enabled = enabled;
 }
 // 0x00008100
 void CGame::SetRacingCheckpointEnabled(DWORD enabled)
 {
-    unknown29 = enabled;
+    m_checkpoints.raceEnabled = enabled;
 }
 #include <string.h>
 // 0x0018e1d8
@@ -53,16 +53,16 @@ CGame::CGame()
     m_pAudio = new CAudio;
     m_pCamera = new CCamera;
     m_pPlayerPed = 0;
-    unknown4d = 0;
-    unknown29 = 0;
-    unknown31 = 0;
+    m_checkpoints.enabled = 0;
+    m_checkpoints.raceEnabled = 0;
+    m_checkpoints.raceCheckpoint = 0;
     m_nCursorMode = 0;
     m_nInputEnableWaitFrames = 0;
     m_bClockEnabled = FALSE;
     unknown6d = 0;
     memset(g_gameUsedPlayerSlots, 0, sizeof(g_gameUsedPlayerSlots));
     memset(m_aKeepLoadedVehicleModels, 0, sizeof(m_aKeepLoadedVehicleModels));
-    unknown55 = 0;
+    m_nTrackedNameDigestMatches = 0;
     m_bHeadMove = TRUE;
     m_nFrameLimiter = 90;
 }
@@ -348,29 +348,13 @@ void CGame::ResetMoney()
 // 0x000a0b80
 void CGame::DeleteRacingCheckpoint()
 {
-    if (unknown31)
+    if (m_checkpoints.raceCheckpoint)
     {
-        Scripting::ProcessCommand(&g_gameDeleteRacingCheckpointCommand, unknown31);
-        unknown31 = 0;
+        Scripting::ProcessCommand(&g_gameDeleteRacingCheckpointCommand, m_checkpoints.raceCheckpoint);
+        m_checkpoints.raceCheckpoint = 0;
     }
-    unknown29 = 0;
+    m_checkpoints.raceEnabled = 0;
 }
-
-// Observed checkpoint region at CGame+0x0c, not a separate native allocation.
-#pragma pack(push, 1)
-struct GameCheckpointState
-{
-    CVector racePosition, raceNext;
-    float raceSize;
-    BYTE raceType;
-    DWORD raceEnabled, raceMarker, raceCheckpoint;
-    CVector position, size;
-    DWORD enabled, marker;
-};
-#pragma pack(pop)
-typedef char CheckpointRegionSize[(sizeof(GameCheckpointState) == 0x49) ? 1 : -1];
-typedef char CheckpointMarkerOffset[(offsetof(GameCheckpointState, marker) == 0x45) ? 1 : -1];
-typedef char RacingMarkerOffset[(offsetof(GameCheckpointState, raceMarker) == 0x21) ? 1 : -1];
 
 // 0x000a0bb0
 DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int type)
@@ -395,7 +379,7 @@ DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int 
 // 0x000a1c00
 void CGame::SetCheckpoint(const CVector* position, const CVector* size)
 {
-    GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
+    GameCheckpointState* s = &m_checkpoints;
     s->position = *position;
     s->size = *size;
     if (s->marker)
@@ -413,7 +397,7 @@ void CGame::SetCheckpoint(const CVector* position, const CVector* size)
 // 0x000a1cc0
 void CGame::CreateRacingCheckpoint()
 {
-    GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
+    GameCheckpointState* s = &m_checkpoints;
     if (s->raceCheckpoint)
     {
         Scripting::ProcessCommand(&g_gameDeleteRacingCheckpointCommand, s->raceCheckpoint);
@@ -428,7 +412,7 @@ void CGame::CreateRacingCheckpoint()
 // 0x000a1f20
 void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVector* next, float size)
 {
-    GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
+    GameCheckpointState* s = &m_checkpoints;
     s->racePosition = *position;
     s->raceNext = *next;
     s->raceSize = size;
@@ -449,7 +433,7 @@ void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVecto
 // 0x000a1d40
 void CGame::ProcessCheckpoints()
 {
-    GameCheckpointState* s = (GameCheckpointState*)((BYTE*)this + 0x0c);
+    GameCheckpointState* s = &m_checkpoints;
     if (s->enabled)
     {
         CPed* ped = GetPlayerPed();

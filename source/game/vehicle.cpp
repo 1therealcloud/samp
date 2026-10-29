@@ -2,7 +2,7 @@
 // 0x0000e290
 void CVehicle::SetObjective(BYTE objective)
 {
-    *((BYTE*)this + 0x64) = objective;
+    m_byteObjective = objective;
 }
 // 0x000b37d0
 void* __stdcall GamePoolVehicleGetAt(int handle)
@@ -42,7 +42,7 @@ CVehicle::~CVehicle()
     m_pGameVehicle = GamePoolVehicleGetAt(m_nHandle);
     if (m_pGameVehicle)
     {
-        DWORD* marker = (DWORD*)((BYTE*)this + 0xb4);
+        DWORD* marker = &m_dwMarker;
         if (*marker)
         {
             Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, *marker);
@@ -64,8 +64,7 @@ CVehicle::~CVehicle()
         {
             int modelSnapshot = model;
             Scripting::ProcessCommand(&g_vehicleDestroyCommand, m_nHandle);
-            if (GameGetModelReferenceCount(modelSnapshot) == 0 && !*(DWORD*)((BYTE*)this + 0x87) && g_pGame->CountBackendVehicleModelRecords() > 80 &&
-                g_pGame->IsModelAvailable(modelSnapshot))
+            if (GameGetModelReferenceCount(modelSnapshot) == 0 && !m_dwKeepLoaded && g_pGame->CountBackendVehicleModelRecords() > 80 && g_pGame->IsModelAvailable(modelSnapshot))
             {
                 ((void(__cdecl*)(int))0x4089a0)(modelSnapshot);
             }
@@ -143,10 +142,10 @@ CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD k
         if (siren)
         {
             g_hookSirenOnce = 1;
-            *(DWORD*)((BYTE*)this + 0x8b) = 1;
+            m_dwSiren = 1;
         }
         else
-            *(DWORD*)((BYTE*)this + 0x8b) = 0;
+            m_dwSiren = 0;
         Scripting::ProcessCommand(&g_vehicleCreateCommand, model, (double)x, (double)y, (double)z, &handle);
         Scripting::ProcessCommand(&g_vehicleRotationCommand, handle, (double)rotation);
         Scripting::ProcessCommand(&g_vehicleGasTankExplosionCommand, handle, 0);
@@ -163,7 +162,7 @@ CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD k
         g_vehicleLastCreatedHandle = handle;
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x4f8) = 0;
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x4b0) = 0;
-        *(DWORD*)((BYTE*)this + 0x5c) = 0;
+        m_dwUnknown5c = 0;
         CMatrix matrix;
         GetMatrix(&matrix);
         BOOL lift = GetSubtype() != 2 && GetSubtype() != 6;
@@ -182,7 +181,7 @@ noLift:
         *(DWORD*)&matrix.position.y = *(DWORD*)&y;
         *(DWORD*)&matrix.position.z = finalZ;
         SetMatrix(matrix);
-        *(DWORD*)((BYTE*)this + 0x87) = keepLoaded;
+        m_dwKeepLoaded = keepLoaded;
     }
     else if (model == 0x23a || model == 0x239)
     {
@@ -255,20 +254,20 @@ noLift:
         GameRemoveDriverByState598(m_pGameVehicle);
     }
 initialized:
-    *(DWORD*)((BYTE*)this + 0x58) = 0;
-    *((BYTE*)this + 0x64) = 0;
-    *(DWORD*)((BYTE*)this + 0x65) = 0;
-    *(DWORD*)((BYTE*)this + 0xb4) = 0;
-    *(DWORD*)((BYTE*)this + 0x6d) = 0;
-    *(DWORD*)((BYTE*)this + 0x69) = GetTickCount();
-    *(DWORD*)((BYTE*)this + 0x50) = 0xffffffff;
-    *(DWORD*)((BYTE*)this + 0x54) = 0xffffffff;
-    *(DWORD*)((BYTE*)this + 0x60) = 0;
+    m_dwInvulnerable = 0;
+    m_byteObjective = 0;
+    m_dwObjectiveMarker = 0;
+    m_dwMarker = 0;
+    m_dwHasBeenDriven = 0;
+    m_dwLastDrivenTime = GetTickCount();
+    m_dwField50 = 0xffffffff;
+    m_dwField54 = 0xffffffff;
+    m_dwLocked = 0;
     m_bColorChanged = FALSE;
     m_bInModShop = FALSE;
-    *(DWORD*)((BYTE*)this + 0x75) = 0;
-    *(DWORD*)((BYTE*)this + 0x8f) = 0;
-    memset((BYTE*)this + 0x93, 0, 33);
+    m_dwEngineOverride75 = 0;
+    m_pLicensePlateTexture = 0;
+    memset(m_szLicensePlateText, 0, 33);
 }
 
 // 0x000b7940
@@ -284,7 +283,7 @@ BOOL CVehicle::IsRC()
 // 0x000b7e60
 BOOL CVehicle::HasSiren()
 {
-    return *(DWORD*)((BYTE*)this + 0x8b) != 0;
+    return m_dwSiren != 0;
 }
 // 0x000b7e70
 BYTE CVehicle::GetMaxPassengers()
@@ -337,7 +336,7 @@ void CVehicle::ResetPointers()
     if (m_pGameVehicle)
     {
         m_pGameVehicle = GamePoolVehicleGetAt(m_nHandle);
-        *(void**)((BYTE*)this + 0x40) = m_pGameVehicle;
+        m_pGameEntity = m_pGameVehicle;
     }
 }
 
@@ -456,7 +455,7 @@ BYTE CVehicle::GetLightsDamage()
 // 0x000b77c0
 void CVehicle::SetTrailer(CVehicle* trailer)
 {
-    *(CVehicle**)((BYTE*)this + 0x48) = trailer;
+    m_pTrailer = trailer;
 }
 
 // 0x000b7910
@@ -474,25 +473,25 @@ bool CVehicle::DoesExist()
 // 0x000b7d40
 void CVehicle::SetField50(DWORD value)
 {
-    *(DWORD*)((BYTE*)this + 0x50) = value;
+    m_dwField50 = value;
 }
 
 // 0x000b7d50
 DWORD CVehicle::GetField50()
 {
-    return *(DWORD*)((BYTE*)this + 0x50);
+    return m_dwField50;
 }
 
 // 0x000b7d60
 void CVehicle::SetField54(DWORD value)
 {
-    *(DWORD*)((BYTE*)this + 0x54) = value;
+    m_dwField54 = value;
 }
 
 // 0x000b7d70
 DWORD CVehicle::GetField54()
 {
-    return *(DWORD*)((BYTE*)this + 0x54);
+    return m_dwField54;
 }
 
 #include "game/entity.h"
@@ -555,12 +554,12 @@ void CVehicle::Lock(BOOL locked)
     if (locked)
     {
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x4f8) = 2;
-        *(DWORD*)((BYTE*)this + 0x60) = 1;
+        m_dwLocked = 1;
     }
     else
     {
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x4f8) = 0;
-        *(DWORD*)((BYTE*)this + 0x60) = 0;
+        m_dwLocked = 0;
     }
 }
 
@@ -569,8 +568,8 @@ BOOL CVehicle::UpdateLastDrivenTime()
 {
     if (m_pGameVehicle && *(void**)((BYTE*)m_pGameVehicle + 0x460))
     {
-        *(DWORD*)((BYTE*)this + 0x6d) = 1;
-        *(DWORD*)((BYTE*)this + 0x69) = GetTickCount();
+        m_dwHasBeenDriven = 1;
+        m_dwLastDrivenTime = GetTickCount();
         return TRUE;
     }
     return FALSE;
@@ -579,7 +578,7 @@ BOOL CVehicle::UpdateLastDrivenTime()
 // 0x000b7750
 void CVehicle::AttachTrailer()
 {
-    CVehicle* trailer = *(CVehicle**)((BYTE*)this + 0x48);
+    CVehicle* trailer = m_pTrailer;
     if (trailer)
         Scripting::ProcessCommand(&g_vehicleAttachTrailerCommand, trailer->m_nHandle, m_nHandle);
 }
@@ -588,10 +587,9 @@ void CVehicle::AttachTrailer()
 void CVehicle::DetachTrailer()
 {
     g_vehicleDetachingTrailer = 1;
-    if (*(CVehicle**)((BYTE*)this + 0x48) && (*(CVehicle**)((BYTE*)this + 0x48))->m_nHandle && GamePoolVehicleGetAt((*(CVehicle**)((BYTE*)this + 0x48))->m_nHandle) &&
-        (*(CVehicle**)((BYTE*)this + 0x48))->m_pGameVehicle)
+    if (m_pTrailer && m_pTrailer->m_nHandle && GamePoolVehicleGetAt(m_pTrailer->m_nHandle) && m_pTrailer->m_pGameVehicle)
     {
-        Scripting::ProcessCommand(&g_vehicleDetachTrailerCommand, (*(CVehicle**)((BYTE*)this + 0x48))->m_nHandle, m_nHandle);
+        Scripting::ProcessCommand(&g_vehicleDetachTrailerCommand, m_pTrailer->m_nHandle, m_nHandle);
     }
     g_vehicleDetachingTrailer = 0;
 }
@@ -645,7 +643,7 @@ void CVehicle::SetPaintjob(BYTE paintjob)
 // 0x000b7c80
 void CVehicle::SetLicensePlateText(const char* text)
 {
-    strncpy((char*)this + 0x93, text, 32);
+    strncpy(m_szLicensePlateText, text, 32);
 }
 
 // 0x000b7ca0
@@ -713,13 +711,13 @@ void CVehicle::SetInvulnerable(BOOL enabled)
         {
             Scripting::ProcessCommand(&g_vehicleProofsCommand, m_nHandle, 1, 1, 1, 1, 1);
             Scripting::ProcessCommand(&g_vehicleDamageableCommand, m_nHandle, 0);
-            *(DWORD*)((BYTE*)this + 0x58) = 1;
+            m_dwInvulnerable = 1;
         }
         else
         {
             Scripting::ProcessCommand(&g_vehicleProofsCommand, m_nHandle, 0, 0, 0, 0, 0);
             Scripting::ProcessCommand(&g_vehicleDamageableCommand, m_nHandle, 1);
-            *(DWORD*)((BYTE*)this + 0x58) = 0;
+            m_dwInvulnerable = 0;
         }
     }
 }
@@ -1033,9 +1031,9 @@ void CVehicle::ProcessMarkers()
 {
     if (!m_pGameVehicle)
         return;
-    DWORD* marker = (DWORD*)((BYTE*)this + 0xb4);
-    DWORD* special = (DWORD*)((BYTE*)this + 0x65);
-    if (*((BYTE*)this + 0x64))
+    DWORD* marker = &m_dwMarker;
+    DWORD* special = &m_dwObjectiveMarker;
+    if (m_byteObjective)
     {
         if (!*special)
         {
@@ -1115,12 +1113,12 @@ void CVehicle::EnableEngine(BOOL enabled)
     {
         initial[0x428] |= 0x10;
         if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 3 && HasDriver() && !DriverIsPlayerPed())
-            *(DWORD*)((BYTE*)this + 0x75) = 1;
+            m_dwEngineOverride75 = 1;
     }
     else
     {
         initial[0x428] &= 0xef;
-        if (!m_pGameVehicle || GameGetVehicleSubtype(m_pGameVehicle) != 3 || !*(DWORD*)((BYTE*)this + 0x75))
+        if (!m_pGameVehicle || GameGetVehicleSubtype(m_pGameVehicle) != 3 || !m_dwEngineOverride75)
             return;
         BYTE* current = (BYTE*)m_pGameVehicle;
         if (current)
@@ -1143,7 +1141,7 @@ skipBackend:
             }
             // clang-format on
         }
-        *(DWORD*)((BYTE*)this + 0x75) = 0;
+        m_dwEngineOverride75 = 0;
     }
 }
 
@@ -1176,24 +1174,23 @@ void __stdcall GameRemoveDriverByState598(void* vehicle)
 // 0x000b7cd0
 void CVehicle::ConstructLicensePlate()
 {
-    BYTE* state = (BYTE*)this;
-    if (!*(IDirect3DTexture9**)(state + 0x8f))
+    if (!m_pLicensePlateTexture)
     {
-        const char *text = (char*)state + 0x93, *end = text;
+        const char *text = m_szLicensePlateText, *end = text;
         while (*end++)
         {
         }
         if (end != text + 1)
         {
             IDirect3DTexture9* created = ((CLicensePlate*)g_devicePlateManager)->Create(text);
-            *(IDirect3DTexture9**)(state + 0x8f) = created;
+            m_pLicensePlateTexture = created;
         }
     }
 }
 // 0x000b7d20
 void CVehicle::ShutdownLicensePlate()
 {
-    IDirect3DTexture9** texture = (IDirect3DTexture9**)((BYTE*)this + 0x8f);
+    IDirect3DTexture9** texture = &m_pLicensePlateTexture;
     if (*texture)
     {
         (*texture)->Release();

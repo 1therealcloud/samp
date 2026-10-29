@@ -157,7 +157,7 @@ void ArchivePublishNameDigest(const DWORD* digest)
         while (word < 5 && digest[word] == g_archiveTrackedNameDigests[entry][word])
             ++word;
         if (word == 5 && g_pGame)
-            ++g_pGame->unknown55;
+            ++g_pGame->m_nTrackedNameDigestMatches;
     }
 }
 

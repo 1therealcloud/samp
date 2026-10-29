@@ -509,7 +509,7 @@ void CLocalPlayer::SendUnoccupiedData(WORD id, BYTE seat)
     stream.Write((char*)&data, 67);
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 1);
     *(WORD*)((BYTE*)vehicles + 0x8e34 + id * 2) = players->localId;
-    *(DWORD*)((BYTE*)vehicle + 0x7f) = 1;
+    vehicle->m_dwLocalUnoccupiedSync = 1;
 }
 // 0x00006c10
 bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
@@ -540,8 +540,8 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
     }
     if (clear)
     {
-        *(DWORD*)((BYTE*)vehicle + 0x7f) = 0;
-        *(DWORD*)((BYTE*)vehicle + 0x83) = 0;
+        vehicle->m_dwLocalUnoccupiedSync = 0;
+        vehicle->m_dwRemoteUnoccupiedSync = 0;
         return false;
     }
     for (int seat = 0; seat < 8; ++seat)

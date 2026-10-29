@@ -56,7 +56,12 @@ public:
     // 0x0009f870
     int GetModelAtomicCount();
 
-    BYTE unknown04[60];
+    union
+    {
+        CVector m_aSpeedHistory[5];
+        // Raw view retained for historical native fixtures.
+        BYTE unknown04[60];
+    };
     void* m_pGameEntity;
     DWORD m_nHandle;
     // 0x0009bce0
@@ -155,6 +160,7 @@ public:
 };
 #pragma pack(pop)
 typedef char EntityExtent[(sizeof(CEntity) == 72) ? 1 : -1];
+typedef char EntitySpeedHistoryOffset[(offsetof(CEntity, m_aSpeedHistory) == 4) ? 1 : -1];
 typedef char EntityBackendOffset[(offsetof(CEntity, m_pGameEntity) == 0x40) ? 1 : -1];
 // 0x000b3720
 void __stdcall GameWorldAdd(void* entity);

@@ -306,8 +306,8 @@ void CVehiclePool::AssignSpecialParams(WORD id, BYTE objective, BYTE locked)
         return;
     if (objective)
     {
-        *((BYTE*)vehicle + 0x64) = 1;
-        *(DWORD*)((BYTE*)vehicle + 0x65) = 0;
+        vehicle->m_byteObjective = 1;
+        vehicle->m_dwObjectiveMarker = 0;
     }
     vehicle->Lock(locked);
 }

@@ -12,6 +12,16 @@ class CEntity;
 class CObject;
 class CMatrix;
 #pragma pack(push, 1)
+// Region at CGame+0C; no standalone allocation or native constructor.
+struct GameCheckpointState
+{
+    CVector racePosition, raceNext;
+    float raceSize;
+    BYTE raceType;
+    DWORD raceEnabled, raceMarker, raceCheckpoint;
+    CVector position, size;
+    DWORD enabled, marker;
+};
 // Exact allocated extent and observed fields. Opaque regions deliberately retain native bytes.
 class CGame
 {
@@ -104,14 +114,13 @@ public:
     CAudio* m_pAudio;
     CCamera* m_pCamera;
     CPed* m_pPlayerPed;
-    BYTE unknown0c[0x1d];
-    DWORD unknown29;
-    BYTE unknown2d[4];
-    DWORD unknown31;
-    BYTE unknown35[0x18];
-    DWORD unknown4d;
-    BYTE unknown51[4];
-    DWORD unknown55;
+    GameCheckpointState m_checkpoints;
+    union
+    {
+        DWORD m_nTrackedNameDigestMatches;
+        // Historical raw name retained for frozen archive fixtures.
+        DWORD unknown55;
+    };
     BOOL m_bHeadMove;
     int m_nFrameLimiter;
     int m_nCursorMode;
@@ -252,6 +261,11 @@ public:
 };
 #pragma pack(pop)
 typedef char GameExtent[(sizeof(CGame) == 0x142) ? 1 : -1];
+typedef char CheckpointRegionSize[(sizeof(GameCheckpointState) == 0x49) ? 1 : -1];
+typedef char CheckpointMarkerOffset[(offsetof(GameCheckpointState, marker) == 0x45) ? 1 : -1];
+typedef char RacingMarkerOffset[(offsetof(GameCheckpointState, raceMarker) == 0x21) ? 1 : -1];
+typedef char GameCheckpointOffset[(offsetof(CGame, m_checkpoints) == 0x0c) ? 1 : -1];
+typedef char GameDigestMatchOffset[(offsetof(CGame, m_nTrackedNameDigestMatches) == 0x55) ? 1 : -1];
 typedef char GameCursorOffset[(offsetof(CGame, m_nCursorMode) == 0x61) ? 1 : -1];
 typedef char GameWaitOffset[(offsetof(CGame, m_nInputEnableWaitFrames) == 0x65) ? 1 : -1];
 typedef char GameClockOffset[(offsetof(CGame, m_bClockEnabled) == 0x69) ? 1 : -1];

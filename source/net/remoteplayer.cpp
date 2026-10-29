@@ -158,7 +158,7 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
         // clang-format on
     }
     vehicle->SetSpeed(speed);
-    *(DWORD*)((BYTE*)vehicle + 0x83) = 1;
+    vehicle->m_dwRemoteUnoccupiedSync = 1;
 }
 // 0x00015950
 void CRemotePlayer::UpdateTrailer(const void* data)

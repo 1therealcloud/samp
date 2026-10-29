@@ -981,7 +981,7 @@ void ScrSetCheckpoint(RPCParameters* parameters)
     stream.Read(radius);
     CVector size = {radius, radius, radius};
     g_pGame->SetCheckpoint(&position, &size);
-    g_pGame->unknown4d = 1;
+    g_pGame->m_checkpoints.enabled = 1;
 }
 // 0x00010150
 void ScrSetRaceCheckpoint(RPCParameters* parameters)
@@ -1000,7 +1000,7 @@ void ScrSetRaceCheckpoint(RPCParameters* parameters)
     CVector next = point;
     stream.Read(point.x);
     g_pGame->SetRacingCheckpoint(type, &position, &next, point.x);
-    g_pGame->unknown29 = 1;
+    g_pGame->m_checkpoints.raceEnabled = 1;
 }
 // 0x0000ef50
 void ScrCreatePickup(RPCParameters* parameters)
@@ -1090,13 +1090,13 @@ void ScrSetIngameTimer(RPCParameters* parameters)
 void ScrDisableCheckpoint(RPCParameters* parameters)
 {
     (void)parameters;
-    g_pGame->unknown4d = 0;
+    g_pGame->m_checkpoints.enabled = 0;
 }
 // 0x0000e440
 void ScrDisableRaceCheckpoint(RPCParameters* parameters)
 {
     (void)parameters;
-    g_pGame->unknown29 = 0;
+    g_pGame->m_checkpoints.raceEnabled = 0;
 }
 // 0x00117fa8
 const int g_rpcScrSetIngameTimer = 60;
