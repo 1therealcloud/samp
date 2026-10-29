@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "game/scripting.h"
 #include <string.h>
 // 0x000a7160
 CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction)
@@ -11,14 +12,7 @@ CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, fl
     this->title[0] = 0;
     columnTitles[0][0] = 0;
     columnTitles[1][0] = 0;
-    char* destination = this->title;
-    char value;
-    do
-    {
-        value = *title++;
-        *destination++ = value;
-    }
-    while (value);
+    strcpy(this->title, title);
     memcpy(&this->x, &x, 4);
     memcpy(&this->y, &y, 4);
     memcpy(&widths[0], &width1, 4);
@@ -30,26 +24,12 @@ CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, fl
 // 0x000a7200
 void CMenu::AddItem(BYTE column, BYTE row, const char* text)
 {
-    char* destination = items[row][column];
-    char value;
-    do
-    {
-        value = *text++;
-        *destination++ = value;
-    }
-    while (value);
+    strcpy(items[row][column], text);
 }
 // 0x000a7230
 void CMenu::SetColumnTitle(BYTE column, const char* text)
 {
-    char* destination = columnTitles[column];
-    char value;
-    do
-    {
-        value = *text++;
-        *destination++ = value;
-    }
-    while (value);
+    strcpy(columnTitles[column], text);
 }
 // 0x000a7280
 char* CMenu::GetItem(BYTE column, BYTE row)
@@ -67,7 +47,6 @@ char* CMenu::GetColumnTitle(BYTE column)
     return columnTitles[column];
 }
 
-#include "game/scripting.h"
 // 0x0013c0c8
 extern const char g_menuItemKeys[24][32] = {"SAMP000", "SAMP100", "SAMP001", "SAMP101", "SAMP002", "SAMP102", "SAMP003", "SAMP103", "SAMP004", "SAMP104", "SAMP005", "SAMP105",
                                             "SAMP006", "SAMP106", "SAMP007", "SAMP107", "SAMP008", "SAMP108", "SAMP009", "SAMP109", "SAMP010", "SAMP110", "SAMP011", "SAMP111"};
@@ -114,31 +93,20 @@ BYTE CMenu::GetActiveRow()
 // 0x000a7330
 void CMenu::Show()
 {
-    const char* title = this->title[0] ? g_menuTitleKey : g_menuDummy;
-    int columns = this->columns;
-    double width;
-    float* widthValues = widths;
-    // clang-format off
-    __asm {mov eax,widthValues}
-    __asm {fld dword ptr [eax+4]}
-    __asm {fadd dword ptr [eax]}
-    __asm {fidiv columns}
-    __asm {fstp qword ptr width}
-    // clang-format on
-    Scripting::ProcessCommand(&g_menuCreateCommand, title, (double)x, (double)y, width, columns, interaction.enabled, 1, 1, &handle);
-    for (int column = 0; column < 2; ++column)
+    Scripting::ProcessCommand(&g_menuCreateCommand, title[0] ? g_menuTitleKey : g_menuDummy, (double)x, (double)y,
+                             (widths[0] + widths[1]) / columns, (int)columns, interaction.enabled, 1, 1, &handle);
+    Scripting::ProcessCommand(&g_menuItemsCommand, handle, 0, columnTitles[0][0] ? g_menuHeaderKey0 : g_menuDummy,
+                             MS(0, 0), MS(1, 0), MS(2, 0), MS(3, 0), MS(4, 0), MS(5, 0),
+                             MS(6, 0), MS(7, 0), MS(8, 0), MS(9, 0), MS(10, 0), MS(11, 0));
+    // Native uses column-zero width for both columns and VC7's _ftol2 conversion.
+    Scripting::ProcessCommand(&g_menuWidthCommand, handle, 0, (int)widths[0]);
+    if (columns == 2)
     {
-        if (column && this->columns != 2)
-            break;
-        const char* heading = columnTitles[column][0] ? (column ? g_menuHeaderKey1 : g_menuHeaderKey0) : g_menuDummy;
-        const char* items[12];
-        for (int row = 11; row >= 0; --row)
-            items[row] = MS((BYTE)row, (BYTE)column);
-        Scripting::ProcessCommand(&g_menuItemsCommand, handle, column, heading, items[0], items[1], items[2], items[3], items[4], items[5], items[6], items[7], items[8], items[9],
-                                  items[10], items[11]);
-        // VC7 uses its native _ftol2 conversion here, matching the original.
-        Scripting::ProcessCommand(&g_menuWidthCommand, handle, column, (int)widths[0]);
+        Scripting::ProcessCommand(&g_menuItemsCommand, handle, 1, columnTitles[1][0] ? g_menuHeaderKey1 : g_menuDummy,
+                                 MS(0, 1), MS(1, 1), MS(2, 1), MS(3, 1), MS(4, 1), MS(5, 1),
+                                 MS(6, 1), MS(7, 1), MS(8, 1), MS(9, 1), MS(10, 1), MS(11, 1));
+        Scripting::ProcessCommand(&g_menuWidthCommand, handle, 1, (int)widths[0]);
     }
-    for (int row = 0; row < 12; ++row)
+    for (BYTE row = 0; row < 12; ++row)
         Scripting::ProcessCommand(&g_menuRowCommand, handle, row, interaction.rows[row]);
 }
