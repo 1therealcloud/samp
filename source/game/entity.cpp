@@ -805,7 +805,7 @@ void CEntity::Native009f960()
     BYTE* entity = (BYTE*)m_pGameEntity;
     // Native reads the vtable before the null test; a null backend must fault.
     void** vtable = *(void***)entity;
-    void* render = entity ? *(void**)(entity + 0x18) : 0;
+    void* render = GetRwObject();
     short model = *(short*)(entity + 0x22);
     // GTA SA virtual address: 0x00733160, cdecl render-object prepass.
     if (model >= 400 && model <= 611 && render)
@@ -862,49 +862,19 @@ void CEntity::Native009f960()
 // Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // 0x0009fba0
-__declspec(naked) void CEntity::ApplyLinearSpeed()
+void CEntity::ApplyLinearSpeed()
 {
-    // clang-format off
-    __asm {
-        sub esp,0x40
-        push ebx
-        mov ebx,ecx
-        mov eax,dword ptr [ebx + 0x40]
-        test eax,eax
-        push esi
-        push edi
-        jz branch_1009fc0a
-        fld dword ptr ds:[0x00b7cb5c]
-        lea eax,[esp + 0xc]
-        push eax
-        call CEntity::GetMatrix
-        fld st(0)
-        mov eax,dword ptr [ebx + 0x40]
-        fmul float ptr [eax + 0x44]
-        sub esp,0x40
-        mov edi,esp
-        mov ecx,0x10
-        fadd float ptr [esp + 0x7c]
-        lea esi,[esp + 0x4c]
-        fstp float ptr [esp + 0x7c]
-        fld st(0)
-        fmul float ptr [eax + 0x48]
-        fadd float ptr [esp + 0x80]
-        fstp float ptr [esp + 0x80]
-        fmul float ptr [eax + 0x4c]
-        fadd float ptr [esp + 0x84]
-        fstp float ptr [esp + 0x84]
-        rep movsd
-        mov ecx,ebx
-        call CEntity::ApplyMatrix
-    branch_1009fc0a:
-        pop edi
-        pop esi
-        pop ebx
-        add esp,0x40
-        ret
+    if (m_pEntity)
+    {
+        // GTA SA timestep VA. Capture before GetMatrix, as in native.
+        float timeStep = *(const float*)0xb7cb5c;
+        CMatrix matrix;
+        GetMatrix(&matrix);
+        matrix.position.x += timeStep * m_pEntity->speed.x;
+        matrix.position.y += timeStep * m_pEntity->speed.y;
+        matrix.position.z += timeStep * m_pEntity->speed.z;
+        ApplyMatrix(matrix);
     }
-    // clang-format on
 }
 
 #include "game/util.h"
