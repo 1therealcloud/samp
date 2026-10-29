@@ -1,6 +1,10 @@
 #include "net/pickuppool.h"
+#include "BitStream.h"
+#include "RakClientInterface.h"
 #include "game/game.h"
 #include "game/scripting.h"
+#include "main.h"
+#include "net/netgame.h"
 #include <stddef.h>
 #include <string.h>
 // 0x00118158
@@ -31,8 +35,7 @@ void CPickupPool::Create(const Pickup* pickup, int id)
         return;
     if (handles[id])
         Scripting::ProcessCommand(&g_pickupDestroyCommand, handles[id]);
-    for (int i = 0; i < 5; ++i)
-        ((DWORD*)&pickups[id])[i] = ((const DWORD*)pickup)[i];
+    memcpy(&pickups[id], pickup, sizeof(Pickup));
     weapons[id].enabled = 0;
     DWORD index;
     DWORD handle = g_pGame->CreatePickup(pickup->model, pickup->type, pickup->x, pickup->y, pickup->z, &index);
@@ -68,7 +71,7 @@ void CPickupPool::DeleteWeapon(WORD owner)
 // 0x000132e0
 int CPickupPool::GetIndex(int index)
 {
-    for (int i = 0; i < Capacity; ++i)
+    for (int i = 0; i != Capacity; ++i)
         if (indices[i] == index)
             return i;
     return -1;
@@ -83,9 +86,6 @@ CPickupPool::~CPickupPool()
     }
 }
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-#include "main.h"
 typedef char PickupRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10) ? 1 : -1];
 // 0x0011816c
 int g_pickupCollectedRpc = 131;
@@ -100,8 +100,8 @@ void CPickupPool::SendNotification(int index)
     if (id == -1 || !handles[id] || cooldown[id] || weapons[id].enabled)
         return;
     RakNet::BitStream stream;
-    stream.WriteBits((const BYTE*)&id, 32, true);
-    (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_pickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
+    stream.Write(id);
+    ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_pickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
     cooldown[id] = 15;
 }
 // 0x00013420
@@ -113,7 +113,7 @@ void CPickupPool::Process()
             continue;
         if (!weapons[i].enabled && pickups[i].type != 14)
         {
-            if (cooldown[i])
+            if (cooldown[i] > 0)
                 --cooldown[i];
             continue;
         }
@@ -122,14 +122,13 @@ void CPickupPool::Process()
         RakNet::BitStream stream;
         if (weapons[i].enabled)
         {
-            WORD owner = weapons[i].owner;
-            stream.WriteBits((const BYTE*)&owner, 16, true);
-            (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_weaponPickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
+            stream.Write(weapons[i].owner);
+            ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_weaponPickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
         }
         else
         {
-            stream.WriteBits((const BYTE*)&i, 32, true);
-            (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_pickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
+            stream.Write(i);
+            ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_pickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
         }
     }
 }
@@ -146,14 +145,9 @@ void CPickupPool::CreateWeapon(int model, float x, float y, float z, int ammo, W
         return;
     pickups[id].model = model;
     pickups[id].type = 4;
-    memcpy(&pickups[id].x, &x, 4);
-    memcpy(&pickups[id].y, &y, 4);
-    float* storedZ = &pickups[id].z;
-    // clang-format off
-    __asm {fld z}
-    __asm {mov eax,storedZ}
-    __asm {fstp dword ptr [eax]}
-    // clang-format on
+    pickups[id].x = x;
+    pickups[id].y = y;
+    pickups[id].z = z;
     handles[id] = g_pGame->CreateWeaponPickup(model, ammo, x, y, z);
     weapons[id].enabled = 1;
     weapons[id].owner = owner;

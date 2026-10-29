@@ -203,9 +203,12 @@ set "UNIT=%SRC:\=_%"
 for %%U in ("%UNIT%") do set "UNIT=%%~nU"
 echo [CL] %SRC%
 set "UNIT_FLAGS="
+set "UNIT_OPT_FLAGS="
 rem SocketLayer requires Winsock2 before the forced DXUT header includes windows.h.
 if /i "%SRC%"=="source\net\netgame.cpp" set "UNIT_FLAGS=/FIwinsock2.h"
-"%SAMP_VC%\bin\cl.exe" %UNIT_FLAGS% %FLAGS% /Fo"%OBJDIR%\%UNIT%.obj" "%SRC%" >"%LOGDIR%\%UNIT%.log" 2>&1
+rem Preserve the native out-of-line GetIndex call; BitStream templates remain inline.
+if /i "%SRC%"=="source\net\pickuppool.cpp" set "UNIT_OPT_FLAGS=/Ob1"
+"%SAMP_VC%\bin\cl.exe" %UNIT_FLAGS% %FLAGS% %UNIT_OPT_FLAGS% /Fo"%OBJDIR%\%UNIT%.obj" "%SRC%" >"%LOGDIR%\%UNIT%.log" 2>&1
 if errorlevel 1 (
     type "%LOGDIR%\%UNIT%.log"
     exit /b 1
