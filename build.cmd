@@ -215,6 +215,8 @@ rem CObject calls GetAngleDifference and ClearModelFlag0 out of line in the nati
 if /i "%SRC%"=="source\game\object.cpp" set "UNIT_OPT_FLAGS=/Ob1"
 rem Texture/model utilities retain their native calls to the shared GTA adapters.
 if /i "%SRC%"=="source\game\game.cpp" set "UNIT_OPT_FLAGS=/Ob1"
+rem RenderWare dispatchers retain their native out-of-line adapter calls.
+if /i "%SRC%"=="source\game\util.cpp" set "UNIT_OPT_FLAGS=/Ob1"
 "%SAMP_VC%\bin\cl.exe" %UNIT_FLAGS% %FLAGS% %UNIT_OPT_FLAGS% /Fo"%OBJDIR%\%UNIT%.obj" "%SRC%" >"%LOGDIR%\%UNIT%.log" 2>&1
 if errorlevel 1 (
     type "%LOGDIR%\%UNIT%.log"
