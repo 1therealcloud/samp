@@ -487,7 +487,22 @@ void* GameRwQueryAtomic48(const void* object)
 // 0x000b1130
 void* __stdcall GameRwReadField34(const void* object)
 {
-    return object ? *(void* const*)((const BYTE*)object + 0x34) : 0;
+    void* result = 0;
+    if (object)
+    {
+        // Native RenderWare memory adapter; the backend slot is still opaque.
+        // clang-format off
+        __asm {
+            mov eax,object
+            mov edx,0x34
+            lea esi,[edx+eax]
+            mov eax,[esi]
+            mov result,eax
+        }
+        // clang-format on
+        return result;
+    }
+    return 0;
 }
 
 // Each entry snapshots GTA world slot C17038 once, and tests only that world.

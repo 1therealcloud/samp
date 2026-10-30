@@ -839,34 +839,36 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
     if (a->type != 1)
         return atomic;
-    if (!a->geometry)
-        return atomic;
-    CObject* state = (CObject*)object;
-    if (!state)
-        return atomic;
-    int count = a->geometry->materialCount;
-    if (count > 16)
-        count = 16;
-    for (int i = 0; i < count; ++i)
+    if (a->geometry)
     {
-        ObjectRwMaterialPrefix* material = a->geometry->materials[i];
-        if (!material)
-            continue;
-        void* texture = state->materials.textures[i];
-        if (texture)
+        CObject* state = (CObject*)object;
+        if (state)
         {
-            material->texture = texture;
-            state->materials.texturesChanged = 1;
-        }
-        if (state->materials.colors[i])
-        {
-            a->geometry->flags |= 0x40;
-            a->geometry->flags &= ~8;
-            material->ambient = 1.0f;
-            material->specular = 0.0f;
-            material->diffuse = 1.0f;
-            material->color = state->materials.colors[i];
-            state->materials.colorsChanged = 1;
+            int count = a->geometry->materialCount;
+            if (count > 16)
+                count = 16;
+            for (int i = 0; i < count; ++i)
+            {
+                ObjectRwMaterialPrefix* material = a->geometry->materials[i];
+                if (!material)
+                    continue;
+                void* texture = state->materials.textures[i];
+                if (texture)
+                {
+                    material->texture = texture;
+                    state->materials.texturesChanged = 1;
+                }
+                if (state->materials.colors[i])
+                {
+                    a->geometry->flags |= 0x40;
+                    a->geometry->flags &= ~8;
+                    material->ambient = 1.0f;
+                    material->specular = 0.0f;
+                    material->diffuse = 1.0f;
+                    material->color = state->materials.colors[i];
+                    state->materials.colorsChanged = 1;
+                }
+            }
         }
     }
     return atomic;

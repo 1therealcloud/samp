@@ -394,14 +394,36 @@ void __stdcall GamePublishPedClump(int model, void* clump)
 // 0x000b34a0
 int GameTxdAdd(const char* name)
 {
-    // GTA SA virtual address.
-    return ((int(__cdecl*)(const char*))0x731c80)(name);
+    int result;
+    // clang-format off
+    __asm {
+        push name
+        mov edx,0x731c80
+        call edx
+        pop edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
 }
 // 0x000b34c0
 DWORD GameTxdLoad(int index, const char* path)
 {
-    // Native wrapper zero-extends the GTA result's AL.
-    return ((BYTE(__cdecl*)(int, const char*))0x7320b0)(index, path);
+    BYTE result = 0;
+    // Native supplies EAX=0 and takes only the backend AL result.
+    // clang-format off
+    __asm {
+        xor eax,eax
+        push path
+        push index
+        mov edx,0x7320b0
+        call edx
+        mov result,al
+        pop edx
+        pop edx
+    }
+    // clang-format on
+    return result;
 }
 // 0x000b4260
 void __stdcall GameSetModelTxd(int model, int index)

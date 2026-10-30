@@ -19,7 +19,7 @@ void GameTxdSetCurrent(int index);
 // 0x000b3540
 void* GameTxdReadTexture(const char* name);
 // 0x000b34f0
-void* GameTxdAddRef(int index);
+void GameTxdAddRef(int index);
 // 0x000b3500
 void GameTxdRemoveRef(int index);
 // 0x000b35b0

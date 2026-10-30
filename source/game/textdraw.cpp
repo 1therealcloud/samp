@@ -64,8 +64,15 @@ void GameReleaseTextDrawTexture(int slot)
 // 0x000b3560
 void GameDestroyTextDrawTexture(void* texture)
 {
-    // GTA SA virtual address; native supplies the address of a local texture word.
-    ((void(__fastcall*)(void*, void*))0x7281e0)(&texture, 0);
+    void* spriteTexture = texture;
+    // GTA CSprite2d deletion receives the address of a one-pointer local.
+    // clang-format off
+    __asm {
+        lea ecx,spriteTexture
+        mov edx,0x7281e0
+        call edx
+    }
+    // clang-format on
 }
 // 0x000b28a0
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)

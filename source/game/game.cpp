@@ -954,22 +954,50 @@ DWORD GameReadStream(void* stream, void* buffer, DWORD length)
 // 0x000b3480
 int GameTxdFind(const char* name)
 {
-    return ((int(__cdecl*)(const char*))0x731850)(name);
+    int result;
+    // Native GTA adapter: preserve the EDX call target and caller cleanup.
+    // clang-format off
+    __asm {
+        push name
+        mov edx,0x731850
+        call edx
+        pop edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
 }
 // 0x000b3510
 void GameTxdPush()
 {
-    ((void(__cdecl*)())0x7316a0)();
+    // clang-format off
+    __asm {
+        mov edx,0x7316a0
+        call edx
+    }
+    // clang-format on
 }
 // 0x000b3520
 void GameTxdPop()
 {
-    ((void(__cdecl*)())0x7316b0)();
+    // clang-format off
+    __asm {
+        mov edx,0x7316b0
+        call edx
+    }
+    // clang-format on
 }
 // 0x000b3530
 void GameTxdSetCurrent(int index)
 {
-    ((void(__cdecl*)(int))0x7319c0)(index);
+    // clang-format off
+    __asm {
+        push index
+        mov edx,0x7319c0
+        call edx
+        pop edx
+    }
+    // clang-format on
 }
 // 0x000b3540
 void* GameTxdReadTexture(const char* name)
@@ -1115,14 +1143,28 @@ void GameParseStreamData(const void* data, DWORD length, void* destination)
 // Texture dictionary reference/slot adapters. Only the native -1 gates are
 // applied; other indices pass through unchanged to their GTA backends.
 // 0x000b34f0
-void* GameTxdAddRef(int index)
+void GameTxdAddRef(int index)
 {
-    return ((void*(__cdecl*)(int))0x731a00)(index);
+    // clang-format off
+    __asm {
+        push index
+        mov edx,0x731a00
+        call edx
+        pop edx
+    }
+    // clang-format on
 }
 // 0x000b3500
 void GameTxdRemoveRef(int index)
 {
-    ((void(__cdecl*)(int))0x731a30)(index);
+    // clang-format off
+    __asm {
+        push index
+        mov edx,0x731a30
+        call edx
+        pop edx
+    }
+    // clang-format on
 }
 // 0x000b35b0
 void GameTxdRemove(int index)
@@ -1477,8 +1519,17 @@ void* __stdcall GameGetModelCollision(int model)
 // 0x000b4300
 WORD __stdcall GameGetModelReferenceCount(int model)
 {
-    const BYTE* info = (const BYTE*)GameGetModelInfo(model);
-    return *(const WORD*)(info + 8);
+    const void* info = GameGetModelInfo(model);
+    DWORD result = 0;
+    // Native reads the backend WORD without a null guard and returns raw AX.
+    // clang-format off
+    __asm {
+        mov edx,info
+        mov bx,word ptr [edx+8]
+        mov word ptr result,bx
+    }
+    // clang-format on
+    return (WORD)result;
 }
 
 // Native preserves the first model-info pointer across the second lookup made
@@ -1880,18 +1931,23 @@ void CGame::EnableHUD(BOOL enabled)
 // 0x000b2790
 BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE fromSamp)
 {
-    char directory[64], path[136];
-    strcpy(directory, fromSamp ? "SAMP\\" : "models\\txd");
+    char directory[65], path[129];
+    if (fromSamp)
+        strcpy(directory, "SAMP\\");
+    else
+        strcpy(directory, "models\\txd");
     int index = GameTxdFind(name);
     if (index != -1)
         return TRUE;
     index = GameTxdAdd(name);
     sprintf(path, "%s\\%s.txd", directory, filename);
-    if (!GameFileExists(path))
-        return FALSE;
-    GameTxdLoad(index, path);
-    GameTxdAddRef(index);
-    return TRUE;
+    if (GameFileExists(path))
+    {
+        GameTxdLoad(index, path);
+        GameTxdAddRef(index);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x0011e844
