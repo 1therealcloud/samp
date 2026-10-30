@@ -43,7 +43,8 @@ class CObject : public CEntity
     friend void* __cdecl ObjectSaveMaterials(void* atomic, void* object);
     // 0x000a8740
     friend void* __cdecl ObjectRestoreMaterials(void* atomic, void* object);
-    BYTE unknown48;
+    // Set after successful backend lookup; IsAdded tests this raw byte.
+    BYTE backendCreationMarker;
     BYTE renderReady;
     DWORD streamingHideCount;
     int modelIndex;
@@ -74,7 +75,9 @@ class CObject : public CEntity
     // Native raw DWORD gate shared by ordinary and text materials.
     BOOL hasMaterials;
     DWORD materialPassState;
-    BYTE unknown1193[6];
+    // Descriptive slot19/20 pass gates; original source names remain unknown.
+    BYTE backendPassRequested, backendPassActive;
+    DWORD unknown1195;
     BYTE timeVisibilityEnabled, visibilityStartHour, visibilityEndHour;
 
 public:

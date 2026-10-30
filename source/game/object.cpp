@@ -580,11 +580,10 @@ void CObject::UpdateCachedCentre()
 // 0x000a8d00
 CObject::CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE flag1193, BYTE firstHour, BYTE lastHour) : CEntity()
 {
-    BYTE* state = (BYTE*)this;
     DWORD handle = 0;
     attachedVehicle = 0xffff;
     attachedObject = 0xffff;
-    state[0x1193] = flag1193;
+    backendPassRequested = flag1193;
     m_pGameEntity = 0;
     m_nHandle = 0;
     attachmentOffset.x = 0;
@@ -594,11 +593,11 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
     attachmentRotation.y = 0;
     attachmentRotation.z = 0;
     attachmentRotationSync = 1;
-    state[0x1b4] = 0;
-    state[0x1194] = 0;
-    state[0xb9] = 0;
-    *(DWORD*)(state + 0xba) = 0;
-    state[0x53] = 0;
+    unknown1b4 = 0;
+    backendPassActive = 0;
+    unknownb9 = 0;
+    unknownba = 0;
+    cameraCollisionDisabled = 0;
     timeVisibilityEnabled = 0;
     visibilityStartHour = 0;
     visibilityEndHour = 0;
@@ -627,10 +626,10 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
     {
         m_pGameEntity = GamePoolObjectGetAt(handle);
         m_nHandle = handle;
-        state[0x48] = 1;
+        backendCreationMarker = 1;
         motionFlags = 0;
         moveSpeed = 0.0f;
-        state[0x1b6] = 0;
+        unknown1b6[0] = 0;
         lastMoveTick = 0;
         modelIndex = model;
         if (GameIsObjectModelInfo(info))
@@ -663,7 +662,7 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
     materials.texturesChanged = 0;
     materials.colorsChanged = 0;
     materials.savedGeometryFlags = 0;
-    *(DWORD*)(state + 0x1195) = 0;
+    unknown1195 = 0;
     for (int i = 0; i < 16; ++i)
     {
         materials.savedTextures[i] = 0;
@@ -683,7 +682,7 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
 BOOL CObject::IsAdded()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
-    return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && ((BYTE*)this)[0x48] ? TRUE : FALSE;
+    return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && backendCreationMarker ? TRUE : FALSE;
 }
 // 0x000a8c30
 void CObject::NativeA8C30()
@@ -701,13 +700,13 @@ void CObject::NativeA8C30()
             call dword ptr [eax+0x4c]
         }
         // clang-format on
-        ((BYTE*)this)[0x1194] = 1;
+        backendPassActive = 1;
     }
 }
 // 0x000a8c70
 void CObject::NativeA8C70()
 {
-    if (m_pEntity && m_pEntity->vtable != 0x863c40 && ((BYTE*)this)[0x1194])
+    if (m_pEntity && m_pEntity->vtable != 0x863c40 && backendPassActive)
     {
         DWORD table = m_pEntity->vtable;
         void* backend = m_pGameEntity;
@@ -720,7 +719,7 @@ void CObject::NativeA8C70()
             call dword ptr [eax+0x50]
         }
         // clang-format on
-        ((BYTE*)this)[0x1194] = 0;
+        backendPassActive = 0;
     }
 }
 // 0x000a8cc0
@@ -805,6 +804,15 @@ BOOL CObject::IsMoving()
 
 // Only the observed RenderWare prefixes used by these callbacks are described.
 // The complete backend layouts and ownership remain outside these views.
+struct ObjectRwTexturePrefix
+{
+    void* raster;
+    BYTE unknown04[0x4c];
+    // Whole raw filtering/addressing word; native increments all32 bits.
+    DWORD filterAddressing;
+};
+typedef char ObjectRwTextureRasterOffset[(offsetof(ObjectRwTexturePrefix, raster) == 0) ? 1 : -1];
+typedef char ObjectRwTextureFilterOffset[(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50) ? 1 : -1];
 struct ObjectRwColor
 {
     BYTE red, green, blue, alpha;
@@ -976,24 +984,23 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
 {
     if (index > 16)
         return;
-    BYTE* state = (BYTE*)this;
-    void** texture = (void**)(state + 0x217 + index * 4);
+    void** texture = &materials.textures[index];
     if (*texture)
     {
         GameDestroyTextDrawTexture(*texture);
-        DWORD raster = *(DWORD*)(state + 0x110b + index * 4);
+        IDirect3DTexture9* raster = materials.rasterField34[index];
         *texture = 0;
         if (raster)
-            *(DWORD*)(state + 0x110b + index * 4) = 0;
+            materials.rasterField34[index] = 0;
     }
-    IUnknown** rendered = (IUnknown**)(state + 0x114b + index * 4);
+    IDirect3DTexture9** rendered = &materials.renderedText[index];
     if (*rendered)
     {
         (*rendered)->Release();
         *rendered = 0;
-        *(DWORD*)(state + 0x31b + index * 4) = 0;
+        materials.textProcessed[index] = 0;
     }
-    char** stored = (char**)(state + 0x10cb + index * 4);
+    char** stored = &materials.text[index];
     if (*stored)
     {
         free(*stored);
@@ -1002,7 +1009,7 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     *texture = GameRwCreateTexture(GameRwCreateRaster(2, 2, 0, 0));
     if (!*texture)
         return;
-    ++*(DWORD*)((BYTE*)*texture + 0x50);
+    ++((ObjectRwTexturePrefix*)*texture)->filterAddressing;
     *stored = (char*)calloc(1, strlen(text) + 1);
     strcpy(*stored, text);
     materials.textInfo[index].index = (BYTE)index;
@@ -1014,11 +1021,11 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     materials.textInfo[index].backgroundColor = backgroundColor;
     materials.textInfo[index].alignment = alignment;
     void* materialTexture = *texture;
-    *(DWORD*)(state + 0x257 + index * 4) = 0;
-    *(DWORD*)(state + 0x2db + index * 4) = 2;
-    void* raster = *(void**)materialTexture;
+    materials.colors[index] = 0;
+    materials.types[index] = 2;
+    void* raster = ((ObjectRwTexturePrefix*)materialTexture)->raster;
     if (raster)
-        *(void**)(state + 0x110b + index * 4) = GameRwReadField34(raster);
+        materials.rasterField34[index] = (IDirect3DTexture9*)GameRwReadField34(raster);
     hasMaterials = 1;
 }
 
@@ -1077,11 +1084,10 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
 // 0x000a9a20
 void CObject::BeforeMaterialRender()
 {
-    BYTE* state = (BYTE*)this;
     if (hasMaterials && materialPassState)
     {
         ProcessMaterials();
-        if (state[0x1193])
+        if (backendPassRequested)
             NativeA8C30();
     }
     materialPassState = 1;
@@ -1089,10 +1095,9 @@ void CObject::BeforeMaterialRender()
 // 0x000a9a60
 void CObject::AfterMaterialRender()
 {
-    BYTE* state = (BYTE*)this;
     if (!hasMaterials)
         return;
-    if (state[0x1193])
+    if (backendPassRequested)
         NativeA8C70();
     g_deviceMaterialOverrideEnabled = 0;
     g_deviceMaterialOverrides = 0;
