@@ -582,12 +582,12 @@ void CObject::UpdateCachedCentre()
     }
 }
 // 0x000a8d00
-CObject::CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE flag1193, BYTE firstHour, BYTE lastHour) : CEntity()
+CObject::CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour) : CEntity()
 {
     DWORD handle = 0;
     attachedVehicle = 0xffff;
     attachedObject = 0xffff;
-    backendPassRequested = flag1193;
+    lightingPassRequested = lightingRequest;
     m_pGameEntity = 0;
     m_nHandle = 0;
     attachmentOffset.x = 0;
@@ -598,7 +598,7 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
     attachmentRotation.z = 0;
     attachmentRotationSync = 1;
     unknown1b4 = 0;
-    backendPassActive = 0;
+    lightingPassEntered = 0;
     unknownb9 = 0;
     unknownba = 0;
     cameraCollisionDisabled = 0;
@@ -688,15 +688,16 @@ BOOL CObject::IsAdded()
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && backendCreationMarker ? TRUE : FALSE;
 }
+// Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
 // 0x000a8c30
-void CObject::NativeA8C30()
+void CObject::SetupLighting()
 {
     if (m_pEntity && m_pEntity->vtable != 0x863c40)
     {
         *(DWORD*)((BYTE*)m_pGameEntity + 0x1c) |= 0x10000000;
         DWORD table = m_pEntity->vtable;
         void* backend = m_pGameEntity;
-        // GTA slot19; native reloads the backend after the flag write.
+        // GTA SetupLighting(slot19); reload backend after publishing bLightObject.
         // clang-format off
         __asm {
             mov eax,table
@@ -704,17 +705,19 @@ void CObject::NativeA8C30()
             call dword ptr [eax+0x4c]
         }
         // clang-format on
-        backendPassActive = 1;
+        // This marks entering the call, regardless of the GTA boolean result.
+        lightingPassEntered = 1;
     }
 }
+// Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
 // 0x000a8c70
-void CObject::NativeA8C70()
+void CObject::RemoveLighting()
 {
-    if (m_pEntity && m_pEntity->vtable != 0x863c40 && backendPassActive)
+    if (m_pEntity && m_pEntity->vtable != 0x863c40 && lightingPassEntered)
     {
         DWORD table = m_pEntity->vtable;
         void* backend = m_pGameEntity;
-        // GTA slot20, one callee-popped integer argument.
+        // GTA RemoveLighting(slot20), with native callee-popped reset word1.
         // clang-format off
         __asm {
             push 1
@@ -723,7 +726,7 @@ void CObject::NativeA8C70()
             call dword ptr [eax+0x50]
         }
         // clang-format on
-        backendPassActive = 0;
+        lightingPassEntered = 0;
     }
 }
 // 0x000a8cc0
@@ -1092,8 +1095,8 @@ void CObject::BeforeMaterialRender()
     if (hasMaterials && materialPassState)
     {
         ProcessMaterials();
-        if (backendPassRequested)
-            NativeA8C30();
+        if (lightingPassRequested)
+            SetupLighting();
     }
     materialPassState = 1;
 }
@@ -1102,8 +1105,8 @@ void CObject::AfterMaterialRender()
 {
     if (!hasMaterials)
         return;
-    if (backendPassRequested)
-        NativeA8C70();
+    if (lightingPassRequested)
+        RemoveLighting();
     g_deviceMaterialOverrideEnabled = 0;
     g_deviceMaterialOverrides = 0;
     if (!materials.texturesChanged && !materials.colorsChanged)
@@ -1143,8 +1146,9 @@ void CObject::UpdateAttachedObjectRotation()
 extern const float g_objectRenderDistanceThreshold = 600.0f;
 // 0x001e04a8
 BYTE g_objectRenderFlag;
+// Name follows the DL API map; original SA-MP spelling unconfirmed.
 // 0x000a8b50
-void CObject::NativeA8B50()
+void CObject::Render()
 {
     if (!m_pEntity)
         return;
@@ -1153,7 +1157,7 @@ void CObject::NativeA8B50()
         return;
     DWORD table = vtable;
     void* backend = m_pGameEntity;
-    // Native GTA slot17 followed by cdecl backend553260.
+    // GTA PreRender(slot17), then CRenderer::RenderOneNonRoad on the captured backend.
     // clang-format off
     __asm {
         mov eax,table
@@ -1166,8 +1170,9 @@ void CObject::NativeA8B50()
     }
     // clang-format on
 }
+// Name follows the DL API map; original SA-MP spelling unconfirmed.
 // 0x000a9b80
-void CObject::Render()
+void CObject::Draw()
 {
     // GTA SA virtual address: excluded backend vtable.
     if (!m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40 || !GetRwObject())
@@ -1197,15 +1202,15 @@ void CObject::Render()
     {
         if (cameraDistance < g_objectRenderDistanceThreshold)
         {
-            NativeA8C30();
+            SetupLighting();
             GameRwRenderObject(GetRwObject());
-            NativeA8C70();
+            RemoveLighting();
         }
         else
             GameRwRenderObject(GetRwObject());
     }
     else if (cameraDistance < g_objectRenderDistanceThreshold)
-        NativeA8B50();
+        Render();
     else
         GameRwRenderObject(GetRwObject());
     if (hasMaterials && materialPassState)

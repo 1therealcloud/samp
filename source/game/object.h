@@ -75,8 +75,8 @@ class CObject : public CEntity
     // Native raw DWORD gate shared by ordinary and text materials.
     BOOL hasMaterials;
     DWORD materialPassState;
-    // Descriptive slot19/20 pass gates; original source names remain unknown.
-    BYTE backendPassRequested, backendPassActive;
+    // Raw lighting request and call-entry marker; original names remain unknown.
+    BYTE lightingPassRequested, lightingPassEntered;
     DWORD unknown1195;
     BYTE timeVisibilityEnabled, visibilityStartHour, visibilityEndHour;
 
@@ -86,9 +86,9 @@ public:
     CVector* GetRotation();
     // 0x00017750
     void DisableCameraCollision();
-    // Native eleven-word entry; flag1193 retains its raw byte.
+    // Native eleven-word entry; lightingRequest retains its raw byte.
     // 0x000a8d00
-    CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE flag1193, BYTE firstHour, BYTE lastHour);
+    CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour);
     // 0x000a9020
     virtual ~CObject();
     // 0x000a79a0
@@ -99,10 +99,11 @@ public:
     void AttachToBackend(void* target, const CVector* offset, const CVector* rotation);
     // 0x000a8b10
     void ProcessFrameObjectsOnce();
+    // Render/Draw names follow the DL API map; original SA-MP spelling unconfirmed.
     // 0x000a8b50
-    void NativeA8B50();
-    // 0x000a9b80
     void Render();
+    // 0x000a9b80
+    void Draw();
     // 0x000a7a10
     void UpdateAttachedObjectRotation();
     // 0x000a7d00
@@ -113,10 +114,12 @@ public:
     BOOL IsMoving();
     // 0x000a79c0
     BOOL IsAdded();
+    // Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
     // 0x000a8c30
-    void NativeA8C30();
+    void SetupLighting();
+    // Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
     // 0x000a8c70
-    void NativeA8C70();
+    void RemoveLighting();
     // 0x000a8cc0
     bool HasRwFrameFlag8();
     // 0x000a8bc0

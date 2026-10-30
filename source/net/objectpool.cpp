@@ -181,7 +181,7 @@ void CObjectPool::Draw()
         {
             CObject* object = objects[i];
             if (object->renderReady && !object->drawLast)
-                object->Render();
+                object->Draw();
         }
 }
 // 0x00012ad0
@@ -215,7 +215,7 @@ void CObjectPool::DrawLast()
             }
     for (int j = 0; j < count; ++j)
         if (ordered[j])
-            ordered[j]->Render();
+            ordered[j]->Draw();
 }
 
 // 0x00012ce0
