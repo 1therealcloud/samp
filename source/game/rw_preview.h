@@ -27,8 +27,6 @@ void GameRwSetClipDistances(void* camera, float farClip, float nearClip);
 void GameRwSetViewWindow(void* camera, const float* window);
 // 0x000b18c0
 void GameRwSetProjection(void* camera, int projection);
-// 0x000b14b0
-void GameRwAddCameraToWorld(void* camera);
 // 0x000b1320
 void* GameRwCreateTexture(void* raster);
 #endif
