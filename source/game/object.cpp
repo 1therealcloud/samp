@@ -351,7 +351,6 @@ extern const float g_objectNegativeTurnVelocityLimit = -0.001f;
 // 0x000a9240
 void CObject::Process(float elapsedSeconds)
 {
-    BYTE* state = (BYTE*)this;
     if (!hasMaterials && !(streamingDistance > g_objectStreamingNearDistance) && !timeVisibilityEnabled)
     {
         if (!GetRwObject() && g_pGame->GetPlayerPed()->IsInVehicle())
@@ -391,147 +390,77 @@ void CObject::Process(float elapsedSeconds)
     }
     if (!(motionFlags & 1))
         return;
-    CVector velocity = {0, 0, 0};
     CMatrix matrix;
-    GetMatrix(&matrix);
-    float step = elapsedSeconds * moveSpeed;
-    float remaining = GetDistanceToTarget(&matrix);
-    DWORD now = RakNet::GetTime();
-    int elapsedTicks = (int)(now - moveStartTick);
-    float clockDistance = ((float)elapsedTicks * 0.001f) * moveSpeed;
-    lastMoveTick = now;
-    CVector old = matrix.position;
-    float travelled = moveDistance - remaining;
-    if (step >= remaining)
+    CVector old;
+    float step, remaining, clockDistance, travelled;
     {
-        SetSpeed(velocity);
-        SetTurnSpeed(velocity);
-        matrix.position.x = targetMatrix.position.x;
-        matrix.position.y = targetMatrix.position.y;
-        matrix.position.z = targetMatrix.position.z;
-        if (rotationEnabled)
-            GameQuaternionToMatrix(&targetQuaternion, &matrix);
-        ApplyMatrix(matrix);
-        Stop();
-        return;
+        CVector zero = {0, 0, 0};
+        GetMatrix(&matrix);
+        step = elapsedSeconds * moveSpeed;
+        remaining = GetDistanceToTarget(&matrix);
+        DWORD now = RakNet::GetTime();
+        int elapsedTicks = (int)(now - moveStartTick);
+        clockDistance = ((float)elapsedTicks * 0.001f) * moveSpeed;
+        lastMoveTick = now;
+        old = matrix.position;
+        travelled = moveDistance - remaining;
+        if (step >= remaining)
+        {
+            SetSpeed(zero);
+            SetTurnSpeed(zero);
+            matrix.position.x = targetMatrix.position.x;
+            matrix.position.y = targetMatrix.position.y;
+            matrix.position.z = targetMatrix.position.z;
+            if (rotationEnabled)
+                GameQuaternionToMatrix(&targetQuaternion, &matrix);
+            ApplyMatrix(matrix);
+            Stop();
+            return;
+        }
     }
     if (!(elapsedSeconds > 0.0))
         return;
-    float remainingFraction, progress;
-    CMatrix* moving = &matrix;
-    CVector* previous = &old;
-    // clang-format off
-    // Native retains reciprocal/dx intermediates in ST0 while spilling dy/dz.
-    __asm {
-        mov esi,state
-        mov edx,moving
-        fld remaining
-        fdiv step
-        fdivr g_quaternionMatrixOne
-        fld dword ptr [esi+0x10b]
-        fsub dword ptr [edx+0x30]
-        fmul st,st(1)
-        fld dword ptr [esi+0x10f]
-        fsub dword ptr [edx+0x34]
-        fmul st,st(2)
-        fstp velocity.y
-        fld dword ptr [esi+0x113]
-        fsub dword ptr [edx+0x38]
-        fmul st,st(2)
-        fstp velocity.z
-        fadd dword ptr [edx+0x30]
-        fstp dword ptr [edx+0x30]
-        fstp st
-        fld velocity.y
-        fadd dword ptr [edx+0x34]
-        fstp dword ptr [edx+0x34]
-        fld velocity.z
-        fadd dword ptr [edx+0x38]
-        fstp dword ptr [edx+0x38]
-        // Native A9571 runs with two deferred FloatOffset arguments on stack:
-        // its [esp+28] is the remaining distance, not travelled distance.
-        fld remaining
-        fdiv dword ptr [esi+0x15b]
-        fld g_quaternionMatrixOne
-        fsub st,st(1)
-        fstp progress
-        fstp remainingFraction
-        mov eax,previous
-        fld g_quaternionMatrixOne
-        fdiv elapsedSeconds
-        fld dword ptr [edx+0x30]
-        fsub dword ptr [eax]
-        fmul st,st(1)
-        fld dword ptr [edx+0x34]
-        fsub dword ptr [eax+4]
-        fmul st,st(2)
-        fstp velocity.y
-        fld dword ptr [edx+0x38]
-        fsub dword ptr [eax+8]
-        fmul st,st(2)
-        fstp velocity.z
-        fmul g_pedDrunkShakeScale
-        fstp velocity.x
-        fstp st
-        fld velocity.y
-        fmul g_pedDrunkShakeScale
-        fstp velocity.y
-        fld velocity.z
-        fmul g_pedDrunkShakeScale
-        fstp velocity.z
+    float reciprocal = 1.0f / (remaining / step);
+    {
+        CVector delta;
+        delta.x = (targetMatrix.position.x - matrix.position.x) * reciprocal;
+        delta.y = (targetMatrix.position.y - matrix.position.y) * reciprocal;
+        delta.z = (targetMatrix.position.z - matrix.position.z) * reciprocal;
+        delta.x += matrix.position.x;
+        matrix.position.x = delta.x;
+        delta.y += matrix.position.y;
+        matrix.position.y = delta.y;
+        delta.z += matrix.position.z;
+        matrix.position.z = delta.z;
     }
-    // clang-format on
-    bool correct;
-    // clang-format off
-    __asm {
-        push travelled
-        push clockDistance
-        call FloatOffset
-        add esp,8
-        fcomp g_objectMutationStep
-        fnstsw ax
-        test ah,0x41
-        sete correct
-    }
-    // clang-format on
-    if (correct && (clockDistance > travelled || travelled > clockDistance))
+    float progress = 1.0f - remaining / moveDistance;
+    float remainingFraction = remaining / moveDistance;
+    CVector speed;
+    float inverseElapsed = 1.0f / elapsedSeconds;
+    speed.x = (matrix.position.x - old.x) * inverseElapsed;
+    speed.y = (matrix.position.y - old.y) * inverseElapsed;
+    speed.z = (matrix.position.z - old.z) * inverseElapsed;
+    speed.x *= 0.02f;
+    speed.y *= 0.02f;
+    speed.z *= 0.02f;
+    if (FloatOffset(clockDistance, travelled) > 0.1f)
     {
         if (clockDistance > travelled)
         {
-            // clang-format off
-            __asm {
-                fld clockDistance
-                fsub travelled
-                fmul g_objectMutationStep
-                fadd g_quaternionMatrixOne
-            }
-            // clang-format on
+            float correction = (clockDistance - travelled) * 0.1f + 1.0f;
+            speed.x *= correction;
+            speed.y *= correction;
+            speed.z *= correction;
         }
-        else
+        else if (travelled > clockDistance)
         {
-            // clang-format off
-            __asm {
-                fld travelled
-                fsub clockDistance
-                fmul g_objectMutationStep
-                fsubr g_quaternionMatrixOne
-            }
-            // clang-format on
+            float correction = 1.0f - (travelled - clockDistance) * 0.1f;
+            speed.x *= correction;
+            speed.y *= correction;
+            speed.z *= correction;
         }
-        // clang-format off
-        __asm {
-            fld velocity.x
-            fmul st,st(1)
-            fstp velocity.x
-            fld velocity.y
-            fmul st,st(1)
-            fstp velocity.y
-            fmul velocity.z
-            fstp velocity.z
-        }
-        // clang-format on
     }
-    SetSpeed(velocity);
+    SetSpeed(speed);
     ApplyLinearSpeed();
     CMatrix current;
     if (rotationEnabled)
@@ -539,7 +468,10 @@ void CObject::Process(float elapsedSeconds)
         float x, y, z;
         GetEulerInverted(&x, &y, &z);
         float desired = targetEuler.z - remainingFraction * angleDelta.z;
-        CVector turn = {0, 0, GetAngleDifference(z, desired) * g_objectTurnVelocityScale};
+        CVector turn;
+        turn.z = GetAngleDifference(z, desired) * g_objectTurnVelocityScale;
+        turn.x = 0;
+        turn.y = 0;
         if (turn.z > 0.001f)
             turn.z = 0.001f;
         else if (turn.z < g_objectNegativeTurnVelocityLimit)
@@ -549,10 +481,13 @@ void CObject::Process(float elapsedSeconds)
         GameQuaternionSlerp(&interpolatedQuaternion, &startQuaternion, &targetQuaternion, progress);
         GameQuaternionNormalize(&interpolatedQuaternion);
         GameQuaternionToMatrix(&interpolatedQuaternion, &current);
+        ApplyMatrix(current);
     }
     else
+    {
         GetMatrix(&current);
-    ApplyMatrix(current);
+        ApplyMatrix(current);
+    }
 }
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -676,7 +611,7 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
         model = 18631;
     void* info = GameGetModelInfo(model);
     drawLast = (GameGetModelFlagsByte(model) >> 1) & 1;
-    if (drawDistance != g_objectScaleLowerBound && info && GameIsObjectModelInfo(info))
+    if (drawDistance != 0.0f && info && GameIsObjectModelInfo(info))
         GameSetModelDrawDistance(info, drawDistance);
     if (model < 0)
     {
@@ -847,18 +782,24 @@ BOOL CObject::IsMoving()
     WORD object = attachedObject;
     if (object != 0xffff)
     {
-        if (!g_pNetGame)
-            return FALSE;
-        BYTE *pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de), *pool = *(BYTE**)(pools + 0x14);
-        // Native accepts id2100 as well; the adjacent-state layout is unproven.
-        if (!pool || object > 2100 || !*(DWORD*)(pool + 4 + object * 4))
-            return FALSE;
-        BYTE* attached = *(BYTE**)(pool + 0x20d4 + object * 4);
-        return attached && (((CObject*)attached)->motionFlags & 1) ? TRUE : FALSE;
+        if (g_pNetGame)
+        {
+            BYTE *pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de), *pool = *(BYTE**)(pools + 0x14);
+            // Native accepts id2100 as well; the adjacent-state layout is unproven.
+            if (pool && object <= 2100 && *(DWORD*)(pool + 4 + object * 4))
+            {
+                CObject* attached = *(CObject**)(pool + 0x20d4 + object * 4);
+                if (attached && (attached->motionFlags & 1))
+                    return TRUE;
+            }
+        }
+        return FALSE;
     }
     if (attachedVehicle != 0xffff)
         return TRUE;
-    return (unsigned int)motionFlags & 1;
+    if (motionFlags & 1)
+        return TRUE;
+    return FALSE;
 }
 
 // 0x000a8430
