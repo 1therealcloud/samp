@@ -1382,3 +1382,21 @@ void __stdcall GameWorldRemove(void* entity)
     }
     // clang-format on
 }
+
+// 0x000b3830
+void* __stdcall GamePoolObjectGetAt(int handle)
+{
+    void* result;
+    // GTA SA object pool B7449C and lookup465040, native thiscall bridge.
+    // clang-format off
+    __asm {
+        mov ebx,0xb7449c
+        mov ecx,[ebx]
+        push handle
+        mov ebx,0x465040
+        call ebx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}

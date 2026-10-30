@@ -1,4 +1,5 @@
 #include "game/object.h"
+#include <math.h>
 #include <string.h>
 // 0x000715c0
 CVector* CObject::GetRotation()
@@ -13,22 +14,6 @@ void CObject::DisableCameraCollision()
 #include "game/scripting.h"
 // 0x0011edfc
 const Scripting::OpcodeInfo g_objectSetRotationCommand = {0x453, "ifff"};
-// 0x000b3830
-void* __stdcall GamePoolObjectGetAt(int handle)
-{
-    void* result;
-    // clang-format off
-    // GTA SA virtual addresses: object pool pointer B7449C, lookup 465040.
-    __asm {
-        mov ecx,dword ptr ds:[0xb7449c]
-        push handle
-        mov eax,0x465040
-        call eax
-        mov result,eax
-    }
-    // clang-format on
-    return result;
-}
 // 0x000a7c90
 void CObject::SetRotation(const CVector* rotation)
 {
@@ -60,7 +45,9 @@ void CObject::Stop()
 // 0x000a7bf0
 float CObject::GetAngleDifference(float from, float to)
 {
-    return GameNormalizeAngle(GameNormalizeAngle(to) - from);
+    to = GameNormalizeAngle(to);
+    to -= from;
+    return GameNormalizeAngle(to);
 }
 // 0x0011e648
 extern const float g_objectDegreesToRadians = 0.01745329238474369f;
@@ -160,31 +147,10 @@ extern const Scripting::OpcodeInfo g_objectAttachObjectCommand = {0x69a, "iiffff
 // 0x000a7bb0
 float CObject::GetDistanceToTarget(const CMatrix* matrix)
 {
-    BYTE* state = (BYTE*)this;
-    // clang-format off
-    __asm {
-        mov ecx,state
-        mov eax,matrix
-        fld dword ptr [eax+0x38]
-        fsub dword ptr [ecx+0x113]
-        fld dword ptr [eax+0x34]
-        fsub dword ptr [ecx+0x10f]
-        fld dword ptr [eax+0x30]
-        fsub dword ptr [ecx+0x10b]
-        fld st
-        fmul st,st(1)
-        fld st(2)
-        fmul st,st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st,st(4)
-        faddp st(1),st
-        fsqrt
-        fstp st(3)
-        fstp st
-        fstp st
-    }
-    // clang-format on
+    float z = matrix->position.z - targetMatrix.position.z;
+    float y = matrix->position.y - targetMatrix.position.y;
+    float x = matrix->position.x - targetMatrix.position.x;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 // 0x000a7e30
 void CObject::AttachToVehicle(CVehicle* vehicle)
@@ -213,18 +179,20 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     if (motionFlags & 1)
     {
         Stop();
-        memcpy(&matrix.position, &targetMatrix.position, 12);
+        matrix.position.x = targetMatrix.position.x;
+        matrix.position.y = targetMatrix.position.y;
+        matrix.position.z = targetMatrix.position.z;
         if (rotationEnabled)
             GameQuaternionToMatrix(&targetQuaternion, &matrix);
         ApplyMatrix(matrix);
     }
     DWORD tick = RakNet::GetTime();
     moveStartTick = tick;
-    memcpy(&targetMatrix.position.x, &position.x, 4);
-    memcpy(&moveSpeed, &speed, 4);
+    targetMatrix.position.x = position.x;
+    moveSpeed = speed;
     motionFlags |= 1;
-    memcpy(&targetMatrix.position.y, &position.y, 4);
-    memcpy(&targetMatrix.position.z, &position.z, 4);
+    targetMatrix.position.y = position.y;
+    targetMatrix.position.z = position.z;
     if (rotation.x > g_objectMotionRotationSentinel && rotation.y > g_objectMotionRotationSentinel && rotation.z > g_objectMotionRotationSentinel)
     {
         rotationEnabled = 1;
@@ -363,15 +331,21 @@ void CObject::ShutdownMaterialText()
 bool CObject::IsTimeVisible()
 {
     BYTE hour = 0, minute = 0;
-    if (!timeVisibilityEnabled)
-        return false;
-    if (g_pGame)
-        g_pGame->GetWorldTime(&hour, &minute);
-    BYTE first = visibilityStartHour, last = visibilityEndHour;
-    if (last > first)
-        return hour >= first && hour < last;
-    if (last < first)
-        return hour >= first || hour < last;
+    if (timeVisibilityEnabled)
+    {
+        if (g_pGame)
+            g_pGame->GetWorldTime(&hour, &minute);
+        if (visibilityEndHour > visibilityStartHour)
+        {
+            if (hour >= visibilityStartHour && hour < visibilityEndHour)
+                return true;
+        }
+        else if (visibilityEndHour < visibilityStartHour)
+        {
+            if (hour >= visibilityStartHour || hour < visibilityEndHour)
+                return true;
+        }
+    }
     return false;
 }
 // 0x000a8b90
@@ -527,7 +501,9 @@ void CObject::Process(float elapsedSeconds)
     {
         SetSpeed(velocity);
         SetTurnSpeed(velocity);
-        memcpy(&matrix.position, &targetMatrix.position, 12);
+        matrix.position.x = targetMatrix.position.x;
+        matrix.position.y = targetMatrix.position.y;
+        matrix.position.z = targetMatrix.position.z;
         if (rotationEnabled)
             GameQuaternionToMatrix(&targetQuaternion, &matrix);
         ApplyMatrix(matrix);
@@ -718,8 +694,9 @@ CObject::~CObject()
             if (*texture && *texture != g_objectSharedMaterialTexture)
             {
                 GameDestroyTextDrawTexture(*texture);
+                DWORD raster = materials.rasterField34[i];
                 *texture = 0;
-                if (materials.rasterField34[i])
+                if (raster)
                     materials.rasterField34[i] = 0;
             }
             char** text = &materials.text[i];
@@ -752,7 +729,11 @@ void CObject::UpdateCachedCentre()
         if (GameGetModelCollisionCentre(modelIndex, &centre))
             GameTransformPoint(&worldCentre, &matrix, &centre);
         else
-            memcpy(&worldCentre, &matrix.position, 12);
+        {
+            worldCentre.x = matrix.position.x;
+            worldCentre.y = matrix.position.y;
+            worldCentre.z = matrix.position.z;
+        }
     }
 }
 // 0x000a8d00
@@ -856,16 +837,18 @@ BOOL CObject::IsAdded()
 // 0x000a8c30
 void CObject::NativeA8C30()
 {
-    // GTA SA virtual address: excluded backend vtable 0x00863c40.
-    if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
+    if (m_pEntity && m_pEntity->vtable != 0x863c40)
     {
         *(DWORD*)((BYTE*)m_pGameEntity + 0x1c) |= 0x10000000;
+        DWORD table = m_pEntity->vtable;
         void* backend = m_pGameEntity;
-        DWORD* table = *(DWORD**)backend;
+        // GTA slot19; native reloads the backend after the flag write.
         // clang-format off
-        __asm {mov ecx,backend}
-        __asm {mov eax,table}
-        __asm {call dword ptr [eax+0x4c]}
+        __asm {
+            mov eax,table
+            mov ecx,backend
+            call dword ptr [eax+0x4c]
+        }
         // clang-format on
         ((BYTE*)this)[0x1194] = 1;
     }
@@ -873,23 +856,25 @@ void CObject::NativeA8C30()
 // 0x000a8c70
 void CObject::NativeA8C70()
 {
-    // GTA SA virtual address: excluded backend vtable 0x00863c40.
-    if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && ((BYTE*)this)[0x1194])
+    if (m_pEntity && m_pEntity->vtable != 0x863c40 && ((BYTE*)this)[0x1194])
     {
+        DWORD table = m_pEntity->vtable;
         void* backend = m_pGameEntity;
-        DWORD* table = *(DWORD**)backend;
+        // GTA slot20, one callee-popped integer argument.
         // clang-format off
-        __asm {push 1}
-        __asm {mov ecx,backend}
-        __asm {mov eax,table}
-        __asm {call dword ptr [eax+0x50]} // clang-format on
+        __asm {
+            push 1
+            mov eax,table
+            mov ecx,backend
+            call dword ptr [eax+0x50]
+        }
+        // clang-format on
         ((BYTE*)this)[0x1194] = 0;
     }
 }
 // 0x000a8cc0
 bool CObject::HasRwFrameFlag8()
 {
-    // GTA SA virtual address: excluded backend vtable 0x00863c40.
     if (!m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40)
         return false;
     BYTE* rw = (BYTE*)GetRwObject();
@@ -899,19 +884,22 @@ bool CObject::HasRwFrameFlag8()
     if (!frame || *frame != 1)
         return false;
     BYTE* data = *(BYTE**)(frame + 0x18);
-    return data && (data[8] & 8) != 0;
+    if (data && (data[8] & 8))
+        return true;
+    return false;
 }
 
 // 0x000a7d00
 void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* rotation)
 {
-    attachedVehicle = id;
     if (id == 0xffff)
     {
+        attachedVehicle = id;
         for (int i = 0; i < 6; ++i)
             ((DWORD*)&attachmentOffset)[i] = 0;
         return;
     }
+    attachedVehicle = id;
     for (int i = 0; i < 3; ++i)
         ((DWORD*)&attachmentOffset)[i] = *(const DWORD*)((const BYTE*)offset + i * 4);
     for (int i = 0; i < 3; ++i)
@@ -920,15 +908,16 @@ void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* 
 // 0x000a7d90
 void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* rotation, BYTE flag)
 {
-    attachedObject = id;
     if (id == 0xffff)
     {
+        attachedObject = id;
         for (int i = 0; i < 5; ++i)
             ((DWORD*)&attachmentOffset)[i] = 0;
         attachmentRotationSync = 1;
         *(DWORD*)&attachmentRotation.z = 0;
         return;
     }
+    attachedObject = id;
     for (int i = 0; i < 3; ++i)
         ((DWORD*)&attachmentOffset)[i] = *(const DWORD*)((const BYTE*)offset + i * 4);
     for (int i = 0; i < 2; ++i)
@@ -954,7 +943,7 @@ BOOL CObject::IsMoving()
     }
     if (attachedVehicle != 0xffff)
         return TRUE;
-    return motionFlags & 1;
+    return (unsigned int)motionFlags & 1;
 }
 
 // 0x000a8430
@@ -1224,10 +1213,9 @@ void CObject::UpdateAttachedObjectRotation()
     if (attachedObject == 0xffff || attachmentRotationSync)
         return;
     GetMatrix(&g_objectAttachmentMatrix);
-    DWORD *out = (DWORD*)&g_objectAttachmentMatrix, *in = (DWORD*)&baseMatrix;
-    for (int column = 0; column < 3; ++column)
-        for (int row = 0; row < 3; ++row)
-            out[column * 4 + row] = in[column * 4 + row];
+    g_objectAttachmentMatrix.right = baseMatrix.right;
+    g_objectAttachmentMatrix.up = baseMatrix.up;
+    g_objectAttachmentMatrix.at = baseMatrix.at;
     GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix, 0, attachmentRotation.x);
     GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix, 1, attachmentRotation.y);
     GameRotateRwMatrixOnAxis(&g_objectAttachmentMatrix, 2, attachmentRotation.z);
@@ -1245,17 +1233,24 @@ BYTE g_objectRenderFlag;
 // 0x000a8b50
 void CObject::NativeA8B50()
 {
-    void* backend = m_pGameEntity;
-    // GTA SA virtual addresses: excluded vtable, backend post-call helper.
-    if (!backend || *(DWORD*)backend == 0x863c40)
+    if (!m_pEntity)
         return;
-    DWORD* table = *(DWORD**)backend;
+    DWORD table = m_pEntity->vtable;
+    if (table == 0x863c40)
+        return;
+    void* backend = m_pGameEntity;
+    // Native GTA slot17 followed by cdecl backend553260.
     // clang-format off
-    __asm {mov ecx,backend}
-    __asm {mov eax,table}
-    __asm {call dword ptr [eax+0x44]}
+    __asm {
+        mov eax,table
+        mov ecx,backend
+        call dword ptr [eax+0x44]
+        push backend
+        mov edx,0x553260
+        call edx
+        pop edx
+    }
     // clang-format on
-    ((void(__cdecl*)(void*))0x553260)(backend);
 }
 // 0x000a9b80
 void CObject::Render()
@@ -1332,21 +1327,27 @@ void CObject::ProcessFrameObjectsOnce()
 // 0x000a7f30
 void CObject::AttachToBackend(void* target, const CVector* offset, const CVector* rotation)
 {
-    void* backend = m_pGameEntity;
-    if (!backend || !target)
+    DWORD entity = (DWORD)m_pGameEntity;
+    DWORD other = (DWORD)target;
+    if (!entity || !other)
         return;
-    float x, y, z;
+    float rx = rotation->x * g_objectDegreesToRadians;
+    float ry = rotation->y * g_objectDegreesToRadians;
+    float rz = rotation->z * g_objectDegreesToRadians;
+    float x = offset->x, y = offset->y, z = offset->z;
+    // GTA SA virtual address54D570: ECX receiver, seven callee-popped words.
     // clang-format off
-    __asm {mov eax,rotation}
-    __asm {fld dword ptr [eax]}
-    __asm {fmul g_objectDegreesToRadians}
-    __asm {fstp x}
-    __asm {fld dword ptr [eax+4]}
-    __asm {fmul g_objectDegreesToRadians}
-    __asm {fstp y}
-    __asm {fld dword ptr [eax+8]}
-    __asm {fmul g_objectDegreesToRadians}
-    __asm {fstp z} // clang-format on
-    // GTA SA virtual address: native entity attachment backend (thiscall).
-    ((void(__fastcall*)(void*, void*, void*, float, float, float, float, float, float))0x54d570)(backend, 0, target, offset->x, offset->y, offset->z, x, y, z);
+    __asm {
+        push rz
+        push ry
+        push rx
+        push z
+        push y
+        push x
+        push other
+        mov ecx,entity
+        mov edx,0x54d570
+        call edx
+    }
+    // clang-format on
 }
