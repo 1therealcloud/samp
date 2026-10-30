@@ -2,6 +2,77 @@
 #include <math.h>
 #include <stddef.h>
 #include <string.h>
+// Only the observed RenderWare prefixes used by these callbacks are described.
+// The complete backend layouts and ownership remain outside these views.
+enum ObjectRwObservedFlags
+{
+    ObjectRwAtomicType = 1,
+    ObjectRwGeometryPrelit = 0x08,
+    ObjectRwGeometryModulateMaterialColor = 0x40
+};
+struct ObjectRwObjectPrefix
+{
+    BYTE type, subType, flags, privateFlags;
+    void* parent;
+};
+typedef char ObjectRwObjectExtent[(sizeof(ObjectRwObjectPrefix) == 8) ? 1 : -1];
+typedef char ObjectRwObjectParentOffset[(offsetof(ObjectRwObjectPrefix, parent) == 4) ? 1 : -1];
+struct ObjectRwTexturePrefix
+{
+    void* raster;
+    BYTE unknown04[0x4c];
+    // Whole raw filtering/addressing word; native increments all32 bits.
+    DWORD filterAddressing;
+};
+typedef char ObjectRwTextureRasterOffset[(offsetof(ObjectRwTexturePrefix, raster) == 0) ? 1 : -1];
+typedef char ObjectRwTextureFilterOffset[(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50) ? 1 : -1];
+struct ObjectRwColor
+{
+    BYTE red, green, blue, alpha;
+};
+struct ObjectRwSurface
+{
+    float ambient, specular, diffuse;
+};
+struct ObjectRwMaterialPrefix
+{
+    void* texture;
+    ObjectRwColor color;
+    void* pipeline;
+    ObjectRwSurface surface;
+};
+struct ObjectRwMaterialListPrefix
+{
+    ObjectRwMaterialPrefix** materials;
+    int count;
+};
+struct ObjectRwGeometryPrefix
+{
+    BYTE unknown00[8];
+    DWORD flags;
+    BYTE unknown0c[20];
+    ObjectRwMaterialListPrefix materialList;
+};
+struct ObjectRwAtomicPrefix
+{
+    ObjectRwObjectPrefix object;
+    BYTE unknown08[0x10];
+    ObjectRwGeometryPrefix* geometry;
+};
+typedef char ObjectRwColorSize[(sizeof(ObjectRwColor) == 4) ? 1 : -1];
+typedef char ObjectRwSurfaceSize[(sizeof(ObjectRwSurface) == 12) ? 1 : -1];
+typedef char ObjectRwMaterialTextureOffset[(offsetof(ObjectRwMaterialPrefix, texture) == 0) ? 1 : -1];
+typedef char ObjectRwMaterialColorOffset[(offsetof(ObjectRwMaterialPrefix, color) == 4) ? 1 : -1];
+typedef char ObjectRwMaterialSurfaceOffsets[(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
+                                             offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14)
+                                                ? 1
+                                                : -1];
+typedef char ObjectRwGeometryOffsets[(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
+                                      offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24)
+                                         ? 1
+                                         : -1];
+typedef char ObjectRwAtomicGeometryOffset[(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18) ? 1 : -1];
+
 // 0x000715c0
 CVector* CObject::GetRotation()
 {
@@ -737,11 +808,13 @@ bool CObject::HasRwFrameFlag8()
     BYTE* rw = (BYTE*)GetRwObject();
     if (!rw)
         return false;
-    BYTE* frame = *(BYTE**)(rw + 4);
-    if (!frame || *frame != 1)
+    // Native follows parent, then requires an atomic (type1), not a frame(type0).
+    // Preserve that unusual path instead of treating the parent as a normal RwFrame.
+    ObjectRwAtomicPrefix* parent = (ObjectRwAtomicPrefix*)((ObjectRwObjectPrefix*)rw)->parent;
+    if (!parent || parent->object.type != ObjectRwAtomicType)
         return false;
-    BYTE* data = *(BYTE**)(frame + 0x18);
-    if (data && (data[8] & 8))
+    ObjectRwGeometryPrefix* geometry = parent->geometry;
+    if (geometry && (geometry->flags & ObjectRwGeometryPrelit))
         return true;
     return false;
 }
@@ -810,68 +883,11 @@ BOOL CObject::IsMoving()
     return FALSE;
 }
 
-// Only the observed RenderWare prefixes used by these callbacks are described.
-// The complete backend layouts and ownership remain outside these views.
-struct ObjectRwTexturePrefix
-{
-    void* raster;
-    BYTE unknown04[0x4c];
-    // Whole raw filtering/addressing word; native increments all32 bits.
-    DWORD filterAddressing;
-};
-typedef char ObjectRwTextureRasterOffset[(offsetof(ObjectRwTexturePrefix, raster) == 0) ? 1 : -1];
-typedef char ObjectRwTextureFilterOffset[(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50) ? 1 : -1];
-struct ObjectRwColor
-{
-    BYTE red, green, blue, alpha;
-};
-struct ObjectRwSurface
-{
-    float ambient, specular, diffuse;
-};
-struct ObjectRwMaterialPrefix
-{
-    void* texture;
-    ObjectRwColor color;
-    void* pipeline;
-    ObjectRwSurface surface;
-};
-struct ObjectRwMaterialListPrefix
-{
-    ObjectRwMaterialPrefix** materials;
-    int count;
-};
-struct ObjectRwGeometryPrefix
-{
-    BYTE unknown00[8];
-    DWORD flags;
-    BYTE unknown0c[20];
-    ObjectRwMaterialListPrefix materialList;
-};
-struct ObjectRwAtomicPrefix
-{
-    BYTE type;
-    BYTE unknown01[23];
-    ObjectRwGeometryPrefix* geometry;
-};
-typedef char ObjectRwColorSize[(sizeof(ObjectRwColor) == 4) ? 1 : -1];
-typedef char ObjectRwSurfaceSize[(sizeof(ObjectRwSurface) == 12) ? 1 : -1];
-typedef char ObjectRwMaterialTextureOffset[(offsetof(ObjectRwMaterialPrefix, texture) == 0) ? 1 : -1];
-typedef char ObjectRwMaterialColorOffset[(offsetof(ObjectRwMaterialPrefix, color) == 4) ? 1 : -1];
-typedef char ObjectRwMaterialSurfaceOffsets[(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
-                                             offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14)
-                                                ? 1
-                                                : -1];
-typedef char ObjectRwGeometryOffsets[(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
-                                      offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24)
-                                         ? 1
-                                         : -1];
-typedef char ObjectRwAtomicGeometryOffset[(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18) ? 1 : -1];
 // 0x000a8430
 void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
-    if (a->type != 1)
+    if (a->object.type != ObjectRwAtomicType)
         return atomic;
     if (a->geometry)
     {
@@ -894,8 +910,8 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
                 }
                 if (state->materials.colors[i])
                 {
-                    a->geometry->flags |= 0x40;
-                    a->geometry->flags &= ~8;
+                    a->geometry->flags |= ObjectRwGeometryModulateMaterialColor;
+                    a->geometry->flags &= ~ObjectRwGeometryPrelit;
                     material->surface.ambient = 1.0f;
                     material->surface.specular = 0.0f;
                     material->surface.diffuse = 1.0f;
@@ -911,7 +927,7 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
-    if (a->type != 1 || !a->geometry)
+    if (a->object.type != ObjectRwAtomicType || !a->geometry)
         return atomic;
     CObject* state = (CObject*)object;
     if (!state)
@@ -935,7 +951,7 @@ void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
 void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
-    if (a->type != 1 || !a->geometry)
+    if (a->object.type != ObjectRwAtomicType || !a->geometry)
         return atomic;
     CObject* state = (CObject*)object;
     if (!state)
@@ -971,7 +987,7 @@ void CObject::ProcessMaterials()
     if (materials.rwObject != rw)
     {
         materials.snapshotValid = 0;
-        void* frame = *(void**)(rw + 4);
+        void* frame = ((ObjectRwObjectPrefix*)rw)->parent;
         if (!frame)
             return;
         GameRwForAllFrameObjects(frame, ObjectSaveMaterials, this);
@@ -981,7 +997,7 @@ void CObject::ProcessMaterials()
     }
     g_deviceMaterialOverrideEnabled = 1;
     g_deviceMaterialOverrides = state;
-    void* frame = *(void**)(rw + 4);
+    void* frame = ((ObjectRwObjectPrefix*)rw)->parent;
     if (frame)
         GameRwForAllFrameObjects(frame, ObjectApplyMaterials, this);
 }
@@ -1114,7 +1130,7 @@ void CObject::AfterMaterialRender()
     BYTE* rw = (BYTE*)GetRwObject();
     if (!rw || materials.rwObject != rw)
         return;
-    void* frame = *(void**)(rw + 4);
+    void* frame = ((ObjectRwObjectPrefix*)rw)->parent;
     if (frame)
         GameRwForAllFrameObjects(frame, ObjectRestoreMaterials, this);
 }
@@ -1230,7 +1246,7 @@ void CObject::ProcessFrameObjectsOnce()
     BYTE* rw = (BYTE*)GetRwObject();
     if (!rw || materials.frameObjectsProcessed)
         return;
-    void* frame = *(void**)(rw + 4);
+    void* frame = ((ObjectRwObjectPrefix*)rw)->parent;
     if (!frame)
         return;
     GameRwForAllFrameObjects(frame, ObjectFrameIdentity, this);
