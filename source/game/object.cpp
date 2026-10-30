@@ -356,21 +356,8 @@ void CObject::Process(float elapsedSeconds)
     {
         if (!GetRwObject() && g_pGame->GetPlayerPed()->IsInVehicle())
         {
-            bool within;
-            // clang-format off
-            __asm {
-                mov ecx,state
-                call CEntity::GetDistanceToCamera
-                mov edx,state
-                fld dword ptr [edx+0x54]
-                fsub g_objectStreamingVehicleMargin
-                fcompp
-                fnstsw ax
-                test ah,0x41
-                sete within
-            }
-            // clang-format on
-            if (within && !g_pGame->IsModelAvailable(modelIndex)) g_pGame->RequestModel(modelIndex, 2);
+            if (GetDistanceToCamera() < streamingDistance - g_objectStreamingVehicleMargin && !g_pGame->IsModelAvailable(modelIndex))
+                g_pGame->RequestModel(modelIndex, 2);
         }
     }
     else
@@ -411,18 +398,8 @@ void CObject::Process(float elapsedSeconds)
     float remaining = GetDistanceToTarget(&matrix);
     DWORD now = RakNet::GetTime();
     int elapsedTicks = (int)(now - moveStartTick);
-    float clockDistance;
-    // clang-format off
-    __asm {
-        fild elapsedTicks
-        fmul g_objectPoolSecondsPerTick
-        mov eax,now
-        mov edx,state
-        mov dword ptr [edx+0x163],eax
-        fmul dword ptr [edx+0x1b0]
-        fstp clockDistance
-    }
-    // clang-format on
+    float clockDistance = ((float)elapsedTicks * 0.001f) * moveSpeed;
+    lastMoveTick = now;
     CVector old = matrix.position;
     float travelled = moveDistance - remaining;
     if (step >= remaining)
@@ -438,7 +415,7 @@ void CObject::Process(float elapsedSeconds)
         Stop();
         return;
     }
-    if (!(elapsedSeconds > 0.0f))
+    if (!(elapsedSeconds > 0.0))
         return;
     float remainingFraction, progress;
     CMatrix* moving = &matrix;
@@ -563,8 +540,8 @@ void CObject::Process(float elapsedSeconds)
         GetEulerInverted(&x, &y, &z);
         float desired = targetEuler.z - remainingFraction * angleDelta.z;
         CVector turn = {0, 0, GetAngleDifference(z, desired) * g_objectTurnVelocityScale};
-        if (turn.z > g_objectPoolSecondsPerTick)
-            turn.z = g_objectPoolSecondsPerTick;
+        if (turn.z > 0.001f)
+            turn.z = 0.001f;
         else if (turn.z < g_objectNegativeTurnVelocityLimit)
             turn.z = g_objectNegativeTurnVelocityLimit;
         SetTurnSpeed(turn);

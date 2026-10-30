@@ -312,7 +312,7 @@ IDirect3DTexture9* CLicensePlate::Create(const char* text)
 
 // 0x00070350
 IDirect3DTexture9* CObjectMaterialText::Create(const char* text, const char* face, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold,
-                                               unsigned alignment)
+                                               BYTE alignment)
 {
     if (!device || !g_deviceFonts)
         return 0;

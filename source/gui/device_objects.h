@@ -24,7 +24,7 @@ class CObjectMaterialText
 {
 public:
     // 0x00070350
-    IDirect3DTexture9* Create(const char* text, const char* font, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold, unsigned alignment);
+    IDirect3DTexture9* Create(const char* text, const char* font, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold, BYTE alignment);
     // 0x00070320
     CObjectMaterialText(IDirect3DDevice9* device);
     // 0x00070340
