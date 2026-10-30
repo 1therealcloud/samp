@@ -100,14 +100,14 @@ BOOL CGame::IsStarted()
 void CGame::SetFrameLimiter(int value)
 {
     m_nFrameLimiter = value;
-    GameUnprotect((void*)0xc1704c, 4);
+    UnFuck((void*)0xc1704c, 4);
     *(DWORD*)0xc1704c = 200;
 }
 // 0x000a1280
 void CGame::EnableClock(bool enable)
 {
-    GameUnprotect((void*)0x859a6c, 10);
-    GameUnprotect((void*)0x52cf10, 1);
+    UnFuck((void*)0x859a6c, 10);
+    UnFuck((void*)0x52cf10, 1);
     if (enable)
     {
         *(BYTE*)0x52cf10 = 0x56;
@@ -234,7 +234,7 @@ void CGame::EnableZoneDisplaying(BYTE enabled)
 void CGame::EnableStuntBonus(BYTE enabled)
 {
     // GTA SA virtual address: 0x00a4a474.
-    GameUnprotect((void*)0xa4a474, 4);
+    UnFuck((void*)0xa4a474, 4);
     *(DWORD*)0xa4a474 = enabled;
 }
 
@@ -242,7 +242,7 @@ void CGame::EnableStuntBonus(BYTE enabled)
 void CGame::SetWorldGravity(float gravity)
 {
     // GTA SA virtual address: 0x00863984; store raw float bits without x87 conversion.
-    GameUnprotect((void*)0x863984, 4);
+    UnFuck((void*)0x863984, 4);
     *(DWORD*)0x863984 = *(DWORD*)&gravity;
 }
 
@@ -278,9 +278,9 @@ void* CGame::GetWeaponInfo(int weapon, int skill)
 void CGame::DisableAutoAiming()
 {
     // GTA SA virtual addresses: 0x0060dc50 and 0x0060e530..0x0060e532.
-    GameUnprotect((void*)0x60dc50, 1);
+    UnFuck((void*)0x60dc50, 1);
     *(BYTE*)0x60dc50 = 0xc3;
-    GameUnprotect((void*)0x60e530, 3);
+    UnFuck((void*)0x60e530, 3);
     *(BYTE*)0x60e530 = 0xc2;
     *(BYTE*)0x60e531 = 8;
     *(BYTE*)0x60e532 = 0;
@@ -646,7 +646,7 @@ BYTE g_gameMouseCallEU[5] = {0xe8, 0x04, 0x7b, 0x20, 0x00};
 BYTE g_gameMouseCallUS[5] = {0xe8, 0xb4, 0x7a, 0x20, 0x00};
 
 // 0x000aa0b0
-void GameUnprotect(void* address, SIZE_T size)
+void UnFuck(void* address, SIZE_T size)
 {
     DWORD oldProtect;
     VirtualProtect(address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
@@ -669,9 +669,9 @@ void GameDisableMousePointers()
     *(DWORD*)0xb7340c = 0;
     *(DWORD*)0xb73410 = 0;
     *(DWORD*)0xb73414 = 0;
-    GameUnprotect((void*)0x53f47a, 4);
-    GameUnprotect((void*)0x53f49a, 4);
-    GameUnprotect((void*)0x53f4b3, 4);
+    UnFuck((void*)0x53f47a, 4);
+    UnFuck((void*)0x53f49a, 4);
+    UnFuck((void*)0x53f4b3, 4);
     *(DWORD*)0x53f47a = (DWORD)&g_gameMouseDummy;
     *(DWORD*)0x53f49a = (DWORD)&g_gameMouseDummy;
     *(DWORD*)0x53f4b3 = (DWORD)&g_gameMouseDummy;
@@ -679,9 +679,9 @@ void GameDisableMousePointers()
 // 0x000a0370
 void GameRestoreMousePointers()
 {
-    GameUnprotect((void*)0x53f47a, 4);
-    GameUnprotect((void*)0x53f49a, 4);
-    GameUnprotect((void*)0x53f4b3, 4);
+    UnFuck((void*)0x53f47a, 4);
+    UnFuck((void*)0x53f49a, 4);
+    UnFuck((void*)0x53f4b3, 4);
     *(DWORD*)0x53f47a = 0xb73410;
     *(DWORD*)0x53f49a = 0xb73414;
     *(DWORD*)0x53f4b3 = 0xb7340c;
@@ -689,9 +689,9 @@ void GameRestoreMousePointers()
 // 0x000a03c0
 void GameDisableMouseCalls()
 {
-    GameUnprotect((void*)0x53f417, 5);
+    UnFuck((void*)0x53f417, 5);
     memset((void*)0x53f417, 0x90, 5);
-    GameUnprotect((void*)0x53f41f, 4);
+    UnFuck((void*)0x53f41f, 4);
     *(BYTE*)0x53f41f = 0x33;
     *(BYTE*)0x53f420 = 0xc0;
     *(BYTE*)0x53f421 = 0x0f;
@@ -708,12 +708,12 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
     CGame* state = this;
     if (mode == 2)
     {
-        GameUnprotect((void*)0x541df5, 5);
+        UnFuck((void*)0x541df5, 5);
         memset((void*)0x541df5, 0x90, 5);
         GameDisableMouseCalls();
         GameClearMouseDelta();
         GameUpdateMouse();
-        GameUnprotect((void*)0x6194a0, 1);
+        UnFuck((void*)0x6194a0, 1);
         *(BYTE*)0x6194a0 = 0xc3;
         g_gameD3DDevice->ShowCursor(TRUE);
         state->m_nCursorMode = 2;
@@ -722,7 +722,7 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
     {
         if (state->m_nCursorMode != 1)
         {
-            GameUnprotect((void*)0x541df5, 5);
+            UnFuck((void*)0x541df5, 5);
             memset((void*)0x541df5, 0x90, 5);
             state->m_nCursorMode = 1;
         }
@@ -734,7 +734,7 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
             GameDisableMouseCalls();
             GameClearMouseDelta();
             GameUpdateMouse();
-            GameUnprotect((void*)0x6194a0, 1);
+            UnFuck((void*)0x6194a0, 1);
             *(BYTE*)0x6194a0 = 0xc3;
             g_gameD3DDevice->ShowCursor(TRUE);
             state->m_nCursorMode = 3;
@@ -747,7 +747,7 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
             GameDisableMousePointers();
             GameClearMouseDelta();
             GameUpdateMouse();
-            GameUnprotect((void*)0x6194a0, 1);
+            UnFuck((void*)0x6194a0, 1);
             *(BYTE*)0x6194a0 = 0xc3;
             state->m_nCursorMode = 4;
         }
@@ -767,13 +767,13 @@ void CGame::ProcessInputEnabling()
     {
         if (state->m_nInputEnableWaitFrames == 0)
         {
-            GameUnprotect((void*)0x541df5, 5);
+            UnFuck((void*)0x541df5, 5);
             memcpy((void*)0x541df5, g_gameKeyCall, 5);
-            GameUnprotect((void*)0x53f417, 5);
+            UnFuck((void*)0x53f417, 5);
             memcpy((void*)0x53f417, g_gameVersion == 1 ? g_gameMouseCallUS : g_gameMouseCallEU, 5);
             GameRestoreMousePointers();
             // Native changes protection at +2, then writes the four-byte instruction.
-            GameUnprotect((void*)0x53f421, 4);
+            UnFuck((void*)0x53f421, 4);
             *(BYTE*)0x53f41f = 0x85;
             *(BYTE*)0x53f420 = 0xc0;
             *(BYTE*)0x53f421 = 0x0f;
@@ -781,7 +781,7 @@ void CGame::ProcessInputEnabling()
             GameClearMouseDelta();
             GameUpdateMouse();
             GameClearMouseDelta();
-            GameUnprotect((void*)0x6194a0, 1);
+            UnFuck((void*)0x6194a0, 1);
             *(BYTE*)0x6194a0 = 0xe9;
             g_gameD3DDevice->ShowCursor(FALSE);
             --state->m_nInputEnableWaitFrames;
@@ -1296,13 +1296,13 @@ void CGame::SetMaxStats()
 {
     ((void(__cdecl*)())0x4399d0)();
     ((void(__cdecl*)())0x439940)();
-    GameUnprotect((void*)0x55a070, 1);
+    UnFuck((void*)0x55a070, 1);
     *(BYTE*)0x55a070 = 0xc3;
 }
 // 0x000a0940
 void CGame::LetTimeGo(char enabled)
 {
-    GameUnprotect((void*)0x52cf10, 1);
+    UnFuck((void*)0x52cf10, 1);
     if (enabled)
     {
         *(BYTE*)0x52cf10 = 0x56;
@@ -2202,7 +2202,7 @@ void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, in
 {
     memset(g_gamePreviewPed, 0, sizeof(g_gamePreviewPed));
     // GTA SA virtual address: native permanent39-byte NOP patch, no restoration.
-    GameUnprotect((void*)0x4e7529, 39);
+    UnFuck((void*)0x4e7529, 39);
     memset((void*)0x4e7529, 0x90, 39);
     BYTE* local = (BYTE*)GameFindLocalPed();
     CVehicle* vehicle = 0;

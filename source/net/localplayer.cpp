@@ -765,7 +765,7 @@ BOOL CLocalPlayer::Spawn()
     if (weapon != -1)
         GetPed()->GiveWeapon(weapon, m_state.spawnInfo.ammo[0]);
     g_pGame->DisableTrainTraffic();
-    GameUnprotect((void*)0x50ac20, 3);
+    UnFuck((void*)0x50ac20, 3);
     // GTA SA virtual addresses: native three-byte permanent RET8 patch.
     *(BYTE*)0x50ac20 = 0xc2;
     *(BYTE*)0x50ac21 = 8;

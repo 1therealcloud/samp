@@ -236,13 +236,13 @@ DWORD __stdcall GameIntegrityMismatch(DWORD code, DWORD a, DWORD b, DWORD c, DWO
 {
     if (g_pNetGame && g_pGame)
     {
-        GameUnprotect((void*)0x541df5, 5);
+        UnFuck((void*)0x541df5, 5);
         *(DWORD*)0x541df5 = 0x90909090;
         *(BYTE*)0x541df9 = 0x90;
         GameDisableMouseCalls();
         GameClearMouseDelta();
         GameUpdateMouse();
-        GameUnprotect((void*)0x6194a0, 1);
+        UnFuck((void*)0x6194a0, 1);
         *(BYTE*)0x6194a0 = 0xc3;
         ++g_clientIntegrityFailures;
     }

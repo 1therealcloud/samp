@@ -145,7 +145,7 @@ void GamePrepareHooks()
     DWORD local_8;
     DWORD local_4;
 
-    GameUnprotect((void*)0x53eb13, 4);
+    UnFuck((void*)0x53eb13, 4);
     *(DWORD*)0x0053eb13 = g_gameLoopAddress - 0x53eb17;
     VirtualProtect((void*)0x0058fc53, 5, 0x40, &local_8);
     *(BYTE*)0x0058fc53 = 0xe8;
@@ -689,7 +689,7 @@ __declspec(naked) void GameHook_000a4850()
         pushad
         push 3
         push 0x4096aa
-        call GameUnprotect
+        call UnFuck
         mov eax,0x90909090
         mov ecx,0x4096aa
         mov word ptr [ecx],ax
@@ -715,10 +715,10 @@ __declspec(naked) void GameHook_000a4960()
     __asm { pushad
         push 4
         push 0x858ba4
-        call GameUnprotect
+        call UnFuck
         push 4
         push 0x858f84
-        call GameUnprotect
+        call UnFuck
         mov eax,dword ptr ds:[0x858ba4]
         mov g_hookSavedFontA,eax
         mov ecx,dword ptr ds:[0x858f84]
@@ -1219,7 +1219,7 @@ __declspec(naked) void GameHook_000a48c0()
     patch:
         push 5
         push 0x71791f
-        call GameUnprotect
+        call UnFuck
         add esp,8
         mov edx,0x90909090
         mov eax,0x71791f
@@ -3695,7 +3695,7 @@ void GameReleaseCachedRasterBuffer()
 void GameDisablePedRemoteCall()
 {
     // GTA SA virtual address: five-byte call site; page remains writable.
-    GameUnprotect((void*)0x5e92f4, 5);
+    UnFuck((void*)0x5e92f4, 5);
     *(DWORD*)0x5e92f4 = 0x90909090;
     *(BYTE*)0x5e92f8 = 0x90;
 }
@@ -4107,7 +4107,7 @@ __declspec(naked) void GameHook_000a2cd0()
         mov dword ptr [g_hookCameraPed], eax
         push 4
         push 0x858ef0
-        call GameUnprotect
+        call UnFuck
         mov eax, dword ptr ds:[0x858ef0]
         mov dword ptr [g_hookCapture0018E588], eax
         add esp, 8
@@ -4207,7 +4207,7 @@ __declspec(naked) void GameHook_000a3e70()
         mov dword ptr [g_hookCapture0018F350], eax
         push 1
         push 0x6d64f0
-        call GameUnprotect
+        call UnFuck
         add esp, 8
         mov byte ptr ds:[0x6d64f0], 0xc3
         push 0
@@ -4854,7 +4854,7 @@ __declspec(naked) void GameHook_000a4cc0()
         mov dword ptr [ecx + 8], edx
         push 0x20
         push 0x5543c0
-        call GameUnprotect
+        call UnFuck
         add esp, 8
         mov eax, 0x90909090
         mov ecx, 0x5543c0
@@ -5248,7 +5248,7 @@ void GameProcessPedControlBody()
         AimStuff::ApplyPlayerSkills(g_hookPlayerIndex);
         *g_clientCrashPedContext = g_hookPlayerIndex;
         g_hookPedControlField540 = *(DWORD*)(g_hookCollisionPed + 0x540);
-        GameUnprotect((void*)0x5e92f4, 5);
+        UnFuck((void*)0x5e92f4, 5);
         *(DWORD*)0x5e92f4 = 0x90909090;
         *(BYTE*)0x5e92f8 = 0x90;
         GameRunPedControlBackend();

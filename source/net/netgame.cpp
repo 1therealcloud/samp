@@ -230,7 +230,7 @@ void __cdecl NetGenerateAuthKey(char* output, const char* challenge)
                 result[i] = value;
             }
         // GTA SA virtual address: 0x004d3aa0; native changes protection and leaves it changed.
-        GameUnprotect((void*)0x4d3aa0, 20);
+        UnFuck((void*)0x4d3aa0, 20);
         BYTE code[20];
         memcpy(code, (const void*)0x4d3aa0, 20);
         for (int i = 0; i < 20; ++i)

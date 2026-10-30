@@ -726,7 +726,7 @@ BOOL GamePatchModelInfoReferences()
             operand = address + 1;
         else
             continue;
-        GameUnprotect(operand, 4);
+        UnFuck(operand, 4);
         *(void***)operand = g_gameModelInfoTable;
     }
     g_gameUseCustomModelInfo = 1;
@@ -1707,7 +1707,7 @@ void* GameLoadPedDff(const char* path)
         return 0;
     // GTA SA virtual address, restored to the native fixed byte, not a snapshot.
     BYTE* patch = (BYTE*)0x41b1d0;
-    GameUnprotect(patch, 1);
+    UnFuck(patch, 1);
     *patch = 0xc3;
     g_gameCustomStreamRead = true;
     void* clump = 0;
@@ -1725,7 +1725,7 @@ BOOL GameLoadObjectDff(const char* path, int model)
     if (!stream)
         return FALSE;
     BYTE* patch = (BYTE*)0x41b1d0;
-    GameUnprotect(patch, 1);
+    UnFuck(patch, 1);
     *patch = 0xc3;
     g_gameCustomStreamRead = true;
     if (!GameLoadAtomicStream(stream, model))

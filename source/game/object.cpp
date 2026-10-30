@@ -691,7 +691,7 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
     if (model < 0)
     {
         // GTA SA virtual address: native negative-model create patch.
-        GameUnprotect((void*)0x46977f, 1);
+        UnFuck((void*)0x46977f, 1);
         *(BYTE*)0x46977f = 0x75;
     }
     Scripting::ProcessCommand(&g_objectCreateCommand, model, (double)position.x, (double)position.y, (double)position.z, &handle);

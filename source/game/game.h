@@ -274,7 +274,7 @@ typedef char GameClockOffset[(offsetof(CGame, m_bClockEnabled) == 0x69) ? 1 : -1
 extern BOOL g_gameUsedPlayerSlots[210];
 
 // 0x000aa0b0
-void GameUnprotect(void* address, SIZE_T size);
+void UnFuck(void* address, SIZE_T size);
 // 0x000a02f0
 void GameClearMouseDelta();
 // 0x000a0310

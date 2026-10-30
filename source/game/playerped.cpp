@@ -870,7 +870,7 @@ void CPed::SetModelIndex(int model)
         if (ped)
         {
             // GTA SA virtual address: persistent one-byte patch0x005a82c0.
-            GameUnprotect((void*)0x5a82c0, 1);
+            UnFuck((void*)0x5a82c0, 1);
             *(BYTE*)0x5a82c0 = 0xc3;
             DestroyCommandTask();
             CEntity::SetModelIndex(model);
