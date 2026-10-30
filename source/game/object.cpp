@@ -31,6 +31,9 @@ void CObject::SetRotation(const CVector* rotation)
 #include "game/util.h"
 #include "main.h"
 #include "net/localplayer.h"
+#include "net/netgame.h"
+#include "net/playerpool.h"
+#include "net/vehiclepool.h"
 #include <GetTime.h>
 #include <string.h>
 // 0x0011ee7c
@@ -158,10 +161,10 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     moveDistance = GetDistanceToPoint(targetMatrix.position.x, targetMatrix.position.y, targetMatrix.position.z);
     if (g_pNetGame)
     {
-        BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
-        BYTE* players = *(BYTE**)(pools + 8);
+        CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
+        CPlayerPool* players = pools->players;
         if (players)
-            (*(CLocalPlayer**)(players + 0x1e))->ProcessSurfing();
+            players->local->ProcessSurfing();
     }
     ClearBackendFlag8();
 }
@@ -367,10 +370,11 @@ void CObject::Process(float elapsedSeconds)
     {
         if (!g_pNetGame)
             return;
-        BYTE *pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de), *pool = *(BYTE**)(pools + 0xc);
-        if (!pool || vehicle >= 2000 || !*(DWORD*)(pool + 0x3074 + vehicle * 4))
+        CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
+        CVehiclePool* pool = pools->vehicles;
+        if (!pool || vehicle >= 2000 || !pool->m_bNotEmpty[vehicle])
             return;
-        CVehicle* attached = *(CVehicle**)(pool + 0x1134 + vehicle * 4);
+        CVehicle* attached = pool->m_pObjects[vehicle];
         if (attached && ((CEntity*)attached)->DoesExist())
             AttachToVehicle(attached);
         return;
@@ -380,8 +384,8 @@ void CObject::Process(float elapsedSeconds)
     {
         if (!g_pNetGame)
             return;
-        BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
-        CObjectPool* pool = *(CObjectPool**)(pools + 0x14);
+        CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
+        CObjectPool* pool = pools->objects;
         if (!pool)
             return;
         CObject* attached = (CObject*)pool->Get(object);
@@ -784,7 +788,8 @@ BOOL CObject::IsMoving()
     {
         if (g_pNetGame)
         {
-            BYTE *pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de), *pool = *(BYTE**)(pools + 0x14);
+            CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
+            BYTE* pool = (BYTE*)pools->objects;
             // Native accepts id2100 as well; the adjacent-state layout is unproven.
             if (pool && object <= 2100 && *(DWORD*)(pool + 4 + object * 4))
             {
