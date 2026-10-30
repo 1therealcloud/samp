@@ -1,5 +1,6 @@
 #include "game/object.h"
 #include <math.h>
+#include <stddef.h>
 #include <string.h>
 // 0x000715c0
 CVector* CObject::GetRotation()
@@ -802,36 +803,68 @@ BOOL CObject::IsMoving()
     return FALSE;
 }
 
+// Only the observed RenderWare prefixes used by these callbacks are described.
+// The complete backend layouts and ownership remain outside these views.
+struct ObjectRwMaterialPrefix
+{
+    void* texture;
+    DWORD color;
+    void* pipeline;
+    float ambient, specular, diffuse;
+};
+struct ObjectRwGeometryPrefix
+{
+    BYTE unknown00[8];
+    DWORD flags;
+    BYTE unknown0c[20];
+    ObjectRwMaterialPrefix** materials;
+    int materialCount;
+};
+struct ObjectRwAtomicPrefix
+{
+    BYTE type;
+    BYTE unknown01[23];
+    ObjectRwGeometryPrefix* geometry;
+};
+typedef char ObjectRwMaterialTextureOffset[(offsetof(ObjectRwMaterialPrefix, texture) == 0) ? 1 : -1];
+typedef char ObjectRwMaterialColorOffset[(offsetof(ObjectRwMaterialPrefix, color) == 4) ? 1 : -1];
+typedef char ObjectRwMaterialSurfaceOffsets
+    [(offsetof(ObjectRwMaterialPrefix, ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, specular) == 0x10 && offsetof(ObjectRwMaterialPrefix, diffuse) == 0x14) ? 1 : -1];
+typedef char ObjectRwGeometryOffsets
+    [(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materials) == 0x20 && offsetof(ObjectRwGeometryPrefix, materialCount) == 0x24) ? 1 : -1];
+typedef char ObjectRwAtomicGeometryOffset[(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18) ? 1 : -1];
 // 0x000a8430
 void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 {
-    BYTE *a = (BYTE*)atomic, *state = (BYTE*)object;
-    if (*a != 1 || !*(void**)(a + 0x18) || !state)
+    ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
+    if (a->type != 1 || !a->geometry)
         return atomic;
-    BYTE* geometry = *(BYTE**)(a + 0x18);
-    int count = *(int*)(geometry + 0x24);
+    CObject* state = (CObject*)object;
+    if (!state)
+        return atomic;
+    int count = a->geometry->materialCount;
     if (count > 16)
         count = 16;
     for (int i = 0; i < count; ++i)
     {
-        BYTE* material = (*(BYTE***)(*(BYTE**)(a + 0x18) + 0x20))[i];
+        ObjectRwMaterialPrefix* material = a->geometry->materials[i];
         if (!material)
             continue;
-        DWORD texture = *(DWORD*)(state + 0x217 + i * 4);
+        void* texture = state->materials.textures[i];
         if (texture)
         {
-            *(DWORD*)material = texture;
-            *(DWORD*)(state + 0x1cb) = 1;
+            material->texture = texture;
+            state->materials.texturesChanged = 1;
         }
-        if (*(DWORD*)(state + 0x257 + i * 4))
+        if (state->materials.colors[i])
         {
-            *(DWORD*)(*(BYTE**)(a + 0x18) + 8) |= 0x40;
-            *(DWORD*)(*(BYTE**)(a + 0x18) + 8) &= ~8;
-            *(DWORD*)(material + 0xc) = 0x3f800000;
-            *(DWORD*)(material + 0x10) = 0;
-            *(DWORD*)(material + 0x14) = 0x3f800000;
-            *(DWORD*)(material + 4) = *(DWORD*)(state + 0x257 + i * 4);
-            *(DWORD*)(state + 0x1cf) = 1;
+            a->geometry->flags |= 0x40;
+            a->geometry->flags &= ~8;
+            material->ambient = 1.0f;
+            material->specular = 0.0f;
+            material->diffuse = 1.0f;
+            material->color = state->materials.colors[i];
+            state->materials.colorsChanged = 1;
         }
     }
     return atomic;
@@ -839,48 +872,52 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 // 0x000a86c0
 void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
 {
-    BYTE *a = (BYTE*)atomic, *state = (BYTE*)object;
-    if (*a != 1 || !*(void**)(a + 0x18) || !state)
+    ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
+    if (a->type != 1 || !a->geometry)
         return atomic;
-    BYTE* geometry = *(BYTE**)(a + 0x18);
-    int count = *(int*)(geometry + 0x24);
+    CObject* state = (CObject*)object;
+    if (!state)
+        return atomic;
+    int count = a->geometry->materialCount;
     if (count > 16)
         count = 16;
-    *(DWORD*)(state + 0x2d7) = *(DWORD*)(geometry + 8);
+    state->materials.savedGeometryFlags = a->geometry->flags;
     for (int i = 0; i < count; ++i)
     {
-        BYTE* material = (*(BYTE***)(*(BYTE**)(a + 0x18) + 0x20))[i];
+        ObjectRwMaterialPrefix* material = a->geometry->materials[i];
         if (!material)
             continue;
-        *(DWORD*)(state + 0x1d7 + i * 4) = *(DWORD*)material;
-        *(DWORD*)(state + 0x297 + i * 4) = *(DWORD*)(material + 4);
+        state->materials.savedTextures[i] = material->texture;
+        state->materials.savedColors[i] = material->color;
     }
-    *(DWORD*)(state + 0x1c7) = 1;
+    state->materials.snapshotValid = 1;
     return atomic;
 }
 // 0x000a8740
 void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
 {
-    BYTE *a = (BYTE*)atomic, *state = (BYTE*)object;
-    if (*a != 1 || !*(void**)(a + 0x18) || !state)
+    ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
+    if (a->type != 1 || !a->geometry)
         return atomic;
-    BYTE* geometry = *(BYTE**)(a + 0x18);
-    int count = *(int*)(geometry + 0x24);
+    CObject* state = (CObject*)object;
+    if (!state)
+        return atomic;
+    int count = a->geometry->materialCount;
     if (count > 16)
         count = 16;
     for (int i = 0; i < count; ++i)
     {
-        BYTE* material = (*(BYTE***)(*(BYTE**)(a + 0x18) + 0x20))[i];
+        ObjectRwMaterialPrefix* material = a->geometry->materials[i];
         if (!material)
             continue;
-        if (*(DWORD*)(state + 0x217 + i * 4) && *(DWORD*)material != *(DWORD*)(state + 0x1d7 + i * 4))
-            *(DWORD*)material = *(DWORD*)(state + 0x1d7 + i * 4);
-        if (*(DWORD*)(state + 0x1cf) && *(DWORD*)(state + 0x257 + i * 4))
-            *(DWORD*)(material + 4) = *(DWORD*)(state + 0x297 + i * 4);
+        if (state->materials.textures[i] && material->texture != state->materials.savedTextures[i])
+            material->texture = state->materials.savedTextures[i];
+        if (state->materials.colorsChanged && state->materials.colors[i])
+            material->color = state->materials.savedColors[i];
     }
-    *(DWORD*)(*(BYTE**)(a + 0x18) + 8) = *(DWORD*)(state + 0x2d7);
-    *(DWORD*)(state + 0x1cf) = 0;
-    *(DWORD*)(state + 0x1cb) = 0;
+    a->geometry->flags = state->materials.savedGeometryFlags;
+    state->materials.colorsChanged = 0;
+    state->materials.texturesChanged = 0;
     return atomic;
 }
 

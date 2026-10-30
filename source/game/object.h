@@ -26,7 +26,8 @@ struct ObjectMaterialState
     void* savedTextures[16];
     void* textures[16];
     DWORD colors[16], savedColors[16], savedGeometryFlags;
-    DWORD types[16], textProcessed[16];
+    int types[16];
+    DWORD textProcessed[16];
     ObjectMaterialTextInfo textInfo[16];
     char* text[16];
     DWORD rasterField34[16];
@@ -35,6 +36,12 @@ struct ObjectMaterialState
 class CObject : public CEntity
 {
     friend class CObjectPool;
+    // 0x000a8430
+    friend void* __cdecl ObjectApplyMaterials(void* atomic, void* object);
+    // 0x000a86c0
+    friend void* __cdecl ObjectSaveMaterials(void* atomic, void* object);
+    // 0x000a8740
+    friend void* __cdecl ObjectRestoreMaterials(void* atomic, void* object);
     BYTE unknown48;
     BYTE renderReady;
     DWORD streamingHideCount;
@@ -64,7 +71,7 @@ class CObject : public CEntity
     BYTE unknown1b6[0x0d];
     ObjectMaterialState materials;
     // Native raw DWORD gate shared by ordinary and text materials.
-    DWORD hasMaterials;
+    BOOL hasMaterials;
     DWORD materialPassState;
     BYTE unknown1193[6];
     BYTE timeVisibilityEnabled, visibilityStartHour, visibilityEndHour;
