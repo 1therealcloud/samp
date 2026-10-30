@@ -1,4 +1,5 @@
 #include "net/vehiclepool.h"
+#include "main.h"
 // 0x00002df0
 void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 {
@@ -10,7 +11,6 @@ void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
 #include "gui.h"
-#include "main.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"

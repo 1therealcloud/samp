@@ -1,4 +1,5 @@
 #include "net/remoteplayer.h"
+#include "main.h"
 // 0x00017790
 void CRemotePlayer::ShowNameTag(BYTE show)
 {
@@ -27,18 +28,14 @@ BYTE CRemotePlayer::GetTeam()
 #include "chatwindow.h"
 #include "game/aimstuff.h"
 #include "game/custommodels.h"
-#include "game/frame_limit.h"
 #include "game/game.h"
-#include "game/player_colors.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"
-#include "main.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/objectpool.h"
 #include "net/playerpool.h"
-#include "net/pool_frame.h"
 #include "net/vehiclepool.h"
 #include <string.h>
 // 0x001181dc
@@ -1643,7 +1640,7 @@ BOOL CRemotePlayer::IsActive()
     return m_state.ped && m_state.playerState != 0;
 }
 
-#include "game/player_colors.h"
+#include "game/util.h"
 // 0x00015e30
 DWORD CRemotePlayer::GetColorAsARGB()
 {

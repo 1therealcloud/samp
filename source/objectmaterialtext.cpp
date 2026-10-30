@@ -1,5 +1,5 @@
 #include "objectmaterialtext.h"
-#include "archive/provider.h"
+#include "archive/ArchiveFS.h"
 #include "chatwindow.h"
 #include "d3dhook/ID3DXFontHook.h"
 #include "game/entity.h"

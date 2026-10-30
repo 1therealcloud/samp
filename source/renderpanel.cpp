@@ -2,7 +2,7 @@
 #include "fontrender.h"
 #include "game/gta_globals.h"
 #include "gui.h"
-#include "net/pool_frame.h"
+#include "net/objectpool.h"
 #include "objectedit.h"
 #include <DXUT.h>
 #include <DXUTgui.h>

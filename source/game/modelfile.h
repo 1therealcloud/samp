@@ -485,4 +485,6 @@ DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk*
 // 0x000bb5a0
 DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filename);
 // Other model editing/writing paths remain under recovery.
+// 0x000b6610
+void GameParseStreamData(const void* data, DWORD length, void* destination);
 #endif

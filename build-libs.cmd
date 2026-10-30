@@ -302,14 +302,7 @@ for %%F in (
     build\libs\dxut-sdk\DXUTMesh.cpp
     build\libs\dxut-sdk\DXUTSettingsDlg.cpp
     build\libs\dxut-sdk\DXUTsound.cpp
-    source\dxut\dxut_hybrid_native.cpp
-    source\dxut\dxut_dialog_native.cpp
-    source\dxut\dxut_texture_native.cpp
-    source\dxut\dxut_media_native.cpp
-    source\dxut\dxut_theme_native.cpp
-    source\dxut\dxut_text_native.cpp
-    source\dxut\dxut_manager_native.cpp
-    source\dxut\dxut_listbox_native.cpp
+    source\dxut\DXUTmedia.cpp
 ) do (
     call :compile "%%F"
     if errorlevel 1 goto :failed

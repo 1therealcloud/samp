@@ -1,6 +1,7 @@
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
 #include "game/hooks.h"
+#include "main.h"
 #include "net/vehiclepool.h"
 #include <string.h>
 // 0x000c5e60
@@ -683,9 +684,9 @@ void ClientSetRenderState(DWORD state, DWORD value)
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
+#include "anticheat.h"
 #include "chatwindow.h"
 #include "cmdwindow.h"
-#include "game/device_integrity.h"
 #include "game/playerped.h"
 #include "game/vehicle.h"
 #include "gui.h"

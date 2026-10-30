@@ -1,4 +1,4 @@
-#include "archive/name_digest.h"
+#include "filechecks.h"
 #include "main.h"
 #include <string.h>
 // 0x0014033c

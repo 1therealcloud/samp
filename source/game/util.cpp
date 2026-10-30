@@ -1,6 +1,11 @@
 #include "game/util.h"
+#include "game/custommodels.h"
+#include "game/game.h"
+#include "game/modelfile.h"
+#include "main.h"
 #include <d3dx9math.h>
 #include <math.h>
+#include <stdio.h>
 typedef char VectorD3dxExtent[(sizeof(CVector) == sizeof(D3DXVECTOR3)) ? 1 : -1];
 typedef char VectorD3dxX[(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x)) ? 1 : -1];
 typedef char VectorD3dxY[(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y)) ? 1 : -1];
@@ -31,7 +36,6 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
     // clang-format on
 }
 #include "chatwindow.h"
-#include "main.h"
 // 0x0011e3a0
 const double g_aimVectorHalfPi = 1.5707963705062866;
 // 0x000b6440
@@ -1767,4 +1771,568 @@ void* __stdcall GamePoolObjectGetAt(int handle)
     }
     // clang-format on
     return result;
+}
+
+#include "game/util.h"
+// GTA SA virtual addresses: GetPad 0x0053FB70; Clear 0x00541A70.
+// VC7 ABI bridge: GetPad(0), then ECX=pad and two unmodified argument words.
+// 0x000b58e0
+__declspec(naked) void GameClearLocalPad(DWORD first, DWORD second)
+{
+    // clang-format off
+    __asm {
+        push ebp
+        mov ebp,esp
+        push 0x0
+        mov edx,0x53fb70
+        call edx
+        mov ecx,eax
+        pop edx
+        push dword ptr [ebp + 0xc]
+        push dword ptr [ebp + 0x8]
+        mov edx,0x541a70
+        call edx
+        pop ebp
+        ret
+    }
+    // clang-format on
+}
+
+#include "game/util.h"
+
+// VC7 cannot express a free-function __thiscall pointer. These thin native
+// adapters set ECX and keep the backend callee-pop and raw AL return intact.
+
+// GTA SA virtual address: 0x0073FB10.
+// 0x000b6020
+__declspec(naked) bool __stdcall GameWeaponFireInstantHit(void* weapon, void* shooter, const CVector* origin, const CVector* muzzle, void* victim, const CVector* target,
+                                                          const CVector* driveBy, DWORD crossHair, DWORD effects)
+{
+    // clang-format off
+    __asm {
+        push ebp
+        mov ebp,esp
+        push dword ptr [ebp + 0x28]
+        push dword ptr [ebp + 0x24]
+        push dword ptr [ebp + 0x20]
+        push dword ptr [ebp + 0x1c]
+        push dword ptr [ebp + 0x18]
+        push dword ptr [ebp + 0x14]
+        push dword ptr [ebp + 0x10]
+        push dword ptr [ebp + 0xc]
+        mov ecx,dword ptr [ebp + 0x8]
+        mov edx,0x73fb10
+        call edx
+        pop ebp
+        ret 0x24
+    }
+    // clang-format on
+}
+
+// GTA SA virtual address: 0x0073AAC0.
+// 0x000b6050
+__declspec(naked) bool __stdcall GameWeaponFireSniper(void* weapon, void* shooter)
+{
+    // clang-format off
+    __asm {
+        push ebp
+        mov ebp,esp
+        push 0x0
+        push 0x0
+        push dword ptr [ebp + 0xc]
+        mov ecx,dword ptr [ebp + 0x8]
+        mov edx,0x73aac0
+        call edx
+        pop ebp
+        ret 0x8
+    }
+    // clang-format on
+}
+
+#include "game/util.h"
+#include <string.h>
+// 0x00151b20
+DWORD g_playerDefaultColors[1000] = {
+#include "game/player_color_values.inc"
+};
+// 0x0018f6c0
+DWORD g_playerColors[1000];
+// 0x000a6fc0
+void PlayerColors::Initialize()
+{
+    memcpy(g_playerColors, g_playerDefaultColors, sizeof(g_playerColors));
+}
+// 0x000a6f50
+void __stdcall PlayerColors::Set(DWORD index, DWORD color)
+{
+    if (index < sizeof(g_playerColors))
+        g_playerColors[index] = color;
+}
+// 0x000a6f70
+DWORD __stdcall PlayerColors::Get(DWORD index)
+{
+    if (index == 1004)
+        return 0x89a4c440;
+    if (index == 1005)
+        return 0xaa0000ff;
+    if (index == 1006)
+        return 0xe2c063ff;
+    if (index < sizeof(g_playerColors))
+        return g_playerColors[index];
+    return index;
+}
+
+#include "game/game.h"
+#include "game/util.h"
+// 0x0015535c
+const CVector g_rwPreviewAxes[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+// 0x000b1700
+void* GameRwCreateLight(int lightType)
+{
+    void* result = 0;
+    DWORD target = g_gameVersion == 1 ? 0x752110 : 0x752160;
+    // clang-format off
+    __asm {
+        push lightType
+        mov edx,target
+        call edx
+        pop edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}
+// 0x000b1770
+void GameRwSetLightColor(void* light, const float* rgba)
+{
+    DWORD target = g_gameVersion == 1 ? 0x751a90 : 0x751ae0;
+    // clang-format off
+    __asm {
+        push rgba
+        push light
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b12d0
+void* GameRwCreateRaster(int width, int height, int depth, int flags)
+{
+    void* result = 0;
+    DWORD target = g_gameVersion == 1 ? 0x7fb230 : 0x7fb270;
+    // clang-format off
+    __asm {
+        push flags
+        push depth
+        push height
+        push width
+        mov edx,target
+        call edx
+        mov result,eax
+        pop edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+    return result;
+}
+// 0x000b1430
+void* GameRwCreateCamera()
+{
+    void* result = 0;
+    DWORD target = g_gameVersion == 1 ? 0x7ee4f0 : 0x7ee530;
+    // clang-format off
+    __asm {
+        mov edx,target
+        call edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}
+// 0x000b1390
+void* GameRwCreateFrame()
+{
+    void* result = 0;
+    DWORD target = g_gameVersion == 1 ? 0x7f0410 : 0x7f0450;
+    // clang-format off
+    __asm {
+        mov edx,target
+        call edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}
+// 0x000b18f0
+void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
+{
+    DWORD target = g_gameVersion == 1 ? 0x7f0e30 : 0x7f0e70;
+    // clang-format off
+    __asm {
+        push combine
+        push position
+        push frame
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b1920
+void GameRwRotateFrame(void* frame, int axis, float angle)
+{
+    const CVector* direction = g_rwPreviewAxes + axis;
+    DWORD target = g_gameVersion == 1 ? 0x7f1010 : 0x7f1050;
+    // clang-format off
+    __asm {
+        push 1
+        push angle
+        push direction
+        push frame
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b15b0
+void GameRwSetCameraRasters(void* camera, void* color, void* depth)
+{
+    // clang-format off
+    __asm {
+        mov ebx,camera
+        mov edx,color
+        mov [ebx+0x60],edx
+        mov edx,depth
+        mov [ebx+0x64],edx
+    }
+    // clang-format on
+}
+// 0x000b1580
+void GameRwSetObjectFrame(void* object, void* frame)
+{
+    DWORD target = g_gameVersion == 1 ? 0x804ef0 : 0x804f30;
+    // clang-format off
+    __asm {
+        push frame
+        push object
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b1680
+void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
+{
+    DWORD farAddress, nearAddress;
+    if (g_gameVersion == 1)
+    {
+        farAddress = 0x7ee2a0;
+        nearAddress = 0x7ee1d0;
+    }
+    else
+    {
+        farAddress = 0x7ee2e0;
+        nearAddress = 0x7ee210;
+    }
+    // clang-format off
+    __asm {
+        push farClip
+        push camera
+        mov edx,farAddress
+        call edx
+        pop edx
+        pop edx
+        push nearClip
+        push camera
+        mov edx,nearAddress
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b16d0
+void GameRwSetViewWindow(void* camera, const float* window)
+{
+    DWORD target = g_gameVersion == 1 ? 0x7ee410 : 0x7ee450;
+    // clang-format off
+    __asm {
+        push window
+        push camera
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b18c0
+void GameRwSetProjection(void* camera, int projection)
+{
+    DWORD target = g_gameVersion == 1 ? 0x7ee3a0 : 0x7ee3e0;
+    // clang-format off
+    __asm {
+        push projection
+        push camera
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
+}
+// 0x000b1320
+void* GameRwCreateTexture(void* raster)
+{
+    void* result = 0;
+    DWORD target = g_gameVersion == 1 ? 0x7f37c0 : 0x7f3800;
+    // clang-format off
+    __asm {
+        push raster
+        mov edx,target
+        call edx
+        mov result,eax
+        pop edx
+    }
+    // clang-format on
+    return result;
+}
+
+// 0x000b2790
+BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE fromSamp)
+{
+    char directory[65], path[129];
+    if (fromSamp)
+        strcpy(directory, "SAMP\\");
+    else
+        strcpy(directory, "models\\txd");
+    int index = GameTxdFind(name);
+    if (index != -1)
+        return TRUE;
+    index = GameTxdAdd(name);
+    sprintf(path, "%s\\%s.txd", directory, filename);
+    if (GameFileExists(path))
+    {
+        GameTxdLoad(index, path);
+        GameTxdAddRef(index);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// 0x000b2860
+void* GameLoadDictionaryTexture(const char* dictionary, const char* name)
+{
+    int index = GameTxdFind(dictionary);
+    if (index == -1)
+        return 0;
+    GameTxdPush();
+    GameTxdSetCurrent(index);
+    void* texture = GameTxdReadTexture(name);
+    GameTxdPop();
+    return texture;
+}
+
+// 0x000b3480
+int GameTxdFind(const char* name)
+{
+    int result;
+    // Native GTA adapter: preserve the EDX call target and caller cleanup.
+    // clang-format off
+    __asm {
+        push name
+        mov edx,0x731850
+        call edx
+        pop edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}
+
+// 0x000b3510
+void GameTxdPush()
+{
+    // clang-format off
+    __asm {
+        mov edx,0x7316a0
+        call edx
+    }
+    // clang-format on
+}
+
+// 0x000b3520
+void GameTxdPop()
+{
+    // clang-format off
+    __asm {
+        mov edx,0x7316b0
+        call edx
+    }
+    // clang-format on
+}
+
+// 0x000b3530
+void GameTxdSetCurrent(int index)
+{
+    // clang-format off
+    __asm {
+        push index
+        mov edx,0x7319c0
+        call edx
+        pop edx
+    }
+    // clang-format on
+}
+
+// 0x000b3540
+void* GameTxdReadTexture(const char* name)
+{
+    // Native constructs a one-pointer CSprite2d on the stack; this is an out-object, not the EAX result.
+    void* texture = 0;
+    // clang-format off
+    __asm push name
+    __asm lea ecx,texture
+    __asm mov edx,0x727270
+    __asm call edx
+        // clang-format on
+        return texture;
+}
+
+// Texture dictionary reference/slot adapters. Only the native -1 gates are
+// applied; other indices pass through unchanged to their GTA backends.
+// 0x000b34f0
+void GameTxdAddRef(int index)
+{
+    // clang-format off
+    __asm {
+        push index
+        mov edx,0x731a00
+        call edx
+        pop edx
+    }
+    // clang-format on
+}
+
+// 0x000b3500
+void GameTxdRemoveRef(int index)
+{
+    // clang-format off
+    __asm {
+        push index
+        mov edx,0x731a30
+        call edx
+        pop edx
+    }
+    // clang-format on
+}
+
+// 0x000b35b0
+void GameTxdRemove(int index)
+{
+    if (index != -1)
+        ((void(__cdecl*)(int))0x731e90)(index);
+}
+
+// 0x000b35d0
+void GameTxdRemoveSlot(int index)
+{
+    if (index != -1)
+        ((void(__cdecl*)(int))0x731cd0)(index);
+}
+
+// 0x000b35f0
+DWORD GameTxdGetReferenceCount(int index)
+{
+    return index == -1 ? 0xffffffffu : ((DWORD(__cdecl*)(int))0x731aa0)(index);
+}
+
+// Native performs name lookup, then removes the slot only when it is not -1.
+// 0x000b3580
+void GameTxdRemoveSlotByName(const char* name)
+{
+    int index = GameTxdFind(name);
+    if (index != -1)
+        ((void(__cdecl*)(int))0x731cd0)(index);
+}
+
+// GTA SA virtual addresses: USA7C7550, fallback7C7590. Exactly one argument.
+// 0x000b1ce0
+void* GameRwGetGeometrySkin(void* geometry)
+{
+    DWORD target = g_gameVersion == 1 ? 0x7c7550 : 0x7c7590;
+    return ((void*(__cdecl*)(void*))target)(geometry);
+}
+
+// GTA SA virtual addresses: backend74BDD0/+50; initialization flag C97B20.
+// Callback addresses are opaque GTA code pointers; no invented callable types.
+// 0x000b1da0
+int GameRwRegisterClumpPlugin(DWORD pluginId)
+{
+    DWORD target = g_gameVersion == 1 ? 0x74bdd0 : 0x74be20;
+    *(DWORD*)0xc97b20 = 0;
+    int result = ((int(__cdecl*)(DWORD, DWORD, DWORD, DWORD, DWORD))target)(0, pluginId, 0x41b1a0, 0x41b1c0, 0x41b1b0);
+    *(DWORD*)0xc97b20 = 1;
+    return result;
+}
+
+// GTA SA virtual addresses: backend74BE70/+50, callbacks41B2F0/41B300.
+// Native forces the flag back to1, not to its previous value, even on failure.
+// 0x000b1e00
+int GameRwRegisterClumpPluginStream(DWORD pluginId, DWORD readCallback)
+{
+    DWORD target = g_gameVersion == 1 ? 0x74be70 : 0x74bec0;
+    *(DWORD*)0xc97b20 = 0;
+    int result = ((int(__cdecl*)(DWORD, DWORD, DWORD, DWORD))target)(pluginId, readCallback, 0x41b2f0, 0x41b300);
+    *(DWORD*)0xc97b20 = 1;
+    return result;
+}
+
+// GTA SA virtual addresses: USA7F3560, fallback7F35A0; fixed enable argument1.
+// 0x000b1e60
+void GameRwEnableAutoMipmapping()
+{
+    DWORD target = g_gameVersion == 1 ? 0x7f3560 : 0x7f35a0;
+    ((void(__cdecl*)(DWORD))target)(1);
+}
+
+// GTA SA virtual addresses: USA734820, all other version values734880 (+60).
+// 0x000b1ca0
+void* GameRwGetFirstAtomic(void* clump)
+{
+    DWORD target = g_gameVersion == 1 ? 0x734820 : 0x734880;
+    return ((void*(__cdecl*)(void*))target)(clump);
+}
+
+// GTA SA virtual address: 0x00734B10, exactly one clump argument.
+// 0x000b1d40
+void* GameRwGetClumpAnimHierarchy(void* clump)
+{
+    return ((void*(__cdecl*)(void*))0x734b10)(clump);
+}
+
+// GTA SA virtual address: 0x004D60E0, exactly one hierarchy argument.
+// 0x000b1d70
+void* GameRwCreateHierarchyAnimation(void* hierarchy)
+{
+    return ((void*(__cdecl*)(void*))0x4d60e0)(hierarchy);
+}
+
+// 0x000b1d20
+void* GameRwGetClumpSkin(void* clump)
+{
+    void* atomic = GameRwGetFirstAtomic(clump);
+    return GameRwGetGeometrySkin(*(void**)((BYTE*)atomic + 0x18));
 }

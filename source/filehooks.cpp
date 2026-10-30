@@ -61,8 +61,8 @@ int WINAPI Arch_ShowCursor(BOOL visible)
     return visible ? 0 : -1;
 }
 
-#include "archive/name_digest.h"
-#include "archive/provider.h"
+#include "archive/ArchiveFS.h"
+#include "filechecks.h"
 #include <ctype.h>
 // 0x00140338
 DWORD g_archiveNextHandle = 0xff000001;

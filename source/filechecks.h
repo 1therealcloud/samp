@@ -1,5 +1,5 @@
-#ifndef SAMP_ARCHIVE_NAME_DIGEST_H
-#define SAMP_ARCHIVE_NAME_DIGEST_H
+#ifndef SAMP_FILECHECKS_H
+#define SAMP_FILECHECKS_H
 #include <windows.h>
 #pragma pack(push, 1)
 // Compiled-reference match: Paul E. Jones SHA-1 family; exact release unknown.

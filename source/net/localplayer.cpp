@@ -1,5 +1,5 @@
 #include "net/localplayer.h"
-#include "net/local_rpc.h"
+#include "main.h"
 // 0x00017770
 void CLocalPlayer::ReturnToClassSelection()
 {
@@ -47,13 +47,11 @@ BYTE CLocalPlayer::GetTeam()
 #include "game/custommodels.h"
 #include "game/game.h"
 #include "game/gta_globals.h"
-#include "game/player_colors.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/textdraw.h"
 #include "game/util.h"
 #include "gui.h"
-#include "main.h"
 #include "net/actorpool.h"
 #include "net/objectpool.h"
 #include "net/playerinfo.h"

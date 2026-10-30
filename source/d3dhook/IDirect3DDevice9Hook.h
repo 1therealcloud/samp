@@ -265,7 +265,7 @@ void ClientDeviceObjectsLost();
 // Implemented in gui.cpp; downstream UI dependencies remain.
 // 0x000c5880
 void ClientDeviceObjectsReset();
-// Implemented in game/device_integrity.cpp.
+// Implemented in anticheat.cpp.
 // 0x0009d6f0
 void GameDeviceIntegrityCycle();
 

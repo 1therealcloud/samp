@@ -1,3 +1,4 @@
+#include "main.h"
 //----------------------------------------------------------
 //
 //   SA:MP Multiplayer Modification For GTA:SA
@@ -15,8 +16,7 @@
 #include "TinyEncrypt.h"
 
 #ifndef ARCTOOL
-//#include "main.h"
-//#include "../game/Util.h"
+////#include "../game/Util.h"
 // Client diagnostics header is unused in the release archive path.
 #endif
 

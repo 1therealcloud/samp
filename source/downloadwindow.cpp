@@ -17,7 +17,7 @@ int CDownloadWindow::GetFilesCount()
     return *(int*)(nativeState + 4);
 }
 #include "GetTime.h"
-#include "dxut/dxut_listbox_native.h"
+#include "dxut/DXUTgui.h"
 #include "fontrender.h"
 #include "game/gta_globals.h"
 #include "gui.h"

@@ -56,10 +56,7 @@ typedef char FontsScratchOffset[(offsetof(CFonts, m_szTempBuffer) == 28) ? 1 : -
 extern const char g_fontMeasureProbe[2];
 // 0x002aca2c
 extern CFonts* g_deviceFonts;
-#endif
 
-#ifndef SAMP_RECOVERED_FONT_SETTINGS_H
-#define SAMP_RECOVERED_FONT_SETTINGS_H
 // 0x000c6950
 int FontGetHeight();
 // 0x000c69a0
@@ -68,4 +65,6 @@ int FontGetDeathWindowHeight();
 int FontGetWeight();
 // 0x000c6a30
 const char* FontGetFace();
+// 0x000c69e0
+int FontGetDialogHeight();
 #endif

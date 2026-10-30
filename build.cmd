@@ -67,7 +67,6 @@ for %%F in (
     source\config.cpp
     source\game\keystuff.cpp
     source\game\aimstuff.cpp
-    source\game\player_colors.cpp
     source\game\animation.cpp
     source\game\scripting.cpp
     source\game\entity.cpp
@@ -82,7 +81,7 @@ for %%F in (
     source\archive\TinyEncrypt.cpp
     source\filehooks.cpp
     source\d3dhook\IDirect3DDevice9Hook.cpp
-    source\game\device_integrity.cpp
+    source\anticheat.cpp
     source\main.cpp
     source\objectedit.cpp
     source\objectselection.cpp
@@ -93,11 +92,9 @@ for %%F in (
     source\game\util.cpp
     source\game\quaternion.cpp
     source\game\modelfile.cpp
-    source\game\weapon_backend.cpp
     source\game\game.cpp
     source\game\debug.cpp
     source\game\debugscript.cpp
-    source\game\pad.cpp
     source\game\vehicle.cpp
     source\game\skinnedmesh.cpp
     source\net\vehiclepool.cpp
@@ -107,7 +104,7 @@ for %%F in (
     source\chatwindow.cpp
     source\game\patches.cpp
     source\game\hooks.cpp
-    source\archive\name_digest.cpp
+    source\filechecks.cpp
     source\exceptions.cpp
     source\renderpanel.cpp
     source\downloadwindow.cpp

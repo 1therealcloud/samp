@@ -1,4 +1,5 @@
 #include "game/object.h"
+#include "main.h"
 #include <math.h>
 #include <stddef.h>
 #include <string.h>
@@ -100,7 +101,6 @@ void CObject::SetRotation(const CVector* rotation)
 
 #include "game/quaternion.h"
 #include "game/util.h"
-#include "main.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"
@@ -414,7 +414,7 @@ void CObject::ProcessStreaming()
 }
 
 #include "game/playerped.h"
-#include "net/pool_frame.h"
+#include "net/objectpool.h"
 // 0x00118200
 extern const float g_objectStreamingNearDistance = 300.0f;
 // 0x00117878
@@ -630,7 +630,7 @@ CObject::~CObject()
     }
 }
 
-#include "game/custom_model_io.h"
+#include "game/custommodels.h"
 // 0x0011ede8
 extern const Scripting::OpcodeInfo g_objectCreateCommand = {0x107, "ifffv"};
 // 0x000a8bc0
@@ -1002,7 +1002,7 @@ void CObject::ProcessMaterials()
         GameRwForAllFrameObjects(frame, ObjectApplyMaterials, this);
 }
 
-#include "game/rw_preview.h"
+#include "game/util.h"
 // 0x000a82a0
 void CObject::SetMaterialText(int index, const char* text, BYTE size, const char* font, BYTE fontSize, BYTE bold, DWORD fontColor, DWORD backgroundColor, BYTE alignment)
 {
@@ -1053,7 +1053,7 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     hasMaterials = 1;
 }
 
-#include "game/effects.h"
+#include "game/util.h"
 // 0x000a8120
 void CObject::SetMaterial(int model, int index, const char* dictionary, const char* texture, DWORD color)
 {

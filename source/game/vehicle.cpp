@@ -1,4 +1,5 @@
 #include "game/vehicle.h"
+#include "main.h"
 // 0x0000e290
 void CVehicle::SetObjective(BYTE objective)
 {
@@ -34,7 +35,6 @@ void CVehicle::SetColor(BYTE primary, BYTE secondary)
 
 #include "game/game.h"
 #include "game/scripting.h"
-#include "main.h"
 
 // 0x000b8420
 CVehicle::~CVehicle()

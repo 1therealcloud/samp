@@ -13,7 +13,6 @@
 #include "gui.h"
 #include "main.h"
 #include "net/actorpool.h"
-#include "net/local_rpc.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/pickuppool.h"

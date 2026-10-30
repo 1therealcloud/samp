@@ -1,5 +1,5 @@
-#ifndef SAMP_DEVICE_INTEGRITY_H
-#define SAMP_DEVICE_INTEGRITY_H
+#ifndef SAMP_ANTICHEAT_H
+#define SAMP_ANTICHEAT_H
 #include <windows.h>
 // 0x0018dc24
 extern DWORD g_integrityVehicleChecksum;

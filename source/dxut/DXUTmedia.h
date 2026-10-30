@@ -1,5 +1,5 @@
-#ifndef SAMP_DXUT_MEDIA_NATIVE_H
-#define SAMP_DXUT_MEDIA_NATIVE_H
+#ifndef DXUT_MEDIA_H
+#define DXUT_MEDIA_H
 #include <windows.h>
 // 0x000972b0
 HRESULT DXUTFindDXSDKMediaFileCch(char* dest, int size, const char* filename);

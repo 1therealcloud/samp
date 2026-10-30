@@ -2,6 +2,7 @@
 #include "Alloc.h"
 #include "LzmaEnc.h"
 #include "game/custommodels.h"
+#include "game/util.h"
 #include <new>
 #include <stdlib.h>
 #include <string.h>
@@ -2380,4 +2381,120 @@ DWORD CModelCollisionFile::SaveFile(const char* filename, const char* modelName)
     output.Write(nativeState, 0x78);
     output.SaveFile(filename);
     return 1;
+}
+
+// 0x000b6610
+void GameParseStreamData(const void* data, DWORD length, void* destination)
+{
+    CModelFileStream* reader = new CModelFileStream((BYTE*)data, length);
+    DWORD count = 0;
+    reader->Read(&count, 4);
+    if (count == 0 || count > 128)
+    {
+        delete reader;
+        return;
+    }
+    DWORD selected = 0;
+    for (DWORD i = 0; i < count; i++)
+    {
+        if (reader->ended)
+            break;
+        BYTE position[12];
+        DWORD type = 0, size = 0;
+        reader->Read(position, 12);
+        reader->Read(&type, 4);
+        reader->Read(&size, 4);
+        if ((type == 0 && (size == 76 || size == 80)) || (type == 10 && size == 40))
+            ++selected;
+        reader->Skip(size);
+    }
+    if (!selected)
+        return; // Native leaks the reader on this path; preserve it.
+    BYTE* result = (BYTE*)calloc(1, selected * 64 + 4);
+    *(DWORD*)result = selected;
+    reader->position = 0;
+    reader->ended = false;
+    DWORD ignoredCount = 0;
+    reader->Read(&ignoredCount, 4);
+    DWORD written = 0;
+    BYTE* record = result + 4;
+    do
+    {
+        if (reader->ended)
+            break;
+        BYTE position[12];
+        DWORD type = 0, size = 0;
+        reader->Read(position, 12);
+        reader->Read(&type, 4);
+        reader->Read(&size, 4);
+        if (type == 0 && (size == 76 || size == 80))
+        {
+            BYTE effect[56] = {0};
+            memcpy(effect, position, 12);
+            reader->Read(effect + 16, 4); // Color.
+            reader->Read(effect + 20, 4);
+            reader->Read(effect + 24, 4);
+            reader->Read(effect + 28, 4);
+            reader->Read(effect + 32, 4);
+            reader->Read(effect + 38, 1);
+            reader->Read(effect + 39, 1);
+            reader->Read(effect + 40, 1);
+            reader->Read(effect + 41, 1);
+            BYTE low = 0, high = 0, discard = 0;
+            reader->Read(&low, 1);
+            char first[65] = {0}, second[65] = {0};
+            reader->Read(first, 24);
+            reader->Read(second, 24);
+            reader->Read(effect + 42, 1);
+            reader->Read(&high, 1);
+            *(WORD*)(effect + 36) = low | ((WORD)high << 8);
+            if (size == 80)
+            {
+                reader->Read(effect + 43, 1);
+                reader->Read(effect + 44, 1);
+                reader->Read(effect + 45, 1);
+                reader->Read(&discard, 1);
+            }
+            else
+            {
+                effect[43] = 0;
+                effect[44] = 0;
+                effect[45] = 100;
+            }
+            reader->Read(&discard, 1);
+            if (strlen(first))
+                *(void**)(effect + 48) = GameLoadDictionaryTexture("particle", first);
+            if (strlen(second))
+                *(void**)(effect + 52) = GameLoadDictionaryTexture("particle", second);
+            memcpy(record, effect, 56);
+            record += 64;
+            ++written;
+        }
+        else if (type == 10 && size == 40)
+        {
+            BYTE effect[53] = {0};
+            memcpy(effect, position, 12);
+            *(DWORD*)(effect + 12) = 10;
+            reader->Read(effect + 16, 12);
+            reader->Read(effect + 28, 12);
+            reader->Read(effect + 40, 12);
+            DWORD value = 0;
+            reader->Read(&value, 4);
+            effect[52] = (BYTE)value;
+            memcpy(record, effect, 53);
+            record += 64;
+            ++written;
+        }
+        else
+            reader->Skip(size);
+    }
+    while (written != selected);
+    if (!written)
+        free(result);
+    else
+    {
+        *(DWORD*)result = written;
+        *(void**)((BYTE*)destination + 0x78) = result;
+    }
+    delete reader;
 }

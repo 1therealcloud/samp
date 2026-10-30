@@ -1,3 +1,4 @@
+#include "main.h"
 // Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
 // Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
 #include "chatwindow.h"
@@ -32,7 +33,6 @@ BYTE CChat::GetTimestamps()
 // Unresolved native dependencies, with explicit VA bindings in the build report.
 // These declarations do not call back into the original DLL.
 #include "config.h"
-#include "main.h"
 // 0x002aca3c
 extern CGame* g_pGame;
 // 0x002aca14

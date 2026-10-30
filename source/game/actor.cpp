@@ -1,8 +1,9 @@
 #include "game/actor.h"
-#include "game/scripting.h"
-#include "game/playerped.h"
-#include "game/util.h"
 #include "game/game.h"
+#include "game/playerped.h"
+#include "game/scripting.h"
+#include "game/util.h"
+#include "main.h"
 #include <string.h>
 // 0x0011e2d0
 const Scripting::OpcodeInfo g_actorKillCommand = {0x321, "i"};
@@ -96,8 +97,7 @@ void CActor::Destroy()
         __asm {mov ecx,saved}
         __asm {mov ebx,[ecx]}
         __asm {push 1}
-        __asm {call dword ptr [ebx]}
-        // clang-format on
+        __asm {call dword ptr [ebx]} // clang-format on
         actorBackend = 0;
         m_pGameEntity = 0;
         return;

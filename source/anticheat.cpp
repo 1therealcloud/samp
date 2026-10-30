@@ -1,4 +1,4 @@
-#include "game/device_integrity.h"
+#include "anticheat.h"
 #include "game/util.h"
 #include "main.h"
 #include <stdlib.h>

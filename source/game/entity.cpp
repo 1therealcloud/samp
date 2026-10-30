@@ -1,6 +1,7 @@
 #include "game/entity.h"
 #include "game/game.h"
 #include "game/scripting.h"
+#include "main.h"
 #include <string.h>
 // 0x0009e950
 void CEntity::GetMatrix(CMatrix* matrix)
@@ -468,7 +469,6 @@ void CEntity::ClearBackendFlag8()
 
 #include "chatwindow.h"
 #include "game/game.h"
-#include "main.h"
 // 0x0009ed90
 BOOL CEntity::SetModelIndex(int model)
 {

@@ -195,3 +195,6 @@ public:
     // 0x00064bd0
     virtual void UnloadData(DWORD dwFileIndex);
 };
+
+// 0x002ac9d4
+extern CArchiveFS* g_pArchive;

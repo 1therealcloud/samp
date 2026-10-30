@@ -1,6 +1,7 @@
 #ifndef SAMP_OBJECT_POOL_H
 #define SAMP_OBJECT_POOL_H
 #include "game/object.h"
+#include <windows.h>
 struct RPCParameters;
 #pragma pack(push, 1)
 class CObjectPool
@@ -108,4 +109,8 @@ extern const char g_objectPoolRayEndText[8];
 // No this pointer is consumed; class ownership and callers are not established.
 // 0x00012f50
 void DrawObjectPoolCollisionDebug();
+// 0x00156b74
+extern DWORD g_objectPoolLastTick;
+// 0x00118130
+extern const float g_objectPoolSecondsPerTick;
 #endif

@@ -1,3 +1,9 @@
+#include "config.h"
+#include "d3dhook/ID3DXFontHook.h"
+#include "dxstdafx.h"
+#include "dxut/DXUTmedia.h"
+#include "fontrender.h"
+#include "main.h"
 //--------------------------------------------------------------------------------------
 // File: DXUTgui.cpp
 //
@@ -252,10 +258,8 @@ CDXUTDialogResourceManager::~CDXUTDialogResourceManager()
 }
 
 //--------------------------------------------------------------------------------------
-// v99 manager implementation supplied by maintained dxut_manager_native.cpp.
 
 //--------------------------------------------------------------------------------------
-// v99 manager implementation supplied by maintained dxut_manager_native.cpp.
 
 //--------------------------------------------------------------------------------------
 bool CDXUTDialogResourceManager::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1590,13 +1594,10 @@ bool CDXUTDialog::OnCycleFocus(bool bForward)
 }
 
 //--------------------------------------------------------------------------------------
-// Native CreateFont implementation supplied by source/dxut_hybrid_native.cpp.
 
 //--------------------------------------------------------------------------------------
-// Native implementation supplied by source/dxut_texture_native.cpp.
 
 //--------------------------------------------------------------------------------------
-// Native theme supplied by source/dxut_theme_native.cpp.
 
 //--------------------------------------------------------------------------------------
 // CDXUTControl class
@@ -7274,4 +7275,1281 @@ void CDXUTElement::Refresh()
 {
     TextureColor.Current = TextureColor.States[DXUT_STATE_HIDDEN];
     FontColor.Current = FontColor.States[DXUT_STATE_HIDDEN];
+}
+
+#include "d3dhook/ID3DXFontHook.h"
+#include "dxstdafx.h"
+#include <stdio.h>
+
+// 0x0008c8f0
+int CDXUTDialogResourceManager::AddFont(const char* face, LONG height, LONG weight)
+{
+    for (int i = 0; i < m_FontCache.GetSize(); ++i)
+    {
+        DXUTFontNode* node = m_FontCache.GetAt(i);
+        if (!_strnicmp(node->strFace, face, MAX_PATH - 1) && node->nHeight == height && node->nWeight == weight)
+            return i;
+    }
+    DXUTFontNode* node = new DXUTFontNode;
+    if (!node)
+        return -1;
+    ZeroMemory(node, sizeof(DXUTFontNode));
+    StringCchCopyA(node->strFace, MAX_PATH, face);
+    node->nHeight = height;
+    node->nWeight = weight;
+    m_FontCache.Add(node);
+    int index = m_FontCache.GetSize() - 1;
+    if (m_pd3dDevice)
+        CreateFont(index);
+    return index;
+}
+
+// 0x0008ca50
+HRESULT CDXUTDialog::SetFont(UINT index, const char* face, LONG height, LONG weight)
+{
+    for (UINT i = m_Fonts.GetSize(); i <= index; ++i)
+        m_Fonts.Add(-1);
+    int font = m_pManager->AddFont(face, height, weight);
+    m_Fonts.SetAt(index, font);
+    return S_OK;
+}
+
+// 0x0008c170
+HRESULT CDXUTDialogResourceManager::CreateFont(UINT index)
+{
+    DXUTFontNode* node = m_FontCache.GetAt(index);
+    if (node->pFont)
+    {
+        node->pFont->Release();
+        node->pFont = 0;
+    }
+    D3DXCreateFontA(m_pd3dDevice, node->nHeight, 0, node->nWeight, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, node->strFace,
+                    &node->pFont);
+    CFontWrapper* wrapper = new CFontWrapper;
+    wrapper->font = node->pFont;
+    node->pFont = wrapper;
+    char debug[260];
+    sprintf(debug, "CDXUTDialogResourceManager::CreateFont(pFont=0x%X,pD3DDevice=0x%X)", wrapper, m_pd3dDevice);
+    return S_OK;
+}
+
+#include "dxstdafx.h"
+
+// 0x0008cae0
+HRESULT CDXUTDialog::DrawTextA(const char* strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow, int nCount)
+{
+    HRESULT hr = S_OK;
+
+    // No need to draw fully transparent layers
+    if (pElement->FontColor.Current.a == 0)
+        return S_OK;
+
+    RECT rcScreen = *prcDest;
+    OffsetRect(&rcScreen, m_x, m_y);
+
+    // If caption is enabled, offset the Y position by its height.
+    if (m_bCaption)
+        OffsetRect(&rcScreen, 0, m_nCaptionHeight);
+
+    //debug
+    //DrawRect( &rcScreen, D3DCOLOR_ARGB(100, 255, 0, 0) );
+
+    D3DXMATRIXA16 matTransform;
+    D3DXMatrixIdentity(&matTransform);
+    m_pManager->m_pSprite->SetTransform(&matTransform);
+
+    DXUTFontNode* pFontNode = GetFont(pElement->iFont);
+
+    if (bShadow)
+    {
+        RECT rcShadow = rcScreen;
+        OffsetRect(&rcShadow, 1, 1);
+        if (pFontNode->pFont)
+        {
+            hr = pFontNode->pFont->DrawTextA(m_pManager->m_pSprite, strText, nCount, &rcShadow, pElement->dwTextFormat,
+                                             D3DCOLOR_ARGB(DWORD(pElement->FontColor.Current.a * 255), 0, 0, 0));
+        }
+        else
+        {
+            m_pManager->CreateFont(pElement->iFont);
+        }
+
+        if (FAILED(hr))
+            return hr;
+    }
+
+    if (pFontNode->pFont)
+    {
+        hr = pFontNode->pFont->DrawTextA(m_pManager->m_pSprite, strText, nCount, &rcScreen, pElement->dwTextFormat, pElement->FontColor.Current);
+    }
+    else
+    {
+        m_pManager->CreateFont(pElement->iFont);
+    }
+
+    if (FAILED(hr))
+        return hr;
+
+    return S_OK;
+}
+
+#include "dxstdafx.h"
+#include "dxut/DXUTmedia.h"
+// 0x000897d0
+int CDXUTDialogResourceManager::AddTexture(const char* strFilename)
+{
+    // See if this texture already exists
+    for (int i = 0; i < m_TextureCache.GetSize(); i++)
+    {
+        DXUTTextureNode* pTextureNode = m_TextureCache.GetAt(i);
+        if (0 == _strnicmp(pTextureNode->strFilename, strFilename, MAX_PATH - 1))
+        {
+            return i;
+        }
+    }
+
+    // Add a new texture and try to create it
+    DXUTTextureNode* pNewTextureNode = new DXUTTextureNode();
+    if (pNewTextureNode == NULL)
+        return -1;
+
+    ZeroMemory(pNewTextureNode, sizeof(DXUTTextureNode));
+    StringCchCopyA(pNewTextureNode->strFilename, MAX_PATH, strFilename);
+    m_TextureCache.Add(pNewTextureNode);
+
+    int iTexture = m_TextureCache.GetSize() - 1;
+
+    // If a device is available, try to create immediately
+    if (m_pd3dDevice)
+        CreateTexture(iTexture);
+
+    return iTexture;
+}
+
+// 0x00089890
+HRESULT CDXUTDialog::SetTexture(UINT index, const char* strFilename)
+{
+    // If this assert triggers, you need to call CDXUTDialog::Init() first.  This change
+    // was made so that the DXUT's GUI could become seperate and optional from DXUT's core.  The
+    // creation and interfacing with CDXUTDialogResourceManager is now the responsibility
+    // of the application if it wishes to use DXUT's GUI.
+    assert(m_pManager != NULL && "To fix call CDXUTDialog::Init() first.  See comments for details.");
+
+    // Make sure the list is at least as large as the index being set
+    for (UINT i = m_Textures.GetSize(); i <= index; i++)
+    {
+        m_Textures.Add(-1);
+    }
+
+    int iTexture = m_pManager->AddTexture(strFilename);
+
+    m_Textures.SetAt(index, iTexture);
+    return S_OK;
+}
+
+// 0x000874b0
+HRESULT CDXUTDialogResourceManager::CreateTexture(UINT iTexture)
+{
+    HRESULT hr = S_OK;
+
+    DXUTTextureNode* pTextureNode = m_TextureCache.GetAt(iTexture);
+
+    //_ASSERT(pTextureNode->strFilename[0] == 0);
+
+    // Make sure there's a texture to create
+    if (pTextureNode->strFilename[0] == 0)
+    {
+        return S_OK;
+    }
+
+    // Find the texture on the hard drive
+    char strPath[MAX_PATH];
+    hr = DXUTFindDXSDKMediaFileCch(strPath, MAX_PATH, pTextureNode->strFilename);
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
+    // Create texture
+    D3DXIMAGE_INFO info;
+    hr = D3DXCreateTextureFromFileExA(m_pd3dDevice, strPath, D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, &info,
+                                      NULL, &pTextureNode->pTexture);
+    if (FAILED(hr))
+    {
+        return hr;
+    }
+
+    // Store dimensions
+    pTextureNode->dwWidth = info.Width;
+    pTextureNode->dwHeight = info.Height;
+
+    return S_OK;
+}
+
+// Isolated native SA-MP dialog theme. Values reviewed from RVA 0x0008d200.
+#include "config.h"
+#include "dxstdafx.h"
+#include "fontrender.h"
+
+// 0x0008d1c0
+void CDXUTDialog::InitFont()
+{
+    int height = FontGetDialogHeight();
+    int weight = FontGetWeight();
+    SetFont(0, FontGetFace(), height, weight);
+    SetFont(1, FontGetFace(), height - 2, weight);
+}
+// 0x0008d200
+void CDXUTDialog::InitDefaultElements()
+{
+    SetTexture(0, "sampgui.png");
+    InitFont();
+    CDXUTElement element;
+    RECT rect;
+    m_CapElement.SetFont(1, 0xffffffff, 5);
+    SetRect(&rect, 17, 269, 241, 287);
+    m_CapElement.SetTexture(0, &rect, 0xffffffff);
+    m_CapElement.TextureColor.States[DXUT_STATE_NORMAL] = 0xc80a0a0a;
+    m_CapElement.FontColor.States[DXUT_STATE_NORMAL] = 0xffd2d2d2;
+    m_CapElement.SetFont(1, 0xffd2d2d2, 4);
+    m_CapElement.TextureColor.Blend(DXUT_STATE_NORMAL, 10.0f);
+    m_CapElement.FontColor.Blend(DXUT_STATE_NORMAL, 10.0f);
+    // Native STATIC stores font state only; unused texture fields remain unspecified.
+    element.SetFont(1, 0xffffffff, 5);
+    element.SetFont(1, 0xffbebebe, 0x44);
+    element.FontColor.States[DXUT_STATE_DISABLED] = 0xc8c8c8c8;
+    SetDefaultElement(DXUT_CONTROL_STATIC, 0, &element);
+    SetRect(&rect, 0, 0, 136, 54);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 5);
+    element.TextureColor.States[DXUT_STATE_NORMAL] = 0xc8ffffff;
+    element.TextureColor.States[DXUT_STATE_PRESSED] = 0xff95b0d0;
+    element.TextureColor.States[DXUT_STATE_MOUSEOVER] = 0xffb92228;
+    element.FontColor.States[DXUT_STATE_MOUSEOVER] = 0xffffffff;
+    element.FontColor.States[DXUT_STATE_NORMAL] = 0xffc8c8c8;
+    SetDefaultElement(DXUT_CONTROL_BUTTON, 0, &element);
+    SetRect(&rect, 0, 0, 136, 54);
+    element.SetTexture(0, &rect, 0xffffff);
+    element.TextureColor.States[DXUT_STATE_MOUSEOVER] = 0xffb92228;
+    element.TextureColor.States[DXUT_STATE_PRESSED] = 0x3c505050;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xc8ffffff;
+    SetDefaultElement(DXUT_CONTROL_BUTTON, 1, &element);
+    SetRect(&rect, 0, 54, 27, 81);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 4);
+    element.FontColor.States[DXUT_STATE_DISABLED] = 0xc8c8c8c8;
+    element.TextureColor.States[DXUT_STATE_NORMAL] = 0x96ffffff;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xc8ffffff;
+    element.TextureColor.States[DXUT_STATE_PRESSED] = 0xffffffff;
+    SetDefaultElement(DXUT_CONTROL_CHECKBOX, 0, &element);
+    SetRect(&rect, 27, 54, 54, 81);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_CHECKBOX, 1, &element);
+    SetRect(&rect, 54, 54, 81, 81);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 4);
+    element.FontColor.States[DXUT_STATE_DISABLED] = 0xc8c8c8c8;
+    element.TextureColor.States[DXUT_STATE_NORMAL] = 0x96ffffff;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xc8ffffff;
+    element.TextureColor.States[DXUT_STATE_PRESSED] = 0xffffffff;
+    SetDefaultElement(DXUT_CONTROL_RADIOBUTTON, 0, &element);
+    SetRect(&rect, 81, 54, 108, 81);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_RADIOBUTTON, 1, &element);
+    SetRect(&rect, 7, 81, 247, 123);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 5);
+    element.TextureColor.States[DXUT_STATE_NORMAL] = 0xc8ffffff;
+    element.TextureColor.States[DXUT_STATE_MOUSEOVER] = 0xffb92228;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xffb92228;
+    element.TextureColor.States[DXUT_STATE_DISABLED] = 0x46c8c8c8;
+    element.FontColor.States[DXUT_STATE_MOUSEOVER] = 0xffffffff;
+    element.FontColor.States[DXUT_STATE_PRESSED] = 0xff000000;
+    element.FontColor.States[DXUT_STATE_DISABLED] = 0xc8c8c8c8;
+    SetDefaultElement(DXUT_CONTROL_COMBOBOX, 0, &element);
+    SetRect(&rect, 272, 0, 325, 49);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.States[DXUT_STATE_NORMAL] = 0xc8ffffff;
+    element.TextureColor.States[DXUT_STATE_PRESSED] = 0xff969696;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xff969696;
+    element.TextureColor.States[DXUT_STATE_DISABLED] = 0x46ffffff;
+    SetDefaultElement(DXUT_CONTROL_COMBOBOX, 1, &element);
+    SetRect(&rect, 7, 123, 241, 265);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 0);
+    element.TextureColor.Init(0xffb92228, 0xc8808080, 0);
+    SetDefaultElement(DXUT_CONTROL_COMBOBOX, 2, &element);
+    SetRect(&rect, 7, 266, 241, 289);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 0);
+    element.TextureColor.Init(0xffc8c8c8, 0xc8808080, 0);
+    SetDefaultElement(DXUT_CONTROL_COMBOBOX, 3, &element);
+    SetRect(&rect, 1, 290, 280, 331);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.States[DXUT_STATE_NORMAL] = 0x96ffffff;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xc8ffffff;
+    element.TextureColor.States[DXUT_STATE_DISABLED] = 0x46ffffff;
+    SetDefaultElement(DXUT_CONTROL_SLIDER, 0, &element);
+    SetRect(&rect, 54, 54, 81, 81);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.Init(0xffb92228, 0xff95b0d0, 0);
+    element.TextureColor.States[DXUT_STATE_MOUSEOVER] = 0xfff0f0f0;
+    element.TextureColor.States[DXUT_STATE_PRESSED] = 0xffb92228;
+    element.TextureColor.States[DXUT_STATE_FOCUS] = 0xffdcdcdc;
+    SetDefaultElement(DXUT_CONTROL_SLIDER, 1, &element);
+    SetRect(&rect, 243, 144, 265, 155);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.Init(0xffffffff, 0xffffffff, 0);
+    SetDefaultElement(DXUT_CONTROL_SCROLLBAR, 0, &element);
+    SetRect(&rect, 243, 124, 265, 144);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.Init(0xffffffff, 0xffffffff, 0);
+    SetDefaultElement(DXUT_CONTROL_SCROLLBAR, 1, &element);
+    SetRect(&rect, 243, 155, 265, 176);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.Init(0xffffffff, 0xffffffff, 0);
+    SetDefaultElement(DXUT_CONTROL_SCROLLBAR, 2, &element);
+    SetRect(&rect, 266, 123, 286, 167);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.TextureColor.Init(0xffb92228, 0xff95b0d0, 0);
+    SetDefaultElement(DXUT_CONTROL_SCROLLBAR, 3, &element);
+    element.SetFont(0, 0xff000000, 4);
+    SetRect(&rect, 14, 90, 241, 113);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 0, &element);
+    SetRect(&rect, 8, 82, 14, 90);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 1, &element);
+    SetRect(&rect, 14, 82, 241, 90);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 2, &element);
+    SetRect(&rect, 241, 82, 246, 90);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 3, &element);
+    SetRect(&rect, 8, 90, 14, 113);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 4, &element);
+    SetRect(&rect, 241, 90, 246, 113);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 5, &element);
+    SetRect(&rect, 8, 113, 14, 121);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 6, &element);
+    SetRect(&rect, 14, 113, 241, 121);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 7, &element);
+    SetRect(&rect, 241, 113, 246, 121);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_EDITBOX, 8, &element);
+    element.SetFont(0, 0xff000000, 4);
+    SetRect(&rect, 14, 90, 241, 113);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 0, &element);
+    SetRect(&rect, 8, 82, 14, 90);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 1, &element);
+    SetRect(&rect, 14, 82, 241, 90);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 2, &element);
+    SetRect(&rect, 241, 82, 246, 90);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 3, &element);
+    SetRect(&rect, 8, 90, 14, 113);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 4, &element);
+    SetRect(&rect, 241, 90, 246, 113);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 5, &element);
+    SetRect(&rect, 8, 113, 14, 121);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 6, &element);
+    SetRect(&rect, 14, 113, 241, 121);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 7, &element);
+    SetRect(&rect, 241, 113, 246, 121);
+    element.SetTexture(0, &rect, 0xffffffff);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 8, &element);
+    SetRect(&rect, 0, 0, 136, 54);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(0, 0xffffffff, 5);
+    SetDefaultElement(DXUT_CONTROL_IMEEDITBOX, 9, &element);
+    SetRect(&rect, 13, 124, 241, 265);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(1, 0xffffffff, 0x40);
+    SetDefaultElement(DXUT_CONTROL_LISTBOX, 0, &element);
+    SetRect(&rect, 17, 269, 241, 287);
+    element.SetTexture(0, &rect, 0xffffffff);
+    element.SetFont(1, 0xffffffff, 0x40);
+    element.TextureColor.Init(0xffb92228, 0xc8808080, 0);
+    SetDefaultElement(DXUT_CONTROL_LISTBOX, 1, &element);
+}
+
+#include "chatwindow.h"
+#include "cmdwindow.h"
+#include "config.h"
+#include "dxstdafx.h"
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <DXUTmisc.h>
+#include <assert.h>
+#include <new>
+#include <string.h>
+#include <wchar.h>
+
+// 0x0009b700
+void InputBufferAnsiToWide(const char* text, wchar_t* output, int capacity)
+{
+    memset(output, 0, capacity * sizeof(wchar_t));
+    int length = MultiByteToWideChar(CP_ACP, 0, text, (int)strlen(text), 0, 0);
+    if (length < capacity)
+        MultiByteToWideChar(CP_ACP, 0, text, (int)strlen(text), output, length);
+}
+
+// 0x00090b30
+HRESULT CDXUTDialog::AddIMEEditBox(int id, const char* text, int x, int y, int width, int height, bool isDefault, CDXUTIMEEditBox** created)
+{
+    CDXUTIMEEditBox* edit = new CDXUTIMEEditBox(this);
+    if (created)
+        *created = edit;
+    if (!edit)
+        return E_OUTOFMEMORY;
+    HRESULT result = AddControl(edit);
+    if (FAILED(result))
+        return result;
+    edit->SetID(id);
+    edit->SetLocation(x, y);
+    edit->SetSize(width, height);
+    edit->m_bIsDefault = isDefault;
+    if (text)
+        edit->SetText(text);
+    return S_OK;
+}
+
+// 0x0017fbb8
+char g_inputAnsiText[2049]; // Includes the observed terminator write at index 2048.
+// 0x00085060
+const char* InputWideToAnsi(const wchar_t* text)
+{
+    memset(g_inputAnsiText, 0, 2048);
+    int length = WideCharToMultiByte(CP_ACP, 0, text, (int)wcslen(text), 0, 0, 0, 0);
+    if (length < 2049)
+    {
+        WideCharToMultiByte(CP_ACP, 0, text, (int)wcslen(text), g_inputAnsiText, length, 0, 0);
+        g_inputAnsiText[length] = 0;
+    }
+    return g_inputAnsiText;
+}
+
+// 0x00180400
+wchar_t g_inputMaskedText[256];
+// 0x000853a0
+const wchar_t* InputMaskWideText(const wchar_t* text)
+{
+    memset(g_inputMaskedText, 0, 511); // Native clears exactly 511 bytes.
+    size_t length = wcslen(text);
+    if (length < 256)
+    {
+        for (size_t i = 0; i < length; ++i)
+            g_inputMaskedText[i] = 0x25cf;
+        g_inputMaskedText[length] = 0;
+    }
+    return g_inputMaskedText;
+}
+
+// Accesses the linked DXUT's actual IMM state; no duplicate context or flags.
+class InputImeAccess : public CDXUTIMEEditBox
+{
+public:
+    // samp.dll RVA: unknown (recovery access helper for RVA 0x00085460)
+    static void ResetDefaultContext(HWND window)
+    {
+        _ImmDisableTextFrameService((DWORD)-1);
+        s_hImcDef = _ImmGetContext(window);
+        _ImmReleaseContext(window, s_hImcDef);
+    }
+};
+// 0x00085460
+void InputResetIme()
+{
+    InputImeAccess::ResetDefaultContext(g_inputGameWindow);
+}
+// 0x00085940
+void InputEnableIme(bool enable)
+{
+    CDXUTIMEEditBox::EnableImeSystem(enable);
+}
+
+// 0x0017f698
+DWORD g_inputImeActivityTick;
+class InputImeActivityAccess : public CDXUTIMEEditBox
+{
+public:
+    // samp.dll RVA: unknown (protected DXUT state accessor; no standalone native entry)
+    static bool Visible()
+    {
+        return s_CandList.bShowWindow || s_bShowReadingWindow;
+    }
+};
+// 0x00085e60
+bool ChatImeActive()
+{
+    if (InputImeActivityAccess::Visible())
+        return true;
+    return InputImeRecent(GetTickCount(), g_inputImeActivityTick);
+}
+
+#include "chatwindow.h"
+#include "cmdwindow.h"
+#include "config.h"
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <DXUTmisc.h>
+#include <assert.h>
+#include <new>
+#include <string.h>
+// 0x0008c860
+HRESULT CDXUTDialogResourceManager::OnCreateDevice(IDirect3DDevice9* device)
+{
+    m_pd3dDevice = device;
+    HRESULT result;
+    for (int i = 0; i < m_FontCache.GetSize(); ++i)
+    {
+        result = CreateFont(i);
+        if (FAILED(result))
+            return result;
+    }
+    for (int j = 0; j < m_TextureCache.GetSize(); ++j)
+    {
+        result = CreateTexture(j);
+        if (FAILED(result))
+            return result;
+    }
+    result = D3DXCreateSprite(device, &m_pSprite);
+    if (FAILED(result))
+        return result;
+    InputResetIme();
+    return S_OK;
+}
+// 0x00086a00
+HRESULT CDXUTDialogResourceManager::OnResetDevice()
+{
+    for (int i = 0; i < m_FontCache.GetSize(); ++i)
+    {
+        DXUTFontNode* font = m_FontCache.GetAt(i);
+        if (font->pFont)
+            font->pFont->OnResetDevice();
+    }
+    if (m_pSprite)
+        m_pSprite->OnResetDevice();
+    m_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &m_pStateBlock);
+    return S_OK;
+}
+
+#include "dxut/DXUTgui.h"
+#include <DXUTgui.h>
+#include <new>
+#include <string.h>
+#include <strsafe.h>
+
+// 0x0006ee60
+CDXUTButtonDL* CDXUTDialogDL::GetButton(int id)
+{
+    return (CDXUTButtonDL*)((CDXUTDialog*)this)->GetControl(id, DXUT_CONTROL_BUTTON);
+}
+// 0x0006a170
+void CDXUTListBoxDL::SetColumnCount(int value)
+{
+    columnCount = value;
+}
+// 0x0006ee80
+int CDXUTListBoxDL::GetColumnCount()
+{
+    return columnCount;
+}
+// 0x0006a180
+void CDXUTListBoxDL::SetColumnWidth(int column, int value)
+{
+    columnWidths[column] = value;
+}
+// 0x0006ee90
+int CDXUTListBoxDL::GetColumnWidth(int column)
+{
+    return columnWidths[column];
+}
+
+// Reconstruction-only access to the shared base layout/nonvirtual body;
+// no fields, virtual overrides or established standalone native entry.
+struct DLControlAccess : CDXUTControl
+{
+    using CDXUTControl::m_bEnabled;
+    using CDXUTControl::m_rcBoundingBox;
+    using CDXUTControl::UpdateRects;
+};
+
+// 0x0008e810
+CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog* parent) : CDXUTControl(0), scrollBar(parent)
+{
+    m_pDialog = parent;
+    style = 0;
+    selectionStart = 0;
+    drag = false;
+    textHeight = 0;
+    columnCount = 0;
+    m_Type = DXUT_CONTROL_LISTBOX;
+    scrollBarWidth = 16;
+    selected = -1;
+    border = 6;
+    margin = 5;
+    columnWidths[0] = columnWidths[1] = columnWidths[2] = 0;
+}
+
+// 0x0008e8d0
+CDXUTListBoxDL::~CDXUTListBoxDL()
+{
+    RemoveAllItems();
+}
+
+// 0x0008a500
+bool CDXUTListBoxDL::HandleKeyboard(UINT message, WPARAM key, LPARAM lparam)
+{
+    if (!m_bEnabled || !m_bVisible)
+        return false;
+    if (scrollBar.HandleKeyboard(message, key, lparam))
+        return true;
+    if (message != WM_KEYDOWN)
+        return false;
+    switch (key)
+    {
+        case VK_UP:
+        case VK_DOWN:
+        case VK_NEXT:
+        case VK_PRIOR:
+        case VK_HOME:
+        case VK_END:
+            break;
+        default:
+            return false;
+    }
+    int count = items.GetSize();
+    if (!count)
+        return true;
+    int old = selected;
+    switch (key)
+    {
+        case VK_UP:
+            --selected;
+            break;
+        case VK_DOWN:
+            ++selected;
+            break;
+        case VK_NEXT:
+            selected += scrollBar.m_nPageSize - 1;
+            break;
+        case VK_PRIOR:
+            selected -= scrollBar.m_nPageSize - 1;
+            break;
+        case VK_HOME:
+            selected = 0;
+            break;
+        case VK_END:
+            selected = count - 1;
+            break;
+    }
+    if (selected < 0)
+        selected = 0;
+    if (selected >= count)
+        selected = count - 1;
+    if (old != selected)
+    {
+        if (style & 1)
+        {
+            for (int i = 0; i < items.GetSize(); ++i)
+                items[i]->selected = false;
+            if (GetKeyState(VK_SHIFT) < 0)
+            {
+                int first = selectionStart, last = selected;
+                if (first > last)
+                {
+                    int swap = first;
+                    first = last;
+                    last = swap;
+                }
+                for (int i = first; i <= last; ++i)
+                    items[i]->selected = true;
+            }
+            else
+            {
+                items[selected]->selected = true;
+                selectionStart = selected;
+            }
+        }
+        else
+            selectionStart = selected;
+        scrollBar.ShowItem(selected);
+        m_pDialog->SendEvent(0x702, true, this);
+    }
+    return true;
+}
+
+// 0x0008a6e0
+bool CDXUTListBoxDL::HandleMouse(UINT message, POINT point, WPARAM keys, LPARAM lparam)
+{
+    if (!m_bEnabled || !m_bVisible)
+        return false;
+    if (message == WM_LBUTTONDOWN && !m_bHasFocus)
+        m_pDialog->RequestFocus(this);
+    if (scrollBar.HandleMouse(message, point, keys, lparam))
+        return true;
+    switch (message)
+    {
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONDBLCLK:
+            if (items.GetSize() > 0 && PtInRect(&selectionRect, point))
+            {
+                int clicked = textHeight ? scrollBar.m_nPosition + (point.y - textRect.top) / textHeight : -1;
+                if (clicked < scrollBar.m_nPosition || clicked >= items.GetSize() || clicked >= scrollBar.m_nPosition + scrollBar.m_nPageSize)
+                    return true;
+                SetCapture(DXUTGetHWND());
+                if (message == WM_LBUTTONDBLCLK)
+                {
+                    m_pDialog->SendEvent(0x701, true, this);
+                    return true;
+                }
+                selected = clicked;
+                if (!(keys & MK_SHIFT))
+                    selectionStart = clicked;
+                if (style & 1)
+                {
+                    DXUTListBoxItemDL* item = items[clicked];
+                    int modifiers = keys & (MK_SHIFT | MK_CONTROL);
+                    if (modifiers == MK_CONTROL)
+                        item->selected = !item->selected;
+                    else if (modifiers == MK_SHIFT)
+                    {
+                        int first = selectionStart, last = clicked;
+                        if (first > last)
+                        {
+                            int swap = first;
+                            first = last;
+                            last = swap;
+                        }
+                        for (int i = 0; i < first; ++i)
+                            items[i]->selected = false;
+                        for (int i = last + 1; i < items.GetSize(); ++i)
+                            items[i]->selected = false;
+                        for (int i = first; i <= last; ++i)
+                            items[i]->selected = true;
+                    }
+                    else if (modifiers == (MK_SHIFT | MK_CONTROL))
+                    {
+                        int first = selectionStart, last = clicked;
+                        if (first > last)
+                        {
+                            int swap = first;
+                            first = last;
+                            last = swap;
+                        }
+                        bool state = items[selectionStart]->selected;
+                        for (int i = first + 1; i < last; ++i)
+                            items[i]->selected = state;
+                        item->selected = true;
+                        selected = selectionStart;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < items.GetSize(); ++i)
+                            items[i]->selected = false;
+                        item->selected = true;
+                    }
+                }
+                m_pDialog->SendEvent(0x702, true, this);
+                return true;
+            }
+            break;
+        case WM_LBUTTONUP:
+            ReleaseCapture();
+            drag = false;
+            if (selected < items.GetSize() && selected != -1)
+            {
+                int first = selectionStart, last = selected;
+                if (first > last)
+                {
+                    int swap = first;
+                    first = last;
+                    last = swap;
+                }
+                for (int i = first + 1; i < last; ++i)
+                    items[i]->selected = items[selectionStart]->selected;
+                items[selected]->selected = items[selectionStart]->selected;
+                if (selectionStart != selected)
+                    m_pDialog->SendEvent(0x702, true, this);
+            }
+            break;
+        case WM_MOUSEMOVE:
+            if (drag)
+            {
+                int item = textHeight ? scrollBar.m_nPosition + (point.y - textRect.top) / textHeight : -1;
+                if (item >= scrollBar.m_nPosition && item < items.GetSize() && item < scrollBar.m_nPosition + scrollBar.m_nPageSize)
+                    selected = item;
+                else if (item < scrollBar.m_nPosition)
+                {
+                    scrollBar.Scroll(-1);
+                    selected = scrollBar.m_nPosition;
+                }
+                else if (item >= scrollBar.m_nPosition + scrollBar.m_nPageSize)
+                {
+                    scrollBar.Scroll(1);
+                    int last = scrollBar.m_nPosition + scrollBar.m_nPageSize;
+                    if (items.GetSize() < last)
+                        last = items.GetSize();
+                    selected = last - 1;
+                }
+                else
+                    break;
+                m_pDialog->SendEvent(0x702, true, this);
+            }
+            break;
+        case WM_MOUSEWHEEL:
+        {
+            UINT lines;
+            SystemParametersInfoA(SPI_GETWHEELSCROLLLINES, 0, &lines, 0);
+            int amount = (short)HIWORD(keys) / WHEEL_DELTA * lines;
+            scrollBar.Scroll(-amount);
+            return true;
+        }
+    }
+    return false;
+}
+
+// 0x0008e900
+void CDXUTListBoxDL::Render(IDirect3DDevice9* device, float elapsed)
+{
+    if (!m_bVisible)
+        return;
+    CDXUTElement* normal = m_Elements.GetAt(0);
+    normal->TextureColor.Blend(DXUT_STATE_NORMAL, elapsed, 0.7f);
+    normal->FontColor.Blend(DXUT_STATE_NORMAL, elapsed, 0.7f);
+    CDXUTElement* selection = m_Elements.GetAt(1);
+    selection->TextureColor.Blend(DXUT_STATE_NORMAL, elapsed, 0.7f);
+    selection->FontColor.Blend(DXUT_STATE_NORMAL, elapsed, 0.7f);
+    m_pDialog->DrawSprite(normal, &m_rcBoundingBox);
+    if (items.GetSize() > 0)
+    {
+        RECT text = textRect, highlight = selectionRect;
+        text.bottom = text.top + m_pDialog->GetFont(normal->iFont)->nHeight;
+        textHeight = text.bottom - text.top;
+        if (scrollBar.m_nPosition < 0)
+        {
+            scrollBar.m_nPosition = 0;
+            scrollBar.Cap();
+            scrollBar.UpdateThumbRect();
+        }
+        if (!g_dxutListScrollInitialized)
+        {
+            scrollBar.m_nPageSize = textHeight ? (textRect.bottom - textRect.top) / textHeight : textRect.bottom - textRect.top;
+            scrollBar.Cap();
+            scrollBar.UpdateThumbRect();
+            g_dxutListScrollInitialized = true;
+        }
+        text.right = textRect.right;
+        for (int i = scrollBar.m_nPosition; i < items.GetSize(); ++i)
+        {
+            if (text.bottom > textRect.bottom)
+                break;
+            DXUTListBoxItemDL* item = items[i];
+            bool selectedStyle = false;
+            if (!(style & 1) && i == selected)
+                selectedStyle = true;
+            else if (style & 1)
+            {
+                if (drag && ((i >= selected && i < selectionStart) || (i <= selected && i > selectionStart)))
+                    selectedStyle = items[selectionStart]->selected;
+                else if (item->selected)
+                    selectedStyle = true;
+            }
+            CDXUTElement* element = normal;
+            if (!item->flag && selectedStyle)
+            {
+                highlight.top = text.top;
+                highlight.bottom = text.bottom;
+                m_pDialog->DrawSprite(selection, &highlight);
+                element = selection;
+            }
+            else if (item->color)
+            {
+                const float scale = 1.0f / 255.0f;
+                normal->FontColor.Current.r = (float)((item->color >> 16) & 255) * scale;
+                normal->FontColor.Current.g = (float)((item->color >> 8) & 255) * scale;
+                normal->FontColor.Current.b = (float)(item->color & 255) * scale;
+                normal->FontColor.Current.a = (float)(item->color >> 24) * scale;
+            }
+            m_pDialog->DrawTextA(item->text, element, &text, false, -1);
+            if (columnCount > 0)
+            {
+                int left = text.left;
+                for (int column = 0; column < columnCount; ++column)
+                {
+                    text.left += columnWidths[column];
+                    m_pDialog->DrawTextA(item->subitems[column], element, &text, false, -1);
+                }
+                text.left = left;
+            }
+            OffsetRect(&text, 0, textHeight);
+        }
+    }
+    scrollBar.Render(device, elapsed);
+}
+
+// 0x0008e8c0
+HRESULT CDXUTListBoxDL::OnInit()
+{
+    return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
+}
+
+// 0x0008e8a0
+bool CDXUTListBoxDL::CanHaveFocus()
+{
+    DLControlAccess* base = (DLControlAccess*)this;
+    return base->m_bVisible && base->m_bEnabled;
+}
+
+// 0x00088700
+void CDXUTListBoxDL::UpdateRects()
+{
+    DLControlAccess* base = (DLControlAccess*)this;
+    base->DLControlAccess::UpdateRects();
+    selectionRect = base->m_rcBoundingBox;
+    selectionRect.right -= scrollBarWidth;
+    InflateRect(&selectionRect, -border, -border);
+    textRect = selectionRect;
+    InflateRect(&textRect, -margin, 0);
+    ((CDXUTControl*)&scrollBar)->SetLocation(base->m_rcBoundingBox.right - scrollBarWidth, base->m_rcBoundingBox.top);
+    ((CDXUTControl*)&scrollBar)->SetSize(scrollBarWidth, base->m_height);
+    DXUTFontNode* font = base->m_pDialog->GetFont(base->GetElement(0)->iFont);
+    if (font && font->nHeight)
+    {
+        scrollBar.m_nPageSize = (textRect.bottom - textRect.top) / font->nHeight;
+        scrollBar.Cap();
+        scrollBar.UpdateThumbRect();
+        scrollBar.ShowItem(selected);
+    }
+}
+
+// 0x0008de50
+CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog* parent) : CDXUTControl(0)
+{
+    m_pDialog = parent;
+    m_Type = DXUT_CONTROL_STATIC;
+    memset(text, 0, sizeof(text));
+    for (int i = 0; i < m_Elements.GetSize(); ++i)
+        if (m_Elements[i])
+            delete m_Elements[i];
+    m_Elements.RemoveAll();
+}
+
+// 0x0008dec0
+CDXUTStaticDL::~CDXUTStaticDL() {}
+
+// 0x0008deb0
+BOOL CDXUTStaticDL::ContainsPoint(POINT)
+{
+    return FALSE;
+}
+
+// 0x0008ded0
+void CDXUTStaticDL::Render(IDirect3DDevice9*, float elapsed)
+{
+    if (!m_bVisible)
+        return;
+    UINT state = m_bEnabled ? DXUT_STATE_NORMAL : DXUT_STATE_DISABLED;
+    CDXUTElement* element = m_Elements.GetAt(0);
+    element->FontColor.Blend(state, elapsed, 0.7f);
+    m_pDialog->DrawTextA(text, element, &m_rcBoundingBox, true, -1);
+}
+
+// 0x0008df20
+CDXUTButtonDL::CDXUTButtonDL(CDXUTDialog* parent) : CDXUTStaticDL(0)
+{
+    m_pDialog = parent;
+    m_Type = DXUT_CONTROL_BUTTON;
+    pressed = false;
+    m_nHotkey = 0;
+}
+
+// 0x0008dfc0
+CDXUTButtonDL::~CDXUTButtonDL() {}
+
+// 0x0008df60
+BOOL CDXUTButtonDL::ContainsPoint(POINT point)
+{
+    return PtInRect(&m_rcBoundingBox, point);
+}
+
+// 0x0008df80
+bool CDXUTButtonDL::CanHaveFocus()
+{
+    return m_bVisible && m_bEnabled;
+}
+
+// 0x0008dfa0
+void CDXUTButtonDL::OnHotkey()
+{
+    m_pDialog->RequestFocus(this);
+    m_pDialog->SendEvent(0x101, true, this);
+}
+
+// 0x000848d0
+bool CDXUTButtonDL::HandleKeyboard(UINT message, WPARAM wparam, LPARAM)
+{
+    if (!m_bEnabled || !m_bVisible)
+        return false;
+    if (message == WM_KEYDOWN && wparam == VK_SPACE)
+    {
+        pressed = true;
+        return true;
+    }
+    if (message == WM_KEYUP && wparam == VK_SPACE)
+    {
+        if (pressed == true)
+        {
+            pressed = false;
+            m_pDialog->SendEvent(0x101, true, this);
+        }
+        return true;
+    }
+    return false;
+}
+
+// 0x00084930
+bool CDXUTButtonDL::HandleMouse(UINT message, POINT point, WPARAM, LPARAM)
+{
+    if (!m_bEnabled || !m_bVisible)
+        return false;
+    if (message == WM_LBUTTONDOWN || message == WM_LBUTTONDBLCLK)
+    {
+        if (!ContainsPoint(point))
+            return false;
+        pressed = true;
+        SetCapture(DXUTGetHWND());
+        m_pDialog->SendEvent(0x102, true, this);
+        if (!m_bHasFocus)
+            m_pDialog->RequestFocus(this);
+        return true;
+    }
+    if (message == WM_LBUTTONUP && pressed)
+    {
+        pressed = false;
+        ReleaseCapture();
+        if (!m_pDialog->m_bKeyboardInput)
+            CDXUTDialog::ClearFocus();
+        if (ContainsPoint(point))
+            m_pDialog->SendEvent(0x101, true, this);
+        return true;
+    }
+    return false;
+}
+
+// 0x0008dfd0
+void CDXUTButtonDL::Render(IDirect3DDevice9*, float elapsed)
+{
+    int offsetX = 0, offsetY = 0;
+    UINT state = DXUT_STATE_NORMAL;
+    if (!m_bVisible)
+        state = DXUT_STATE_HIDDEN;
+    else if (!m_bEnabled)
+        state = DXUT_STATE_DISABLED;
+    else if (pressed)
+    {
+        state = DXUT_STATE_PRESSED;
+        offsetX = 1;
+        offsetY = 2;
+    }
+    else if (m_bMouseOver)
+    {
+        state = DXUT_STATE_MOUSEOVER;
+        offsetX = -1;
+        offsetY = -2;
+    }
+    else if (m_bHasFocus)
+        state = DXUT_STATE_FOCUS;
+    CDXUTElement* element = m_Elements.GetAt(0);
+    float rate = state == DXUT_STATE_PRESSED ? 0.0f : 0.8f;
+    RECT rect = m_rcBoundingBox;
+    OffsetRect(&rect, offsetX, offsetY);
+    element->TextureColor.Blend(state, elapsed, rate);
+    element->FontColor.Blend(state, elapsed, rate);
+    m_pDialog->DrawSprite(element, &rect);
+    m_pDialog->DrawTextA(text, element, &rect, false, -1);
+    element = m_Elements.GetAt(1);
+    element->TextureColor.Blend(state, elapsed, rate);
+    element->FontColor.Blend(state, elapsed, rate);
+    m_pDialog->DrawSprite(element, &rect);
+    m_pDialog->DrawTextA(text, element, &rect, false, -1);
+}
+
+// 0x00090790
+HRESULT CDXUTDialogDL::AddButton(int id, const char* text, int x, int y, int width, int height, UINT hotkey, bool isDefault, CDXUTButtonDL** created)
+{
+    // This native factory has no constructor-failure cleanup frame.
+    CDXUTButtonDL* button = (CDXUTButtonDL*)operator new(sizeof(CDXUTButtonDL));
+    if (button)
+        new (button) CDXUTButtonDL((CDXUTDialog*)this);
+    if (created)
+        *created = button;
+    if (!button)
+        return E_OUTOFMEMORY;
+    HRESULT result = ((CDXUTDialog*)this)->AddControl((CDXUTControl*)button);
+    if (FAILED(result))
+        return result;
+    ((CDXUTControl*)button)->SetID(id);
+    ((CDXUTStaticDL*)button)->SetText(text);
+    ((CDXUTControl*)button)->SetLocation(x, y);
+    ((CDXUTControl*)button)->SetSize(width, height);
+    ((CDXUTControl*)button)->SetHotkey(hotkey);
+    *((BYTE*)button + 7) = (BYTE)isDefault;
+    return S_OK;
+}
+
+// 0x000875c0
+HRESULT CDXUTStaticDL::SetText(const char* value)
+{
+    if (!value)
+    {
+        text[0] = 0;
+        return S_OK;
+    }
+    StringCchCopyA(text, 260, value);
+    return S_OK;
+}
+
+// 0x0008a270
+HRESULT CDXUTListBoxDL::AddItem(const char* value, void* data, int row)
+{
+    DXUTListBoxItemDL* item = new DXUTListBoxItemDL;
+    if (!item)
+        return E_OUTOFMEMORY;
+    StringCchCopyA(item->text, 256, value);
+    item->data = data;
+    SetRect(&item->activeRect, 0, 0, 0, 0);
+    item->selected = false;
+    item->color = row;
+    item->flag = false;
+    // Native initializes only64 bytes of each129-byte subitem buffer.
+    for (int i = 0; i < 3; ++i)
+        memset(item->subitems[i], 0, 64);
+    HRESULT result = items.Add(item);
+    if (FAILED(result))
+    {
+        delete item;
+        return result;
+    }
+    scrollBar.SetTrackRange(0, items.GetSize());
+    return result;
+}
+
+// 0x0008a370
+HRESULT CDXUTListBoxDL::InsertItem(int index, const char* value, void* data, DWORD color)
+{
+    DXUTListBoxItemDL* item = new DXUTListBoxItemDL;
+    if (!item)
+        return E_OUTOFMEMORY;
+    StringCchCopyA(item->text, 256, value);
+    item->data = data;
+    SetRect(&item->activeRect, 0, 0, 0, 0);
+    item->selected = false;
+    item->color = color;
+    HRESULT result = items.Insert(index, item);
+    if (SUCCEEDED(result))
+        scrollBar.SetTrackRange(0, items.GetSize());
+    else
+        delete item;
+    return result;
+}
+
+// 0x00088880
+void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
+{
+    if (row < 0 || row >= items.GetSize() || column < 0 || column >= columnCount)
+        return;
+    memset(items[row]->subitems[column], 0, 128);
+    strncpy(items[row]->subitems[column], value, 128);
+}
+
+// 0x0008a440
+DXUTListBoxItemDL* CDXUTListBoxDL::GetItem(int row)
+{
+    if (row < 0 || row >= items.GetSize())
+        return 0;
+    return items[row];
+}
+// 0x0006e240
+DXUTListBoxItemDL* CDXUTListBoxDL::GetSelectedItem(int previous)
+{
+    return GetItem(GetSelectedIndex(previous));
+}
+// 0x0006e260
+CDXUTScrollBar* CDXUTListBoxDL::GetScrollBar()
+{
+    return &scrollBar;
+}
+
+// 0x0008c270
+void CDXUTListBoxDL::RemoveAllItems()
+{
+    for (int i = 0; i < items.GetSize(); ++i)
+        delete items[i];
+    items.RemoveAll();
+    scrollBar.SetTrackRange(0, 1);
+}
+
+// 0x00088800
+void CDXUTListBoxDL::RemoveItem(int index)
+{
+    if (index < 0 || index >= items.GetSize())
+        return;
+    delete items[index];
+    items.Remove(index);
+    scrollBar.SetTrackRange(0, items.GetSize());
+    if (selected >= items.GetSize())
+        selected = items.GetSize() - 1;
+    m_pDialog->SendEvent(EVENT_LISTBOX_SELECTION, true, this);
+}
+
+// 0x0008a470
+void CDXUTListBoxDL::SelectItem(int index)
+{
+    int count = items.GetSize();
+    if (!count)
+        return;
+    int old = selected;
+    selected = index;
+    if (selected < 0)
+        selected = 0;
+    if (selected >= count)
+        selected = count - 1;
+    if (old != selected)
+    {
+        if (style & 1)
+            items[selected]->selected = true;
+        selectionStart = selected;
+        scrollBar.ShowItem(selected);
+    }
+    CDXUTDialog* parent = m_pDialog;
+    parent->SendEvent(0x702, true, (CDXUTControl*)this);
+}
+
+// 0x000888f0
+int CDXUTListBoxDL::GetSelectedIndex(int previous)
+{
+    if (previous < -1)
+        return -1;
+    if (style & 1)
+    {
+        int count = items.GetSize();
+        for (int i = previous + 1; i < count; ++i)
+            if (items[i]->selected)
+                return i;
+        return -1;
+    }
+    return selected;
 }

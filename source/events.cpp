@@ -4,7 +4,6 @@
 #include "game/playerped.h"
 #include "game/vehicle.h"
 #include "main.h"
-#include "net/local_rpc.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"

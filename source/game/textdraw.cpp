@@ -459,7 +459,7 @@ void CTextDraw::SetText(const char* text)
 }
 
 #include "game/custommodels.h"
-#include "game/effects.h"
+#include "game/util.h"
 #include <stdio.h>
 #include <stdlib.h>
 // 0x000b28d0

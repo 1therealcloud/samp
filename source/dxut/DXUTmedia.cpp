@@ -1,4 +1,4 @@
-#include "dxut/dxut_media_native.h"
+#include "dxut/DXUTmedia.h"
 #include "dxstdafx.h"
 // 0x00181ac8
 char g_dxutMediaSearchPath[MAX_PATH];

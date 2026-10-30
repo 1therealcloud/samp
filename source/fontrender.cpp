@@ -334,3 +334,9 @@ const char g_fontMeasureProbe[2] = "Y";
 
 // 0x002aca2c
 CFonts* g_deviceFonts;
+
+// 0x000c69e0
+int FontGetDialogHeight()
+{
+    return g_pConfig->GetIntValue("fontsize") * 2 + 20;
+}

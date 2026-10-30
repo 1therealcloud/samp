@@ -1,5 +1,6 @@
 #include "game/custommodels.h"
 #include "game/modelfile.h"
+#include "main.h"
 #include <stdlib.h>
 #include <string.h>
 // Original owning type/name unconfirmed; preserve this distinct native entry.
@@ -357,11 +358,10 @@ void CCustomModels::ReleaseObjectEntry(int model)
 }
 
 #include "chatwindow.h"
-#include "game/custom_model_io.h"
-#include "game/effects.h"
+#include "game/custommodels.h"
 #include "game/game.h"
 #include "game/hooks.h"
-#include "main.h"
+#include "game/util.h"
 #include "net/netgame.h"
 #include <stdlib.h>
 #include <string.h>

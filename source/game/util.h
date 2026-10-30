@@ -2,6 +2,7 @@
 #define SAMP_OBJECT_MATH_H
 #include "game/entity.h"
 #include <d3d9.h>
+#include <windows.h>
 // GTA SA VA: 0x00c97c28; returns the current global, including an installed proxy.
 // 0x000c5110
 IDirect3DDevice9* GameGetCurrentD3DDevice();
@@ -35,10 +36,7 @@ float FloatOffset(float first, float second);
 void __stdcall GameBuildAimUpVector(const CVector* direction, CVector* up);
 // 0x0011e3a0
 extern const double g_aimVectorHalfPi;
-#endif
 
-#ifndef SAMP_RW_TRANSFORM_H
-#define SAMP_RW_TRANSFORM_H
 // Native axis table is indexed without a bounds check.
 // 0x001553d8
 extern const CVector g_rwRotationAxes[3];
@@ -61,10 +59,7 @@ void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale);
 // Raw backend layout; unlike GameQuaternionFromMatrix, no XYZW/WXYZ reorder.
 // 0x000b4d20
 void GameRwQuaternionFromMatrix(void* quaternion, const CMatrix* matrix);
-#endif
 
-#ifndef SAMP_VECTOR_ADAPTERS_H
-#define SAMP_VECTOR_ADAPTERS_H
 // 0x000b4630
 void GameNormalizeVector(CVector* vector);
 // 0x000b4750
@@ -72,10 +67,7 @@ CVector* GameVectorCrossProduct(CVector* out, const CVector* left, const CVector
 // Transposed basis only; no translation.
 // 0x000b4790
 CVector* GameTransformVectorByTranspose(CVector* out, const CVector* vector, const CMatrix* matrix);
-#endif
 
-#ifndef SAMP_RW_HELPERS_H
-#define SAMP_RW_HELPERS_H
 typedef CVector*(__cdecl* GameRwPointTransformBackend)(CVector*, const CVector*, int, const CMatrix*);
 typedef void(__cdecl* GameRwAxisRotateBackend)(CMatrix*, const CVector*, float, int);
 // 0x001553d4
@@ -98,11 +90,7 @@ void GameInvertRwMatrix(CMatrix* out, const CMatrix* matrix);
 void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle);
 // 0x000b54b0
 float GameHeadingToRadians(float heading);
-#endif
 
-#ifndef SAMP_RW_OBJECTS_H
-#define SAMP_RW_OBJECTS_H
-#include <windows.h>
 // Opaque GTA/RenderWare objects, not SA-MP CEntity/CCamera wrapper pointers.
 typedef void*(__cdecl* GameRwObjectCallback)(void* object, void* data);
 // 0x000b1010
@@ -171,10 +159,7 @@ void GameRwDestroyObject(void* object);
 BOOL __stdcall GameRwRenderAtomic(void* object);
 // 0x000b5e70
 void __stdcall GameRwRenderObject(void* object);
-#endif
 
-#ifndef SAMP_GAME_POOL_HELPERS_H
-#define SAMP_GAME_POOL_HELPERS_H
 // Opaque GTA backend pointers; these are not SA-MP pool/wrapper objects.
 // 0x000b37a0
 int __stdcall GamePoolPedGetIndex(void* ped);
@@ -191,10 +176,7 @@ bool GamePoolHasObjectModel(int model);
 // Fixed physical GTA table span, independent of recovered custom-model bank.
 // 0x000b3a00
 int GameCountEmptyBackendModelSlots();
-#endif
 
-#ifndef SAMP_RASTER_HELPERS_H
-#define SAMP_RASTER_HELPERS_H
 // 0x002a9d98
 extern int g_rwImageDepth;
 // 0x002a9d9c
@@ -212,15 +194,107 @@ void GameCreateSceneRasters();
 // Raw GPR-preserving entry, not a RenderWare camera method.
 // 0x000b5860
 void GameRenderWithSceneRasters();
-#endif
 
-#ifndef SAMP_NATIVE_SCRATCH_H
-#define SAMP_NATIVE_SCRATCH_H
 // Shared physical native BSS span. Collision and rotation adapters use views
 // inside it; this is not one established typed collision object.
 // 0x002aae18
 extern BYTE g_entityCollisionScratch[0x1044];
-#endif
+// 0x0015535c
+extern const CVector g_rwPreviewAxes[3];
+// 0x000b1700
+void* GameRwCreateLight(int type);
+// 0x000b1770
+void GameRwSetLightColor(void* light, const float* rgba);
+// 0x000b12d0
+void* GameRwCreateRaster(int width, int height, int depth, int flags);
+// 0x000b1430
+void* GameRwCreateCamera();
+// 0x000b1390
+void* GameRwCreateFrame();
+// 0x000b18f0
+void GameRwTranslateFrame(void* frame, const CVector* position, int combine);
+// 0x000b1920
+void GameRwRotateFrame(void* frame, int axis, float angle);
+// 0x000b15b0
+void GameRwSetCameraRasters(void* camera, void* color, void* depth);
+// 0x000b1580
+void GameRwSetObjectFrame(void* object, void* frame);
+// 0x000b1680
+void GameRwSetClipDistances(void* camera, float farClip, float nearClip);
+// 0x000b16d0
+void GameRwSetViewWindow(void* camera, const float* window);
+// 0x000b18c0
+void GameRwSetProjection(void* camera, int projection);
+// 0x000b1320
+void* GameRwCreateTexture(void* raster);
+// Raw native argument words forwarded to GTA CPad::Clear.
+// 0x000b58e0
+void GameClearLocalPad(DWORD first, DWORD second);
+// Opaque GTA backend objects, not maintained CEntity/CPed wrapper instances.
+// Flag arguments retain full native DWORD words while the backend consumes bools.
+// 0x000b6020
+bool __stdcall GameWeaponFireInstantHit(void* weapon, void* shooter, const CVector* origin, const CVector* muzzle, void* victim, const CVector* target, const CVector* driveBy,
+                                        DWORD crossHair, DWORD effects);
+// 0x000b6050
+bool __stdcall GameWeaponFireSniper(void* weapon, void* shooter);
+// 0x00151b20
+extern DWORD g_playerDefaultColors[1000];
+// 0x0018f6c0
+extern DWORD g_playerColors[1000];
+namespace PlayerColors
+{
+// 0x000a6fc0
+void Initialize();
+// 0x000a6f50
+void __stdcall Set(DWORD index, DWORD color);
+// 0x000a6f70
+DWORD __stdcall Get(DWORD index);
+} // namespace PlayerColors
+// The effects parser uses the same23-byte native stream as DFF/TXD parsing.
+// Its single implementation,including borrowed-buffer lifecycle,is in modelfile.
+// 0x000b2790
+BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE fromSamp);
+// 0x000b2860
+void* GameLoadDictionaryTexture(const char* dictionary, const char* name);
+// 0x000b3480
+int GameTxdFind(const char* name);
+// 0x000b3510
+void GameTxdPush();
+// 0x000b3520
+void GameTxdPop();
+// 0x000b3530
+void GameTxdSetCurrent(int index);
+// 0x000b3540
+void* GameTxdReadTexture(const char* name);
+// 0x000b34f0
+void GameTxdAddRef(int index);
+// 0x000b3500
+void GameTxdRemoveRef(int index);
+// 0x000b35b0
+void GameTxdRemove(int index);
+// 0x000b35d0
+void GameTxdRemoveSlot(int index);
+// 0x000b35f0
+DWORD GameTxdGetReferenceCount(int index);
+// 0x000b3580
+void GameTxdRemoveSlotByName(const char* name);
+// 0x000b1ce0
+void* GameRwGetGeometrySkin(void* geometry);
+// 0x000b1da0
+int GameRwRegisterClumpPlugin(DWORD pluginId);
+// 0x000b1e00
+int GameRwRegisterClumpPluginStream(DWORD pluginId, DWORD readCallback);
+// 0x000b1e60
+void GameRwEnableAutoMipmapping();
+// 0x000b1ca0
+void* GameRwGetFirstAtomic(void* clump);
+// 0x000b1d40
+void* GameRwGetClumpAnimHierarchy(void* clump);
+// 0x000b1d70
+void* GameRwCreateHierarchyAnimation(void* hierarchy);
+
+// 0x000b1d20
+void* GameRwGetClumpSkin(void* clump);
 
 // 0x000b3e40
 DWORD __stdcall GameTestCameraSphere(const CVector* centre, float radius);
@@ -343,3 +417,4 @@ float GameAsin(float value);
 // Position12 bytes and float heading; null backend is not checked natively.
 // 0x000b6260
 void GameGetBackendPositionAndHeading(void* entity, CVector* position, float* heading);
+#endif

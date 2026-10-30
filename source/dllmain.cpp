@@ -1,4 +1,4 @@
-#include "archive/provider.h"
+#include "archive/ArchiveFS.h"
 #include "filehooks.h"
 #include "game/hooks.h"
 #include "main.h"

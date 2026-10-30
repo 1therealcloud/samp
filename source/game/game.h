@@ -2,6 +2,7 @@
 #define SAMP_RECOVERED_GAME_H
 #include "game/audio.h"
 #include "game/camera.h"
+#include "game/scripting.h"
 #include <d3d9.h>
 #include <stddef.h>
 #include <windows.h>
@@ -271,11 +272,7 @@ typedef char GameWaitOffset[(offsetof(CGame, m_nInputEnableWaitFrames) == 0x65) 
 typedef char GameClockOffset[(offsetof(CGame, m_bClockEnabled) == 0x69) ? 1 : -1];
 // 0x0018e1d8
 extern BOOL g_gameUsedPlayerSlots[210];
-#endif
 
-#ifndef SAMP_RECOVERED_GAME_INPUT_H
-#define SAMP_RECOVERED_GAME_INPUT_H
-#include "main.h"
 // 0x000aa0b0
 void GameUnprotect(void* address, SIZE_T size);
 // 0x000a02f0
@@ -300,11 +297,7 @@ extern BYTE g_gameKeyCall[5];
 extern BYTE g_gameMouseCallEU[5];
 // 0x00151928
 extern BYTE g_gameMouseCallUS[5];
-#endif
 
-#ifndef SAMP_GAME_MODEL_H
-#define SAMP_GAME_MODEL_H
-#include "game/scripting.h"
 // Physical native bank ends at the following enable flag. The enabled lookup
 // does not check indices; adjacency outside this bank is not proven equivalent.
 // 0x001c0444
@@ -407,16 +400,10 @@ DWORD __cdecl GameReadPedModelTable28(int model);
 DWORD __cdecl GameReadPedModelTable2c(int model);
 // 0x000b3d80
 DWORD __cdecl GameReadPedModelTable24(int model);
-#endif
 
-#ifndef SAMP_RECOVERED_GAME_INITIALIZATION_H
-#define SAMP_RECOVERED_GAME_INITIALIZATION_H
 // 0x0018e1cc
 extern char* g_gameTextBuffer;
-#endif
 
-#ifndef SAMP_RECOVERED_GAME_PREINIT_H
-#define SAMP_RECOVERED_GAME_PREINIT_H
 // 0x000aa060
 void GameWaitUnprotect(BYTE* address, SIZE_T size, BYTE expected);
 // 0x000aa300
@@ -427,8 +414,7 @@ DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2);
 DWORD __cdecl GameDataReadHook(void* arg0, DWORD length, void* arg2);
 // 0x000b1a40
 DWORD GameReadStream(void* stream, void* buffer, DWORD length);
-// 0x000b6610
-void GameParseStreamData(const void* data, DWORD length, void* destination);
+
 // 0x002a9270
 extern DWORD g_gamePhysicalMegabytes;
 // 0x002a9274
@@ -441,7 +427,26 @@ extern char g_gameFrameNodeError[256];
 extern bool g_gameCustomStreamRead;
 // 0x0018f6b8
 extern void* g_gameStreamBuffer;
-#endif
+// 0x0018e520
+extern BYTE g_frameKeyCycle;
+// 0x0018e524
+extern DWORD g_frameKeyCycleTick;
+// 0x0018e528
+extern DWORD g_frameSampleCount;
+// 0x0018e52c
+extern DWORD g_frameSampleTick;
+// 0x0018e530
+extern DWORD g_frameSleepTick;
+// 0x0018e534
+extern float g_frameScale;
+// 0x001181d8
+extern const float g_frameScaleMultiplier;
+// 0x0011c664
+extern const float g_frameScaleNumerator;
+// 0x0009fe50
+void GameUpdateKeyCycle();
+// 0x000b5d10
+void GameSetVideoMode(DWORD mode);
 
 // 0x0011e844
 extern const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand;
@@ -563,3 +568,4 @@ extern DWORD g_gamePreviewPed[488];
 // Unchecked index; native reloads selected table after the real CRT free.
 // 0x000a7720
 void GameFreeModelInfo(int model);
+#endif

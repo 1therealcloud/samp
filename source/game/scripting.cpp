@@ -1,4 +1,5 @@
 #include "game/scripting.h"
+#include "main.h"
 #include <string.h>
 // 0x002a93f0
 CRunningScript* g_scriptThread;
@@ -10,7 +11,6 @@ void Scripting::Initialize()
 }
 
 #include "chatwindow.h"
-#include "main.h"
 #include <stdarg.h>
 // 0x002a92f0
 BYTE g_scriptBuffer[256];

@@ -1,6 +1,6 @@
 #include "net/actorpool.h"
-#include "game/actor.h"
 #include "chatwindow.h"
+#include "game/actor.h"
 #include "game/custommodels.h"
 #include "main.h"
 // 0x00001610

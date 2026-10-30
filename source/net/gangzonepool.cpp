@@ -1,5 +1,6 @@
 #include "net/gangzonepool.h"
 #include "game/game.h"
+#include "main.h"
 #include <stdlib.h>
 #include <string.h>
 // Native record allocation is malloc; release calls operator delete.

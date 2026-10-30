@@ -35,11 +35,7 @@ void GameInstallEventOpcodes();
 void GameSetEventOpcode();
 // 0x00001c60
 void GamePlayerDriverOpcode();
-#endif
 
-#ifndef SAMP_RECOVERED_GAME_LIMITS_H
-#define SAMP_RECOVERED_GAME_LIMITS_H
-#include "game/limit_data.h"
 #pragma pack(push, 1)
 struct GamePedModelRecord
 {
@@ -70,7 +66,26 @@ void GameRelocateModelRecords();
 void GameRelocateModelFlags();
 // 0x000aa180
 void GameIncreasePoolLimits();
-#endif
+// 0x001546b0
+extern BYTE g_gamePoolPatchOne[7];
+// 0x001546b8
+extern BYTE g_gamePoolPatchTwo[5];
+// 0x001546f8
+extern DWORD g_gameModelReferenceSites[14];
+// 0x00154730
+extern DWORD g_gameScanDirectUSA[14];
+// 0x00154768
+extern DWORD g_gameScanDirectEU[14];
+// 0x001547a0
+extern DWORD g_gameScanOperandUSA[56];
+// 0x00154880
+extern DWORD g_gameScanOperandEU[56];
+// 0x00154960
+extern DWORD g_gameScanSecondSites[11];
+// 0x0015498c
+extern DWORD g_gamePedReferenceSites[4];
+// 0x001549a0
+extern BYTE g_gameDefaultModelFlags[1024];
 
 // 0x000a9d10
 void _patch(DWORD address, BYTE* data, int byteCount);
@@ -91,3 +106,4 @@ void GamePatchCount44(DWORD count);
 void GameSetFontPatchBytes3();
 // 0x000aaa50
 void GameApplyDebugInitializationPatches();
+#endif

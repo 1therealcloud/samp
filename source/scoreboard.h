@@ -1,6 +1,6 @@
 #ifndef SAMP_SCOREBOARD_H
 #define SAMP_SCOREBOARD_H
-#include "dxut/dxut_listbox_native.h"
+#include "dxut/DXUTgui.h"
 #include <d3dx9.h>
 #pragma pack(push, 1)
 struct ScoreboardRow

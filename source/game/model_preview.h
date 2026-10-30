@@ -1,6 +1,6 @@
 #ifndef SAMP_MODEL_PREVIEW_H
 #define SAMP_MODEL_PREVIEW_H
-#include "game/rw_preview.h"
+#include "game/entity.h"
 #pragma pack(push, 1)
 // Descriptive recovered class name; original identity is not established.
 class CModelPreview
