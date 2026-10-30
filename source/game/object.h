@@ -150,7 +150,7 @@ public:
     float GetAngleDifference(float from, float to);
     // Rotation matrix builder dependency; not a production stand-in.
     // 0x000a7fb0
-    void Rotate(CVector rotation);
+    void Rotate(float x, float y, float z);
     // Original consumes seven float words.
     // 0x000a97c0
     void Move(CVector position, float speed, CVector rotation);

@@ -54,87 +54,27 @@ extern const float g_objectDegreesToRadians = 0.01745329238474369f;
 // Keep the native x87 trigonometry and float spill boundaries. Only the nine
 // rotation coefficients are written; matrix padding and position are untouched.
 // 0x000a7fb0
-void CObject::Rotate(CVector rotation)
+void CObject::Rotate(float x, float y, float z)
 {
-    BYTE* state = (BYTE*)this;
-    // clang-format off
-    __asm {
-        mov esi,state
-        lea edx,rotation
-        fld dword ptr [edx]
-        mov ebx, dword ptr [edx + 4]
-        fmul g_objectDegreesToRadians
-        mov eax, dword ptr [edx]
-        fld dword ptr [edx + 4]
-        mov dword ptr [esi + 0xad], eax
-        fmul g_objectDegreesToRadians
-        mov eax, dword ptr [edx + 8]
-        mov dword ptr [esi + 0xb1], ebx
-        mov dword ptr [esi + 0xb5], eax
-        fstp dword ptr [edx + 4]
-        fld dword ptr [edx + 8]
-        fmul g_objectDegreesToRadians
-        fstp dword ptr [edx + 8]
-        fld st(0)
-        fcos
-        fstp dword ptr [edx]
-        fsin
-        fld dword ptr [edx + 4]
-        fcos
-        fld dword ptr [edx + 4]
-        fsin
-        fld dword ptr [edx + 8]
-        fcos
-        fld dword ptr [edx + 8]
-        fsin
-        fst dword ptr [edx + 4]
-        fmul st,st(4)
-        fld st(1)
-        fmul st,st(5)
-        fstp dword ptr [edx + 8]
-        fld st(1)
-        fmul st,st(4)
-        fld st(1)
-        fmul st,st(4)
-        fsubp st(1),st
-        fstp dword ptr [esi + 0xdb]
-        fld dword ptr [edx + 8]
-        fmul st,st(3)
-        fld dword ptr [edx + 4]
-        fmul st,st(5)
-        faddp st(1),st
-        fstp dword ptr [esi + 0xdf]
-        fld st(2)
-        fmul dword ptr [edx]
-        fchs
-        fstp dword ptr [esi + 0xe3]
-        fld dword ptr [edx + 4]
-        fmul dword ptr [edx]
-        fchs
-        fstp dword ptr [esi + 0xeb]
-        fld st(1)
-        fmul dword ptr [edx]
-        fstp dword ptr [esi + 0xef]
-        fxch st(4)
-        fstp dword ptr [esi + 0xf3]
-        fxch st(3)
-        fmul st,st(2)
-        fxch st(3)
-        fmul st,st(1)
-        faddp st(3),st
-        fxch st(2)
-        fstp dword ptr [esi + 0xfb]
-        fld dword ptr [edx + 4]
-        fmul st,st(2)
-        fld dword ptr [edx + 8]
-        fmul st,st(2)
-        fsubp st(1),st
-        fstp dword ptr [esi + 0xff]
-        fstp st(1)
-        fmul dword ptr [edx]
-        fstp dword ptr [esi + 0x103]
-    }
-    // clang-format on
+    eulerRotation.x = x;
+    eulerRotation.y = y;
+    eulerRotation.z = z;
+    x *= g_objectDegreesToRadians;
+    y *= g_objectDegreesToRadians;
+    z *= g_objectDegreesToRadians;
+    float cx = (float)cos(x), sx = (float)sin(x);
+    float cy = (float)cos(y), sy = (float)sin(y);
+    float cz = (float)cos(z), sz = (float)sin(z);
+    float sxsz = sx * sz, sxcz = sx * cz;
+    targetMatrix.right.x = cz * cy - sxsz * sy;
+    targetMatrix.right.y = sxcz * sy + sz * cy;
+    targetMatrix.right.z = -sy * cx;
+    targetMatrix.up.x = -sz * cx;
+    targetMatrix.up.y = cz * cx;
+    targetMatrix.up.z = sx;
+    targetMatrix.at.x = sxsz * cy + cz * sy;
+    targetMatrix.at.y = sz * sy - sxcz * cy;
+    targetMatrix.at.z = cy * cx;
 }
 
 // 0x0011ee24
@@ -189,10 +129,10 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     DWORD tick = RakNet::GetTime();
     moveStartTick = tick;
     targetMatrix.position.x = position.x;
-    moveSpeed = speed;
-    motionFlags |= 1;
     targetMatrix.position.y = position.y;
     targetMatrix.position.z = position.z;
+    moveSpeed = speed;
+    motionFlags |= 1;
     if (rotation.x > g_objectMotionRotationSentinel && rotation.y > g_objectMotionRotationSentinel && rotation.z > g_objectMotionRotationSentinel)
     {
         rotationEnabled = 1;
@@ -204,7 +144,7 @@ void CObject::Move(CVector position, float speed, CVector rotation)
         angleDelta.x = GetAngleDifference(x, targetEuler.x);
         angleDelta.y = GetAngleDifference(y, targetEuler.y);
         angleDelta.z = GetAngleDifference(z, targetEuler.z);
-        Rotate(rotation);
+        Rotate(rotation.x, rotation.y, rotation.z);
         CMatrix rotated;
         GetMatrix(&rotated);
         GameQuaternionFromMatrix(&rotated, &startQuaternion);
@@ -361,24 +301,12 @@ void CObject::ClearModelFlag0()
 // 0x000a9150
 void CObject::ProcessStreaming()
 {
-    BYTE* state = (BYTE*)this;
     renderReady = 0;
-    bool timeHidden = timeVisibilityEnabled && !IsTimeVisible();
-    bool outside;
-    // clang-format off
-    // Native caches a float but compares the unspilled ST0 result.
-    __asm {
-        mov ecx,state
-        call CEntity::GetDistanceToCamera
-        mov edx,state
-        fst dword ptr [edx+0x68]
-        fcomp dword ptr [edx+0x54]
-        fnstsw ax
-        test ah,0x41
-        sete outside
-    }
-    // clang-format on
-    if (!outside && !timeHidden)
+    bool timeHidden = false;
+    if (timeVisibilityEnabled && !IsTimeVisible())
+        timeHidden = true;
+    cameraDistance = GetDistanceToCamera();
+    if (!(cameraDistance > streamingDistance) && !timeHidden)
     {
         if (!GetRwObject())
         {
@@ -741,18 +669,26 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
 {
     BYTE* state = (BYTE*)this;
     DWORD handle = 0;
-    attachedVehicle = attachedObject = 0xffff;
+    attachedVehicle = 0xffff;
+    attachedObject = 0xffff;
     state[0x1193] = flag1193;
     m_pGameEntity = 0;
     m_nHandle = 0;
-    memset(&attachmentOffset, 0, 24);
+    attachmentOffset.x = 0;
+    attachmentOffset.y = 0;
+    attachmentOffset.z = 0;
+    attachmentRotation.x = 0;
+    attachmentRotation.y = 0;
+    attachmentRotation.z = 0;
     attachmentRotationSync = 1;
     state[0x1b4] = 0;
     state[0x1194] = 0;
     state[0xb9] = 0;
     *(DWORD*)(state + 0xba) = 0;
     state[0x53] = 0;
-    timeVisibilityEnabled = visibilityStartHour = visibilityEndHour = 0;
+    timeVisibilityEnabled = 0;
+    visibilityStartHour = 0;
+    visibilityEndHour = 0;
     if (firstHour || lastHour)
     {
         timeVisibilityEnabled = 1;
@@ -795,7 +731,9 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
             memcpy(&streamingDistance, &drawDistance, 4);
         }
         GetMatrix(&baseMatrix);
-        memcpy(&baseMatrix.position, &position, 12);
+        baseMatrix.position.x = position.x;
+        baseMatrix.position.y = position.y;
+        baseMatrix.position.z = position.z;
         SetMatrix(baseMatrix);
         SetRotation(&rotation);
         SetBackendHighFlag();
@@ -1066,8 +1004,9 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     if (*texture)
     {
         GameDestroyTextDrawTexture(*texture);
+        DWORD raster = *(DWORD*)(state + 0x110b + index * 4);
         *texture = 0;
-        if (*(DWORD*)(state + 0x110b + index * 4))
+        if (raster)
             *(DWORD*)(state + 0x110b + index * 4) = 0;
     }
     IUnknown** rendered = (IUnknown**)(state + 0x114b + index * 4);
@@ -1087,33 +1026,20 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     if (!*texture)
         return;
     ++*(DWORD*)((BYTE*)*texture + 0x50);
-    unsigned length = 0;
-    while (text[length])
-        ++length;
-    *stored = (char*)calloc(1, length + 1);
-    char* destination = *stored;
-    do
-    {
-        *destination++ = *text;
-    }
-    while (*text++);
-    BYTE* record = state + index * 0xd7;
-    record[0x35c] = (BYTE)index;
-    record[0x3e5] = size;
-    destination = (char*)(record + 0x3e6);
-    do
-    {
-        *destination++ = *font;
-    }
-    while (*font++);
-    record[0x427] = fontSize;
-    record[0x428] = bold != 0;
-    *(DWORD*)(record + 0x429) = fontColor;
-    *(DWORD*)(record + 0x42d) = backgroundColor;
-    record[0x431] = alignment;
+    *stored = (char*)calloc(1, strlen(text) + 1);
+    strcpy(*stored, text);
+    materials.textInfo[index].index = (BYTE)index;
+    materials.textInfo[index].size = size;
+    strcpy(materials.textInfo[index].font, font);
+    materials.textInfo[index].fontSize = fontSize;
+    materials.textInfo[index].bold = bold != 0;
+    materials.textInfo[index].fontColor = fontColor;
+    materials.textInfo[index].backgroundColor = backgroundColor;
+    materials.textInfo[index].alignment = alignment;
+    void* materialTexture = *texture;
     *(DWORD*)(state + 0x257 + index * 4) = 0;
     *(DWORD*)(state + 0x2db + index * 4) = 2;
-    void* raster = *(void**)*texture;
+    void* raster = *(void**)materialTexture;
     if (raster)
         *(void**)(state + 0x110b + index * 4) = GameRwReadField34(raster);
     hasMaterials = 1;
@@ -1127,33 +1053,33 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
         return;
     if (model > 0 && !GameModelQueryB4170(model))
         return;
-    BYTE* state = (BYTE*)this;
-    void** slot = (void**)(state + 0x217 + index * 4);
-    if (*slot)
+    if (materials.textures[index])
     {
-        GameDestroyTextDrawTexture(*slot);
-        *slot = 0;
-        if (*(DWORD*)(state + 0x110b + index * 4))
-            *(DWORD*)(state + 0x110b + index * 4) = 0;
+        GameDestroyTextDrawTexture(materials.textures[index]);
+        DWORD raster = materials.rasterField34[index];
+        materials.textures[index] = 0;
+        if (raster)
+            materials.rasterField34[index] = 0;
     }
     if (model > 0)
     {
-        BOOL ready = g_pGame->IsModelAvailable(model);
-        if (!ready)
+        if (!g_pGame->IsModelAvailable(model))
         {
             g_pGame->RequestModel(model, 2);
             g_pGame->LoadRequestedModels();
-            ready = g_pGame->IsModelAvailable(model);
             int waits = 0;
-            while (!ready)
+            while (!g_pGame->IsModelAvailable(model))
             {
                 if (++waits > 250)
-                    break;
+                {
+                    materials.textures[index] = 0;
+                    goto releaseModel;
+                }
                 Sleep(2);
-                ready = g_pGame->IsModelAvailable(model);
             }
         }
-        *slot = ready ? GameLoadDictionaryTexture(dictionary, texture) : 0;
+        materials.textures[index] = GameLoadDictionaryTexture(dictionary, texture);
+    releaseModel:
         if (!GameGetModelReferenceCount(model) && g_pGame->IsModelAvailable(model))
             g_pGame->ReleaseModel(model, 0);
     }
@@ -1164,10 +1090,10 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
             GameLoadTextureDictionary("blanktex", "blanktex", 1);
             g_objectSharedMaterialTexture = GameLoadDictionaryTexture("blanktex", "blanktex");
         }
-        *slot = g_objectSharedMaterialTexture;
+        materials.textures[index] = g_objectSharedMaterialTexture;
     }
-    *(DWORD*)(state + 0x257 + index * 4) = color;
-    *(DWORD*)(state + 0x2db + index * 4) = 1;
+    materials.colors[index] = color;
+    materials.types[index] = 1;
     hasMaterials = 1;
 }
 
@@ -1235,9 +1161,10 @@ void CObject::NativeA8B50()
 {
     if (!m_pEntity)
         return;
-    DWORD table = m_pEntity->vtable;
-    if (table == 0x863c40)
+    DWORD vtable = m_pEntity->vtable;
+    if (vtable == 0x863c40)
         return;
+    DWORD table = vtable;
     void* backend = m_pGameEntity;
     // Native GTA slot17 followed by cdecl backend553260.
     // clang-format off
@@ -1262,27 +1189,20 @@ void CObject::Render()
     CCamera* camera = *(CCamera**)((BYTE*)g_pGame + 4);
     CVector* centre = &worldCentre;
     float* radius = &collisionRadius;
-    BYTE closer;
-    // clang-format off
-    // Compare the camera's unspilled ST0 result, as in the original body.
-    __asm {mov ecx,camera}
-    __asm {push centre}
-    __asm {call CCamera::GetDistanceToPoint}
-    __asm {mov edx,radius}
-    __asm {fcomp dword ptr [edx]}
-    __asm {fnstsw ax}
-    __asm {test ah,5}
-    __asm {setnp closer}
-    // clang-format on
-    if (!closer && !GameTestCameraSphere(centre, *radius))
+    if (!(camera->GetDistanceToPoint(centre) < *radius) && !GameTestCameraSphere(centre, *radius))
         return;
     if (drawLast)
     {
         // GTA SA virtual address: native weather/render state gate.
-        DWORD alpha = (*(DWORD*)0xb72914 || (GameGetModelFlagsByte(modelIndex) & 8)) ? 0 : 100;
-        ClientSetRenderState(30, alpha);
+        if (*(DWORD*)0xb72914 || (GameGetModelFlagsByte(modelIndex) & 8))
+            ClientSetRenderState(30, 0);
+        else
+            ClientSetRenderState(30, 100);
     }
-    ClientSetRenderState(20, (GameGetModelFlagsByte(modelIndex) & 0x40) ? 2 : 1);
+    if (GameGetModelFlagsByte(modelIndex) & 0x40)
+        ClientSetRenderState(20, 2);
+    else
+        ClientSetRenderState(20, 1);
     if (hasMaterials && materialPassState)
         ProcessMaterials();
     GameSetupD3DFog(1);
