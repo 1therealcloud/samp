@@ -1,5 +1,4 @@
 #include "dxut/dxut_listbox_native.h"
-#include "gui/input_text.h"
 #include <DXUTgui.h>
 #include <new>
 #include <string.h>

@@ -240,7 +240,7 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     ClearBackendFlag8();
 }
 
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 
 // 0x000a8870
 bool CObject::GetMaterialSize(int code, int* width, int* height)
@@ -567,7 +567,7 @@ void CObject::Process(float elapsedSeconds)
 }
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
-#include "gui/textdraw_texture.h"
+#include "game/textdraw.h"
 #include <stdlib.h>
 // 0x001e0498
 void* g_objectSharedMaterialTexture = 0;

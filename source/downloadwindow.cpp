@@ -20,7 +20,7 @@ int CDownloadWindow::GetFilesCount()
 #include "dxut/dxut_listbox_native.h"
 #include "fontrender.h"
 #include "game/gta_globals.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include <string.h>
 // 0x0011c37c
 const char g_downloadWindowTitle[18] = "Updating models..";

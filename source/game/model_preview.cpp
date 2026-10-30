@@ -4,9 +4,9 @@
 #include "game/hooks.h"
 #include "game/object.h"
 #include "game/playerped.h"
+#include "game/textdraw.h"
 #include "game/util.h"
 #include "game/vehicle.h"
-#include "gui/textdraw_texture.h"
 #include "main.h"
 #include <string.h>
 // 0x002aca38

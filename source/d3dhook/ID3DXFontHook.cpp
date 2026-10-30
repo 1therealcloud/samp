@@ -1,5 +1,7 @@
-#include "gui/font_wrapper.h"
-#include "gui/chat_dependencies.h"
+#include "d3dhook/ID3DXFontHook.h"
+#include "cmdwindow.h"
+#include "runutil.h"
+#include <DXUTgui.h>
 #include <string.h>
 
 // 0x0006b310

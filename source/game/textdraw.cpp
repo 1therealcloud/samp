@@ -20,7 +20,7 @@ void CTextDraw::OnLostDevice()
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/font.h"
-#include "gui/textdraw_texture.h"
+#include "game/textdraw.h"
 extern "C"
 {
     // MSVC CRT helper, supplied by the selected static runtime, not recovered here.

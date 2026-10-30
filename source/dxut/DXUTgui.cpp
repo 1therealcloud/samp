@@ -9,9 +9,7 @@
 #include "DXUTsettingsDlg.h"
 #include "dxstdafx.h"
 #include "game/gta_globals.h"
-#include "gui/input_text.h"
-#include "input_activity.h"
-#include "input_password.h"
+#include <DXUTgui.h>
 
 // 0x0006a130
 void CDXUTDialog::SetCaptionText(const char* text)

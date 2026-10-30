@@ -1,7 +1,7 @@
 #include "game/playerped.h"
 #include "exceptions.h"
 #include "game/aimstuff.h"
-#include "gui/textdraw_texture.h"
+#include "game/textdraw.h"
 // 0x00013570
 void* CPed::GetGtaActor()
 {
@@ -16,7 +16,7 @@ void* CPed::GetGtaActor()
 #include "game/scripting.h"
 #include "game/task.h"
 #include "game/weapon_backend.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include "label.h"
 #include "net/localplayer.h"
 #include <stdio.h>

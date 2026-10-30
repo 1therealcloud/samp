@@ -5,7 +5,7 @@
 #include "game/game.h"
 #include "game/gta_globals.h"
 #include "game/util.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"

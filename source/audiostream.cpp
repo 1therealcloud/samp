@@ -44,7 +44,7 @@ void CAudioStream::ControlGameRadio()
 #include "fontrender.h"
 #include "game/entity.h"
 #include "game/gta_globals.h"
-#include "gui/device_objects.h"
+#include "gui.h"
 #include <stdio.h>
 #include <string.h>
 // 0x0016c5c0

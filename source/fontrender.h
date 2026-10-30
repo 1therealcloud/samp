@@ -54,6 +54,8 @@ typedef char FontsScratchOffset[(offsetof(CFonts, m_szTempBuffer) == 28) ? 1 : -
 
 // 0x00118400
 extern const char g_fontMeasureProbe[2];
+// 0x002aca2c
+extern CFonts* g_deviceFonts;
 #endif
 
 #ifndef SAMP_RECOVERED_FONT_SETTINGS_H

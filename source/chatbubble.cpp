@@ -1,7 +1,7 @@
 #include "chatbubble.h"
 #include "game/game.h"
 #include "game/playerped.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include "label.h"
 #include "main.h"
 #include "net/playerpool.h"

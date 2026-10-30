@@ -40,7 +40,7 @@ if not exist "%OBJDIR%" goto :failed
 if not exist "%LOGDIR%" goto :failed
 type nul >"%OBJECTS%"
 set "FLAGS=/nologo /c /O2 /Ob2 /Oi /GF /MT /Zp1 /Gy /GX /GR- /DNDEBUG /DWIN32 /DUNICODE /D_UNICODE /DSTRSAFE_NO_DEPRECATE /DCURL_STATICLIB /DSAMP_DIRECT_GTA_GLOBALS /FI"%CD%\build\libs\dxut-sdk\dxstdafx.h""
-set "INCLUDE=%CD%\build\libs\dxut-sdk;%SYSTEM_INCLUDE%;%CD%\source;%CD%\source\gui;%CD%\source\dxut;%CD%\third-party\RakNet\Include;%CD%\third-party\bass;%CD%\third-party\detours;%CD%\third-party\curl\include;%CD%\third-party\zlib;%CD%\third-party\lzma\C;%CD%\third-party\ttmath"
+set "INCLUDE=%CD%\build\libs\dxut-sdk;%SYSTEM_INCLUDE%;%CD%\source;%CD%\source\dxut;%CD%\third-party\RakNet\Include;%CD%\third-party\bass;%CD%\third-party\detours;%CD%\third-party\curl\include;%CD%\third-party\zlib;%CD%\third-party\lzma\C;%CD%\third-party\ttmath"
 echo [RC] source\samp.rc
 "%SAMP_PSDK%\Bin\rc.exe" /fo"%OUT%\samp.res" "source\samp.rc" >"%LOGDIR%\resources.log" 2>&1
 if errorlevel 1 (
@@ -57,14 +57,14 @@ for %%F in (
     source\runutil.cpp
     source\md5.cpp
     source\httpclient.cpp
-    source\gui\chat_dependencies.cpp
     source\cmdwindow.cpp
     source\fontrender.cpp
-    source\gui\font_wrapper.cpp
+    source\gui.cpp
+    source\spawnscreen.cpp
+    source\licenseplate.cpp
+    source\objectmaterialtext.cpp
+    source\d3dhook\ID3DXFontHook.cpp
     source\config.cpp
-    source\gui\input_text.cpp
-    source\gui\input_activity.cpp
-    source\gui\input_password.cpp
     source\game\keystuff.cpp
     source\game\aimstuff.cpp
     source\game\player_colors.cpp
@@ -82,7 +82,6 @@ for %%F in (
     source\archive\TinyEncrypt.cpp
     source\filehooks.cpp
     source\d3dhook\IDirect3DDevice9Hook.cpp
-    source\gui\device_objects.cpp
     source\game\device_integrity.cpp
     source\main.cpp
     source\objectedit.cpp
@@ -106,12 +105,10 @@ for %%F in (
     source\game\camera.cpp
     source\game\audio.cpp
     source\chatwindow.cpp
-    source\gui\input_ime.cpp
     source\game\patches.cpp
     source\game\hooks.cpp
     source\archive\name_digest.cpp
     source\exceptions.cpp
-    source\gui\gui.cpp
     source\renderpanel.cpp
     source\downloadwindow.cpp
     source\audiostream.cpp
@@ -121,16 +118,13 @@ for %%F in (
     source\playertags.cpp
     source\deathwindow.cpp
     source\scoreboard.cpp
-    source\gui\gui_events.cpp
     source\cmdprocs.cpp
     source\subclass.cpp
     source\events.cpp
-    source\gui\device_lifecycle.cpp
     source\game\playerped.cpp
     source\net\playerpool.cpp
     source\net\playerinfo.cpp
     source\game\task.cpp
-    source\gui\render_state.cpp
     source\net\localplayer.cpp
     source\net\netgame.cpp
     source\net\netrpc.cpp

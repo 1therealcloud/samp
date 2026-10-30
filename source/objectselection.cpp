@@ -3,7 +3,7 @@
 #include "RakClientInterface.h"
 #include "cmdwindow.h"
 #include "game/playerped.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include "main.h"
 #include "net/objectpool.h"
 #include "objectedit.h"

@@ -1,6 +1,6 @@
 #include "net/textdrawpool.h"
-#include "gui/device_lifecycle.h"
-#include "gui/textdraw_texture.h"
+#include "game/textdraw.h"
+#include "gui.h"
 // 0x000177d0
 CTextDraw* CTextDrawPool::Get(WORD id)
 {

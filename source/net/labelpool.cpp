@@ -1,14 +1,16 @@
 #include "net/labelpool.h"
+#include "cmdwindow.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/util.h"
-#include "gui/chat_dependencies.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include "label.h"
 #include "main.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
+#include "runutil.h"
+#include <DXUTgui.h>
 #include <stdlib.h>
 // Native label text uses the CRT calloc/free entries.
 #include <string.h>

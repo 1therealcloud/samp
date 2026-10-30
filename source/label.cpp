@@ -3,7 +3,7 @@
 #include "game/aimstuff.h"
 #include "game/quaternion.h"
 #include "game/scripting.h"
-#include "gui/device_objects.h"
+#include "gui.h"
 
 // 0x0011c640
 const Scripting::OpcodeInfo g_labelLineOfSightCommand = {0x6bd, "ffffffiiiii"};

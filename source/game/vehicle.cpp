@@ -1169,7 +1169,7 @@ void __stdcall GameRemoveDriverByState598(void* vehicle)
 }
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
-#include "gui/device_objects.h"
+#include "gui.h"
 
 // 0x000b7cd0
 void CVehicle::ConstructLicensePlate()

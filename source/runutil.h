@@ -31,8 +31,6 @@ void K_EncodeString(char* szInput, char* szOutput);
 // 0x0009d880
 char* K_DecodeString(unsigned char* szInput);
 
-#endif
-
 // 0x000b55e0
 bool Util_IsDecimal(const char* text);
 // 0x000b5920
@@ -46,3 +44,15 @@ extern unsigned long g_clientD3D9ImageSize;
 // Dynamic ANSI Toolhelp lookup of current process, with native failure behavior.
 // 0x0009d8c0
 unsigned long Util_RefreshD3D9ModuleInfo();
+
+// Names are descriptive recovery names, not claims about original source spelling.
+// 0x000b5950
+int ChatIsHexDigit(char value);
+// 0x000b59c0
+unsigned long ChatParseColorTag(char* text);
+// 0x000b5c00
+void ChatStripColorTags(char* text);
+// 0x000b5c40
+int ChatPrepareMessage(char* text, int maximumLength);
+
+#endif

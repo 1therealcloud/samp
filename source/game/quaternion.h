@@ -25,7 +25,7 @@ void GameQuaternionSlerp(GameQuaternion* out, const GameQuaternion* from, const 
 void GameQuaternionFromEuler(const CVector* angles, GameQuaternion* quaternion);
 // 0x000b5160
 void GameQuaternionToEuler(const GameQuaternion* quaternion, CVector* angles);
-// Shared native constant, existing storage in gui/textdraw_render.cpp.
+// Shared native constant, existing storage in game/textdraw.cpp.
 // 0x00117884
 extern const float g_textDrawHalf;
 // 0x0011d7c8

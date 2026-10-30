@@ -1,11 +1,21 @@
 #include "cmdwindow.h"
-#include "gui/chat_dependencies.h"
+#include "runutil.h"
+#include <DXUTgui.h>
 // 0x00002e80
 DWORD CInput::GetEnabledState()
 {
     return m_bEnabled;
 }
-#include "gui/input_native.h"
+#include "chatwindow.h"
+#include "cmdwindow.h"
+#include "config.h"
+#include "main.h"
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <DXUTmisc.h>
+#include <assert.h>
+#include <new>
+#include <string.h>
 // 0x00068e10
 CInput::CInput(IDirect3DDevice9* device)
 {

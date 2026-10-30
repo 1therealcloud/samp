@@ -32,7 +32,9 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
         blue = 0;
     return (color & 0xff000000) | ((DWORD)red << 16) | ((DWORD)green << 8) | blue;
 }
-#include "gui/chat_dependencies.h"
+#include "cmdwindow.h"
+#include "runutil.h"
+#include <DXUTgui.h>
 #include <string.h>
 
 // 0x0006b530
@@ -216,7 +218,7 @@ void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
     sprite->End();
 }
 
-#include "gui/font_wrapper.h"
+#include "d3dhook/ID3DXFontHook.h"
 #include <stdlib.h>
 
 // 0x0006b320
@@ -329,3 +331,6 @@ const char* FontGetFace()
 
 // 0x00118400
 const char g_fontMeasureProbe[2] = "Y";
+
+// 0x002aca2c
+CFonts* g_deviceFonts;

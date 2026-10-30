@@ -1,6 +1,6 @@
 // Isolated hybrid DXUT candidate only; see build_dxut_hybrid_v68.cjs.
+#include "d3dhook/ID3DXFontHook.h"
 #include "dxstdafx.h"
-#include "gui/font_wrapper.h"
 #include <stdio.h>
 
 // 0x0008c8f0

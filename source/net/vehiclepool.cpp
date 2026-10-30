@@ -9,7 +9,7 @@ void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 #include "chatwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
-#include "gui/device_objects.h"
+#include "gui.h"
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"

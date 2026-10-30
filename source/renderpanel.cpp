@@ -1,7 +1,7 @@
 #include "renderpanel.h"
 #include "fontrender.h"
 #include "game/gta_globals.h"
-#include "gui/device_lifecycle.h"
+#include "gui.h"
 #include "net/pool_frame.h"
 #include "objectedit.h"
 #include <DXUT.h>

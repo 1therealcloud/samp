@@ -840,7 +840,7 @@ void CCustomModels::Initialize()
 #include "LzmaDec.h"
 #include "RakClientInterface.h"
 #include "config.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include "net/netgame.h"
 #include <curl/curl.h>
 #include <process.h>

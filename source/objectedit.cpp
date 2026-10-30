@@ -6,7 +6,7 @@ WORD CObjectEdit::GetObjectId()
 }
 #include "filehooks.h"
 #include "game/entity.h"
-#include "gui/device_objects.h"
+#include "gui.h"
 #include "main.h"
 // 0x00072ff0
 BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)

@@ -1,6 +1,13 @@
-#include "gui/input_native.h"
+#include "chatwindow.h"
+#include "cmdwindow.h"
+#include "config.h"
+#include "main.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
+#include <DXUTmisc.h>
+#include <assert.h>
+#include <new>
+#include <string.h>
 // Candidate-only replacements; declarations are supplied by the selected DXUT header.
 // 0x0008c860
 HRESULT CDXUTDialogResourceManager::OnCreateDevice(IDirect3DDevice9* device)

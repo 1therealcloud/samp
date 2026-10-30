@@ -688,8 +688,7 @@ void ClientSetRenderState(DWORD state, DWORD value)
 #include "game/device_integrity.h"
 #include "game/playerped.h"
 #include "game/vehicle.h"
-#include "gui/device_lifecycle.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <stdio.h>

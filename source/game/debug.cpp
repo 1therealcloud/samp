@@ -5,7 +5,7 @@
 #include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include "main.h"
 #include <stdio.h>
 #include <string.h>

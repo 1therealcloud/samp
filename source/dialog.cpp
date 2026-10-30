@@ -1,18 +1,21 @@
 #include "dialog.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
+#include "chatwindow.h"
 #include "cmdwindow.h"
+#include "config.h"
 #include "dxut/dxut_listbox_native.h"
 #include "game/game.h"
 #include "game/hooks.h"
 #include "game/scripting.h"
-#include "gui/chat_dependencies.h"
-#include "gui/device_lifecycle.h"
-#include "gui/input_native.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include "main.h"
+#include "runutil.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
+#include <DXUTmisc.h>
+#include <assert.h>
+#include <new>
 #include <stdlib.h>
 #include <string.h>
 

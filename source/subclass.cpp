@@ -2,9 +2,7 @@
 #include "cmdprocs.h"
 #include "cmdwindow.h"
 #include "game/game.h"
-#include "gui/device_lifecycle.h"
-#include "gui/gui.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include "main.h"
 #include <DXUT.h>
 #include <DXUTgui.h>

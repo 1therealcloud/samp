@@ -48,7 +48,7 @@ BOOL CNetGame::LanMode()
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include "main.h"
 #include "net/actorpool.h"
 #include "net/gangzonepool.h"

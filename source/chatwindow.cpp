@@ -17,7 +17,8 @@ BYTE CChat::GetTimestamps()
 {
     return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
 }
-#include "gui/chat_dependencies.h"
+#include "cmdwindow.h"
+#include "runutil.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <DXUTmisc.h>

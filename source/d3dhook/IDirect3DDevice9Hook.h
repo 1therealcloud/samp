@@ -259,10 +259,10 @@ extern D3DMATRIX g_deviceViewMatrix;
 extern D3DMATRIX g_deviceProjectionMatrix;
 // 0x0017ec80
 extern D3DMATRIX g_deviceWorldMatrix;
-// Implemented in gui/device_lifecycle.cpp; downstream UI/pool dependencies remain.
+// Implemented in gui.cpp; downstream UI/pool dependencies remain.
 // 0x000c5620
 void ClientDeviceObjectsLost();
-// Implemented in gui/device_lifecycle.cpp; downstream UI dependencies remain.
+// Implemented in gui.cpp; downstream UI dependencies remain.
 // 0x000c5880
 void ClientDeviceObjectsReset();
 // Implemented in game/device_integrity.cpp.

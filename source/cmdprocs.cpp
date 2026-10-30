@@ -47,9 +47,7 @@ void Commands::Setup()
 #include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
-#include "gui/device_lifecycle.h"
-#include "gui/gui.h"
-#include "gui/render_dependencies.h"
+#include "gui.h"
 #include "net/localplayer.h"
 #include "scoreboard.h"
 #include <DXUT.h>

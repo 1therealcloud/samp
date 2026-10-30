@@ -1811,4 +1811,31 @@ protected:
 #endif
 };
 
+// 0x0017fbb8
+extern char g_inputAnsiText[2049];
+// 0x00085060
+const char* InputWideToAnsi(const wchar_t*);
+// 0x0009b700
+void InputBufferAnsiToWide(const char*, wchar_t*, int);
+
+// 0x00180400
+extern wchar_t g_inputMaskedText[256];
+// 0x000853a0
+const wchar_t* InputMaskWideText(const wchar_t*);
+
+// 0x0017f698
+extern DWORD g_inputImeActivityTick;
+// 0x00085e60
+bool ChatImeActive();
+// samp.dll RVA: unknown (extracted signed tick arithmetic; no standalone native entry)
+inline bool InputImeRecent(DWORD now, DWORD start)
+{
+    return (LONG)(now - start) < 300;
+}
+
+// 0x00085940
+void InputEnableIme(bool);
+// 0x00085460
+void InputResetIme();
+
 #endif // DXUT_GUI_H
