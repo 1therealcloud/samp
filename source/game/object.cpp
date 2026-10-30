@@ -805,20 +805,32 @@ BOOL CObject::IsMoving()
 
 // Only the observed RenderWare prefixes used by these callbacks are described.
 // The complete backend layouts and ownership remain outside these views.
+struct ObjectRwColor
+{
+    BYTE red, green, blue, alpha;
+};
+struct ObjectRwSurface
+{
+    float ambient, specular, diffuse;
+};
 struct ObjectRwMaterialPrefix
 {
     void* texture;
-    DWORD color;
+    ObjectRwColor color;
     void* pipeline;
-    float ambient, specular, diffuse;
+    ObjectRwSurface surface;
+};
+struct ObjectRwMaterialListPrefix
+{
+    ObjectRwMaterialPrefix** materials;
+    int count;
 };
 struct ObjectRwGeometryPrefix
 {
     BYTE unknown00[8];
     DWORD flags;
     BYTE unknown0c[20];
-    ObjectRwMaterialPrefix** materials;
-    int materialCount;
+    ObjectRwMaterialListPrefix materialList;
 };
 struct ObjectRwAtomicPrefix
 {
@@ -826,12 +838,18 @@ struct ObjectRwAtomicPrefix
     BYTE unknown01[23];
     ObjectRwGeometryPrefix* geometry;
 };
+typedef char ObjectRwColorSize[(sizeof(ObjectRwColor) == 4) ? 1 : -1];
+typedef char ObjectRwSurfaceSize[(sizeof(ObjectRwSurface) == 12) ? 1 : -1];
 typedef char ObjectRwMaterialTextureOffset[(offsetof(ObjectRwMaterialPrefix, texture) == 0) ? 1 : -1];
 typedef char ObjectRwMaterialColorOffset[(offsetof(ObjectRwMaterialPrefix, color) == 4) ? 1 : -1];
-typedef char ObjectRwMaterialSurfaceOffsets
-    [(offsetof(ObjectRwMaterialPrefix, ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, specular) == 0x10 && offsetof(ObjectRwMaterialPrefix, diffuse) == 0x14) ? 1 : -1];
-typedef char ObjectRwGeometryOffsets
-    [(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materials) == 0x20 && offsetof(ObjectRwGeometryPrefix, materialCount) == 0x24) ? 1 : -1];
+typedef char ObjectRwMaterialSurfaceOffsets[(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
+                                             offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14)
+                                                ? 1
+                                                : -1];
+typedef char ObjectRwGeometryOffsets[(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
+                                      offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24)
+                                         ? 1
+                                         : -1];
 typedef char ObjectRwAtomicGeometryOffset[(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18) ? 1 : -1];
 // 0x000a8430
 void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
@@ -844,12 +862,12 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
         CObject* state = (CObject*)object;
         if (state)
         {
-            int count = a->geometry->materialCount;
+            int count = a->geometry->materialList.count;
             if (count > 16)
                 count = 16;
             for (int i = 0; i < count; ++i)
             {
-                ObjectRwMaterialPrefix* material = a->geometry->materials[i];
+                ObjectRwMaterialPrefix* material = a->geometry->materialList.materials[i];
                 if (!material)
                     continue;
                 void* texture = state->materials.textures[i];
@@ -862,10 +880,10 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
                 {
                     a->geometry->flags |= 0x40;
                     a->geometry->flags &= ~8;
-                    material->ambient = 1.0f;
-                    material->specular = 0.0f;
-                    material->diffuse = 1.0f;
-                    material->color = state->materials.colors[i];
+                    material->surface.ambient = 1.0f;
+                    material->surface.specular = 0.0f;
+                    material->surface.diffuse = 1.0f;
+                    memcpy(&material->color, &state->materials.colors[i], sizeof(material->color));
                     state->materials.colorsChanged = 1;
                 }
             }
@@ -882,17 +900,17 @@ void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
     CObject* state = (CObject*)object;
     if (!state)
         return atomic;
-    int count = a->geometry->materialCount;
+    int count = a->geometry->materialList.count;
     if (count > 16)
         count = 16;
     state->materials.savedGeometryFlags = a->geometry->flags;
     for (int i = 0; i < count; ++i)
     {
-        ObjectRwMaterialPrefix* material = a->geometry->materials[i];
+        ObjectRwMaterialPrefix* material = a->geometry->materialList.materials[i];
         if (!material)
             continue;
         state->materials.savedTextures[i] = material->texture;
-        state->materials.savedColors[i] = material->color;
+        memcpy(&state->materials.savedColors[i], &material->color, sizeof(material->color));
     }
     state->materials.snapshotValid = 1;
     return atomic;
@@ -906,18 +924,18 @@ void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
     CObject* state = (CObject*)object;
     if (!state)
         return atomic;
-    int count = a->geometry->materialCount;
+    int count = a->geometry->materialList.count;
     if (count > 16)
         count = 16;
     for (int i = 0; i < count; ++i)
     {
-        ObjectRwMaterialPrefix* material = a->geometry->materials[i];
+        ObjectRwMaterialPrefix* material = a->geometry->materialList.materials[i];
         if (!material)
             continue;
         if (state->materials.textures[i] && material->texture != state->materials.savedTextures[i])
             material->texture = state->materials.savedTextures[i];
         if (state->materials.colorsChanged && state->materials.colors[i])
-            material->color = state->materials.savedColors[i];
+            memcpy(&material->color, &state->materials.savedColors[i], sizeof(material->color));
     }
     a->geometry->flags = state->materials.savedGeometryFlags;
     state->materials.colorsChanged = 0;
