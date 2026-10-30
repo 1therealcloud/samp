@@ -535,7 +535,7 @@ CObject::~CObject()
             if (*texture && *texture != g_objectSharedMaterialTexture)
             {
                 GameDestroyTextDrawTexture(*texture);
-                DWORD raster = materials.rasterField34[i];
+                IDirect3DTexture9* raster = materials.rasterField34[i];
                 *texture = 0;
                 if (raster)
                     materials.rasterField34[i] = 0;
@@ -837,7 +837,9 @@ typedef char ObjectRwAtomicGeometryOffset[(offsetof(ObjectRwAtomicPrefix, geomet
 void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
-    if (a->type != 1 || !a->geometry)
+    if (a->type != 1)
+        return atomic;
+    if (!a->geometry)
         return atomic;
     CObject* state = (CObject*)object;
     if (!state)
@@ -1011,7 +1013,7 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
     if (materials.textures[index])
     {
         GameDestroyTextDrawTexture(materials.textures[index]);
-        DWORD raster = materials.rasterField34[index];
+        IDirect3DTexture9* raster = materials.rasterField34[index];
         materials.textures[index] = 0;
         if (raster)
             materials.rasterField34[index] = 0;

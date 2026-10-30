@@ -30,7 +30,8 @@ struct ObjectMaterialState
     DWORD textProcessed[16];
     ObjectMaterialTextInfo textInfo[16];
     char* text[16];
-    DWORD rasterField34[16];
+    // Non-owning pointer view copied from the RenderWare raster's +0x34 slot.
+    IDirect3DTexture9* rasterField34[16];
     IDirect3DTexture9* renderedText[16];
 };
 class CObject : public CEntity
