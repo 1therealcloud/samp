@@ -25,6 +25,34 @@ typedef char NativeCustomDownloadExtent[(sizeof(CustomModelDownload) == 0x11e) ?
 typedef char NativeCustomWorkerExtent[(sizeof(CustomModelWorker) == 0x230) ? 1 : -1];
 typedef char NativeCustomWorkerDownloadOffset[(offsetof(CustomModelWorker, download) == 0x112) ? 1 : -1];
 typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker, failed) == 0x10d) ? 1 : -1];
+// Shared observed memory prefix for nine otherwise unidentified native entries.
+// This view does not assign their original classes/template types to CCustomModels.
+// Element values stay raw DWORDs; their pointer/value semantics are unconfirmed.
+struct NativeModelArrayPrefix
+{
+    DWORD* slots;
+    DWORD count;
+    // 0x0000c440
+    DWORD Read0000c440(DWORD index);
+    // 0x0000c460
+    DWORD Count0000c460();
+    // 0x0000c470
+    DWORD Read0000c470(DWORD index);
+    // 0x0000c490
+    DWORD Count0000c490();
+    // 0x0000c4a0
+    NativeModelArrayPrefix* Initialize0000c4a0();
+    // 0x0000c4b0
+    DWORD Read0000c4b0(DWORD index);
+    // 0x0000c4d0
+    DWORD Count0000c4d0();
+    // 0x000bbc60
+    NativeModelArrayPrefix* Initialize000bbc60();
+    // 0x000bbc70
+    NativeModelArrayPrefix* Initialize000bbc70();
+};
+typedef char NativeModelArrayPrefixExtent[(sizeof(NativeModelArrayPrefix) == 8) ? 1 : -1];
+typedef char NativeModelArrayCountOffset[(offsetof(NativeModelArrayPrefix, count) == 4) ? 1 : -1];
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 // Download/validation paths are recovered; full native class coverage is not established.
 class CCustomModels

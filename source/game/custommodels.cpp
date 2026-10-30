@@ -2,6 +2,72 @@
 #include "game/modelfile.h"
 #include <stdlib.h>
 #include <string.h>
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c440
+DWORD NativeModelArrayPrefix::Read0000c440(DWORD index)
+{
+    if (index >= count)
+        return 0;
+    return slots[index];
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c460
+DWORD NativeModelArrayPrefix::Count0000c460()
+{
+    return count;
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c470
+DWORD NativeModelArrayPrefix::Read0000c470(DWORD index)
+{
+    if (index >= count)
+        return 0;
+    return slots[index];
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c490
+DWORD NativeModelArrayPrefix::Count0000c490()
+{
+    return count;
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c4a0
+NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize0000c4a0()
+{
+    slots = 0;
+    count = 0;
+    return this;
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c4b0
+DWORD NativeModelArrayPrefix::Read0000c4b0(DWORD index)
+{
+    if (index >= count)
+        return 0;
+    return slots[index];
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c4d0
+DWORD NativeModelArrayPrefix::Count0000c4d0()
+{
+    return count;
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x000bbc60
+NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize000bbc60()
+{
+    slots = 0;
+    count = 0;
+    return this;
+}
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x000bbc70
+NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize000bbc70()
+{
+    slots = 0;
+    count = 0;
+    return this;
+}
 // 0x00117cd8
 const char g_customDeleteDffPattern[] = "%s\\0x%X.dff";
 // 0x00117ce4
