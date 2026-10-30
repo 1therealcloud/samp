@@ -136,28 +136,48 @@ void __cdecl GameRotateRwQuaternion(void* quaternion, int axis, float angle, int
 {
     const CVector* direction = &g_rwRotationAxes[axis];
     DWORD target = g_gameVersion == 1 ? 0x7eb7c0 : 0x7eb800;
-    ((void(__cdecl*)(void*, const CVector*, float, int))target)(quaternion, direction, angle, combine);
+    // Native cdecl GTA bridge keeps the four argument words and EDX call target.
+    // clang-format off
+    __asm {
+        push combine
+        push angle
+        push direction
+        push quaternion
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 // Shared fields are views into the existing native backing span, not new globals.
 // GTA SA virtual addresses: USA 7F2720; all other version values use 7F2760.
 // 0x000b5370
 void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angle)
 {
-    const DWORD* direction = (const DWORD*)&g_rwRotationAxes[axis];
-    DWORD x = direction[0], y = direction[1], z = direction[2];
-    // Shared native fields: samp.dll RVAs 002ABE34 and 002ABE28.
     CVector* queryAxis = (CVector*)(g_entityCollisionScratch + 0x101c);
-    CVector* centre = (CVector*)(g_entityCollisionScratch + 0x1010);
-    *(DWORD*)&queryAxis->x = x;
-    *(DWORD*)&queryAxis->y = y;
-    *(DWORD*)&queryAxis->z = z;
+    *queryAxis = g_rwRotationAxes[axis];
     DWORD target = g_gameVersion == 1 ? 0x7f2720 : 0x7f2760;
-    ((void(__cdecl*)(const CMatrix*, CVector*, float*, CVector*))target)(matrix, queryAxis, &g_rwQueryAngle, centre);
+    // Shared axis/centre/result storage and native x87 publication are retained.
     // clang-format off
-    // Native publishes through x87, including its float-load/store NaN behavior.
     __asm {
-        mov eax,angle
+        lea eax,[g_entityCollisionScratch + 0x1010]
+        push eax
+        lea eax,g_rwQueryAngle
+        push eax
+        lea eax,[g_entityCollisionScratch + 0x101c]
+        push eax
+        push matrix
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+        pop edx
         fld g_rwQueryAngle
+        mov eax,angle
         fstp dword ptr [eax]
     }
     // clang-format on
@@ -167,28 +187,77 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
 void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, float* angle)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eba80 : 0x7ebac0;
-    ((void(__cdecl*)(const void*, CVector*, float*))target)(quaternion, axis, angle);
+    // Recovered cdecl GTA call and caller word cleanup.
+    // clang-format off
+    __asm {
+        push angle
+        push axis
+        push quaternion
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 // GTA SA virtual addresses: USA 7F1FD0; all other version values use 7F2010.
 // 0x000b5410
 void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angle)
 {
+    const CVector* direction = axis;
     DWORD target = g_gameVersion == 1 ? 0x7f1fd0 : 0x7f2010;
-    ((void(__cdecl*)(CMatrix*, const CVector*, float, int))target)(matrix, axis, angle, 1);
+    // Native captures the axis before reusing its argument home for the target.
+    // clang-format off
+    __asm {
+        push 1
+        push angle
+        push direction
+        push matrix
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 // GTA SA virtual addresses: USA 7F1920; all other version values use 7F1960.
 // 0x000b5450
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f1920 : 0x7f1960;
-    ((void(__cdecl*)(CMatrix*, const CMatrix*))target)(out, matrix);
+    // Recovered cdecl GTA call and caller word cleanup.
+    // clang-format off
+    __asm {
+        push matrix
+        push out
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 // GTA SA virtual addresses: USA 7F22C0; all other version values use 7F2300.
 // 0x000b5480
 void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f22c0 : 0x7f2300;
-    ((void(__cdecl*)(CMatrix*, const CVector*, int))target)(matrix, scale, 1);
+    // Recovered cdecl GTA call and caller word cleanup.
+    // clang-format off
+    __asm {
+        push 1
+        push scale
+        push matrix
+        mov edx,target
+        call edx
+        pop edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 
 // GTA SA virtual address: 0x0059C910, ECX receives the vector.
@@ -371,7 +440,21 @@ void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
 {
     const CVector* direction = &g_rwRotationAxes[axis];
     g_rwAxisRotateBackend = (GameRwAxisRotateBackend)(g_gameVersion == 1 ? 0x7f1fd0 : 0x7f2010);
-    g_rwAxisRotateBackend(matrix, direction, angle, 1);
+    // Native reloads the published target into saved EBX after pushing arguments.
+    // clang-format off
+    __asm {
+        push 1
+        push angle
+        push direction
+        push matrix
+        mov ebx,g_rwAxisRotateBackend
+        call ebx
+        pop ebx
+        pop ebx
+        pop ebx
+        pop ebx
+    }
+    // clang-format on
 }
 
 // GTA SA virtual address: 0x007498E0 (fixed).
