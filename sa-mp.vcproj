@@ -25,28 +25,28 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="build\libs\dxut-sdk;source;source\dxut;source\game;source\net;source\archive;source\d3dhook;third-party\RakNet\Include;third-party\bass;third-party\detours;third-party\curl\include;third-party\zlib;third-party\lzma\C;third-party\ttmath;&quot;$(DXSDK_DIR)Include&quot;;&quot;$(DXSDK_DIR)Samples\C++\Common&quot;"
+				AdditionalIncludeDirectories="source;third-party\RakNet\Include;third-party\bass;third-party\detours;third-party\dxut;third-party\curl\include;third-party\zlib;third-party\lzma\C;third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UNICODE;_UNICODE;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
 				StringPooling="TRUE"
+				ExceptionHandling="TRUE"
 				RuntimeLibrary="0"
 				StructMemberAlignment="1"
 				EnableFunctionLevelLinking="TRUE"
-				ExceptionHandling="TRUE"
 				RuntimeTypeInfo="FALSE"
-				ForcedIncludeFiles="dxstdafx.h"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
-				CompileAs="0"/>
+				CompileAs="0"
+				ForcedIncludeFiles="dxstdafx.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RakNet.lib zlib.lib libcurl.lib lzma.lib dxut.lib bass.lib detours.lib libcmt.lib libcpmt.lib oldnames.lib kernel32.lib psapi.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib wldap32.lib crypt32.lib secur32.lib version.lib usp10.lib dsound.lib d3d9.lib d3dx9.lib dxguid.lib dxerr9.lib"
+				AdditionalDependencies="RakNet.lib zlib.lib libcurl.lib lzma.lib bass.lib detours.lib libcmt.lib libcpmt.lib oldnames.lib kernel32.lib psapi.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib wldap32.lib crypt32.lib secur32.lib version.lib usp10.lib dsound.lib d3d9.lib d3dx9.lib dxguid.lib dxerr9.lib"
 				OutputFile="$(OutDir)\samp.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="build\libraries;third-party\bass;third-party\detours;&quot;$(DXSDK_DIR)Lib\x86&quot;"
+				AdditionalLibraryDirectories="build\libraries;third-party\bass;third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)\samp.pdb"
 				GenerateMapFile="TRUE"
@@ -76,6 +76,10 @@
 				Name="VCXMLDataGeneratorTool"/>
 			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -229,7 +233,9 @@
 				RelativePath="source\menu.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -312,7 +318,9 @@
 				RelativePath="source\game\actor.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -385,7 +393,9 @@
 				RelativePath="source\game\game.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -425,7 +435,9 @@
 				RelativePath="source\game\object.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -480,7 +492,9 @@
 				RelativePath="source\game\util.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -500,7 +514,9 @@
 				RelativePath="source\net\actorpool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -534,7 +550,9 @@
 				RelativePath="source\net\netgame.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -556,7 +574,9 @@
 				RelativePath="source\net\pickuppool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
-					<Tool Name="VCCLCompilerTool" InlineFunctionExpansion="1"/>
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -636,6 +656,9 @@
 				RelativePath="source\archive\KeyPair.h">
 			</File>
 			<File
+				RelativePath="source\archive\keys.h">
+			</File>
+			<File
 				RelativePath="source\archive\Obfuscator.h">
 			</File>
 			<File
@@ -652,9 +675,6 @@
 			</File>
 			<File
 				RelativePath="source\archive\TinyEncrypt.h">
-			</File>
-			<File
-				RelativePath="source\archive\keys.h">
 			</File>
 		</Filter>
 		<Filter
@@ -677,29 +697,58 @@
 			Name="dxut"
 			Filter="">
 			<File
-				RelativePath="source\dxut\DXUTgui.cpp">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool Name="VCCLCompilerTool"/>
-				</FileConfiguration>
+				RelativePath=".\third-party\dxut\dxstdafx.cpp">
 			</File>
 			<File
-				RelativePath="source\dxut\DXUTgui.h">
+				RelativePath=".\third-party\dxut\dxstdafx.h">
 			</File>
 			<File
-				RelativePath="source\dxut\DXUTmedia.cpp">
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool Name="VCCLCompilerTool"/>
-				</FileConfiguration>
+				RelativePath=".\third-party\dxut\DXUT.cpp">
 			</File>
 			<File
-				RelativePath="source\dxut\DXUTmedia.h">
+				RelativePath=".\third-party\dxut\DXUT.h">
 			</File>
 			<File
-				RelativePath="source\dxut\dxstdafx.h">
+				RelativePath=".\third-party\dxut\DXUTenum.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTenum.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTgui.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTgui.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTmedia.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTmedia.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTMesh.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTMesh.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTmisc.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTmisc.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTSettingsDlg.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTSettingsDlg.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTsound.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUTsound.h">
 			</File>
 		</Filter>
 		<Filter

@@ -83,6 +83,7 @@
 #include "DXUTenum.h"
 #include "DXUTmesh.h"
 #include "DXUTgui.h"
+#include "DXUTmedia.h"
 #include "DXUTsettingsDlg.h"
 #include "DXUTSound.h"
 

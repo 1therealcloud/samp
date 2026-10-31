@@ -4,7 +4,6 @@
 #include "chatwindow.h"
 #include "cmdwindow.h"
 #include "config.h"
-#include "dxut/DXUTgui.h"
 #include "game/game.h"
 #include "game/hooks.h"
 #include "game/scripting.h"
