@@ -703,6 +703,32 @@
 				RelativePath=".\third-party\dxut\dxstdafx.h">
 			</File>
 			<File
+				RelativePath=".\third-party\dxut\DXUtil.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"
+						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUtil.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\D3DUtil.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"
+						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\D3DUtil.h">
+			</File>
+			<File
 				RelativePath=".\third-party\dxut\DXUT.cpp">
 			</File>
 			<File

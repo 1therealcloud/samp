@@ -568,6 +568,7 @@ DXUTTextureNode* CDXUTDialog::GetTexture( UINT index )
 
 
 //--------------------------------------------------------------------------------------
+// 0x00089900
 bool CDXUTDialog::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     bool bHandled = false;
@@ -582,38 +583,6 @@ bool CDXUTDialog::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
         ( WM_LBUTTONDOWN == uMsg || WM_LBUTTONDBLCLK == uMsg || WM_KEYDOWN == uMsg ) )
     {
         m_bKeyboardInput = true;
-    }
-
-    // If caption is enable, check for clicks in the caption area.
-    if( m_bCaption )
-    {
-        static bool bDrag;
-
-        if( uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONDBLCLK )
-        {
-            POINT mousePoint = { short(LOWORD(lParam)), short(HIWORD(lParam)) };
-
-            if( mousePoint.x >= m_x && mousePoint.x < m_x + m_width &&
-                mousePoint.y >= m_y && mousePoint.y < m_y + m_nCaptionHeight )
-            {
-                bDrag = true;
-                SetCapture( DXUTGetHWND() );
-                return true;
-            }
-        } else
-        if( uMsg == WM_LBUTTONUP && bDrag )
-        {
-            POINT mousePoint = { short(LOWORD(lParam)), short(HIWORD(lParam)) };
-
-            if( mousePoint.x >= m_x && mousePoint.x < m_x + m_width &&
-                mousePoint.y >= m_y && mousePoint.y < m_y + m_nCaptionHeight )
-            {
-                ReleaseCapture();
-                bDrag = false;
-                m_bMinimized = !m_bMinimized;
-                return true;
-            }
-        }
     }
 
     // If the dialog is minimized, don't send any messages to controls.
@@ -749,7 +718,6 @@ bool CDXUTDialog::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
         case WM_LBUTTONDBLCLK:
         case WM_MBUTTONDBLCLK:
         case WM_RBUTTONDBLCLK:
-        case WM_XBUTTONDBLCLK:
         case WM_MOUSEWHEEL:
         {
             // If not accepting mouse input, return false to indicate the message should still 
@@ -1535,41 +1503,59 @@ HRESULT CDXUTDialog::CalcTextRect( LPCWSTR strText, CDXUTElement* pElement, RECT
 
 
 //--------------------------------------------------------------------------------------
-HRESULT CDXUTDialog::DrawText( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow, int nCount )
+// 0x0008ce50
+HRESULT CDXUTDialog::DrawText( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow, int nCount)
 {
     HRESULT hr = S_OK;
 
     // No need to draw fully transparent layers
-    if( pElement->FontColor.Current.a == 0 )
+    if (pElement->FontColor.Current.a == 0)
         return S_OK;
 
     RECT rcScreen = *prcDest;
-    OffsetRect( &rcScreen, m_x, m_y );
+    OffsetRect(&rcScreen, m_x, m_y);
 
     // If caption is enabled, offset the Y position by its height.
-    if( m_bCaption )
-        OffsetRect( &rcScreen, 0, m_nCaptionHeight );
+    if (m_bCaption)
+        OffsetRect(&rcScreen, 0, m_nCaptionHeight);
 
     //debug
     //DrawRect( &rcScreen, D3DCOLOR_ARGB(100, 255, 0, 0) );
 
     D3DXMATRIXA16 matTransform;
-    D3DXMatrixIdentity( &matTransform );
-    m_pManager->m_pSprite->SetTransform( &matTransform );
+    D3DXMatrixIdentity(&matTransform);
+    m_pManager->m_pSprite->SetTransform(&matTransform);
 
-    DXUTFontNode* pFontNode = GetFont( pElement->iFont );
-    
-    if( bShadow )
+    DXUTFontNode* pFontNode = GetFont(pElement->iFont);
+
+    if (bShadow)
     {
         RECT rcShadow = rcScreen;
-        OffsetRect( &rcShadow, 1, 1 );
-        hr = pFontNode->pFont->DrawText( m_pManager->m_pSprite, strText, nCount, &rcShadow, pElement->dwTextFormat, D3DCOLOR_ARGB(DWORD(pElement->FontColor.Current.a * 255), 0, 0, 0) );
-        if( FAILED(hr) )
+        OffsetRect(&rcShadow, 1, 1);
+        if (pFontNode->pFont)
+        {
+            hr = pFontNode->pFont->DrawTextW(m_pManager->m_pSprite, strText, nCount, &rcShadow, pElement->dwTextFormat,
+                                             D3DCOLOR_ARGB(DWORD(pElement->FontColor.Current.a * 255), 0, 0, 0));
+        }
+        else
+        {
+            m_pManager->CreateFont(pElement->iFont);
+        }
+
+        if (FAILED(hr))
             return hr;
     }
 
-    hr = pFontNode->pFont->DrawText( m_pManager->m_pSprite, strText, nCount, &rcScreen, pElement->dwTextFormat, pElement->FontColor.Current );
-    if( FAILED(hr) )
+    if (pFontNode->pFont)
+    {
+        hr = pFontNode->pFont->DrawTextW(m_pManager->m_pSprite, strText, nCount, &rcScreen, pElement->dwTextFormat, pElement->FontColor.Current);
+    }
+    else
+    {
+        m_pManager->CreateFont(pElement->iFont);
+    }
+
+    if (FAILED(hr))
         return hr;
 
     return S_OK;
