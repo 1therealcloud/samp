@@ -371,6 +371,9 @@ public:
     int AddFont( LPCWSTR strFaceName, LONG height, LONG weight );
     // 0x0008c8f0
     int AddFont(const char* face, LONG height, LONG weight);
+    // Descriptive name; the original lexical name is unknown.
+    // 0x0008c9e0
+    int UpdateFont(UINT index, const char* face, LONG height, LONG weight);
     friend class NativeFontManagerProbe;
     friend class NativeDialogProbe;
     friend class CDXUTDialog;

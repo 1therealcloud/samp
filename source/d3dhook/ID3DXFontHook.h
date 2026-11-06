@@ -70,6 +70,8 @@ void FontAnsiToWide(const char*, wchar_t*, int);
 int FontIsWideHexDigit(unsigned short);
 // 0x000b5ad0
 unsigned long FontParseWideColorTag(const wchar_t*);
+// 0x000734b0
+void FontNextAnsiGlyphColor();
 // 0x00073580
 void FontNextGlyphColor();
 // samp.dll RVA: unknown (integration helper extracted from startup RVA 0x000c5e70)

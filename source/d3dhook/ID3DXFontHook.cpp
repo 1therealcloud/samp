@@ -177,6 +177,32 @@ unsigned long FontParseWideColorTag(const wchar_t* text)
     return 0xffffffff;
 }
 
+// 0x000734b0
+void FontNextAnsiGlyphColor()
+{
+    char ch = g_fontOriginalText[g_fontGlyphCursor];
+    while (ch && (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'))
+        ch = g_fontOriginalText[++g_fontGlyphCursor];
+    unsigned long color = ChatParseColorTag(g_fontOriginalText + g_fontGlyphCursor);
+    while (color != 0xffffffff)
+    {
+        g_fontGlyphColor = color | 0xff000000;
+        g_fontGlyphCursor += 8;
+        ch = g_fontOriginalText[g_fontGlyphCursor];
+        while (ch && (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'))
+            ch = g_fontOriginalText[++g_fontGlyphCursor];
+        color = ChatParseColorTag(g_fontOriginalText + g_fontGlyphCursor);
+    }
+    if (g_fontOriginalText[g_fontGlyphCursor])
+    {
+        int length = mblen(g_fontOriginalText + g_fontGlyphCursor, MB_CUR_MAX);
+        if (length < 0)
+            ++g_fontGlyphCursor;
+        else
+            g_fontGlyphCursor += length;
+    }
+}
+
 // 0x00073580
 void FontNextGlyphColor()
 {

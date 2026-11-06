@@ -7604,6 +7604,29 @@ int CDXUTDialogResourceManager::AddFont(const char* face, LONG height, LONG weig
     return index;
 }
 
+// 0x0008c9e0
+int CDXUTDialogResourceManager::UpdateFont(UINT index, const char* face, LONG height, LONG weight)
+{
+    DXUTFontNode* node = m_FontCache.GetAt(index);
+    if (!node)
+        return -1;
+    char* destination = node->strFace;
+    UINT remaining = MAX_PATH;
+    while (remaining && *face)
+    {
+        *destination++ = *face++;
+        --remaining;
+    }
+    if (!remaining)
+        --destination;
+    *destination = 0;
+    node->nHeight = height;
+    node->nWeight = weight;
+    if (m_pd3dDevice)
+        CreateFont(index);
+    return index;
+}
+
 // 0x0008ca50
 HRESULT CDXUTDialog::SetFont(UINT index, const char* face, LONG height, LONG weight)
 {
