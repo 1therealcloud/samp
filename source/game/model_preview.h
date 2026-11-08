@@ -1,5 +1,6 @@
-#ifndef SAMP_MODEL_PREVIEW_H
-#define SAMP_MODEL_PREVIEW_H
+#ifndef MODEL_PREVIEW_H
+#define MODEL_PREVIEW_H
+
 #include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
@@ -46,4 +47,5 @@ extern const float g_previewHeight;
 extern const float g_previewObjectDistance;
 // 0x0011c66c
 extern const float g_previewObjectRadiusScale;
-#endif
+
+#endif // MODEL_PREVIEW_H

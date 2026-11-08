@@ -1,5 +1,6 @@
-#ifndef SAMP_RECOVERED_GAME_PATCHES_H
-#define SAMP_RECOVERED_GAME_PATCHES_H
+#ifndef PATCHES_H
+#define PATCHES_H
+
 #include <windows.h>
 // 0x000a6f00
 void GameInstallVehicleDamageFilter();
@@ -106,4 +107,5 @@ void GamePatchCount44(DWORD count);
 void GameSetFontPatchBytes3();
 // 0x000aaa50
 void GameApplyDebugInitializationPatches();
-#endif
+
+#endif // PATCHES_H

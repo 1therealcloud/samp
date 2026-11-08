@@ -1,4 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "scoreboard.h"
+
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "fontrender.h"
@@ -11,9 +16,6 @@
 #include "net/netgame.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 extern "C" __int64 __cdecl _ftol2();
 // 0x0011c6d0
 int g_scoreboardNotificationRpc = 23;

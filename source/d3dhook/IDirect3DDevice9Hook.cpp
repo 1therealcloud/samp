@@ -3,16 +3,14 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-
 #include <DXUT.h>
 #include <DXUTgui.h>
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
 
+#include "BitStream.h"
+#include "RakClientInterface.h"
 #include "main.h"
-
 #include "game/game.h"
 #include "game/hooks.h"
 #include "net/vehiclepool.h"

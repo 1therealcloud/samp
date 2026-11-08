@@ -1,8 +1,10 @@
-#ifndef SAMP_TEXTDRAW_ADDRESS_INTERFACE_H
-#define SAMP_TEXTDRAW_ADDRESS_INTERFACE_H
-#include <static_assert.h>
+#ifndef TEXTDRAW_H
+#define TEXTDRAW_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 // Packed native transmit record; fields are transferred as raw bits by the constructor.
 // DL places flags first, unlike the 0.2x record. No standalone native constructor.
@@ -157,4 +159,5 @@ void GameDestroyTextDrawTexture(void* texture);
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color);
 // 0x000b26f0
 BOOL GameInitializeTextDrawTextures();
-#endif
+
+#endif // TEXTDRAW_H

@@ -1,5 +1,6 @@
-#ifndef SAMP_HELPDIALOG_H
-#define SAMP_HELPDIALOG_H
+#ifndef HELPDIALOG_H
+#define HELPDIALOG_H
+
 #include <windows.h>
 struct IDirect3DDevice9;
 class CHelpDialog
@@ -18,4 +19,5 @@ extern const char g_helpDialogTitle[12];
 extern const char g_helpDialogText[420];
 // 0x0011c63c
 extern const char g_helpDialogButton[3];
-#endif
+
+#endif // HELPDIALOG_H

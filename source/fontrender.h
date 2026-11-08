@@ -1,9 +1,12 @@
-#ifndef SAMP_RECOVERED_FONTS_H
-#define SAMP_RECOVERED_FONTS_H
-#include <static_assert.h>
-#include <d3dx9.h>
+#ifndef FONTRENDER_H
+#define FONTRENDER_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <d3dx9.h>
+
+#include <static_assert.h>
 // Native green-underflow branch clears red and retains green; not generic saturation.
 // 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount);
@@ -68,4 +71,5 @@ int FontGetWeight();
 const char* FontGetFace();
 // 0x000c69e0
 int FontGetDialogHeight();
-#endif
+
+#endif // FONTRENDER_H

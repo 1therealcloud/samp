@@ -1,8 +1,10 @@
-#include "net/gangzonepool.h"
-#include "game/game.h"
-#include "main.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "net/gangzonepool.h"
+
+#include "game/game.h"
+#include "main.h"
 // Native record allocation is malloc; release calls operator delete.
 // 0x001569a0
 BYTE g_gangZoneFlashPhase = 0;

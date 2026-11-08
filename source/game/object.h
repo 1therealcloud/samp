@@ -1,5 +1,6 @@
-#ifndef SAMP_OBJECT_WRAPPER_H
-#define SAMP_OBJECT_WRAPPER_H
+#ifndef OBJECT_H
+#define OBJECT_H
+
 #include <static_assert.h>
 #include "game/entity.h"
 #include "game/quaternion.h"
@@ -213,4 +214,5 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object);
 void* __cdecl ObjectSaveMaterials(void* atomic, void* object);
 // 0x000a8740
 void* __cdecl ObjectRestoreMaterials(void* atomic, void* object);
-#endif
+
+#endif // OBJECT_H

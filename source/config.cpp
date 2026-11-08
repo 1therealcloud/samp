@@ -1,9 +1,10 @@
-#include "config.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+
+#include "config.h"
 
 // 0x002aca0c
 CConfig* g_pConfig;

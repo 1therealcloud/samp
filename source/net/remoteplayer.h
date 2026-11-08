@@ -1,9 +1,11 @@
-#ifndef SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
-#define SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
-#include <static_assert.h>
-#include "net/localplayer.h"
+#ifndef REMOTEPLAYER_H
+#define REMOTEPLAYER_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
+#include "net/localplayer.h"
 struct CVector;
 class CMatrix;
 #pragma pack(push, 1)
@@ -254,4 +256,5 @@ extern const float g_remoteVehicleAxisTeleportDistance;
 extern const double g_remoteUnoccupiedCorrectionThreshold;
 // 0x001181e0
 extern const float g_remoteTrailerCorrection;
-#endif
+
+#endif // REMOTEPLAYER_H

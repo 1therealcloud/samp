@@ -1,8 +1,10 @@
-#ifndef SAMP_GAME_TASK_H
-#define SAMP_GAME_TASK_H
-#include <static_assert.h>
+#ifndef TASK_H
+#define TASK_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 class CPed;
 struct CVector;
 #pragma pack(push, 1)
@@ -97,4 +99,5 @@ public:
 STATIC_ASSERT(sizeof(CTaskUseGoggles) == 16);
 STATIC_ASSERT(sizeof(CTaskGoToPoint) == 16);
 STATIC_ASSERT(sizeof(CTaskKillPedOnFootArmed) == 16);
-#endif
+
+#endif // TASK_H

@@ -1,5 +1,6 @@
-#ifndef SAMP_NETRPC_H
-#define SAMP_NETRPC_H
+#ifndef NETRPC_H
+#define NETRPC_H
+
 class RakClientInterface;
 struct RPCParameters;
 // 0x00012310
@@ -211,4 +212,5 @@ extern const int g_rpcUnknown00117F0C;
 extern const int g_rpcUnknown00117F08;
 // 0x00117f04
 extern const int g_rpcUnknown00117F04;
-#endif
+
+#endif // NETRPC_H

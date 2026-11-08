@@ -1,5 +1,6 @@
-#ifndef SAMP_SCRIPTRPC_H
-#define SAMP_SCRIPTRPC_H
+#ifndef SCRIPTRPC_H
+#define SCRIPTRPC_H
+
 class RakClientInterface;
 struct RPCParameters;
 namespace Scripting
@@ -420,4 +421,5 @@ extern const int g_rpcScrSetActorPosition;
 extern const int g_rpcScrSetActorHealth;
 // 0x001182d8
 extern const int g_rpcUnknown001182D8;
-#endif
+
+#endif // SCRIPTRPC_H

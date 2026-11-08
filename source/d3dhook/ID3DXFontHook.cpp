@@ -1,7 +1,5 @@
 // ID3DXFontHook.cpp
 
-#include <static_assert.h>
-
 #include <string.h>
 #include <stdlib.h>
 #include <wchar.h>
@@ -10,6 +8,7 @@
 
 #include "d3dhook/ID3DXFontHook.h"
 
+#include <static_assert.h>
 #include "cmdwindow.h"
 #include "runutil.h"
 

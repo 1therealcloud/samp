@@ -1,7 +1,9 @@
-#ifndef SAMP_OBJECT_SELECTION_H
-#define SAMP_OBJECT_SELECTION_H
-#include <static_assert.h>
+#ifndef OBJECTSELECTION_H
+#define OBJECTSELECTION_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 class CObjectSelection
 {
@@ -31,4 +33,5 @@ extern const float g_objectSelectionMaxDistance;
 extern const char g_objectSelectionLabelFormat[36];
 // 0x00117f28
 extern int g_objectSelectionRpc;
-#endif
+
+#endif // OBJECTSELECTION_H

@@ -1,7 +1,9 @@
-#ifndef SAMP_RECOVERED_KEYSTUFF_H
-#define SAMP_RECOVERED_KEYSTUFF_H
-#include <static_assert.h>
+#ifndef KEYSTUFF_H
+#define KEYSTUFF_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 struct KeyPad
 {
     WORD keys1[24], keys2[24];
@@ -45,4 +47,5 @@ void ResetKeys(int player);
 // 0x000a7140
 void ResetInternalKeys();
 } // namespace KeyStuff
-#endif
+
+#endif // KEYSTUFF_H

@@ -1,4 +1,5 @@
 #include "textdrawselection.h"
+
 #include "cmdwindow.h"
 #include "main.h"
 // 0x000c5120

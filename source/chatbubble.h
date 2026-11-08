@@ -1,8 +1,10 @@
-#ifndef SAMP_CHATBUBBLE_H
-#define SAMP_CHATBUBBLE_H
-#include <static_assert.h>
+#ifndef CHATBUBBLE_H
+#define CHATBUBBLE_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct ChatBubbleEntry
 {
@@ -37,4 +39,5 @@ extern const float g_chatBubbleLineDistanceScale;
 extern const float g_chatBubbleDistanceBase;
 // 0x0011bcc8
 extern const float g_chatBubbleHeightLift;
-#endif
+
+#endif // CHATBUBBLE_H

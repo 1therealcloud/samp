@@ -1,5 +1,6 @@
-#ifndef SAMP_RUNUTIL_H
-#define SAMP_RUNUTIL_H
+#ifndef RUNUTIL_H
+#define RUNUTIL_H
+
 #include <stddef.h>
 // Signed ASCII comparison; zero length reads neither input.
 // 0x00017510
@@ -55,4 +56,4 @@ void ChatStripColorTags(char* text);
 // 0x000b5c40
 int ChatPrepareMessage(char* text, int maximumLength);
 
-#endif
+#endif // RUNUTIL_H

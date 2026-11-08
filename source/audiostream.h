@@ -1,5 +1,6 @@
-#ifndef SAMP_AUDIO_STREAM_NATIVE_H
-#define SAMP_AUDIO_STREAM_NATIVE_H
+#ifndef AUDIOSTREAM_H
+#define AUDIOSTREAM_H
+
 #include <windows.h>
 struct CVector;
 class CAudioStream
@@ -86,4 +87,5 @@ extern const char g_audioStreamOffsetFormat[45];
 extern const char g_audioStreamAttributesError[34];
 // 0x0011bc54
 extern const char g_audioStreamPositionError[32];
-#endif
+
+#endif // AUDIOSTREAM_H

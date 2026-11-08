@@ -1,4 +1,8 @@
+#include <new>
+#include <string.h>
+
 #include "objectmaterialtext.h"
+
 #include "archive/ArchiveFS.h"
 #include "chatwindow.h"
 #include "d3dhook/ID3DXFontHook.h"
@@ -6,8 +10,6 @@
 #include "game/textdraw.h"
 #include "gui.h"
 #include "main.h"
-#include <new>
-#include <string.h>
 // 0x00070340
 CObjectMaterialText::~CObjectMaterialText()
 {

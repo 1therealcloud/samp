@@ -1,9 +1,11 @@
-#include <static_assert.h>
-#include "game/object.h"
-#include "main.h"
 #include <math.h>
 #include <stddef.h>
 #include <string.h>
+
+#include "game/object.h"
+
+#include <static_assert.h>
+#include "main.h"
 // Only the observed RenderWare prefixes used by these callbacks are described.
 // The complete backend layouts and ownership remain outside these views.
 enum ObjectRwObservedFlags

@@ -1,4 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "game/debugscript.h"
+
 #include "chatwindow.h"
 #include "game/building_removal.h"
 #include "game/game.h"
@@ -6,9 +11,6 @@
 #include "game/vehicle.h"
 #include "main.h"
 #include "net/objectpool.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 // 0x0018de38
 CVector g_debugScriptCameraPosition;
 // 0x0018de44

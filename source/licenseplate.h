@@ -1,7 +1,9 @@
-#ifndef SAMP_LICENSEPLATE_H
-#define SAMP_LICENSEPLATE_H
-#include "fontrender.h"
+#ifndef LICENSEPLATE_H
+#define LICENSEPLATE_H
+
 #include <d3dx9.h>
+
+#include "fontrender.h"
 struct CVector;
 #pragma pack(push, 1)
 class CLicensePlate
@@ -25,4 +27,5 @@ public:
     IDirect3DTexture9* Create(const char* text);
 };
 #pragma pack(pop)
-#endif
+
+#endif // LICENSEPLATE_H

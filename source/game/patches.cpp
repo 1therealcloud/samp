@@ -1,7 +1,9 @@
+#include <string.h>
+
 #include "game/patches.h"
+
 #include "game/game.h"
 #include "game/hooks.h"
-#include <string.h>
 // 0x000a6f00
 void GameInstallVehicleDamageFilter()
 {

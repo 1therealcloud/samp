@@ -1,5 +1,6 @@
-#ifndef SAMP_CLIENT_EXCEPTIONS_H
-#define SAMP_CLIENT_EXCEPTIONS_H
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
+
 #include <windows.h>
 // 0x0015fa68
 extern CONTEXT* g_clientExceptionContext;
@@ -24,4 +25,5 @@ void ClientDumpNetworkState(char* text);
 void ClientDumpLoadedModules(char* text);
 // 0x00060260
 void ClientSendCrashReport();
-#endif
+
+#endif // EXCEPTIONS_H

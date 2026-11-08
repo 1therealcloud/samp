@@ -1,5 +1,6 @@
-#ifndef SAMP_CLIENT_COMMANDS_H
-#define SAMP_CLIENT_COMMANDS_H
+#ifndef CMDPROCS_H
+#define CMDPROCS_H
+
 #include "game/scripting.h"
 namespace Commands
 {
@@ -70,4 +71,5 @@ extern const Scripting::OpcodeInfo g_commandGetInterior;
 extern const Scripting::OpcodeInfo g_commandGetVehicleAngle;
 // 0x0011bdf8
 extern const Scripting::OpcodeInfo g_commandGetActorAngle;
-#endif
+
+#endif // CMDPROCS_H

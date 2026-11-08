@@ -1,8 +1,10 @@
-#ifndef SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
-#define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
-#include <static_assert.h>
+#ifndef CUSTOMMODELS_H
+#define CUSTOMMODELS_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct CustomModelDownload
 {
@@ -342,4 +344,5 @@ void __stdcall GameSetModelField8(int model, WORD value);
 BOOL __stdcall GameIsObjectModelInfo(void* info);
 // 0x001e0448
 extern DWORD g_gameLoadingCustomModel;
-#endif
+
+#endif // CUSTOMMODELS_H

@@ -1,13 +1,14 @@
-#ifndef SAMP_MAIN_H
-#define SAMP_MAIN_H
+#ifndef MAIN_H
+#define MAIN_H
+
+#include <string>
+#include <windows.h>
 
 #include "cmdprocs.h"
 #include "config.h"
 #include "game/debugscript.h"
 #include "game/game.h"
 #include "game/gta_globals.h"
-#include <string>
-#include <windows.h>
 class CInput;
 class CChat;
 // 0x002aca3c
@@ -97,4 +98,5 @@ extern DWORD g_clientQuitRequested;
 extern DWORD g_clientQuitStarted;
 // 0x000c6630
 void ClientProcessFrame();
-#endif
+
+#endif // MAIN_H

@@ -1,8 +1,11 @@
-#ifndef SAMP_OBJECT_MATH_H
-#define SAMP_OBJECT_MATH_H
-#include "game/entity.h"
-#include <d3d9.h>
+#ifndef UTIL_H
+#define UTIL_H
+
 #include <windows.h>
+
+#include <d3d9.h>
+
+#include "game/entity.h"
 // GTA SA VA: 0x00c97c28; returns the current global, including an installed proxy.
 // 0x000c5110
 IDirect3DDevice9* GameGetCurrentD3DDevice();
@@ -417,4 +420,5 @@ float GameAsin(float value);
 // Position12 bytes and float heading; null backend is not checked natively.
 // 0x000b6260
 void GameGetBackendPositionAndHeading(void* entity, CVector* position, float* heading);
-#endif
+
+#endif // UTIL_H

@@ -1,8 +1,10 @@
-#ifndef SAMP_SCOREBOARD_H
-#define SAMP_SCOREBOARD_H
-#include <static_assert.h>
+#ifndef SCOREBOARD_H
+#define SCOREBOARD_H
+
 #include <DXUTgui.h>
 #include <d3dx9.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct ScoreboardRow
 {
@@ -78,4 +80,5 @@ extern const char g_scoreboardCountProbe[];
 extern const char g_scoreboardCountFormat[];
 // 0x0011c194
 extern const float g_scoreboardHeaderInset;
-#endif
+
+#endif // SCOREBOARD_H

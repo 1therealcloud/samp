@@ -1,7 +1,9 @@
+#include <stdlib.h>
+
 #include "anticheat.h"
+
 #include "game/util.h"
 #include "main.h"
-#include <stdlib.h>
 // 0x0018dc24
 DWORD g_integrityVehicleChecksum;
 // 0x0018dc28

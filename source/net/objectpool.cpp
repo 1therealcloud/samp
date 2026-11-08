@@ -1,7 +1,10 @@
-#include "net/objectpool.h"
-#include "main.h"
-#include <GetTime.h>
 #include <string.h>
+
+#include <GetTime.h>
+
+#include "net/objectpool.h"
+
+#include "main.h"
 // 0x00012700
 CObjectPool::CObjectPool()
 {

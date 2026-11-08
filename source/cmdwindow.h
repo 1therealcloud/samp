@@ -1,9 +1,12 @@
-#ifndef SAMP_RECOVERED_INPUT_H
-#define SAMP_RECOVERED_INPUT_H
-#include <static_assert.h>
-#include <d3d9.h>
+#ifndef CMDWINDOW_H
+#define CMDWINDOW_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <d3d9.h>
+
+#include <static_assert.h>
 class CDXUTDialog;
 class CDXUTEditBox;
 typedef void(__cdecl* InputCommand)(char*);
@@ -72,4 +75,5 @@ public:
 STATIC_ASSERT(sizeof(CInput) == 0x1afc);
 STATIC_ASSERT(offsetof(CInput, m_bEnabled) == 0x14e0);
 STATIC_ASSERT(offsetof(CInput, m_szRecallBuffer) == 0x1565);
-#endif
+
+#endif // CMDWINDOW_H

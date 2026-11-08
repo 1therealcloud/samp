@@ -1,7 +1,9 @@
-#ifndef SAMP_FILECHECKS_H
-#define SAMP_FILECHECKS_H
-#include <static_assert.h>
+#ifndef FILECHECKS_H
+#define FILECHECKS_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 // Compiled-reference match: Paul E. Jones SHA-1 family; exact release unknown.
 // Distinct from RakNet's CSHA1. Native output consists of five host-order
@@ -59,4 +61,5 @@ void ArchivePublishNameDigest(const DWORD* digest);
 void ArchiveComputeFileDigest(const char* filename, DWORD* digest);
 // 0x00062a60
 void ArchiveComputeNameDigest(const void* data, DWORD length, DWORD* digest);
-#endif
+
+#endif // FILECHECKS_H

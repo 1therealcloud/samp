@@ -1,7 +1,9 @@
-#ifndef SAMP_DOWNLOAD_WINDOW_H
-#define SAMP_DOWNLOAD_WINDOW_H
-#include <static_assert.h>
+#ifndef DOWNLOADWINDOW_H
+#define DOWNLOADWINDOW_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
 #pragma pack(push, 1)
@@ -88,4 +90,5 @@ extern const char g_downloadCompleteFormat[15];
 extern const char g_downloadCaptionFormat[38];
 // 0x0011b918
 extern const float g_downloadKilobytesPerByte;
-#endif
+
+#endif // DOWNLOADWINDOW_H

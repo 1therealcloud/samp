@@ -1,6 +1,8 @@
-#include "menu.h"
-#include "game/scripting.h"
 #include <string.h>
+
+#include "menu.h"
+
+#include "game/scripting.h"
 // 0x000a7160
 CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction)
 {

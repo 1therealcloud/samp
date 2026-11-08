@@ -1,8 +1,10 @@
-#ifndef SAMP_LABEL_H
-#define SAMP_LABEL_H
+#ifndef LABEL_H
+#define LABEL_H
+
+#include <d3dx9.h>
+
 #include "game/entity.h"
 #include "game/scripting.h"
-#include <d3dx9.h>
 #pragma pack(push, 1)
 class CLabel
 {
@@ -29,4 +31,5 @@ public:
 #pragma pack(pop)
 // 0x0011c640
 extern const Scripting::OpcodeInfo g_labelLineOfSightCommand;
-#endif
+
+#endif // LABEL_H

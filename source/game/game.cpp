@@ -1,7 +1,9 @@
+#include <process.h>
+
 #include "game/game.h"
+
 #include "game/modelfile.h"
 #include "main.h"
-#include <process.h>
 // 0x000607b0
 int CGame::GetScreenWidth()
 {

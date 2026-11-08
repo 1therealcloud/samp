@@ -1,7 +1,9 @@
-#ifndef SAMP_TEXTDRAW_SELECTION_H
-#define SAMP_TEXTDRAW_SELECTION_H
-#include <static_assert.h>
+#ifndef TEXTDRAWSELECTION_H
+#define TEXTDRAWSELECTION_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 class CTextDrawSelection
 {
@@ -29,4 +31,5 @@ public:
 STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
 // 0x001182f8
 extern int g_textDrawClickRpc;
-#endif
+
+#endif // TEXTDRAWSELECTION_H

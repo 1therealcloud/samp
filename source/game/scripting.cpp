@@ -1,6 +1,8 @@
-#include "game/scripting.h"
-#include "main.h"
 #include <string.h>
+
+#include "game/scripting.h"
+
+#include "main.h"
 // 0x002a93f0
 CRunningScript* g_scriptThread;
 // 0x000b2150

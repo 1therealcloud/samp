@@ -1,5 +1,6 @@
-#include "game/keystuff.h"
 #include <string.h>
+
+#include "game/keystuff.h"
 // 0x00152ac0
 KeyPad* g_keysInternal = (KeyPad*)0xb73458;
 // 0x00152ac4

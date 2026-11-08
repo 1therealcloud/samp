@@ -1,12 +1,15 @@
-#ifndef SAMP_RECOVERED_GAME_H
-#define SAMP_RECOVERED_GAME_H
+#ifndef GAME_H
+#define GAME_H
+
+#include <stddef.h>
+#include <windows.h>
+
+#include <d3d9.h>
+
 #include <static_assert.h>
 #include "game/audio.h"
 #include "game/camera.h"
 #include "game/scripting.h"
-#include <d3d9.h>
-#include <stddef.h>
-#include <windows.h>
 class CPed;
 class CVehicle;
 struct CVector;
@@ -572,4 +575,5 @@ void GameFreeModelInfo(int model);
 // Descriptive name; original name and unused parameters are unknown.
 // 0x0000e4f0
 void GameLoadRequestedModelsAndEndThread();
-#endif
+
+#endif // GAME_H

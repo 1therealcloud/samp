@@ -1,5 +1,6 @@
-#include "net/playerinfo.h"
 #include <string.h>
+
+#include "net/playerinfo.h"
 // 0x0006e270
 int CPlayerInfo::GetScore()
 {

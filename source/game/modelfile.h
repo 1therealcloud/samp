@@ -1,10 +1,12 @@
-#ifndef SAMP_MODEL_FILE_H
-#define SAMP_MODEL_FILE_H
-#include <static_assert.h>
+#ifndef MODELFILE_H
+#define MODELFILE_H
+
 #include <stddef.h>
 #include <stdio.h>
 #include <vector>
 #include <windows.h>
+
+#include <static_assert.h>
 // Descriptive names for the native model-file parser types.
 #pragma pack(push, 1)
 struct CModelFileStream
@@ -488,4 +490,5 @@ DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filenam
 // Other model editing/writing paths remain under recovery.
 // 0x000b6610
 void GameParseStreamData(const void* data, DWORD length, void* destination);
-#endif
+
+#endif // MODELFILE_H

@@ -1,8 +1,10 @@
-#ifndef SAMP_RECOVERED_CONFIG_H
-#define SAMP_RECOVERED_CONFIG_H
-#include <static_assert.h>
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 class CConfig
 {
@@ -135,4 +137,4 @@ void ClientInitializeCacheDirectory();
 // 0x000c5340
 void ClientInitializePaths();
 
-#endif
+#endif // CONFIG_H

@@ -1,4 +1,7 @@
+#include <string.h>
+
 #include "net/netrpc.h"
+
 #include "BitStream.h"
 #include "GetTime.h"
 #include "RakClientInterface.h"
@@ -24,7 +27,6 @@
 #include "objectselection.h"
 #include "scoreboard.h"
 #include "svrnetstats.h"
-#include <string.h>
 // 0x00011f80
 void ScrCustomModelDownload(RPCParameters* parameters)
 {

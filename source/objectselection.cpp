@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <string.h>
+
 #include "objectselection.h"
+
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "cmdwindow.h"
@@ -7,8 +11,6 @@
 #include "main.h"
 #include "net/objectpool.h"
 #include "objectedit.h"
-#include <stdio.h>
-#include <string.h>
 
 // 0x0011c6b0
 const float g_objectSelectionMaxDistance = 150.0f;

@@ -1,5 +1,6 @@
-#ifndef SAMP_MENUPOOL_H
-#define SAMP_MENUPOOL_H
+#ifndef MENUPOOL_H
+#define MENUPOOL_H
+
 #include <static_assert.h>
 #include "menu.h"
 struct RPCParameters;
@@ -41,4 +42,5 @@ STATIC_ASSERT(sizeof(CMenuPool) == 0x402);
 extern int g_menuSelectedRpc;
 // 0x001179c0
 extern int g_menuExitedRpc;
-#endif
+
+#endif // MENUPOOL_H

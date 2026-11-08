@@ -1,6 +1,8 @@
-#include "filehooks.h"
-#include <detours.h>
 #include <string.h>
+
+#include <detours.h>
+
+#include "filehooks.h"
 // 0x0016bf60
 ArchiveFileRecord g_archiveOpenRecords[50];
 // 0x0016be98

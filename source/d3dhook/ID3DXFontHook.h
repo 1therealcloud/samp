@@ -3,6 +3,7 @@
 #define ID3DXFONTHOOK_H
 
 #include <windows.h>
+
 #include <d3dx9.h>
 
 #include <static_assert.h>

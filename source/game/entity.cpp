@@ -1,8 +1,10 @@
+#include <string.h>
+
 #include "game/entity.h"
+
 #include "game/game.h"
 #include "game/scripting.h"
 #include "main.h"
-#include <string.h>
 // 0x0009e950
 void CEntity::GetMatrix(CMatrix* matrix)
 {

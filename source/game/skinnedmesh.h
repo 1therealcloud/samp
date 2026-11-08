@@ -1,8 +1,11 @@
-#ifndef SAMP_SKINNED_MESH_H
-#define SAMP_SKINNED_MESH_H
-#include <static_assert.h>
-#include <d3dx9.h>
+#ifndef SKINNEDMESH_H
+#define SKINNEDMESH_H
+
 #include <stddef.h>
+
+#include <d3dx9.h>
+
+#include <static_assert.h>
 
 // Native hierarchy extensions; names are descriptive, not original identifiers.
 struct SkinFrame : D3DXFRAME
@@ -108,4 +111,5 @@ extern const char g_skinTexturePathFormat[];
 extern const char g_skinBoneNameFormat[];
 // 0x0011f8b8
 extern const char g_skinBoneCountFormat[];
-#endif
+
+#endif // SKINNEDMESH_H

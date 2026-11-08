@@ -1,5 +1,6 @@
-#ifndef SAMP_RECOVERED_VEHICLEPOOL_H
-#define SAMP_RECOVERED_VEHICLEPOOL_H
+#ifndef VEHICLEPOOL_H
+#define VEHICLEPOOL_H
+
 #include <static_assert.h>
 #include "game/vehicle.h"
 #pragma pack(push, 1)
@@ -119,4 +120,5 @@ extern const char g_vehiclePoolNotDeletedMessage[];
 extern int g_vehiclePoolDestroyRpc;
 // 0x001184c4
 extern const char g_vehiclePoolQueueFullMessage[];
-#endif
+
+#endif // VEHICLEPOOL_H

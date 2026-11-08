@@ -1,4 +1,5 @@
 #include "helpdialog.h"
+
 #include "game/scripting.h"
 #include "gui.h"
 

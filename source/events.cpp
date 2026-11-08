@@ -1,5 +1,6 @@
-#include <static_assert.h>
 #include "events.h"
+
+#include <static_assert.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/playerped.h"

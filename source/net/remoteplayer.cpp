@@ -1,4 +1,5 @@
 #include "net/remoteplayer.h"
+
 #include "main.h"
 // 0x00017790
 void CRemotePlayer::ShowNameTag(BYTE show)

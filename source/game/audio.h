@@ -1,5 +1,6 @@
-#ifndef SAMP_RECOVERED_AUDIO_H
-#define SAMP_RECOVERED_AUDIO_H
+#ifndef AUDIO_H
+#define AUDIO_H
+
 #include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
@@ -32,4 +33,5 @@ public:
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CAudio) == 5);
-#endif
+
+#endif // AUDIO_H

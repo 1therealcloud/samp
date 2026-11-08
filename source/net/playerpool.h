@@ -1,9 +1,11 @@
-#ifndef SAMP_PLAYER_POOL_H
-#define SAMP_PLAYER_POOL_H
-#include <static_assert.h>
+#ifndef PLAYERPOOL_H
+#define PLAYERPOOL_H
+
 #include <stddef.h>
 #include <string>
 #include <windows.h>
+
+#include <static_assert.h>
 // Packed native pool; inclusive ID1004 accesses retain observed adjacent storage behavior.
 class CRemotePlayer;
 class CLocalPlayer;
@@ -133,4 +135,5 @@ extern DWORD g_activePlayerCountCountdown;
 // No this pointer consumed; original class ownership not established.
 // 0x00003ff0
 DWORD GetCachedActivePlayerCount();
-#endif
+
+#endif // PLAYERPOOL_H

@@ -1,4 +1,5 @@
 #include "objectedit.h"
+
 #include "main.h"
 // 0x00017850
 WORD CObjectEdit::GetObjectId()

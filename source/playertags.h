@@ -1,8 +1,10 @@
-#ifndef SAMP_PLAYERTAGS_H
-#define SAMP_PLAYERTAGS_H
+#ifndef PLAYERTAGS_H
+#define PLAYERTAGS_H
+
+#include <d3dx9.h>
+
 #include "game/entity.h"
 #include "game/scripting.h"
-#include <d3dx9.h>
 struct PlayerTagVertex
 {
     float x, y, z, rhw;
@@ -134,4 +136,5 @@ extern const char g_legacyPlayerTagTextureName[];
 extern const float g_legacyPlayerTagInv256;
 // 0x0011c6b8
 extern const float g_legacyPlayerTagInv16;
-#endif
+
+#endif // PLAYERTAGS_H

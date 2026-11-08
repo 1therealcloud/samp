@@ -1,8 +1,10 @@
-#ifndef SAMP_TEXTDRAW_POOL_H
-#define SAMP_TEXTDRAW_POOL_H
+#ifndef TEXTDRAWPOOL_H
+#define TEXTDRAWPOOL_H
+
+#include <windows.h>
+
 #include <static_assert.h>
 #include "game/textdraw.h"
-#include <windows.h>
 struct RPCParameters;
 #pragma pack(push, 1)
 class CTextDrawPool
@@ -32,4 +34,5 @@ public:
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CTextDrawPool) == 0x4800);
-#endif
+
+#endif // TEXTDRAWPOOL_H

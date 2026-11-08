@@ -1,12 +1,15 @@
-#include <static_assert.h>
+#include <math.h>
+#include <stdio.h>
+
+#include <d3dx9math.h>
+
 #include "game/util.h"
+
+#include <static_assert.h>
 #include "game/custommodels.h"
 #include "game/game.h"
 #include "game/modelfile.h"
 #include "main.h"
-#include <d3dx9math.h>
-#include <math.h>
-#include <stdio.h>
 STATIC_ASSERT(sizeof(CVector) == sizeof(D3DXVECTOR3));
 STATIC_ASSERT(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x));
 STATIC_ASSERT(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y));

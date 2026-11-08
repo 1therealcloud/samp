@@ -1,5 +1,6 @@
-#include <static_assert.h>
 #include "net/netgame.h"
+
+#include <static_assert.h>
 #include "main.h"
 // 0x00001a90
 RakClientInterface* CNetGame::GetRakClient()

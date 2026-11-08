@@ -1,5 +1,6 @@
-#ifndef SAMP_SERVER_NETSTATS_H
-#define SAMP_SERVER_NETSTATS_H
+#ifndef SVRNETSTATS_H
+#define SVRNETSTATS_H
+
 #include <windows.h>
 struct IDirect3DDevice9;
 class CSrvNetStats
@@ -14,4 +15,5 @@ public:
 };
 // 0x0016c7f8
 extern DWORD g_srvNetStatsHistory[74];
-#endif
+
+#endif // SVRNETSTATS_H

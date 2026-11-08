@@ -1,10 +1,12 @@
-#ifndef SAMP_LOCAL_PLAYER_INTERFACE_H
-#define SAMP_LOCAL_PLAYER_INTERFACE_H
+#ifndef LOCALPLAYER_H
+#define LOCALPLAYER_H
+
+#include <stddef.h>
+#include <windows.h>
+
 #include <static_assert.h>
 #include "game/quaternion.h"
 #include "game/scripting.h"
-#include <stddef.h>
-#include <windows.h>
 // Native synchronization records shared by senders and receivers, as in 0.2x.
 // Plain packed storage; no standalone native constructors are established.
 #pragma pack(push, 1)
@@ -478,4 +480,5 @@ extern CVector g_localSurfEntityTurnSpeed;
 extern DWORD g_localOnFootSendRate;
 // 0x0013c0ac
 extern DWORD g_localInCarSendRate;
-#endif
+
+#endif // LOCALPLAYER_H

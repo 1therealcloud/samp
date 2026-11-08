@@ -1,8 +1,10 @@
-#ifndef SAMP_OBJECT_POOL_H
-#define SAMP_OBJECT_POOL_H
+#ifndef OBJECTPOOL_H
+#define OBJECTPOOL_H
+
+#include <windows.h>
+
 #include <static_assert.h>
 #include "game/object.h"
-#include <windows.h>
 struct RPCParameters;
 #pragma pack(push, 1)
 class CObjectPool
@@ -114,4 +116,5 @@ void DrawObjectPoolCollisionDebug();
 extern DWORD g_objectPoolLastTick;
 // 0x00118130
 extern const float g_objectPoolSecondsPerTick;
-#endif
+
+#endif // OBJECTPOOL_H

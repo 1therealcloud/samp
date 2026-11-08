@@ -1,5 +1,6 @@
-#include "svrnetstats.h"
 #include <string.h>
+
+#include "svrnetstats.h"
 // 0x0016c7f8
 DWORD g_srvNetStatsHistory[74];
 // 0x00070cc0

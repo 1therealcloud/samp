@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <string.h>
+
 #include "game/debug.h"
+
 #include "game/game.h"
 #include "game/keystuff.h"
 #include "game/playerped.h"
@@ -7,8 +11,6 @@
 #include "game/vehicle.h"
 #include "gui.h"
 #include "main.h"
-#include <stdio.h>
-#include <string.h>
 // 0x0011f56c
 const char g_taskNoneName[5] = "None";
 // Native returns this constant even for a null task; no task dereference.

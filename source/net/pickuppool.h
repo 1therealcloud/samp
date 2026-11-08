@@ -1,7 +1,9 @@
-#ifndef SAMP_PICKUPPOOL_H
-#define SAMP_PICKUPPOOL_H
-#include <static_assert.h>
+#ifndef PICKUPPOOL_H
+#define PICKUPPOOL_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct Pickup
 {
@@ -54,4 +56,5 @@ STATIC_ASSERT(sizeof(CPickupPool) == 0x23004);
 extern int g_pickupCollectedRpc;
 // 0x00118170
 extern int g_weaponPickupCollectedRpc;
-#endif
+
+#endif // PICKUPPOOL_H

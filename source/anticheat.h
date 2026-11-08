@@ -1,5 +1,6 @@
-#ifndef SAMP_ANTICHEAT_H
-#define SAMP_ANTICHEAT_H
+#ifndef ANTICHEAT_H
+#define ANTICHEAT_H
+
 #include <windows.h>
 // 0x0018dc24
 extern DWORD g_integrityVehicleChecksum;
@@ -51,4 +52,5 @@ extern DWORD g_clientTimerFrequencyAttempted;
 extern const double g_clientTimerUnsignedBias;
 // 0x0011a930
 extern const double g_clientTimerMillisecondScale;
-#endif
+
+#endif // ANTICHEAT_H

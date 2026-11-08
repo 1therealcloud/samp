@@ -1,8 +1,10 @@
-#ifndef SAMP_DIALOG_H
-#define SAMP_DIALOG_H
-#include <static_assert.h>
+#ifndef DIALOG_H
+#define DIALOG_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
 class CDXUTListBoxDL;
@@ -82,4 +84,5 @@ extern const float g_dialogLineScale;
 extern const float g_dialogEditPadding;
 // 0x0011c348
 extern int g_dialogResponseRpcId;
-#endif
+
+#endif // DIALOG_H

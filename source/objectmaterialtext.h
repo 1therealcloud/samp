@@ -1,7 +1,9 @@
-#ifndef SAMP_OBJECTMATERIALTEXT_H
-#define SAMP_OBJECTMATERIALTEXT_H
-#include "fontrender.h"
+#ifndef OBJECTMATERIALTEXT_H
+#define OBJECTMATERIALTEXT_H
+
 #include <d3dx9.h>
+
+#include "fontrender.h"
 struct CVector;
 #pragma pack(push, 1)
 class CObjectMaterialText
@@ -21,4 +23,5 @@ public:
     void OnResetDevice();
 };
 #pragma pack(pop)
-#endif
+
+#endif // OBJECTMATERIALTEXT_H

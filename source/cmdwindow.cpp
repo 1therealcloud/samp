@@ -1,8 +1,10 @@
-#include <static_assert.h>
+#include <DXUTgui.h>
+
 #include "cmdwindow.h"
+
+#include <static_assert.h>
 #include "main.h"
 #include "runutil.h"
-#include <DXUTgui.h>
 // 0x00002e80
 DWORD CInput::GetEnabledState()
 {

@@ -1,5 +1,15 @@
-#include <static_assert.h>
+#include <assert.h>
+#include <new>
+#include <stdlib.h>
+#include <string.h>
+
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <DXUTmisc.h>
+
 #include "dialog.h"
+
+#include <static_assert.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "chatwindow.h"
@@ -11,13 +21,6 @@
 #include "gui.h"
 #include "main.h"
 #include "runutil.h"
-#include <DXUT.h>
-#include <DXUTgui.h>
-#include <DXUTmisc.h>
-#include <assert.h>
-#include <new>
-#include <stdlib.h>
-#include <string.h>
 
 // Reconstruction-only access facade for the established control vtable slot4C.
 // It adds no fields, virtual methods or standalone native entries.

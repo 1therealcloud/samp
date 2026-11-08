@@ -1,4 +1,5 @@
 #include "net/vehiclepool.h"
+
 #include "main.h"
 // 0x00002df0
 void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)

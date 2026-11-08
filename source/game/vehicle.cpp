@@ -1,4 +1,5 @@
 #include "game/vehicle.h"
+
 #include "main.h"
 // 0x0000e290
 void CVehicle::SetObjective(BYTE objective)

@@ -1,7 +1,9 @@
-#ifndef SAMP_ARCHIVE_FILEHOOKS_H
-#define SAMP_ARCHIVE_FILEHOOKS_H
-#include <static_assert.h>
+#ifndef FILEHOOKS_H
+#define FILEHOOKS_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct ArchiveFileRecord
 {
@@ -84,4 +86,5 @@ DWORD WINAPI Arch_SetFilePointer(HANDLE file, LONG distance, PLONG high, DWORD m
 BOOL WINAPI Arch_CloseHandle(HANDLE file);
 // 0x000623a0
 DWORD WINAPI Arch_GetFileType(HANDLE file);
-#endif
+
+#endif // FILEHOOKS_H

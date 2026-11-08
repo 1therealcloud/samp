@@ -1,11 +1,13 @@
+#include <new>
+#include <stdio.h>
+#include <string.h>
+
 #include "game/skinnedmesh.h"
+
 #include "chatwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
 #include "main.h"
-#include <new>
-#include <stdio.h>
-#include <string.h>
 
 // 0x000b9340
 CSkinHierarchyAllocator::CSkinHierarchyAllocator() {}

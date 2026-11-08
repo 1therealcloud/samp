@@ -1,11 +1,13 @@
-#include <static_assert.h>
+#include <string.h>
+
 #include "net/menupool.h"
+
+#include <static_assert.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/keystuff.h"
 #include "main.h"
 #include "net/netgame.h"
-#include <string.h>
 // 0x000177b0
 DWORD CMenuPool::GetActiveState(BYTE id)
 {

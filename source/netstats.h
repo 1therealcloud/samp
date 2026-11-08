@@ -1,8 +1,10 @@
-#ifndef SAMP_CLIENT_NETSTATS_H
-#define SAMP_CLIENT_NETSTATS_H
-#include <static_assert.h>
+#ifndef NETSTATS_H
+#define NETSTATS_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 struct IDirect3DDevice9;
 class CNetStats
 {
@@ -39,4 +41,5 @@ extern const char g_netStatsMemoryFormat[46];
 extern const char g_netStatsProcessFormat[37];
 // 0x0011b7b4
 extern const char g_netStatsTitle[21];
-#endif
+
+#endif // NETSTATS_H

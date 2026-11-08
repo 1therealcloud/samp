@@ -1,5 +1,6 @@
-#ifndef SAMP_GAME_FONT_H
-#define SAMP_GAME_FONT_H
+#ifndef FONT_H
+#define FONT_H
+
 #include <windows.h>
 // 0x0009fc80
 void Font_PrintString(float x, float y, char* text);
@@ -35,4 +36,5 @@ void Font_SetShadow(int shadow);
 void Font_UnkConv2(char* text);
 // 0x0009fd80
 DWORD Font_UnkConv(char* text, int a, int b, int c, int d, int e, int f, char* output);
-#endif
+
+#endif // FONT_H

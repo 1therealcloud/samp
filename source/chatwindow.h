@@ -1,10 +1,11 @@
-#ifndef SAMP_RECOVERED_CHAT_H
-#define SAMP_RECOVERED_CHAT_H
+#ifndef CHATWINDOW_H
+#define CHATWINDOW_H
 
 // Native x86 layout. Names come from references; offsets are checked below.
-#include <d3dx9.h>
 #include <stddef.h>
 #include <windows.h>
+
+#include <d3dx9.h>
 
 class CDXUTDialog;
 class CDXUTEditBox;
@@ -163,4 +164,5 @@ CHAT_LAYOUT_ASSERT(chat_position_offset, offsetof(CChat, m_nScrollbarPos) == 0x6
 CHAT_LAYOUT_ASSERT(chat_height_offset, offsetof(CChat, m_nCharHeight) == 0x63e2);
 CHAT_LAYOUT_ASSERT(chat_timestamp_width_offset, offsetof(CChat, m_nTimestampWidth) == 0x63e6);
 #undef CHAT_LAYOUT_ASSERT
-#endif
+
+#endif // CHATWINDOW_H

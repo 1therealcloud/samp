@@ -7,9 +7,11 @@
 //
 //----------------------------------------------------------
 
-#pragma once
 
 //----------------------------------------------------------
+
+#ifndef FILESYSTEM_H
+#define FILESYSTEM_H
 
 #define FS_FILE_MAGIC 0x32414153 // "SAA2"
 #define FS_BLOCK_SIZE 0x800      // 2kb
@@ -71,3 +73,5 @@ public:
 
 //----------------------------------------------------------
 // EOF
+
+#endif // FILESYSTEM_H

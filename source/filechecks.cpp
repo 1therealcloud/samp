@@ -1,6 +1,8 @@
-#include "filechecks.h"
-#include "main.h"
 #include <string.h>
+
+#include "filechecks.h"
+
+#include "main.h"
 // 0x0014033c
 DWORD g_archiveTrackedNameDigests[3][5] = {{0x11c714fd, 0x0a46694e, 0x7aec2920, 0x2100e2e4, 0x94f7372e},
                                            {0x0b85a2ad, 0x344bdae1, 0xa19471d5, 0x7d49d3e9, 0x7dde6cbe},

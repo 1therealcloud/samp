@@ -1,5 +1,6 @@
-#ifndef SAMP_GAME_HOOKS_H
-#define SAMP_GAME_HOOKS_H
+#ifndef HOOKS_H
+#define HOOKS_H
+
 #include <windows.h>
 
 class CPlayerPool;
@@ -797,4 +798,5 @@ WORD GameResolveDamagePlayer(void* entity);
 WORD GameResolveDamageActor(void* entity);
 // 0x0018e81c
 extern CVehicle* g_hookEnterVehicle;
-#endif
+
+#endif // HOOKS_H

@@ -1,11 +1,13 @@
+#include <new>
+#include <stdlib.h>
+#include <string.h>
+
 #include "game/modelfile.h"
+
 #include "Alloc.h"
 #include "LzmaEnc.h"
 #include "game/custommodels.h"
 #include "game/util.h"
-#include <new>
-#include <stdlib.h>
-#include <string.h>
 // 0x00155470
 const BYTE g_modelLzmaProperties[5] = {0x5d, 0, 0, 1, 0};
 // 0x000b36f0

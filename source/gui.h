@@ -1,5 +1,11 @@
-#ifndef SAMP_GUI_H
-#define SAMP_GUI_H
+#ifndef GUI_H
+#define GUI_H
+
+#include <windows.h>
+
+#include <d3dx9.h>
+#include <unknwn.h>
+
 #include "audiostream.h"
 #include "chatbubble.h"
 #include "deathwindow.h"
@@ -24,9 +30,6 @@
 #include "spawnscreen.h"
 #include "svrnetstats.h"
 #include "textdrawselection.h"
-#include <d3dx9.h>
-#include <unknwn.h>
-#include <windows.h>
 class CDXUTDialog;
 class CDXUTControl;
 // 0x002acab8
@@ -144,4 +147,5 @@ void GameReacquireInputDevice();
 
 // 0x000c6a60
 void ClientInitializeDialogResources();
-#endif
+
+#endif // GUI_H

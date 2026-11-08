@@ -1,7 +1,9 @@
-#ifndef SAMP_RENDER_PANEL_H
-#define SAMP_RENDER_PANEL_H
-#include <static_assert.h>
+#ifndef RENDERPANEL_H
+#define RENDERPANEL_H
+
 #include <windows.h>
+
+#include <static_assert.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
 #pragma pack(push, 1)
@@ -33,4 +35,5 @@ public:
 STATIC_ASSERT(sizeof(CRenderPanel) == 0x28);
 // 0x0011c75c
 extern const char g_renderPanelTitle[10];
-#endif
+
+#endif // RENDERPANEL_H

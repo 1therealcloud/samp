@@ -1,5 +1,6 @@
-#ifndef SAMP_RECOVERED_SCM_EVENTS_H
-#define SAMP_RECOVERED_SCM_EVENTS_H
+#ifndef EVENTS_H
+#define EVENTS_H
+
 #include <windows.h>
 // 0x00117690
 extern int g_scmEventRpcId;
@@ -23,4 +24,5 @@ extern CPed* g_driverPed;
 extern BOOL g_driverCompareFlag;
 // 0x0015699c
 extern void* g_driverScriptThread;
-#endif
+
+#endif // EVENTS_H

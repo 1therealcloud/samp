@@ -1,4 +1,9 @@
+#include <new>
+#include <stdio.h>
+#include <string.h>
+
 #include "playertags.h"
+
 #include "chatbubble.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "deathwindow.h"
@@ -14,9 +19,6 @@
 #include "net/netgame.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
-#include <new>
-#include <stdio.h>
-#include <string.h>
 // 0x0017e988
 CMatrix g_nametagVehicleMatrix;
 // 0x0017eb08

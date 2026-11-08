@@ -1,5 +1,6 @@
-#ifndef SAMP_ACTOR_H
-#define SAMP_ACTOR_H
+#ifndef ACTOR_H
+#define ACTOR_H
+
 #include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
@@ -79,4 +80,5 @@ STATIC_ASSERT(sizeof(CActor) == 0x56);
 extern void* g_actorTaskBackend;
 // 0x0009bfb0
 DWORD GameClearActorTasks();
-#endif
+
+#endif // ACTOR_H

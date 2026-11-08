@@ -1,5 +1,6 @@
-#include <static_assert.h>
 #include "net/localplayer.h"
+
+#include <static_assert.h>
 #include "main.h"
 // 0x00017770
 void CLocalPlayer::ReturnToClassSelection()

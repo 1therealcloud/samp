@@ -2,8 +2,9 @@
 // Original copyright (c) 2005 Kye Bitossi.
 // Recovered against 0.3.DL-R1 instructions; verification scope is recorded in analysis.
 
-#include "runutil.h"
 #include <string.h>
+
+#include "runutil.h"
 
 // 0x000172e0
 void Util_UrlUnencode(char* enc)

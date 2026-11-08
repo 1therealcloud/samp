@@ -1,9 +1,11 @@
-#ifndef SAMP_RECOVERED_ENTITY_H
-#define SAMP_RECOVERED_ENTITY_H
-#include <static_assert.h>
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include <stddef.h>
 #include <string.h>
 #include <windows.h>
+
+#include <static_assert.h>
 // Five raw DWORDs consumed by the native collision adapter; semantic fields unresolved.
 struct GameEntityCollisionShape
 {
@@ -267,4 +269,5 @@ extern const char g_entityDetachExceptionLabel[5];
 // Original owner/name unknown; ECX unused, two cdecl stack arguments.
 // 0x0009f8b0
 void __cdecl GameDetachBackendRwObject(void* entity, void* object);
-#endif
+
+#endif // ENTITY_H

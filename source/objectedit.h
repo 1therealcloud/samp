@@ -1,7 +1,9 @@
-#ifndef SAMP_OBJECT_EDIT_H
-#define SAMP_OBJECT_EDIT_H
-#include <static_assert.h>
+#ifndef OBJECTEDIT_H
+#define OBJECTEDIT_H
+
 #include <d3dx9.h>
+
+#include <static_assert.h>
 class CMatrix;
 struct CVector;
 #pragma pack(push, 1)
@@ -112,4 +114,5 @@ extern const float g_objectEditDistanceScale;
 extern int g_objectEditRpc;
 // 0x00117f30
 extern int g_objectEditAttachedRpc;
-#endif
+
+#endif // OBJECTEDIT_H

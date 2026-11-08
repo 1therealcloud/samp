@@ -1,7 +1,9 @@
-#include "game/animation.h"
-#include "runutil.h"
 #include <stdio.h>
 #include <string.h>
+
+#include "game/animation.h"
+
+#include "runutil.h"
 // 0x001419d0
 char g_animationNames[1812][36] = {
 #include "game/animation_names.inc"

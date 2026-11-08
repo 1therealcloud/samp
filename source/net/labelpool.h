@@ -1,8 +1,10 @@
-#ifndef SAMP_LABELPOOL_H
-#define SAMP_LABELPOOL_H
+#ifndef LABELPOOL_H
+#define LABELPOOL_H
+
+#include <stddef.h>
+
 #include <static_assert.h>
 #include "game/entity.h"
-#include <stddef.h>
 #pragma pack(push, 1)
 struct TextLabel
 {
@@ -38,4 +40,5 @@ STATIC_ASSERT(sizeof(TextLabel) == 29);
 STATIC_ASSERT(offsetof(TextLabel, attachedPlayer) == 0x19);
 STATIC_ASSERT(offsetof(CLabelPool, active) == 0xe800);
 STATIC_ASSERT(sizeof(CLabelPool) == 0x10800);
-#endif
+
+#endif // LABELPOOL_H

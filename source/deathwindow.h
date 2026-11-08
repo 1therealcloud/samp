@@ -1,8 +1,11 @@
-#ifndef SAMP_DEATHWINDOW_H
-#define SAMP_DEATHWINDOW_H
-#include <static_assert.h>
-#include <d3dx9.h>
+#ifndef DEATHWINDOW_H
+#define DEATHWINDOW_H
+
 #include <stddef.h>
+
+#include <d3dx9.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct DeathWindowEntry
 {
@@ -73,4 +76,5 @@ extern const char g_deathWeaponBackgroundGlyph[2];
 extern const float g_deathWindowHorizontalFactor;
 // 0x0011c378
 extern const float g_deathWindowVerticalFactor;
-#endif
+
+#endif // DEATHWINDOW_H

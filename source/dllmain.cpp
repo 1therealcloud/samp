@@ -1,9 +1,10 @@
+#include <process.h>
+#include <string.h>
+
 #include "archive/ArchiveFS.h"
 #include "filehooks.h"
 #include "game/hooks.h"
 #include "main.h"
-#include <process.h>
-#include <string.h>
 
 // Standard CRT integration adapter; no established standalone native entry.
 // samp.dll RVA: unknown (standard VC7 CRT integration adapter; no established standalone native entry)

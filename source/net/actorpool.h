@@ -1,8 +1,10 @@
-#ifndef SAMP_ACTOR_POOL_H
-#define SAMP_ACTOR_POOL_H
+#ifndef ACTORPOOL_H
+#define ACTORPOOL_H
+
+#include <windows.h>
+
 #include <static_assert.h>
 #include "game/actor.h"
-#include <windows.h>
 #pragma pack(push, 1)
 // Packed native creation request; custom model is separate from constructor model.
 struct ActorCreateInfo
@@ -52,4 +54,5 @@ public:
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CActorPool) == 0x4e24);
-#endif
+
+#endif // ACTORPOOL_H

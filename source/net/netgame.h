@@ -1,9 +1,11 @@
-#ifndef SAMP_NETGAME_H
-#define SAMP_NETGAME_H
-#include <static_assert.h>
-#include "game/scripting.h"
+#ifndef NETGAME_H
+#define NETGAME_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
+#include "game/scripting.h"
 // Observed coordinator fields; the unused prefix remains opaque.
 class CVehiclePool;
 class CPlayerPool;
@@ -317,4 +319,5 @@ extern const char g_netJoiningMessage[];
 extern const char g_netClientVersion[];
 // 0x00117bf8
 extern int g_netJoinRpc;
-#endif
+
+#endif // NETGAME_H

@@ -1,5 +1,6 @@
-#ifndef SAMP_RECOVERED_ANIMATION_H
-#define SAMP_RECOVERED_ANIMATION_H
+#ifndef ANIMATION_H
+#define ANIMATION_H
+
 #include <windows.h>
 // 0x001419d0
 extern char g_animationNames[1812][36];
@@ -18,4 +19,5 @@ DWORD __stdcall GameGetAnimationGroupKey(int group, int animation);
 DWORD __stdcall GameAnimationKey(const char* name);
 // 0x0009c980
 void GameInitializeAnimationKeys();
-#endif
+
+#endif // ANIMATION_H

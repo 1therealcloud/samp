@@ -1,8 +1,10 @@
-#ifndef SAMP_MENU_H
-#define SAMP_MENU_H
-#include <static_assert.h>
+#ifndef MENU_H
+#define MENU_H
+
 #include <stddef.h>
 #include <windows.h>
+
+#include <static_assert.h>
 #pragma pack(push, 1)
 // Sixteen native DWORDs copied verbatim; only the first thirteen have known uses.
 struct CMenuInteraction
@@ -60,4 +62,5 @@ STATIC_ASSERT(offsetof(CMenu, handle) == 0x3b4);
 extern const char g_menuItemKeys[24][32];
 // 0x0011ecf4
 extern const char g_menuDummy[6];
-#endif
+
+#endif // MENU_H

@@ -1,13 +1,15 @@
+#include <stdio.h>
+
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <d3dx9.h>
+
 #include "chatwindow.h"
 #include "cmdprocs.h"
 #include "cmdwindow.h"
 #include "game/game.h"
 #include "gui.h"
 #include "main.h"
-#include <DXUT.h>
-#include <DXUTgui.h>
-#include <d3dx9.h>
-#include <stdio.h>
 
 #ifdef GetSystemMetrics
 #undef GetSystemMetrics

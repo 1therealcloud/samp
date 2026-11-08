@@ -1,8 +1,10 @@
+#include <string.h>
+
 #include "net/playerpool.h"
+
 #include "main.h"
 #include "net/netgame.h"
 #include "net/playerinfo.h"
-#include <string.h>
 // 0x000010d0
 CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
 {

@@ -1,5 +1,6 @@
-#ifndef SAMP_GTA_GLOBALS_H
-#define SAMP_GTA_GLOBALS_H
+#ifndef GTA_GLOBALS_H
+#define GTA_GLOBALS_H
+
 #include <windows.h>
 
 #ifdef SAMP_DIRECT_GTA_GLOBALS
@@ -15,4 +16,4 @@ extern int g_chatScreenWidth;
 extern HWND g_inputGameWindow;
 #endif
 
-#endif
+#endif // GTA_GLOBALS_H

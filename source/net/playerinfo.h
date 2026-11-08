@@ -1,9 +1,11 @@
-#ifndef SAMP_PLAYERINFO_H
-#define SAMP_PLAYERINFO_H
-#include <static_assert.h>
+#ifndef PLAYERINFO_H
+#define PLAYERINFO_H
+
 #include <stddef.h>
 #include <string>
 #include <windows.h>
+
+#include <static_assert.h>
 class CRemotePlayer;
 #pragma pack(push, 1)
 class CPlayerInfo
@@ -41,4 +43,5 @@ public:
 STATIC_ASSERT(sizeof(std::string) == 28);
 STATIC_ASSERT(offsetof(CPlayerInfo, name) == 0x10);
 STATIC_ASSERT(sizeof(CPlayerInfo) == 0x2c);
-#endif
+
+#endif // PLAYERINFO_H

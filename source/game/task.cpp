@@ -1,4 +1,5 @@
 #include "game/task.h"
+
 #include "exceptions.h"
 #include "game/playerped.h"
 // The default constructor deliberately leaves m_bSelfCreated untouched.

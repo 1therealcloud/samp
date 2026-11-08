@@ -1,5 +1,6 @@
-#ifndef SAMP_RECOVERED_SCRIPTING_H
-#define SAMP_RECOVERED_SCRIPTING_H
+#ifndef SCRIPTING_H
+#define SCRIPTING_H
+
 #include <windows.h>
 // Layout fields are not established yet; native Initialize allocates and clears 224 bytes.
 struct CRunningScript
@@ -292,4 +293,5 @@ extern const char g_gameFightCLibrary[8];
 extern const char g_gameFightDLibrary[8];
 // 0x0011eaac
 extern const char g_gameFightELibrary[8];
-#endif
+
+#endif // SCRIPTING_H

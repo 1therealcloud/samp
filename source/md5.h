@@ -2,6 +2,7 @@
 
 #ifndef MD5_H
 #define MD5_H
+
 #include <static_assert.h>
 
 #ifdef __alpha
@@ -34,4 +35,4 @@ typedef struct MD5Context MD5_CTX;
 // Original x86 context extent; the finalizer deliberately clears sizeof(pointer).
 STATIC_ASSERT(sizeof(MD5Context) == 88 && sizeof(uint32) == 4);
 
-#endif /* !MD5_H */
+#endif // MD5_H

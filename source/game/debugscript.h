@@ -1,5 +1,6 @@
-#ifndef SAMP_GAME_DEBUGSCRIPT_H
-#define SAMP_GAME_DEBUGSCRIPT_H
+#ifndef DEBUGSCRIPT_H
+#define DEBUGSCRIPT_H
+
 #include "game/entity.h"
 class CObjectPool;
 // 0x0018de38
@@ -32,4 +33,5 @@ void ProcessLine(const char* line);
 // 0x0009e7f0
 void Initialize(const char* filename);
 } // namespace DebugScript
-#endif
+
+#endif // DEBUGSCRIPT_H
