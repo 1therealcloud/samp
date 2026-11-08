@@ -1,4 +1,3 @@
-#include "main.h"
 //----------------------------------------------------------
 //
 //   SA:MP Multiplayer Modification For GTA:SA

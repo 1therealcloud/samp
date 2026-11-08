@@ -33,6 +33,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rcon", "tools\rcon\rcon.vcp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "arctool2", "tools\arctool2\arctool2.vcproj", "{EA07AC30-8B5C-4461-A9DF-AFC20197F09D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -65,6 +69,10 @@ Global
 		{587842F7-AFE1-437C-A761-D5AAD6183896}.Debug.Build.0 = Debug|Win32
 		{587842F7-AFE1-437C-A761-D5AAD6183896}.Release.ActiveCfg = Release|Win32
 		{587842F7-AFE1-437C-A761-D5AAD6183896}.Release.Build.0 = Release|Win32
+		{EA07AC30-8B5C-4461-A9DF-AFC20197F09D}.Debug.ActiveCfg = Debug|Win32
+		{EA07AC30-8B5C-4461-A9DF-AFC20197F09D}.Debug.Build.0 = Debug|Win32
+		{EA07AC30-8B5C-4461-A9DF-AFC20197F09D}.Release.ActiveCfg = Release|Win32
+		{EA07AC30-8B5C-4461-A9DF-AFC20197F09D}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

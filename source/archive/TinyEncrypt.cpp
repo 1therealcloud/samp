@@ -140,7 +140,7 @@ void CTinyEncrypt::LoadKey(PCHAR szFileName)
 {
     FILE* fiKey;
 
-    fopen_s(&fiKey, (CHAR*)szFileName, "rb");
+    fiKey = fopen((CHAR*)szFileName, "rb");
     fread(m_pdwKey, 1, TEA_KEY_SIZE, fiKey);
     fclose(fiKey);
 }
@@ -154,7 +154,7 @@ void CTinyEncrypt::WriteKey(PCHAR szFileName)
 {
     FILE* fiKey;
 
-    fopen_s(&fiKey, (CHAR*)szFileName, "wb");
+    fiKey = fopen((CHAR*)szFileName, "wb");
     fwrite(m_pdwKey, 1, TEA_KEY_SIZE, fiKey);
     fclose(fiKey);
 }
@@ -171,7 +171,7 @@ void CTinyEncrypt::WriteCHeaderFile(PSTR szFileName)
     FILE* fiHeader;
 
     // Generate the header file
-    fopen_s(&fiHeader, szFileName, "wt");
+    fiHeader = fopen(szFileName, "wt");
     fprintf(fiHeader, "//-----------------------------------------\n");
     fprintf(fiHeader, "// SAMP Archive 2 Tool - TEA Keys\n");
     fprintf(fiHeader, "//\n");
