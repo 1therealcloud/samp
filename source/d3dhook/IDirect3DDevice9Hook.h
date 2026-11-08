@@ -1,7 +1,11 @@
-#ifndef SAMP_DIRECT3D_DEVICE9_HOOK_H
-#define SAMP_DIRECT3D_DEVICE9_HOOK_H
-#include <static_assert.h>
+// IDirect3DDevice9Hook
+#ifndef IDIRECT3DDEVICE9HOOK_H
+#define IDIRECT3DDEVICE9HOOK_H
+
 #include <d3d9.h>
+
+#include <static_assert.h>
+
 // Four-byte native proxy; the real device is a shared global.
 class IDirect3DDevice9Hook : public IDirect3DDevice9
 {
@@ -254,6 +258,7 @@ public:
     HRESULT __stdcall CreateQuery(D3DQUERYTYPE Type, IDirect3DQuery9** ppQuery);
 };
 STATIC_ASSERT(sizeof(IDirect3DDevice9Hook) == 4);
+
 // 0x0017ec00
 extern D3DMATRIX g_deviceViewMatrix;
 // 0x0017ec40
@@ -284,4 +289,5 @@ extern BYTE* g_devicePlateManager;
 void* GameGetVehiclePlateTexture();
 // 0x000c54f0
 void ClientSetRenderState(DWORD state, DWORD value);
-#endif
+
+#endif // IDIRECT3DDEVICE9HOOK_H

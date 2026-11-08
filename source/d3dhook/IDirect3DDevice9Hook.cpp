@@ -1,9 +1,28 @@
+// IDirect3DDevice9Hook.cpp
+
+#include <string.h>
+#include <stdio.h>
+
+#include "BitStream.h"
+#include "RakClientInterface.h"
+
+#include <DXUT.h>
+#include <DXUTgui.h>
+
 #include "d3dhook/IDirect3DDevice9Hook.h"
+
+#include "main.h"
+
 #include "game/game.h"
 #include "game/hooks.h"
-#include "main.h"
 #include "net/vehiclepool.h"
-#include <string.h>
+#include "anticheat.h"
+#include "chatwindow.h"
+#include "cmdwindow.h"
+#include "game/playerped.h"
+#include "game/vehicle.h"
+#include "gui.h"
+
 // 0x000c5e60
 IDirect3DDevice9Hook::IDirect3DDevice9Hook() {}
 // 0x0017ec00
@@ -12,6 +31,7 @@ D3DMATRIX g_deviceViewMatrix;
 D3DMATRIX g_deviceProjectionMatrix;
 // 0x0017ec80
 D3DMATRIX g_deviceWorldMatrix;
+
 // 0x00073f60
 HRESULT __stdcall IDirect3DDevice9Hook::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -682,17 +702,6 @@ void ClientSetRenderState(DWORD state, DWORD value)
     ((void(__cdecl*)(DWORD, DWORD))(*(DWORD**)(*(DWORD*)0xc97b24 + 0x20)))(state, value);
 }
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-#include "anticheat.h"
-#include "chatwindow.h"
-#include "cmdwindow.h"
-#include "game/playerped.h"
-#include "game/vehicle.h"
-#include "gui.h"
-#include <DXUT.h>
-#include <DXUTgui.h>
-#include <stdio.h>
 // 0x002aca1c
 CAudioStream* g_renderAudioStream;
 // 0x002aca08

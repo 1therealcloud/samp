@@ -1,8 +1,12 @@
-#ifndef SAMP_RECOVERED_FONT_WRAPPER_H
-#define SAMP_RECOVERED_FONT_WRAPPER_H
-#include <static_assert.h>
-#include <d3dx9.h>
+// ID3DXFontHook
+#ifndef ID3DXFONTHOOK_H
+#define ID3DXFONTHOOK_H
+
 #include <windows.h>
+#include <d3dx9.h>
+
+#include <static_assert.h>
+
 // Native vtable RVA 0x0011c438. No added destructor or reference count.
 class CFontWrapper : public ID3DXFont
 {
@@ -48,11 +52,9 @@ public:
     // 0x00073870
     virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
 };
-STATIC_ASSERT(sizeof(CFontWrapper) == 8);
-#endif
 
-#ifndef SAMP_RECOVERED_FONT_COLOR_H
-#define SAMP_RECOVERED_FONT_COLOR_H
+STATIC_ASSERT(sizeof(CFontWrapper) == 8);
+
 // 0x0017e97c
 extern char* g_fontOriginalText;
 // 0x0017e980
@@ -79,4 +81,5 @@ void FontNextGlyphColor();
 void InitializeFontDrawBuffers();
 // samp.dll RVA: unknown (recovery accessor for static sprite object RVA 0x00140bd8)
 ID3DXSprite* FontColorSprite();
-#endif
+
+#endif // ID3DXFONTHOOK_H

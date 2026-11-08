@@ -1,9 +1,17 @@
+// ID3DXFontHook.cpp
+
 #include <static_assert.h>
+
+#include <string.h>
+#include <stdlib.h>
+#include <wchar.h>
+
+#include <DXUTgui.h>
+
 #include "d3dhook/ID3DXFontHook.h"
+
 #include "cmdwindow.h"
 #include "runutil.h"
-#include <DXUTgui.h>
-#include <string.h>
 
 // 0x0006b310
 CFontWrapper::CFontWrapper() {}
@@ -127,8 +135,6 @@ HRESULT STDMETHODCALLTYPE CFontWrapper::OnResetDevice()
     return font->OnResetDevice();
 }
 
-#include <stdlib.h>
-#include <wchar.h>
 // 0x0017e97c
 char* g_fontOriginalText;
 // 0x0017e980
