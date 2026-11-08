@@ -133,6 +133,7 @@ type
     procedure SetClipBoardStr(Str: String);
 
     procedure GetGTAExe(Owner: HWND);
+    procedure GetModelCacheFolder(Owner: HWND);
     procedure FormCreate(Sender: TObject);
     procedure lbServersDrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
@@ -275,6 +276,8 @@ var
   PingCounter: Integer = 0;
   MasterFile: Integer = 1;
   gta_sa_exe: String;
+  model_cache: String;
+  artwork_proxy: String;
   QueryQueue: TStringList;
   ServersTopIndex: Integer = -1;
   InstanceChecked: Boolean = false;
@@ -515,7 +518,7 @@ begin
 
   TmpStr:= ExtractFilePath(Copy(TmpStr, 2, Length(TmpStr)-2));
 
-  if BrowseForFolder(Owner, BrowseExe, TmpStr, 'Please locate your GTA: San Andreas installtion...') then begin
+  if BrowseForFolder(Owner, BrowseExe, TmpStr, 'Please locate your GTA: San Andreas installation...') then begin
     gta_sa_exe:= BrowseExe + '\gta_sa.exe';
 
     Reg.RootKey:= HKEY_CURRENT_USER;
@@ -524,6 +527,23 @@ begin
     Reg.CloseKey;
     Reg.Free;
   end;
+end;
+
+procedure TfmMain.GetModelCacheFolder(Owner: HWND);
+var
+  Reg: TRegistry;
+  BrowseCache: String;
+begin
+  Reg:= TRegistry.Create;
+  if BrowseForFolder(Owner, BrowseCache, GetUserFilesPath + 'cache', 'Please locate your model cache...') then begin
+    model_cache:= BrowseCache;
+
+    Reg.RootKey:= HKEY_CURRENT_USER;
+    Reg.OpenKey('SOFTWARE\SAMP', true);
+    Reg.WriteString('model_cache', model_cache);
+    Reg.CloseKey;
+  end;
+  Reg.Free;
 end;
 
 procedure TfmMain.FormCreate(Sender: TObject);
@@ -545,6 +565,10 @@ begin
   else
     GetGTAExe(Handle);
 
+  if Reg.ValueExists('model_cache') then
+    model_cache:= Reg.ReadString('model_cache');
+  if Reg.ValueExists('artwork_proxy') then
+    artwork_proxy:= Reg.ReadString('artwork_proxy');
   if Reg.ValueExists('PlayerName') then
     edName.Text:= Reg.ReadString('PlayerName');
   Reg.CloseKey;
@@ -1127,7 +1151,7 @@ begin
       BlockRead(ImportFile, Servers[i].RconPassword[1], Temp);
 
     Servers[i].Ping:= 9999;
-    Servers[i].Tag:= Random($FFFF);
+    Servers[i].Tag:= Word(Servers[i].Port);
 
     if Dubble then
       SetLength(Servers, i)
@@ -1382,7 +1406,7 @@ begin
     Request.ContentType:= 'text/html';
     Request.Accept:= 'text/html, */*';
     Request.BasicAuthentication:= False;
-    Request.UserAgent:= 'Mozilla/3.0 (compatible; SA:MP v0.3.7)';
+    Request.UserAgent:= 'Mozilla/3.0 (compatible; SA:MP v0.3.DL)';
 
     HTTPOptions:= [hoForceEncodeParams];
   end;
@@ -1390,9 +1414,9 @@ begin
   SL:= TStringList.Create;
   try
     if MasterFile = 1 then
-      SL.Text:= IdHTTP.Get('/0.3.7/internet')
+      SL.Text:= IdHTTP.Get('/0.3.DL/internet')
     else if MasterFile = 2 then
-      SL.Text:= IdHTTP.Get('/0.3.7/hosted');
+      SL.Text:= IdHTTP.Get('/0.3.DL/hosted');
   except
     // STATUS: BAD RESPONCE FROM MASTER SERVER
   end;
@@ -1415,7 +1439,7 @@ begin
     Servers[i].Address:= Copy(SL.Strings[i], 1, Pos(':', SL.Strings[i])-1);
     Servers[i].Port:= StrToIntDef(Copy(SL.Strings[i], Pos(':', SL.Strings[i])+1, 5), 7777);
     Servers[i].Ping:= 9999;
-    Servers[i].Tag:= Random($FFFF);
+    Servers[i].Tag:= Word(Servers[i].Port);
     //QueryServerInfo(SL.Strings[i], true, true, false, false);
     //Sleep(10);
     QueryQueue.Add(SL.Strings[i] + '#' + IntToStr(Servers[i].Tag));

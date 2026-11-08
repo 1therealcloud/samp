@@ -1,10 +1,10 @@
 object fmSettings: TfmSettings
-  Left = 473
-  Top = 185
+  Left = 703
+  Top = 289
   BorderStyle = bsDialog
   Caption = 'Settings'
-  ClientHeight = 178
-  ClientWidth = 250
+  ClientHeight = 251
+  ClientWidth = 318
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object fmSettings: TfmSettings
   TextHeight = 13
   object bnSave: TButton
     Left = 8
-    Top = 144
+    Top = 216
     Width = 75
     Height = 25
     Caption = 'Save'
@@ -28,7 +28,7 @@ object fmSettings: TfmSettings
   end
   object bnCancel: TButton
     Left = 88
-    Top = 144
+    Top = 216
     Width = 75
     Height = 25
     Caption = 'Cancel'
@@ -38,20 +38,20 @@ object fmSettings: TfmSettings
   object gbPasswords: TGroupBox
     Left = 8
     Top = 8
-    Width = 233
-    Height = 129
+    Width = 305
+    Height = 201
     Caption = ' Passwords '
     TabOrder = 2
     object Label1: TLabel
       Left = 16
-      Top = 80
+      Top = 72
       Width = 196
       Height = 13
       Caption = 'San Andreas Installation Location:'
     end
     object sbBrowse: TSpeedButton
-      Left = 192
-      Top = 96
+      Left = 272
+      Top = 88
       Width = 23
       Height = 21
       Flat = True
@@ -84,6 +84,55 @@ object fmSettings: TfmSettings
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
       OnClick = sbBrowseClick
     end
+    object lblModelCacheTag: TLabel
+      Left = 16
+      Top = 112
+      Width = 129
+      Height = 13
+      Caption = 'Model Cache Location:'
+    end
+    object sbBrowseCache: TSpeedButton
+      Left = 272
+      Top = 128
+      Width = 23
+      Height = 21
+      Flat = True
+      Glyph.Data = {
+        36030000424D3603000000000000360000002800000010000000100000000100
+        18000000000000030000120B0000120B00000000000000000000FF00FFFF00FF
+        FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+        FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+        00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF18A5D6
+        18A5D618A5D6FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+        FFFF00FFFF00FFFF00FFFF00FF18A5D69CDEFF84EFFF52C6F718A5D6299CC618
+        8CBD299CC6FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF18A5D6
+        4AB5F79CFFFF94F7FF7BE7FF73E7F77BE7FF73E7F752C6F718A5D6299CC6FF00
+        FFFF00FFFF00FFFF00FFFF00FF18A5D64AB5F7ADF7FF8CF7F78CEFFF8CEFFF8C
+        EFFF7BE7FF73E7F77BD6F752C6F718A5D6FF00FFFF00FFFF00FFFF00FF18A5D6
+        18A5D6A5DEF794F7FF8CEFFF8CEFFF8CEFFF8CEFFF8CEFFF7BE7FF73E7F752C6
+        F7FF00FFFF00FFFF00FFFF00FF18A5D67BE7FF18A5D69CFFFF94F7FF8CF7F794
+        F7FF8CEFFF8CEFFF8CEFFF7BE7FF73E7F7188CBDFF00FFFF00FFFF00FF18A5D6
+        94F7FF18A5D6A5DEF7A5EFF7A5EFF79CFFFF8CEFFF8CEFFF8CEFFF73E7F77BE7
+        FF4AB5F7FF00FFFF00FFFF00FF18A5D69CFFFF73E7F718A5D6299CC6188CBD29
+        9CC6A5DEF78CF7F784EFFF84EFFF7BE7FF73E7F7299CC6FF00FFFF00FF18A5D6
+        9CFFFF94F7FF73E7F77BE7FF73E7F76BDEEF18A5D6A5DEF784EFFF84EFFF84EF
+        FF94EFFF18A5D6FF00FFFF00FF18A5D69CFFFF94F7FF94F7FF8CEFFF94F7FF73
+        E7F77BE7FF18A5D6188CBD18A5D618A5D618A5D6299CC6FF00FFFF00FF18A5D6
+        C6FFFF94F7FF9CFFFFCEFFFFD6F7FF8CEFFF8CF7F77BE7FF73EFF718A5D6FF00
+        FFFF00FFFF00FFFF00FFFF00FF18A5D69CDEFFC6FFFFC6FFFF9CDEFF18A5D618
+        8CBD299CC6188CBD299CC618A5D6FF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+        18A5D618A5D6299CC6188CBDFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+        FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+        00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+      OnClick = sbBrowseCacheClick
+    end
+    object lblProxyAddr: TLabel
+      Left = 16
+      Top = 152
+      Width = 254
+      Height = 13
+      Caption = 'Download Proxy: (http://,https://,socks5://)'
+    end
     object cbSaveServerPasswords: TCheckBox
       Left = 16
       Top = 24
@@ -102,12 +151,30 @@ object fmSettings: TfmSettings
     end
     object edInstallLoc: TEdit
       Left = 16
-      Top = 96
-      Width = 177
+      Top = 88
+      Width = 257
       Height = 21
       Color = clBtnFace
       ReadOnly = True
       TabOrder = 2
+    end
+    object edCacheLoc: TEdit
+      Left = 16
+      Top = 128
+      Width = 257
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object edProxyAddress: TEdit
+      Left = 16
+      Top = 168
+      Width = 257
+      Height = 21
+      HideSelection = False
+      MaxLength = 64
+      TabOrder = 4
     end
   end
 end

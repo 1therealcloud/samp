@@ -1,13 +1,13 @@
 object fmMain: TfmMain
-  Left = 542
-  Top = 282
+  Left = 949
+  Top = 297
   Width = 840
   Height = 600
-  Caption = 'San Andreas Multiplayer 0.3.7-R4'
+  Caption = 'San Andreas Multiplayer 0.3.DL'
   Color = clBtnFace
   Constraints.MinHeight = 420
   Constraints.MinWidth = 525
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clSilver
   Font.Height = -11
   Font.Name = 'Arial'
@@ -22,10 +22,10 @@ object fmMain: TfmMain
   PixelsPerInch = 96
   TextHeight = 14
   object spRight: TSplitter
-    Left = 594
-    Top = 28
+    Left = 602
+    Top = 29
     Width = 10
-    Height = 372
+    Height = 361
     Align = alRight
     Beveled = True
     Color = clMenu
@@ -136,8 +136,8 @@ object fmMain: TfmMain
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 520
-    Width = 824
+    Top = 511
+    Width = 832
     Height = 21
     Panels = <
       item
@@ -151,7 +151,7 @@ object fmMain: TfmMain
   object tbMain: TToolBar
     Left = 0
     Top = 0
-    Width = 824
+    Width = 832
     Height = 28
     ButtonHeight = 24
     Caption = 'tbMain'
@@ -170,7 +170,7 @@ object fmMain: TfmMain
     Wrapable = False
     OnResize = tbMainResize
     DesignSize = (
-      824
+      832
       26)
     object tbConnect: TToolButton
       Left = 0
@@ -438,8 +438,8 @@ object fmMain: TfmMain
   end
   object tsServerLists: TTabSet
     Left = 0
-    Top = 499
-    Width = 824
+    Top = 490
+    Width = 832
     Height = 21
     Align = alBottom
     DitherBackground = False
@@ -461,15 +461,15 @@ object fmMain: TfmMain
   end
   object pnBreakable: TPanel
     Left = 0
-    Top = 400
-    Width = 824
-    Height = 99
+    Top = 390
+    Width = 832
+    Height = 100
     Align = alBottom
     BevelOuter = bvNone
     Ctl3D = True
     Font.Charset = OEM_CHARSET
     Font.Color = clSilver
-    Font.Height = -12
+    Font.Height = -11
     Font.Name = 'Arial'
     Font.Style = []
     ParentCtl3D = False
@@ -482,7 +482,7 @@ object fmMain: TfmMain
       Left = 0
       Top = 0
       Width = 241
-      Height = 99
+      Height = 100
       Align = alLeft
       Caption = ' Filter '
       Color = clBtnFace
@@ -512,13 +512,13 @@ object fmMain: TfmMain
         EditLabel.Caption = 'Mode:'
         EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = clWindowText
-        EditLabel.Font.Height = -12
+        EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'MS Sans Serif'
         EditLabel.Font.Style = []
         EditLabel.ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -12
+        Font.Height = -11
         Font.Name = 'Arial'
         Font.Style = []
         ParentCtl3D = False
@@ -542,13 +542,13 @@ object fmMain: TfmMain
         EditLabel.Caption = 'Language:'
         EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = clWindowText
-        EditLabel.Font.Height = -12
+        EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'MS Sans Serif'
         EditLabel.Font.Style = []
         EditLabel.ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -12
+        Font.Height = -11
         Font.Name = 'Arial'
         Font.Style = []
         ParentCtl3D = False
@@ -613,16 +613,16 @@ object fmMain: TfmMain
       end
     end
     object gbInfo: TGroupBox
-      Left = 339
+      Left = 347
       Top = 0
       Width = 485
-      Height = 99
+      Height = 100
       Align = alRight
       Caption = ' Server Info '
       Ctl3D = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBtnText
-      Font.Height = -12
+      Font.Height = -11
       Font.Name = 'Arial'
       Font.Style = []
       ParentCtl3D = False
@@ -884,18 +884,18 @@ object fmMain: TfmMain
   object pnLine: TPanel
     Left = 0
     Top = 28
-    Width = 824
-    Height = 0
+    Width = 832
+    Height = 1
     Align = alTop
     BevelOuter = bvNone
     Color = clBlack
     TabOrder = 4
   end
   object pnRight: TPanel
-    Left = 604
-    Top = 28
+    Left = 612
+    Top = 29
     Width = 220
-    Height = 372
+    Height = 361
     Align = alRight
     BevelOuter = bvNone
     Color = 4933703
@@ -904,7 +904,7 @@ object fmMain: TfmMain
     TabOrder = 5
     object Splitter1: TSplitter
       Left = 0
-      Top = 212
+      Top = 201
       Width = 220
       Height = 10
       Cursor = crVSplit
@@ -918,7 +918,7 @@ object fmMain: TfmMain
       Left = 0
       Top = 0
       Width = 220
-      Height = 212
+      Height = 201
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
@@ -926,7 +926,7 @@ object fmMain: TfmMain
         Left = 0
         Top = 17
         Width = 220
-        Height = 195
+        Height = 184
         TabStop = False
         Style = lbOwnerDrawFixed
         Align = alClient
@@ -975,7 +975,7 @@ object fmMain: TfmMain
     end
     object pnRules: TPanel
       Left = 0
-      Top = 222
+      Top = 211
       Width = 220
       Height = 150
       Align = alBottom
@@ -1055,9 +1055,9 @@ object fmMain: TfmMain
   end
   object pnMain: TPanel
     Left = 0
-    Top = 28
-    Width = 594
-    Height = 372
+    Top = 29
+    Width = 602
+    Height = 361
     Align = alClient
     BevelOuter = bvNone
     Color = 4933703
@@ -1065,7 +1065,7 @@ object fmMain: TfmMain
     object hcServers: THeaderControl
       Left = 0
       Top = 0
-      Width = 594
+      Width = 602
       Height = 17
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBtnFace
@@ -1119,8 +1119,8 @@ object fmMain: TfmMain
     object lbServers: TListBox
       Left = 0
       Top = 17
-      Width = 594
-      Height = 355
+      Width = 602
+      Height = 344
       Style = lbOwnerDrawFixed
       Align = alClient
       BorderStyle = bsNone
