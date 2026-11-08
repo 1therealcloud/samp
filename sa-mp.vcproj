@@ -49,8 +49,6 @@
 				AdditionalLibraryDirectories="build\libraries;third-party\bass;third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)\samp.pdb"
-				GenerateMapFile="TRUE"
-				MapFileName="$(OutDir)\samp.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="1"
@@ -68,6 +66,69 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="source"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)build\binaries\Debug"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)-debug"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="source;third-party\RakNet\Include;third-party\bass;third-party\detours;third-party\dxut;third-party\curl\include;third-party\zlib;third-party\lzma\C;third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;UNICODE;_UNICODE;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
+				ExceptionHandling="TRUE"
+				RuntimeLibrary="1"
+				StructMemberAlignment="1"
+				RuntimeTypeInfo="FALSE"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"
+				ForcedIncludeFiles="dxstdafx.h"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="RakNet.lib zlib.lib libcurl.lib lzma.lib bass.lib detours.lib libcmt.lib libcpmt.lib oldnames.lib kernel32.lib psapi.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib wldap32.lib crypt32.lib secur32.lib version.lib usp10.lib dsound.lib d3d9.lib d3dx9.lib dxguid.lib dxerr9.lib"
+				OutputFile="$(OutDir)\samp.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="build\libraries;third-party\bass;third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)\samp.pdb"
+				SubSystem="2"
+				ImportLibrary="$(SolutionDir)build\libraries\samp.lib"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /y &quot;$(ProjectDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="source"/>
 			<Tool
@@ -237,6 +298,12 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="source\menu.h">
@@ -322,6 +389,12 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="source\game\actor.h">
@@ -397,6 +470,12 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="source\game\game.h">
@@ -435,6 +514,12 @@
 				RelativePath="source\game\object.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -496,6 +581,12 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="source\game\util.h">
@@ -514,6 +605,12 @@
 				RelativePath="source\net\actorpool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -554,6 +651,12 @@
 						Name="VCCLCompilerTool"
 						ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="source\net\netgame.h">
@@ -574,6 +677,12 @@
 				RelativePath="source\net\pickuppool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -697,36 +806,30 @@
 			Name="dxut"
 			Filter="">
 			<File
-				RelativePath=".\third-party\dxut\dxstdafx.cpp">
-			</File>
-			<File
-				RelativePath=".\third-party\dxut\dxstdafx.h">
-			</File>
-			<File
-				RelativePath=".\third-party\dxut\DXUtil.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"
-						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\third-party\dxut\DXUtil.h">
-			</File>
-			<File
 				RelativePath=".\third-party\dxut\D3DUtil.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"
-						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+						ForcedIncludeFiles="windows.h;$(NoInherit)"
+						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="windows.h;$(NoInherit)"
+						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\third-party\dxut\D3DUtil.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\dxstdafx.cpp">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\dxstdafx.h">
 			</File>
 			<File
 				RelativePath=".\third-party\dxut\DXUT.cpp">
@@ -745,6 +848,26 @@
 			</File>
 			<File
 				RelativePath=".\third-party\dxut\DXUTgui.h">
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUtil.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="windows.h;$(NoInherit)"
+						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="windows.h;$(NoInherit)"
+						UndefinePreprocessorDefinitions="UNICODE;_UNICODE"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\third-party\dxut\DXUtil.h">
 			</File>
 			<File
 				RelativePath=".\third-party\dxut\DXUTmedia.cpp">

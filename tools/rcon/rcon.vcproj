@@ -13,7 +13,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)build\binaries\Debug"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)\Debug"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)-debug"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
