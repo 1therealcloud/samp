@@ -5,10 +5,10 @@ interface
 //{$DEFINE DEBUG}
 
 uses
-  Windows, Messages, Forms, SysUtils, Registry, WinSock, ShellAPI, ShlObj, hh,
+  Windows, Messages, Forms, SysUtils, Registry, WinSock, ShellAPI, ShlObj,
   FindSort, Dialogs, IdHTTP, MMSystem, ExtCtrls, XPMan, ImgList, Controls,
   Menus, ComCtrls, StdCtrls, TeEngine, Series, TeeProcs, Chart, Tabs, Graphics,
-  GIFImage, ToolWin, Classes, TlHelp32, ComObj, ActiveX, ClipBrd;
+  ToolWin, Classes, TlHelp32, ComObj, ActiveX, ClipBrd;
 
 {$L EliRT.obj}
 
