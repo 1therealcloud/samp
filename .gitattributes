@@ -2,3 +2,6 @@
 *.cmd text eol=crlf
 /third-party/bass/** -text
 /third-party/detours/** -text
+/third-party/dxut/** -text
+
+*.dfm -text
