@@ -2,3 +2,5 @@ build/
 work/
 *.ncb
 *.suo
+*.dcu
+tools/launcher/samp.exe
