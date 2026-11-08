@@ -1,5 +1,6 @@
 #ifndef SAMP_SKINNED_MESH_H
 #define SAMP_SKINNED_MESH_H
+#include <static_assert.h>
 #include <d3dx9.h>
 #include <stddef.h>
 
@@ -81,18 +82,18 @@ public:
     void UpdateSkin(DWORD unused);
 };
 
-typedef char SkinnedMeshExtent[(sizeof(CSkinnedMesh) == 0x34) ? 1 : -1];
-typedef char SkinnedMeshRootOffset[(offsetof(CSkinnedMesh, root) == 0xc) ? 1 : -1];
-typedef char SkinnedMeshBonesOffset[(offsetof(CSkinnedMesh, boneMatrices) == 0x10) ? 1 : -1];
-typedef char SkinnedMeshControllerOffset[(offsetof(CSkinnedMesh, controller) == 0x30) ? 1 : -1];
-typedef char SkinFrameExtent[(sizeof(SkinFrame) == 0x90) ? 1 : -1];
-typedef char SkinFrameCombinedOffset[(offsetof(SkinFrame, combined) == 0x50) ? 1 : -1];
-typedef char SkinContainerExtent[(sizeof(SkinMeshContainer) == 0x40) ? 1 : -1];
-typedef char SkinContainerTexturesOffset[(offsetof(SkinMeshContainer, textures) == 0x24) ? 1 : -1];
-typedef char SkinContainerWorkingOffset[(offsetof(SkinMeshContainer, workingMesh) == 0x2c) ? 1 : -1];
-typedef char SkinContainerBonesOffset[(offsetof(SkinMeshContainer, boneOffsets) == 0x30) ? 1 : -1];
-typedef char SkinMaterialExtent[(sizeof(D3DMATERIAL9) == 68) ? 1 : -1];
-typedef char SkinAllocatorExtent[(sizeof(CSkinHierarchyAllocator) == 4) ? 1 : -1];
+STATIC_ASSERT(sizeof(CSkinnedMesh) == 0x34);
+STATIC_ASSERT(offsetof(CSkinnedMesh, root) == 0xc);
+STATIC_ASSERT(offsetof(CSkinnedMesh, boneMatrices) == 0x10);
+STATIC_ASSERT(offsetof(CSkinnedMesh, controller) == 0x30);
+STATIC_ASSERT(sizeof(SkinFrame) == 0x90);
+STATIC_ASSERT(offsetof(SkinFrame, combined) == 0x50);
+STATIC_ASSERT(sizeof(SkinMeshContainer) == 0x40);
+STATIC_ASSERT(offsetof(SkinMeshContainer, textures) == 0x24);
+STATIC_ASSERT(offsetof(SkinMeshContainer, workingMesh) == 0x2c);
+STATIC_ASSERT(offsetof(SkinMeshContainer, boneOffsets) == 0x30);
+STATIC_ASSERT(sizeof(D3DMATERIAL9) == 68);
+STATIC_ASSERT(sizeof(CSkinHierarchyAllocator) == 4);
 
 // Original development path is retained; no alternate texture search is invented.
 // 0x0011f860

@@ -1,5 +1,6 @@
 #ifndef SAMP_HTTPCLIENT_H
 #define SAMP_HTTPCLIENT_H
+#include <static_assert.h>
 #include <winsock.h>
 #pragma pack(push, 1)
 //----------------------------------------------------
@@ -134,7 +135,7 @@ public:
 
 //----------------------------------------------------
 #pragma pack(pop)
-typedef char HttpRequestExtent[(sizeof(HTTP_REQUEST) == 22) ? 1 : -1];
-typedef char HttpResponseExtent[(sizeof(HTTP_RESPONSE) == 24) ? 1 : -1];
-typedef char HttpClientExtent[(sizeof(CHttpClient) == 54) ? 1 : -1];
+STATIC_ASSERT(sizeof(HTTP_REQUEST) == 22);
+STATIC_ASSERT(sizeof(HTTP_RESPONSE) == 24);
+STATIC_ASSERT(sizeof(CHttpClient) == 54);
 #endif

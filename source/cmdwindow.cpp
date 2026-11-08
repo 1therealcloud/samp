@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "cmdwindow.h"
 #include "main.h"
 #include "runutil.h"
@@ -254,7 +255,7 @@ struct InputNetGameView
     RakClientInterface* client;
 };
 #pragma pack(pop)
-typedef char InputClientOffset[(offsetof(InputNetGameView, client) == 0x2c) ? 1 : -1];
+STATIC_ASSERT(offsetof(InputNetGameView, client) == 0x2c);
 
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
 // 0x0011c310

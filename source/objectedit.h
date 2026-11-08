@@ -1,5 +1,6 @@
 #ifndef SAMP_OBJECT_EDIT_H
 #define SAMP_OBJECT_EDIT_H
+#include <static_assert.h>
 #include <d3dx9.h>
 class CMatrix;
 struct CVector;
@@ -73,7 +74,7 @@ public:
     void Render();
 };
 #pragma pack(pop)
-typedef char ObjectEditExtent[(sizeof(CObjectEdit) == 0x117) ? 1 : -1];
+STATIC_ASSERT(sizeof(CObjectEdit) == 0x117);
 // Descriptive helper name. Output stores may alias, and API failures are ignored.
 // 0x000739e0
 void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector* end);

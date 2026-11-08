@@ -1,5 +1,6 @@
 #ifndef SAMP_ACTOR_POOL_H
 #define SAMP_ACTOR_POOL_H
+#include <static_assert.h>
 #include "game/actor.h"
 #include <windows.h>
 #pragma pack(push, 1)
@@ -12,11 +13,11 @@ struct ActorCreateInfo
     float heading, health;
     BYTE invulnerable;
 };
-typedef char NativeActorCreateInfoExtent[(sizeof(ActorCreateInfo) == 31) ? 1 : -1];
+STATIC_ASSERT(sizeof(ActorCreateInfo) == 31);
 class CActorPool
 {
-    typedef char ActorBackendOffset[(offsetof(CActor, actorBackend) == 0x48) ? 1 : -1];
-    typedef char ActorInvulnerableOffset[(offsetof(CActor, invulnerable) == 0x55) ? 1 : -1];
+    STATIC_ASSERT(offsetof(CActor, actorBackend) == 0x48);
+    STATIC_ASSERT(offsetof(CActor, invulnerable) == 0x55);
     int largestId;
     CActor* actors[1000];
     DWORD active[1000];
@@ -50,5 +51,5 @@ public:
     WORD Find(void* ped);
 };
 #pragma pack(pop)
-typedef char NativeActorPoolExtent[(sizeof(CActorPool) == 0x4e24) ? 1 : -1];
+STATIC_ASSERT(sizeof(CActorPool) == 0x4e24);
 #endif

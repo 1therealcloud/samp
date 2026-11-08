@@ -1,5 +1,6 @@
 #ifndef SAMP_MODEL_FILE_H
 #define SAMP_MODEL_FILE_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <vector>
@@ -437,33 +438,33 @@ void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const Model
 void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value);
 #pragma pack(pop)
 
-typedef char NativeCollisionVertexExtent[(sizeof(ModelCollisionVertex) == 6) ? 1 : -1];
-typedef char NativeCollisionTriangleExtent[(sizeof(ModelCollisionTriangle) == 8) ? 1 : -1];
-typedef char NativeCollisionBoundsExtent[(sizeof(ModelCollisionBounds) == 24) ? 1 : -1];
-typedef char NativeCollisionGroupExtent[(sizeof(ModelCollisionFaceGroup) == 28) ? 1 : -1];
-typedef char NativeCollisionBoxExtent[(sizeof(ModelCollisionBox) == 28) ? 1 : -1];
-typedef char NativeCollisionSphereExtent[(sizeof(ModelCollisionSphere) == 20) ? 1 : -1];
-typedef char NativeCollisionVectorExtent[(sizeof(ModelCollisionTriangleVector) == 16) ? 1 : -1];
-typedef char NativeCollisionNodeExtent[(sizeof(CModelCollisionNode) == 0x34) ? 1 : -1];
-typedef char NativeCollisionNodeLeftOffset[(offsetof(CModelCollisionNode, left) == 0x1c) ? 1 : -1];
-typedef char NativeCollisionNodeVectorOffset[(offsetof(CModelCollisionNode, triangles) == 0x24) ? 1 : -1];
-typedef char NativeCollisionArrayAExtent[(sizeof(CModelCollisionBoxArray) == 8) ? 1 : -1];
-typedef char NativeCollisionArrayBExtent[(sizeof(CModelCollisionSphereArray) == 8) ? 1 : -1];
+STATIC_ASSERT(sizeof(ModelCollisionVertex) == 6);
+STATIC_ASSERT(sizeof(ModelCollisionTriangle) == 8);
+STATIC_ASSERT(sizeof(ModelCollisionBounds) == 24);
+STATIC_ASSERT(sizeof(ModelCollisionFaceGroup) == 28);
+STATIC_ASSERT(sizeof(ModelCollisionBox) == 28);
+STATIC_ASSERT(sizeof(ModelCollisionSphere) == 20);
+STATIC_ASSERT(sizeof(ModelCollisionTriangleVector) == 16);
+STATIC_ASSERT(sizeof(CModelCollisionNode) == 0x34);
+STATIC_ASSERT(offsetof(CModelCollisionNode, left) == 0x1c);
+STATIC_ASSERT(offsetof(CModelCollisionNode, triangles) == 0x24);
+STATIC_ASSERT(sizeof(CModelCollisionBoxArray) == 8);
+STATIC_ASSERT(sizeof(CModelCollisionSphereArray) == 8);
 // 0x0011f8d8
 extern const float g_modelCollisionVertexScale;
 // 0x0011f8dc
 extern const float g_modelCollisionVertexInvScale;
-typedef char NativeModelStreamExtent[(sizeof(CModelFileStream) == 0x17) ? 1 : -1];
-typedef char NativeModelChunkExtent[(sizeof(CModelFileChunk) == 0x23) ? 1 : -1];
-typedef char NativeTxdFileExtent[(sizeof(CTxdFile) == 0x2b) ? 1 : -1];
-typedef char NativeDffFileExtent[(sizeof(CDffFile) == 0x4c) ? 1 : -1];
-typedef char NativeModelGeometryExtent[(sizeof(CModelGeometry) == 0xa1) ? 1 : -1];
-typedef char NativeModelMaterialRecordExtent[(sizeof(CModelMaterialRecord) == 0xa4) ? 1 : -1];
-typedef char NativeModelSkinExtent[(sizeof(CModelSkin) == 44) ? 1 : -1];
-typedef char NativeModelGeometryMaterialsOffset[(offsetof(CModelGeometry, materials) == 0x58) ? 1 : -1];
-typedef char NativeModelGeometryMeshesOffset[(offsetof(CModelGeometry, meshes) == 0x6d) ? 1 : -1];
-typedef char NativeDffFramesOffset[(offsetof(CDffFile, frames) == 0x34) ? 1 : -1];
-typedef char NativeModelStreamOwnedOffset[(offsetof(CModelFileStream, owned) == 0xd) ? 1 : -1];
+STATIC_ASSERT(sizeof(CModelFileStream) == 0x17);
+STATIC_ASSERT(sizeof(CModelFileChunk) == 0x23);
+STATIC_ASSERT(sizeof(CTxdFile) == 0x2b);
+STATIC_ASSERT(sizeof(CDffFile) == 0x4c);
+STATIC_ASSERT(sizeof(CModelGeometry) == 0xa1);
+STATIC_ASSERT(sizeof(CModelMaterialRecord) == 0xa4);
+STATIC_ASSERT(sizeof(CModelSkin) == 44);
+STATIC_ASSERT(offsetof(CModelGeometry, materials) == 0x58);
+STATIC_ASSERT(offsetof(CModelGeometry, meshes) == 0x6d);
+STATIC_ASSERT(offsetof(CDffFile, frames) == 0x34);
+STATIC_ASSERT(offsetof(CModelFileStream, owned) == 0xd);
 // 0x00117c9c
 extern const char g_customTxdVerifyError[];
 // 0x00117c60

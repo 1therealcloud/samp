@@ -1,5 +1,6 @@
 #ifndef SAMP_CHATBUBBLE_H
 #define SAMP_CHATBUBBLE_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 #pragma pack(push, 1)
@@ -24,9 +25,9 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char ChatBubbleEntryExtent[(sizeof(ChatBubbleEntry) == 280) ? 1 : -1];
-typedef char ChatBubbleCreatedOffset[(offsetof(ChatBubbleEntry, created) == 0x104) ? 1 : -1];
-typedef char ChatBubbleExtent[(sizeof(CChatBubble) == 0x44a20) ? 1 : -1];
+STATIC_ASSERT(sizeof(ChatBubbleEntry) == 280);
+STATIC_ASSERT(offsetof(ChatBubbleEntry, created) == 0x104);
+STATIC_ASSERT(sizeof(CChatBubble) == 0x44a20);
 // Mutates the caller buffer; valid length<=512 does not bound resulting length.
 // 0x000171a0
 int FormatChatBubbleText(char* text, int width, int tolerance);

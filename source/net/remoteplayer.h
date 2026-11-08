@@ -1,5 +1,6 @@
 #ifndef SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
 #define SAMP_REMOTE_PLAYER_ADDRESS_INTERFACE_H
+#include <static_assert.h>
 #include "net/localplayer.h"
 #include <stddef.h>
 #include <windows.h>
@@ -181,36 +182,36 @@ public:
     void Remove();
 };
 #pragma pack(pop)
-typedef char RemotePedOffset[(offsetof(RemotePlayerState, ped) == 4) ? 1 : -1];
-typedef char RemoteVehicleOffset[(offsetof(RemotePlayerState, vehicle) == 8) ? 1 : -1];
-typedef char RemoteTagOffset[(offsetof(RemotePlayerState, showNameTag) == 0x10) ? 1 : -1];
-typedef char RemoteSpecialActionOffset[(offsetof(RemotePlayerState, specialAction) == 0x18) ? 1 : -1];
-typedef char RemoteStateOffset[(offsetof(RemotePlayerState, playerState) == 0x1a) ? 1 : -1];
-typedef char RemoteRawFlagOffset[(offsetof(RemotePlayerState, rawFlag1c) == 0x1c) ? 1 : -1];
-typedef char RemotePassengerOffset[(offsetof(RemotePlayerState, passenger) == 0x24) ? 1 : -1];
-typedef char RemoteOnfootOffset[(offsetof(RemotePlayerState, onfoot) == 0x3c) ? 1 : -1];
-typedef char RemoteIncarOffset[(offsetof(RemotePlayerState, incar) == 0x80) ? 1 : -1];
-typedef char RemoteUnknownF5Offset[(offsetof(RemotePlayerState, unknownf5) == 0xf5) ? 1 : -1];
-typedef char RemoteOnfootTargetOffset[(offsetof(RemotePlayerState, onfootTargetPosition) == 0x120) ? 1 : -1];
-typedef char RemoteIncarTargetOffset[(offsetof(RemotePlayerState, incarTargetPosition) == 0x138) ? 1 : -1];
-typedef char RemoteInaccuracyOffset[(offsetof(RemotePlayerState, positionInaccuracy) == 0x190) ? 1 : -1];
-typedef char RemoteRotationOffset[(offsetof(RemotePlayerState, incarTargetRotation) == 0x19c) ? 1 : -1];
-typedef char RemoteArmourOffset[(offsetof(RemotePlayerState, reportedArmour) == 0x1ac) ? 1 : -1];
-typedef char RemoteHealthOffset[(offsetof(RemotePlayerState, reportedHealth) == 0x1b0) ? 1 : -1];
-typedef char RemoteAnimationOffset[(offsetof(RemotePlayerState, appliedAnimation) == 0x1c0) ? 1 : -1];
-typedef char RemoteUpdateTypeOffset[(offsetof(RemotePlayerState, updateType) == 0x1c4) ? 1 : -1];
-typedef char RemoteUpdateTickOffset[(offsetof(RemotePlayerState, lastUpdateTick) == 0x1c5) ? 1 : -1];
-typedef char RemoteTimestampOffset[(offsetof(RemotePlayerState, lastNetworkTimestamp) == 0x1c9) ? 1 : -1];
-typedef char RemoteScriptedAnimationOffset[(offsetof(RemotePlayerState, scriptedAnimation) == 0x1cd) ? 1 : -1];
-typedef char RemoteStatusOffset[(offsetof(RemotePlayerState, status) == 0x1d1) ? 1 : -1];
-typedef char RemoteHeadDirectionOffset[(offsetof(RemotePlayerState, headDirection) == 0x1d5) ? 1 : -1];
-typedef char RemoteHeadTickOffset[(offsetof(RemotePlayerState, lastHeadUpdateTick) == 0x1e1) ? 1 : -1];
-typedef char RemoteHeadTaskTickOffset[(offsetof(RemotePlayerState, lastHeadTaskTick) == 0x1e5) ? 1 : -1];
-typedef char RemoteMarkerFlagOffset[(offsetof(RemotePlayerState, markerEnabled) == 0x1e9) ? 1 : -1];
-typedef char RemoteMarkerPositionOffset[(offsetof(RemotePlayerState, markerX) == 0x1ed) ? 1 : -1];
-typedef char RemoteMarkerOffset[(offsetof(RemotePlayerState, marker) == 0x1f9) ? 1 : -1];
-typedef char RemoteStateExtent[(sizeof(RemotePlayerState) == 0x1fd) ? 1 : -1];
-typedef char RemotePlayerExtent[(sizeof(CRemotePlayer) == 0x1fd) ? 1 : -1];
+STATIC_ASSERT(offsetof(RemotePlayerState, ped) == 4);
+STATIC_ASSERT(offsetof(RemotePlayerState, vehicle) == 8);
+STATIC_ASSERT(offsetof(RemotePlayerState, showNameTag) == 0x10);
+STATIC_ASSERT(offsetof(RemotePlayerState, specialAction) == 0x18);
+STATIC_ASSERT(offsetof(RemotePlayerState, playerState) == 0x1a);
+STATIC_ASSERT(offsetof(RemotePlayerState, rawFlag1c) == 0x1c);
+STATIC_ASSERT(offsetof(RemotePlayerState, passenger) == 0x24);
+STATIC_ASSERT(offsetof(RemotePlayerState, onfoot) == 0x3c);
+STATIC_ASSERT(offsetof(RemotePlayerState, incar) == 0x80);
+STATIC_ASSERT(offsetof(RemotePlayerState, unknownf5) == 0xf5);
+STATIC_ASSERT(offsetof(RemotePlayerState, onfootTargetPosition) == 0x120);
+STATIC_ASSERT(offsetof(RemotePlayerState, incarTargetPosition) == 0x138);
+STATIC_ASSERT(offsetof(RemotePlayerState, positionInaccuracy) == 0x190);
+STATIC_ASSERT(offsetof(RemotePlayerState, incarTargetRotation) == 0x19c);
+STATIC_ASSERT(offsetof(RemotePlayerState, reportedArmour) == 0x1ac);
+STATIC_ASSERT(offsetof(RemotePlayerState, reportedHealth) == 0x1b0);
+STATIC_ASSERT(offsetof(RemotePlayerState, appliedAnimation) == 0x1c0);
+STATIC_ASSERT(offsetof(RemotePlayerState, updateType) == 0x1c4);
+STATIC_ASSERT(offsetof(RemotePlayerState, lastUpdateTick) == 0x1c5);
+STATIC_ASSERT(offsetof(RemotePlayerState, lastNetworkTimestamp) == 0x1c9);
+STATIC_ASSERT(offsetof(RemotePlayerState, scriptedAnimation) == 0x1cd);
+STATIC_ASSERT(offsetof(RemotePlayerState, status) == 0x1d1);
+STATIC_ASSERT(offsetof(RemotePlayerState, headDirection) == 0x1d5);
+STATIC_ASSERT(offsetof(RemotePlayerState, lastHeadUpdateTick) == 0x1e1);
+STATIC_ASSERT(offsetof(RemotePlayerState, lastHeadTaskTick) == 0x1e5);
+STATIC_ASSERT(offsetof(RemotePlayerState, markerEnabled) == 0x1e9);
+STATIC_ASSERT(offsetof(RemotePlayerState, markerX) == 0x1ed);
+STATIC_ASSERT(offsetof(RemotePlayerState, marker) == 0x1f9);
+STATIC_ASSERT(sizeof(RemotePlayerState) == 0x1fd);
+STATIC_ASSERT(sizeof(CRemotePlayer) == 0x1fd);
 // 0x001181e4
 extern const float g_remoteAbsentDistance;
 // 0x001181e8

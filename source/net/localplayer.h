@@ -1,5 +1,6 @@
 #ifndef SAMP_LOCAL_PLAYER_INTERFACE_H
 #define SAMP_LOCAL_PLAYER_INTERFACE_H
+#include <static_assert.h>
 #include "game/quaternion.h"
 #include "game/scripting.h"
 #include <stddef.h>
@@ -28,8 +29,8 @@ struct LocalIncarSyncData
     DWORD modelData;
 };
 #pragma pack(pop)
-typedef char LocalOnfootSyncExtent[(sizeof(LocalOnfootSyncData) == 68) ? 1 : -1];
-typedef char LocalIncarSyncExtent[(sizeof(LocalIncarSyncData) == 63) ? 1 : -1];
+STATIC_ASSERT(sizeof(LocalOnfootSyncData) == 68);
+STATIC_ASSERT(sizeof(LocalIncarSyncData) == 63);
 
 #pragma pack(push, 1)
 struct LocalAimSyncData
@@ -54,9 +55,9 @@ struct LocalPassengerSyncData
     CVector position;
 };
 #pragma pack(pop)
-typedef char LocalAimSyncExtent[(sizeof(LocalAimSyncData) == 31) ? 1 : -1];
-typedef char LocalTrailerSyncExtent[(sizeof(LocalTrailerSyncData) == 54) ? 1 : -1];
-typedef char LocalPassengerSyncExtent[(sizeof(LocalPassengerSyncData) == 24) ? 1 : -1];
+STATIC_ASSERT(sizeof(LocalAimSyncData) == 31);
+STATIC_ASSERT(sizeof(LocalTrailerSyncData) == 54);
+STATIC_ASSERT(sizeof(LocalPassengerSyncData) == 24);
 
 #pragma pack(push, 1)
 struct UnoccupiedSyncData
@@ -67,7 +68,7 @@ struct UnoccupiedSyncData
     float health;
 };
 #pragma pack(pop)
-typedef char UnoccupiedSyncExtent[(sizeof(UnoccupiedSyncData) == 67) ? 1 : -1];
+STATIC_ASSERT(sizeof(UnoccupiedSyncData) == 67);
 
 #pragma pack(push, 1)
 struct BulletSyncData
@@ -78,31 +79,31 @@ struct BulletSyncData
     BYTE weapon;
 };
 #pragma pack(pop)
-typedef char BulletSyncExtent[(sizeof(BulletSyncData) == 40) ? 1 : -1];
-typedef char OnfootPositionOffset[(offsetof(LocalOnfootSyncData, position) == 6) ? 1 : -1];
-typedef char OnfootRotationOffset[(offsetof(LocalOnfootSyncData, rotation) == 0x12) ? 1 : -1];
-typedef char OnfootHealthOffset[(offsetof(LocalOnfootSyncData, health) == 0x22) ? 1 : -1];
-typedef char OnfootSpeedOffset[(offsetof(LocalOnfootSyncData, speed) == 0x26) ? 1 : -1];
-typedef char OnfootSurfingOffset[(offsetof(LocalOnfootSyncData, surfingOffset) == 0x32) ? 1 : -1];
-typedef char OnfootAnimationOffset[(offsetof(LocalOnfootSyncData, animation) == 0x40) ? 1 : -1];
-typedef char IncarRotationOffset[(offsetof(LocalIncarSyncData, rotation) == 8) ? 1 : -1];
-typedef char IncarPositionOffset[(offsetof(LocalIncarSyncData, position) == 0x18) ? 1 : -1];
-typedef char IncarSpeedOffset[(offsetof(LocalIncarSyncData, speed) == 0x24) ? 1 : -1];
-typedef char IncarHealthOffset[(offsetof(LocalIncarSyncData, health) == 0x30) ? 1 : -1];
-typedef char IncarPedHealthOffset[(offsetof(LocalIncarSyncData, pedHealth) == 0x34) ? 1 : -1];
-typedef char IncarTrailerOffset[(offsetof(LocalIncarSyncData, trailer) == 0x39) ? 1 : -1];
-typedef char IncarModelDataOffset[(offsetof(LocalIncarSyncData, modelData) == 0x3b) ? 1 : -1];
-typedef char AimZOffset[(offsetof(LocalAimSyncData, aimZ) == 25) ? 1 : -1];
-typedef char AimZoomWeaponOffset[(offsetof(LocalAimSyncData, zoomWeapon) == 29) ? 1 : -1];
-typedef char TrailerRotationOffset[(offsetof(LocalTrailerSyncData, rotation) == 14) ? 1 : -1];
-typedef char TrailerSpeedOffset[(offsetof(LocalTrailerSyncData, speed) == 30) ? 1 : -1];
-typedef char PassengerKeysOffset[(offsetof(LocalPassengerSyncData, keys) == 10) ? 1 : -1];
-typedef char PassengerPositionOffset[(offsetof(LocalPassengerSyncData, position) == 12) ? 1 : -1];
-typedef char UnoccupiedPositionOffset[(offsetof(UnoccupiedSyncData, position) == 27) ? 1 : -1];
-typedef char UnoccupiedHealthOffset[(offsetof(UnoccupiedSyncData, health) == 63) ? 1 : -1];
-typedef char BulletTargetOffset[(offsetof(BulletSyncData, targetId) == 1) ? 1 : -1];
-typedef char BulletOriginOffset[(offsetof(BulletSyncData, origin) == 3) ? 1 : -1];
-typedef char BulletWeaponOffset[(offsetof(BulletSyncData, weapon) == 39) ? 1 : -1];
+STATIC_ASSERT(sizeof(BulletSyncData) == 40);
+STATIC_ASSERT(offsetof(LocalOnfootSyncData, position) == 6);
+STATIC_ASSERT(offsetof(LocalOnfootSyncData, rotation) == 0x12);
+STATIC_ASSERT(offsetof(LocalOnfootSyncData, health) == 0x22);
+STATIC_ASSERT(offsetof(LocalOnfootSyncData, speed) == 0x26);
+STATIC_ASSERT(offsetof(LocalOnfootSyncData, surfingOffset) == 0x32);
+STATIC_ASSERT(offsetof(LocalOnfootSyncData, animation) == 0x40);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, rotation) == 8);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, position) == 0x18);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, speed) == 0x24);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, health) == 0x30);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, pedHealth) == 0x34);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, trailer) == 0x39);
+STATIC_ASSERT(offsetof(LocalIncarSyncData, modelData) == 0x3b);
+STATIC_ASSERT(offsetof(LocalAimSyncData, aimZ) == 25);
+STATIC_ASSERT(offsetof(LocalAimSyncData, zoomWeapon) == 29);
+STATIC_ASSERT(offsetof(LocalTrailerSyncData, rotation) == 14);
+STATIC_ASSERT(offsetof(LocalTrailerSyncData, speed) == 30);
+STATIC_ASSERT(offsetof(LocalPassengerSyncData, keys) == 10);
+STATIC_ASSERT(offsetof(LocalPassengerSyncData, position) == 12);
+STATIC_ASSERT(offsetof(UnoccupiedSyncData, position) == 27);
+STATIC_ASSERT(offsetof(UnoccupiedSyncData, health) == 63);
+STATIC_ASSERT(offsetof(BulletSyncData, targetId) == 1);
+STATIC_ASSERT(offsetof(BulletSyncData, origin) == 3);
+STATIC_ASSERT(offsetof(BulletSyncData, weapon) == 39);
 
 class CPed;
 class CEntity;
@@ -337,63 +338,63 @@ public:
     void PrevClass();
 };
 #pragma pack(pop)
-typedef char LocalSpawnInfoExtent[(sizeof(LocalSpawnInfo) == 50) ? 1 : -1];
-typedef char LocalSpawnPositionOffset[(offsetof(LocalSpawnInfo, position) == 10) ? 1 : -1];
-typedef char LocalSpawnWeaponsOffset[(offsetof(LocalSpawnInfo, weapons) == 26) ? 1 : -1];
-typedef char LocalSpawnAmmoOffset[(offsetof(LocalSpawnInfo, ammo) == 38) ? 1 : -1];
-typedef char LocalState_ped_Offset[(offsetof(LocalPlayerState, ped) == 0x0) ? 1 : -1];
-typedef char LocalState_trailer_Offset[(offsetof(LocalPlayerState, trailer) == 0x4) ? 1 : -1];
-typedef char LocalState_onfoot_Offset[(offsetof(LocalPlayerState, onfoot) == 0x3a) ? 1 : -1];
-typedef char LocalState_passenger_Offset[(offsetof(LocalPlayerState, passenger) == 0x7e) ? 1 : -1];
-typedef char LocalState_incar_Offset[(offsetof(LocalPlayerState, incar) == 0x96) ? 1 : -1];
-typedef char LocalState_aim_Offset[(offsetof(LocalPlayerState, aim) == 0xd5) ? 1 : -1];
-typedef char LocalState_active_Offset[(offsetof(LocalPlayerState, active) == 0xf4) ? 1 : -1];
-typedef char LocalState_wasted_Offset[(offsetof(LocalPlayerState, wasted) == 0xf8) ? 1 : -1];
-typedef char LocalState_currentVehicle_Offset[(offsetof(LocalPlayerState, currentVehicle) == 0xfc) ? 1 : -1];
-typedef char LocalState_cameraTargets_Offset[(offsetof(LocalPlayerState, cameraTargets) == 0x108) ? 1 : -1];
-typedef char LocalState_headDirection_Offset[(offsetof(LocalPlayerState, headDirection) == 0x114) ? 1 : -1];
-typedef char LocalState_headUpdateTick_Offset[(offsetof(LocalPlayerState, headUpdateTick) == 0x120) ? 1 : -1];
-typedef char LocalState_spectating_Offset[(offsetof(LocalPlayerState, spectating) == 0x12c) ? 1 : -1];
-typedef char LocalState_team_Offset[(offsetof(LocalPlayerState, team) == 0x130) ? 1 : -1];
-typedef char LocalState_unknown131_Offset[(offsetof(LocalPlayerState, unknown131) == 0x131) ? 1 : -1];
-typedef char LocalState_lastSendTick_Offset[(offsetof(LocalPlayerState, lastSendTick) == 0x133) ? 1 : -1];
-typedef char LocalState_spawnPermission_Offset[(offsetof(LocalPlayerState, spawnPermission) == 0x143) ? 1 : -1];
-typedef char LocalState_classSelectionTick_Offset[(offsetof(LocalPlayerState, classSelectionTick) == 0x147) ? 1 : -1];
-typedef char LocalState_initialSelectionTick_Offset[(offsetof(LocalPlayerState, initialSelectionTick) == 0x14b) ? 1 : -1];
-typedef char LocalState_spawnInfo_Offset[(offsetof(LocalPlayerState, spawnInfo) == 0x14f) ? 1 : -1];
-typedef char LocalState_hasSpawnInfo_Offset[(offsetof(LocalPlayerState, hasSpawnInfo) == 0x181) ? 1 : -1];
-typedef char LocalState_weaponsUpdateTick_Offset[(offsetof(LocalPlayerState, weaponsUpdateTick) == 0x185) ? 1 : -1];
-typedef char LocalState_aimedPlayer_Offset[(offsetof(LocalPlayerState, aimedPlayer) == 0x189) ? 1 : -1];
-typedef char LocalState_lastWeapons_Offset[(offsetof(LocalPlayerState, lastWeapons) == 0x18e) ? 1 : -1];
-typedef char LocalState_lastAmmo_Offset[(offsetof(LocalPlayerState, lastAmmo) == 0x19b) ? 1 : -1];
-typedef char LocalState_passengerDriveby_Offset[(offsetof(LocalPlayerState, passengerDriveby) == 0x1cf) ? 1 : -1];
-typedef char LocalState_interior_Offset[(offsetof(LocalPlayerState, interior) == 0x1d3) ? 1 : -1];
-typedef char LocalState_rcMode_Offset[(offsetof(LocalPlayerState, rcMode) == 0x1d4) ? 1 : -1];
-typedef char LocalState_unknown1d8_Offset[(offsetof(LocalPlayerState, unknown1d8) == 0x1d8) ? 1 : -1];
-typedef char LocalState_surfingId_Offset[(offsetof(LocalPlayerState, surfingId) == 0x2d8) ? 1 : -1];
-typedef char LocalState_surfingTick_Offset[(offsetof(LocalPlayerState, surfingTick) == 0x2da) ? 1 : -1];
-typedef char LocalState_surfingEntity_Offset[(offsetof(LocalPlayerState, surfingEntity) == 0x2de) ? 1 : -1];
-typedef char LocalState_surfingLocked_Offset[(offsetof(LocalPlayerState, surfingLocked) == 0x2e2) ? 1 : -1];
-typedef char LocalState_surfingMode_Offset[(offsetof(LocalPlayerState, surfingMode) == 0x2e6) ? 1 : -1];
-typedef char LocalState_surfingOffset_Offset[(offsetof(LocalPlayerState, surfingOffset) == 0x2ea) ? 1 : -1];
-typedef char LocalState_unknown2f6_Offset[(offsetof(LocalPlayerState, unknown2f6) == 0x2f6) ? 1 : -1];
-typedef char LocalState_rawSurfState2fa_Offset[(offsetof(LocalPlayerState, rawSurfState2fa) == 0x2fa) ? 1 : -1];
-typedef char LocalState_wantsAnotherClass_Offset[(offsetof(LocalPlayerState, wantsAnotherClass) == 0x2fe) ? 1 : -1];
-typedef char LocalState_selectedClass_Offset[(offsetof(LocalPlayerState, selectedClass) == 0x302) ? 1 : -1];
-typedef char LocalState_waitingForSpawnReply_Offset[(offsetof(LocalPlayerState, waitingForSpawnReply) == 0x306) ? 1 : -1];
-typedef char LocalState_rawFlag30a_Offset[(offsetof(LocalPlayerState, rawFlag30a) == 0x30a) ? 1 : -1];
-typedef char LocalState_zoneDisplayTick_Offset[(offsetof(LocalPlayerState, zoneDisplayTick) == 0x30e) ? 1 : -1];
-typedef char LocalState_spectateCameraMode_Offset[(offsetof(LocalPlayerState, spectateCameraMode) == 0x312) ? 1 : -1];
-typedef char LocalState_spectateType_Offset[(offsetof(LocalPlayerState, spectateType) == 0x313) ? 1 : -1];
-typedef char LocalState_spectateId_Offset[(offsetof(LocalPlayerState, spectateId) == 0x314) ? 1 : -1];
-typedef char LocalState_spectateProcessed_Offset[(offsetof(LocalPlayerState, spectateProcessed) == 0x318) ? 1 : -1];
-typedef char LocalState_damageVehicle_Offset[(offsetof(LocalPlayerState, damageVehicle) == 0x31c) ? 1 : -1];
-typedef char LocalState_panelsDamage_Offset[(offsetof(LocalPlayerState, panelsDamage) == 0x31e) ? 1 : -1];
-typedef char LocalState_doorsDamage_Offset[(offsetof(LocalPlayerState, doorsDamage) == 0x322) ? 1 : -1];
-typedef char LocalState_lightsDamage_Offset[(offsetof(LocalPlayerState, lightsDamage) == 0x326) ? 1 : -1];
-typedef char LocalState_tiresDamage_Offset[(offsetof(LocalPlayerState, tiresDamage) == 0x327) ? 1 : -1];
-typedef char LocalStateExtent[(sizeof(LocalPlayerState) == 0x328) ? 1 : -1];
-typedef char LocalPlayerExtent[(sizeof(CLocalPlayer) == 0x328) ? 1 : -1];
+STATIC_ASSERT(sizeof(LocalSpawnInfo) == 50);
+STATIC_ASSERT(offsetof(LocalSpawnInfo, position) == 10);
+STATIC_ASSERT(offsetof(LocalSpawnInfo, weapons) == 26);
+STATIC_ASSERT(offsetof(LocalSpawnInfo, ammo) == 38);
+STATIC_ASSERT(offsetof(LocalPlayerState, ped) == 0x0);
+STATIC_ASSERT(offsetof(LocalPlayerState, trailer) == 0x4);
+STATIC_ASSERT(offsetof(LocalPlayerState, onfoot) == 0x3a);
+STATIC_ASSERT(offsetof(LocalPlayerState, passenger) == 0x7e);
+STATIC_ASSERT(offsetof(LocalPlayerState, incar) == 0x96);
+STATIC_ASSERT(offsetof(LocalPlayerState, aim) == 0xd5);
+STATIC_ASSERT(offsetof(LocalPlayerState, active) == 0xf4);
+STATIC_ASSERT(offsetof(LocalPlayerState, wasted) == 0xf8);
+STATIC_ASSERT(offsetof(LocalPlayerState, currentVehicle) == 0xfc);
+STATIC_ASSERT(offsetof(LocalPlayerState, cameraTargets) == 0x108);
+STATIC_ASSERT(offsetof(LocalPlayerState, headDirection) == 0x114);
+STATIC_ASSERT(offsetof(LocalPlayerState, headUpdateTick) == 0x120);
+STATIC_ASSERT(offsetof(LocalPlayerState, spectating) == 0x12c);
+STATIC_ASSERT(offsetof(LocalPlayerState, team) == 0x130);
+STATIC_ASSERT(offsetof(LocalPlayerState, unknown131) == 0x131);
+STATIC_ASSERT(offsetof(LocalPlayerState, lastSendTick) == 0x133);
+STATIC_ASSERT(offsetof(LocalPlayerState, spawnPermission) == 0x143);
+STATIC_ASSERT(offsetof(LocalPlayerState, classSelectionTick) == 0x147);
+STATIC_ASSERT(offsetof(LocalPlayerState, initialSelectionTick) == 0x14b);
+STATIC_ASSERT(offsetof(LocalPlayerState, spawnInfo) == 0x14f);
+STATIC_ASSERT(offsetof(LocalPlayerState, hasSpawnInfo) == 0x181);
+STATIC_ASSERT(offsetof(LocalPlayerState, weaponsUpdateTick) == 0x185);
+STATIC_ASSERT(offsetof(LocalPlayerState, aimedPlayer) == 0x189);
+STATIC_ASSERT(offsetof(LocalPlayerState, lastWeapons) == 0x18e);
+STATIC_ASSERT(offsetof(LocalPlayerState, lastAmmo) == 0x19b);
+STATIC_ASSERT(offsetof(LocalPlayerState, passengerDriveby) == 0x1cf);
+STATIC_ASSERT(offsetof(LocalPlayerState, interior) == 0x1d3);
+STATIC_ASSERT(offsetof(LocalPlayerState, rcMode) == 0x1d4);
+STATIC_ASSERT(offsetof(LocalPlayerState, unknown1d8) == 0x1d8);
+STATIC_ASSERT(offsetof(LocalPlayerState, surfingId) == 0x2d8);
+STATIC_ASSERT(offsetof(LocalPlayerState, surfingTick) == 0x2da);
+STATIC_ASSERT(offsetof(LocalPlayerState, surfingEntity) == 0x2de);
+STATIC_ASSERT(offsetof(LocalPlayerState, surfingLocked) == 0x2e2);
+STATIC_ASSERT(offsetof(LocalPlayerState, surfingMode) == 0x2e6);
+STATIC_ASSERT(offsetof(LocalPlayerState, surfingOffset) == 0x2ea);
+STATIC_ASSERT(offsetof(LocalPlayerState, unknown2f6) == 0x2f6);
+STATIC_ASSERT(offsetof(LocalPlayerState, rawSurfState2fa) == 0x2fa);
+STATIC_ASSERT(offsetof(LocalPlayerState, wantsAnotherClass) == 0x2fe);
+STATIC_ASSERT(offsetof(LocalPlayerState, selectedClass) == 0x302);
+STATIC_ASSERT(offsetof(LocalPlayerState, waitingForSpawnReply) == 0x306);
+STATIC_ASSERT(offsetof(LocalPlayerState, rawFlag30a) == 0x30a);
+STATIC_ASSERT(offsetof(LocalPlayerState, zoneDisplayTick) == 0x30e);
+STATIC_ASSERT(offsetof(LocalPlayerState, spectateCameraMode) == 0x312);
+STATIC_ASSERT(offsetof(LocalPlayerState, spectateType) == 0x313);
+STATIC_ASSERT(offsetof(LocalPlayerState, spectateId) == 0x314);
+STATIC_ASSERT(offsetof(LocalPlayerState, spectateProcessed) == 0x318);
+STATIC_ASSERT(offsetof(LocalPlayerState, damageVehicle) == 0x31c);
+STATIC_ASSERT(offsetof(LocalPlayerState, panelsDamage) == 0x31e);
+STATIC_ASSERT(offsetof(LocalPlayerState, doorsDamage) == 0x322);
+STATIC_ASSERT(offsetof(LocalPlayerState, lightsDamage) == 0x326);
+STATIC_ASSERT(offsetof(LocalPlayerState, tiresDamage) == 0x327);
+STATIC_ASSERT(sizeof(LocalPlayerState) == 0x328);
+STATIC_ASSERT(sizeof(CLocalPlayer) == 0x328);
 // 0x00117978
 extern const float g_localUnoccupiedRange;
 // 0x00117948

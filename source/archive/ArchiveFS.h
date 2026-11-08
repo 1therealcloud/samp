@@ -6,6 +6,7 @@
 //----------------------------------------------------------
 
 #pragma once
+#include <static_assert.h>
 
 #include <stddef.h>
 #include <windows.h>
@@ -117,11 +118,11 @@ typedef struct _AFS_ENTRYBT_NODE
 
 } AFS_ENTRYBT_NODE;
 
-typedef char NativeAfsEntryNodeExtent[(sizeof(AFS_ENTRYBT_NODE) == 16) ? 1 : -1];
-typedef char NativeAfsEntryNodeEntryOffset[(offsetof(AFS_ENTRYBT_NODE, pEntry) == 0) ? 1 : -1];
-typedef char NativeAfsEntryNodeLeftOffset[(offsetof(AFS_ENTRYBT_NODE, pLNode) == 4) ? 1 : -1];
-typedef char NativeAfsEntryNodeRightOffset[(offsetof(AFS_ENTRYBT_NODE, pRNode) == 8) ? 1 : -1];
-typedef char NativeAfsEntryNodeDataOffset[(offsetof(AFS_ENTRYBT_NODE, pbData) == 12) ? 1 : -1];
+STATIC_ASSERT(sizeof(AFS_ENTRYBT_NODE) == 16);
+STATIC_ASSERT(offsetof(AFS_ENTRYBT_NODE, pEntry) == 0);
+STATIC_ASSERT(offsetof(AFS_ENTRYBT_NODE, pLNode) == 4);
+STATIC_ASSERT(offsetof(AFS_ENTRYBT_NODE, pRNode) == 8);
+STATIC_ASSERT(offsetof(AFS_ENTRYBT_NODE, pbData) == 12);
 
 const DWORD FILES_FORCE_FS[] = {
     OBFUSCATE_DATA(0x5440792e), //ar_stats.dat

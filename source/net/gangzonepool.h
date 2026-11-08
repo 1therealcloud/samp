@@ -1,5 +1,6 @@
 #ifndef SAMP_GANGZONEPOOL_H
 #define SAMP_GANGZONEPOOL_H
+#include <static_assert.h>
 #include <windows.h>
 #pragma pack(push, 1)
 struct GangZone
@@ -29,8 +30,8 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char NativeGangZoneRecordExtent[(sizeof(GangZone) == 24) ? 1 : -1];
-typedef char NativeGangZonePoolExtent[(sizeof(CGangZonePool) == 0x2000) ? 1 : -1];
+STATIC_ASSERT(sizeof(GangZone) == 24);
+STATIC_ASSERT(sizeof(CGangZonePool) == 0x2000);
 // 0x001569a0
 extern BYTE g_gangZoneFlashPhase;
 // 0x001569a4

@@ -1,5 +1,6 @@
 #ifndef SAMP_RENDER_PANEL_H
 #define SAMP_RENDER_PANEL_H
+#include <static_assert.h>
 #include <windows.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
@@ -29,7 +30,7 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char NativeRenderPanelExtent[(sizeof(CRenderPanel) == 0x28) ? 1 : -1];
+STATIC_ASSERT(sizeof(CRenderPanel) == 0x28);
 // 0x0011c75c
 extern const char g_renderPanelTitle[10];
 #endif

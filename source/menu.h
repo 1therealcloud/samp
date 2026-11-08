@@ -1,5 +1,6 @@
 #ifndef SAMP_MENU_H
 #define SAMP_MENU_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 #pragma pack(push, 1)
@@ -45,16 +46,16 @@ public:
     char* GetColumnTitle(BYTE column);
 };
 #pragma pack(pop)
-typedef char NativeMenuInteractionExtent[(sizeof(CMenuInteraction) == 64) ? 1 : -1];
-typedef char NativeMenuExtent[(sizeof(CMenu) == 0x3b8) ? 1 : -1];
-typedef char NativeMenuTitleOffset[(offsetof(CMenu, title) == 1) ? 1 : -1];
-typedef char NativeMenuItemsOffset[(offsetof(CMenu, items) == 0x21) ? 1 : -1];
-typedef char NativeMenuColumnsOffset[(offsetof(CMenu, columnTitles) == 0x321) ? 1 : -1];
-typedef char NativeMenuXOffset[(offsetof(CMenu, x) == 0x361) ? 1 : -1];
-typedef char NativeMenuWidthsOffset[(offsetof(CMenu, widths) == 0x369) ? 1 : -1];
-typedef char NativeMenuColumnCountOffset[(offsetof(CMenu, columns) == 0x371) ? 1 : -1];
-typedef char NativeMenuInteractionOffset[(offsetof(CMenu, interaction) == 0x372) ? 1 : -1];
-typedef char NativeMenuHandleOffset[(offsetof(CMenu, handle) == 0x3b4) ? 1 : -1];
+STATIC_ASSERT(sizeof(CMenuInteraction) == 64);
+STATIC_ASSERT(sizeof(CMenu) == 0x3b8);
+STATIC_ASSERT(offsetof(CMenu, title) == 1);
+STATIC_ASSERT(offsetof(CMenu, items) == 0x21);
+STATIC_ASSERT(offsetof(CMenu, columnTitles) == 0x321);
+STATIC_ASSERT(offsetof(CMenu, x) == 0x361);
+STATIC_ASSERT(offsetof(CMenu, widths) == 0x369);
+STATIC_ASSERT(offsetof(CMenu, columns) == 0x371);
+STATIC_ASSERT(offsetof(CMenu, interaction) == 0x372);
+STATIC_ASSERT(offsetof(CMenu, handle) == 0x3b4);
 // 0x0013c0c8
 extern const char g_menuItemKeys[24][32];
 // 0x0011ecf4

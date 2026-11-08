@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "events.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
@@ -88,7 +89,7 @@ struct ScmNetGameView
     ScmPoolsView* pools;
 };
 #pragma pack(pop)
-typedef char ScmPoolsOffset[(offsetof(ScmNetGameView, pools) == 0x3de) ? 1 : -1];
+STATIC_ASSERT(offsetof(ScmNetGameView, pools) == 0x3de);
 // 0x00117690
 int g_scmEventRpcId = 96;
 // 0x00156988

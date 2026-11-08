@@ -1,5 +1,6 @@
 #ifndef SAMP_DOWNLOAD_WINDOW_H
 #define SAMP_DOWNLOAD_WINDOW_H
+#include <static_assert.h>
 #include <windows.h>
 struct IDirect3DDevice9;
 class CDXUTDialog;
@@ -13,7 +14,7 @@ struct DownloadRecord
     BYTE status;
     DWORD downloaded, total;
 };
-typedef char NativeDownloadRecordExtent[(sizeof(DownloadRecord) == 18) ? 1 : -1];
+STATIC_ASSERT(sizeof(DownloadRecord) == 18);
 class CDownloadWindow
 {
 public:
@@ -64,7 +65,7 @@ public:
     void ResetDialogControls(CDXUTDialog* dialog);
 };
 #pragma pack(pop)
-typedef char NativeDownloadWindowExtent[(sizeof(CDownloadWindow) == 0x260) ? 1 : -1];
+STATIC_ASSERT(sizeof(CDownloadWindow) == 0x260);
 // 0x0011c37c
 extern const char g_downloadWindowTitle[18];
 // 0x0011c414

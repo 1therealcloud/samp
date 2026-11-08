@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_VEHICLE_H
 #define SAMP_RECOVERED_VEHICLE_H
+#include <static_assert.h>
 #include "game/entity.h"
 #include "game/scripting.h"
 #include <stddef.h>
@@ -189,26 +190,26 @@ public:
     void ShutdownLicensePlate();
 };
 #pragma pack(pop)
-typedef char VehicleExtent[(sizeof(CVehicle) == 0xb8) ? 1 : -1];
-typedef char VehicleHandleOffset[(offsetof(CVehicle, m_nHandle) == 0x44) ? 1 : -1];
-typedef char VehicleTrailerOffset[(offsetof(CVehicle, m_pTrailer) == 0x48) ? 1 : -1];
-typedef char VehicleBackendOffset[(offsetof(CVehicle, m_pGameVehicle) == 0x4c) ? 1 : -1];
-typedef char VehicleColorOffset[(offsetof(CVehicle, m_bColorChanged) == 0x7b) ? 1 : -1];
-typedef char VehicleField50Offset[(offsetof(CVehicle, m_dwField50) == 0x50) ? 1 : -1];
-typedef char VehicleInvulnerableOffset[(offsetof(CVehicle, m_dwInvulnerable) == 0x58) ? 1 : -1];
-typedef char VehicleLockOffset[(offsetof(CVehicle, m_dwLocked) == 0x60) ? 1 : -1];
-typedef char VehicleObjectiveOffset[(offsetof(CVehicle, m_byteObjective) == 0x64) ? 1 : -1];
-typedef char VehicleObjectiveMarkerOffset[(offsetof(CVehicle, m_dwObjectiveMarker) == 0x65) ? 1 : -1];
-typedef char VehicleDrivenTickOffset[(offsetof(CVehicle, m_dwLastDrivenTime) == 0x69) ? 1 : -1];
-typedef char VehicleModShopOffset[(offsetof(CVehicle, m_bInModShop) == 0x71) ? 1 : -1];
-typedef char VehicleEngineOverrideOffset[(offsetof(CVehicle, m_dwEngineOverride75) == 0x75) ? 1 : -1];
-typedef char VehicleLocalUnoccupiedOffset[(offsetof(CVehicle, m_dwLocalUnoccupiedSync) == 0x7f) ? 1 : -1];
-typedef char VehicleRemoteUnoccupiedOffset[(offsetof(CVehicle, m_dwRemoteUnoccupiedSync) == 0x83) ? 1 : -1];
-typedef char VehicleKeepLoadedOffset[(offsetof(CVehicle, m_dwKeepLoaded) == 0x87) ? 1 : -1];
-typedef char VehicleSirenOffset[(offsetof(CVehicle, m_dwSiren) == 0x8b) ? 1 : -1];
-typedef char VehiclePlateTextureOffset[(offsetof(CVehicle, m_pLicensePlateTexture) == 0x8f) ? 1 : -1];
-typedef char VehiclePlateTextOffset[(offsetof(CVehicle, m_szLicensePlateText) == 0x93) ? 1 : -1];
-typedef char VehicleMarkerOffset[(offsetof(CVehicle, m_dwMarker) == 0xb4) ? 1 : -1];
+STATIC_ASSERT(sizeof(CVehicle) == 0xb8);
+STATIC_ASSERT(offsetof(CVehicle, m_nHandle) == 0x44);
+STATIC_ASSERT(offsetof(CVehicle, m_pTrailer) == 0x48);
+STATIC_ASSERT(offsetof(CVehicle, m_pGameVehicle) == 0x4c);
+STATIC_ASSERT(offsetof(CVehicle, m_bColorChanged) == 0x7b);
+STATIC_ASSERT(offsetof(CVehicle, m_dwField50) == 0x50);
+STATIC_ASSERT(offsetof(CVehicle, m_dwInvulnerable) == 0x58);
+STATIC_ASSERT(offsetof(CVehicle, m_dwLocked) == 0x60);
+STATIC_ASSERT(offsetof(CVehicle, m_byteObjective) == 0x64);
+STATIC_ASSERT(offsetof(CVehicle, m_dwObjectiveMarker) == 0x65);
+STATIC_ASSERT(offsetof(CVehicle, m_dwLastDrivenTime) == 0x69);
+STATIC_ASSERT(offsetof(CVehicle, m_bInModShop) == 0x71);
+STATIC_ASSERT(offsetof(CVehicle, m_dwEngineOverride75) == 0x75);
+STATIC_ASSERT(offsetof(CVehicle, m_dwLocalUnoccupiedSync) == 0x7f);
+STATIC_ASSERT(offsetof(CVehicle, m_dwRemoteUnoccupiedSync) == 0x83);
+STATIC_ASSERT(offsetof(CVehicle, m_dwKeepLoaded) == 0x87);
+STATIC_ASSERT(offsetof(CVehicle, m_dwSiren) == 0x8b);
+STATIC_ASSERT(offsetof(CVehicle, m_pLicensePlateTexture) == 0x8f);
+STATIC_ASSERT(offsetof(CVehicle, m_szLicensePlateText) == 0x93);
+STATIC_ASSERT(offsetof(CVehicle, m_dwMarker) == 0xb4);
 // 0x000b37d0
 void* __stdcall GamePoolVehicleGetAt(int handle);
 // GTA SA vtable classification helper; values are native 0..7 tags.

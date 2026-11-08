@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_PED_H
 #define SAMP_RECOVERED_PED_H
+#include <static_assert.h>
 #include "game/entity.h"
 #include "game/scripting.h"
 struct CameraAim;
@@ -11,14 +12,14 @@ struct PedBulletData
     CVector origin, target, offset;
     void* entity;
 };
-typedef char PedBulletDataExtent[(sizeof(PedBulletData) == 44) ? 1 : -1];
+STATIC_ASSERT(sizeof(PedBulletData) == 44);
 struct PedAccessoryState
 {
     int model, bone;
     CVector offset, rotation, scale;
     DWORD materialColor1, materialColor2;
 };
-typedef char PedAccessoryExtent[(sizeof(PedAccessoryState) == 52) ? 1 : -1];
+STATIC_ASSERT(sizeof(PedAccessoryState) == 52);
 // samp.dll vtable RVA: 0x0011f24c
 class CPed : public CEntity
 {
@@ -435,9 +436,9 @@ public:
     void SetArmedWeapon(DWORD weapon, BYTE direct);
 };
 #pragma pack(pop)
-typedef char PedExtent[(sizeof(CPed) == 0x32d) ? 1 : -1];
-typedef char PedBackendOffset[(offsetof(CPed, m_pGamePed) == 0x2a4) ? 1 : -1];
-typedef char PedPlayerOffset[(offsetof(CPed, m_nPlayerNumber) == 0x2b0) ? 1 : -1];
+STATIC_ASSERT(sizeof(CPed) == 0x32d);
+STATIC_ASSERT(offsetof(CPed, m_pGamePed) == 0x2a4);
+STATIC_ASSERT(offsetof(CPed, m_nPlayerNumber) == 0x2b0);
 // 0x002a9da8
 extern void* g_gamePlayerPeds[210];
 // 0x002aa0f0

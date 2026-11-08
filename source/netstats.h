@@ -1,5 +1,6 @@
 #ifndef SAMP_CLIENT_NETSTATS_H
 #define SAMP_CLIENT_NETSTATS_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 struct IDirect3DDevice9;
@@ -13,8 +14,8 @@ public:
     // 0x000607f0
     void Draw();
 };
-typedef char NetStatsExtent[(sizeof(CNetStats) == 24) ? 1 : -1];
-typedef char NetStatsTickOffset[(offsetof(CNetStats, lastUpdateTick) == 8) ? 1 : -1];
+STATIC_ASSERT(sizeof(CNetStats) == 24);
+STATIC_ASSERT(offsetof(CNetStats, lastUpdateTick) == 8);
 // Native buffers have unsafe writes/concatenations; overflow adjacency is unproven.
 // 0x00163a78
 extern char g_netStatsLine[1024];

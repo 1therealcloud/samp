@@ -1,5 +1,6 @@
 #ifndef SAMP_SCOREBOARD_H
 #define SAMP_SCOREBOARD_H
+#include <static_assert.h>
 #include <DXUTgui.h>
 #include <d3dx9.h>
 #pragma pack(push, 1)
@@ -51,8 +52,8 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char ScoreboardExtent[(sizeof(CScoreboard) == 0x44) ? 1 : -1];
-typedef char ScoreboardRowExtent[(sizeof(ScoreboardRow) == 45) ? 1 : -1];
+STATIC_ASSERT(sizeof(CScoreboard) == 0x44);
+STATIC_ASSERT(sizeof(ScoreboardRow) == 45);
 // 0x0006e310
 void ScoreboardSwapRows(ScoreboardRow* first, ScoreboardRow* second);
 // 0x0011c6d0

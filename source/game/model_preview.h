@@ -1,5 +1,6 @@
 #ifndef SAMP_MODEL_PREVIEW_H
 #define SAMP_MODEL_PREVIEW_H
+#include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
 // Descriptive recovered class name; original identity is not established.
@@ -28,7 +29,7 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char ModelPreviewExtent[(sizeof(CModelPreview) == 28) ? 1 : -1];
+STATIC_ASSERT(sizeof(CModelPreview) == 28);
 // 0x002aca38
 extern CModelPreview* g_modelPreview;
 // 0x0011c654

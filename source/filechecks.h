@@ -1,5 +1,6 @@
 #ifndef SAMP_FILECHECKS_H
 #define SAMP_FILECHECKS_H
+#include <static_assert.h>
 #include <windows.h>
 #pragma pack(push, 1)
 // Compiled-reference match: Paul E. Jones SHA-1 family; exact release unknown.
@@ -46,7 +47,7 @@ public:
     void ProcessBlock();
 };
 #pragma pack(pop)
-typedef char ArchiveNameSha1Extent[(sizeof(ArchiveNameSha1) == 102) ? 1 : -1];
+STATIC_ASSERT(sizeof(ArchiveNameSha1) == 102);
 // Three independent native digest comparisons: handling.cfg, weapon.dat,
 // melee.dat. Publication increments CGame's observed DWORD at offset 0x55.
 // 0x0014033c

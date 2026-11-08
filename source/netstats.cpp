@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "netstats.h"
 #include "RakClientInterface.h"
 #include "RakNetStatistics.h"
@@ -13,10 +14,10 @@
 #include <stdio.h>
 #include <string.h>
 // Match the selected RakNet fields actually consumed by the original UI.
-typedef char NetStatsSentOffset[(offsetof(RakNetStatisticsStruct, totalBitsSent) == 0xb8) ? 1 : -1];
-typedef char NetStatsReceivedOffset[(offsetof(RakNetStatisticsStruct, bitsReceived) == 0xd8) ? 1 : -1];
-typedef char NetStatsResentOffset[(offsetof(RakNetStatisticsStruct, messagesTotalBitsResent) == 0x94) ? 1 : -1];
-typedef char NetStatsProcessCountersExtent[(sizeof(PROCESS_MEMORY_COUNTERS) == 40) ? 1 : -1];
+STATIC_ASSERT(offsetof(RakNetStatisticsStruct, totalBitsSent) == 0xb8);
+STATIC_ASSERT(offsetof(RakNetStatisticsStruct, bitsReceived) == 0xd8);
+STATIC_ASSERT(offsetof(RakNetStatisticsStruct, messagesTotalBitsResent) == 0x94);
+STATIC_ASSERT(sizeof(PROCESS_MEMORY_COUNTERS) == 40);
 // 0x00163a78
 char g_netStatsLine[1024];
 // 0x00163e78

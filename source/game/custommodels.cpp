@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "game/custommodels.h"
 #include "game/modelfile.h"
 #include "main.h"
@@ -844,7 +845,7 @@ void CCustomModels::Initialize()
 #include "net/netgame.h"
 #include <curl/curl.h>
 #include <process.h>
-typedef char NativeLzmaSizeExtent[(sizeof(SizeT) == 4) ? 1 : -1];
+STATIC_ASSERT(sizeof(SizeT) == 4);
 // 0x00117e1c
 const char g_customDownloadSizeError[] = "[error] file 0x%X bad length got:%u expected:%u. Deleting..";
 // 0x00117de8

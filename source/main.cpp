@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "main.h"
 #include "RakClientInterface.h"
 #include "anticheat.h"
@@ -33,8 +34,8 @@ IDirect3DDevice9* g_clientSavedGameDevice;
 DWORD g_clientDeviceInitialized;
 // 0x002aca44
 DWORD g_clientNetworkInitialized;
-typedef char NativeNetworkAllocationExtent[(sizeof(CNetGame) == 0x3e2) ? 1 : -1];
-typedef char NativeTextDrawSelectionExtent[(sizeof(CTextDrawSelection) == 10) ? 1 : -1];
+STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
+STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
 // 0x000c5e70
 void ClientInitializeDeviceAndGui()
 {

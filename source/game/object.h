@@ -1,5 +1,6 @@
 #ifndef SAMP_OBJECT_WRAPPER_H
 #define SAMP_OBJECT_WRAPPER_H
+#include <static_assert.h>
 #include "game/entity.h"
 #include "game/quaternion.h"
 // Native allocation extent is established; observed pool flags are named below.
@@ -170,20 +171,20 @@ public:
     void Move(CVector position, float speed, CVector rotation);
 };
 #pragma pack(pop)
-typedef char ObjectTextInfoExtent[(sizeof(ObjectMaterialTextInfo) == 0xd7) ? 1 : -1];
-typedef char ObjectTextInfoSize[(offsetof(ObjectMaterialTextInfo, size) == 0x8a) ? 1 : -1];
-typedef char ObjectTextInfoFont[(offsetof(ObjectMaterialTextInfo, font) == 0x8b) ? 1 : -1];
-typedef char ObjectTextInfoColor[(offsetof(ObjectMaterialTextInfo, fontColor) == 0xce) ? 1 : -1];
-typedef char ObjectTextInfoAlignment[(offsetof(ObjectMaterialTextInfo, alignment) == 0xd6) ? 1 : -1];
-typedef char ObjectMaterialStateExtent[(sizeof(ObjectMaterialState) == 0xfc8) ? 1 : -1];
-typedef char ObjectMaterialTextures[(offsetof(ObjectMaterialState, textures) == 0x54) ? 1 : -1];
-typedef char ObjectMaterialColors[(offsetof(ObjectMaterialState, colors) == 0x94) ? 1 : -1];
-typedef char ObjectMaterialTypes[(offsetof(ObjectMaterialState, types) == 0x118) ? 1 : -1];
-typedef char ObjectMaterialRecords[(offsetof(ObjectMaterialState, textInfo) == 0x198) ? 1 : -1];
-typedef char ObjectMaterialText[(offsetof(ObjectMaterialState, text) == 0xf08) ? 1 : -1];
-typedef char ObjectMaterialRaster[(offsetof(ObjectMaterialState, rasterField34) == 0xf48) ? 1 : -1];
-typedef char ObjectMaterialRendered[(offsetof(ObjectMaterialState, renderedText) == 0xf88) ? 1 : -1];
-typedef char NativeObjectAllocationExtent[(sizeof(CObject) == 0x119c) ? 1 : -1];
+STATIC_ASSERT(sizeof(ObjectMaterialTextInfo) == 0xd7);
+STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, size) == 0x8a);
+STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, font) == 0x8b);
+STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, fontColor) == 0xce);
+STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, alignment) == 0xd6);
+STATIC_ASSERT(sizeof(ObjectMaterialState) == 0xfc8);
+STATIC_ASSERT(offsetof(ObjectMaterialState, textures) == 0x54);
+STATIC_ASSERT(offsetof(ObjectMaterialState, colors) == 0x94);
+STATIC_ASSERT(offsetof(ObjectMaterialState, types) == 0x118);
+STATIC_ASSERT(offsetof(ObjectMaterialState, textInfo) == 0x198);
+STATIC_ASSERT(offsetof(ObjectMaterialState, text) == 0xf08);
+STATIC_ASSERT(offsetof(ObjectMaterialState, rasterField34) == 0xf48);
+STATIC_ASSERT(offsetof(ObjectMaterialState, renderedText) == 0xf88);
+STATIC_ASSERT(sizeof(CObject) == 0x119c);
 // 0x0011ee80
 extern const float g_objectRenderDistanceThreshold;
 // 0x00118200

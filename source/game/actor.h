@@ -1,5 +1,6 @@
 #ifndef SAMP_ACTOR_H
 #define SAMP_ACTOR_H
+#include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
 // Observed GTA SA ped-backend prefix, not the complete GTA allocation/type.
@@ -20,12 +21,12 @@ struct ActorBackendPrefix
     BYTE unknown54c[0x10];
     float heading;
 };
-typedef char ActorBackendFlagsOffset[(offsetof(ActorBackendPrefix, flags) == 0x46c) ? 1 : -1];
-typedef char ActorBackendTasksOffset[(offsetof(ActorBackendPrefix, tasks) == 0x47c) ? 1 : -1];
-typedef char ActorBackendStateOffset[(offsetof(ActorBackendPrefix, state530) == 0x530) ? 1 : -1];
-typedef char ActorBackendHealthOffset[(offsetof(ActorBackendPrefix, health) == 0x540) ? 1 : -1];
-typedef char ActorBackendArmourOffset[(offsetof(ActorBackendPrefix, armour) == 0x548) ? 1 : -1];
-typedef char ActorBackendHeadingOffset[(offsetof(ActorBackendPrefix, heading) == 0x55c) ? 1 : -1];
+STATIC_ASSERT(offsetof(ActorBackendPrefix, flags) == 0x46c);
+STATIC_ASSERT(offsetof(ActorBackendPrefix, tasks) == 0x47c);
+STATIC_ASSERT(offsetof(ActorBackendPrefix, state530) == 0x530);
+STATIC_ASSERT(offsetof(ActorBackendPrefix, health) == 0x540);
+STATIC_ASSERT(offsetof(ActorBackendPrefix, armour) == 0x548);
+STATIC_ASSERT(offsetof(ActorBackendPrefix, heading) == 0x55c);
 // Native SA-MP allocation is0x56; bytes4C..54 remain untouched/unresolved.
 // samp.dll vtable RVA: 0x0011e318
 class CActor : public CEntity
@@ -73,7 +74,7 @@ public:
     void SetInvulnerable(BYTE enabled);
 };
 #pragma pack(pop)
-typedef char NativeActorExtent[(sizeof(CActor) == 0x56) ? 1 : -1];
+STATIC_ASSERT(sizeof(CActor) == 0x56);
 // 0x00181e5c
 extern void* g_actorTaskBackend;
 // 0x0009bfb0

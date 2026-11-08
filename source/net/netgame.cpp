@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "net/netgame.h"
 #include "main.h"
 // 0x00001a90
@@ -404,7 +405,7 @@ public:
     // 0x0000a0a0
     bool ReadVelocity(float& x, float& y, float& z);
 };
-typedef char NativeSyncStreamExtent[(sizeof(NativeSyncBitStream) == sizeof(RakNet::BitStream)) ? 1 : -1];
+STATIC_ASSERT(sizeof(NativeSyncBitStream) == sizeof(RakNet::BitStream));
 // 0x00009370
 bool NativeSyncBitStream::ReadQuaternion(float& w, float& x, float& y, float& z)
 {
@@ -634,8 +635,8 @@ void CNetGame::Packet_IncarSync(Packet* packet)
     if (remote)
         remote->UpdateIncar(&data, timestamp);
 }
-typedef char NativePacketLengthOffset[(offsetof(Packet, length) == 8) ? 1 : -1];
-typedef char NativePacketDataOffset[(offsetof(Packet, data) == 16) ? 1 : -1];
+STATIC_ASSERT(offsetof(Packet, length) == 8);
+STATIC_ASSERT(offsetof(Packet, data) == 16);
 // 0x00009730
 void CNetGame::Packet_UnoccupiedSync(Packet* packet)
 {

@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "net/localplayer.h"
 #include "main.h"
 // 0x00017770
@@ -914,7 +915,7 @@ DWORD CLocalPlayer::GetColorAsARGB()
     return (PlayerColors::Get(*(WORD*)players) >> 8) | 0xff000000;
 }
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
-typedef char LocalRpcReliability[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10) ? 1 : -1];
+STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
 // 0x0011787c
 int g_localSpawnRequestRpc = 129;
 // 0x00117954
@@ -1281,7 +1282,7 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
     BYTE packet = 206;
     stream.WriteBits(&packet, 8, true);
     stream.Write((const char*)&payload, 40);
-    typedef char BulletReliability[(HIGH_PRIORITY == 1 && UNRELIABLE_SEQUENCED == 7) ? 1 : -1];
+    STATIC_ASSERT(HIGH_PRIORITY == 1 && UNRELIABLE_SEQUENCED == 7);
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
 }
 
@@ -1521,7 +1522,7 @@ void CLocalPlayer::ProcessVehicleDamage(WORD id)
     stream.WriteBits(&lights, 8, true);
     BYTE tires = m_state.tiresDamage;
     stream.WriteBits(&tires, 8, true);
-    typedef char VehicleDamageReliability[(HIGH_PRIORITY == 1 && RELIABLE == 8) ? 1 : -1];
+    STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE == 8);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 // 0x00006de0

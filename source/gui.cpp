@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "gui.h"
 #include "chatwindow.h"
 #include "cmdwindow.h"
@@ -21,7 +22,7 @@ CDXUTDialog* g_guiServerDialog;
 CDXUTDialog* g_guiPanelDialog;
 // 0x002acac8
 CDXUTDialog* g_guiDownloadDialog;
-typedef char NativeDialogExtent[(sizeof(CDXUTDialog) == 0x1ea) ? 1 : -1];
+STATIC_ASSERT(sizeof(CDXUTDialog) == 0x1ea);
 // 0x000c6ce0
 void ClientInitializeGui()
 {
@@ -138,18 +139,18 @@ void ClientInitializeGui()
 }
 
 // Constructor-only opaque storage is intentional: the full UI interfaces remain open.
-typedef char CDeathWindowObservedExtent[(sizeof(CDeathWindow) == 0x157) ? 1 : -1];
-typedef char CScoreboardObservedExtent[(sizeof(CScoreboard) == 0x44) ? 1 : -1];
-typedef char CDialogObservedExtent[(sizeof(CDialog) == 0x29d) ? 1 : -1];
-typedef char CRenderPanelObservedExtent[(sizeof(CRenderPanel) == 0x28) ? 1 : -1];
-typedef char CDownloadWindowObservedExtent[(sizeof(CDownloadWindow) == 0x260) ? 1 : -1];
-typedef char CNetStatsObservedExtent[(sizeof(CNetStats) == 0x18) ? 1 : -1];
-typedef char CSrvNetStatsObservedExtent[(sizeof(CSrvNetStats) == 0x18) ? 1 : -1];
-typedef char CHelpDialogObservedExtent[(sizeof(CHelpDialog) == 0x4) ? 1 : -1];
-typedef char CChatBubbleObservedExtent[(sizeof(CChatBubble) == 0x44a20) ? 1 : -1];
+STATIC_ASSERT(sizeof(CDeathWindow) == 0x157);
+STATIC_ASSERT(sizeof(CScoreboard) == 0x44);
+STATIC_ASSERT(sizeof(CDialog) == 0x29d);
+STATIC_ASSERT(sizeof(CRenderPanel) == 0x28);
+STATIC_ASSERT(sizeof(CDownloadWindow) == 0x260);
+STATIC_ASSERT(sizeof(CNetStats) == 0x18);
+STATIC_ASSERT(sizeof(CSrvNetStats) == 0x18);
+STATIC_ASSERT(sizeof(CHelpDialog) == 0x4);
+STATIC_ASSERT(sizeof(CChatBubble) == 0x44a20);
 
 // Allocation extent and packed manager layout observed in the original constructor.
-typedef char DialogManagerExtent[(sizeof(CDXUTDialogResourceManager) == 36) ? 1 : -1];
+STATIC_ASSERT(sizeof(CDXUTDialogResourceManager) == 36);
 // 0x000c6a60
 void ClientInitializeDialogResources()
 {

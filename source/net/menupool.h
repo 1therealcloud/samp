@@ -1,5 +1,6 @@
 #ifndef SAMP_MENUPOOL_H
 #define SAMP_MENUPOOL_H
+#include <static_assert.h>
 #include "menu.h"
 struct RPCParameters;
 #pragma pack(push, 1)
@@ -35,7 +36,7 @@ public:
     void Hide(BYTE id);
 };
 #pragma pack(pop)
-typedef char NativeMenuPoolExtent[(sizeof(CMenuPool) == 0x402) ? 1 : -1];
+STATIC_ASSERT(sizeof(CMenuPool) == 0x402);
 // 0x001179c4
 extern int g_menuSelectedRpc;
 // 0x001179c0

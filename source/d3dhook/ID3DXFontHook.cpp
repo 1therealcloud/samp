@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "d3dhook/ID3DXFontHook.h"
 #include "cmdwindow.h"
 #include "runutil.h"
@@ -262,7 +263,7 @@ public:
 // 0x00073960
 CFontColorSprite::CFontColorSprite() {}
 
-typedef char FontColorSpriteSize[(sizeof(CFontColorSprite) == 4) ? 1 : -1];
+STATIC_ASSERT(sizeof(CFontColorSprite) == 4);
 // 0x00140bd8
 static CFontColorSprite g_fontColorSprite;
 

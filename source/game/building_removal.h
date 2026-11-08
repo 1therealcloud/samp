@@ -1,12 +1,13 @@
 #ifndef SAMP_GAME_BUILDING_REMOVAL_H
 #define SAMP_GAME_BUILDING_REMOVAL_H
+#include <static_assert.h>
 #include <windows.h>
 struct BuildingRemovalRecord
 {
     int model;
     float x, y, z, radius;
 };
-typedef char BuildingRemovalRecordExtent[(sizeof(BuildingRemovalRecord) == 20) ? 1 : -1];
+STATIC_ASSERT(sizeof(BuildingRemovalRecord) == 20);
 // 0x0009ca80
 void GameHideObjectEntity(void* entity);
 // 0x0009cab0

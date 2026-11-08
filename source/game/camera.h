@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_CAMERA_H
 #define SAMP_RECOVERED_CAMERA_H
+#include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
 class CCamera
@@ -41,7 +42,7 @@ public:
     void Detach();
 };
 #pragma pack(pop)
-typedef char CameraExtent[(sizeof(CCamera) == 8) ? 1 : -1];
+STATIC_ASSERT(sizeof(CCamera) == 8);
 // 0x000b46e0
 BYTE __cdecl GameIsCameraPointValid(const CVector* point);
 #endif

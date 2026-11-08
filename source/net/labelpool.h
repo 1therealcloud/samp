@@ -1,5 +1,6 @@
 #ifndef SAMP_LABELPOOL_H
 #define SAMP_LABELPOOL_H
+#include <static_assert.h>
 #include "game/entity.h"
 #include <stddef.h>
 #pragma pack(push, 1)
@@ -33,8 +34,8 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char TextLabelExtent[(sizeof(TextLabel) == 29) ? 1 : -1];
-typedef char TextLabelPlayerOffset[(offsetof(TextLabel, attachedPlayer) == 0x19) ? 1 : -1];
-typedef char LabelPoolFlagsOffset[(offsetof(CLabelPool, active) == 0xe800) ? 1 : -1];
-typedef char LabelPoolExtent[(sizeof(CLabelPool) == 0x10800) ? 1 : -1];
+STATIC_ASSERT(sizeof(TextLabel) == 29);
+STATIC_ASSERT(offsetof(TextLabel, attachedPlayer) == 0x19);
+STATIC_ASSERT(offsetof(CLabelPool, active) == 0xe800);
+STATIC_ASSERT(sizeof(CLabelPool) == 0x10800);
 #endif

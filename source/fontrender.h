@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_FONTS_H
 #define SAMP_RECOVERED_FONTS_H
+#include <static_assert.h>
 #include <d3dx9.h>
 #include <stddef.h>
 #include <windows.h>
@@ -49,8 +50,8 @@ public:
     // 0x0006b320
     void Reset();
 };
-typedef char FontsSize[(sizeof(CFonts) == 40) ? 1 : -1];
-typedef char FontsScratchOffset[(offsetof(CFonts, m_szTempBuffer) == 28) ? 1 : -1];
+STATIC_ASSERT(sizeof(CFonts) == 40);
+STATIC_ASSERT(offsetof(CFonts, m_szTempBuffer) == 28);
 
 // 0x00118400
 extern const char g_fontMeasureProbe[2];

@@ -1,46 +1,47 @@
 #ifndef SAMP_OBJECT_POOL_H
 #define SAMP_OBJECT_POOL_H
+#include <static_assert.h>
 #include "game/object.h"
 #include <windows.h>
 struct RPCParameters;
 #pragma pack(push, 1)
 class CObjectPool
 {
-    typedef char ObjectReadyOffset[(offsetof(CObject, renderReady) == 0x49) ? 1 : -1];
-    typedef char ObjectCameraCollisionOffset[(offsetof(CObject, cameraCollisionDisabled) == 0x53) ? 1 : -1];
-    typedef char ObjectDrawLastOffset[(offsetof(CObject, drawLast) == 0x6c) ? 1 : -1];
-    typedef char ObjectAttachmentEulerOffset[(offsetof(CObject, eulerRotation) == 0xad) ? 1 : -1];
-    typedef char ObjectAttachmentVehicleOffset[(offsetof(CObject, attachedVehicle) == 0xbe) ? 1 : -1];
-    typedef char ObjectAttachmentObjectOffset[(offsetof(CObject, attachedObject) == 0xc0) ? 1 : -1];
-    typedef char ObjectAttachmentOffsetOffset[(offsetof(CObject, attachmentOffset) == 0xc2) ? 1 : -1];
-    typedef char ObjectAttachmentRotationOffset[(offsetof(CObject, attachmentRotation) == 0xce) ? 1 : -1];
-    typedef char ObjectAttachmentSyncOffset[(offsetof(CObject, attachmentRotationSync) == 0xda) ? 1 : -1];
-    typedef char ObjectAttachmentTargetMatrixOffset[(offsetof(CObject, targetMatrix) == 0xdb) ? 1 : -1];
-    typedef char ObjectAttachmentBaseMatrixOffset[(offsetof(CObject, baseMatrix) == 0x11b) ? 1 : -1];
-    typedef char ObjectMoveDistanceOffset[(offsetof(CObject, moveDistance) == 0x15b) ? 1 : -1];
-    typedef char ObjectMoveStartTickOffset[(offsetof(CObject, moveStartTick) == 0x15f) ? 1 : -1];
-    typedef char ObjectLastMoveTickOffset[(offsetof(CObject, lastMoveTick) == 0x163) ? 1 : -1];
-    typedef char ObjectTargetQuaternionOffset[(offsetof(CObject, targetQuaternion) == 0x167) ? 1 : -1];
-    typedef char ObjectInterpolatedQuaternionOffset[(offsetof(CObject, interpolatedQuaternion) == 0x177) ? 1 : -1];
-    typedef char ObjectStartQuaternionOffset[(offsetof(CObject, startQuaternion) == 0x187) ? 1 : -1];
-    typedef char ObjectTargetEulerOffset[(offsetof(CObject, targetEuler) == 0x197) ? 1 : -1];
-    typedef char ObjectAngleDeltaOffset[(offsetof(CObject, angleDelta) == 0x1a3) ? 1 : -1];
-    typedef char ObjectMotionFlagsOffset[(offsetof(CObject, motionFlags) == 0x1af) ? 1 : -1];
-    typedef char ObjectMoveSpeedOffset[(offsetof(CObject, moveSpeed) == 0x1b0) ? 1 : -1];
-    typedef char ObjectRotationEnabledOffset[(offsetof(CObject, rotationEnabled) == 0x1b5) ? 1 : -1];
-    typedef char ObjectStreamingHideCountOffset[(offsetof(CObject, streamingHideCount) == 0x4a) ? 1 : -1];
-    typedef char ObjectModelIndexOffset[(offsetof(CObject, modelIndex) == 0x4e) ? 1 : -1];
-    typedef char ObjectUsesModelDrawDistanceOffset[(offsetof(CObject, usesModelDrawDistance) == 0x52) ? 1 : -1];
-    typedef char ObjectStreamingDistanceOffset[(offsetof(CObject, streamingDistance) == 0x54) ? 1 : -1];
-    typedef char ObjectCollisionRadiusOffset[(offsetof(CObject, collisionRadius) == 0x58) ? 1 : -1];
-    typedef char ObjectWorldCentreOffset[(offsetof(CObject, worldCentre) == 0x5c) ? 1 : -1];
-    typedef char ObjectCameraDistanceOffset[(offsetof(CObject, cameraDistance) == 0x68) ? 1 : -1];
-    typedef char ObjectTimeVisibilityEnabledOffset[(offsetof(CObject, timeVisibilityEnabled) == 0x1199) ? 1 : -1];
-    typedef char ObjectVisibilityStartHourOffset[(offsetof(CObject, visibilityStartHour) == 0x119a) ? 1 : -1];
-    typedef char ObjectVisibilityEndHourOffset[(offsetof(CObject, visibilityEndHour) == 0x119b) ? 1 : -1];
-    typedef char ObjectMaterialStateOffset[(offsetof(CObject, materials) == 0x1c3) ? 1 : -1];
-    typedef char ObjectMaterialPassOffset[(offsetof(CObject, materialPassState) == 0x118f) ? 1 : -1];
-    typedef char ObjectMaterialGateOffset[(offsetof(CObject, hasMaterials) == 0x118b) ? 1 : -1];
+    STATIC_ASSERT(offsetof(CObject, renderReady) == 0x49);
+    STATIC_ASSERT(offsetof(CObject, cameraCollisionDisabled) == 0x53);
+    STATIC_ASSERT(offsetof(CObject, drawLast) == 0x6c);
+    STATIC_ASSERT(offsetof(CObject, eulerRotation) == 0xad);
+    STATIC_ASSERT(offsetof(CObject, attachedVehicle) == 0xbe);
+    STATIC_ASSERT(offsetof(CObject, attachedObject) == 0xc0);
+    STATIC_ASSERT(offsetof(CObject, attachmentOffset) == 0xc2);
+    STATIC_ASSERT(offsetof(CObject, attachmentRotation) == 0xce);
+    STATIC_ASSERT(offsetof(CObject, attachmentRotationSync) == 0xda);
+    STATIC_ASSERT(offsetof(CObject, targetMatrix) == 0xdb);
+    STATIC_ASSERT(offsetof(CObject, baseMatrix) == 0x11b);
+    STATIC_ASSERT(offsetof(CObject, moveDistance) == 0x15b);
+    STATIC_ASSERT(offsetof(CObject, moveStartTick) == 0x15f);
+    STATIC_ASSERT(offsetof(CObject, lastMoveTick) == 0x163);
+    STATIC_ASSERT(offsetof(CObject, targetQuaternion) == 0x167);
+    STATIC_ASSERT(offsetof(CObject, interpolatedQuaternion) == 0x177);
+    STATIC_ASSERT(offsetof(CObject, startQuaternion) == 0x187);
+    STATIC_ASSERT(offsetof(CObject, targetEuler) == 0x197);
+    STATIC_ASSERT(offsetof(CObject, angleDelta) == 0x1a3);
+    STATIC_ASSERT(offsetof(CObject, motionFlags) == 0x1af);
+    STATIC_ASSERT(offsetof(CObject, moveSpeed) == 0x1b0);
+    STATIC_ASSERT(offsetof(CObject, rotationEnabled) == 0x1b5);
+    STATIC_ASSERT(offsetof(CObject, streamingHideCount) == 0x4a);
+    STATIC_ASSERT(offsetof(CObject, modelIndex) == 0x4e);
+    STATIC_ASSERT(offsetof(CObject, usesModelDrawDistance) == 0x52);
+    STATIC_ASSERT(offsetof(CObject, streamingDistance) == 0x54);
+    STATIC_ASSERT(offsetof(CObject, collisionRadius) == 0x58);
+    STATIC_ASSERT(offsetof(CObject, worldCentre) == 0x5c);
+    STATIC_ASSERT(offsetof(CObject, cameraDistance) == 0x68);
+    STATIC_ASSERT(offsetof(CObject, timeVisibilityEnabled) == 0x1199);
+    STATIC_ASSERT(offsetof(CObject, visibilityStartHour) == 0x119a);
+    STATIC_ASSERT(offsetof(CObject, visibilityEndHour) == 0x119b);
+    STATIC_ASSERT(offsetof(CObject, materials) == 0x1c3);
+    STATIC_ASSERT(offsetof(CObject, materialPassState) == 0x118f);
+    STATIC_ASSERT(offsetof(CObject, hasMaterials) == 0x118b);
     // 0x00019b20
     friend void ScrAttachCameraToObject(RPCParameters* parameters);
     int largestId;
@@ -94,7 +95,7 @@ public:
     void ShutdownMaterials();
 };
 #pragma pack(pop)
-typedef char NativeObjectPoolExtent[(sizeof(CObjectPool) == 0x41a4) ? 1 : -1];
+STATIC_ASSERT(sizeof(CObjectPool) == 0x41a4);
 // Native copies all five words; the fifth is intentionally uninitialized stack data.
 // 0x00156b5c
 extern GameEntityCollisionShape g_objectPoolRayOrigin;

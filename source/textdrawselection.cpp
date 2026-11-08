@@ -108,7 +108,6 @@ void CTextDrawSelection::Process()
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-typedef char TextDrawClickRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9) ? 1 : -1];
 // 0x001182f8
 int g_textDrawClickRpc = 83;
 // 0x00070f20

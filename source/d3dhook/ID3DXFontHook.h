@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_FONT_WRAPPER_H
 #define SAMP_RECOVERED_FONT_WRAPPER_H
+#include <static_assert.h>
 #include <d3dx9.h>
 #include <windows.h>
 // Native vtable RVA 0x0011c438. No added destructor or reference count.
@@ -47,7 +48,7 @@ public:
     // 0x00073870
     virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
 };
-typedef char FontWrapperSize[(sizeof(CFontWrapper) == 8) ? 1 : -1];
+STATIC_ASSERT(sizeof(CFontWrapper) == 8);
 #endif
 
 #ifndef SAMP_RECOVERED_FONT_COLOR_H

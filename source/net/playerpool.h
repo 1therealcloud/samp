@@ -1,5 +1,6 @@
 #ifndef SAMP_PLAYER_POOL_H
 #define SAMP_PLAYER_POOL_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <string>
 #include <windows.h>
@@ -109,12 +110,12 @@ public:
     DWORD GetPlayerInfoFlag(WORD player);
 };
 #pragma pack(pop)
-typedef char PlayerPoolLocalNameOffset[(offsetof(CPlayerPool, localName) == 2) ? 1 : -1];
-typedef char PlayerPoolLocalOffset[(offsetof(CPlayerPool, local) == 0x1e) ? 1 : -1];
-typedef char PlayerPoolPlayersOffset[(offsetof(CPlayerPool, players) == 0x26) ? 1 : -1];
-typedef char PlayerPoolConnectedOffset[(offsetof(CPlayerPool, connected) == 0xfd6) ? 1 : -1];
-typedef char PlayerPoolCollisionOffset[(offsetof(CPlayerPool, savedCollision) == 0x1f86) ? 1 : -1];
-typedef char PlayerPoolExtent[(sizeof(CPlayerPool) == 0x2f3e) ? 1 : -1];
+STATIC_ASSERT(offsetof(CPlayerPool, localName) == 2);
+STATIC_ASSERT(offsetof(CPlayerPool, local) == 0x1e);
+STATIC_ASSERT(offsetof(CPlayerPool, players) == 0x26);
+STATIC_ASSERT(offsetof(CPlayerPool, connected) == 0xfd6);
+STATIC_ASSERT(offsetof(CPlayerPool, savedCollision) == 0x1f86);
+STATIC_ASSERT(sizeof(CPlayerPool) == 0x2f3e);
 // 0x00156b84
 extern DWORD g_playerPoolProcessCount;
 // 0x0011817c

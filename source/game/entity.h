@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_ENTITY_H
 #define SAMP_RECOVERED_ENTITY_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <string.h>
 #include <windows.h>
@@ -42,10 +43,10 @@ struct EntityBackendPrefix
     CVector turnSpeed;
 };
 #pragma pack(pop)
-typedef char EntityBackendMatrixOffset[(offsetof(EntityBackendPrefix, matrix) == 0x14) ? 1 : -1];
-typedef char EntityBackendSpeedOffset[(offsetof(EntityBackendPrefix, speed) == 0x44) ? 1 : -1];
-typedef char EntityBackendTurnSpeedOffset[(offsetof(EntityBackendPrefix, turnSpeed) == 0x50) ? 1 : -1];
-typedef char EntityBackendPrefixExtent[(sizeof(EntityBackendPrefix) == 0x5c) ? 1 : -1];
+STATIC_ASSERT(offsetof(EntityBackendPrefix, matrix) == 0x14);
+STATIC_ASSERT(offsetof(EntityBackendPrefix, speed) == 0x44);
+STATIC_ASSERT(offsetof(EntityBackendPrefix, turnSpeed) == 0x50);
+STATIC_ASSERT(sizeof(EntityBackendPrefix) == 0x5c);
 // 0x000b3990
 void GameChangeBackendEntityModel(void* entity, DWORD model);
 // Raw helper; no full object type or vtable meaning established.
@@ -194,9 +195,9 @@ public:
     }
 };
 #pragma pack(pop)
-typedef char EntityExtent[(sizeof(CEntity) == 72) ? 1 : -1];
-typedef char EntitySpeedHistoryOffset[(offsetof(CEntity, m_aSpeedHistory) == 4) ? 1 : -1];
-typedef char EntityBackendOffset[(offsetof(CEntity, m_pGameEntity) == 0x40) ? 1 : -1];
+STATIC_ASSERT(sizeof(CEntity) == 72);
+STATIC_ASSERT(offsetof(CEntity, m_aSpeedHistory) == 4);
+STATIC_ASSERT(offsetof(CEntity, m_pGameEntity) == 0x40);
 // 0x000b3720
 void __stdcall GameWorldAdd(void* entity);
 // 0x000b3740

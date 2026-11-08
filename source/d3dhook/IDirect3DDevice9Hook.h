@@ -1,5 +1,6 @@
 #ifndef SAMP_DIRECT3D_DEVICE9_HOOK_H
 #define SAMP_DIRECT3D_DEVICE9_HOOK_H
+#include <static_assert.h>
 #include <d3d9.h>
 // Four-byte native proxy; the real device is a shared global.
 class IDirect3DDevice9Hook : public IDirect3DDevice9
@@ -252,7 +253,7 @@ public:
     // 0x00074da0
     HRESULT __stdcall CreateQuery(D3DQUERYTYPE Type, IDirect3DQuery9** ppQuery);
 };
-typedef char DeviceProxyExtent[(sizeof(IDirect3DDevice9Hook) == 4) ? 1 : -1];
+STATIC_ASSERT(sizeof(IDirect3DDevice9Hook) == 4);
 // 0x0017ec00
 extern D3DMATRIX g_deviceViewMatrix;
 // 0x0017ec40

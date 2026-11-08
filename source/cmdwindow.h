@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_INPUT_H
 #define SAMP_RECOVERED_INPUT_H
+#include <static_assert.h>
 #include <d3d9.h>
 #include <stddef.h>
 #include <windows.h>
@@ -68,7 +69,7 @@ public:
     bool IsActive();
 };
 #pragma pack(pop)
-typedef char InputSize[(sizeof(CInput) == 0x1afc) ? 1 : -1];
-typedef char InputEnabledOffset[(offsetof(CInput, m_bEnabled) == 0x14e0) ? 1 : -1];
-typedef char InputRecallOffset[(offsetof(CInput, m_szRecallBuffer) == 0x1565) ? 1 : -1];
+STATIC_ASSERT(sizeof(CInput) == 0x1afc);
+STATIC_ASSERT(offsetof(CInput, m_bEnabled) == 0x14e0);
+STATIC_ASSERT(offsetof(CInput, m_szRecallBuffer) == 0x1565);
 #endif

@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "game/object.h"
 #include "main.h"
 #include <math.h>
@@ -16,8 +17,8 @@ struct ObjectRwObjectPrefix
     BYTE type, subType, flags, privateFlags;
     void* parent;
 };
-typedef char ObjectRwObjectExtent[(sizeof(ObjectRwObjectPrefix) == 8) ? 1 : -1];
-typedef char ObjectRwObjectParentOffset[(offsetof(ObjectRwObjectPrefix, parent) == 4) ? 1 : -1];
+STATIC_ASSERT(sizeof(ObjectRwObjectPrefix) == 8);
+STATIC_ASSERT(offsetof(ObjectRwObjectPrefix, parent) == 4);
 struct ObjectRwTexturePrefix
 {
     void* raster;
@@ -25,8 +26,8 @@ struct ObjectRwTexturePrefix
     // Whole raw filtering/addressing word; native increments all32 bits.
     DWORD filterAddressing;
 };
-typedef char ObjectRwTextureRasterOffset[(offsetof(ObjectRwTexturePrefix, raster) == 0) ? 1 : -1];
-typedef char ObjectRwTextureFilterOffset[(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50) ? 1 : -1];
+STATIC_ASSERT(offsetof(ObjectRwTexturePrefix, raster) == 0);
+STATIC_ASSERT(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50);
 struct ObjectRwColor
 {
     BYTE red, green, blue, alpha;
@@ -60,19 +61,15 @@ struct ObjectRwAtomicPrefix
     BYTE unknown08[0x10];
     ObjectRwGeometryPrefix* geometry;
 };
-typedef char ObjectRwColorSize[(sizeof(ObjectRwColor) == 4) ? 1 : -1];
-typedef char ObjectRwSurfaceSize[(sizeof(ObjectRwSurface) == 12) ? 1 : -1];
-typedef char ObjectRwMaterialTextureOffset[(offsetof(ObjectRwMaterialPrefix, texture) == 0) ? 1 : -1];
-typedef char ObjectRwMaterialColorOffset[(offsetof(ObjectRwMaterialPrefix, color) == 4) ? 1 : -1];
-typedef char ObjectRwMaterialSurfaceOffsets[(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
-                                             offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14)
-                                                ? 1
-                                                : -1];
-typedef char ObjectRwGeometryOffsets[(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
-                                      offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24)
-                                         ? 1
-                                         : -1];
-typedef char ObjectRwAtomicGeometryOffset[(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18) ? 1 : -1];
+STATIC_ASSERT(sizeof(ObjectRwColor) == 4);
+STATIC_ASSERT(sizeof(ObjectRwSurface) == 12);
+STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, texture) == 0);
+STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, color) == 4);
+STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
+                                             offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14);
+STATIC_ASSERT(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
+                                      offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24);
+STATIC_ASSERT(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18);
 
 // 0x000715c0
 CVector* CObject::GetRotation()

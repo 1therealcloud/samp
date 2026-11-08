@@ -1,5 +1,6 @@
 #ifndef SAMP_DEATHWINDOW_H
 #define SAMP_DEATHWINDOW_H
+#include <static_assert.h>
 #include <d3dx9.h>
 #include <stddef.h>
 #pragma pack(push, 1)
@@ -57,9 +58,9 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-typedef char DeathWindowEntryExtent[(sizeof(DeathWindowEntry) == 59) ? 1 : -1];
-typedef char DeathWindowExtent[(sizeof(CDeathWindow) == 0x157) ? 1 : -1];
-typedef char DeathWindowFontOffset[(offsetof(CDeathWindow, font) == 0x137) ? 1 : -1];
+STATIC_ASSERT(sizeof(DeathWindowEntry) == 59);
+STATIC_ASSERT(sizeof(CDeathWindow) == 0x157);
+STATIC_ASSERT(offsetof(CDeathWindow, font) == 0x137);
 // 0x0011c330
 extern const char g_deathAuxFontFace[9];
 // 0x0011c34c

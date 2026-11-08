@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_AUDIO_H
 #define SAMP_RECOVERED_AUDIO_H
+#include <static_assert.h>
 #include "game/entity.h"
 #pragma pack(push, 1)
 class CAudio
@@ -30,5 +31,5 @@ public:
     void Process();
 };
 #pragma pack(pop)
-typedef char AudioExtent[(sizeof(CAudio) == 5) ? 1 : -1];
+STATIC_ASSERT(sizeof(CAudio) == 5);
 #endif

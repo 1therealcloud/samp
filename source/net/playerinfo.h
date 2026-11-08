@@ -1,5 +1,6 @@
 #ifndef SAMP_PLAYERINFO_H
 #define SAMP_PLAYERINFO_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <string>
 #include <windows.h>
@@ -37,7 +38,7 @@ public:
     ~CPlayerInfo();
 };
 #pragma pack(pop)
-typedef char PlayerInfoStringExtent[(sizeof(std::string) == 28) ? 1 : -1];
-typedef char PlayerInfoNameOffset[(offsetof(CPlayerInfo, name) == 0x10) ? 1 : -1];
-typedef char PlayerInfoExtent[(sizeof(CPlayerInfo) == 0x2c) ? 1 : -1];
+STATIC_ASSERT(sizeof(std::string) == 28);
+STATIC_ASSERT(offsetof(CPlayerInfo, name) == 0x10);
+STATIC_ASSERT(sizeof(CPlayerInfo) == 0x2c);
 #endif

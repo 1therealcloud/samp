@@ -1,5 +1,6 @@
 #ifndef SAMP_TEXTDRAW_POOL_H
 #define SAMP_TEXTDRAW_POOL_H
+#include <static_assert.h>
 #include "game/textdraw.h"
 #include <windows.h>
 struct RPCParameters;
@@ -30,5 +31,5 @@ public:
     void OnLostDevice();
 };
 #pragma pack(pop)
-typedef char NativeTextDrawPoolExtent[(sizeof(CTextDrawPool) == 0x4800) ? 1 : -1];
+STATIC_ASSERT(sizeof(CTextDrawPool) == 0x4800);
 #endif

@@ -1,5 +1,6 @@
 #ifndef SAMP_DIALOG_H
 #define SAMP_DIALOG_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 struct IDirect3DDevice9;
@@ -66,12 +67,12 @@ public:
     int PopulateTable(const char* text, SIZE* size, BOOL header);
 };
 #pragma pack(pop)
-typedef char DialogSize[(sizeof(CDialog) == 0x29d) ? 1 : -1];
-typedef char DialogStateOffset[(offsetof(CDialog, active) == 0x28) ? 1 : -1];
-typedef char DialogTitleOffset[(offsetof(CDialog, title) == 0x40) ? 1 : -1];
-typedef char DialogServerOffset[(offsetof(CDialog, serverSide) == 0x81) ? 1 : -1];
-typedef char DialogHeaderOffset[(offsetof(CDialog, columnTitles) == 0x89) ? 1 : -1];
-typedef char DialogWidthsOffset[(offsetof(CDialog, columnWidths) == 0x28d) ? 1 : -1];
+STATIC_ASSERT(sizeof(CDialog) == 0x29d);
+STATIC_ASSERT(offsetof(CDialog, active) == 0x28);
+STATIC_ASSERT(offsetof(CDialog, title) == 0x40);
+STATIC_ASSERT(offsetof(CDialog, serverSide) == 0x81);
+STATIC_ASSERT(offsetof(CDialog, columnTitles) == 0x89);
+STATIC_ASSERT(offsetof(CDialog, columnWidths) == 0x28d);
 // 0x0011c304
 extern const float g_dialogNegativeLineScale;
 // 0x00118490

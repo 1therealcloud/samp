@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_CONFIG_H
 #define SAMP_RECOVERED_CONFIG_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 #pragma pack(push, 1)
@@ -71,11 +72,11 @@ public:
     BOOL Load();
 };
 #pragma pack(pop)
-typedef char ConfigEntrySize[(sizeof(CConfig::ConfigEntry) == 0x3d) ? 1 : -1];
-typedef char ConfigSize[(sizeof(CConfig) == 0x8309) ? 1 : -1];
-typedef char ConfigMapOffset[(offsetof(CConfig, occupied) == 0x7a00) ? 1 : -1];
-typedef char ConfigFilenameOffset[(offsetof(CConfig, filename) == 0x8200) ? 1 : -1];
-typedef char ConfigBoundOffset[(offsetof(CConfig, upperBound) == 0x8305) ? 1 : -1];
+STATIC_ASSERT(sizeof(CConfig::ConfigEntry) == 0x3d);
+STATIC_ASSERT(sizeof(CConfig) == 0x8309);
+STATIC_ASSERT(offsetof(CConfig, occupied) == 0x7a00);
+STATIC_ASSERT(offsetof(CConfig, filename) == 0x8200);
+STATIC_ASSERT(offsetof(CConfig, upperBound) == 0x8305);
 // 0x002aca0c
 extern CConfig* g_pConfig;
 
@@ -87,9 +88,9 @@ struct ClientSettings
     char password[257], host[257], port[257], nickname[257], debugScript[257];
 };
 #pragma pack(pop)
-typedef char ClientSettingsExtent[(sizeof(ClientSettings) == 1297) ? 1 : -1];
-typedef char ClientSettingsHostOffset[(offsetof(ClientSettings, host) == 0x10d) ? 1 : -1];
-typedef char ClientSettingsScriptOffset[(offsetof(ClientSettings, debugScript) == 0x410) ? 1 : -1];
+STATIC_ASSERT(sizeof(ClientSettings) == 1297);
+STATIC_ASSERT(offsetof(ClientSettings, host) == 0x10d);
+STATIC_ASSERT(offsetof(ClientSettings, debugScript) == 0x410);
 // 0x002abe78
 extern ClientSettings g_clientSettings;
 

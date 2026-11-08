@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_GAME_H
 #define SAMP_RECOVERED_GAME_H
+#include <static_assert.h>
 #include "game/audio.h"
 #include "game/camera.h"
 #include "game/scripting.h"
@@ -261,15 +262,15 @@ public:
     void EnableHUD(BOOL enabled);
 };
 #pragma pack(pop)
-typedef char GameExtent[(sizeof(CGame) == 0x142) ? 1 : -1];
-typedef char CheckpointRegionSize[(sizeof(GameCheckpointState) == 0x49) ? 1 : -1];
-typedef char CheckpointMarkerOffset[(offsetof(GameCheckpointState, marker) == 0x45) ? 1 : -1];
-typedef char RacingMarkerOffset[(offsetof(GameCheckpointState, raceMarker) == 0x21) ? 1 : -1];
-typedef char GameCheckpointOffset[(offsetof(CGame, m_checkpoints) == 0x0c) ? 1 : -1];
-typedef char GameDigestMatchOffset[(offsetof(CGame, m_nTrackedNameDigestMatches) == 0x55) ? 1 : -1];
-typedef char GameCursorOffset[(offsetof(CGame, m_nCursorMode) == 0x61) ? 1 : -1];
-typedef char GameWaitOffset[(offsetof(CGame, m_nInputEnableWaitFrames) == 0x65) ? 1 : -1];
-typedef char GameClockOffset[(offsetof(CGame, m_bClockEnabled) == 0x69) ? 1 : -1];
+STATIC_ASSERT(sizeof(CGame) == 0x142);
+STATIC_ASSERT(sizeof(GameCheckpointState) == 0x49);
+STATIC_ASSERT(offsetof(GameCheckpointState, marker) == 0x45);
+STATIC_ASSERT(offsetof(GameCheckpointState, raceMarker) == 0x21);
+STATIC_ASSERT(offsetof(CGame, m_checkpoints) == 0x0c);
+STATIC_ASSERT(offsetof(CGame, m_nTrackedNameDigestMatches) == 0x55);
+STATIC_ASSERT(offsetof(CGame, m_nCursorMode) == 0x61);
+STATIC_ASSERT(offsetof(CGame, m_nInputEnableWaitFrames) == 0x65);
+STATIC_ASSERT(offsetof(CGame, m_bClockEnabled) == 0x69);
 // 0x0018e1d8
 extern BOOL g_gameUsedPlayerSlots[210];
 
@@ -316,7 +317,7 @@ struct GameModelReferencePatch
     BYTE opcode;
 };
 #pragma pack(pop)
-typedef char NativeModelReferencePatchExtent[(sizeof(GameModelReferencePatch) == 5) ? 1 : -1];
+STATIC_ASSERT(sizeof(GameModelReferencePatch) == 5);
 // Addresses stored in these records are GTA SA virtual addresses.
 // 0x00152ae8
 extern const GameModelReferencePatch g_gameModelReferencePatchesUS[707];

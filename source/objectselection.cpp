@@ -16,7 +16,6 @@ const float g_objectSelectionMaxDistance = 150.0f;
 const char g_objectSelectionLabelFormat[36] = "[id: %d, type: %d]\nDistance: %.2fm\n";
 // 0x00117f28
 int g_objectSelectionRpc = 27;
-typedef char ObjectSelectionRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9) ? 1 : -1];
 
 // 0x0006d440
 CObjectSelection::CObjectSelection()

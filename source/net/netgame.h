@@ -1,5 +1,6 @@
 #ifndef SAMP_NETGAME_H
 #define SAMP_NETGAME_H
+#include <static_assert.h>
 #include "game/scripting.h"
 #include <stddef.h>
 #include <windows.h>
@@ -42,17 +43,17 @@ struct CNetGameSettings
     BYTE showNameTags;
     BYTE unknown39;
 };
-typedef char NetGameSettingsExtent[(sizeof(CNetGameSettings) == 0x3a) ? 1 : -1];
-typedef char NetGameSettingsBoundsOffset[(offsetof(CNetGameSettings, worldBounds) == 5) ? 1 : -1];
-typedef char NetGameSettingsGravityOffset[(offsetof(CNetGameSettings, gravity) == 0x16) ? 1 : -1];
-typedef char NetGameSettingsDamageOffset[(offsetof(CNetGameSettings, vehicleDamageFilter) == 0x1b) ? 1 : -1];
-typedef char NetGameSettingsClockOffset[(offsetof(CNetGameSettings, holdWorldTime) == 0x1f) ? 1 : -1];
-typedef char NetGameSettingsSpawnsOffset[(offsetof(CNetGameSettings, spawnsAvailable) == 0x23) ? 1 : -1];
-typedef char NetGameSettingsTagDistanceOffset[(offsetof(CNetGameSettings, nameTagDrawDistance) == 0x27) ? 1 : -1];
-typedef char NetGameSettingsHourOffset[(offsetof(CNetGameSettings, worldHour) == 0x2c) ? 1 : -1];
-typedef char NetGameSettingsMarkersOffset[(offsetof(CNetGameSettings, playerMarkersMode) == 0x30) ? 1 : -1];
-typedef char NetGameSettingsTagsOffset[(offsetof(CNetGameSettings, showNameTags) == 0x38) ? 1 : -1];
-typedef char NetGameSettingsTailOffset[(offsetof(CNetGameSettings, unknown39) == 0x39) ? 1 : -1];
+STATIC_ASSERT(sizeof(CNetGameSettings) == 0x3a);
+STATIC_ASSERT(offsetof(CNetGameSettings, worldBounds) == 5);
+STATIC_ASSERT(offsetof(CNetGameSettings, gravity) == 0x16);
+STATIC_ASSERT(offsetof(CNetGameSettings, vehicleDamageFilter) == 0x1b);
+STATIC_ASSERT(offsetof(CNetGameSettings, holdWorldTime) == 0x1f);
+STATIC_ASSERT(offsetof(CNetGameSettings, spawnsAvailable) == 0x23);
+STATIC_ASSERT(offsetof(CNetGameSettings, nameTagDrawDistance) == 0x27);
+STATIC_ASSERT(offsetof(CNetGameSettings, worldHour) == 0x2c);
+STATIC_ASSERT(offsetof(CNetGameSettings, playerMarkersMode) == 0x30);
+STATIC_ASSERT(offsetof(CNetGameSettings, showNameTags) == 0x38);
+STATIC_ASSERT(offsetof(CNetGameSettings, unknown39) == 0x39);
 struct CNetGamePools
 {
     CMenuPool* menus;
@@ -237,23 +238,23 @@ public:
     CPlayerPool* GetPlayerPool();
 };
 #pragma pack(pop)
-typedef char NetGamePoolSetExtent[(sizeof(CNetGamePools) == 0x24) ? 1 : -1];
-typedef char NetGamePoolsOffset[(offsetof(CNetGame, pools) == 0x3de) ? 1 : -1];
-typedef char NetGameClientOffset[(offsetof(CNetGame, rakClient) == 0x2c) ? 1 : -1];
-typedef char NetGameHostOffset[(offsetof(CNetGame, hostOrIp) == 0x30) ? 1 : -1];
-typedef char NetGameHostNameOffset[(offsetof(CNetGame, hostName) == 0x131) ? 1 : -1];
-typedef char NetGameCollisionOffset[(offsetof(CNetGame, disableVehicleCollisions) == 0x232) ? 1 : -1];
-typedef char NetGameCameraTargetOffset[(offsetof(CNetGame, updateCameraTarget) == 0x233) ? 1 : -1];
-typedef char NetGameTagStatusOffset[(offsetof(CNetGame, showNameTagStatus) == 0x234) ? 1 : -1];
-typedef char NetGamePortOffset[(offsetof(CNetGame, serverPort) == 0x235) ? 1 : -1];
-typedef char NetGameLanOffset[(offsetof(CNetGame, lanMode) == 0x239) ? 1 : -1];
-typedef char NetGameMapIconsOffset[(offsetof(CNetGame, mapIcons) == 0x23d) ? 1 : -1];
-typedef char NetGameStateOffset[(offsetof(CNetGame, gameState) == 0x3cd) ? 1 : -1];
-typedef char NetGameConnectTickOffset[(offsetof(CNetGame, lastConnectAttempt) == 0x3d1) ? 1 : -1];
-typedef char NetGameSettingsOffset[(offsetof(CNetGame, settings) == 0x3d5) ? 1 : -1];
-typedef char NetGameModelWaitOffset[(offsetof(CNetGame, modelWaitActive) == 0x3d9) ? 1 : -1];
-typedef char NetGameModelTickOffset[(offsetof(CNetGame, modelWaitTick) == 0x3da) ? 1 : -1];
-typedef char NetGameExtent[(sizeof(CNetGame) == 0x3e2) ? 1 : -1];
+STATIC_ASSERT(sizeof(CNetGamePools) == 0x24);
+STATIC_ASSERT(offsetof(CNetGame, pools) == 0x3de);
+STATIC_ASSERT(offsetof(CNetGame, rakClient) == 0x2c);
+STATIC_ASSERT(offsetof(CNetGame, hostOrIp) == 0x30);
+STATIC_ASSERT(offsetof(CNetGame, hostName) == 0x131);
+STATIC_ASSERT(offsetof(CNetGame, disableVehicleCollisions) == 0x232);
+STATIC_ASSERT(offsetof(CNetGame, updateCameraTarget) == 0x233);
+STATIC_ASSERT(offsetof(CNetGame, showNameTagStatus) == 0x234);
+STATIC_ASSERT(offsetof(CNetGame, serverPort) == 0x235);
+STATIC_ASSERT(offsetof(CNetGame, lanMode) == 0x239);
+STATIC_ASSERT(offsetof(CNetGame, mapIcons) == 0x23d);
+STATIC_ASSERT(offsetof(CNetGame, gameState) == 0x3cd);
+STATIC_ASSERT(offsetof(CNetGame, lastConnectAttempt) == 0x3d1);
+STATIC_ASSERT(offsetof(CNetGame, settings) == 0x3d5);
+STATIC_ASSERT(offsetof(CNetGame, modelWaitActive) == 0x3d9);
+STATIC_ASSERT(offsetof(CNetGame, modelWaitTick) == 0x3da);
+STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
 // 0x00156b38
 extern DWORD g_netPlayersInfoTick;
 // 0x00117b98

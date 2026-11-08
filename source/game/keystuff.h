@@ -1,12 +1,13 @@
 #ifndef SAMP_RECOVERED_KEYSTUFF_H
 #define SAMP_RECOVERED_KEYSTUFF_H
+#include <static_assert.h>
 #include <windows.h>
 struct KeyPad
 {
     WORD keys1[24], keys2[24];
     BYTE opaque[212];
 };
-typedef char KeyPadExtent[(sizeof(KeyPad) == 308) ? 1 : -1];
+STATIC_ASSERT(sizeof(KeyPad) == 308);
 // 0x00152ac0
 extern KeyPad* g_keysInternal;
 // 0x00152ac4

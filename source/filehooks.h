@@ -1,5 +1,6 @@
 #ifndef SAMP_ARCHIVE_FILEHOOKS_H
 #define SAMP_ARCHIVE_FILEHOOKS_H
+#include <static_assert.h>
 #include <windows.h>
 #pragma pack(push, 1)
 struct ArchiveFileRecord
@@ -9,7 +10,7 @@ struct ArchiveFileRecord
     BYTE *start, *current;
 };
 #pragma pack(pop)
-typedef char ArchiveFileRecordExtent[(sizeof(ArchiveFileRecord) == 20) ? 1 : -1];
+STATIC_ASSERT(sizeof(ArchiveFileRecord) == 20);
 // 0x0016bf60
 extern ArchiveFileRecord g_archiveOpenRecords[50];
 // 0x0016be98

@@ -1,5 +1,6 @@
 #ifndef SAMP_RECOVERED_VEHICLEPOOL_H
 #define SAMP_RECOVERED_VEHICLEPOOL_H
+#include <static_assert.h>
 #include "game/vehicle.h"
 #pragma pack(push, 1)
 // Native40-byte record; raw words retained for existing callers.
@@ -100,18 +101,18 @@ public:
     void ConstructLicensePlates();
 };
 #pragma pack(pop)
-typedef char VehiclePoolObjectOffset[(offsetof(CVehiclePool, m_pObjects) == 0x1134) ? 1 : -1];
-typedef char VehiclePoolStateOffset[(offsetof(CVehiclePool, m_bNotEmpty) == 0x3074) ? 1 : -1];
-typedef char VehiclePoolGtaOffset[(offsetof(CVehiclePool, m_pGameObjects) == 0x4fb4) ? 1 : -1];
-typedef char VehiclePoolQueueFlagsOffset[(offsetof(CVehiclePool, queueActive) == 0xfa4) ? 1 : -1];
-typedef char VehiclePoolTickOffset[(offsetof(CVehiclePool, lastTick) == 0x9dd4) ? 1 : -1];
-typedef char VehiclePoolStateBD14Offset[(offsetof(CVehiclePool, stateBD14) == 0xbd14) ? 1 : -1];
-typedef char VehiclePoolPlateReadyOffset[(offsetof(CVehiclePool, licensePlatesReady) == 0x17894) ? 1 : -1];
-typedef char VehiclePoolExtent[(sizeof(CVehiclePool) == 0x17898) ? 1 : -1];
-typedef char VehiclePoolQueueExtent[(sizeof(VehiclePoolQueueEntry) == 40) ? 1 : -1];
-typedef char VehiclePoolQueueModelOffset[(offsetof(VehiclePoolQueueEntry, model) == 2) ? 1 : -1];
-typedef char VehiclePoolQueueHealthOffset[(offsetof(VehiclePoolQueueEntry, health) == 0x18) ? 1 : -1];
-typedef char VehiclePoolQueueSirenOffset[(offsetof(VehiclePoolQueueEntry, siren) == 0x27) ? 1 : -1];
+STATIC_ASSERT(offsetof(CVehiclePool, m_pObjects) == 0x1134);
+STATIC_ASSERT(offsetof(CVehiclePool, m_bNotEmpty) == 0x3074);
+STATIC_ASSERT(offsetof(CVehiclePool, m_pGameObjects) == 0x4fb4);
+STATIC_ASSERT(offsetof(CVehiclePool, queueActive) == 0xfa4);
+STATIC_ASSERT(offsetof(CVehiclePool, lastTick) == 0x9dd4);
+STATIC_ASSERT(offsetof(CVehiclePool, stateBD14) == 0xbd14);
+STATIC_ASSERT(offsetof(CVehiclePool, licensePlatesReady) == 0x17894);
+STATIC_ASSERT(sizeof(CVehiclePool) == 0x17898);
+STATIC_ASSERT(sizeof(VehiclePoolQueueEntry) == 40);
+STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, model) == 2);
+STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, health) == 0x18);
+STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, siren) == 0x27);
 // 0x001184f8
 extern const char g_vehiclePoolNotDeletedMessage[];
 // 0x0011851c

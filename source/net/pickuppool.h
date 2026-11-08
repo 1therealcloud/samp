@@ -1,5 +1,6 @@
 #ifndef SAMP_PICKUPPOOL_H
 #define SAMP_PICKUPPOOL_H
+#include <static_assert.h>
 #include <windows.h>
 #pragma pack(push, 1)
 struct Pickup
@@ -46,9 +47,9 @@ public:
     int GetIndex(int index);
 };
 #pragma pack(pop)
-typedef char NativePickupExtent[(sizeof(Pickup) == 20) ? 1 : -1];
-typedef char NativeWeaponPickupExtent[(sizeof(WeaponPickupState) == 3) ? 1 : -1];
-typedef char NativePickupPoolExtent[(sizeof(CPickupPool) == 0x23004) ? 1 : -1];
+STATIC_ASSERT(sizeof(Pickup) == 20);
+STATIC_ASSERT(sizeof(WeaponPickupState) == 3);
+STATIC_ASSERT(sizeof(CPickupPool) == 0x23004);
 // 0x0011816c
 extern int g_pickupCollectedRpc;
 // 0x00118170

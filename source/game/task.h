@@ -1,5 +1,6 @@
 #ifndef SAMP_GAME_TASK_H
 #define SAMP_GAME_TASK_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 class CPed;
@@ -38,9 +39,9 @@ public:
     virtual BOOL IsSimple();
 };
 #pragma pack(pop)
-typedef char TaskSize[(sizeof(CTask) == 16) ? 1 : -1];
-typedef char TaskBackendOffset[(offsetof(CTask, m_pTaskType) == 12) ? 1 : -1];
-typedef char TaskPedOffset[(offsetof(CTask, m_pPlayerPed) == 8) ? 1 : -1];
+STATIC_ASSERT(sizeof(CTask) == 16);
+STATIC_ASSERT(offsetof(CTask, m_pTaskType) == 12);
+STATIC_ASSERT(offsetof(CTask, m_pPlayerPed) == 8);
 // samp.dll vtable RVA: 0x0011f450
 class CTaskJetpack : public CTask
 {
@@ -61,8 +62,8 @@ public:
     // 0x000b2630
     virtual ~CTaskTakeDamageFall();
 };
-typedef char JetpackWrapperSize[(sizeof(CTaskJetpack) == 16) ? 1 : -1];
-typedef char FallWrapperSize[(sizeof(CTaskTakeDamageFall) == 16) ? 1 : -1];
+STATIC_ASSERT(sizeof(CTaskJetpack) == 16);
+STATIC_ASSERT(sizeof(CTaskTakeDamageFall) == 16);
 // Descriptive wrapper names inferred from established GTA backend identities.
 // samp.dll vtable RVA: 0x0011f488
 class CTaskUseGoggles : public CTask
@@ -93,7 +94,7 @@ public:
     // 0x000b26c0
     virtual ~CTaskKillPedOnFootArmed();
 };
-typedef char GogglesWrapperSize[(sizeof(CTaskUseGoggles) == 16) ? 1 : -1];
-typedef char GoToWrapperSize[(sizeof(CTaskGoToPoint) == 16) ? 1 : -1];
-typedef char KillPedWrapperSize[(sizeof(CTaskKillPedOnFootArmed) == 16) ? 1 : -1];
+STATIC_ASSERT(sizeof(CTaskUseGoggles) == 16);
+STATIC_ASSERT(sizeof(CTaskGoToPoint) == 16);
+STATIC_ASSERT(sizeof(CTaskKillPedOnFootArmed) == 16);
 #endif

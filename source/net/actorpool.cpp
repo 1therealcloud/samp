@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "net/actorpool.h"
 #include "chatwindow.h"
 #include "game/actor.h"
@@ -116,7 +117,7 @@ WORD CActorPool::FindInRay(float maxCameraDistance, const CVector* origin, const
         float value;
         DWORD unknown10;
     };
-    typedef char NativeActorRayPointExtent[(sizeof(RayPoint) == 20) ? 1 : -1];
+    STATIC_ASSERT(sizeof(RayPoint) == 20);
     RayPoint from, to;
     from.point.x = origin->x;
     from.point.y = origin->y;

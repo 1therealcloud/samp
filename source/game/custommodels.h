@@ -1,5 +1,6 @@
 #ifndef SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
 #define SAMP_CUSTOM_MODEL_ADDRESS_INTERFACE_H
+#include <static_assert.h>
 #include <stddef.h>
 #include <windows.h>
 #pragma pack(push, 1)
@@ -21,10 +22,10 @@ struct CustomModelWorker
     CustomModelDownload download;
 };
 #pragma pack(pop)
-typedef char NativeCustomDownloadExtent[(sizeof(CustomModelDownload) == 0x11e) ? 1 : -1];
-typedef char NativeCustomWorkerExtent[(sizeof(CustomModelWorker) == 0x230) ? 1 : -1];
-typedef char NativeCustomWorkerDownloadOffset[(offsetof(CustomModelWorker, download) == 0x112) ? 1 : -1];
-typedef char NativeCustomWorkerFailureOffset[(offsetof(CustomModelWorker, failed) == 0x10d) ? 1 : -1];
+STATIC_ASSERT(sizeof(CustomModelDownload) == 0x11e);
+STATIC_ASSERT(sizeof(CustomModelWorker) == 0x230);
+STATIC_ASSERT(offsetof(CustomModelWorker, download) == 0x112);
+STATIC_ASSERT(offsetof(CustomModelWorker, failed) == 0x10d);
 // Shared observed memory prefix for nine otherwise unidentified native entries.
 // This view does not assign their original classes/template types to CCustomModels.
 // Element values stay raw DWORDs; their pointer/value semantics are unconfirmed.
@@ -51,8 +52,8 @@ struct NativeModelArrayPrefix
     // 0x000bbc70
     NativeModelArrayPrefix* Initialize000bbc70();
 };
-typedef char NativeModelArrayPrefixExtent[(sizeof(NativeModelArrayPrefix) == 8) ? 1 : -1];
-typedef char NativeModelArrayCountOffset[(offsetof(NativeModelArrayPrefix, count) == 4) ? 1 : -1];
+STATIC_ASSERT(sizeof(NativeModelArrayPrefix) == 8);
+STATIC_ASSERT(offsetof(NativeModelArrayPrefix, count) == 4);
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 // Download/validation paths are recovered; full native class coverage is not established.
 class CCustomModels
@@ -221,7 +222,7 @@ public:
     // 0x0000c2e0
     BOOL LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash);
 };
-typedef char NativeCustomModelsExtent[(sizeof(CCustomModels) == 0x206d) ? 1 : -1];
+STATIC_ASSERT(sizeof(CCustomModels) == 0x206d);
 // 0x002aca28
 extern CCustomModels* g_customModels;
 // 0x00117c48

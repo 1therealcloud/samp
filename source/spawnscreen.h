@@ -1,5 +1,6 @@
 #ifndef SAMP_SPAWNSCREEN_H
 #define SAMP_SPAWNSCREEN_H
+#include <static_assert.h>
 #include "fontrender.h"
 #include <d3dx9.h>
 struct CVector;
@@ -41,5 +42,5 @@ public:
 #pragma pack(pop)
 // 0x0011c74c
 extern const char g_spawnVersionText[];
-typedef char NativeSpawnVertexExtent[(sizeof(SpawnScreenVertex) == 28) ? 1 : -1];
+STATIC_ASSERT(sizeof(SpawnScreenVertex) == 28);
 #endif

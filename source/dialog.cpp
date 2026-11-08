@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "dialog.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
@@ -245,8 +246,8 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
         BYTE padding[7];
         char line[256];
     } scratch;
-    typedef char TableCellAlias[(offsetof(TableScratch, cell) == 16) ? 1 : -1];
-    typedef char TableLineOffset[(offsetof(TableScratch, line) == 0x98) ? 1 : -1];
+    STATIC_ASSERT(offsetof(TableScratch, cell) == 16);
+    STATIC_ASSERT(offsetof(TableScratch, line) == 0x98);
     memset(scratch.widths, 0, sizeof(scratch.widths));
     memset(scratch.line, 0, sizeof(scratch.line));
     int totalHeight = 0;
@@ -530,8 +531,6 @@ void CDialog::Close(char response)
     }
     Hide();
 }
-
-typedef char DialogRpcEnums[(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9) ? 1 : -1];
 
 // 0x0006f460
 void CDialog::ResetDialogControls(CDXUTDialog* parent)

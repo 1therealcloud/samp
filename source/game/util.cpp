@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "game/util.h"
 #include "game/custommodels.h"
 #include "game/game.h"
@@ -6,10 +7,10 @@
 #include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
-typedef char VectorD3dxExtent[(sizeof(CVector) == sizeof(D3DXVECTOR3)) ? 1 : -1];
-typedef char VectorD3dxX[(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x)) ? 1 : -1];
-typedef char VectorD3dxY[(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y)) ? 1 : -1];
-typedef char VectorD3dxZ[(offsetof(CVector, z) == offsetof(D3DXVECTOR3, z)) ? 1 : -1];
+STATIC_ASSERT(sizeof(CVector) == sizeof(D3DXVECTOR3));
+STATIC_ASSERT(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x));
+STATIC_ASSERT(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y));
+STATIC_ASSERT(offsetof(CVector, z) == offsetof(D3DXVECTOR3, z));
 // 0x000c5110
 IDirect3DDevice9* GameGetCurrentD3DDevice()
 {

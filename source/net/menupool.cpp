@@ -1,3 +1,4 @@
+#include <static_assert.h>
 #include "net/menupool.h"
 #include "BitStream.h"
 #include "RakClientInterface.h"
@@ -107,7 +108,7 @@ char* CMenuPool::GetTextPointer(const char* suffix)
     return 0;
 }
 
-typedef char MenuRpcOptions[(HIGH_PRIORITY == 1 && RELIABLE == 8) ? 1 : -1];
+STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE == 8);
 // 0x001179c4
 int g_menuSelectedRpc = 132;
 // 0x001179c0
