@@ -1,6 +1,7 @@
 #include "game/game.h"
 #include "game/modelfile.h"
 #include "main.h"
+#include <process.h>
 // 0x000607b0
 int CGame::GetScreenWidth()
 {
@@ -1010,6 +1011,13 @@ void CGame::RequestModel(int model, int loadingStream)
 void CGame::LoadRequestedModels()
 {
     Scripting::ProcessCommand(&g_gameLoadModelsCommand);
+}
+// Descriptive name; original name and unused parameters are unknown.
+// 0x0000e4f0
+void GameLoadRequestedModelsAndEndThread()
+{
+    g_pGame->LoadRequestedModels();
+    _endthread();
 }
 // Invalid IDs report TRUE. Preserve the inclusive upper bound and raw result.
 // 0x000a07b0

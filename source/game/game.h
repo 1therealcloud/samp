@@ -568,4 +568,7 @@ extern DWORD g_gamePreviewPed[488];
 // Unchecked index; native reloads selected table after the real CRT free.
 // 0x000a7720
 void GameFreeModelInfo(int model);
+// Descriptive name; original name and unused parameters are unknown.
+// 0x0000e4f0
+void GameLoadRequestedModelsAndEndThread();
 #endif
