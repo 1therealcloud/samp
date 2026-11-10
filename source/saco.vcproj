@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="sa-mp"
+	Name="saco"
 	ProjectGUID="{B68A7D03-6F39-44F4-935C-6D36DA5A8F34}"
 	SccProjectName=""
 	SccLocalPath="">
@@ -25,7 +25,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="source;third-party\RakNet\Include;third-party\bass;third-party\detours;third-party\dxut;third-party\curl\include;third-party\zlib;third-party\lzma\C;third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UNICODE;_UNICODE;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
 				StringPooling="TRUE"
 				ExceptionHandling="TRUE"
@@ -46,7 +46,7 @@
 				OutputFile="$(OutDir)\samp.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="build\libraries;third-party\bass;third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
+				AdditionalLibraryDirectories="$(SolutionDir)build\libraries;$(SolutionDir)third-party\bass;$(SolutionDir)third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)\samp.pdb"
 				SubSystem="2"
@@ -58,7 +58,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(ProjectDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
+				CommandLine="copy /y &quot;$(SolutionDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -67,7 +67,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="source"/>
+				AdditionalIncludeDirectories="."/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -90,7 +90,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="source;third-party\RakNet\Include;third-party\bass;third-party\detours;third-party\dxut;third-party\curl\include;third-party\zlib;third-party\lzma\C;third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;UNICODE;_UNICODE;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -111,7 +111,7 @@
 				OutputFile="$(OutDir)\samp.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="build\libraries;third-party\bass;third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
+				AdditionalLibraryDirectories="$(SolutionDir)build\libraries;$(SolutionDir)third-party\bass;$(SolutionDir)third-party\detours;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)\samp.pdb"
 				SubSystem="2"
@@ -121,7 +121,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(ProjectDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
+				CommandLine="copy /y &quot;$(SolutionDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -130,7 +130,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="source"/>
+				AdditionalIncludeDirectories="."/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -150,148 +150,148 @@
 			Name="general"
 			Filter="">
 			<File
-				RelativePath="source\anticheat.cpp">
+				RelativePath="anticheat.cpp">
 			</File>
 			<File
-				RelativePath="source\anticheat.h">
+				RelativePath="anticheat.h">
 			</File>
 			<File
-				RelativePath="source\audiostream.cpp">
+				RelativePath="audiostream.cpp">
 			</File>
 			<File
-				RelativePath="source\audiostream.h">
+				RelativePath="audiostream.h">
 			</File>
 			<File
-				RelativePath="source\chatbubble.cpp">
+				RelativePath="chatbubble.cpp">
 			</File>
 			<File
-				RelativePath="source\chatbubble.h">
+				RelativePath="chatbubble.h">
 			</File>
 			<File
-				RelativePath="source\chatwindow.cpp">
+				RelativePath="chatwindow.cpp">
 			</File>
 			<File
-				RelativePath="source\chatwindow.h">
+				RelativePath="chatwindow.h">
 			</File>
 			<File
-				RelativePath="source\cmdprocs.cpp">
+				RelativePath="cmdprocs.cpp">
 			</File>
 			<File
-				RelativePath="source\cmdprocs.h">
+				RelativePath="cmdprocs.h">
 			</File>
 			<File
-				RelativePath="source\cmdwindow.cpp">
+				RelativePath="cmdwindow.cpp">
 			</File>
 			<File
-				RelativePath="source\cmdwindow.h">
+				RelativePath="cmdwindow.h">
 			</File>
 			<File
-				RelativePath="source\config.cpp">
+				RelativePath="config.cpp">
 			</File>
 			<File
-				RelativePath="source\config.h">
+				RelativePath="config.h">
 			</File>
 			<File
-				RelativePath="source\deathwindow.cpp">
+				RelativePath="deathwindow.cpp">
 			</File>
 			<File
-				RelativePath="source\deathwindow.h">
+				RelativePath="deathwindow.h">
 			</File>
 			<File
-				RelativePath="source\dialog.cpp">
+				RelativePath="dialog.cpp">
 			</File>
 			<File
-				RelativePath="source\dialog.h">
+				RelativePath="dialog.h">
 			</File>
 			<File
-				RelativePath="source\dllmain.cpp">
+				RelativePath="dllmain.cpp">
 			</File>
 			<File
-				RelativePath="source\downloadwindow.cpp">
+				RelativePath="downloadwindow.cpp">
 			</File>
 			<File
-				RelativePath="source\downloadwindow.h">
+				RelativePath="downloadwindow.h">
 			</File>
 			<File
-				RelativePath="source\events.cpp">
+				RelativePath="events.cpp">
 			</File>
 			<File
-				RelativePath="source\events.h">
+				RelativePath="events.h">
 			</File>
 			<File
-				RelativePath="source\exceptions.cpp">
+				RelativePath="exceptions.cpp">
 			</File>
 			<File
-				RelativePath="source\exceptions.h">
+				RelativePath="exceptions.h">
 			</File>
 			<File
-				RelativePath="source\filechecks.cpp">
+				RelativePath="filechecks.cpp">
 			</File>
 			<File
-				RelativePath="source\filechecks.h">
+				RelativePath="filechecks.h">
 			</File>
 			<File
-				RelativePath="source\filehooks.cpp">
+				RelativePath="filehooks.cpp">
 			</File>
 			<File
-				RelativePath="source\filehooks.h">
+				RelativePath="filehooks.h">
 			</File>
 			<File
-				RelativePath="source\filesystem.cpp">
+				RelativePath="filesystem.cpp">
 			</File>
 			<File
-				RelativePath="source\filesystem.h">
+				RelativePath="filesystem.h">
 			</File>
 			<File
-				RelativePath="source\fontrender.cpp">
+				RelativePath="fontrender.cpp">
 			</File>
 			<File
-				RelativePath="source\fontrender.h">
+				RelativePath="fontrender.h">
 			</File>
 			<File
-				RelativePath="source\gui.cpp">
+				RelativePath="gui.cpp">
 			</File>
 			<File
-				RelativePath="source\gui.h">
+				RelativePath="gui.h">
 			</File>
 			<File
-				RelativePath="source\helpdialog.cpp">
+				RelativePath="helpdialog.cpp">
 			</File>
 			<File
-				RelativePath="source\helpdialog.h">
+				RelativePath="helpdialog.h">
 			</File>
 			<File
-				RelativePath="source\httpclient.cpp">
+				RelativePath="httpclient.cpp">
 			</File>
 			<File
-				RelativePath="source\httpclient.h">
+				RelativePath="httpclient.h">
 			</File>
 			<File
-				RelativePath="source\label.cpp">
+				RelativePath="label.cpp">
 			</File>
 			<File
-				RelativePath="source\label.h">
+				RelativePath="label.h">
 			</File>
 			<File
-				RelativePath="source\licenseplate.cpp">
+				RelativePath="licenseplate.cpp">
 			</File>
 			<File
-				RelativePath="source\licenseplate.h">
+				RelativePath="licenseplate.h">
 			</File>
 			<File
-				RelativePath="source\main.cpp">
+				RelativePath="main.cpp">
 			</File>
 			<File
-				RelativePath="source\main.h">
+				RelativePath="main.h">
 			</File>
 			<File
-				RelativePath="source\md5.cpp">
+				RelativePath="md5.cpp">
 			</File>
 			<File
-				RelativePath="source\md5.h">
+				RelativePath="md5.h">
 			</File>
 			<File
-				RelativePath="source\menu.cpp">
+				RelativePath="menu.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -306,83 +306,83 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\menu.h">
+				RelativePath="menu.h">
 			</File>
 			<File
-				RelativePath="source\netstats.cpp">
+				RelativePath="netstats.cpp">
 			</File>
 			<File
-				RelativePath="source\netstats.h">
+				RelativePath="netstats.h">
 			</File>
 			<File
-				RelativePath="source\objectedit.cpp">
+				RelativePath="objectedit.cpp">
 			</File>
 			<File
-				RelativePath="source\objectedit.h">
+				RelativePath="objectedit.h">
 			</File>
 			<File
-				RelativePath="source\objectmaterialtext.cpp">
+				RelativePath="objectmaterialtext.cpp">
 			</File>
 			<File
-				RelativePath="source\objectmaterialtext.h">
+				RelativePath="objectmaterialtext.h">
 			</File>
 			<File
-				RelativePath="source\objectselection.cpp">
+				RelativePath="objectselection.cpp">
 			</File>
 			<File
-				RelativePath="source\objectselection.h">
+				RelativePath="objectselection.h">
 			</File>
 			<File
-				RelativePath="source\playertags.cpp">
+				RelativePath="playertags.cpp">
 			</File>
 			<File
-				RelativePath="source\playertags.h">
+				RelativePath="playertags.h">
 			</File>
 			<File
-				RelativePath="source\renderpanel.cpp">
+				RelativePath="renderpanel.cpp">
 			</File>
 			<File
-				RelativePath="source\renderpanel.h">
+				RelativePath="renderpanel.h">
 			</File>
 			<File
-				RelativePath="source\runutil.cpp">
+				RelativePath="runutil.cpp">
 			</File>
 			<File
-				RelativePath="source\runutil.h">
+				RelativePath="runutil.h">
 			</File>
 			<File
-				RelativePath="source\scoreboard.cpp">
+				RelativePath="scoreboard.cpp">
 			</File>
 			<File
-				RelativePath="source\scoreboard.h">
+				RelativePath="scoreboard.h">
 			</File>
 			<File
-				RelativePath="source\spawnscreen.cpp">
+				RelativePath="spawnscreen.cpp">
 			</File>
 			<File
-				RelativePath="source\spawnscreen.h">
+				RelativePath="spawnscreen.h">
 			</File>
 			<File
-				RelativePath="source\subclass.cpp">
+				RelativePath="subclass.cpp">
 			</File>
 			<File
-				RelativePath="source\svrnetstats.cpp">
+				RelativePath="svrnetstats.cpp">
 			</File>
 			<File
-				RelativePath="source\svrnetstats.h">
+				RelativePath="svrnetstats.h">
 			</File>
 			<File
-				RelativePath="source\textdrawselection.cpp">
+				RelativePath="textdrawselection.cpp">
 			</File>
 			<File
-				RelativePath="source\textdrawselection.h">
+				RelativePath="textdrawselection.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="game"
 			Filter="">
 			<File
-				RelativePath="source\game\actor.cpp">
+				RelativePath="game\actor.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -397,73 +397,73 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\game\actor.h">
+				RelativePath="game\actor.h">
 			</File>
 			<File
-				RelativePath="source\game\aimstuff.cpp">
+				RelativePath="game\aimstuff.cpp">
 			</File>
 			<File
-				RelativePath="source\game\aimstuff.h">
+				RelativePath="game\aimstuff.h">
 			</File>
 			<File
-				RelativePath="source\game\animation.cpp">
+				RelativePath="game\animation.cpp">
 			</File>
 			<File
-				RelativePath="source\game\animation.h">
+				RelativePath="game\animation.h">
 			</File>
 			<File
-				RelativePath="source\game\animation_names.inc">
+				RelativePath="game\animation_names.inc">
 			</File>
 			<File
-				RelativePath="source\game\audio.cpp">
+				RelativePath="game\audio.cpp">
 			</File>
 			<File
-				RelativePath="source\game\audio.h">
+				RelativePath="game\audio.h">
 			</File>
 			<File
-				RelativePath="source\game\building_removal.cpp">
+				RelativePath="game\building_removal.cpp">
 			</File>
 			<File
-				RelativePath="source\game\building_removal.h">
+				RelativePath="game\building_removal.h">
 			</File>
 			<File
-				RelativePath="source\game\camera.cpp">
+				RelativePath="game\camera.cpp">
 			</File>
 			<File
-				RelativePath="source\game\camera.h">
+				RelativePath="game\camera.h">
 			</File>
 			<File
-				RelativePath="source\game\custommodels.cpp">
+				RelativePath="game\custommodels.cpp">
 			</File>
 			<File
-				RelativePath="source\game\custommodels.h">
+				RelativePath="game\custommodels.h">
 			</File>
 			<File
-				RelativePath="source\game\debug.cpp">
+				RelativePath="game\debug.cpp">
 			</File>
 			<File
-				RelativePath="source\game\debug.h">
+				RelativePath="game\debug.h">
 			</File>
 			<File
-				RelativePath="source\game\debugscript.cpp">
+				RelativePath="game\debugscript.cpp">
 			</File>
 			<File
-				RelativePath="source\game\debugscript.h">
+				RelativePath="game\debugscript.h">
 			</File>
 			<File
-				RelativePath="source\game\entity.cpp">
+				RelativePath="game\entity.cpp">
 			</File>
 			<File
-				RelativePath="source\game\entity.h">
+				RelativePath="game\entity.h">
 			</File>
 			<File
-				RelativePath="source\game\font.cpp">
+				RelativePath="game\font.cpp">
 			</File>
 			<File
-				RelativePath="source\game\font.h">
+				RelativePath="game\font.h">
 			</File>
 			<File
-				RelativePath="source\game\game.cpp">
+				RelativePath="game\game.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -478,40 +478,40 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\game\game.h">
+				RelativePath="game\game.h">
 			</File>
 			<File
-				RelativePath="source\game\gta_globals.h">
+				RelativePath="game\gta_globals.h">
 			</File>
 			<File
-				RelativePath="source\game\hooks.cpp">
+				RelativePath="game\hooks.cpp">
 			</File>
 			<File
-				RelativePath="source\game\hooks.h">
+				RelativePath="game\hooks.h">
 			</File>
 			<File
-				RelativePath="source\game\keystuff.cpp">
+				RelativePath="game\keystuff.cpp">
 			</File>
 			<File
-				RelativePath="source\game\keystuff.h">
+				RelativePath="game\keystuff.h">
 			</File>
 			<File
-				RelativePath="source\game\limit_values.inc">
+				RelativePath="game\limit_values.inc">
 			</File>
 			<File
-				RelativePath="source\game\model_preview.cpp">
+				RelativePath="game\model_preview.cpp">
 			</File>
 			<File
-				RelativePath="source\game\model_preview.h">
+				RelativePath="game\model_preview.h">
 			</File>
 			<File
-				RelativePath="source\game\modelfile.cpp">
+				RelativePath="game\modelfile.cpp">
 			</File>
 			<File
-				RelativePath="source\game\modelfile.h">
+				RelativePath="game\modelfile.h">
 			</File>
 			<File
-				RelativePath="source\game\object.cpp">
+				RelativePath="game\object.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -526,55 +526,55 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\game\object.h">
+				RelativePath="game\object.h">
 			</File>
 			<File
-				RelativePath="source\game\patches.cpp">
+				RelativePath="game\patches.cpp">
 			</File>
 			<File
-				RelativePath="source\game\patches.h">
+				RelativePath="game\patches.h">
 			</File>
 			<File
-				RelativePath="source\game\player_color_values.inc">
+				RelativePath="game\player_color_values.inc">
 			</File>
 			<File
-				RelativePath="source\game\playerped.cpp">
+				RelativePath="game\playerped.cpp">
 			</File>
 			<File
-				RelativePath="source\game\playerped.h">
+				RelativePath="game\playerped.h">
 			</File>
 			<File
-				RelativePath="source\game\quaternion.cpp">
+				RelativePath="game\quaternion.cpp">
 			</File>
 			<File
-				RelativePath="source\game\quaternion.h">
+				RelativePath="game\quaternion.h">
 			</File>
 			<File
-				RelativePath="source\game\scripting.cpp">
+				RelativePath="game\scripting.cpp">
 			</File>
 			<File
-				RelativePath="source\game\scripting.h">
+				RelativePath="game\scripting.h">
 			</File>
 			<File
-				RelativePath="source\game\skinnedmesh.cpp">
+				RelativePath="game\skinnedmesh.cpp">
 			</File>
 			<File
-				RelativePath="source\game\skinnedmesh.h">
+				RelativePath="game\skinnedmesh.h">
 			</File>
 			<File
-				RelativePath="source\game\task.cpp">
+				RelativePath="game\task.cpp">
 			</File>
 			<File
-				RelativePath="source\game\task.h">
+				RelativePath="game\task.h">
 			</File>
 			<File
-				RelativePath="source\game\textdraw.cpp">
+				RelativePath="game\textdraw.cpp">
 			</File>
 			<File
-				RelativePath="source\game\textdraw.h">
+				RelativePath="game\textdraw.h">
 			</File>
 			<File
-				RelativePath="source\game\util.cpp">
+				RelativePath="game\util.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -589,20 +589,20 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\game\util.h">
+				RelativePath="game\util.h">
 			</File>
 			<File
-				RelativePath="source\game\vehicle.cpp">
+				RelativePath="game\vehicle.cpp">
 			</File>
 			<File
-				RelativePath="source\game\vehicle.h">
+				RelativePath="game\vehicle.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="net"
 			Filter="">
 			<File
-				RelativePath="source\net\actorpool.cpp">
+				RelativePath="net\actorpool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -617,34 +617,34 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\net\actorpool.h">
+				RelativePath="net\actorpool.h">
 			</File>
 			<File
-				RelativePath="source\net\gangzonepool.cpp">
+				RelativePath="net\gangzonepool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\gangzonepool.h">
+				RelativePath="net\gangzonepool.h">
 			</File>
 			<File
-				RelativePath="source\net\labelpool.cpp">
+				RelativePath="net\labelpool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\labelpool.h">
+				RelativePath="net\labelpool.h">
 			</File>
 			<File
-				RelativePath="source\net\localplayer.cpp">
+				RelativePath="net\localplayer.cpp">
 			</File>
 			<File
-				RelativePath="source\net\localplayer.h">
+				RelativePath="net\localplayer.h">
 			</File>
 			<File
-				RelativePath="source\net\menupool.cpp">
+				RelativePath="net\menupool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\menupool.h">
+				RelativePath="net\menupool.h">
 			</File>
 			<File
-				RelativePath="source\net\netgame.cpp">
+				RelativePath="net\netgame.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -659,22 +659,22 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\net\netgame.h">
+				RelativePath="net\netgame.h">
 			</File>
 			<File
-				RelativePath="source\net\netrpc.cpp">
+				RelativePath="net\netrpc.cpp">
 			</File>
 			<File
-				RelativePath="source\net\netrpc.h">
+				RelativePath="net\netrpc.h">
 			</File>
 			<File
-				RelativePath="source\net\objectpool.cpp">
+				RelativePath="net\objectpool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\objectpool.h">
+				RelativePath="net\objectpool.h">
 			</File>
 			<File
-				RelativePath="source\net\pickuppool.cpp">
+				RelativePath="net\pickuppool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -689,124 +689,124 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="source\net\pickuppool.h">
+				RelativePath="net\pickuppool.h">
 			</File>
 			<File
-				RelativePath="source\net\playerinfo.cpp">
+				RelativePath="net\playerinfo.cpp">
 			</File>
 			<File
-				RelativePath="source\net\playerinfo.h">
+				RelativePath="net\playerinfo.h">
 			</File>
 			<File
-				RelativePath="source\net\playerpool.cpp">
+				RelativePath="net\playerpool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\playerpool.h">
+				RelativePath="net\playerpool.h">
 			</File>
 			<File
-				RelativePath="source\net\remoteplayer.cpp">
+				RelativePath="net\remoteplayer.cpp">
 			</File>
 			<File
-				RelativePath="source\net\remoteplayer.h">
+				RelativePath="net\remoteplayer.h">
 			</File>
 			<File
-				RelativePath="source\net\scriptrpc.cpp">
+				RelativePath="net\scriptrpc.cpp">
 			</File>
 			<File
-				RelativePath="source\net\scriptrpc.h">
+				RelativePath="net\scriptrpc.h">
 			</File>
 			<File
-				RelativePath="source\net\textdrawpool.cpp">
+				RelativePath="net\textdrawpool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\textdrawpool.h">
+				RelativePath="net\textdrawpool.h">
 			</File>
 			<File
-				RelativePath="source\net\vehiclepool.cpp">
+				RelativePath="net\vehiclepool.cpp">
 			</File>
 			<File
-				RelativePath="source\net\vehiclepool.h">
+				RelativePath="net\vehiclepool.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="archive"
 			Filter="">
 			<File
-				RelativePath="source\archive\ArchiveCommon.h">
+				RelativePath="archive\ArchiveCommon.h">
 			</File>
 			<File
-				RelativePath="source\archive\ArchiveFS.cpp">
+				RelativePath="archive\ArchiveFS.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\ArchiveFS.h">
+				RelativePath="archive\ArchiveFS.h">
 			</File>
 			<File
-				RelativePath="source\archive\CryptoContext.cpp">
+				RelativePath="archive\CryptoContext.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\CryptoContext.h">
+				RelativePath="archive\CryptoContext.h">
 			</File>
 			<File
-				RelativePath="source\archive\CryptoFns.cpp">
+				RelativePath="archive\CryptoFns.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\CryptoFns.h">
+				RelativePath="archive\CryptoFns.h">
 			</File>
 			<File
-				RelativePath="source\archive\Hasher.cpp">
+				RelativePath="archive\Hasher.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\Hasher.h">
+				RelativePath="archive\Hasher.h">
 			</File>
 			<File
-				RelativePath="source\archive\KeyPair.cpp">
+				RelativePath="archive\KeyPair.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\KeyPair.h">
+				RelativePath="archive\KeyPair.h">
 			</File>
 			<File
-				RelativePath="source\archive\keys.h">
+				RelativePath="archive\keys.h">
 			</File>
 			<File
-				RelativePath="source\archive\Obfuscator.h">
+				RelativePath="archive\Obfuscator.h">
 			</File>
 			<File
-				RelativePath="source\archive\Signer.cpp">
+				RelativePath="archive\Signer.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\Signer.h">
+				RelativePath="archive\Signer.h">
 			</File>
 			<File
-				RelativePath="source\archive\Stream.h">
+				RelativePath="archive\Stream.h">
 			</File>
 			<File
-				RelativePath="source\archive\TinyEncrypt.cpp">
+				RelativePath="archive\TinyEncrypt.cpp">
 			</File>
 			<File
-				RelativePath="source\archive\TinyEncrypt.h">
+				RelativePath="archive\TinyEncrypt.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="d3dhook"
 			Filter="">
 			<File
-				RelativePath="source\d3dhook\ID3DXFontHook.cpp">
+				RelativePath="d3dhook\ID3DXFontHook.cpp">
 			</File>
 			<File
-				RelativePath="source\d3dhook\ID3DXFontHook.h">
+				RelativePath="d3dhook\ID3DXFontHook.h">
 			</File>
 			<File
-				RelativePath="source\d3dhook\IDirect3DDevice9Hook.cpp">
+				RelativePath="d3dhook\IDirect3DDevice9Hook.cpp">
 			</File>
 			<File
-				RelativePath="source\d3dhook\IDirect3DDevice9Hook.h">
+				RelativePath="d3dhook\IDirect3DDevice9Hook.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="dxut"
 			Filter="">
 			<File
-				RelativePath=".\third-party\dxut\D3DUtil.cpp">
+				RelativePath="..\third-party\dxut\D3DUtil.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -823,34 +823,34 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\D3DUtil.h">
+				RelativePath="..\third-party\dxut\D3DUtil.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\dxstdafx.cpp">
+				RelativePath="..\third-party\dxut\dxstdafx.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\dxstdafx.h">
+				RelativePath="..\third-party\dxut\dxstdafx.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUT.cpp">
+				RelativePath="..\third-party\dxut\DXUT.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUT.h">
+				RelativePath="..\third-party\dxut\DXUT.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTenum.cpp">
+				RelativePath="..\third-party\dxut\DXUTenum.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTenum.h">
+				RelativePath="..\third-party\dxut\DXUTenum.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTgui.cpp">
+				RelativePath="..\third-party\dxut\DXUTgui.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTgui.h">
+				RelativePath="..\third-party\dxut\DXUTgui.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUtil.cpp">
+				RelativePath="..\third-party\dxut\DXUtil.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -867,44 +867,44 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUtil.h">
+				RelativePath="..\third-party\dxut\DXUtil.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTmedia.cpp">
+				RelativePath="..\third-party\dxut\DXUTmedia.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTmedia.h">
+				RelativePath="..\third-party\dxut\DXUTmedia.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTMesh.cpp">
+				RelativePath="..\third-party\dxut\DXUTMesh.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTMesh.h">
+				RelativePath="..\third-party\dxut\DXUTMesh.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTmisc.cpp">
+				RelativePath="..\third-party\dxut\DXUTmisc.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTmisc.h">
+				RelativePath="..\third-party\dxut\DXUTmisc.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTSettingsDlg.cpp">
+				RelativePath="..\third-party\dxut\DXUTSettingsDlg.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTSettingsDlg.h">
+				RelativePath="..\third-party\dxut\DXUTSettingsDlg.h">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTsound.cpp">
+				RelativePath="..\third-party\dxut\DXUTsound.cpp">
 			</File>
 			<File
-				RelativePath=".\third-party\dxut\DXUTsound.h">
+				RelativePath="..\third-party\dxut\DXUTsound.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="resources"
 			Filter="">
 			<File
-				RelativePath="source\samp.rc">
+				RelativePath="samp.rc">
 			</File>
 		</Filter>
 		<Filter
@@ -914,57 +914,57 @@
 				Name="bass"
 				Filter="">
 				<File
-					RelativePath="third-party\bass\bass.h">
+					RelativePath="..\third-party\bass\bass.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="detours"
 				Filter="">
 				<File
-					RelativePath="third-party\detours\detours.h">
+					RelativePath="..\third-party\detours\detours.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="ttmath"
 				Filter="">
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmath.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmath.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathbig.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathbig.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathdec.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathdec.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathint.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathint.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathmisc.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathmisc.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathobjects.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathobjects.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathparser.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathparser.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmaththreads.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmaththreads.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathtypes.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathtypes.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathuint.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathuint.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathuint_noasm.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathuint_noasm.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathuint_x86.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathuint_x86.h">
 				</File>
 				<File
-					RelativePath="third-party\ttmath\ttmath\ttmathuint_x86_64.h">
+					RelativePath="..\third-party\ttmath\ttmath\ttmathuint_x86_64.h">
 				</File>
 			</Filter>
 		</Filter>
