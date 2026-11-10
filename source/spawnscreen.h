@@ -3,8 +3,8 @@
 
 #include <d3dx9.h>
 
-#include <static_assert.h>
 #include "fontrender.h"
+#include <static_assert.h>
 struct CVector;
 #pragma pack(push, 1)
 struct SpawnScreenVertex

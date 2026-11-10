@@ -1,10 +1,10 @@
 #include "net/actorpool.h"
 
-#include <static_assert.h>
 #include "chatwindow.h"
 #include "game/actor.h"
 #include "game/custommodels.h"
 #include "main.h"
+#include <static_assert.h>
 // 0x00001610
 CActor* CActorPool::Get(WORD id)
 {

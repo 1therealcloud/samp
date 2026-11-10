@@ -4,9 +4,9 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
 #include "game/quaternion.h"
 #include "game/scripting.h"
+#include <static_assert.h>
 // Native synchronization records shared by senders and receivers, as in 0.2x.
 // Plain packed storage; no standalone native constructors are established.
 #pragma pack(push, 1)

@@ -3,8 +3,8 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
 #include "game/textdraw.h"
+#include <static_assert.h>
 struct RPCParameters;
 #pragma pack(push, 1)
 class CTextDrawPool

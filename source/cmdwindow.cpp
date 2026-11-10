@@ -2,9 +2,9 @@
 
 #include "cmdwindow.h"
 
-#include <static_assert.h>
 #include "main.h"
 #include "runutil.h"
+#include <static_assert.h>
 // 0x00002e80
 DWORD CInput::GetEnabledState()
 {

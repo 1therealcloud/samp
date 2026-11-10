@@ -6,7 +6,6 @@
 
 #include "main.h"
 
-#include <static_assert.h>
 #include "RakClientInterface.h"
 #include "anticheat.h"
 #include "chatwindow.h"
@@ -20,6 +19,7 @@
 #include "game/hooks.h"
 #include "game/model_preview.h"
 #include "gui.h"
+#include <static_assert.h>
 
 // Client runtime globals, initialization and frame coordination.
 // 0x002aca3c

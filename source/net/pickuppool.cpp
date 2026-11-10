@@ -3,13 +3,13 @@
 
 #include "net/pickuppool.h"
 
-#include <static_assert.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/game.h"
 #include "game/scripting.h"
 #include "main.h"
 #include "net/netgame.h"
+#include <static_assert.h>
 // 0x00118158
 const Scripting::OpcodeInfo g_pickupDestroyCommand = {0x215, "i"};
 // 0x00008190

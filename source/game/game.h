@@ -6,10 +6,10 @@
 
 #include <d3d9.h>
 
-#include <static_assert.h>
 #include "game/audio.h"
 #include "game/camera.h"
 #include "game/scripting.h"
+#include <static_assert.h>
 class CPed;
 class CVehicle;
 struct CVector;

@@ -6,7 +6,6 @@
 
 #include "gui.h"
 
-#include <static_assert.h>
 #include "chatwindow.h"
 #include "cmdwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -17,6 +16,7 @@
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/vehiclepool.h"
+#include <static_assert.h>
 // 0x002acab8
 CDXUTDialog* g_guiScoreboardDialog;
 // 0x002acac0

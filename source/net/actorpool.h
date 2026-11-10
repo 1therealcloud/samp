@@ -3,8 +3,8 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
 #include "game/actor.h"
+#include <static_assert.h>
 #pragma pack(push, 1)
 // Packed native creation request; custom model is separate from constructor model.
 struct ActorCreateInfo

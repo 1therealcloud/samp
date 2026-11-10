@@ -9,7 +9,6 @@
 
 #include "dialog.h"
 
-#include <static_assert.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "chatwindow.h"
@@ -21,6 +20,7 @@
 #include "gui.h"
 #include "main.h"
 #include "runutil.h"
+#include <static_assert.h>
 
 // Reconstruction-only access facade for the established control vtable slot4C.
 // It adds no fields, virtual methods or standalone native entries.

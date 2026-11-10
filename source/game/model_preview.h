@@ -1,8 +1,8 @@
 #ifndef MODEL_PREVIEW_H
 #define MODEL_PREVIEW_H
 
-#include <static_assert.h>
 #include "game/entity.h"
+#include <static_assert.h>
 #pragma pack(push, 1)
 // Descriptive recovered class name; original identity is not established.
 class CModelPreview

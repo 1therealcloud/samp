@@ -1,6 +1,5 @@
 #include "events.h"
 
-#include <static_assert.h>
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "game/playerped.h"
@@ -11,6 +10,7 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
+#include <static_assert.h>
 // 0x00001aa0
 void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD param2, DWORD param3)
 {

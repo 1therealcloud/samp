@@ -1,16 +1,16 @@
 // ID3DXFontHook.cpp
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <wchar.h>
 
 #include <DXUTgui.h>
 
 #include "d3dhook/ID3DXFontHook.h"
 
-#include <static_assert.h>
 #include "cmdwindow.h"
 #include "runutil.h"
+#include <static_assert.h>
 
 // 0x0006b310
 CFontWrapper::CFontWrapper() {}

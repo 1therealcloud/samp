@@ -5,7 +5,6 @@
 
 #include "netstats.h"
 
-#include <static_assert.h>
 #include "RakClientInterface.h"
 #include "RakNetStatistics.h"
 #include "fontrender.h"
@@ -16,6 +15,7 @@
 #include "net/localplayer.h"
 #include "net/objectpool.h"
 #include "net/vehiclepool.h"
+#include <static_assert.h>
 // Match the selected RakNet fields actually consumed by the original UI.
 STATIC_ASSERT(offsetof(RakNetStatisticsStruct, totalBitsSent) == 0xb8);
 STATIC_ASSERT(offsetof(RakNetStatisticsStruct, bitsReceived) == 0xd8);

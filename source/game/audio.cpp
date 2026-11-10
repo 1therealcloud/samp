@@ -14,8 +14,7 @@ int CAudio::GetRadioStation()
         mov station,eax
     }
     // clang-format on
-    if (station < 0 || station > 12)
-        return -1;
+    if (station < 0 || station > 12) return -1;
     return station;
 }
 // 0x000a2060

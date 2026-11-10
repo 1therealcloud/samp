@@ -1,8 +1,8 @@
 #ifndef VEHICLEPOOL_H
 #define VEHICLEPOOL_H
 
-#include <static_assert.h>
 #include "game/vehicle.h"
+#include <static_assert.h>
 #pragma pack(push, 1)
 // Native40-byte record; raw words retained for existing callers.
 struct VehiclePoolQueueEntry

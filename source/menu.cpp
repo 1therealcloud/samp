@@ -95,18 +95,16 @@ BYTE CMenu::GetActiveRow()
 // 0x000a7330
 void CMenu::Show()
 {
-    Scripting::ProcessCommand(&g_menuCreateCommand, title[0] ? g_menuTitleKey : g_menuDummy, (double)x, (double)y,
-                             (widths[0] + widths[1]) / columns, (int)columns, interaction.enabled, 1, 1, &handle);
-    Scripting::ProcessCommand(&g_menuItemsCommand, handle, 0, columnTitles[0][0] ? g_menuHeaderKey0 : g_menuDummy,
-                             MS(0, 0), MS(1, 0), MS(2, 0), MS(3, 0), MS(4, 0), MS(5, 0),
-                             MS(6, 0), MS(7, 0), MS(8, 0), MS(9, 0), MS(10, 0), MS(11, 0));
+    Scripting::ProcessCommand(&g_menuCreateCommand, title[0] ? g_menuTitleKey : g_menuDummy, (double)x, (double)y, (widths[0] + widths[1]) / columns, (int)columns,
+                              interaction.enabled, 1, 1, &handle);
+    Scripting::ProcessCommand(&g_menuItemsCommand, handle, 0, columnTitles[0][0] ? g_menuHeaderKey0 : g_menuDummy, MS(0, 0), MS(1, 0), MS(2, 0), MS(3, 0), MS(4, 0), MS(5, 0),
+                              MS(6, 0), MS(7, 0), MS(8, 0), MS(9, 0), MS(10, 0), MS(11, 0));
     // Native uses column-zero width for both columns and VC7's _ftol2 conversion.
     Scripting::ProcessCommand(&g_menuWidthCommand, handle, 0, (int)widths[0]);
     if (columns == 2)
     {
-        Scripting::ProcessCommand(&g_menuItemsCommand, handle, 1, columnTitles[1][0] ? g_menuHeaderKey1 : g_menuDummy,
-                                 MS(0, 1), MS(1, 1), MS(2, 1), MS(3, 1), MS(4, 1), MS(5, 1),
-                                 MS(6, 1), MS(7, 1), MS(8, 1), MS(9, 1), MS(10, 1), MS(11, 1));
+        Scripting::ProcessCommand(&g_menuItemsCommand, handle, 1, columnTitles[1][0] ? g_menuHeaderKey1 : g_menuDummy, MS(0, 1), MS(1, 1), MS(2, 1), MS(3, 1), MS(4, 1), MS(5, 1),
+                                  MS(6, 1), MS(7, 1), MS(8, 1), MS(9, 1), MS(10, 1), MS(11, 1));
         Scripting::ProcessCommand(&g_menuWidthCommand, handle, 1, (int)widths[0]);
     }
     for (BYTE row = 0; row < 12; ++row)

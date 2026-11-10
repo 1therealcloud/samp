@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
 #include "game/scripting.h"
+#include <static_assert.h>
 // Observed coordinator fields; the unused prefix remains opaque.
 class CVehiclePool;
 class CPlayerPool;

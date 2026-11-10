@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 
-#include <static_assert.h>
 #include "game/entity.h"
+#include <static_assert.h>
 #pragma pack(push, 1)
 struct TextLabel
 {

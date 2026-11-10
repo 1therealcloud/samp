@@ -1,7 +1,7 @@
 // IDirect3DDevice9Hook.cpp
 
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <DXUT.h>
 #include <DXUTgui.h>
@@ -10,16 +10,16 @@
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "main.h"
-#include "game/game.h"
-#include "game/hooks.h"
-#include "net/vehiclepool.h"
 #include "anticheat.h"
 #include "chatwindow.h"
 #include "cmdwindow.h"
+#include "game/game.h"
+#include "game/hooks.h"
 #include "game/playerped.h"
 #include "game/vehicle.h"
 #include "gui.h"
+#include "main.h"
+#include "net/vehiclepool.h"
 
 // 0x000c5e60
 IDirect3DDevice9Hook::IDirect3DDevice9Hook() {}

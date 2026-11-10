@@ -4,8 +4,8 @@
 
 #include "game/object.h"
 
-#include <static_assert.h>
 #include "main.h"
+#include <static_assert.h>
 // Only the observed RenderWare prefixes used by these callbacks are described.
 // The complete backend layouts and ownership remain outside these views.
 enum ObjectRwObservedFlags
@@ -68,9 +68,9 @@ STATIC_ASSERT(sizeof(ObjectRwSurface) == 12);
 STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, texture) == 0);
 STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, color) == 4);
 STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
-                                             offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14);
+              offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14);
 STATIC_ASSERT(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
-                                      offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24);
+              offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24);
 STATIC_ASSERT(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18);
 
 // 0x000715c0

@@ -3,9 +3,9 @@
 
 #include "game/custommodels.h"
 
-#include <static_assert.h>
 #include "game/modelfile.h"
 #include "main.h"
+#include <static_assert.h>
 // Original owning type/name unconfirmed; preserve this distinct native entry.
 // 0x0000c440
 DWORD NativeModelArrayPrefix::Read0000c440(DWORD index)

@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
 #include "net/localplayer.h"
+#include <static_assert.h>
 struct CVector;
 class CMatrix;
 #pragma pack(push, 1)

@@ -17,10 +17,10 @@ int CDownloadWindow::GetFilesCount()
     return *(int*)(nativeState + 4);
 }
 #include "GetTime.h"
-#include <DXUTgui.h>
 #include "fontrender.h"
 #include "game/gta_globals.h"
 #include "gui.h"
+#include <DXUTgui.h>
 #include <string.h>
 // 0x0011c37c
 const char g_downloadWindowTitle[18] = "Updating models..";
