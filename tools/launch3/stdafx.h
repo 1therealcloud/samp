@@ -16,10 +16,10 @@
 
 #define VC_EXTRALEAN
 
-#include <afxwin.h>
-#include <afxext.h>
-#include <afxdisp.h>
 #include <afxcmn.h>
+#include <afxdisp.h>
+#include <afxext.h>
+#include <afxwin.h>
 
 //----------------------------------------------------
 // EOF
