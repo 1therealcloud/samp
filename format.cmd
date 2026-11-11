@@ -1,10 +1,7 @@
 @echo off
 setlocal EnableExtensions DisableDelayedExpansion
 cd /d "%~dp0"
-set "FORMAT_PAUSE=1"
-if /i "%~1"=="--no-pause" set "FORMAT_PAUSE=0"
-if not "%~1"=="" if /i not "%~1"=="--no-pause" goto :usage
-if not "%~2"=="" goto :usage
+if not "%~1"=="" goto :usage
 
 set "CF=%CLANG_FORMAT%"
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -40,7 +37,7 @@ set "FORMAT_EXIT=0"
 goto :finish
 
 :usage
-echo Usage: format.cmd [--no-pause]
+echo Usage: format.cmd
 set "FORMAT_EXIT=1"
 goto :finish
 
@@ -54,5 +51,5 @@ echo ERROR: formatting failed.
 set "FORMAT_EXIT=1"
 
 :finish
-if "%FORMAT_PAUSE%"=="1" pause
+pause
 exit /b %FORMAT_EXIT%
