@@ -43,6 +43,22 @@ BASS is an external DLL; its entries above are import thunks. The other 66 impor
 
 RakNet, zlib, libcurl, LZMA and ttmath are pinned Git submodules under `third-party/`. BASS, Detours and the modified DXUT sources are included directly in that directory. D3DX9 is supplied by the DirectX SDK. The MSVC runtime is linked statically.
 
+## Utilities
+
+The repository also includes the server browser and supporting tools:
+
+| Tool | Source | Purpose |
+| --- | --- | --- |
+| `samp.exe` | [`tools/exgui`](tools/exgui) | Server browser, favorites, server queries and game launcher. |
+| `rcon.exe` | [`tools/rcon`](tools/rcon) | Console client for remote server administration. |
+| `arctool2.exe` | [`tools/arctool2`](tools/arctool2) | Builds SA-MP archives from a file list. |
+| `launch3.exe` | [`tools/launch3`](tools/launch3) | Alternative game launcher with DLL injection. |
+| `kdff.exe` | [`tools/dff/dfftool`](tools/dff/dfftool) | Inspects DFF files, generates and attaches COL collision data, and imports night vertex colors. |
+| `kdff.dll` | [`tools/dff/DffFormatDll`](tools/dff/DffFormatDll) | DFF/COL processing and vertex-color operations used by the DFF GUI. |
+| `kdffgui.exe` | [`tools/dff/Project1`](tools/dff/Project1) | Graphical DFF preview, collision generation and vertex-color editing. |
+
+`kdff.exe` compiles the shared DFF/COL backend directly into the executable and does not require `kdff.dll`. The GUI loads `kdff.dll` separately. DLL-specific code is selected with `KDFF_DLL`.
+
 ## Building
 
 Build requirements:
@@ -50,7 +66,7 @@ Build requirements:
 - Git.
 - Visual Studio .NET 2003 (Service Pack 1 optional).
 - DirectX 9.0 SDK, April 2005.
-- Delphi 7 (optional, for the server-browser launcher).
+- Delphi 7 (optional, for the server browser and DFF GUI).
 
 Initialize the dependencies:
 
@@ -60,7 +76,11 @@ git submodule update --init --recursive
 
 Open `sa-mp.sln` in Visual Studio .NET 2003 and build the solution. The output is placed in `build/binaries/`.
 
-To build the server-browser launcher, open `tools/exgui/samp.dpr` in Delphi 7 and build the project to produce `samp.exe`.
+The solution includes the C++ utilities: `rcon`, `arctool2`, `launch3`, `dfftool` and `DffFormatDll`.
+
+To build the server browser, open `tools/exgui/samp.dpr` in Delphi 7 and build the project.
+
+To build the DFF GUI, open `tools/dff/Project1/Project1.dpr` in Delphi 7 and build the project.
 
 ## Formatting
 
