@@ -56,4 +56,14 @@ void ChatStripColorTags(char* text);
 // 0x000b5c40
 int ChatPrepareMessage(char* text, int maximumLength);
 
+// Descriptive ECX adapter; original class and field meaning are unproved.
+// 0x000c5140
+void* __fastcall NativeClearFirstByte(void* object);
+
+// Descriptive x86 stack adapter, not a recovered original prototype. For a
+// nonzero first DWORD the caller must provide readable argument bytes through
+// offset 0x13 from that DWORD's stack slot. No caller binding is established.
+// 0x000b5fb0
+unsigned short __cdecl NativeReadStackWord0B5FB0(unsigned long first, ...);
+
 #endif // RUNUTIL_H

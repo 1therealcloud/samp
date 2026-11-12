@@ -148,4 +148,10 @@ void GameReacquireInputDevice();
 // 0x000c6a60
 void ClientInitializeDialogResources();
 
+// Descriptive ABI adapter; ECX receiver and one DWORD stack argument.
+// 0x000841a0
+void __fastcall NativeWriteDword013f(void* object, void* unusedEdx, DWORD value);
+// 0x0006eea0
+void __fastcall NativeWriteByte0012(void* object, void* unusedEdx, BYTE value);
+
 #endif // GUI_H

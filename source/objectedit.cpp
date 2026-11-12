@@ -917,3 +917,10 @@ void CObjectEdit::Disable(BOOL send)
     if (unknown78 == 1)
         SendEditEndNotification(notify);
 }
+
+// Descriptive ABI adapter; original class and field meaning are not established.
+// 0x00002ea0
+DWORD __fastcall NativeReadDword0080(const void* object)
+{
+    return *(const DWORD*)((const BYTE*)object + 0x80);
+}

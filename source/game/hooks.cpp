@@ -28,6 +28,20 @@
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
 
+// Descriptive name; original name and class membership are not established.
+// GTA CWeather::Update adapter. No native caller has been established.
+// 0x000a5b80
+__declspec(naked) void GameUpdateWeather()
+{
+    // clang-format off
+    __asm {
+        mov edx, 0x72b850
+        call edx
+        ret
+    }
+    // clang-format on
+}
+
 // 0x00151a60
 BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};
 // 0x000a5bf0

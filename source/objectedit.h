@@ -115,4 +115,8 @@ extern int g_objectEditRpc;
 // 0x00117f30
 extern int g_objectEditAttachedRpc;
 
+// Descriptive ABI adapter; native uses ECX and returns the raw DWORD in EAX.
+// 0x00002ea0
+DWORD __fastcall NativeReadDword0080(const void* object);
+
 #endif // OBJECTEDIT_H

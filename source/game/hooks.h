@@ -799,4 +799,8 @@ WORD GameResolveDamageActor(void* entity);
 // 0x0018e81c
 extern CVehicle* g_hookEnterVehicle;
 
+// Descriptive name; original wrapper identity is not established.
+// 0x000a5b80
+void GameUpdateWeather();
+
 #endif // HOOKS_H

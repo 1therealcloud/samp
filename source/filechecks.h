@@ -4,6 +4,9 @@
 #include <windows.h>
 
 #include <static_assert.h>
+// 0x00062b00
+char* GetSHA1Result(unsigned int* digest, char* buffer);
+
 #pragma pack(push, 1)
 // Compiled-reference match: Paul E. Jones SHA-1 family; exact release unknown.
 // Distinct from RakNet's CSHA1. Native output consists of five host-order

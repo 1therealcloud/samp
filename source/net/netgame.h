@@ -320,4 +320,11 @@ extern const char g_netClientVersion[];
 // 0x00117bf8
 extern int g_netJoinRpc;
 
+// Descriptive names; original class membership is not established.
+// Native entries ignore ECX and pop one pointer argument.
+// 0x00008590
+BYTE __stdcall NetGetPacketId(Packet* packet);
+// 0x000085b0
+BYTE __stdcall NetIsTimestampedPacket(Packet* packet);
+
 #endif // NETGAME_H

@@ -87,4 +87,8 @@ BOOL WINAPI Arch_CloseHandle(HANDLE file);
 // 0x000623a0
 DWORD WINAPI Arch_GetFileType(HANDLE file);
 
+// Descriptive ABI adapter; native uses ECX and no stack arguments.
+// 0x00061ff0
+void __fastcall NativeIncrementDword0055(void* object);
+
 #endif // FILEHOOKS_H

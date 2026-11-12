@@ -53,7 +53,7 @@ struct ObjectRwMaterialListPrefix
 struct ObjectRwGeometryPrefix
 {
     BYTE unknown00[8];
-    DWORD flags;
+    unsigned int flags; // RenderWare RwUInt32.
     BYTE unknown0c[20];
     ObjectRwMaterialListPrefix materialList;
 };

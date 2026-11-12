@@ -6,6 +6,35 @@
 
 #include "runutil.h"
 
+// Descriptive ECX adapter; original class and field meaning are unproved.
+// 0x000c5140
+void* __fastcall NativeClearFirstByte(void* object)
+{
+    *(unsigned char*)object = 0;
+    return object;
+}
+
+// The native entry reads its argument area, not memory pointed to by first.
+// Variadic syntax represents the unknown trailing stack extent only; the
+// original prototype, owner and field meaning remain unproved.
+// 0x000b5fb0
+unsigned short __cdecl NativeReadStackWord0B5FB0(unsigned long first, ...)
+{
+    if (!first)
+        return 0;
+
+    unsigned long value = 0;
+    // clang-format off
+    __asm {
+        lea edx, first
+        xor eax, eax
+        mov ax, word ptr [edx+12h]
+        mov word ptr value, ax
+    }
+    // clang-format on
+    return (unsigned short)value;
+}
+
 // 0x000172e0
 void Util_UrlUnencode(char* enc)
 {

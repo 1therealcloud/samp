@@ -320,6 +320,24 @@ void CNetGame::Packet_ConnectionLost(Packet* packet)
         g_renderAudioStream->Stop(true);
     gameState = StateWaitingToConnect;
 }
+// Descriptive free-function names; no native receiver use was observed.
+// 0x00008590
+BYTE __stdcall NetGetPacketId(Packet* packet)
+{
+    if (!packet)
+        return 0xff;
+    BYTE id = packet->data[0];
+    if (id == 40)
+        return packet->data[5];
+    return id;
+}
+// 0x000085b0
+BYTE __stdcall NetIsTimestampedPacket(Packet* packet)
+{
+    if (!packet)
+        return 0;
+    return packet->data[0] == 40;
+}
 // 0x0000af40
 void CNetGame::UpdateNetwork()
 {
