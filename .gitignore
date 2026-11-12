@@ -4,3 +4,5 @@ work/
 *.suo
 *.dcu
 tools/launcher/samp.exe
+tools/dff/Project1/Project1.exe
+tools/dff/Project1/kdff.dll

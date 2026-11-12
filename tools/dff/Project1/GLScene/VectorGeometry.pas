@@ -161,7 +161,7 @@ uses VectorTypes;
 const
    cMaxArray = (MaxInt shr 4);
 
-{$i ../GLScene.inc}
+{$i GLScene.inc}
 
 type
    // data types needed for 3D graphics calculation,
