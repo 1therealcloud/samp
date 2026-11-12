@@ -1,0 +1,6 @@
+LIBRARY kdff
+EXPORTS
+    AppendColToDff @1
+    EasyVertexColors @2
+    GenerateColFromDff @3
+    ImportNVCFromDff @4
