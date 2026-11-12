@@ -292,6 +292,7 @@ uses
 
 {$R *.dfm}
 
+// 0x000e2888
 procedure CheckAnotherInstance();
 begin
   if InstanceChecked <> true then begin
@@ -304,16 +305,18 @@ begin
   end;
 end;
 
+// 0x000e2944
 function GetUserFilesPath(): String;
 var
   Path: Array[0..MAX_PATH] Of Char;
 begin
-  if SHGetSpecialFolderPath(0, Path, CSIDL_PERSONAL, False) <> FALSE then
-    Result:= Path + '\GTA San Andreas User Files\SAMP\'
+  if SHGetSpecialFolderPath(0, Path, CSIDL_PERSONAL, False) = FALSE then
+    Result:= ''
   else
-    Result:= '';
+    Result:= Path + '\GTA San Andreas User Files\SAMP\';
 end;
 
+// 0x000e2a08
 procedure CreateDesktopShortcut(Arguments, ShortcutName: String);
 var
   IObject: IUnknown;
@@ -376,6 +379,9 @@ begin
   Result:= CompareText(TServerInfo(a^).Map, TServerInfo(b^).Map);
 end;
 
+// 0x000e2da8
+procedure SetupUserFilesFolder(Path: String);
+// 0x000e2cdc
 function FindLastOf(Find, Text: string): Integer;
 var
   i: Integer;
@@ -389,7 +395,6 @@ begin
   end;
 end;
 
-procedure SetupUserFilesFolder(Path: String);
 var
   DirName: String;
   EndPos: Integer;
@@ -414,6 +419,7 @@ begin
 end;
 
 
+// 0x000e2f2c
 function TfmMain.GetToken(TokenData: String; ItemIndex: Integer; TokenDelimiter: String): String;
 var
   i, Len, DelimLen, TokenCount: Integer;
@@ -441,6 +447,7 @@ begin
   Result:= TokenString;
 end;
 
+// 0x000e30b4
 function GetIPFromHost(const HostName: string): string;
 type
   TaPInAddr = array[0..10] of PInAddr;
@@ -473,6 +480,7 @@ begin
   WSACleanup;
 end;
 
+// 0x000e31c4
 function DarkenColor(Color: TColor): TColor;
 begin
   Result:= Color;
@@ -488,16 +496,19 @@ begin
   end;
 end;
 
+// 0x000e3274
 function TfmMain.GetClipBoardStr: String;
 begin
   Result:= Clipboard.AsText;
 end;
 
+// 0x000e3294
 procedure TfmMain.SetClipBoardStr(Str: String);
 begin
   Clipboard.AsText:= Str;
 end;
 
+// 0x000e32e4
 procedure TfmMain.GetGTAExe(Owner: HWND);
 var
   Reg: TRegistry;
@@ -529,23 +540,26 @@ begin
   end;
 end;
 
+// 0x000e3530
 procedure TfmMain.GetModelCacheFolder(Owner: HWND);
 var
   Reg: TRegistry;
-  BrowseCache: String;
+  TmpStr, BrowseCache: String;
 begin
   Reg:= TRegistry.Create;
-  if BrowseForFolder(Owner, BrowseCache, GetUserFilesPath + 'cache', 'Please locate your model cache...') then begin
+  TmpStr:= GetUserFilesPath + 'cache';
+  if BrowseForFolder(Owner, BrowseCache, TmpStr, 'Please locate your model cache...') then begin
     model_cache:= BrowseCache;
 
     Reg.RootKey:= HKEY_CURRENT_USER;
     Reg.OpenKey('SOFTWARE\SAMP', true);
     Reg.WriteString('model_cache', model_cache);
     Reg.CloseKey;
+    Reg.Free;
   end;
-  Reg.Free;
 end;
 
+// 0x000e3674
 procedure TfmMain.FormCreate(Sender: TObject);
 var
   Dummy: Boolean;
@@ -591,6 +605,7 @@ begin
   tmrServerListUpdate.Enabled:= true;
 
   SetupUserFilesFolder(GetUserFilesPath);
+  SetupUserFilesFolder(GetUserFilesPath + 'cache');
 
   if FileExists(GetUserFilesPath + 'USERDATA.DAT') then
     ImportFavorites(GetUserFilesPath + 'USERDATA.DAT', false);
@@ -601,6 +616,7 @@ begin
   UpdateServers;
 end;
 
+// 0x000e3a20
 procedure TfmMain.lbServersDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 var
@@ -661,18 +677,21 @@ begin
   end;
 end;
 
+// 0x000e413c
 procedure TfmMain.hcServersSectionResize(HeaderControl: THeaderControl;
   Section: THeaderSection);
 begin
   lbServers.Repaint;
 end;
 
+// 0x000e4160
 procedure TfmMain.tbMainResize(Sender: TObject);
 begin
   ToolButton1.Width:= ((Sender as TToolBar).Width-ToolButton1.Left)-imLogo.Width;
   imLogo.Repaint;
 end;
 
+// 0x000e41c8
 procedure TfmMain.hcServersSectionClick(HeaderControl: THeaderControl;
   Section: THeaderSection);
 begin
@@ -742,6 +761,7 @@ begin
   UpdateServers;
 end;
 
+// 0x000e4328
 procedure TfmMain.pnBreakableResize(Sender: TObject);
 begin
   gbInfo.Width:= pnBreakable.Width - gbFilter.Width + 1;
@@ -754,6 +774,7 @@ end;
 
 var
   ReRender: Boolean;
+// 0x000e43c8
 procedure TfmMain.hcServersDrawSection(HeaderControl: THeaderControl;
   Section: THeaderSection; const Rect: TRect; Pressed: Boolean);
 var
@@ -800,6 +821,7 @@ begin
   end;
 end;
 
+// 0x000e45d4
 procedure TfmMain.tmServerListUpdate(Sender: TObject);
 begin
   if QueryQueue.Count > 0 then
@@ -808,6 +830,7 @@ begin
   lbRules.Invalidate;
 end;
 
+// 0x000e4618
 procedure TfmMain.tmSIPingUpdateTimer(Sender: TObject);
 var
   Idx: Integer;
@@ -834,6 +857,7 @@ begin
     QueryServerInfo(Servers[Idx].Address + ':' + IntToStr(Servers[Idx].Port) + '#' + IntToStr(Servers[Idx].Tag), true, true, true, true);
 end;
 
+// 0x000e4828
 procedure TfmMain.lbServersClick(Sender: TObject);
 var
   Enabled: Boolean;
@@ -872,11 +896,13 @@ begin
   RefreshServerClick(Self);
 end;
 
+// 0x000e4a30
 procedure TfmMain.FilterChange(Sender: TObject);
 begin
   UpdateServers;
 end;
 
+// 0x000e4a48
 procedure TfmMain.UpdateServers;
 var
   ActualIdx, Idx, i: Integer;
@@ -1050,12 +1076,14 @@ begin
   Application.ProcessMessages;
 end;
 
+// 0x000e58a8
 procedure TfmMain.lbServersContextPopup(Sender: TObject; MousePos: TPoint;
   var Handled: Boolean);
 begin
   Handled:= lbServers.ItemIndex = -1;
 end;
 
+// 0x000e58e0
 procedure TfmMain.ImportFavoritesClick(Sender: TObject);
 var
   OD: TOpenDialog;
@@ -1085,6 +1113,7 @@ begin
   ExportFavorites(GetUserFilesPath + 'USERDATA.DAT', true);
 end;
 
+// 0x000e5a94
 procedure TfmMain.ImportFavorites(FileName: String; AddToFavs: Boolean);
 var
   ImportFile: File;
@@ -1164,6 +1193,7 @@ begin
   UpdateServers;
 end;
 
+// 0x000e600c
 procedure TfmMain.ExportFavoritesClick(Sender: TObject);
 var
   SD: TSaveDialog;
@@ -1198,6 +1228,7 @@ begin
   SD.Free;
 end;
 
+// 0x000e6234
 procedure TfmMain.ExportFavorites(FileName: String; ExportPasswords: Boolean);
 var
   ExportFile: File;
@@ -1238,17 +1269,20 @@ begin
   CloseFile(ExportFile);
 end;
 
+// 0x000e6520
 procedure TfmMain.ExitClick(Sender: TObject);
 begin
   Close;
 end;
 
+// 0x000e6538
 procedure TfmMain.miViewClick(Sender: TObject);
 begin
   miFilterServerInfo.Checked:= Filtered;
   miStatusBar.Checked:= sbMain.Visible;
 end;
 
+// 0x000e6578
 procedure TfmMain.ToggleFilterServerInfo(Sender: TObject);
 begin
   if Filtered then begin
@@ -1265,12 +1299,14 @@ begin
   UpdateServers;
 end;
 
+// 0x000e66f0
 procedure TfmMain.ToggleStatusBar(Sender: TObject);
 begin
   sbMain.Visible:= not sbMain.Visible;
   sbMain.Top:= 10000;
 end;
 
+// 0x000e6730
 procedure TfmMain.ConnectClick(Sender: TObject);
 var
   Idx: Integer;
@@ -1296,6 +1332,7 @@ begin
   ServerConnect(Servers[Idx].Address, IntToStr(Servers[Idx].Port), SrvPwd);
 end;
 
+// 0x000e6948
 procedure TfmMain.AddServerClick(Sender: TObject);
 var
   Server: String;
@@ -1315,6 +1352,7 @@ begin
     end;
 end;
 
+// 0x000e6b0c
 procedure TfmMain.AddServer(Server: String);
 var
   i, j: Integer;
@@ -1347,6 +1385,7 @@ begin
       UpdateServers;
 end;
 
+// 0x000e6e60
 procedure TfmMain.DeleteServerClick(Sender: TObject);
 var
   Idx, i: Integer;
@@ -1365,6 +1404,7 @@ begin
   FavoritesChanged:= true;
 end;
 
+// 0x000e700c
 procedure TfmMain.RefreshServerClick(Sender: TObject);
 var
   Idx: Integer;
@@ -1376,6 +1416,7 @@ begin
   QueryServerInfo(Servers[Idx].Address + ':' + IntToStr(Servers[Idx].Port) + '#' + IntToStr(Servers[Idx].Tag), true, true, true, true);
 end;
 
+// 0x000e7148
 procedure TfmMain.MasterServerUpdateClick(Sender: TObject);
 var
   SL: TStringList;
@@ -1454,6 +1495,7 @@ begin
 
 end;
 
+// 0x000e76cc
 procedure TfmMain.CopyServerInfoClick(Sender: TObject);
 var
   Idx: Integer;
@@ -1472,6 +1514,7 @@ begin
   SetClipBoardStr(Str);
 end;
 
+// 0x000e7948
 procedure TfmMain.ServerPropertiesClick(Sender: TObject);
 var
   fmServerProperties: TfmServerProperties;
@@ -1500,6 +1543,7 @@ begin
   end;
 end;
 
+// 0x000e7c1c
 procedure TfmMain.RemoteConsoleClick(Sender: TObject);
 var
   fmRconConfig: TfmRconConfig;
@@ -1515,6 +1559,7 @@ begin
   fmRconConfig.Free;
 end;
 
+// 0x000e7d68
 procedure TfmMain.SettingsClick(Sender: TObject);
 var
   fmSettings: TfmSettings;
@@ -1524,16 +1569,19 @@ begin
   fmSettings.Free;
 end;
 
+// 0x000e7da4
 procedure TfmMain.HelpTopicsClick(Sender: TObject);
 begin
   ShellExecute(Handle, 'open', 'http://wiki.sa-mp.com/', nil, nil, SW_SHOWNORMAL);
 end;
 
+// 0x000e7df4
 procedure TfmMain.AboutClick(Sender: TObject);
 begin
   fmAbout.ShowModal;
 end;
 
+// 0x000e7e14
 procedure TfmMain.tsServerListsChange(Sender: TObject; NewTab: Integer;
   var AllowChange: Boolean);
 begin
@@ -1580,6 +1628,7 @@ begin
   IPList.Clear;
 end;
 
+// 0x000e8040
 procedure TfmMain.QueryServerInfoParse(SrcIP: String; SrcPort: Word; Buf: PAnsiChar; DataLen: Integer);
 var
   StrIP: String;
@@ -1635,7 +1684,8 @@ begin
   end;
   
   if Idx = -1 then begin
-   //fmMain.Caption:= 'Server not found ' + StrIP;
+    OutputDebugString(PChar('[ServerNotFound]('+Buf[10]+')'+StrIP+':'+IntToStr(Tag)+
+      ' FromIP: '+SrcIP+':'+IntToStr(SrcPort)+' DataLen:'+IntToStr(DataLen)));
    Exit;
   end;
 
@@ -1679,7 +1729,9 @@ begin
     begin
       BufPos:= 11;
 
-      //OutputDebugString(PChar('[I] Packet from ' + Servers[Idx].Address + ':' + IntToStr(Servers[Idx].Port)));
+      OutputDebugString(PChar('[I] Packet from ' + Servers[Idx].Address + ':' +
+        IntToStr(Servers[Idx].Port) + ' FromIP: ' + SrcIP + ':' +
+        IntToStr(SrcPort) + ' DataLen:' + IntToStr(DataLen)));
 
       Move(Buf[BufPos], TempByte, 1);
       Inc(BufPos, 1);
@@ -1803,6 +1855,7 @@ begin
     lbRules.Invalidate;
 end;
 
+// 0x000e8e00
 procedure TfmMain.QueryServerInfoError(SocketError: Integer);
 var
   err: array[0..512] of Char;
@@ -1811,6 +1864,7 @@ begin
   MessageDlg(err, mtError, [mbOk], 0);
 end;
 
+// 0x000e8e9c
 procedure TfmMain.QueryServerInfo(Server: String; bPing: Boolean; bInfo: Boolean; bPlayers: Boolean; bRules: Boolean);
 var
   Buf: PByteArray;
@@ -1875,6 +1929,9 @@ begin
   Move(Tag, Buf[8], 2); // Tag
 
   if bInfo = true then begin
+    OutputDebugString(PChar('[?i] Query ' + Server + ' ' +
+      IntToStr(Byte(Buf[4])) + '.' + IntToStr(Byte(Buf[5])) + '.' +
+      IntToStr(Byte(Buf[6])) + '.' + IntToStr(Byte(Buf[7])) + ':' + IntToStr(Port)));
     Buf[10]:= Byte('i'); // Info Packet Id
     sendto(QuerySocket, Buf[0], 11, 0, ToAddr, ToLen);
     Sleep(1);
@@ -1905,7 +1962,9 @@ begin
   FreeMem(Buf, 15);
 end;
 
+// 0x000e9414
 procedure TfmMain.ServerConnect(Server: String; Port: String; Password: String);
+// 0x000e93ac
 procedure GetDebugPrivs;
 var
   hToken: THandle;
@@ -1974,16 +2033,19 @@ begin
   //CloseHandle(ProcInfo.hProcess);
 end;
 
+// 0x000e98f8
 procedure TfmMain.piCopyClick(Sender: TObject);
 begin
   SetClipBoardStr(edSIAddress.Text);
 end;
 
+// 0x000e9954
 procedure TfmMain.pmCopyPopup(Sender: TObject);
 begin
   piCopy.Enabled:= edSIAddress.Text <> '- - -';
 end;
 
+// 0x000e99d4
 procedure TfmMain.lbPlayersDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 var
@@ -2033,12 +2095,14 @@ begin
   end;
 end;
 
+// 0x000e9e6c
 procedure TfmMain.hcPlayersSectionResize(HeaderControl: THeaderControl;
   Section: THeaderSection);
 begin
   lbPlayers.Repaint;
 end;
 
+// 0x000e9e90
 procedure TfmMain.lbRulesDrawItem(Control: TWinControl; Index: Integer;
   Rect: TRect; State: TOwnerDrawState);
 var
@@ -2088,12 +2152,14 @@ begin
   end;
 end;
 
+// 0x000ea310
 procedure TfmMain.hcRulesSectionResize(HeaderControl: THeaderControl;
   Section: THeaderSection);
 begin
   lbRules.Repaint;
 end;
 
+// 0x000ea334
 procedure TfmMain.sbMainDrawPanel(StatusBar: TStatusBar;
   Panel: TStatusPanel; const Rect: TRect);
 var
@@ -2107,16 +2173,19 @@ begin
   StatusBar.Canvas.Rectangle(Rect.Left, Rect.Top, Rect.Left+Pcnt, Rect.Bottom);
 end;
 
+// 0x000ea3ec
 procedure TfmMain.lbPlayersExit(Sender: TObject);
 begin
   lbPlayers.ItemIndex:= -1;
 end;
 
+// 0x000ea410
 procedure TfmMain.lbRulesExit(Sender: TObject);
 begin
   lbRules.ItemIndex:= -1;
 end;
 
+// 0x000ea434
 procedure TfmMain.WMRecv(var Message: TMessage);
 var
   lpBuffer: Array[0..2048] of Char;
@@ -2149,6 +2218,7 @@ begin
 
 end;
 
+// 0x000ea578
 procedure TfmMain.FormDestroy(Sender: TObject);
 var
   Reg: TRegistry;
@@ -2174,6 +2244,7 @@ begin
   Sleep(0);
 end;
 
+// 0x000ea6d8
 procedure TfmMain.FormShow(Sender: TObject);
 var
   ServFull, ServAddr, ServPort, ServPass: String;
@@ -2260,6 +2331,7 @@ begin
   Result:= 0;
 end;
 
+// 0x000eabc8
 function TfmMain.BrowseForFolder(Owner: HWND; var Directory: String; StartDir, Title: String): Boolean;
  var
   BrowseInfo: TBrowseInfo;
@@ -2283,11 +2355,13 @@ begin
   End;
 end;
 
+// 0x000eaca0
 procedure TfmMain.miSampClick(Sender: TObject);
 begin
   ShellExecute(Handle, 'open', 'http://www.sa-mp.com/', nil, nil, SW_SHOWNORMAL);
 end;
 
+// 0x000eacf0
 procedure TfmMain.tmrQueryQueueProcessTimer(Sender: TObject);
 begin
   //Application.ProcessMessages;
@@ -2299,11 +2373,13 @@ begin
   end;
 end;
 
+// 0x000ead70
 procedure TfmMain.label_urlClick(Sender: TObject);
 begin
   ShellExecute(0, 'open', PAnsiChar('http://' + (Sender as TLabel).Caption), '', '', SW_SHOWNORMAL);
 end;
 
+// 0x000eae20
 procedure TfmMain.CreateFASTDesktoplink1Click(Sender: TObject);
 var
   Idx: Integer;
@@ -2316,12 +2392,14 @@ begin
   CreateDesktopShortcut(Servers[Idx].Address + ':' + IntToStr(Servers[Idx].Port), Servers[Idx].HostName);
 end;
 
+// 0x000eaf38
 procedure TfmMain.FormResize(Sender: TObject);
 begin
   imLogo.Left:= fmMain.Width - imLogo.Width;
   imLogo.Repaint;
 end;
 
+// 0x000eaf84
 procedure TfmMain.imLogoClick(Sender: TObject);
 begin
   fmAbout.ShowModal;

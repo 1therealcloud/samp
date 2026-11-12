@@ -34,6 +34,7 @@ uses
 
 {$R *.dfm}
 
+// 0x000cce34
 procedure TfmRconConfig.edHostKeyPress(Sender: TObject; var Key: Char);
 begin
   if not (Key in ['0'..'9','a'..'z','A'..'Z','.',':'])
@@ -41,11 +42,13 @@ begin
     Key:= #0;
 end;
 
+// 0x000cce78
 procedure TfmRconConfig.bnCancelClick(Sender: TObject);
 begin
   Close;
 end;
 
+// 0x000cce90
 procedure TfmRconConfig.bnConnectClick(Sender: TObject);
  var
   //fmRcon: TfmRcon;
@@ -67,6 +70,7 @@ begin
   Close;
 end;
 
+// 0x000cd030
 procedure TfmRconConfig.edPasswordChange(Sender: TObject);
 begin
   bnConnect.Enabled:= (edHost.Text <> '') and (edPassword.Text <> '');

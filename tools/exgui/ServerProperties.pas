@@ -48,6 +48,7 @@ uses Main;
 
 {$R *.dfm}
 
+// 0x000cc880
 procedure TfmServerProperties.bnSaveClick(Sender: TObject);
 var
   Idx: Integer;
@@ -58,11 +59,13 @@ begin
   Close;
 end;
 
+// 0x000cc97c
 procedure TfmServerProperties.bnCancelClick(Sender: TObject);
 begin
   Close;
 end;
 
+// 0x000cc994
 procedure TfmServerProperties.bnConnectClick(Sender: TObject);
 var
   Idx: Integer;
@@ -74,11 +77,13 @@ begin
   Close;
 end;
 
+// 0x000ccaa4
 procedure TfmServerProperties.pmCopyPopup(Sender: TObject);
 begin
   piCopy.Enabled:= edAddress.Text <> '- - -';
 end;
 
+// 0x000ccb24
 procedure TfmServerProperties.piCopyClick(Sender: TObject);
 begin
   fmMain.SetClipBoardStr(edAddress.Text);

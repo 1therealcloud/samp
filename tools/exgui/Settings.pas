@@ -17,9 +17,9 @@ type
     Label1: TLabel;
     sbBrowse: TSpeedButton;
     lblModelCacheTag: TLabel;
+    edCacheLoc: TEdit;
     sbBrowseCache: TSpeedButton;
     lblProxyAddr: TLabel;
-    edCacheLoc: TEdit;
     edProxyAddress: TEdit;
     procedure bnSaveClick(Sender: TObject);
     procedure bnCancelClick(Sender: TObject);
@@ -41,6 +41,7 @@ uses Main;
 
 {$R *.dfm}
 
+// 0x000cd3e8
 procedure TfmSettings.bnSaveClick(Sender: TObject);
 var
   Reg: TRegistry;
@@ -57,11 +58,13 @@ begin
   Close;
 end;
 
+// 0x000cd554
 procedure TfmSettings.bnCancelClick(Sender: TObject);
 begin
   Close;
 end;
 
+// 0x000cd56c
 procedure TfmSettings.FormCreate(Sender: TObject);
 var
   Reg: TRegistry;
@@ -81,12 +84,14 @@ begin
   edProxyAddress.Text:= artwork_proxy;
 end;
 
+// 0x000cd6e0
 procedure TfmSettings.sbBrowseClick(Sender: TObject);
 begin
   fmMain.GetGTAExe(Handle);
   edInstallLoc.Text:= ExtractFilePath(gta_sa_exe);
 end;
 
+// 0x000cd758
 procedure TfmSettings.sbBrowseCacheClick(Sender: TObject);
 begin
   fmMain.GetModelCacheFolder(Handle);
