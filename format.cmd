@@ -24,12 +24,14 @@ echo Formatter: %CF%
 "%CF%" --version
 if errorlevel 1 goto :failed
 set "FORMAT_COUNT=0"
-for /r "%CD%\source" %%F in (*) do (
-    for %%E in (.cpp .c .h .hpp .inl) do if /i "%%~xF"=="%%E" (
-        echo   %%F
-        "%CF%" -i -style=file "%%F"
-        if errorlevel 1 goto :failed
-        set /a FORMAT_COUNT+=1 >nul
+for %%R in (source tools) do (
+    for /f "delims=" %%F in ('dir /s /b /a-d "%%R\*" 2^>nul ^| findstr /v /i /r /c:"[\\]tools[\\]rcon[\\]" /c:"[\\]tools[\\]arctool2[\\]" /c:"[\\]tools[\\]exgui[\\]" /c:"[\\]tools[\\]dff[\\]Project1[\\]"') do (
+        for %%E in (.cpp .c .h .hpp .inl) do if /i "%%~xF"=="%%E" (
+            echo   %%F
+            "%CF%" -i -style=file "%%F"
+            if errorlevel 1 goto :failed
+            set /a FORMAT_COUNT+=1 >nul
+        )
     )
 )
 echo Formatted %FORMAT_COUNT% files.

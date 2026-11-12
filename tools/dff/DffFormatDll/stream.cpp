@@ -6,7 +6,8 @@
 // 0x00001000
 void* __cdecl AllocateHeap(void* Context, unsigned int Size)
 {
-    if (!Size) return 0;
+    if (!Size)
+        return 0;
     return malloc(Size);
 }
 
@@ -19,27 +20,28 @@ void __cdecl ReleaseHeap(void* Context, void* Address)
 // 0x00001030
 void* __cdecl AllocateVirtual(void* Context, unsigned int Size)
 {
-    if (!Size) return 0;
+    if (!Size)
+        return 0;
     return VirtualAlloc(0, Size, MEM_COMMIT, PAGE_READWRITE);
 }
 
 // 0x00001050
 void __cdecl ReleaseVirtual(void* Context, void* Address)
 {
-    if (Address) VirtualFree(Address, 0, MEM_RELEASE);
+    if (Address)
+        VirtualFree(Address, 0, MEM_RELEASE);
 }
 
 CAllocatorCallbacks HeapAllocator = {AllocateHeap, ReleaseHeap};
 CAllocatorCallbacks VirtualAllocator = {AllocateVirtual, ReleaseVirtual};
 
-CMemoryStream::CMemoryStream()
-    : Data(0), Position(0), Size(0), End(false), OwnsData(false),
-      Unknown0e(0), Unknown12(0), Unknown16(false) {}
+CMemoryStream::CMemoryStream() : Data(0), Position(0), Size(0), End(false), OwnsData(false), Unknown0e(0), Unknown12(0), Unknown16(false) {}
 
 // 0x00001070
 CMemoryStream::~CMemoryStream()
 {
-    if (OwnsData && Data) {
+    if (OwnsData && Data)
+    {
         free(Data);
         Data = 0;
     }
@@ -49,7 +51,8 @@ CMemoryStream::~CMemoryStream()
 unsigned int CMemoryStream::Skip(int Count)
 {
     unsigned int Next = Position + Count;
-    if (Next < Size) {
+    if (Next < Size)
+    {
         Position = Next;
         return Next;
     }
@@ -62,11 +65,13 @@ unsigned int CMemoryStream::Skip(int Count)
 unsigned int CMemoryStream::Save(FILE* File)
 {
     unsigned int Offset = 0;
-    while (Offset < Size) {
+    while (Offset < Size)
+    {
         unsigned int Next = Offset + 1024;
         if (Next < Size)
             fwrite(Data + Offset, 1, 1024, File);
-        else {
+        else
+        {
             fwrite(Data + Offset, 1, Size - Offset, File);
             Next = Size;
         }
@@ -101,7 +106,8 @@ bool CMemoryStream::MakeOwned()
 // 0x00002e40
 unsigned int CMemoryStream::Write(const void* Buffer, unsigned int Count)
 {
-    if (Size < Position + Count) {
+    if (Size < Position + Count)
+    {
         if (!OwnsData)
             MakeOwned();
         unsigned int Extra = Count - Size + Position;
@@ -125,7 +131,8 @@ unsigned int CMemoryStream::Read(void* Buffer, unsigned int Count)
     unsigned int Next = Position + Count;
     if (Next < Size)
         Position = Next;
-    else {
+    else
+    {
         Position = Size;
         End = true;
     }
@@ -136,7 +143,8 @@ unsigned int CMemoryStream::Read(void* Buffer, unsigned int Count)
 unsigned int CMemoryStream::Load(const char* FileName)
 {
     Position = 0;
-    if (OwnsData && Data) {
+    if (OwnsData && Data)
+    {
         free(Data);
         Data = 0;
     }
@@ -147,7 +155,8 @@ unsigned int CMemoryStream::Load(const char* FileName)
     Data = static_cast<unsigned char*>(malloc(1));
     Size = 1;
     unsigned char Buffer[2048];
-    while (!feof(File)) {
+    while (!feof(File))
+    {
         unsigned int Count = static_cast<unsigned int>(fread(Buffer, 1, sizeof(Buffer), File));
         Write(Buffer, Count);
     }
@@ -222,7 +231,8 @@ CPointerArray::CPointerArray() : Items(0), Count(0) {}
 
 CPointerArray::~CPointerArray()
 {
-    if (Items) {
+    if (Items)
+    {
         free(Items);
         Items = 0;
     }
@@ -239,8 +249,10 @@ void* CPointerArray::Get(unsigned int Index) const
 // 0x00001d10
 bool CPointerArray::Resize(unsigned int NewCount)
 {
-    if (!NewCount) {
-        if (Items) {
+    if (!NewCount)
+    {
+        if (Items)
+        {
             free(Items);
             Items = 0;
         }
@@ -262,7 +274,8 @@ int CPointerArray::Add(void* Value)
 {
     unsigned int OldCount = Count;
     for (unsigned int Index = 0; Index < OldCount; ++Index)
-        if (!Items[Index]) {
+        if (!Items[Index])
+        {
             Items[Index] = Value;
             return Index;
         }

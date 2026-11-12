@@ -4,7 +4,8 @@
 #include "geometry.h"
 
 #pragma pack(push, 1)
-struct ColHeader {
+struct ColHeader
+{
     unsigned int Magic, Size;
     char Name[20];
     unsigned short ModelId, Unknown1e;
@@ -16,16 +17,22 @@ struct ColHeader {
     unsigned int SphereOffset, BoxOffset, LineOffset, VertexOffset, FaceOffset, PlaneOffset;
     unsigned int ShadowFaceCount, ShadowVertexOffset, ShadowFaceOffset;
 };
-struct ColFace {
+struct ColFace
+{
     unsigned short a, b, c;
     unsigned char Material, Light;
 };
-struct ColVertex { short x, y, z; };
-struct ColBox {
+struct ColVertex
+{
+    short x, y, z;
+};
+struct ColBox
+{
     CVector Min, Max;
     unsigned char Material, Flags, Brightness, Light;
 };
-class CColModel {
+class CColModel
+{
 public:
     ColHeader Header;
     CPointerArray Boxes, Spheres;

@@ -5,27 +5,38 @@
 #include "vector.h"
 
 #pragma pack(push, 1)
-struct RwTriangle {
+struct RwTriangle
+{
     unsigned short Vertex1, Vertex2, Material, Vertex3;
 };
-struct RwColor { unsigned char r, g, b, a; };
-struct RwUV { float u, v; };
-struct RwTexture {
+struct RwColor
+{
+    unsigned char r, g, b, a;
+};
+struct RwUV
+{
+    float u, v;
+};
+struct RwTexture
+{
     unsigned int Filter;
     char Name[32], Mask[32];
 };
-struct RwMaterial {
+struct RwMaterial
+{
     unsigned int Flags;
     RwColor Color;
     unsigned int Unused, TextureCount;
     float Surface[3];
     RwTexture Textures[2];
 };
-struct RwSplit {
+struct RwSplit
+{
     unsigned int IndexCount, Material;
     unsigned int* Indices;
 };
-struct RwSkin {
+struct RwSkin
+{
     unsigned char BoneCount, UsedBoneCount, MaxWeights, Unused;
     unsigned char* Bones;
     unsigned int* Indices;
@@ -38,7 +49,8 @@ struct RwSkin {
 };
 
 // Instance size0xa1; field names recovered descriptively from reads and writes.
-class CGeometry {
+class CGeometry
+{
 public:
     bool Modified, Unknown01;
     unsigned int Error, ErrorDetail;
@@ -91,9 +103,7 @@ public:
     // 0x00003260
     bool GenerateNormals();
     // 0x000032b0
-    bool SetColors(const RwColor* Day, const RwColor* Night,
-        const CVector* DayDirection, const CVector* NightDirection,
-        float Minimum, float Maximum);
+    bool SetColors(const RwColor* Day, const RwColor* Night, const CVector* DayDirection, const CVector* NightDirection, float Minimum, float Maximum);
 #endif
 };
 #pragma pack(pop)
@@ -102,8 +112,7 @@ public:
 bool GetGeometryBounds(const CGeometry* Geometry, CVector* Min, CVector* Max);
 #ifdef KDFF_DLL
 // 0x00003050
-void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal,
-    const CVector* Direction, float Minimum, float Maximum);
+void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal, const CVector* Direction, float Minimum, float Maximum);
 #endif
 
 #endif

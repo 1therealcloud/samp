@@ -1,7 +1,8 @@
 #ifndef KDFF_VECTOR_H
 #define KDFF_VECTOR_H
 
-struct CVector {
+struct CVector
+{
     float x, y, z;
 };
 

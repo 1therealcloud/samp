@@ -4,7 +4,8 @@
 #include "geometry.h"
 
 #pragma pack(push, 1)
-class CClump {
+class CClump
+{
 public:
     unsigned int Error, ErrorDetail;
     CMemoryStream File;

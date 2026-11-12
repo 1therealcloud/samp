@@ -34,8 +34,7 @@ void Add(CVector* Result, const CVector* A, const CVector* B)
 // 0x00002d10
 void Normalize(CVector* Result, const CVector* Value)
 {
-    float Scale = 1.0f / static_cast<float>(sqrt(Value->z * Value->z +
-        Value->y * Value->y + Value->x * Value->x));
+    float Scale = 1.0f / static_cast<float>(sqrt(Value->z * Value->z + Value->y * Value->y + Value->x * Value->x));
     Result->x = Scale * Value->x;
     Result->y = Scale * Value->y;
     Result->z = Scale * Value->z;

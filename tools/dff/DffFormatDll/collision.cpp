@@ -32,21 +32,32 @@ bool CColModel::GenerateFaces(const CGeometry* Geometry)
 {
     GetGeometryBounds(Geometry, &Header.Min, &Header.Max);
     Header.Radius = Geometry->Radius;
-    if (!Geometry->HasVertices) return false;
-    if (Faces) { free(Faces); Faces = 0; }
+    if (!Geometry->HasVertices)
+        return false;
+    if (Faces)
+    {
+        free(Faces);
+        Faces = 0;
+    }
     Faces = static_cast<ColFace*>(calloc(Geometry->TriangleCount, 8));
     FaceCount = Geometry->TriangleCount;
-    for (unsigned int i = 0; i < Geometry->TriangleCount; ++i) {
+    for (unsigned int i = 0; i < Geometry->TriangleCount; ++i)
+    {
         Faces[i].a = Geometry->Triangles[i].Vertex3;
         Faces[i].b = Geometry->Triangles[i].Vertex1;
         Faces[i].c = Geometry->Triangles[i].Vertex2;
         Faces[i].Material = 0;
         Faces[i].Light = 0xff;
     }
-    if (Vertices) { free(Vertices); Vertices = 0; }
+    if (Vertices)
+    {
+        free(Vertices);
+        Vertices = 0;
+    }
     Vertices = static_cast<ColVertex*>(calloc(Geometry->VertexCount, 6));
     VertexCount = Geometry->VertexCount;
-    for (unsigned int i = 0; i < Geometry->VertexCount; ++i) {
+    for (unsigned int i = 0; i < Geometry->VertexCount; ++i)
+    {
         // Native x87 product goes directly into CRT _ftol2 (truncate).
         Vertices[i].x = static_cast<short>(static_cast<int>(Geometry->Vertices[i].x * 128.0f));
         Vertices[i].y = static_cast<short>(static_cast<int>(Geometry->Vertices[i].y * 128.0f));
@@ -79,24 +90,29 @@ bool CColModel::Save(const char* FileName, const char* ModelName)
     Output.Write(&Header, 0x78);
     unsigned int i;
     unsigned int Count = Spheres.Count;
-    if (Count) {
+    if (Count)
+    {
         unsigned int Offset = Output.Position - 4;
         Header.SphereCount = static_cast<unsigned short>(Count);
         for (i = 0; i < Count; ++i)
-            if (Spheres.Get(i)) Output.Write(Spheres.Get(i), 20);
+            if (Spheres.Get(i))
+                Output.Write(Spheres.Get(i), 20);
         Header.Size += Output.Position - Offset - 4;
         Header.SphereOffset = Offset;
     }
     Count = Boxes.Count;
-    if (Count) {
+    if (Count)
+    {
         unsigned int Offset = Output.Position - 4;
         Header.BoxCount = static_cast<unsigned short>(Count);
         for (i = 0; i < Count; ++i)
-            if (Boxes.Get(i)) Output.Write(Boxes.Get(i), 28);
+            if (Boxes.Get(i))
+                Output.Write(Boxes.Get(i), 28);
         Header.Size += Output.Position - Offset - 4;
         Header.BoxOffset = Offset;
     }
-    if (GroupCount) {
+    if (GroupCount)
+    {
         unsigned int Start = Output.Position;
         Header.Flags |= 8;
         Output.Write(Groups, GroupCount * 28);
@@ -104,14 +120,16 @@ bool CColModel::Save(const char* FileName, const char* ModelName)
         Output.Write(&GroupCount, 4);
         Header.Size += 4;
     }
-    if (FaceCount) {
+    if (FaceCount)
+    {
         Header.FaceCount = static_cast<unsigned short>(FaceCount);
         unsigned int Offset = Output.Position - 4;
         Output.Write(Faces, FaceCount * 8);
         Header.FaceOffset = Offset;
         Header.Size += Output.Position - Offset - 4;
     }
-    if (VertexCount) {
+    if (VertexCount)
+    {
         unsigned int Offset = Output.Position - 4;
         Output.Write(Vertices, VertexCount * 6);
         Header.VertexOffset = Offset;

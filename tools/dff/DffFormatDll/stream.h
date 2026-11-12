@@ -5,16 +5,17 @@
 
 // Private names are descriptive. Layout and behavior come from kdff.dll.
 #pragma pack(push, 1)
-class CMemoryStream {
+class CMemoryStream
+{
 public:
-    unsigned char* Data;             // +0x00
-    unsigned int Position;           // +0x04
-    unsigned int Size;               // +0x08
-    bool End;                        // +0x0c
-    bool OwnsData;                   // +0x0d
-    unsigned int Unknown0e;          // +0x0e
-    unsigned int Unknown12;          // +0x12
-    bool Unknown16;                  // +0x16
+    unsigned char* Data;    // +0x00
+    unsigned int Position;  // +0x04
+    unsigned int Size;      // +0x08
+    bool End;               // +0x0c
+    bool OwnsData;          // +0x0d
+    unsigned int Unknown0e; // +0x0e
+    unsigned int Unknown12; // +0x12
+    bool Unknown16;         // +0x16
 
     // Inlined in native constructors and temporary stream declarations.
     CMemoryStream();
@@ -38,14 +39,16 @@ public:
     unsigned int ReadUInt();
 };
 
-struct RwChunkHeader {
+struct RwChunkHeader
+{
     unsigned int Type;
     unsigned int Size;
     unsigned short Build;
     unsigned short Version;
 };
 
-class CRwChunk {
+class CRwChunk
+{
 public:
     RwChunkHeader Header;
     CMemoryStream Stream;
@@ -56,7 +59,8 @@ public:
 };
 
 // Shared pointer-array implementation; payload ownership belongs to its users.
-class CPointerArray {
+class CPointerArray
+{
 public:
     void** Items;
     unsigned int Count;
@@ -76,9 +80,10 @@ CRwChunk* ReadChunk(CMemoryStream* Stream);
 // 0x00001bb0
 bool AppendChunk(CRwChunk* Destination, const CRwChunk* Source);
 
-struct CAllocatorCallbacks {
-    void* (__cdecl* Allocate)(void* Context, unsigned int Size);
-    void (__cdecl* Release)(void* Context, void* Address);
+struct CAllocatorCallbacks
+{
+    void*(__cdecl* Allocate)(void* Context, unsigned int Size);
+    void(__cdecl* Release)(void* Context, void* Address);
 };
 // Native callback pairs retained in the DLL's data, although its exports do not use them.
 // 0x00011040
