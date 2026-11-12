@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<VisualStudioProject ProjectType="Visual C++" Version="7.10" Name="dfftool" ProjectGUID="{DE1E52BF-13AA-4FE6-A8B8-2DAE23A53C89}" Keyword="Win32Proj">
+  <Platforms><Platform Name="Win32"/></Platforms>
+  <Configurations>
+    <Configuration Name="Debug|Win32" OutputDirectory="..\..\..\build\binaries\Debug" IntermediateDirectory="..\..\..\build\intermediate\dfftool-debug" ConfigurationType="1" CharacterSet="2">
+      <Tool Name="VCCLCompilerTool" Optimization="0" PreprocessorDefinitions="WIN32;_CONSOLE;_DEBUG" ExceptionHandling="TRUE" RuntimeLibrary="1" BufferSecurityCheck="TRUE" UsePrecompiledHeader="0" WarningLevel="3" DebugInformationFormat="3"/>
+      <Tool Name="VCLinkerTool" OutputFile="$(OutDir)\kdff.exe" LinkIncremental="1" GenerateDebugInformation="TRUE" ProgramDatabaseFile="$(OutDir)\dfftool.pdb" SubSystem="1" TargetMachine="1" OptimizeReferences="2" EnableCOMDATFolding="2"/>
+    </Configuration>
+    <Configuration Name="Release|Win32" OutputDirectory="..\..\..\build\binaries" IntermediateDirectory="..\..\..\build\intermediate\dfftool" ConfigurationType="1" CharacterSet="2">
+      <Tool Name="VCCLCompilerTool" Optimization="2" PreprocessorDefinitions="WIN32;_CONSOLE;NDEBUG" ExceptionHandling="TRUE" RuntimeLibrary="0" BufferSecurityCheck="TRUE" UsePrecompiledHeader="0" WarningLevel="3" DebugInformationFormat="3"/>
+      <Tool Name="VCLinkerTool" OutputFile="$(OutDir)\kdff.exe" LinkIncremental="1" GenerateDebugInformation="TRUE" ProgramDatabaseFile="$(OutDir)\dfftool.pdb" SubSystem="1" TargetMachine="1" OptimizeReferences="2" EnableCOMDATFolding="2"/>
+    </Configuration>
+  </Configurations>
+  <References/>
+  <Files>
+    <File RelativePath=".\dfftool.cpp"/>
+    <File RelativePath="..\DffFormatDll\clump.cpp"/>
+    <File RelativePath="..\DffFormatDll\collision.cpp"/>
+    <File RelativePath="..\DffFormatDll\geometry.cpp"/>
+    <File RelativePath="..\DffFormatDll\stream.cpp"/>
+  </Files>
+  <Globals/>
+</VisualStudioProject>

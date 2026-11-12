@@ -391,6 +391,7 @@ bool GetGeometryBounds(const CGeometry* Geometry, CVector* Min, CVector* Max)
     return true;
 }
 
+#ifdef KDFF_DLL
 // 0x00003050
 void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal,
     const CVector* Direction, float Minimum, float Maximum)
@@ -468,3 +469,4 @@ bool CGeometry::SetColors(const RwColor* Day, const RwColor* Night,
     }
     return true;
 }
+#endif

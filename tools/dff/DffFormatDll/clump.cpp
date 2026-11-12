@@ -188,3 +188,53 @@ bool CClump::ReadGeometry()
     }
     return true;
 }
+
+#ifndef KDFF_DLL
+// 0x00001bb0 (kdff.exe)
+static bool ReadFrameExtension(CRwChunk* Chunk)
+{
+    while (!Chunk->Stream.End) {
+        RwChunkHeader Header;
+        Chunk->Stream.Read(&Header, 12);
+        if (Header.Type != 0x11e && Header.Type == 0x253f2fe && Header.Size > 23)
+            return false;
+        Chunk->Stream.Skip(Header.Size);
+    }
+    return true;
+}
+
+// 0x00001c40 (kdff.exe)
+bool CClump::ReadFrames()
+{
+    if (!FrameList) return false;
+    FrameList->Stream.Position = 0;
+    FrameList->Stream.End = false;
+    RwChunkHeader Header;
+    FrameList->Stream.Read(&Header, 12);
+    if (Header.Type == 1) {
+        unsigned int Count = FrameList->Stream.ReadUInt();
+        if (Count > 255) {
+            if (!Error) Error = 0xabec;
+            ErrorDetail = Count;
+            return false;
+        }
+        Unknown48 = calloc(Count, 56);
+        FrameList->Stream.Read(Unknown48, Count * 56);
+        CRwChunk* Extension = ReadChunk(&FrameList->Stream);
+        while (Extension) {
+            if (Extension->Header.Type == 3 && Extension->Header.Size &&
+                !ReadFrameExtension(Extension)) {
+                delete Extension;
+                if (!Error) Error = 0xabee;
+                return false;
+            }
+            delete Extension;
+            Extension = ReadChunk(&FrameList->Stream);
+        }
+        return true;
+    }
+    if (!Error) Error = 0xabe7;
+    ErrorDetail = 1;
+    return false;
+}
+#endif

@@ -36,6 +36,10 @@ public:
     bool RebuildGeometry();
     // 0x00002170
     bool ReadGeometry();
+#ifndef KDFF_DLL
+    // 0x00001c40 (kdff.exe)
+    bool ReadFrames();
+#endif
 };
 #pragma pack(pop)
 

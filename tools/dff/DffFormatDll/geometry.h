@@ -85,6 +85,7 @@ public:
     bool ImportNightColors(const CGeometry* Source);
     // 0x00003950
     CRwChunk* Write();
+#ifdef KDFF_DLL
     // 0x00003150
     void CalculateNormals();
     // 0x00003260
@@ -93,13 +94,16 @@ public:
     bool SetColors(const RwColor* Day, const RwColor* Night,
         const CVector* DayDirection, const CVector* NightDirection,
         float Minimum, float Maximum);
+#endif
 };
 #pragma pack(pop)
 
 // 0x000010a0
 bool GetGeometryBounds(const CGeometry* Geometry, CVector* Min, CVector* Max);
+#ifdef KDFF_DLL
 // 0x00003050
 void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal,
     const CVector* Direction, float Minimum, float Maximum);
+#endif
 
 #endif

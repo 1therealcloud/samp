@@ -3,11 +3,11 @@
   <Platforms><Platform Name="Win32"/></Platforms>
   <Configurations>
     <Configuration Name="Debug|Win32" OutputDirectory="..\..\..\build\binaries\Debug" IntermediateDirectory="..\..\..\build\intermediate\DffFormatDll-debug" ConfigurationType="2" CharacterSet="2">
-      <Tool Name="VCCLCompilerTool" Optimization="0" PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG" ExceptionHandling="TRUE" RuntimeLibrary="1" StructMemberAlignment="1" BufferSecurityCheck="TRUE" UsePrecompiledHeader="0" WarningLevel="3" DebugInformationFormat="3"/>
+      <Tool Name="VCCLCompilerTool" Optimization="0" PreprocessorDefinitions="WIN32;_WINDOWS;KDFF_DLL;_DEBUG" ExceptionHandling="TRUE" RuntimeLibrary="1" StructMemberAlignment="1" BufferSecurityCheck="TRUE" UsePrecompiledHeader="0" WarningLevel="3" DebugInformationFormat="3"/>
       <Tool Name="VCLinkerTool" OutputFile="$(OutDir)\kdff.dll" LinkIncremental="1" ModuleDefinitionFile="$(ProjectDir)DffFormatDll.def" GenerateDebugInformation="TRUE" ProgramDatabaseFile="$(OutDir)\kdff.pdb" ImportLibrary="$(OutDir)\kdff.lib" SubSystem="2" TargetMachine="1" OptimizeReferences="2" EnableCOMDATFolding="2"/>
     </Configuration>
     <Configuration Name="Release|Win32" OutputDirectory="..\..\..\build\binaries" IntermediateDirectory="..\..\..\build\intermediate\DffFormatDll" ConfigurationType="2" CharacterSet="2">
-      <Tool Name="VCCLCompilerTool" Optimization="2" PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG" ExceptionHandling="TRUE" RuntimeLibrary="0" StructMemberAlignment="1" BufferSecurityCheck="TRUE" UsePrecompiledHeader="0" WarningLevel="3" DebugInformationFormat="3"/>
+      <Tool Name="VCCLCompilerTool" Optimization="2" PreprocessorDefinitions="WIN32;_WINDOWS;KDFF_DLL;NDEBUG" ExceptionHandling="TRUE" RuntimeLibrary="0" StructMemberAlignment="1" BufferSecurityCheck="TRUE" UsePrecompiledHeader="0" WarningLevel="3" DebugInformationFormat="3"/>
       <Tool Name="VCLinkerTool" OutputFile="$(OutDir)\kdff.dll" LinkIncremental="1" ModuleDefinitionFile="$(ProjectDir)DffFormatDll.def" GenerateDebugInformation="TRUE" ProgramDatabaseFile="$(OutDir)\kdff.pdb" ImportLibrary="$(OutDir)\kdff.lib" SubSystem="2" TargetMachine="1" OptimizeReferences="2" EnableCOMDATFolding="2"/>
     </Configuration>
   </Configurations>
