@@ -56,8 +56,12 @@ IDirect3DTexture9* CObjectMaterialText::Create(const char* text, const char* fac
     D3DDISPLAYMODE display;
     device->GetDisplayMode(0, &display);
     IDirect3DTexture9* created;
-    D3DFORMAT format = background ? D3DFMT_X8R8G8B8 : D3DFMT_A8R8G8B8;
-    if (FAILED(D3DXCreateTexture(device, width, height, 1, D3DUSAGE_RENDERTARGET, format, D3DPOOL_DEFAULT, &created)))
+    HRESULT result;
+    if (!background)
+        result = D3DXCreateTexture(device, width, height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &created);
+    else
+        result = D3DXCreateTexture(device, width, height, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &created);
+    if (FAILED(result))
         return 0;
     IDirect3DSurface9* surface;
     created->GetSurfaceLevel(0, &surface);
@@ -66,13 +70,16 @@ IDirect3DTexture9* CObjectMaterialText::Create(const char* text, const char* fac
     ID3DXRenderToSurface* renderer;
     if (FAILED(D3DXCreateRenderToSurface(device, desc.Width, desc.Height, desc.Format, TRUE, D3DFMT_D16, &renderer)))
         return 0;
+    int weight = 400;
+    if (bold)
+        weight = 700;
     DWORD flags = 0;
     if ((BYTE)alignment == 1)
         flags = DT_CENTER | DT_VCENTER;
     else if ((BYTE)alignment == 2)
         flags = DT_RIGHT;
     ID3DXFont* rawFont;
-    if (FAILED(D3DXCreateFontA(device, fontSize, 0, bold ? 700 : 400, 1, FALSE, 1, 0, 0, 0, face, &rawFont)))
+    if (FAILED(D3DXCreateFontA(device, fontSize, 0, weight, 1, FALSE, 1, 0, 0, 0, face, &rawFont)))
     {
         g_pChat->AddDebugMessage("SignText: Can't create font %s", face);
         return 0;

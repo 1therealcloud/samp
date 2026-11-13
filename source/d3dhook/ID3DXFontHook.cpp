@@ -12,8 +12,47 @@
 #include "runutil.h"
 #include <static_assert.h>
 
-// 0x0006b310
-CFontWrapper::CFontWrapper() {}
+// Native vtable RVA 0x0011c76c. State is shared, as in the DLL.
+class CFontColorSprite : public ID3DXSprite
+{
+public:
+    // 0x00073960
+    CFontColorSprite();
+    // 0x00073880
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void** output);
+    // 0x00073890
+    virtual ULONG STDMETHODCALLTYPE AddRef();
+    // 0x000738a0
+    virtual ULONG STDMETHODCALLTYPE Release();
+    // 0x000738b0
+    virtual HRESULT STDMETHODCALLTYPE GetDevice(IDirect3DDevice9** device);
+    // 0x000738c0
+    virtual HRESULT STDMETHODCALLTYPE GetTransform(D3DXMATRIX* transform);
+    // 0x000738d0
+    virtual HRESULT STDMETHODCALLTYPE SetTransform(const D3DXMATRIX* transform);
+    // 0x000738e0
+    virtual HRESULT STDMETHODCALLTYPE SetWorldViewRH(const D3DXMATRIX* world, const D3DXMATRIX* view);
+    // 0x000738f0
+    virtual HRESULT STDMETHODCALLTYPE SetWorldViewLH(const D3DXMATRIX* world, const D3DXMATRIX* view);
+    // 0x00073900
+    virtual HRESULT STDMETHODCALLTYPE Begin(DWORD flags);
+    // 0x00073660
+    virtual HRESULT STDMETHODCALLTYPE Draw(IDirect3DTexture9* texture, const RECT* rect, const D3DXVECTOR3* center, const D3DXVECTOR3* position, D3DCOLOR color);
+    // 0x00073910
+    virtual HRESULT STDMETHODCALLTYPE Flush();
+    // 0x00073920
+    virtual HRESULT STDMETHODCALLTYPE End();
+    // 0x00073930
+    virtual HRESULT STDMETHODCALLTYPE OnLostDevice();
+    // 0x00073940
+    virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
+};
+// 0x00073960
+CFontColorSprite::CFontColorSprite() {}
+
+STATIC_ASSERT(sizeof(CFontColorSprite) == 4);
+// 0x00140bd8
+static CFontColorSprite g_fontColorSprite;
 
 // 0x00073770
 HRESULT STDMETHODCALLTYPE CFontWrapper::QueryInterface(REFIID iid, void** output)
@@ -102,18 +141,20 @@ HRESULT STDMETHODCALLTYPE CFontWrapper::PreloadTextW(const wchar_t* text, INT co
 // 0x00073680
 INT STDMETHODCALLTYPE CFontWrapper::DrawTextA(ID3DXSprite* sprite, const char* text, INT count, RECT* rect, DWORD format, D3DCOLOR color)
 {
-    if (!sprite)
-        return font->DrawTextA(0, text, count, rect, format, color);
-    g_fontRealSprite = sprite;
-    g_fontGlyphColor = color;
-    g_fontGlyphCursor = 0;
-    if (strlen(text) >= 100001)
-        return 0;
-    strcpy(g_fontOriginalText, text);
-    strcpy(g_fontStrippedText, text);
-    FontAnsiToWide(g_fontOriginalText, g_fontWideText, 20000);
-    ChatStripColorTags(g_fontStrippedText);
-    return font->DrawTextA(FontColorSprite(), g_fontStrippedText, (INT)strlen(g_fontStrippedText), rect, format, color);
+    if (sprite)
+    {
+        g_fontRealSprite = sprite;
+        g_fontGlyphColor = color;
+        g_fontGlyphCursor = 0;
+        if (strlen(text) > 100000)
+            return 0;
+        strcpy(g_fontOriginalText, text);
+        strcpy(g_fontStrippedText, text);
+        FontAnsiToWide(g_fontOriginalText, g_fontWideText, 20000);
+        ChatStripColorTags(g_fontStrippedText);
+        return font->DrawTextA(&g_fontColorSprite, g_fontStrippedText, (INT)strlen(g_fontStrippedText), rect, format, color);
+    }
+    return font->DrawTextA(0, text, count, rect, format, color);
 }
 
 // 0x00073850
@@ -228,54 +269,6 @@ void FontNextGlyphColor()
     // Native code checks the ANSI buffer with the same index used for UTF-16.
     if (g_fontOriginalText[g_fontGlyphCursor])
         ++g_fontGlyphCursor;
-}
-
-// Native vtable RVA 0x0011c76c. State is shared, as in the DLL.
-class CFontColorSprite : public ID3DXSprite
-{
-public:
-    // 0x00073960
-    CFontColorSprite();
-    // 0x00073880
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void** output);
-    // 0x00073890
-    virtual ULONG STDMETHODCALLTYPE AddRef();
-    // 0x000738a0
-    virtual ULONG STDMETHODCALLTYPE Release();
-    // 0x000738b0
-    virtual HRESULT STDMETHODCALLTYPE GetDevice(IDirect3DDevice9** device);
-    // 0x000738c0
-    virtual HRESULT STDMETHODCALLTYPE GetTransform(D3DXMATRIX* transform);
-    // 0x000738d0
-    virtual HRESULT STDMETHODCALLTYPE SetTransform(const D3DXMATRIX* transform);
-    // 0x000738e0
-    virtual HRESULT STDMETHODCALLTYPE SetWorldViewRH(const D3DXMATRIX* world, const D3DXMATRIX* view);
-    // 0x000738f0
-    virtual HRESULT STDMETHODCALLTYPE SetWorldViewLH(const D3DXMATRIX* world, const D3DXMATRIX* view);
-    // 0x00073900
-    virtual HRESULT STDMETHODCALLTYPE Begin(DWORD flags);
-    // 0x00073660
-    virtual HRESULT STDMETHODCALLTYPE Draw(IDirect3DTexture9* texture, const RECT* rect, const D3DXVECTOR3* center, const D3DXVECTOR3* position, D3DCOLOR color);
-    // 0x00073910
-    virtual HRESULT STDMETHODCALLTYPE Flush();
-    // 0x00073920
-    virtual HRESULT STDMETHODCALLTYPE End();
-    // 0x00073930
-    virtual HRESULT STDMETHODCALLTYPE OnLostDevice();
-    // 0x00073940
-    virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
-};
-// 0x00073960
-CFontColorSprite::CFontColorSprite() {}
-
-STATIC_ASSERT(sizeof(CFontColorSprite) == 4);
-// 0x00140bd8
-static CFontColorSprite g_fontColorSprite;
-
-// samp.dll RVA: unknown (recovery accessor for static sprite object RVA 0x00140bd8)
-ID3DXSprite* FontColorSprite()
-{
-    return &g_fontColorSprite;
 }
 
 // 0x00073880

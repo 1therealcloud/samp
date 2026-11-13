@@ -89,7 +89,7 @@ void CFonts::OnResetDevice()
 // 0x0006ac40
 FontSize* CFonts::GetTextScreenSize(FontSize* output, const char* text, int format)
 {
-    FontSize size;
+    FontSize size = {0, 0};
     if (strlen(text) > 100000)
     {
         *output = size;
@@ -107,7 +107,7 @@ FontSize* CFonts::GetTextScreenSize(FontSize* output, const char* text, int form
 // 0x0006acf0
 FontSize* CFonts::GetLittleTextScreenSize(FontSize* output, const char* text, int format)
 {
-    FontSize size;
+    FontSize size = {0, 0};
     if (strlen(text) > 100000)
     {
         *output = size;
@@ -279,54 +279,9 @@ void CFonts::Reset()
     wrapper = new CFontWrapper;
     wrapper->font = m_pLicensePlateFont;
     m_pLicensePlateFont = wrapper;
-    FontSize size;
-    GetTextScreenSize(&size, g_fontMeasureProbe, 0);
-    m_nFontHeight = size.cy;
-    GetLittleTextScreenSize(&size, g_fontMeasureProbe, 0);
-    m_nLittleFontHeight = size.cy;
-}
-
-#include "config.h"
-#include "game/gta_globals.h"
-
-// 0x000c6950
-int FontGetHeight()
-{
-    int height;
-    if (g_chatScreenWidth < 1024)
-        height = 14;
-    else if (g_chatScreenWidth < 1400)
-        height = 16;
-    else if (g_chatScreenWidth < 1600)
-        height = 18;
-    else
-        height = 20;
-    return height + g_pConfig->GetIntValue("fontsize") * 2;
-}
-
-// 0x000c69a0
-int FontGetDeathWindowHeight()
-{
-    int base = g_chatScreenWidth < 1024 ? 12 : 14;
-    int adjusted = (int)((DWORD)base + (DWORD)g_pConfig->GetIntValue("fontsize") * 2);
-    return adjusted < base ? base : adjusted;
-}
-
-// 0x000c6a00
-int FontGetWeight()
-{
-    int weight = g_pConfig->GetIntValue("fontweight");
-    if (weight == 0)
-        return 700;
-    return weight == 1 ? 400 : 700;
-}
-
-// 0x000c6a30
-const char* FontGetFace()
-{
-    if (g_pConfig && g_pConfig->GetStringValue("fontface"))
-        return g_pConfig->GetStringValue("fontface");
-    return "Arial";
+    FontSize size, littleSize;
+    m_nFontHeight = GetTextScreenSize(&size, g_fontMeasureProbe, 0)->cy;
+    m_nLittleFontHeight = GetLittleTextScreenSize(&littleSize, g_fontMeasureProbe, 0)->cy;
 }
 
 // 0x00118400
@@ -334,9 +289,3 @@ const char g_fontMeasureProbe[2] = "Y";
 
 // 0x002aca2c
 CFonts* g_deviceFonts;
-
-// 0x000c69e0
-int FontGetDialogHeight()
-{
-    return g_pConfig->GetIntValue("fontsize") * 2 + 20;
-}

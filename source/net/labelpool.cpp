@@ -20,7 +20,9 @@
 // 0x0000e3c0
 DWORD CLabelPool::IsActive(WORD id)
 {
-    return id < 2048 ? active[id] : 0;
+    if (id >= 2048)
+        return 0;
+    return active[id];
 }
 // 0x00001190
 CLabelPool::CLabelPool()
@@ -49,20 +51,18 @@ void CLabelPool::Create(WORD id, const char* text, DWORD color, CVector position
             free(labels[id].text);
         memset(&labels[id], 0, sizeof(TextLabel));
     }
-    DWORD converted = (color << 24) | (color >> 8);
+    color = (color << 24) | (color >> 8);
     char* allocated = (char*)calloc(1, strlen(text) + 1);
     TextLabel* entry = &labels[id];
     entry->text = allocated;
     // Native copies after freeing the old text and does not recover from OOM.
-    do
-    {
-        *allocated++ = *text;
-    }
-    while (*text++);
+    strcpy(allocated, text);
     if (strlen(entry->text) < 400)
         ChatPrepareMessage(entry->text, 399);
-    entry->color = converted;
-    memcpy(&entry->position, &position, 12);
+    entry->color = color;
+    entry->position.x = position.x;
+    entry->position.y = position.y;
+    entry->position.z = position.z;
     memcpy(&entry->drawDistance, &drawDistance, 4);
     entry->behindWalls = behindWalls;
     entry->attachedPlayer = player;

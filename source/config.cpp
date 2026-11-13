@@ -136,12 +136,19 @@ BOOL CConfig::Save()
         if (occupied[i])
         {
             ConfigEntry& entry = entries[i];
-            if (entry.type == VALUE_TYPE_INT)
-                fprintf(file, "%s=%d\n", entry.name, entry.intValue);
-            else if (entry.type == VALUE_TYPE_STRING && entry.stringValue)
-                fprintf(file, "%s=\"%s\"\n", entry.name, entry.stringValue);
-            else if (entry.type == VALUE_TYPE_FLOAT)
-                fprintf(file, "%s=%f\n", entry.name, (double)entry.floatValue);
+            switch (entry.type)
+            {
+                case VALUE_TYPE_INT:
+                    fprintf(file, "%s=%d\n", entry.name, entry.intValue);
+                    break;
+                case VALUE_TYPE_STRING:
+                    if (entry.stringValue)
+                        fprintf(file, "%s=\"%s\"\n", entry.name, entry.stringValue);
+                    break;
+                case VALUE_TYPE_FLOAT:
+                    fprintf(file, "%s=%f\n", entry.name, (double)entry.floatValue);
+                    break;
+            }
         }
     fclose(file);
     return TRUE;
@@ -154,10 +161,13 @@ BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
         i = CreateEntry(name);
     if (i < 0)
         return FALSE;
-    if (readOnly)
+    if (!readOnly)
+    {
+        if (entries[i].readOnly)
+            return FALSE;
+    }
+    else
         entries[i].readOnly = TRUE;
-    else if (entries[i].readOnly)
-        return FALSE;
     entries[i].intValue = value;
     entries[i].type = VALUE_TYPE_INT;
     Save();
@@ -171,10 +181,13 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
         i = CreateEntry(name);
     if (i < 0)
         return FALSE;
-    if (readOnly)
+    if (!readOnly)
+    {
+        if (entries[i].readOnly)
+            return FALSE;
+    }
+    else
         entries[i].readOnly = TRUE;
-    else if (entries[i].readOnly)
-        return FALSE;
     entries[i].type = VALUE_TYPE_STRING;
     if (entries[i].stringValue)
         free(entries[i].stringValue);
@@ -191,10 +204,13 @@ BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
         i = CreateEntry(name);
     if (i < 0)
         return FALSE;
-    if (readOnly)
+    if (!readOnly)
+    {
+        if (entries[i].readOnly)
+            return FALSE;
+    }
+    else
         entries[i].readOnly = TRUE;
-    else if (entries[i].readOnly)
-        return FALSE;
     entries[i].floatValue = value;
     entries[i].type = VALUE_TYPE_FLOAT;
     Save();

@@ -357,7 +357,7 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
         free(text);
     text = (char*)calloc(1, strlen(value) + 64);
     strcpy(text, value);
-    // Native hidden-result scratch; do not invoke the reconstruction FontSize ctor.
+    // Native hidden-result scratch.
     SIZE bodySize;
     FontSize* measured = g_deviceFonts->GetLittleTextScreenSize((FontSize*)&bodySize, text, 0x40);
     textWidth = measured->cx;

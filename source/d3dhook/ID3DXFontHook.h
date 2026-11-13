@@ -14,7 +14,7 @@ class CFontWrapper : public ID3DXFont
 public:
     // Initializes only the COM vptr; wrapped font pointer is untouched.
     // 0x0006b310
-    CFontWrapper();
+    CFontWrapper() {}
     ID3DXFont* font;
     // 0x00073770
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void** output);
@@ -80,7 +80,5 @@ void FontNextAnsiGlyphColor();
 void FontNextGlyphColor();
 // samp.dll RVA: unknown (integration helper extracted from startup RVA 0x000c5e70)
 void InitializeFontDrawBuffers();
-// samp.dll RVA: unknown (recovery accessor for static sprite object RVA 0x00140bd8)
-ID3DXSprite* FontColorSprite();
 
 #endif // ID3DXFONTHOOK_H

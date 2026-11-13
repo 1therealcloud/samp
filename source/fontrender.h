@@ -13,15 +13,9 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount);
 // Saturates each RGB channel at255, retaining alpha.
 // 0x0006b270
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount);
-// samp.dll RVA: unknown (inline layout helper; no standalone entry established)
 struct FontSize
 {
     long cx, cy;
-    FontSize()
-    {
-        cx = 0;
-        cy = 0;
-    }
 };
 class CFonts
 {

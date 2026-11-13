@@ -243,3 +243,51 @@ void ClientRequestQuit()
     g_clientQuitRequested = 1;
     g_clientQuitStarted = GetTickCount();
 }
+
+// 0x000c6950
+int FontGetHeight()
+{
+    int height;
+    if (g_chatScreenWidth < 1024)
+        height = 14;
+    else if (g_chatScreenWidth < 1400)
+        height = 16;
+    else if (g_chatScreenWidth < 1600)
+        height = 18;
+    else
+        height = 20;
+    return height + g_pConfig->GetIntValue("fontsize") * 2;
+}
+
+// 0x000c69a0
+int FontGetDeathWindowHeight()
+{
+    int base = 14;
+    if (g_chatScreenWidth < 1024)
+        base = 12;
+    int adjusted = (int)((DWORD)base + (DWORD)g_pConfig->GetIntValue("fontsize") * 2);
+    return adjusted < base ? base : adjusted;
+}
+
+// 0x000c6a00
+int FontGetWeight()
+{
+    int weight = g_pConfig->GetIntValue("fontweight");
+    if (weight == 0)
+        return 700;
+    return weight == 1 ? 400 : 700;
+}
+
+// 0x000c6a30
+const char* FontGetFace()
+{
+    if (g_pConfig && g_pConfig->GetStringValue("fontface"))
+        return g_pConfig->GetStringValue("fontface");
+    return "Arial";
+}
+
+// 0x000c69e0
+int FontGetDialogHeight()
+{
+    return g_pConfig->GetIntValue("fontsize") * 2 + 20;
+}

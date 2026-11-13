@@ -66,13 +66,8 @@ void CChatBubble::Add(WORD player, const char* text, DWORD color, float drawDist
     if (strlen(text) > 144)
         return;
     DWORD converted = (color >> 8) | 0xff000000;
-    // Native forward byte copy, including overlap and clearing-before-read alias.
-    char* out = entry->text;
-    do
-    {
-        *out++ = *text;
-    }
-    while (*text++);
+    // Native copies only after clearing and validating the source length.
+    strcpy(entries[player].text, text);
     entry->rows = FormatChatBubbleText(entry->text, 36, 12);
     entry->color = converted;
     memcpy(&entry->drawDistance, &drawDistance, 4);

@@ -12,7 +12,7 @@ CTextDraw* CTextDrawPool::Get(WORD id)
 // 0x0001e260
 CTextDrawPool::CTextDrawPool()
 {
-    for (int i = 0; i < 2304; ++i)
+    for (int i = 0; i != 2304; ++i)
     {
         draws[i] = 0;
         active[i] = 0;
@@ -57,23 +57,28 @@ CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const ch
 // 0x0001e2f0
 void CTextDrawPool::Draw()
 {
-    if (g_deviceScoreboard && *(DWORD*)g_deviceScoreboard)
-        return;
-    for (int i = 0; i < 2304; i++)
-        if (active[i])
-            draws[i]->Draw();
+    int i = 0;
+    if (!g_deviceScoreboard || !*(DWORD*)g_deviceScoreboard)
+    {
+        do
+        {
+            if (active[i])
+                draws[i]->Draw();
+        }
+        while (++i != 2304);
+    }
 }
 // 0x0001e330
 void CTextDrawPool::Native01E330()
 {
-    for (int i = 0; i < 2304; i++)
+    for (int i = 0; i != 2304; i++)
         if (active[i])
             draws[i]->Native0B30A0();
 }
 // 0x0001e360
 void CTextDrawPool::OnLostDevice()
 {
-    for (int i = 0; i < 2304; i++)
+    for (int i = 0; i != 2304; i++)
         if (active[i])
             draws[i]->OnLostDevice();
 }
