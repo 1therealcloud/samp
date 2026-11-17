@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "resource.h"
+
 class CLaunch3Dlg : public CDialog
 {
 public:
