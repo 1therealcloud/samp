@@ -21,14 +21,12 @@
 #ifndef HIGHFIRST
 #define byteReverse(buf, len) /* Nothing */
 #else
-// samp.dll RVA: unknown (big-endian dependency branch; not present in the x86 client)
 void byteReverse(unsigned char* buf, unsigned longs);
 
 #ifndef ASM_MD5
 /*
  * Note: this code is harmless on little-endian machines.
  */
-// samp.dll RVA: unknown (big-endian dependency branch; not present in the x86 client)
 void byteReverse(unsigned char* buf, unsigned longs)
 {
     uint32 t;
