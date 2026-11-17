@@ -5,3 +5,6 @@
 /third-party/dxut/** -text
 
 *.dfm -text
+
+# github
+third-party/** linguist-vendored
