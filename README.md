@@ -16,7 +16,7 @@ SHA-256:
 bccdb297464bd382625635be25585df07a8fa6668bc0015650708e3eb4ffcd4b
 ```
 
-The current binary inventory contains **9,095 native entries**: **9,012 function and compiler-helper entries**, plus **83 import thunks**. These counts describe native entry addresses, rather than unique C++ methods or byte-matched functions.
+The current binary inventory contains **9,093 native entries**: **9,010 function and compiler-helper entries**, plus **83 import thunks**. These counts describe native entry addresses, rather than unique C++ methods or byte-matched functions.
 
 | Component | Entries |
 | --- | ---: |
@@ -33,9 +33,9 @@ The current binary inventory contains **9,095 native entries**: **9,012 function
 | D3DX9 | 53 |
 | CRT / STL | 864 |
 | MSVC-generated code / exception handling | 1,333 |
-| Shared code / uncertain ownership | 215 |
+| Shared code / uncertain ownership | 213 |
 | Other import thunks | 66 |
-| **Total** | **9,095** |
+| **Total** | **9,093** |
 
 BASS is an external DLL; its entries above are import thunks. The other 66 import thunks cover D3DX9 and Windows APIs. Uncertain ownership is recorded separately from functionality and matching progress.
 
