@@ -1150,15 +1150,6 @@ const Scripting::OpcodeInfo g_gameLoadModelsCommand = {0x38b, ""};
 const Scripting::OpcodeInfo g_gameModelAvailableCommand = {0x248, "i"};
 // 0x0011e618
 const char g_gameModelTimeoutWarning[41] = "Warning: Model %u wouldn't load in time!";
-// 0x000a7630
-void* __stdcall GameGetModelInfo(int model)
-{
-    if (g_gameUseCustomModelInfo)
-        return g_gameModelInfoTable[model];
-    if (model >= 0 && model <= 20000)
-        return ((void**)0xa9b0c8)[model];
-    return 0;
-}
 // 0x000b41a0
 DWORD __stdcall GameGetModelData1c(int model)
 {
@@ -1320,14 +1311,20 @@ BOOL __cdecl GameGetModelCollisionCentre(int model, CVector* centre)
 BYTE __stdcall GameGetModelFlagsByte(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
-    return info ? *(BYTE*)(info + 0x12) : 0;
+    BYTE flags = 0;
+    if (info)
+        flags = info[0x12];
+    return flags;
 }
 // Native exposes AX; this reads the full overlapping two-byte field.
 // 0x000b6000
 WORD __stdcall GameGetModelFlagsWord(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
-    return info ? *(WORD*)(info + 0x12) : 0;
+    WORD flags = 0;
+    if (info)
+        flags = *(WORD*)(info + 0x12);
+    return flags;
 }
 
 // These helpers receive an existing backend model-info pointer, not a model ID.

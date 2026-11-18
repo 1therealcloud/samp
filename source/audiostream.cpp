@@ -59,13 +59,18 @@ void CAudioStream::DrawInfo()
 {
     if (!initialized || !g_audioStreamRadioActive)
         return;
-    char text[257] = {0};
+    char text[257];
+    memset(text, 0, sizeof(text));
     if (!strlen(g_audioStreamTitle) || !strlen(g_audioStreamStation))
         return;
     _snprintf(text, 256, g_audioStreamInfoFormat, g_audioStreamTitle, g_audioStreamStation);
     // GTA SA virtual addresses: screen height0x00c17048, width0x00c17044.
     DWORD height = *(DWORD*)0xc17048, width = (DWORD)g_chatScreenWidth;
-    RECT rect = {15, (LONG)(height - 20), (LONG)width, (LONG)(height - 20 + 30)};
+    RECT rect;
+    rect.left = 15;
+    rect.top = (LONG)(height - 20);
+    rect.bottom = (LONG)((DWORD)rect.top + 30);
+    rect.right = (LONG)width;
     g_deviceFonts->DrawLittleText(0, text, rect, 0x100, 0x99ffffff, FALSE);
 }
 // 0x00066610

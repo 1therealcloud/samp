@@ -28,7 +28,9 @@ WORD GameFindAnimation(const char* library, const char* name)
 // 0x0009c950
 char* GameGetAnimationName(short index)
 {
-    return index > 0 && index < 1813 ? g_animationNames[index - 1] : 0;
+    if (index > 1812 || index < 1)
+        return 0;
+    return g_animationNames[index - 1];
 }
 // 0x000b4080
 DWORD __stdcall GameAnimationKey(const char* name)

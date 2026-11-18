@@ -71,12 +71,12 @@ DWORD g_archiveNextHandle = 0xff000001;
 // 0x00062000
 BOOL ArchiveIsCustomHandle(DWORD handle)
 {
-    return handle > 0xff000000 && handle < 0xff000101;
+    return handle >= 0xff000001 && handle < 0xff000101;
 }
 // 0x00062020
 int ArchiveFindUnusedRecord()
 {
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i != 50; i++)
         if (g_archiveRecordUsed[i] == FALSE)
             return i;
     return -1;

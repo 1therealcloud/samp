@@ -515,11 +515,14 @@ void __stdcall GameSetModelField8(int model, WORD value)
 // 0x000b40e0
 BOOL __stdcall GameIsObjectModelInfo(void* info)
 {
-    if (!info)
-        return FALSE;
-    // GTA SA vtable virtual addresses.
-    DWORD table = *(DWORD*)info;
-    return table == 0x85bbf0 || table == 0x85bc30 || table == 0x85bc70 || table == 0x85bcb0 || table == 0x85bcf0;
+    if (info)
+    {
+        // GTA SA vtable virtual addresses.
+        DWORD table = *(DWORD*)info;
+        if (table == 0x85bbf0 || table == 0x85bc30 || table == 0x85bc70 || table == 0x85bcb0 || table == 0x85bcf0)
+            return TRUE;
+    }
+    return FALSE;
 }
 
 #include <stdio.h>

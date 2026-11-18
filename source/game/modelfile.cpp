@@ -244,7 +244,7 @@ DWORD CModelFileStream::Read(void* output, DWORD count)
     memset(output, 0, count);
     if (position + count > length)
         count = length - position;
-    if (!count)
+    if (count <= 0)
         return 0;
     memcpy(output, data + position, count);
     DWORD next = position + count;
@@ -541,42 +541,52 @@ DWORD CTxdFile::LoadFile(const char* filename)
 // 0x000bb280
 DWORD CDffFile::StoreFrames(CModelFileChunk* chunk)
 {
-    if (frames)
-        return 0;
-    frames = chunk;
-    return 1;
+    if (!frames)
+    {
+        frames = chunk;
+        return 1;
+    }
+    return 0;
 }
 // 0x000bb2a0
 DWORD CDffFile::StoreGeometryList(CModelFileChunk* chunk)
 {
-    if (geometryList)
-        return 0;
-    geometryList = chunk;
-    return 1;
+    if (!geometryList)
+    {
+        geometryList = chunk;
+        return 1;
+    }
+    return 0;
 }
 // 0x000bb2c0
 DWORD CDffFile::StoreAtomic(CModelFileChunk* chunk)
 {
-    if (atomic)
-        return 0;
-    atomic = chunk;
-    return 1;
+    if (!atomic)
+    {
+        atomic = chunk;
+        return 1;
+    }
+    return 0;
 }
 // 0x000bb2e0
 DWORD CDffFile::StoreStructure(CModelFileChunk* chunk)
 {
-    if (structure)
-        return 0;
-    structure = chunk;
-    return 1;
+    if (!structure)
+    {
+        structure = chunk;
+        return 1;
+    }
+    return 0;
 }
 // 0x000bb300
 DWORD CDffFile::StoreExtension(CModelFileChunk* chunk)
 {
-    if (extension)
-        return 0;
-    extension = chunk;
-    return 1;
+    if (!extension)
+    {
+        extension = chunk;
+        return 1;
+    }
+    return 0;
 }
 // 0x000bb320
 DWORD CDffFile::ReadChildren(CModelFileChunk* parent)
@@ -950,11 +960,8 @@ CModelGeometry::CModelGeometry()
     unknown20 = 0;
     uv = 0;
     triangles = 0;
-    memset(sphere, 0, 16);
-    hasVertices = 0;
-    hasNormals = 0;
-    vertices = 0;
-    normals = 0;
+    memset((BYTE*)this + offsetof(CModelGeometry, sphere), 0,
+           offsetof(CModelGeometry, material) - offsetof(CModelGeometry, sphere));
     materialCount = 0;
     unknown60 = 0;
     unknown61 = 0;
@@ -1025,7 +1032,9 @@ CModelGeometry::~CModelGeometry()
 // 0x000bb110
 bool CModelGeometry::IsModified()
 {
-    return modified != 0 || modifiedOther != 0;
+    if (modified || modifiedOther)
+        return true;
+    return false;
 }
 // 0x000bb130
 DWORD CModelGeometry::GetError()
@@ -2101,7 +2110,9 @@ void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const Model
 // 0x000b9a40
 void* CModelCollisionBoxArray::Get(DWORD index)
 {
-    return index < count ? items[index] : 0;
+    if (index >= count)
+        return 0;
+    return items[index];
 }
 // 0x000b9a60
 DWORD CModelCollisionBoxArray::GetCount()
@@ -2155,7 +2166,9 @@ DWORD CModelCollisionBoxArray::Insert(void* value)
 // 0x000b9a70
 void* CModelCollisionSphereArray::Get(DWORD index)
 {
-    return index < count ? items[index] : 0;
+    if (index >= count)
+        return 0;
+    return items[index];
 }
 // 0x000b9a90
 DWORD CModelCollisionSphereArray::GetCount()

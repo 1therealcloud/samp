@@ -1517,10 +1517,13 @@ BYTE __stdcall GameFindPlayerPedIndex(void* ped)
 // 0x000b4410
 BOOL __stdcall GameIsTrainVehicle(void* vehicle)
 {
-    if (!vehicle)
-        return FALSE;
-    g_gameVehicleModel = *(short*)((BYTE*)vehicle + 0x22);
-    return g_gameVehicleModel == 0x21a || g_gameVehicleModel == 0x23a || g_gameVehicleModel == 0x219 || g_gameVehicleModel == 0x239 || g_gameVehicleModel == 0x1c1;
+    if (vehicle)
+    {
+        g_gameVehicleModel = *(short*)((BYTE*)vehicle + 0x22);
+        if (g_gameVehicleModel == 0x21a || g_gameVehicleModel == 0x23a || g_gameVehicleModel == 0x219 || g_gameVehicleModel == 0x239 || g_gameVehicleModel == 0x1c1)
+            return TRUE;
+    }
+    return FALSE;
 }
 // 0x000b4460
 BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)

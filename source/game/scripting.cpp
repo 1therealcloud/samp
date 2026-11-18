@@ -44,21 +44,22 @@ int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, cons
     return EXCEPTION_CONTINUE_SEARCH;
 }
 // 0x000b1ed0
-DWORD Scripting::ExecBuffer()
+__declspec(naked) DWORD Scripting::ExecBuffer()
 {
-    g_scriptLocalDebug = TRUE;
-    BYTE* buffer = g_scriptBuffer;
-    memcpy(g_scriptThread->opaque + 0x14, &buffer, 4);
+    // The backend receives the script thread in ECX and can replace it.
     // clang-format off
     __asm {
+        mov dword ptr [g_scriptLocalDebug],1
+        mov eax,offset g_scriptBuffer
         mov ecx,g_scriptThread
+        mov [ecx+0x14],eax
         call g_scriptProcessOneCommand
+        mov ecx,g_scriptThread
+        mov eax,[ecx+0xc5]
+        mov dword ptr [g_scriptLocalDebug],0
+        ret
     }
     // clang-format on
-    DWORD result;
-    memcpy(&result, g_scriptThread->opaque + 0xc5, 4);
-    g_scriptLocalDebug = FALSE;
-    return result;
 }
 // 0x000b1f10
 DWORD __cdecl Scripting::ProcessCommand(const OpcodeInfo* command, ...)

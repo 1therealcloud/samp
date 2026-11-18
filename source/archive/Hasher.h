@@ -13,7 +13,7 @@
 class CHasher
 {
 private:
-    // 0x00140788
+    // 0x00140790
     static DWORD ms_dwHashAlgorithm;
 
     HCRYPTHASH m_hCryptHash;

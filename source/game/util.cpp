@@ -1117,21 +1117,48 @@ DWORD __stdcall GamePoolVehicleGetIndex(void* vehicle)
 // 0x000b3870
 void* GamePoolBuildingGetArray()
 {
-    return **(void***)0xb74498;
+    void* array;
+    // clang-format off
+    __asm {
+        mov eax,0xb74498
+        mov edx,[eax]
+        mov eax,[edx]
+        mov array,eax
+    }
+    // clang-format on
+    return array;
 }
 
 // GTA SA virtual pool-pointer address: 0x00B744A0.
 // 0x000b3890
 void* GamePoolDummyGetArray()
 {
-    return **(void***)0xb744a0;
+    void* array;
+    // clang-format off
+    __asm {
+        mov eax,0xb744a0
+        mov edx,[eax]
+        mov eax,[edx]
+        mov array,eax
+    }
+    // clang-format on
+    return array;
 }
 
 // GTA SA virtual pool-pointer address: 0x00B7449C.
 // 0x000b38b0
 void* GamePoolObjectGetArray()
 {
-    return **(void***)0xb7449c;
+    void* array;
+    // clang-format off
+    __asm {
+        mov eax,0xb7449c
+        mov edx,[eax]
+        mov eax,[edx]
+        mov array,eax
+    }
+    // clang-format on
+    return array;
 }
 
 // Native scans exactly 3100 records of 412 bytes, independent of pool metadata.
@@ -2379,4 +2406,14 @@ void* GameRwGetClumpSkin(void* clump)
 {
     void* atomic = GameRwGetFirstAtomic(clump);
     return GameRwGetGeometrySkin(*(void**)((BYTE*)atomic + 0x18));
+}
+
+// 0x000a7630
+void* __stdcall GameGetModelInfo(int model)
+{
+    if (g_gameUseCustomModelInfo)
+        return g_gameModelInfoTable[model];
+    if (model >= 0 && model <= 20000)
+        return ((void**)0xa9b0c8)[model];
+    return 0;
 }

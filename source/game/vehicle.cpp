@@ -246,12 +246,12 @@ initialized:
 // 0x000b7940
 BOOL CVehicle::IsRC()
 {
-    if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
-    {
-        short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
-        return model == 0x1b9 || model == 0x1d0 || model == 0x1d1 || model == 0x252 || model == 0x1f5 || model == 0x234;
-    }
-    return FALSE;
+    if (!m_pGameVehicle)
+        return FALSE;
+    if (!GamePoolVehicleGetAt(m_nHandle))
+        return FALSE;
+    short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
+    return model == 0x1b9 || model == 0x1d0 || model == 0x1d1 || model == 0x252 || model == 0x1f5 || model == 0x234;
 }
 // 0x000b7e60
 BOOL CVehicle::HasSiren()
@@ -740,22 +740,22 @@ void CVehicle::SetLandingGearState(int state)
 // 0x000b7170
 BOOL CVehicle::GetLandingGearState()
 {
-    if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5)
-    {
-        void* backend = m_pGameVehicle;
-        float position = 0.0f;
-        // clang-format off
-        __asm {
-            mov eax,backend
-            mov edx,[eax + 0x9cc]
-            mov position,edx
-        }
-        // clang-format on
-        if (position == g_objectScaleLowerBound)
-            return FALSE;
-        return TRUE;
+    if (!m_pGameVehicle)
+        return FALSE;
+    if (GameGetVehicleSubtype(m_pGameVehicle) != 5)
+        return FALSE;
+    void* backend = m_pGameVehicle;
+    float position = 0.0f;
+    // clang-format off
+    __asm {
+        mov eax,backend
+        mov edx,[eax + 0x9cc]
+        mov position,edx
     }
-    return FALSE;
+    // clang-format on
+    if (position == g_objectScaleLowerBound)
+        return FALSE;
+    return TRUE;
 }
 
 // 0x000b7480
@@ -863,12 +863,12 @@ void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
 // 0x000b78b0
 BOOL CVehicle::IsTrailer()
 {
-    if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
-    {
-        short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
-        return model == 0x1b3 || model == 0x1c2 || model == 0x248 || model == 0x24f || model == 0x25e || model == 0x25f || model == 0x260 || model == 0x262 || model == 0x263;
-    }
-    return FALSE;
+    if (!m_pGameVehicle)
+        return FALSE;
+    if (!GamePoolVehicleGetAt(m_nHandle))
+        return FALSE;
+    short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
+    return model == 0x1b3 || model == 0x1c2 || model == 0x248 || model == 0x24f || model == 0x25e || model == 0x25f || model == 0x260 || model == 0x262 || model == 0x263;
 }
 
 // 0x000b7d80

@@ -58,8 +58,8 @@ BOOL CObjectPool::Delete(WORD id)
 // 0x00013060
 CObjectPool::~CObjectPool()
 {
-    for (WORD i = 0; i < 2100; ++i)
-        Delete(i);
+    for (int i = 0; i < 2100; ++i)
+        Delete((WORD)i);
 }
 // 0x000128d0
 CObject* CObjectPool::Find(void* backend)
@@ -166,11 +166,13 @@ BOOL CObjectPool::Create(WORD id, int model, CVector position, CVector rotation,
     }
     CObject* object = g_pGame->NewObject(model, position.x, position.y, position.z, rotation, drawDistance, firstHour, lastHour);
     *(CObject**)(state + 0x20d4 + id * 4) = object;
-    if (!object)
-        return FALSE;
-    *(DWORD*)(state + 4 + id * 4) = 1;
-    UpdateLargestId();
-    return TRUE;
+    if (object)
+    {
+        *(DWORD*)(state + 4 + id * 4) = 1;
+        UpdateLargestId();
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x00012a90

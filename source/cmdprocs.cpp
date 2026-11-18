@@ -297,19 +297,20 @@ void Commands::DrawNameTagStatus(char*)
 // 0x000681a0
 void Commands::DrawChatTimestamps(char*)
 {
-    if (g_pChat)
+    CChat* chat = g_pChat;
+    if (chat)
     {
-        if (g_pChat->m_bTimestamps)
+        if (chat->m_bTimestamps)
         {
-            g_pChat->m_bTimestamps = false;
-            g_pChat->m_bRedraw = TRUE;
+            chat->m_bTimestamps = false;
+            chat->m_bRedraw = TRUE;
             if (g_pConfig)
                 g_pConfig->WriteIntValue("timestamp", 0, FALSE);
         }
         else
         {
-            g_pChat->m_bTimestamps = true;
-            g_pChat->m_bRedraw = TRUE;
+            chat->m_bTimestamps = true;
+            chat->m_bRedraw = TRUE;
             if (g_pConfig)
                 g_pConfig->WriteIntValue("timestamp", 1, FALSE);
         }

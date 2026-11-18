@@ -51,15 +51,19 @@ void CTextDrawSelection::ResetTextDraws()
     BYTE* pool = *(BYTE**)(pools + 0x20);
     if (!pool)
         return;
-    for (WORD i = 0; i < 2304; ++i)
-        if (*(DWORD*)(pool + i * 4))
+    for (int i = 0; i != 2304; ++i)
+    {
+        // The native loop narrows the index before the pool lookup.
+        WORD id = (WORD)i;
+        if (id < 2304 && *(DWORD*)(pool + id * 4))
         {
-            BYTE* draw = *(BYTE**)(pool + 0x2400 + i * 4);
+            BYTE* draw = *(BYTE**)(pool + 0x2400 + id * 4);
             if (!draw)
                 continue;
             draw[0x9d1] = 0;
             *(DWORD*)(draw + 0x9d2) = 0;
         }
+    }
 }
 // 0x00070db0
 void CTextDrawSelection::UpdateHovered()

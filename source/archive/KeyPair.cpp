@@ -47,7 +47,7 @@ void CKeyPair::GenerateKey()
 //------------------------------------
 
 // 0x00065380
-void CKeyPair::ReleaseKey()
+__declspec(noinline) void CKeyPair::ReleaseKey()
 {
     // Destroy the key pair
     CRYPT(DestroyKey)(m_hCryptKey);

@@ -95,7 +95,10 @@ CPed::~CPed()
 // 0x000aba90
 BOOL CPed::IsInVehicle()
 {
-    return m_pGamePed ? (*(DWORD*)((BYTE*)m_pGamePed + 0x46c) >> 8) & 1 : FALSE;
+    BYTE* ped = (BYTE*)m_pGamePed;
+    if (!ped)
+        return (BOOL)ped;
+    return (*(DWORD*)(ped + 0x46c) >> 8) & 1;
 }
 // 0x000abbe0
 BOOL CPed::IsPassenger()
@@ -236,9 +239,7 @@ BOOL CPed::IsOnGround()
 void* CPed::GetCurrentWeaponSlot()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
-    if (!ped)
-        return 0;
-    return ped + 0x5a0 + *(ped + 0x718) * 0x1c;
+    return ped ? ped + 0x5a0 + ped[0x718] * 0x1c : 0;
 }
 
 #include "game/aimstuff.h"
@@ -280,8 +281,8 @@ void CPed::RemoveWeaponWhenEnteringVehicle()
     {
         // clang-format off
         // GTA SA virtual address: 0x005e6370, backend ECX, argument0.
-        __asm { push 0
-            mov ecx,ped
+        __asm { mov ecx,ped
+            push 0
             mov edx,0x5e6370
             call edx
         }
@@ -454,7 +455,9 @@ BOOL CPed::HasJetpack()
     BYTE* tasks = *(BYTE**)(ped + 0x47c);
     BYTE* task = *(BYTE**)(tasks + 0x10);
     // GTA SA virtual address: 0x008705c4, native task vtable comparison.
-    return task && *(DWORD*)task == 0x8705c4 ? TRUE : FALSE;
+    if (!task)
+        return FALSE;
+    return *(DWORD*)task == 0x8705c4;
 }
 
 // 0x000ad720
@@ -463,7 +466,7 @@ void CPed::StopDancing()
     CMatrix matrix;
     unknown2d2 = 0;
     GetMatrix(&matrix);
-    Teleport(matrix.position);
+    Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
 }
 
 // 0x000ad510
@@ -704,8 +707,9 @@ void CPed::DisableJetpack()
         // GTA SA virtual addresses: vtable0x008705c4 and callee0x006801d0.
         if (task && *(DWORD*)task == 0x8705c4)
         {
+            void* backendTask = task;
             // clang-format off
-            __asm { mov ecx,task
+            __asm { mov ecx,backendTask
                 mov edx,0x6801d0
                 push 1
                 call edx
@@ -841,7 +845,7 @@ void CPed::StopUrinating()
         }
         CMatrix matrix;
         GetMatrix(&matrix);
-        Teleport(matrix.position);
+        Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
         m_bUrinating = 0;
     }
 }
@@ -888,8 +892,8 @@ void CPed::SetModelIndex(int model)
             __asm { mov eax,ped
                 lea ecx,[eax+0x294]
                 push eax
-                mov edx,0x4e68d0
-                call edx
+                mov ebx,0x4e68d0
+                call ebx
             }
             // clang-format on
         }
@@ -1103,7 +1107,7 @@ void CPed::SetControllable(BOOL enabled)
             return;
         CMatrix matrix;
         GetMatrix(&matrix);
-        Teleport(matrix.position);
+        Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
     }
 }
 
@@ -1689,10 +1693,21 @@ const Scripting::OpcodeInfo g_pedWarpFromVehicle = {0x362, "ifff"};
 // 0x0011f320
 const char g_pedNullAnimation[5] = "NULL";
 // 0x000b3770
-void* __stdcall GamePoolPedGetAt(int handle)
+__declspec(noinline) void* __stdcall GamePoolPedGetAt(int handle)
 {
-    // GTA SA virtual pool-pointer and thiscall backend addresses.
-    return ((void*(__fastcall*)(void*, void*, int))0x404910)(*(void**)0xb74490, 0, handle);
+    void* result;
+    // GTA SA thiscall backend. The pool goes in ECX and the handle on the stack.
+    // clang-format off
+    __asm {
+        mov ebx,0xb74490
+        mov ecx,[ebx]
+        push handle
+        mov ebx,0x404910
+        call ebx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
 }
 // 0x000aea30
 BOOL CPed::HasAccessory()
@@ -1729,7 +1744,7 @@ void CPed::DropStuff()
     }
     CMatrix matrix;
     GetMatrix(&matrix);
-    Teleport(matrix.position);
+    Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
     m_stuffType = 0;
 }
 // 0x000ac190
@@ -3156,7 +3171,11 @@ void* CPed::FindAnimationTask()
 DWORD CPed::GetPackedAnimation()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
-    if (!ped || *(DWORD*)ped == 0x863c40 || !*(void**)(ped + 0x18))
+    if (!ped)
+        return 0;
+    if (*(DWORD*)ped == 0x863c40)
+        return 0;
+    if (!*(void**)(ped + 0x18))
         return 0;
     void* task = FindAnimationTask();
     return task ? PackAnimationTask(task) : PackQueuedAnimation();
@@ -3627,7 +3646,12 @@ void CPed::ProcessVehicleHorn()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
         return;
-    KeyPad* keys = m_nPlayerNumber ? KeyStuff::GetPlayerKeys(m_nPlayerNumber) : KeyStuff::GetInternalKeys();
+    KeyPad* keys;
+    BYTE player = m_nPlayerNumber;
+    if (!player)
+        keys = KeyStuff::GetInternalKeys();
+    else
+        keys = KeyStuff::GetPlayerKeys(player);
     BYTE* ped = (BYTE*)m_pGamePed;
     BYTE* vehicle = *(BYTE**)(ped + 0x58c);
     if (vehicle && (*(DWORD*)(ped + 0x46c) & 0x100) && *(void**)(vehicle + 0x460) == ped)
@@ -3637,10 +3661,10 @@ void CPed::ProcessVehicleHorn()
 // 0x000ae050
 void CPed::SetWeaponSkill(int skill, WORD value)
 {
-    if (m_nPlayerNumber)
-        AimStuff::SetPlayerSkill(m_nPlayerNumber, skill, value);
-    else
-        AimStuff::SetLocalSkill(skill, value);
+    BYTE player = m_nPlayerNumber;
+    if (!player)
+        return AimStuff::SetLocalSkill(skill, value);
+    AimStuff::SetPlayerSkill(player, skill, value);
 }
 
 // 0x000ae130

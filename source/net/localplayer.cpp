@@ -913,7 +913,9 @@ CPed* CLocalPlayer::GetPed()
 DWORD CLocalPlayer::GetColorAsARGB()
 {
     CPlayerPool* players = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
-    return (PlayerColors::Get(*(WORD*)players) >> 8) | 0xff000000;
+    WORD player = players->localId;
+    DWORD color = PlayerColors::Get(player);
+    return (color >> 8) | 0xff000000;
 }
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
 STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);

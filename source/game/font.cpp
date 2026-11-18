@@ -2,7 +2,19 @@
 // 0x0009fc80
 void Font_PrintString(float x, float y, char* text)
 {
-    ((void(__cdecl*)(float, float, char*))0x71a700)(x, y, text);
+    // GTA SA cdecl backend. Forward the three argument words.
+    // clang-format off
+    __asm {
+        push text
+        push y
+        push x
+        mov eax,0x71a700
+        call eax
+        pop eax
+        pop eax
+        pop eax
+    }
+    // clang-format on
 }
 // 0x0009fca0
 __declspec(naked) void Font_SetColor(DWORD color)

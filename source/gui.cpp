@@ -442,7 +442,8 @@ void ClientProcessMenuTransition()
 // 0x0009e2d0
 void GameDebugDraw()
 {
-    if (g_gameDebugStage == 10)
+    DWORD stage = g_gameDebugStage;
+    if (stage && stage == 10)
         GameDrawDebugEntities();
 }
 
