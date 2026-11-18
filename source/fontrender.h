@@ -35,9 +35,9 @@ public:
     // 0x0006ac00
     void OnResetDevice();
     // 0x0006ac40
-    FontSize* GetTextScreenSize(FontSize*, const char*, int);
+    FontSize GetTextScreenSize(const char*, int);
     // 0x0006acf0
-    FontSize* GetLittleTextScreenSize(FontSize*, const char*, int);
+    FontSize GetLittleTextScreenSize(const char*, int);
     // 0x0006ada0
     void DrawText(ID3DXSprite*, const char*, RECT, D3DCOLOR, BOOL);
     // 0x0006af20

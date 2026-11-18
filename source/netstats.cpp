@@ -137,9 +137,8 @@ void CNetStats::Draw()
     }
     StatisticsToString(stats, g_netStatsScratch, 4);
     strcat(g_netStatsDisplay, g_netStatsScratch);
-    FontSize fullSize, probe;
-    g_deviceFonts->GetTextScreenSize(&fullSize, g_netStatsDisplay, 0);
-    g_deviceFonts->GetTextScreenSize(&probe, g_fontMeasureProbe, 0);
+    FontSize fullSize = g_deviceFonts->GetTextScreenSize(g_netStatsDisplay, 0);
+    FontSize probe = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
     // GTA SA virtual address: width captured once for title and all body lines.
     int right = *(DWORD*)0xc17044 - 150;
     RECT title = {10, 10, right, 10 + probe.cy};

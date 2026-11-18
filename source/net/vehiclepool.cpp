@@ -417,7 +417,7 @@ DWORD CVehiclePool::GetRef(void* backend)
 WORD CVehiclePool::Find(void* gameObject)
 {
     for (int i = 1; i <= m_nLargestId; i++)
-        if (m_pGameObjects[i] == gameObject)
+        if (gameObject == m_pGameObjects[i])
             return (WORD)i;
     return 0xffff;
 }
@@ -431,7 +431,9 @@ CVehicle* CVehiclePool::Get(WORD id)
 // 0x00001150
 BOOL CVehiclePool::DoesExist(WORD id)
 {
-    return id < 2000 ? m_bNotEmpty[id] : FALSE;
+    if (id >= 2000)
+        return FALSE;
+    return m_bNotEmpty[id];
 }
 
 #include "game/object.h"
@@ -474,9 +476,9 @@ void CVehiclePool::ConstructLicensePlates()
         IDirect3DTexture9* created = ((CLicensePlate*)g_devicePlateManager)->Create("XYZSR998");
         ((CLicensePlate*)g_devicePlateManager)->defaultTexture = created;
     }
-    if (m_nLargestId >= 0)
+    DWORD counter = 0;
+    if ((int)(WORD)counter <= m_nLargestId)
     {
-        DWORD counter = 0;
         do
         {
             WORD slot = (WORD)counter;
@@ -490,9 +492,9 @@ void CVehiclePool::ConstructLicensePlates()
 void CVehiclePool::ShutdownLicensePlates()
 {
     BYTE* state = (BYTE*)this;
-    if (m_nLargestId >= 0)
+    DWORD counter = 0;
+    if ((int)(WORD)counter <= m_nLargestId)
     {
-        DWORD counter = 0;
         do
         {
             WORD slot = (WORD)counter;

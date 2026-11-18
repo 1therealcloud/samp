@@ -42,7 +42,7 @@ const float g_textDrawVirtualHeight = 448.0f;
 // 0x000b2720
 int GameAllocateTextDrawTexture()
 {
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i != 200; i++)
         if (!g_textDrawTextureUsed[i])
         {
             g_textDrawTextureUsed[i] = 1;
@@ -366,7 +366,7 @@ void CTextDraw::Native0B30A0()
         created = g_modelPreview->RenderVehicle(*model, data.format.backgroundColor, (CVector*)data.format.rotation, data.format.zoom, data.format.vehicleColor1,
                                                 data.format.vehicleColor2);
     }
-    else if ((*model >= 321 && *model <= 373) || *model >= 615)
+    else if ((*model > 320 && *model <= 373) || *model >= 615)
     {
         if (!GameHasModelInfo(*model))
             *model = 0x48c7;

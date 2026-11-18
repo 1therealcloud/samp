@@ -37,7 +37,7 @@ void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD 
         case 3:
             car = vehicles->Get(vehicle);
             if (car)
-                car->SetColor((BYTE)param2, (BYTE)param3);
+                car->SetColor((int)param2, (int)param3);
             break;
         case 4:
             if (player <= 1004)
@@ -117,7 +117,7 @@ void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, D
         {
             vehicle = pool->Get(id);
             if (vehicle)
-                vehicle->SetColor((BYTE)param2, (BYTE)param3);
+                vehicle->SetColor((int)param2, (int)param3);
         }
         else if (eventType == 4 && vehicle && vehicle->m_pGameVehicle)
         {

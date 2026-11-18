@@ -83,7 +83,7 @@ void CModelPreview::RenderTestScene(int model)
     ClientSetRenderState(8, 1);
     ClientSetRenderState(7, 2);
     CVector position = {0, 0, 70.0f};
-    CObject* object = new CObject(model, position, CVector(), 200.0f, 0, 0, 0);
+    CObject* object = new CObject(model, position.x, position.y, position.z, CVector(), 200.0f, 0, 0, 0);
     object->Add();
     position.z = 40.0f;
     object->Teleport(position);
@@ -105,7 +105,7 @@ void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotat
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
     void* result = GameRwCreateTexture(raster);
-    CPed* ped = new CPed(208, 0, CVector(), 0.0f);
+    CPed* ped = new CPed(208, 0, 0.0f, 0.0f, 0.0f, 0.0f);
     if (!raster || !result || !ped)
         return 0;
     // Native special height is DWORD 0x42489999 (the lower neighbour of 50.15f).
@@ -228,7 +228,7 @@ void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVect
     if (model == 1373 || model == 3118 || model == 3552 || model == 3553)
         model = 18631;
     CVector initialPosition = {0, 0, 50.0f};
-    CObject* object = new CObject(model, initialPosition, CVector(), 0, 0, 0, 0);
+    CObject* object = new CObject(model, initialPosition.x, initialPosition.y, initialPosition.z, CVector(), 0, 0, 0, 0);
     if (!object || !object->m_pGameEntity)
         return result;
     float distance;

@@ -652,7 +652,7 @@ void CObject::UpdateCachedCentre()
     }
 }
 // 0x000a8d00
-CObject::CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour) : CEntity()
+CObject::CObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour) : CEntity()
 {
     DWORD handle = 0;
     attachedVehicle = 0xffff;
@@ -693,7 +693,7 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
         UnFuck((void*)0x46977f, 1);
         *(BYTE*)0x46977f = 0x75;
     }
-    Scripting::ProcessCommand(&g_objectCreateCommand, model, (double)position.x, (double)position.y, (double)position.z, &handle);
+    Scripting::ProcessCommand(&g_objectCreateCommand, model, (double)x, (double)y, (double)z, &handle);
     if (model < 0)
         *(BYTE*)0x46977f = 0x7d;
     if (handle && GamePoolObjectGetAt(handle))
@@ -717,9 +717,9 @@ CObject::CObject(int model, CVector position, CVector rotation, float drawDistan
             memcpy(&streamingDistance, &drawDistance, 4);
         }
         GetMatrix(&baseMatrix);
-        baseMatrix.position.x = position.x;
-        baseMatrix.position.y = position.y;
-        baseMatrix.position.z = position.z;
+        baseMatrix.position.x = x;
+        baseMatrix.position.y = y;
+        baseMatrix.position.z = z;
         SetMatrix(baseMatrix);
         SetRotation(&rotation);
         SetBackendHighFlag();

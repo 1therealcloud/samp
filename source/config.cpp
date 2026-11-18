@@ -57,7 +57,9 @@ int CConfig::GetIndex(const char* name)
 // 0x000657b0
 bool CConfig::DoesExist(const char* name)
 {
-    return GetIndex(name) >= 0;
+    if (GetIndex(name) >= 0)
+        return true;
+    return false;
 }
 // 0x000657d0
 int CConfig::CreateEntry(const char* name)
@@ -79,19 +81,31 @@ int CConfig::CreateEntry(const char* name)
 int CConfig::GetIntValue(const char* name)
 {
     int i = GetIndex(name);
-    return i >= 0 && entries[i].type == VALUE_TYPE_INT ? entries[i].intValue : 0;
+    if (i < 0)
+        return 0;
+    if (entries[i].type != VALUE_TYPE_INT)
+        return 0;
+    return entries[i].intValue;
 }
 // 0x000658c0
 const char* CConfig::GetStringValue(const char* name)
 {
     int i = GetIndex(name);
-    return i >= 0 && entries[i].type == VALUE_TYPE_STRING ? entries[i].stringValue : 0;
+    if (i < 0)
+        return 0;
+    if (entries[i].type != VALUE_TYPE_STRING)
+        return 0;
+    return entries[i].stringValue;
 }
 // 0x000658f0
 float CConfig::GetFloatValue(const char* name)
 {
     int i = GetIndex(name);
-    return i >= 0 && entries[i].type == VALUE_TYPE_FLOAT ? entries[i].floatValue : 0.0f;
+    if (i < 0)
+        return 0.0f;
+    if (entries[i].type != VALUE_TYPE_FLOAT)
+        return 0.0f;
+    return entries[i].floatValue;
 }
 // 0x00065920
 BOOL CConfig::Free(const char* name)

@@ -851,8 +851,14 @@ bool CModelMaterialArray::Resize(DWORD size)
     if (!replacement)
         return false;
     items = replacement;
-    for (DWORD i = count; i < size; ++i)
-        items[i] = 0;
+    DWORD i = count;
+    if (i < size)
+    {
+        do
+        {
+            items[i] = 0;
+        } while (++i != size);
+    }
     count = size;
     return true;
 }
@@ -873,8 +879,14 @@ bool CModelMeshArray::Resize(DWORD size)
     if (!replacement)
         return false;
     items = replacement;
-    for (DWORD i = count; i < size; ++i)
-        items[i] = 0;
+    DWORD i = count;
+    if (i < size)
+    {
+        do
+        {
+            items[i] = 0;
+        } while (++i != size);
+    }
     count = size;
     return true;
 }
@@ -895,8 +907,14 @@ bool CModelGeometryArray::Resize(DWORD size)
     if (!replacement)
         return false;
     items = replacement;
-    for (DWORD i = count; i < size; ++i)
-        items[i] = 0;
+    DWORD i = count;
+    if (i < size)
+    {
+        do
+        {
+            items[i] = 0;
+        } while (++i != size);
+    }
     count = size;
     return true;
 }
@@ -2107,8 +2125,14 @@ bool CModelCollisionBoxArray::Resize(DWORD size)
     if (!resized)
         return false;
     items = resized;
-    for (DWORD i = count; i < size; ++i)
-        items[i] = 0;
+    DWORD i = count;
+    if (i < size)
+    {
+        do
+        {
+            items[i] = 0;
+        } while (++i != size);
+    }
     count = size;
     return true;
 }
@@ -2155,8 +2179,14 @@ bool CModelCollisionSphereArray::Resize(DWORD size)
     if (!resized)
         return false;
     items = resized;
-    for (DWORD i = count; i < size; ++i)
-        items[i] = 0;
+    DWORD i = count;
+    if (i < size)
+    {
+        do
+        {
+            items[i] = 0;
+        } while (++i != size);
+    }
     count = size;
     return true;
 }

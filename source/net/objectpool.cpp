@@ -28,9 +28,14 @@ void CObjectPool::UpdateLargestId()
 int CObjectPool::GetCount()
 {
     int count = 0;
-    for (int i = 0; i < 2100; ++i)
-        if (active[i])
+    const DWORD* slot = active;
+    int remaining = 2100;
+    do
+    {
+        if (*slot)
             ++count;
+        ++slot;
+    } while (--remaining);
     return count;
 }
 // 0x00012750
@@ -61,7 +66,7 @@ CObject* CObjectPool::Find(void* backend)
 {
     int largest = largestId;
     for (int i = 1; i <= largest; ++i)
-        if (objects[i] && objects[i]->m_pGameEntity == backend)
+        if (objects[i] && backend == objects[i]->m_pGameEntity)
             return objects[i];
     return 0;
 }
@@ -70,7 +75,7 @@ WORD CObjectPool::GetId(void* backend)
 {
     int largest = largestId;
     for (int i = 1; i <= largest; ++i)
-        if (objects[i] && objects[i]->m_pGameEntity == backend)
+        if (objects[i] && backend == objects[i]->m_pGameEntity)
             return (WORD)i;
     return 0xffff;
 }
@@ -78,7 +83,7 @@ WORD CObjectPool::GetId(void* backend)
 CEntity* CObjectPool::Get(WORD id)
 {
     BYTE* state = (BYTE*)this;
-    if (id < 2101 && *(DWORD*)(state + 4 + id * 4))
+    if (id <= 2100 && *(DWORD*)(state + 4 + id * 4))
         return *(CEntity**)(state + 0x20d4 + id * 4);
     return 0;
 }
@@ -94,17 +99,10 @@ void CObjectPool::Process()
         g_objectPoolLastTick = RakNet::GetTime();
     DWORD now = RakNet::GetTime();
     LONG delta = (LONG)(now - g_objectPoolLastTick);
-    float seconds;
-    // clang-format off
-    __asm {
-        fild delta
-        fmul g_objectPoolSecondsPerTick
-        fstp seconds
-    }
-    // clang-format on
-    if (largestId >= 0)
+    float seconds = (float)delta * g_objectPoolSecondsPerTick;
+    DWORD i = 0;
+    if ((LONG)i <= largestId)
     {
-        DWORD i = 0;
         do
         {
             if (active[i])
@@ -117,9 +115,9 @@ void CObjectPool::Process()
 // 0x00012a10
 void CObjectPool::ConstructMaterials()
 {
-    if (largestId >= 0)
+    DWORD i = 0;
+    if ((LONG)i <= largestId)
     {
-        DWORD i = 0;
         do
         {
             if (active[i])
@@ -135,9 +133,9 @@ void CObjectPool::ConstructMaterials()
 // 0x00012a50
 void CObjectPool::ShutdownMaterials()
 {
-    if (largestId >= 0)
+    DWORD i = 0;
+    if ((LONG)i <= largestId)
     {
-        DWORD i = 0;
         do
         {
             if (active[i])
@@ -355,14 +353,16 @@ int CObjectPool::GetLargestId()
 // 0x00012680
 DWORD CObjectPool::IsActive(WORD id)
 {
-    return id <= 2100 ? active[id] : 0;
+    if (id > 2100)
+        return 0;
+    return *(DWORD*)((BYTE*)this + 4 + id * 4);
 }
 // 0x000129d0
 void CObjectPool::UpdateAttachedObjectRotations()
 {
-    if (largestId < 0)
-        return;
     DWORD i = 0;
+    if ((LONG)i > largestId)
+        return;
     do
     {
         if (active[i])

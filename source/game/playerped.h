@@ -214,7 +214,7 @@ public:
     // 0x000ab690
     CPed();
     // 0x000b08e0
-    CPed(int player, int model, CVector position, float rotation);
+    CPed(BYTE player, int model, float x, float y, float z, float rotation);
     // 0x000ad9f0
     void ProcessDrunk();
     // 0x000aef40

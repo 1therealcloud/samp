@@ -1055,6 +1055,46 @@ int __stdcall GamePoolPedGetIndex(void* ped)
     return result;
 }
 
+// 0x000b5d20
+int GameGetVehicleSubtype(void* vehicle)
+{
+    if (!vehicle)
+        return 0;
+    // GTA SA virtual vtable addresses.
+    DWORD vtable = *(DWORD*)vehicle;
+    if (vtable == 0x871120)
+        return 1;
+    if (vtable == 0x8721a0)
+        return 4;
+    if (vtable == 0x871360)
+        return 2;
+    if (vtable == 0x871948)
+        return 5;
+    if (vtable == 0x871680)
+        return 3;
+    if (vtable == 0x871528)
+        return 6;
+    return vtable == 0x872370 ? 7 : 0;
+}
+
+// GTA SA virtual addresses: pool slot B74494, thiscall backend 4048E0.
+// 0x000b37d0
+void* __stdcall GamePoolVehicleGetAt(int handle)
+{
+    void* result;
+    // clang-format off
+    __asm {
+        mov ebx,0xb74494
+        mov ecx,dword ptr [ebx]
+        push handle
+        mov ebx,0x4048e0
+        call ebx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}
+
 // GTA SA virtual addresses: pool slot B74494, thiscall backend 424160.
 // 0x000b3800
 DWORD __stdcall GamePoolVehicleGetIndex(void* vehicle)

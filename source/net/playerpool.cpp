@@ -8,9 +8,13 @@
 // 0x000010d0
 CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
 {
-    if (player > 1004)
-        return 0;
-    return *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4);
+    if (player <= 1004)
+    {
+        CPlayerInfo* entry = *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4);
+        if (entry)
+            return entry;
+    }
+    return 0;
 }
 // 0x0000a1d0
 const char* CPlayerPool::GetLocalPlayerName()
@@ -141,7 +145,7 @@ void CPlayerPool::Deactivate()
     local->m_state.active = 0;
     *(DWORD*)&this->local->m_state.selectedClass = 0;
     for (WORD id = 0; id < 1004; ++id)
-        if (connected[id] == 1)
+        if (IsConnected(id) == 1)
         {
             CRemotePlayer* remote = players[id] ? players[id]->remote : 0;
             remote->m_state.playerState = 0;
@@ -243,7 +247,12 @@ void CPlayerPool::RestoreCollision()
         CRemotePlayer* remote = players[id] ? players[id]->remote : 0;
         CPed* ped = remote->m_state.ped;
         if (ped && !ped->IsInVehicle())
-            ped->SetCollisionFlag(savedCollision[id] != 0);
+        {
+            if (savedCollision[id])
+                ped->SetCollisionFlag(TRUE);
+            else
+                ped->SetCollisionFlag(FALSE);
+        }
     }
 }
 // 0x00001a80
@@ -255,29 +264,47 @@ CLocalPlayer* CPlayerPool::GetLocalPlayer()
 int CPlayerPool::GetCount(BOOL includeFlagged)
 {
     int count = 0;
-    for (int id = 0; id < 1004; id++)
-        if (connected[id] == 1)
-        {
-            if (includeFlagged || !players[id]->npc)
-                count++;
-        }
+    if (includeFlagged)
+    {
+        for (int id = 0; id < 1004; ++id)
+            if (IsConnected((WORD)id) == 1)
+                ++count;
+    }
+    else
+    {
+        for (int id = 0; id < 1004; ++id)
+            if (IsConnected((WORD)id) == 1 && !players[(WORD)id]->npc)
+                ++count;
+    }
     return count;
 }
 // 0x0006e290
 int CPlayerPool::GetScore(WORD player)
 {
+    BYTE* entry;
     if (player > 1004)
+        goto noEntry;
+    entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
+    if (!entry)
+    {
+    noEntry:
         return 0;
-    BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
-    return entry ? *(int*)entry : 0;
+    }
+    return *(int*)entry;
 }
 // 0x0006e2b0
 DWORD CPlayerPool::GetPing(WORD player)
 {
+    BYTE* entry;
     if (player > 1004)
+        goto noEntry;
+    entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
+    if (!entry)
+    {
+    noEntry:
         return 0;
-    BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
-    return entry ? *(DWORD*)(entry + 0xc) : 0;
+    }
+    return *(DWORD*)(entry + 0xc);
 }
 // 0x0006e2e0
 int CPlayerPool::GetLocalScore()
@@ -292,7 +319,7 @@ DWORD CPlayerPool::GetLocalPing()
 // 0x000010f0
 CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
 {
-    if (player < 1005)
+    if (player <= 1004)
     {
         BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
         if (entry)
@@ -303,20 +330,23 @@ CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
 // 0x000010b0
 DWORD CPlayerPool::IsConnected(WORD player)
 {
-    if (player > 1003)
+    if (player >= 1004)
         return 0;
     return *(DWORD*)((BYTE*)this + 0xfd6 + player * 4);
 }
 // 0x0000e300
 DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
 {
-    if (player < 1005)
+    BYTE* entry;
+    if (player > 1004)
+        goto noEntry;
+    entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
+    if (!entry)
     {
-        BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
-        if (entry)
-            return *(DWORD*)(entry + 4);
+    noEntry:
+        return 0;
     }
-    return 0;
+    return *(DWORD*)(entry + 4);
 }
 // 0x000137c0
 WORD CPlayerPool::Find(void* ped)

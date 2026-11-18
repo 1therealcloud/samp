@@ -55,9 +55,9 @@ bool CDialog::MsgProc(UINT message, WPARAM wparam, LPARAM lparam)
 // 0x0006ef30
 bool CDialog::IsInputHidden()
 {
-    if (!*(DWORD*)(nativeState + 0x24))
-        return false;
-    return ChatImeActive();
+    if (*(DWORD*)(nativeState + 0x24))
+        return ChatImeActive();
+    return false;
 }
 
 // 0x0011c304
@@ -357,15 +357,12 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
         free(text);
     text = (char*)calloc(1, strlen(value) + 64);
     strcpy(text, value);
-    // Native hidden-result scratch.
-    SIZE bodySize;
-    FontSize* measured = g_deviceFonts->GetLittleTextScreenSize((FontSize*)&bodySize, text, 0x40);
-    textWidth = measured->cx;
-    textHeight = measured->cy;
+    FontSize measured = g_deviceFonts->GetLittleTextScreenSize(text, 0x40);
+    textWidth = measured.cx;
+    textHeight = measured.cy;
     if (strlen(caption))
     {
-        SIZE titleSize;
-        g_deviceFonts->GetTextScreenSize((FontSize*)&titleSize, g_fontMeasureProbe, 0);
+        FontSize titleSize = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
         // Native copies the original, untruncated caption and leaves stale caption
         // state untouched when the input caption is empty.
         strcpy((char*)dialog + 0x16, caption);
@@ -458,8 +455,7 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
                 listHeight = 400;
             if (header)
             {
-                SIZE headerSize;
-                g_deviceFonts->GetLittleTextScreenSize((FontSize*)&headerSize, g_fontMeasureProbe, 0);
+                FontSize headerSize = g_deviceFonts->GetLittleTextScreenSize(g_fontMeasureProbe, 0);
                 height = dialog->GetCaptionHeight() + buttonHeight + headerSize.cy + listHeight + 15;
                 ((CDXUTControl*)list)->SetLocation(5, headerSize.cy + 5);
             }

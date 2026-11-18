@@ -54,7 +54,7 @@ void GameInitializeAnimationKeys()
 // 0x0009ca50
 WORD GameFindAnimationByKey(DWORD key)
 {
-    for (int i = 0; i < 1812; i++)
+    for (int i = 0; i != 1812; i++)
         if (g_animationKeys[i] == key)
             return (WORD)(i + 1);
     return 0xffff;

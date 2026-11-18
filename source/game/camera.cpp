@@ -146,10 +146,3 @@ void CCamera::Detach()
     m_pAttachedTo = 0;
     Scripting::ProcessCommand(&g_cameraRestore);
 }
-
-// 0x0009fda0
-CCamera::CCamera()
-{
-    m_pMatrix = (CMatrix*)0xb6f99c;
-    m_pAttachedTo = 0;
-}

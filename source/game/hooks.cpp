@@ -1509,7 +1509,7 @@ const float g_gameStreamingDistanceSquared = 40000.0f;
 // 0x000b3f60
 BYTE __stdcall GameFindPlayerPedIndex(void* ped)
 {
-    for (BYTE player = 0; player < 210; ++player)
+    for (BYTE player = 0; player != 210; ++player)
         if (g_gamePlayerPeds[player] == ped)
             return player;
     return 0;

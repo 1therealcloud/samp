@@ -189,7 +189,7 @@ DWORD __stdcall GameCountUnusedModelSlots()
 {
     DWORD count = 0;
     // GTA SA virtual addresses: native model slots1000..19999.
-    for (DWORD address = 0xa9c068; address < 0xaae948; address += 4)
+    for (DWORD address = 0xa9c068; address != 0xaae948; address += 4)
         if (!*(DWORD*)address)
             ++count;
     return count;

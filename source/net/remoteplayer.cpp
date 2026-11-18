@@ -714,14 +714,18 @@ void CRemotePlayer::SetMarkerPosition(short x, short y, short z)
 // 0x00014470
 BOOL CRemotePlayer::HasSurfingTarget()
 {
+    if (m_state.playerState != 17)
+        return FALSE;
     WORD id = m_state.onfoot.surfingVehicle;
-    return m_state.playerState == 17 && id && id != 0xffff && id < 4100 ? TRUE : FALSE;
+    return id && id != 0xffff && id < 4100 ? TRUE : FALSE;
 }
 // 0x000144a0
 BOOL CRemotePlayer::SurfingOnObject()
 {
+    if (m_state.playerState != 17)
+        return FALSE;
     WORD id = m_state.onfoot.surfingVehicle;
-    return m_state.playerState == 17 && id && id != 0xffff && id >= 2000 && id < 4100 ? TRUE : FALSE;
+    return id && id != 0xffff && id >= 2000 && id < 4100 ? TRUE : FALSE;
 }
 // 0x00014780
 void CRemotePlayer::ProcessSpecialAction()
@@ -1650,13 +1654,8 @@ DWORD CRemotePlayer::GetColorAsARGB()
 // 0x00015fd0
 int CRemotePlayer::GetStatus()
 {
-    if (!m_state.ped)
-        return 0;
-    if (!m_state.ped->DoesExist())
-        return 0;
-    if (m_state.ped->GetVehicleTransitionTaskState())
-        return 0;
-    if (m_state.ped->HasTaskType704())
+    if (!m_state.ped || !m_state.ped->DoesExist() ||
+        m_state.ped->GetVehicleTransitionTaskState() || m_state.ped->HasTaskType704())
         return 0;
     return (int)m_state.status;
 }

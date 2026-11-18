@@ -190,8 +190,13 @@ void CALLBACK ClientGuiScoreboardEvent(UINT event, int id, CDXUTControl* control
 // 0x000c6bf0
 void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
-    if (id == 1 && event == 0x601 && g_pInput && !g_pInput->IsActive())
-        g_pInput->ProcessInput();
+    switch (id)
+    {
+    case 1:
+        if (event == 0x601 && g_pInput && !g_pInput->IsActive())
+            g_pInput->ProcessInput();
+        break;
+    }
 }
 // 0x000c6c60
 void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, void* context)

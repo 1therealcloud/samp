@@ -109,16 +109,18 @@ void CGame::SetFrameLimiter(int value)
 // 0x000a1280
 void CGame::EnableClock(bool enable)
 {
+    char format[] = {'%', '0', '2', 'd', ':', '%', '0', '2', 'd', '\0'};
     UnFuck((void*)0x859a6c, 10);
-    UnFuck((void*)0x52cf10, 1);
     if (enable)
     {
+        UnFuck((void*)0x52cf10, 1);
         *(BYTE*)0x52cf10 = 0x56;
         m_bClockEnabled = TRUE;
-        memcpy((void*)0x859a6c, "%02d:%02d", 10);
+        memcpy((void*)0x859a6c, format, sizeof(format));
     }
     else
     {
+        UnFuck((void*)0x52cf10, 1);
         *(BYTE*)0x52cf10 = 0xc3;
         m_bClockEnabled = FALSE;
         memset((void*)0x859a6c, 0, 10);
@@ -253,28 +255,67 @@ void CGame::SetWorldGravity(float gravity)
 void CGame::LoadScene(const char* name)
 {
     // GTA SA virtual address: 0x005b8700, cdecl.
-    ((void(__cdecl*)(const char*))0x5b8700)(name);
+    // clang-format off
+    __asm
+    {
+        push name
+        mov ebx, 0x5b8700
+        call ebx
+        pop ebx
+    }
+    // clang-format on
 }
 
 // 0x000a19a0
 void CGame::LoadCollisionFile(const char* name)
 {
     // GTA SA virtual address: 0x005b4e60, cdecl; native second argument is zero.
-    ((void(__cdecl*)(const char*, int))0x5b4e60)(name, 0);
+    // clang-format off
+    __asm
+    {
+        push 0
+        push name
+        mov edx, 0x5b4e60
+        call edx
+        pop edx
+        pop edx
+    }
+    // clang-format on
 }
 
 // 0x000a19c0
 void CGame::LoadCullZone(const char* name)
 {
     // GTA SA virtual address: 0x005b4b40, cdecl.
-    ((void(__cdecl*)(const char*))0x5b4b40)(name);
+    // clang-format off
+    __asm
+    {
+        push name
+        mov edx, 0x5b4b40
+        call edx
+        pop edx
+    }
+    // clang-format on
 }
 
 // 0x000a1200
 void* CGame::GetWeaponInfo(int weapon, int skill)
 {
     // GTA SA virtual address: 0x00743c60, cdecl; raw backend pointer.
-    return ((void*(__cdecl*)(int, int))0x743c60)(weapon, skill);
+    void* info;
+    // clang-format off
+    __asm
+    {
+        push skill
+        push weapon
+        mov edx, 0x743c60
+        call edx
+        pop ecx
+        pop ecx
+        mov info, eax
+    }
+    // clang-format on
+    return info;
 }
 
 // 0x000a19f0
@@ -293,14 +334,30 @@ void CGame::DisableAutoAiming()
 void CGame::DisableEnterExits()
 {
     // GTA SA virtual address: 0x0096a7d8; unchecked native array/count prefix.
-    BYTE* pool = *(BYTE* volatile*)0x96a7d8;
-    BYTE* record = *(BYTE* volatile*)pool;
-    DWORD count = *(volatile DWORD*)(pool + 8);
-    while (count)
+    DWORD pool = *(DWORD*)0x96a7d8;
+    DWORD entries = *(DWORD*)pool;
+    int count = 0;
+    int index = 0;
+    // clang-format off
+    __asm
     {
-        *(volatile WORD*)(record + 0x30) &= 0;
-        record += 0x3c;
-        --count;
+        mov ecx, pool
+        mov eax, [ecx + 8]
+        mov count, eax
+    }
+    // clang-format on
+    BYTE* slot;
+    while (index != count)
+    {
+        slot = (BYTE*)entries + 60 * index;
+        // clang-format off
+        __asm
+        {
+            mov eax, slot
+            and word ptr [eax + 48], 0
+        }
+        // clang-format on
+        ++index;
     }
 }
 
@@ -324,7 +381,9 @@ void CGame::RefreshRenderer(float x, float y)
 CVehicle* CGame::CreateVehicle(int model, float x, float y, float z, float rotation, BOOL siren)
 {
     // Native indexes this+model-0x122 without a model-range check.
-    DWORD keepLoaded = *((BYTE*)this + model - 0x122) != 0;
+    DWORD keepLoaded = 0;
+    if (m_aKeepLoadedVehicleModels[model - 400])
+        keepLoaded = 1;
     CVehicle* vehicle = new CVehicle(model, x, y, z, rotation, keepLoaded, siren);
     // Native dereferences even a null allocation; failed backend creation leaks this wrapper.
     return vehicle->m_pGameVehicle ? vehicle : 0;
@@ -333,21 +392,28 @@ CVehicle* CGame::CreateVehicle(int model, float x, float y, float z, float rotat
 // 0x000a0050
 BOOL CGame::RemovePed(CPed* ped)
 {
-    if (!ped)
-        return FALSE;
-    BYTE player = ped->m_nPlayerNumber;
-    delete ped;
-    g_gameUsedPlayerSlots[player] = FALSE;
-    return TRUE;
+    if (ped)
+    {
+        BYTE player = ped->m_nPlayerNumber;
+        delete ped;
+        g_gameUsedPlayerSlots[player] = FALSE;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x000a1ee0
 void CGame::ResetMoney()
 {
-    // GTA SA virtual address: 0x00b7ce50. Modular negation preserves INT_MIN.
-    DWORD money = *(DWORD*)0xb7ce50;
+    // GTA SA virtual address: 0x00b7ce50; native abs/negation also preserves INT_MIN on x86.
+    int money = *(int*)0xb7ce50;
     if (money)
-        Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand, 0, 0u - money);
+    {
+        if (money < 0)
+            Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand, 0, abs(money));
+        else
+            Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand, 0, -money);
+    }
 }
 
 // 0x000a0b80
@@ -365,18 +431,28 @@ void CGame::DeleteRacingCheckpoint()
 DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int type)
 {
     DWORD marker = 0;
-    const Scripting::OpcodeInfo* command = &g_gameCreateMarkerCommand;
-    if (type == 1)
-        command = &g_gameCreateMarkerType1Command;
+    if (type == 0)
+        Scripting::ProcessCommand(&g_gameCreateMarkerCommand, (double)x, (double)y, (double)z, icon, &marker);
+    else if (type == 1)
+        Scripting::ProcessCommand(&g_gameCreateMarkerType1Command, (double)x, (double)y, (double)z, icon, &marker);
     else if (type == 2)
-        command = &g_gameCreateMarkerType2Command;
+        Scripting::ProcessCommand(&g_gameCreateMarkerType2Command, (double)x, (double)y, (double)z, icon, &marker);
     else if (type == 3)
-        command = &g_gameCreateMarkerType3Command;
-    Scripting::ProcessCommand(command, (double)x, (double)y, (double)z, icon, &marker);
+        Scripting::ProcessCommand(&g_gameCreateMarkerType3Command, (double)x, (double)y, (double)z, icon, &marker);
+    else
+        Scripting::ProcessCommand(&g_gameCreateMarkerCommand, (double)x, (double)y, (double)z, icon, &marker);
     if (icon == 0)
     {
-        Scripting::ProcessCommand(&g_gameMarkerColorCommand, marker, color);
-        Scripting::ProcessCommand(&g_gameMarkerModeCommand, marker, color < 1004u ? 2 : 3);
+        if (color < 1004u)
+        {
+            Scripting::ProcessCommand(&g_gameMarkerColorCommand, marker, color);
+            Scripting::ProcessCommand(&g_gameMarkerModeCommand, marker, 2);
+        }
+        else
+        {
+            Scripting::ProcessCommand(&g_gameMarkerColorCommand, marker, color);
+            Scripting::ProcessCommand(&g_gameMarkerModeCommand, marker, 3);
+        }
     }
     return marker;
 }
@@ -417,20 +493,20 @@ void CGame::CreateRacingCheckpoint()
 // 0x000a1f20
 void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVector* next, float size)
 {
-    GameCheckpointState* s = &m_checkpoints;
-    s->racePosition = *position;
-    s->raceNext = *next;
-    s->raceSize = size;
-    s->raceType = type;
-    if (s->raceMarker)
+    m_checkpoints.racePosition = *position;
+    m_checkpoints.raceNext = *next;
+    m_checkpoints.raceSize = size;
+    m_checkpoints.raceType = type;
+    if (m_checkpoints.raceMarker)
     {
-        Scripting::ProcessCommand(&g_gameDeleteMarkerCommand, s->raceMarker);
-        s->raceMarker = 0;
+        Scripting::ProcessCommand(&g_gameDeleteMarkerCommand, m_checkpoints.raceMarker);
+        m_checkpoints.raceMarker = 0;
         DWORD marker = 0;
-        Scripting::ProcessCommand(&g_gameCreateMarkerCommand, (double)s->racePosition.x, (double)s->racePosition.y, (double)s->racePosition.z, 0, &marker);
+        Scripting::ProcessCommand(&g_gameCreateMarkerCommand, (double)m_checkpoints.racePosition.x, (double)m_checkpoints.racePosition.y,
+                                  (double)m_checkpoints.racePosition.z, 0, &marker);
         Scripting::ProcessCommand(&g_gameMarkerColorCommand, marker, 1005);
         Scripting::ProcessCommand(&g_gameMarkerModeCommand, marker, 3);
-        s->raceMarker = marker;
+        m_checkpoints.raceMarker = marker;
     }
     CreateRacingCheckpoint();
 }
@@ -494,7 +570,17 @@ void CGame::DisplayGameText(const char* text, int time, int style)
         *(DWORD*)g_gameTextBuffer = 0;
         strncpy(g_gameTextBuffer, text, 512);
         // GTA SA virtual address: 0x0069f2b0, cdecl.
-        ((void(__cdecl*)(const char*, int, int))0x69f2b0)(g_gameTextBuffer, time, style);
+        // clang-format off
+        __asm
+        {
+            push style
+            push time
+            push g_gameTextBuffer
+            mov eax, 0x69f2b0
+            call eax
+            add esp, 12
+        }
+        // clang-format on
     }
 }
 
@@ -504,21 +590,25 @@ DWORD CGame::CreatePickup(int model, int type, float x, float y, float z, DWORD*
     int selected = model;
     if (!GameModelQueryB4170(selected))
         selected = 18631;
-    if (selected >= 0 && selected <= 20000)
+    else if (selected > 20000 || selected < 0)
+        goto createPickup;
+    if (!Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
     {
-        if (!Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
-        {
-            Scripting::ProcessCommand(&g_gameRequestModelCommand, selected);
-            Scripting::ProcessCommand(&g_gameLoadModelsCommand);
-            void(WINAPI* volatile sleep)(DWORD) = ::Sleep;
-            while (selected <= 20000 && !Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
-                sleep(1);
-        }
+        Scripting::ProcessCommand(&g_gameRequestModelCommand, selected);
+        Scripting::ProcessCommand(&g_gameLoadModelsCommand);
+        while (selected <= 20000 && !Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
+            ::Sleep(1);
     }
+createPickup:
     // The native output aliases the original model argument, not the selected fallback.
     Scripting::ProcessCommand(&g_gameCreatePickupCommand, selected, type, (double)x, (double)y, (double)z, &model);
+    // The native handle conversion goes through a byte offset into the pickup pool.
+    const int pickupEntrySize = 32;
+    int pickupOffset = (model & 0xffff) * pickupEntrySize;
+    if (pickupOffset)
+        pickupOffset /= pickupEntrySize;
     if (index)
-        *index = (DWORD)model & 0xffff;
+        *index = pickupOffset;
     return (DWORD)model;
 }
 
@@ -526,7 +616,7 @@ DWORD CGame::CreatePickup(int model, int type, float x, float y, float z, DWORD*
 void CGame::DrawGangZone(const float* position, DWORD color)
 {
     // GTA SA virtual addresses: radar flag0x00ba67a4 and cdecl draw0x005853d0.
-    ((void(__cdecl*)(const float*, DWORD*, DWORD))0x5853d0)(position, &color, (DWORD) * (BYTE*)0xba67a4);
+    ((void(__cdecl*)(const float*, DWORD*, BYTE))0x5853d0)(position, &color, *(BYTE*)0xba67a4);
 }
 
 #include "game/custommodels.h"
@@ -543,7 +633,15 @@ void CGame::ReleaseModel(int model, BYTE force)
             if (Scripting::ProcessCommand(&g_gameModelAvailableCommand, model))
             {
                 // GTA SA virtual address: 0x004089a0, cdecl model argument.
-                ((void(__cdecl*)(int))0x4089a0)(model);
+                // clang-format off
+                __asm
+                {
+                    push model
+                    mov edx, 0x4089a0
+                    call edx
+                    pop edx
+                }
+                // clang-format on
             }
         }
         else if (Scripting::ProcessCommand(&g_gameModelAvailableCommand, model))
@@ -558,62 +656,83 @@ void CGame::ReleaseModel(int model, BYTE force)
 }
 
 // 0x000a1430
-void CGame::SetRequiredVehicleModels(BYTE* priorities)
+void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
 {
     memset(m_aKeepLoadedVehicleModels, 0, sizeof(m_aKeepLoadedVehicleModels));
-    for (int model = 400; model < 612; ++model)
-        ReleaseModel(model, 0);
-    int models[212];
-    for (int i = 0; i < 212; ++i)
-        models[i] = 400 + i;
-    for (int count = 211; count > 0; --count)
+    int model = 400;
+    do
     {
-        for (int i = 0; i < count; ++i)
+        if (model >= 0)
         {
-            if (priorities[i + 1] > priorities[i])
-            {
-                BYTE priority = priorities[i];
-                priorities[i] = priorities[i + 1];
-                int model = models[i];
-                models[i] = models[i + 1];
-                priorities[i + 1] = priority;
-                models[i + 1] = model;
-            }
+            if (model < 20000 && Scripting::ProcessCommand(&g_gameModelAvailableCommand, model))
+                Scripting::ProcessCommand(&g_gameReleaseModelCommand, model);
         }
-    }
-    for (int i = 0; i < 80; ++i)
+        else if (g_customModels && g_customModels->IsObjectEntry(model) && !GamePoolHasObjectModel(model))
+            g_customModels->ReleaseObjectEntry(model);
+    } while (++model != 612);
+    int models[212];
+    int i = 0;
+    do
     {
-        if (priorities[i])
+        models[i] = 400 + i;
+    } while (++i != 212);
+    int count = 211;
+    while (count > 0)
+    {
+        int* entry = models + 1;
+        BYTE* priority = priorities + 1;
+        int remaining = count;
+        do
+        {
+            BYTE right = *priority;
+            BYTE left = priority[-1];
+            if (right > left)
+            {
+                int model = entry[-1];
+                priority[-1] = right;
+                entry[-1] = *entry;
+                *priority = left;
+                *entry = model;
+            }
+            ++priority;
+            ++entry;
+        } while (--remaining);
+        --count;
+    }
+    i = 0;
+    do
+    {
+        if (priorities[i] > 0)
         {
             int model = models[i];
             Scripting::ProcessCommand(&g_gameRequestModelCommand, model);
             Scripting::ProcessCommand(&g_gameLoadModelsCommand);
             m_aKeepLoadedVehicleModels[model - 400] = true;
         }
-    }
+    } while (++i != 80);
 }
 
 // 0x000a16c0
 void CGame::LoadAnimationsAndModels()
 {
-    if (!IsAnimationLoaded(g_gameParachuteLibrary))
-        RequestAnimation(g_gameParachuteLibrary);
-    if (!IsAnimationLoaded(g_pedDrinkLibrary))
-        RequestAnimation(g_pedDrinkLibrary);
-    if (!IsAnimationLoaded(g_pedSmokeLibrary))
-        RequestAnimation(g_pedSmokeLibrary);
-    if (!IsAnimationLoaded(g_pedUrinationLibrary))
-        RequestAnimation(g_pedUrinationLibrary);
-    if (!IsAnimationLoaded(g_gameVendingLibrary))
-        RequestAnimation(g_gameVendingLibrary);
-    if (!IsAnimationLoaded(g_gameFightBLibrary))
-        RequestAnimation(g_gameFightBLibrary);
-    if (!IsAnimationLoaded(g_gameFightCLibrary))
-        RequestAnimation(g_gameFightCLibrary);
-    if (!IsAnimationLoaded(g_gameFightDLibrary))
-        RequestAnimation(g_gameFightDLibrary);
-    if (!IsAnimationLoaded(g_gameFightELibrary))
-        RequestAnimation(g_gameFightELibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameParachuteLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_gameParachuteLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_pedDrinkLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_pedDrinkLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_pedSmokeLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_pedSmokeLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_pedUrinationLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_pedUrinationLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameVendingLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_gameVendingLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameFightBLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_gameFightBLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameFightCLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_gameFightCLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameFightDLibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_gameFightDLibrary);
+    if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameFightELibrary))
+        Scripting::ProcessCommand(&g_gameRequestAnimationCommand, g_gameFightELibrary);
     if (!Scripting::ProcessCommand(&g_gameModelAvailableCommand, 3131))
         Scripting::ProcessCommand(&g_gameRequestModelCommand, 3131);
     if (!Scripting::ProcessCommand(&g_gameModelAvailableCommand, 1485))
@@ -654,17 +773,28 @@ void UnFuck(void* address, SIZE_T size)
     DWORD oldProtect;
     VirtualProtect(address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
 }
+
+// GTA's mouse routines are also called directly from the cursor handlers.
+// clang-format off
+#define CALL_GTA_CLEAR_MOUSE_DELTA() __asm { mov edx, 0x541bd0 } __asm { call edx }
+#define CALL_GTA_UPDATE_MOUSE() __asm { mov edx, 0x541dd0 } __asm { call edx }
+// clang-format on
+
 // 0x000a02f0
 void GameClearMouseDelta()
 {
     *(DWORD*)0xb73424 = 0;
     *(DWORD*)0xb73428 = 0;
-    ((void(__cdecl*)())0x541bd0)();
+    // clang-format off
+    CALL_GTA_CLEAR_MOUSE_DELTA()
+    // clang-format on
 }
 // 0x000a0310
 void GameUpdateMouse()
 {
-    ((void(__cdecl*)())0x541dd0)();
+    // clang-format off
+    CALL_GTA_UPDATE_MOUSE()
+    // clang-format on
 }
 // 0x000a0320
 void GameDisableMousePointers()
@@ -714,8 +844,12 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
         UnFuck((void*)0x541df5, 5);
         memset((void*)0x541df5, 0x90, 5);
         GameDisableMouseCalls();
-        GameClearMouseDelta();
-        GameUpdateMouse();
+        *(DWORD*)0xb73424 = 0;
+        *(DWORD*)0xb73428 = 0;
+        // clang-format off
+        CALL_GTA_CLEAR_MOUSE_DELTA()
+        CALL_GTA_UPDATE_MOUSE()
+        // clang-format on
         UnFuck((void*)0x6194a0, 1);
         *(BYTE*)0x6194a0 = 0xc3;
         g_gameD3DDevice->ShowCursor(TRUE);
@@ -735,8 +869,12 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
         if (state->m_nCursorMode != 3)
         {
             GameDisableMouseCalls();
-            GameClearMouseDelta();
-            GameUpdateMouse();
+            *(DWORD*)0xb73424 = 0;
+            *(DWORD*)0xb73428 = 0;
+            // clang-format off
+            CALL_GTA_CLEAR_MOUSE_DELTA()
+            CALL_GTA_UPDATE_MOUSE()
+            // clang-format on
             UnFuck((void*)0x6194a0, 1);
             *(BYTE*)0x6194a0 = 0xc3;
             g_gameD3DDevice->ShowCursor(TRUE);
@@ -748,8 +886,12 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
         if (state->m_nCursorMode != 4)
         {
             GameDisableMousePointers();
-            GameClearMouseDelta();
-            GameUpdateMouse();
+            *(DWORD*)0xb73424 = 0;
+            *(DWORD*)0xb73428 = 0;
+            // clang-format off
+            CALL_GTA_CLEAR_MOUSE_DELTA()
+            CALL_GTA_UPDATE_MOUSE()
+            // clang-format on
             UnFuck((void*)0x6194a0, 1);
             *(BYTE*)0x6194a0 = 0xc3;
             state->m_nCursorMode = 4;
@@ -772,8 +914,16 @@ void CGame::ProcessInputEnabling()
         {
             UnFuck((void*)0x541df5, 5);
             memcpy((void*)0x541df5, g_gameKeyCall, 5);
-            UnFuck((void*)0x53f417, 5);
-            memcpy((void*)0x53f417, g_gameVersion == 1 ? g_gameMouseCallUS : g_gameMouseCallEU, 5);
+            if (g_gameVersion == 1)
+            {
+                UnFuck((void*)0x53f417, 5);
+                memcpy((void*)0x53f417, g_gameMouseCallUS, 5);
+            }
+            else
+            {
+                UnFuck((void*)0x53f417, 5);
+                memcpy((void*)0x53f417, g_gameMouseCallEU, 5);
+            }
             GameRestoreMousePointers();
             // Native changes protection at +2, then writes the four-byte instruction.
             UnFuck((void*)0x53f421, 4);
@@ -781,9 +931,17 @@ void CGame::ProcessInputEnabling()
             *(BYTE*)0x53f420 = 0xc0;
             *(BYTE*)0x53f421 = 0x0f;
             *(BYTE*)0x53f422 = 0x8c;
-            GameClearMouseDelta();
-            GameUpdateMouse();
-            GameClearMouseDelta();
+            *(DWORD*)0xb73424 = 0;
+            *(DWORD*)0xb73428 = 0;
+            // clang-format off
+            CALL_GTA_CLEAR_MOUSE_DELTA()
+            CALL_GTA_UPDATE_MOUSE()
+            // clang-format on
+            *(DWORD*)0xb73424 = 0;
+            *(DWORD*)0xb73428 = 0;
+            // clang-format off
+            CALL_GTA_CLEAR_MOUSE_DELTA()
+            // clang-format on
             UnFuck((void*)0x6194a0, 1);
             *(BYTE*)0x6194a0 = 0xe9;
             g_gameD3DDevice->ShowCursor(FALSE);
@@ -793,6 +951,9 @@ void CGame::ProcessInputEnabling()
             --state->m_nInputEnableWaitFrames;
     }
 }
+
+#undef CALL_GTA_CLEAR_MOUSE_DELTA
+#undef CALL_GTA_UPDATE_MOUSE
 
 #include "game/aimstuff.h"
 #include "game/keystuff.h"
@@ -1025,7 +1186,7 @@ void GameLoadRequestedModelsAndEndThread()
 // 0x000a07b0
 BOOL CGame::IsModelAvailable(int model)
 {
-    if (model >= 0 && model <= 20000)
+    if (model <= 20000 && model >= 0)
         return Scripting::ProcessCommand(&g_gameModelAvailableCommand, model);
     return TRUE;
 }
@@ -1283,11 +1444,12 @@ const Scripting::OpcodeInfo g_gameSetWorldTime = {0xc0, "ii"};
 // 0x000a0980
 void CGame::SetWorldWeather(int weather)
 {
-    BOOL clockEnabled = m_bClockEnabled;
     // GTA SA virtual addresses: 0x00c81318, 0x00c8131c, 0x00c81320.
-    *(DWORD*)0xc81318 = weather;
-    if (!clockEnabled)
+    if (m_bClockEnabled)
+        *(DWORD*)0xc81318 = weather;
+    else
     {
+        *(DWORD*)0xc81318 = weather;
         *(DWORD*)0xc8131c = weather;
         *(DWORD*)0xc81320 = weather;
     }
@@ -1304,8 +1466,15 @@ void CGame::SetWorldTime(int hour, int minute)
 // 0x000a0a20
 void CGame::SetMaxStats()
 {
-    ((void(__cdecl*)())0x4399d0)();
-    ((void(__cdecl*)())0x439940)();
+    // clang-format off
+    __asm
+    {
+        mov eax, 0x4399d0
+        call eax
+        mov eax, 0x439940
+        call eax
+    }
+    // clang-format on
     UnFuck((void*)0x55a070, 1);
     *(BYTE*)0x55a070 = 0xc3;
 }
@@ -1521,7 +1690,7 @@ const float g_frameScaleMultiplier = 3.0f;
 const float g_frameScaleNumerator = 50.0f;
 
 // 0x0009fe50
-void GameUpdateKeyCycle()
+void CGame::UpdateKeyCycle()
 {
     DWORD now = RakNet::GetTime();
     if (!g_frameKeyCycleTick)
@@ -1532,9 +1701,9 @@ void GameUpdateKeyCycle()
     if ((LONG)(now - g_frameKeyCycleTick) > 30)
     {
         ++g_frameKeyCycle;
-        g_frameKeyCycleTick = now;
         if (g_frameKeyCycle == 5)
             g_frameKeyCycle = 0;
+        g_frameKeyCycleTick = now;
     }
     *(BYTE*)0xb7356e = g_frameKeyCycle;
 }
@@ -1557,36 +1726,21 @@ void CGame::ProcessFrameLimiter()
     {
         *(DWORD*)0xb7cb5c = 0x3f800000;
         *(DWORD*)0xb7cb58 = 0x3f800000;
-        g_gamePatchValue1546f0 = 0x40400000;
+        g_gamePatchValue1546f0 = 3.0f;
         g_frameSampleTick = RakNet::GetTime();
         g_frameSleepTick = g_frameSampleTick;
         return;
     }
-    GameUpdateKeyCycle();
+    UpdateKeyCycle();
     ++g_frameSampleCount;
     if ((LONG)(now - g_frameSampleTick) > 250)
     {
         LONG frames = (LONG)(g_frameSampleCount * 4u - 4u);
-        // clang-format off
-        // Preserve the unrounded quotient through publication and multiplication.
-        __asm {
-            cmp frames,16
-            jle minimum_scale
-            fild frames
-            fdivr g_frameScaleNumerator
-            jmp publish_scale
-        minimum_scale:
-            fld g_frameScaleMultiplier
-        publish_scale:
-            fst g_frameScale
-            fld st(0)
-            fxch st(1)
-            fstp dword ptr ds:[0xb7cb5c]
-            fst dword ptr ds:[0xb7cb58]
-            fmul g_frameScaleMultiplier
-            fstp g_gamePatchValue1546f0
-        }
-        // clang-format on
+        float scale = frames > 16 ? g_frameScaleNumerator / frames : g_frameScaleMultiplier;
+        g_frameScale = scale;
+        *(float*)0xb7cb5c = scale;
+        *(float*)0xb7cb58 = scale;
+        g_gamePatchValue1546f0 = scale * g_frameScaleMultiplier;
         g_frameSampleTick = RakNet::GetTime();
         g_frameSampleCount = 0;
     }
@@ -1607,17 +1761,26 @@ void CGame::ProcessFrameLimiter()
     }
     else
     {
-        elapsed = now - g_frameSleepTick;
-        if (!*(BYTE*)0xba6794)
+        if (*(BYTE*)0xba6794)
         {
+            elapsed = now - g_frameSleepTick;
+            int limit = m_nFrameLimiter;
+            if (elapsed && limit)
+            {
+                int period = 1000 / limit;
+                if ((LONG)elapsed < period)
+                {
+                    ::Sleep((DWORD)period - elapsed - 1u);
+                    g_frameSleepTick = RakNet::GetTime();
+                    return;
+                }
+            }
+        }
+        else
+        {
+            elapsed = now - g_frameSleepTick;
             if (elapsed && (LONG)elapsed < 11)
                 ::Sleep(10u - elapsed);
-        }
-        else if (elapsed && m_nFrameLimiter)
-        {
-            int period = 1000 / m_nFrameLimiter;
-            if ((LONG)elapsed < period)
-                ::Sleep((DWORD)period - elapsed - 1u);
         }
     }
     g_frameSleepTick = RakNet::GetTime();
@@ -1647,13 +1810,12 @@ const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand = {0x32b, "iiifffv"}
 DWORD CGame::CreateWeaponPickup(int model, int ammo, float x, float y, float z)
 {
     int selected = model;
-    if (selected >= 0 && selected <= 20000 && !Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
+    if (selected <= 20000 && selected >= 0 && !Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
     {
         Scripting::ProcessCommand(&g_gameRequestModelCommand, selected);
         Scripting::ProcessCommand(&g_gameLoadModelsCommand);
-        void(WINAPI* volatile sleep)(DWORD) = ::Sleep;
         while (!Scripting::ProcessCommand(&g_gameModelAvailableCommand, selected))
-            sleep(5);
+            ::Sleep(5);
     }
     Scripting::ProcessCommand(&g_gameCreateWeaponPickupCommand, selected, 4, ammo, (double)x, (double)y, (double)z, &model);
     return (DWORD)model;
@@ -1740,11 +1902,7 @@ radius_scale:
 // 0x000a0170
 CObject* CGame::NewObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE firstHour, BYTE lastHour)
 {
-    CVector position;
-    memcpy(&position.x, &x, 4);
-    memcpy(&position.y, &y, 4);
-    memcpy(&position.z, &z, 4);
-    return new CObject(model, position, rotation, drawDistance, 0, firstHour, lastHour);
+    return new CObject(model, x, y, z, rotation, drawDistance, 0, firstHour, lastHour);
 }
 
 #include "game/hooks.h"
@@ -1856,35 +2014,22 @@ void CGame::EnableRadar(BOOL enabled)
 // 0x000a0d20
 void CGame::UpdateFarClippingPlane()
 {
-    BYTE* ped = (BYTE*)GameFindLocalPed();
-    if (!ped)
+    EntityBackendPrefix* ped = (EntityBackendPrefix*)GameFindLocalPed();
+    if (ped)
     {
-        g_gameFarClipDistance = 1250.0f;
-        return;
+        DWORD interior;
+        Scripting::ProcessCommand(&g_gameCurrentInteriorCommand, &interior);
+        if ((BYTE)interior == 0)
+        {
+            g_gameFarClipDistance = g_gameFarClipBase - ped->matrix->position.z * 2.0f;
+            if (g_gameFarClipDistance < g_gameFarClipMinimum)
+                g_gameFarClipDistance = g_gameFarClipMinimum;
+        }
+        else
+            g_gameFarClipDistance = 400.0f;
     }
-    DWORD interior;
-    Scripting::ProcessCommand(&g_gameCurrentInteriorCommand, &interior);
-    if ((BYTE)interior)
-    {
-        g_gameFarClipDistance = 400.0f;
-        return;
-    }
-    const float* height = (const float*)(*(BYTE**)(ped + 0x14) + 0x38);
-    // clang-format off
-    __asm {
-        mov eax,height
-        fld dword ptr [eax]
-        fadd st(0),st(0)
-        fsubr g_gameFarClipBase
-        fst g_gameFarClipDistance
-        fcomp g_gameFarClipMinimum
-        fnstsw ax
-        test ah,5
-        jp far_clip_done
-        mov g_gameFarClipDistance,442f0000h
-far_clip_done:
-    }
-    // clang-format on
+    else
+        g_gameFarClipDistance = g_gameFarClipBase;
 }
 // 0x000a0dc0
 const char* CGame::GetWeaponName(int weapon)
@@ -1998,9 +2143,17 @@ void CGame::Restart()
     // GTA SA virtual addresses: restart flags and three no-argument backend calls.
     *(BYTE*)0xba67a5 = 1;
     *(BYTE*)0xba67a6 = 1;
-    ((void(__cdecl*)())0x53c550)();
-    ((void(__cdecl*)())0x561aa0)();
-    ((void(__cdecl*)())0x53c680)();
+    // clang-format off
+    __asm
+    {
+        mov edx, 0x53c550
+        call edx
+        mov edx, 0x561aa0
+        call edx
+        mov edx, 0x53c680
+        call edx
+    }
+    // clang-format on
     *(BYTE*)0xba6831 = 1;
 }
 // 0x000a1250
@@ -2023,18 +2176,23 @@ BOOL CGame::UsingGamepad()
 CPed* CGame::CreatePed(int model, CVector position, float rotation, DWORD, BOOL playerFlag)
 {
     BYTE slot = 2;
-    while (g_gameUsedPlayerSlots[slot] == 1)
+    do
     {
-        if (++slot == 210)
-            return 0;
-    }
+        if (g_gameUsedPlayerSlots[slot] != 1)
+            goto foundSlot;
+    } while (++slot != 210);
+    return 0;
+
+foundSlot:
     if (!slot)
         return 0;
-    CPed* ped = new CPed(slot, model, position, rotation);
+    CPed* ped = new CPed(slot, model, position.x, position.y, position.z, rotation);
     if (ped && ped->m_pGamePed)
     {
+        if (playerFlag)
+            playerFlag = 1;
         g_gameUsedPlayerSlots[slot] = 1;
-        GameSetPlayerFlag(slot, playerFlag ? 1 : 0);
+        GameSetPlayerFlag(slot, playerFlag);
     }
     // Native returns an allocated wrapper even when its GTA backend is null.
     return ped;
@@ -2043,26 +2201,20 @@ CPed* CGame::CreatePed(int model, CVector position, float rotation, DWORD, BOOL 
 // 0x0009fea0
 void CGame::SetTimeScale(float scale)
 {
-    // clang-format off
-    // GTA SA virtual addresses: paired game time-scale words.
-    __asm {
-        mov eax,scale
-        fld scale
-        fmul g_frameScaleMultiplier
-        mov dword ptr ds:[0b7cb5ch],eax
-        mov ecx,eax
-        mov dword ptr ds:[0b7cb58h],ecx
-        fstp dword ptr g_gamePatchValue1546f0
-    }
-    // clang-format on
+    *(float*)0xb7cb5c = scale;
+    *(float*)0xb7cb58 = scale;
+    g_gamePatchValue1546f0 = scale * g_frameScaleMultiplier;
 }
 
 // 0x0009ff00
 BYTE CGame::FindFreePlayerSlot()
 {
-    for (int player = 2; player < 210; player++)
+    BYTE player = 2;
+    do
+    {
         if (g_gameUsedPlayerSlots[player] != 1)
-            return (BYTE)player;
+            return player;
+    } while (++player != 210);
     return 0;
 }
 
@@ -2070,9 +2222,14 @@ BYTE CGame::FindFreePlayerSlot()
 BYTE CGame::CountUsedPlayerSlots()
 {
     BYTE count = 0;
-    for (int player = 2; player < 210; player++)
-        if (g_gameUsedPlayerSlots[player] == 1)
+    const BOOL* slot = g_gameUsedPlayerSlots + 2;
+    int remaining = 208;
+    do
+    {
+        if (*slot == 1)
             ++count;
+        ++slot;
+    } while (--remaining);
     return count;
 }
 
@@ -2086,10 +2243,12 @@ void CGame::SetEightByteName(const char* name)
 // 0x000a0150
 BOOL CGame::DeleteEntity(CEntity* entity)
 {
-    if (!entity)
-        return FALSE;
-    delete entity;
-    return TRUE;
+    if (entity)
+    {
+        delete entity;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x000a0210
@@ -2108,22 +2267,48 @@ BOOL CGame::IsKeyPressed(int key)
 // 0x000a0870
 BOOL CGame::LoadModelNow(int model)
 {
-    if (model < 0 || model > 20000)
+    DWORD offset = (DWORD)model * 20;
+    if (model > 20000 || model < 0)
         return TRUE;
     if (Scripting::ProcessCommand(&g_gameModelAvailableCommand, model))
         return TRUE;
     // GTA SA virtual addresses: request/load are direct cdecl backends here.
-    ((void(__cdecl*)(int, int))0x4087e0)(model, 2);
-    ((void(__cdecl*)(int))0x40ea10)(0);
-    DWORD offset = (DWORD)model * 20;
-    if (*(BYTE*)(0x8e4cd0 + offset) != 1)
-        return FALSE;
-    if (*(BYTE*)(0x8e4cc6 + offset) & 2)
+    // clang-format off
+    __asm
     {
-        ((void(__cdecl*)(int))0x409c10)(model);
-        ((void(__cdecl*)(int))0x409c70)(model);
+        push 2
+        push model
+        mov edx, 0x4087e0
+        call edx
+        pop edx
+        pop edx
+        push 0
+        mov edx, 0x40ea10
+        call edx
+        pop edx
     }
-    return TRUE;
+    // clang-format on
+    if (*(BYTE*)(0x8e4cd0 + offset) == 1)
+    {
+        if (*(BYTE*)(0x8e4cc6 + offset) & 2)
+        {
+            // clang-format off
+            __asm
+            {
+                push model
+                mov edx, 0x409c10
+                call edx
+                pop edx
+                push model
+                mov edx, 0x409c70
+                call edx
+                pop edx
+            }
+            // clang-format on
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x000a09a0
@@ -2210,17 +2395,17 @@ DWORD g_gamePreviewPed[488];
 // 0x000a15b0
 void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, int model, DWORD color)
 {
+    CVehicle* vehicle = 0;
     memset(g_gamePreviewPed, 0, sizeof(g_gamePreviewPed));
     // GTA SA virtual address: native permanent39-byte NOP patch, no restoration.
     UnFuck((void*)0x4e7529, 39);
     memset((void*)0x4e7529, 0x90, 39);
     BYTE* local = (BYTE*)GameFindLocalPed();
-    CVehicle* vehicle = 0;
     if (useVehicle && model >= 400 && model < 612)
     {
         vehicle = new CVehicle(model, 0, 0, 0, 0, 0, 0);
         // Native does not handle a failed allocation before this call.
-        vehicle->SetColor((BYTE)color, 0xff);
+        vehicle->SetColor((int)color, -1);
         vehicle->Remove();
         // Native aliases within the same preview-ped storage, not new globals.
         // samp.dll RVAs: vehicle pointer0018f124, flags0018f004.
@@ -2230,14 +2415,15 @@ void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, in
     if (local)
     {
         BYTE* intelligence = *(BYTE**)(local + 0x480);
-        void* receiver = (BYTE*)*(void**)intelligence + 0x21c;
         // clang-format off
         // GTA SA virtual address: thiscall backend(receiver,A4,first,second).
         __asm {
+            mov ecx,intelligence
+            mov eax,[ecx]
+            lea ecx,[eax + 0x21c]
             push second
             push first
             push 0a4h
-            mov ecx,receiver
             mov edx,4e71e0h
             call edx
         }

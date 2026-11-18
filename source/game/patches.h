@@ -20,7 +20,7 @@ extern DWORD g_gamePatchValue1546c8;
 // 0x001546cc
 extern DWORD g_gamePatchValue1546cc;
 // 0x001546f0
-extern DWORD g_gamePatchValue1546f0;
+extern float g_gamePatchValue1546f0;
 // 0x001546f4
 extern DWORD g_gamePatchValue1546f4;
 // 0x0018f498

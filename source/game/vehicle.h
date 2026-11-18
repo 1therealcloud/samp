@@ -157,7 +157,7 @@ public:
     // 0x000b77c0
     void SetTrailer(CVehicle* trailer);
     // 0x000b7910
-    bool IsTowtruck();
+    BOOL IsTowtruck();
     // 0x000b7c70
     bool DoesExist();
     // 0x000b7d40
@@ -169,7 +169,7 @@ public:
     // 0x000b7d70
     DWORD GetField54();
     // 0x000b6e20
-    void SetColor(BYTE primary, BYTE secondary);
+    void SetColor(int primary, int secondary);
     // 0x000b6fa0
     BOOL IsTrainPart();
     // 0x000b7940

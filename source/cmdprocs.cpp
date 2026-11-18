@@ -200,7 +200,8 @@ void Commands::SavePositionOnly(char* params)
             return;
         }
         BYTE* vehicle = (BYTE*)ped->GetVehicle();
-        Scripting::ProcessCommand(&g_commandGetVehicleAngle, GamePoolVehicleGetIndex(vehicle), &angle);
+        DWORD vehicleIndex = GamePoolVehicleGetIndex(vehicle);
+        Scripting::ProcessCommand(&g_commandGetVehicleAngle, vehicleIndex, &angle);
         BYTE* matrix = *(BYTE**)(vehicle + 0x14);
         fprintf(file, "%u,%.4f,%.4f,%.4f,%.4f,%u,%u ; %s\n", (int)*(short*)(vehicle + 0x22), *(float*)(matrix + 0x30), *(float*)(matrix + 0x34), *(float*)(matrix + 0x38), angle,
                 (unsigned)vehicle[0x434], (unsigned)vehicle[0x435], params);
@@ -250,7 +251,7 @@ void Commands::ToggleCameraTargetLabels(char*)
 void Commands::SetChatPageSize(char* params)
 {
     int size;
-    if (!strlen(params) || (size = atol(params)) < 10 || size > 20)
+    if (!strlen(params) || (size = atoi(params)) < 10 || size > 20)
     {
         if (g_pChat)
             g_pChat->AddDebugMessage("pagesize [10-20] (lines)");
@@ -266,7 +267,7 @@ void Commands::SetChatFontSize(char* params)
 {
     if (strlen(params))
     {
-        int size = atol(params);
+        int size = atoi(params);
         if (size >= -3 && size <= 5)
         {
             if (g_pConfig)
@@ -362,7 +363,7 @@ void Commands::SetFrameLimiter(char* params)
 {
     if (strlen(params))
     {
-        DWORD value = atol(params);
+        DWORD value = atoi(params);
         if (value >= 20 && value <= 90)
         {
             g_pGame->SetFrameLimiter(value);
@@ -411,7 +412,7 @@ void Commands::DebugSetWorldWeather(char* params)
         g_pChat->AddDebugMessage("Usage: set_weather (weather number)");
         return;
     }
-    g_pGame->SetWorldWeather(atol(params));
+    g_pGame->SetWorldWeather(atoi(params));
 }
 // 0x00068960
 void Commands::DebugSetWorldTime(char* params)
@@ -423,7 +424,7 @@ void Commands::DebugSetWorldTime(char* params)
     }
     int hour = 0, minute = 0;
     sscanf(params, "%d%d", &hour, &minute);
-    if (hour >= 0 && hour < 24 && minute >= 0 && minute < 60)
+    if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59)
     {
         g_pGame->SetWorldTime(hour, minute);
         return;

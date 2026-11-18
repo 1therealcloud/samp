@@ -84,7 +84,7 @@ int ArchiveFindUnusedRecord()
 // 0x00062040
 int ArchiveFindRecord(HANDLE handle)
 {
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i != 50; i++)
         if (g_archiveRecordUsed[i] == TRUE && g_archiveOpenRecords[i].handle == handle)
             return i;
     return -1;

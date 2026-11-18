@@ -7,6 +7,8 @@
 #include "game/util.h"
 // 0x0011e32c
 static const float g_aimCameraZoomRange = 35.0f;
+// 0x00117b9c
+static const float g_aimCameraAspectBase = 1.0f;
 // 0x001419b0
 CameraAim* g_aimInternal = (CameraAim*)0xb6f32c;
 // 0x001419b4
@@ -44,8 +46,8 @@ void __stdcall AimStuff::UpdateCamera()
 // 0x0009c260
 void __stdcall AimStuff::ApplyLocalCamera()
 {
-    memcpy(g_aimInternalZoom, &g_aimLocalZoom, 4);
-    memcpy(g_aimInternalAspect, &g_aimLocalAspect, 4);
+    *g_aimInternalZoom = g_aimLocalZoom;
+    *g_aimInternalAspect = g_aimLocalAspect;
 }
 // 0x0009c280
 void __stdcall AimStuff::SetPlayerCamera(BYTE player, float zoom, float aspect)
@@ -72,13 +74,17 @@ void __stdcall AimStuff::ApplyPlayerCamera(BYTE player)
     __asm {
         movzx eax,player
         mov ecx,g_aimInternalZoom
-        fld dword ptr g_aimPlayerZoom[eax*4]
+        shl eax,2
+        fld dword ptr g_aimPlayerZoom[eax]
         fmul g_aimCameraZoomRange
         fadd g_aimCameraZoomRange
         fstp dword ptr [ecx]
+        mov edx,g_aimInternalAspect
+        fld dword ptr g_aimPlayerAspect[eax]
+        fadd g_aimCameraAspectBase
+        fstp dword ptr [edx]
     }
     // clang-format on
-    *g_aimInternalAspect = g_aimPlayerAspect[player] + 1.0f;
 }
 // 0x0009c310
 void __stdcall AimStuff::SetPlayerCameraMode(BYTE mode, BYTE player)

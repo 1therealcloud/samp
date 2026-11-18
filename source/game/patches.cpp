@@ -71,7 +71,7 @@ DWORD g_gamePatchValue1546c8 = 0x469c4000;
 // 0x001546cc
 DWORD g_gamePatchValue1546cc = 0xc69c4000;
 // 0x001546f0
-DWORD g_gamePatchValue1546f0 = 0x40000000;
+float g_gamePatchValue1546f0 = 2.0f;
 // 0x001546f4
 DWORD g_gamePatchValue1546f4 = 0x461c4000;
 // 0x0018f498

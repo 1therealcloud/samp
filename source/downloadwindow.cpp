@@ -55,36 +55,33 @@ CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
 void CDownloadWindow::ResetFonts()
 {
     DWORD* state = (DWORD*)nativeState;
+    DWORD height = state[6];
     BYTE* dialog = (BYTE*)state[10];
-    DWORD height = state[6], width = state[5];
+    DWORD width = state[5];
     *(DWORD*)(dialog + 0x11e) = width;
     *(DWORD*)(dialog + 0x122) = height;
     RECT client;
     GetClientRect(g_inputGameWindow, &client);
-    // Native signed SUB/CDQ/SAR halves, with wrapping subtraction.
-    LONG w = (LONG)state[5];
-    LONG halfW = (LONG)((DWORD)w - (w < 0 ? 0xffffffffUL : 0)) >> 1;
-    LONG right = client.right;
-    LONG halfRight = (LONG)((DWORD)right - (right < 0 ? 0xffffffffUL : 0)) >> 1;
-    LONG bottom = client.bottom;
-    LONG halfBottom = (LONG)((DWORD)bottom - (bottom < 0 ? 0xffffffffUL : 0)) >> 1;
-    LONG h = (LONG)state[6];
-    LONG halfH = (LONG)((DWORD)h - (h < 0 ? 0xffffffffUL : 0)) >> 1;
-    state[3] = (DWORD)halfRight - (DWORD)halfW;
-    state[4] = (DWORD)halfBottom - (DWORD)halfH;
+    DWORD left = (DWORD)(client.right / 2) - (DWORD)((LONG)state[5] / 2);
+    DWORD top = (DWORD)(client.bottom / 2);
+    state[3] = left;
+    top -= (DWORD)((LONG)state[6] / 2);
     dialog = (BYTE*)state[10];
-    *(DWORD*)(dialog + 0x116) = state[3];
-    *(DWORD*)(dialog + 0x11a) = state[4];
-    state[9] = state[6] - *(DWORD*)((BYTE*)state[10] + 0x126);
-    SIZE measured;
-    g_deviceFonts->GetLittleTextScreenSize((FontSize*)&measured, g_fontMeasureProbe, 0);
+    state[4] = top;
+    *(DWORD*)(dialog + 0x116) = left;
+    *(DWORD*)(dialog + 0x11a) = top;
+    DWORD captionHeight = *(DWORD*)((BYTE*)state[10] + 0x126);
+    state[9] = state[6] - captionHeight;
+    FontSize measured = g_deviceFonts->GetLittleTextScreenSize(g_fontMeasureProbe, 0);
     CDXUTControl* list = (CDXUTControl*)state[11];
     list->SetLocation(2, (LONG)((DWORD)measured.cy + 2));
+    DWORD listHeight = state[9] - (DWORD)measured.cy - 4;
+    DWORD listWidth = state[5] - 4;
     list = (CDXUTControl*)state[11];
-    list->SetSize((LONG)(state[5] - 4), (LONG)(state[9] - (DWORD)measured.cy - 4));
+    list->SetSize((LONG)listWidth, (LONG)listHeight);
 }
 // 0x0006a280
-void CDownloadWindow::GetRect(RECT* out)
+__declspec(noinline) void CDownloadWindow::GetRect(RECT* out)
 {
     DWORD* state = (DWORD*)nativeState;
     out->left = state[3];
@@ -97,8 +94,7 @@ void CDownloadWindow::Show(DWORD mode)
 {
     DWORD* state = (DWORD*)nativeState;
     state[0x94] = mode;
-    SIZE measured;
-    g_deviceFonts->GetTextScreenSize((FontSize*)&measured, g_fontMeasureProbe, 0);
+    FontSize measured = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
     strcpy((char*)state[10] + 0x16, g_downloadWindowTitle);
     ((BYTE*)state[10])[0x14] = 1;
     *(DWORD*)((BYTE*)state[10] + 0x126) = (DWORD)measured.cy + 4;
@@ -107,8 +103,8 @@ void CDownloadWindow::Show(DWORD mode)
     ((BYTE*)state[10])[0x13] = 1;
     if (state[11])
     {
-        ((CDXUTControl*)state[11])->SetEnabled(true);
         ((CDXUTControl*)state[11])->SetVisible(true);
+        ((CDXUTControl*)state[11])->SetEnabled(true);
     }
     ResetFonts();
     state[12] = 1;
@@ -127,10 +123,19 @@ void CDownloadWindow::Draw()
     rect.top = (LONG)((DWORD)rect.top + *(DWORD*)((BYTE*)state[10] + 0x126) + 3);
     rect.left = (LONG)((DWORD)rect.left + 16);
     // Native signed count is live and unbounded; three columns are initialized by construction.
-    for (int column = 0; column < (LONG)state[13]; column++)
+    int column = 0;
+    if ((LONG)state[13] > 0)
     {
-        g_deviceFonts->DrawLittleText(0, (const char*)nativeState + 0x38 + column * 129, rect, 0x120, 0xffa9c4e4, TRUE);
-        rect.left = (LONG)((DWORD)rect.left + *(DWORD*)(nativeState + 0x23c + column * 4));
+        const DWORD* width = (const DWORD*)(nativeState + 0x23c);
+        const char* title = (const char*)nativeState + 0x38;
+        do
+        {
+            g_deviceFonts->DrawLittleText(0, title, rect, 0x120, 0xffa9c4e4, TRUE);
+            rect.left = (LONG)((DWORD)rect.left + *width);
+            ++column;
+            ++width;
+            title += 129;
+        } while (column < (LONG)state[13]);
     }
 }
 // 0x0006a500
@@ -147,8 +152,8 @@ void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
     ((CDXUTControl*)state[11])->SetSize((LONG)(state[5] - 4), (LONG)(state[6] - 35));
     ((CDXUTControl*)state[11])->OnInit();
     ((CDXUTControl*)state[11])->GetElement(0)->TextureColor.Init(0xc8ffffff, 0xc8808080, 0);
-    ((CDXUTControl*)state[11])->SetVisible(false);
     ((CDXUTControl*)state[11])->SetEnabled(false);
+    ((CDXUTControl*)state[11])->SetVisible(false);
     created = (CDXUTListBoxDL*)state[11];
     created->columnCount = 2;
     created = (CDXUTListBoxDL*)state[11];
@@ -186,7 +191,9 @@ const float g_downloadKilobytesPerByte = 0.0009765625f;
 DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
-    return index < state[1] ? ((DownloadRecord**)state[0])[index] : 0;
+    if (index >= state[1])
+        return 0;
+    return ((DownloadRecord**)state[0])[index];
 }
 // 0x0006a450
 bool CDownloadWindow::ResizeRecords(DWORD count)
@@ -206,8 +213,14 @@ bool CDownloadWindow::ResizeRecords(DWORD count)
     if (!records)
         return false;
     state[0] = (DWORD)records;
-    for (DWORD i = state[1]; i < count; i++)
-        ((DownloadRecord**)state[0])[i] = 0;
+    DWORD i = state[1];
+    if (i < count)
+    {
+        do
+        {
+            ((DownloadRecord**)state[0])[i] = 0;
+        } while (++i != count);
+    }
     state[1] = count;
     return true;
 }
@@ -215,21 +228,37 @@ bool CDownloadWindow::ResizeRecords(DWORD count)
 void CDownloadWindow::TrimRecords()
 {
     DWORD* state = (DWORD*)nativeState;
-    DWORD count = state[1], last = 0xffffffff;
-    for (DWORD i = 0; i < count; i++)
-        if (((DownloadRecord**)state[0])[i])
-            last = i;
-    ResizeRecords(last == 0xffffffff ? 0 : last + 1);
+    DWORD count = state[1];
+    DWORD i = 0;
+    DWORD last = 0xffffffff;
+    if (count)
+    {
+        do
+        {
+            if (((DownloadRecord**)state[0])[i])
+                last = i;
+        } while (++i != count);
+    }
+    if (last == 0xffffffff)
+        ResizeRecords(0);
+    else
+        ResizeRecords(++last);
 }
 // 0x0006a610
-int CDownloadWindow::FindRecord(DWORD id)
+__declspec(noinline) int CDownloadWindow::FindRecord(DWORD id)
 {
     DWORD* state = (DWORD*)nativeState;
     DWORD count = state[1];
     // Native assumes every visited record is non-null; holes are not skipped.
-    for (DWORD i = 0; i < count; i++)
-        if (((DownloadRecord**)state[0])[i]->id == id)
-            return (int)i;
+    DWORD i = 0;
+    if (count)
+    {
+        do
+        {
+            if (GetRecord(i)->id == id)
+                return (int)i;
+        } while (++i != count);
+    }
     return -1;
 }
 // 0x0006a640
@@ -242,21 +271,27 @@ int CDownloadWindow::AddRecord(DownloadRecord* record)
 {
     DWORD* state = (DWORD*)nativeState;
     DWORD count = state[1];
-    for (DWORD i = 0; i < count; i++)
-        if (!((DownloadRecord**)state[0])[i])
+    DWORD i = 0;
+    if (count)
+    {
+        do
         {
-            if ((LONG)i < 0)
-                break;
-            ((DownloadRecord**)state[0])[i] = record;
-            return (int)i;
-        }
+            if (!((DownloadRecord**)state[0])[i])
+            {
+                if ((LONG)i < 0)
+                    break;
+                ((DownloadRecord**)state[0])[i] = record;
+                return (int)i;
+            }
+        } while (++i != count);
+    }
     if (!ResizeRecords(count + 1))
         return -1;
     ((DownloadRecord**)state[0])[count] = record;
     return (int)count;
 }
 // 0x0006a6b0
-bool CDownloadWindow::RemoveRecord(DWORD index)
+__declspec(noinline) bool CDownloadWindow::RemoveRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
     if (index >= state[1])
@@ -266,7 +301,7 @@ bool CDownloadWindow::RemoveRecord(DWORD index)
     return true;
 }
 // 0x0006a6e0
-void CDownloadWindow::ClearRecords()
+__declspec(noinline) void CDownloadWindow::ClearRecords()
 {
     DWORD* state = (DWORD*)nativeState;
     int count = (int)state[1];
@@ -299,8 +334,8 @@ void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downl
     int index = FindRecord(id);
     DownloadRecord* record;
     DWORD delta;
-    BYTE currentStatus = status;
-    char text[64];
+    BYTE currentStatus;
+    char text[68];
     if (index == -1)
     {
         record = (DownloadRecord*)calloc(1, 18);
@@ -308,69 +343,42 @@ void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downl
         record->id = id;
         record->status = status;
         record->downloaded = downloaded;
-        record->total = total;
         delta = downloaded;
-        _snprintf(text, 64, type == 1 ? g_downloadModel : g_downloadTexture);
+        record->total = total;
+        if (type == 1)
+            _snprintf(text, 64, g_downloadModel);
+        else
+            _snprintf(text, 64, g_downloadTexture);
         ((CDXUTListBoxDL*)state[11])->AddItem(text, (void*)0xffffffff, -1);
         record->row = state[1];
         AddRecord(record);
         _snprintf(text, 64, g_downloadIdFormat, id);
         ((CDXUTListBoxDL*)state[11])->SetSubItemText(record->row, 0, text);
         ((CDXUTListBoxDL*)state[11])->SelectItem(record->row);
+        currentStatus = status;
         ((CDXUTListBoxDL*)state[11])->GetItem(record->row)->flag = true;
     }
     else
     {
         record = GetRecord(index);
-        delta = downloaded - record->downloaded;
-        record->status = status;
+        DWORD previousDownloaded = record->downloaded;
+        currentStatus = status;
+        record->status = currentStatus;
+        delta = downloaded - previousDownloaded;
         record->downloaded = downloaded;
     }
     float percentage = 0.0f;
     if (downloaded > 0 && record->total > 0)
-    {
-        DWORD denominator = record->total;
-        // clang-format off
-        __asm {
-            mov eax,downloaded
-            test eax,eax
-            fild downloaded
-            jge numerator_signed
-            fadd g_cursorRayUnsignedBias
-numerator_signed:
-            fmul g_vehicleTrainSpeedMaximum
-            mov eax,denominator
-            test eax,eax
-            fild denominator
-            jge denominator_signed
-            fadd g_cursorRayUnsignedBias
-denominator_signed:
-            fdivp st(1),st(0)
-            fstp percentage
-        }
-        // clang-format on
-    }
+        percentage = (float)downloaded * g_vehicleTrainSpeedMaximum / (float)record->total;
     state[0x96] += delta;
     if ((LONG)(RakNet::GetTime() - state[0x95]) > 1000)
     {
         state[0x95] = RakNet::GetTime();
         DWORD bytes = state[0x96];
         state[0x97] = 0;
-        if (bytes)
+        if (bytes > 0)
         {
-            float speed;
-            // clang-format off
-            __asm {
-                mov eax,bytes
-                test eax,eax
-                fild bytes
-                jge bytes_signed
-                fadd g_cursorRayUnsignedBias
-bytes_signed:
-                fmul g_downloadKilobytesPerByte
-                fstp speed
-            }
-            // clang-format on
+            float speed = (float)bytes * g_downloadKilobytesPerByte;
             memcpy(&state[0x97], &speed, 4);
         }
         state[0x96] = 0;
@@ -395,10 +403,8 @@ bytes_signed:
     ((CDXUTListBoxDL*)state[11])->SetSubItemText(record->row, 1, text);
     if ((LONG)state[0x94] > 0)
     {
-        char title[64];
-        float speed;
-        memcpy(&speed, &state[0x97], 4);
-        _snprintf(title, 64, g_downloadCaptionFormat, state[0x93], state[0x94], (double)speed);
+        char title[68];
+        _snprintf(title, 64, g_downloadCaptionFormat, state[0x93], state[0x94], (double)*(const float*)&state[0x97]);
         strcpy((char*)state[10] + 0x16, title);
     }
 }

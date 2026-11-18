@@ -10,7 +10,11 @@ public:
     CEntity* m_pAttachedTo;
     CMatrix* m_pMatrix;
     // 0x0009fda0
-    CCamera();
+    CCamera()
+    {
+        m_pMatrix = (CMatrix*)0xb6f99c;
+        m_pAttachedTo = 0;
+    }
     // Provisional external binding; standalone native destructor identity unverified.
     // 0x0009fdb0
     ~CCamera();

@@ -34,7 +34,7 @@ public:
     // 0x0006a440
     int GetFilesCount();
     // 0x0006a450
-    bool ResizeRecords(DWORD count);
+    __declspec(noinline) bool ResizeRecords(DWORD count);
     // 0x0006a4c0
     void TrimRecords();
     // 0x0006a610

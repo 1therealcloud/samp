@@ -43,8 +43,8 @@ int FormatChatBubbleText(char* text, int width, int tolerance)
         else
         {
             base += boundary;
-            remaining -= boundary;
             text[base] = '\n';
+            remaining -= boundary;
             cursor = base + width;
         }
         ++rows;

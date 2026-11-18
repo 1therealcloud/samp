@@ -432,7 +432,8 @@ BYTE CPed::GetAim()
         return 1;
     if (keys->keys1[10])
         return 2;
-    return keys->keys1[9] ? 3 : 0;
+    BYTE mask = (keys->keys1[9] == 0) - 1;
+    return mask & 3;
 }
 
 // 0x000ad600
@@ -2102,12 +2103,12 @@ const Scripting::OpcodeInfo g_pedCommand03fe = {0x3fe, "ii"};
 // 0x0011f388
 const float g_pedSpawnLift = 0.15f;
 // 0x000b08e0
-CPed::CPed(int player, int model, CVector position, float rotation)
+CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
 {
     DWORD handle = 0, scriptPlayer = (BYTE)player;
     m_pGamePed = 0;
     m_nHandle = 0;
-    Scripting::ProcessCommand(&g_pedCreatePlayerCommand, &scriptPlayer, (double)position.x, (double)position.y, (double)position.z, &handle);
+    Scripting::ProcessCommand(&g_pedCreatePlayerCommand, &scriptPlayer, (double)x, (double)y, (double)z, &handle);
     Scripting::ProcessCommand(&g_pedGetPlayerHandleCommand, &scriptPlayer, &handle);
     m_nHandle = handle;
     m_pGamePed = GamePoolPedGetAt(handle);
@@ -2146,9 +2147,9 @@ CPed::CPed(int player, int model, CVector position, float rotation)
     memset(unknown2fd, 0, 44);
     CMatrix matrix;
     GetMatrix(&matrix);
-    memcpy(&matrix.position.x, &position.x, 4);
-    memcpy(&matrix.position.y, &position.y, 4);
-    float pz = position.z, liftedZ;
+    memcpy(&matrix.position.x, &x, 4);
+    memcpy(&matrix.position.y, &y, 4);
+    float pz = z, liftedZ;
     // clang-format off
     __asm {
         fld pz
@@ -2191,7 +2192,7 @@ void CPed::AddAccessory(int index, const PedAccessoryState* info)
     if (stored->model < 0 && g_customModels && g_customModels->IsObjectEntry(stored->model) && !g_customModels->GetLoadedFlag(stored->model) &&
         !g_customModels->LoadObjectEntry(stored->model))
         stored->model = 18631;
-    CObject* object = new CObject(stored->model, matrix.position, stored->rotation, 200.0f, 1, 0, 0);
+    CObject* object = new CObject(stored->model, matrix.position.x, matrix.position.y, matrix.position.z, stored->rotation, 200.0f, 1, 0, 0);
     m_accessoryObjects[index] = object;
     if (info->materialColor1)
         object->SetMaterial(-1, 0, 0, 0, info->materialColor1);

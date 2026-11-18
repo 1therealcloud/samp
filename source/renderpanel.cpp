@@ -82,8 +82,7 @@ void CRenderPanel::GetRect(RECT* out)
 // 0x00071350
 void CRenderPanel::Show()
 {
-    SIZE measured;
-    g_deviceFonts->GetTextScreenSize((FontSize*)&measured, g_fontMeasureProbe, 0);
+    FontSize measured = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
     DWORD* state = (DWORD*)nativeState;
     BYTE* dialog = (BYTE*)state[8];
     strcpy((char*)dialog + 0x16, g_renderPanelTitle);
@@ -132,8 +131,11 @@ void CRenderPanel::DrawLabels()
     if (!font)
         return;
     DWORD* state = (DWORD*)nativeState;
-    LONG x = (LONG)(state[1] + 25), y = (LONG)(state[2] + *(DWORD*)((BYTE*)state[8] + 0x126) + 30);
-    RECT rect = {x, y, (LONG)((DWORD)x + 1), (LONG)((DWORD)y + 1)};
+    RECT rect;
+    rect.left = (LONG)(state[1] + 25);
+    rect.top = (LONG)(state[2] + *(DWORD*)((BYTE*)state[8] + 0x126) + 30);
+    rect.right = (LONG)((DWORD)rect.left + 1);
+    rect.bottom = (LONG)((DWORD)rect.top + 1);
     font->DrawTextA(0, editor->GetRenderChar(0), 1, &rect, 0x105, 0xff9999cc);
     rect.top = (LONG)((DWORD)rect.top + state[7]);
     rect.bottom = (LONG)((DWORD)rect.top + 1);

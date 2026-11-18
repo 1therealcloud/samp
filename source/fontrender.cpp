@@ -87,40 +87,32 @@ void CFonts::OnResetDevice()
     m_pLicensePlateFont->OnResetDevice();
 }
 // 0x0006ac40
-FontSize* CFonts::GetTextScreenSize(FontSize* output, const char* text, int format)
+FontSize CFonts::GetTextScreenSize(const char* text, int format)
 {
     FontSize size = {0, 0};
     if (strlen(text) > 100000)
-    {
-        *output = size;
-        return output;
-    }
+        return size;
     strcpy(m_szTempBuffer, text);
     ChatStripColorTags(m_szTempBuffer);
     RECT rect;
     m_pFont->DrawTextA(0, m_szTempBuffer, -1, &rect, format | DT_CALCRECT, 0xff000000);
     size.cx = rect.right - rect.left;
     size.cy = rect.bottom - rect.top;
-    *output = size;
-    return output;
+    return size;
 }
 // 0x0006acf0
-FontSize* CFonts::GetLittleTextScreenSize(FontSize* output, const char* text, int format)
+FontSize CFonts::GetLittleTextScreenSize(const char* text, int format)
 {
     FontSize size = {0, 0};
     if (strlen(text) > 100000)
-    {
-        *output = size;
-        return output;
-    }
+        return size;
     strcpy(m_szTempBuffer, text);
     ChatStripColorTags(m_szTempBuffer);
     RECT rect;
     m_pLittleFont->DrawTextA(0, m_szTempBuffer, -1, &rect, format | DT_CALCRECT, 0xff000000);
     size.cx = rect.right - rect.left;
     size.cy = rect.bottom - rect.top;
-    *output = size;
-    return output;
+    return size;
 }
 // 0x0006ada0
 void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR color, BOOL shadow)
@@ -279,9 +271,8 @@ void CFonts::Reset()
     wrapper = new CFontWrapper;
     wrapper->font = m_pLicensePlateFont;
     m_pLicensePlateFont = wrapper;
-    FontSize size, littleSize;
-    m_nFontHeight = GetTextScreenSize(&size, g_fontMeasureProbe, 0)->cy;
-    m_nLittleFontHeight = GetLittleTextScreenSize(&littleSize, g_fontMeasureProbe, 0)->cy;
+    m_nFontHeight = GetTextScreenSize(g_fontMeasureProbe, 0).cy;
+    m_nLittleFontHeight = GetLittleTextScreenSize(g_fontMeasureProbe, 0).cy;
 }
 
 // 0x00118400

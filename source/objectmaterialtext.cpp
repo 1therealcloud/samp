@@ -32,7 +32,7 @@ void CObjectMaterialText::OnLostDevice()
 }
 
 // 0x00070300
-void CObjectMaterialText::OnResetDevice()
+__declspec(noinline) void CObjectMaterialText::OnResetDevice()
 {
     D3DXCreateSprite(device, &first);
     D3DXCreateSprite(device, &second);

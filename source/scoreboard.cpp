@@ -230,8 +230,7 @@ void CScoreboard::Draw()
     RECT host = {left, top, right, bottom};
     // Native reaches this dereference even after the nullable earlier net gates.
     g_deviceFonts->DrawLittleText(0, (char*)g_pNetGame + 0x131, host, 0x120, 0xffbebebe, TRUE);
-    FontSize size;
-    g_deviceFonts->GetLittleTextScreenSize(&size, g_scoreboardCountProbe, 0);
+    FontSize size = g_deviceFonts->GetLittleTextScreenSize(g_scoreboardCountProbe, 0);
     long* textWidth = &size.cx;
     // clang-format off
     __asm {
@@ -340,7 +339,7 @@ CScoreboard::CScoreboard(IDirect3DDevice9* device)
     state[15] = 0;
     state[16] = 0;
     state[1] = 0;
-    if (!g_pGame || g_chatScreenWidth < 801)
+    if (!g_pGame || g_chatScreenWidth <= 800)
     {
         state[5] = 0x44200000;
         state[6] = 0x43f00000;

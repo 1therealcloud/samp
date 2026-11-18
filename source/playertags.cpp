@@ -297,8 +297,7 @@ void CPlayerTags::DrawLabel(const CVector* position, const char* text, DWORD col
     // Native accepts unordered projected depth, ignores viewport/projection failures.
     if (!visible) return;
     int x = (int)projected.x, y = (int)projected.y;
-    FontSize size;
-    g_deviceFonts->GetLittleTextScreenSize(&size, text, 0);
+    FontSize size = g_deviceFonts->GetLittleTextScreenSize(text, 0);
     RECT rect = {x - size.cx / 2, y + 17 - size.cy, x + size.cx / 2, y};
     g_deviceFonts->DrawLittleText(sprite, text, rect, 0x100, color, TRUE);
     if (!drawStatus)

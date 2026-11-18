@@ -249,6 +249,8 @@ public:
     void SetFrameLimiter(int);
     // 0x000a1a30
     void ProcessFrameLimiter();
+    // 0x0009fe50
+    void UpdateKeyCycle();
     // 0x0009fed0
     void Sleep(int elapsed, int limit);
     // 0x000a1280
@@ -447,8 +449,6 @@ extern float g_frameScale;
 extern const float g_frameScaleMultiplier;
 // 0x0011c664
 extern const float g_frameScaleNumerator;
-// 0x0009fe50
-void GameUpdateKeyCycle();
 // 0x000b5d10
 void GameSetVideoMode(DWORD mode);
 

@@ -136,8 +136,14 @@ bool CCustomModels::ResizeRecords(DWORD count)
     if (!replacement)
         return false;
     records = replacement;
-    for (DWORD i = previous; i < count; ++i)
-        records[i] = 0;
+    DWORD i = previous;
+    if (i < count)
+    {
+        do
+        {
+            records[i] = 0;
+        } while (++i != count);
+    }
     previous = count;
     return true;
 }

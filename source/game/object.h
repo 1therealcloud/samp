@@ -90,7 +90,7 @@ public:
     void DisableCameraCollision();
     // Native eleven-word entry; lightingRequest retains its raw byte.
     // 0x000a8d00
-    CObject(int model, CVector position, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour);
+    CObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour);
     // 0x000a9020
     virtual ~CObject();
     // 0x000a79a0

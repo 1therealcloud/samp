@@ -6,31 +6,17 @@ void CVehicle::SetObjective(BYTE objective)
 {
     m_byteObjective = objective;
 }
-// 0x000b37d0
-void* __stdcall GamePoolVehicleGetAt(int handle)
-{
-    void* result;
-    // clang-format off
-    __asm {
-        mov ecx,dword ptr ds:[0xb74494]
-        push handle
-        mov eax,0x4048e0
-        call eax
-        mov result,eax
-    }
-    // clang-format on
-    return result;
-}
 // 0x000b6e20
-void CVehicle::SetColor(BYTE primary, BYTE secondary)
+void CVehicle::SetColor(int primary, int secondary)
 {
+    BYTE color = (BYTE)secondary;
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
     {
-        ((BYTE*)m_pGameVehicle)[0x434] = primary;
-        ((BYTE*)m_pGameVehicle)[0x435] = secondary;
+        ((BYTE*)m_pGameVehicle)[0x434] = (BYTE)primary;
+        ((BYTE*)m_pGameVehicle)[0x435] = color;
     }
-    m_nSecondaryColor = secondary;
-    m_nPrimaryColor = primary;
+    m_nSecondaryColor = color;
+    m_nPrimaryColor = (BYTE)primary;
     m_bColorChanged = TRUE;
 }
 
@@ -43,11 +29,10 @@ CVehicle::~CVehicle()
     m_pGameVehicle = GamePoolVehicleGetAt(m_nHandle);
     if (m_pGameVehicle)
     {
-        DWORD* marker = &m_dwMarker;
-        if (*marker)
+        if (m_dwMarker)
         {
-            Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, *marker);
-            *marker = 0;
+            Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, m_dwMarker);
+            m_dwMarker = 0;
         }
         RemovePassengers();
         if (m_pTrailer)
@@ -55,21 +40,30 @@ CVehicle::~CVehicle()
             DetachTrailer();
             m_pTrailer = 0;
         }
-        ShutdownLicensePlate();
-        short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
-        if (model == 0x21a || model == 0x219)
+        if (m_pLicensePlateTexture)
         {
-            Scripting::ProcessCommand(&g_vehicleDestroyTrainCommand, m_nHandle);
+            m_pLicensePlateTexture->Release();
+            m_pLicensePlateTexture = 0;
         }
-        else
+        short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
+        if (model != 0x21a && model != 0x219)
         {
             int modelSnapshot = model;
             Scripting::ProcessCommand(&g_vehicleDestroyCommand, m_nHandle);
             if (GameGetModelReferenceCount(modelSnapshot) == 0 && !m_dwKeepLoaded && g_pGame->CountBackendVehicleModelRecords() > 80 && g_pGame->IsModelAvailable(modelSnapshot))
             {
-                ((void(__cdecl*)(int))0x4089a0)(modelSnapshot);
+                // clang-format off
+                __asm {
+                    push modelSnapshot
+                    mov edx,0x4089a0
+                    call edx
+                    pop edx
+                }
+                // clang-format on
             }
         }
+        else
+            Scripting::ProcessCommand(&g_vehicleDestroyTrainCommand, m_nHandle);
     }
 }
 
@@ -131,8 +125,7 @@ CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD k
             g_pGame->LoadRequestedModels();
             if (!g_pGame->IsModelAvailable(model))
             {
-                // Keep the resolved Sleep target for the entire native wait loop.
-                void(WINAPI* volatile sleep)(DWORD) = Sleep;
+                void(WINAPI* sleep)(DWORD) = Sleep;
                 do
                 {
                     sleep(0);
@@ -166,21 +159,10 @@ CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD k
         m_dwUnknown5c = 0;
         CMatrix matrix;
         GetMatrix(&matrix);
-        BOOL lift = GetSubtype() != 2 && GetSubtype() != 6;
-        DWORD finalZ;
-        // clang-format off
-        __asm {
-            fld z
-            cmp lift,0
-            je noLift
-            fadd dword ptr [g_vehicleCreationLift]
-noLift:
-            fstp dword ptr finalZ
-        }
-        // clang-format on
-        *(DWORD*)&matrix.position.x = *(DWORD*)&x;
-        *(DWORD*)&matrix.position.y = *(DWORD*)&y;
-        *(DWORD*)&matrix.position.z = finalZ;
+        // Keep both paths on x87 through the final float store.
+        matrix.position.z = (float)(GetSubtype() != 2 && GetSubtype() != 6 ? (double)(z + g_vehicleCreationLift) : (double)z);
+        matrix.position.x = x;
+        matrix.position.y = y;
         SetMatrix(matrix);
         m_dwKeepLoaded = keepLoaded;
     }
@@ -211,19 +193,9 @@ noLift:
     else
     {
         int trainType = model == 0x21a ? 5 : model == 0x219 ? 3 : 9;
-        DWORD direction;
-        // clang-format off
-        __asm {
-            mov direction,0
-            fld rotation
-            fcomp dword ptr [g_angleUpperBound]
-            fnstsw ax
-            test ah,0x41
-            jnz directionDone
-            mov direction,1
- directionDone:
-        }
-        // clang-format on
+        DWORD direction = 0;
+        if (rotation > g_angleUpperBound)
+            direction = 1;
         g_pGame->RequestModel(0x21a, 2);
         g_pGame->RequestModel(0x23a, 2);
         g_pGame->RequestModel(0x219, 2);
@@ -232,7 +204,7 @@ noLift:
         g_pGame->LoadRequestedModels();
         BOOL available = g_pGame->IsModelAvailable(0x21a);
         // The five train waits share one resolved Sleep target.
-        void(WINAPI* volatile sleep)(DWORD) = Sleep;
+        void(WINAPI* sleep)(DWORD) = Sleep;
         while (!available)
         {
             sleep(0);
@@ -303,31 +275,6 @@ int CVehicle::GetSubtype()
 {
     return m_pGameVehicle ? GameGetVehicleSubtype(m_pGameVehicle) : 0;
 }
-// 0x000b5d20
-int GameGetVehicleSubtype(void* vehicle)
-{
-    if (!vehicle)
-        return 0;
-    // GTA SA vtable virtual addresses, not samp.dll addresses.
-    switch (*(DWORD*)vehicle)
-    {
-        case 0x871120:
-            return 1;
-        case 0x8721a0:
-            return 4;
-        case 0x871360:
-            return 2;
-        case 0x871948:
-            return 5;
-        case 0x871680:
-            return 3;
-        case 0x871528:
-            return 6;
-        case 0x872370:
-            return 7;
-    }
-    return 0;
-}
 
 #include "game/playerped.h"
 
@@ -356,12 +303,11 @@ BOOL CVehicle::HasDriver()
 // 0x000b6c70
 BOOL CVehicle::IsOccupied()
 {
-    BYTE* vehicle = (BYTE*)m_pGameVehicle;
-    if (vehicle)
+    if (m_pGameVehicle)
     {
-        for (int slot = 0; slot < 8; ++slot)
-            if (*(void**)(vehicle + 0x460 + slot * 4))
-                return TRUE;
+        void** occupants = (void**)((BYTE*)m_pGameVehicle + 0x460);
+        if (occupants[0] || occupants[1] || occupants[2] || occupants[3] || occupants[4] || occupants[5] || occupants[6] || occupants[7])
+            return TRUE;
     }
     return FALSE;
 }
@@ -400,14 +346,14 @@ BOOL CVehicle::HasPlayerPed()
 // 0x000b7080
 void CVehicle::EnableSiren(BYTE enabled)
 {
-    BYTE* flags = (BYTE*)m_pGameVehicle + 0x42d;
-    *flags = (BYTE)((*flags & 0x7f) | (enabled << 7));
+    BYTE* vehicle = (BYTE*)m_pGameVehicle;
+    vehicle[0x42d] = (BYTE)((vehicle[0x42d] & 0x7f) | (enabled << 7));
 }
 
 // 0x000b70a0
 BOOL CVehicle::SirenEnabled()
 {
-    return (*(BYTE*)((BYTE*)m_pGameVehicle + 0x42d) & 0x80) != 0;
+    return (BYTE)(*(BYTE*)((BYTE*)m_pGameVehicle + 0x42d) & 0x80) == 0x80;
 }
 
 // 0x000b70c0
@@ -432,25 +378,34 @@ DWORD CVehicle::GetHydraThrusters()
 // 0x000b7420
 float CVehicle::GetTrainSpeed()
 {
-    return m_pGameVehicle ? *(float*)((BYTE*)m_pGameVehicle + 0x5a4) : g_objectScaleLowerBound;
+    if (!m_pGameVehicle)
+        return g_objectScaleLowerBound;
+    DWORD speed = *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a4);
+    return *(float*)&speed;
 }
 
 // 0x000b76c0
 DWORD CVehicle::GetPanelsDamage()
 {
-    return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 ? *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b4) : 0;
+    if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
+        return *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b4);
+    return 0;
 }
 
 // 0x000b76f0
 DWORD CVehicle::GetDoorsDamage()
 {
-    return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 ? *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9) : 0;
+    if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
+        return *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9);
+    return 0;
 }
 
 // 0x000b7720
 BYTE CVehicle::GetLightsDamage()
 {
-    return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 ? *(BYTE*)((BYTE*)m_pGameVehicle + 0x5b0) : 0;
+    if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
+        return *(BYTE*)((BYTE*)m_pGameVehicle + 0x5b0);
+    return 0;
 }
 
 // 0x000b77c0
@@ -460,9 +415,13 @@ void CVehicle::SetTrailer(CVehicle* trailer)
 }
 
 // 0x000b7910
-bool CVehicle::IsTowtruck()
+BOOL CVehicle::IsTowtruck()
 {
-    return m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && *(short*)((BYTE*)m_pGameVehicle + 0x22) == 0x20d;
+    if (!m_pGameVehicle)
+        return FALSE;
+    if (GamePoolVehicleGetAt(m_nHandle))
+        return *(short*)((BYTE*)m_pGameVehicle + 0x22) == 0x20d;
+    return FALSE;
 }
 
 // 0x000b7c70
@@ -523,7 +482,9 @@ void CVehicle::UpdateColor()
 // 0x000b6ef0
 DWORD CVehicle::IsSunk()
 {
-    return m_pGameVehicle ? Scripting::ProcessCommand(&g_vehicleIsSunkCommand, m_nHandle) : 0;
+    if (!m_pGameVehicle)
+        return 0;
+    return Scripting::ProcessCommand(&g_vehicleIsSunkCommand, m_nHandle);
 }
 
 // 0x000b6fe0
@@ -600,15 +561,15 @@ void CVehicle::EnableLights(BYTE enabled)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
     {
-        if (enabled)
-        {
-            *((BYTE*)m_pGameVehicle + 0x4a8) &= 0xf7;
-            *((BYTE*)m_pGameVehicle + 0x428) |= 0x40;
-        }
-        else
+        if (!enabled)
         {
             *((BYTE*)m_pGameVehicle + 0x4a8) |= 8;
             *((BYTE*)m_pGameVehicle + 0x428) &= 0xbf;
+        }
+        else
+        {
+            *((BYTE*)m_pGameVehicle + 0x4a8) &= 0xf7;
+            *((BYTE*)m_pGameVehicle + 0x428) |= 0x40;
         }
     }
 }
@@ -616,26 +577,36 @@ void CVehicle::EnableLights(BYTE enabled)
 // 0x000b79f0
 BYTE CVehicle::GetBackendLightsDisabledFlag()
 {
-    if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
-        return (*((BYTE*)m_pGameVehicle + 0x4a8) >> 3) & 1;
+    if (!m_pGameVehicle)
+    return 1;
+    if (GamePoolVehicleGetAt(m_nHandle))
+    {
+        BYTE flags = *((BYTE*)m_pGameVehicle + 0x4a8);
+        flags >>= 3;
+        flags &= 1;
+        return flags;
+    }
     return 1;
 }
 
 // 0x000b7be0
 BOOL CVehicle::RemoveComponent(WORD component)
 {
-    if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
+    if (!m_pGameVehicle)
     {
-        Scripting::ProcessCommand(&g_vehicleRemoveComponentCommand, m_nHandle, (unsigned int)component);
-        return TRUE;
+unavailable:
+        return FALSE;
     }
-    return FALSE;
+    if (!GamePoolVehicleGetAt(m_nHandle))
+        goto unavailable;
+    Scripting::ProcessCommand(&g_vehicleRemoveComponentCommand, m_nHandle, (unsigned int)component);
+    return TRUE;
 }
 
 // 0x000b7c20
 void CVehicle::SetPaintjob(BYTE paintjob)
 {
-    if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 && paintjob < 4)
+    if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 && paintjob <= 3)
     {
         Scripting::ProcessCommand(&g_vehiclePaintjobCommand, m_nHandle, (unsigned int)paintjob);
     }
@@ -663,14 +634,15 @@ float CVehicle::GetBackendFloat648()
 // 0x000b7ea0
 void CVehicle::SetWindowOpenFlag(BYTE window)
 {
-    void* backend = m_pGameVehicle;
-    if (backend)
+    if (m_pGameVehicle)
     {
-        unsigned int value = window;
+        void* backend = m_pGameVehicle;
         // clang-format off
         __asm {
             mov ecx,backend
-            push value
+            xor edx,edx
+            mov dl,window
+            push edx
             mov edx,0x6d3080
             call edx
         }
@@ -681,14 +653,15 @@ void CVehicle::SetWindowOpenFlag(BYTE window)
 // 0x000b7ed0
 void CVehicle::ClearWindowOpenFlag(BYTE window)
 {
-    void* backend = m_pGameVehicle;
-    if (backend)
+    if (m_pGameVehicle)
     {
-        unsigned int value = window;
+        void* backend = m_pGameVehicle;
         // clang-format off
         __asm {
             mov ecx,backend
-            push value
+            xor edx,edx
+            mov dl,window
+            push edx
             mov edx,0x6d30b0
             call edx
         }
@@ -729,39 +702,35 @@ void CVehicle::SetLandingGearState(int state)
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5)
     {
         void* backend = m_pGameVehicle;
-        DWORD position = *(DWORD*)((BYTE*)backend + 0x9cc);
+        float position = 0.0f;
+        // clang-format off
+        __asm {
+            mov eax,backend
+            mov edx,[eax + 0x9cc]
+            mov position,edx
+        }
+        // clang-format on
         // Invalid state must not load/compare the float in x87.
         if (state == 1)
         {
-            // clang-format off
-            __asm {
-                fld dword ptr [g_objectScaleLowerBound]
-                fld dword ptr position
-                fucompp
-                fnstsw ax
-                test ah,0x44
-                jp skipRaise
-                mov ecx,backend
-                mov edx,0x6cac20
-                call edx
-skipRaise:
+            if (position == g_objectScaleLowerBound)
+            {
+                // clang-format off
+                __asm {
+                    mov ecx,backend
+                    mov edx,0x6cac20
+                    call edx
+                }
+                // clang-format on
             }
-            // clang-format on
         }
-        else if (state == 0)
+        else if (state == 0 && position == g_quaternionMatrixOne)
         {
             // clang-format off
             __asm {
-                fld dword ptr [g_quaternionMatrixOne]
-                fld dword ptr position
-                fucompp
-                fnstsw ax
-                test ah,0x44
-                jp skipLower
                 mov ecx,backend
                 mov edx,0x6cac70
                 call edx
-skipLower:
             }
             // clang-format on
         }
@@ -771,7 +740,22 @@ skipLower:
 // 0x000b7170
 BOOL CVehicle::GetLandingGearState()
 {
-    return m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5 && *(float*)((BYTE*)m_pGameVehicle + 0x9cc) != g_objectScaleLowerBound;
+    if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5)
+    {
+        void* backend = m_pGameVehicle;
+        float position = 0.0f;
+        // clang-format off
+        __asm {
+            mov eax,backend
+            mov edx,[eax + 0x9cc]
+            mov position,edx
+        }
+        // clang-format on
+        if (position == g_objectScaleLowerBound)
+            return FALSE;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x000b7480
@@ -779,28 +763,51 @@ void CVehicle::SetTires(BYTE tires)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
     {
-        *((BYTE*)m_pGameVehicle + 0x5a8) = tires & 1;
-        *((BYTE*)m_pGameVehicle + 0x5a7) = (tires >> 1) & 1;
-        *((BYTE*)m_pGameVehicle + 0x5a6) = (tires >> 2) & 1;
-        *((BYTE*)m_pGameVehicle + 0x5a5) = (tires >> 3) & 1;
+        if (tires & 1)
+            *((BYTE*)m_pGameVehicle + 0x5a8) = 1;
+        else
+            *((BYTE*)m_pGameVehicle + 0x5a8) = 0;
+        tires >>= 1;
+        if (tires & 1)
+            *((BYTE*)m_pGameVehicle + 0x5a7) = 1;
+        else
+            *((BYTE*)m_pGameVehicle + 0x5a7) = 0;
+        tires >>= 1;
+        if (tires & 1)
+            *((BYTE*)m_pGameVehicle + 0x5a6) = 1;
+        else
+            *((BYTE*)m_pGameVehicle + 0x5a6) = 0;
+        if (tires & 2)
+            *((BYTE*)m_pGameVehicle + 0x5a5) = 1;
+        else
+            *((BYTE*)m_pGameVehicle + 0x5a5) = 0;
         return;
     }
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 2)
     {
-        *((BYTE*)m_pGameVehicle + 0x65d) = tires & 1;
-        *((BYTE*)m_pGameVehicle + 0x65c) = (tires >> 1) & 1;
+        if (tires & 1)
+            *((BYTE*)m_pGameVehicle + 0x65d) = 1;
+        else
+            *((BYTE*)m_pGameVehicle + 0x65d) = 0;
+        if (tires & 2)
+            *((BYTE*)m_pGameVehicle + 0x65c) = 1;
+        else
+            *((BYTE*)m_pGameVehicle + 0x65c) = 0;
     }
 }
 
 // 0x000b7570
 BYTE CVehicle::GetTires()
 {
+    BYTE result = 0;
     if (!m_pGameVehicle)
         return 0;
     if (GameGetVehicleSubtype(m_pGameVehicle) == 1)
     {
         BYTE* backend = (BYTE*)m_pGameVehicle;
-        BYTE result = (backend[0x5a5] != 0) << 1;
+        if (backend[0x5a5])
+            result = 1;
+        result <<= 1;
         if (backend[0x5a6])
             result |= 1;
         result <<= 1;
@@ -809,16 +816,17 @@ BYTE CVehicle::GetTires()
         result <<= 1;
         if (backend[0x5a8])
             result |= 1;
-        return result;
     }
-    if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 2)
+    else if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 2)
     {
-        BYTE result = (*((BYTE*)m_pGameVehicle + 0x65c) != 0) << 1;
-        if (*((BYTE*)m_pGameVehicle + 0x65d))
+        BYTE* backend = (BYTE*)m_pGameVehicle;
+        if (backend[0x65c])
+            result = 1;
+        result <<= 1;
+        if (backend[0x65d])
             result |= 1;
-        return result;
     }
-    return 0;
+    return result;
 }
 
 // 0x000b7600
@@ -869,16 +877,18 @@ void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
     {
         void* backend = m_pGameVehicle;
+        int enable = 1;
+        int mode = 0;
         // clang-format off
         __asm {
-            push 1
+            push enable
             push third
             push first
             push second
-            push 0
+            push mode
             mov ecx,backend
-            mov edx,0x6a6ae0
-            call edx
+            mov ebx,0x6a6ae0
+            call ebx
         }
         // clang-format on
     }
@@ -887,23 +897,9 @@ void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
 // 0x000b7440
 void CVehicle::SetTrainSpeed(float speed)
 {
-    // clang-format off
-    // Preserve both FCOMP operations and native status masks, including NaNs.
-    __asm {
-        fld speed
-        fcomp dword ptr [g_vehicleTrainSpeedMaximum]
-        fnstsw ax
-        test ah,0x41
-        jz rejected
-        fld speed
-        fcomp dword ptr [g_vehicleTrainSpeedMinimum]
-        fnstsw ax
-        test ah,5
-        jnp rejected
-    }
-    // clang-format on
-    if (m_pGameVehicle) * (DWORD*)((BYTE*)m_pGameVehicle + 0x5a4) = *(DWORD*)&speed;
-rejected:;
+    // The native bounds checks allow unordered inputs.
+    if (!(speed > g_vehicleTrainSpeedMaximum) && !(speed < g_vehicleTrainSpeedMinimum) && m_pGameVehicle)
+        *(float*)((BYTE*)m_pGameVehicle + 0x5a4) = speed;
 }
 
 // 0x000b7e10
@@ -911,23 +907,8 @@ void CVehicle::SetBackendFloat64c(float speed)
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
         return;
-    // clang-format off
-    // Preserve both FCOMP operations and native status masks, including NaNs.
-    __asm {
-        fld speed
-        fcomp dword ptr [g_quaternionMatrixOne]
-        fnstsw ax
-        test ah,0x41
-        jz rejected
-        fld speed
-        fcomp dword ptr [g_entityEulerSign]
-        fnstsw ax
-        test ah,5
-        jnp rejected
-    }
-    // clang-format on
-    *(DWORD*)((BYTE*)m_pGameVehicle + 0x64c) = *(DWORD*)&speed;
-rejected:;
+    if (!(speed > g_quaternionMatrixOne) && !(speed < g_entityEulerSign))
+        *(float*)((BYTE*)m_pGameVehicle + 0x64c) = speed;
 }
 
 #include "net/vehiclepool.h"
@@ -974,24 +955,23 @@ void CVehicle::RemovePassengers()
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
         return;
-    BYTE* matrix = *(BYTE**)((BYTE*)m_pGameVehicle + 0x14);
-    DWORD xBits = *(DWORD*)(matrix + 0x30), yBits = *(DWORD*)(matrix + 0x34), zBits = *(DWORD*)(matrix + 0x38);
-    for (int offset = 0x460; offset < 0x480; offset += 4)
+    const CMatrix* matrix = ((EntityBackendPrefix*)m_pGameVehicle)->matrix;
+    float x = matrix->position.x;
+    float y = matrix->position.y;
+    float z = matrix->position.z;
+    void* volatile* driver = (void* volatile*)((BYTE*)m_pGameVehicle + 0x460);
+    if (*driver)
+    {
+        int handle = GamePoolPedGetIndex(*driver);
+        Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)x, (double)y, (double)(g_quaternionMatrixTwo + z));
+    }
+    for (int offset = 0x464; offset < 0x480; offset += 4)
     {
         void* ped = *(void**)((BYTE*)m_pGameVehicle + offset);
         if (ped)
         {
             int handle = GamePoolPedGetIndex(ped);
-            double raisedZ;
-            // clang-format off
-            // Native loads Z before FADD and rounds directly to the vararg double.
-            __asm {
-                fld dword ptr zBits
-                fadd dword ptr [g_quaternionMatrixTwo]
-                fstp qword ptr raisedZ
-            }
-            // clang-format on
-            Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)*(float*)&xBits, (double)*(float*)&yBits, raisedZ);
+            Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)x, (double)y, (double)(g_quaternionMatrixTwo + z));
         }
     }
 }
@@ -1025,80 +1005,47 @@ BOOL CVehicle::AddComponent(WORD component)
 // 0x0011812c
 const float g_vehicleMarkerDistance = 200.0f;
 
-// Keep x87 return in ST0: no float spill between distance call and FCOMP.
 // Raw wrapper views do not establish the full allocation extent.
 // 0x000b7220
 void CVehicle::ProcessMarkers()
 {
     if (!m_pGameVehicle)
         return;
-    DWORD* marker = &m_dwMarker;
-    DWORD* special = &m_dwObjectiveMarker;
     if (m_byteObjective)
     {
-        if (!*special)
+        if (!m_dwObjectiveMarker)
         {
-            if (*marker)
+            if (m_dwMarker)
             {
-                Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, *marker);
-                *marker = 0;
+                Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, m_dwMarker);
+                m_dwMarker = 0;
             }
-            Scripting::ProcessCommand(&g_vehicleCreateMarkerCommand, m_nHandle, 1, 3, marker);
-            Scripting::ProcessCommand(&g_vehicleMarkerColorCommand, *marker, 0x3ee);
-            Scripting::ProcessCommand(&g_vehicleMarkerModeCommand, *marker, 3);
-            *special = 1;
+            Scripting::ProcessCommand(&g_vehicleCreateMarkerCommand, m_nHandle, 1, 3, &m_dwMarker);
+            Scripting::ProcessCommand(&g_vehicleMarkerColorCommand, m_dwMarker, 0x3ee);
+            Scripting::ProcessCommand(&g_vehicleMarkerModeCommand, m_dwMarker, 3);
+            m_dwObjectiveMarker = 1;
         }
         return;
     }
-    if (*special && *marker)
+    if (m_dwObjectiveMarker && m_dwMarker)
     {
-        Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, *marker);
-        *special = 0;
-        *marker = 0;
+        Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, m_dwMarker);
+        m_dwObjectiveMarker = 0;
+        m_dwMarker = 0;
     }
-    BOOL farOrUnordered;
-    // clang-format off
-    __asm {
-        mov ecx,this
-        call CEntity::GetDistanceToLocalPlayer
-        fcomp dword ptr [g_vehicleMarkerDistance]
-        fnstsw ax
-        test ah,5
-        setp al
-        movzx eax,al
-        mov farOrUnordered,eax
-    }
-    // clang-format on
-    if (!farOrUnordered && !IsOccupied())
+    if (GetDistanceToLocalPlayer() < g_vehicleMarkerDistance && !IsOccupied())
     {
-        if (!*marker)
+        if (!m_dwMarker)
         {
-            Scripting::ProcessCommand(&g_vehicleCreateMarkerCommand, m_nHandle, 1, 2, marker);
-            Scripting::ProcessCommand(&g_vehicleMarkerColorCommand, *marker, 0x3ec);
+            Scripting::ProcessCommand(&g_vehicleCreateMarkerCommand, m_nHandle, 1, 2, &m_dwMarker);
+            Scripting::ProcessCommand(&g_vehicleMarkerColorCommand, m_dwMarker, 0x3ec);
         }
         return;
     }
-    if (!IsOccupied())
+    if ((IsOccupied() || GetDistanceToLocalPlayer() >= g_vehicleMarkerDistance) && m_dwMarker)
     {
-        BOOL orderedFar;
-        // clang-format off
-        __asm {
-            mov ecx,this
-            call CEntity::GetDistanceToLocalPlayer
-            fcomp dword ptr [g_vehicleMarkerDistance]
-            fnstsw ax
-            test ah,1
-            setz al
-            movzx eax,al
-            mov orderedFar,eax
-        }
-        // clang-format on
-        if (!orderedFar) return;
-    }
-    if (*marker)
-    {
-        Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, *marker);
-        *marker = 0;
+        Scripting::ProcessCommand(&g_vehicleDestroyMarkerCommand, m_dwMarker);
+        m_dwMarker = 0;
     }
 }
 
@@ -1107,42 +1054,35 @@ void CVehicle::ProcessMarkers()
 // 0x000b85a0
 void CVehicle::EnableEngine(BOOL enabled)
 {
-    BYTE* initial = (BYTE*)m_pGameVehicle;
-    if (!initial)
+    if (!m_pGameVehicle)
         return;
-    if (enabled)
-    {
-        initial[0x428] |= 0x10;
-        if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 3 && HasDriver() && !DriverIsPlayerPed())
-            m_dwEngineOverride75 = 1;
-    }
-    else
+    BYTE* initial = (BYTE*)m_pGameVehicle;
+    if (!enabled)
     {
         initial[0x428] &= 0xef;
         if (!m_pGameVehicle || GameGetVehicleSubtype(m_pGameVehicle) != 3 || !m_dwEngineOverride75)
             return;
         BYTE* current = (BYTE*)m_pGameVehicle;
-        if (current)
+        if (current && *(float*)(current + 0x4c0) > g_objectScaleLowerBound)
         {
+            DWORD saved = *(DWORD*)0xb6b990;
             // clang-format off
             __asm {
-                mov eax,current
-                fld dword ptr [eax+0x4c0]
-                fcomp dword ptr [g_objectScaleLowerBound]
-                fnstsw ax
-                test ah,0x41
-                jnz skipBackend
-                mov edi,dword ptr ds:[0xb6b990]
                 mov eax,initial
                 lea ecx,[eax+0x138]
                 mov edx,0x4fcf40
                 call edx
-                mov dword ptr ds:[0xb6b990],edi
-skipBackend:
             }
             // clang-format on
+            *(DWORD*)0xb6b990 = saved;
         }
         m_dwEngineOverride75 = 0;
+    }
+    else
+    {
+        initial[0x428] |= 0x10;
+        if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 3 && HasDriver() && !DriverIsPlayerPed())
+            m_dwEngineOverride75 = 1;
     }
 }
 
@@ -1177,15 +1117,9 @@ void CVehicle::ConstructLicensePlate()
 {
     if (!m_pLicensePlateTexture)
     {
-        const char *text = m_szLicensePlateText, *end = text;
-        while (*end++)
-        {
-        }
-        if (end != text + 1)
-        {
-            IDirect3DTexture9* created = ((CLicensePlate*)g_devicePlateManager)->Create(text);
-            m_pLicensePlateTexture = created;
-        }
+        const char* text = m_szLicensePlateText;
+        if (strlen(text))
+            m_pLicensePlateTexture = ((CLicensePlate*)g_devicePlateManager)->Create(text);
     }
 }
 // 0x000b7d20
@@ -1207,24 +1141,31 @@ const Scripting::OpcodeInfo g_vehicleWreckedCommand = {0x119, "i"};
 void CVehicle::SetLocked(BOOL locked)
 {
     if (m_pGameVehicle)
-        Scripting::ProcessCommand(&g_vehicleLockedCommand, m_nHandle, locked ? 1 : 0);
+    {
+        if (locked)
+            Scripting::ProcessCommand(&g_vehicleLockedCommand, m_nHandle, 1);
+        else
+            Scripting::ProcessCommand(&g_vehicleLockedCommand, m_nHandle, 0);
+    }
 }
 // 0x000b6f10
 BOOL CVehicle::IsWrecked()
 {
-    return m_pGameVehicle ? (BOOL)Scripting::ProcessCommand(&g_vehicleWreckedCommand, m_nHandle) : FALSE;
+    if (!m_pGameVehicle)
+        return FALSE;
+    return Scripting::ProcessCommand(&g_vehicleWreckedCommand, m_nHandle);
 }
 
 // 0x000b6db0
 void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
 {
-    BYTE* vehicle = (BYTE*)m_pGameVehicle;
-    if (!vehicle)
-        return;
-    if (enabled)
-        vehicle[0x428] |= 0x20;
-    else
-        vehicle[0x428] &= 0xdf;
+    if (m_pGameVehicle)
+    {
+        if (!enabled)
+            ((BYTE*)m_pGameVehicle)[0x428] &= 0xdf;
+        else
+            ((BYTE*)m_pGameVehicle)[0x428] |= 0x20;
+    }
 }
 
 // 0x000b7400
@@ -1249,8 +1190,11 @@ void CVehicle::SetBackendFloat94CAnd950(float first, float second)
 // 0x000b6fa0
 BOOL CVehicle::IsTrainPart()
 {
-    if (!m_pGameVehicle)
-        return FALSE;
-    short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
-    return model == 0x21a || model == 0x23a || model == 0x219 || model == 0x239 || model == 0x1c1;
+    if (m_pGameVehicle)
+    {
+        int model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
+        if (model == 0x21a || model == 0x23a || model == 0x219 || model == 0x239 || model == 0x1c1)
+            return TRUE;
+    }
+    return FALSE;
 }

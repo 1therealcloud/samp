@@ -47,8 +47,7 @@ void CSpawnScreen::Draw()
 {
     if (!fonts || !*(char**)(unknown00 + 4))
         return;
-    FontSize measured;
-    fonts->GetTextScreenSize(&measured, *(char**)(unknown00 + 4), 0);
+    FontSize measured = fonts->GetTextScreenSize(*(char**)(unknown00 + 4), 0);
     // GTA SA virtual address: screen height 0x00C17048. Integer arithmetic wraps.
     LONG bottom = (LONG)(*(DWORD*)0xc17048 - 30), top = (LONG)((DWORD)bottom - (DWORD)measured.cy);
     RECT textRect = {20, top, (LONG)(20u + (DWORD)measured.cx), bottom};
@@ -99,10 +98,9 @@ void CSpawnScreen::Draw()
         device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vertices, 28);
         states[0]->Apply();
     }
-    FontSize versionSize;
-    FontSize* size = fonts->GetTextScreenSize(&versionSize, g_spawnVersionText, 0);
-    LONG left = (LONG)(20u + (DWORD)((int)(185u - (DWORD)size->cx) / 2));
-    RECT versionRect = {left, imageBottom, (LONG)((DWORD)left + (DWORD)size->cx), (LONG)((DWORD)imageBottom + (DWORD)size->cy)};
+    FontSize size = fonts->GetTextScreenSize(g_spawnVersionText, 0);
+    LONG left = (LONG)(20u + (DWORD)((int)(185u - (DWORD)size.cx) / 2));
+    RECT versionRect = {left, imageBottom, (LONG)((DWORD)left + (DWORD)size.cx), (LONG)((DWORD)imageBottom + (DWORD)size.cy)};
     fonts->DrawText(0, g_spawnVersionText, versionRect, 0xff27abfa, TRUE);
 }
 
