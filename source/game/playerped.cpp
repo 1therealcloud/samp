@@ -161,7 +161,10 @@ BOOL CPed::DoesDancing()
 // 0x000ab9f0
 DWORD CPed::GetFlags()
 {
-    return m_pGamePed ? *(DWORD*)((BYTE*)m_pGamePed + 0x46c) : 0;
+    BYTE* ped = (BYTE*)m_pGamePed;
+    if (!ped)
+        return (DWORD)ped;
+    return *(DWORD*)(ped + 0x46c);
 }
 
 // 0x000ab7d0
@@ -291,7 +294,11 @@ void* CPed::GetAimedPed()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     // GTA SA virtual address: excluded vtable0x00863c40.
-    if (!ped || *(DWORD*)ped == 0x863c40 || !*(DWORD*)(ped + 0x18))
+    if (!ped)
+        return 0;
+    if (*(DWORD*)ped == 0x863c40)
+        return 0;
+    if (!*(DWORD*)(ped + 0x18))
         return 0;
     return *(void**)(ped + 0x79c);
 }
