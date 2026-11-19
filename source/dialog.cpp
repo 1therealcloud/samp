@@ -43,7 +43,8 @@ CDialog::CDialog(IDirect3DDevice9* device)
     state[4] = 300;
     state[5] = 100;
     state[6] = 30;
-    memset(nativeState + 0x89, 0, 0x204);
+    for (int i = 0; i < 0x204; ++i)
+        nativeState[0x89 + i] = 0;
 }
 
 // 0x0006ef10

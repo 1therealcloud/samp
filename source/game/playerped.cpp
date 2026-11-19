@@ -47,17 +47,6 @@ void* g_gamePlayerPeds[210];
 BYTE g_gamePlayerControllerState[210][16];
 #pragma bss_seg()
 
-// 0x000b3860
-void* __stdcall GameFindLocalPed()
-{
-    return *(void**)0xb7cd98;
-}
-// 0x000b3f20
-void __stdcall GameAssignPlayerPed(BYTE player, void* ped)
-{
-    g_gamePlayerPeds[player] = ped;
-    memset(g_gamePlayerControllerState[player], 0, 16);
-}
 // 0x000ab690
 CPed::CPed()
 {
@@ -68,7 +57,8 @@ CPed::CPed()
     GameAssignPlayerPed(0, m_pGamePed);
     Scripting::ProcessCommand(&g_pedCommand087e, m_nHandle, 1);
     Scripting::ProcessCommand(&g_pedCommand0446, m_nHandle, 0);
-    unknown2a8 = unknown2ac = 1;
+    unknown2a8 = 1;
+    unknown2ac = 1;
     m_arrow = 0;
     m_parachuteObject = 0;
     m_bUrinating = 0;
@@ -77,8 +67,12 @@ CPed::CPed()
     m_danceStyle = 0;
     m_bUsingCellphone = 0;
     m_lastDanceMove = 0;
-    m_stuffType = m_stuffObject = m_drunkLevel = 0;
-    unknown2f6 = unknown2f7 = unknown2f8 = 0;
+    m_stuffType = 0;
+    m_stuffObject = 0;
+    m_drunkLevel = 0;
+    unknown2f6 = 0;
+    unknown2f7 = 0;
+    unknown2f8 = 0;
     for (int i = 0; i < 10; i++)
     {
         m_accessoryOccupied[i] = FALSE;
@@ -2880,7 +2874,11 @@ BOOL CPed::HasTaskType208()
 BOOL CPed::HasAimTarget()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
-    return ped && (*(DWORD*)(ped + 0x500) || m_lastDanceMove);
+    if (!ped)
+        return FALSE;
+    if (*(DWORD*)(ped + 0x500) || m_lastDanceMove)
+        return TRUE;
+    return FALSE;
 }
 
 // 0x000aca70
@@ -3000,7 +2998,10 @@ BOOL CPed::HasTaskType401()
 // 0x000adcb0
 DWORD CPed::GetBackendByte72D()
 {
-    return m_pGamePed ? *(BYTE*)((BYTE*)m_pGamePed + 0x72d) : 0;
+    BYTE* ped = (BYTE*)m_pGamePed;
+    if (!ped)
+        return (DWORD)ped;
+    return ped[0x72d];
 }
 
 // 0x000ae0d0
@@ -3230,7 +3231,7 @@ DWORD CPed::GetBoneHierarchyFlags()
 }
 
 // 0x000ae890
-void CPed::UpdateBoneMatrices()
+__forceinline void CPed::UpdateBoneMatrices()
 {
     void* ped = m_pGamePed;
     if (ped)

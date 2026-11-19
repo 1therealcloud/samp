@@ -8055,7 +8055,7 @@ const char* InputWideToAnsi(const wchar_t* text)
 {
     memset(g_inputAnsiText, 0, 2048);
     int length = WideCharToMultiByte(CP_ACP, 0, text, (int)wcslen(text), 0, 0, 0, 0);
-    if (length < 2049)
+    if (length <= 2048)
     {
         WideCharToMultiByte(CP_ACP, 0, text, (int)wcslen(text), g_inputAnsiText, length, 0, 0);
         g_inputAnsiText[length] = 0;
@@ -8069,12 +8069,13 @@ wchar_t g_inputMaskedText[256];
 const wchar_t* InputMaskWideText(const wchar_t* text)
 {
     memset(g_inputMaskedText, 0, 511); // Native clears exactly 511 bytes.
-    size_t length = wcslen(text);
-    if (length < 256)
+    int length = (int)wcslen(text);
+    int i = 0;
+    if (length <= 255)
     {
-        for (size_t i = 0; i < length; ++i)
+        for (; i != length; ++i)
             g_inputMaskedText[i] = 0x25cf;
-        g_inputMaskedText[length] = 0;
+        g_inputMaskedText[i] = 0;
     }
     return g_inputMaskedText;
 }

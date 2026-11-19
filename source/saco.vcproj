@@ -203,6 +203,18 @@
 			</File>
 			<File
 				RelativePath="dialog.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="dialog.h">
@@ -254,6 +266,18 @@
 			</File>
 			<File
 				RelativePath="gui.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="gui.h">
@@ -278,6 +302,18 @@
 			</File>
 			<File
 				RelativePath="licenseplate.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="licenseplate.h">
@@ -320,12 +356,36 @@
 			</File>
 			<File
 				RelativePath="objectedit.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="objectedit.h">
 			</File>
 			<File
 				RelativePath="objectmaterialtext.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="objectmaterialtext.h">
@@ -405,6 +465,18 @@
 			</File>
 			<File
 				RelativePath="game\aimstuff.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\aimstuff.h">
@@ -426,6 +498,18 @@
 			</File>
 			<File
 				RelativePath="game\building_removal.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\building_removal.h">
@@ -438,6 +522,18 @@
 			</File>
 			<File
 				RelativePath="game\custommodels.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\custommodels.h">
@@ -543,6 +639,18 @@
 			</File>
 			<File
 				RelativePath="game\playerped.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\playerped.h">
@@ -573,6 +681,18 @@
 			</File>
 			<File
 				RelativePath="game\textdraw.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\textdraw.h">
@@ -721,6 +841,18 @@
 			</File>
 			<File
 				RelativePath="net\textdrawpool.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="net\textdrawpool.h">
@@ -801,6 +933,18 @@
 			</File>
 			<File
 				RelativePath="d3dhook\IDirect3DDevice9Hook.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="d3dhook\IDirect3DDevice9Hook.h">

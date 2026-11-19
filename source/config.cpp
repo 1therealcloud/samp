@@ -65,9 +65,15 @@ bool CConfig::DoesExist(const char* name)
 int CConfig::CreateEntry(const char* name)
 {
     int index = 0;
-    while (index < MAX_ENTRIES && occupied[index])
+    for (int slot = 0; slot < MAX_ENTRIES; ++slot)
+    {
+        if (!occupied[slot])
+            break;
         ++index;
-    if (index == MAX_ENTRIES || strlen(name) >= 41)
+    }
+    if (index == MAX_ENTRIES)
+        return -1;
+    if (strlen(name) > 40)
         return -1;
     _strlwr((char*)name);
     strcpy(entries[index].name, name);
@@ -168,7 +174,7 @@ BOOL CConfig::Save()
     return TRUE;
 }
 // 0x00065b00
-BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
+__declspec(noinline) BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -211,7 +217,7 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
     return TRUE;
 }
 // 0x00065c00
-BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
+__declspec(noinline) BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -233,18 +239,23 @@ BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
 // 0x00065c60
 void CConfig::Write(const char* name, char* value)
 {
-    int type = GetType(value);
-    if (type == VALUE_TYPE_INT)
-        WriteIntValue(name, atol(value), FALSE);
-    else if (type == VALUE_TYPE_STRING)
+    switch (GetType(value))
     {
-        int length = (int)strlen(value);
-        strncpy(value, value + 1, length - 1);
-        value[length - 2] = 0;
-        WriteStringValue(name, value, FALSE);
+        case VALUE_TYPE_FLOAT:
+            WriteFloatValue(name, (float)atof(value), FALSE);
+            break;
+        case VALUE_TYPE_STRING:
+        {
+            int length = (int)strlen(value);
+            strncpy(value, value + 1, length - 1);
+            value[length - 2] = 0;
+            WriteStringValue(name, value, FALSE);
+            break;
+        }
+        case VALUE_TYPE_INT:
+            WriteIntValue(name, atoi(value), FALSE);
+            break;
     }
-    else if (type == VALUE_TYPE_FLOAT)
-        WriteFloatValue(name, (float)atof(value), FALSE);
 }
 // 0x00065cf0
 BOOL CConfig::Load()
@@ -253,40 +264,48 @@ BOOL CConfig::Load()
     if (!file)
         return FALSE;
     char line[260], name[260], value[260];
-    while (!feof(file))
+    if (!feof(file))
     {
-        fgets(line, 256, file); // Native ignores the return value, including at EOF.
-        char* p = line;
-        int nameLength = 0, valueLength = 0;
-        while (*p == ' ' || *p == '\t')
-            ++p;
-        if (!*p || *p == ';' || *p == '\n' || *p == '[')
-            continue;
-        while (*p && *p != ' ' && *p != '=' && *p != '\n' && *p != '\t' && *p != ';')
-            name[nameLength++] = (char)toupper(*p++);
-        if (!nameLength)
-            continue;
-        name[nameLength] = 0;
-        while (*p == ' ' || *p == '\t')
-            ++p;
-        if (*p != '=')
-            continue;
         do
         {
-            ++p;
+            fgets(line, 256, file); // Native ignores the return value, including at EOF.
+            char* p = line;
+            int nameLength = 0, valueLength = 0;
+            while (*p == ' ' || *p == '\t')
+                ++p;
+            if (!*p || *p == ';' || *p == '\n' || *p == '[')
+                continue;
+            while (*p && *p != ' ' && *p != '=' && *p != '\n' && *p != '\t' && *p != ';')
+            {
+                name[nameLength] = (char)toupper(*p);
+                ++nameLength;
+                ++p;
+            }
+            if (!nameLength)
+                continue;
+            name[nameLength] = 0;
+            while (*p == ' ' || *p == '\t')
+                ++p;
+            if (*p != '=')
+                continue;
+            do
+            {
+                ++p;
+            }
+            while (*p == ' ' || *p == '\t');
+            if (!*p)
+                continue;
+            while (*p && *p != '\n')
+                value[valueLength++] = *p++;
+            if (!valueLength)
+                continue;
+            value[valueLength] = 0;
+            p = value + valueLength - 1;
+            while (*p == ' ' || *p == '\t' || *p == '\r')
+                *p-- = 0;
+            Write(name, value);
         }
-        while (*p == ' ' || *p == '\t');
-        if (!*p)
-            continue;
-        while (*p && *p != '\n')
-            value[valueLength++] = *p++;
-        if (!valueLength)
-            continue;
-        value[valueLength] = 0;
-        p = value + valueLength - 1;
-        while (*p == ' ' || *p == '\t' || *p == '\r')
-            *p-- = 0;
-        Write(name, value);
+        while (!feof(file));
     }
     fclose(file);
     return TRUE;
@@ -352,6 +371,9 @@ void Settings::Initialize()
                     g_clientSettings.online = TRUE;
                     g_clientSettings.debug = FALSE;
                     break;
+                case 'z':
+                    GetFromCommandLine(++line, g_clientSettings.password);
+                    break;
                 case 'h':
                     GetFromCommandLine(++line, g_clientSettings.host);
                     break;
@@ -360,9 +382,6 @@ void Settings::Initialize()
                     break;
                 case 'n':
                     GetFromCommandLine(++line, g_clientSettings.nickname);
-                    break;
-                case 'z':
-                    GetFromCommandLine(++line, g_clientSettings.password);
                     break;
                 case 'l':
                     GetFromQuotes(++line, g_clientSettings.debugScript);
@@ -386,7 +405,7 @@ const char* ClientGetCacheDirectory()
 }
 
 // 0x000b5900
-BOOL ClientPathExists(const char* path)
+__declspec(noinline) BOOL ClientPathExists(const char* path)
 {
     struct _stat info;
     return _stat(path, &info) == 0;

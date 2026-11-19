@@ -91,10 +91,9 @@ void ClientInitializeGui()
     g_renderSecondDialog->EnableMouseInput(true);
     g_renderSecondDialog->EnableKeyboardInput(false);
     g_renderSecondDialog->SetVisible(false);
-    // Selected SDK widgets expose a wide-text API; these native labels are ASCII.
-    g_renderSecondDialog->AddButton(6, L"<<", 10, 5, 90, 30, 0, false, 0);
-    g_renderSecondDialog->AddButton(5, L">>", 110, 5, 90, 30, 0, false, 0);
-    g_renderSecondDialog->AddButton(4, L"Spawn", 210, 5, 90, 30, 0, false, 0);
+    ((CDXUTDialogDL*)g_renderSecondDialog)->AddButton(6, "<<", 10, 5, 90, 30, 0, false, 0);
+    ((CDXUTDialogDL*)g_renderSecondDialog)->AddButton(5, ">>", 110, 5, 90, 30, 0, false, 0);
+    ((CDXUTDialogDL*)g_renderSecondDialog)->AddButton(4, "Spawn", 210, 5, 90, 30, 0, false, 0);
     if (g_pChat)
         g_pChat->ResetDialogControls(g_renderFirstDialog);
     if (g_pInput)

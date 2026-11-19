@@ -19,7 +19,9 @@ SpawnScreenVertex::SpawnScreenVertex() {}
 // 0x000705d0
 SpawnScreenVertex::SpawnScreenVertex(const CVector& position, float w, DWORD color, float tu, float tv)
 {
-    memcpy(&x, &position, 12);
+    memcpy(&x, &position.x, 4);
+    memcpy(&y, &position.y, 4);
+    memcpy(&z, &position.z, 4);
     memcpy(&rhw, &w, 4);
     this->color = color;
     memcpy(&u, &tu, 4);

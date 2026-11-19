@@ -25,15 +25,18 @@ ArchiveNameSha1::ArchiveNameSha1()
 // 0x00063550
 ArchiveNameSha1::~ArchiveNameSha1() {}
 // 0x00063560
-void ArchiveNameSha1::Reset()
+__declspec(noinline) void ArchiveNameSha1::Reset()
 {
-    lengthLow = lengthHigh = blockIndex = 0;
+    lengthLow = 0;
+    lengthHigh = 0;
+    blockIndex = 0;
     state[0] = 0x67452301;
     state[1] = 0xefcdab89;
     state[2] = 0x98badcfe;
     state[3] = 0x10325476;
     state[4] = 0xc3d2e1f0;
-    computed = corrupted = false;
+    computed = false;
+    corrupted = false;
 }
 // 0x000635f0
 void ArchiveNameSha1::ProcessBlock()
@@ -99,7 +102,7 @@ void ArchiveNameSha1::Input(const BYTE* data, DWORD length)
         --length;
         if (corrupted)
             return;
-        block[blockIndex++] = *data++;
+        block[blockIndex++] = *data;
         lengthLow += 8;
         if (!lengthLow)
         {
@@ -109,6 +112,7 @@ void ArchiveNameSha1::Input(const BYTE* data, DWORD length)
         }
         if (blockIndex == 64)
             ProcessBlock();
+        ++data;
     }
     while (length);
 }
@@ -204,12 +208,12 @@ void ArchiveNameSha1::Input(const char* data, DWORD length)
     Input((const BYTE*)data, length);
 }
 // 0x00063db0
-void ArchiveNameSha1::Input(BYTE value)
+__declspec(noinline) void ArchiveNameSha1::Input(BYTE value)
 {
     Input(&value, 1);
 }
 // 0x00063dc0
-void ArchiveNameSha1::Input(char value)
+__declspec(noinline) void ArchiveNameSha1::Input(char value)
 {
     Input((const BYTE*)&value, 1);
 }

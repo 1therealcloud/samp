@@ -78,16 +78,19 @@ void CTextDrawSelection::UpdateHovered()
     BYTE* pool = *(BYTE**)(pools + 0x20);
     if (!pool)
         return;
+    int i = 0;
     unknown08 = 0xffff;
-    for (WORD i = 0; i < 2304; ++i)
-        if (*(DWORD*)(pool + i * 4))
+    for (; i != 2304; ++i)
+    {
+        WORD id = (WORD)i;
+        if (id < 2304 && *(DWORD*)(pool + id * 4))
         {
-            BYTE* draw = *(BYTE**)(pool + 0x2400 + i * 4);
+            BYTE* draw = *(BYTE**)(pool + 0x2400 + id * 4);
             if (!draw)
                 continue;
             draw[0x9d1] = 0;
             *(DWORD*)(draw + 0x9d2) = 0;
-            draw = *(DWORD*)(pool + i * 4) ? *(BYTE**)(pool + 0x2400 + i * 4) : 0;
+            draw = *(DWORD*)(pool + id * 4) == 0 ? 0 : *(BYTE**)(pool + 0x2400 + id * 4);
             if (!draw[0x9a7] || !draw[0x9bf])
                 continue;
             RECT* rect = (RECT*)(draw + 0x9c1);
@@ -96,10 +99,12 @@ void CTextDrawSelection::UpdateHovered()
             if (!PtInRect(rect, point))
                 continue;
             unknown08 = i;
-            draw = *(DWORD*)(pool + i * 4) ? *(BYTE**)(pool + 0x2400 + i * 4) : 0;
+            draw = *(DWORD*)(pool + id * 4) == 0 ? 0 : *(BYTE**)(pool + 0x2400 + id * 4);
+            DWORD color = unknown04;
             draw[0x9d1] = 1;
-            *(DWORD*)(draw + 0x9d2) = unknown04;
+            *(DWORD*)(draw + 0x9d2) = color;
         }
+    }
 }
 // 0x00070eb0
 void CTextDrawSelection::Process()
@@ -119,7 +124,6 @@ int g_textDrawClickRpc = 83;
 void CTextDrawSelection::SendNotification()
 {
     RakNet::BitStream stream;
-    DWORD id = unknown08;
-    stream.WriteBits((const BYTE*)&id, 16, true);
+    stream.Write(unknown08);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_textDrawClickRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }

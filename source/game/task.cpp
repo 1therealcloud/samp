@@ -4,7 +4,7 @@
 #include "game/playerped.h"
 // The default constructor deliberately leaves m_bSelfCreated untouched.
 // 0x000b2180
-CTask::CTask()
+__declspec(noinline) CTask::CTask()
 {
     m_pTaskType = 0;
     m_pPlayerPed = 0;
@@ -17,7 +17,7 @@ CTask::CTask(DWORD size)
     Create(size);
 }
 // 0x000b2590
-CTask::CTask(BYTE* task)
+__declspec(noinline) CTask::CTask(BYTE* task)
 {
     m_pTaskType = 0;
     m_pPlayerPed = 0;
@@ -25,7 +25,7 @@ CTask::CTask(BYTE* task)
 }
 // Native destruction only resets the vptr; Destroy is a separate operation.
 // 0x000b21a0
-CTask::~CTask() {}
+__declspec(noinline) CTask::~CTask() {}
 // GTA SA virtual address: 0x0061A5A0, backend task allocation.
 // 0x000b21b0
 void CTask::Create(DWORD bytes)
@@ -44,7 +44,7 @@ void CTask::Create(DWORD bytes)
     m_pTaskType = task;
 }
 // 0x000b21e0
-void CTask::Create(BYTE* task)
+__declspec(noinline) void CTask::Create(BYTE* task)
 {
     m_bSelfCreated = FALSE;
     m_pTaskType = task;
@@ -67,7 +67,7 @@ CTask* CTask::CreateCopy()
 }
 // Native self-created tasks use deletion flag 0; attached tasks use flag 1.
 // 0x000b2200
-void CTask::Destroy()
+__declspec(noinline) void CTask::Destroy()
 {
     if (IsDestroyed())
         return;
@@ -131,7 +131,9 @@ DWORD CTask::GetID()
 // 0x000b22e0
 BOOL CTask::IsDestroyed()
 {
-    return m_pTaskType == 0 || *(DWORD*)m_pTaskType == 0x86d48c;
+    if (!m_pTaskType)
+        return TRUE;
+    return *(DWORD*)m_pTaskType == 0x86d48c;
 }
 // Native widens AL without normalizing it to a C++ bool.
 // 0x000b2300

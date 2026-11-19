@@ -79,8 +79,8 @@ void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
     // clang-format off
     __asm {
         mov eax,input
-        mov ecx,output
         fld dword ptr [eax]
+        mov ecx,output
         fchs
         fstp dword ptr [ecx]
         mov edx,dword ptr [eax+8]

@@ -73,7 +73,7 @@ bool CDffFile::IsModified()
 {
     DWORD count = geometries.count;
     for (DWORD i = 0; i != count; ++i)
-        if (geometries.items[i]->IsModified())
+        if (geometries.Get(i)->IsModified())
             return true;
     return false;
 }
@@ -676,7 +676,7 @@ DWORD CDffFile::LoadCollisionFile(const char* filename)
     if (root && root->type == 0x10)
     {
         ReadChildren(root);
-        if (extension && extension->length)
+        if (extension && extension->length > 0)
         {
             CModelFileChunk* chunk = ReadChunk(&extension->stream);
             if (chunk && chunk->type == 0x253f2ff)
@@ -804,7 +804,9 @@ CModelGeometryArray::CModelGeometryArray()
 // samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
 CModelGeometry* CModelGeometryArray::Get(DWORD index)
 {
-    return index < count ? items[index] : 0;
+    if (index >= count)
+        return 0;
+    return items[index];
 }
 // samp.dll RVA: unknown (identical native array count entries; typed binding not established)
 DWORD CModelGeometryArray::GetCount()
@@ -845,7 +847,7 @@ DWORD CModelMeshArray::GetCount()
 }
 
 // 0x0000c550
-bool CModelMaterialArray::Resize(DWORD size)
+__declspec(noinline) bool CModelMaterialArray::Resize(DWORD size)
 {
     if (!size)
     {
@@ -873,7 +875,7 @@ bool CModelMaterialArray::Resize(DWORD size)
     return true;
 }
 // 0x0000c5c0
-bool CModelMeshArray::Resize(DWORD size)
+__declspec(noinline) bool CModelMeshArray::Resize(DWORD size)
 {
     if (!size)
     {
@@ -901,7 +903,7 @@ bool CModelMeshArray::Resize(DWORD size)
     return true;
 }
 // 0x0000c630
-bool CModelGeometryArray::Resize(DWORD size)
+__declspec(noinline) bool CModelGeometryArray::Resize(DWORD size)
 {
     if (!size)
     {
@@ -932,12 +934,24 @@ bool CModelGeometryArray::Resize(DWORD size)
 DWORD CModelGeometryArray::Insert(CModelGeometry* geometry)
 {
     DWORD previous = count, index = 0;
-    while (index != previous && items[index])
-        ++index;
-    if (index != previous && (int)index >= 0)
+    if (previous)
     {
-        items[index] = geometry;
-        return index;
+        CModelGeometry** entries = items;
+        CModelGeometry** slot = entries;
+        do
+        {
+            if (!*slot)
+            {
+                if ((LONG)index >= 0)
+                {
+                    entries[index] = geometry;
+                    return index;
+                }
+                break;
+            }
+            ++index;
+            ++slot;
+        } while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -1170,12 +1184,24 @@ CModelFileChunk* CModelGeometry::ReadChunk(CModelFileStream* input)
 DWORD CModelMaterialArray::Insert(void* entry)
 {
     DWORD previous = count, index = 0;
-    while (index != previous && items[index])
-        ++index;
-    if (index != previous && (int)index >= 0)
+    if (previous)
     {
-        items[index] = entry;
-        return index;
+        void** entries = items;
+        void** slot = entries;
+        do
+        {
+            if (!*slot)
+            {
+                if ((LONG)index >= 0)
+                {
+                    entries[index] = entry;
+                    return index;
+                }
+                break;
+            }
+            ++index;
+            ++slot;
+        } while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -1186,12 +1212,24 @@ DWORD CModelMaterialArray::Insert(void* entry)
 DWORD CModelMeshArray::Insert(BYTE* entry)
 {
     DWORD previous = count, index = 0;
-    while (index != previous && items[index])
-        ++index;
-    if (index != previous && (int)index >= 0)
+    if (previous)
     {
-        items[index] = entry;
-        return index;
+        BYTE** entries = items;
+        BYTE** slot = entries;
+        do
+        {
+            if (!*slot)
+            {
+                if ((LONG)index >= 0)
+                {
+                    entries[index] = entry;
+                    return index;
+                }
+                break;
+            }
+            ++index;
+            ++slot;
+        } while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -1972,8 +2010,12 @@ DWORD CModelCollisionFile::SetInitialHeaderSize()
 // 0x000b95e0
 DWORD CModelCollisionFile::CalculateGeometryBounds(const CModelGeometry* geometry, float* minimum, float* maximum)
 {
-    minimum[0] = minimum[1] = minimum[2] = 100000.0f;
-    maximum[0] = maximum[1] = maximum[2] = -100000.0f;
+    minimum[0] = 100000.0f;
+    minimum[1] = 100000.0f;
+    minimum[2] = 100000.0f;
+    maximum[0] = -100000.0f;
+    maximum[1] = -100000.0f;
+    maximum[2] = -100000.0f;
     if (!geometry->vertices)
         return 0;
     for (DWORD i = 0; i != (DWORD)geometry->vertexCount; ++i)
@@ -2006,7 +2048,7 @@ DWORD CModelCollisionFile::AddSphere(ModelCollisionSphere* sphere)
     return ((CModelCollisionSphereArray*)(nativeState + 0x80))->Insert(sphere);
 }
 // 0x000ba1a0
-DWORD CModelCollisionFile::AddBox(ModelCollisionBox* box)
+__declspec(noinline) DWORD CModelCollisionFile::AddBox(ModelCollisionBox* box)
 {
     return ((CModelCollisionBoxArray*)(nativeState + 0x78))->Insert(box);
 }
@@ -2018,8 +2060,7 @@ DWORD CModelCollisionFile::BuildBoxFromGeometry(const CModelGeometry* geometry)
     ModelCollisionBox* box = (ModelCollisionBox*)calloc(1, 28);
     memcpy(box->bounds.minimum, nativeState + 0x20, 12);
     memcpy(box->bounds.maximum, nativeState + 0x2c, 12);
-    box->data[2] = 255;
-    box->data[3] = 255;
+    box->data[3] = box->data[2] = 255;
     box->data[0] = 0;
     AddBox(box);
     return 1;
@@ -2029,63 +2070,61 @@ DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry* geometry)
 {
     CalculateGeometryBounds(geometry, (float*)(nativeState + 0x20), (float*)(nativeState + 0x2c));
     memcpy(nativeState + 0x44, geometry->sphere + 3, 4);
-    if (!geometry->hasVertices)
-        return 0;
-    if (*(void**)(nativeState + 0x88))
+    if (geometry->hasVertices)
     {
-        free(*(void**)(nativeState + 0x88));
-        *(void**)(nativeState + 0x88) = 0;
-    }
-    *(void**)(nativeState + 0x88) = calloc(geometry->triangleCount, 8);
-    *(DWORD*)(nativeState + 0x8c) = geometry->triangleCount;
-    for (DWORD i = 0; i != (DWORD)geometry->triangleCount; ++i)
-    {
-        (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].vertices[0] = ((WORD*)geometry->triangles)[i * 4 + 3];
-        (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].vertices[1] = ((WORD*)geometry->triangles)[i * 4];
-        (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].vertices[2] = ((WORD*)geometry->triangles)[i * 4 + 1];
-        (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].surface = 0;
-        (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].lighting = 255;
-    }
-    if (*(void**)(nativeState + 0x90))
-    {
-        free(*(void**)(nativeState + 0x90));
-        *(void**)(nativeState + 0x90) = 0;
-    }
-    *(void**)(nativeState + 0x90) = calloc(geometry->vertexCount, 6);
-    *(DWORD*)(nativeState + 0x94) = geometry->vertexCount;
-    for (DWORD i = 0; i != (DWORD)geometry->vertexCount; ++i)
-        for (int axis = 0; axis < 3; ++axis)
+        if (*(void**)(nativeState + 0x88))
         {
-            const float* coordinate = (const float*)geometry->vertices + i * 3 + axis;
-            SHORT converted;
-            // clang-format off
-        // Native keeps FMUL extended until the real CRT truncation helper.
-        __asm {
-            mov eax,coordinate
-            fld dword ptr [eax]
-            fmul dword ptr g_modelCollisionVertexScale
-            call _ftol2
-            mov converted,ax
+            free(*(void**)(nativeState + 0x88));
+            *(void**)(nativeState + 0x88) = 0;
         }
-            // clang-format on
-            (*(ModelCollisionVertex**)(nativeState + 0x90))[i].values[axis] = converted;
+        *(void**)(nativeState + 0x88) = calloc(geometry->triangleCount, 8);
+        *(DWORD*)(nativeState + 0x8c) = geometry->triangleCount;
+        for (DWORD i = 0; i != (DWORD)geometry->triangleCount; ++i)
+        {
+            (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].vertices[0] = ((WORD*)geometry->triangles)[i * 4 + 3];
+            (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].vertices[1] = ((WORD*)geometry->triangles)[i * 4];
+            (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].vertices[2] = ((WORD*)geometry->triangles)[i * 4 + 1];
+            (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].surface = 0;
+            (*(ModelCollisionTriangle**)(nativeState + 0x88))[i].lighting = 255;
         }
-    return 1;
+        if (*(void**)(nativeState + 0x90))
+        {
+            free(*(void**)(nativeState + 0x90));
+            *(void**)(nativeState + 0x90) = 0;
+        }
+        *(void**)(nativeState + 0x90) = calloc(geometry->vertexCount, 6);
+        *(DWORD*)(nativeState + 0x94) = geometry->vertexCount;
+        for (DWORD i = 0; i != (DWORD)geometry->vertexCount; ++i)
+        {
+            (*(ModelCollisionVertex**)(nativeState + 0x90))[i].values[0] = (SHORT)(((const float*)geometry->vertices)[i * 3 + 0] * g_modelCollisionVertexScale);
+            (*(ModelCollisionVertex**)(nativeState + 0x90))[i].values[1] = (SHORT)(((const float*)geometry->vertices)[i * 3 + 1] * g_modelCollisionVertexScale);
+            (*(ModelCollisionVertex**)(nativeState + 0x90))[i].values[2] = (SHORT)(((const float*)geometry->vertices)[i * 3 + 2] * g_modelCollisionVertexScale);
+        }
+        return 1;
+    }
+    return 0;
 }
 // 0x000b98a0
 bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex* vertex, const ModelCollisionBounds* bounds)
 {
-    float x = vertex->values[0] * g_modelCollisionVertexInvScale;
-    float y = vertex->values[1] * g_modelCollisionVertexInvScale;
-    float z = vertex->values[2] * g_modelCollisionVertexInvScale;
-    return x >= bounds->minimum[0] && x <= bounds->maximum[0] && y >= bounds->minimum[1] && y <= bounds->maximum[1] && z >= bounds->minimum[2] && z <= bounds->maximum[2];
+    float point[3];
+    point[0] = vertex->values[0] * g_modelCollisionVertexInvScale;
+    point[1] = vertex->values[1] * g_modelCollisionVertexInvScale;
+    point[2] = vertex->values[2] * g_modelCollisionVertexInvScale;
+    if (point[0] >= bounds->minimum[0] && point[0] <= bounds->maximum[0] &&
+        point[1] >= bounds->minimum[1] && point[1] <= bounds->maximum[1] &&
+        point[2] >= bounds->minimum[2] && point[2] <= bounds->maximum[2])
+        return true;
+    return false;
 }
 // 0x000b9950
 bool CModelCollisionFile::TriangleHasVertexInBounds(const ModelCollisionTriangle* triangle, const ModelCollisionBounds* bounds)
 {
     ModelCollisionVertex* vertices = *(ModelCollisionVertex**)(nativeState + 0x90);
-    return ContainsVertex(vertices + triangle->vertices[0], bounds) || ContainsVertex(vertices + triangle->vertices[1], bounds) ||
-           ContainsVertex(vertices + triangle->vertices[2], bounds);
+    if (ContainsVertex(vertices + triangle->vertices[0], bounds) || ContainsVertex(vertices + triangle->vertices[1], bounds) ||
+        ContainsVertex(vertices + triangle->vertices[2], bounds))
+        return true;
+    return false;
 }
 // 0x000b99c0
 void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value)
@@ -2150,18 +2189,30 @@ bool CModelCollisionBoxArray::Resize(DWORD size)
 // 0x000ba040
 DWORD CModelCollisionBoxArray::Insert(void* value)
 {
-    DWORD oldCount = count, index = 0;
-    while (index < oldCount && items[index])
-        ++index;
-    if ((LONG)index >= 0 && index < oldCount)
+    DWORD previous = count, index = 0;
+    if (previous)
     {
-        items[index] = value;
-        return index;
+        void** entries = items;
+        void** slot = entries;
+        do
+        {
+            if (!*slot)
+            {
+                if ((LONG)index >= 0)
+                {
+                    entries[index] = value;
+                    return index;
+                }
+                break;
+            }
+            ++index;
+            ++slot;
+        } while (index != previous);
     }
-    if (!Resize(oldCount + 1))
+    if (!Resize(previous + 1))
         return 0xffffffff;
-    items[oldCount] = value;
-    return oldCount;
+    items[previous] = value;
+    return previous;
 }
 // 0x000b9a70
 void* CModelCollisionSphereArray::Get(DWORD index)
@@ -2206,18 +2257,30 @@ bool CModelCollisionSphereArray::Resize(DWORD size)
 // 0x000ba0a0
 DWORD CModelCollisionSphereArray::Insert(void* value)
 {
-    DWORD oldCount = count, index = 0;
-    while (index < oldCount && items[index])
-        ++index;
-    if ((LONG)index >= 0 && index < oldCount)
+    DWORD previous = count, index = 0;
+    if (previous)
     {
-        items[index] = value;
-        return index;
+        void** entries = items;
+        void** slot = entries;
+        do
+        {
+            if (!*slot)
+            {
+                if ((LONG)index >= 0)
+                {
+                    entries[index] = value;
+                    return index;
+                }
+                break;
+            }
+            ++index;
+            ++slot;
+        } while (index != previous);
     }
-    if (!Resize(oldCount + 1))
+    if (!Resize(previous + 1))
         return 0xffffffff;
-    items[oldCount] = value;
-    return oldCount;
+    items[previous] = value;
+    return previous;
 }
 
 // Shared native half constant, already maintained by textdraw.
@@ -2236,15 +2299,15 @@ CModelCollisionNode::~CModelCollisionNode()
     delete right;
 }
 // 0x000b9d10
-void CModelCollisionNode::CountLeaves(DWORD* count)
+__declspec(noinline) void CModelCollisionNode::CountLeaves(DWORD* count)
 {
-    CModelCollisionNode* node = this;
-    while (node->left)
+    if (left)
     {
-        node->left->CountLeaves(count);
-        node = node->right;
+        left->CountLeaves(count);
+        right->CountLeaves(count);
+        return;
     }
-    if (!node->triangles.empty())
+    if (triangles.size() > 0)
         ++*count;
 }
 // 0x000ba320
@@ -2352,7 +2415,7 @@ DWORD CModelCollisionFile::BuildFaceGroups()
         root.left->CountLeaves(&count);
         root.right->CountLeaves(&count);
     }
-    else if (!root.triangles.empty())
+    else if (root.triangles.size() > 0)
         count = 1;
     *(void**)(nativeState + 0x98) = calloc(count, 28);
     *(DWORD*)(nativeState + 0x9c) = 0;

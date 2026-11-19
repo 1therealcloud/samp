@@ -157,7 +157,8 @@ CPlayerPool::CPlayerPool()
 {
     for (WORD id = 0; id < 1004; id++)
     {
-        players[id] = 0;
+        if (id <= 1004)
+            players[id] = 0;
         connected[id] = 0;
     }
     local = new CLocalPlayer;

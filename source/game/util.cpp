@@ -7,6 +7,7 @@
 
 #include "game/custommodels.h"
 #include "game/game.h"
+#include "game/playerped.h"
 #include "game/modelfile.h"
 #include "main.h"
 #include <static_assert.h>
@@ -2416,4 +2417,16 @@ void* __stdcall GameGetModelInfo(int model)
     if (model >= 0 && model <= 20000)
         return ((void**)0xa9b0c8)[model];
     return 0;
+}
+
+// 0x000b3860
+void* __stdcall GameFindLocalPed()
+{
+    return *(void**)0xb7cd98;
+}
+// 0x000b3f20
+void __stdcall GameAssignPlayerPed(BYTE player, void* ped)
+{
+    g_gamePlayerPeds[player] = ped;
+    memset(g_gamePlayerControllerState[player], 0, 16);
 }

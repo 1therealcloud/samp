@@ -97,7 +97,8 @@ DWORD CCustomModels::ParseCacheHash(const char* filename)
 void CCustomModels::ClearTransferStorage()
 {
     memset(nativeState + 0x222, 0, 0x11e);
-    memset(nativeState + 0x1345, 0, 0xd20);
+    for (int i = 0; i < 0xd20; ++i)
+        nativeState[0x1345 + i] = 0;
 }
 // 0x0000d890
 CCustomModels::CCustomModels()
@@ -150,12 +151,24 @@ bool CCustomModels::ResizeRecords(DWORD count)
 // 0x0000c6a0
 void CCustomModels::TrimRecords()
 {
-    DWORD count = *(DWORD*)(nativeState + 4), last = 0xffffffff;
-    BYTE** records = *(BYTE***)nativeState;
-    for (DWORD i = 0; i < count; ++i)
-        if (records[i])
-            last = i;
-    ResizeRecords(last == 0xffffffff ? 0 : last + 1);
+    DWORD count = *(DWORD*)(nativeState + 4);
+    DWORD i = 0;
+    DWORD last = 0xffffffff;
+    if (count)
+    {
+        BYTE** record = *(BYTE***)nativeState;
+        do
+        {
+            if (*record)
+                last = i;
+            ++i;
+            ++record;
+        } while (i != count);
+    }
+    if (last == 0xffffffff)
+        ResizeRecords(0);
+    else
+        ResizeRecords(last + 1);
 }
 // 0x0000cfc0
 bool CCustomModels::EraseRecord(DWORD index)
@@ -188,14 +201,14 @@ DWORD CCustomModels::AddRecord(DWORD index, const void* record)
 // 0x0000d5a0
 DWORD CCustomModels::DeleteRecord(DWORD index)
 {
-    if (index >= *(DWORD*)(nativeState + 4))
-        return 0xffffffff;
-    void* record = (*(void***)nativeState)[index];
-    if (!record)
-        return 0xffffffff;
-    free(record);
-    EraseRecord(index);
-    return index;
+    void* record = GetRecord(index);
+    if (record)
+    {
+        free(record);
+        EraseRecord(index);
+        return index;
+    }
+    return 0xffffffff;
 }
 // 0x0000d5e0
 void CCustomModels::ClearRecords()
@@ -214,13 +227,19 @@ void CCustomModels::ResumeReadyWorker()
 {
     if (!nativeState[0x1344])
         return;
-    for (int i = 0; i < 6; ++i)
+    int i = 0;
+    BYTE* worker = nativeState + 0x1349;
+    for (; i < 6; ++i, worker += 0x230)
     {
-        BYTE* worker = nativeState + 0x1349 + i * 0x230;
-        if (worker[2] && !worker[0] && worker[1])
+        BYTE active = worker[2];
+        if (active && !worker[0])
         {
-            worker[1] = 0;
-            return;
+            BYTE paused = worker[1];
+            if (paused)
+            {
+                nativeState[0x134a + i * 0x230] = 0;
+                return;
+            }
         }
     }
 }
@@ -230,19 +249,16 @@ CCustomModels* g_customModels;
 // 0x0000c950
 bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
 {
-    BYTE* state = (BYTE*)this;
-    if (!state[0x21f] || endIndex <= 0)
+    if (!nativeState[0x21f])
         return false;
-    DWORD count = *(DWORD*)(state + 4);
     for (int i = 0; i < endIndex; ++i)
-        if ((DWORD)i < count)
-        {
-            BYTE* entry = (*(BYTE***)state)[i];
-            if (!entry)
-                continue;
-            if ((*(DWORD*)(entry + 0x46) == hash && entry[2]) || (*(DWORD*)(entry + 0x4a) == hash && entry[3]))
-                return true;
-        }
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        if (!entry)
+            continue;
+        if ((*(DWORD*)(entry + 0x46) == hash && entry[2]) || (*(DWORD*)(entry + 0x4a) == hash && entry[3]))
+            return true;
+    }
     return false;
 }
 // 0x0000c9b0
@@ -252,29 +268,30 @@ int CCustomModels::MarkResourceRequests()
     if (!state[0x21f])
         return -1;
     DWORD index = 0, pending = 0, count = *(DWORD*)(state + 4);
-    if (!count)
-        return 0;
-    do
+    if (count)
     {
-        BYTE* entry = index < count ? (*(BYTE***)state)[index] : 0;
-        if ((entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(state + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))) && !entry[6])
+        do
         {
-            if (!entry[0])
+            BYTE* entry = (BYTE*)GetRecord(index);
+            if ((entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(state + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))) && !entry[6])
             {
-                entry[2] = 1;
-                if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x46)))
-                    ++pending;
+                if (!entry[0])
+                {
+                    entry[2] = 1;
+                    if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x46)))
+                        ++pending;
+                }
+                if (!entry[1])
+                {
+                    entry[3] = 1;
+                    if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x4a)))
+                        ++pending;
+                }
             }
-            if (!entry[1])
-            {
-                entry[3] = 1;
-                if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x4a)))
-                    ++pending;
-            }
+            count = *(DWORD*)(state + 4);
         }
-        count = *(DWORD*)(state + 4);
+        while (++index != count);
     }
-    while (++index != count);
     return (int)pending;
 }
 
@@ -283,9 +300,9 @@ bool CCustomModels::IsPedEntry(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; i++)
+    for (DWORD i = 0; i != count; i++)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (*(int*)(entry + 0x10) == model && entry[7] == 1)
             return true;
     }
@@ -296,9 +313,9 @@ bool CCustomModels::IsObjectEntry(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; i++)
+    for (DWORD i = 0; i != count; i++)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (*(int*)(entry + 0x10) == model && entry[7] == 2)
             return true;
     }
@@ -309,9 +326,9 @@ BYTE CCustomModels::GetLoadedFlag(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; i++)
+    for (DWORD i = 0; i != count; i++)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (*(int*)(entry + 0x10) == model)
             return entry[0x58];
     }
@@ -322,9 +339,9 @@ BOOL CCustomModels::DoesExist(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; i++)
+    for (DWORD i = 0; i != count; i++)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (*(int*)(entry + 0x10) == model && entry[7] == 1)
         {
             if (!LoadPedModel(*(DWORD*)(entry + 0xc), *(DWORD*)(entry + 0x10), *(DWORD*)(entry + 0x46), *(DWORD*)(entry + 0x4a)))
@@ -341,9 +358,9 @@ BOOL CCustomModels::LoadObjectEntry(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; i++)
+    for (DWORD i = 0; i != count; i++)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         // This method alone has the observed null-record guard.
         if (entry && *(int*)(entry + 0x10) == model && entry[7] == 2)
         {
@@ -1228,9 +1245,9 @@ DWORD __cdecl CustomModelFileCrc(const char* filename)
 int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
 {
     DWORD count = *(DWORD*)(nativeState + 4);
-    for (DWORD i = 0; i < count; ++i)
+    for (DWORD i = 0; i != count; ++i)
     {
-        BYTE* record = (*(BYTE***)nativeState)[i];
+        BYTE* record = (BYTE*)GetRecord(i);
         if (!record)
             continue;
         if ((type == 1 && *(DWORD*)(record + 0x46) == hash) || (type == 2 && *(DWORD*)(record + 0x4a) == hash))
@@ -1244,7 +1261,7 @@ bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload*
     int index = FindResourceIndex(type, hash);
     if (index < 0)
         return false;
-    BYTE* record = (DWORD)index < *(DWORD*)(nativeState + 4) ? (*(BYTE***)nativeState)[index] : 0;
+    BYTE* record = (BYTE*)GetRecord(index);
     memset(download, 0, 0x11e);
     download->index = index;
     download->type = type;
@@ -1320,7 +1337,7 @@ BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
 // 0x0000bca0
 int CCustomModels::FindWorkerByFile(void* file)
 {
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i != 6; ++i)
         if (*(void**)(nativeState + 0x1457 + i * 0x230) == file)
             return i;
     return -1;
@@ -1338,10 +1355,11 @@ int CCustomModels::CountMissingResources()
 {
     if (!nativeState[0x21f])
         return -1;
-    DWORD count = *(DWORD*)(nativeState + 4), missing = 0;
-    for (DWORD i = 0; i < count; ++i)
+    DWORD count = *(DWORD*)(nativeState + 4);
+    DWORD i = 0, missing = 0;
+    for (; i != count; ++i)
     {
-        BYTE* record = (*(BYTE***)nativeState)[i];
+        BYTE* record = (BYTE*)GetRecord(i);
         if (!record || record[6])
             continue;
         if (record[7] == 1 || (record[7] == 2 && (*(DWORD*)(record + 8) == *(DWORD*)(nativeState + 0x217) || *(DWORD*)(record + 8) == 0xffffffff)))
@@ -1390,7 +1408,7 @@ bool CCustomModels::HasResourceHash(DWORD hash)
     int count = *(int*)(nativeState + 4);
     for (int i = 0; i < count; ++i)
     {
-        BYTE* entry = (*(BYTE***)nativeState)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (entry && (*(DWORD*)(entry + 0x46) == hash || *(DWORD*)(entry + 0x4a) == hash))
             return true;
     }
@@ -1456,7 +1474,7 @@ void CCustomModels::RefreshCachedResources()
     if (count)
         do
         {
-            BYTE* entry = index < count ? (*(BYTE***)nativeState)[index] : 0;
+            BYTE* entry = (BYTE*)GetRecord(index);
             if (entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(nativeState + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff)))
             {
                 if (!entry[0] && IsDffCached(*(DWORD*)(entry + 0x46)))
@@ -1489,7 +1507,7 @@ bool CCustomModels::IsDffCached(DWORD hash)
     if (GameFileExists(path))
         return true;
     _snprintf(path, 260, g_customDffCachePattern, (char*)this + 0x10e, hash);
-    return GameFileExists(path) != 0;
+    return GameFileExists(path) ? true : false;
 }
 // 0x0000bba0
 bool CCustomModels::IsTxdCached(DWORD hash)
@@ -1499,7 +1517,7 @@ bool CCustomModels::IsTxdCached(DWORD hash)
     if (GameFileExists(path))
         return true;
     _snprintf(path, 260, g_customTxdCachePattern, (char*)this + 0x10e, hash);
-    return GameFileExists(path) != 0;
+    return GameFileExists(path) ? true : false;
 }
 // 0x0000bd40
 bool CCustomModels::PauseReadyWorker()
@@ -1507,13 +1525,19 @@ bool CCustomModels::PauseReadyWorker()
     BYTE* state = (BYTE*)this;
     if (!state[0x1344])
         return false;
-    for (int i = 0; i < 6; ++i)
+    int i = 0;
+    BYTE* worker = nativeState + 0x1349;
+    for (; i < 6; ++i, worker += 0x230)
     {
-        BYTE* worker = state + 0x1349 + i * 0x230;
-        if (worker[2] && !worker[0] && !worker[1])
+        BYTE active = worker[2];
+        if (active && !worker[0])
         {
-            worker[1] = 1;
-            return true;
+            BYTE paused = worker[1];
+            if (!paused)
+            {
+                nativeState[0x134a + i * 0x230] = 1;
+                return true;
+            }
         }
     }
     return false;
@@ -1536,9 +1560,9 @@ bool CCustomModels::IsDffRequested(DWORD hash)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; ++i)
+    for (DWORD i = 0; i != count; ++i)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (entry && *(DWORD*)(entry + 0x46) == hash && entry[4])
             return true;
     }
@@ -1549,9 +1573,9 @@ bool CCustomModels::IsTxdRequested(DWORD hash)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; ++i)
+    for (DWORD i = 0; i != count; ++i)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (entry && *(DWORD*)(entry + 0x4a) == hash && entry[5])
             return true;
     }
@@ -1759,9 +1783,9 @@ DWORD CCustomModels::GetObjectTextureHash(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; ++i)
+    for (DWORD i = 0; i != count; ++i)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (entry && *(int*)(entry + 0x10) == model && entry[7] == 2)
             return *(DWORD*)(entry + 0x4a);
     }
@@ -1773,9 +1797,9 @@ BYTE CCustomModels::GetObjectFirstHour(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; ++i)
+    for (DWORD i = 0; i != count; ++i)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (entry && *(int*)(entry + 0x10) == model && entry[7] == 2)
             return entry[0x56];
     }
@@ -1787,9 +1811,9 @@ BYTE CCustomModels::GetObjectLastHour(int model)
 {
     BYTE* state = (BYTE*)this;
     DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i < count; ++i)
+    for (DWORD i = 0; i != count; ++i)
     {
-        BYTE* entry = (*(BYTE***)state)[i];
+        BYTE* entry = (BYTE*)GetRecord(i);
         if (entry && *(int*)(entry + 0x10) == model && entry[7] == 2)
             return entry[0x57];
     }
@@ -1803,9 +1827,11 @@ DWORD CCustomModels::GetCount()
 }
 
 // 0x0000c410
-void* CCustomModels::GetRecord(DWORD index)
+__forceinline void* CCustomModels::GetRecord(DWORD index)
 {
-    return index < *(DWORD*)(nativeState + 4) ? (*(void***)nativeState)[index] : 0;
+    if (index >= *(DWORD*)(nativeState + 4))
+        return 0;
+    return (*(void***)nativeState)[index];
 }
 // 0x0000c400
 CCustomModels* CCustomModels::InitializeRecordStorage()
@@ -1835,18 +1861,18 @@ void CCustomModels::ProcessDelayedReleases()
     if (count)
         do
         {
-            BYTE* entry = index < count ? (*(BYTE***)nativeState)[index] : 0;
+            BYTE* entry = (BYTE*)GetRecord(index);
             if (entry[0x58] && entry[0x59])
             {
                 DWORD delay = *(DWORD*)(entry + 0x5a);
-                if (delay)
-                    *(DWORD*)(entry + 0x5a) = delay - 1;
-                else
+                if (!delay)
                 {
                     GameCleanupModelAndTxd(*(int*)(entry + 0x10));
                     entry[0x59] = 0;
                     entry[0x58] = 0;
                 }
+                else
+                    *(DWORD*)(entry + 0x5a) = delay - 1;
             }
             count = *(DWORD*)(nativeState + 4);
         }

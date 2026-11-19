@@ -300,7 +300,7 @@ void Util_SanitizeAscii(char* text)
     while (*text)
     {
         unsigned char value = (unsigned char)*text;
-        if (value < 0x20 || value > 0x7f)
+        if (value > 0x7f || value < 0x20)
             *text = ' ';
         ++text;
     }

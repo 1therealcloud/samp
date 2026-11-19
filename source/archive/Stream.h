@@ -29,6 +29,8 @@ public:
 
     // 0x00063e80
     virtual ~CAbstractStream() {}
+    // 0x00063ee0
+    // MSVC scalar deleting destructor emitted for ~CAbstractStream.
 
     // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes) = 0;

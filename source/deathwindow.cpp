@@ -50,7 +50,8 @@ CDeathWindow::~CDeathWindow()
 // 0x00069660
 void CDeathWindow::PushBack()
 {
-    memmove(entries, entries + 1, 4 * sizeof(DeathWindowEntry));
+    for (size_t i = 0; i < 4 * sizeof(DeathWindowEntry); ++i)
+        ((BYTE*)entries)[i] = ((BYTE*)(entries + 1))[i];
 }
 
 // 0x00069680

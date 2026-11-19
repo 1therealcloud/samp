@@ -26,6 +26,14 @@ CRenderPanel::CRenderPanel(IDirect3DDevice9* device)
     state[7] = 38;
 }
 
+// 0x000710d0
+void CDXUTSlider::SetColorOverride(D3DXCOLOR color)
+{
+    BYTE* slider = (BYTE*)this;
+    slider[0x76] = 1;
+    memcpy(slider + 0x77, &color, sizeof(color));
+}
+
 // 0x00071140
 void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
 {
@@ -33,42 +41,27 @@ void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
     state[8] = (DWORD)dialog;
     if (!dialog)
         return;
+    const float low = 0.6f;
+    const float high = 0.80000007f;
     dialog->AddSlider(30, 50, 10, state[5], state[6], -100, 100, 0, false, 0);
-    BYTE* slider = (BYTE*)((CDXUTDialog*)state[8])->GetControl(30, 5);
-    DWORD color[4] = {0x3f19999a, 0x3f19999a, 0x3f4cccce, 0x3f800000};
-    slider[0x76] = 1;
-    memcpy(slider + 0x77, color, 16);
+    ((CDXUTDialog*)state[8])->GetSlider(30)->SetColorOverride(D3DXCOLOR(low, low, high, 1.0f));
     int secondY = (LONG)(state[7] + 10);
     ((CDXUTDialog*)state[8])->AddSlider(32, 50, secondY, state[5], state[6], -100, 100, 0, false, 0);
-    slider = (BYTE*)((CDXUTDialog*)state[8])->GetControl(32, 5);
-    color[0] = 0x3f4cccce;
-    color[1] = 0x3f19999a;
-    color[2] = 0x3f19999a;
-    slider[0x76] = 1;
-    memcpy(slider + 0x77, color, 16);
+    ((CDXUTDialog*)state[8])->GetSlider(32)->SetColorOverride(D3DXCOLOR(high, low, low, 1.0f));
     int thirdY = (LONG)(state[7] + (DWORD)secondY);
     ((CDXUTDialog*)state[8])->AddSlider(34, 50, thirdY, state[5], state[6], -100, 100, 0, false, 0);
-    slider = (BYTE*)((CDXUTDialog*)state[8])->GetControl(34, 5);
-    color[0] = 0x3f19999a;
-    color[1] = 0x3f4cccce;
-    slider[0x76] = 1;
-    memcpy(slider + 0x77, color, 16);
+    ((CDXUTDialog*)state[8])->GetSlider(34)->SetColorOverride(D3DXCOLOR(low, high, low, 1.0f));
 }
 // 0x000712c0
 void CRenderPanel::UpdateLayout()
 {
     DWORD* state = (DWORD*)nativeState;
-    BYTE* dialog = (BYTE*)state[8];
-    DWORD height = state[4], width = state[3];
-    *(DWORD*)(dialog + 0x11e) = width;
-    *(DWORD*)(dialog + 0x122) = height;
+    ((CDXUTDialog*)state[8])->SetSize(state[3], state[4]);
     RECT rect;
     GetClientRect(g_inputGameWindow, &rect);
-    state[1] = (DWORD)rect.right - state[3] - 5;
-    state[2] = (DWORD)rect.bottom - state[4] - 10;
-    dialog = (BYTE*)state[8];
-    *(DWORD*)(dialog + 0x116) = state[1];
-    *(DWORD*)(dialog + 0x11a) = state[2];
+    LONG x = state[1] = rect.right - (LONG)state[3] - 5;
+    LONG y = state[2] = rect.bottom - (LONG)state[4] - 10;
+    ((CDXUTDialog*)state[8])->SetLocation(x, y);
 }
 // 0x00071320
 void CRenderPanel::GetRect(RECT* out)
@@ -105,23 +98,16 @@ void CRenderPanel::ProcessControls()
     DWORD* state = (DWORD*)nativeState;
     if (!state[8])
         return;
-    for (int axis = 0; axis < 3; axis++)
-    {
-        BYTE* slider = (BYTE*)((CDXUTDialog*)state[8])->GetControl(30 + axis * 2, 5);
-        int value = *(int*)(slider + 0x4d);
-        if (value)
-        {
-            float difference;
-            // clang-format off
-            __asm {
-                fild value
-                fmul g_objectPoolSecondsPerTick
-                fstp difference
-            }
-            // clang-format on
-            ((CObjectEdit*)g_deviceObjectEdit)->ApplyChanges(axis, difference);
-        }
-    }
+    int value;
+    value = *(int*)((BYTE*)((CDXUTDialog*)state[8])->GetControl(30, 5) + 0x4d);
+    if (value)
+        ((CObjectEdit*)g_deviceObjectEdit)->ApplyChanges(0, value * g_objectPoolSecondsPerTick);
+    value = *(int*)((BYTE*)((CDXUTDialog*)state[8])->GetControl(32, 5) + 0x4d);
+    if (value)
+        ((CObjectEdit*)g_deviceObjectEdit)->ApplyChanges(1, value * g_objectPoolSecondsPerTick);
+    value = *(int*)((BYTE*)((CDXUTDialog*)state[8])->GetControl(34, 5) + 0x4d);
+    if (value)
+        ((CObjectEdit*)g_deviceObjectEdit)->ApplyChanges(2, value * g_objectPoolSecondsPerTick);
 }
 // 0x00071480
 void CRenderPanel::DrawLabels()

@@ -844,6 +844,8 @@ class CDXUTSlider : public CDXUTControl
 public:
     CDXUTSlider( CDXUTDialog *pDialog = NULL );
 
+    void SetColorOverride( D3DXCOLOR color );
+
     virtual BOOL ContainsPoint( POINT pt );
     // 0x0008e730 
     virtual bool CanHaveFocus() { return (m_bVisible && m_bEnabled); }

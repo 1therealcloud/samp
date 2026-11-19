@@ -166,24 +166,63 @@ void __stdcall AimStuff::SetLocalSkill(int skill, WORD value)
 // 0x0009c5b0
 void __stdcall AimStuff::UpdateLocalSkills()
 {
-    memcpy(g_aimLocalSkills, (BYTE*)g_aimInternalStats + 0x114, sizeof(g_aimLocalSkills));
+    g_aimLocalSkills[0] = g_aimInternalStats[69];
+    g_aimLocalSkills[1] = g_aimInternalStats[70];
+    g_aimLocalSkills[2] = g_aimInternalStats[71];
+    g_aimLocalSkills[3] = g_aimInternalStats[72];
+    g_aimLocalSkills[4] = g_aimInternalStats[73];
+    g_aimLocalSkills[5] = g_aimInternalStats[74];
+    g_aimLocalSkills[6] = g_aimInternalStats[75];
+    g_aimLocalSkills[7] = g_aimInternalStats[76];
+    g_aimLocalSkills[8] = g_aimInternalStats[77];
+    g_aimLocalSkills[9] = g_aimInternalStats[78];
+    g_aimLocalSkills[10] = g_aimInternalStats[79];
 }
 // 0x0009c640
 void __stdcall AimStuff::ApplyLocalSkills()
 {
-    memcpy((BYTE*)g_aimInternalStats + 0x114, g_aimLocalSkills, sizeof(g_aimLocalSkills));
+    g_aimInternalStats[69] = g_aimLocalSkills[0];
+    g_aimInternalStats[70] = g_aimLocalSkills[1];
+    g_aimInternalStats[71] = g_aimLocalSkills[2];
+    g_aimInternalStats[72] = g_aimLocalSkills[3];
+    g_aimInternalStats[73] = g_aimLocalSkills[4];
+    g_aimInternalStats[74] = g_aimLocalSkills[5];
+    g_aimInternalStats[75] = g_aimLocalSkills[6];
+    g_aimInternalStats[76] = g_aimLocalSkills[7];
+    g_aimInternalStats[77] = g_aimLocalSkills[8];
+    g_aimInternalStats[78] = g_aimLocalSkills[9];
+    g_aimInternalStats[79] = g_aimLocalSkills[10];
 }
 // 0x0009c710
 void __stdcall AimStuff::ResetLocalSkills()
 {
-    for (int i = 0; i < 11; i++)
-        *(float*)((BYTE*)g_aimInternalStats + 0x114 + i * 4) = 999.0f;
+    g_aimInternalStats[69] = 999.0f;
+    g_aimInternalStats[70] = 999.0f;
+    g_aimInternalStats[71] = 999.0f;
+    g_aimInternalStats[72] = 999.0f;
+    g_aimInternalStats[73] = 999.0f;
+    g_aimInternalStats[74] = 999.0f;
+    g_aimInternalStats[75] = 999.0f;
+    g_aimInternalStats[76] = 999.0f;
+    g_aimInternalStats[77] = 999.0f;
+    g_aimInternalStats[78] = 999.0f;
+    g_aimInternalStats[79] = 999.0f;
     UpdateLocalSkills();
 }
 // 0x0009c7a0
 void __stdcall AimStuff::ApplyPlayerSkills(int player)
 {
-    memcpy((BYTE*)g_aimInternalStats + 0x114, g_aimPlayerSkills[player], sizeof(g_aimLocalSkills));
+    g_aimInternalStats[69] = g_aimPlayerSkills[player][0];
+    g_aimInternalStats[70] = g_aimPlayerSkills[player][1];
+    g_aimInternalStats[71] = g_aimPlayerSkills[player][2];
+    g_aimInternalStats[72] = g_aimPlayerSkills[player][3];
+    g_aimInternalStats[73] = g_aimPlayerSkills[player][4];
+    g_aimInternalStats[74] = g_aimPlayerSkills[player][5];
+    g_aimInternalStats[75] = g_aimPlayerSkills[player][6];
+    g_aimInternalStats[76] = g_aimPlayerSkills[player][7];
+    g_aimInternalStats[77] = g_aimPlayerSkills[player][8];
+    g_aimInternalStats[78] = g_aimPlayerSkills[player][9];
+    g_aimInternalStats[79] = g_aimPlayerSkills[player][10];
 }
 
 // 0x00002d20

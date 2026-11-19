@@ -373,7 +373,11 @@ void CModelPreview::Draw()
     if (texture)
     {
         DWORD color = 0xffffffff;
-        TextDrawRect rect = {0, 512, 512, 0};
+        TextDrawRect rect;
+        rect.left = 0;
+        rect.top = 0;
+        rect.right = 512;
+        rect.bottom = 512;
         GameDrawTextDrawTexture(texture, &rect, &color);
     }
 }

@@ -5,9 +5,12 @@
 // 0x000177d0
 CTextDraw* CTextDrawPool::Get(WORD id)
 {
-    if (id >= 2304 || !active[id])
+    if (id >= 2304)
         return 0;
-    return draws[id];
+    DWORD index = id;
+    if (active[index] == 0)
+        return 0;
+    return draws[index];
 }
 // 0x0001e260
 CTextDrawPool::CTextDrawPool()
@@ -45,14 +48,17 @@ CTextDrawPool::~CTextDrawPool()
 // 0x0001e3d0
 CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const char* text)
 {
-    if (draws[id])
+    DWORD index = id;
+    if (draws[index])
         Delete(id);
     CTextDraw* draw = new CTextDraw(info, text);
-    if (!draw)
-        return 0;
-    draws[id] = draw;
-    active[id] = 1;
-    return draw;
+    if (draw)
+    {
+        draws[index] = draw;
+        active[index] = 1;
+        return draw;
+    }
+    return 0;
 }
 // 0x0001e2f0
 void CTextDrawPool::Draw()

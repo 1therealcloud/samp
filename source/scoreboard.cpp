@@ -80,11 +80,10 @@ void CScoreboard::SendNotification()
     DXUTListBoxItemDL* item = selectedList->GetItem(selectedList->GetSelectedIndex(-1));
     if (item)
     {
-        int player = atoi(item->text);
+        WORD player = (WORD)atoi(item->text);
         RakNet::BitStream stream;
-        stream.WriteBits((const unsigned char*)&player, 16, true);
-        BYTE action = 0;
-        stream.WriteBits(&action, 8, true);
+        stream.Write(player);
+        stream.Write((BYTE)0);
         (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_scoreboardNotificationRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
     }
     Close(true);
