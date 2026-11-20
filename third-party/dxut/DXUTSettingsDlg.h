@@ -73,7 +73,7 @@ protected:
     CD3DEnumDeviceInfo* GetCurrentDeviceInfo();
     CD3DEnumDeviceSettingsCombo* GetCurrentDeviceSettingsCombo();
 
-    void AddAdapter( const WCHAR* strDescription, UINT iAdapter );
+    void AddAdapter( const CHAR* strDescription, UINT iAdapter );
     UINT GetSelectedAdapter();
 
     void AddDeviceType( D3DDEVTYPE devType );

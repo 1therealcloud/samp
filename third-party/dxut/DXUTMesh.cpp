@@ -20,7 +20,7 @@
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-CDXUTMesh::CDXUTMesh( LPCWSTR strName )
+CDXUTMesh::CDXUTMesh( LPCSTR strName )
 {
     StringCchCopy( m_strName, 512, strName );
     m_pSysMemMesh        = NULL;
@@ -50,15 +50,15 @@ CDXUTMesh::~CDXUTMesh()
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-HRESULT CDXUTMesh::Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strFilename )
+HRESULT CDXUTMesh::Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCSTR strFilename )
 {
-    WCHAR        strPath[MAX_PATH];
+    CHAR        strPath[MAX_PATH];
     LPD3DXBUFFER pAdjacencyBuffer = NULL;
     LPD3DXBUFFER pMtrlBuffer = NULL;
     HRESULT      hr;
 
     // Find the path for the file, and convert it to ANSI (for the D3DX API)
-    DXUTFindDXSDKMediaFileCch( strPath, sizeof(strPath) / sizeof(WCHAR), strFilename );
+    DXUTFindDXSDKMediaFileCch( strPath, sizeof(strPath) / sizeof(CHAR), strFilename );
 
     // Load the mesh
     if( FAILED( hr = D3DXLoadMeshFromX( strPath, D3DXMESH_SYSTEMMEM, pd3dDevice, 
@@ -79,11 +79,11 @@ HRESULT CDXUTMesh::Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strFilename )
     }
 
     // Set strPath to the path of the mesh file
-    WCHAR *pLastBSlash = wcsrchr( strPath, L'\\' );
+    CHAR *pLastBSlash = strrchr( strPath, '\\' );
     if( pLastBSlash )
-        *(pLastBSlash + 1) = L'\0';
+        *(pLastBSlash + 1) = '\0';
     else
-        *strPath = L'\0';
+        *strPath = '\0';
 
     hr = CreateMaterials( strPath, pd3dDevice, pAdjacencyBuffer, pMtrlBuffer );
 
@@ -125,7 +125,7 @@ HRESULT CDXUTMesh::Create( LPDIRECT3DDEVICE9 pd3dDevice,
         return hr;
     }
 
-    hr = CreateMaterials( L"", pd3dDevice, pAdjacencyBuffer, pMtrlBuffer );
+    hr = CreateMaterials( "", pd3dDevice, pAdjacencyBuffer, pMtrlBuffer );
 
     SAFE_RELEASE( pAdjacencyBuffer );
     SAFE_RELEASE( pMtrlBuffer );
@@ -134,7 +134,7 @@ HRESULT CDXUTMesh::Create( LPDIRECT3DDEVICE9 pd3dDevice,
 }
 
 
-HRESULT CDXUTMesh::CreateMaterials( LPCWSTR strPath, IDirect3DDevice9 *pd3dDevice, ID3DXBuffer *pAdjacencyBuffer, ID3DXBuffer *pMtrlBuffer )
+HRESULT CDXUTMesh::CreateMaterials( LPCSTR strPath, IDirect3DDevice9 *pd3dDevice, ID3DXBuffer *pAdjacencyBuffer, ID3DXBuffer *pMtrlBuffer )
 {
     // Get material info for the mesh
     // Get the array of materials out of the buffer
@@ -159,22 +159,18 @@ HRESULT CDXUTMesh::CreateMaterials( LPCWSTR strPath, IDirect3DDevice9 *pd3dDevic
             // Create a texture
             if( d3dxMtrls[i].pTextureFilename )
             {
-                WCHAR strTexture[MAX_PATH];
-                WCHAR strTextureTemp[MAX_PATH];
+                CHAR strTexture[MAX_PATH];
                 D3DXIMAGE_INFO ImgInfo;
 
                 // First attempt to look for texture in the same folder as the input folder.
-                MultiByteToWideChar( CP_ACP, 0, d3dxMtrls[i].pTextureFilename, -1, strTextureTemp, MAX_PATH );
-                strTextureTemp[MAX_PATH-1] = 0;
-
                 StringCchCopy( strTexture, MAX_PATH, strPath );
-                StringCchCat( strTexture, MAX_PATH, strTextureTemp );
+                StringCchCat( strTexture, MAX_PATH, d3dxMtrls[i].pTextureFilename );
 
                 // Inspect the texture file to determine the texture type.
                 if( FAILED( D3DXGetImageInfoFromFile( strTexture, &ImgInfo ) ) )
                 {
                     // Search the media folder
-                    if( FAILED( DXUTFindDXSDKMediaFileCch( strTexture, MAX_PATH, strTextureTemp ) ) )
+                    if( FAILED( DXUTFindDXSDKMediaFileCch( strTexture, MAX_PATH, d3dxMtrls[i].pTextureFilename ) ) )
                         continue;  // Can't find. Skip.
 
                     D3DXGetImageInfoFromFile( strTexture, &ImgInfo );
@@ -567,7 +563,7 @@ HRESULT CDXUTMesh::Render( ID3DXEffect *pEffect,
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-CDXUTMeshFrame::CDXUTMeshFrame( LPCWSTR strName )
+CDXUTMeshFrame::CDXUTMeshFrame( LPCSTR strName )
 {
     StringCchCopy( m_strName, 512, strName );
     D3DXMatrixIdentity( &m_mat );
@@ -617,7 +613,7 @@ bool CDXUTMeshFrame::EnumMeshes( bool (*EnumMeshCB)(CDXUTMesh*,void*),
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-CDXUTMesh* CDXUTMeshFrame::FindMesh( LPCWSTR strMeshName )
+CDXUTMesh* CDXUTMeshFrame::FindMesh( LPCSTR strMeshName )
 {
     CDXUTMesh* pMesh;
 
@@ -643,7 +639,7 @@ CDXUTMesh* CDXUTMeshFrame::FindMesh( LPCWSTR strMeshName )
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-CDXUTMeshFrame* CDXUTMeshFrame::FindFrame( LPCWSTR strFrameName )
+CDXUTMeshFrame* CDXUTMeshFrame::FindFrame( LPCSTR strFrameName )
 {
     CDXUTMeshFrame* pFrame;
 
@@ -788,14 +784,12 @@ HRESULT CDXUTMeshFile::LoadFrame( LPDIRECT3DDEVICE9 pd3dDevice,
     if( Guid == TID_D3DRMFrame )
     {
         // Get the frame name
-        CHAR  strAnsiName[512] = "";
-        WCHAR strName[512];
+        CHAR strName[512] = {0};
         SIZE_T dwNameLength = 512;
         SIZE_T cChildren;
-        if( FAILED( hr = pFileData->GetName( strAnsiName, &dwNameLength ) ) )
+        if( FAILED( hr = pFileData->GetName( strName, &dwNameLength ) ) )
             return hr;
 
-        WideCharToMultiByte( CP_ACP, 0, strName, -1, strAnsiName, 512, NULL, NULL );
         strName[511] = 0;
 
         // Create the frame
@@ -842,14 +836,12 @@ HRESULT CDXUTMeshFile::LoadMesh( LPDIRECT3DDEVICE9 pd3dDevice,
         return E_FAIL;
 
     // Get the mesh name
-    CHAR  strAnsiName[512] = {0};
-    WCHAR strName[512];
+    CHAR strName[512] = {0};
     SIZE_T dwNameLength = 512;
     HRESULT hr;
-    if( FAILED( hr = pFileData->GetName( strAnsiName, &dwNameLength ) ) )
+    if( FAILED( hr = pFileData->GetName( strName, &dwNameLength ) ) )
         return hr;
 
-    MultiByteToWideChar( CP_ACP, 0, strAnsiName, -1, strName, 512 );
     strName[511] = 0;
 
     // Create the mesh
@@ -868,7 +860,7 @@ HRESULT CDXUTMeshFile::LoadMesh( LPDIRECT3DDEVICE9 pd3dDevice,
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-HRESULT CDXUTMeshFile::CreateFromResource( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strResource, LPCWSTR strType )
+HRESULT CDXUTMeshFile::CreateFromResource( LPDIRECT3DDEVICE9 pd3dDevice, LPCSTR strResource, LPCSTR strType )
 {
     LPD3DXFILE           pDXFile   = NULL;
     LPD3DXFILEENUMOBJECT pEnumObj  = NULL;
@@ -888,19 +880,10 @@ HRESULT CDXUTMeshFile::CreateFromResource( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR
         return E_FAIL;
     }
     
-    CHAR strTypeAnsi[MAX_PATH];
-    CHAR strResourceAnsi[MAX_PATH];
-
-    WideCharToMultiByte( CP_ACP, 0, strType, -1, strTypeAnsi, MAX_PATH, NULL, NULL );
-    strTypeAnsi[MAX_PATH-1] = 0;
-
-    WideCharToMultiByte( CP_ACP, 0, strResource, -1, strResourceAnsi, MAX_PATH, NULL, NULL );
-    strResourceAnsi[MAX_PATH-1] = 0;
-
     D3DXF_FILELOADRESOURCE dxlr;
     dxlr.hModule = NULL;
-    dxlr.lpName = strResourceAnsi;
-    dxlr.lpType = strTypeAnsi;
+    dxlr.lpName = strResource;
+    dxlr.lpType = strType;
 
     // Create enum object
     hr = pDXFile->CreateEnumObject( (void*)&dxlr, D3DXF_FILELOAD_FROMRESOURCE, 
@@ -943,7 +926,7 @@ HRESULT CDXUTMeshFile::CreateFromResource( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR
 // Name:
 // Desc:
 //-----------------------------------------------------------------------------
-HRESULT CDXUTMeshFile::Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strFilename )
+HRESULT CDXUTMeshFile::Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCSTR strFilename )
 {
     LPD3DXFILE           pDXFile   = NULL;
     LPD3DXFILEENUMOBJECT pEnumObj  = NULL;
@@ -963,18 +946,16 @@ HRESULT CDXUTMeshFile::Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strFilename
         return E_FAIL;
     }
 
-    // Find the path to the file, and convert it to ANSI (for the D3DXOF API)
-    WCHAR strPath[MAX_PATH];
-    CHAR  strPathANSI[MAX_PATH];
-    DXUTFindDXSDKMediaFileCch( strPath, sizeof(strPath) / sizeof(WCHAR), strFilename );
-    
-    
-    WideCharToMultiByte( CP_ACP, 0, strPath, -1, strPathANSI, MAX_PATH, NULL, NULL );
-    strPathANSI[MAX_PATH-1] = 0;
+    CHAR strPath[MAX_PATH];
+    hr = DXUTFindDXSDKMediaFileCch( strPath, MAX_PATH, strFilename );
+    if( FAILED(hr) )
+    {
+        SAFE_RELEASE( pDXFile );
+        return hr;
+    }
 
-    
     // Create enum object
-    hr = pDXFile->CreateEnumObject( (void*)strPathANSI, D3DXF_FILELOAD_FROMFILE, 
+    hr = pDXFile->CreateEnumObject( (void*)strPath, D3DXF_FILELOAD_FROMFILE,
                                     &pEnumObj );
     if( FAILED(hr) )
     {

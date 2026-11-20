@@ -20,7 +20,7 @@
 class CDXUTMesh
 {
 public:
-    WCHAR                   m_strName[512];
+    CHAR                   m_strName[512];
 
     LPD3DXMESH              m_pSysMemMesh;    // SysMem mesh, lives through resize
     LPD3DXMESH              m_pLocalMesh;     // Local mesh, rebuilt on resize
@@ -59,12 +59,12 @@ public:
     HRESULT InvalidateDeviceObjects();
 
     // Creation/destruction
-    HRESULT Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strFilename );
+    HRESULT Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCSTR strFilename );
     HRESULT Create( LPDIRECT3DDEVICE9 pd3dDevice, LPD3DXFILEDATA pFileData );
-    HRESULT CreateMaterials( LPCWSTR strPath, IDirect3DDevice9 *pd3dDevice, ID3DXBuffer *pAdjacencyBuffer, ID3DXBuffer *pMtrlBuffer );
+    HRESULT CreateMaterials( LPCSTR strPath, IDirect3DDevice9 *pd3dDevice, ID3DXBuffer *pAdjacencyBuffer, ID3DXBuffer *pMtrlBuffer );
     HRESULT Destroy();
 
-    CDXUTMesh( LPCWSTR strName = L"CDXUTMeshFile_Mesh" );
+    CDXUTMesh( LPCSTR strName = "CDXUTMeshFile_Mesh" );
     virtual ~CDXUTMesh();
 };
 
@@ -78,7 +78,7 @@ public:
 class CDXUTMeshFrame
 {
 public:
-    WCHAR      m_strName[512];
+    CHAR      m_strName[512];
     D3DXMATRIX m_mat;
     CDXUTMesh*  m_pMesh;
 
@@ -90,8 +90,8 @@ public:
     void        SetMatrix( D3DXMATRIX* pmat ) { m_mat = *pmat; }
     D3DXMATRIX* GetMatrix()                   { return &m_mat; }
 
-    CDXUTMesh*   FindMesh( LPCWSTR strMeshName );
-    CDXUTMeshFrame*  FindFrame( LPCWSTR strFrameName );
+    CDXUTMesh*   FindMesh( LPCSTR strMeshName );
+    CDXUTMeshFrame*  FindFrame( LPCSTR strFrameName );
     bool        EnumMeshes( bool (*EnumMeshCB)(CDXUTMesh*,void*), 
                             void* pContext );
 
@@ -103,7 +103,7 @@ public:
                     bool bDrawAlphaSubsets = true,
                     D3DXMATRIX* pmatWorldMatrix = NULL);
 
-    CDXUTMeshFrame( LPCWSTR strName = L"CDXUTMeshFile_Frame" );
+    CDXUTMeshFrame( LPCSTR strName = "CDXUTMeshFile_Frame" );
     virtual ~CDXUTMeshFrame();
 };
 
@@ -121,13 +121,13 @@ class CDXUTMeshFile : public CDXUTMeshFrame
     HRESULT LoadFrame( LPDIRECT3DDEVICE9 pd3dDevice, LPD3DXFILEDATA pFileData, 
                        CDXUTMeshFrame* pParentFrame );
 public:
-    HRESULT Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strFilename );
-    HRESULT CreateFromResource( LPDIRECT3DDEVICE9 pd3dDevice, LPCWSTR strResource, LPCWSTR strType );
+    HRESULT Create( LPDIRECT3DDEVICE9 pd3dDevice, LPCSTR strFilename );
+    HRESULT CreateFromResource( LPDIRECT3DDEVICE9 pd3dDevice, LPCSTR strResource, LPCSTR strType );
     // For pure devices, specify the world transform. If the world transform is not
     // specified on pure devices, this function will fail.
     HRESULT Render( LPDIRECT3DDEVICE9 pd3dDevice, D3DXMATRIX* pmatWorldMatrix = NULL );
 
-    CDXUTMeshFile() : CDXUTMeshFrame( L"CDXUTMeshFile_Root" ) {}
+    CDXUTMeshFile() : CDXUTMeshFrame( "CDXUTMeshFile_Root" ) {}
 };
 
 

@@ -29,8 +29,6 @@ CDXUTTimer* DXUTGetGlobalTimer()
 //--------------------------------------------------------------------------------------
 // Internal functions forward declarations
 //--------------------------------------------------------------------------------------
-bool DXUTFindMediaSearchTypicalDirs( WCHAR* strSearchPath, int cchSearch, LPCWSTR strLeaf, WCHAR* strExePath, WCHAR* strExeName );
-bool DXUTFindMediaSearchParentDirs( WCHAR* strSearchPath, int cchSearch, WCHAR* strStartAt, WCHAR* strLeafName );
 INT_PTR CALLBACK DisplaySwitchToREFWarningProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
@@ -44,12 +42,12 @@ void DXUTDisplaySwitchingToREFWarning()
         // Open the appropriate registry key
         DWORD dwSkipWarning = 0;
         HKEY hKey;
-        LONG lResult = RegOpenKeyEx( HKEY_CURRENT_USER, L"Software\\Microsoft\\DirectX 9.0 SDK", 0, KEY_READ, &hKey );
+        LONG lResult = RegOpenKeyEx( HKEY_CURRENT_USER, "Software\\Microsoft\\DirectX 9.0 SDK", 0, KEY_READ, &hKey );
         if( ERROR_SUCCESS == lResult ) 
         {
             DWORD dwType;
             DWORD dwSize = sizeof(DWORD);
-            lResult = RegQueryValueEx( hKey, L"Skip Warning On REF", NULL, &dwType, (BYTE*)&dwSkipWarning, &dwSize );
+            lResult = RegQueryValueEx( hKey, "Skip Warning On REF", NULL, &dwType, (BYTE*)&dwSkipWarning, &dwSize );
             RegCloseKey( hKey );
         }
 
@@ -76,11 +74,11 @@ void DXUTDisplaySwitchingToREFWarning()
 
             if( (nResult & 0x80) == 0x80 ) // "Don't show again" checkbox was checked
             {
-                lResult = RegOpenKeyEx( HKEY_CURRENT_USER, L"Software\\Microsoft\\DirectX 9.0 SDK", 0, KEY_WRITE, &hKey );
+                lResult = RegOpenKeyEx( HKEY_CURRENT_USER, "Software\\Microsoft\\DirectX 9.0 SDK", 0, KEY_WRITE, &hKey );
                 if( ERROR_SUCCESS == lResult ) 
                 {
                     dwSkipWarning = 1;
-                    RegSetValueEx( hKey, L"Skip Warning On REF", 0, REG_DWORD, (BYTE*)&dwSkipWarning, sizeof(DWORD) );
+                    RegSetValueEx( hKey, "Skip Warning On REF", 0, REG_DWORD, (BYTE*)&dwSkipWarning, sizeof(DWORD) );
                     RegCloseKey( hKey );
                 }
             }
@@ -104,10 +102,10 @@ INT_PTR CALLBACK DisplaySwitchToREFWarningProc(HWND hDlg, UINT message, WPARAM w
             // Easier to set text here than in the DLGITEMTEMPLATE
             SetWindowText( hDlg, DXUTGetWindowTitle() );
             SendMessage( GetDlgItem(hDlg, 0x100), STM_SETIMAGE, IMAGE_ICON, (LPARAM)LoadIcon(0, IDI_QUESTION));
-            SetDlgItemText( hDlg, 0x101, L"Switching to the Direct3D reference rasterizer, a software device\nthat implements the entire Direct3D feature set, but runs very slowly.\nDo you wish to continue?" ); 
-            SetDlgItemText( hDlg, IDYES, L"&Yes" );
-            SetDlgItemText( hDlg, IDNO, L"&No" );
-            SetDlgItemText( hDlg, IDIGNORE, L"&Don't show again" );
+            SetDlgItemText( hDlg, 0x101, "Switching to the Direct3D reference rasterizer, a software device\nthat implements the entire Direct3D feature set, but runs very slowly.\nDo you wish to continue?" );
+            SetDlgItemText( hDlg, IDYES, "&Yes" );
+            SetDlgItemText( hDlg, IDNO, "&No" );
+            SetDlgItemText( hDlg, IDIGNORE, "&Don't show again" );
             break;
 
         case WM_COMMAND: 
@@ -280,26 +278,25 @@ bool CDXUTTimer::IsStopped()
 //--------------------------------------------------------------------------------------
 // Returns pointer to static media search buffer
 //--------------------------------------------------------------------------------------
-WCHAR* DXUTMediaSearchPath()
+CHAR* DXUTMediaSearchPath()
 {
-    static WCHAR s_strMediaSearchPath[MAX_PATH] = {0};
-    return s_strMediaSearchPath;
+    return InputDxutMediaSearchPath();
 
 }   
 
 //--------------------------------------------------------------------------------------
-LPCWSTR DXUTGetMediaSearchPath()
+LPCSTR DXUTGetMediaSearchPath()
 {
     return DXUTMediaSearchPath();
 }
 
 
 //--------------------------------------------------------------------------------------
-HRESULT DXUTSetMediaSearchPath( LPCWSTR strPath )
+HRESULT DXUTSetMediaSearchPath( LPCSTR strPath )
 {
     HRESULT hr;
 
-    WCHAR* s_strSearchPath = DXUTMediaSearchPath();
+    CHAR* s_strSearchPath = DXUTMediaSearchPath();
 
     hr = StringCchCopy( s_strSearchPath, MAX_PATH, strPath );   
     if( SUCCEEDED(hr) )
@@ -307,9 +304,9 @@ HRESULT DXUTSetMediaSearchPath( LPCWSTR strPath )
         // append slash if needed
         size_t ch;
         hr = StringCchLength( s_strSearchPath, MAX_PATH, &ch );
-        if( SUCCEEDED(hr) && s_strSearchPath[ch-1] != L'\\')
+        if( SUCCEEDED(hr) && ch != 0 && s_strSearchPath[ch-1] != '\\')
         {
-            hr = StringCchCat( s_strSearchPath, MAX_PATH, L"\\" );
+            hr = StringCchCat( s_strSearchPath, MAX_PATH, "\\" );
         }
     }
 
@@ -318,200 +315,6 @@ HRESULT DXUTSetMediaSearchPath( LPCWSTR strPath )
 
 
 //--------------------------------------------------------------------------------------
-// Tries to find the location of a SDK media file
-//       cchDest is the size in WCHARs of strDestPath.  Be careful not to 
-//       pass in sizeof(strDest) on UNICODE builds.
-//--------------------------------------------------------------------------------------
-HRESULT DXUTFindDXSDKMediaFileCch( WCHAR* strDestPath, int cchDest, LPCWSTR strFilename )
-{
-    bool bFound;
-    WCHAR strSearchFor[MAX_PATH];
-    
-    if( NULL==strFilename || strFilename[0] == 0 || NULL==strDestPath || cchDest < 10 )
-        return E_INVALIDARG;
-
-    // Get the exe name, and exe path
-    WCHAR strExePath[MAX_PATH] = {0};
-    WCHAR strExeName[MAX_PATH] = {0};
-    WCHAR* strLastSlash = NULL;
-    GetModuleFileName( NULL, strExePath, MAX_PATH );
-    strExePath[MAX_PATH-1]=0;
-    strLastSlash = wcsrchr( strExePath, TEXT('\\') );
-    if( strLastSlash )
-    {
-        StringCchCopy( strExeName, MAX_PATH, &strLastSlash[1] );
-
-        // Chop the exe name from the exe path
-        *strLastSlash = 0;
-
-        // Chop the .exe from the exe name
-        strLastSlash = wcsrchr( strExeName, TEXT('.') );
-        if( strLastSlash )
-            *strLastSlash = 0;
-    }
-
-    // Typical directories:
-    //      .\
-    //      ..\
-    //      ..\..\
-    //      %EXE_DIR%\
-    //      %EXE_DIR%\..\
-    //      %EXE_DIR%\..\..\
-    //      %EXE_DIR%\..\%EXE_NAME%
-    //      %EXE_DIR%\..\..\%EXE_NAME%
-
-    // Typical directory search
-    bFound = DXUTFindMediaSearchTypicalDirs( strDestPath, cchDest, strFilename, strExePath, strExeName );
-    if( bFound )
-        return S_OK;
-
-    // Typical directory search again, but also look in a subdir called "\media\" 
-    StringCchPrintf( strSearchFor, MAX_PATH, L"media\\%s", strFilename ); 
-    bFound = DXUTFindMediaSearchTypicalDirs( strDestPath, cchDest, strSearchFor, strExePath, strExeName );
-    if( bFound )
-        return S_OK;
-
-    WCHAR strLeafName[MAX_PATH] = {0};
-
-    // Search all parent directories starting at .\ and using strFilename as the leaf name
-    StringCchCopy( strLeafName, MAX_PATH, strFilename ); 
-    bFound = DXUTFindMediaSearchParentDirs( strDestPath, cchDest, L".", strLeafName );
-    if( bFound )
-        return S_OK;
-
-    // Search all parent directories starting at the exe's dir and using strFilename as the leaf name
-    bFound = DXUTFindMediaSearchParentDirs( strDestPath, cchDest, strExePath, strLeafName );
-    if( bFound )
-        return S_OK;
-
-    // Search all parent directories starting at .\ and using "media\strFilename" as the leaf name
-    StringCchPrintf( strLeafName, MAX_PATH, L"media\\%s", strFilename ); 
-    bFound = DXUTFindMediaSearchParentDirs( strDestPath, cchDest, L".", strLeafName );
-    if( bFound )
-        return S_OK;
-
-    // Search all parent directories starting at the exe's dir and using "media\strFilename" as the leaf name
-    bFound = DXUTFindMediaSearchParentDirs( strDestPath, cchDest, strExePath, strLeafName );
-    if( bFound )
-        return S_OK;
-
-    // On failure, return the file as the path but also return an error code
-    StringCchCopy( strDestPath, cchDest, strFilename );
-
-    return DXUTERR_MEDIANOTFOUND;
-}
-
-
-//--------------------------------------------------------------------------------------
-// Search a set of typical directories
-//--------------------------------------------------------------------------------------
-bool DXUTFindMediaSearchTypicalDirs( WCHAR* strSearchPath, int cchSearch, LPCWSTR strLeaf, 
-                                     WCHAR* strExePath, WCHAR* strExeName )
-{
-    // Typical directories:
-    //      .\
-    //      ..\
-    //      ..\..\
-    //      %EXE_DIR%\
-    //      %EXE_DIR%\..\
-    //      %EXE_DIR%\..\..\
-    //      %EXE_DIR%\..\%EXE_NAME%
-    //      %EXE_DIR%\..\..\%EXE_NAME%
-    //      DXSDK media path
-
-    // Search in .\  
-    StringCchCopy( strSearchPath, cchSearch, strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in ..\  
-    StringCchPrintf( strSearchPath, cchSearch, L"..\\%s", strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in ..\..\ 
-    StringCchPrintf( strSearchPath, cchSearch, L"..\\..\\%s", strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in ..\..\ 
-    StringCchPrintf( strSearchPath, cchSearch, L"..\\..\\%s", strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in the %EXE_DIR%\ 
-    StringCchPrintf( strSearchPath, cchSearch, L"%s\\%s", strExePath, strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in the %EXE_DIR%\..\ 
-    StringCchPrintf( strSearchPath, cchSearch, L"%s\\..\\%s", strExePath, strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in the %EXE_DIR%\..\..\ 
-    StringCchPrintf( strSearchPath, cchSearch, L"%s\\..\\..\\%s", strExePath, strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in "%EXE_DIR%\..\%EXE_NAME%\".  This matches the DirectX SDK layout
-    StringCchPrintf( strSearchPath, cchSearch, L"%s\\..\\%s\\%s", strExePath, strExeName, strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in "%EXE_DIR%\..\..\%EXE_NAME%\".  This matches the DirectX SDK layout
-    StringCchPrintf( strSearchPath, cchSearch, L"%s\\..\\..\\%s\\%s", strExePath, strExeName, strLeaf ); 
-    if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-        return true;
-
-    // Search in media search dir 
-    WCHAR* s_strSearchPath = DXUTMediaSearchPath();
-    if( s_strSearchPath[0] != 0 )
-    {
-        StringCchPrintf( strSearchPath, cchSearch, L"%s%s", s_strSearchPath, strLeaf ); 
-        if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
-            return true;
-    }
-
-    return false;
-}
-
-
-
-//--------------------------------------------------------------------------------------
-// Search parent directories starting at strStartAt, and appending strLeafName
-// at each parent directory.  It stops at the root directory.
-//--------------------------------------------------------------------------------------
-bool DXUTFindMediaSearchParentDirs( WCHAR* strSearchPath, int cchSearch, WCHAR* strStartAt, WCHAR* strLeafName )
-{
-    WCHAR strFullPath[MAX_PATH] = {0};
-    WCHAR strFullFileName[MAX_PATH] = {0};
-    WCHAR strSearch[MAX_PATH] = {0};
-    WCHAR* strFilePart = NULL;
-
-    GetFullPathName( strStartAt, MAX_PATH, strFullPath, &strFilePart );
-    if( strFilePart == NULL )
-        return false;
-   
-    while( strFilePart != NULL && *strFilePart != '\0' )
-    {
-        StringCchPrintf( strFullFileName, MAX_PATH, L"%s\\%s", strFullPath, strLeafName ); 
-        if( GetFileAttributes( strFullFileName ) != 0xFFFFFFFF )
-        {
-            StringCchCopy( strSearchPath, cchSearch, strFullFileName ); 
-            return true;
-        }
-
-        StringCchPrintf( strSearch, MAX_PATH, L"%s\\..", strFullPath ); 
-        GetFullPathName( strSearch, MAX_PATH, strFullPath, &strFilePart );
-    }
-
-    return false;
-}
-
-
-//--------------------------------------------------------------------------------------
-// CDXUTResourceCache
 //--------------------------------------------------------------------------------------
 
 
@@ -541,7 +344,7 @@ HRESULT CDXUTResourceCache::CreateTextureFromFileEx( LPDIRECT3DDEVICE9 pDevice, 
     {
         DXUTCache_Texture &Entry = m_TextureCache[i];
         if( Entry.Location == DXUTCACHE_LOCATION_FILE &&
-            !lstrcmpW( Entry.wszSource, pSrcFile ) &&
+            !lstrcmpA( Entry.wszSource, pSrcFile ) &&
             Entry.Width == Width &&
             Entry.Height == Height &&
             Entry.MipLevels == MipLevels &&
@@ -598,7 +401,7 @@ HRESULT CDXUTResourceCache::CreateTextureFromResourceEx( LPDIRECT3DDEVICE9 pDevi
         DXUTCache_Texture &Entry = m_TextureCache[i];
         if( Entry.Location == DXUTCACHE_LOCATION_RESOURCE &&
             Entry.hSrcModule == hSrcModule &&
-            !lstrcmpW( Entry.wszSource, pSrcResource ) &&
+            !lstrcmpA( Entry.wszSource, pSrcResource ) &&
             Entry.Width == Width &&
             Entry.Height == Height &&
             Entry.MipLevels == MipLevels &&
@@ -655,7 +458,7 @@ HRESULT CDXUTResourceCache::CreateCubeTextureFromFileEx( LPDIRECT3DDEVICE9 pDevi
     {
         DXUTCache_Texture &Entry = m_TextureCache[i];
         if( Entry.Location == DXUTCACHE_LOCATION_FILE &&
-            !lstrcmpW( Entry.wszSource, pSrcFile ) &&
+            !lstrcmpA( Entry.wszSource, pSrcFile ) &&
             Entry.Width == Size &&
             Entry.MipLevels == MipLevels &&
             Entry.Usage == Usage &&
@@ -710,7 +513,7 @@ HRESULT CDXUTResourceCache::CreateCubeTextureFromResourceEx( LPDIRECT3DDEVICE9 p
         DXUTCache_Texture &Entry = m_TextureCache[i];
         if( Entry.Location == DXUTCACHE_LOCATION_RESOURCE &&
             Entry.hSrcModule == hSrcModule &&
-            !lstrcmpW( Entry.wszSource, pSrcResource ) &&
+            !lstrcmpA( Entry.wszSource, pSrcResource ) &&
             Entry.Width == Size &&
             Entry.MipLevels == MipLevels &&
             Entry.Usage == Usage &&
@@ -765,7 +568,7 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromFileEx( LPDIRECT3DDEVICE9 pDe
     {
         DXUTCache_Texture &Entry = m_TextureCache[i];
         if( Entry.Location == DXUTCACHE_LOCATION_FILE &&
-            !lstrcmpW( Entry.wszSource, pSrcFile ) &&
+            !lstrcmpA( Entry.wszSource, pSrcFile ) &&
             Entry.Width == Width &&
             Entry.Height == Height &&
             Entry.Depth == Depth &&
@@ -824,7 +627,7 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromResourceEx( LPDIRECT3DDEVICE9
         DXUTCache_Texture &Entry = m_TextureCache[i];
         if( Entry.Location == DXUTCACHE_LOCATION_RESOURCE &&
             Entry.hSrcModule == hSrcModule &&
-            !lstrcmpW( Entry.wszSource, pSrcResource ) &&
+            !lstrcmpA( Entry.wszSource, pSrcResource ) &&
             Entry.Width == Width &&
             Entry.Height == Height &&
             Entry.Depth == Depth &&
@@ -869,7 +672,7 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromResourceEx( LPDIRECT3DDEVICE9
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateFont( LPDIRECT3DDEVICE9 pDevice, UINT Height, UINT Width, UINT Weight, UINT MipLevels, BOOL Italic, DWORD CharSet, DWORD OutputPrecision, DWORD Quality, DWORD PitchAndFamily, LPCTSTR pFacename, LPD3DXFONT *ppFont )
 {
-    D3DXFONT_DESCW Desc;
+    D3DXFONT_DESCA Desc;
     
     Desc.Height = Height;
     Desc.Width = Width;
@@ -940,7 +743,7 @@ HRESULT CDXUTResourceCache::CreateEffectFromFile( LPDIRECT3DDEVICE9 pDevice, LPC
         DXUTCache_Effect &Entry = m_EffectCache[i];
 
         if( Entry.Location == DXUTCACHE_LOCATION_FILE &&
-            !lstrcmpW( Entry.wszSource, pSrcFile ) &&
+            !lstrcmpA( Entry.wszSource, pSrcFile ) &&
             Entry.dwFlags == Flags )
         {
             // A match is found.  Increment the ref coutn and return the ID3DXEffect object.
@@ -979,7 +782,7 @@ HRESULT CDXUTResourceCache::CreateEffectFromResource( LPDIRECT3DDEVICE9 pDevice,
 
         if( Entry.Location == DXUTCACHE_LOCATION_RESOURCE &&
             Entry.hSrcModule == hSrcModule &&
-            !lstrcmpW( Entry.wszSource, pSrcResource ) &&
+            !lstrcmpA( Entry.wszSource, pSrcResource ) &&
             Entry.dwFlags == Flags )
         {
             // A match is found.  Increment the ref coutn and return the ID3DXEffect object.
@@ -2050,73 +1853,73 @@ D3DXMATRIX DXUTGetCubeMapViewMatrix( DWORD dwFace )
 //--------------------------------------------------------------------------------------
 // Returns the string for the given D3DFORMAT.
 //--------------------------------------------------------------------------------------
-LPCWSTR DXUTD3DFormatToString( D3DFORMAT format, bool bWithPrefix )
+LPCSTR DXUTD3DFormatToString( D3DFORMAT format, bool bWithPrefix )
 {
-    WCHAR* pstr = NULL;
+    CHAR* pstr = NULL;
     switch( format )
     {
-    case D3DFMT_UNKNOWN:         pstr = L"D3DFMT_UNKNOWN"; break;
-    case D3DFMT_R8G8B8:          pstr = L"D3DFMT_R8G8B8"; break;
-    case D3DFMT_A8R8G8B8:        pstr = L"D3DFMT_A8R8G8B8"; break;
-    case D3DFMT_X8R8G8B8:        pstr = L"D3DFMT_X8R8G8B8"; break;
-    case D3DFMT_R5G6B5:          pstr = L"D3DFMT_R5G6B5"; break;
-    case D3DFMT_X1R5G5B5:        pstr = L"D3DFMT_X1R5G5B5"; break;
-    case D3DFMT_A1R5G5B5:        pstr = L"D3DFMT_A1R5G5B5"; break;
-    case D3DFMT_A4R4G4B4:        pstr = L"D3DFMT_A4R4G4B4"; break;
-    case D3DFMT_R3G3B2:          pstr = L"D3DFMT_R3G3B2"; break;
-    case D3DFMT_A8:              pstr = L"D3DFMT_A8"; break;
-    case D3DFMT_A8R3G3B2:        pstr = L"D3DFMT_A8R3G3B2"; break;
-    case D3DFMT_X4R4G4B4:        pstr = L"D3DFMT_X4R4G4B4"; break;
-    case D3DFMT_A2B10G10R10:     pstr = L"D3DFMT_A2B10G10R10"; break;
-    case D3DFMT_A8B8G8R8:        pstr = L"D3DFMT_A8B8G8R8"; break;
-    case D3DFMT_X8B8G8R8:        pstr = L"D3DFMT_X8B8G8R8"; break;
-    case D3DFMT_G16R16:          pstr = L"D3DFMT_G16R16"; break;
-    case D3DFMT_A2R10G10B10:     pstr = L"D3DFMT_A2R10G10B10"; break;
-    case D3DFMT_A16B16G16R16:    pstr = L"D3DFMT_A16B16G16R16"; break;
-    case D3DFMT_A8P8:            pstr = L"D3DFMT_A8P8"; break;
-    case D3DFMT_P8:              pstr = L"D3DFMT_P8"; break;
-    case D3DFMT_L8:              pstr = L"D3DFMT_L8"; break;
-    case D3DFMT_A8L8:            pstr = L"D3DFMT_A8L8"; break;
-    case D3DFMT_A4L4:            pstr = L"D3DFMT_A4L4"; break;
-    case D3DFMT_V8U8:            pstr = L"D3DFMT_V8U8"; break;
-    case D3DFMT_L6V5U5:          pstr = L"D3DFMT_L6V5U5"; break;
-    case D3DFMT_X8L8V8U8:        pstr = L"D3DFMT_X8L8V8U8"; break;
-    case D3DFMT_Q8W8V8U8:        pstr = L"D3DFMT_Q8W8V8U8"; break;
-    case D3DFMT_V16U16:          pstr = L"D3DFMT_V16U16"; break;
-    case D3DFMT_A2W10V10U10:     pstr = L"D3DFMT_A2W10V10U10"; break;
-    case D3DFMT_UYVY:            pstr = L"D3DFMT_UYVY"; break;
-    case D3DFMT_YUY2:            pstr = L"D3DFMT_YUY2"; break;
-    case D3DFMT_DXT1:            pstr = L"D3DFMT_DXT1"; break;
-    case D3DFMT_DXT2:            pstr = L"D3DFMT_DXT2"; break;
-    case D3DFMT_DXT3:            pstr = L"D3DFMT_DXT3"; break;
-    case D3DFMT_DXT4:            pstr = L"D3DFMT_DXT4"; break;
-    case D3DFMT_DXT5:            pstr = L"D3DFMT_DXT5"; break;
-    case D3DFMT_D16_LOCKABLE:    pstr = L"D3DFMT_D16_LOCKABLE"; break;
-    case D3DFMT_D32:             pstr = L"D3DFMT_D32"; break;
-    case D3DFMT_D15S1:           pstr = L"D3DFMT_D15S1"; break;
-    case D3DFMT_D24S8:           pstr = L"D3DFMT_D24S8"; break;
-    case D3DFMT_D24X8:           pstr = L"D3DFMT_D24X8"; break;
-    case D3DFMT_D24X4S4:         pstr = L"D3DFMT_D24X4S4"; break;
-    case D3DFMT_D16:             pstr = L"D3DFMT_D16"; break;
-    case D3DFMT_L16:             pstr = L"D3DFMT_L16"; break;
-    case D3DFMT_VERTEXDATA:      pstr = L"D3DFMT_VERTEXDATA"; break;
-    case D3DFMT_INDEX16:         pstr = L"D3DFMT_INDEX16"; break;
-    case D3DFMT_INDEX32:         pstr = L"D3DFMT_INDEX32"; break;
-    case D3DFMT_Q16W16V16U16:    pstr = L"D3DFMT_Q16W16V16U16"; break;
-    case D3DFMT_MULTI2_ARGB8:    pstr = L"D3DFMT_MULTI2_ARGB8"; break;
-    case D3DFMT_R16F:            pstr = L"D3DFMT_R16F"; break;
-    case D3DFMT_G16R16F:         pstr = L"D3DFMT_G16R16F"; break;
-    case D3DFMT_A16B16G16R16F:   pstr = L"D3DFMT_A16B16G16R16F"; break;
-    case D3DFMT_R32F:            pstr = L"D3DFMT_R32F"; break;
-    case D3DFMT_G32R32F:         pstr = L"D3DFMT_G32R32F"; break;
-    case D3DFMT_A32B32G32R32F:   pstr = L"D3DFMT_A32B32G32R32F"; break;
-    case D3DFMT_CxV8U8:          pstr = L"D3DFMT_CxV8U8"; break;
-    default:                     pstr = L"Unknown format"; break;
+    case D3DFMT_UNKNOWN:         pstr = "D3DFMT_UNKNOWN"; break;
+    case D3DFMT_R8G8B8:          pstr = "D3DFMT_R8G8B8"; break;
+    case D3DFMT_A8R8G8B8:        pstr = "D3DFMT_A8R8G8B8"; break;
+    case D3DFMT_X8R8G8B8:        pstr = "D3DFMT_X8R8G8B8"; break;
+    case D3DFMT_R5G6B5:          pstr = "D3DFMT_R5G6B5"; break;
+    case D3DFMT_X1R5G5B5:        pstr = "D3DFMT_X1R5G5B5"; break;
+    case D3DFMT_A1R5G5B5:        pstr = "D3DFMT_A1R5G5B5"; break;
+    case D3DFMT_A4R4G4B4:        pstr = "D3DFMT_A4R4G4B4"; break;
+    case D3DFMT_R3G3B2:          pstr = "D3DFMT_R3G3B2"; break;
+    case D3DFMT_A8:              pstr = "D3DFMT_A8"; break;
+    case D3DFMT_A8R3G3B2:        pstr = "D3DFMT_A8R3G3B2"; break;
+    case D3DFMT_X4R4G4B4:        pstr = "D3DFMT_X4R4G4B4"; break;
+    case D3DFMT_A2B10G10R10:     pstr = "D3DFMT_A2B10G10R10"; break;
+    case D3DFMT_A8B8G8R8:        pstr = "D3DFMT_A8B8G8R8"; break;
+    case D3DFMT_X8B8G8R8:        pstr = "D3DFMT_X8B8G8R8"; break;
+    case D3DFMT_G16R16:          pstr = "D3DFMT_G16R16"; break;
+    case D3DFMT_A2R10G10B10:     pstr = "D3DFMT_A2R10G10B10"; break;
+    case D3DFMT_A16B16G16R16:    pstr = "D3DFMT_A16B16G16R16"; break;
+    case D3DFMT_A8P8:            pstr = "D3DFMT_A8P8"; break;
+    case D3DFMT_P8:              pstr = "D3DFMT_P8"; break;
+    case D3DFMT_L8:              pstr = "D3DFMT_L8"; break;
+    case D3DFMT_A8L8:            pstr = "D3DFMT_A8L8"; break;
+    case D3DFMT_A4L4:            pstr = "D3DFMT_A4L4"; break;
+    case D3DFMT_V8U8:            pstr = "D3DFMT_V8U8"; break;
+    case D3DFMT_L6V5U5:          pstr = "D3DFMT_L6V5U5"; break;
+    case D3DFMT_X8L8V8U8:        pstr = "D3DFMT_X8L8V8U8"; break;
+    case D3DFMT_Q8W8V8U8:        pstr = "D3DFMT_Q8W8V8U8"; break;
+    case D3DFMT_V16U16:          pstr = "D3DFMT_V16U16"; break;
+    case D3DFMT_A2W10V10U10:     pstr = "D3DFMT_A2W10V10U10"; break;
+    case D3DFMT_UYVY:            pstr = "D3DFMT_UYVY"; break;
+    case D3DFMT_YUY2:            pstr = "D3DFMT_YUY2"; break;
+    case D3DFMT_DXT1:            pstr = "D3DFMT_DXT1"; break;
+    case D3DFMT_DXT2:            pstr = "D3DFMT_DXT2"; break;
+    case D3DFMT_DXT3:            pstr = "D3DFMT_DXT3"; break;
+    case D3DFMT_DXT4:            pstr = "D3DFMT_DXT4"; break;
+    case D3DFMT_DXT5:            pstr = "D3DFMT_DXT5"; break;
+    case D3DFMT_D16_LOCKABLE:    pstr = "D3DFMT_D16_LOCKABLE"; break;
+    case D3DFMT_D32:             pstr = "D3DFMT_D32"; break;
+    case D3DFMT_D15S1:           pstr = "D3DFMT_D15S1"; break;
+    case D3DFMT_D24S8:           pstr = "D3DFMT_D24S8"; break;
+    case D3DFMT_D24X8:           pstr = "D3DFMT_D24X8"; break;
+    case D3DFMT_D24X4S4:         pstr = "D3DFMT_D24X4S4"; break;
+    case D3DFMT_D16:             pstr = "D3DFMT_D16"; break;
+    case D3DFMT_L16:             pstr = "D3DFMT_L16"; break;
+    case D3DFMT_VERTEXDATA:      pstr = "D3DFMT_VERTEXDATA"; break;
+    case D3DFMT_INDEX16:         pstr = "D3DFMT_INDEX16"; break;
+    case D3DFMT_INDEX32:         pstr = "D3DFMT_INDEX32"; break;
+    case D3DFMT_Q16W16V16U16:    pstr = "D3DFMT_Q16W16V16U16"; break;
+    case D3DFMT_MULTI2_ARGB8:    pstr = "D3DFMT_MULTI2_ARGB8"; break;
+    case D3DFMT_R16F:            pstr = "D3DFMT_R16F"; break;
+    case D3DFMT_G16R16F:         pstr = "D3DFMT_G16R16F"; break;
+    case D3DFMT_A16B16G16R16F:   pstr = "D3DFMT_A16B16G16R16F"; break;
+    case D3DFMT_R32F:            pstr = "D3DFMT_R32F"; break;
+    case D3DFMT_G32R32F:         pstr = "D3DFMT_G32R32F"; break;
+    case D3DFMT_A32B32G32R32F:   pstr = "D3DFMT_A32B32G32R32F"; break;
+    case D3DFMT_CxV8U8:          pstr = "D3DFMT_CxV8U8"; break;
+    default:                     pstr = "Unknown format"; break;
     }
-    if( bWithPrefix || wcsstr( pstr, L"D3DFMT_" )== NULL )
+    if( bWithPrefix || strstr( pstr, "D3DFMT_" )== NULL )
         return pstr;
     else
-        return pstr + lstrlen( L"D3DFMT_" );
+        return pstr + lstrlen( "D3DFMT_" );
 }
 
 
@@ -2135,7 +1938,7 @@ VOID DXUTOutputDebugStringW( LPCWSTR strMsg, ... )
     strBuffer[511] = L'\0';
     va_end(args);
 
-    OutputDebugString( strBuffer );
+    OutputDebugStringW( strBuffer );
 #else
     UNREFERENCED_PARAMETER(strMsg);
 #endif
@@ -2421,14 +2224,14 @@ CDXUTTextHelper::CDXUTTextHelper( ID3DXFont* pFont, ID3DXSprite* pSprite, int nL
 
 
 //--------------------------------------------------------------------------------------
-HRESULT CDXUTTextHelper::DrawFormattedTextLine( const WCHAR* strMsg, ... )
+HRESULT CDXUTTextHelper::DrawFormattedTextLine( const CHAR* strMsg, ... )
 {
-    WCHAR strBuffer[512];
+    CHAR strBuffer[512];
     
     va_list args;
     va_start(args, strMsg);
     StringCchVPrintf( strBuffer, 512, strMsg, args );
-    strBuffer[511] = L'\0';
+    strBuffer[511] = '\0';
     va_end(args);
 
     return DrawTextLine( strBuffer );
@@ -2436,17 +2239,17 @@ HRESULT CDXUTTextHelper::DrawFormattedTextLine( const WCHAR* strMsg, ... )
 
 
 //--------------------------------------------------------------------------------------
-HRESULT CDXUTTextHelper::DrawTextLine( const WCHAR* strMsg )
+HRESULT CDXUTTextHelper::DrawTextLine( const CHAR* strMsg )
 {
     if( NULL == m_pFont ) 
-        return DXUT_ERR_MSGBOX( L"DrawTextLine", E_INVALIDARG );
+        return DXUT_ERR_MSGBOX( "DrawTextLine", E_INVALIDARG );
 
     HRESULT hr;
     RECT rc;
     SetRect( &rc, m_pt.x, m_pt.y, 0, 0 ); 
     hr = m_pFont->DrawText( m_pSprite, strMsg, -1, &rc, DT_NOCLIP, m_clr );
     if( FAILED(hr) )
-        return DXTRACE_ERR_MSGBOX( L"DrawText", hr );
+        return DXUT_ERR_MSGBOX( "DrawText", hr );
 
     m_pt.y += m_nLineHeight;
 
@@ -2454,29 +2257,29 @@ HRESULT CDXUTTextHelper::DrawTextLine( const WCHAR* strMsg )
 }
 
 
-HRESULT CDXUTTextHelper::DrawFormattedTextLine( RECT &rc, DWORD dwFlags, const WCHAR* strMsg, ... )
+HRESULT CDXUTTextHelper::DrawFormattedTextLine( RECT &rc, DWORD dwFlags, const CHAR* strMsg, ... )
 {
-    WCHAR strBuffer[512];
+    CHAR strBuffer[512];
     
     va_list args;
     va_start(args, strMsg);
     StringCchVPrintf( strBuffer, 512, strMsg, args );
-    strBuffer[511] = L'\0';
+    strBuffer[511] = '\0';
     va_end(args);
 
     return DrawTextLine( rc, dwFlags, strBuffer );
 }
 
 
-HRESULT CDXUTTextHelper::DrawTextLine( RECT &rc, DWORD dwFlags, const WCHAR* strMsg )
+HRESULT CDXUTTextHelper::DrawTextLine( RECT &rc, DWORD dwFlags, const CHAR* strMsg )
 {
     if( NULL == m_pFont ) 
-        return DXUT_ERR_MSGBOX( L"DrawTextLine", E_INVALIDARG );
+        return DXUT_ERR_MSGBOX( "DrawTextLine", E_INVALIDARG );
 
     HRESULT hr;
     hr = m_pFont->DrawText( m_pSprite, strMsg, -1, &rc, dwFlags, m_clr );
     if( FAILED(hr) )
-        return DXTRACE_ERR_MSGBOX( L"DrawText", hr );
+        return DXUT_ERR_MSGBOX( "DrawText", hr );
 
     m_pt.y += m_nLineHeight;
 
@@ -2520,13 +2323,13 @@ CDXUTDirectionWidget::CDXUTDirectionWidget()
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTDirectionWidget::StaticOnCreateDevice( IDirect3DDevice9* pd3dDevice )
 {
-    WCHAR str[MAX_PATH];
+    CHAR str[MAX_PATH];
     HRESULT hr;
 
     s_pd3dDevice = pd3dDevice;
    
     // Read the D3DX effect file
-    V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, L"UI\\DXUTShared.fx" ) );
+    V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, "UI\\DXUTShared.fx" ) );
 
     // If this fails, there should be debug output as to 
     // why the .fx file failed to compile
@@ -2536,7 +2339,7 @@ HRESULT CDXUTDirectionWidget::StaticOnCreateDevice( IDirect3DDevice9* pd3dDevice
     // sample we'll ignore the X file's embedded materials since we know 
     // exactly the model we're loading.  See the mesh samples such as
     // "OptimizedMesh" for a more generic mesh loading example.
-    V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, L"UI\\arrow.x" ) );
+    V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, "UI\\arrow.x" ) );
 
     V_RETURN( D3DXLoadMeshFromX( str, D3DXMESH_MANAGED, s_pd3dDevice, NULL, 
                                  NULL, NULL, NULL, &s_pMesh) );
@@ -2759,10 +2562,10 @@ static bool DXUT_EnsureD3DAPIs( void )
         return true;
 
     // This may fail if DirectX 9 isn't installed
-    WCHAR wszPath[MAX_PATH+1];
+    CHAR wszPath[MAX_PATH+1];
     if( !::GetSystemDirectory( wszPath, MAX_PATH+1 ) )
         return false;
-    StringCchCat( wszPath, MAX_PATH, L"\\d3d9.dll" );
+    StringCchCat( wszPath, MAX_PATH, "\\d3d9.dll" );
     s_hModD3D9 = LoadLibrary( wszPath );
     if( s_hModD3D9 == NULL ) 
         return false;

@@ -96,7 +96,7 @@ enum DXUTCACHE_SOURCELOCATION { DXUTCACHE_LOCATION_FILE, DXUTCACHE_LOCATION_RESO
 struct DXUTCache_Texture
 {
     DXUTCACHE_SOURCELOCATION Location;
-    WCHAR wszSource[MAX_PATH];
+    CHAR wszSource[MAX_PATH];
     HMODULE hSrcModule;
     UINT Width;
     UINT Height;
@@ -117,7 +117,7 @@ struct DXUTCache_Font : public D3DXFONT_DESC
 struct DXUTCache_Effect
 {
     DXUTCACHE_SOURCELOCATION Location;
-    WCHAR wszSource[MAX_PATH];
+    CHAR wszSource[MAX_PATH];
     HMODULE hSrcModule;
     DWORD dwFlags;
     ID3DXEffect *pEffect;
@@ -447,10 +447,10 @@ public:
     void SetForegroundColor( D3DXCOLOR clr ) { m_clr = clr; }
 
     void Begin();
-    HRESULT DrawFormattedTextLine( const WCHAR* strMsg, ... );
-    HRESULT DrawTextLine( const WCHAR* strMsg );
-    HRESULT DrawFormattedTextLine( RECT &rc, DWORD dwFlags, const WCHAR* strMsg, ... );
-    HRESULT DrawTextLine( RECT &rc, DWORD dwFlags, const WCHAR* strMsg );
+    HRESULT DrawFormattedTextLine( const CHAR* strMsg, ... );
+    HRESULT DrawTextLine( const CHAR* strMsg );
+    HRESULT DrawFormattedTextLine( RECT &rc, DWORD dwFlags, const CHAR* strMsg, ... );
+    HRESULT DrawTextLine( RECT &rc, DWORD dwFlags, const CHAR* strMsg );
     void End();
 
 protected:
@@ -551,16 +551,15 @@ void DXUTDisplaySwitchingToREFWarning();
 //--------------------------------------------------------------------------------------
 // Tries to finds a media file by searching in common locations
 //--------------------------------------------------------------------------------------
-HRESULT DXUTFindDXSDKMediaFileCch( WCHAR* strDestPath, int cchDest, LPCWSTR strFilename );
-HRESULT DXUTSetMediaSearchPath( LPCWSTR strPath );
-LPCWSTR DXUTGetMediaSearchPath();
+HRESULT DXUTSetMediaSearchPath( LPCSTR strPath );
+LPCSTR DXUTGetMediaSearchPath();
 
 
 //--------------------------------------------------------------------------------------
 // Returns the string for the given D3DFORMAT.
 //       bWithPrefix determines whether the string should include the "D3DFMT_"
 //--------------------------------------------------------------------------------------
-LPCWSTR DXUTD3DFormatToString( D3DFORMAT format, bool bWithPrefix );
+LPCSTR DXUTD3DFormatToString( D3DFORMAT format, bool bWithPrefix );
 
 
 //--------------------------------------------------------------------------------------
@@ -571,11 +570,10 @@ D3DXMATRIX DXUTGetCubeMapViewMatrix( DWORD dwFace );
 
 //--------------------------------------------------------------------------------------
 // Debug printing support
-// See dxerr9.h for more debug printing support
 //--------------------------------------------------------------------------------------
 void DXUTOutputDebugStringW( LPCWSTR strMsg, ... );
 void DXUTOutputDebugStringA( LPCSTR strMsg, ... );
-HRESULT WINAPI DXUTTrace( const CHAR* strFile, DWORD dwLine, HRESULT hr, const WCHAR* strMsg, bool bPopMsgBox );
+HRESULT WINAPI DXUTTrace( const CHAR* strFile, DWORD dwLine, HRESULT hr, const CHAR* strMsg, bool bPopMsgBox );
 
 #ifdef UNICODE
 #define DXUTOutputDebugString DXUTOutputDebugStringW
@@ -583,8 +581,7 @@ HRESULT WINAPI DXUTTrace( const CHAR* strFile, DWORD dwLine, HRESULT hr, const W
 #define DXUTOutputDebugString DXUTOutputDebugStringA
 #endif
 
-// These macros are very similar to dxerr9's but it special cases the HRESULT defined
-// by DXUT to pop better message boxes. 
+// Trace DXUT failures in debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
 #define DXUT_ERR(str,hr)           DXUTTrace( __FILE__, (DWORD)__LINE__, hr, str, false )
 #define DXUT_ERR_MSGBOX(str,hr)    DXUTTrace( __FILE__, (DWORD)__LINE__, hr, str, true )

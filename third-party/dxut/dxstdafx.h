@@ -56,12 +56,6 @@
 // Direct3D includes
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <dxerr9.h>
-
-// DirectSound includes
-#include <mmsystem.h>
-#include <mmreg.h>
-#include <dsound.h>
 
 // strsafe.h deprecates old unsecure string functions.  If you 
 // really do not want to it to (not recommended), then uncomment the next line 
@@ -85,14 +79,13 @@
 #include "DXUTgui.h"
 #include "DXUTmedia.h"
 #include "DXUTsettingsDlg.h"
-#include "DXUTSound.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 #ifndef V
-#define V(x)           { hr = x; if( FAILED(hr) ) { DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, true ); } }
+#define V(x)           { hr = x; if( FAILED(hr) ) { DXUTTrace( __FILE__, (DWORD)__LINE__, hr, #x, true ); } }
 #endif
 #ifndef V_RETURN
-#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, true ); } }
+#define V_RETURN(x)    { hr = x; if( FAILED(hr) ) { return DXUTTrace( __FILE__, (DWORD)__LINE__, hr, #x, true ); } }
 #endif
 #else
 #ifndef V

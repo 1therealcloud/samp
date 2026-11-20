@@ -190,10 +190,10 @@ protected:
         bool                         m_MouseButtons[5];                 // array of mouse states
 
         CGrowableArray<DXUT_TIMER>*  m_TimerList;                       // list of DXUT_TIMER structs
-        WCHAR                        m_StaticFrameStats[256];           // static part of frames stats 
-        WCHAR                        m_FrameStats[256];                 // frame stats (fps, width, etc)
-        WCHAR                        m_DeviceStats[256];                // device stats (description, device type, etc)
-        WCHAR                        m_WindowTitle[256];                // window title
+        CHAR                        m_StaticFrameStats[256];           // static part of frames stats
+        CHAR                        m_FrameStats[256];                 // frame stats (fps, width, etc)
+        CHAR                        m_DeviceStats[256];                // device stats (description, device type, etc)
+        CHAR                        m_WindowTitle[256];                // window title
     };
     
     STATE m_state;
@@ -342,10 +342,10 @@ public:
     GET_SET_ACCESSOR( CGrowableArray<DXUT_TIMER>*, TimerList );   
     GET_ACCESSOR( bool*, Keys );
     GET_ACCESSOR( bool*, MouseButtons );
-    GET_ACCESSOR( WCHAR*, StaticFrameStats );
-    GET_ACCESSOR( WCHAR*, FrameStats );
-    GET_ACCESSOR( WCHAR*, DeviceStats );    
-    GET_ACCESSOR( WCHAR*, WindowTitle );
+    GET_ACCESSOR( CHAR*, StaticFrameStats );
+    GET_ACCESSOR( CHAR*, FrameStats );
+    GET_ACCESSOR( CHAR*, DeviceStats );
+    GET_ACCESSOR( CHAR*, WindowTitle );
 };
 
 
@@ -384,7 +384,7 @@ void    DXUTUpdateFrameStats();
 void    DXUTUpdateDeviceStats( D3DDEVTYPE DeviceType, DWORD BehaviorFlags, D3DADAPTER_IDENTIFIER9* pAdapterIdentifier );
 void    DXUTUpdateStaticFrameStats();
 void    DXUTHandleTimers();
-bool    DXUTGetCmdParam( WCHAR*& strCmdLine, WCHAR* strFlag, int nFlagLen );
+bool    DXUTGetCmdParam( CHAR*& strCmdLine, CHAR* strFlag, int nFlagLen );
 void    DXUTDisplayErrorMessage( HRESULT hr );
 LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 void    DXUTCheckForWindowSizeChange();
@@ -466,10 +466,10 @@ HRESULT DXUTInit( bool bParseCommandLine, bool bHandleDefaultHotkeys, bool bShow
     GetDXUTState().SetStartupFilterKeys( fk );
 
     // Increase the accuracy of Sleep() without needing to link to winmm.lib
-    WCHAR wszPath[MAX_PATH+1];
+    CHAR wszPath[MAX_PATH+1];
     if( GetSystemDirectory( wszPath, MAX_PATH+1 ) )
     {
-        StringCchCat( wszPath, MAX_PATH, L"\\winmm.dll" );
+        StringCchCat( wszPath, MAX_PATH, "\\winmm.dll" );
         HINSTANCE hInstWinMM = LoadLibrary( wszPath );
         if( hInstWinMM ) 
         {
@@ -491,7 +491,7 @@ HRESULT DXUTInit( bool bParseCommandLine, bool bHandleDefaultHotkeys, bool bShow
     if( !D3DXCheckVersion( D3D_SDK_VERSION, D3DX_SDK_VERSION ) )
     {
         DXUTDisplayErrorMessage( DXUTERR_INCORRECTVERSION );
-        return DXUT_ERR( L"D3DXCheckVersion", DXUTERR_INCORRECTVERSION );
+        return DXUT_ERR( "D3DXCheckVersion", DXUTERR_INCORRECTVERSION );
     }
 
     // Create a Direct3D object if one has not already been created
@@ -508,7 +508,7 @@ HRESULT DXUTInit( bool bParseCommandLine, bool bHandleDefaultHotkeys, bool bShow
     {
         // If still NULL, then something went wrong
         DXUTDisplayErrorMessage( DXUTERR_NODIRECT3D );
-        return DXUT_ERR( L"Direct3DCreate9", DXUTERR_NODIRECT3D );
+        return DXUT_ERR( "Direct3DCreate9", DXUTERR_NODIRECT3D );
     }
 
     // Reset the timer
@@ -525,164 +525,164 @@ HRESULT DXUTInit( bool bParseCommandLine, bool bHandleDefaultHotkeys, bool bShow
 //--------------------------------------------------------------------------------------
 void DXUTParseCommandLine()
 {
-    WCHAR* strCmdLine = GetCommandLine();
+    CHAR* strCmdLine = GetCommandLine();
 
     // Skip past program name (first token in command line).
-    if (*strCmdLine == L'"')  // Check for and handle quoted program name
+    if (*strCmdLine == '"')  // Check for and handle quoted program name
     {
         strCmdLine++;
 
         // Skip over until another double-quote or a null 
-        while (*strCmdLine && (*strCmdLine != L'"'))
+        while (*strCmdLine && (*strCmdLine != '"'))
             strCmdLine++;
 
         // Skip over double-quote
-        if (*strCmdLine == L'"')            
+        if (*strCmdLine == '"')
             strCmdLine++;    
     }
     else   
     {
         // First token wasn't a quote
-        while (*strCmdLine > L' ')
+        while (*strCmdLine > ' ')
             strCmdLine++;
     }
 
     for(;;)
     {
         // Skip past any white space preceding the next token
-        while (*strCmdLine && (*strCmdLine <= L' '))
+        while (*strCmdLine && (*strCmdLine <= ' '))
             strCmdLine++;
         if( *strCmdLine == 0 )
             break;
 
-        WCHAR strFlag[256];
+        CHAR strFlag[256];
         int nFlagLen = 0;
 
         // Skip past the flag marker
-        if( *strCmdLine == L'/' ||
-            *strCmdLine == L'-' )
+        if( *strCmdLine == '/' ||
+            *strCmdLine == '-' )
             strCmdLine++;
 
         // Compare the first N letters w/o regard to case
-        StringCchCopy( strFlag, 256, L"adapter" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "adapter" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
             {
-                int nAdapter = _wtoi(strFlag);
+                int nAdapter = atoi(strFlag);
                 GetDXUTState().SetOverrideAdapterOrdinal( nAdapter );
             }
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"windowed" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "windowed" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideWindowed( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"fullscreen" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "fullscreen" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideFullScreen( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"forcehal" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "forcehal" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideForceHAL( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"forceref" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "forceref" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideForceREF( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"forcepurehwvp" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "forcepurehwvp" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideForcePureHWVP( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"forcehwvp" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "forcehwvp" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideForceHWVP( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"forceswvp" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "forceswvp" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetOverrideForceSWVP( true );
             strCmdLine += nFlagLen;
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"width" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "width" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
             {
-                int nWidth = _wtoi(strFlag);
+                int nWidth = atoi(strFlag);
                 GetDXUTState().SetOverrideWidth( nWidth );
             }
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"height" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "height" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
             {
-                int nHeight = _wtoi(strFlag);
+                int nHeight = atoi(strFlag);
                 GetDXUTState().SetOverrideHeight( nHeight );
             }
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"startx" );
-        nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "startx" );
+        nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
             {
-                int nX = _wtoi(strFlag);
+                int nX = atoi(strFlag);
                 GetDXUTState().SetOverrideStartX( nX );
             }
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"starty" );
-        nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "starty" );
+        nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
             {
-                int nY = _wtoi(strFlag);
+                int nY = atoi(strFlag);
                 GetDXUTState().SetOverrideStartY( nY );
             }
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"constantframetime" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "constantframetime" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             float fTimePerFrame;
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
-                fTimePerFrame = (float)wcstod( strFlag, NULL );
+                fTimePerFrame = (float)strtod( strFlag, NULL );
             else
                 fTimePerFrame = 0.0333f;
             GetDXUTState().SetOverrideConstantFrameTime( true );
@@ -691,27 +691,27 @@ void DXUTParseCommandLine()
             continue;
         }
 
-        StringCchCopy( strFlag, 256, L"quitafterframe" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "quitafterframe" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             if( DXUTGetCmdParam( strCmdLine, strFlag, nFlagLen ) )
             {
-                int nFrame = _wtoi(strFlag);
+                int nFrame = atoi(strFlag);
                 GetDXUTState().SetOverrideQuitAfterFrame( nFrame );
             }
             continue;
         }      
         
-        StringCchCopy( strFlag, 256, L"noerrormsgboxes" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "noerrormsgboxes" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetShowMsgBoxOnError( false );
             strCmdLine += nFlagLen;
             continue;
         }        
 
-        StringCchCopy( strFlag, 256, L"automation" ); nFlagLen = (int) wcslen(strFlag);
-        if( _wcsnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
+        StringCchCopy( strFlag, 256, "automation" ); nFlagLen = (int) strlen(strFlag);
+        if( _strnicmp( strCmdLine, strFlag, nFlagLen ) == 0 )
         {
             GetDXUTState().SetAutomation( true );
             strCmdLine += nFlagLen;
@@ -720,13 +720,13 @@ void DXUTParseCommandLine()
 
         // Unrecognized flag
         StringCchCopy( strFlag, 256, strCmdLine ); 
-        WCHAR* strSpace = strFlag;
-        while (*strSpace && (*strSpace > L' '))
+        CHAR* strSpace = strFlag;
+        while (*strSpace && (*strSpace > ' '))
             strSpace++;
         *strSpace = 0;
 
-        DXUTOutputDebugString( L"Unrecognized flag: %s", strFlag );
-        strCmdLine += wcslen(strFlag);
+        DXUTOutputDebugStringA( "Unrecognized flag: %s", strFlag );
+        strCmdLine += strlen(strFlag);
     }
 }
 
@@ -736,22 +736,22 @@ void DXUTParseCommandLine()
 //      Example: if strCmdLine=="-width:1024 -forceref"
 // then after: strCmdLine==" -forceref" and strFlag=="1024"
 //--------------------------------------------------------------------------------------
-bool DXUTGetCmdParam( WCHAR*& strCmdLine, WCHAR* strFlag, int nFlagLen )
+bool DXUTGetCmdParam( CHAR*& strCmdLine, CHAR* strFlag, int nFlagLen )
 {
     strCmdLine += nFlagLen;
-    if( *strCmdLine == L':' )
+    if( *strCmdLine == ':' )
     {       
         strCmdLine++; // Skip ':'
 
         // Place NULL terminator in strFlag after current token
         StringCchCopy( strFlag, 256, strCmdLine );
-        WCHAR* strSpace = strFlag;
-        while (*strSpace && (*strSpace > L' '))
+        CHAR* strSpace = strFlag;
+        while (*strSpace && (*strSpace > ' '))
             strSpace++;
         *strSpace = 0;
     
         // Update strCmdLine
-        strCmdLine += wcslen(strFlag);
+        strCmdLine += strlen(strFlag);
         return true;
     }
     else
@@ -768,14 +768,14 @@ bool DXUTGetCmdParam( WCHAR*& strCmdLine, WCHAR* strFlag, int nFlagLen )
 // call it with the default parameters.  Instead of calling this, you can 
 // call DXUTSetWindow() to use an existing window.  
 //--------------------------------------------------------------------------------------
-HRESULT DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstance, 
+HRESULT DXUTCreateWindow( const CHAR* strWindowTitle, HINSTANCE hInstance,
                           HICON hIcon, HMENU hMenu, int x, int y )
 {
     HRESULT hr;
 
     // Not allowed to call this from inside the device callbacks
     if( GetDXUTState().GetInsideDeviceCallback() )
-        return DXUT_ERR_MSGBOX( L"DXUTCreateWindow", E_FAIL );
+        return DXUT_ERR_MSGBOX( "DXUTCreateWindow", E_FAIL );
 
     GetDXUTState().SetWindowCreateCalled( true );
 
@@ -799,7 +799,7 @@ HRESULT DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstance,
             hInstance = (HINSTANCE)GetModuleHandle(NULL);
         GetDXUTState().SetHInstance( hInstance );
 
-        WCHAR szExePath[MAX_PATH];
+        CHAR szExePath[MAX_PATH];
         GetModuleFileName( NULL, szExePath, MAX_PATH );
         if( hIcon == NULL ) // If the icon is NULL, then use the first one found in the exe
             hIcon = ExtractIcon( hInstance, szExePath, 0 ); 
@@ -815,13 +815,13 @@ HRESULT DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstance,
         wndClass.hCursor = LoadCursor( NULL, IDC_ARROW );
         wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
         wndClass.lpszMenuName = NULL;
-        wndClass.lpszClassName = L"Direct3DWindowClass";
+        wndClass.lpszClassName = "Direct3DWindowClass";
 
         if( !RegisterClass( &wndClass ) )
         {
             DWORD dwError = GetLastError();
             if( dwError != ERROR_CLASS_ALREADY_EXISTS )
-                return DXUT_ERR_MSGBOX( L"RegisterClass", HRESULT_FROM_WIN32(dwError) );
+                return DXUT_ERR_MSGBOX( "RegisterClass", HRESULT_FROM_WIN32(dwError) );
         }
 
         // Set the window's initial style.  It is invisible initially since it might
@@ -851,17 +851,17 @@ HRESULT DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstance,
         SetRect( &rc, 0, 0, nDefaultWidth, nDefaultHeight );        
         AdjustWindowRect( &rc, dwWindowStyle, ( hMenu != NULL ) ? true : false );
 
-        WCHAR* strCachedWindowTitle = GetDXUTState().GetWindowTitle();
+        CHAR* strCachedWindowTitle = GetDXUTState().GetWindowTitle();
         StringCchCopy( strCachedWindowTitle, 256, strWindowTitle );
 
         // Create the render window
-        HWND hWnd = CreateWindow( L"Direct3DWindowClass", strWindowTitle, dwWindowStyle,
+        HWND hWnd = CreateWindow( "Direct3DWindowClass", strWindowTitle, dwWindowStyle,
                                x, y, (rc.right-rc.left), (rc.bottom-rc.top), 0,
                                hMenu, hInstance, 0 );
         if( hWnd == NULL )
         {
             DWORD dwError = GetLastError();
-            return DXUT_ERR_MSGBOX( L"CreateWindow", HRESULT_FROM_WIN32(dwError) );
+            return DXUT_ERR_MSGBOX( "CreateWindow", HRESULT_FROM_WIN32(dwError) );
         }
 
         GetDXUTState().SetWindowCreated( true );
@@ -885,7 +885,7 @@ HRESULT DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDevic
  
     // Not allowed to call this from inside the device callbacks
     if( GetDXUTState().GetInsideDeviceCallback() )
-        return DXUT_ERR_MSGBOX( L"DXUTCreateWindow", E_FAIL );
+        return DXUT_ERR_MSGBOX( "DXUTCreateWindow", E_FAIL );
 
     GetDXUTState().SetWindowCreateCalled( true );
 
@@ -893,21 +893,21 @@ HRESULT DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDevic
     // caller must pass in valid HWND for all three parameters.  The same
     // HWND may be used for more than one parameter.
     if( hWndFocus == NULL || hWndDeviceFullScreen == NULL || hWndDeviceWindowed == NULL )
-        return DXUT_ERR_MSGBOX( L"DXUTSetWindow", E_INVALIDARG );
+        return DXUT_ERR_MSGBOX( "DXUTSetWindow", E_INVALIDARG );
 
     // If subclassing the window, set the pointer to the local window procedure
     if( bHandleMessages )
     {
         // Switch window procedures
 #ifdef _WIN64
-        LONG_PTR nResult = SetWindowLongPtr( hWndFocus, GWLP_WNDPROC, (LONG_PTR)DXUTStaticWndProc );
+        LONG_PTR nResult = SetWindowLongPtrW( hWndFocus, GWLP_WNDPROC, (LONG_PTR)DXUTStaticWndProc );
 #else
-        LONG_PTR nResult = SetWindowLongPtr( hWndFocus, GWLP_WNDPROC, (LONG)(LONG_PTR)DXUTStaticWndProc );
+        LONG_PTR nResult = SetWindowLongPtrW( hWndFocus, GWLP_WNDPROC, (LONG)(LONG_PTR)DXUTStaticWndProc );
 #endif 
  
         DWORD dwError = GetLastError();
         if( nResult == 0 )
-            return DXUT_ERR_MSGBOX( L"SetWindowLongPtr", HRESULT_FROM_WIN32(dwError) );
+            return DXUT_ERR_MSGBOX( "SetWindowLongPtr", HRESULT_FROM_WIN32(dwError) );
     }
  
     if( !GetDXUTState().GetDXUTInited() ) 
@@ -924,7 +924,7 @@ HRESULT DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDevic
             return hr;
     }
  
-    WCHAR* strCachedWindowTitle = GetDXUTState().GetWindowTitle();
+    CHAR* strCachedWindowTitle = GetDXUTState().GetWindowTitle();
     GetWindowText( hWndFocus, strCachedWindowTitle, 255 );
     strCachedWindowTitle[255] = 0;
    
@@ -955,7 +955,7 @@ HRESULT DXUTCreateDevice( UINT AdapterOrdinal, bool bWindowed,
 
     // Not allowed to call this from inside the device callbacks
     if( GetDXUTState().GetInsideDeviceCallback() )
-        return DXUT_ERR_MSGBOX( L"DXUTCreateWindow", E_FAIL );
+        return DXUT_ERR_MSGBOX( "DXUTCreateWindow", E_FAIL );
 
     // Record the function arguments in the global state 
     GetDXUTState().SetIsDeviceAcceptableFunc( pCallbackIsDeviceAcceptable );
@@ -1057,7 +1057,7 @@ HRESULT DXUTCreateDevice( UINT AdapterOrdinal, bool bWindowed,
     if( FAILED(hr) ) // the call will fail if no valid devices were found
     {
         DXUTDisplayErrorMessage( hr );
-        return DXUT_ERR( L"DXUTFindValidDeviceSettings", hr );
+        return DXUT_ERR( "DXUTFindValidDeviceSettings", hr );
     }
 
     // Change to a Direct3D device created from the new device settings.  
@@ -1081,11 +1081,11 @@ HRESULT DXUTSetDevice( IDirect3DDevice9* pd3dDevice )
     HRESULT hr;
 
     if( pd3dDevice == NULL )
-        return DXUT_ERR_MSGBOX( L"DXUTSetDevice", E_INVALIDARG );
+        return DXUT_ERR_MSGBOX( "DXUTSetDevice", E_INVALIDARG );
 
     // Not allowed to call this from inside the device callbacks
     if( GetDXUTState().GetInsideDeviceCallback() )
-        return DXUT_ERR_MSGBOX( L"DXUTCreateWindow", E_FAIL );
+        return DXUT_ERR_MSGBOX( "DXUTCreateWindow", E_FAIL );
 
     GetDXUTState().SetDeviceCreateCalled( true );
 
@@ -1198,7 +1198,7 @@ HRESULT DXUTCreateDeviceFromSettings( DXUTDeviceSettings* pDeviceSettings, bool 
         if( FAILED(hr) ) // the call will fail if no valid devices were found
         {
             DXUTDisplayErrorMessage( hr );
-            return DXUT_ERR( L"DXUTFindValidDeviceSettings", hr );
+            return DXUT_ERR( "DXUTFindValidDeviceSettings", hr );
         }
     }
 
@@ -1416,7 +1416,7 @@ HRESULT DXUTFindValidDeviceSettings( DXUTDeviceSettings* pOut, DXUTDeviceSetting
                                      DXUTMatchOptions* pMatchOptions )
 {
     if( pOut == NULL )
-        return DXUT_ERR_MSGBOX( L"DXUTFindValidDeviceSettings", E_INVALIDARG );
+        return DXUT_ERR_MSGBOX( "DXUTFindValidDeviceSettings", E_INVALIDARG );
 
     CD3DEnumeration* pd3dEnum = DXUTPrepareEnumerationObject( false );
     IDirect3D9*      pD3D     = DXUTGetD3DObject();
@@ -2704,7 +2704,7 @@ HRESULT DXUTChangeDevice( DXUTDeviceSettings* pNewDeviceSettings, IDirect3DDevic
             GetDXUTState().SetFullScreenBackBufferHeightAtModeChange( pOldDeviceSettings->pp.BackBufferHeight );
 
             // Restore windowed mode style
-            SetWindowLong( DXUTGetHWNDDeviceWindowed(), GWL_STYLE, GetDXUTState().GetWindowedStyleAtModeChange() );
+            SetWindowLongW( DXUTGetHWNDDeviceWindowed(), GWL_STYLE, GetDXUTState().GetWindowedStyleAtModeChange() );
         }
 
         // If different device windows are used for windowed mode and fullscreen mode,
@@ -2745,7 +2745,7 @@ HRESULT DXUTChangeDevice( DXUTDeviceSettings* pNewDeviceSettings, IDirect3DDevic
         ShowWindow( DXUTGetHWNDDeviceFullScreen(), SW_HIDE );
 
         // Set FS window style
-        SetWindowLong( DXUTGetHWNDDeviceFullScreen(), GWL_STYLE, WS_POPUP|WS_SYSMENU );
+        SetWindowLongW( DXUTGetHWNDDeviceFullScreen(), GWL_STYLE, WS_POPUP|WS_SYSMENU );
 
         // If using the same window for windowed and fullscreen mode, save and remove menu 
         if( DXUTGetHWNDDeviceFullScreen() == DXUTGetHWNDDeviceWindowed() )
@@ -3274,7 +3274,7 @@ HRESULT DXUTCreate3DEnvironment( IDirect3DDevice9* pd3dDeviceFromApp )
                                 &pNewDeviceSettings->pp, &pd3dDevice );
         if( FAILED(hr) )
         {
-            DXUT_ERR( L"CreateDevice", hr );
+            DXUT_ERR( "CreateDevice", hr );
             return DXUTERR_CREATINGDEVICE;
         }
     }
@@ -3305,7 +3305,7 @@ HRESULT DXUTCreate3DEnvironment( IDirect3DDevice9* pd3dDeviceFromApp )
     // Call the resource cache created function
     hr = DXUTGetGlobalResourceCache().OnCreateDevice( pd3dDevice );
     if( FAILED(hr) )
-        return DXUT_ERR( L"OnCreateDevice", ( hr == DXUTERR_MEDIANOTFOUND ) ? DXUTERR_MEDIANOTFOUND : DXUTERR_CREATINGDEVICEOBJECTS );
+        return DXUT_ERR( "OnCreateDevice", ( hr == DXUTERR_MEDIANOTFOUND ) ? DXUTERR_MEDIANOTFOUND : DXUTERR_CREATINGDEVICEOBJECTS );
 
     // Call the app's device created callback if non-NULL
     const D3DSURFACE_DESC* pbackBufferSurfaceDesc = DXUTGetBackBufferSurfaceDesc();
@@ -3319,7 +3319,7 @@ HRESULT DXUTCreate3DEnvironment( IDirect3DDevice9* pd3dDeviceFromApp )
         return E_FAIL;
     if( FAILED(hr) )  
     {
-        DXUT_ERR( L"DeviceCreated callback", hr );        
+        DXUT_ERR( "DeviceCreated callback", hr );
         return ( hr == DXUTERR_MEDIANOTFOUND ) ? DXUTERR_MEDIANOTFOUND : DXUTERR_CREATINGDEVICEOBJECTS;
     }
     GetDXUTState().SetDeviceObjectsCreated( true );
@@ -3327,7 +3327,7 @@ HRESULT DXUTCreate3DEnvironment( IDirect3DDevice9* pd3dDeviceFromApp )
     // Call the resource cache device reset function
     hr = DXUTGetGlobalResourceCache().OnResetDevice( pd3dDevice );
     if( FAILED(hr) )
-        return DXUT_ERR( L"OnResetDevice", DXUTERR_RESETTINGDEVICEOBJECTS );
+        return DXUT_ERR( "OnResetDevice", DXUTERR_RESETTINGDEVICEOBJECTS );
 
     // Call the app's device reset callback if non-NULL
     GetDXUTState().SetInsideDeviceCallback( true );
@@ -3340,7 +3340,7 @@ HRESULT DXUTCreate3DEnvironment( IDirect3DDevice9* pd3dDeviceFromApp )
         return E_FAIL;
     if( FAILED(hr) )
     {
-        DXUT_ERR( L"DeviceReset callback", hr );
+        DXUT_ERR( "DeviceReset callback", hr );
         return ( hr == DXUTERR_MEDIANOTFOUND ) ? DXUTERR_MEDIANOTFOUND : DXUTERR_RESETTINGDEVICEOBJECTS;
     }
     GetDXUTState().SetDeviceObjectsReset( true );
@@ -3386,7 +3386,7 @@ HRESULT DXUTReset3DEnvironment()
         if( hr == D3DERR_DEVICELOST )
             return D3DERR_DEVICELOST; // Reset could legitimately fail if the device is lost
         else
-            return DXUT_ERR( L"Reset", DXUTERR_RESETTINGDEVICE );
+            return DXUT_ERR( "Reset", DXUTERR_RESETTINGDEVICE );
     }
 
     // Update back buffer desc before calling app's device callbacks
@@ -3394,7 +3394,7 @@ HRESULT DXUTReset3DEnvironment()
 
     hr = DXUTGetGlobalResourceCache().OnResetDevice( pd3dDevice );
     if( FAILED(hr) )
-        return DXUT_ERR( L"OnResetDevice", DXUTERR_RESETTINGDEVICEOBJECTS );
+        return DXUT_ERR( "OnResetDevice", DXUTERR_RESETTINGDEVICEOBJECTS );
 
     // Call the app's OnDeviceReset callback
     GetDXUTState().SetInsideDeviceCallback( true );
@@ -3407,7 +3407,7 @@ HRESULT DXUTReset3DEnvironment()
     if( FAILED(hr) )
     {
         // If callback failed, cleanup
-        DXUT_ERR( L"DeviceResetCallback", hr );
+        DXUT_ERR( "DeviceResetCallback", hr );
         if( hr != DXUTERR_MEDIANOTFOUND )
             hr = DXUTERR_RESETTINGDEVICEOBJECTS;
 
@@ -3503,7 +3503,7 @@ HRESULT DXUTMainLoop( HACCEL hAccel )
     {
         if( (GetDXUTState().GetExitCode() == 0) || (GetDXUTState().GetExitCode() == 11) )
             GetDXUTState().SetExitCode(1);
-        return DXUT_ERR_MSGBOX( L"DXUTMainLoop", E_FAIL );
+        return DXUT_ERR_MSGBOX( "DXUTMainLoop", E_FAIL );
     }
 
     GetDXUTState().SetInsideMainloop( true );
@@ -3537,7 +3537,7 @@ HRESULT DXUTMainLoop( HACCEL hAccel )
     {
         if( (GetDXUTState().GetExitCode() == 0) || (GetDXUTState().GetExitCode() == 11) )
             GetDXUTState().SetExitCode(1);
-        return DXUT_ERR_MSGBOX( L"DXUTMainLoop", E_FAIL );
+        return DXUT_ERR_MSGBOX( "DXUTMainLoop", E_FAIL );
     }
 
     // Now we're ready to receive and process Windows messages.
@@ -3805,46 +3805,46 @@ void DXUTRender3DEnvironment()
 void DXUTUpdateDeviceStats( D3DDEVTYPE DeviceType, DWORD BehaviorFlags, D3DADAPTER_IDENTIFIER9* pAdapterIdentifier )
 {
     // Store device description
-    WCHAR* pstrDeviceStats = GetDXUTState().GetDeviceStats();
+    CHAR* pstrDeviceStats = GetDXUTState().GetDeviceStats();
     if( DeviceType == D3DDEVTYPE_REF )
-        StringCchCopy( pstrDeviceStats, 256, L"REF" );
+        StringCchCopy( pstrDeviceStats, 256, "REF" );
     else if( DeviceType == D3DDEVTYPE_HAL )
-        StringCchCopy( pstrDeviceStats, 256, L"HAL" );
+        StringCchCopy( pstrDeviceStats, 256, "HAL" );
     else if( DeviceType == D3DDEVTYPE_SW )
-        StringCchCopy( pstrDeviceStats, 256, L"SW" );
+        StringCchCopy( pstrDeviceStats, 256, "SW" );
 
     if( BehaviorFlags & D3DCREATE_HARDWARE_VERTEXPROCESSING &&
         BehaviorFlags & D3DCREATE_PUREDEVICE )
     {
         if( DeviceType == D3DDEVTYPE_HAL )
-            StringCchCat( pstrDeviceStats, 256, L" (pure hw vp)" );
+            StringCchCat( pstrDeviceStats, 256, " (pure hw vp)" );
         else
-            StringCchCat( pstrDeviceStats, 256, L" (simulated pure hw vp)" );
+            StringCchCat( pstrDeviceStats, 256, " (simulated pure hw vp)" );
     }
     else if( BehaviorFlags & D3DCREATE_HARDWARE_VERTEXPROCESSING )
     {
         if( DeviceType == D3DDEVTYPE_HAL )
-            StringCchCat( pstrDeviceStats, 256, L" (hw vp)" );
+            StringCchCat( pstrDeviceStats, 256, " (hw vp)" );
         else
-            StringCchCat( pstrDeviceStats, 256, L" (simulated hw vp)" );
+            StringCchCat( pstrDeviceStats, 256, " (simulated hw vp)" );
     }
     else if( BehaviorFlags & D3DCREATE_MIXED_VERTEXPROCESSING )
     {
         if( DeviceType == D3DDEVTYPE_HAL )
-            StringCchCat( pstrDeviceStats, 256, L" (mixed vp)" );
+            StringCchCat( pstrDeviceStats, 256, " (mixed vp)" );
         else
-            StringCchCat( pstrDeviceStats, 256, L" (simulated mixed vp)" );
+            StringCchCat( pstrDeviceStats, 256, " (simulated mixed vp)" );
     }
     else if( BehaviorFlags & D3DCREATE_SOFTWARE_VERTEXPROCESSING )
     {
-        StringCchCat( pstrDeviceStats, 256, L" (sw vp)" );
+        StringCchCat( pstrDeviceStats, 256, " (sw vp)" );
     }
 
     if( DeviceType == D3DDEVTYPE_HAL )
     {
         // Be sure not to overflow m_strDeviceStats when appending the adapter 
         // description, since it can be long.  
-        StringCchCat( pstrDeviceStats, 256, L": " );
+        StringCchCat( pstrDeviceStats, 256, ": " );
 
         // Try to get a unique description from the CD3DEnumDeviceSettingsCombo
         DXUTDeviceSettings* pDeviceSettings = GetDXUTState().GetCurrentDeviceSettings();
@@ -3857,8 +3857,8 @@ void DXUTUpdateDeviceStats( D3DDEVTYPE DeviceType, DWORD BehaviorFlags, D3DADAPT
         else
         {
             const int cchDesc = sizeof(pAdapterIdentifier->Description);
-            WCHAR szDescription[cchDesc];
-            MultiByteToWideChar( CP_ACP, 0, pAdapterIdentifier->Description, -1, szDescription, cchDesc );
+            CHAR szDescription[cchDesc];
+            StringCchCopyA( szDescription, cchDesc, pAdapterIdentifier->Description );
             szDescription[cchDesc-1] = 0;
             StringCchCat( pstrDeviceStats, 256, szDescription );
         }
@@ -3886,8 +3886,8 @@ void DXUTUpdateFrameStats()
         GetDXUTState().SetLastStatsUpdateTime( fTime );
         GetDXUTState().SetLastStatsUpdateFrames( 0 );
 
-        WCHAR* pstrFrameStats = GetDXUTState().GetFrameStats();
-        WCHAR* pstrStaticFrameStats = GetDXUTState().GetStaticFrameStats();
+        CHAR* pstrFrameStats = GetDXUTState().GetFrameStats();
+        CHAR* pstrStaticFrameStats = GetDXUTState().GetStaticFrameStats();
         StringCchPrintf( pstrFrameStats, 256, pstrStaticFrameStats, fFPS );
         pstrFrameStats[255] = 0;
     }
@@ -3910,7 +3910,7 @@ void DXUTUpdateStaticFrameStats()
     if( NULL == pDeviceSettingsCombo )
         return;
 
-    WCHAR strFmt[100];
+    CHAR strFmt[100];
     D3DPRESENT_PARAMETERS* pPP = &pDeviceSettings->pp;
 
     if( pDeviceSettingsCombo->AdapterFormat == pDeviceSettingsCombo->BackBufferFormat )
@@ -3919,15 +3919,15 @@ void DXUTUpdateStaticFrameStats()
     }
     else
     {
-        StringCchPrintf( strFmt, 100, L"backbuf %s, adapter %s", 
+        StringCchPrintf( strFmt, 100, "backbuf %s, adapter %s",
             DXUTD3DFormatToString( pDeviceSettingsCombo->BackBufferFormat, false ), 
             DXUTD3DFormatToString( pDeviceSettingsCombo->AdapterFormat, false ) );
     }
 
-    WCHAR strDepthFmt[100];
+    CHAR strDepthFmt[100];
     if( pPP->EnableAutoDepthStencil )
     {
-        StringCchPrintf( strDepthFmt, 100, L" (%s)", DXUTD3DFormatToString( pPP->AutoDepthStencilFormat, false ) );
+        StringCchPrintf( strDepthFmt, 100, " (%s)", DXUTD3DFormatToString( pPP->AutoDepthStencilFormat, false ) );
     }
     else
     {
@@ -3935,16 +3935,16 @@ void DXUTUpdateStaticFrameStats()
         strDepthFmt[0] = 0;
     }
 
-    WCHAR strMultiSample[100];
+    CHAR strMultiSample[100];
     switch( pPP->MultiSampleType )
     {
-        case D3DMULTISAMPLE_NONMASKABLE: StringCchCopy( strMultiSample, 100, L" (Nonmaskable Multisample)" ); break;
-        case D3DMULTISAMPLE_NONE:        StringCchCopy( strMultiSample, 100, L"" ); break;
-        default:                         StringCchPrintf( strMultiSample, 100, L" (%dx Multisample)", pPP->MultiSampleType ); break;
+        case D3DMULTISAMPLE_NONMASKABLE: StringCchCopy( strMultiSample, 100, " (Nonmaskable Multisample)" ); break;
+        case D3DMULTISAMPLE_NONE:        StringCchCopy( strMultiSample, 100, "" ); break;
+        default:                         StringCchPrintf( strMultiSample, 100, " (%dx Multisample)", pPP->MultiSampleType ); break;
     }
 
-    WCHAR* pstrStaticFrameStats = GetDXUTState().GetStaticFrameStats();
-    StringCchPrintf( pstrStaticFrameStats, 256, L"%%.02f fps (%dx%d), %s%s%s", 
+    CHAR* pstrStaticFrameStats = GetDXUTState().GetStaticFrameStats();
+    StringCchPrintf( pstrStaticFrameStats, 256, "%%.02f fps (%dx%d), %s%s%s",
                 pPP->BackBufferWidth, pPP->BackBufferHeight,
                 strFmt, strDepthFmt, strMultiSample );
 }
@@ -4367,7 +4367,7 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             if( hMenu != NULL )
                 DestroyMenu( hMenu );
             DestroyWindow( hWnd );
-            UnregisterClass( L"Direct3DWindowClass", NULL );
+            UnregisterClass( "Direct3DWindowClass", NULL );
             GetDXUTState().SetHWNDFocus( NULL );
             GetDXUTState().SetHWNDDeviceFullScreen( NULL );
             GetDXUTState().SetHWNDDeviceWindowed( NULL );
@@ -4385,7 +4385,7 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     if( GetDXUTState().GetMenu() == NULL && (uMsg == WM_SYSKEYDOWN || uMsg == WM_SYSKEYUP) && wParam == VK_F10 )
         return 0;
     else
-        return DefWindowProc( hWnd, uMsg, wParam, lParam );
+        return DefWindowProcW( hWnd, uMsg, wParam, lParam );
 }
 
 
@@ -4476,7 +4476,7 @@ void DXUTCleanup3DEnvironment( bool bReleaseSettings )
             if( pd3dDevice->Release() > 0 )  
             {
                 DXUTDisplayErrorMessage( DXUTERR_NONZEROREFCOUNT );
-                DXUT_ERR( L"DXUTCleanup3DEnvironment", DXUTERR_NONZEROREFCOUNT );
+                DXUT_ERR( "DXUTCleanup3DEnvironment", DXUTERR_NONZEROREFCOUNT );
             }
         }
         GetDXUTState().SetD3DDevice( NULL );
@@ -4523,7 +4523,7 @@ void DXUTUpdateBackBufferDesc()
 HRESULT DXUTSetTimer( LPDXUTCALLBACKTIMER pCallbackTimer, float fTimeoutInSecs, UINT* pnIDEvent, void* pCallbackUserContext ) 
 { 
     if( pCallbackTimer == NULL )
-        return DXUT_ERR_MSGBOX( L"DXUTSetTimer", E_INVALIDARG ); 
+        return DXUT_ERR_MSGBOX( "DXUTSetTimer", E_INVALIDARG );
 
     HRESULT hr;
     DXUT_TIMER DXUTTimer;
@@ -4569,7 +4569,7 @@ HRESULT DXUTKillTimer( UINT nIDEvent )
     }
     else
     {
-        return DXUT_ERR_MSGBOX( L"DXUTKillTimer", E_INVALIDARG );
+        return DXUT_ERR_MSGBOX( "DXUTKillTimer", E_INVALIDARG );
     }
 
     return S_OK; 
@@ -4625,9 +4625,9 @@ RECT DXUTGetFullsceenClientRectAtModeChange()       { RECT rc = { 0, 0, GetDXUTS
 double DXUTGetTime()                                { return GetDXUTState().GetTime(); }
 float DXUTGetElapsedTime()                          { return GetDXUTState().GetElapsedTime(); }
 float DXUTGetFPS()                                  { return GetDXUTState().GetFPS(); }
-LPCWSTR DXUTGetWindowTitle()                        { return GetDXUTState().GetWindowTitle(); }
-LPCWSTR DXUTGetFrameStats()                         { return GetDXUTState().GetFrameStats(); }
-LPCWSTR DXUTGetDeviceStats()                        { return GetDXUTState().GetDeviceStats(); }
+LPCSTR DXUTGetWindowTitle()                        { return GetDXUTState().GetWindowTitle(); }
+LPCSTR DXUTGetFrameStats()                         { return GetDXUTState().GetFrameStats(); }
+LPCSTR DXUTGetDeviceStats()                        { return GetDXUTState().GetDeviceStats(); }
 bool DXUTIsRenderingPaused()                        { return GetDXUTState().GetPauseRenderingCount() > 0; }
 bool DXUTIsTimePaused()                             { return GetDXUTState().GetPauseTimeCount() > 0; }
 int DXUTGetExitCode()                               { return GetDXUTState().GetExitCode(); }
@@ -4732,26 +4732,26 @@ DXUTDeviceSettings DXUTGetDeviceSettings()
 //--------------------------------------------------------------------------------------
 void DXUTDisplayErrorMessage( HRESULT hr )
 {
-    WCHAR strBuffer[512];
+    CHAR strBuffer[512];
 
     int nExitCode;
     bool bFound = true; 
     switch( hr )
     {
-        case DXUTERR_NODIRECT3D:             nExitCode = 2; StringCchCopy( strBuffer, 512, L"Could not initialize Direct3D. You may want to check that the latest version of DirectX is correctly installed on your system.  Also make sure that this program was compiled with header files that match the installed DirectX DLLs." ); break;
-        case DXUTERR_INCORRECTVERSION:       nExitCode = 10; StringCchCopy( strBuffer, 512, L"Incorrect version of Direct3D and/or D3DX." ); break;
-        case DXUTERR_MEDIANOTFOUND:          nExitCode = 4; StringCchCopy( strBuffer, 512, L"Could not find required media. Ensure that the DirectX SDK is correctly installed." ); break;
-        case DXUTERR_NONZEROREFCOUNT:        nExitCode = 5; StringCchCopy( strBuffer, 512, L"The D3D device has a non-zero reference count, meaning some objects were not released." ); break;
-        case DXUTERR_CREATINGDEVICE:         nExitCode = 6; StringCchCopy( strBuffer, 512, L"Failed creating the Direct3D device." ); break;
-        case DXUTERR_RESETTINGDEVICE:        nExitCode = 7; StringCchCopy( strBuffer, 512, L"Failed resetting the Direct3D device." ); break;
-        case DXUTERR_CREATINGDEVICEOBJECTS:  nExitCode = 8; StringCchCopy( strBuffer, 512, L"Failed creating Direct3D device objects." ); break;
-        case DXUTERR_RESETTINGDEVICEOBJECTS: nExitCode = 9; StringCchCopy( strBuffer, 512, L"Failed resetting Direct3D device objects." ); break;
+        case DXUTERR_NODIRECT3D:             nExitCode = 2; StringCchCopy( strBuffer, 512, "Could not initialize Direct3D. You may want to check that the latest version of DirectX is correctly installed on your system.  Also make sure that this program was compiled with header files that match the installed DirectX DLLs." ); break;
+        case DXUTERR_INCORRECTVERSION:       nExitCode = 10; StringCchCopy( strBuffer, 512, "Incorrect version of Direct3D and/or D3DX." ); break;
+        case DXUTERR_MEDIANOTFOUND:          nExitCode = 4; StringCchCopy( strBuffer, 512, "Could not find required media. Ensure that the DirectX SDK is correctly installed." ); break;
+        case DXUTERR_NONZEROREFCOUNT:        nExitCode = 5; StringCchCopy( strBuffer, 512, "The D3D device has a non-zero reference count, meaning some objects were not released." ); break;
+        case DXUTERR_CREATINGDEVICE:         nExitCode = 6; StringCchCopy( strBuffer, 512, "Failed creating the Direct3D device." ); break;
+        case DXUTERR_RESETTINGDEVICE:        nExitCode = 7; StringCchCopy( strBuffer, 512, "Failed resetting the Direct3D device." ); break;
+        case DXUTERR_CREATINGDEVICEOBJECTS:  nExitCode = 8; StringCchCopy( strBuffer, 512, "Failed creating Direct3D device objects." ); break;
+        case DXUTERR_RESETTINGDEVICEOBJECTS: nExitCode = 9; StringCchCopy( strBuffer, 512, "Failed resetting Direct3D device objects." ); break;
         case DXUTERR_NOCOMPATIBLEDEVICES:    
             nExitCode = 3; 
             if( GetSystemMetrics(SM_REMOTESESSION) != 0 )
-                StringCchCopy( strBuffer, 512, L"Direct3D does not work over a remote session." ); 
+                StringCchCopy( strBuffer, 512, "Direct3D does not work over a remote session." );
             else
-                StringCchCopy( strBuffer, 512, L"Could not find any compatible Direct3D devices." ); 
+                StringCchCopy( strBuffer, 512, "Could not find any compatible Direct3D devices." );
             break;
         default: bFound = false; nExitCode = 1;break;
     }   
@@ -4762,7 +4762,7 @@ void DXUTDisplayErrorMessage( HRESULT hr )
     if( bFound && bShowMsgBoxOnError )
     {
         if( DXUTGetWindowTitle()[0] == 0 )
-            MessageBox( DXUTGetHWND(), strBuffer, L"DirectX Application", MB_ICONERROR|MB_OK );
+            MessageBox( DXUTGetHWND(), strBuffer, "DirectX Application", MB_ICONERROR|MB_OK );
         else
             MessageBox( DXUTGetHWND(), strBuffer, DXUTGetWindowTitle(), MB_ICONERROR|MB_OK );
     }
@@ -4770,16 +4770,22 @@ void DXUTDisplayErrorMessage( HRESULT hr )
 
 
 //--------------------------------------------------------------------------------------
-// Display error msg box to help debug 
+// The client ships a no-op DXTraceA with the original stdcall signature.
 //--------------------------------------------------------------------------------------
+extern "C" __declspec(noinline) HRESULT WINAPI DXTraceA( const CHAR*, DWORD, HRESULT, const CHAR*, BOOL )
+{
+    return S_OK;
+}
+
+#pragma comment(linker, "/include:?DXUTTrace@@YGJPBDKJ0_N@Z")
 HRESULT WINAPI DXUTTrace( const CHAR* strFile, DWORD dwLine, HRESULT hr,
-                          const WCHAR* strMsg, bool bPopMsgBox )
+                          const CHAR* strMsg, bool bPopMsgBox )
 {
     bool bShowMsgBoxOnError = GetDXUTState().GetShowMsgBoxOnError();
     if( bPopMsgBox && bShowMsgBoxOnError == false )
         bPopMsgBox = false;
 
-    return DXTrace( strFile, dwLine, hr, strMsg, bPopMsgBox );
+    return DXTraceA( strFile, dwLine, hr, strMsg, bPopMsgBox );
 }
 
 
@@ -5095,8 +5101,8 @@ void DXUTGetDesktopResolution( UINT AdapterOrdinal, DWORD* pdwWidth, DWORD* pdwH
     DEVMODE devMode;
     ZeroMemory( &devMode, sizeof(DEVMODE) );
     devMode.dmSize = sizeof(DEVMODE);
-    WCHAR strDeviceName[256];
-    MultiByteToWideChar( CP_ACP, 0, pAdapterInfo->AdapterIdentifier.DeviceName, -1, strDeviceName, 256 );
+    CHAR strDeviceName[256];
+    StringCchCopyA( strDeviceName, 256, pAdapterInfo->AdapterIdentifier.DeviceName );
     strDeviceName[255] = 0;
     EnumDisplaySettings( strDeviceName, ENUM_REGISTRY_SETTINGS, &devMode );
     *pdwWidth = devMode.dmPelsWidth;

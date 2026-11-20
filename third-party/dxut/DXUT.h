@@ -7,24 +7,6 @@
 #ifndef DXUT_H
 #define DXUT_H
 
-#ifndef UNICODE
-#error "DXUT requires a Unicode build. See the nearby comments for details"
-//
-// If you are using Microsoft Visual C++ .NET, under the General tab of the project 
-// properties change the Character Set to 'Use Unicode Character Set'.  
-//
-// Windows XP and later are native Unicode so Unicode applications will perform better.  
-// For Windows 98 and Windows Me support, consider using the Microsoft Layer for Unicode (MSLU).  
-//
-// To use MSLU, link against a set of libraries similar to this
-//      /nod:kernel32.lib /nod:advapi32.lib /nod:user32.lib /nod:gdi32.lib /nod:shell32.lib /nod:comdlg32.lib /nod:version.lib /nod:mpr.lib /nod:rasapi32.lib /nod:winmm.lib /nod:winspool.lib /nod:vfw32.lib /nod:secur32.lib /nod:oleacc.lib /nod:oledlg.lib /nod:sensapi.lib UnicoWS.lib kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.lib mpr.lib rasapi32.lib winmm.lib winspool.lib vfw32.lib secur32.lib oleacc.lib oledlg.lib sensapi.lib dxerr9.lib dxguid.lib d3dx9d.lib d3d9.lib comctl32.lib
-// and put the unicows.dll (available for download from msdn.microsoft.com) in the exe's folder.
-// 
-// For more details see the MSDN article titled:
-// "MSLU: Develop Unicode Applications for Windows 9x Platforms with the Microsoft Layer for Unicode"
-// at http://msdn.microsoft.com/msdnmag/issues/01/10/MSLU/default.aspx 
-//
-#endif
 
 //--------------------------------------------------------------------------------------
 // Structs
@@ -94,7 +76,7 @@ void DXUTSetCallbackMsgProc( LPDXUTCALLBACKMSGPROC pCallbackMsgProc, void* pUser
 HRESULT DXUTInit( bool bParseCommandLine = true, bool bHandleDefaultHotkeys = true, bool bShowMsgBoxOnError = true );
 
 // Choose either DXUTCreateWindow or DXUTSetWindow.  If using DXUTSetWindow, consider using DXUTStaticWndProc
-HRESULT DXUTCreateWindow( const WCHAR* strWindowTitle = L"Direct3D Window", 
+HRESULT DXUTCreateWindow( const CHAR* strWindowTitle = "Direct3D Window",
                           HINSTANCE hInstance = NULL, HICON hIcon = NULL, HMENU hMenu = NULL,
                           int x = CW_USEDEFAULT, int y = CW_USEDEFAULT );
 HRESULT DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDeviceWindowed, bool bHandleMessages = true );
@@ -185,9 +167,9 @@ double                  DXUTGetTime();
 float                   DXUTGetElapsedTime();
 bool                    DXUTIsWindowed();
 float                   DXUTGetFPS();
-LPCWSTR                 DXUTGetWindowTitle();
-LPCWSTR                 DXUTGetFrameStats();
-LPCWSTR                 DXUTGetDeviceStats();
+LPCSTR                 DXUTGetWindowTitle();
+LPCSTR                 DXUTGetFrameStats();
+LPCSTR                 DXUTGetDeviceStats();
 bool                    DXUTIsRenderingPaused();
 bool                    DXUTIsTimePaused();
 int                     DXUTGetExitCode();

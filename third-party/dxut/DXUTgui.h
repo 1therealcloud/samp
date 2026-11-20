@@ -140,14 +140,13 @@ public:
     bool MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
     // Control creation
-    HRESULT AddStatic( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTStatic** ppCreated=NULL );
-    HRESULT AddButton( int ID, LPCWSTR strText, int x, int y, int width, int height, UINT nHotkey=0, bool bIsDefault=false, CDXUTButton** ppCreated=NULL );
-    HRESULT AddCheckBox( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bChecked=false, UINT nHotkey=0, bool bIsDefault=false, CDXUTCheckBox** ppCreated=NULL );
-    HRESULT AddRadioButton( int ID, UINT nButtonGroup, LPCWSTR strText, int x, int y, int width, int height, bool bChecked=false, UINT nHotkey=0, bool bIsDefault=false, CDXUTRadioButton** ppCreated=NULL );
+    HRESULT AddStatic( int ID, LPCSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTStatic** ppCreated=NULL );
+    HRESULT AddButton( int ID, LPCSTR strText, int x, int y, int width, int height, UINT nHotkey=0, bool bIsDefault=false, CDXUTButton** ppCreated=NULL );
+    HRESULT AddCheckBox( int ID, LPCSTR strText, int x, int y, int width, int height, bool bChecked=false, UINT nHotkey=0, bool bIsDefault=false, CDXUTCheckBox** ppCreated=NULL );
+    HRESULT AddRadioButton( int ID, UINT nButtonGroup, LPCSTR strText, int x, int y, int width, int height, bool bChecked=false, UINT nHotkey=0, bool bIsDefault=false, CDXUTRadioButton** ppCreated=NULL );
     HRESULT AddComboBox( int ID, int x, int y, int width, int height, UINT nHotKey=0, bool bIsDefault=false, CDXUTComboBox** ppCreated=NULL );
     HRESULT AddSlider( int ID, int x, int y, int width, int height, int min=0, int max=100, int value=50, bool bIsDefault=false, CDXUTSlider** ppCreated=NULL );
-    HRESULT AddEditBox( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTEditBox** ppCreated=NULL );
-    HRESULT AddIMEEditBox( int ID, LPCWSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTIMEEditBox** ppCreated=NULL );
+    HRESULT AddEditBox( int ID, LPCSTR strText, int x, int y, int width, int height, bool bIsDefault=false, CDXUTEditBox** ppCreated=NULL );
     // 0x00090b30
     HRESULT AddIMEEditBox(int ID, const char* strText, int x, int y, int width, int height, bool bIsDefault = false, CDXUTIMEEditBox** ppCreated = NULL);
     HRESULT AddListBox( int ID, int x, int y, int width, int height, DWORD dwStyle=0, CDXUTListBox** ppCreated=NULL );
@@ -189,7 +188,7 @@ public:
     HRESULT DrawPolyLine( POINT* apPoints, UINT nNumPoints, D3DCOLOR color );
     HRESULT DrawSprite( CDXUTElement* pElement, RECT* prcDest );
     HRESULT CalcTextRect( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, int nCount = -1 );
-    HRESULT DrawText( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow = false, int nCount = -1 );
+    HRESULT DrawTextW( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow = false, int nCount = -1 );
     // 0x0008cae0
     HRESULT DrawTextA(const char* text, CDXUTElement* element, RECT* rect, bool shadow = false, int count = -1);
 
@@ -250,13 +249,11 @@ public:
 
     // Shared resource access. Indexed fonts and textures are shared among
     // all the controls.
-    HRESULT       SetFont( UINT index, LPCWSTR strFaceName, LONG height, LONG weight );
     // 0x0008ca50
     HRESULT SetFont(UINT index, const char* face, LONG height, LONG weight);
     // 0x00086B40
     DXUTFontNode* GetFont( UINT index );
 
-    HRESULT          SetTexture( UINT index, LPCWSTR strFilename );
     // 0x00089890
     HRESULT SetTexture(UINT index, const char* filename);
     DXUTTextureNode* GetTexture( UINT index );
@@ -369,7 +366,6 @@ public:
     void        OnDestroyDevice();
     bool        MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     
-    int AddFont( LPCWSTR strFaceName, LONG height, LONG weight );
     // 0x0008c8f0
     int AddFont(const char* face, LONG height, LONG weight);
     // Descriptive name; the original lexical name is unknown.
@@ -378,7 +374,6 @@ public:
     friend class NativeFontManagerProbe;
     friend class NativeDialogProbe;
     friend class CDXUTDialog;
-    int AddTexture( LPCWSTR strFilename );
     // 0x000897d0
     int AddTexture(const char* filename);
     friend class NativeTextureProbe;
@@ -550,13 +545,13 @@ public:
     virtual void Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
     virtual BOOL ContainsPoint( POINT pt ) { return false; }
 
-    HRESULT GetTextCopy( LPWSTR strDest, UINT bufferCount );
-    LPCWSTR GetText() { return m_strText; }
-    HRESULT SetText( LPCWSTR strText );
+    HRESULT GetTextCopy( LPSTR strDest, UINT bufferCount );
+    LPCSTR GetText() { return m_strText; }
+    HRESULT SetText( LPCSTR strText );
 
 
 protected:
-    WCHAR m_strText[MAX_PATH];      // Window text  
+    CHAR m_strText[MAX_PATH];      // Window text
 };
 
 
@@ -709,7 +704,7 @@ protected:
 //-----------------------------------------------------------------------------
 struct DXUTListBoxItem
 {
-    WCHAR strText[256];
+    CHAR strText[256];
     void*  pData;
 
     RECT  rcActive;
@@ -735,10 +730,10 @@ public:
     void SetStyle( DWORD dwStyle ) { m_dwStyle = dwStyle; }
     void SetScrollBarWidth( int nWidth ) { m_nSBWidth = nWidth; UpdateRects(); }
     void SetBorder( int nBorder, int nMargin ) { m_nBorder = nBorder; m_nMargin = nMargin; }
-    HRESULT AddItem( const WCHAR *wszText, void *pData );
-    HRESULT InsertItem( int nIndex, const WCHAR *wszText, void *pData );
+    HRESULT AddItem( const CHAR *wszText, void *pData );
+    HRESULT InsertItem( int nIndex, const CHAR *wszText, void *pData );
     void RemoveItem( int nIndex );
-    void RemoveItemByText( WCHAR *wszText );
+    void RemoveItemByText( CHAR *wszText );
     void RemoveItemByData( void *pData );
     void RemoveAllItems();
 
@@ -771,7 +766,7 @@ protected:
 //-----------------------------------------------------------------------------
 struct DXUTComboBoxItem
 {
-    WCHAR strText[256];
+    CHAR strText[256];
     void*  pData;
 
     RECT  rcActive;
@@ -798,12 +793,12 @@ public:
 
     virtual void UpdateRects(); 
 
-    HRESULT AddItem( const WCHAR* strText, void* pData );
+    HRESULT AddItem( const CHAR* strText, void* pData );
     void    RemoveAllItems();
     void    RemoveItem( UINT index );
-    bool    ContainsItem( const WCHAR* strText, UINT iStart=0 );
-    int     FindItem( const WCHAR* strText, UINT iStart=0 );
-    void*   GetItemData( const WCHAR* strText );
+    bool    ContainsItem( const CHAR* strText, UINT iStart=0 );
+    int     FindItem( const CHAR* strText, UINT iStart=0 );
+    void*   GetItemData( const CHAR* strText );
     void*   GetItemData( int nIndex );
     void    SetDropHeight( UINT nHeight ) { m_nDropHeight = nHeight; UpdateRects(); }
     void    SetScrollBarWidth( int nWidth ) { m_nSBWidth = nWidth; UpdateRects(); }
@@ -815,7 +810,7 @@ public:
     DXUTComboBoxItem* GetItem( UINT index ) { return m_Items.GetAt( index ); }
 
     HRESULT SetSelectedByIndex( UINT index );
-    HRESULT SetSelectedByText( const WCHAR* strText );
+    HRESULT SetSelectedByText( const CHAR* strText );
     HRESULT SetSelectedByData( void* pData );  
 
 protected:

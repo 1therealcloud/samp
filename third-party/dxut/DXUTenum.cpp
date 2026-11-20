@@ -184,15 +184,13 @@ HRESULT CD3DEnumeration::Enumerate( IDirect3D9* pD3D,
     {
         pAdapterInfo = m_AdapterInfoList.GetAt(i);
 
-        MultiByteToWideChar( CP_ACP, 0, 
-                             pAdapterInfo->AdapterIdentifier.Description, -1, 
-                             pAdapterInfo->szUniqueDescription, 100 );
+        StringCchCopyA( pAdapterInfo->szUniqueDescription, 101, pAdapterInfo->AdapterIdentifier.Description );
         pAdapterInfo->szUniqueDescription[100] = 0;
 
         if( !bUniqueDesc )
         {
-            WCHAR sz[100];
-            StringCchPrintf( sz, 100, L" (#%d)", pAdapterInfo->AdapterOrdinal );
+            CHAR sz[100];
+            StringCchPrintf( sz, 100, " (#%d)", pAdapterInfo->AdapterOrdinal );
             StringCchCat( pAdapterInfo->szUniqueDescription, 256, sz );
 
         }
