@@ -56,7 +56,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\lzma-st"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
