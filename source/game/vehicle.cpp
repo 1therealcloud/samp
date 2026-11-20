@@ -962,8 +962,8 @@ void CVehicle::RemovePassengers()
     void* volatile* driver = (void* volatile*)((BYTE*)m_pGameVehicle + 0x460);
     if (*driver)
     {
-        int handle = GamePoolPedGetIndex(*driver);
-        Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)x, (double)y, (double)(g_quaternionMatrixTwo + z));
+        int handle = GamePoolPedGetIndex(*(void* volatile*)((BYTE*)m_pGameVehicle + 0x460));
+        Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)x, (double)y, (double)(z + 2.0f));
     }
     for (int offset = 0x464; offset < 0x480; offset += 4)
     {
@@ -971,7 +971,7 @@ void CVehicle::RemovePassengers()
         if (ped)
         {
             int handle = GamePoolPedGetIndex(ped);
-            Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)x, (double)y, (double)(g_quaternionMatrixTwo + z));
+            Scripting::ProcessCommand(&g_vehicleWarpPedCommand, handle, (double)x, (double)y, (double)(z + 2.0f));
         }
     }
 }

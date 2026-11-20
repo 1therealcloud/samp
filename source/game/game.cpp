@@ -1345,10 +1345,11 @@ float __stdcall GameGetModelDrawDistance(const void* info)
 void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
-    *(void**)(info + 0x1c) = object;
     // clang-format off
     __asm {
         mov ecx,info
+        mov edx,object
+        mov dword ptr [ecx+0x1c],edx
         push object
         mov edx,dword ptr [ecx]
         call dword ptr [edx+0x3c]

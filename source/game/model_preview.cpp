@@ -72,6 +72,7 @@ const float g_previewObjectRadiusScale = 2.25f;
 // 0x0006b9d0
 void CModelPreview::RenderTestScene(int model)
 {
+    CVector initialRotation = {0, 0, 0};
     if (!g_pGame->IsStarted() || !camera)
         return;
     DWORD background = 0xff330033;
@@ -83,10 +84,9 @@ void CModelPreview::RenderTestScene(int model)
     ClientSetRenderState(8, 1);
     ClientSetRenderState(7, 2);
     CVector position = {0, 0, 70.0f};
-    CObject* object = new CObject(model, position.x, position.y, position.z, CVector(), 200.0f, 0, 0, 0);
+    CObject* object = new CObject(model, position.x, position.y, position.z, initialRotation, 200.0f, 0, 0, 0);
     object->Add();
-    position.z = 40.0f;
-    object->Teleport(position);
+    object->Teleport(0.0f, 0.0f, 40.0f);
     // GetMatrix deliberately leaves the four padding/flag words untouched.
     CMatrix matrix;
     object->GetMatrix(&matrix);
@@ -109,8 +109,7 @@ void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotat
     if (!raster || !result || !ped)
         return 0;
     // Native special height is DWORD 0x42489999 (the lower neighbour of 50.15f).
-    CVector position = {0, zoom * g_previewPedDistanceScale, model == 162 ? 50.149997711181640625f : 50.05f};
-    ped->Teleport(position);
+    ped->Teleport(0, zoom * g_previewPedDistanceScale, model != 162 ? 50.05f : 50.149997711181640625f);
     ped->SetModelIndex(model);
     ped->SetCollisionProcessed(FALSE);
     ped->SetCollisionFlag(FALSE);
@@ -159,36 +158,14 @@ void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* r
         return 0;
     vehicle->SetCollisionProcessed(FALSE);
     vehicle->SetCollisionFlag(FALSE);
-    float distance;
-    // clang-format off
-    // Preserve native extended ST0 through the two operations, then spill before GetSubtype.
-    __asm {
-        push model
-        call GameGetModelCollisionRadius
-        add esp,4
-        fadd st(0),st(0)
-        fsubr dword ptr [g_previewVehicleDistance]
-        fmul dword ptr [zoom]
-        fstp dword ptr [distance]
-    }
-    // clang-format on
+    float distance = (g_previewVehicleDistance - 2.0f * GameGetModelCollisionRadius(model)) * zoom;
     if (vehicle->GetSubtype() == 4)
     {
-        // clang-format off
-        __asm {
-            push model
-            call GameGetModelCollisionRadius
-            add esp,4
-            fmul dword ptr [g_previewBoatRadiusScale]
-            fsubr dword ptr [g_previewBoatDistance]
-            fstp dword ptr [distance]
-        }
-        // clang-format on
+        distance = g_previewBoatDistance - g_previewBoatRadiusScale * GameGetModelCollisionRadius(model);
     }
-    CVector position = {0, distance, 50.0f};
-    vehicle->Teleport(position);
+    vehicle->Teleport(0, distance, 50.0f);
     if (primary != -1 && secondary != -1)
-        vehicle->SetColor((BYTE)primary, (BYTE)secondary);
+        vehicle->SetColor(primary, secondary);
     CMatrix matrix;
     memset(&matrix, 0, sizeof(matrix));
     vehicle->GetMatrix(&matrix);
@@ -221,6 +198,7 @@ void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* r
 // 0x0006c0b0
 void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVector* rotation, float zoom)
 {
+    CVector initialRotation = {0, 0, 0};
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
     void* result = GameRwCreateTexture(raster);
     if (!raster || !result)
@@ -228,21 +206,10 @@ void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVect
     if (model == 1373 || model == 3118 || model == 3552 || model == 3553)
         model = 18631;
     CVector initialPosition = {0, 0, 50.0f};
-    CObject* object = new CObject(model, initialPosition.x, initialPosition.y, initialPosition.z, CVector(), 0, 0, 0, 0);
+    CObject* object = new CObject(model, initialPosition.x, initialPosition.y, initialPosition.z, initialRotation, 0, 0, 0, 0);
     if (!object || !object->m_pGameEntity)
         return result;
-    float distance;
-    // clang-format off
-    __asm {
-        push model
-        call GameGetModelCollisionRadius
-        add esp,4
-        fmul dword ptr [g_previewObjectRadiusScale]
-        fsubr dword ptr [g_previewObjectDistance]
-        fmul dword ptr [zoom]
-        fstp dword ptr [distance]
-    }
-    // clang-format on
+    float distance = (g_previewObjectDistance - g_previewObjectRadiusScale * GameGetModelCollisionRadius(model)) * zoom;
     CMatrix matrix;
     memset(&matrix, 0, sizeof(matrix));
     object->GetMatrix(&matrix);
@@ -260,17 +227,8 @@ void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVect
     object->ApplyMatrix(matrix);
     CVector centre;
     object->GetBoundCentre(&centre);
-    float height;
-    // clang-format off
-    __asm {
-        fld dword ptr [centre.z]
-        fsub dword ptr [g_previewHeight]
-        fsubr dword ptr [g_previewHeight]
-        fstp dword ptr [height]
-    }
-    // clang-format on
-    CVector position = {-centre.x, distance, height};
-    object->Teleport(position);
+    float height = g_previewHeight - (centre.z - g_previewHeight);
+    object->Teleport(-centre.x, distance, height);
     BOOL changed = FALSE;
     if (!object->GetRwObject())
         changed = object->SetModelIndex(model);
@@ -303,10 +261,10 @@ void* CModelPreview::RenderObject(int model, DWORD background, const CVector* ro
         return 0;
     if (model == 1373 || model == 3118 || model == 3552 || model == 3553)
         model = 18631;
-    bool requested = false;
+    BOOL requested = FALSE;
     if (!g_pGame->IsModelAvailable(model))
     {
-        requested = true;
+        requested = TRUE;
         g_pGame->RequestModel(model, 2);
         g_pGame->LoadRequestedModels();
         while (!g_pGame->IsModelAvailable(model))
@@ -315,18 +273,7 @@ void* CModelPreview::RenderObject(int model, DWORD background, const CVector* ro
     void* object = (void*)GameQueryModelVirtual2c(model);
     if (!object)
         return result;
-    float distance;
-    // clang-format off
-    __asm {
-        push model
-        call GameGetModelCollisionRadius
-        add esp,4
-        fmul dword ptr [g_previewObjectRadiusScale]
-        fsubr dword ptr [g_previewObjectDistance]
-        fmul dword ptr [zoom]
-        fstp dword ptr [distance]
-    }
-    // clang-format on
+    const float distance = (g_previewObjectDistance - g_previewObjectRadiusScale * GameGetModelCollisionRadius(model)) * zoom;
     CVector centre = {0, 0, 0};
     GameGetModelCollisionCentre(model, &centre);
     void* objectFrame = *(void**)((BYTE*)object + 4);

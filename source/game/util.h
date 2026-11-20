@@ -180,17 +180,13 @@ bool GamePoolHasObjectModel(int model);
 // 0x000b3a00
 int GameCountEmptyBackendModelSlots();
 
-// 0x002a9d98
-extern int g_rwImageDepth;
-// 0x002a9d9c
-extern int g_rwImageWidth;
 // 0x002a9a40
 extern int g_rwImageHeight;
 // 0x002aae10
 extern void* g_rwImageScratch;
 // 0x00155400
 extern void** g_rwSceneCameraSlot;
-// 0x000b5690
+// Compatibility name for GameDebugWriteRasterImage.
 void GameWriteRasterBmp(void* raster, const char* filename);
 // 0x000b57d0
 void GameCreateSceneRasters();

@@ -13,20 +13,22 @@ BOOL CAudioStream::Reset()
 {
     g_audioStreamHandle = 0;
     BASS_Free();
-    if (!BASS_Init(-1, 44100, 0, 0, 0))
-        return FALSE;
-    BASS_SetConfigPtr(16, g_audioStreamAgent);
-    DWORD volume = (DWORD)(__int64)(g_pGame->m_pAudio->GetRadioVolume() * 7000.0f);
-    BASS_SetConfig(5, volume);
-    BASS_SetConfig(21, 1);
-    BASS_SetConfig(11, 10000);
-    if (!g_pConfig->DoesExist("audioproxyoff"))
-        g_pConfig->WriteIntValue("audioproxyoff", 0, FALSE);
-    if (g_pConfig->GetIntValue("audioproxyoff"))
-        BASS_SetConfigPtr(17, 0);
-    BASS_SetEAXParameters(-1, 0.0f, -1.0f, -1.0f);
-    initialized = 1;
-    return TRUE;
+    if (BASS_Init(-1, 44100, 0, 0, 0))
+    {
+        BASS_SetConfigPtr(16, g_audioStreamAgent);
+        DWORD volume = (DWORD)(__int64)(g_pGame->m_pAudio->GetRadioVolume() * 7000.0f);
+        BASS_SetConfig(5, volume);
+        BASS_SetConfig(21, 1);
+        BASS_SetConfig(11, 10000);
+        if (!g_pConfig->DoesExist("audioproxyoff"))
+            g_pConfig->WriteIntValue("audioproxyoff", 0, FALSE);
+        if (g_pConfig->GetIntValue("audioproxyoff"))
+            BASS_SetConfigPtr(17, 0);
+        BASS_SetEAXParameters(-1, 0.0f, -1.0f, -1.0f);
+        initialized = 1;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // 0x0016c7d0
@@ -216,20 +218,8 @@ BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius
         BASS_ChannelStop(g_audioStreamHandle);
         g_audioStreamHandle = 0;
     }
-    BYTE allowed;
-    // clang-format off
-    __asm {
-        mov eax,g_pGame
-        mov ecx,[eax]
-        call CAudio::GetRadioVolume
-        fcomp g_objectScaleLowerBound
-        fnstsw ax
-        test ah,41h
-        setp allowed
-    }
-    // clang-format on
-    // The original parity test accepts unordered radio volume as well as >0.
-    if (!allowed) return FALSE;
+    if (g_pGame->m_pAudio->GetRadioVolume() <= g_objectScaleLowerBound)
+        return FALSE;
     memset(g_audioStreamUrl, 0, 257);
     strncpy(g_audioStreamUrl, url, 256);
     memset(g_audioStreamTitle, 0, 257);
@@ -277,7 +267,6 @@ void __cdecl CAudioStream::Worker(void*)
     while (!*(volatile BYTE*)&g_audioStreamStopRequested)
     {
         BASS_StreamGetFilePosition(g_audioStreamHandle, 4);
-        int volume = 0;
         if (!g_pGame->IsMenuVisible())
         {
             HWND window = g_inputGameWindow;
@@ -285,64 +274,27 @@ void __cdecl CAudioStream::Worker(void*)
             {
                 if (g_audioStreamSpatial)
                 {
-                    int baseVolume;
-                    // clang-format off
-                    __asm {
-                        mov eax,g_pGame
-                        mov ecx,[eax]
-                        call CAudio::GetRadioVolume
-                        fmul g_audioStreamSpatialVolumeScale
-                        call _ftol2
-                        mov baseVolume,eax
-                    }
-                    // clang-format on
+                    int baseVolume = (int)(g_pGame->m_pAudio->GetRadioVolume() * g_audioStreamSpatialVolumeScale);
+                    int volume = 0;
                     CPed* ped = g_pGame->GetPlayerPed();
                     if (ped)
                     {
-                        DWORD px, py, pz;
-                        memcpy(&px, &g_audioStreamPosition.x, 4);
-                        memcpy(&py, &g_audioStreamPosition.y, 4);
-                        memcpy(&pz, &g_audioStreamPosition.z, 4);
-                        // clang-format off
-                        __asm {
-                            push pz
-                            push py
-                            push px
-                            mov ecx,ped
-                            call CEntity::GetDistanceToPoint
-                            fcom g_audioStreamRadius
-                            fnstsw ax
-                            test ah,5
-                            jp outside_radius
-                            fdiv g_audioStreamRadius
-                            fsubr g_quaternionMatrixOne
-                            fimul baseVolume
-                            call _ftol2
-                            mov volume,eax
-                            jmp distance_done
-outside_radius:
-                            fstp st(0)
-distance_done:
-                        }
-                        // clang-format on
+                        const float distance = ped->GetDistanceToPoint(g_audioStreamPosition.x, g_audioStreamPosition.y, g_audioStreamPosition.z);
+                        if (distance < g_audioStreamRadius)
+                            volume = (int)(baseVolume * (g_quaternionMatrixOne - distance / g_audioStreamRadius));
                     }
+                    BASS_SetConfig(5, (DWORD)volume);
                 }
                 else
                 {
-                    // clang-format off
-                    __asm {
-                        mov eax,g_pGame
-                        mov ecx,[eax]
-                        call CAudio::GetRadioVolume
-                        fmul g_audioStreamVolumeScale
-                        call _ftol2
-                        mov volume,eax
-                    }
-                    // clang-format on
+                    BASS_SetConfig(5, (DWORD)(int)(g_pGame->m_pAudio->GetRadioVolume() * g_audioStreamVolumeScale));
                 }
             }
+            else
+                BASS_SetConfig(5, 0);
         }
-        BASS_SetConfig(5, (DWORD)volume);
+        else
+            BASS_SetConfig(5, 0);
         Sleep(20);
     }
     BASS_ChannelStop(g_audioStreamHandle);

@@ -3,20 +3,28 @@
 // 0x0006b270
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
 {
-    unsigned red = ((color >> 16) & 255) + amount;
-    unsigned green = ((color >> 8) & 255) + amount;
-    unsigned blue = (color & 255) + amount;
-    if (red >= 255)
+    BYTE alpha = (BYTE)(color >> 24);
+    BYTE red = (BYTE)(color >> 16), green = (BYTE)(color >> 8), blue = (BYTE)color;
+    if (red + amount < 255)
+        red += amount;
+    else
         red = 255;
-    if (green >= 255)
+    if (green + amount < 255)
+        green += amount;
+    else
         green = 255;
-    if (blue >= 255)
+    if (blue + amount < 255)
+        blue += amount;
+    else
         blue = 255;
-    return (color & 0xff000000) | (red << 16) | (green << 8) | blue;
+    DWORD result = ((DWORD)alpha << 8) | red;
+    result = (result << 8) | green;
+    return (result << 8) | blue;
 }
 // 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
 {
+    BYTE alpha = (BYTE)(color >> 24);
     BYTE red = (BYTE)(color >> 16), green = (BYTE)(color >> 8), blue = (BYTE)color;
     if (red > amount)
         red -= amount;
@@ -30,7 +38,9 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
         blue -= amount;
     else
         blue = 0;
-    return (color & 0xff000000) | ((DWORD)red << 16) | ((DWORD)green << 8) | blue;
+    DWORD result = ((DWORD)alpha << 8) | red;
+    result = (result << 8) | green;
+    return (result << 8) | blue;
 }
 #include "cmdwindow.h"
 #include "runutil.h"

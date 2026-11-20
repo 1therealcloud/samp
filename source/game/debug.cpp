@@ -32,16 +32,19 @@ DWORD GameGetTaskType(void* task)
             // clang-format off
             __asm {
                 pushad
+                mov edx,task
+                mov ebx,[edx]
+                mov edx,[ebx+0x10]
                 mov ecx,task
-                mov edx,[ecx]
-                call dword ptr [edx+0x10]
+                call edx
                 mov result,eax
                 popad
             }
             // clang-format on
+            return result;
         }
     }
-    return result;
+    return 0;
 }
 // 0x000b3c50
 void* GameGetTaskChild(void* task)
@@ -56,16 +59,19 @@ void* GameGetTaskChild(void* task)
             // GTA SA virtual interface: preserve caller registers across the call.
             __asm {
                 pushad
+                mov edx,task
+                mov ebx,[edx]
+                mov edx,[ebx+8]
                 mov ecx,task
-                mov edx,[ecx]
-                call dword ptr [edx+8]
+                call edx
                 mov result,eax
                 popad
             }
             // clang-format on
+            return result;
         }
     }
-    return result;
+    return 0;
 }
 // 0x001518d4
 DWORD g_debugSelectedVehicleModel = 400;
@@ -222,8 +228,7 @@ float GameDebugGroundHeight(const CVector* position)
     memcpy(&end, position, 8);
     end.z = -100.0f;
     BYTE collision[52];
-    void* entity = (void*)position;
-    GameProcessLineOfSightRaw(position, &end, collision, &entity, 1, 0, 0, 1, 1, 1, 0, 0);
+    GameProcessLineOfSightRaw(position, &end, collision, (void**)&position, 1, 0, 0, 1, 1, 1, 0, 0);
     return *(float*)(collision + 8);
 }
 // 0x0009dda0
@@ -431,19 +436,7 @@ void GameDebugMoveToHeightmapBlock()
 {
     GameDebugSelectHeightmapBlock((int)g_debugHeightmapFlagCopy);
     CPed* ped = g_pGame->GetPlayerPed();
-    CVector position;
-    position.z = 540.0f;
-    // clang-format off
-    __asm {
-        fld g_debugHeightmapStartY
-        fsub g_vehicleTrainSpeedMaximum
-        fstp position.y
-        fld g_debugHeightmapStartX
-        fadd g_vehicleTrainSpeedMaximum
-        fstp position.x
-    }
-    // clang-format on
-    ped->Teleport(position);
+    ped->Teleport(g_debugHeightmapStartX + g_vehicleTrainSpeedMaximum, g_debugHeightmapStartY - g_vehicleTrainSpeedMaximum, 540.0f);
 }
 // 0x0009ddd0
 void GameDebugProcessHeightmap()
@@ -489,16 +482,14 @@ void GameDebugProcessHeightmap()
 #include "game/hooks.h"
 #pragma bss_seg(".pstate$g")
 // 0x002aae10
-void* g_debugRasterImage;
+void* g_rwImageScratch;
 #pragma bss_seg()
 // 0x002abe40
-void* g_debugRasterSource;
+#define g_debugRasterSource (*(void**)(g_entityCollisionScratch + 0x1028))
 // 0x002abe44
-void* g_debugRasterResult;
+#define g_debugRasterResult (*(void**)(g_entityCollisionScratch + 0x102c))
 // 0x002abe48
-void* g_debugRasterAlternate;
-// 0x002a9a40
-DWORD g_debugRasterWord10;
+#define g_debugRasterAlternate (*(void**)(g_entityCollisionScratch + 0x1030))
 // 0x0011e370
 const char g_debugAllBuildingsFilename[] = "c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
 // 0x0011f594
@@ -532,26 +523,29 @@ void GameDebugExportWorldPlacements()
 // 0x000b5610
 void GameDebugBindRasterResult()
 {
-    g_debugRasterSource = *(void**)0xc402d8;
-    g_debugRasterResult = ((void*(__cdecl*)(void*))0x7f37c0)(g_debugRasterSource);
-    if (!g_debugRasterResult)
+    void* volatile& source = g_debugRasterSource;
+    void* volatile& result = g_debugRasterResult;
+    source = *(void**)0xc402d8;
+    result = ((void*(__cdecl*)(void*))0x7f37c0)(source);
+    if (!result)
         g_pChat->AddDebugMessage(g_debugRasterMissingText);
     // Native live result reloads: raw GTA globals, including publication of NULL.
-    *(void**)0xb4e690 = g_debugRasterResult;
-    *(void**)0xb4e68c = g_debugRasterResult;
-    *(void**)0xb4e47c = g_debugRasterResult;
-    *(void**)0xb4e3ec = g_debugRasterResult;
+    *(void**)0xb4e690 = result;
+    *(void**)0xb4e68c = result;
+    *(void**)0xb4e47c = result;
+    *(void**)0xb4e3ec = result;
     *(DWORD*)0x8a7780 = 0x40000000;
 }
 // 0x000b5690
 void GameDebugWriteRasterImage(void* raster, const char* filename)
 {
-    // Observed argument order from native snapshot globals; APIs remain unchecked.
-    g_debugRasterImage = ((void*(__cdecl*)(DWORD, DWORD, DWORD))0x8026e0)(g_gamePlayerTableUnknown2A9D98[1], g_debugRasterWord10, g_gamePlayerTableUnknown2A9D98[0]);
-    ((void*(__cdecl*)(void*))0x8027a0)(g_debugRasterImage);
-    ((void*(__cdecl*)(void*, void*))0x804250)(g_debugRasterImage, raster);
-    ((void*(__cdecl*)(void*, const char*))0x7ce990)(g_debugRasterImage, filename);
-    ((DWORD(__cdecl*)(void*))0x802740)(g_debugRasterImage);
+    // Read the published scratch pointer again before every RenderWare call.
+    void* volatile& image = g_rwImageScratch;
+    image = ((void*(__cdecl*)(DWORD, DWORD, DWORD))0x8026e0)(g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
+    ((void*(__cdecl*)(void*))0x8027a0)(image);
+    ((void*(__cdecl*)(void*, void*))0x804250)(image, raster);
+    ((void*(__cdecl*)(void*, const char*))0x7ce990)(image, filename);
+    ((DWORD(__cdecl*)(void*))0x802740)(image);
 }
 // 0x000b5700
 void GameDebugDumpRasterImages()
@@ -560,23 +554,23 @@ void GameDebugDumpRasterImages()
     BYTE* raster = (BYTE*)g_debugRasterSource;
     // Native dereferences the first pointer BEFORE checking it for null.
     g_gamePlayerTableUnknown2A9D98[0] = *(DWORD*)(raster + 0x14);
-    g_debugRasterWord10 = *(DWORD*)(raster + 0x10);
+    g_rwImageHeight = *(DWORD*)(raster + 0x10);
     g_gamePlayerTableUnknown2A9D98[1] = *(DWORD*)(raster + 0xc);
     if (g_debugRasterSource)
     {
         GameDebugWriteRasterImage(g_debugRasterSource, g_debugRasterFirstFilename);
-        g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_debugRasterWord10, g_gamePlayerTableUnknown2A9D98[0]);
+        g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
     }
     if (g_debugRasterAlternate)
     {
         raster = (BYTE*)g_debugRasterAlternate;
         g_gamePlayerTableUnknown2A9D98[0] = *(DWORD*)(raster + 0x14);
-        g_debugRasterWord10 = *(DWORD*)(raster + 0x10);
+        g_rwImageHeight = *(DWORD*)(raster + 0x10);
         g_gamePlayerTableUnknown2A9D98[1] = *(DWORD*)(raster + 0xc);
         if (g_debugRasterAlternate)
         {
             GameDebugWriteRasterImage(g_debugRasterAlternate, g_debugRasterSecondFilename);
-            g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_debugRasterWord10, g_gamePlayerTableUnknown2A9D98[0]);
+            g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
         }
     }
 }

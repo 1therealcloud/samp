@@ -1579,7 +1579,7 @@ void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
         return;
     CMatrix matrix;
     ped->GetMatrix(&matrix);
-    float z = matrix.position.z + g_quaternionMatrixOne;
+    float z = matrix.position.z + 1.0f;
     ped->WarpFromVehicle(matrix.position.x, matrix.position.y, z);
     g_pGame->DisplayGameText(g_remoteCarJackedText, 1000, 5);
 }

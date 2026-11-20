@@ -2056,7 +2056,7 @@ CameraAim* CPed::GetCameraAim()
 BOOL __stdcall GameIsBackendOnScreen(void* backend)
 {
     // GTA SA virtual address: thiscall backend, raw EAX normalized to BOOL.
-    int result;
+    int result = 0;
     // clang-format off
     __asm {
         mov ecx,backend
@@ -3775,11 +3775,97 @@ BYTE* __stdcall GameGetPlayerControlFlags(BYTE player)
 // 0x000b3a20
 int __stdcall GameGetWeaponModel(int weapon)
 {
-    // Reconstruction-only lookup storage for the native switch/jump table.
-    // No established standalone native data entry for this compact table.
-    static const int models[46] = {331, 333, 334, 335, 336, 337, 338, 339, 341, 321, 322, 323, 324, 325, 326, 342, 343, 344, -1,  -1,  -1,  346, 347,
-                                   348, 349, 350, 351, 352, 353, 355, 356, 372, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 371};
-    return (DWORD)weapon - 1u < 46 ? models[(DWORD)weapon - 1u] : -1;
+    switch (weapon)
+    {
+    case 1:
+        return 331;
+    case 2:
+        return 333;
+    case 3:
+        return 334;
+    case 4:
+        return 335;
+    case 5:
+        return 336;
+    case 6:
+        return 337;
+    case 7:
+        return 338;
+    case 8:
+        return 339;
+    case 9:
+        return 341;
+    case 10:
+        return 321;
+    case 11:
+        return 322;
+    case 12:
+        return 323;
+    case 13:
+        return 324;
+    case 14:
+        return 325;
+    case 15:
+        return 326;
+    case 16:
+        return 342;
+    case 17:
+        return 343;
+    case 18:
+        return 344;
+    case 22:
+        return 346;
+    case 23:
+        return 347;
+    case 24:
+        return 348;
+    case 25:
+        return 349;
+    case 26:
+        return 350;
+    case 27:
+        return 351;
+    case 28:
+        return 352;
+    case 29:
+        return 353;
+    case 30:
+        return 355;
+    case 31:
+        return 356;
+    case 32:
+        return 372;
+    case 33:
+        return 357;
+    case 34:
+        return 358;
+    case 35:
+        return 359;
+    case 36:
+        return 360;
+    case 37:
+        return 361;
+    case 38:
+        return 362;
+    case 39:
+        return 363;
+    case 40:
+        return 364;
+    case 41:
+        return 365;
+    case 42:
+        return 366;
+    case 43:
+        return 367;
+    case 44:
+        return 368;
+    case 45:
+        return 369;
+    case 46:
+        return 371;
+    default:
+        return -1;
+    }
 }
 
 // 0x000acd70

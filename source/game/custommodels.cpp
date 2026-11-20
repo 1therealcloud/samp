@@ -426,20 +426,25 @@ void* GameCloneObjectModelInfo(int base, int model)
     return 0;
 }
 // 0x000a7750
-BOOL GameAttachModelTxd(int model, const char* name, const char* path)
+bool GameAttachModelTxd(int model, const char* name, const char* path)
 {
     int index = GameTxdFind(name);
-    if (index == -1)
+    if (index != -1)
+        GameSetModelTxd(model, index);
+    else
     {
         index = GameTxdAdd(name);
-        if (!GameFileExists(path))
-            return FALSE;
-        GameTxdLoad(index, path);
+        if (GameFileExists(path))
+        {
+            GameTxdLoad(index, path);
+            GameSetModelTxd(model, index);
+        }
+        else
+            return false;
     }
-    GameSetModelTxd(model, index);
     GameTxdPush();
     GameTxdSetCurrent(index);
-    return TRUE;
+    return true;
 }
 // 0x000a77c0
 BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* dff, const char* txd)
@@ -461,17 +466,17 @@ BOOL GameRegisterCustomObject(int base, int model, const char* name, const char*
     g_gameLoadingCustomModel = model;
     if (GameCloneObjectModelInfo(base, model))
     {
-        if (!GameAttachModelTxd(model, name, txd))
-        {
-            if (g_pChat)
-                g_pChat->AddDebugMessage("[error] Failed to load texture for model ID: %d", model);
-        }
-        else
+        if (GameAttachModelTxd(model, name, txd))
         {
             if (GameLoadObjectDff(dff, model))
                 return TRUE;
             if (g_pChat)
                 g_pChat->AddDebugMessage("[error] Failed to load model ID: %d", model);
+        }
+        else
+        {
+            if (g_pChat)
+                g_pChat->AddDebugMessage("[error] Failed to load texture for model ID: %d", model);
         }
     }
     return FALSE;

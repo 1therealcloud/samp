@@ -128,16 +128,6 @@ void GameDebugMoveToHeightmapBlock();
 // 0x0009ddd0
 void GameDebugProcessHeightmap();
 
-// 0x002aae10
-extern void* g_debugRasterImage;
-// 0x002abe40
-extern void* g_debugRasterSource;
-// 0x002abe44
-extern void* g_debugRasterResult;
-// 0x002abe48
-extern void* g_debugRasterAlternate;
-// 0x002a9a40
-extern DWORD g_debugRasterWord10;
 // 0x0011e370
 extern const char g_debugAllBuildingsFilename[];
 // 0x0011f594

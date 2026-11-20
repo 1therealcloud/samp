@@ -6,6 +6,7 @@
 #include "game/util.h"
 
 #include "game/custommodels.h"
+#include "game/debug.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/modelfile.h"
@@ -1191,14 +1192,8 @@ int GameCountEmptyBackendModelSlots()
     return count;
 }
 
-// 0x002a9d98
-int g_rwImageDepth;
-// 0x002a9d9c
-int g_rwImageWidth;
 // 0x002a9a40
 int g_rwImageHeight;
-// 0x002aae10
-void* g_rwImageScratch;
 // 0x00155400
 void** g_rwSceneCameraSlot = (void**)0xc1703c;
 
@@ -1210,14 +1205,9 @@ void** g_rwSceneCameraSlot = (void**)0xc1703c;
 
 // Native ignores all failures and reloads the published image between calls.
 // GTA SA virtual addresses: image create/allocate/from-raster/BMP write/destroy.
-// 0x000b5690
 void GameWriteRasterBmp(void* raster, const char* filename)
 {
-    g_rwImageScratch = ((void*(__cdecl*)(int, int, int))0x8026e0)(g_rwImageWidth, g_rwImageHeight, g_rwImageDepth);
-    ((void*(__cdecl*)(void*))0x8027a0)(g_rwImageScratch);
-    ((void*(__cdecl*)(void*, void*))0x804250)(g_rwImageScratch, raster);
-    ((void*(__cdecl*)(void*, const char*))0x7ce990)(g_rwImageScratch, filename);
-    ((BOOL(__cdecl*)(void*))0x802740)(g_rwImageScratch);
+    GameDebugWriteRasterImage(raster, filename);
 }
 
 // Allocate only when both raster slots are null. A partial success is retained.
@@ -1229,11 +1219,11 @@ void GameCreateSceneRasters()
         return;
     SCENE_SOURCE_RASTER = *(void**)0xc402d8;
     BYTE* source = (BYTE*)SCENE_SOURCE_RASTER;
-    g_rwImageDepth = *(int*)(source + 0x14);
+    g_gamePlayerTableUnknown2A9D98[0] = *(int*)(source + 0x14);
     g_rwImageHeight = *(int*)(source + 0x10);
-    g_rwImageWidth = *(int*)(source + 0xc);
-    SCENE_COLOR_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_rwImageDepth, 5);
-    SCENE_DEPTH_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_rwImageDepth, 1);
+    g_gamePlayerTableUnknown2A9D98[1] = *(int*)(source + 0xc);
+    SCENE_COLOR_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_gamePlayerTableUnknown2A9D98[0], 5);
+    SCENE_DEPTH_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_gamePlayerTableUnknown2A9D98[0], 1);
 }
 
 // Preserve all PUSHAD registers, camera publication, call order and saved-slot

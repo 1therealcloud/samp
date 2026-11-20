@@ -7,9 +7,9 @@ CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
     return this;
 }
 // 0x0006aa00
-bool CDownloadWindow::ReleaseRecordStorage()
+DownloadRecordStorage::~DownloadRecordStorage()
 {
-    return ResizeRecords(0);
+    ResizeRecords(0);
 }
 // 0x0006a440
 int CDownloadWindow::GetFilesCount()
@@ -28,8 +28,6 @@ const char g_downloadWindowTitle[18] = "Updating models..";
 CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
-    state[0] = 0;
-    state[1] = 0;
     state[2] = (DWORD)device;
     state[10] = 0;
     state[12] = 0;
@@ -63,11 +61,10 @@ void CDownloadWindow::ResetFonts()
     RECT client;
     GetClientRect(g_inputGameWindow, &client);
     DWORD left = (DWORD)(client.right / 2) - (DWORD)((LONG)state[5] / 2);
-    DWORD top = (DWORD)(client.bottom / 2);
+    DWORD top = (DWORD)(*(const volatile LONG*)&client.bottom / 2) - (DWORD)((LONG)state[6] / 2);
     state[3] = left;
-    top -= (DWORD)((LONG)state[6] / 2);
-    dialog = (BYTE*)state[10];
     state[4] = top;
+    dialog = (BYTE*)state[10];
     *(DWORD*)(dialog + 0x116) = left;
     *(DWORD*)(dialog + 0x11a) = top;
     DWORD captionHeight = *(DWORD*)((BYTE*)state[10] + 0x126);
@@ -196,7 +193,7 @@ DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
     return ((DownloadRecord**)state[0])[index];
 }
 // 0x0006a450
-bool CDownloadWindow::ResizeRecords(DWORD count)
+bool DownloadRecordStorage::ResizeRecords(DWORD count)
 {
     DWORD* state = (DWORD*)nativeState;
     if (!count)

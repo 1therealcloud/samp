@@ -391,6 +391,8 @@ const char* CDeathWindow::GetWeaponSpriteId(BYTE weapon)
         case 51:
             // Native glyph literal RVA: 0x00118300
             return "Q";
+        case 53:
+            return "J";
         case 54:
             // Native glyph literal RVA: 0x00118440
             return "K";

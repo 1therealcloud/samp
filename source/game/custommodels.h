@@ -315,7 +315,7 @@ void* GameClonePedModelInfo(int base, int model);
 // 0x000a76c0
 void* GameCloneObjectModelInfo(int base, int model);
 // 0x000a7750
-BOOL GameAttachModelTxd(int model, const char* name, const char* path);
+bool GameAttachModelTxd(int model, const char* name, const char* path);
 // 0x000b1b10
 void* GameLoadPedDff(const char* path);
 // 0x000b1bc0

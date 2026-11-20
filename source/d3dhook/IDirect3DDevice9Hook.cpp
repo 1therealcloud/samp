@@ -689,7 +689,7 @@ void* GameGetVehiclePlateTexture()
     if (g_hookCachedBuffer)
     {
         g_devicePlateTexture = *(void**)((BYTE*)g_hookCachedBuffer + 0x34);
-        return *(void**)((BYTE*)g_hookCachedBuffer + 0x34);
+        return g_devicePlateTexture;
     }
     return 0;
 }

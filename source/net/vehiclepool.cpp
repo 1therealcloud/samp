@@ -393,15 +393,18 @@ const char g_vehiclePoolQueueFullMessage[] = "All vehicle waiting slots are cons
 void CVehiclePool::Queue(const VehiclePoolQueueEntry* entry)
 {
     int slot = 0;
-    while (slot < 100 && queueActive[slot])
-        slot++;
+    do
+    {
+        if (!queueActive[slot])
+            break;
+    } while (++slot != 100);
     if (slot == 100)
     {
         g_pChat->AddDebugMessage(g_vehiclePoolQueueFullMessage);
         return;
     }
     queueActive[slot] = 1;
-    memcpy(queue + slot, entry, sizeof(*entry));
+    queue[slot] = *entry;
 }
 // 0x0001e680
 DWORD CVehiclePool::GetRef(int id)
@@ -445,20 +448,10 @@ bool CVehiclePool::TestCollisionShapes(const GameEntityCollisionShape* first, co
         if (!m_bNotEmpty[index])
             continue;
         CVehicle* vehicle = m_pObjects[index];
-        if (!vehicle || !vehicle->DoesExist())
+        if (!vehicle || !vehicle->CEntity::DoesExist())
             continue;
-        BYTE nearby;
-        // clang-format off
-        __asm {
-            mov ecx,vehicle
-            call CEntity::GetDistanceToCamera
-            fcomp g_objectStreamingNearDistance
-            fnstsw ax
-            test ah,5
-            setnp nearby
-        }
-        // clang-format on
-        if (!nearby || vehicle->IsIgnored()) continue;
+        if (!(vehicle->GetDistanceToCamera() < g_objectStreamingNearDistance) || vehicle->IsIgnored())
+            continue;
         if (vehicle->TestCollisionShapes(first, second, 1))
             return true;
     }
@@ -513,9 +506,5 @@ WORD CVehiclePool::FindInLine(DWORD unused, const CVector* origin, const CVector
     GameProcessLineOfSightRaw(origin, end, collision, &entity, 0, 1, 0, 0, 0, 0, 0, 0);
     if (!entity)
         return 0xffff;
-    int largest = m_nLargestId;
-    for (int id = 1; id <= largest; ++id)
-        if (m_pGameObjects[id] == entity)
-            return (WORD)id;
-    return 0xffff;
+    return Find(entity);
 }

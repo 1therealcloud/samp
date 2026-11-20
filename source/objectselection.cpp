@@ -140,18 +140,7 @@ void CObjectSelection::Draw()
     CEntity* object = pool->Get(id);
     if (!object)
         return;
-    BYTE visible;
-    // clang-format off
-    __asm {
-        mov ecx,object
-        call CEntity::GetDistanceToCamera
-        fcomp g_objectSelectionMaxDistance
-        fnstsw ax
-        test ah,41h
-        setnp visible
-    }
-    // clang-format on
-    if (visible)
+    if (object->GetDistanceToCamera() <= g_objectSelectionMaxDistance)
     {
         objectId = id;
         DrawLabels();

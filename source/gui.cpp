@@ -201,49 +201,54 @@ void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, voi
 void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
     // Native resolves these pointers even for events that do not dispatch a command.
-    BYTE* pools = *(BYTE* volatile*)((BYTE*)g_pNetGame + 0x3de);
-    BYTE* players = *(BYTE* volatile*)(pools + 8);
-    CLocalPlayer* local = *(CLocalPlayer* volatile*)(players + 0x1e);
-    if (id == 4)
+    BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
+    BYTE* players = *(BYTE**)(pools + 8);
+    CLocalPlayer* local = *(CLocalPlayer**)(players + 0x1e);
+    switch (id)
     {
+    case 4:
         if (event == 0x101)
             local->RequestSpawn();
-    }
-    else if (id == 5)
-    {
+        break;
+    case 5:
         if (event == 0x101)
             local->NextClass();
+        break;
+    case 6:
+        if (event == 0x101)
+            local->PrevClass();
+        break;
     }
-    else if (id == 6 && event == 0x101)
-        local->PrevClass();
 }
 // 0x000c6b60
 void CALLBACK ClientGuiDialogEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
-    if (id == 19)
+    switch (id)
     {
+    case 19:
         if (event == 0x601)
         {
-            if (!g_renderDialog || g_pInput->IsActive())
-                return;
-            g_renderDialog->Close(1);
+            if (g_renderDialog && !g_pInput->IsActive())
+                g_renderDialog->Close(1);
             return;
         }
-    }
-    else if (id == 20)
-    {
+        break;
+    case 20:
         if (event == 0x101)
         {
             if (g_renderDialog)
                 g_renderDialog->Close(1);
             return;
         }
-    }
-    else if (id == 21 && event == 0x101)
-    {
-        if (g_renderDialog)
-            g_renderDialog->Close(0);
-        return;
+        break;
+    case 21:
+        if (event == 0x101)
+        {
+            if (g_renderDialog)
+                g_renderDialog->Close(0);
+            return;
+        }
+        break;
     }
     if (event == 0x701 && g_renderDialog)
         g_renderDialog->Close(1);
@@ -334,7 +339,7 @@ void ClientDeviceObjectsLost()
         if (pool)
         {
             *(DWORD*)(pool + 0x17894) = 0;
-            ((CVehiclePool*)pool)->ShutdownLicensePlates();
+            (*(CVehiclePool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0xc))->ShutdownLicensePlates();
         }
         if (g_pNetGame && *(DWORD*)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x20))
             (*(CTextDrawPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x20))->OnLostDevice();
@@ -413,10 +418,11 @@ DWORD g_gameDebugStage;
 // 0x000a0280
 void GameReleaseRenderResource()
 {
-    g_gameLastReleasedResource = *(IUnknown**)0xc8cfa4;
-    if (*(IUnknown**)0xc8cfa4)
+    IUnknown* resource = *(IUnknown**)0xc8cfa4;
+    g_gameLastReleasedResource = resource;
+    if (resource)
     {
-        (*(IUnknown**)0xc8cfa4)->Release();
+        resource->Release();
         *(IUnknown**)0xc8cfa4 = 0;
     }
 }

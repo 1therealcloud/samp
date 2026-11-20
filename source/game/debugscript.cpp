@@ -124,7 +124,7 @@ void DebugScript::Initialize(const char* filename)
         g_pChat->AddDebugMessage("DEBUGSCRIPT: I can't open %s", filename);
         return;
     }
-    char line[256];
+    char line[MAX_PATH];
     // Native ignores fgets failure, including the first read of an empty file.
     while (!feof(file))
     {
@@ -134,5 +134,5 @@ void DebugScript::Initialize(const char* filename)
     fclose(file);
     CPed* ped = g_pGame->GetPlayerPed();
     if (ped)
-        ped->Teleport(g_debugScriptCameraPosition);
+        ped->Teleport(g_debugScriptCameraPosition.x, g_debugScriptCameraPosition.y, g_debugScriptCameraPosition.z);
 }

@@ -36,7 +36,7 @@ void CPlayerPool::SetAt(WORD player, CPlayerInfo* info)
 void CPlayerPool::SetName(WORD player, const char* text)
 {
     if (player <= 1004 && players[player])
-        players[player]->SetName(text);
+        players[player]->name.assign(text, strlen(text));
 }
 #include "game/game.h"
 #include "game/playerped.h"

@@ -17,16 +17,26 @@ struct DownloadRecord
     DWORD downloaded, total;
 };
 STATIC_ASSERT(sizeof(DownloadRecord) == 18);
-class CDownloadWindow
+// The record storage is the first subobject of the window.
+struct DownloadRecordStorage
+{
+    BYTE nativeState[0x260];
+
+    DownloadRecordStorage()
+    {
+        *(DWORD*)nativeState = 0;
+        *(DWORD*)(nativeState + 4) = 0;
+    }
+    ~DownloadRecordStorage();
+    __declspec(noinline) bool ResizeRecords(DWORD count);
+};
+
+class CDownloadWindow : public DownloadRecordStorage
 {
 public:
     // Initializes only the pointer/count prefix; does not free previous storage.
     // 0x0006a410
     CDownloadWindow* InitializeRecordStorage();
-    // Separate prefix-release entry; preserves ResizeRecords' result in AL.
-    // 0x0006aa00
-    bool ReleaseRecordStorage();
-    BYTE nativeState[0x260];
     // First two window DWORDs are a specialized pointer-array view.
     // Descriptive helpers retain its observed allocation behavior.
     // 0x0006a420
@@ -34,7 +44,6 @@ public:
     // 0x0006a440
     int GetFilesCount();
     // 0x0006a450
-    __declspec(noinline) bool ResizeRecords(DWORD count);
     // 0x0006a4c0
     void TrimRecords();
     // 0x0006a610

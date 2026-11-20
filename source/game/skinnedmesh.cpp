@@ -254,11 +254,7 @@ void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
                 mesh = container;
             if (container->pSkinInfo)
             {
-                typedef HRESULT(WINAPI * CloneFunction)(ID3DXMesh*, DWORD, DWORD, IDirect3DDevice9*, ID3DXMesh**);
-                CloneFunction clone = (CloneFunction)(*(void***)container->MeshData.pMesh)[11];
-                IDirect3DDevice9* cloneDevice = device;
-                DWORD fvf = container->MeshData.pMesh->GetFVF();
-                clone(container->MeshData.pMesh, 0x220, fvf, cloneDevice, &container->workingMesh);
+                container->MeshData.pMesh->CloneMeshFVF(0x220, container->MeshData.pMesh->GetFVF(), device, &container->workingMesh);
                 if (maximumBones < container->pSkinInfo->GetNumBones())
                     maximumBones = container->pSkinInfo->GetNumBones();
                 for (DWORD i = 0; i < container->pSkinInfo->GetNumBones(); ++i)
@@ -271,18 +267,22 @@ void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
         }
         if (frame->pFrameSibling)
             SetupBonePointers((SkinFrame*)frame->pFrameSibling, parent);
+
+        SkinFrame* child = (SkinFrame*)frame->pFrameFirstChild;
+        if (!child)
+            break;
         parent = &frame->combined;
-        frame = (SkinFrame*)frame->pFrameFirstChild;
+        frame = child;
     }
-    while (frame);
+    while (true);
 }
 // 0x000b8d10
 void CSkinnedMesh::SetAnimation(DWORD index)
 {
     if (index == currentAnimation || index >= animationCapacity)
         return;
-    ID3DXAnimationSet* set = 0;
     currentAnimation = index;
+    ID3DXAnimationSet* set = 0;
     controller->GetAnimationSet(index, &set);
     controller->SetTrackAnimationSet(0, set);
     if (set)
@@ -291,7 +291,7 @@ void CSkinnedMesh::SetAnimation(DWORD index)
 // 0x000b9190
 void CSkinnedMesh::DrawFrame(SkinFrame* frame)
 {
-    do
+    for (;;)
     {
         for (SkinMeshContainer* container = (SkinMeshContainer*)frame->pMeshContainer; container; container = (SkinMeshContainer*)container->pNextMeshContainer)
         {
@@ -305,9 +305,11 @@ void CSkinnedMesh::DrawFrame(SkinFrame* frame)
         }
         if (frame->pFrameSibling)
             DrawFrame((SkinFrame*)frame->pFrameSibling);
-        frame = (SkinFrame*)frame->pFrameFirstChild;
+        SkinFrame* child = (SkinFrame*)frame->pFrameFirstChild;
+        if (!child)
+            break;
+        frame = child;
     }
-    while (frame);
 }
 // 0x000b9250
 void CSkinnedMesh::NativeNoOp3Words(DWORD, DWORD, DWORD) {}
@@ -330,7 +332,7 @@ void CSkinnedMesh::DumpBones()
 // 0x000b92e0
 void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* parent)
 {
-    do
+    for (;;)
     {
         if (parent)
             D3DXMatrixMultiply(&frame->combined, &frame->TransformationMatrix, parent);
@@ -338,10 +340,12 @@ void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* paren
             memcpy(&frame->combined, &frame->TransformationMatrix, 64);
         if (frame->pFrameSibling)
             UpdateFrameMatrices((SkinFrame*)frame->pFrameSibling, parent);
+        SkinFrame* child = (SkinFrame*)frame->pFrameFirstChild;
+        if (!child)
+            break;
         parent = &frame->combined;
-        frame = (SkinFrame*)frame->pFrameFirstChild;
+        frame = child;
     }
-    while (frame);
 }
 // 0x000b9350
 int CSkinnedMesh::Load(const char* filename)

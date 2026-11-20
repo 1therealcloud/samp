@@ -89,19 +89,33 @@ void CObjectEdit::TryChangeProcessType()
     POINT point;
     GetCursorPos(&point);
     ScreenToClient(g_inputGameWindow, &point);
-    if (!unknown84 || !g_pGame->m_nCursorMode)
+    if (!unknown84)
+    {
+        unknown113 = 0xffffffff;
+        return;
+    }
+    if (!g_pGame->m_nCursorMode)
     {
         unknown113 = 0xffffffff;
         return;
     }
     BYTE* state = (BYTE*)this;
-    for (int i = 0; i < 7; i++)
-        if (PtInRect((RECT*)(state + 8 + i * 16), point))
-        {
-            unknown113 = i == 6 ? 10 : i;
-            return;
-        }
-    unknown113 = 0xffffffff;
+    if (PtInRect((RECT*)(state + 0x8), point))
+        unknown113 = 0;
+    else if (PtInRect((RECT*)(state + 0x18), point))
+        unknown113 = 1;
+    else if (PtInRect((RECT*)(state + 0x28), point))
+        unknown113 = 2;
+    else if (PtInRect((RECT*)(state + 0x38), point))
+        unknown113 = 3;
+    else if (PtInRect((RECT*)(state + 0x48), point))
+        unknown113 = 4;
+    else if (PtInRect((RECT*)(state + 0x58), point))
+        unknown113 = 5;
+    else if (PtInRect((RECT*)(state + 0x68), point))
+        unknown113 = 10;
+    else
+        unknown113 = 0xffffffff;
 }
 // 0x00071c90
 void CObjectEdit::SetEditMode(int mode)
@@ -133,19 +147,45 @@ void CObjectEdit::ApplyChanges(int axis, float difference)
 void CObjectEdit::ProcessMouseMove()
 {
     POINT point;
+    DWORD vertical = 0;
     GetCursorPos(&point);
     BYTE* state = (BYTE*)this;
     int axis = (int)unknown113;
     BYTE reverse = 0;
-    DWORD vertical = 0;
-    if (axis >= 0 && axis < 3)
+    if (axis == 0)
     {
-        reverse = state[0xa4 + axis];
-        vertical = *(DWORD*)(state + 0xb7 + axis * 4);
+        reverse = state[0xa4];
+        vertical = *(DWORD*)(state + 0xb7);
     }
-    bool horizontal = unknown7c == 1 ? vertical != 0 : vertical == 0;
-    int current = horizontal ? point.x : point.y, previous = *(int*)(state + (horizontal ? 0xa7 : 0xab));
-    int delta = (LONG)(reverse ? (DWORD)previous - (DWORD)current : (DWORD)current - (DWORD)previous);
+    else if (axis == 1)
+    {
+        reverse = state[0xa5];
+        vertical = *(DWORD*)(state + 0xbb);
+    }
+    else if (axis == 2)
+    {
+        reverse = state[0xa6];
+        vertical = *(DWORD*)(state + 0xbf);
+    }
+    int delta;
+    if (unknown7c == 1)
+    {
+        if (vertical)
+            goto horizontal;
+    }
+    else if (!vertical)
+        goto horizontal;
+    if (reverse)
+        delta = *(int*)(state + 0xab) - point.y;
+    else
+        delta = point.y - *(int*)(state + 0xab);
+    goto apply;
+horizontal:
+    if (reverse)
+        delta = *(int*)(state + 0xa7) - point.x;
+    else
+        delta = point.x - *(int*)(state + 0xa7);
+apply:
     if (delta)
     {
         ApplyChanges(axis, (float)delta * 0.01f);
@@ -190,19 +230,10 @@ void CObjectEdit::ApplyObjectChanges(int axis, float difference)
     SendEditEndNotification(2);
     memcpy((BYTE*)this + 0xc3, &matrix, 64);
 }
-// 0x00071cb0
-void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
+// Preserve the native x87 load order for the caller's difference argument.
+template<int axis>
+static __forceinline void ApplyAttachedAxis(BYTE* record, DWORD mode, const volatile float& difference)
 {
-    int slot = *(int*)((BYTE*)this + 0x8a);
-    CPed* ped = g_pGame->GetPlayerPed();
-    if (slot < 0 || slot >= 10 || !ped->m_accessoryOccupied[slot])
-        return;
-    BYTE* record = (BYTE*)&ped->m_accessoryInfo[slot];
-    if (!record)
-        return;
-    if (axis < 0 || axis > 2)
-        return;
-    DWORD mode = unknown7c;
     if (mode == 0)
     {
         float* value = (float*)(record + 8 + axis * 4);
@@ -216,23 +247,28 @@ void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
     else if (mode == 2)
     {
         float* value = (float*)(record + 0x20 + axis * 4);
-        // clang-format off
-        // FST then compare the unrounded x87 result, including its unordered behavior.
-        __asm {
-            mov edx,value
-            fld difference
-            fmul g_objectMutationStep
-            fadd dword ptr [edx]
-            fst dword ptr [edx]
-            fcomp g_objectScaleLowerBound
-            fnstsw ax
-            test ah,5
-            jp done
-            mov dword ptr [edx],0
-        done:
-        }
-        // clang-format on
+        *value = difference * g_objectMutationStep + *value;
+        if (*value < g_objectScaleLowerBound)
+            *value = 0;
     }
+}
+
+// 0x00071cb0
+void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
+{
+    int slot = *(int*)((BYTE*)this + 0x8a);
+    CPed* ped = g_pGame->GetPlayerPed();
+    if (slot < 0 || slot >= 10 || !ped->m_accessoryOccupied[slot])
+        return;
+    BYTE* record = (BYTE*)&ped->m_accessoryInfo[slot];
+    if (!record)
+        return;
+    if (axis == 0)
+        ApplyAttachedAxis<0>(record, unknown7c, difference);
+    else if (axis == 1)
+        ApplyAttachedAxis<1>(record, unknown7c, difference);
+    else if (axis == 2)
+        ApplyAttachedAxis<2>(record, unknown7c, difference);
 }
 
 #include "objectedit.h"
@@ -514,11 +550,11 @@ const char* CObjectEdit::GetRenderChar(int axis)
 void CObjectEdit::CenterButtonRect(RECT* out, const POINT* center)
 {
     LONG width = *(LONG*)unknown00;
-    LONG half = ((LONG)((DWORD)width - (width < 0 ? 0xffffffffUL : 0)) >> 1);
+    LONG half = width / 2;
     out->left = (LONG)((DWORD)center->x - (DWORD)half);
     out->right = (LONG)(*(DWORD*)unknown00 + (DWORD)out->left);
     LONG height = *(LONG*)(unknown00 + 4);
-    half = ((LONG)((DWORD)height - (height < 0 ? 0xffffffffUL : 0)) >> 1);
+    half = height / 2;
     out->top = (LONG)((DWORD)center->y - (DWORD)half);
     out->bottom = (LONG)(*(DWORD*)(unknown00 + 4) + (DWORD)out->top);
 }
@@ -904,7 +940,9 @@ void CObjectEdit::SendAttachedEditEndNotification(int status)
 // 0x00072660
 void CObjectEdit::Disable(BOOL send)
 {
-    BOOL notify = send != 0;
+    BOOL notify = FALSE;
+    if (send)
+        notify = TRUE;
     unknown80 = 0;
     g_pGame->SetCursorMode(0, TRUE);
     if (g_pInput->m_bEnabled)

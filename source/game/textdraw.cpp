@@ -81,7 +81,15 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
     {
         ClientSetRenderState(9, 2);
         // GTA SA virtual address; raw handle remains the this argument.
-        ((void(__fastcall*)(void*, void*, TextDrawRect*, DWORD*))0x728350)(texture, 0, rect, color);
+        // clang-format off
+        __asm {
+            push color
+            push rect
+            mov ecx,texture
+            mov edx,728350h
+            call edx
+        }
+        // clang-format on
     }
 }
 // 0x000b2c90
@@ -421,21 +429,25 @@ void CTextDraw::SetText(const char* text)
     strncpy((char*)state, text, 800);
     state[800] = 0;
     data.hasKeyCodes = 0;
+    char* p = (char*)state;
     bool inside = false, valid = true;
     int length = 0;
-    for (char* p = (char*)state; *p; ++p)
+    for (; *p; ++p)
     {
         if (*p == '~')
         {
-            if (inside)
+            if (!inside)
+            {
+                inside = true;
+                if (p[1] == 'k' || p[1] == 'K')
+                    data.hasKeyCodes = 1;
+            }
+            else
             {
                 length = 0;
                 inside = false;
                 continue;
             }
-            inside = true;
-            if (p[1] == 'k' || p[1] == 'K')
-                data.hasKeyCodes = 1;
         }
         if (inside && ++length > 24)
             valid = false;
