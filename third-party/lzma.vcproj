@@ -65,6 +65,7 @@
 				AdditionalIncludeDirectories="$(ProjectDir)lzma\C"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_7ZIP_ST"
 				InlineFunctionExpansion="1"
+				AdditionalOptions="/Ob1"
 				EnableIntrinsicFunctions="TRUE"
 				StringPooling="TRUE"
 				EnableFunctionLevelLinking="TRUE"
