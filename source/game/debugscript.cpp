@@ -19,15 +19,49 @@ CObjectPool* g_debugScriptObjects;
 WORD g_debugScriptObjectCount;
 
 // 0x0009e2f0
-char* DebugScript::GetCommandParams(char* line)
+__declspec(naked) char* DebugScript::GetCommandParams(char* line)
 {
-    char *first = strchr(line, '('), *last = strchr(line, ')');
-    if (!first || !last)
-        return 0;
-    int distance = last - first;
-    strncpy(line, first + 1, distance - 1);
-    line[distance] = 0;
-    return line;
+    __asm
+    {
+        push ebx
+        push esi
+        mov esi, [esp+0Ch] // line
+        push 28h // '('
+        push esi
+        call strchr
+        push 29h // ')'
+        push esi
+        mov ebx, eax // Opening delimiter
+        call strchr
+        add esp, 10h
+        test ebx, ebx
+        jz missingDelimiter
+        test eax, eax
+        jz missingDelimiter
+
+        push edi
+        mov edi, eax
+        sub edi, ebx // Distance between delimiters
+        lea eax, [edi-1]
+        push eax
+        inc ebx
+        push ebx
+        push esi
+        call strncpy
+        add esp, 0Ch
+        mov byte ptr [edi+esi], 0
+        pop edi
+        mov eax, esi
+        pop esi
+        pop ebx
+        ret
+
+    missingDelimiter:
+        pop esi
+        xor eax, eax
+        pop ebx
+        ret
+    }
 }
 // 0x0009e340
 void DebugScript::CreateObject(const char* params)

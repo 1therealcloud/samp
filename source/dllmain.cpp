@@ -68,7 +68,7 @@ BOOL WINAPI ClientDllMainForward(HINSTANCE module, DWORD reason, LPVOID reserved
 }
 
 // 0x0009db90
-void GameMarkStartupStage()
+__declspec(noinline) void GameMarkStartupStage()
 {
     g_clientStartupMarker = 1;
 }

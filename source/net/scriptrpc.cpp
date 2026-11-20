@@ -240,7 +240,9 @@ void ScrSetPlayerAttachedObject(RPCParameters* parameters)
 // 0x0001d780
 void ScrRpc48(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     DWORD value = 0;
     stream.Read(value);
     BYTE* models = (BYTE*)g_customModels;
@@ -279,7 +281,9 @@ void ScrSetPlayerName(RPCParameters* parameters)
 // 0x000188b0
 void ScrSetPlayerDrunkLevel(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     DWORD level;
     stream.Read(level);
     CPed* ped = g_pGame->GetPlayerPed();
@@ -391,7 +395,9 @@ void ScrRemoveBuildingForPlayer(RPCParameters* parameters)
 // 0x00018b40
 void ScrPlayCrimeReport(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     WORD unused;
     BOOL useVehicle = 0;
     int model = 0;
@@ -411,7 +417,9 @@ void ScrPlayCrimeReport(RPCParameters* parameters)
 // 0x00018750
 void ScrPlayerOpcode052C(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     DWORD value;
     stream.Read(value);
     if (g_pGame->GetPlayerPed())
@@ -420,7 +428,9 @@ void ScrPlayerOpcode052C(RPCParameters* parameters)
 // 0x00018800
 void ScrPlayerOpcode03FD(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     DWORD value;
     stream.Read(value);
     if (g_pGame->GetPlayerPed())
@@ -435,7 +445,9 @@ void ScrRpc125(RPCParameters* parameters)
 // 0x0001a230
 void ScrRpc64(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     WORD ignored;
     stream.Read(ignored);
 }
@@ -448,7 +460,9 @@ const char g_rpcInvalidSkinWarning[] = "Warning: SetPlayerSkin %d isn't a valid 
 // 0x00017a60
 void ScrSetSpawnInfo(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
     BYTE info[50];
     stream.Read((char*)info, 50);
@@ -628,7 +642,9 @@ void ScrMoveVehicleComponent(RPCParameters* parameters)
 // 0x000185c0
 void ScrSetPlayerWidescreen(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     BYTE enabled;
     stream.Read(enabled);
     g_pChat->AddDebugMessage(g_rpcWidescreenMessage, (int)enabled);
@@ -851,7 +867,9 @@ void ScrSetPlayerMapIcon(RPCParameters* parameters)
 // 0x0001a3e0
 void ScrRemovePlayerMapIcon(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     BYTE id;
     stream.Read(id);
     ((CNetGame*)g_pNetGame)->RemoveMapIcon(id);
@@ -906,7 +924,9 @@ void ScrSetVehiclePosition(RPCParameters* parameters)
 // 0x000198b0
 void ScrSetVehicleZAngle(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     WORD id;
     float angle;
     stream.Read(id);
@@ -918,7 +938,9 @@ void ScrSetVehicleZAngle(RPCParameters* parameters)
 // 0x00019990
 void ScrSetVehicleParamsForPlayer(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     WORD id;
     BYTE objective, locked;
     stream.Read(id);
@@ -1287,7 +1309,9 @@ void ScrShowTextDraw(RPCParameters* parameters)
 // 0x0001c980
 void ScrHideTextDrawForPlayer(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CTextDrawPool* pool = ((CNetGame*)g_pNetGame)->pools->textDraws;
     if (pool)
     {
@@ -1299,7 +1323,9 @@ void ScrHideTextDrawForPlayer(RPCParameters* parameters)
 // 0x0001ca30
 void ScrTextDrawSetString(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     WORD length = 0;
     CTextDrawPool* pool = ((CNetGame*)g_pNetGame)->pools->textDraws;
     if (pool)
@@ -1423,7 +1449,9 @@ void ScrSetPlayerPositionFindZ(RPCParameters* parameters)
 // 0x00018350
 void ScrSetPlayerVelocity(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CVector velocity;
     stream.Read(velocity.x);
     stream.Read(velocity.y);
@@ -1448,7 +1476,9 @@ void ScrSetPlayerWorldBounds(RPCParameters* parameters)
 // 0x0001a0d0
 void ScrSetPlayerFacingAngle(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     float angle;
     stream.Read(angle);
     g_pGame->GetPlayerPed()->SetRotation(angle);
@@ -1456,7 +1486,9 @@ void ScrSetPlayerFacingAngle(RPCParameters* parameters)
 // 0x00017860
 void ScrEnableStuntBonusForPlayer(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     bool enabled;
     stream.Read(enabled);
     g_pGame->EnableStuntBonus((BYTE)enabled);
@@ -1488,7 +1520,9 @@ void ScrGivePlayerWeapon(RPCParameters* parameters)
 // 0x0001cb40
 void ScrGangZoneCreate(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CGangZonePool* zones = ((CNetGame*)g_pNetGame)->pools->gangZones;
     if (zones)
     {
@@ -1507,7 +1541,9 @@ void ScrGangZoneCreate(RPCParameters* parameters)
 // 0x0001cc60
 void ScrGangZoneDestroy(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CGangZonePool* zones = ((CNetGame*)g_pNetGame)->pools->gangZones;
     if (zones)
     {
@@ -1519,7 +1555,9 @@ void ScrGangZoneDestroy(RPCParameters* parameters)
 // 0x0001cd10
 void ScrGangZoneFlash(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CGangZonePool* zones = ((CNetGame*)g_pNetGame)->pools->gangZones;
     if (zones)
     {
@@ -1533,7 +1571,9 @@ void ScrGangZoneFlash(RPCParameters* parameters)
 // 0x0001cdd0
 void ScrGangZoneStopFlash(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     CGangZonePool* zones = ((CNetGame*)g_pNetGame)->pools->gangZones;
     if (zones)
     {
@@ -1554,7 +1594,9 @@ void ScrDisableVehicleCollisions(RPCParameters* parameters)
 // 0x0001a800
 void ScrSetGravity(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     float gravity;
     stream.Read(gravity);
     g_pGame->SetWorldGravity(gravity);
@@ -1591,7 +1633,9 @@ void ScrSetPlayerArmor(RPCParameters* parameters)
 // 0x00019530
 void ScrSetPlayerInterior(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     BYTE interior;
     stream.Read(interior);
     g_pGame->GetPlayerPed()->LinkToInterior(interior, TRUE);
@@ -1599,7 +1643,9 @@ void ScrSetPlayerInterior(RPCParameters* parameters)
 // 0x0001a030
 void ScrGivePlayerMoney(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     int amount;
     stream.Read(amount);
     g_pGame->IncreasePlayerMoney(amount);
@@ -1623,7 +1669,9 @@ void ScrSetPlayerSpecialAction(RPCParameters* parameters)
 // 0x00019dc0
 void ScrTogglePlayerControllable(RPCParameters* parameters)
 {
-    RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
+    unsigned char* input = parameters->input;
+    const int bits = (int)parameters->numberOfBitsOfData;
+    RakNet::BitStream stream(input, bits / 8 + 1, false);
     BYTE enabled;
     stream.Read(enabled);
     g_pGame->GetPlayerPed()->SetControllable(enabled);

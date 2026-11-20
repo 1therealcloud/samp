@@ -78,15 +78,16 @@ IDirect3DTexture9* CObjectMaterialText::Create(const char* text, const char* fac
         flags = DT_CENTER | DT_VCENTER;
     else if ((BYTE)alignment == 2)
         flags = DT_RIGHT;
-    ID3DXFont* rawFont;
-    if (FAILED(D3DXCreateFontA(device, fontSize, 0, weight, 1, FALSE, 1, 0, 0, 0, face, &rawFont)))
+    ID3DXFont* font;
+    if (FAILED(D3DXCreateFontA(device, fontSize, 0, weight, 1, FALSE, 1, 0, 0, 0, face, &font)))
     {
         g_pChat->AddDebugMessage("SignText: Can't create font %s", face);
         return 0;
     }
     // Native leaks this eight-byte proxy; Release forwards to the underlying font.
-    CFontWrapper* font = new CFontWrapper;
-    font->font = rawFont;
+    CFontWrapper* wrapper = new CFontWrapper;
+    wrapper->font = font;
+    font = wrapper;
     renderer->BeginScene(surface, 0);
     device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, background, 0.0f, 0);
     first->Begin(D3DXSPRITE_ALPHABLEND);

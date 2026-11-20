@@ -75,7 +75,11 @@ IDirect3DTexture9* CLicensePlate::Create(const char* text)
         return 0;
     renderer->BeginScene(surface, 0);
     device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xffbeb6a8, 1.0f, 0);
-    RECT rect = {0, 3, 128, 32};
+    RECT rect;
+    rect.left = 0;
+    rect.right = 128;
+    rect.bottom = 32;
+    rect.top = 3;
     g_deviceFonts->DrawLicensePlateText(text, rect, 0xee444470);
     renderer->EndScene(0);
     created->SetAutoGenFilterType(D3DTEXF_LINEAR);

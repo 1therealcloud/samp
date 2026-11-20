@@ -11,7 +11,7 @@
 #include "main.h"
 #include "game/gta_globals.h"
 #include "d3dhook/ID3DXFontHook.h"
-#include "fontrender.h"
+#include "render/fontrender.h"
 
 #include "DXUTgui.h"
 #include "DXUTsettingsDlg.h"
@@ -7712,7 +7712,7 @@ HRESULT CDXUTDialogResourceManager::CreateTexture(UINT iTexture)
 // Isolated native SA-MP dialog theme. Values reviewed from RVA 0x0008d200.
 #include "config.h"
 #include "dxstdafx.h"
-#include "fontrender.h"
+#include "render/fontrender.h"
 
 // 0x0008d1c0
 void CDXUTDialog::InitFont()
@@ -7907,8 +7907,8 @@ void CDXUTDialog::InitDefaultElements()
     SetDefaultElement(DXUT_CONTROL_LISTBOX, 1, &element);
 }
 
-#include "chatwindow.h"
-#include "cmdwindow.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "config.h"
 #include "dxstdafx.h"
 #include <DXUT.h>
@@ -8007,21 +8007,31 @@ DWORD g_inputImeActivityTick;
 class InputImeActivityAccess : public CDXUTIMEEditBox
 {
 public:
-    static bool Visible()
+    static bool CandidateWindowVisible()
     {
-        return s_CandList.bShowWindow || s_bShowReadingWindow;
+        return s_CandList.bShowWindow;
+    }
+
+    static bool ReadingWindowVisible()
+    {
+        return s_bShowReadingWindow;
     }
 };
 // 0x00085e60
 bool ChatImeActive()
 {
-    if (InputImeActivityAccess::Visible())
+    if (InputImeActivityAccess::CandidateWindowVisible())
         return true;
-    return InputImeRecent(GetTickCount(), g_inputImeActivityTick);
+    if (InputImeActivityAccess::ReadingWindowVisible())
+        return true;
+    const DWORD now = GetTickCount();
+    if ((LONG)(now - g_inputImeActivityTick) < 300)
+        return true;
+    return false;
 }
 
-#include "chatwindow.h"
-#include "cmdwindow.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "config.h"
 #include <DXUT.h>
 #include <DXUTgui.h>

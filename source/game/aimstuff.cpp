@@ -235,25 +235,16 @@ void __stdcall AimStuff::GetCameraExtZoomAndAspectRatio(float* zoom, float* aspe
 // 0x0009c4f0
 void GameAimLookAtPartial(CameraAim* aim, float x, float y, float z)
 {
-    D3DXVECTOR3 eye, target(x, y, z), vertical(0, 0, 1);
-    memcpy(&eye, &aim->source, 12);
+    CVector direction;
+    D3DXVECTOR3 eye(aim->source.x, aim->source.y, aim->source.z);
+    D3DXVECTOR3 target(x, y, z);
+    D3DXVECTOR3 vertical(0, 0, 1);
     D3DXMATRIX matrix;
     D3DXMatrixLookAtRH(&matrix, &eye, &target, &vertical);
-    CVector direction, up;
-    // clang-format off
-    __asm {
-        lea eax,matrix
-        fld dword ptr [eax+8]
-        fchs
-        fstp direction.x
-        fld dword ptr [eax+0x18]
-        fchs
-        fstp direction.y
-        fld dword ptr [eax+0x28]
-        fchs
-        fstp direction.z
-    }
-    // clang-format on
+    CVector up;
+    direction.x = -matrix._13;
+    direction.y = -matrix._23;
+    direction.z = -matrix._33;
     GameBuildAimUpVector(&direction, &up);
     // Preserve the four observed DWORD publications, including shifted Y sources.
     memcpy(&aim->front.x, &direction.y, 4);
