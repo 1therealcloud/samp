@@ -132,7 +132,8 @@ void CDownloadWindow::Draw()
             ++column;
             ++width;
             title += 129;
-        } while (column < (LONG)state[13]);
+        }
+        while (column < (LONG)state[13]);
     }
 }
 // 0x0006a500
@@ -216,7 +217,8 @@ bool DownloadRecordStorage::ResizeRecords(DWORD count)
         do
         {
             ((DownloadRecord**)state[0])[i] = 0;
-        } while (++i != count);
+        }
+        while (++i != count);
     }
     state[1] = count;
     return true;
@@ -234,7 +236,8 @@ void CDownloadWindow::TrimRecords()
         {
             if (((DownloadRecord**)state[0])[i])
                 last = i;
-        } while (++i != count);
+        }
+        while (++i != count);
     }
     if (last == 0xffffffff)
         ResizeRecords(0);
@@ -254,7 +257,8 @@ __declspec(noinline) int CDownloadWindow::FindRecord(DWORD id)
         {
             if (GetRecord(i)->id == id)
                 return (int)i;
-        } while (++i != count);
+        }
+        while (++i != count);
     }
     return -1;
 }
@@ -280,7 +284,8 @@ int CDownloadWindow::AddRecord(DownloadRecord* record)
                 ((DownloadRecord**)state[0])[i] = record;
                 return (int)i;
             }
-        } while (++i != count);
+        }
+        while (++i != count);
     }
     if (!ResizeRecords(count + 1))
         return -1;

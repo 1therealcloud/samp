@@ -8,8 +8,8 @@
 #include "game/custommodels.h"
 #include "game/debug.h"
 #include "game/game.h"
-#include "game/playerped.h"
 #include "game/modelfile.h"
+#include "game/playerped.h"
 #include "main.h"
 #include <static_assert.h>
 STATIC_ASSERT(sizeof(CVector) == sizeof(D3DXVECTOR3));

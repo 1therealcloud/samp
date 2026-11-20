@@ -143,7 +143,8 @@ bool CCustomModels::ResizeRecords(DWORD count)
         do
         {
             records[i] = 0;
-        } while (++i != count);
+        }
+        while (++i != count);
     }
     previous = count;
     return true;
@@ -163,7 +164,8 @@ void CCustomModels::TrimRecords()
                 last = i;
             ++i;
             ++record;
-        } while (i != count);
+        }
+        while (i != count);
     }
     if (last == 0xffffffff)
         ResizeRecords(0);

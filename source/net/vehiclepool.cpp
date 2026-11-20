@@ -397,7 +397,8 @@ void CVehiclePool::Queue(const VehiclePoolQueueEntry* entry)
     {
         if (!queueActive[slot])
             break;
-    } while (++slot != 100);
+    }
+    while (++slot != 100);
     if (slot == 100)
     {
         g_pChat->AddDebugMessage(g_vehiclePoolQueueFullMessage);

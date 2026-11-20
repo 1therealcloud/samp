@@ -1654,8 +1654,7 @@ DWORD CRemotePlayer::GetColorAsARGB()
 // 0x00015fd0
 int CRemotePlayer::GetStatus()
 {
-    if (!m_state.ped || !m_state.ped->DoesExist() ||
-        m_state.ped->GetVehicleTransitionTaskState() || m_state.ped->HasTaskType704())
+    if (!m_state.ped || !m_state.ped->DoesExist() || m_state.ped->GetVehicleTransitionTaskState() || m_state.ped->HasTaskType704())
         return 0;
     return (int)m_state.status;
 }

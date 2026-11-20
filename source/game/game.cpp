@@ -502,8 +502,8 @@ void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVecto
         Scripting::ProcessCommand(&g_gameDeleteMarkerCommand, m_checkpoints.raceMarker);
         m_checkpoints.raceMarker = 0;
         DWORD marker = 0;
-        Scripting::ProcessCommand(&g_gameCreateMarkerCommand, (double)m_checkpoints.racePosition.x, (double)m_checkpoints.racePosition.y,
-                                  (double)m_checkpoints.racePosition.z, 0, &marker);
+        Scripting::ProcessCommand(&g_gameCreateMarkerCommand, (double)m_checkpoints.racePosition.x, (double)m_checkpoints.racePosition.y, (double)m_checkpoints.racePosition.z, 0,
+                                  &marker);
         Scripting::ProcessCommand(&g_gameMarkerColorCommand, marker, 1005);
         Scripting::ProcessCommand(&g_gameMarkerModeCommand, marker, 3);
         m_checkpoints.raceMarker = marker;
@@ -669,13 +669,15 @@ void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
         }
         else if (g_customModels && g_customModels->IsObjectEntry(model) && !GamePoolHasObjectModel(model))
             g_customModels->ReleaseObjectEntry(model);
-    } while (++model != 612);
+    }
+    while (++model != 612);
     int models[212];
     int i = 0;
     do
     {
         models[i] = 400 + i;
-    } while (++i != 212);
+    }
+    while (++i != 212);
     int count = 211;
     while (count > 0)
     {
@@ -696,7 +698,8 @@ void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
             }
             ++priority;
             ++entry;
-        } while (--remaining);
+        }
+        while (--remaining);
         --count;
     }
     i = 0;
@@ -709,7 +712,8 @@ void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
             Scripting::ProcessCommand(&g_gameLoadModelsCommand);
             m_aKeepLoadedVehicleModels[model - 400] = true;
         }
-    } while (++i != 80);
+    }
+    while (++i != 80);
 }
 
 // 0x000a16c0
@@ -2178,7 +2182,8 @@ CPed* CGame::CreatePed(int model, CVector position, float rotation, DWORD, BOOL 
     {
         if (g_gameUsedPlayerSlots[slot] != 1)
             goto foundSlot;
-    } while (++slot != 210);
+    }
+    while (++slot != 210);
     return 0;
 
 foundSlot:
@@ -2212,7 +2217,8 @@ BYTE CGame::FindFreePlayerSlot()
     {
         if (g_gameUsedPlayerSlots[player] != 1)
             return player;
-    } while (++player != 210);
+    }
+    while (++player != 210);
     return 0;
 }
 
@@ -2227,7 +2233,8 @@ BYTE CGame::CountUsedPlayerSlots()
         if (*slot == 1)
             ++count;
         ++slot;
-    } while (--remaining);
+    }
+    while (--remaining);
     return count;
 }
 

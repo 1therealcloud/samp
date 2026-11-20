@@ -231,7 +231,7 @@ void CObjectEdit::ApplyObjectChanges(int axis, float difference)
     memcpy((BYTE*)this + 0xc3, &matrix, 64);
 }
 // Preserve the native x87 load order for the caller's difference argument.
-template<int axis>
+template <int axis>
 static __forceinline void ApplyAttachedAxis(BYTE* record, DWORD mode, const volatile float& difference)
 {
     if (mode == 0)

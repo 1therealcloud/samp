@@ -191,10 +191,10 @@ void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, voi
 {
     switch (id)
     {
-    case 1:
-        if (event == 0x601 && g_pInput && !g_pInput->IsActive())
-            g_pInput->ProcessInput();
-        break;
+        case 1:
+            if (event == 0x601 && g_pInput && !g_pInput->IsActive())
+                g_pInput->ProcessInput();
+            break;
     }
 }
 // 0x000c6c60
@@ -206,18 +206,18 @@ void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, voi
     CLocalPlayer* local = *(CLocalPlayer**)(players + 0x1e);
     switch (id)
     {
-    case 4:
-        if (event == 0x101)
-            local->RequestSpawn();
-        break;
-    case 5:
-        if (event == 0x101)
-            local->NextClass();
-        break;
-    case 6:
-        if (event == 0x101)
-            local->PrevClass();
-        break;
+        case 4:
+            if (event == 0x101)
+                local->RequestSpawn();
+            break;
+        case 5:
+            if (event == 0x101)
+                local->NextClass();
+            break;
+        case 6:
+            if (event == 0x101)
+                local->PrevClass();
+            break;
     }
 }
 // 0x000c6b60
@@ -225,30 +225,30 @@ void CALLBACK ClientGuiDialogEvent(UINT event, int id, CDXUTControl* control, vo
 {
     switch (id)
     {
-    case 19:
-        if (event == 0x601)
-        {
-            if (g_renderDialog && !g_pInput->IsActive())
-                g_renderDialog->Close(1);
-            return;
-        }
-        break;
-    case 20:
-        if (event == 0x101)
-        {
-            if (g_renderDialog)
-                g_renderDialog->Close(1);
-            return;
-        }
-        break;
-    case 21:
-        if (event == 0x101)
-        {
-            if (g_renderDialog)
-                g_renderDialog->Close(0);
-            return;
-        }
-        break;
+        case 19:
+            if (event == 0x601)
+            {
+                if (g_renderDialog && !g_pInput->IsActive())
+                    g_renderDialog->Close(1);
+                return;
+            }
+            break;
+        case 20:
+            if (event == 0x101)
+            {
+                if (g_renderDialog)
+                    g_renderDialog->Close(1);
+                return;
+            }
+            break;
+        case 21:
+            if (event == 0x101)
+            {
+                if (g_renderDialog)
+                    g_renderDialog->Close(0);
+                return;
+            }
+            break;
     }
     if (event == 0x701 && g_renderDialog)
         g_renderDialog->Close(1);

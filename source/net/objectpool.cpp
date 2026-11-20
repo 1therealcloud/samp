@@ -35,7 +35,8 @@ int CObjectPool::GetCount()
         if (*slot)
             ++count;
         ++slot;
-    } while (--remaining);
+    }
+    while (--remaining);
     return count;
 }
 // 0x00012750

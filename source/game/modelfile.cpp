@@ -869,7 +869,8 @@ __declspec(noinline) bool CModelMaterialArray::Resize(DWORD size)
         do
         {
             items[i] = 0;
-        } while (++i != size);
+        }
+        while (++i != size);
     }
     count = size;
     return true;
@@ -897,7 +898,8 @@ __declspec(noinline) bool CModelMeshArray::Resize(DWORD size)
         do
         {
             items[i] = 0;
-        } while (++i != size);
+        }
+        while (++i != size);
     }
     count = size;
     return true;
@@ -925,7 +927,8 @@ __declspec(noinline) bool CModelGeometryArray::Resize(DWORD size)
         do
         {
             items[i] = 0;
-        } while (++i != size);
+        }
+        while (++i != size);
     }
     count = size;
     return true;
@@ -951,7 +954,8 @@ DWORD CModelGeometryArray::Insert(CModelGeometry* geometry)
             }
             ++index;
             ++slot;
-        } while (index != previous);
+        }
+        while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -974,8 +978,7 @@ CModelGeometry::CModelGeometry()
     unknown20 = 0;
     uv = 0;
     triangles = 0;
-    memset((BYTE*)this + offsetof(CModelGeometry, sphere), 0,
-           offsetof(CModelGeometry, material) - offsetof(CModelGeometry, sphere));
+    memset((BYTE*)this + offsetof(CModelGeometry, sphere), 0, offsetof(CModelGeometry, material) - offsetof(CModelGeometry, sphere));
     materialCount = 0;
     unknown60 = 0;
     unknown61 = 0;
@@ -1201,7 +1204,8 @@ DWORD CModelMaterialArray::Insert(void* entry)
             }
             ++index;
             ++slot;
-        } while (index != previous);
+        }
+        while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -1229,7 +1233,8 @@ DWORD CModelMeshArray::Insert(BYTE* entry)
             }
             ++index;
             ++slot;
-        } while (index != previous);
+        }
+        while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -2111,9 +2116,8 @@ bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex* vertex, con
     point[0] = vertex->values[0] * g_modelCollisionVertexInvScale;
     point[1] = vertex->values[1] * g_modelCollisionVertexInvScale;
     point[2] = vertex->values[2] * g_modelCollisionVertexInvScale;
-    if (point[0] >= bounds->minimum[0] && point[0] <= bounds->maximum[0] &&
-        point[1] >= bounds->minimum[1] && point[1] <= bounds->maximum[1] &&
-        point[2] >= bounds->minimum[2] && point[2] <= bounds->maximum[2])
+    if (point[0] >= bounds->minimum[0] && point[0] <= bounds->maximum[0] && point[1] >= bounds->minimum[1] && point[1] <= bounds->maximum[1] && point[2] >= bounds->minimum[2] &&
+        point[2] <= bounds->maximum[2])
         return true;
     return false;
 }
@@ -2181,7 +2185,8 @@ bool CModelCollisionBoxArray::Resize(DWORD size)
         do
         {
             items[i] = 0;
-        } while (++i != size);
+        }
+        while (++i != size);
     }
     count = size;
     return true;
@@ -2207,7 +2212,8 @@ DWORD CModelCollisionBoxArray::Insert(void* value)
             }
             ++index;
             ++slot;
-        } while (index != previous);
+        }
+        while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;
@@ -2249,7 +2255,8 @@ bool CModelCollisionSphereArray::Resize(DWORD size)
         do
         {
             items[i] = 0;
-        } while (++i != size);
+        }
+        while (++i != size);
     }
     count = size;
     return true;
@@ -2275,7 +2282,8 @@ DWORD CModelCollisionSphereArray::Insert(void* value)
             }
             ++index;
             ++slot;
-        } while (index != previous);
+        }
+        while (index != previous);
     }
     if (!Resize(previous + 1))
         return 0xffffffff;

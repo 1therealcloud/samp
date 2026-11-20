@@ -125,7 +125,7 @@ CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD k
             g_pGame->LoadRequestedModels();
             if (!g_pGame->IsModelAvailable(model))
             {
-                void(WINAPI* sleep)(DWORD) = Sleep;
+                void(WINAPI * sleep)(DWORD) = Sleep;
                 do
                 {
                     sleep(0);
@@ -204,7 +204,7 @@ CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD k
         g_pGame->LoadRequestedModels();
         BOOL available = g_pGame->IsModelAvailable(0x21a);
         // The five train waits share one resolved Sleep target.
-        void(WINAPI* sleep)(DWORD) = Sleep;
+        void(WINAPI * sleep)(DWORD) = Sleep;
         while (!available)
         {
             sleep(0);
@@ -578,7 +578,7 @@ void CVehicle::EnableLights(BYTE enabled)
 BYTE CVehicle::GetBackendLightsDisabledFlag()
 {
     if (!m_pGameVehicle)
-    return 1;
+        return 1;
     if (GamePoolVehicleGetAt(m_nHandle))
     {
         BYTE flags = *((BYTE*)m_pGameVehicle + 0x4a8);
@@ -594,7 +594,7 @@ BOOL CVehicle::RemoveComponent(WORD component)
 {
     if (!m_pGameVehicle)
     {
-unavailable:
+    unavailable:
         return FALSE;
     }
     if (!GamePoolVehicleGetAt(m_nHandle))
@@ -753,8 +753,7 @@ BOOL CVehicle::GetLandingGearState()
         mov position,edx
     }
     // clang-format on
-    if (position == g_objectScaleLowerBound)
-        return FALSE;
+    if (position == g_objectScaleLowerBound) return FALSE;
     return TRUE;
 }
 
