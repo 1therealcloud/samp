@@ -18,18 +18,18 @@
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Gs /Gm- /Zl"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_LIB;DEBUG;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x403"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				ExceptionHandling="FALSE"
-				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="FALSE"
+				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
-				DebugInformationFormat="3"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(IntDir)\detours.pdb"
-				AdditionalOptions="/Gs /Gm- /Zl"/>
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -62,18 +62,18 @@
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Gs /Gm- /Zl"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_LIB;DEBUG;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x403"
-				RuntimeLibrary="1"
-				EnableFunctionLevelLinking="TRUE"
 				ExceptionHandling="FALSE"
-				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="FALSE"
+				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
-				DebugInformationFormat="3"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(IntDir)\detours.pdb"
-				AdditionalOptions="/Gs /Gm- /Zl"/>
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
