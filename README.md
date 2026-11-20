@@ -2,11 +2,17 @@
 
 This project aims to reimplement SA-MP 0.3.DL-R1 as closely as possible to its original source code through reverse engineering and matching decompilation.
 
-The 0.3.DL-R1 client is reconstructed from its binary. The 0.2x sources serve as reference material for names and organization, and some legacy components, including the archive code, are reused.
+The 0.3.DL-R1 client is reconstructed from its binary.\
+The 0.2x sources serve as reference material for names, organization and some code\
+(`source/archive`, `tools/arctool2`, `tools/rcon`).
 
 ## Status
 
-The client is fully functional and playable, with no known issues observed during testing. All SA-MP functionality is implemented. Matching the compiled code to the original binary remains a work in progress, with substantial work still ahead.
+The client is fully functional and playable, with no known issues observed during testing.\
+All SA-MP functionality is implemented.\
+Approximately **75% of the compiled SA-MP client code** matches the original.\
+This figure covers the client's own code.\
+Third-party code and full DLL matching are tracked separately.
 
 Reference binary: **SA-MP 0.3.DL-R1 `samp.dll`**.
 
@@ -16,7 +22,8 @@ SHA-256:
 bccdb297464bd382625635be25585df07a8fa6668bc0015650708e3eb4ffcd4b
 ```
 
-The current binary inventory contains **9,093 native entries**: **9,010 function and compiler-helper entries**, plus **83 import thunks**. These counts describe native entry addresses, rather than unique C++ methods or byte-matched functions.
+The current binary inventory contains **9,093 native entries**.\
+These counts describe native entry addresses, rather than unique C++ methods or byte-matched functions.
 
 | Component | Entries |
 | --- | ---: |
@@ -37,11 +44,22 @@ The current binary inventory contains **9,093 native entries**: **9,010 function
 | Other import thunks | 66 |
 | **Total** | **9,093** |
 
-BASS is an external DLL; its entries above are import thunks. The other 66 import thunks cover D3DX9 and Windows APIs. Uncertain ownership is recorded separately from functionality and matching progress.
-
 ## Dependencies
 
-RakNet, zlib, libcurl, LZMA and ttmath are pinned Git submodules under `third-party/`. BASS, Detours and the modified DXUT sources are included directly in that directory. D3DX9 is supplied by the DirectX SDK. The MSVC runtime is linked statically.
+RakNet, zlib, libcurl, LZMA, and TTMath are pinned Git submodules under `third-party/`.\
+BASS, Detours, and the modified DXUT sources are included directly.\
+The DirectX SDK supplies D3DX9.\
+The MSVC runtime is linked statically.
+
+| Dependency | Match status |
+| --- | --- |
+| libcurl 7.57.0 | All verified function bodies match the original. |
+| zlib 1.2.11 | All verified function bodies match the original. |
+| LZMA 16.04 | All verified function bodies match the original. |
+| BASS | The project uses [BASS 2.4.7](http://www.un4seen.com/stuff/bass247.zip), the same build shipped with the original client. |
+| TTMath | Uses the [open.mp fork of TTMath 0.9.3](https://github.com/openmultiplayer/ttmath), which includes small source changes. |
+| RakNet and DXUT | Closely match the client-specific versions in the original binary. Some implementations still differ. |
+| Detours | The project uses the same Detours version as the original client (1.5 Build 46). |
 
 ## Utilities
 
@@ -57,16 +75,14 @@ The repository also includes the server browser and supporting tools:
 | `kdff.dll` | [`tools/dff/DffFormatDll`](tools/dff/DffFormatDll) | DFF/COL processing and vertex-color operations used by the DFF GUI. |
 | `kdffgui.exe` | [`tools/dff/Project1`](tools/dff/Project1) | Graphical DFF preview, collision generation and vertex-color editing. |
 
-`kdff.exe` compiles the shared DFF/COL backend directly into the executable and does not require `kdff.dll`. The GUI loads `kdff.dll` separately. DLL-specific code is selected with `KDFF_DLL`.
-
 ## Building
 
 Build requirements:
 
-- Git.
-- Visual Studio .NET 2003 (Service Pack 1 optional).
-- DirectX 9.0 SDK, April 2005.
-- Delphi 7 (optional, for the server browser and DFF GUI).
+- [Git](https://git-scm.com/install/windows).
+- [Visual Studio .NET 2003 RTM](https://archive.org/details/microsoft-visual-studio-.-net-2003-professional-disc-1).
+- [DirectX 9.0 SDK, April 2005](https://web.archive.org/web/20111118175754/https://download.microsoft.com/download/a/c/d/acdfb557-266f-4af4-8673-6ab8009b4ddd/dxsdk_apr2005.exe).
+- [Delphi 7 (optional)](https://altd.embarcadero.com/download/delphi/d7/english/ent/delphi_7_ent_en.iso).
 
 Initialize the dependencies:
 
@@ -84,6 +100,4 @@ To build the DFF GUI, open `tools/dff/Project1/Project1.dpr` in Delphi 7 and bui
 
 ## Formatting
 
-Run `format.cmd` to format `source/` using the included `.clang-format`.
-
-Inline assembly is enclosed in `// clang-format off` and `// clang-format on` guards.
+Run `format.cmd` to format `source/` and `tools/` using the included `.clang-format`.
