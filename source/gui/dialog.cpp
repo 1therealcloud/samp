@@ -7,17 +7,17 @@
 #include <DXUTgui.h>
 #include <DXUTmisc.h>
 
-#include "dialog.h"
+#include "gui/dialog.h"
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "chatwindow.h"
-#include "cmdwindow.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "config.h"
 #include "game/game.h"
 #include "game/hooks.h"
 #include "game/scripting.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "runutil.h"
 #include <static_assert.h>

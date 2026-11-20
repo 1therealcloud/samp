@@ -5,14 +5,14 @@
 #include "BitStream.h"
 #include "RakClientInterface.h"
 #include "StringCompressor.h"
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/actor.h"
 #include "game/audio.h"
 #include "game/building_removal.h"
 #include "game/camera.h"
 #include "game/custommodels.h"
 #include "game/playerped.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "net/actorpool.h"
 #include "net/gangzonepool.h"
@@ -25,7 +25,7 @@
 #include "net/remoteplayer.h"
 #include "net/textdrawpool.h"
 #include "net/vehiclepool.h"
-#include "textdrawselection.h"
+#include "gui/textdrawselection.h"
 // 0x00118288
 const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand = {0x69b, "iiffffff"};
 // 0x0001aba0

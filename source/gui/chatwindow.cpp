@@ -1,7 +1,7 @@
 #include "main.h"
 // Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
 // Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 // 0x00068e00
 LONG CChat::GetChatWindowBottom()
 {
@@ -18,7 +18,7 @@ BYTE CChat::GetTimestamps()
 {
     return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
 }
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "runutil.h"
 #include <DXUT.h>
 #include <DXUTgui.h>

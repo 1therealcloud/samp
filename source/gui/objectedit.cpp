@@ -1,4 +1,4 @@
-#include "objectedit.h"
+#include "gui/objectedit.h"
 
 #include "main.h"
 // 0x00017850
@@ -8,7 +8,7 @@ WORD CObjectEdit::GetObjectId()
 }
 #include "filehooks.h"
 #include "game/entity.h"
-#include "gui.h"
+#include "gui/gui.h"
 // 0x00072ff0
 BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
 {
@@ -271,7 +271,7 @@ void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
         ApplyAttachedAxis<2>(record, unknown7c, difference);
 }
 
-#include "objectedit.h"
+#include "gui/objectedit.h"
 // 0x00071600
 CObjectEdit::CObjectEdit(IDirect3DDevice9* value)
 {
@@ -874,7 +874,7 @@ void CObjectEdit::Render()
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 // 0x00117f2c
 int g_objectEditRpc = 117;
 // 0x00117f30

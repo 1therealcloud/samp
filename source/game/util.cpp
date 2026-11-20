@@ -41,7 +41,7 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
     }
     // clang-format on
 }
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 // 0x0011e3a0
 const double g_aimVectorHalfPi = 1.5707963705062866;
 // 0x000b6440

@@ -385,7 +385,7 @@ void CCustomModels::ReleaseObjectEntry(int model)
     (void)model;
 }
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/custommodels.h"
 #include "game/game.h"
 #include "game/hooks.h"
@@ -876,7 +876,7 @@ void CCustomModels::Initialize()
 #include "LzmaDec.h"
 #include "RakClientInterface.h"
 #include "config.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "net/netgame.h"
 #include <curl/curl.h>
 #include <process.h>

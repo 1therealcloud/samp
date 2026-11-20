@@ -239,7 +239,7 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     ClearBackendFlag8();
 }
 
-#include "gui.h"
+#include "gui/gui.h"
 
 // 0x000a8870
 bool CObject::GetMaterialSize(int code, int* width, int* height)

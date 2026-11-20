@@ -8,10 +8,10 @@ void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 }
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"

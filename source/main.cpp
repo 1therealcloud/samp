@@ -8,9 +8,9 @@
 
 #include "RakClientInterface.h"
 #include "anticheat.h"
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "cmdprocs.h"
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "config.h"
 #include "d3dhook/ID3DXFontHook.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -18,7 +18,7 @@
 #include "game/gta_globals.h"
 #include "game/hooks.h"
 #include "game/model_preview.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include <static_assert.h>
 
 // Client runtime globals, initialization and frame coordination.

@@ -1,7 +1,7 @@
 #include "net/textdrawpool.h"
 
 #include "game/textdraw.h"
-#include "gui.h"
+#include "gui/gui.h"
 // 0x000177d0
 CTextDraw* CTextDrawPool::Get(WORD id)
 {

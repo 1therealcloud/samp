@@ -3,7 +3,7 @@
 
 #include "game/hooks.h"
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "cmdprocs.h"
 #include "exceptions.h"
 #include "game/aimstuff.h"
@@ -16,7 +16,7 @@
 #include "game/scripting.h"
 #include "game/textdraw.h"
 #include "game/util.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "net/actorpool.h"
 #include "net/gangzonepool.h"

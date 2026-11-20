@@ -9,7 +9,7 @@
 #include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 // 0x0011f56c
 const char g_taskNoneName[5] = "None";
@@ -396,7 +396,7 @@ int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
     return 0;
 }
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/hooks.h"
 // 0x001518d0
 DWORD g_debugHeightmapTileEnd = 900;

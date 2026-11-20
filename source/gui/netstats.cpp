@@ -3,14 +3,14 @@
 
 #include <psapi.h>
 
-#include "netstats.h"
+#include "gui/netstats.h"
 
 #include "RakClientInterface.h"
 #include "RakNetStatistics.h"
-#include "fontrender.h"
+#include "render/fontrender.h"
 #include "game/debug.h"
 #include "game/playerped.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/objectpool.h"

@@ -1,4 +1,4 @@
-#include "downloadwindow.h"
+#include "gui/downloadwindow.h"
 // 0x0006a410
 CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
 {
@@ -17,9 +17,9 @@ int CDownloadWindow::GetFilesCount()
     return *(int*)(nativeState + 4);
 }
 #include "GetTime.h"
-#include "fontrender.h"
+#include "render/fontrender.h"
 #include "game/gta_globals.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include <DXUTgui.h>
 #include <string.h>
 // 0x0011c37c
@@ -161,7 +161,7 @@ void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
 }
 
 #include "game/vehicle.h"
-#include "objectedit.h"
+#include "gui/objectedit.h"
 #include <stdio.h>
 #include <stdlib.h>
 // 0x0011c414

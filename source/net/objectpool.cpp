@@ -319,8 +319,8 @@ WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVec
     return selected;
 }
 
-#include "gui.h"
-#include "label.h"
+#include "gui/gui.h"
+#include "gui/label.h"
 // 0x0011813c
 const char g_objectPoolRayOriginText[8] = "Sphere1";
 // 0x00118134

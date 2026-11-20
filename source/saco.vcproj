@@ -166,28 +166,10 @@
 				RelativePath="audiostream.h">
 			</File>
 			<File
-				RelativePath="chatbubble.cpp">
-			</File>
-			<File
-				RelativePath="chatbubble.h">
-			</File>
-			<File
-				RelativePath="chatwindow.cpp">
-			</File>
-			<File
-				RelativePath="chatwindow.h">
-			</File>
-			<File
 				RelativePath="cmdprocs.cpp">
 			</File>
 			<File
 				RelativePath="cmdprocs.h">
-			</File>
-			<File
-				RelativePath="cmdwindow.cpp">
-			</File>
-			<File
-				RelativePath="cmdwindow.h">
 			</File>
 			<File
 				RelativePath="config.cpp">
@@ -196,37 +178,7 @@
 				RelativePath="config.h">
 			</File>
 			<File
-				RelativePath="deathwindow.cpp">
-			</File>
-			<File
-				RelativePath="deathwindow.h">
-			</File>
-			<File
-				RelativePath="dialog.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="dialog.h">
-			</File>
-			<File
 				RelativePath="dllmain.cpp">
-			</File>
-			<File
-				RelativePath="downloadwindow.cpp">
-			</File>
-			<File
-				RelativePath="downloadwindow.h">
 			</File>
 			<File
 				RelativePath="events.cpp">
@@ -259,64 +211,10 @@
 				RelativePath="filesystem.h">
 			</File>
 			<File
-				RelativePath="fontrender.cpp">
-			</File>
-			<File
-				RelativePath="fontrender.h">
-			</File>
-			<File
-				RelativePath="gui.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="gui.h">
-			</File>
-			<File
-				RelativePath="helpdialog.cpp">
-			</File>
-			<File
-				RelativePath="helpdialog.h">
-			</File>
-			<File
 				RelativePath="httpclient.cpp">
 			</File>
 			<File
 				RelativePath="httpclient.h">
-			</File>
-			<File
-				RelativePath="label.cpp">
-			</File>
-			<File
-				RelativePath="label.h">
-			</File>
-			<File
-				RelativePath="licenseplate.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="licenseplate.h">
 			</File>
 			<File
 				RelativePath="main.cpp">
@@ -331,115 +229,207 @@
 				RelativePath="md5.h">
 			</File>
 			<File
-				RelativePath="menu.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="menu.h">
-			</File>
-			<File
-				RelativePath="netstats.cpp">
-			</File>
-			<File
-				RelativePath="netstats.h">
-			</File>
-			<File
-				RelativePath="objectedit.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="objectedit.h">
-			</File>
-			<File
-				RelativePath="objectmaterialtext.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="objectmaterialtext.h">
-			</File>
-			<File
-				RelativePath="objectselection.cpp">
-			</File>
-			<File
-				RelativePath="objectselection.h">
-			</File>
-			<File
-				RelativePath="playertags.cpp">
-			</File>
-			<File
-				RelativePath="playertags.h">
-			</File>
-			<File
-				RelativePath="renderpanel.cpp">
-			</File>
-			<File
-				RelativePath="renderpanel.h">
-			</File>
-			<File
 				RelativePath="runutil.cpp">
 			</File>
 			<File
 				RelativePath="runutil.h">
 			</File>
 			<File
-				RelativePath="scoreboard.cpp">
-			</File>
-			<File
-				RelativePath="scoreboard.h">
-			</File>
-			<File
-				RelativePath="spawnscreen.cpp">
-			</File>
-			<File
-				RelativePath="spawnscreen.h">
-			</File>
-			<File
 				RelativePath="subclass.cpp">
 			</File>
+		</Filter>
+		<Filter
+			Name="gui"
+			Filter="">
 			<File
-				RelativePath="svrnetstats.cpp">
+				RelativePath="gui\chatwindow.cpp">
 			</File>
 			<File
-				RelativePath="svrnetstats.h">
+				RelativePath="gui\chatwindow.h">
 			</File>
 			<File
-				RelativePath="textdrawselection.cpp">
+				RelativePath="gui\cmdwindow.cpp">
 			</File>
 			<File
-				RelativePath="textdrawselection.h">
+				RelativePath="gui\cmdwindow.h">
+			</File>
+			<File
+				RelativePath="gui\dialog.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="gui\dialog.h">
+			</File>
+			<File
+				RelativePath="gui\downloadwindow.cpp">
+			</File>
+			<File
+				RelativePath="gui\downloadwindow.h">
+			</File>
+			<File
+				RelativePath="gui\gui.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="gui\gui.h">
+			</File>
+			<File
+				RelativePath="gui\helpdialog.cpp">
+			</File>
+			<File
+				RelativePath="gui\helpdialog.h">
+			</File>
+			<File
+				RelativePath="gui\renderpanel.cpp">
+			</File>
+			<File
+				RelativePath="gui\renderpanel.h">
+			</File>
+			<File
+				RelativePath="gui\scoreboard.cpp">
+			</File>
+			<File
+				RelativePath="gui\scoreboard.h">
+			</File>
+			<File
+				RelativePath="gui\spawnscreen.cpp">
+			</File>
+			<File
+				RelativePath="gui\spawnscreen.h">
+			</File>
+			<File
+				RelativePath="gui\chatbubble.cpp">
+			</File>
+			<File
+				RelativePath="gui\chatbubble.h">
+			</File>
+			<File
+				RelativePath="gui\deathwindow.cpp">
+			</File>
+			<File
+				RelativePath="gui\deathwindow.h">
+			</File>
+			<File
+				RelativePath="gui\label.cpp">
+			</File>
+			<File
+				RelativePath="gui\label.h">
+			</File>
+			<File
+				RelativePath="gui\netstats.cpp">
+			</File>
+			<File
+				RelativePath="gui\netstats.h">
+			</File>
+			<File
+				RelativePath="gui\playertags.cpp">
+			</File>
+			<File
+				RelativePath="gui\playertags.h">
+			</File>
+			<File
+				RelativePath="gui\objectedit.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="gui\objectedit.h">
+			</File>
+			<File
+				RelativePath="gui\objectselection.cpp">
+			</File>
+			<File
+				RelativePath="gui\objectselection.h">
+			</File>
+			<File
+				RelativePath="gui\textdrawselection.cpp">
+			</File>
+			<File
+				RelativePath="gui\textdrawselection.h">
+			</File>
+			<File
+				RelativePath="gui\svrnetstats.cpp">
+			</File>
+			<File
+				RelativePath="gui\svrnetstats.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="render"
+			Filter="">
+			<File
+				RelativePath="render\objectmaterialtext.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="render\objectmaterialtext.h">
+			</File>
+			<File
+				RelativePath="render\fontrender.cpp">
+			</File>
+			<File
+				RelativePath="render\fontrender.h">
+			</File>
+			<File
+				RelativePath="render\licenseplate.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="render\licenseplate.h">
 			</File>
 		</Filter>
 		<Filter
@@ -720,6 +710,24 @@
 			</File>
 			<File
 				RelativePath="game\vehicle.h">
+			</File>
+			<File
+				RelativePath="game\menu.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="game\menu.h">
 			</File>
 		</Filter>
 		<Filter

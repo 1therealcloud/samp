@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "menu.h"
+#include "game/menu.h"
 
 #include "game/scripting.h"
 // 0x000a7160

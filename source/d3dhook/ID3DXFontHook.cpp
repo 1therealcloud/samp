@@ -8,7 +8,7 @@
 
 #include "d3dhook/ID3DXFontHook.h"
 
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "runutil.h"
 #include <static_assert.h>
 

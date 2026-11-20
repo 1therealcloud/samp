@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "objectselection.h"
+#include "gui/objectselection.h"
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "game/playerped.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "net/objectpool.h"
-#include "objectedit.h"
+#include "gui/objectedit.h"
 
 // 0x0011c6b0
 const float g_objectSelectionMaxDistance = 150.0f;

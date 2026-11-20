@@ -2,15 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "scoreboard.h"
+#include "gui/scoreboard.h"
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "fontrender.h"
+#include "render/fontrender.h"
 #include "game/game.h"
 #include "game/gta_globals.h"
 #include "game/util.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/netgame.h"

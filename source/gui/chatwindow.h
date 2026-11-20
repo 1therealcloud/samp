@@ -10,7 +10,7 @@
 class CDXUTDialog;
 class CDXUTEditBox;
 class CDXUTScrollBar;
-#include "fontrender.h"
+#include "render/fontrender.h"
 
 #pragma pack(push, 1)
 class CChat

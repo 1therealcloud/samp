@@ -1,7 +1,7 @@
-#include "helpdialog.h"
+#include "gui/helpdialog.h"
 
 #include "game/scripting.h"
-#include "gui.h"
+#include "gui/gui.h"
 
 // 0x0011c488
 const char g_helpDialogTitle[12] = "SA-MP Keys:";

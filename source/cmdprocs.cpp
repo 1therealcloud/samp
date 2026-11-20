@@ -1,6 +1,6 @@
 #include "cmdprocs.h"
 
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "main.h"
 // 0x00068b50
 void Commands::Setup()
@@ -40,7 +40,7 @@ void Commands::Setup()
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "config.h"
 #include "game/debug.h"
 #include "game/hooks.h"
@@ -48,9 +48,9 @@ void Commands::Setup()
 #include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "net/localplayer.h"
-#include "scoreboard.h"
+#include "gui/scoreboard.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <stdio.h>

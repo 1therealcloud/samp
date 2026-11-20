@@ -4,7 +4,7 @@
 
 #include "game/skinnedmesh.h"
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
 #include "main.h"

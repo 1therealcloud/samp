@@ -4,10 +4,10 @@
 #include <DXUTgui.h>
 #include <GetTime.h>
 
-#include "gui.h"
+#include "gui/gui.h"
 
-#include "chatwindow.h"
-#include "cmdwindow.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
 #include "game/hooks.h"

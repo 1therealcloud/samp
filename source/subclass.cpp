@@ -4,11 +4,11 @@
 #include <DXUTgui.h>
 #include <d3dx9.h>
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "cmdprocs.h"
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "game/game.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 
 #ifdef GetSystemMetrics

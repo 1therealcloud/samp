@@ -1,6 +1,6 @@
-#include "textdrawselection.h"
+#include "gui/textdrawselection.h"
 
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "main.h"
 // 0x000c5120
 CTextDrawSelection::CTextDrawSelection()

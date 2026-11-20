@@ -1,11 +1,11 @@
-#include "deathwindow.h"
+#include "gui/deathwindow.h"
 // 0x0006c720
 BOOL CDeathWindow::AreAuxiliaryFontsInitialized()
 {
     return auxiliaryFontsInitialized;
 }
-#include "fontrender.h"
-#include "playertags.h"
+#include "render/fontrender.h"
+#include "gui/playertags.h"
 #include <string.h>
 extern "C" __int64 __cdecl _ftol2();
 // 0x0011c330

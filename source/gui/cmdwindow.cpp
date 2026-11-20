@@ -1,6 +1,6 @@
 #include <DXUTgui.h>
 
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 
 #include "main.h"
 #include "runutil.h"
@@ -10,8 +10,8 @@ DWORD CInput::GetEnabledState()
 {
     return m_bEnabled;
 }
-#include "chatwindow.h"
-#include "cmdwindow.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "config.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
@@ -243,7 +243,7 @@ void CInput::ProcessInput()
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include <string.h>
 
 // 0x002aca24

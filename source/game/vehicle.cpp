@@ -93,7 +93,7 @@ void CVehicle::Remove()
     }
 }
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/hooks.h"
 #include "game/util.h"
 #include <string.h>
@@ -1109,7 +1109,7 @@ void __stdcall GameRemoveDriverByState598(void* vehicle)
 }
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
-#include "gui.h"
+#include "gui/gui.h"
 
 // 0x000b7cd0
 void CVehicle::ConstructLicensePlate()

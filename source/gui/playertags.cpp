@@ -2,19 +2,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "playertags.h"
+#include "gui/playertags.h"
 
-#include "chatbubble.h"
+#include "gui/chatbubble.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
-#include "deathwindow.h"
-#include "fontrender.h"
+#include "gui/deathwindow.h"
+#include "render/fontrender.h"
 #include "game/aimstuff.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include "main.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"

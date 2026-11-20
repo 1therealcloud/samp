@@ -4,12 +4,12 @@
 
 #include "net/labelpool.h"
 
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/util.h"
-#include "gui.h"
-#include "label.h"
+#include "gui/gui.h"
+#include "gui/label.h"
 #include "main.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"

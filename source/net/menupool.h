@@ -1,7 +1,7 @@
 #ifndef MENUPOOL_H
 #define MENUPOOL_H
 
-#include "menu.h"
+#include "game/menu.h"
 #include <static_assert.h>
 struct RPCParameters;
 #pragma pack(push, 1)

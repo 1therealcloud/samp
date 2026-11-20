@@ -26,7 +26,7 @@ BYTE CRemotePlayer::GetTeam()
 {
     return m_state.team;
 }
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/aimstuff.h"
 #include "game/custommodels.h"
 #include "game/game.h"

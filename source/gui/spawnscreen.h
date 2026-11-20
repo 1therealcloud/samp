@@ -3,7 +3,7 @@
 
 #include <d3dx9.h>
 
-#include "fontrender.h"
+#include "render/fontrender.h"
 #include <static_assert.h>
 struct CVector;
 #pragma pack(push, 1)

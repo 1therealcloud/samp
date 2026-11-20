@@ -44,10 +44,10 @@ void CAudioStream::ControlGameRadio()
     }
 }
 
-#include "fontrender.h"
+#include "render/fontrender.h"
 #include "game/entity.h"
 #include "game/gta_globals.h"
-#include "gui.h"
+#include "gui/gui.h"
 #include <stdio.h>
 #include <string.h>
 // 0x0016c5c0
@@ -177,7 +177,7 @@ void CALLBACK CAudioStream::MetadataSync(DWORD, DWORD, DWORD, void*)
     ReadMetadata();
 }
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"

@@ -1,5 +1,5 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
-#include "fontrender.h"
+#include "render/fontrender.h"
 // 0x0006b270
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
 {
@@ -42,7 +42,7 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
     result = (result << 8) | green;
     return (result << 8) | blue;
 }
-#include "cmdwindow.h"
+#include "gui/cmdwindow.h"
 #include "runutil.h"
 #include <DXUTgui.h>
 #include <string.h>

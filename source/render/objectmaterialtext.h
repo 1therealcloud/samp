@@ -3,7 +3,7 @@
 
 #include <d3dx9.h>
 
-#include "fontrender.h"
+#include "render/fontrender.h"
 struct CVector;
 #pragma pack(push, 1)
 class CObjectMaterialText

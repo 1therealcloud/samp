@@ -1,6 +1,6 @@
 #include "net/actorpool.h"
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/actor.h"
 #include "game/custommodels.h"
 #include "main.h"

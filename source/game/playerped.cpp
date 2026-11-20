@@ -18,8 +18,8 @@ void* CPed::GetGtaActor()
 #include "game/scripting.h"
 #include "game/task.h"
 #include "game/util.h"
-#include "gui.h"
-#include "label.h"
+#include "gui/gui.h"
+#include "gui/label.h"
 #include "net/localplayer.h"
 #include <stdio.h>
 #include <stdlib.h>

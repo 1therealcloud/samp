@@ -1,11 +1,11 @@
 #include <string.h>
 
-#include "chatbubble.h"
+#include "gui/chatbubble.h"
 
 #include "game/game.h"
 #include "game/playerped.h"
-#include "gui.h"
-#include "label.h"
+#include "gui/gui.h"
+#include "gui/label.h"
 #include "main.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"

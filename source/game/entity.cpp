@@ -469,7 +469,7 @@ void CEntity::ClearBackendFlag8()
         *(DWORD*)((BYTE*)m_pGameEntity + 0x40) &= 0xfffffff7;
 }
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/game.h"
 // 0x0009ed90
 BOOL CEntity::SetModelIndex(int model)

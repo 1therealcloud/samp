@@ -4,7 +4,7 @@
 
 #include "game/debugscript.h"
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include "game/building_removal.h"
 #include "game/game.h"
 #include "game/playerped.h"

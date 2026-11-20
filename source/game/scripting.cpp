@@ -12,7 +12,7 @@ void Scripting::Initialize()
     memset(g_scriptThread, 0, 224);
 }
 
-#include "chatwindow.h"
+#include "gui/chatwindow.h"
 #include <stdarg.h>
 // 0x002a92f0
 BYTE g_scriptBuffer[256];
