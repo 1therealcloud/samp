@@ -68,6 +68,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BUILDING_LIBCURL;CURL_STATICLIB;USE_WINDOWS_SSPI;USE_SCHANNEL;HTTP_ONLY;HAVE_LIBZ;HAVE_ZLIB_H"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
 				StructMemberAlignment="4"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
