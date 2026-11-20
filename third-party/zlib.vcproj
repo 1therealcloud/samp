@@ -64,6 +64,8 @@
 				AdditionalIncludeDirectories="$(ProjectDir)zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				OmitFramePointers="FALSE"
+				AdditionalOptions="/Oy-"
+				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
