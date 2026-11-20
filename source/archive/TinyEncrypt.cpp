@@ -61,8 +61,6 @@ void CTinyEncrypt::SetKey(BYTE* pbKey, BYTE bytXORKey)
 //------------------------------------
 
 #ifdef ARCTOOL
-
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CTinyEncrypt::EncryptBlock(DWORD& dwV0, DWORD& dwV1)
 {
     DWORD dwSum = 0;
@@ -107,7 +105,6 @@ void CTinyEncrypt::DecryptBlock(DWORD& dwV0, DWORD& dwV1)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CTinyEncrypt::EncryptData(DWORD dwLength, BYTE* pbData)
 {
     DWORD dwBlocks = dwLength / 4;
@@ -135,7 +132,6 @@ void CTinyEncrypt::DecryptData(DWORD dwLength, BYTE* pbData)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CTinyEncrypt::LoadKey(PCHAR szFileName)
 {
     FILE* fiKey;
@@ -149,7 +145,6 @@ void CTinyEncrypt::LoadKey(PCHAR szFileName)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CTinyEncrypt::WriteKey(PCHAR szFileName)
 {
     FILE* fiKey;
@@ -163,7 +158,6 @@ void CTinyEncrypt::WriteKey(PCHAR szFileName)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CTinyEncrypt::WriteCHeaderFile(PSTR szFileName)
 {
     const BYTE bytXORKey = 0xAA;

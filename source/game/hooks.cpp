@@ -5242,8 +5242,8 @@ void GameRunPedControlBackend()
         }
     }
 }
-// Extracted readable body; outer native entry preserves PUSHAD state.
-// samp.dll RVA: unknown (reconstruction-only body helper extracted from A26D0; no standalone native entry)
+// extracted readable body
+// inline
 void GameProcessPedControlBody()
 {
     g_hookCollisionPed = g_hookCameraPed;

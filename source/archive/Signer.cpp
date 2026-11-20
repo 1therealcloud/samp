@@ -29,7 +29,6 @@ CSigner::~CSigner(void)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CSigner::SignHash(CHasher* pHasher)
 {
     if (m_pbSignature != NULL)
@@ -45,7 +44,6 @@ void CSigner::SignHash(CHasher* pHasher)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 BYTE* CSigner::GetSignature()
 {
     return m_pbSignature;
@@ -55,7 +53,6 @@ BYTE* CSigner::GetSignature()
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 DWORD CSigner::GetSignatureLength()
 {
     return m_dwLength;

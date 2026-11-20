@@ -32,7 +32,7 @@ public:
     // 0x00063ee0
     // MSVC scalar deleting destructor emitted for ~CAbstractStream.
 
-    // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+    // inline
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes) = 0;
 
     // 0x00063e90
@@ -41,7 +41,7 @@ public:
         return Read(pbBuffer, nNumberOfElements * nElementSize);
     }
 
-    // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+    // inline
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes) = 0;
 
     // 0x00063eb0
@@ -50,7 +50,7 @@ public:
         return Write(pbBuffer, nNumberOfElements * nElementSize);
     }
 
-    // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+    // inline
     virtual void Seek(int nOffset, eSeek seekMode) = 0;
 
     // 0x00063ed0
@@ -59,7 +59,7 @@ public:
         Seek(nOffset, SeekStart);
     }
 
-    // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+    // inline
     virtual unsigned int Tell() = 0;
 };
 
@@ -83,7 +83,7 @@ public:
         TypeBinary,
     };
 
-    // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+    // inline
     CFileStream()
     {
         m_fiFile = NULL;

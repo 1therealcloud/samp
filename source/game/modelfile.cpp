@@ -795,52 +795,52 @@ CModelFileChunk* CDffFile::ReadChunk(CModelFileStream* input)
     }
     return chunk;
 }
-// samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+// inline
 CModelGeometryArray::CModelGeometryArray()
 {
     items = 0;
     count = 0;
 }
-// samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+// inline
 CModelGeometry* CModelGeometryArray::Get(DWORD index)
 {
     if (index >= count)
         return 0;
     return items[index];
 }
-// samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+// inline
 DWORD CModelGeometryArray::GetCount()
 {
     return count;
 }
-// samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+// inline
 CModelMaterialArray::CModelMaterialArray()
 {
     items = 0;
     count = 0;
 }
-// samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+// inline
 void* CModelMaterialArray::Get(DWORD index)
 {
     return index < count ? items[index] : 0;
 }
-// samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+// inline
 DWORD CModelMaterialArray::GetCount()
 {
     return count;
 }
-// samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+// inline
 CModelMeshArray::CModelMeshArray()
 {
     items = 0;
     count = 0;
 }
-// samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+// inline
 BYTE* CModelMeshArray::Get(DWORD index)
 {
     return index < count ? items[index] : 0;
 }
-// samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+// inline
 DWORD CModelMeshArray::GetCount()
 {
     return count;

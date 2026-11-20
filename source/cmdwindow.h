@@ -10,7 +10,7 @@
 class CDXUTDialog;
 class CDXUTEditBox;
 typedef void(__cdecl* InputCommand)(char*);
-// samp.dll RVA: unknown (inline layout helper; no standalone entry established)
+// inline
 struct InputRect : RECT
 {
     InputRect()

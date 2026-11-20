@@ -9,7 +9,7 @@ class CAudio
 public:
     BOOL m_bSoundLoaded;
     bool m_bOutdoorAmbienceTrackDisabled;
-    // samp.dll RVA: unknown (inline initialization in CGame RVA 0x0009fdc0; standalone entry not established)
+    // inline
     CAudio() : m_bSoundLoaded(FALSE), m_bOutdoorAmbienceTrackDisabled(false) {}
     // 0x000a2030
     int GetRadioStation();

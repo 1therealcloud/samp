@@ -11,7 +11,7 @@
 
 //------------------------------------
 
-// samp.dll RVA: unknown (native global not established; unused legacy declaration)
+// legacy
 DWORD CKeyPair::ms_dwRSAKeySize = 1024;
 
 //------------------------------------
@@ -35,7 +35,6 @@ CKeyPair::~CKeyPair(void)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CKeyPair::GenerateKey()
 {
     // Generate a key pair
@@ -57,7 +56,6 @@ __declspec(noinline) void CKeyPair::ReleaseKey()
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CKeyPair::LoadFromFile(PCHAR szFileName)
 {
     DWORD dwKeySize;
@@ -83,7 +81,6 @@ void CKeyPair::LoadFromFile(PCHAR szFileName)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CKeyPair::WriteToFile(PCHAR szFileName)
 {
     DWORD dwKeySize;
@@ -109,7 +106,6 @@ void CKeyPair::WriteToFile(PCHAR szFileName)
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CKeyPair::WriteCHeaderFile(PSTR szFileName)
 {
     const BYTE bytXORKey = 0xAA;

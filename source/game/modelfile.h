@@ -125,11 +125,11 @@ struct CTxdFile
 struct CModelGeometry;
 struct CModelGeometryArray
 {
-    // samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+    // inline
     CModelGeometryArray();
-    // samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+    // inline
     CModelGeometry* Get(DWORD index);
-    // samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+    // inline
     DWORD GetCount();
     // 0x0000cf80
     void Clear();
@@ -145,11 +145,11 @@ struct CModelGeometryArray
 };
 struct CModelMaterialArray
 {
-    // samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+    // inline
     CModelMaterialArray();
-    // samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+    // inline
     void* Get(DWORD index);
-    // samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+    // inline
     DWORD GetCount();
     // 0x0000cfa0
     void Clear();
@@ -165,11 +165,11 @@ struct CModelMaterialArray
 };
 struct CModelMeshArray
 {
-    // samp.dll RVA: unknown (identical native array initializer entries; typed binding not established)
+    // inline
     CModelMeshArray();
-    // samp.dll RVA: unknown (identical native pointer-array getter entries; typed binding not established)
+    // inline
     BYTE* Get(DWORD index);
-    // samp.dll RVA: unknown (identical native array count entries; typed binding not established)
+    // inline
     DWORD GetCount();
     // 0x0000cfb0
     void Clear();

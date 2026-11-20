@@ -78,7 +78,7 @@ unsigned long FontParseWideColorTag(const wchar_t*);
 void FontNextAnsiGlyphColor();
 // 0x00073580
 void FontNextGlyphColor();
-// samp.dll RVA: unknown (integration helper extracted from startup RVA 0x000c5e70)
+// inline
 void InitializeFontDrawBuffers();
 
 #endif // ID3DXFONTHOOK_H

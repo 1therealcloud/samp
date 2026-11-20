@@ -26,7 +26,6 @@ private:
     DWORD m_pdwKey[TEA_KEY_SIZE / sizeof(DWORD)];
 
 #ifdef ARCTOOL
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void EncryptBlock(DWORD& dwV0, DWORD& dwV1);
 #endif
 
@@ -43,14 +42,10 @@ public:
     void SetKey(BYTE* pbKey, BYTE bytXORKey);
 
 #ifdef ARCTOOL
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void LoadKey(PCHAR szFileName);
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void WriteKey(PCHAR szFileName);
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void WriteCHeaderFile(PCHAR szFileName);
 
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void EncryptData(DWORD dwLength, BYTE* pbData);
 #endif
 

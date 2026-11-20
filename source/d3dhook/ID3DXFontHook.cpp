@@ -188,7 +188,7 @@ D3DCOLOR g_fontGlyphColor;
 // 0x00174d34
 int g_fontGlyphCursor;
 
-// samp.dll RVA: unknown (integration helper extracted from startup RVA 0x000c5e70)
+// inline
 void InitializeFontDrawBuffers()
 {
     g_fontOriginalText = (char*)calloc(1, 100001);

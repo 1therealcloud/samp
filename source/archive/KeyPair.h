@@ -13,7 +13,7 @@
 class CKeyPair
 {
 private:
-    // samp.dll RVA: unknown (native global not established; unused legacy declaration)
+    // legacy
     static DWORD ms_dwRSAKeySize;
 
     HCRYPTKEY m_hCryptKey;
@@ -26,13 +26,9 @@ public:
     ~CKeyPair(void);
 
 #ifdef ARCTOOL
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void GenerateKey();
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void LoadFromFile(PCHAR szFileName);
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void WriteToFile(PCHAR szFileName);
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void WriteCHeaderFile(PCHAR szFileName);
 #endif
 

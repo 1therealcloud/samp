@@ -24,11 +24,8 @@ public:
     ~CSigner(void);
 
 #ifdef ARCTOOL
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void SignHash(CHasher* pHasher);
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     BYTE* GetSignature();
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     DWORD GetSignatureLength();
 #endif
 

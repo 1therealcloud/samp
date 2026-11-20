@@ -21,7 +21,7 @@ private:
     // 0x00140780
     static LPSTR ms_szContainerName;
 
-    // samp.dll RVA: unknown (native global not established; unused legacy declaration)
+    // legacy
     static HMODULE ms_hAdvApi32;
 
     HCRYPTPROV m_hCryptProv;
@@ -36,7 +36,6 @@ public:
     HCRYPTPROV GetProvider();
 
 #ifdef ARCTOOL
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void GenerateRandom(DWORD dwLength, BYTE* pbBuffer);
 #endif
 };

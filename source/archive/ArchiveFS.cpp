@@ -19,7 +19,7 @@
 // Client diagnostics header is unused in the release archive path.
 //#endif
 
-// samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+// inline
 extern void _declspec(noreturn) GameForcedExit(int iReasonCode);
 #define FORCE_EXIT(a)                                                                                                                                                              \
     GameForcedExit(a);                                                                                                                                                             \

@@ -207,7 +207,6 @@ public:
     int GetCaptionHeight() const { return m_nCaptionHeight; }
     // 0x0006a120
     void SetCaptionHeight( int nHeight ) { m_nCaptionHeight = nHeight; }
-    // samp.dll RVA: unknown (SDK wide compatibility facade; no standalone native entry)
     void SetCaptionText( const WCHAR * text ) {
         m_wszCaption[0] = 0;
         WideCharToMultiByte(CP_ACP, 0, text, -1, m_wszCaption, 256, 0, 0);
@@ -456,14 +455,9 @@ public:
     // 0x0008DDF0
     virtual bool GetVisible() { return m_bVisible; }
 
-    // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
-
     UINT GetType() const { return m_Type; }
 
-    // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
-
     int  GetID() const { return m_ID; }
-    // samp.dll RVA: unknown (identical entries 0x00049ED0/0x00084110; typed native entry not uniquely established)
     void SetID( int ID ) { m_ID = ID; }
 
     // 0x000848A0
@@ -476,13 +470,9 @@ public:
     // 0x00084120
 
     void SetHotkey( UINT nHotkey ) { m_nHotkey = nHotkey; }
-    // samp.dll RVA: unknown (inline field accessor; standalone DL type binding not established)
     UINT GetHotkey() { return m_nHotkey; }
 
-    // samp.dll RVA: unknown (inline SDK accessor; standalone native entry not established)
-
     void SetUserData( void *pUserData ) { m_pUserData = pUserData; }
-    // samp.dll RVA: unknown (inline SDK accessor; standalone native entry not established)
     void *GetUserData() const { return m_pUserData; }
 
     // 0x00087540
@@ -894,22 +884,15 @@ public:
     // 0x0009b1d0
     static void Uninitialize();
 
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
-
     int  GetBufferSize() { return m_nBufferSize; }
     // 0x0009b240
     bool SetBufferSize( int nSize );
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int  GetTextSize()  { return lstrlenW( m_pwszBuffer ); }
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     const WCHAR* GetBuffer() { return m_pwszBuffer; }
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     const WCHAR& operator[]( int n ) const { return m_pwszBuffer[n]; }
     // 0x0009b470
     WCHAR& operator[]( int n );
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     DXUTFontNode* GetFontNode() { return m_pFontNode; }
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetFontNode( DXUTFontNode *pFontNode ) { m_pFontNode = pFontNode; }
     // 0x0009b480
     void Clear();
@@ -1026,8 +1009,6 @@ public:
     // 0x00088d90
     virtual void OnFocusIn();
 
-    // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
-
     void SetText( LPCWSTR wszText, bool bSelected = false );
     // 0x00085000
     void SetText(const char* text, bool bSelected = false);
@@ -1036,7 +1017,6 @@ public:
     // Updates both native mask flags, without invalidating cached analysis.
     // 0x0006eeb0
     void SetPasswordMode(bool enabled);
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     int GetTextLength() { return m_Buffer.GetTextSize(); }  // Returns text length in chars excluding NULL.
     // 0x00088950
     HRESULT GetTextCopy( LPWSTR strDest, UINT bufferCount );
@@ -1050,13 +1030,10 @@ public:
     void SetSelectedBackColor( D3DCOLOR Color ) { m_SelBkColor = Color; }  // Selected background color
     // 0x00068df0
     void SetCaretColor( D3DCOLOR Color ) { m_CaretColor = Color; }  // Caret color
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetBorderWidth( int nBorder ) { m_nBorder = nBorder; UpdateRects(); }  // Border of the window
-    // samp.dll RVA: unknown (inline SDK accessor; native standalone entry not established)
     void SetSpacing( int nSpacing ) { m_nSpacing = nSpacing; UpdateRects(); }
     // 0x00089000
     void ParseFloatArray( float *pNumbers, int nCount );
-    // samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
     void SetTextFloatArray( const float *pNumbers, int nCount );
 
 protected:
@@ -1268,11 +1245,8 @@ public:
     virtual void RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElapsedTime );
 
 protected:
-    // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
     static WORD GetLanguage() { return LOWORD( s_hklCurrent ); }
-    // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
     static WORD GetPrimaryLanguage() { return PRIMARYLANGID( LOWORD( s_hklCurrent ) ); }
-    // samp.dll RVA: unknown (inline language helper; no standalone native entry established)
     static WORD GetSubLanguage() { return SUBLANGID( LOWORD( s_hklCurrent ) ); }
     // 0x00085430
     static void SendKey( BYTE nVirtKey );
@@ -1419,7 +1393,6 @@ const wchar_t* InputMaskWideText(const wchar_t*);
 extern DWORD g_inputImeActivityTick;
 // 0x00085e60
 bool ChatImeActive();
-// samp.dll RVA: unknown (extracted signed tick arithmetic; no standalone native entry)
 inline bool InputImeRecent(DWORD now, DWORD start)
 {
     return (LONG)(now - start) < 300;

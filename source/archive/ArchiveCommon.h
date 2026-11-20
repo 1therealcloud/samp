@@ -84,7 +84,6 @@ typedef struct _SAA_FILE_HEADER
     }
 
 #ifdef ARCTOOL
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void InitializeDataV1()
     {
         headerV1.dwSAAV = 0x32414153; // "SAA2"
@@ -92,14 +91,12 @@ typedef struct _SAA_FILE_HEADER
         // All other data should be random, or predefined outside.
     }
 
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void InitializeDataV2()
     {
         headerV2.dwSAMPID = SAA_FILE_ID;
         headerV2.dwVersion = SAA_FILE_VERSION;
     }
 
-    // samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
     void Write(FILE* f)
     {
         fseek(f, 0, SEEK_SET);
@@ -121,7 +118,7 @@ typedef struct _SAA_FILE_HEADER
         this->headerV2.dwCompleteID ^= this->headerV2.dwXORKey;
     }
 
-    // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
+    // inline
     void Read(FILE* f)
     {
         fread(&headerV1, 1, sizeof(DWORD) * 2 + sizeof(WORD) * dwFakeDataSize, f);

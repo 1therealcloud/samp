@@ -18,7 +18,7 @@ DWORD CCryptoContext::ms_dwProviderType = PROV_RSA_FULL;
 LPSTR CCryptoContext::ms_szProviderName = NULL;
 // 0x00140780
 LPSTR CCryptoContext::ms_szContainerName = (LPSTR) "SAMP";
-// samp.dll RVA: unknown (native global not established; unused legacy declaration)
+// legacy
 HMODULE CCryptoContext::ms_hAdvApi32 = NULL;
 
 //------------------------------------
@@ -78,7 +78,6 @@ HCRYPTPROV CCryptoContext::GetProvider()
 //------------------------------------
 
 #ifdef ARCTOOL
-// samp.dll RVA: unknown (ARCTOOL-only branch; not established in the client)
 void CCryptoContext::GenerateRandom(DWORD dwLength, BYTE* pbBuffer)
 {
     CryptGenRandom(m_hCryptProv, dwLength, pbBuffer);

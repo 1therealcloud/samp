@@ -761,7 +761,7 @@ extern const char g_hookPedExceptionLabel[10];
 extern const char g_hookPedRemovedMessage[32];
 // 0x000a2530
 void GameRunPedControlBackend();
-// samp.dll RVA: unknown (reconstruction-only body helper extracted from A26D0; no standalone native entry)
+// inline
 void GameProcessPedControlBody();
 // Native policy helpers; their protocol send methods remain separate dependencies.
 // 0x000a3430

@@ -4245,7 +4245,6 @@ void CDXUTEditBox::ClearText()
 
 
 //--------------------------------------------------------------------------------------
-// samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
 void CDXUTEditBox::SetText( LPCWSTR wszText, bool bSelected )
 {
     assert( wszText != NULL );
@@ -4800,8 +4799,6 @@ void CDXUTEditBox::ParseFloatArray( float *pNumbers, int nCount )
         pToken = pEnd;
     }
 }
-
-// samp.dll RVA: unknown (SDK compatibility method; standalone native entry not established)
 
 
 void CDXUTEditBox::SetTextFloatArray( const float *pNumbers, int nCount )
@@ -7987,7 +7984,6 @@ const wchar_t* InputMaskWideText(const wchar_t* text)
 class InputImeAccess : public CDXUTIMEEditBox
 {
 public:
-    // samp.dll RVA: unknown (recovery access helper for RVA 0x00085460)
     static void ResetDefaultContext(HWND window)
     {
         _ImmDisableTextFrameService((DWORD)-1);
@@ -8011,7 +8007,6 @@ DWORD g_inputImeActivityTick;
 class InputImeActivityAccess : public CDXUTIMEEditBox
 {
 public:
-    // samp.dll RVA: unknown (protected DXUT state accessor; no standalone native entry)
     static bool Visible()
     {
         return s_CandList.bShowWindow || s_bShowReadingWindow;

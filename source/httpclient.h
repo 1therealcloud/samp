@@ -103,27 +103,27 @@ public:
 
     // 0x000023e0
     bool GetHeaderValue(char* szHeaderName, char* szReturnBuffer, int iBufSize);
-    // samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+    // inline
     int GetResponseCode()
     {
         return m_Response.response_code;
     };
-    // samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+    // inline
     int GetContentType()
     {
         return m_Response.content_type;
     };
-    // samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+    // inline
     char* GetResponseHeaders()
     {
         return m_Response.header;
     };
-    // samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+    // inline
     char* GetDocument()
     {
         return m_Response.response;
     };
-    // samp.dll RVA: unknown (inline reference accessor; no standalone native entry established)
+    // inline
     int GetDocumentLength()
     {
         return m_Response.response_len;
