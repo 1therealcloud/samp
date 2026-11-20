@@ -56,14 +56,14 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\lzma-st"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="$(ProjectDir)lzma\C"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_7ZIP_ST"
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="TRUE"
 				StringPooling="TRUE"

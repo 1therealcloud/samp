@@ -3133,80 +3133,11 @@ void DXUTSetShortcutKeySettings( bool bAllowWhenFullscreen, bool bAllowWhenWindo
 
 
 //--------------------------------------------------------------------------------------
-// Enables/disables Windows keys, and disables or restores the StickyKeys/ToggleKeys/FilterKeys 
-// shortcut to help prevent accidental task switching
+// The client stores this flag for its keyboard callback.
 //--------------------------------------------------------------------------------------
 void DXUTAllowShortcutKeys( bool bAllowKeys )
 {
     GetDXUTState().SetAllowShortcutKeys( bAllowKeys );
-
-    if( bAllowKeys )
-    {
-        // Restore StickyKeys/etc to original state and enable Windows key      
-        STICKYKEYS sk = GetDXUTState().GetStartupStickyKeys();
-        TOGGLEKEYS tk = GetDXUTState().GetStartupToggleKeys();
-        FILTERKEYS fk = GetDXUTState().GetStartupFilterKeys();
-        
-        SystemParametersInfo(SPI_SETSTICKYKEYS, sizeof(STICKYKEYS), &sk, 0);
-        SystemParametersInfo(SPI_SETTOGGLEKEYS, sizeof(TOGGLEKEYS), &tk, 0);
-        SystemParametersInfo(SPI_SETFILTERKEYS, sizeof(FILTERKEYS), &fk, 0);
-
-        // Remove the keyboard hoook when it isn't needed to prevent any slow down of other apps
-        if( GetDXUTState().GetKeyboardHook() )
-        {
-            UnhookWindowsHookEx( GetDXUTState().GetKeyboardHook() );
-            GetDXUTState().SetKeyboardHook( NULL );
-        }                
-    }
-    else
-    {
-        // Set low level keyboard hook if haven't already
-        if( GetDXUTState().GetKeyboardHook() == NULL )
-        {
-            // Set the low-level hook procedure.  Only works on Windows 2000 and above
-            OSVERSIONINFO OSVersionInfo;
-            OSVersionInfo.dwOSVersionInfoSize = sizeof(OSVersionInfo);
-            GetVersionEx(&OSVersionInfo);
-            if( OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && OSVersionInfo.dwMajorVersion > 4 )
-            {
-                HHOOK hKeyboardHook = SetWindowsHookEx( WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0 );
-                GetDXUTState().SetKeyboardHook( hKeyboardHook );
-            }
-        }
-
-        // Disable StickyKeys/etc shortcuts but if the accessibility feature is on, 
-        // then leave the settings alone as its probably being usefully used
-
-        STICKYKEYS skOff = GetDXUTState().GetStartupStickyKeys();
-        if( (skOff.dwFlags & SKF_STICKYKEYSON) == 0 )
-        {
-            // Disable the hotkey and the confirmation
-            skOff.dwFlags &= ~SKF_HOTKEYACTIVE;
-            skOff.dwFlags &= ~SKF_CONFIRMHOTKEY;
-
-            SystemParametersInfo(SPI_SETSTICKYKEYS, sizeof(STICKYKEYS), &skOff, 0);
-        }
-
-        TOGGLEKEYS tkOff = GetDXUTState().GetStartupToggleKeys();
-        if( (tkOff.dwFlags & TKF_TOGGLEKEYSON) == 0 )
-        {
-            // Disable the hotkey and the confirmation
-            tkOff.dwFlags &= ~TKF_HOTKEYACTIVE;
-            tkOff.dwFlags &= ~TKF_CONFIRMHOTKEY;
-
-            SystemParametersInfo(SPI_SETTOGGLEKEYS, sizeof(TOGGLEKEYS), &tkOff, 0);
-        }
-
-        FILTERKEYS fkOff = GetDXUTState().GetStartupFilterKeys();
-        if( (fkOff.dwFlags & FKF_FILTERKEYSON) == 0 )
-        {
-            // Disable the hotkey and the confirmation
-            fkOff.dwFlags &= ~FKF_HOTKEYACTIVE;
-            fkOff.dwFlags &= ~FKF_CONFIRMHOTKEY;
-
-            SystemParametersInfo(SPI_SETFILTERKEYS, sizeof(FILTERKEYS), &fkOff, 0);
-        }
-    }
 }
 
 
