@@ -19,7 +19,6 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="0">
-			<!-- Custom optimization preserves file-level /Ob1 overrides in VC7.1. -->
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="4"
@@ -46,6 +45,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/MERGE:.pstate=.data"
 				AdditionalDependencies="RakNet.lib zlib.lib libcurl.lib lzma.lib libcmt.lib libcpmt.lib oldnames.lib d3dx9.lib user32.lib comctl32.lib advapi32.lib kernel32.lib gdi32.lib wsock32.lib winmm.lib psapi.lib bass.lib ws2_32.lib crypt32.lib shell32.lib imm32.lib ole32.lib oleaut32.lib uuid.lib secur32.lib version.lib usp10.lib d3d9.lib dxguid.lib detours.lib"
 				OutputFile="$(OutDir)\samp.dll"
 				LinkIncremental="1"
@@ -55,7 +55,6 @@
 				ProgramDatabaseFile="$(OutDir)\samp.pdb"
 				SubSystem="2"
 				OptimizeReferences="1"
-				AdditionalOptions="/MERGE:.pstate=.data"
 				EnableCOMDATFolding="1"
 				ImportLibrary="$(SolutionDir)build\libraries\samp.lib"
 				TargetMachine="1"/>
@@ -98,8 +97,8 @@
 				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
 				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
 				ExceptionHandling="TRUE"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				StructMemberAlignment="1"
 				RuntimeTypeInfo="FALSE"
@@ -902,9 +901,6 @@
 				RelativePath="archive\KeyPair.h">
 			</File>
 			<File
-				RelativePath="archive\keys.h">
-			</File>
-			<File
 				RelativePath="archive\Obfuscator.h">
 			</File>
 			<File
@@ -922,6 +918,16 @@
 			<File
 				RelativePath="archive\TinyEncrypt.h">
 			</File>
+			<Filter
+				Name="keys"
+				Filter="">
+				<File
+					RelativePath=".\archive\keys\pkey.h">
+				</File>
+				<File
+					RelativePath=".\archive\keys\skey.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="d3dhook"
@@ -952,144 +958,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="dxut"
-			Filter="">
-			<File
-				RelativePath="..\third-party\dxut\D3DUtil.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"
-						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\D3DUtil.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\dxstdafx.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\dxstdafx.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUT.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUT.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTenum.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTenum.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTgui.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTgui.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUtil.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"
-						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUtil.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTmedia.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTmedia.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTMesh.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTMesh.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTmisc.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTmisc.h">
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTSettingsDlg.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						BufferSecurityCheck="TRUE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\third-party\dxut\DXUTSettingsDlg.h">
-			</File>
-		</Filter>
-		<Filter
 			Name="resources"
 			Filter="">
 			<File
@@ -1107,10 +975,45 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="detours"
+				Name="d3d"
 				Filter="">
 				<File
-					RelativePath="..\third-party\detours\detours.h">
+					RelativePath="..\third-party\dxut\D3DUtil.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"
+							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\D3DUtil.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUtil.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"
+							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUtil.h">
 				</File>
 			</Filter>
 			<Filter
@@ -1154,6 +1057,106 @@
 				</File>
 				<File
 					RelativePath="..\third-party\ttmath\ttmath\ttmathuint_x86_64.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="dxut"
+				Filter="">
+				<File
+					RelativePath="..\third-party\dxut\dxstdafx.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\dxstdafx.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUT.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUT.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTenum.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTenum.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTgui.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTgui.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTmedia.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTmedia.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTMesh.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTMesh.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTmisc.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTmisc.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTSettingsDlg.cpp">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							BufferSecurityCheck="TRUE"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTSettingsDlg.h">
 				</File>
 			</Filter>
 		</Filter>

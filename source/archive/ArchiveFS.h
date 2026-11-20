@@ -16,7 +16,8 @@
 
 //#include "../../archive/pkey.h"
 //#include "../../archive/skey.h"
-#include "keys.h"
+#include "keys/pkey.h"
+#include "keys/skey.h"
 
 #ifndef ARCTOOL
 
