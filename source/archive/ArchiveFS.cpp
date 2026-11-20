@@ -14,10 +14,10 @@
 #include "Signer.h"
 #include "TinyEncrypt.h"
 
-#ifndef ARCTOOL
+//#ifndef ARCTOOL
 ////#include "../game/Util.h"
 // Client diagnostics header is unused in the release archive path.
-#endif
+//#endif
 
 // samp.dll RVA: unknown (inline/pure-virtual or legacy helper; standalone native entry not established)
 extern void _declspec(noreturn) GameForcedExit(int iReasonCode);
