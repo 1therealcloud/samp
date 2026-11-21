@@ -1,11 +1,47 @@
 #include "game/vehicle.h"
 
+#include "d3dhook/IDirect3DDevice9Hook.h"
+#include "game/entity.h"
+#include "game/game.h"
+#include "game/hooks.h"
+#include "game/playerped.h"
+#include "game/quaternion.h"
+#include "game/scripting.h"
+#include "game/util.h"
+#include "gui/chatwindow.h"
+#include "gui/gui.h"
 #include "main.h"
+#include "net/vehiclepool.h"
+#include <string.h>
+// 0x002abe64
+void* g_vehicleTrainCursor;
+// 0x002abe68
+DWORD g_vehicleLastCreatedHandle;
+// 0x0011e33c
+const float g_vehicleCreationLift = 0.25f;
+// 0x0011f7e0
+const char g_vehicleBadCarriageWarning[29] = "Warning: bad train carriages";
+// 0x0011f800
+const char g_vehicleCreationWarning[42] = "Warning: couldn't create vehicle type: %u";
+// 0x0018f5dc
+DWORD g_vehicleDetachingTrailer;
+
+const float g_vehicleTrainSpeedMinimum = -100.0f;
+// 0x001181a4
+const float g_vehicleTrainSpeedMaximum = 100.0f;
+// 0x0011812c
+const float g_vehicleMarkerDistance = 200.0f;
+// 0x0011f704
+const Scripting::OpcodeInfo g_vehicleLockedCommand = {0x519, "ii"};
+// 0x0011f68c
+const Scripting::OpcodeInfo g_vehicleWreckedCommand = {0x119, "i"};
+
 // 0x0000e290
 void CVehicle::SetObjective(BYTE objective)
 {
     m_byteObjective = objective;
 }
+
 // 0x000b6e20
 void CVehicle::SetColor(int primary, int secondary)
 {
@@ -19,9 +55,6 @@ void CVehicle::SetColor(int primary, int secondary)
     m_nPrimaryColor = (BYTE)primary;
     m_bColorChanged = TRUE;
 }
-
-#include "game/game.h"
-#include "game/scripting.h"
 
 // 0x000b8420
 CVehicle::~CVehicle()
@@ -92,22 +125,6 @@ void CVehicle::Remove()
         CEntity::Remove();
     }
 }
-
-#include "gui/chatwindow.h"
-#include "game/hooks.h"
-#include "game/util.h"
-#include <string.h>
-
-// 0x002abe64
-void* g_vehicleTrainCursor;
-// 0x002abe68
-DWORD g_vehicleLastCreatedHandle;
-// 0x0011e33c
-const float g_vehicleCreationLift = 0.25f;
-// 0x0011f7e0
-const char g_vehicleBadCarriageWarning[29] = "Warning: bad train carriages";
-// 0x0011f800
-const char g_vehicleCreationWarning[42] = "Warning: couldn't create vehicle type: %u";
 
 // Preserve base construction, untouched early-return bytes and native global reloads.
 // 0x000b7f00
@@ -253,11 +270,13 @@ BOOL CVehicle::IsRC()
     short model = *(short*)((BYTE*)m_pGameVehicle + 0x22);
     return model == 0x1b9 || model == 0x1d0 || model == 0x1d1 || model == 0x252 || model == 0x1f5 || model == 0x234;
 }
+
 // 0x000b7e60
 BOOL CVehicle::HasSiren()
 {
     return m_dwSiren != 0;
 }
+
 // 0x000b7e70
 BYTE CVehicle::GetMaxPassengers()
 {
@@ -265,18 +284,18 @@ BYTE CVehicle::GetMaxPassengers()
         return *((BYTE*)m_pGameVehicle + 0x488);
     return 0;
 }
+
 // 0x000b6de0
 float CVehicle::GetHealth()
 {
     return m_pGameVehicle ? *(float*)((BYTE*)m_pGameVehicle + 0x4c0) : g_objectScaleLowerBound;
 }
+
 // 0x000b6ed0
 int CVehicle::GetSubtype()
 {
     return m_pGameVehicle ? GameGetVehicleSubtype(m_pGameVehicle) : 0;
 }
-
-#include "game/playerped.h"
 
 // 0x000b6c00
 void CVehicle::ResetPointers()
@@ -453,11 +472,6 @@ DWORD CVehicle::GetField54()
 {
     return m_dwField54;
 }
-
-#include "game/entity.h"
-
-// 0x0018f5dc
-DWORD g_vehicleDetachingTrailer;
 
 // 0x000b6bd0
 void CVehicle::ChangeInterior(int interior)
@@ -669,12 +683,7 @@ void CVehicle::ClearWindowOpenFlag(BYTE window)
     }
 }
 
-#include "game/quaternion.h"
-
 // 0x001181a0
-const float g_vehicleTrainSpeedMinimum = -100.0f;
-// 0x001181a4
-const float g_vehicleTrainSpeedMaximum = 100.0f;
 
 // 0x000b6cd0
 void CVehicle::SetInvulnerable(BOOL enabled)
@@ -910,8 +919,6 @@ void CVehicle::SetBackendFloat64c(float speed)
         *(float*)((BYTE*)m_pGameVehicle + 0x64c) = speed;
 }
 
-#include "net/vehiclepool.h"
-
 // 0x000b77d0
 CVehicle* CVehicle::GetTrailer()
 {
@@ -1000,9 +1007,6 @@ BOOL CVehicle::AddComponent(WORD component)
     Scripting::ProcessCommand(&g_vehicleAddComponentCommand, m_nHandle, model, &result);
     return TRUE;
 }
-
-// 0x0011812c
-const float g_vehicleMarkerDistance = 200.0f;
 
 // Raw wrapper views do not establish the full allocation extent.
 // 0x000b7220
@@ -1108,9 +1112,6 @@ void __stdcall GameRemoveDriverByState598(void* vehicle)
     *(void**)((BYTE*)vehicle + 0x460) = 0;
 }
 
-#include "d3dhook/IDirect3DDevice9Hook.h"
-#include "gui/gui.h"
-
 // 0x000b7cd0
 void CVehicle::ConstructLicensePlate()
 {
@@ -1121,6 +1122,7 @@ void CVehicle::ConstructLicensePlate()
             m_pLicensePlateTexture = ((CLicensePlate*)g_devicePlateManager)->Create(text);
     }
 }
+
 // 0x000b7d20
 void CVehicle::ShutdownLicensePlate()
 {
@@ -1132,10 +1134,6 @@ void CVehicle::ShutdownLicensePlate()
     }
 }
 
-// 0x0011f704
-const Scripting::OpcodeInfo g_vehicleLockedCommand = {0x519, "ii"};
-// 0x0011f68c
-const Scripting::OpcodeInfo g_vehicleWreckedCommand = {0x119, "i"};
 // 0x000b6d70
 void CVehicle::SetLocked(BOOL locked)
 {
@@ -1147,6 +1145,7 @@ void CVehicle::SetLocked(BOOL locked)
             Scripting::ProcessCommand(&g_vehicleLockedCommand, m_nHandle, 0);
     }
 }
+
 // 0x000b6f10
 BOOL CVehicle::IsWrecked()
 {

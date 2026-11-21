@@ -11,23 +11,30 @@
 
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "gui/chatwindow.h"
-#include "gui/cmdwindow.h"
 #include "config.h"
 #include "game/game.h"
 #include "game/hooks.h"
 #include "game/scripting.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "gui/gui.h"
 #include "main.h"
 #include "runutil.h"
 #include <static_assert.h>
 
-// Reconstruction-only access facade for the established control vtable slot4C.
-// It adds no fields, virtual methods or standalone native entries.
 struct DialogControlAccess : CDXUTControl
 {
     using CDXUTControl::UpdateRects;
 };
+
+// 0x0011c304
+const float g_dialogNegativeLineScale = -1.5f;
+// 0x00118490
+const float g_dialogLineScale = 1.5f;
+// 0x0011c724
+const float g_dialogEditPadding = 14.0f;
+// 0x0011c348
+int g_dialogResponseRpcId = 62;
 
 // 0x0006eec0
 CDialog::CDialog(IDirect3DDevice9* device)
@@ -60,11 +67,6 @@ bool CDialog::IsInputHidden()
         return ChatImeActive();
     return false;
 }
-
-// 0x0011c304
-const float g_dialogNegativeLineScale = -1.5f;
-// 0x00118490
-const float g_dialogLineScale = 1.5f;
 
 // 0x0006f0f0
 RECT* CDialog::GetRect(RECT* rect)
@@ -100,7 +102,6 @@ int CDialog::GetFontHeight()
     return dialog->GetFont(1)->nHeight;
 }
 
-// Descriptive recovery name; the delimiter is returned without consumption.
 // 0x0006f200
 const char* CDialog::CopyColumn(const char* value, char* output, int limit)
 {
@@ -119,7 +120,6 @@ const char* CDialog::CopyColumn(const char* value, char* output, int limit)
     return value;
 }
 
-// Descriptive recovery name; a newline is returned without consumption.
 // 0x0006f260
 const char* CDialog::CopyLine(const char* value, char* output, int limit)
 {
@@ -335,9 +335,6 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
     return 1;
 }
 
-// 0x0011c724
-const float g_dialogEditPadding = 14.0f;
-
 // 0x0006fa50
 void CDialog::Show(int requestId, int style, const char* caption, const char* value, const char* firstButton, const char* secondButton, BOOL remote)
 {
@@ -489,9 +486,6 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
     Recalc();
     active = TRUE;
 }
-
-// 0x0011c348
-int g_dialogResponseRpcId = 62;
 
 // 0x000700d0
 void CDialog::Close(char response)

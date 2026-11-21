@@ -4,10 +4,10 @@
 
 #include "net/labelpool.h"
 
-#include "gui/cmdwindow.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/util.h"
+#include "gui/cmdwindow.h"
 #include "gui/gui.h"
 #include "gui/label.h"
 #include "main.h"
@@ -24,6 +24,7 @@ DWORD CLabelPool::IsActive(WORD id)
         return 0;
     return active[id];
 }
+
 // 0x00001190
 CLabelPool::CLabelPool()
 {
@@ -33,6 +34,7 @@ CLabelPool::CLabelPool()
         active[id] = 0;
     }
 }
+
 // 0x000015e0
 CLabelPool::~CLabelPool()
 {
@@ -40,6 +42,7 @@ CLabelPool::~CLabelPool()
         if (active[id])
             Delete(id);
 }
+
 // 0x000011d0
 void CLabelPool::Create(WORD id, const char* text, DWORD color, CVector position, float drawDistance, BYTE behindWalls, WORD player, WORD vehicle)
 {
@@ -69,6 +72,7 @@ void CLabelPool::Create(WORD id, const char* text, DWORD color, CVector position
     entry->attachedVehicle = vehicle;
     active[id] = 1;
 }
+
 // 0x000012e0
 BOOL CLabelPool::Delete(WORD id)
 {
@@ -80,6 +84,7 @@ BOOL CLabelPool::Delete(WORD id)
     active[id] = 0;
     return TRUE;
 }
+
 // 0x00001350
 void CLabelPool::Draw()
 {

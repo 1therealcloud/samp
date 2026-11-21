@@ -4,10 +4,10 @@
 #include <DXUTgui.h>
 #include <d3dx9.h>
 
-#include "gui/chatwindow.h"
 #include "cmdprocs.h"
-#include "gui/cmdwindow.h"
 #include "game/game.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "gui/gui.h"
 #include "main.h"
 
@@ -18,6 +18,16 @@
 DWORD g_clientInputOutsideClick;
 // 0x0016be88
 DWORD g_clientScoreboardOutsideClick;
+// 0x0011b928
+const char g_screenshotFilenamePattern[] = "\\screens\\sa-mp-%03i.png";
+// 0x0011c7dc
+const char g_screenshotTakenMessage[] = "Screenshot Taken - sa-mp-%03i.png";
+// 0x0011c7c0
+const char g_screenshotFailureMessage[] = "Unable to save screenshot.";
+
+// 0x0016be78
+WNDPROC g_clientPreviousWindowProcedure;
+
 // 0x000610d0
 LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
@@ -231,6 +241,7 @@ BOOL ClientHandleCharacter(unsigned int character)
     }
     return FALSE;
 }
+
 // 0x00060d90
 void ClientToggleWindowedMode()
 {
@@ -242,18 +253,6 @@ void ClientToggleWindowedMode()
     ((void(__cdecl*)(int))0x745c70)(mode);
     *(int*)0xc97c18 = mode;
 }
-
-// 0x0011b928
-const char g_screenshotFilenamePattern[] = "\\screens\\sa-mp-%03i.png";
-
-// 0x0011c7dc
-const char g_screenshotTakenMessage[] = "Screenshot Taken - sa-mp-%03i.png";
-
-// 0x0011c7c0
-const char g_screenshotFailureMessage[] = "Unable to save screenshot.";
-
-// 0x0016be78
-WNDPROC g_clientPreviousWindowProcedure;
 
 // 0x00061cf0
 int ClientFindScreenshotFilename(std::string* path)

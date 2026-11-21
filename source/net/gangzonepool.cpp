@@ -19,6 +19,7 @@ CGangZonePool::CGangZonePool()
         active[i] = 0;
     }
 }
+
 // 0x00002180
 CGangZonePool::~CGangZonePool()
 {
@@ -29,6 +30,7 @@ CGangZonePool::~CGangZonePool()
             zones[i] = 0;
         }
 }
+
 // 0x000021b0
 void CGangZonePool::Create(WORD id, float minX, float minY, float maxX, float maxY, DWORD color)
 {
@@ -50,18 +52,21 @@ void CGangZonePool::Create(WORD id, float minX, float minY, float maxX, float ma
     zones[id] = zone;
     active[id] = 1;
 }
+
 // 0x00002230
 void CGangZonePool::StartFlashing(WORD id, DWORD color)
 {
     if (zones[id])
         zones[id]->flashColor = color;
 }
+
 // 0x00002250
 void CGangZonePool::StopFlashing(WORD id)
 {
     if (zones[id])
         zones[id]->flashColor = zones[id]->color;
 }
+
 // 0x00002270
 void CGangZonePool::Delete(WORD id)
 {
@@ -72,6 +77,7 @@ void CGangZonePool::Delete(WORD id)
         active[id] = 0;
     }
 }
+
 // 0x000022a0
 void CGangZonePool::Draw()
 {

@@ -6,14 +6,18 @@
 #include "GetTime.h"
 #include "RakClientInterface.h"
 #include "StringCompressor.h"
-#include "gui/chatwindow.h"
 #include "events.h"
 #include "game/custommodels.h"
 #include "game/game.h"
 #include "game/patches.h"
 #include "game/playerped.h"
 #include "game/vehicle.h"
+#include "gui/chatwindow.h"
 #include "gui/gui.h"
+#include "gui/objectedit.h"
+#include "gui/objectselection.h"
+#include "gui/scoreboard.h"
+#include "gui/svrnetstats.h"
 #include "main.h"
 #include "net/actorpool.h"
 #include "net/localplayer.h"
@@ -23,10 +27,107 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
-#include "gui/objectedit.h"
-#include "gui/objectselection.h"
-#include "gui/scoreboard.h"
-#include "gui/svrnetstats.h"
+// 0x0013c0b4
+DWORD g_rpcInitValue13C0B4 = 2;
+// 0x001180ec
+const char g_rpcConnectedFormat[] = "Connected to {B9C9BF}%.64s";
+// 0x00118108
+const char g_rpcCouldNotSpawnPlayer[] = "Warning: Couldn't spawn player(%u)";
+// 0x001180c4
+const char g_rpcRejectedVersion[] = "CONNECTION REJECTED: Incorrect Version.";
+// 0x00118098
+const char g_rpcRejectedNickname[] = "CONNECTION REJECTED: Unacceptable NickName";
+// 0x00118060
+const char g_rpcNicknameLength[] = "Please choose another nick between and 3-20 characters";
+// 0x00118040
+const char g_rpcNicknameCharacters[] = "Please use only a-z, A-Z, 0-9";
+// 0x0011800c
+const char g_rpcNicknameQuit[] = "Use /quit to exit or press ESC and select Quit Game";
+// 0x00117fe4
+const char g_rpcRejectedMod[] = "CONNECTION REJECTED: Bad mod version.";
+// 0x00117fac
+const char g_rpcRejectedSlot[] = "CONNECTION REJECTED: Unable to allocate a player slot.";
+// 0x00117fa8
+const int g_rpcScrSetIngameTimer = 60;
+// 0x00117fa4
+const int g_rpcScrWorldPlayerAdd = 32;
+// 0x00117fa0
+const int g_rpcScrWorldPlayerDeath = 166;
+// 0x00117f9c
+const int g_rpcScrWorldPlayerRemove = 163;
+// 0x00117f98
+const int g_rpcScrWorldVehicleAdd = 164;
+// 0x00117f94
+const int g_rpcScrWorldVehicleRemove = 165;
+// 0x00117f90
+const int g_rpcScrSetVehicleParamsEx = 24;
+// 0x00117968
+const int g_rpcDamageVehicle = 106;
+// 0x00117f8c
+const int g_rpcScrSetPlayerSkillLevel = 34;
+// 0x00117f88
+const int g_rpcScrCreate3DTextLabel = 36;
+// 0x00117f84
+const int g_rpcScrDestroy3DTextLabel = 58;
+// 0x00117f80
+const int g_rpcScrChatBubble = 59;
+// 0x00117f7c
+const int g_rpcScrShowDialog = 61;
+// 0x00117f78
+const int g_rpcScrServerJoin = 137;
+// 0x00117f74
+const int g_rpcScrServerQuit = 138;
+// 0x00117f70
+const int g_rpcScrInitGame = 139;
+// 0x00117f6c
+const int g_rpcScrSetCheckpoint = 107;
+// 0x00117f68
+const int g_rpcScrDisableCheckpoint = 37;
+// 0x00117f64
+const int g_rpcScrSetRaceCheckpoint = 38;
+// 0x00117f60
+const int g_rpcScrDisableRaceCheckpoint = 39;
+// 0x00117f5c
+const int g_rpcSrvNetStats = 102;
+// 0x00117f58
+const int g_rpcScrGamemodeRestart = 40;
+// 0x00117f54
+const int g_rpcConnectionRejected = 130;
+// 0x00117f50
+const int g_rpcScrClientMessage = 93;
+// 0x00117f4c
+const int g_rpcScrSetWorldTime = 94;
+// 0x00117f48
+const int g_rpcScrCreatePickup = 95;
+// 0x00117f44
+const int g_rpcScrDestroyPickup = 63;
+// 0x00117f40
+const int g_rpcScrDestroyWeaponPickup = 151;
+// 0x00117f3c
+const int g_rpcScrSetWeather = 152;
+// 0x00117f38
+const int g_rpcScrSetPlayerTime = 29;
+// 0x00117f34
+const int g_rpcScrToggleClock = 30;
+// 0x00117f24
+const int g_rpcScrCancelEdit = 28;
+// 0x00117f20
+const int g_rpcScrUpdateCameraTarget = 170;
+// 0x00117f1c
+const int g_rpcClientCheck = 103;
+// 0x00117f18
+const int g_rpcScrCreateActor = 171;
+// 0x00117f14
+const int g_rpcScrDestroyActor = 172;
+// 0x00117f10
+const int g_rpcUnknown00117F10 = 179;
+// 0x00117f0c
+const int g_rpcUnknown00117F0C = 180;
+// 0x00117f08
+const int g_rpcUnknown00117F08 = 183;
+// 0x00117f04
+const int g_rpcUnknown00117F04 = 185;
+
 // 0x00011f80
 void ScrCustomModelDownload(RPCParameters* parameters)
 {
@@ -71,6 +172,7 @@ void ScrCustomModelDownload(RPCParameters* parameters)
         g_customModels->ProcessCompressedChunk(stage, unpackedLength, chunk, (DWORD)length);
     }
 }
+
 // 0x00011d80
 void ScrCustomModelRecord(RPCParameters* parameters)
 {
@@ -100,6 +202,7 @@ void ScrCustomModelRecord(RPCParameters* parameters)
     g_customModels->AddRecord(index, record);
     g_customModels->SetExpectedRecordCount(count);
 }
+
 // 0x0000ea40
 void ScrCustomModelsReset(RPCParameters* parameters)
 {
@@ -111,6 +214,7 @@ void ScrCustomModelsReset(RPCParameters* parameters)
         g_customModels->DeleteRecord(0);
     }
 }
+
 // 0x0000ead0
 void ScrCustomModelsComplete(RPCParameters* parameters)
 {
@@ -122,10 +226,7 @@ void ScrCustomModelsComplete(RPCParameters* parameters)
         models->StopWorkers();
     }
 }
-// 0x0013c0b4
-DWORD g_rpcInitValue13C0B4 = 2;
-// 0x001180ec
-const char g_rpcConnectedFormat[] = "Connected to {B9C9BF}%.64s";
+
 // 0x00010530
 void ScrInitGame(RPCParameters* parameters)
 {
@@ -194,14 +295,14 @@ void ScrInitGame(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->gameState = CNetGame::StateConnected;
     players->local->PrepareForClassSelection();
 }
+
 // 0x0000e4e0
 void ScrGamemodeRestart(RPCParameters* parameters)
 {
     (void)parameters;
     ((CNetGame*)g_pNetGame)->ShutdownForRestart();
 }
-// 0x00118108
-const char g_rpcCouldNotSpawnPlayer[] = "Warning: Couldn't spawn player(%u)";
+
 // 0x000109d0
 void ScrWorldPlayerAdd(RPCParameters* parameters)
 {
@@ -247,6 +348,7 @@ void ScrWorldPlayerAdd(RPCParameters* parameters)
             ped->SetImmunities(0, 1, 1, 0, 0);
     }
 }
+
 // 0x0000e500
 void ScrWorldVehicleAdd(RPCParameters* parameters)
 {
@@ -288,6 +390,7 @@ void ScrWorldVehicleAdd(RPCParameters* parameters)
         vehicle->SetColor((BYTE)first, (BYTE)second);
     RakNet::GetTimeNS();
 }
+
 // 0x00010dc0
 void ScrWorldVehicleRemove(RPCParameters* parameters)
 {
@@ -344,6 +447,7 @@ void ScrWorldVehicleRemove(RPCParameters* parameters)
         vehicles->Delete((WORD)(id + 3));
     }
 }
+
 // 0x0000f150
 void ScmEvent(RPCParameters* parameters)
 {
@@ -357,6 +461,7 @@ void ScmEvent(RPCParameters* parameters)
     stream.Read(param3);
     GameProcessIncomingEvent(player, eventType, (WORD)vehicle, param2, param3);
 }
+
 // 0x0000e910
 BYTE ClientCheckChecksum(const void* data, WORD length)
 {
@@ -366,6 +471,7 @@ BYTE ClientCheckChecksum(const void* data, WORD length)
         result ^= bytes[i] & 0xcc;
     return result;
 }
+
 // 0x00011860
 void SendClientCheckResponse(BYTE type, DWORD argument, BYTE result)
 {
@@ -375,6 +481,7 @@ void SendClientCheckResponse(BYTE type, DWORD argument, BYTE result)
     stream.Write(result);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(const_cast<int*>(&g_rpcClientCheck), &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
+
 // 0x00011930
 void ClientCheck(RPCParameters* parameters)
 {
@@ -472,20 +579,7 @@ void ClientCheck(RPCParameters* parameters)
         SendClientCheckResponse(0x48, RakNet::GetTime(), 0);
     }
 }
-// 0x001180c4
-const char g_rpcRejectedVersion[] = "CONNECTION REJECTED: Incorrect Version.";
-// 0x00118098
-const char g_rpcRejectedNickname[] = "CONNECTION REJECTED: Unacceptable NickName";
-// 0x00118060
-const char g_rpcNicknameLength[] = "Please choose another nick between and 3-20 characters";
-// 0x00118040
-const char g_rpcNicknameCharacters[] = "Please use only a-z, A-Z, 0-9";
-// 0x0011800c
-const char g_rpcNicknameQuit[] = "Use /quit to exit or press ESC and select Quit Game";
-// 0x00117fe4
-const char g_rpcRejectedMod[] = "CONNECTION REJECTED: Bad mod version.";
-// 0x00117fac
-const char g_rpcRejectedSlot[] = "CONNECTION REJECTED: Unable to allocate a player slot.";
+
 // 0x0000fea0
 void RequestClass(RPCParameters* parameters)
 {
@@ -499,6 +593,7 @@ void RequestClass(RPCParameters* parameters)
         local->SetSpawnInfo(info);
     local->PrepareForClassSelection_Outcome(outcome != 0);
 }
+
 // 0x0000ff70
 void RequestSpawn(RPCParameters* parameters)
 {
@@ -511,6 +606,7 @@ void RequestSpawn(RPCParameters* parameters)
     else
         local->m_state.waitingForSpawnReply = 0;
 }
+
 // 0x00010410
 void ConnectionRejected(RPCParameters* parameters)
 {
@@ -532,6 +628,7 @@ void ConnectionRejected(RPCParameters* parameters)
         g_pChat->AddInfoMessage(g_rpcRejectedSlot);
     ((CNetGame*)g_pNetGame)->rakClient->Disconnect(500, 0);
 }
+
 // 0x000114a0
 void EnterVehicle(RPCParameters* parameters)
 {
@@ -550,6 +647,7 @@ void EnterVehicle(RPCParameters* parameters)
             remote->EnterVehicle((WORD)vehicle, passenger != 0);
     }
 }
+
 // 0x000115c0
 void ExitVehicle(RPCParameters* parameters)
 {
@@ -566,6 +664,7 @@ void ExitVehicle(RPCParameters* parameters)
             remote->ExitVehicle();
     }
 }
+
 // 0x000121c0
 void Chat(RPCParameters* parameters)
 {
@@ -590,6 +689,7 @@ void Chat(RPCParameters* parameters)
             pool->players[player]->remote->Chat(text);
     }
 }
+
 // 0x00010c20
 void ScrWorldPlayerDeath(RPCParameters* parameters)
 {
@@ -600,6 +700,7 @@ void ScrWorldPlayerDeath(RPCParameters* parameters)
     if (pool && player <= 1004 && pool->players[player] && pool->players[player]->remote)
         pool->players[player]->remote->Kill();
 }
+
 // 0x00010ce0
 void ScrWorldPlayerRemove(RPCParameters* parameters)
 {
@@ -614,6 +715,7 @@ void ScrWorldPlayerRemove(RPCParameters* parameters)
             pool->players[(WORD)player]->remote->Remove();
     }
 }
+
 // 0x000102b0
 void UpdateScoresPingsIps(RPCParameters* parameters)
 {
@@ -647,6 +749,7 @@ void UpdateScoresPingsIps(RPCParameters* parameters)
             g_deviceScoreboard->UpdateList();
     }
 }
+
 // 0x0000e740
 void EnterEditObject(RPCParameters* parameters)
 {
@@ -659,6 +762,7 @@ void EnterEditObject(RPCParameters* parameters)
     if (g_renderObjectSelection)
         g_renderObjectSelection->Enable(TRUE);
 }
+
 // 0x0000e800
 void ScrCancelEdit(RPCParameters* parameters)
 {
@@ -669,6 +773,7 @@ void ScrCancelEdit(RPCParameters* parameters)
     if (g_renderObjectSelection && g_renderObjectSelection->enabled)
         g_renderObjectSelection->Enable(FALSE);
 }
+
 // 0x0000e8b0
 void ScrUpdateCameraTarget(RPCParameters* parameters)
 {
@@ -678,6 +783,7 @@ void ScrUpdateCameraTarget(RPCParameters* parameters)
     if (g_pNetGame)
         ((CNetGame*)g_pNetGame)->updateCameraTarget = (BYTE)enabled;
 }
+
 // 0x000116b0
 void EditAttachedObject(RPCParameters* parameters)
 {
@@ -688,6 +794,7 @@ void EditAttachedObject(RPCParameters* parameters)
         g_renderObjectSelection->Enable(FALSE);
     ((CObjectEdit*)g_deviceObjectEdit)->EnterEditAttachedObject(index);
 }
+
 // 0x00011770
 void EditObject(RPCParameters* parameters)
 {
@@ -702,6 +809,7 @@ void EditObject(RPCParameters* parameters)
         g_renderTextDrawSelection->Disable();
     ((CObjectEdit*)g_deviceObjectEdit)->EnterEditObject(id, playerObject ? TRUE : FALSE);
 }
+
 // 0x0000e940
 void ScrCreateActor(RPCParameters* parameters)
 {
@@ -718,6 +826,7 @@ void ScrCreateActor(RPCParameters* parameters)
         }
     }
 }
+
 // 0x00011cd0
 void ScrDestroyActor(RPCParameters* parameters)
 {
@@ -730,6 +839,7 @@ void ScrDestroyActor(RPCParameters* parameters)
         pool->Delete(id);
     }
 }
+
 // 0x00011090
 void DamageVehicle(RPCParameters* parameters)
 {
@@ -750,6 +860,7 @@ void DamageVehicle(RPCParameters* parameters)
         vehicle->SetTires(tires);
     }
 }
+
 // 0x000111c0
 void ScrSetVehicleParamsEx(RPCParameters* parameters)
 {
@@ -794,6 +905,7 @@ void ScrSetVehicleParamsEx(RPCParameters* parameters)
             vehicle->ClearWindowOpenFlag((BYTE)component[j]);
     }
 }
+
 // 0x0000f4b0
 void ScrSetPlayerSkillLevel(RPCParameters* parameters)
 {
@@ -825,6 +937,7 @@ void ScrSetPlayerSkillLevel(RPCParameters* parameters)
         ped->SetWeaponSkill(skill, value);
     }
 }
+
 // 0x0000f5e0
 void ScrCreate3DTextLabel(RPCParameters* parameters)
 {
@@ -852,6 +965,7 @@ void ScrCreate3DTextLabel(RPCParameters* parameters)
             pool->Create(id, text, color, position, distance, behindWalls, player, vehicle);
     }
 }
+
 // 0x0000f790
 void ScrDestroy3DTextLabel(RPCParameters* parameters)
 {
@@ -865,6 +979,7 @@ void ScrDestroy3DTextLabel(RPCParameters* parameters)
             pool->Delete(id);
     }
 }
+
 // 0x0000f850
 void ScrChatBubble(RPCParameters* parameters)
 {
@@ -893,6 +1008,7 @@ void ScrChatBubble(RPCParameters* parameters)
             g_renderChatBubble->Add(player, text, color, distance, lifespan);
     }
 }
+
 // 0x0000f9c0
 void ScrShowDialog(RPCParameters* parameters)
 {
@@ -912,6 +1028,7 @@ void ScrShowDialog(RPCParameters* parameters)
     if (strlen(title) && strlen(text))
         g_renderDialog->Show(id, type, title, text, button1, button2, TRUE);
 }
+
 // 0x0000ee60
 void ScrClientMessage(RPCParameters* parameters)
 {
@@ -927,6 +1044,7 @@ void ScrClientMessage(RPCParameters* parameters)
         g_pChat->AddMessage(color, text);
     }
 }
+
 // 0x0000fbb0
 void ScrServerJoin(RPCParameters* parameters)
 {
@@ -952,6 +1070,7 @@ void ScrServerJoin(RPCParameters* parameters)
             pool->GetPlayer(player)->SetColor(color);
     }
 }
+
 // 0x0000fd40
 void ScrServerQuit(RPCParameters* parameters)
 {
@@ -963,12 +1082,14 @@ void ScrServerQuit(RPCParameters* parameters)
     stream.Read(reason);
     pool->Delete(player, reason);
 }
+
 // 0x0000e450
 void SrvNetStats(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     stream.Read((char*)g_srvNetStatsHistory, 0x128);
 }
+
 // 0x00010040
 void ScrSetCheckpoint(RPCParameters* parameters)
 {
@@ -983,6 +1104,7 @@ void ScrSetCheckpoint(RPCParameters* parameters)
     g_pGame->SetCheckpoint(&position, &size);
     g_pGame->m_checkpoints.enabled = 1;
 }
+
 // 0x00010150
 void ScrSetRaceCheckpoint(RPCParameters* parameters)
 {
@@ -1002,6 +1124,7 @@ void ScrSetRaceCheckpoint(RPCParameters* parameters)
     g_pGame->SetRacingCheckpoint(type, &position, &next, point.x);
     g_pGame->m_checkpoints.raceEnabled = 1;
 }
+
 // 0x0000ef50
 void ScrCreatePickup(RPCParameters* parameters)
 {
@@ -1014,6 +1137,7 @@ void ScrCreatePickup(RPCParameters* parameters)
     if (pool)
         pool->Create(&pickup, id);
 }
+
 // 0x0000f010
 void ScrDestroyPickup(RPCParameters* parameters)
 {
@@ -1024,6 +1148,7 @@ void ScrDestroyPickup(RPCParameters* parameters)
     if (pool)
         pool->Delete(id);
 }
+
 // 0x0000f0b0
 void ScrDestroyWeaponPickup(RPCParameters* parameters)
 {
@@ -1032,6 +1157,7 @@ void ScrDestroyWeaponPickup(RPCParameters* parameters)
     stream.Read(owner);
     ((CNetGame*)g_pNetGame)->pools->pickups->DeleteWeapon(owner);
 }
+
 // The original handlers use signed bits/8+1, including an extra byte for aligned data.
 // Read failures are deliberately ignored; uninitialized native output locals stay so.
 // 0x0000edc0
@@ -1042,6 +1168,7 @@ void ScrSetWorldTime(RPCParameters* parameters)
     stream.Read(hour);
     ((CNetGame*)g_pNetGame)->settings->worldHour = hour;
 }
+
 // 0x0000f240
 void ScrSetWeather(RPCParameters* parameters)
 {
@@ -1051,6 +1178,7 @@ void ScrSetWeather(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->settings->weather = weather;
     g_pGame->SetWorldWeather(weather);
 }
+
 // 0x0000f2f0
 void ScrSetPlayerTime(RPCParameters* parameters)
 {
@@ -1062,6 +1190,7 @@ void ScrSetPlayerTime(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->settings->worldHour = hour;
     ((CNetGame*)g_pNetGame)->settings->worldMinute = minute;
 }
+
 // 0x0000f3d0
 void ScrToggleClock(RPCParameters* parameters)
 {
@@ -1078,6 +1207,7 @@ void ScrToggleClock(RPCParameters* parameters)
         g_pGame->GetWorldTime(&settings->worldHour, &settings->worldMinute);
     }
 }
+
 // 0x0000fe00
 void ScrSetIngameTimer(RPCParameters* parameters)
 {
@@ -1086,102 +1216,24 @@ void ScrSetIngameTimer(RPCParameters* parameters)
     stream.Read(timer);
     g_pGame->SetTimer(timer);
 }
+
 // 0x0000e430
 void ScrDisableCheckpoint(RPCParameters* parameters)
 {
     (void)parameters;
     g_pGame->m_checkpoints.enabled = 0;
 }
+
 // 0x0000e440
 void ScrDisableRaceCheckpoint(RPCParameters* parameters)
 {
     (void)parameters;
     g_pGame->m_checkpoints.raceEnabled = 0;
 }
-// 0x00117fa8
-const int g_rpcScrSetIngameTimer = 60;
-// 0x00117fa4
-const int g_rpcScrWorldPlayerAdd = 32;
-// 0x00117fa0
-const int g_rpcScrWorldPlayerDeath = 166;
-// 0x00117f9c
-const int g_rpcScrWorldPlayerRemove = 163;
-// 0x00117f98
-const int g_rpcScrWorldVehicleAdd = 164;
-// 0x00117f94
-const int g_rpcScrWorldVehicleRemove = 165;
-// 0x00117f90
-const int g_rpcScrSetVehicleParamsEx = 24;
-// 0x00117968
-const int g_rpcDamageVehicle = 106;
-// 0x00117f8c
-const int g_rpcScrSetPlayerSkillLevel = 34;
-// 0x00117f88
-const int g_rpcScrCreate3DTextLabel = 36;
-// 0x00117f84
-const int g_rpcScrDestroy3DTextLabel = 58;
-// 0x00117f80
-const int g_rpcScrChatBubble = 59;
-// 0x00117f7c
-const int g_rpcScrShowDialog = 61;
-// 0x00117f78
-const int g_rpcScrServerJoin = 137;
-// 0x00117f74
-const int g_rpcScrServerQuit = 138;
-// 0x00117f70
-const int g_rpcScrInitGame = 139;
-// 0x00117f6c
-const int g_rpcScrSetCheckpoint = 107;
-// 0x00117f68
-const int g_rpcScrDisableCheckpoint = 37;
-// 0x00117f64
-const int g_rpcScrSetRaceCheckpoint = 38;
-// 0x00117f60
-const int g_rpcScrDisableRaceCheckpoint = 39;
-// 0x00117f5c
-const int g_rpcSrvNetStats = 102;
-// 0x00117f58
-const int g_rpcScrGamemodeRestart = 40;
-// 0x00117f54
-const int g_rpcConnectionRejected = 130;
-// 0x00117f50
-const int g_rpcScrClientMessage = 93;
-// 0x00117f4c
-const int g_rpcScrSetWorldTime = 94;
-// 0x00117f48
-const int g_rpcScrCreatePickup = 95;
-// 0x00117f44
-const int g_rpcScrDestroyPickup = 63;
-// 0x00117f40
-const int g_rpcScrDestroyWeaponPickup = 151;
-// 0x00117f3c
-const int g_rpcScrSetWeather = 152;
-// 0x00117f38
-const int g_rpcScrSetPlayerTime = 29;
-// 0x00117f34
-const int g_rpcScrToggleClock = 30;
-// 0x00117f24
-const int g_rpcScrCancelEdit = 28;
-// 0x00117f20
-const int g_rpcScrUpdateCameraTarget = 170;
-// 0x00117f1c
-const int g_rpcClientCheck = 103;
-// 0x00117f18
-const int g_rpcScrCreateActor = 171;
-// 0x00117f14
-const int g_rpcScrDestroyActor = 172;
 // Custom-model record handler RVA0x00011d80; legacy registry name retained.
-// 0x00117f10
-const int g_rpcUnknown00117F10 = 179;
 // Custom-model reset handler RVA0x0000ea40; legacy registry name retained.
-// 0x00117f0c
-const int g_rpcUnknown00117F0C = 180;
 // Custom-model download handler RVA0x00011f80; legacy registry name retained.
-// 0x00117f08
-const int g_rpcUnknown00117F08 = 183;
 // Custom-model completion handler RVA0x0000ead0; legacy registry name retained.
-// 0x00117f04
-const int g_rpcUnknown00117F04 = 185;
 // 0x0000eb60
 void UnRegisterRPCs(RakClientInterface* client)
 {

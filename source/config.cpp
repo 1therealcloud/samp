@@ -9,6 +9,17 @@
 // 0x002aca0c
 CConfig* g_pConfig;
 
+// 0x002abe78
+ClientSettings g_clientSettings;
+// 0x002ac7a8
+char g_clientDataDirectory[261];
+// 0x002ac8b0
+char g_clientCacheDirectory[261];
+// 0x002ac498
+char g_clientConfigFilename[520];
+// 0x002ac6a0
+char g_clientChatFilename[264];
+
 // 0x00065e60
 CConfig::CConfig(const char* file)
 {
@@ -25,6 +36,7 @@ CConfig::CConfig(const char* file)
         Load();
     }
 }
+
 // 0x00065680
 CConfig::~CConfig()
 {
@@ -35,6 +47,7 @@ CConfig::~CConfig()
         occupied[i] = FALSE;
     }
 }
+
 // 0x000656c0
 void CConfig::FindFirstFree()
 {
@@ -44,6 +57,7 @@ void CConfig::FindFirstFree()
             last = i;
     upperBound = last + 1;
 }
+
 // 0x00065710
 int CConfig::GetIndex(const char* name)
 {
@@ -54,6 +68,7 @@ int CConfig::GetIndex(const char* name)
             return i;
     return -1;
 }
+
 // 0x000657b0
 bool CConfig::DoesExist(const char* name)
 {
@@ -61,6 +76,7 @@ bool CConfig::DoesExist(const char* name)
         return true;
     return false;
 }
+
 // 0x000657d0
 int CConfig::CreateEntry(const char* name)
 {
@@ -83,6 +99,7 @@ int CConfig::CreateEntry(const char* name)
     FindFirstFree();
     return index;
 }
+
 // 0x00065890
 int CConfig::GetIntValue(const char* name)
 {
@@ -93,6 +110,7 @@ int CConfig::GetIntValue(const char* name)
         return 0;
     return entries[i].intValue;
 }
+
 // 0x000658c0
 const char* CConfig::GetStringValue(const char* name)
 {
@@ -103,6 +121,7 @@ const char* CConfig::GetStringValue(const char* name)
         return 0;
     return entries[i].stringValue;
 }
+
 // 0x000658f0
 float CConfig::GetFloatValue(const char* name)
 {
@@ -113,6 +132,7 @@ float CConfig::GetFloatValue(const char* name)
         return 0.0f;
     return entries[i].floatValue;
 }
+
 // 0x00065920
 BOOL CConfig::Free(const char* name)
 {
@@ -126,17 +146,20 @@ BOOL CConfig::Free(const char* name)
     FindFirstFree();
     return TRUE;
 }
+
 // 0x00065980
 int CConfig::GetValueType(const char* name)
 {
     int i = GetIndex(name);
     return i < 0 ? VALUE_TYPE_NONE : entries[i].type;
 }
+
 // 0x000659b0
 CConfig::ConfigEntry* CConfig::GetEntry(int index)
 {
     return index >= 0 && index < MAX_ENTRIES && occupied[index] ? &entries[index] : 0;
 }
+
 // 0x000659e0
 int CConfig::GetType(const char* text)
 {
@@ -146,6 +169,7 @@ int CConfig::GetType(const char* text)
         return VALUE_TYPE_STRING;
     return strchr(text, '.') ? VALUE_TYPE_FLOAT : VALUE_TYPE_INT;
 }
+
 // 0x00065a50
 BOOL CConfig::Save()
 {
@@ -173,6 +197,7 @@ BOOL CConfig::Save()
     fclose(file);
     return TRUE;
 }
+
 // 0x00065b00
 __declspec(noinline) BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
 {
@@ -193,6 +218,7 @@ __declspec(noinline) BOOL CConfig::WriteIntValue(const char* name, int value, BO
     Save();
     return TRUE;
 }
+
 // 0x00065b60
 BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnly)
 {
@@ -216,6 +242,7 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
     Save();
     return TRUE;
 }
+
 // 0x00065c00
 __declspec(noinline) BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
 {
@@ -236,6 +263,7 @@ __declspec(noinline) BOOL CConfig::WriteFloatValue(const char* name, float value
     Save();
     return TRUE;
 }
+
 // 0x00065c60
 void CConfig::Write(const char* name, char* value)
 {
@@ -257,6 +285,7 @@ void CConfig::Write(const char* name, char* value)
             break;
     }
 }
+
 // 0x00065cf0
 BOOL CConfig::Load()
 {
@@ -310,21 +339,6 @@ BOOL CConfig::Load()
     fclose(file);
     return TRUE;
 }
-
-// 0x002abe78
-ClientSettings g_clientSettings;
-
-// 0x002ac7a8
-char g_clientDataDirectory[261];
-
-// 0x002ac8b0
-char g_clientCacheDirectory[261];
-
-// 0x002ac498
-char g_clientConfigFilename[520];
-
-// 0x002ac6a0
-char g_clientChatFilename[264];
 
 // Native parsers have no destination bound; missing opening quotes also have
 // no terminator guard. Retain that behavior instead of silently truncating.

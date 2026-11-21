@@ -4,13 +4,10 @@
 
 #include "game/skinnedmesh.h"
 
-#include "gui/chatwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
+#include "gui/chatwindow.h"
 #include "main.h"
-
-// 0x000b9340
-CSkinHierarchyAllocator::CSkinHierarchyAllocator() {}
 
 // 0x0011f860
 const char g_skinTextureDirectory[] = "C:\\Users\\New\\Desktop\\SAMP_037_Desktop\\Matite2014\\newskins\\ponz\\";
@@ -20,6 +17,13 @@ const char g_skinTextureFailed[] = "FAILED texture: %s";
 const char g_skinTextureLoaded[] = "LOADED texture: %s";
 // 0x0011c92c
 const char g_skinTexturePathFormat[] = "%s%s";
+// 0x0011f8a4
+const char g_skinBoneNameFormat[] = "Bone(%u) name: %s";
+// 0x0011f8b8
+const char g_skinBoneCountFormat[] = "Num bones: %u";
+
+// 0x000b9340
+CSkinHierarchyAllocator::CSkinHierarchyAllocator() {}
 
 // 0x000b8ad0
 HRESULT __stdcall CSkinHierarchyAllocator::CreateFrame(LPCSTR name, D3DXFRAME** out)
@@ -202,11 +206,6 @@ HRESULT __stdcall CSkinHierarchyAllocator::DestroyMeshContainer(D3DXMESHCONTAINE
     return S_OK;
 }
 
-// 0x0011f8a4
-const char g_skinBoneNameFormat[] = "Bone(%u) name: %s";
-// 0x0011f8b8
-const char g_skinBoneCountFormat[] = "Num bones: %u";
-
 // 0x000b8bc0
 CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9* inputDevice)
 {
@@ -221,6 +220,7 @@ CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9* inputDevice)
     controller = 0;
     mesh = 0;
 }
+
 // 0x000b9510
 CSkinnedMesh::~CSkinnedMesh()
 {
@@ -242,6 +242,7 @@ CSkinnedMesh::~CSkinnedMesh()
     }
     device = 0;
 }
+
 // 0x000b8c30
 void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
 {
@@ -276,6 +277,7 @@ void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
     }
     while (true);
 }
+
 // 0x000b8d10
 void CSkinnedMesh::SetAnimation(DWORD index)
 {
@@ -288,6 +290,7 @@ void CSkinnedMesh::SetAnimation(DWORD index)
     if (set)
         set->Release();
 }
+
 // 0x000b9190
 void CSkinnedMesh::DrawFrame(SkinFrame* frame)
 {
@@ -311,8 +314,10 @@ void CSkinnedMesh::DrawFrame(SkinFrame* frame)
         frame = child;
     }
 }
+
 // 0x000b9250
 void CSkinnedMesh::NativeNoOp3Words(DWORD, DWORD, DWORD) {}
+
 // 0x000b9260
 void CSkinnedMesh::DumpBones()
 {
@@ -329,6 +334,7 @@ void CSkinnedMesh::DumpBones()
             g_pChat->AddDebugMessage(g_skinBoneNameFormat, i, name);
         }
 }
+
 // 0x000b92e0
 void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* parent)
 {
@@ -347,6 +353,7 @@ void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* paren
         frame = child;
     }
 }
+
 // 0x000b9350
 int CSkinnedMesh::Load(const char* filename)
 {
@@ -364,6 +371,7 @@ int CSkinnedMesh::Load(const char* filename)
     }
     return 0;
 }
+
 // 0x000b9450
 void CSkinnedMesh::UpdateSkin(DWORD)
 {
@@ -383,6 +391,7 @@ void CSkinnedMesh::UpdateSkin(DWORD)
     container->workingMesh->UnlockVertexBuffer();
     container->MeshData.pMesh->UnlockVertexBuffer();
 }
+
 // 0x000b8d60
 int CSkinnedMesh::Render(const CMatrix* matrix)
 {

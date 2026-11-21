@@ -4,11 +4,11 @@
 
 #include "game/debugscript.h"
 
-#include "gui/chatwindow.h"
 #include "game/building_removal.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/vehicle.h"
+#include "gui/chatwindow.h"
 #include "main.h"
 #include "net/objectpool.h"
 // 0x0018de38
@@ -63,6 +63,7 @@ __declspec(naked) char* DebugScript::GetCommandParams(char* line)
         ret
     }
 }
+
 // 0x0009e340
 void DebugScript::CreateObject(const char* params)
 {
@@ -82,6 +83,7 @@ void DebugScript::CreateObject(const char* params)
         g_debugScriptObjectCount++;
     }
 }
+
 // 0x0009e450
 void DebugScript::CreateVehicle(const char* params)
 {
@@ -95,6 +97,7 @@ void DebugScript::CreateVehicle(const char* params)
     atoi(strtok(0, ","));
     new CVehicle(model, x, y, z, rotation, 0, FALSE);
 }
+
 // 0x0009e560
 void DebugScript::SetPlayerCameraPos(const char* params)
 {
@@ -106,6 +109,7 @@ void DebugScript::SetPlayerCameraPos(const char* params)
     g_debugScriptCameraPosition.x = x;
     g_debugScriptCameraPosition.y = y;
 }
+
 // 0x0009e5d0
 void DebugScript::RemoveBuildingForPlayer(const char* params)
 {
@@ -117,8 +121,10 @@ void DebugScript::RemoveBuildingForPlayer(const char* params)
     float radius = (float)atof(strtok(0, ","));
     GameRemoveBuilding(model, x, y, z, radius);
 }
+
 // 0x0009e680
 void DebugScript::SetPlayerCameraLookAt(const char*) {}
+
 // 0x0009e690
 void DebugScript::SetPlayerInterior(const char* params)
 {
@@ -130,6 +136,7 @@ void DebugScript::SetPlayerInterior(const char* params)
     if (ped)
         ped->LinkToInterior((BYTE)interior, TRUE);
 }
+
 // 0x0009e6e0
 void DebugScript::ProcessLine(const char* line)
 {
@@ -146,6 +153,7 @@ void DebugScript::ProcessLine(const char* line)
     else if (!strncmp(line, "SetPlayerInterior", 17))
         SetPlayerInterior(GetCommandParams((char*)line));
 }
+
 // 0x0009e7f0
 void DebugScript::Initialize(const char* filename)
 {

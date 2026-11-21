@@ -8,9 +8,7 @@
 
 #include "RakClientInterface.h"
 #include "anticheat.h"
-#include "gui/chatwindow.h"
 #include "cmdprocs.h"
-#include "gui/cmdwindow.h"
 #include "config.h"
 #include "d3dhook/ID3DXFontHook.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -18,6 +16,8 @@
 #include "game/gta_globals.h"
 #include "game/hooks.h"
 #include "game/model_preview.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "gui/gui.h"
 #include <static_assert.h>
 
@@ -39,6 +39,17 @@ DWORD g_clientDeviceInitialized;
 DWORD g_clientNetworkInitialized;
 STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
 STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
+// 0x002aca60
+DWORD g_clientIntegrityFailures;
+// 0x002aca64
+DWORD g_clientIntegrityFailed;
+// 0x002aca68
+DWORD g_clientSkipGameFrame;
+// 0x002ac9c0
+DWORD g_clientQuitRequested;
+// 0x002ac9c4
+DWORD g_clientQuitStarted;
+
 // 0x000c5e70
 void ClientInitializeDeviceAndGui()
 {
@@ -131,16 +142,6 @@ void ClientInitializeDeviceAndGui()
     g_clientDeviceInitialized = 1;
 }
 
-// 0x002aca60
-DWORD g_clientIntegrityFailures;
-// 0x002aca64
-DWORD g_clientIntegrityFailed;
-// 0x002aca68
-DWORD g_clientSkipGameFrame;
-// 0x002ac9c0
-DWORD g_clientQuitRequested;
-// 0x002ac9c4
-DWORD g_clientQuitStarted;
 // 0x000c6630
 void ClientProcessFrame()
 {
@@ -158,6 +159,7 @@ void ClientProcessFrame()
     if (g_pGame)
         g_pGame->m_pAudio->Process();
 }
+
 // 0x000c66b0
 __declspec(naked) void ClientGameLoop()
 {

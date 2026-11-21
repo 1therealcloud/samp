@@ -2,23 +2,30 @@
 
 #include "gui/cmdwindow.h"
 
+#include "BitStream.h"
+#include "RakClientInterface.h"
+#include "config.h"
+#include "gui/chatwindow.h"
 #include "main.h"
 #include "runutil.h"
+#include <DXUT.h>
+#include <DXUTmisc.h>
+#include <assert.h>
+#include <new>
 #include <static_assert.h>
+#include <string.h>
+// 0x002aca24
+extern void* g_pNetGame;
+
+// 0x0011c310
+int g_inputCommandRpcId = 50;
+
 // 0x00002e80
 DWORD CInput::GetEnabledState()
 {
     return m_bEnabled;
 }
-#include "gui/chatwindow.h"
-#include "gui/cmdwindow.h"
-#include "config.h"
-#include <DXUT.h>
-#include <DXUTgui.h>
-#include <DXUTmisc.h>
-#include <assert.h>
-#include <new>
-#include <string.h>
+
 // 0x00068e10
 CInput::CInput(IDirect3DDevice9* device)
 {
@@ -32,6 +39,7 @@ CInput::CInput(IDirect3DDevice9* device)
     memset(m_szInput, 0, sizeof(m_szInput));
     memset(m_szCurrentBuffer, 0, sizeof(m_szCurrentBuffer));
 }
+
 // 0x00068e80
 InputRect* CInput::GetRect(InputRect* rect)
 {
@@ -43,6 +51,7 @@ InputRect* CInput::GetRect(InputRect* rect)
     }
     return rect;
 }
+
 // 0x00068ec0
 void CInput::Open()
 {
@@ -67,6 +76,7 @@ void CInput::Open()
         m_bEnabled = TRUE;
     }
 }
+
 // 0x00069010
 void CInput::AddRecall(const char* text)
 {
@@ -76,6 +86,7 @@ void CInput::AddRecall(const char* text)
     if (m_nTotalRecall < 10)
         ++m_nTotalRecall;
 }
+
 // 0x00069070
 void CInput::RecallUp()
 {
@@ -90,6 +101,7 @@ void CInput::RecallUp()
         m_pEditbox->SetText(m_szRecallBuffer[m_nCurrentRecall], false);
     }
 }
+
 // 0x000690e0
 void CInput::RecallDown()
 {
@@ -103,12 +115,14 @@ void CInput::RecallDown()
         m_pEditbox->SetText(m_szCurrentBuffer, false);
     m_nCurrentRecall = -1;
 }
+
 // 0x00069130
 void CInput::EnableCursor()
 {
     if (m_bEnabled)
         g_pGame->SetCursorMode(2, FALSE);
 }
+
 // 0x00069150
 InputCommand CInput::GetCommandHandler(const char* name)
 {
@@ -117,11 +131,13 @@ InputCommand CInput::GetCommandHandler(const char* name)
             return m_pCommandProc[i];
     return 0;
 }
+
 // 0x000691a0
 void CInput::SetDefaultCommand(InputCommand command)
 {
     m_pDefaultCommand = command;
 }
+
 // 0x000691b0
 void CInput::AddCommand(const char* name, InputCommand command)
 {
@@ -132,6 +148,7 @@ void CInput::AddCommand(const char* name, InputCommand command)
         ++m_nCommandCount;
     }
 }
+
 // 0x00069210
 BOOL CInput::MsgProc(int message, int wparam, int lparam)
 {
@@ -139,6 +156,7 @@ BOOL CInput::MsgProc(int message, int wparam, int lparam)
         return TRUE;
     return FALSE;
 }
+
 // 0x00069280
 void CInput::ResetDialogControls(CDXUTDialog* dialog)
 {
@@ -241,14 +259,6 @@ void CInput::ProcessInput()
     }
 }
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-#include "gui/cmdwindow.h"
-#include <string.h>
-
-// 0x002aca24
-extern void* g_pNetGame;
-
 // Partial view: only the independently observed client field is described.
 #pragma pack(push, 1)
 struct InputNetGameView
@@ -260,8 +270,6 @@ struct InputNetGameView
 STATIC_ASSERT(offsetof(InputNetGameView, client) == 0x2c);
 
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
-// 0x0011c310
-int g_inputCommandRpcId = 50;
 
 // Recovered from 0x10069340. The input length excludes the trailing NUL.
 // 0x00069340

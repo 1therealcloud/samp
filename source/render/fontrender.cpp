@@ -1,5 +1,16 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
 #include "render/fontrender.h"
+#include "d3dhook/ID3DXFontHook.h"
+#include "gui/cmdwindow.h"
+#include "runutil.h"
+#include <DXUTgui.h>
+#include <stdlib.h>
+#include <string.h>
+// 0x00118400
+const char g_fontMeasureProbe[2] = "Y";
+// 0x002aca2c
+CFonts* g_deviceFonts;
+
 // 0x0006b270
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
 {
@@ -21,6 +32,7 @@ DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
     result = (result << 8) | green;
     return (result << 8) | blue;
 }
+
 // 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
 {
@@ -42,10 +54,6 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
     result = (result << 8) | green;
     return (result << 8) | blue;
 }
-#include "gui/cmdwindow.h"
-#include "runutil.h"
-#include <DXUTgui.h>
-#include <string.h>
 
 // 0x0006b530
 CFonts::CFonts(IDirect3DDevice9* device)
@@ -76,6 +84,7 @@ CFonts::~CFonts()
     RELEASE_FONT(m_pDefaultSprite)
     RELEASE_FONT(m_pLicensePlateFont)
 }
+
 // 0x0006abc0
 void CFonts::OnLostDevice()
 {
@@ -86,6 +95,7 @@ void CFonts::OnLostDevice()
     m_pDefaultSprite->OnLostDevice();
     m_pLicensePlateFont->OnLostDevice();
 }
+
 // 0x0006ac00
 void CFonts::OnResetDevice()
 {
@@ -96,6 +106,7 @@ void CFonts::OnResetDevice()
     m_pDefaultSprite->OnResetDevice();
     m_pLicensePlateFont->OnResetDevice();
 }
+
 // 0x0006ac40
 FontSize CFonts::GetTextScreenSize(const char* text, int format)
 {
@@ -110,6 +121,7 @@ FontSize CFonts::GetTextScreenSize(const char* text, int format)
     size.cy = rect.bottom - rect.top;
     return size;
 }
+
 // 0x0006acf0
 FontSize CFonts::GetLittleTextScreenSize(const char* text, int format)
 {
@@ -124,6 +136,7 @@ FontSize CFonts::GetLittleTextScreenSize(const char* text, int format)
     size.cy = rect.bottom - rect.top;
     return size;
 }
+
 // 0x0006ada0
 void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR color, BOOL shadow)
 {
@@ -158,6 +171,7 @@ void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR
     if (ownSprite)
         sprite->End();
 }
+
 // 0x0006af20
 void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, int format, D3DCOLOR color, BOOL shadow)
 {
@@ -192,6 +206,7 @@ void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, in
     if (ownSprite)
         sprite->End();
 }
+
 // 0x0006b090
 void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
 {
@@ -219,9 +234,6 @@ void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
     m_pLicensePlateFont->DrawTextA(sprite, text, -1, &rect, DT_NOCLIP | DT_CENTER | DT_VCENTER, color);
     sprite->End();
 }
-
-#include "d3dhook/ID3DXFontHook.h"
-#include <stdlib.h>
 
 // 0x0006b320
 void CFonts::Reset()
@@ -284,9 +296,3 @@ void CFonts::Reset()
     m_nFontHeight = GetTextScreenSize(g_fontMeasureProbe, 0).cy;
     m_nLittleFontHeight = GetLittleTextScreenSize(g_fontMeasureProbe, 0).cy;
 }
-
-// 0x00118400
-const char g_fontMeasureProbe[2] = "Y";
-
-// 0x002aca2c
-CFonts* g_deviceFonts;

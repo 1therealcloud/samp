@@ -3,75 +3,24 @@
 
 #include "game/custommodels.h"
 
+#include "Alloc.h"
+#include "BitStream.h"
+#include "LzmaDec.h"
+#include "RakClientInterface.h"
+#include "config.h"
+#include "game/game.h"
+#include "game/hooks.h"
 #include "game/modelfile.h"
+#include "game/util.h"
+#include "gui/chatwindow.h"
+#include "gui/gui.h"
 #include "main.h"
+#include "net/netgame.h"
+#include <curl/curl.h>
+#include <process.h>
 #include <static_assert.h>
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c440
-DWORD NativeModelArrayPrefix::Read0000c440(DWORD index)
-{
-    if (index >= count)
-        return 0;
-    return slots[index];
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c460
-DWORD NativeModelArrayPrefix::Count0000c460()
-{
-    return count;
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c470
-DWORD NativeModelArrayPrefix::Read0000c470(DWORD index)
-{
-    if (index >= count)
-        return 0;
-    return slots[index];
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c490
-DWORD NativeModelArrayPrefix::Count0000c490()
-{
-    return count;
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c4a0
-NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize0000c4a0()
-{
-    slots = 0;
-    count = 0;
-    return this;
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c4b0
-DWORD NativeModelArrayPrefix::Read0000c4b0(DWORD index)
-{
-    if (index >= count)
-        return 0;
-    return slots[index];
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x0000c4d0
-DWORD NativeModelArrayPrefix::Count0000c4d0()
-{
-    return count;
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x000bbc60
-NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize000bbc60()
-{
-    slots = 0;
-    count = 0;
-    return this;
-}
-// Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x000bbc70
-NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize000bbc70()
-{
-    slots = 0;
-    count = 0;
-    return this;
-}
+#include <stdio.h>
+#include <sys/stat.h>
 // 0x00117cd8
 const char g_customDeleteDffPattern[] = "%s\\0x%X.dff";
 // 0x00117ce4
@@ -84,473 +33,13 @@ const char g_customFindTempPattern[] = "%s/*.temp";
 const char g_customFindDffPattern[] = "%s/*.dff";
 // 0x00117d0c
 const char g_customFindTxdPattern[] = "%s/*.txd";
-// 0x0000c0b0
-DWORD CCustomModels::ParseCacheHash(const char* filename)
-{
-    if (filename[0] != '0' || filename[1] != 'x')
-        return 0;
-    char digits[12];
-    strncpy(digits, filename + 2, 8);
-    return strtoul(digits, 0, 16);
-}
-// 0x0000b990
-void CCustomModels::ClearTransferStorage()
-{
-    memset(nativeState + 0x222, 0, 0x11e);
-    for (int i = 0; i < 0xd20; ++i)
-        nativeState[0x1345 + i] = 0;
-}
-// 0x0000d890
-CCustomModels::CCustomModels()
-{
-    *(DWORD*)nativeState = 0;
-    *(DWORD*)(nativeState + 4) = 0;
-    nativeState[8] = 0;
-    memset(nativeState + 9, 0, 261);
-    *(DWORD*)(nativeState + 0x213) = 0;
-    nativeState[0x21f] = 0;
-    nativeState[0x221] = 0;
-    nativeState[0x220] = 0;
-    *(DWORD*)(nativeState + 0x21b) = 0;
-    *(DWORD*)(nativeState + 0x217) = 0;
-    ClearTransferStorage();
-    *(DWORD*)(nativeState + 0x2065) = 0;
-    *(DWORD*)(nativeState + 0x2069) = 0;
-    nativeState[0x1344] = 0;
-}
-// 0x0000c4e0
-bool CCustomModels::ResizeRecords(DWORD count)
-{
-    BYTE**& records = *(BYTE***)nativeState;
-    DWORD& previous = *(DWORD*)(nativeState + 4);
-    if (!count)
-    {
-        if (records)
-        {
-            free(records);
-            records = 0;
-        }
-        previous = 0;
-        return true;
-    }
-    BYTE** replacement = (BYTE**)realloc(records, count * 4);
-    if (!replacement)
-        return false;
-    records = replacement;
-    DWORD i = previous;
-    if (i < count)
-    {
-        do
-        {
-            records[i] = 0;
-        }
-        while (++i != count);
-    }
-    previous = count;
-    return true;
-}
-// 0x0000c6a0
-void CCustomModels::TrimRecords()
-{
-    DWORD count = *(DWORD*)(nativeState + 4);
-    DWORD i = 0;
-    DWORD last = 0xffffffff;
-    if (count)
-    {
-        BYTE** record = *(BYTE***)nativeState;
-        do
-        {
-            if (*record)
-                last = i;
-            ++i;
-            ++record;
-        }
-        while (i != count);
-    }
-    if (last == 0xffffffff)
-        ResizeRecords(0);
-    else
-        ResizeRecords(last + 1);
-}
-// 0x0000cfc0
-bool CCustomModels::EraseRecord(DWORD index)
-{
-    if (index >= *(DWORD*)(nativeState + 4))
-        return false;
-    (*(BYTE***)nativeState)[index] = 0;
-    TrimRecords();
-    return true;
-}
-// 0x0000cff0
-bool CCustomModels::SetRecord(DWORD index, void* record)
-{
-    if (index >= *(DWORD*)(nativeState + 4) && !ResizeRecords(index + 1))
-        return false;
-    (*(void***)nativeState)[index] = record;
-    return true;
-}
-// 0x0000d550
-DWORD CCustomModels::AddRecord(DWORD index, const void* record)
-{
-    void* copy = calloc(1, 94);
-    int base = *(const int*)((const BYTE*)record + 0xc);
-    if (base < 0 || base > 20000)
-        return 0xffffffff;
-    memcpy(copy, record, 94);
-    SetRecord(index, copy);
-    return index;
-}
-// 0x0000d5a0
-DWORD CCustomModels::DeleteRecord(DWORD index)
-{
-    void* record = GetRecord(index);
-    if (record)
-    {
-        free(record);
-        EraseRecord(index);
-        return index;
-    }
-    return 0xffffffff;
-}
-// 0x0000d5e0
-void CCustomModels::ClearRecords()
-{
-    ResizeRecords(0);
-}
-// 0x0000bd10
-void CCustomModels::StopWorkers()
-{
-    for (int i = 0; i < 6; ++i)
-        nativeState[0x134c + i * 0x230] = 1;
-    nativeState[0x1344] = 0;
-}
-// 0x0000bd90
-void CCustomModels::ResumeReadyWorker()
-{
-    if (!nativeState[0x1344])
-        return;
-    int i = 0;
-    BYTE* worker = nativeState + 0x1349;
-    for (; i < 6; ++i, worker += 0x230)
-    {
-        BYTE active = worker[2];
-        if (active && !worker[0])
-        {
-            BYTE paused = worker[1];
-            if (paused)
-            {
-                nativeState[0x134a + i * 0x230] = 0;
-                return;
-            }
-        }
-    }
-}
 
 // 0x002aca28
 CCustomModels* g_customModels;
-// 0x0000c950
-bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
-{
-    if (!nativeState[0x21f])
-        return false;
-    for (int i = 0; i < endIndex; ++i)
-    {
-        BYTE* entry = (BYTE*)GetRecord(i);
-        if (!entry)
-            continue;
-        if ((*(DWORD*)(entry + 0x46) == hash && entry[2]) || (*(DWORD*)(entry + 0x4a) == hash && entry[3]))
-            return true;
-    }
-    return false;
-}
-// 0x0000c9b0
-int CCustomModels::MarkResourceRequests()
-{
-    BYTE* state = (BYTE*)this;
-    if (!state[0x21f])
-        return -1;
-    DWORD index = 0, pending = 0, count = *(DWORD*)(state + 4);
-    if (count)
-    {
-        do
-        {
-            BYTE* entry = (BYTE*)GetRecord(index);
-            if ((entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(state + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))) && !entry[6])
-            {
-                if (!entry[0])
-                {
-                    entry[2] = 1;
-                    if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x46)))
-                        ++pending;
-                }
-                if (!entry[1])
-                {
-                    entry[3] = 1;
-                    if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x4a)))
-                        ++pending;
-                }
-            }
-            count = *(DWORD*)(state + 4);
-        }
-        while (++index != count);
-    }
-    return (int)pending;
-}
-
-// 0x0000cc80
-bool CCustomModels::IsPedEntry(int model)
-{
-    BYTE* state = (BYTE*)this;
-    DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i != count; i++)
-    {
-        BYTE* entry = (BYTE*)GetRecord(i);
-        if (*(int*)(entry + 0x10) == model && entry[7] == 1)
-            return true;
-    }
-    return false;
-}
-// 0x0000ccc0
-bool CCustomModels::IsObjectEntry(int model)
-{
-    BYTE* state = (BYTE*)this;
-    DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i != count; i++)
-    {
-        BYTE* entry = (BYTE*)GetRecord(i);
-        if (*(int*)(entry + 0x10) == model && entry[7] == 2)
-            return true;
-    }
-    return false;
-}
-// 0x0000cd00
-BYTE CCustomModels::GetLoadedFlag(int model)
-{
-    BYTE* state = (BYTE*)this;
-    DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i != count; i++)
-    {
-        BYTE* entry = (BYTE*)GetRecord(i);
-        if (*(int*)(entry + 0x10) == model)
-            return entry[0x58];
-    }
-    return 0;
-}
-// 0x0000ce30
-BOOL CCustomModels::DoesExist(int model)
-{
-    BYTE* state = (BYTE*)this;
-    DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i != count; i++)
-    {
-        BYTE* entry = (BYTE*)GetRecord(i);
-        if (*(int*)(entry + 0x10) == model && entry[7] == 1)
-        {
-            if (!LoadPedModel(*(DWORD*)(entry + 0xc), *(DWORD*)(entry + 0x10), *(DWORD*)(entry + 0x46), *(DWORD*)(entry + 0x4a)))
-                return FALSE;
-            entry[0x59] = 0;
-            entry[0x58] = 1;
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-// 0x0000ce90
-BOOL CCustomModels::LoadObjectEntry(int model)
-{
-    BYTE* state = (BYTE*)this;
-    DWORD count = *(DWORD*)(state + 4);
-    for (DWORD i = 0; i != count; i++)
-    {
-        BYTE* entry = (BYTE*)GetRecord(i);
-        // This method alone has the observed null-record guard.
-        if (entry && *(int*)(entry + 0x10) == model && entry[7] == 2)
-        {
-            if (!entry[0] || !entry[1])
-                return FALSE;
-            if (!LoadObjectModel(*(DWORD*)(entry + 0xc), *(DWORD*)(entry + 0x10), *(DWORD*)(entry + 0x46), *(DWORD*)(entry + 0x4a)))
-                return FALSE;
-            entry[0x59] = 0;
-            entry[0x58] = 1;
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-// The reference entry is exactly RET4; this empty behavior is native.
-// 0x0000cd40
-void CCustomModels::ReleaseObjectEntry(int model)
-{
-    (void)model;
-}
-
-#include "gui/chatwindow.h"
-#include "game/custommodels.h"
-#include "game/game.h"
-#include "game/hooks.h"
-#include "game/util.h"
-#include "net/netgame.h"
-#include <stdlib.h>
-#include <string.h>
-
 // 0x001e0448
 DWORD g_gameLoadingCustomModel;
 
-// 0x000a7670
-void* GameClonePedModelInfo(int base, int model)
-{
-    void* copy = calloc(0x44, 1);
-    void* source = GameGetModelInfo(base);
-    if (source && GameIsPedModel(base))
-    {
-        memcpy(copy, source, 0x44);
-        g_gameModelInfoTable[model] = copy;
-        return copy;
-    }
-    // Native validation failure leaks the allocation.
-    return 0;
-}
-// 0x000a76c0
-void* GameCloneObjectModelInfo(int base, int model)
-{
-    void* existing = g_gameModelInfoTable[model];
-    if (existing)
-        return existing;
-    void* copy = calloc(0x20, 1);
-    void* source = GameGetModelInfo(base);
-    if (source && GameIsObjectModelInfo(source))
-    {
-        memcpy(copy, source, 0x20);
-        g_gameModelInfoTable[model] = copy;
-        return copy;
-    }
-    return 0;
-}
-// 0x000a7750
-bool GameAttachModelTxd(int model, const char* name, const char* path)
-{
-    int index = GameTxdFind(name);
-    if (index != -1)
-        GameSetModelTxd(model, index);
-    else
-    {
-        index = GameTxdAdd(name);
-        if (GameFileExists(path))
-        {
-            GameTxdLoad(index, path);
-            GameSetModelTxd(model, index);
-        }
-        else
-            return false;
-    }
-    GameTxdPush();
-    GameTxdSetCurrent(index);
-    return true;
-}
-// 0x000a77c0
-BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* dff, const char* txd)
-{
-    if (GameClonePedModelInfo(base, model) && GameAttachModelTxd(model, name, txd))
-    {
-        void* clump = GameLoadPedDff(dff);
-        if (clump)
-        {
-            GamePublishPedClump(model, clump);
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-// 0x000a7820
-BOOL GameRegisterCustomObject(int base, int model, const char* name, const char* dff, const char* txd)
-{
-    g_gameLoadingCustomModel = model;
-    if (GameCloneObjectModelInfo(base, model))
-    {
-        if (GameAttachModelTxd(model, name, txd))
-        {
-            if (GameLoadObjectDff(dff, model))
-                return TRUE;
-            if (g_pChat)
-                g_pChat->AddDebugMessage("[error] Failed to load model ID: %d", model);
-        }
-        else
-        {
-            if (g_pChat)
-                g_pChat->AddDebugMessage("[error] Failed to load texture for model ID: %d", model);
-        }
-    }
-    return FALSE;
-}
-// 0x000b41d0
-void __stdcall GamePublishPedClump(int model, void* clump)
-{
-    BYTE* info = (BYTE*)GameGetModelInfo(model);
-    *(void**)(info + 0x1c) = clump;
-    ((void(__fastcall*)(void*, void*, void*))(*(DWORD**)info)[16])(info, 0, clump);
-}
-// 0x000b34a0
-int GameTxdAdd(const char* name)
-{
-    int result;
-    // clang-format off
-    __asm {
-        push name
-        mov edx,0x731c80
-        call edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
-    return result;
-}
-// 0x000b34c0
-DWORD GameTxdLoad(int index, const char* path)
-{
-    BYTE result = 0;
-    // Native supplies EAX=0 and takes only the backend AL result.
-    // clang-format off
-    __asm {
-        xor eax,eax
-        push path
-        push index
-        mov edx,0x7320b0
-        call edx
-        mov result,al
-        pop edx
-        pop edx
-    }
-    // clang-format on
-    return result;
-}
-// 0x000b4260
-void __stdcall GameSetModelTxd(int model, int index)
-{
-    *(WORD*)((BYTE*)GameGetModelInfo(model) + 0xa) = (WORD)index;
-}
-// 0x000b4330
-void __stdcall GameSetModelField8(int model, WORD value)
-{
-    BYTE* info = (BYTE*)GameGetModelInfo(model);
-    if (info)
-        *(WORD*)(info + 8) = value;
-}
-// 0x000b40e0
-BOOL __stdcall GameIsObjectModelInfo(void* info)
-{
-    if (info)
-    {
-        // GTA SA vtable virtual addresses.
-        DWORD table = *(DWORD*)info;
-        if (table == 0x85bbf0 || table == 0x85bc30 || table == 0x85bc70 || table == 0x85bcb0 || table == 0x85bcf0)
-            return TRUE;
-    }
-    return FALSE;
-}
-
-#include <stdio.h>
-#include <sys/stat.h>
+// Original owning type/name unconfirmed; preserve this distinct native entry.
 // 0x00152ae8
 const GameModelReferencePatch g_gameModelReferencePatchesUS[707] = {
     {0x0040122a, 0x8b}, {0x00403da4, 0x8b}, {0x00403ecc, 0x8b}, {0x00405cdf, 0x8b}, {0x00405e50, 0x8b}, {0x004063f1, 0x8b}, {0x00406b11, 0x8b}, {0x00407b21, 0x8b},
@@ -745,6 +234,622 @@ const char g_customCollisionWrongType[] = "[Error] not a COL3 collision";
 const char g_customCollisionLoadFailed[] = "[Error] model loader failed to load col.";
 // 0x0011ed68
 const char g_customCollisionAllocationFailed[] = "[Error] model loader failed to allocated a new col.";
+// 0x00117e1c
+const char g_customDownloadSizeError[] = "[error] file 0x%X bad length got:%u expected:%u. Deleting..";
+// 0x00117de8
+const char g_customDownloadCrcError[] = "[error] file 0x%X bad checksum (0x%X). Deleting..";
+// 0x002ac390
+char g_customProxy[261];
+// 0x0011f9c0
+const char g_customRegistryKey[] = "Software\\SAMP";
+// 0x0011f9dc
+const char g_customProxyValue[] = "artwork_proxy";
+// 0x00117e58
+const char g_customUserAgent[] = "SAMP/0.3";
+// 0x00117e9c
+const char g_customLogUrlsOption[] = "logurls";
+// 0x00117e8c
+const char g_customUrlLogFormat[] = "[url 0x%X]: %s";
+// 0x00117e64
+const char g_customNoFreeWorkerError[] = "[error] AddURLRequest: No free slots!";
+// 0x00117ed8
+const char g_customUrlInfoError[] = "DownloadRedirect: Can't fill download info!";
+// 0x00117ea4
+const char g_customUrlOpenError[] = "DownloadRedirect: Can't open temp file for writing!";
+// 0x00140378
+const DWORD g_customCrcTable[256] = {
+    0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd,
+    0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7, 0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec,
+    0x14015c4f, 0x63066cd9, 0xfa0f3d63, 0x8d080df5, 0x3b6e20c8, 0x4c69105e, 0xd56041e4, 0xa2677172, 0x3c03e4d1, 0x4b04d447, 0xd20d85fd, 0xa50ab56b, 0x35b5a8fa, 0x42b2986c,
+    0xdbbbc9d6, 0xacbcf940, 0x32d86ce3, 0x45df5c75, 0xdcd60dcf, 0xabd13d59, 0x26d930ac, 0x51de003a, 0xc8d75180, 0xbfd06116, 0x21b4f4b5, 0x56b3c423, 0xcfba9599, 0xb8bda50f,
+    0x2802b89e, 0x5f058808, 0xc60cd9b2, 0xb10be924, 0x2f6f7c87, 0x58684c11, 0xc1611dab, 0xb6662d3d, 0x76dc4190, 0x01db7106, 0x98d220bc, 0xefd5102a, 0x71b18589, 0x06b6b51f,
+    0x9fbfe4a5, 0xe8b8d433, 0x7807c9a2, 0x0f00f934, 0x9609a88e, 0xe10e9818, 0x7f6a0dbb, 0x086d3d2d, 0x91646c97, 0xe6635c01, 0x6b6b51f4, 0x1c6c6162, 0x856530d8, 0xf262004e,
+    0x6c0695ed, 0x1b01a57b, 0x8208f4c1, 0xf50fc457, 0x65b0d9c6, 0x12b7e950, 0x8bbeb8ea, 0xfcb9887c, 0x62dd1ddf, 0x15da2d49, 0x8cd37cf3, 0xfbd44c65, 0x4db26158, 0x3ab551ce,
+    0xa3bc0074, 0xd4bb30e2, 0x4adfa541, 0x3dd895d7, 0xa4d1c46d, 0xd3d6f4fb, 0x4369e96a, 0x346ed9fc, 0xad678846, 0xda60b8d0, 0x44042d73, 0x33031de5, 0xaa0a4c5f, 0xdd0d7cc9,
+    0x5005713c, 0x270241aa, 0xbe0b1010, 0xc90c2086, 0x5768b525, 0x206f85b3, 0xb966d409, 0xce61e49f, 0x5edef90e, 0x29d9c998, 0xb0d09822, 0xc7d7a8b4, 0x59b33d17, 0x2eb40d81,
+    0xb7bd5c3b, 0xc0ba6cad, 0xedb88320, 0x9abfb3b6, 0x03b6e20c, 0x74b1d29a, 0xead54739, 0x9dd277af, 0x04db2615, 0x73dc1683, 0xe3630b12, 0x94643b84, 0x0d6d6a3e, 0x7a6a5aa8,
+    0xe40ecf0b, 0x9309ff9d, 0x0a00ae27, 0x7d079eb1, 0xf00f9344, 0x8708a3d2, 0x1e01f268, 0x6906c2fe, 0xf762575d, 0x806567cb, 0x196c3671, 0x6e6b06e7, 0xfed41b76, 0x89d32be0,
+    0x10da7a5a, 0x67dd4acc, 0xf9b9df6f, 0x8ebeeff9, 0x17b7be43, 0x60b08ed5, 0xd6d6a3e8, 0xa1d1937e, 0x38d8c2c4, 0x4fdff252, 0xd1bb67f1, 0xa6bc5767, 0x3fb506dd, 0x48b2364b,
+    0xd80d2bda, 0xaf0a1b4c, 0x36034af6, 0x41047a60, 0xdf60efc3, 0xa867df55, 0x316e8eef, 0x4669be79, 0xcb61b38c, 0xbc66831a, 0x256fd2a0, 0x5268e236, 0xcc0c7795, 0xbb0b4703,
+    0x220216b9, 0x5505262f, 0xc5ba3bbe, 0xb2bd0b28, 0x2bb45a92, 0x5cb36a04, 0xc2d7ffa7, 0xb5d0cf31, 0x2cd99e8b, 0x5bdeae1d, 0x9b64c2b0, 0xec63f226, 0x756aa39c, 0x026d930a,
+    0x9c0906a9, 0xeb0e363f, 0x72076785, 0x05005713, 0x95bf4a82, 0xe2b87a14, 0x7bb12bae, 0x0cb61b38, 0x92d28e9b, 0xe5d5be0d, 0x7cdcefb7, 0x0bdbdf21, 0x86d3d2d4, 0xf1d4e242,
+    0x68ddb3f8, 0x1fda836e, 0x81be16cd, 0xf6b9265b, 0x6fb077e1, 0x18b74777, 0x88085ae6, 0xff0f6a70, 0x66063bca, 0x11010b5c, 0x8f659eff, 0xf862ae69, 0x616bffd3, 0x166ccf45,
+    0xa00ae278, 0xd70dd2ee, 0x4e048354, 0x3903b3c2, 0xa7672661, 0xd06016f7, 0x4969474d, 0x3e6e77db, 0xaed16a4a, 0xd9d65adc, 0x40df0b66, 0x37d83bf0, 0xa9bcae53, 0xdebb9ec5,
+    0x47b2cf7f, 0x30b5ffe9, 0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
+    0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
+};
+// 0x00156b44
+CCustomModels* g_customDownloadManager;
+// 0x00117cfc
+const char g_customTemporaryPathPattern[] = "%s/%05d_%X.temp";
+// 0x00117d30
+const char g_customDownloadWriteMode[] = "wb";
+// 0x00118e1c
+const char g_customDownloadReadMode[] = "rb";
+// 0x00117d34
+const char g_customFillDownloadError[] = "Can't fill download info for CRC: 0x%X";
+// 0x00117c48
+const char g_customDffCachePattern[] = "%s/0x%X.dff";
+// 0x00117c54
+const char g_customTxdCachePattern[] = "%s/0x%X.txd";
+// 0x00117d60
+int g_customRequestDffRpc = 181;
+// 0x00117d5c
+int g_customRequestTxdRpc = 182;
+// 0x00117d64
+int g_customRequestsCompleteRpc = 184;
+
+// 0x0000c440
+DWORD NativeModelArrayPrefix::Read0000c440(DWORD index)
+{
+    if (index >= count)
+        return 0;
+    return slots[index];
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c460
+DWORD NativeModelArrayPrefix::Count0000c460()
+{
+    return count;
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c470
+DWORD NativeModelArrayPrefix::Read0000c470(DWORD index)
+{
+    if (index >= count)
+        return 0;
+    return slots[index];
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c490
+DWORD NativeModelArrayPrefix::Count0000c490()
+{
+    return count;
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c4a0
+NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize0000c4a0()
+{
+    slots = 0;
+    count = 0;
+    return this;
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c4b0
+DWORD NativeModelArrayPrefix::Read0000c4b0(DWORD index)
+{
+    if (index >= count)
+        return 0;
+    return slots[index];
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x0000c4d0
+DWORD NativeModelArrayPrefix::Count0000c4d0()
+{
+    return count;
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x000bbc60
+NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize000bbc60()
+{
+    slots = 0;
+    count = 0;
+    return this;
+}
+
+// Original owning type/name unconfirmed; preserve this distinct native entry.
+// 0x000bbc70
+NativeModelArrayPrefix* NativeModelArrayPrefix::Initialize000bbc70()
+{
+    slots = 0;
+    count = 0;
+    return this;
+}
+
+// 0x0000c0b0
+DWORD CCustomModels::ParseCacheHash(const char* filename)
+{
+    if (filename[0] != '0' || filename[1] != 'x')
+        return 0;
+    char digits[12];
+    strncpy(digits, filename + 2, 8);
+    return strtoul(digits, 0, 16);
+}
+
+// 0x0000b990
+void CCustomModels::ClearTransferStorage()
+{
+    memset(nativeState + 0x222, 0, 0x11e);
+    for (int i = 0; i < 0xd20; ++i)
+        nativeState[0x1345 + i] = 0;
+}
+
+// 0x0000d890
+CCustomModels::CCustomModels()
+{
+    *(DWORD*)nativeState = 0;
+    *(DWORD*)(nativeState + 4) = 0;
+    nativeState[8] = 0;
+    memset(nativeState + 9, 0, 261);
+    *(DWORD*)(nativeState + 0x213) = 0;
+    nativeState[0x21f] = 0;
+    nativeState[0x221] = 0;
+    nativeState[0x220] = 0;
+    *(DWORD*)(nativeState + 0x21b) = 0;
+    *(DWORD*)(nativeState + 0x217) = 0;
+    ClearTransferStorage();
+    *(DWORD*)(nativeState + 0x2065) = 0;
+    *(DWORD*)(nativeState + 0x2069) = 0;
+    nativeState[0x1344] = 0;
+}
+
+// 0x0000c4e0
+bool CCustomModels::ResizeRecords(DWORD count)
+{
+    BYTE**& records = *(BYTE***)nativeState;
+    DWORD& previous = *(DWORD*)(nativeState + 4);
+    if (!count)
+    {
+        if (records)
+        {
+            free(records);
+            records = 0;
+        }
+        previous = 0;
+        return true;
+    }
+    BYTE** replacement = (BYTE**)realloc(records, count * 4);
+    if (!replacement)
+        return false;
+    records = replacement;
+    DWORD i = previous;
+    if (i < count)
+    {
+        do
+        {
+            records[i] = 0;
+        }
+        while (++i != count);
+    }
+    previous = count;
+    return true;
+}
+
+// 0x0000c6a0
+void CCustomModels::TrimRecords()
+{
+    DWORD count = *(DWORD*)(nativeState + 4);
+    DWORD i = 0;
+    DWORD last = 0xffffffff;
+    if (count)
+    {
+        BYTE** record = *(BYTE***)nativeState;
+        do
+        {
+            if (*record)
+                last = i;
+            ++i;
+            ++record;
+        }
+        while (i != count);
+    }
+    if (last == 0xffffffff)
+        ResizeRecords(0);
+    else
+        ResizeRecords(last + 1);
+}
+
+// 0x0000cfc0
+bool CCustomModels::EraseRecord(DWORD index)
+{
+    if (index >= *(DWORD*)(nativeState + 4))
+        return false;
+    (*(BYTE***)nativeState)[index] = 0;
+    TrimRecords();
+    return true;
+}
+
+// 0x0000cff0
+bool CCustomModels::SetRecord(DWORD index, void* record)
+{
+    if (index >= *(DWORD*)(nativeState + 4) && !ResizeRecords(index + 1))
+        return false;
+    (*(void***)nativeState)[index] = record;
+    return true;
+}
+
+// 0x0000d550
+DWORD CCustomModels::AddRecord(DWORD index, const void* record)
+{
+    void* copy = calloc(1, 94);
+    int base = *(const int*)((const BYTE*)record + 0xc);
+    if (base < 0 || base > 20000)
+        return 0xffffffff;
+    memcpy(copy, record, 94);
+    SetRecord(index, copy);
+    return index;
+}
+
+// 0x0000d5a0
+DWORD CCustomModels::DeleteRecord(DWORD index)
+{
+    void* record = GetRecord(index);
+    if (record)
+    {
+        free(record);
+        EraseRecord(index);
+        return index;
+    }
+    return 0xffffffff;
+}
+
+// 0x0000d5e0
+void CCustomModels::ClearRecords()
+{
+    ResizeRecords(0);
+}
+
+// 0x0000bd10
+void CCustomModels::StopWorkers()
+{
+    for (int i = 0; i < 6; ++i)
+        nativeState[0x134c + i * 0x230] = 1;
+    nativeState[0x1344] = 0;
+}
+
+// 0x0000bd90
+void CCustomModels::ResumeReadyWorker()
+{
+    if (!nativeState[0x1344])
+        return;
+    int i = 0;
+    BYTE* worker = nativeState + 0x1349;
+    for (; i < 6; ++i, worker += 0x230)
+    {
+        BYTE active = worker[2];
+        if (active && !worker[0])
+        {
+            BYTE paused = worker[1];
+            if (paused)
+            {
+                nativeState[0x134a + i * 0x230] = 0;
+                return;
+            }
+        }
+    }
+}
+
+// 0x0000c950
+bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
+{
+    if (!nativeState[0x21f])
+        return false;
+    for (int i = 0; i < endIndex; ++i)
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        if (!entry)
+            continue;
+        if ((*(DWORD*)(entry + 0x46) == hash && entry[2]) || (*(DWORD*)(entry + 0x4a) == hash && entry[3]))
+            return true;
+    }
+    return false;
+}
+
+// 0x0000c9b0
+int CCustomModels::MarkResourceRequests()
+{
+    BYTE* state = (BYTE*)this;
+    if (!state[0x21f])
+        return -1;
+    DWORD index = 0, pending = 0, count = *(DWORD*)(state + 4);
+    if (count)
+    {
+        do
+        {
+            BYTE* entry = (BYTE*)GetRecord(index);
+            if ((entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(state + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))) && !entry[6])
+            {
+                if (!entry[0])
+                {
+                    entry[2] = 1;
+                    if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x46)))
+                        ++pending;
+                }
+                if (!entry[1])
+                {
+                    entry[3] = 1;
+                    if (!HasEarlierResourceRequest((int)index, *(DWORD*)(entry + 0x4a)))
+                        ++pending;
+                }
+            }
+            count = *(DWORD*)(state + 4);
+        }
+        while (++index != count);
+    }
+    return (int)pending;
+}
+
+// 0x0000cc80
+bool CCustomModels::IsPedEntry(int model)
+{
+    BYTE* state = (BYTE*)this;
+    DWORD count = *(DWORD*)(state + 4);
+    for (DWORD i = 0; i != count; i++)
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        if (*(int*)(entry + 0x10) == model && entry[7] == 1)
+            return true;
+    }
+    return false;
+}
+
+// 0x0000ccc0
+bool CCustomModels::IsObjectEntry(int model)
+{
+    BYTE* state = (BYTE*)this;
+    DWORD count = *(DWORD*)(state + 4);
+    for (DWORD i = 0; i != count; i++)
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        if (*(int*)(entry + 0x10) == model && entry[7] == 2)
+            return true;
+    }
+    return false;
+}
+
+// 0x0000cd00
+BYTE CCustomModels::GetLoadedFlag(int model)
+{
+    BYTE* state = (BYTE*)this;
+    DWORD count = *(DWORD*)(state + 4);
+    for (DWORD i = 0; i != count; i++)
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        if (*(int*)(entry + 0x10) == model)
+            return entry[0x58];
+    }
+    return 0;
+}
+
+// 0x0000ce30
+BOOL CCustomModels::DoesExist(int model)
+{
+    BYTE* state = (BYTE*)this;
+    DWORD count = *(DWORD*)(state + 4);
+    for (DWORD i = 0; i != count; i++)
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        if (*(int*)(entry + 0x10) == model && entry[7] == 1)
+        {
+            if (!LoadPedModel(*(DWORD*)(entry + 0xc), *(DWORD*)(entry + 0x10), *(DWORD*)(entry + 0x46), *(DWORD*)(entry + 0x4a)))
+                return FALSE;
+            entry[0x59] = 0;
+            entry[0x58] = 1;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// 0x0000ce90
+BOOL CCustomModels::LoadObjectEntry(int model)
+{
+    BYTE* state = (BYTE*)this;
+    DWORD count = *(DWORD*)(state + 4);
+    for (DWORD i = 0; i != count; i++)
+    {
+        BYTE* entry = (BYTE*)GetRecord(i);
+        // This method alone has the observed null-record guard.
+        if (entry && *(int*)(entry + 0x10) == model && entry[7] == 2)
+        {
+            if (!entry[0] || !entry[1])
+                return FALSE;
+            if (!LoadObjectModel(*(DWORD*)(entry + 0xc), *(DWORD*)(entry + 0x10), *(DWORD*)(entry + 0x46), *(DWORD*)(entry + 0x4a)))
+                return FALSE;
+            entry[0x59] = 0;
+            entry[0x58] = 1;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// The reference entry is exactly RET4; this empty behavior is native.
+// 0x0000cd40
+void CCustomModels::ReleaseObjectEntry(int model)
+{
+    (void)model;
+}
+
+// 0x000a7670
+void* GameClonePedModelInfo(int base, int model)
+{
+    void* copy = calloc(0x44, 1);
+    void* source = GameGetModelInfo(base);
+    if (source && GameIsPedModel(base))
+    {
+        memcpy(copy, source, 0x44);
+        g_gameModelInfoTable[model] = copy;
+        return copy;
+    }
+    // Native validation failure leaks the allocation.
+    return 0;
+}
+
+// 0x000a76c0
+void* GameCloneObjectModelInfo(int base, int model)
+{
+    void* existing = g_gameModelInfoTable[model];
+    if (existing)
+        return existing;
+    void* copy = calloc(0x20, 1);
+    void* source = GameGetModelInfo(base);
+    if (source && GameIsObjectModelInfo(source))
+    {
+        memcpy(copy, source, 0x20);
+        g_gameModelInfoTable[model] = copy;
+        return copy;
+    }
+    return 0;
+}
+
+// 0x000a7750
+bool GameAttachModelTxd(int model, const char* name, const char* path)
+{
+    int index = GameTxdFind(name);
+    if (index != -1)
+        GameSetModelTxd(model, index);
+    else
+    {
+        index = GameTxdAdd(name);
+        if (GameFileExists(path))
+        {
+            GameTxdLoad(index, path);
+            GameSetModelTxd(model, index);
+        }
+        else
+            return false;
+    }
+    GameTxdPush();
+    GameTxdSetCurrent(index);
+    return true;
+}
+
+// 0x000a77c0
+BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* dff, const char* txd)
+{
+    if (GameClonePedModelInfo(base, model) && GameAttachModelTxd(model, name, txd))
+    {
+        void* clump = GameLoadPedDff(dff);
+        if (clump)
+        {
+            GamePublishPedClump(model, clump);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// 0x000a7820
+BOOL GameRegisterCustomObject(int base, int model, const char* name, const char* dff, const char* txd)
+{
+    g_gameLoadingCustomModel = model;
+    if (GameCloneObjectModelInfo(base, model))
+    {
+        if (GameAttachModelTxd(model, name, txd))
+        {
+            if (GameLoadObjectDff(dff, model))
+                return TRUE;
+            if (g_pChat)
+                g_pChat->AddDebugMessage("[error] Failed to load model ID: %d", model);
+        }
+        else
+        {
+            if (g_pChat)
+                g_pChat->AddDebugMessage("[error] Failed to load texture for model ID: %d", model);
+        }
+    }
+    return FALSE;
+}
+
+// 0x000b41d0
+void __stdcall GamePublishPedClump(int model, void* clump)
+{
+    BYTE* info = (BYTE*)GameGetModelInfo(model);
+    *(void**)(info + 0x1c) = clump;
+    ((void(__fastcall*)(void*, void*, void*))(*(DWORD**)info)[16])(info, 0, clump);
+}
+
+// 0x000b34a0
+int GameTxdAdd(const char* name)
+{
+    int result;
+    // clang-format off
+    __asm {
+        push name
+        mov edx,0x731c80
+        call edx
+        pop edx
+        mov result,eax
+    }
+    // clang-format on
+    return result;
+}
+
+// 0x000b34c0
+DWORD GameTxdLoad(int index, const char* path)
+{
+    BYTE result = 0;
+    // Native supplies EAX=0 and takes only the backend AL result.
+    // clang-format off
+    __asm {
+        xor eax,eax
+        push path
+        push index
+        mov edx,0x7320b0
+        call edx
+        mov result,al
+        pop edx
+        pop edx
+    }
+    // clang-format on
+    return result;
+}
+
+// 0x000b4260
+void __stdcall GameSetModelTxd(int model, int index)
+{
+    *(WORD*)((BYTE*)GameGetModelInfo(model) + 0xa) = (WORD)index;
+}
+
+// 0x000b4330
+void __stdcall GameSetModelField8(int model, WORD value)
+{
+    BYTE* info = (BYTE*)GameGetModelInfo(model);
+    if (info)
+        *(WORD*)(info + 8) = value;
+}
+
+// 0x000b40e0
+BOOL __stdcall GameIsObjectModelInfo(void* info)
+{
+    if (info)
+    {
+        // GTA SA vtable virtual addresses.
+        DWORD table = *(DWORD*)info;
+        if (table == 0x85bbf0 || table == 0x85bc30 || table == 0x85bc70 || table == 0x85bcb0 || table == 0x85bcf0)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 // 0x000a7560
 BOOL GamePatchModelInfoReferences()
 {
@@ -768,6 +873,7 @@ BOOL GamePatchModelInfoReferences()
     g_gameUseCustomModelInfo = 1;
     return TRUE;
 }
+
 // 0x000a75f0
 BOOL GameInitializeCustomModelInfo()
 {
@@ -780,6 +886,7 @@ BOOL GameInitializeCustomModelInfo()
     GameInstallModelInfoHook();
     return TRUE;
 }
+
 // 0x000b6390
 void* __cdecl GameCreateCollisionModel()
 {
@@ -792,6 +899,7 @@ void* __cdecl GameCreateCollisionModel()
     // clang-format on
     return collision;
 }
+
 // 0x000b63c0
 BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collision)
 {
@@ -802,6 +910,7 @@ BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collisi
     ((void(__cdecl*)(const void*, DWORD, void*, DWORD))0x537ce0)((const BYTE*)data + 0x20, encoded - 0x18, collision, 0);
     return TRUE;
 }
+
 // 0x000a78b0
 DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
 {
@@ -833,12 +942,14 @@ DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
     free(data);
     return 0;
 }
+
 // 0x000a7980
 void GameRegisterCustomCollisionPlugin()
 {
     GameRwRegisterClumpPlugin(0x253f2ff);
     GameRwRegisterClumpPluginStream(0x253f2ff, (DWORD)GameReadCustomCollision);
 }
+
 // 0x0000b9c0
 DWORD CCustomModels::SanitizeCacheHost(char* output, DWORD capacity, const char* host)
 {
@@ -855,6 +966,7 @@ DWORD CCustomModels::SanitizeCacheHost(char* output, DWORD capacity, const char*
     output[written] = 0;
     return written;
 }
+
 // 0x0000ba40
 void CCustomModels::Initialize()
 {
@@ -871,38 +983,7 @@ void CCustomModels::Initialize()
     nativeState[8] = 1;
     *(DWORD*)(nativeState + 0x213) = 2;
 }
-#include "Alloc.h"
-#include "BitStream.h"
-#include "LzmaDec.h"
-#include "RakClientInterface.h"
-#include "config.h"
-#include "gui/gui.h"
-#include "net/netgame.h"
-#include <curl/curl.h>
-#include <process.h>
 STATIC_ASSERT(sizeof(SizeT) == 4);
-// 0x00117e1c
-const char g_customDownloadSizeError[] = "[error] file 0x%X bad length got:%u expected:%u. Deleting..";
-// 0x00117de8
-const char g_customDownloadCrcError[] = "[error] file 0x%X bad checksum (0x%X). Deleting..";
-// 0x002ac390
-char g_customProxy[261];
-// 0x0011f9c0
-const char g_customRegistryKey[] = "Software\\SAMP";
-// 0x0011f9dc
-const char g_customProxyValue[] = "artwork_proxy";
-// 0x00117e58
-const char g_customUserAgent[] = "SAMP/0.3";
-// 0x00117e9c
-const char g_customLogUrlsOption[] = "logurls";
-// 0x00117e8c
-const char g_customUrlLogFormat[] = "[url 0x%X]: %s";
-// 0x00117e64
-const char g_customNoFreeWorkerError[] = "[error] AddURLRequest: No free slots!";
-// 0x00117ed8
-const char g_customUrlInfoError[] = "DownloadRedirect: Can't fill download info!";
-// 0x00117ea4
-const char g_customUrlOpenError[] = "DownloadRedirect: Can't open temp file for writing!";
 // 0x000c52d0
 const char* CustomModelGetProxy()
 {
@@ -914,6 +995,7 @@ const char* CustomModelGetProxy()
     // Native intentionally does not close the opened key.
     return RegQueryValueExA(key, g_customProxyValue, 0, &type, (BYTE*)g_customProxy, &length) == 0 ? g_customProxy : 0;
 }
+
 // 0x0000de60
 BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
 {
@@ -947,6 +1029,7 @@ BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
         g_customDownloadManager->FinishDownload(&worker->download);
     return TRUE;
 }
+
 // 0x0000df90
 void __cdecl CustomModelDownloadThread(void* argument)
 {
@@ -965,6 +1048,7 @@ void __cdecl CustomModelDownloadThread(void* argument)
     curl_global_cleanup();
     worker->enabled = 0;
 }
+
 // 0x0000dff0
 bool CCustomModels::StartWorkers()
 {
@@ -993,6 +1077,7 @@ bool CCustomModels::StartWorkers()
     nativeState[0x1344] = 1;
     return true;
 }
+
 // 0x0000e0a0
 void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
 {
@@ -1016,6 +1101,7 @@ void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
     if (g_pChat)
         g_pChat->AddDebugMessage(g_customNoFreeWorkerError);
 }
+
 // 0x0000e180
 void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
 {
@@ -1041,12 +1127,14 @@ void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
     if (CountReadyWorkers() > 0)
         *(DWORD*)(nativeState + 0x213) = 2;
 }
+
 // 0x000c50d0
 int __stdcall CustomModelLzmaDecode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD* sourceLength, const BYTE* properties, DWORD propertySize)
 {
     ELzmaStatus status;
     return LzmaDecode(destination, (SizeT*)destinationLength, source, (SizeT*)sourceLength, properties, propertySize, LZMA_FINISH_ANY, &status, &g_Alloc);
 }
+
 // 0x0000d070
 void CCustomModels::ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, const void* data, DWORD length)
 {
@@ -1077,6 +1165,7 @@ void CCustomModels::ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, con
     else if (stage != 1)
         AbortDownload(0, 5002, 0);
 }
+
 // 0x0000da80
 bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
 {
@@ -1093,6 +1182,7 @@ bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
     }
     return true;
 }
+
 // 0x0000bfd0
 bool CCustomModels::VerifyTxd(const char* filename, DWORD hash)
 {
@@ -1109,6 +1199,7 @@ bool CCustomModels::VerifyTxd(const char* filename, DWORD hash)
     }
     return true;
 }
+
 // 0x0000dbd0
 void CCustomModels::FinishDownload(CustomModelDownload* download)
 {
@@ -1189,38 +1280,6 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 4, download->downloaded, 0, -1, 0);
     *(DWORD*)(nativeState + 0x213) = 2;
 }
-// 0x00140378
-const DWORD g_customCrcTable[256] = {
-    0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd,
-    0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7, 0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec,
-    0x14015c4f, 0x63066cd9, 0xfa0f3d63, 0x8d080df5, 0x3b6e20c8, 0x4c69105e, 0xd56041e4, 0xa2677172, 0x3c03e4d1, 0x4b04d447, 0xd20d85fd, 0xa50ab56b, 0x35b5a8fa, 0x42b2986c,
-    0xdbbbc9d6, 0xacbcf940, 0x32d86ce3, 0x45df5c75, 0xdcd60dcf, 0xabd13d59, 0x26d930ac, 0x51de003a, 0xc8d75180, 0xbfd06116, 0x21b4f4b5, 0x56b3c423, 0xcfba9599, 0xb8bda50f,
-    0x2802b89e, 0x5f058808, 0xc60cd9b2, 0xb10be924, 0x2f6f7c87, 0x58684c11, 0xc1611dab, 0xb6662d3d, 0x76dc4190, 0x01db7106, 0x98d220bc, 0xefd5102a, 0x71b18589, 0x06b6b51f,
-    0x9fbfe4a5, 0xe8b8d433, 0x7807c9a2, 0x0f00f934, 0x9609a88e, 0xe10e9818, 0x7f6a0dbb, 0x086d3d2d, 0x91646c97, 0xe6635c01, 0x6b6b51f4, 0x1c6c6162, 0x856530d8, 0xf262004e,
-    0x6c0695ed, 0x1b01a57b, 0x8208f4c1, 0xf50fc457, 0x65b0d9c6, 0x12b7e950, 0x8bbeb8ea, 0xfcb9887c, 0x62dd1ddf, 0x15da2d49, 0x8cd37cf3, 0xfbd44c65, 0x4db26158, 0x3ab551ce,
-    0xa3bc0074, 0xd4bb30e2, 0x4adfa541, 0x3dd895d7, 0xa4d1c46d, 0xd3d6f4fb, 0x4369e96a, 0x346ed9fc, 0xad678846, 0xda60b8d0, 0x44042d73, 0x33031de5, 0xaa0a4c5f, 0xdd0d7cc9,
-    0x5005713c, 0x270241aa, 0xbe0b1010, 0xc90c2086, 0x5768b525, 0x206f85b3, 0xb966d409, 0xce61e49f, 0x5edef90e, 0x29d9c998, 0xb0d09822, 0xc7d7a8b4, 0x59b33d17, 0x2eb40d81,
-    0xb7bd5c3b, 0xc0ba6cad, 0xedb88320, 0x9abfb3b6, 0x03b6e20c, 0x74b1d29a, 0xead54739, 0x9dd277af, 0x04db2615, 0x73dc1683, 0xe3630b12, 0x94643b84, 0x0d6d6a3e, 0x7a6a5aa8,
-    0xe40ecf0b, 0x9309ff9d, 0x0a00ae27, 0x7d079eb1, 0xf00f9344, 0x8708a3d2, 0x1e01f268, 0x6906c2fe, 0xf762575d, 0x806567cb, 0x196c3671, 0x6e6b06e7, 0xfed41b76, 0x89d32be0,
-    0x10da7a5a, 0x67dd4acc, 0xf9b9df6f, 0x8ebeeff9, 0x17b7be43, 0x60b08ed5, 0xd6d6a3e8, 0xa1d1937e, 0x38d8c2c4, 0x4fdff252, 0xd1bb67f1, 0xa6bc5767, 0x3fb506dd, 0x48b2364b,
-    0xd80d2bda, 0xaf0a1b4c, 0x36034af6, 0x41047a60, 0xdf60efc3, 0xa867df55, 0x316e8eef, 0x4669be79, 0xcb61b38c, 0xbc66831a, 0x256fd2a0, 0x5268e236, 0xcc0c7795, 0xbb0b4703,
-    0x220216b9, 0x5505262f, 0xc5ba3bbe, 0xb2bd0b28, 0x2bb45a92, 0x5cb36a04, 0xc2d7ffa7, 0xb5d0cf31, 0x2cd99e8b, 0x5bdeae1d, 0x9b64c2b0, 0xec63f226, 0x756aa39c, 0x026d930a,
-    0x9c0906a9, 0xeb0e363f, 0x72076785, 0x05005713, 0x95bf4a82, 0xe2b87a14, 0x7bb12bae, 0x0cb61b38, 0x92d28e9b, 0xe5d5be0d, 0x7cdcefb7, 0x0bdbdf21, 0x86d3d2d4, 0xf1d4e242,
-    0x68ddb3f8, 0x1fda836e, 0x81be16cd, 0xf6b9265b, 0x6fb077e1, 0x18b74777, 0x88085ae6, 0xff0f6a70, 0x66063bca, 0x11010b5c, 0x8f659eff, 0xf862ae69, 0x616bffd3, 0x166ccf45,
-    0xa00ae278, 0xd70dd2ee, 0x4e048354, 0x3903b3c2, 0xa7672661, 0xd06016f7, 0x4969474d, 0x3e6e77db, 0xaed16a4a, 0xd9d65adc, 0x40df0b66, 0x37d83bf0, 0xa9bcae53, 0xdebb9ec5,
-    0x47b2cf7f, 0x30b5ffe9, 0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
-    0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
-};
-// 0x00156b44
-CCustomModels* g_customDownloadManager;
-// 0x00117cfc
-const char g_customTemporaryPathPattern[] = "%s/%05d_%X.temp";
-// 0x00117d30
-const char g_customDownloadWriteMode[] = "wb";
-// 0x00118e1c
-const char g_customDownloadReadMode[] = "rb";
-// 0x00117d34
-const char g_customFillDownloadError[] = "Can't fill download info for CRC: 0x%X";
 // 0x000628a0
 DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
 {
@@ -1232,6 +1291,7 @@ DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
     }
     return ~crc;
 }
+
 // 0x000628e0
 DWORD __cdecl CustomModelFileCrc(const char* filename)
 {
@@ -1248,6 +1308,7 @@ DWORD __cdecl CustomModelFileCrc(const char* filename)
     fclose(file);
     return crc;
 }
+
 // 0x0000c7e0
 int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
 {
@@ -1262,6 +1323,7 @@ int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
     }
     return -1;
 }
+
 // 0x0000c830
 bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload* download)
 {
@@ -1287,6 +1349,7 @@ bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload*
     _snprintf(download->temporaryPath, 260, g_customTemporaryPathPattern, (char*)this + 9, index, download->hash);
     return true;
 }
+
 // 0x0000bc30
 void CCustomModels::WriteDownload(CustomModelDownload* download, const void* data, DWORD length)
 {
@@ -1300,6 +1363,7 @@ void CCustomModels::WriteDownload(CustomModelDownload* download, const void* dat
     if (g_renderDownloadWindow)
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 1, download->downloaded, 0, -1, 0);
 }
+
 // 0x0000c760
 void CCustomModels::AbortDownload(CustomModelDownload* download, int error, const char* detail)
 {
@@ -1322,6 +1386,7 @@ void CCustomModels::AbortDownload(CustomModelDownload* download, int error, cons
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, error, detail);
     *(DWORD*)(nativeState + 0x213) = 2;
 }
+
 // 0x0000d1c0
 BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
 {
@@ -1341,6 +1406,7 @@ BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
     *(DWORD*)(nativeState + 0x213) = 1;
     return TRUE;
 }
+
 // 0x0000bca0
 int CCustomModels::FindWorkerByFile(void* file)
 {
@@ -1349,6 +1415,7 @@ int CCustomModels::FindWorkerByFile(void* file)
             return i;
     return -1;
 }
+
 // 0x0000bcd0
 DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void* download)
 {
@@ -1357,6 +1424,7 @@ DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void
         manager->WriteDownload((CustomModelDownload*)download, data, size * count);
     return size * count;
 }
+
 // 0x0000c8e0
 int CCustomModels::CountMissingResources()
 {
@@ -1375,16 +1443,6 @@ int CCustomModels::CountMissingResources()
     }
     return (int)missing;
 }
-// 0x00117c48
-const char g_customDffCachePattern[] = "%s/0x%X.dff";
-// 0x00117c54
-const char g_customTxdCachePattern[] = "%s/0x%X.txd";
-// 0x00117d60
-int g_customRequestDffRpc = 181;
-// 0x00117d5c
-int g_customRequestTxdRpc = 182;
-// 0x00117d64
-int g_customRequestsCompleteRpc = 184;
 // Cache mutation and manifest completion stay with the same manager class.
 // 0x0000c100
 BOOL CCustomModels::DeleteCachedDff(DWORD hash)
@@ -1393,6 +1451,7 @@ BOOL CCustomModels::DeleteCachedDff(DWORD hash)
     _snprintf(path, 260, g_customDeleteDffPattern, (char*)this + 9, hash);
     return DeleteFileA(path);
 }
+
 // 0x0000c140
 BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
 {
@@ -1400,6 +1459,7 @@ BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
     _snprintf(path, 260, g_customDeleteTxdPattern, (char*)this + 9, hash);
     return DeleteFileA(path);
 }
+
 // 0x0000c180
 BOOL CCustomModels::DeleteTemporaryFile(const char* filename)
 {
@@ -1407,6 +1467,7 @@ BOOL CCustomModels::DeleteTemporaryFile(const char* filename)
     _snprintf(path, 260, g_customDeleteTempPattern, (char*)this + 9, filename);
     return DeleteFileA(path);
 }
+
 // 0x0000ca40
 bool CCustomModels::HasResourceHash(DWORD hash)
 {
@@ -1421,6 +1482,7 @@ bool CCustomModels::HasResourceHash(DWORD hash)
     }
     return false;
 }
+
 // 0x0000ca90
 void CCustomModels::PurgeUnusedCache()
 {
@@ -1472,6 +1534,7 @@ void CCustomModels::PurgeUnusedCache()
         FindClose(search);
     }
 }
+
 // 0x0000cbf0
 void CCustomModels::RefreshCachedResources()
 {
@@ -1494,6 +1557,7 @@ void CCustomModels::RefreshCachedResources()
         while (++index != count);
     PurgeUnusedCache();
 }
+
 // 0x0000d030
 void CCustomModels::SetExpectedRecordCount(DWORD count)
 {
@@ -1506,6 +1570,7 @@ void CCustomModels::SetExpectedRecordCount(DWORD count)
             *(DWORD*)(nativeState + 0x213) = 2;
     }
 }
+
 // 0x0000bb10
 bool CCustomModels::IsDffCached(DWORD hash)
 {
@@ -1516,6 +1581,7 @@ bool CCustomModels::IsDffCached(DWORD hash)
     _snprintf(path, 260, g_customDffCachePattern, (char*)this + 0x10e, hash);
     return GameFileExists(path) ? true : false;
 }
+
 // 0x0000bba0
 bool CCustomModels::IsTxdCached(DWORD hash)
 {
@@ -1526,6 +1592,7 @@ bool CCustomModels::IsTxdCached(DWORD hash)
     _snprintf(path, 260, g_customTxdCachePattern, (char*)this + 0x10e, hash);
     return GameFileExists(path) ? true : false;
 }
+
 // 0x0000bd40
 bool CCustomModels::PauseReadyWorker()
 {
@@ -1549,6 +1616,7 @@ bool CCustomModels::PauseReadyWorker()
     }
     return false;
 }
+
 // 0x0000bde0
 int CCustomModels::CountReadyWorkers()
 {
@@ -1562,6 +1630,7 @@ int CCustomModels::CountReadyWorkers()
     }
     return count;
 }
+
 // 0x0000c6e0
 bool CCustomModels::IsDffRequested(DWORD hash)
 {
@@ -1575,6 +1644,7 @@ bool CCustomModels::IsDffRequested(DWORD hash)
     }
     return false;
 }
+
 // 0x0000c720
 bool CCustomModels::IsTxdRequested(DWORD hash)
 {
@@ -1588,6 +1658,7 @@ bool CCustomModels::IsTxdRequested(DWORD hash)
     }
     return false;
 }
+
 // 0x0000d270
 BOOL CCustomModels::RequestResource(DWORD index, BYTE type, DWORD hash, DWORD size)
 {
@@ -1607,6 +1678,7 @@ BOOL CCustomModels::RequestResource(DWORD index, BYTE type, DWORD hash, DWORD si
     PauseReadyWorker();
     return TRUE;
 }
+
 // 0x0000d390
 void CCustomModels::Process()
 {
@@ -1718,30 +1790,35 @@ void* GameRwStreamOpen(int type, int access, const void* data)
     DWORD target = g_gameVersion == 1 ? 0x7ecef0 : 0x7ecf30;
     return ((void*(__cdecl*)(int, int, const void*))target)(type, access, data);
 }
+
 // 0x000b1a00
 BOOL GameRwStreamClose(void* stream, void* data)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ece20 : 0x7ece60;
     return ((BOOL(__cdecl*)(void*, void*))target)(stream, data);
 }
+
 // 0x000b1a80
 BOOL GameRwFindChunk(void* stream, DWORD type, DWORD* length, DWORD* version)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ed2d0 : 0x7ed310;
     return ((BOOL(__cdecl*)(void*, DWORD, DWORD*, DWORD*))target)(stream, type, length, version);
 }
+
 // 0x000b1ad0
 void* GameRwReadClump(void* stream)
 {
     DWORD target = g_gameVersion == 1 ? 0x74b420 : 0x74b470;
     return ((void*(__cdecl*)(void*))target)(stream);
 }
+
 // 0x000b1ba0
 DWORD GameLoadAtomicStream(void* stream, int model)
 {
     // GTA SA virtual address; preserve zero-extension of AL.
     return ((BYTE(__cdecl*)(void*, int))0x5371f0)(stream, model);
 }
+
 // 0x000b1b10
 void* GameLoadPedDff(const char* path)
 {
@@ -1761,6 +1838,7 @@ void* GameLoadPedDff(const char* path)
     g_gameCustomStreamRead = false;
     return clump;
 }
+
 // 0x000b1bc0
 BOOL GameLoadObjectDff(const char* path, int model)
 {
@@ -1840,6 +1918,7 @@ __forceinline void* CCustomModels::GetRecord(DWORD index)
         return 0;
     return (*(void***)nativeState)[index];
 }
+
 // 0x0000c400
 CCustomModels* CCustomModels::InitializeRecordStorage()
 {
@@ -1847,6 +1926,7 @@ CCustomModels* CCustomModels::InitializeRecordStorage()
     *(DWORD*)(nativeState + 4) = 0;
     return this;
 }
+
 // 0x0000cdb0
 DWORD CCustomModels::GetObjectDffHash(int model)
 {
@@ -1861,6 +1941,7 @@ DWORD CCustomModels::GetObjectDffHash(int model)
         while (++index != count);
     return 0;
 }
+
 // 0x0000cd50
 void CCustomModels::ProcessDelayedReleases()
 {
@@ -1885,11 +1966,13 @@ void CCustomModels::ProcessDelayedReleases()
         }
         while (++index != count);
 }
+
 // 0x00008200
 DWORD CCustomModels::GetActiveVirtualWorld()
 {
     return *(DWORD*)(nativeState + 0x217);
 }
+
 // 0x00017820
 void CCustomModels::SetActiveVirtualWorld(DWORD world)
 {
@@ -1900,11 +1983,13 @@ void CCustomModels::SetActiveVirtualWorld(DWORD world)
         nativeState[0x220] = 0;
     }
 }
+
 // 0x00008210
 BYTE CCustomModels::GetStopFlag()
 {
     return nativeState[0x221];
 }
+
 // 0x0000e400
 void CCustomModels::RequestStop()
 {
@@ -1917,6 +2002,7 @@ void CCustomModels::ClearRecordStorage()
 {
     ResizeRecords(0);
 }
+
 // 0x0000beb0
 DWORD CCustomModels::CountEnabledActiveWorkers()
 {
@@ -1927,6 +2013,7 @@ DWORD CCustomModels::CountEnabledActiveWorkers()
             ++count;
     return count;
 }
+
 // 0x0000bf40
 DWORD CCustomModels::CountEnabledPausedWorkers()
 {

@@ -12,6 +12,14 @@
 #include <static_assert.h>
 // 0x00118158
 const Scripting::OpcodeInfo g_pickupDestroyCommand = {0x215, "i"};
+// 0x0011816c
+int g_pickupCollectedRpc = 131;
+// 0x00118170
+int g_weaponPickupCollectedRpc = 97;
+
+// 0x00118144
+const Scripting::OpcodeInfo g_pickupCollectedCommand = {0x214, "i"};
+
 // 0x00008190
 CPickupPool::CPickupPool()
 {
@@ -31,6 +39,7 @@ CPickupPool::CPickupPool()
         indices[i] = -1;
     }
 }
+
 // 0x00013170
 void CPickupPool::Create(const Pickup* pickup, int id)
 {
@@ -46,6 +55,7 @@ void CPickupPool::Create(const Pickup* pickup, int id)
     indices[id] = (int)index;
     ++count;
 }
+
 // 0x00013220
 void CPickupPool::Delete(int id)
 {
@@ -57,6 +67,7 @@ void CPickupPool::Delete(int id)
     indices[id] = -1;
     --count;
 }
+
 // 0x00013280
 void CPickupPool::DeleteWeapon(WORD owner)
 {
@@ -71,6 +82,7 @@ void CPickupPool::DeleteWeapon(WORD owner)
         }
     }
 }
+
 // 0x000132e0
 int CPickupPool::GetIndex(int index)
 {
@@ -79,6 +91,7 @@ int CPickupPool::GetIndex(int index)
             return i;
     return -1;
 }
+
 // 0x00013310
 CPickupPool::~CPickupPool()
 {
@@ -90,12 +103,6 @@ CPickupPool::~CPickupPool()
 }
 
 STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
-// 0x0011816c
-int g_pickupCollectedRpc = 131;
-// 0x00118170
-int g_weaponPickupCollectedRpc = 97;
-// 0x00118144
-const Scripting::OpcodeInfo g_pickupCollectedCommand = {0x214, "i"};
 // 0x00013340
 void CPickupPool::SendNotification(int index)
 {
@@ -107,6 +114,7 @@ void CPickupPool::SendNotification(int index)
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_pickupCollectedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
     cooldown[id] = 15;
 }
+
 // 0x00013420
 void CPickupPool::Process()
 {

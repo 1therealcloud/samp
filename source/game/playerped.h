@@ -340,7 +340,6 @@ public:
     void* GetAccessory(int index);
     // 0x000715d0
     PedAccessoryState* GetAccessoryInfo(int index);
-    // Descriptive names; native output remains untouched when the backend is invalid.
     // 0x000ae680
     void GetBoneMatrixById(CMatrix* out, int bone);
     // Accesses the backend bone table without bounds/null checks before forwarding.
@@ -349,7 +348,6 @@ public:
     // Raw animation-frame quaternion; the bone index is unchecked.
     // 0x000ae7b0
     void* GetBoneQuaternion(int bone);
-    // Descriptive names for the observed pose/frame bodies.
     // 0x000ae8b0
     void ApplySecondaryPose();
     // 0x000b0360

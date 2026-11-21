@@ -104,7 +104,6 @@ public:
     void SetMarkerState(BOOL enabled);
     // 0x000143d0
     void SetMarkerPosition(short x, short y, short z);
-    // Descriptive name: includes encoded object IDs as well as vehicle IDs.
     // 0x00014470
     BOOL HasSurfingTarget();
     // 0x000144a0
@@ -113,7 +112,6 @@ public:
     void ProcessSpecialAction();
     // 0x000149f0
     void UpdateOnfootSpeedAndPosition();
-    // Descriptive name for native XY-only path.
     // 0x00014c00
     void UpdateOnfootXYSpeedAndPosition();
     // 0x00014ec0
@@ -124,7 +122,6 @@ public:
     void UpdateIncarRotation();
     // 0x000153a0
     void UpdateTrain(const CMatrix* matrix, const CVector* speed, float trainSpeed);
-    // Descriptive names for native target-storage methods; backend is unchecked.
     // 0x00014e50
     void SetOnfootTarget(const CVector* position, const CVector* speed);
     // 0x00015330

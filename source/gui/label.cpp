@@ -15,6 +15,7 @@ CLabel::CLabel(IDirect3DDevice9* value)
     device = value;
     D3DXCreateSprite(device, &sprite);
 }
+
 // 0x0006b610
 CLabel::~CLabel()
 {
@@ -39,7 +40,6 @@ void CLabel::OnResetDevice()
         sprite->OnResetDevice();
 }
 
-// Descriptive recovery name; original method spelling is not established.
 // 0x0006b650
 BOOL CLabel::HasLineOfSight(float x, float y, float z)
 {

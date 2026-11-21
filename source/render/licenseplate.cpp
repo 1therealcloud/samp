@@ -4,10 +4,10 @@
 #include "render/licenseplate.h"
 
 #include "archive/ArchiveFS.h"
-#include "gui/chatwindow.h"
 #include "d3dhook/ID3DXFontHook.h"
 #include "game/entity.h"
 #include "game/textdraw.h"
+#include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "main.h"
 // 0x0006d420

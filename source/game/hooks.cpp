@@ -3,7 +3,6 @@
 
 #include "game/hooks.h"
 
-#include "gui/chatwindow.h"
 #include "cmdprocs.h"
 #include "exceptions.h"
 #include "game/aimstuff.h"
@@ -16,6 +15,7 @@
 #include "game/scripting.h"
 #include "game/textdraw.h"
 #include "game/util.h"
+#include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "main.h"
 #include "net/actorpool.h"
@@ -28,46 +28,9 @@
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
 
-// Descriptive name; original name and class membership are not established.
-// GTA CWeather::Update adapter. No native caller has been established.
-// 0x000a5b80
-__declspec(naked) void GameUpdateWeather()
-{
-    // clang-format off
-    __asm {
-        mov edx, 0x72b850
-        call edx
-        ret
-    }
-    // clang-format on
-}
-
 // 0x00151a60
 BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};
-// 0x000a5bf0
-__declspec(naked) void GameHook_000a5bf0()
-{
-    // clang-format off
-    __asm {
-        cmp ebp,0
-        jl custom_model_negative
-        push esi
-        push edi
-        lea edi,[ebp+ebp*4]
-        mov eax,0x4087f0
-        jmp eax
-    custom_model_negative:
-        pop ebp
-        pop ebx
-        ret
-    }
-    // clang-format on
-}
-// 0x000a6d30
-void GameInstallModelInfoHook()
-{
-    GameInstallHook(0x4087ea, (DWORD)GameHook_000a5bf0, 0x4087d7, g_gameCustomModelHookJump, 6);
-}
+
 // 0x0018f624
 CPlayerPool* g_hookDamagePlayerPool;
 // 0x00151afc
@@ -96,18 +59,6 @@ DWORD g_hookShotArguments[8];
 CVector g_hookAdjustedShotPoint;
 // 0x0018f648
 DWORD g_hookShotLineResult;
-
-// Raw installed callback: EAX returns the preview-ped backing storage.
-// 0x000a3ec0
-__declspec(naked) void GameHook_000a3ec0()
-{
-    // clang-format off
-    __asm {
-        mov eax,offset g_gamePreviewPed
-        ret
-    }
-    // clang-format on
-}
 // 0x002ac9cc
 DWORD g_gameLoopAddress;
 // 0x0018f56c
@@ -144,6 +95,481 @@ BYTE g_gameHookJump00151a44[9] = {0xff, 0x25, 0xa6, 0x34, 0x55, 0x00, 0x90, 0x90
 BYTE g_gameHookJump00151a50[6] = {0xff, 0x25, 0x33, 0x34, 0x4b, 0x00};
 // 0x00151a68
 BYTE g_gameHookJump00151a68[6] = {0xff, 0x25, 0xdb, 0x74, 0x56, 0x00};
+// 0x0018f4c8
+DWORD g_hookRadarIndex;
+// 0x0018f4cc
+DWORD g_hookCheatFunction;
+// 0x0018f4b0
+DWORD g_hookCameraPed;
+// 0x0018f540
+DWORD g_hookRenderEsi;
+// 0x0018f544
+DWORD g_hookRenderEbx;
+// 0x0018f568
+DWORD g_hookFreedBuffer;
+// 0x00151ab8
+DWORD g_hookKeepBuffer = 1;
+// 0x0018f560
+DWORD g_hookCachedBuffer;
+// 0x00151abc
+DWORD g_hookAllocateFunction = 0x7fb270;
+// 0x0018f570
+DWORD g_hookSavedEsi;
+// 0x0018f5c4
+DWORD g_hookRenderReturn;
+// 0x00151ac8
+BYTE g_hookRenderRestore[3] = {0xff, 0x52, 0x20};
+// 0x0018f5d4
+DWORD g_hookSavedFontA;
+// 0x0018f5d8
+DWORD g_hookSavedFontB;
+// 0x0018f508
+DWORD g_hookHudScaleY;
+// 0x0018f50c
+float g_hookHudWidth;
+// 0x0018f510
+float g_hookHudHeight;
+// 0x00151a6e
+BYTE g_hookHudAspectFix = 1;
+// 0x0011c728
+const float g_hookHudAspectThreshold = 1.6f;
+// 0x0011eb68
+const float g_hookHudScaleNumerator = 0.00221999991f;
+// 0x002aca6c
+DWORD g_hookFogEnabled;
+// 0x002aca70
+DWORD g_hookDisableFog;
+// 0x0018e560
+DWORD g_hookCollisionPed;
+// 0x0018e8e0
+DWORD g_hookSavedMatrix[16];
+// 0x0018eab4
+DWORD g_hookSavedSpeed[3];
+// 0x0018f52c
+DWORD g_hookHornArgument;
+// 0x0018f530
+DWORD g_hookHornThis;
+// 0x0018eb24
+DWORD g_hookHornVehicle;
+// 0x0018f534
+BYTE g_hookHornStatus;
+// 0x0018f4c4
+DWORD g_hookAnimationReturn;
+// 0x0018e584
+DWORD g_hookAnimationClump;
+// 0x0018f548
+DWORD g_hookAnimationGroup;
+// 0x0018f54c
+DWORD g_hookAnimationId;
+// 0x0018f550
+DWORD g_hookAnimationBlend;
+// 0x0018eb90
+DWORD g_hookAnimationPed;
+// 0x0018eb88
+DWORD g_hookAnimationLocalClump;
+// 0x0018f4ec
+DWORD g_hookAnimationType;
+// 0x0018f4f0
+DWORD g_hookQueuedAnimationGroup;
+// 0x0018f4f4
+DWORD g_hookQueuedAnimationId;
+// 0x0018f4f8
+DWORD g_hookQueuedAnimationBlend;
+// 0x00151aa4
+DWORD g_hookAnimationContinueA = 0x4d3aaa;
+// 0x00151aa8
+DWORD g_hookAnimationContinueB = 0x4d4617;
+// 0x0018f5cc
+DWORD g_hookRenderObject;
+// 0x00151acc
+BYTE g_hookObjectRestore[5] = {0xe8, 0x3c, 0xff, 0xff, 0xff};
+// 0x0018f5b4
+DWORD g_hookMarker;
+// 0x0018f5b8
+DWORD g_hookMarkerArgument;
+// 0x0018f5bc
+DWORD g_hookSuppressAllMarkers;
+BYTE g_hookCameraHudPrepared;
+// 0x0018f6a8
+DWORD g_hookAudioSavedState;
+// 0x0018f6ac
+DWORD g_hookAudioArgument0;
+// 0x0018f6b0
+DWORD g_hookAudioArgument1;
+CObjectPool* g_debugObjectPool;
+// 0x00151964
+WORD* g_hookCameraModeWord = (WORD*)0xb6f858;
+// 0x0018f4ac
+BYTE g_hookSavedPlayer;
+// 0x0018f4b4
+BYTE g_hookPlayerIndex;
+// 0x0018f4c0
+DWORD g_hookPedControlThis;
+// 0x0018f51c
+DWORD g_hookWeaponResult;
+// 0x0018f520
+DWORD g_hookRestoreSkills;
+// 0x0018f524
+DWORD g_hookLocalPedControl;
+// 0x0018f528
+DWORD g_hookRestoreKeys;
+// 0x0018ea58
+BYTE g_hookSavedCameraMode;
+// 0x0018e5c8
+WORD g_hookSavedCameraModeWord;
+// 0x0018e810
+DWORD g_hookVehicleProcess;
+// 0x0018e8d0
+DWORD g_hookControlVehicle;
+// 0x0018ea54
+DWORD g_hookVehicleVtable;
+// 0x0018e934
+DWORD g_hookVehicleKeys;
+// 0x0018e938
+BYTE g_hookVehicleStatus;
+// 0x0018eb20
+DWORD g_hookVehicleLean;
+// 0x0018e8cc
+DWORD g_hookVehicleLeanTarget;
+// 0x002a9a44
+int g_gameVehicleModel;
+// 0x002a9a48
+DWORD g_gameLinkedVehicle;
+// 0x002a9a4c
+float g_gameVehicleDistanceSquared;
+// 0x0011f5dc
+const float g_gameStreamingDistanceSquared = 40000.0f;
+// 0x0018f694
+DWORD g_hookContactOther;
+// 0x0018f698
+DWORD g_hookContactReturn;
+// 0x0018f69c
+DWORD g_hookSirenVehicle;
+// 0x0018f6a0
+BYTE g_hookSirenResult;
+// 0x0018f6a4
+DWORD g_hookSirenOnce;
+// 0x00151b0c
+WORD g_hookSirenVehicleId = 0xffff;
+// 0x0018f63c
+DWORD g_hookPedQueryThis;
+// 0x0018f640
+DWORD g_hookPedQueryPed;
+// 0x0018e7f8
+DWORD g_hookPickupBackend;
+// 0x0018e5cc
+DWORD g_hookMenuTextResult;
+// 0x0018f5a8
+CVector g_hookPassengerCameraPosition;
+// 0x0018e580
+DWORD g_hookTrailerBackend;
+// 0x0018e7fc
+CVehiclePool* g_hookTrailerPool;
+// 0x0018e7f0
+WORD g_hookTrailerId;
+// 0x0018f5e0
+CVehicle* g_hookTrailerVehicle;
+// 0x0018f600
+DWORD g_hookObjectSavedStack;
+// 0x0018f5f8
+DWORD g_hookObjectBackend;
+// 0x0018f604
+DWORD g_hookObjectResult;
+// 0x0018f5fc
+CObject* g_hookObjectRotationWrapper;
+// 0x0018f614
+CObjectPool* g_hookObjectDrawPool;
+// 0x0018f618
+DWORD g_hookObjectDrawBackend;
+// 0x0018f578
+CObject* g_hookObjectDrawWrapper;
+// 0x0018f580
+DWORD g_hookMaterialReturn;
+// 0x0018f574
+DWORD g_hookMaterialBackend;
+// 0x0018f57c
+CPlayerPool* g_hookMaterialPlayerPool;
+// 0x0018f5a4
+DWORD g_hookSurfingIndex;
+// 0x0018e7f4
+CRemotePlayer* g_hookSurfingRemote;
+// 0x0018eac0
+GameEntityCollisionShape g_hookCollisionFirst;
+// 0x0018e56c
+GameEntityCollisionShape g_hookCollisionSecond;
+// 0x0018f68c
+BYTE g_hookCollisionResult;
+// 0x0011e508
+const float g_hookCollisionBoundHigh = 3000.0f;
+// 0x0011ec3c
+const float g_hookCollisionBoundLow = -3000.0f;
+// 0x0018f4d0
+DWORD g_hookGate18F4D0;
+// 0x0018eb2c
+DWORD g_hookRandomReturn;
+// 0x0018e8b8
+DWORD g_hookRecordReturn18E8B8;
+// 0x0018f5c8
+DWORD g_hookRecordEcx18F5C8;
+// 0x0011ec04
+const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
+// 0x00151aac
+DWORD g_hookCapture00151AAC = 0x4d4417;
+// 0x00151ab0
+DWORD g_hookCapture00151AB0 = 0x4d3b30;
+// 0x00151ab4
+WORD g_hookCapture00151AB4 = 0xffff;
+// 0x00151ac4
+WORD g_hookCapture00151AC4 = 0xffff;
+// 0x0018e540
+DWORD g_hookCapture0018E540;
+// 0x0018e544
+DWORD g_hookCapture0018E544;
+// 0x0018e564
+DWORD g_hookCapture0018E564;
+// 0x0018e588
+DWORD g_hookCapture0018E588;
+// 0x0018e58c
+DWORD g_hookCapture0018E58C;
+// 0x0018e5c4
+DWORD g_hookCapture0018E5C4;
+// 0x0018e5d8
+DWORD g_hookCapture0018E5D8;
+// 0x0018e800
+CVector g_hookAimRayTarget;
+// 0x0018e814
+DWORD g_hookCapture0018E814;
+// 0x0018e818
+DWORD g_hookCapture0018E818;
+// 0x0018e86c
+DWORD g_hookCapture0018E86C;
+// 0x0018e874
+DWORD g_hookCapture0018E874;
+// 0x0018e8c8
+DWORD g_hookCapture0018E8C8;
+// 0x0018e8d4
+DWORD g_hookCapture0018E8D4;
+// 0x0018e924
+DWORD g_hookCapture0018E924;
+// 0x0018e928
+DWORD g_hookCapture0018E928;
+// 0x0018ea40
+CVector g_hookAimRayOrigin;
+// 0x0018eaa0
+DWORD g_hookCapture0018EAA0;
+// 0x0018eaa4
+DWORD g_hookCapture0018EAA4;
+// 0x0018eaa8
+DWORD g_hookCapture0018EAA8;
+// 0x0018eab0
+DWORD g_hookCapture0018EAB0;
+// 0x0018eb1c
+DWORD g_hookCapture0018EB1C;
+// 0x0018eb70
+DWORD g_hookCapture0018EB70;
+// 0x0018eb78
+DWORD g_hookCapture0018EB78;
+// 0x0018eb8c
+DWORD g_hookCapture0018EB8C;
+// 0x0018f33c
+DWORD g_hookCapture0018F33C;
+// 0x0018f340
+DWORD g_hookCapture0018F340;
+// 0x0018f34c
+DWORD g_hookCapture0018F34C;
+// 0x0018f350
+DWORD g_hookCapture0018F350;
+// 0x0018f354
+DWORD g_hookCapture0018F354;
+// 0x0018f360
+DWORD g_hookCapture0018F360;
+// 0x0018f368
+DWORD g_hookCapture0018F368;
+// 0x0018f37c
+DWORD g_hookCapture0018F37C;
+// 0x0018f558
+DWORD g_hookCapture0018F558;
+// 0x0018f55c
+DWORD g_hookCapture0018F55C;
+// 0x0018f594
+DWORD g_hookCapture0018F594;
+// 0x0018f598
+DWORD g_hookCapture0018F598;
+// 0x0018f59c
+DWORD g_hookCapture0018F59C;
+// 0x0018f5a0
+DWORD g_hookCapture0018F5A0;
+// 0x0018f5e4
+DWORD g_hookCapture0018F5E4;
+// 0x0018f658
+DWORD g_hookCapture0018F658;
+// 0x0018f65c
+DWORD g_hookCapture0018F65C;
+// 0x0018f660
+DWORD g_hookCapture0018F660;
+// 0x0018e878
+CMatrix g_hookAimOffsetMatrix;
+// 0x0018ead8
+CMatrix g_hookMountedMatrix;
+// 0x00151ad4
+DWORD g_hookPatchOverride151AD4[3] = {0x0, 0x0, 0x41700000};
+// 0x00151ae0
+BYTE g_hookRestore5543C0[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
+// 0x00151af8
+WORD g_hookRestore5543DC = 0x4774;
+// 0x0018e548
+DWORD g_hookCapture0018E548;
+// 0x0018e54c
+DWORD g_hookCapture0018E54C;
+// 0x0018e7e4
+DWORD g_hookCapture0018E7E4;
+// 0x0018e7e8
+DWORD g_hookCapture0018E7E8;
+// 0x0018e7ec
+DWORD g_hookCapture0018E7EC;
+// 0x0018e80c
+DWORD g_hookCapture0018E80C;
+// 0x0018e92c
+DWORD g_hookCapture0018E92C;
+// 0x0018eaac
+DWORD g_hookCapture0018EAAC;
+// 0x0018eb74
+DWORD g_hookCapture0018EB74;
+// 0x0018f338
+DWORD g_hookCapture0018F338;
+// 0x0018f344
+DWORD g_hookCapture0018F344;
+// 0x0018f348
+DWORD g_hookCapture0018F348;
+// 0x0018f358
+DWORD g_hookCapture0018F358;
+// 0x0018f35c
+DWORD g_hookCapture0018F35C;
+// 0x0018f364
+DWORD g_hookCapture0018F364;
+// 0x0018f380
+DWORD g_hookCapture0018F380;
+// 0x0018f48c
+DWORD g_hookCapture0018F48C;
+// 0x0018f490
+DWORD g_hookCapture0018F490;
+// 0x0018f608
+DWORD g_hookCapture0018F608;
+// 0x0018f60c
+DWORD g_hookCapture0018F60C;
+// 0x0018f610
+DWORD g_hookCapture0018F610;
+// 0x002aca54
+DWORD g_clientRenderCaller;
+// 0x002aca58
+DWORD g_clientRenderState;
+// 0x002aca5c
+DWORD g_clientRenderValue;
+// 0x0018e550
+DWORD g_hookExitTask;
+// 0x0018e5d4
+CVehiclePool* g_hookEventVehiclePool;
+// 0x0018e568
+WORD g_hookEventVehicleId;
+// 0x0018e868
+CVehicle* g_hookExitVehicle;
+// 0x0018eb18
+CLocalPlayer* g_hookEventLocalPlayer;
+// 0x0018eb30
+CMatrix g_hookExitMatrix;
+// 0x00151aa0
+DWORD g_hookExitTaskArgument = 0xffffffff;
+// 0x0011c65c
+const float g_hookTrainExitOffset = 2.5f;
+// 0x0018e5bc
+DWORD g_hookQuitDeadline;
+// 0x0018f538
+DWORD g_hookDamageResponse;
+// 0x0018f53c
+DWORD g_hookDamagePed;
+// 0x0018e8c0
+DWORD g_hookPedControlField540;
+// 0x0018f378
+CPlayerPool* g_hookFaultPlayerPool;
+// 0x00151970
+WORD g_hookFaultPlayerId = 0xffff;
+// 0x0018e824
+CRemotePlayer* g_hookFaultRemotePlayer;
+// 0x00151a70
+const BYTE g_hookPedRestoreA[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
+// 0x00151a88
+const BYTE g_hookPedRestoreB[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
+// 0x00151a90
+const BYTE g_hookPedRemoteRestore[5] = {0xe8, 0x17, 0x88, 0xff, 0xff};
+// 0x0011ebcc
+const char g_hookPedExceptionLabel[10] = "playerped";
+// 0x0011ebac
+const char g_hookPedRemovedMessage[32] = "Removed player %u due to error.";
+
+// GTA CWeather::Update adapter. No native caller has been established.
+// 0x0018f504
+DWORD g_hookHudScaleX;
+// 0x0018f690
+DWORD g_hookContactThis;
+// 0x0018e81c
+CVehicle* g_hookEnterVehicle;
+// 0x0011ebe4
+const char g_hookPedSayFormat[] = "CPed::Say(%u,%u,%f,%u,%u,%u)";
+// 0x002aca50
+DWORD g_clientPreviousRenderState;
+// 0x0018f4a8
+DWORD g_hookIgnoreNextExit;
+
+// 0x000a5b80
+__declspec(naked) void GameUpdateWeather()
+{
+    // clang-format off
+    __asm {
+        mov edx, 0x72b850
+        call edx
+        ret
+    }
+    // clang-format on
+}
+
+// 0x000a5bf0
+__declspec(naked) void GameHook_000a5bf0()
+{
+    // clang-format off
+    __asm {
+        cmp ebp,0
+        jl custom_model_negative
+        push esi
+        push edi
+        lea edi,[ebp+ebp*4]
+        mov eax,0x4087f0
+        jmp eax
+    custom_model_negative:
+        pop ebp
+        pop ebx
+        ret
+    }
+    // clang-format on
+}
+
+// 0x000a6d30
+void GameInstallModelInfoHook()
+{
+    GameInstallHook(0x4087ea, (DWORD)GameHook_000a5bf0, 0x4087d7, g_gameCustomModelHookJump, 6);
+}
+
+// Raw installed callback: EAX returns the preview-ped backing storage.
+// 0x000a3ec0
+__declspec(naked) void GameHook_000a3ec0()
+{
+    // clang-format off
+    __asm {
+        mov eax,offset g_gamePreviewPed
+        ret
+    }
+    // clang-format on
+}
+
 // 0x000a5d80
 void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size)
 {
@@ -155,6 +581,7 @@ void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* j
     memcpy((void*)address, jumpCode, size);
     VirtualProtect((void*)address, size, oldProtect, &ignored);
 }
+
 // 0x000a5e30
 void GamePrepareHooks()
 {
@@ -456,35 +883,6 @@ void GameInstallHooks()
     return;
 }
 
-// 0x0018f4c8
-DWORD g_hookRadarIndex;
-// 0x0018f4cc
-DWORD g_hookCheatFunction;
-// 0x0018f4b0
-DWORD g_hookCameraPed;
-// 0x0018f540
-DWORD g_hookRenderEsi;
-// 0x0018f544
-DWORD g_hookRenderEbx;
-// 0x0018f568
-DWORD g_hookFreedBuffer;
-// 0x00151ab8
-DWORD g_hookKeepBuffer = 1;
-// 0x0018f560
-DWORD g_hookCachedBuffer;
-// 0x00151abc
-DWORD g_hookAllocateFunction = 0x7fb270;
-// 0x0018f570
-DWORD g_hookSavedEsi;
-// 0x0018f5c4
-DWORD g_hookRenderReturn;
-// 0x00151ac8
-BYTE g_hookRenderRestore[3] = {0xff, 0x52, 0x20};
-// 0x0018f5d4
-DWORD g_hookSavedFontA;
-// 0x0018f5d8
-DWORD g_hookSavedFontB;
-
 // Yield before entering the original game update routine.
 // 0x000a2200
 __declspec(naked) void GameHook_000a2200()
@@ -509,6 +907,7 @@ __declspec(naked) void GameHook_000a37a0()
         ret }
     // clang-format on
 }
+
 // 0x000a37c0
 __declspec(naked) void GameHook_000a37c0()
 {
@@ -574,6 +973,7 @@ __declspec(naked) void GameHook_000a3b20()
         ret }
     // clang-format on
 }
+
 // 0x000a3ce0
 __declspec(naked) void GameHook_000a3ce0()
 {
@@ -619,6 +1019,7 @@ __declspec(naked) void GameHook_000a3d20()
         jmp eax }
     // clang-format on
 }
+
 // 0x000a3e50
 __declspec(naked) void GameHook_000a3e50()
 {
@@ -637,6 +1038,7 @@ __declspec(naked) void GameHook_000a3e50()
         jmp edx }
     // clang-format on
 }
+
 // 0x000a4190
 __declspec(naked) void GameHook_000a4190()
 {
@@ -724,6 +1126,7 @@ __declspec(naked) void GameHook_000a4850()
         ret }
     // clang-format on
 }
+
 // 0x000a4960
 __declspec(naked) void GameHook_000a4960()
 {
@@ -754,6 +1157,7 @@ __declspec(naked) void GameHook_000a4960()
         ret }
     // clang-format on
 }
+
 // 0x000a5150
 __declspec(naked) void GameHook_000a5150()
 {
@@ -767,6 +1171,7 @@ __declspec(naked) void GameHook_000a5150()
         ret }
     // clang-format on
 }
+
 // 0x000a5850
 __declspec(naked) void GameHook_000a5850()
 {
@@ -801,74 +1206,6 @@ __declspec(naked) void GameHook_000a5d20()
     // clang-format on
 }
 
-// 0x0018f504
-DWORD g_hookHudScaleX;
-// 0x0018f508
-DWORD g_hookHudScaleY;
-// 0x0018f50c
-float g_hookHudWidth;
-// 0x0018f510
-float g_hookHudHeight;
-// 0x00151a6e
-BYTE g_hookHudAspectFix = 1;
-// 0x0011c728
-const float g_hookHudAspectThreshold = 1.6f;
-// 0x0011eb68
-const float g_hookHudScaleNumerator = 0.00221999991f;
-// 0x002aca6c
-DWORD g_hookFogEnabled;
-// 0x002aca70
-DWORD g_hookDisableFog;
-// 0x0018e560
-DWORD g_hookCollisionPed;
-// 0x0018e8e0
-DWORD g_hookSavedMatrix[16];
-// 0x0018eab4
-DWORD g_hookSavedSpeed[3];
-// 0x0018f52c
-DWORD g_hookHornArgument;
-// 0x0018f530
-DWORD g_hookHornThis;
-// 0x0018eb24
-DWORD g_hookHornVehicle;
-// 0x0018f534
-BYTE g_hookHornStatus;
-// 0x0018f4c4
-DWORD g_hookAnimationReturn;
-// 0x0018e584
-DWORD g_hookAnimationClump;
-// 0x0018f548
-DWORD g_hookAnimationGroup;
-// 0x0018f54c
-DWORD g_hookAnimationId;
-// 0x0018f550
-DWORD g_hookAnimationBlend;
-// 0x0018eb90
-DWORD g_hookAnimationPed;
-// 0x0018eb88
-DWORD g_hookAnimationLocalClump;
-// 0x0018f4ec
-DWORD g_hookAnimationType;
-// 0x0018f4f0
-DWORD g_hookQueuedAnimationGroup;
-// 0x0018f4f4
-DWORD g_hookQueuedAnimationId;
-// 0x0018f4f8
-DWORD g_hookQueuedAnimationBlend;
-// 0x00151aa4
-DWORD g_hookAnimationContinueA = 0x4d3aaa;
-// 0x00151aa8
-DWORD g_hookAnimationContinueB = 0x4d4617;
-// 0x0018f5cc
-DWORD g_hookRenderObject;
-// 0x00151acc
-BYTE g_hookObjectRestore[5] = {0xe8, 0x3c, 0xff, 0xff, 0xff};
-// 0x0018f5b4
-DWORD g_hookMarker;
-// 0x0018f5b8
-DWORD g_hookMarkerArgument;
-// 0x0018f5bc
-DWORD g_hookSuppressAllMarkers;
 // The comparison and repeated division retain x87 precision until the final
 // float store. A rounded float ratio changes the native 16:10 boundary.
 // 0x000a2220
@@ -899,6 +1236,7 @@ void GamePrepareHudDraw()
         // clang-format on
     }
 }
+
 // 0x000c5400
 void GameSetupD3DFog(DWORD enabled)
 {
@@ -911,6 +1249,7 @@ void GameSetupD3DFog(DWORD enabled)
         g_gameD3DDevice->SetRenderState(D3DRS_FOGVERTEXMODE, D3DFOG_LINEAR);
     }
 }
+
 // 0x000a22c0
 __declspec(naked) void GameHook_000a22c0()
 {
@@ -931,6 +1270,7 @@ __declspec(naked) void GameHook_000a22c0()
     }
     // clang-format on
 }
+
 // 0x000a29d0
 __declspec(naked) void GameHook_000a29d0()
 {
@@ -1039,6 +1379,7 @@ __declspec(naked) void GameHook_000a33c0()
     }
     // clang-format on
 }
+
 // 0x000a3b90
 __declspec(naked) void GameHook_000a3b90()
 {
@@ -1067,6 +1408,7 @@ __declspec(naked) void GameHook_000a3b90()
     }
     // clang-format on
 }
+
 // 0x000a3f30
 __declspec(naked) void GameHook_000a3f30()
 {
@@ -1113,6 +1455,7 @@ __declspec(naked) void GameHook_000a3f30()
     }
     // clang-format on
 }
+
 // 0x000a3fe0
 __declspec(naked) void GameHook_000a3fe0()
 {
@@ -1163,6 +1506,7 @@ __declspec(naked) void GameHook_000a3fe0()
     }
     // clang-format on
 }
+
 // 0x000a47d0
 __declspec(naked) void GameHook_000a47d0()
 {
@@ -1207,6 +1551,7 @@ __declspec(naked) void GameHook_000a47d0()
     }
     // clang-format on
 }
+
 // 0x000a48c0
 __declspec(naked) void GameHook_000a48c0()
 {
@@ -1261,13 +1606,6 @@ __declspec(naked) void GameHook_000a48c0()
 }
 
 // 0x0018f514
-BYTE g_hookCameraHudPrepared;
-// 0x0018f6a8
-DWORD g_hookAudioSavedState;
-// 0x0018f6ac
-DWORD g_hookAudioArgument0;
-// 0x0018f6b0
-DWORD g_hookAudioArgument1;
 
 // Raw GTA entry ABIs: preserve live registers and native CALL/JMP/RET behavior.
 // 0x000a22f0
@@ -1317,6 +1655,7 @@ __declspec(naked) void GameHook_000a22f0()
     }
     // clang-format on
 }
+
 // 0x000a2370
 __declspec(naked) void GameHook_000a2370()
 {
@@ -1339,6 +1678,7 @@ __declspec(naked) void GameHook_000a2370()
     }
     // clang-format on
 }
+
 // 0x000a23a0
 __declspec(naked) void GameHook_000a23a0()
 {
@@ -1358,6 +1698,7 @@ __declspec(naked) void GameHook_000a23a0()
     }
     // clang-format on
 }
+
 // 0x000a5b90
 __declspec(naked) void GameHook_000a5b90()
 {
@@ -1390,7 +1731,6 @@ __declspec(naked) void GameHook_000a5b90()
 }
 
 // 0x0018de44
-CObjectPool* g_debugObjectPool;
 
 // 0x000a23d0
 void GameHook_000a23d0()
@@ -1463,49 +1803,7 @@ using KeyStuff::GetInternalKeys;
 using KeyStuff::UpdateKeys;
 // Raw entry ABI: weapon ECX=ped; ped control ECX=this, [ESP+4]=ped;
 // vehicle ECX=vehicle. Vehicle control preserves PUSHAD registers.
-// 0x00151964
-WORD* g_hookCameraModeWord = (WORD*)0xb6f858;
-// 0x0018f4ac
-BYTE g_hookSavedPlayer;
-// 0x0018f4b4
-BYTE g_hookPlayerIndex;
-// 0x0018f4c0
-DWORD g_hookPedControlThis;
-// 0x0018f51c
-DWORD g_hookWeaponResult;
-// 0x0018f520
-DWORD g_hookRestoreSkills;
-// 0x0018f524
-DWORD g_hookLocalPedControl;
-// 0x0018f528
-DWORD g_hookRestoreKeys;
-// 0x0018ea58
-BYTE g_hookSavedCameraMode;
-// 0x0018e5c8
-WORD g_hookSavedCameraModeWord;
-// 0x0018e810
-DWORD g_hookVehicleProcess;
-// 0x0018e8d0
-DWORD g_hookControlVehicle;
-// 0x0018ea54
-DWORD g_hookVehicleVtable;
-// 0x0018e934
-DWORD g_hookVehicleKeys;
-// 0x0018e938
-BYTE g_hookVehicleStatus;
-// 0x0018eb20
-DWORD g_hookVehicleLean;
-// 0x0018e8cc
-DWORD g_hookVehicleLeanTarget;
-// 0x002a9a44
-int g_gameVehicleModel;
-// 0x002a9a48
-DWORD g_gameLinkedVehicle;
-// 0x002a9a4c
-float g_gameVehicleDistanceSquared;
 
-// 0x0011f5dc
-const float g_gameStreamingDistanceSquared = 40000.0f;
 // 0x000b3f60
 BYTE __stdcall GameFindPlayerPedIndex(void* ped)
 {
@@ -1514,6 +1812,7 @@ BYTE __stdcall GameFindPlayerPedIndex(void* ped)
             return player;
     return 0;
 }
+
 // 0x000b4410
 BOOL __stdcall GameIsTrainVehicle(void* vehicle)
 {
@@ -1525,6 +1824,7 @@ BOOL __stdcall GameIsTrainVehicle(void* vehicle)
     }
     return FALSE;
 }
+
 // 0x000b4460
 BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
 {
@@ -1537,6 +1837,7 @@ BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
     BYTE* driver = *(BYTE**)(linked + 0x460);
     return driver && (*(DWORD*)(driver + 0x46c) & 0x100) ? TRUE : FALSE;
 }
+
 // 0x000a2ab0
 __declspec(naked) void GameHook_000a2ab0()
 {
@@ -1584,6 +1885,7 @@ __declspec(naked) void GameHook_000a2ab0()
     }
     // clang-format on
 }
+
 // 0x000a2b50
 __declspec(naked) void GameHook_000a2b50()
 {
@@ -1681,6 +1983,7 @@ __declspec(naked) void GameHook_000a2b50()
     }
     // clang-format on
 }
+
 // 0x000a2e70
 __declspec(naked) void GameHook_000a2e70()
 {
@@ -2094,25 +2397,6 @@ __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
     // clang-format on
 }
 
-// 0x0018f690
-DWORD g_hookContactThis;
-// 0x0018f694
-DWORD g_hookContactOther;
-// 0x0018f698
-DWORD g_hookContactReturn;
-// 0x0018f69c
-DWORD g_hookSirenVehicle;
-// 0x0018f6a0
-BYTE g_hookSirenResult;
-// 0x0018f6a4
-DWORD g_hookSirenOnce;
-// 0x00151b0c
-WORD g_hookSirenVehicleId = 0xffff;
-// 0x0018f63c
-DWORD g_hookPedQueryThis;
-// 0x0018f640
-DWORD g_hookPedQueryPed;
-
 // Raw GTA collision method ABI; suppression returns with RET8.
 // 0x000a5870
 __declspec(naked) void GameHook_000a5870()
@@ -2300,6 +2584,7 @@ __declspec(naked) void GameHook_000a5a50()
     }
     // clang-format on
 }
+
 // 0x000a5820
 __declspec(naked) void GameHook_000a5820()
 {
@@ -2322,6 +2607,7 @@ __declspec(naked) void GameHook_000a5820()
     }
     // clang-format on
 }
+
 // 0x000a5100
 __declspec(naked) void GameHook_000a5100()
 {
@@ -2407,8 +2693,6 @@ __declspec(naked) void GameHook_000a5af0()
     // clang-format on
 }
 
-// 0x0018e81c
-CVehicle* g_hookEnterVehicle;
 // 0x000a3430
 BOOL GameNotifyEnterVehicle()
 {
@@ -2456,6 +2740,7 @@ BOOL GameNotifyEnterVehicle()
     g_hookEventLocalPlayer->EnterVehicle(g_hookEventVehicleId, FALSE);
     return TRUE;
 }
+
 // 0x000a3840
 WORD GameResolveDamagePlayer(void* entity)
 {
@@ -2489,6 +2774,7 @@ WORD GameResolveDamagePlayer(void* entity)
     }
     return result;
 }
+
 // 0x000a38e0
 WORD GameResolveDamageActor(void* entity)
 {
@@ -2563,35 +2849,6 @@ BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
     }
     return FALSE;
 }
-
-// 0x0018e7f8
-DWORD g_hookPickupBackend;
-// 0x0018e5cc
-DWORD g_hookMenuTextResult;
-// 0x0018f5a8
-CVector g_hookPassengerCameraPosition;
-// 0x0018e580
-DWORD g_hookTrailerBackend;
-// 0x0018e7fc
-CVehiclePool* g_hookTrailerPool;
-// 0x0018e7f0
-WORD g_hookTrailerId;
-// 0x0018f5e0
-CVehicle* g_hookTrailerVehicle;
-// 0x0018f600
-DWORD g_hookObjectSavedStack;
-// 0x0018f5f8
-DWORD g_hookObjectBackend;
-// 0x0018f604
-DWORD g_hookObjectResult;
-// 0x0018f5fc
-CObject* g_hookObjectRotationWrapper;
-// 0x0018f614
-CObjectPool* g_hookObjectDrawPool;
-// 0x0018f618
-DWORD g_hookObjectDrawBackend;
-// 0x0018f578
-CObject* g_hookObjectDrawWrapper;
 
 // Raw installed GTA ABI; void() is an address declaration only.
 // 0x000a3c60
@@ -2998,27 +3255,6 @@ __declspec(naked) void GameHook_000a4e70()
     // clang-format on
 }
 
-// 0x0018f580
-DWORD g_hookMaterialReturn;
-// 0x0018f574
-DWORD g_hookMaterialBackend;
-// 0x0018f57c
-CPlayerPool* g_hookMaterialPlayerPool;
-// 0x0018f5a4
-DWORD g_hookSurfingIndex;
-// 0x0018e7f4
-CRemotePlayer* g_hookSurfingRemote;
-// 0x0018eac0
-GameEntityCollisionShape g_hookCollisionFirst;
-// 0x0018e56c
-GameEntityCollisionShape g_hookCollisionSecond;
-// 0x0018f68c
-BYTE g_hookCollisionResult;
-// 0x0011e508
-const float g_hookCollisionBoundHigh = 3000.0f;
-// 0x0011ec3c
-const float g_hookCollisionBoundLow = -3000.0f;
-
 // Raw installed GTA ABI; void() is an installation-address type only.
 // 0x000a42d0
 __declspec(naked) void GameHook_000a42d0()
@@ -3330,6 +3566,7 @@ BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
         return FALSE;
     return net->pools->players->GetPlayer(id)->nativeState[0x19] == team ? TRUE : FALSE;
 }
+
 // 0x000a5090
 __declspec(naked) void GameHook_000a5090()
 {
@@ -3367,6 +3604,7 @@ __declspec(naked) void GameHook_000a5090()
     }
     // clang-format on
 }
+
 // 0x000a5170
 void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target, const CVector* collision, void** entity)
 {
@@ -3415,6 +3653,7 @@ void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target,
     }
     g_pGame->GetPlayerPed()->SetBulletData(&g_hookBulletHitData);
 }
+
 // 0x000a5540
 __declspec(naked) void GameHook_000a5540()
 {
@@ -3477,6 +3716,7 @@ __declspec(naked) void GameHook_000a5540()
     }
     // clang-format on
 }
+
 // 0x000a5600
 __declspec(naked) void GameHook_000a5600()
 {
@@ -3507,6 +3747,7 @@ __declspec(naked) void GameHook_000a5600()
     }
     // clang-format on
 }
+
 // 0x000a5650
 __declspec(naked) void GameHook_000a5650()
 {
@@ -3541,6 +3782,7 @@ __declspec(naked) void GameHook_000a5650()
     }
     // clang-format on
 }
+
 // 0x000a5360
 __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* collision, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
                                                    DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
@@ -3718,6 +3960,7 @@ void GameDisablePedRemoteCall()
     *(DWORD*)0x5e92f4 = 0x90909090;
     *(BYTE*)0x5e92f8 = 0x90;
 }
+
 // 0x000a26b0
 void GameRestorePedRemoteCall()
 {
@@ -3735,6 +3978,7 @@ void GameWriteProtectedDword(DWORD address, DWORD value)
     *(DWORD*)address = value;
     protect((void*)address, 4, oldProtection, &ignoredProtection);
 }
+
 // Opcode byte is passed through without restricting it to CALL/JMP.
 // 0x000a5df0
 void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
@@ -3746,15 +3990,6 @@ void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
     *(DWORD*)(address + 1) = target - address - 5;
     protect((void*)address, 5, oldProtection, &ignoredProtection);
 }
-
-// 0x0018f4d0
-DWORD g_hookGate18F4D0;
-// 0x0018eb2c
-DWORD g_hookRandomReturn;
-// 0x0018e8b8
-DWORD g_hookRecordReturn18E8B8;
-// 0x0018f5c8
-DWORD g_hookRecordEcx18F5C8;
 
 // 0x000a22a0
 __declspec(naked) void GameRestoreHudDraw()
@@ -4016,105 +4251,6 @@ __declspec(naked) void GameHook_000a48a0()
     }
     // clang-format on
 }
-
-// 0x0011ebe4
-const char g_hookPedSayFormat[] = "CPed::Say(%u,%u,%f,%u,%u,%u)";
-// 0x0011ec04
-const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
-// 0x00151aac
-DWORD g_hookCapture00151AAC = 0x4d4417;
-// 0x00151ab0
-DWORD g_hookCapture00151AB0 = 0x4d3b30;
-// 0x00151ab4
-WORD g_hookCapture00151AB4 = 0xffff;
-// 0x00151ac4
-WORD g_hookCapture00151AC4 = 0xffff;
-// 0x0018e540
-DWORD g_hookCapture0018E540;
-// 0x0018e544
-DWORD g_hookCapture0018E544;
-// 0x0018e564
-DWORD g_hookCapture0018E564;
-// 0x0018e588
-DWORD g_hookCapture0018E588;
-// 0x0018e58c
-DWORD g_hookCapture0018E58C;
-// 0x0018e5c4
-DWORD g_hookCapture0018E5C4;
-// 0x0018e5d8
-DWORD g_hookCapture0018E5D8;
-// 0x0018e800
-CVector g_hookAimRayTarget;
-// 0x0018e814
-DWORD g_hookCapture0018E814;
-// 0x0018e818
-DWORD g_hookCapture0018E818;
-// 0x0018e86c
-DWORD g_hookCapture0018E86C;
-// 0x0018e874
-DWORD g_hookCapture0018E874;
-// 0x0018e8c8
-DWORD g_hookCapture0018E8C8;
-// 0x0018e8d4
-DWORD g_hookCapture0018E8D4;
-// 0x0018e924
-DWORD g_hookCapture0018E924;
-// 0x0018e928
-DWORD g_hookCapture0018E928;
-// 0x0018ea40
-CVector g_hookAimRayOrigin;
-// 0x0018eaa0
-DWORD g_hookCapture0018EAA0;
-// 0x0018eaa4
-DWORD g_hookCapture0018EAA4;
-// 0x0018eaa8
-DWORD g_hookCapture0018EAA8;
-// 0x0018eab0
-DWORD g_hookCapture0018EAB0;
-// 0x0018eb1c
-DWORD g_hookCapture0018EB1C;
-// 0x0018eb70
-DWORD g_hookCapture0018EB70;
-// 0x0018eb78
-DWORD g_hookCapture0018EB78;
-// 0x0018eb8c
-DWORD g_hookCapture0018EB8C;
-// 0x0018f33c
-DWORD g_hookCapture0018F33C;
-// 0x0018f340
-DWORD g_hookCapture0018F340;
-// 0x0018f34c
-DWORD g_hookCapture0018F34C;
-// 0x0018f350
-DWORD g_hookCapture0018F350;
-// 0x0018f354
-DWORD g_hookCapture0018F354;
-// 0x0018f360
-DWORD g_hookCapture0018F360;
-// 0x0018f368
-DWORD g_hookCapture0018F368;
-// 0x0018f37c
-DWORD g_hookCapture0018F37C;
-// 0x0018f558
-DWORD g_hookCapture0018F558;
-// 0x0018f55c
-DWORD g_hookCapture0018F55C;
-// 0x0018f594
-DWORD g_hookCapture0018F594;
-// 0x0018f598
-DWORD g_hookCapture0018F598;
-// 0x0018f59c
-DWORD g_hookCapture0018F59C;
-// 0x0018f5a0
-DWORD g_hookCapture0018F5A0;
-// 0x0018f5e4
-DWORD g_hookCapture0018F5E4;
-// 0x0018f658
-DWORD g_hookCapture0018F658;
-// 0x0018f65c
-DWORD g_hookCapture0018F65C;
-// 0x0018f660
-DWORD g_hookCapture0018F660;
 
 // 0x000a2cd0
 __declspec(naked) void GameHook_000a2cd0()
@@ -4582,58 +4718,6 @@ __declspec(naked) void GameHook_000a52d0()
 }
 
 // Additional native control/camera/patch callbacks and their shared aggregates.
-// 0x0018e878
-CMatrix g_hookAimOffsetMatrix;
-// 0x0018ead8
-CMatrix g_hookMountedMatrix;
-// 0x00151ad4
-DWORD g_hookPatchOverride151AD4[3] = {0x0, 0x0, 0x41700000};
-// 0x00151ae0
-BYTE g_hookRestore5543C0[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
-// 0x00151af8
-WORD g_hookRestore5543DC = 0x4774;
-// 0x0018e548
-DWORD g_hookCapture0018E548;
-// 0x0018e54c
-DWORD g_hookCapture0018E54C;
-// 0x0018e7e4
-DWORD g_hookCapture0018E7E4;
-// 0x0018e7e8
-DWORD g_hookCapture0018E7E8;
-// 0x0018e7ec
-DWORD g_hookCapture0018E7EC;
-// 0x0018e80c
-DWORD g_hookCapture0018E80C;
-// 0x0018e92c
-DWORD g_hookCapture0018E92C;
-// 0x0018eaac
-DWORD g_hookCapture0018EAAC;
-// 0x0018eb74
-DWORD g_hookCapture0018EB74;
-// 0x0018f338
-DWORD g_hookCapture0018F338;
-// 0x0018f344
-DWORD g_hookCapture0018F344;
-// 0x0018f348
-DWORD g_hookCapture0018F348;
-// 0x0018f358
-DWORD g_hookCapture0018F358;
-// 0x0018f35c
-DWORD g_hookCapture0018F35C;
-// 0x0018f364
-DWORD g_hookCapture0018F364;
-// 0x0018f380
-DWORD g_hookCapture0018F380;
-// 0x0018f48c
-DWORD g_hookCapture0018F48C;
-// 0x0018f490
-DWORD g_hookCapture0018F490;
-// 0x0018f608
-DWORD g_hookCapture0018F608;
-// 0x0018f60c
-DWORD g_hookCapture0018F60C;
-// 0x0018f610
-DWORD g_hookCapture0018F610;
 
 // 0x000a2d30
 __declspec(naked) void GameHook_000a2d30()
@@ -4922,18 +5006,6 @@ __declspec(naked) void GameHook_000a4cc0()
     // clang-format on
 }
 
-// 0x002aca50
-DWORD g_clientPreviousRenderState;
-
-// 0x002aca54
-DWORD g_clientRenderCaller;
-
-// 0x002aca58
-DWORD g_clientRenderState;
-
-// 0x002aca5c
-DWORD g_clientRenderValue;
-
 // 0x000c54c0
 void ClientInstallRenderStateHook()
 {
@@ -4977,30 +5049,6 @@ __declspec(naked) void ClientRenderStateHook()
     // clang-format on
 }
 
-// 0x0018f4a8
-DWORD g_hookIgnoreNextExit;
-// 0x0018e550
-DWORD g_hookExitTask;
-// 0x0018e5d4
-CVehiclePool* g_hookEventVehiclePool;
-// 0x0018e568
-WORD g_hookEventVehicleId;
-// 0x0018e868
-CVehicle* g_hookExitVehicle;
-// 0x0018eb18
-CLocalPlayer* g_hookEventLocalPlayer;
-// 0x0018eb30
-CMatrix g_hookExitMatrix;
-// 0x00151aa0
-DWORD g_hookExitTaskArgument = 0xffffffff;
-// 0x0011c65c
-const float g_hookTrainExitOffset = 2.5f;
-// 0x0018e5bc
-DWORD g_hookQuitDeadline;
-// 0x0018f538
-DWORD g_hookDamageResponse;
-// 0x0018f53c
-DWORD g_hookDamagePed;
 // Raw GTA task ABI: continuation jumps and original constructor stack words.
 // 0x000a3580
 __declspec(naked) void GameHook_000a3580()
@@ -5041,6 +5089,7 @@ __declspec(naked) void GameHook_000a3580()
     }
     // clang-format on
 }
+
 // 0x000a35e0
 __declspec(naked) void GameHook_000a35e0()
 {
@@ -5133,6 +5182,7 @@ __declspec(naked) void GameHook_000a35e0()
     }
     // clang-format on
 }
+
 // 0x000a3a70
 __declspec(naked) void GameHook_000a3a70()
 {
@@ -5192,24 +5242,6 @@ __declspec(naked) void GameHook_000a3800()
     // clang-format on
 }
 
-// 0x0018e8c0
-DWORD g_hookPedControlField540;
-// 0x0018f378
-CPlayerPool* g_hookFaultPlayerPool;
-// 0x00151970
-WORD g_hookFaultPlayerId = 0xffff;
-// 0x0018e824
-CRemotePlayer* g_hookFaultRemotePlayer;
-// 0x00151a70
-const BYTE g_hookPedRestoreA[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
-// 0x00151a88
-const BYTE g_hookPedRestoreB[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
-// 0x00151a90
-const BYTE g_hookPedRemoteRestore[5] = {0xe8, 0x17, 0x88, 0xff, 0xff};
-// 0x0011ebcc
-const char g_hookPedExceptionLabel[10] = "playerped";
-// 0x0011ebac
-const char g_hookPedRemovedMessage[32] = "Removed player %u due to error.";
 // 0x000a2530
 void GameRunPedControlBackend()
 {
@@ -5242,6 +5274,7 @@ void GameRunPedControlBackend()
         }
     }
 }
+
 // extracted readable body
 // inline
 void GameProcessPedControlBody()

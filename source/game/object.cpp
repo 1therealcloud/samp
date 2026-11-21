@@ -4,8 +4,26 @@
 
 #include "game/object.h"
 
+#include "d3dhook/IDirect3DDevice9Hook.h"
+#include "game/camera.h"
+#include "game/custommodels.h"
+#include "game/game.h"
+#include "game/hooks.h"
+#include "game/playerped.h"
+#include "game/quaternion.h"
+#include "game/scripting.h"
+#include "game/textdraw.h"
+#include "game/util.h"
+#include "gui/gui.h"
 #include "main.h"
+#include "net/localplayer.h"
+#include "net/netgame.h"
+#include "net/objectpool.h"
+#include "net/playerpool.h"
+#include "net/vehiclepool.h"
+#include <GetTime.h>
 #include <static_assert.h>
+#include <stdlib.h>
 // Only the observed RenderWare prefixes used by these callbacks are described.
 // The complete backend layouts and ownership remain outside these views.
 enum ObjectRwObservedFlags
@@ -73,19 +91,53 @@ STATIC_ASSERT(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwG
               offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24);
 STATIC_ASSERT(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18);
 
+// 0x0011edfc
+const Scripting::OpcodeInfo g_objectSetRotationCommand = {0x453, "ifff"};
+// 0x0011ee7c
+extern const float g_objectMotionRotationSentinel = -999.0f;
+// 0x0011e648
+extern const float g_objectDegreesToRadians = 0.01745329238474369f;
+// 0x0011ee24
+extern const Scripting::OpcodeInfo g_objectIsAttachedCommand = {0x685, "i"};
+// 0x0011ee10
+extern const Scripting::OpcodeInfo g_objectAttachVehicleCommand = {0x681, "iiffffff"};
+// 0x0011ee38
+extern const Scripting::OpcodeInfo g_objectAttachObjectCommand = {0x69a, "iiffffff"};
+// 0x00118200
+extern const float g_objectStreamingNearDistance = 300.0f;
+// 0x00117878
+extern const float g_objectStreamingVehicleMargin = 30.0f;
+// 0x001181b0
+extern const float g_objectTurnVelocityScale = 0.01f;
+// 0x0011ee78
+extern const float g_objectNegativeTurnVelocityLimit = -0.001f;
+// 0x001e0498
+void* g_objectSharedMaterialTexture = 0;
+// 0x0011ee4c
+extern const Scripting::OpcodeInfo g_objectDestroyCommand = {0x108, "i"};
+// 0x0011ede8
+extern const Scripting::OpcodeInfo g_objectCreateCommand = {0x107, "ifffv"};
+// 0x001e0450
+CMatrix g_objectAttachmentMatrix;
+// 0x001e049c
+CVector g_objectAttachmentZeroSpeed = {0, 0, 0};
+// 0x0011ee80
+extern const float g_objectRenderDistanceThreshold = 600.0f;
+// 0x001e04a8
+BYTE g_objectRenderFlag;
+
 // 0x000715c0
 CVector* CObject::GetRotation()
 {
     return &eulerRotation;
 }
+
 // 0x00017750
 void CObject::DisableCameraCollision()
 {
     cameraCollisionDisabled = 1;
 }
-#include "game/scripting.h"
-// 0x0011edfc
-const Scripting::OpcodeInfo g_objectSetRotationCommand = {0x453, "ifff"};
+
 // 0x000a7c90
 void CObject::SetRotation(const CVector* rotation)
 {
@@ -98,16 +150,6 @@ void CObject::SetRotation(const CVector* rotation)
     }
 }
 
-#include "game/quaternion.h"
-#include "game/util.h"
-#include "net/localplayer.h"
-#include "net/netgame.h"
-#include "net/playerpool.h"
-#include "net/vehiclepool.h"
-#include <GetTime.h>
-#include <string.h>
-// 0x0011ee7c
-extern const float g_objectMotionRotationSentinel = -999.0f;
 // 0x000a7c20
 void CObject::Stop()
 {
@@ -116,6 +158,7 @@ void CObject::Stop()
     SetTurnSpeed(zero);
     motionFlags &= 0xfe;
 }
+
 // 0x000a7bf0
 float CObject::GetAngleDifference(float from, float to)
 {
@@ -123,8 +166,6 @@ float CObject::GetAngleDifference(float from, float to)
     to -= from;
     return GameNormalizeAngle(to);
 }
-// 0x0011e648
-extern const float g_objectDegreesToRadians = 0.01745329238474369f;
 // Keep the native x87 trigonometry and float spill boundaries. Only the nine
 // rotation coefficients are written; matrix padding and position are untouched.
 // 0x000a7fb0
@@ -151,12 +192,6 @@ void CObject::Rotate(float x, float y, float z)
     targetMatrix.at.z = cy * cx;
 }
 
-// 0x0011ee24
-extern const Scripting::OpcodeInfo g_objectIsAttachedCommand = {0x685, "i"};
-// 0x0011ee10
-extern const Scripting::OpcodeInfo g_objectAttachVehicleCommand = {0x681, "iiffffff"};
-// 0x0011ee38
-extern const Scripting::OpcodeInfo g_objectAttachObjectCommand = {0x69a, "iiffffff"};
 // Keep differences/products in x87 registers through sqrt, returning ST0.
 // 0x000a7bb0
 float CObject::GetDistanceToTarget(const CMatrix* matrix)
@@ -166,6 +201,7 @@ float CObject::GetDistanceToTarget(const CMatrix* matrix)
     float x = matrix->position.x - targetMatrix.position.x;
     return (float)sqrt(x * x + y * y + z * z);
 }
+
 // 0x000a7e30
 void CObject::AttachToVehicle(CVehicle* vehicle)
 {
@@ -175,6 +211,7 @@ void CObject::AttachToVehicle(CVehicle* vehicle)
                                   (double)attachmentOffset.z, (double)attachmentRotation.x, (double)attachmentRotation.y, (double)attachmentRotation.z);
     }
 }
+
 // 0x000a7eb0
 void CObject::AttachToObject(CObject* object)
 {
@@ -238,8 +275,6 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     }
     ClearBackendFlag8();
 }
-
-#include "gui/gui.h"
 
 // 0x000a8870
 bool CObject::GetMaterialSize(int code, int* width, int* height)
@@ -306,6 +341,7 @@ bool CObject::GetMaterialSize(int code, int* width, int* height)
             return false;
     }
 }
+
 // 0x000a9ad0
 void CObject::ConstructMaterialText()
 {
@@ -325,6 +361,7 @@ void CObject::ConstructMaterialText()
         }
     }
 }
+
 // 0x000a8ac0
 void CObject::ShutdownMaterialText()
 {
@@ -340,7 +377,6 @@ void CObject::ShutdownMaterialText()
     }
 }
 
-#include "game/game.h"
 // 0x000a7b40
 bool CObject::IsTimeVisible()
 {
@@ -362,6 +398,7 @@ bool CObject::IsTimeVisible()
     }
     return false;
 }
+
 // 0x000a8b90
 void CObject::ClearModelFlag0()
 {
@@ -372,6 +409,7 @@ void CObject::ClearModelFlag0()
             *(DWORD*)(info + 0x12) &= 0xfffffffe;
     }
 }
+
 // 0x000a9150
 void CObject::ProcessStreaming()
 {
@@ -412,16 +450,6 @@ void CObject::ProcessStreaming()
     }
 }
 
-#include "game/playerped.h"
-#include "net/objectpool.h"
-// 0x00118200
-extern const float g_objectStreamingNearDistance = 300.0f;
-// 0x00117878
-extern const float g_objectStreamingVehicleMargin = 30.0f;
-// 0x001181b0
-extern const float g_objectTurnVelocityScale = 0.01f;
-// 0x0011ee78
-extern const float g_objectNegativeTurnVelocityLimit = -0.001f;
 // 0x000a9240
 void CObject::Process(float elapsedSeconds)
 {
@@ -565,13 +593,6 @@ void CObject::Process(float elapsedSeconds)
     }
 }
 
-#include "d3dhook/IDirect3DDevice9Hook.h"
-#include "game/textdraw.h"
-#include <stdlib.h>
-// 0x001e0498
-void* g_objectSharedMaterialTexture = 0;
-// 0x0011ee4c
-extern const Scripting::OpcodeInfo g_objectDestroyCommand = {0x108, "i"};
 // 0x000a79a0
 void CObject::Add()
 {
@@ -579,6 +600,7 @@ void CObject::Add()
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         GameWorldAdd(m_pGameEntity);
 }
+
 // 0x000a79f0
 void CObject::Remove()
 {
@@ -586,6 +608,7 @@ void CObject::Remove()
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         GameWorldRemove(m_pGameEntity);
 }
+
 // 0x000a9020
 CObject::~CObject()
 {
@@ -629,9 +652,6 @@ CObject::~CObject()
     }
 }
 
-#include "game/custommodels.h"
-// 0x0011ede8
-extern const Scripting::OpcodeInfo g_objectCreateCommand = {0x107, "ifffv"};
 // 0x000a8bc0
 void CObject::UpdateCachedCentre()
 {
@@ -651,6 +671,7 @@ void CObject::UpdateCachedCentre()
         }
     }
 }
+
 // 0x000a8d00
 CObject::CObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour) : CEntity()
 {
@@ -758,6 +779,7 @@ BOOL CObject::IsAdded()
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && backendCreationMarker ? TRUE : FALSE;
 }
+
 // Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
 // 0x000a8c30
 void CObject::SetupLighting()
@@ -779,6 +801,7 @@ void CObject::SetupLighting()
         lightingPassEntered = 1;
     }
 }
+
 // Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
 // 0x000a8c70
 void CObject::RemoveLighting()
@@ -799,6 +822,7 @@ void CObject::RemoveLighting()
         lightingPassEntered = 0;
     }
 }
+
 // 0x000a8cc0
 bool CObject::HasRwFrameFlag8()
 {
@@ -834,6 +858,7 @@ void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* 
     for (int i = 0; i < 3; ++i)
         ((DWORD*)&attachmentRotation)[i] = *(const DWORD*)((const BYTE*)rotation + i * 4);
 }
+
 // 0x000a7d90
 void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* rotation, BYTE flag)
 {
@@ -855,6 +880,7 @@ void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* r
     attachmentRotationSync = flag;
     *(DWORD*)&attachmentRotation.z = last;
 }
+
 // 0x000a80b0
 BOOL CObject::IsMoving()
 {
@@ -922,6 +948,7 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
     }
     return atomic;
 }
+
 // 0x000a86c0
 void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
 {
@@ -946,6 +973,7 @@ void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
     state->materials.snapshotValid = 1;
     return atomic;
 }
+
 // 0x000a8740
 void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
 {
@@ -1001,7 +1029,6 @@ void CObject::ProcessMaterials()
         GameRwForAllFrameObjects(frame, ObjectApplyMaterials, this);
 }
 
-#include "game/util.h"
 // 0x000a82a0
 void CObject::SetMaterialText(int index, const char* text, BYTE size, const char* font, BYTE fontSize, BYTE bold, DWORD fontColor, DWORD backgroundColor, BYTE alignment)
 {
@@ -1052,7 +1079,6 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     hasMaterials = 1;
 }
 
-#include "game/util.h"
 // 0x000a8120
 void CObject::SetMaterial(int model, int index, const char* dictionary, const char* texture, DWORD color)
 {
@@ -1115,6 +1141,7 @@ void CObject::BeforeMaterialRender()
     }
     materialPassState = 1;
 }
+
 // 0x000a9a60
 void CObject::AfterMaterialRender()
 {
@@ -1134,10 +1161,6 @@ void CObject::AfterMaterialRender()
         GameRwForAllFrameObjects(frame, ObjectRestoreMaterials, this);
 }
 
-// 0x001e0450
-CMatrix g_objectAttachmentMatrix;
-// 0x001e049c
-CVector g_objectAttachmentZeroSpeed = {0, 0, 0};
 // 0x000a7a10
 void CObject::UpdateAttachedObjectRotation()
 {
@@ -1155,12 +1178,6 @@ void CObject::UpdateAttachedObjectRotation()
     SetSpeed(g_objectAttachmentZeroSpeed);
 }
 
-#include "game/camera.h"
-#include "game/hooks.h"
-// 0x0011ee80
-extern const float g_objectRenderDistanceThreshold = 600.0f;
-// 0x001e04a8
-BYTE g_objectRenderFlag;
 // Name follows the DL API map; original SA-MP spelling unconfirmed.
 // 0x000a8b50
 void CObject::Render()
@@ -1185,6 +1202,7 @@ void CObject::Render()
     }
     // clang-format on
 }
+
 // Name follows the DL API map; original SA-MP spelling unconfirmed.
 // 0x000a9b80
 void CObject::Draw()
@@ -1239,6 +1257,7 @@ void* __cdecl ObjectFrameIdentity(void* object, void*)
 {
     return object;
 }
+
 // 0x000a8b10
 void CObject::ProcessFrameObjectsOnce()
 {
@@ -1251,6 +1270,7 @@ void CObject::ProcessFrameObjectsOnce()
     GameRwForAllFrameObjects(frame, ObjectFrameIdentity, this);
     materials.frameObjectsProcessed = 1;
 }
+
 // 0x000a7f30
 void CObject::AttachToBackend(void* target, const CVector* offset, const CVector* rotation)
 {

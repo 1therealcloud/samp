@@ -10,32 +10,52 @@
 #include "game/util.h"
 // 0x00155470
 const BYTE g_modelLzmaProperties[5] = {0x5d, 0, 0, 1, 0};
+// 0x00117c9c
+const char g_customTxdVerifyError[] = "[warning] Could not verify 0x%X.txd. Error(%d) Deleting..";
+// 0x00117c60
+const char g_customTxdCountError[] = "[warning] Too many textures in 0x%X.txd. (%u) Deleting..";
+// 0x00117dac
+const char g_customDffVerifyError[] = "[warning] Could not validate 0x%X.dff. Error(%d) Deleting..";
+// 0x00117d68
+const char g_customDffParseError[] = "[warning] Could not validate 0x%X.dff. Error(%d:0x%X) Deleting..";
+// 0x0011f8d8
+const float g_modelCollisionVertexScale = 128.0f;
+// 0x0011f8dc
+const float g_modelCollisionVertexInvScale = 0.0078125f;
+// 0x00117884
+extern const float g_textDrawHalf;
+
 // 0x000b36f0
 void CModelFileStream::Reset()
 {
     position = 0;
     ended = 0;
 }
+
 // 0x000b3700
 BYTE CModelFileStream::HasEnded()
 {
     return ended;
 }
+
 // 0x000bc4e0
 int CModelGeometry::GetVertexCount()
 {
     return vertexCount;
 }
+
 // 0x000bc4f0
 BYTE CModelGeometry::HasVertexColors()
 {
     return hasColors;
 }
+
 // 0x000bc500
 void* CModelGeometry::GetVertexColors()
 {
     return colors;
 }
+
 // 0x000bc510
 DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE* first, const BYTE* second)
 {
@@ -68,6 +88,7 @@ DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE* first, const BYTE* sec
     }
     return 1;
 }
+
 // 0x000bbc80
 bool CDffFile::IsModified()
 {
@@ -77,6 +98,7 @@ bool CDffFile::IsModified()
             return true;
     return false;
 }
+
 // 0x000bc710
 DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk* child)
 {
@@ -87,6 +109,7 @@ DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk*
     parent->length += child->stream.length + 12;
     return 1;
 }
+
 // 0x000c5040
 int __stdcall ModelLzmaEncode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD sourceLength, BYTE* properties, DWORD* propertySize, int level,
                               DWORD dictionary, int lc, int lp, int pb, int fastBytes, int threads)
@@ -102,6 +125,7 @@ int __stdcall ModelLzmaEncode(BYTE* destination, DWORD* destinationLength, const
     options.numThreads = threads;
     return LzmaEncode(destination, (SizeT*)destinationLength, source, sourceLength, &options, properties, (SizeT*)propertySize, 0, 0, &g_Alloc, &g_Alloc);
 }
+
 // 0x0000b800
 CModelFileStream::CModelFileStream()
 {
@@ -114,6 +138,7 @@ CModelFileStream::CModelFileStream()
     scratchLength = 0;
     scratch = 0;
 }
+
 // 0x0000b820
 CModelFileStream::~CModelFileStream()
 {
@@ -123,6 +148,7 @@ CModelFileStream::~CModelFileStream()
         data = 0;
     }
 }
+
 // 0x000bc250
 int CModelFileStream::Compress()
 {
@@ -147,6 +173,7 @@ int CModelFileStream::Compress()
     compressed = 1;
     return result;
 }
+
 // 0x000bc300
 int CModelFileStream::Decompress(DWORD outputLength)
 {
@@ -168,14 +195,7 @@ int CModelFileStream::Decompress(DWORD outputLength)
     compressed = 0;
     return result;
 }
-// 0x00117c9c
-const char g_customTxdVerifyError[] = "[warning] Could not verify 0x%X.txd. Error(%d) Deleting..";
-// 0x00117c60
-const char g_customTxdCountError[] = "[warning] Too many textures in 0x%X.txd. (%u) Deleting..";
-// 0x00117dac
-const char g_customDffVerifyError[] = "[warning] Could not validate 0x%X.dff. Error(%d) Deleting..";
-// 0x00117d68
-const char g_customDffParseError[] = "[warning] Could not validate 0x%X.dff. Error(%d:0x%X) Deleting..";
+
 // 0x000bc060
 DWORD CModelFileStream::WriteFileChunks(FILE* file)
 {
@@ -197,6 +217,7 @@ DWORD CModelFileStream::WriteFileChunks(FILE* file)
     }
     return length;
 }
+
 // 0x000bc0c0
 DWORD CModelFileStream::SaveFile(const char* filename)
 {
@@ -207,11 +228,13 @@ DWORD CModelFileStream::SaveFile(const char* filename)
     fclose(file);
     return length;
 }
+
 // 0x000bc100
 DWORD CModelFileStream::SaveHandle(FILE* file)
 {
     return WriteFileChunks(file);
 }
+
 // 0x000bc110
 bool CModelFileStream::CopyBuffer()
 {
@@ -223,6 +246,7 @@ bool CModelFileStream::CopyBuffer()
     owned = 1;
     return true;
 }
+
 // 0x000bc150
 DWORD CModelFileStream::Write(const void* input, DWORD count)
 {
@@ -238,6 +262,7 @@ DWORD CModelFileStream::Write(const void* input, DWORD count)
     position += count;
     return count;
 }
+
 // 0x000bc1d0
 DWORD CModelFileStream::Read(void* output, DWORD count)
 {
@@ -257,6 +282,7 @@ DWORD CModelFileStream::Read(void* output, DWORD count)
     }
     return count;
 }
+
 // 0x000bc390
 DWORD CModelFileStream::LoadFile(const char* filename)
 {
@@ -284,17 +310,20 @@ DWORD CModelFileStream::LoadFile(const char* filename)
     ended = 0;
     return length;
 }
+
 // Equivalent native forwarding entry at RVA 0x000b9590; original duplicate identity unknown.
 // 0x000bc450
 DWORD CModelFileStream::WriteDword(DWORD value)
 {
     return Write(&value, 4);
 }
+
 // 0x000bc460
 DWORD CModelFileStream::WriteWord(WORD value)
 {
     return Write(&value, 2);
 }
+
 // 0x000bc470
 DWORD CModelFileStream::ReadDword()
 {
@@ -302,6 +331,7 @@ DWORD CModelFileStream::ReadDword()
     Read(&value, 4);
     return value;
 }
+
 // 0x000b36a0
 BYTE CModelFileStream::ReadByte()
 {
@@ -309,31 +339,37 @@ BYTE CModelFileStream::ReadByte()
     Read(&value, 1);
     return value;
 }
+
 // 0x000bc490
 BYTE* CModelFileStream::Current()
 {
     return data + position;
 }
+
 // 0x000bc4a0
 DWORD CModelFileStream::Remaining()
 {
     return length - position;
 }
+
 // 0x0000b850
 CModelFileChunk::~CModelFileChunk()
 {
     // The stream member performs the native owned-buffer cleanup.
 }
+
 // 0x0000b8a0
 DWORD CModelFileChunk::GetType()
 {
     return type;
 }
+
 // 0x0000b8b0
 DWORD CModelFileChunk::GetLength()
 {
     return length;
 }
+
 // 0x0000b8c0
 CTxdFile::CTxdFile()
 {
@@ -344,6 +380,7 @@ CTxdFile::CTxdFile()
     textureCount = 0;
     parsedCount = 0;
 }
+
 // 0x0000b8f0
 CTxdFile::~CTxdFile()
 {
@@ -358,16 +395,19 @@ CTxdFile::~CTxdFile()
         root = 0;
     }
 }
+
 // 0x0000b970
 DWORD CTxdFile::GetTextureCount()
 {
     return textureCount;
 }
+
 // 0x0000b980
 DWORD CTxdFile::GetError()
 {
     return error;
 }
+
 // 0x000bda10
 CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
 {
@@ -416,6 +456,7 @@ CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
     }
     return chunk;
 }
+
 // 0x000bdb20
 DWORD CTxdFile::ReadStructure(CModelFileChunk* chunk)
 {
@@ -427,6 +468,7 @@ DWORD CTxdFile::ReadStructure(CModelFileChunk* chunk)
     textureCount = (WORD)count;
     return 1;
 }
+
 // 0x000bdb60
 DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
 {
@@ -484,6 +526,7 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
     ++parsedCount;
     return 1;
 }
+
 // 0x000bdd80
 DWORD CTxdFile::ReadChildren(CModelFileChunk* parent)
 {
@@ -513,6 +556,7 @@ DWORD CTxdFile::ReadChildren(CModelFileChunk* parent)
     }
     return 1;
 }
+
 // 0x000bde10
 DWORD CTxdFile::LoadFile(const char* filename)
 {
@@ -538,6 +582,7 @@ DWORD CTxdFile::LoadFile(const char* filename)
     }
     return 1;
 }
+
 // 0x000bb280
 DWORD CDffFile::StoreFrames(CModelFileChunk* chunk)
 {
@@ -548,6 +593,7 @@ DWORD CDffFile::StoreFrames(CModelFileChunk* chunk)
     }
     return 0;
 }
+
 // 0x000bb2a0
 DWORD CDffFile::StoreGeometryList(CModelFileChunk* chunk)
 {
@@ -558,6 +604,7 @@ DWORD CDffFile::StoreGeometryList(CModelFileChunk* chunk)
     }
     return 0;
 }
+
 // 0x000bb2c0
 DWORD CDffFile::StoreAtomic(CModelFileChunk* chunk)
 {
@@ -568,6 +615,7 @@ DWORD CDffFile::StoreAtomic(CModelFileChunk* chunk)
     }
     return 0;
 }
+
 // 0x000bb2e0
 DWORD CDffFile::StoreStructure(CModelFileChunk* chunk)
 {
@@ -578,6 +626,7 @@ DWORD CDffFile::StoreStructure(CModelFileChunk* chunk)
     }
     return 0;
 }
+
 // 0x000bb300
 DWORD CDffFile::StoreExtension(CModelFileChunk* chunk)
 {
@@ -588,6 +637,7 @@ DWORD CDffFile::StoreExtension(CModelFileChunk* chunk)
     }
     return 0;
 }
+
 // 0x000bb320
 DWORD CDffFile::ReadChildren(CModelFileChunk* parent)
 {
@@ -632,6 +682,7 @@ DWORD CDffFile::ReadChildren(CModelFileChunk* parent)
     }
     return 1;
 }
+
 // 0x000bb460
 DWORD CDffFile::LoadFile(const char* filename)
 {
@@ -666,6 +717,7 @@ DWORD CDffFile::LoadFile(const char* filename)
     }
     return 1;
 }
+
 // 0x000bb520
 DWORD CDffFile::LoadCollisionFile(const char* filename)
 {
@@ -685,6 +737,7 @@ DWORD CDffFile::LoadCollisionFile(const char* filename)
     }
     return 1;
 }
+
 // 0x000bbaa0
 DWORD CDffFile::VerifyFrameExtension(CModelFileChunk* chunk)
 {
@@ -705,6 +758,7 @@ DWORD CDffFile::VerifyFrameExtension(CModelFileChunk* chunk)
     }
     return 1;
 }
+
 // 0x000bbb30
 DWORD CDffFile::ReadFrames()
 {
@@ -747,6 +801,7 @@ DWORD CDffFile::ReadFrames()
     }
     return 1;
 }
+
 // 0x000bb170
 CModelFileChunk* CDffFile::ReadChunk(CModelFileStream* input)
 {
@@ -795,12 +850,14 @@ CModelFileChunk* CDffFile::ReadChunk(CModelFileStream* input)
     }
     return chunk;
 }
+
 // inline
 CModelGeometryArray::CModelGeometryArray()
 {
     items = 0;
     count = 0;
 }
+
 // inline
 CModelGeometry* CModelGeometryArray::Get(DWORD index)
 {
@@ -808,38 +865,45 @@ CModelGeometry* CModelGeometryArray::Get(DWORD index)
         return 0;
     return items[index];
 }
+
 // inline
 DWORD CModelGeometryArray::GetCount()
 {
     return count;
 }
+
 // inline
 CModelMaterialArray::CModelMaterialArray()
 {
     items = 0;
     count = 0;
 }
+
 // inline
 void* CModelMaterialArray::Get(DWORD index)
 {
     return index < count ? items[index] : 0;
 }
+
 // inline
 DWORD CModelMaterialArray::GetCount()
 {
     return count;
 }
+
 // inline
 CModelMeshArray::CModelMeshArray()
 {
     items = 0;
     count = 0;
 }
+
 // inline
 BYTE* CModelMeshArray::Get(DWORD index)
 {
     return index < count ? items[index] : 0;
 }
+
 // inline
 DWORD CModelMeshArray::GetCount()
 {
@@ -875,6 +939,7 @@ __declspec(noinline) bool CModelMaterialArray::Resize(DWORD size)
     count = size;
     return true;
 }
+
 // 0x0000c5c0
 __declspec(noinline) bool CModelMeshArray::Resize(DWORD size)
 {
@@ -904,6 +969,7 @@ __declspec(noinline) bool CModelMeshArray::Resize(DWORD size)
     count = size;
     return true;
 }
+
 // 0x0000c630
 __declspec(noinline) bool CModelGeometryArray::Resize(DWORD size)
 {
@@ -933,6 +999,7 @@ __declspec(noinline) bool CModelGeometryArray::Resize(DWORD size)
     count = size;
     return true;
 }
+
 // 0x000bbe20
 DWORD CModelGeometryArray::Insert(CModelGeometry* geometry)
 {
@@ -962,6 +1029,7 @@ DWORD CModelGeometryArray::Insert(CModelGeometry* geometry)
     items[previous] = geometry;
     return previous;
 }
+
 // 0x000bbe80
 CModelGeometry::CModelGeometry()
 {
@@ -990,6 +1058,7 @@ CModelGeometry::CModelGeometry()
     material = 0;
     extension = 0;
 }
+
 // 0x0000d620
 CModelGeometry::~CModelGeometry()
 {
@@ -1046,6 +1115,7 @@ CModelGeometry::~CModelGeometry()
     }
     // Member destructors clear meshes, then materials, matching native order.
 }
+
 // 0x000bb110
 bool CModelGeometry::IsModified()
 {
@@ -1053,27 +1123,32 @@ bool CModelGeometry::IsModified()
         return true;
     return false;
 }
+
 // 0x000bb130
 DWORD CModelGeometry::GetError()
 {
     return error;
 }
+
 // 0x000bb140
 DWORD CModelGeometry::GetDetail()
 {
     return detail;
 }
+
 // 0x000bc4b0
 void CModelGeometry::SetError(DWORD value)
 {
     if (!error)
         error = value;
 }
+
 // 0x000bc4d0
 void CModelGeometry::SetDetail(DWORD value)
 {
     detail = value;
 }
+
 // 0x0000d820
 CDffFile::CDffFile()
 {
@@ -1090,6 +1165,7 @@ CDffFile::CDffFile()
     unknown44 = 0;
     frameData = 0;
 }
+
 // 0x0000d8f0
 CDffFile::~CDffFile()
 {
@@ -1135,6 +1211,7 @@ CDffFile::~CDffFile()
     // Native explicit clear precedes the geometry-array member destructor.
     geometries.Resize(0);
 }
+
 // 0x000bc600
 CModelFileChunk* CModelGeometry::ReadChunk(CModelFileStream* input)
 {
@@ -1183,6 +1260,7 @@ CModelFileChunk* CModelGeometry::ReadChunk(CModelFileStream* input)
     }
     return chunk;
 }
+
 // 0x000bcdb0
 DWORD CModelMaterialArray::Insert(void* entry)
 {
@@ -1212,6 +1290,7 @@ DWORD CModelMaterialArray::Insert(void* entry)
     items[previous] = entry;
     return previous;
 }
+
 // 0x000bce10
 DWORD CModelMeshArray::Insert(BYTE* entry)
 {
@@ -1241,6 +1320,7 @@ DWORD CModelMeshArray::Insert(BYTE* entry)
     items[previous] = entry;
     return previous;
 }
+
 // 0x000b36c0
 DWORD CModelFileStream::Skip(DWORD count)
 {
@@ -1254,6 +1334,7 @@ DWORD CModelFileStream::Skip(DWORD count)
     ended = 1;
     return length;
 }
+
 // 0x000bd180
 bool CModelGeometry::ReadMaterial(CModelFileStream* input)
 {
@@ -1348,6 +1429,7 @@ malformed:
         free(record);
     return false;
 }
+
 // 0x000bd5f0
 bool CModelGeometry::ReadMaterials(CModelFileStream* input)
 {
@@ -1385,6 +1467,7 @@ bool CModelGeometry::ReadMaterials(CModelFileStream* input)
     }
     return true;
 }
+
 // 0x000bc760
 bool CModelGeometry::ReadSkin(CModelFileStream* input)
 {
@@ -1423,6 +1506,7 @@ bool CModelGeometry::ReadSkin(CModelFileStream* input)
     skin.unknown1c = word;
     return !skin.unknown14 && !skin.unknown18 && !skin.unknown1c;
 }
+
 // 0x000bce70
 bool CModelGeometry::ReadExtensions(CModelFileStream* input)
 {
@@ -1518,6 +1602,7 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
     }
     return true;
 }
+
 // 0x000bd700
 bool CModelGeometry::Read(CModelFileStream* input, WORD version)
 {
@@ -1615,6 +1700,7 @@ incomplete:
         error = 0xabe1;
     return false;
 }
+
 // 0x000bbf00
 DWORD CDffFile::ReadGeometries()
 {
@@ -1672,11 +1758,13 @@ void CModelFileStream::SetBuffer(BYTE* buffer, DWORD size)
     ended = 0;
     owned = 0;
 }
+
 // 0x000bb060
 DWORD CModelFileStream::WriteByte(BYTE value)
 {
     return Write(&value, 1);
 }
+
 // 0x000bb070
 WORD CModelFileStream::ReadWord()
 {
@@ -1684,16 +1772,19 @@ WORD CModelFileStream::ReadWord()
     Read(&value, 2);
     return value;
 }
+
 // 0x000bb090
 BYTE* CModelFileStream::GetBuffer()
 {
     return data;
 }
+
 // 0x000bb0a0
 DWORD CModelFileStream::GetLength()
 {
     return length;
 }
+
 // 0x000bb0b0
 CModelFileChunk::CModelFileChunk()
 {
@@ -1702,6 +1793,7 @@ CModelFileChunk::CModelFileChunk()
     build = 0xffff;
     version = 0x1803;
 }
+
 // 0x000bb0e0
 void CModelFileChunk::SetBuffer(BYTE* buffer, DWORD size)
 {
@@ -1711,22 +1803,26 @@ void CModelFileChunk::SetBuffer(BYTE* buffer, DWORD size)
     stream.ended = 0;
     stream.owned = 0;
 }
+
 // 0x000bb100
 void CModelFileChunk::UpdateLength()
 {
     length = stream.length;
 }
+
 // 0x000bb150
 void CDffFile::SetError(DWORD value)
 {
     if (!error)
         error = value;
 }
+
 // 0x000bb160
 void CDffFile::SetDetail(DWORD value)
 {
     detail = value;
 }
+
 // 0x000bb940
 DWORD CDffFile::AppendChunk(CModelFileChunk* parent, const CModelFileChunk* child)
 {
@@ -1737,6 +1833,7 @@ DWORD CDffFile::AppendChunk(CModelFileChunk* parent, const CModelFileChunk* chil
     parent->length += child->stream.length + 12;
     return 1;
 }
+
 // 0x000bb990
 DWORD CDffFile::AppendCollisionFile(const char* filename)
 {
@@ -1749,6 +1846,7 @@ DWORD CDffFile::AppendCollisionFile(const char* filename)
     chunk.type = 0x253f2ff;
     return AppendChunk(extension, &chunk);
 }
+
 // 0x000bb5a0
 DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filename)
 {
@@ -1955,6 +2053,7 @@ CModelFileStream::CModelFileStream(BYTE* buffer, DWORD size)
     scratchLength = 0;
     scratch = 0;
 }
+
 // 0x000b3660
 float CModelFileStream::ReadFloat()
 {
@@ -1962,6 +2061,7 @@ float CModelFileStream::ReadFloat()
     Read(&value, 4);
     return value;
 }
+
 // 0x000b3680
 int CModelFileStream::ReadInt()
 {
@@ -1975,36 +2075,37 @@ void CModelGeometryArray::Clear()
 {
     Resize(0);
 }
+
 // 0x0000cfa0
 void CModelMaterialArray::Clear()
 {
     Resize(0);
 }
+
 // 0x0000cfb0
 void CModelMeshArray::Clear()
 {
     Resize(0);
 }
+
 // 0x0000d5f0
 CModelMaterialArray::~CModelMaterialArray()
 {
     Resize(0);
 }
+
 // 0x0000d600
 CModelMeshArray::~CModelMeshArray()
 {
     Resize(0);
 }
+
 // 0x0000d610
 CModelGeometryArray::~CModelGeometryArray()
 {
     Resize(0);
 }
 
-// 0x0011f8d8
-const float g_modelCollisionVertexScale = 128.0f;
-// 0x0011f8dc
-const float g_modelCollisionVertexInvScale = 0.0078125f;
 extern "C" __int64 __cdecl _ftol2();
 // 0x000b95d0
 DWORD CModelCollisionFile::SetInitialHeaderSize()
@@ -2012,6 +2113,7 @@ DWORD CModelCollisionFile::SetInitialHeaderSize()
     *(DWORD*)(nativeState + 4) = 0x74;
     return 1;
 }
+
 // 0x000b95e0
 DWORD CModelCollisionFile::CalculateGeometryBounds(const CModelGeometry* geometry, float* minimum, float* maximum)
 {
@@ -2040,6 +2142,7 @@ DWORD CModelCollisionFile::CalculateGeometryBounds(const CModelGeometry* geometr
     }
     return 1;
 }
+
 // 0x000b96e0
 DWORD CModelCollisionFile::SetGeometryBounds(const CModelGeometry* geometry)
 {
@@ -2047,16 +2150,19 @@ DWORD CModelCollisionFile::SetGeometryBounds(const CModelGeometry* geometry)
     memcpy(nativeState + 0x44, geometry->sphere + 3, 4);
     return 1;
 }
+
 // 0x000ba190
 DWORD CModelCollisionFile::AddSphere(ModelCollisionSphere* sphere)
 {
     return ((CModelCollisionSphereArray*)(nativeState + 0x80))->Insert(sphere);
 }
+
 // 0x000ba1a0
 __declspec(noinline) DWORD CModelCollisionFile::AddBox(ModelCollisionBox* box)
 {
     return ((CModelCollisionBoxArray*)(nativeState + 0x78))->Insert(box);
 }
+
 // 0x000ba240
 DWORD CModelCollisionFile::BuildBoxFromGeometry(const CModelGeometry* geometry)
 {
@@ -2070,6 +2176,7 @@ DWORD CModelCollisionFile::BuildBoxFromGeometry(const CModelGeometry* geometry)
     AddBox(box);
     return 1;
 }
+
 // 0x000b9710
 DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry* geometry)
 {
@@ -2109,6 +2216,7 @@ DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry* geometry)
     }
     return 0;
 }
+
 // 0x000b98a0
 bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex* vertex, const ModelCollisionBounds* bounds)
 {
@@ -2121,6 +2229,7 @@ bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex* vertex, con
         return true;
     return false;
 }
+
 // 0x000b9950
 bool CModelCollisionFile::TriangleHasVertexInBounds(const ModelCollisionTriangle* triangle, const ModelCollisionBounds* bounds)
 {
@@ -2130,6 +2239,7 @@ bool CModelCollisionFile::TriangleHasVertexInBounds(const ModelCollisionTriangle
         return true;
     return false;
 }
+
 // 0x000b99c0
 void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value)
 {
@@ -2140,6 +2250,7 @@ void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const Model
     if (value->values[2] < target->values[2])
         target->values[2] = value->values[2];
 }
+
 // 0x000b9a00
 void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value)
 {
@@ -2150,6 +2261,7 @@ void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const Model
     if (value->values[2] > target->values[2])
         target->values[2] = value->values[2];
 }
+
 // 0x000b9a40
 void* CModelCollisionBoxArray::Get(DWORD index)
 {
@@ -2157,11 +2269,13 @@ void* CModelCollisionBoxArray::Get(DWORD index)
         return 0;
     return items[index];
 }
+
 // 0x000b9a60
 DWORD CModelCollisionBoxArray::GetCount()
 {
     return count;
 }
+
 // 0x000b9b70
 bool CModelCollisionBoxArray::Resize(DWORD size)
 {
@@ -2191,6 +2305,7 @@ bool CModelCollisionBoxArray::Resize(DWORD size)
     count = size;
     return true;
 }
+
 // 0x000ba040
 DWORD CModelCollisionBoxArray::Insert(void* value)
 {
@@ -2220,6 +2335,7 @@ DWORD CModelCollisionBoxArray::Insert(void* value)
     items[previous] = value;
     return previous;
 }
+
 // 0x000b9a70
 void* CModelCollisionSphereArray::Get(DWORD index)
 {
@@ -2227,11 +2343,13 @@ void* CModelCollisionSphereArray::Get(DWORD index)
         return 0;
     return items[index];
 }
+
 // 0x000b9a90
 DWORD CModelCollisionSphereArray::GetCount()
 {
     return count;
 }
+
 // 0x000b9be0
 bool CModelCollisionSphereArray::Resize(DWORD size)
 {
@@ -2261,6 +2379,7 @@ bool CModelCollisionSphereArray::Resize(DWORD size)
     count = size;
     return true;
 }
+
 // 0x000ba0a0
 DWORD CModelCollisionSphereArray::Insert(void* value)
 {
@@ -2292,20 +2411,20 @@ DWORD CModelCollisionSphereArray::Insert(void* value)
 }
 
 // Shared native half constant, already maintained by textdraw.
-// 0x00117884
-extern const float g_textDrawHalf;
 // 0x000bab60
 CModelCollisionNode::CModelCollisionNode()
 {
     right = 0;
     left = 0;
 }
+
 // 0x000ba750
 CModelCollisionNode::~CModelCollisionNode()
 {
     delete left;
     delete right;
 }
+
 // 0x000b9d10
 __declspec(noinline) void CModelCollisionNode::CountLeaves(DWORD* count)
 {
@@ -2318,6 +2437,7 @@ __declspec(noinline) void CModelCollisionNode::CountLeaves(DWORD* count)
     if (triangles.size() > 0)
         ++*count;
 }
+
 // 0x000ba320
 void CModelCollisionNode::WriteLeaves(CModelCollisionFile* file)
 {
@@ -2361,6 +2481,7 @@ void CModelCollisionNode::WriteLeaves(CModelCollisionFile* file)
     ++*(DWORD*)(state + 0x9c);
     *(DWORD*)(state + 0x8c) += node->triangles.size();
 }
+
 // 0x000babf0
 void CModelCollisionNode::Split(CModelCollisionFile* file)
 {
@@ -2408,6 +2529,7 @@ void CModelCollisionNode::Split(CModelCollisionFile* file)
     if (right->triangles.size() > 80)
         right->Split(file);
 }
+
 // 0x000baec0
 DWORD CModelCollisionFile::BuildFaceGroups()
 {
@@ -2431,6 +2553,7 @@ DWORD CModelCollisionFile::BuildFaceGroups()
     root.WriteLeaves(this);
     return count;
 }
+
 // 0x000b9d50
 DWORD CModelCollisionFile::SaveFile(const char* filename, const char* modelName)
 {

@@ -9,6 +9,7 @@ __declspec(noinline) CTask::CTask()
     m_pTaskType = 0;
     m_pPlayerPed = 0;
 }
+
 // 0x000b2560
 CTask::CTask(DWORD size)
 {
@@ -16,6 +17,7 @@ CTask::CTask(DWORD size)
     m_pPlayerPed = 0;
     Create(size);
 }
+
 // 0x000b2590
 __declspec(noinline) CTask::CTask(BYTE* task)
 {
@@ -23,9 +25,11 @@ __declspec(noinline) CTask::CTask(BYTE* task)
     m_pPlayerPed = 0;
     Create(task);
 }
+
 // Native destruction only resets the vptr; Destroy is a separate operation.
 // 0x000b21a0
 __declspec(noinline) CTask::~CTask() {}
+
 // GTA SA virtual address: 0x0061A5A0, backend task allocation.
 // 0x000b21b0
 void CTask::Create(DWORD bytes)
@@ -43,12 +47,14 @@ void CTask::Create(DWORD bytes)
     m_bSelfCreated = TRUE;
     m_pTaskType = task;
 }
+
 // 0x000b21e0
 __declspec(noinline) void CTask::Create(BYTE* task)
 {
     m_bSelfCreated = FALSE;
     m_pTaskType = task;
 }
+
 // 0x000b25b0
 CTask* CTask::CreateCopy()
 {
@@ -65,6 +71,7 @@ CTask* CTask::CreateCopy()
     // clang-format on
     return new CTask(task);
 }
+
 // Native self-created tasks use deletion flag 0; attached tasks use flag 1.
 // 0x000b2200
 __declspec(noinline) void CTask::Destroy()
@@ -110,6 +117,7 @@ void CTask::ApplyToPed(CPed* ped)
     // clang-format on
     *g_clientCrashPedContext = 0;
 }
+
 // 0x000b22c0
 DWORD CTask::GetID()
 {
@@ -127,6 +135,7 @@ DWORD CTask::GetID()
     // clang-format on
     return result;
 }
+
 // GTA SA virtual vtable address: 0x0086D48C, backend base-task sentinel.
 // 0x000b22e0
 BOOL CTask::IsDestroyed()
@@ -174,6 +183,7 @@ CTaskJetpack::CTaskJetpack()
     }
     // clang-format on
 }
+
 // 0x000b2380
 CTaskJetpack::CTaskJetpack(BYTE* task)
 {
@@ -254,6 +264,7 @@ CTaskGoToPoint::CTaskGoToPoint(DWORD moveState, const CVector* target, float rad
     }
     // clang-format on
 }
+
 // 0x000b2690
 CTaskGoToPoint::~CTaskGoToPoint() {}
 // GTA SA virtual address: 0x00621190; backend extent92. Native argument order:
@@ -277,5 +288,6 @@ CTaskKillPedOnFootArmed::CTaskKillPedOnFootArmed(DWORD competence, DWORD duckTim
     }
     // clang-format on
 }
+
 // 0x000b26c0
 CTaskKillPedOnFootArmed::~CTaskKillPedOnFootArmed() {}

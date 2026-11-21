@@ -17,6 +17,7 @@ int CAudio::GetRadioStation()
     if (station < 0 || station > 12) return -1;
     return station;
 }
+
 // 0x000a2060
 void CAudio::StartRadio(int station)
 {
@@ -30,6 +31,7 @@ void CAudio::StartRadio(int station)
     }
     // clang-format on
 }
+
 // 0x000a2080
 void CAudio::StopRadio()
 {
@@ -43,11 +45,13 @@ void CAudio::StopRadio()
     }
     // clang-format on
 }
+
 // 0x000a20a0
 float CAudio::GetRadioVolume()
 {
     return *(float*)0xb5fcc8;
 }
+
 // 0x000a20b0
 void CAudio::StopOutdoorAmbienceTrack()
 {
@@ -59,6 +63,7 @@ void CAudio::StopOutdoorAmbienceTrack()
     }
     // clang-format on
 }
+
 // 0x000a20c0
 void CAudio::SetOutdoorAmbienceTrack(int track)
 {
@@ -71,11 +76,13 @@ void CAudio::SetOutdoorAmbienceTrack(int track)
     }
     // clang-format on
 }
+
 // 0x000a21c0
 bool CAudio::IsOutdoorAmbienceTrackDisabled()
 {
     return m_bOutdoorAmbienceTrackDisabled;
 }
+
 // 0x000a20e0
 void CAudio::Play(int sound, CVector position)
 {

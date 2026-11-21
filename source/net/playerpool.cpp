@@ -2,9 +2,26 @@
 
 #include "net/playerpool.h"
 
+#include "game/game.h"
+#include "game/playerped.h"
 #include "main.h"
+#include "net/actorpool.h"
+#include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerinfo.h"
+#include "net/remoteplayer.h"
+// 0x00156b84
+DWORD g_playerPoolProcessCount;
+// 0x0011817c
+const char g_playerPoolRemoteException[] = "s001";
+// 0x00118174
+const char g_playerPoolLocalException[] = "s002";
+
+// 0x00156ac0
+DWORD g_cachedActivePlayerCount = 0;
+// 0x00156ac4
+DWORD g_activePlayerCountCountdown = 0;
+
 // 0x000010d0
 CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
 {
@@ -16,40 +33,33 @@ CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
     }
     return 0;
 }
+
 // 0x0000a1d0
 const char* CPlayerPool::GetLocalPlayerName()
 {
     return localName.c_str();
 }
+
 // 0x0000b5e0
 void CPlayerPool::SetLocalPlayerName(const char* text)
 {
     localName.assign(text, strlen(text));
 }
+
 // 0x00013630
 void CPlayerPool::SetAt(WORD player, CPlayerInfo* info)
 {
     if (player <= 1004)
         *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4) = info;
 }
+
 // 0x0001da50
 void CPlayerPool::SetName(WORD player, const char* text)
 {
     if (player <= 1004 && players[player])
         players[player]->name.assign(text, strlen(text));
 }
-#include "game/game.h"
-#include "game/playerped.h"
-#include "net/actorpool.h"
-#include "net/localplayer.h"
-#include "net/playerinfo.h"
-#include "net/remoteplayer.h"
-// 0x00156b84
-DWORD g_playerPoolProcessCount;
-// 0x0011817c
-const char g_playerPoolRemoteException[] = "s001";
-// 0x00118174
-const char g_playerPoolLocalException[] = "s002";
+
 // 0x000136c0
 BOOL CPlayerPool::Process()
 {
@@ -78,6 +88,7 @@ BOOL CPlayerPool::Process()
     }
     return TRUE;
 }
+
 // 0x00013c50
 WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord)
 {
@@ -139,6 +150,7 @@ WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, cons
     }
     return selected;
 }
+
 // 0x000139f0
 void CPlayerPool::Deactivate()
 {
@@ -152,6 +164,7 @@ void CPlayerPool::Deactivate()
             remote->m_state.showNameTag = 1;
         }
 }
+
 // 0x00013e80
 CPlayerPool::CPlayerPool()
 {
@@ -167,6 +180,7 @@ CPlayerPool::CPlayerPool()
     localId = 0;
     largestId = 0;
 }
+
 // 0x00014100
 BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
 {
@@ -188,6 +202,7 @@ BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
     UpdateLargestId();
     return TRUE;
 }
+
 // 0x00013f40
 BOOL CPlayerPool::Delete(WORD id, BYTE reason)
 {
@@ -202,6 +217,7 @@ BOOL CPlayerPool::Delete(WORD id, BYTE reason)
     UpdateLargestId();
     return TRUE;
 }
+
 // 0x00013fd0
 CPlayerPool::~CPlayerPool()
 {
@@ -211,6 +227,7 @@ CPlayerPool::~CPlayerPool()
     for (WORD id = 0; id < 1004; id++)
         Delete(id, 0);
 }
+
 // 0x00013650
 void CPlayerPool::UpdateLargestId()
 {
@@ -220,6 +237,7 @@ void CPlayerPool::UpdateLargestId()
             largest = id;
     largestId = largest;
 }
+
 // 0x00013b50
 void CPlayerPool::ForceCollision()
 {
@@ -237,6 +255,7 @@ void CPlayerPool::ForceCollision()
         }
     }
 }
+
 // 0x00013bd0
 void CPlayerPool::RestoreCollision()
 {
@@ -256,11 +275,13 @@ void CPlayerPool::RestoreCollision()
         }
     }
 }
+
 // 0x00001a80
 CLocalPlayer* CPlayerPool::GetLocalPlayer()
 {
     return local;
 }
+
 // 0x000138c0
 int CPlayerPool::GetCount(BOOL includeFlagged)
 {
@@ -279,6 +300,7 @@ int CPlayerPool::GetCount(BOOL includeFlagged)
     }
     return count;
 }
+
 // 0x0006e290
 int CPlayerPool::GetScore(WORD player)
 {
@@ -293,6 +315,7 @@ int CPlayerPool::GetScore(WORD player)
     }
     return *(int*)entry;
 }
+
 // 0x0006e2b0
 DWORD CPlayerPool::GetPing(WORD player)
 {
@@ -307,16 +330,19 @@ DWORD CPlayerPool::GetPing(WORD player)
     }
     return *(DWORD*)(entry + 0xc);
 }
+
 // 0x0006e2e0
 int CPlayerPool::GetLocalScore()
 {
     return localScore;
 }
+
 // 0x0006e2f0
 DWORD CPlayerPool::GetLocalPing()
 {
     return localPing;
 }
+
 // 0x000010f0
 CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
 {
@@ -328,6 +354,7 @@ CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
     }
     return 0;
 }
+
 // 0x000010b0
 DWORD CPlayerPool::IsConnected(WORD player)
 {
@@ -335,6 +362,7 @@ DWORD CPlayerPool::IsConnected(WORD player)
         return 0;
     return *(DWORD*)((BYTE*)this + 0xfd6 + player * 4);
 }
+
 // 0x0000e300
 DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
 {
@@ -349,6 +377,7 @@ DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
     }
     return *(DWORD*)(entry + 4);
 }
+
 // 0x000137c0
 WORD CPlayerPool::Find(void* ped)
 {
@@ -455,6 +484,7 @@ int CPlayerPool::GetLargestId()
 {
     return largestId;
 }
+
 // 0x00002de0
 WORD CPlayerPool::GetLocalId()
 {
@@ -481,6 +511,7 @@ void CPlayerPool::SetScore(WORD id, int value)
     if (info)
         info->score = value;
 }
+
 // 0x0000e380
 void CPlayerPool::SetPing(WORD id, DWORD value)
 {
@@ -496,10 +527,6 @@ void CPlayerPool::SetPing(WORD id, DWORD value)
         info->ping = value;
 }
 
-// 0x00156ac0
-DWORD g_cachedActivePlayerCount = 0;
-// 0x00156ac4
-DWORD g_activePlayerCountCountdown = 0;
 // ECX and stack arguments unused; original class ownership is not established.
 // 0x00003ff0
 DWORD GetCachedActivePlayerCount()

@@ -4,7 +4,26 @@
 
 #include "net/objectpool.h"
 
+#include "game/custommodels.h"
+#include "gui/gui.h"
+#include "gui/label.h"
 #include "main.h"
+// 0x00156b74
+DWORD g_objectPoolLastTick;
+// 0x00118130
+const float g_objectPoolSecondsPerTick = 0.001f;
+
+// 0x00156b5c
+GameEntityCollisionShape g_objectPoolRayOrigin;
+// 0x00156b48
+GameEntityCollisionShape g_objectPoolRayEnd;
+// 0x00156b70
+CObject* g_objectPoolRayDebugObject;
+// 0x0011813c
+const char g_objectPoolRayOriginText[8] = "Sphere1";
+// 0x00118134
+const char g_objectPoolRayEndText[8] = "Sphere2";
+
 // 0x00012700
 CObjectPool::CObjectPool()
 {
@@ -15,6 +34,7 @@ CObjectPool::CObjectPool()
     }
     largestId = 0;
 }
+
 // 0x000126a0
 void CObjectPool::UpdateLargestId()
 {
@@ -24,6 +44,7 @@ void CObjectPool::UpdateLargestId()
             largest = i;
     largestId = largest;
 }
+
 // 0x00012730
 int CObjectPool::GetCount()
 {
@@ -39,6 +60,7 @@ int CObjectPool::GetCount()
     while (--remaining);
     return count;
 }
+
 // 0x00012750
 BOOL CObjectPool::Delete(WORD id)
 {
@@ -56,12 +78,14 @@ BOOL CObjectPool::Delete(WORD id)
     UpdateLargestId();
     return TRUE;
 }
+
 // 0x00013060
 CObjectPool::~CObjectPool()
 {
     for (int i = 0; i < 2100; ++i)
         Delete((WORD)i);
 }
+
 // 0x000128d0
 CObject* CObjectPool::Find(void* backend)
 {
@@ -71,6 +95,7 @@ CObject* CObjectPool::Find(void* backend)
             return objects[i];
     return 0;
 }
+
 // 0x00012910
 WORD CObjectPool::GetId(void* backend)
 {
@@ -80,6 +105,7 @@ WORD CObjectPool::GetId(void* backend)
             return (WORD)i;
     return 0xffff;
 }
+
 // 0x00002e10
 CEntity* CObjectPool::Get(WORD id)
 {
@@ -88,10 +114,6 @@ CEntity* CObjectPool::Get(WORD id)
         return *(CEntity**)(state + 0x20d4 + id * 4);
     return 0;
 }
-// 0x00156b74
-DWORD g_objectPoolLastTick;
-// 0x00118130
-const float g_objectPoolSecondsPerTick = 0.001f;
 
 // 0x00012950
 void CObjectPool::Process()
@@ -113,6 +135,7 @@ void CObjectPool::Process()
     }
     g_objectPoolLastTick = now;
 }
+
 // 0x00012a10
 void CObjectPool::ConstructMaterials()
 {
@@ -131,6 +154,7 @@ void CObjectPool::ConstructMaterials()
         while ((LONG)++i <= largestId);
     }
 }
+
 // 0x00012a50
 void CObjectPool::ShutdownMaterials()
 {
@@ -150,7 +174,6 @@ void CObjectPool::ShutdownMaterials()
     }
 }
 
-#include "game/custommodels.h"
 // 0x000127d0
 BOOL CObjectPool::Create(WORD id, int model, CVector position, CVector rotation, float drawDistance)
 {
@@ -187,6 +210,7 @@ void CObjectPool::Draw()
                 object->Draw();
         }
 }
+
 // 0x00012ad0
 void CObjectPool::DrawLast()
 {
@@ -250,13 +274,6 @@ bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, con
     return false;
 }
 
-// 0x00156b5c
-GameEntityCollisionShape g_objectPoolRayOrigin;
-// 0x00156b48
-GameEntityCollisionShape g_objectPoolRayEnd;
-// 0x00156b70
-CObject* g_objectPoolRayDebugObject;
-
 // 0x00012d70
 WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVector* end)
 {
@@ -319,13 +336,6 @@ WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVec
     return selected;
 }
 
-#include "gui/gui.h"
-#include "gui/label.h"
-// 0x0011813c
-const char g_objectPoolRayOriginText[8] = "Sphere1";
-// 0x00118134
-const char g_objectPoolRayEndText[8] = "Sphere2";
-
 // 0x00012f50
 void DrawObjectPoolCollisionDebug()
 {
@@ -353,6 +363,7 @@ int CObjectPool::GetLargestId()
 {
     return largestId;
 }
+
 // 0x00012680
 DWORD CObjectPool::IsActive(WORD id)
 {
@@ -360,6 +371,7 @@ DWORD CObjectPool::IsActive(WORD id)
         return 0;
     return *(DWORD*)((BYTE*)this + 4 + id * 4);
 }
+
 // 0x000129d0
 void CObjectPool::UpdateAttachedObjectRotations()
 {

@@ -99,6 +99,7 @@ public:
     {
         memset(m_aSpeedHistory, 0, sizeof(m_aSpeedHistory));
     }
+
     // Native only resets the vptr; backend/history storage is untouched.
     // 0x0009bd00
     virtual ~CEntity() {}

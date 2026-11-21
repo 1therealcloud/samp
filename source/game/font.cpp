@@ -16,6 +16,7 @@ void Font_PrintString(float x, float y, char* text)
     }
     // clang-format on
 }
+
 // 0x0009fca0
 __declspec(naked) void Font_SetColor(DWORD color)
 {
@@ -24,6 +25,7 @@ __declspec(naked) void Font_SetColor(DWORD color)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fcb0
 __declspec(naked) void Font_SetDropColor(DWORD color)
 {
@@ -32,6 +34,7 @@ __declspec(naked) void Font_SetDropColor(DWORD color)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fcc0
 __declspec(naked) void Font_SetOutline(int outline)
 {
@@ -40,6 +43,7 @@ __declspec(naked) void Font_SetOutline(int outline)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fcd0
 __declspec(naked) void Font_Unk12(int value)
 {
@@ -48,6 +52,7 @@ __declspec(naked) void Font_Unk12(int value)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fce0
 __declspec(naked) void Font_SetScale(float x, float y)
 {
@@ -56,6 +61,7 @@ __declspec(naked) void Font_SetScale(float x, float y)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fcf0
 __declspec(naked) void Font_SetJustify(int justify)
 {
@@ -64,6 +70,7 @@ __declspec(naked) void Font_SetJustify(int justify)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd00
 __declspec(naked) void Font_SetFontStyle(int style)
 {
@@ -72,6 +79,7 @@ __declspec(naked) void Font_SetFontStyle(int style)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd10
 __declspec(naked) void Font_SetProportional(int proportional)
 {
@@ -80,6 +88,7 @@ __declspec(naked) void Font_SetProportional(int proportional)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd20
 __declspec(naked) void Font_SetRightJustifyWrap(float wrap)
 {
@@ -88,6 +97,7 @@ __declspec(naked) void Font_SetRightJustifyWrap(float wrap)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd30
 __declspec(naked) void Font_UseBox(int use, int unknown)
 {
@@ -96,6 +106,7 @@ __declspec(naked) void Font_UseBox(int use, int unknown)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd40
 __declspec(naked) void Font_UseBoxColor(DWORD color)
 {
@@ -104,6 +115,7 @@ __declspec(naked) void Font_UseBoxColor(DWORD color)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd50
 __declspec(naked) void Font_SetLineWidth(float width)
 {
@@ -112,6 +124,7 @@ __declspec(naked) void Font_SetLineWidth(float width)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd60
 __declspec(naked) void Font_SetLineHeight(float height)
 {
@@ -120,6 +133,7 @@ __declspec(naked) void Font_SetLineHeight(float height)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd70
 __declspec(naked) void Font_SetShadow(int shadow)
 {
@@ -128,6 +142,7 @@ __declspec(naked) void Font_SetShadow(int shadow)
     __asm jmp eax
     // clang-format on
 }
+
 // 0x0009fd90
 __declspec(naked) void Font_UnkConv2(char* text){
     // clang-format off

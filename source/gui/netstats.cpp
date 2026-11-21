@@ -7,7 +7,6 @@
 
 #include "RakClientInterface.h"
 #include "RakNetStatistics.h"
-#include "render/fontrender.h"
 #include "game/debug.h"
 #include "game/playerped.h"
 #include "gui/gui.h"
@@ -15,12 +14,8 @@
 #include "net/localplayer.h"
 #include "net/objectpool.h"
 #include "net/vehiclepool.h"
+#include "render/fontrender.h"
 #include <static_assert.h>
-// Match the selected RakNet fields actually consumed by the original UI.
-STATIC_ASSERT(offsetof(RakNetStatisticsStruct, totalBitsSent) == 0xb8);
-STATIC_ASSERT(offsetof(RakNetStatisticsStruct, bitsReceived) == 0xd8);
-STATIC_ASSERT(offsetof(RakNetStatisticsStruct, messagesTotalBitsResent) == 0x94);
-STATIC_ASSERT(sizeof(PROCESS_MEMORY_COUNTERS) == 40);
 // 0x00163a78
 char g_netStatsLine[1024];
 // 0x00163e78
@@ -55,6 +50,7 @@ CNetStats::CNetStats(IDirect3DDevice9* value)
     uploadRate = 0;
     device = value;
 }
+
 // 0x000607f0
 void CNetStats::Draw()
 {

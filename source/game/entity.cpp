@@ -2,9 +2,38 @@
 
 #include "game/entity.h"
 
+#include "game/camera.h"
 #include "game/game.h"
 #include "game/scripting.h"
+#include "game/util.h"
+#include "gui/chatwindow.h"
 #include "main.h"
+#include <math.h>
+// 0x001181b8
+extern const float g_entityRadiansToDegrees = 57.2957763671875f;
+// 0x0011c660
+extern const float g_entityEulerSign = -1.0f;
+// 0x0011b31c
+extern const float g_entityBoundaryLift = 0.03999999910593033f;
+
+// 0x0011e644
+const float g_entityUnavailableDistance = 100000.0f;
+GameEntityCollisionShape g_entityCollisionShapeA;
+// 0x0018de4c
+GameEntityCollisionShape g_entityCollisionShapeB;
+// 0x0018de7c
+void* g_entityCollisionEntity;
+// 0x00155404
+GameEntityCollisionBackend g_entityCollisionBackend = (GameEntityCollisionBackend)0x419f00; // GTA SA virtual address.
+// 0x00155408
+void** g_entityCollisionContextSlot = (void**)0x9655cc; // GTA SA virtual address.
+// 0x002abe5c
+void* g_entityCollisionSavedContext;
+// 0x002abe60
+BYTE g_entityCollisionResult;
+// 0x0011e64c
+const char g_entityDetachExceptionLabel[5] = "s113";
+
 // 0x0009e950
 void CEntity::GetMatrix(CMatrix* matrix)
 {
@@ -23,6 +52,7 @@ void CEntity::GetMatrix(CMatrix* matrix)
     matrix->position.y = m_pEntity->matrix->position.y;
     matrix->position.z = m_pEntity->matrix->position.z;
 }
+
 // 0x0009ee80
 void CEntity::Teleport(float x, float y, float z)
 {
@@ -48,6 +78,7 @@ void CEntity::Teleport(float x, float y, float z)
         }
     }
 }
+
 // 0x0009f140
 void CEntity::Add()
 {
@@ -62,6 +93,7 @@ void CEntity::Add()
         Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
     }
 }
+
 // 0x0009f240
 void CEntity::Remove()
 {
@@ -69,12 +101,6 @@ void CEntity::Remove()
         GameWorldRemove(m_pGameEntity);
 }
 
-// 0x001181b8
-extern const float g_entityRadiansToDegrees = 57.2957763671875f;
-// 0x0011c660
-extern const float g_entityEulerSign = -1.0f;
-// 0x0011b31c
-extern const float g_entityBoundaryLift = 0.03999999910593033f;
 // 0x0009ea00
 void CEntity::SetMatrix(CMatrix matrix)
 {
@@ -93,6 +119,7 @@ void CEntity::SetMatrix(CMatrix matrix)
     m_pEntity->matrix->position.y = matrix.position.y;
     m_pEntity->matrix->position.z = matrix.position.z;
 }
+
 // 0x0009eb20
 void CEntity::GetSpeed(CVector* speed)
 {
@@ -100,6 +127,7 @@ void CEntity::GetSpeed(CVector* speed)
     speed->y = m_pEntity->speed.y;
     speed->z = m_pEntity->speed.z;
 }
+
 // 0x0009eb50
 void CEntity::SetSpeed(CVector speed)
 {
@@ -107,6 +135,7 @@ void CEntity::SetSpeed(CVector speed)
     m_pEntity->speed.y = speed.y;
     m_pEntity->speed.z = speed.z;
 }
+
 // 0x0009ec70
 void CEntity::GetTurnSpeed(CVector* speed)
 {
@@ -114,6 +143,7 @@ void CEntity::GetTurnSpeed(CVector* speed)
     speed->y = m_pEntity->turnSpeed.y;
     speed->z = m_pEntity->turnSpeed.z;
 }
+
 // 0x0009eca0
 void CEntity::SetTurnSpeed(CVector speed)
 {
@@ -121,6 +151,7 @@ void CEntity::SetTurnSpeed(CVector speed)
     m_pEntity->turnSpeed.y = speed.y;
     m_pEntity->turnSpeed.z = speed.z;
 }
+
 // 0x0009ecd0
 void CEntity::ApplyTurnSpeed()
 {
@@ -136,6 +167,7 @@ void CEntity::ApplyTurnSpeed()
     }
     // clang-format on
 }
+
 // GTA returns raw float bits in EAX, not an ST0 float result.
 // 0x0009ecf0
 float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
@@ -155,6 +187,7 @@ float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
     // clang-format on
     return distance;
 }
+
 // 0x0009ed30
 void CEntity::GetBoundCentre(CVector* centre)
 {
@@ -171,16 +204,19 @@ void CEntity::GetBoundCentre(CVector* centre)
     }
     // clang-format on
 }
+
 // 0x0009ee70
 int CEntity::GetModelIndex()
 {
     return (int)*(short*)((BYTE*)m_pGameEntity + 0x22);
 }
+
 // 0x0009f210
 BOOL CEntity::DoesExist()
 {
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0xb4) ? TRUE : FALSE;
 }
+
 // 0x0009f260
 BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
@@ -240,6 +276,7 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
     }
     return FALSE;
 }
+
 // 0x0009f400
 BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
@@ -257,6 +294,7 @@ BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float 
         return TRUE;
     return FALSE;
 }
+
 // 0x0009f4a0
 DWORD CEntity::GetCollisionFlag()
 {
@@ -264,6 +302,7 @@ DWORD CEntity::GetCollisionFlag()
         return 1;
     return *(BYTE*)&m_pEntity->flags & 1;
 }
+
 // 0x0009f470
 void CEntity::SetCollisionFlag(BOOL enabled)
 {
@@ -275,6 +314,7 @@ void CEntity::SetCollisionFlag(BOOL enabled)
             m_pEntity->flags &= ~1u;
     }
 }
+
 // 0x0009f4c0
 void CEntity::SetCollisionProcessed(BOOL processed)
 {
@@ -286,6 +326,7 @@ void CEntity::SetCollisionProcessed(BOOL processed)
             m_pEntity->flags |= 0x80000002;
     }
 }
+
 // 0x0009f730
 void CEntity::GetEulerInverted(float* x, float* y, float* z)
 {
@@ -329,6 +370,7 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
         // clang-format on
     }
 }
+
 // 0x0009f8a0
 DWORD* CEntity::GetRwObject()
 {
@@ -336,6 +378,7 @@ DWORD* CEntity::GetRwObject()
         return 0;
     return m_pEntity->rwObject;
 }
+
 // 0x0009f9f0
 void CEntity::DeleteRwObject()
 {
@@ -352,6 +395,7 @@ void CEntity::DeleteRwObject()
         // clang-format on
     }
 }
+
 // 0x0009fb20
 bool CEntity::IsIgnored()
 {
@@ -359,6 +403,7 @@ bool CEntity::IsIgnored()
         return true;
     return false;
 }
+
 // 0x0009fc20
 BOOL CEntity::IsStationary()
 {
@@ -368,6 +413,7 @@ BOOL CEntity::IsStationary()
         return TRUE;
     return FALSE;
 }
+
 // 0x0009eac0
 void CEntity::UpdateRwFrame()
 {
@@ -396,7 +442,6 @@ void CEntity::UpdateRwFrame()
     }
 }
 
-#include <math.h>
 // clang-format off
 // 0x0009fb40
 __declspec(naked) void CEntity::ApplyMatrix(CMatrix matrix)
@@ -469,8 +514,6 @@ void CEntity::ClearBackendFlag8()
         *(DWORD*)((BYTE*)m_pGameEntity + 0x40) &= 0xfffffff7;
 }
 
-#include "gui/chatwindow.h"
-#include "game/game.h"
 // 0x0009ed90
 BOOL CEntity::SetModelIndex(int model)
 {
@@ -534,11 +577,6 @@ DWORD __stdcall GameReadBackendDword(const void* backend)
 {
     return *(const DWORD*)backend;
 }
-
-#include "game/camera.h"
-
-// 0x0011e644
-const float g_entityUnavailableDistance = 100000.0f;
 
 // Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
 // 0x0009ef00
@@ -715,7 +753,6 @@ __declspec(naked) float CEntity::GetDistanceToLocalPlayerNoHeight()
     // clang-format on
 }
 
-// Descriptive name: native only establishes setting backend +1C bit 31.
 // 0x0009f560
 void CEntity::SetBackendHighFlag()
 {
@@ -723,6 +760,7 @@ void CEntity::SetBackendHighFlag()
     if (backend && *backend != 0x863c40)
         backend[7] |= 0x80000000;
 }
+
 // GTA vtable slot 10 (+28), ProcessControl. Native does not check backend.
 // 0x0009fa20
 void CEntity::ProcessControl()
@@ -929,22 +967,7 @@ void CEntity::ApplyLinearSpeed()
     }
 }
 
-#include "game/util.h"
-
 // 0x0018de60
-GameEntityCollisionShape g_entityCollisionShapeA;
-// 0x0018de4c
-GameEntityCollisionShape g_entityCollisionShapeB;
-// 0x0018de7c
-void* g_entityCollisionEntity;
-// 0x00155404
-GameEntityCollisionBackend g_entityCollisionBackend = (GameEntityCollisionBackend)0x419f00; // GTA SA virtual address.
-// 0x00155408
-void** g_entityCollisionContextSlot = (void**)0x9655cc; // GTA SA virtual address.
-// 0x002abe5c
-void* g_entityCollisionSavedContext;
-// 0x002abe60
-BYTE g_entityCollisionResult;
 
 // 0x0009fa40
 __declspec(naked) bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode)
@@ -1140,12 +1163,14 @@ void CEntity::SetBackendFlag40000(BOOL enabled)
         Add();
     }
 }
+
 // 0x0009f540
 void CEntity::SetBackendFlags80400()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         *(DWORD*)((BYTE*)m_pGameEntity + 0x1c) |= 0x80400;
 }
+
 // 0x0009f580
 void CEntity::SetBackendFlag2000(BOOL clear)
 {
@@ -1170,6 +1195,7 @@ void CEntity::SetBackendFlag2000(BOOL clear)
     }
     // clang-format on
 }
+
 // 0x0009f610
 DWORD CEntity::GetRwObjectWord38()
 {
@@ -1181,6 +1207,7 @@ DWORD CEntity::GetRwObjectWord38()
         return 0;
     return *(DWORD*)(object + 0x38);
 }
+
 // 0x0009f7a0
 void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
 {
@@ -1197,6 +1224,7 @@ void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
     GameQueryRwMatrixAngle(matrix, 2, &angle);
     *z = angle;
 }
+
 // 0x0009f870
 int CEntity::GetModelAtomicCount()
 {
@@ -1290,6 +1318,7 @@ __declspec(naked) void CEntity::SetAveragedSpeed(CVector speed)
     }
     // clang-format on
 }
+
 // Native x87 precision/spill boundaries and repeated backend loads are significant.
 // 0x0009f630
 __declspec(naked) void CEntity::SetEulerRotation(float x, float y, float z)
@@ -1385,8 +1414,6 @@ __declspec(naked) void CEntity::SetEulerRotation(float x, float y, float z)
     // clang-format on
 }
 
-// 0x0011e64c
-const char g_entityDetachExceptionLabel[5] = "s113";
 // Incoming ECX is unused; original owner/name is not established.
 // GTA SA virtual addresses: 0x00733160 and 0x00553260.
 // 0x0009f8b0

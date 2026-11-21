@@ -51,11 +51,13 @@ int FormatChatBubbleText(char* text, int width, int tolerance)
     }
     return rows;
 }
+
 // 0x00066860
 CChatBubble::CChatBubble()
 {
     memset(entries, 0, sizeof(entries));
 }
+
 // 0x00066890
 void CChatBubble::Add(WORD player, const char* text, DWORD color, float drawDistance, int lifespan)
 {
@@ -75,6 +77,7 @@ void CChatBubble::Add(WORD player, const char* text, DWORD color, float drawDist
     entry->created = GetTickCount();
     entry->active = 1;
 }
+
 // 0x00066950
 void CChatBubble::Draw()
 {

@@ -5,11 +5,11 @@
 
 #include "gui/renderpanel.h"
 
-#include "render/fontrender.h"
 #include "game/gta_globals.h"
 #include "gui/gui.h"
-#include "net/objectpool.h"
 #include "gui/objectedit.h"
+#include "net/objectpool.h"
+#include "render/fontrender.h"
 // 0x0011c75c
 const char g_renderPanelTitle[10] = "Transform";
 // 0x00071100
@@ -52,6 +52,7 @@ void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
     ((CDXUTDialog*)state[8])->AddSlider(34, 50, thirdY, state[5], state[6], -100, 100, 0, false, 0);
     ((CDXUTDialog*)state[8])->GetSlider(34)->SetColorOverride(D3DXCOLOR(low, high, low, 1.0f));
 }
+
 // 0x000712c0
 void CRenderPanel::UpdateLayout()
 {
@@ -63,6 +64,7 @@ void CRenderPanel::UpdateLayout()
     LONG y = state[2] = rect.bottom - (LONG)state[4] - 10;
     ((CDXUTDialog*)state[8])->SetLocation(x, y);
 }
+
 // 0x00071320
 void CRenderPanel::GetRect(RECT* out)
 {
@@ -72,6 +74,7 @@ void CRenderPanel::GetRect(RECT* out)
     out->top = state[2];
     out->bottom = (LONG)(state[4] + (DWORD)out->top);
 }
+
 // 0x00071350
 void CRenderPanel::Show()
 {
@@ -85,6 +88,7 @@ void CRenderPanel::Show()
     UpdateLayout();
     state[9] = 1;
 }
+
 // 0x000713c0
 void CRenderPanel::Hide()
 {
@@ -92,6 +96,7 @@ void CRenderPanel::Hide()
     ((BYTE*)state[8])[0x13] = 0;
     state[9] = 0;
 }
+
 // 0x000713d0
 void CRenderPanel::ProcessControls()
 {
@@ -109,6 +114,7 @@ void CRenderPanel::ProcessControls()
     if (value)
         ((CObjectEdit*)g_deviceObjectEdit)->ApplyChanges(2, value * g_objectPoolSecondsPerTick);
 }
+
 // 0x00071480
 void CRenderPanel::DrawLabels()
 {
@@ -130,6 +136,7 @@ void CRenderPanel::DrawLabels()
     rect.bottom = (LONG)((DWORD)rect.top + 1);
     font->DrawTextA(0, ((CObjectEdit*)g_deviceObjectEdit)->GetRenderChar(2), 1, &rect, 0x105, 0xff99cc99);
 }
+
 // 0x00071560
 void CRenderPanel::Draw()
 {

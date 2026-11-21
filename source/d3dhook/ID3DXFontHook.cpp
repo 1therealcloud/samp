@@ -47,12 +47,25 @@ public:
     // 0x00073940
     virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
 };
+// 0x00140bd8
+static CFontColorSprite g_fontColorSprite;
+// 0x0017e97c
+char* g_fontOriginalText;
+// 0x0017e980
+char* g_fontStrippedText;
+// 0x00174d38
+wchar_t g_fontWideText[20000];
+// 0x00174d30
+ID3DXSprite* g_fontRealSprite;
+// 0x00174d20
+D3DCOLOR g_fontGlyphColor;
+// 0x00174d34
+int g_fontGlyphCursor;
+
 // 0x00073960
 CFontColorSprite::CFontColorSprite() {}
 
 STATIC_ASSERT(sizeof(CFontColorSprite) == 4);
-// 0x00140bd8
-static CFontColorSprite g_fontColorSprite;
 
 // 0x00073770
 HRESULT STDMETHODCALLTYPE CFontWrapper::QueryInterface(REFIID iid, void** output)
@@ -174,19 +187,6 @@ HRESULT STDMETHODCALLTYPE CFontWrapper::OnResetDevice()
 {
     return font->OnResetDevice();
 }
-
-// 0x0017e97c
-char* g_fontOriginalText;
-// 0x0017e980
-char* g_fontStrippedText;
-// 0x00174d38
-wchar_t g_fontWideText[20000];
-// 0x00174d30
-ID3DXSprite* g_fontRealSprite;
-// 0x00174d20
-D3DCOLOR g_fontGlyphColor;
-// 0x00174d34
-int g_fontGlyphCursor;
 
 // inline
 void InitializeFontDrawBuffers()

@@ -1,32 +1,13 @@
 #include "game/textdraw.h"
-
-// 0x000b3080
-void CTextDraw::Draw()
-{
-    if (data.format.textureSlot != -1)
-        Native0B2C90();
-    else
-        Native0B2DA0();
-}
-// 0x000b32b0
-void CTextDraw::OnLostDevice()
-{
-    if (data.format.style == 5 && data.format.textureSlot != -1)
-    {
-        GameReleaseTextDrawTexture(data.format.textureSlot);
-        data.format.textureSlot = -1;
-    }
-}
-
 #include "d3dhook/IDirect3DDevice9Hook.h"
+#include "game/custommodels.h"
 #include "game/font.h"
-#include "game/textdraw.h"
-extern "C"
-{
-    // MSVC CRT helper, supplied by the selected static runtime, not recovered here.
-    // 0x000f9324
-    __int64 __cdecl _ftol2();
-}
+#include "game/game.h"
+#include "game/model_preview.h"
+#include "game/util.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // 0x002a9400
 void* g_textDrawTextures[200];
@@ -39,6 +20,37 @@ const float g_textDrawVirtualWidth = 640.0f;
 // 0x0011f568
 const float g_textDrawVirtualHeight = 448.0f;
 
+// 0x0011f54c
+const char g_textDrawUnmatchedTilde[23] = "Error: unmatched tilde";
+// 0x0011f524
+const char g_textDrawLongKeyString[40] = "Error: can't use k-codes in long string";
+
+// 0x000b3080
+void CTextDraw::Draw()
+{
+    if (data.format.textureSlot != -1)
+        Native0B2C90();
+    else
+        Native0B2DA0();
+}
+
+// 0x000b32b0
+void CTextDraw::OnLostDevice()
+{
+    if (data.format.style == 5 && data.format.textureSlot != -1)
+    {
+        GameReleaseTextDrawTexture(data.format.textureSlot);
+        data.format.textureSlot = -1;
+    }
+}
+
+extern "C"
+{
+    // MSVC CRT helper, supplied by the selected static runtime, not recovered here.
+    // 0x000f9324
+    __int64 __cdecl _ftol2();
+}
+
 // 0x000b2720
 int GameAllocateTextDrawTexture()
 {
@@ -50,6 +62,7 @@ int GameAllocateTextDrawTexture()
         }
     return -1;
 }
+
 // 0x000b2750
 __declspec(noinline) void GameReleaseTextDrawTexture(int slot)
 {
@@ -61,6 +74,7 @@ __declspec(noinline) void GameReleaseTextDrawTexture(int slot)
         g_textDrawTextures[slot] = 0;
     }
 }
+
 // 0x000b3560
 __declspec(noinline) void GameDestroyTextDrawTexture(void* texture)
 {
@@ -74,6 +88,7 @@ __declspec(noinline) void GameDestroyTextDrawTexture(void* texture)
     }
     // clang-format on
 }
+
 // 0x000b28a0
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
 {
@@ -92,6 +107,7 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
         // clang-format on
     }
 }
+
 // 0x000b2c90
 void CTextDraw::Native0B2C90()
 {
@@ -153,6 +169,7 @@ void CTextDraw::Native0B2C90()
     // clang-format on
     data.hasSelectableRect = 1;
 }
+
 // 0x000b2da0
 void CTextDraw::Native0B2DA0()
 {
@@ -340,10 +357,6 @@ BOOL GameInitializeTextDrawTextures()
     return TRUE;
 }
 
-#include "game/custommodels.h"
-#include "game/game.h"
-#include "game/model_preview.h"
-
 // 0x000b30a0
 void CTextDraw::Native0B30A0()
 {
@@ -397,27 +410,25 @@ void CTextDraw::Native0B30A0()
     }
 }
 
-#include <string.h>
-// 0x0011f54c
-const char g_textDrawUnmatchedTilde[23] = "Error: unmatched tilde";
-// 0x0011f524
-const char g_textDrawLongKeyString[40] = "Error: can't use k-codes in long string";
 // 0x00070d10
 RECT* CTextDraw::GetSelectableRect()
 {
     return data.format.selectable && data.hasSelectableRect ? &data.selectableRect : 0;
 }
+
 // 0x00070d30
 void CTextDraw::SetHover(BYTE active, DWORD color)
 {
     data.hovered = active;
     data.hoverColor = color;
 }
+
 // 0x000b2b50
 CTextDraw::~CTextDraw()
 {
     GameReleaseTextDrawTexture(data.format.textureSlot);
 }
+
 // 0x000b2b60
 void CTextDraw::SetText(const char* text)
 {
@@ -470,10 +481,6 @@ void CTextDraw::SetText(const char* text)
     }
 }
 
-#include "game/custommodels.h"
-#include "game/util.h"
-#include <stdio.h>
-#include <stdlib.h>
 // 0x000b28d0
 void CTextDraw::LoadTexture()
 {

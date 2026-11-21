@@ -27,7 +27,6 @@ public:
     // Selector is an axis (0..2), not a boolean font selector.
     // 0x00071a40
     const char* GetRenderChar(int axis);
-    // Descriptive names for native rectangle helpers.
     // 0x00071ae0
     void CenterButtonRect(RECT* out, const POINT* center);
     // 0x00071b20
@@ -36,7 +35,6 @@ public:
     void EnterEditObject(WORD id, BOOL playerObject);
     // 0x00071f80
     void EnterEditAttachedObject(int index);
-    // Descriptive name; rectangle is passed by value (native RET20).
     // 0x00071fe0
     void DrawButton(int processType, RECT rect);
     // 0x000726d0

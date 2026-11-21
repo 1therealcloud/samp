@@ -10,17 +10,74 @@
 #include "game/game.h"
 #include "game/modelfile.h"
 #include "game/playerped.h"
+#include "game/quaternion.h"
+#include "gui/chatwindow.h"
 #include "main.h"
 #include <static_assert.h>
+#include <string.h>
 STATIC_ASSERT(sizeof(CVector) == sizeof(D3DXVECTOR3));
 STATIC_ASSERT(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x));
 STATIC_ASSERT(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y));
 STATIC_ASSERT(offsetof(CVector, z) == offsetof(D3DXVECTOR3, z));
+// 0x0011e3a0
+const double g_aimVectorHalfPi = 1.5707963705062866;
+
+// 0x001181c4
+extern const float g_objectRotationFactor = 10.0f;
+// 0x0011f578
+extern const float g_angleUpperBound = 180.0f;
+// 0x0011f574
+extern const float g_angleLowerBound = -180.0f;
+// 0x001181b4
+extern const float g_anglePeriod = 360.0f;
+// 0x001179b0
+extern const float g_objectScaleLowerBound = 0.0f;
+// 0x001553d8
+const CVector g_rwRotationAxes[3] = {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
+
+// 0x001553d4
+GameRwPointTransformBackend g_rwPointTransformBackend = (GameRwPointTransformBackend)0x7edd90;
+// 0x001553fc
+GameRwAxisRotateBackend g_rwAxisRotateBackend = (GameRwAxisRotateBackend)0x7f1fd0;
+// 0x0011f58c
+const float g_headingInverseHalfTurn = 0.0055555556900799274f;
+// 0x0011f590
+const float g_headingPi = 3.1415927410125732f;
+// 0x002a9a40
+int g_rwImageHeight;
+// 0x00155400
+void** g_rwSceneCameraSlot = (void**)0xc1703c;
+// 0x0011f414
+const char g_rwMaterialCountText[] = "NumMaterials = %d";
+// 0x0011f3f0
+const char g_rwMaterialNameText[] = "Material Index: %d TextureName: %s";
+// 0x0011f3cc
+const char g_rwMaterialNullText[] = "Material Index: %d Texture: NULL";
+// 0x0018f6c0
+DWORD g_playerColors[1000];
+// 0x0015535c
+const CVector g_rwPreviewAxes[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+
+#pragma bss_seg(".pstate$h")
+// 0x002aae14
+float g_rwQueryAngle;
+#pragma bss_seg()
+
+// 0x001181ac
+extern const float g_objectMutationStep = 0.1f;
+// 0x002aae18
+BYTE g_entityCollisionScratch[0x1044];
+// 0x00151b20
+DWORD g_playerDefaultColors[1000] = {
+#include "game/player_color_values.inc"
+};
+
 // 0x000c5110
 IDirect3DDevice9* GameGetCurrentD3DDevice()
 {
     return *(IDirect3DDevice9**)0xc97c28;
 }
+
 // 0x000c5510
 __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
 {
@@ -41,9 +98,7 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
     }
     // clang-format on
 }
-#include "gui/chatwindow.h"
-// 0x0011e3a0
-const double g_aimVectorHalfPi = 1.5707963705062866;
+
 // 0x000b6440
 __declspec(naked) void __stdcall GameBuildAimUpVector(const CVector* direction, CVector* up)
 {
@@ -80,18 +135,6 @@ __declspec(naked) void __stdcall GameBuildAimUpVector(const CVector* direction, 
     }
     // clang-format on
 }
-// 0x001181ac
-extern const float g_objectMutationStep = 0.1f;
-// 0x001181c4
-extern const float g_objectRotationFactor = 10.0f;
-// 0x0011f578
-extern const float g_angleUpperBound = 180.0f;
-// 0x0011f574
-extern const float g_angleLowerBound = -180.0f;
-// 0x001181b4
-extern const float g_anglePeriod = 360.0f;
-// 0x001179b0
-extern const float g_objectScaleLowerBound = 0.0f;
 // 0x000b44e0
 __declspec(naked) float __cdecl GameNormalizeAngle(float angle)
 {
@@ -115,6 +158,7 @@ __declspec(naked) float __cdecl GameNormalizeAngle(float angle)
     }
     // clang-format on
 }
+
 // 0x000b4850
 void GameTransformPoint(CVector* out, const CMatrix* matrix, const CVector* delta)
 {
@@ -131,14 +175,6 @@ float FloatOffset(float first, float second)
         return first - second;
     return second - first;
 }
-
-#include "game/game.h"
-// 0x001553d8
-const CVector g_rwRotationAxes[3] = {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
-#pragma bss_seg(".pstate$h")
-// 0x002aae14
-float g_rwQueryAngle;
-#pragma bss_seg()
 
 // GTA SA virtual addresses: USA 7EB7C0; all other version values use 7EB800.
 // 0x000b5320
@@ -162,6 +198,7 @@ void __cdecl GameRotateRwQuaternion(void* quaternion, int axis, float angle, int
     }
     // clang-format on
 }
+
 // Shared fields are views into the existing native backing span, not new globals.
 // GTA SA virtual addresses: USA 7F2720; all other version values use 7F2760.
 // 0x000b5370
@@ -192,6 +229,7 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
     }
     // clang-format on
 }
+
 // GTA SA virtual addresses: USA 7EBA80; all other version values use 7EBAC0.
 // 0x000b53e0
 void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, float* angle)
@@ -211,6 +249,7 @@ void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, f
     }
     // clang-format on
 }
+
 // GTA SA virtual addresses: USA 7F1FD0; all other version values use 7F2010.
 // 0x000b5410
 void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angle)
@@ -233,6 +272,7 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
     }
     // clang-format on
 }
+
 // GTA SA virtual addresses: USA 7F1920; all other version values use 7F1960.
 // 0x000b5450
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
@@ -250,6 +290,7 @@ void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
     }
     // clang-format on
 }
+
 // GTA SA virtual addresses: USA 7F22C0; all other version values use 7F2300.
 // 0x000b5480
 void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
@@ -294,6 +335,7 @@ CVector* GameTransformVectorByTranspose(CVector* out, const CVector* vector, con
 {
     return ((CVector * (__cdecl*)(CVector*, const CVector*, const CMatrix*))0x59c810)(out, vector, matrix);
 }
+
 // Backend quaternion layout is deliberately opaque, as in the other RW adapters.
 // GTA SA virtual addresses: USA 0x007EB5C0; all other values use 0x007EB600.
 // 0x000b4d20
@@ -311,15 +353,6 @@ void GameRwQuaternionFromMatrix(void* quaternion, const CMatrix* matrix)
     }
     // clang-format on
 }
-
-// 0x001553d4
-GameRwPointTransformBackend g_rwPointTransformBackend = (GameRwPointTransformBackend)0x7edd90;
-// 0x001553fc
-GameRwAxisRotateBackend g_rwAxisRotateBackend = (GameRwAxisRotateBackend)0x7f1fd0;
-// 0x0011f58c
-const float g_headingInverseHalfTurn = 0.0055555556900799274f;
-// 0x0011f590
-const float g_headingPi = 3.1415927410125732f;
 
 // GTA SA virtual address: 0x007EDDC0, fixed vector transform (no translation).
 // 0x000b5210
@@ -759,6 +792,7 @@ void GameRwWorldAddCamera(void* camera)
         // clang-format on
     }
 }
+
 // GTA SA virtual backend: 0x00751300 (fixed for every version).
 // 0x000b1600
 void GameRwWorldAddClump(void* clump)
@@ -778,6 +812,7 @@ void GameRwWorldAddClump(void* clump)
         // clang-format on
     }
 }
+
 // GTA SA virtual backend: 0x00751460 (fixed for every version).
 // 0x000b1630
 void GameRwWorldRemoveClump(void* clump)
@@ -797,6 +832,7 @@ void GameRwWorldRemoveClump(void* clump)
         // clang-format on
     }
 }
+
 // GTA SA virtual backend: 0x0074F570 (fixed for every version).
 // 0x000b1660
 void GameRwWorldRender()
@@ -814,6 +850,7 @@ void GameRwWorldRender()
         // clang-format on
     }
 }
+
 // GTA SA virtual backend: 0x00751910; non-USA fallback +0x50.
 // 0x000b17c0
 void GameRwWorldAddLight(void* light)
@@ -834,6 +871,7 @@ void GameRwWorldAddLight(void* light)
         // clang-format on
     }
 }
+
 // GTA SA virtual backend: 0x00751960; non-USA fallback +0x50.
 // 0x000b1800
 void GameRwWorldRemoveLight(void* light)
@@ -896,6 +934,7 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot20(DWORD first, DWORD second)
     }
     // clang-format on
 }
+
 // GTA SA virtual address74C800. Return input word, not backend result.
 // 0x000b1100
 __declspec(naked) void* GameRwUnlockGeometry(void* geometry)
@@ -913,6 +952,7 @@ __declspec(naked) void* GameRwUnlockGeometry(void* geometry)
     }
     // clang-format on
 }
+
 // GTA SA virtual address74C7D0. Pass lock maskFFF, then return that word.
 // 0x000b1110
 __declspec(naked) DWORD GameRwLockGeometry(void* geometry)
@@ -1192,11 +1232,6 @@ int GameCountEmptyBackendModelSlots()
     return count;
 }
 
-// 0x002a9a40
-int g_rwImageHeight;
-// 0x00155400
-void** g_rwSceneCameraSlot = (void**)0xc1703c;
-
 // Shared scratch views only; no independent global storage is introduced.
 // RVAs 2ABE40, 2ABE48 and 2ABE4C.
 #define SCENE_SOURCE_RASTER (*(void**)(g_entityCollisionScratch + 0x1028))
@@ -1277,9 +1312,6 @@ __declspec(naked) void GameRenderWithSceneRasters()
     // clang-format on
 }
 
-// 0x002aae18
-BYTE g_entityCollisionScratch[0x1044];
-
 // 0x000b3e40
 DWORD __stdcall GameTestCameraSphere(const CVector* centre, float radius)
 {
@@ -1324,6 +1356,7 @@ void __stdcall GameRwReplaceField34(void* object, void* replacement)
         }
     }
 }
+
 // 0x000b11c0
 void* GameRwDumpAtomicMaterials(void* object, void* data)
 {
@@ -1355,6 +1388,7 @@ void* GameRwDumpAtomicMaterials(void* object, void* data)
     }
     return object;
 }
+
 // 0x000b1260
 void* __stdcall GameRwDumpObjectFrameMaterials(void* object)
 {
@@ -1363,11 +1397,13 @@ void* __stdcall GameRwDumpObjectFrameMaterials(void* object)
         frame = GameRwForAllFrameObjects(frame, GameRwDumpAtomicMaterials, 0);
     return frame;
 }
+
 // 0x000b1280
 void* GameRwKeepType1Object(void* object, void* data)
 {
     return *(BYTE*)object == 1 ? object : 0;
 }
+
 // 0x000b12a0
 void* __stdcall GameRwEnumerateObjectFrameType1(void* object)
 {
@@ -1376,6 +1412,7 @@ void* __stdcall GameRwEnumerateObjectFrameType1(void* object)
         return frame;
     return GameRwForAllFrameObjects(frame, GameRwKeepType1Object, 0);
 }
+
 // 0x000b1970
 void* GameRwGetObjectFrame(const void* object)
 {
@@ -1383,6 +1420,7 @@ void* GameRwGetObjectFrame(const void* object)
         return (void*)object;
     return *(void**)((const BYTE*)object + 4);
 }
+
 // 0x000b1e90
 void* GameRwGetClumpWord8Minus64(void* clump, int index)
 {
@@ -1401,12 +1439,6 @@ void* GameRwGetClumpWord8Minus64(void* clump, int index)
     return result;
 }
 
-// 0x0011f414
-const char g_rwMaterialCountText[] = "NumMaterials = %d";
-// 0x0011f3f0
-const char g_rwMaterialNameText[] = "Material Index: %d TextureName: %s";
-// 0x0011f3cc
-const char g_rwMaterialNullText[] = "Material Index: %d Texture: NULL";
 // Native x87 intermediate precision, spill locations and input bit pattern matter.
 // 0x000b55a0
 __declspec(naked) float GameApproximateSqrt(float value)
@@ -1455,6 +1487,7 @@ DWORD GameCall705B60(DWORD argument)
 {
     return ((DWORD(__cdecl*)(DWORD))0x705b60)(argument);
 }
+
 // Backend consumes three stack DWORDs (RET12); semantic types are unknown.
 // GTA SA virtual address: 0x0059C790.
 // 0x000b4770
@@ -1462,6 +1495,7 @@ DWORD GameCall59C790(DWORD first, DWORD second, DWORD third)
 {
     return ((DWORD(__stdcall*)(DWORD, DWORD, DWORD))0x59c790)(first, second, third);
 }
+
 // 0x000b4360
 void GameReplaceBuildingPoolModels(int model, int replacement)
 {
@@ -1479,8 +1513,6 @@ void GameReplaceBuildingPoolModels(int model, int replacement)
         }
     }
 }
-
-#include "game/quaternion.h"
 
 // Returns the unspilled extended difference.
 // 0x000b44a0
@@ -1697,6 +1729,7 @@ DWORD GameCountNonzeroPoolBytesB7449C()
             ++count;
     return count;
 }
+
 // 0x000b3900
 DWORD GameCountNonzeroPoolBytesC8800C()
 {
@@ -1709,6 +1742,7 @@ DWORD GameCountNonzeroPoolBytesC8800C()
             ++count;
     return count;
 }
+
 // 0x000b4130
 void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
 {
@@ -1716,6 +1750,7 @@ void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
     if (entity && *(DWORD*)entity == 0x85bbf0)
         *(DWORD*)entity = 0x85bd30;
 }
+
 // 0x000b42c0
 void GameWriteGlobal9689E0(DWORD value)
 {
@@ -1803,6 +1838,7 @@ void __stdcall GameWorldAdd(void* entity)
     }
     // clang-format on
 }
+
 // 0x000b3740
 void __stdcall GameWorldRemove(void* entity)
 {
@@ -1835,7 +1871,6 @@ void* __stdcall GamePoolObjectGetAt(int handle)
     return result;
 }
 
-#include "game/util.h"
 // GTA SA virtual addresses: GetPad 0x0053FB70; Clear 0x00541A70.
 // VC7 ABI bridge: GetPad(0), then ECX=pad and two unmodified argument words.
 // 0x000b58e0
@@ -1859,8 +1894,6 @@ __declspec(naked) void GameClearLocalPad(DWORD first, DWORD second)
     }
     // clang-format on
 }
-
-#include "game/util.h"
 
 // VC7 cannot express a free-function __thiscall pointer. These thin native
 // adapters set ECX and keep the backend callee-pop and raw AL return intact.
@@ -1911,25 +1944,19 @@ __declspec(naked) bool __stdcall GameWeaponFireSniper(void* weapon, void* shoote
     // clang-format on
 }
 
-#include "game/util.h"
-#include <string.h>
-// 0x00151b20
-DWORD g_playerDefaultColors[1000] = {
-#include "game/player_color_values.inc"
-};
-// 0x0018f6c0
-DWORD g_playerColors[1000];
 // 0x000a6fc0
 void PlayerColors::Initialize()
 {
     memcpy(g_playerColors, g_playerDefaultColors, sizeof(g_playerColors));
 }
+
 // 0x000a6f50
 void __stdcall PlayerColors::Set(DWORD index, DWORD color)
 {
     if (index < sizeof(g_playerColors))
         g_playerColors[index] = color;
 }
+
 // 0x000a6f70
 DWORD __stdcall PlayerColors::Get(DWORD index)
 {
@@ -1944,10 +1971,6 @@ DWORD __stdcall PlayerColors::Get(DWORD index)
     return index;
 }
 
-#include "game/game.h"
-#include "game/util.h"
-// 0x0015535c
-const CVector g_rwPreviewAxes[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 // 0x000b1700
 void* GameRwCreateLight(int lightType)
 {
@@ -1964,6 +1987,7 @@ void* GameRwCreateLight(int lightType)
     // clang-format on
     return result;
 }
+
 // 0x000b1770
 void GameRwSetLightColor(void* light, const float* rgba)
 {
@@ -1979,6 +2003,7 @@ void GameRwSetLightColor(void* light, const float* rgba)
     }
     // clang-format on
 }
+
 // 0x000b12d0
 void* GameRwCreateRaster(int width, int height, int depth, int flags)
 {
@@ -2001,6 +2026,7 @@ void* GameRwCreateRaster(int width, int height, int depth, int flags)
     // clang-format on
     return result;
 }
+
 // 0x000b1430
 void* GameRwCreateCamera()
 {
@@ -2015,6 +2041,7 @@ void* GameRwCreateCamera()
     // clang-format on
     return result;
 }
+
 // 0x000b1390
 void* GameRwCreateFrame()
 {
@@ -2029,6 +2056,7 @@ void* GameRwCreateFrame()
     // clang-format on
     return result;
 }
+
 // 0x000b18f0
 void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
 {
@@ -2046,6 +2074,7 @@ void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
     }
     // clang-format on
 }
+
 // 0x000b1920
 void GameRwRotateFrame(void* frame, int axis, float angle)
 {
@@ -2066,6 +2095,7 @@ void GameRwRotateFrame(void* frame, int axis, float angle)
     }
     // clang-format on
 }
+
 // 0x000b15b0
 void GameRwSetCameraRasters(void* camera, void* color, void* depth)
 {
@@ -2079,6 +2109,7 @@ void GameRwSetCameraRasters(void* camera, void* color, void* depth)
     }
     // clang-format on
 }
+
 // 0x000b1580
 void GameRwSetObjectFrame(void* object, void* frame)
 {
@@ -2094,6 +2125,7 @@ void GameRwSetObjectFrame(void* object, void* frame)
     }
     // clang-format on
 }
+
 // 0x000b1680
 void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
 {
@@ -2125,6 +2157,7 @@ void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
     }
     // clang-format on
 }
+
 // 0x000b16d0
 void GameRwSetViewWindow(void* camera, const float* window)
 {
@@ -2140,6 +2173,7 @@ void GameRwSetViewWindow(void* camera, const float* window)
     }
     // clang-format on
 }
+
 // 0x000b18c0
 void GameRwSetProjection(void* camera, int projection)
 {
@@ -2155,6 +2189,7 @@ void GameRwSetProjection(void* camera, int projection)
     }
     // clang-format on
 }
+
 // 0x000b1320
 void* GameRwCreateTexture(void* raster)
 {
@@ -2414,6 +2449,7 @@ void* __stdcall GameFindLocalPed()
 {
     return *(void**)0xb7cd98;
 }
+
 // 0x000b3f20
 void __stdcall GameAssignPlayerPed(BYTE player, void* ped)
 {

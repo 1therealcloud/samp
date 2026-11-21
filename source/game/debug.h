@@ -17,7 +17,6 @@ struct CVector;
 struct KeyPad;
 class CCamera;
 class CVehicle;
-// Descriptive recovery names for the native debug-state setters.
 // 0x0009dee0
 void GameSetDebugState(DWORD first, DWORD second, DWORD stage);
 // 0x0009df00

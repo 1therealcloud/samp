@@ -13,6 +13,21 @@
 #include "main.h"
 // 0x002aca38
 CModelPreview* g_modelPreview;
+// 0x0011c654
+const float g_previewPedDistanceScale = -2.25f;
+// 0x0011c658
+const float g_previewBoatDistance = -5.5f;
+// 0x0011c65c
+const float g_previewBoatRadiusScale = 2.5f;
+// 0x0011c660
+const float g_previewVehicleDistance = -1.0f;
+// 0x0011c664
+const float g_previewHeight = 50.0f;
+// 0x0011c668
+const float g_previewObjectDistance = -0.1f;
+// 0x0011c66c
+const float g_previewObjectRadiusScale = 2.25f;
+
 // 0x0006c700
 CModelPreview::CModelPreview()
 {
@@ -23,6 +38,7 @@ CModelPreview::CModelPreview()
     light = 0;
     Reset();
 }
+
 // 0x0006b880
 bool CModelPreview::Reset()
 {
@@ -53,21 +69,6 @@ bool CModelPreview::Reset()
     }
     return false;
 }
-
-// 0x0011c654
-const float g_previewPedDistanceScale = -2.25f;
-// 0x0011c658
-const float g_previewBoatDistance = -5.5f;
-// 0x0011c65c
-const float g_previewBoatRadiusScale = 2.5f;
-// 0x0011c660
-const float g_previewVehicleDistance = -1.0f;
-// 0x0011c664
-const float g_previewHeight = 50.0f;
-// 0x0011c668
-const float g_previewObjectDistance = -0.1f;
-// 0x0011c66c
-const float g_previewObjectRadiusScale = 2.25f;
 
 // 0x0006b9d0
 void CModelPreview::RenderTestScene(int model)

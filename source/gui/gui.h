@@ -7,22 +7,15 @@
 #include <unknwn.h>
 
 #include "audiostream.h"
+#include "game/debug.h"
 #include "gui/chatbubble.h"
 #include "gui/deathwindow.h"
 #include "gui/dialog.h"
 #include "gui/downloadwindow.h"
-#include "render/fontrender.h"
-#include "game/debug.h"
 #include "gui/helpdialog.h"
 #include "gui/label.h"
-#include "render/licenseplate.h"
-#include "net/labelpool.h"
-#include "net/netgame.h"
-#include "net/objectpool.h"
-#include "net/textdrawpool.h"
 #include "gui/netstats.h"
 #include "gui/objectedit.h"
-#include "render/objectmaterialtext.h"
 #include "gui/objectselection.h"
 #include "gui/playertags.h"
 #include "gui/renderpanel.h"
@@ -30,6 +23,13 @@
 #include "gui/spawnscreen.h"
 #include "gui/svrnetstats.h"
 #include "gui/textdrawselection.h"
+#include "net/labelpool.h"
+#include "net/netgame.h"
+#include "net/objectpool.h"
+#include "net/textdrawpool.h"
+#include "render/fontrender.h"
+#include "render/licenseplate.h"
+#include "render/objectmaterialtext.h"
 class CDXUTDialog;
 class CDXUTControl;
 // 0x002acab8

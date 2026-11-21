@@ -25,6 +25,7 @@ WORD GameFindAnimation(const char* library, const char* name)
             return (WORD)(i + 1);
     return 0xffff;
 }
+
 // 0x0009c950
 char* GameGetAnimationName(short index)
 {
@@ -32,11 +33,13 @@ char* GameGetAnimationName(short index)
         return 0;
     return g_animationNames[index - 1];
 }
+
 // 0x000b4080
 DWORD __stdcall GameAnimationKey(const char* name)
 {
     return ((DWORD(__cdecl*)(const char*))0x53cf30)(name);
 }
+
 // 0x0009c980
 void GameInitializeAnimationKeys()
 {
@@ -61,6 +64,7 @@ WORD GameFindAnimationByKey(DWORD key)
             return (WORD)(i + 1);
     return 0xffff;
 }
+
 // 0x000b4030
 DWORD __stdcall GameGetAnimationGroupKey(int group, int animation)
 {

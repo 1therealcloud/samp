@@ -4,22 +4,100 @@
 #include "game/debug.h"
 
 #include "game/game.h"
+#include "game/hooks.h"
 #include "game/keystuff.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
+#include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "main.h"
 // 0x0011f56c
 const char g_taskNoneName[5] = "None";
+// 0x001518d4
+DWORD g_debugSelectedVehicleModel = 400;
+// 0x0018dd48
+KeyPad* g_debugVehicleKeys;
+// 0x0018dd4c
+CCamera* g_debugVehicleCamera;
+// 0x0018de30
+DWORD g_debugVehicleSelectionActive;
+// 0x0018de34
+CVehicle* g_debugSelectedVehicle;
+// 0x0018ddec
+DWORD g_debugSelectionFlagA;
+// 0x0018ddf0
+DWORD g_debugSelectionFlagB;
+// 0x0011e530
+const char g_debugVehicleSelectText[15] = "Vehicle Select";
+// 0x0011c198
+const char g_debugVehicleTypeFormat[8] = "TYPE_%d";
+// 0x0018dc20
+BYTE g_nativeDebugFlag18DC20 = 0;
+// 0x0018dd50
+float g_debugHeightmapStartX = 0;
+// 0x0018dde4
+float g_debugHeightmapStartY = 0;
+// 0x0018de18
+DWORD g_debugHeightmapStage = 0;
+// 0x0018de28
+DWORD g_debugHeightmapFlagCopy = 0;
+// 0x0018de2c
+FILE* g_debugHeightmapFile = 0;
+// 0x0011e50c
+const char g_debugHeightmapFilename[] = "c:\\blocks\\SA2_bos.hmap";
+// 0x0018dc1c
+FILE* g_debugPlacementFile = 0;
+// 0x0011e3d8
+const char g_debugPlacementFilename[] = "c:\\0\\lc2sa_LoadObjectInstance_1_noipllods_Zonly_Q2E.txt";
+// 0x0011e3a8
+const char g_debugPlacementFormat[] = "%d,%.7f,%.7f,%.7f,%.5f,%.5f,%.5f,%.2f,%u,%X\n";
+// 0x0011e340
+const char g_debugEntityPlacementFormat[] = "%u,%.5f,%.5f,%.5f,0.0,0.0,%.5f,%.5f\n";
+// 0x0011d7c0
+const double g_debugEulerNegativeOne = -1.0;
+// 0x0011e36c
+const float g_debugPlacementMaxDrawDistance = 299.0f;
+// 0x0011e368
+const float g_debugPlacementMaxZ = 500.0f;
+// 0x001518d0
+DWORD g_debugHeightmapTileEnd = 900;
+// 0x0018de1c
+DWORD g_debugHeightmapFinished = 0;
+// 0x0018de20
+DWORD g_debugHeightmapTilePrepared = 0;
+// 0x0018de24
+DWORD g_debugHeightmapWaitFrames = 0;
+// 0x0011e4d8
+const char g_debugHeightmapBlockFormat[] = "HM Setup Block: %d Row/Col: %d,%d XY: %.2f,%.2f";
+// 0x0011e524
+const char g_debugHeightmapFinishedText[] = "Finished HM";
+
+// 0x0011e370
+const char g_debugAllBuildingsFilename[] = "c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
+// 0x0011f594
+const char g_debugRasterMissingText[] = "No texture!";
+// 0x0011f5cc
+const char g_debugRasterFirstFilename[] = "Raster1.bmp";
+// 0x0011f5a0
+const char g_debugRasterSecondFilename[] = "Raster2.bmp";
+// 0x0011f5ac
+const char g_debugRasterDimensionsFormat[] = "Width %u Height: %u Depth: %u";
+
 // Native returns this constant even for a null task; no task dereference.
+#pragma bss_seg(".pstate$g")
+// 0x002aae10
+void* g_rwImageScratch;
+#pragma bss_seg()
+
 // 0x000b3cf0
 const char* GameGetTaskName(void* task)
 {
     (void)task;
     return g_taskNoneName;
 }
+
 // 0x000b3ca0
 DWORD GameGetTaskType(void* task)
 {
@@ -46,6 +124,7 @@ DWORD GameGetTaskType(void* task)
     }
     return 0;
 }
+
 // 0x000b3c50
 void* GameGetTaskChild(void* task)
 {
@@ -73,24 +152,7 @@ void* GameGetTaskChild(void* task)
     }
     return 0;
 }
-// 0x001518d4
-DWORD g_debugSelectedVehicleModel = 400;
-// 0x0018dd48
-KeyPad* g_debugVehicleKeys;
-// 0x0018dd4c
-CCamera* g_debugVehicleCamera;
-// 0x0018de30
-DWORD g_debugVehicleSelectionActive;
-// 0x0018de34
-CVehicle* g_debugSelectedVehicle;
-// 0x0018ddec
-DWORD g_debugSelectionFlagA;
-// 0x0018ddf0
-DWORD g_debugSelectionFlagB;
-// 0x0011e530
-const char g_debugVehicleSelectText[15] = "Vehicle Select";
-// 0x0011c198
-const char g_debugVehicleTypeFormat[8] = "TYPE_%d";
+
 // 0x0009dee0
 void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
 {
@@ -98,6 +160,7 @@ void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
     g_debugSelectionFlagA = first;
     g_debugSelectionFlagB = second;
 }
+
 // 0x0009df00
 void GameClearDebugState()
 {
@@ -111,6 +174,7 @@ void GameRebuildDebugVehicle()
         delete g_debugSelectedVehicle;
     g_debugSelectedVehicle = g_pGame->CreateVehicle(g_debugSelectedVehicleModel, 5, 5, 500, 0, FALSE);
 }
+
 // 0x0009df50
 void GameDrawDebugEntities()
 {
@@ -190,6 +254,7 @@ void GameDrawDebugEntities()
         g_debugVehicleSelectionActive = 0;
     }
 }
+
 // 0x000b3a00
 DWORD __stdcall GameCountUnusedModelSlots()
 {
@@ -201,25 +266,12 @@ DWORD __stdcall GameCountUnusedModelSlots()
     return count;
 }
 
-// 0x0018dc20
-BYTE g_nativeDebugFlag18DC20 = 0;
-// 0x0018dd50
-float g_debugHeightmapStartX = 0;
-// 0x0018dde4
-float g_debugHeightmapStartY = 0;
-// 0x0018de18
-DWORD g_debugHeightmapStage = 0;
-// 0x0018de28
-DWORD g_debugHeightmapFlagCopy = 0;
-// 0x0018de2c
-FILE* g_debugHeightmapFile = 0;
-// 0x0011e50c
-const char g_debugHeightmapFilename[] = "c:\\blocks\\SA2_bos.hmap";
 // 0x0009d3a0
 void __stdcall GameSetNativeDebugFlag18DC20(BYTE value)
 {
     g_nativeDebugFlag18DC20 = value;
 }
+
 // Ignores GTA result and returns raw collision-position Z, even on failure.
 // 0x0009dc80
 float GameDebugGroundHeight(const CVector* position)
@@ -231,6 +283,7 @@ float GameDebugGroundHeight(const CVector* position)
     GameProcessLineOfSightRaw(position, &end, collision, (void**)&position, 1, 0, 0, 1, 1, 1, 0, 0);
     return *(float*)(collision + 8);
 }
+
 // 0x0009dda0
 void GameDebugOpenHeightmap()
 {
@@ -238,6 +291,7 @@ void GameDebugOpenHeightmap()
     g_debugHeightmapFlagCopy = g_debugSelectionFlagA;
     g_debugHeightmapStage = 1;
 }
+
 // 0x0009dcd0
 void GameDebugWriteHeightmap()
 {
@@ -274,20 +328,6 @@ void GameDebugWriteHeightmap()
     }
 }
 
-// 0x0018dc1c
-FILE* g_debugPlacementFile = 0;
-// 0x0011e3d8
-const char g_debugPlacementFilename[] = "c:\\0\\lc2sa_LoadObjectInstance_1_noipllods_Zonly_Q2E.txt";
-// 0x0011e3a8
-const char g_debugPlacementFormat[] = "%d,%.7f,%.7f,%.7f,%.5f,%.5f,%.5f,%.2f,%u,%X\n";
-// 0x0011e340
-const char g_debugEntityPlacementFormat[] = "%u,%.5f,%.5f,%.5f,0.0,0.0,%.5f,%.5f\n";
-// 0x0011d7c0
-const double g_debugEulerNegativeOne = -1.0;
-// 0x0011e36c
-const float g_debugPlacementMaxDrawDistance = 299.0f;
-// 0x0011e368
-const float g_debugPlacementMaxZ = 500.0f;
 // 0x0009ce60
 void GameDebugWriteEntityPlacement(void* entity, FILE* file)
 {
@@ -360,6 +400,7 @@ void GameDebugWriteEntityPlacement(void* entity, FILE* file)
     if (withinDistance && position.z < g_debugPlacementMaxZ) fprintf(file, g_debugEntityPlacementFormat, (DWORD)(int)*(short*)(backend + 0x22), (double)position.x,
                                                                      (double)position.y, (double)position.z, (double)heading, (double)distance);
 }
+
 // 0x0009d100
 int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
 {
@@ -396,20 +437,6 @@ int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
     return 0;
 }
 
-#include "gui/chatwindow.h"
-#include "game/hooks.h"
-// 0x001518d0
-DWORD g_debugHeightmapTileEnd = 900;
-// 0x0018de1c
-DWORD g_debugHeightmapFinished = 0;
-// 0x0018de20
-DWORD g_debugHeightmapTilePrepared = 0;
-// 0x0018de24
-DWORD g_debugHeightmapWaitFrames = 0;
-// 0x0011e4d8
-const char g_debugHeightmapBlockFormat[] = "HM Setup Block: %d Row/Col: %d,%d XY: %.2f,%.2f";
-// 0x0011e524
-const char g_debugHeightmapFinishedText[] = "Finished HM";
 // 0x0009dba0
 void GameDebugSelectHeightmapBlock(int index)
 {
@@ -431,6 +458,7 @@ void GameDebugSelectHeightmapBlock(int index)
     // clang-format on
     g_pChat->AddDebugMessage(g_debugHeightmapBlockFormat, index, row, column, (double)g_debugHeightmapStartX, displayY);
 }
+
 // 0x0009dc30
 void GameDebugMoveToHeightmapBlock()
 {
@@ -438,6 +466,7 @@ void GameDebugMoveToHeightmapBlock()
     CPed* ped = g_pGame->GetPlayerPed();
     ped->Teleport(g_debugHeightmapStartX + g_vehicleTrainSpeedMaximum, g_debugHeightmapStartY - g_vehicleTrainSpeedMaximum, 540.0f);
 }
+
 // 0x0009ddd0
 void GameDebugProcessHeightmap()
 {
@@ -479,27 +508,12 @@ void GameDebugProcessHeightmap()
     --g_debugHeightmapWaitFrames;
 }
 
-#include "game/hooks.h"
-#pragma bss_seg(".pstate$g")
-// 0x002aae10
-void* g_rwImageScratch;
-#pragma bss_seg()
 // 0x002abe40
 #define g_debugRasterSource (*(void**)(g_entityCollisionScratch + 0x1028))
 // 0x002abe44
 #define g_debugRasterResult (*(void**)(g_entityCollisionScratch + 0x102c))
 // 0x002abe48
 #define g_debugRasterAlternate (*(void**)(g_entityCollisionScratch + 0x1030))
-// 0x0011e370
-const char g_debugAllBuildingsFilename[] = "c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
-// 0x0011f594
-const char g_debugRasterMissingText[] = "No texture!";
-// 0x0011f5cc
-const char g_debugRasterFirstFilename[] = "Raster1.bmp";
-// 0x0011f5a0
-const char g_debugRasterSecondFilename[] = "Raster2.bmp";
-// 0x0011f5ac
-const char g_debugRasterDimensionsFormat[] = "Width %u Height: %u Depth: %u";
 // 0x0009cf80
 void GameDebugExportWorldPlacements()
 {
@@ -520,6 +534,7 @@ void GameDebugExportWorldPlacements()
             GameDebugWriteEntityPlacement(cursor, file);
     fclose(file);
 }
+
 // 0x000b5610
 void GameDebugBindRasterResult()
 {
@@ -536,6 +551,7 @@ void GameDebugBindRasterResult()
     *(void**)0xb4e3ec = result;
     *(DWORD*)0x8a7780 = 0x40000000;
 }
+
 // 0x000b5690
 void GameDebugWriteRasterImage(void* raster, const char* filename)
 {
@@ -547,6 +563,7 @@ void GameDebugWriteRasterImage(void* raster, const char* filename)
     ((void*(__cdecl*)(void*, const char*))0x7ce990)(image, filename);
     ((DWORD(__cdecl*)(void*))0x802740)(image);
 }
+
 // 0x000b5700
 void GameDebugDumpRasterImages()
 {

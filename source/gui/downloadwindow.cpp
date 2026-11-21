@@ -1,4 +1,38 @@
 #include "gui/downloadwindow.h"
+#include "GetTime.h"
+#include "game/gta_globals.h"
+#include "game/vehicle.h"
+#include "gui/gui.h"
+#include "gui/objectedit.h"
+#include "render/fontrender.h"
+#include <DXUTgui.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// 0x0011c37c
+const char g_downloadWindowTitle[18] = "Updating models..";
+// 0x0011c414
+const char g_downloadModel[6] = "Model";
+// 0x0011c40c
+const char g_downloadTexture[8] = "Texture";
+// 0x0011c404
+const char g_downloadIdFormat[5] = "0x%X";
+// 0x0011c400
+const char g_downloadZeroFormat[4] = "0%%";
+// 0x0011c3f8
+const char g_downloadPercentFormat[7] = "%.0f%%";
+// 0x0011c3e0
+const char g_downloadDetailFormat[21] = "{CC8888}(%d) %.16s..";
+// 0x0011c3c8
+const char g_downloadErrorFormat[24] = "{CC8888}Error(%d) %d/%d";
+// 0x0011c3b8
+const char g_downloadCompleteFormat[15] = "{77AA77}%.0f%%";
+// 0x0011c390
+const char g_downloadCaptionFormat[38] = "Updating models.. [%d/%d] (%.2f KB/s)";
+// 0x0011b918
+const float g_downloadKilobytesPerByte = 0.0009765625f;
+
 // 0x0006a410
 CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
 {
@@ -6,24 +40,19 @@ CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
     *(DWORD*)(nativeState + 4) = 0;
     return this;
 }
+
 // 0x0006aa00
 DownloadRecordStorage::~DownloadRecordStorage()
 {
     ResizeRecords(0);
 }
+
 // 0x0006a440
 int CDownloadWindow::GetFilesCount()
 {
     return *(int*)(nativeState + 4);
 }
-#include "GetTime.h"
-#include "render/fontrender.h"
-#include "game/gta_globals.h"
-#include "gui/gui.h"
-#include <DXUTgui.h>
-#include <string.h>
-// 0x0011c37c
-const char g_downloadWindowTitle[18] = "Updating models..";
+
 // 0x0006aa10
 CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
 {
@@ -77,6 +106,7 @@ void CDownloadWindow::ResetFonts()
     list = (CDXUTControl*)state[11];
     list->SetSize((LONG)listWidth, (LONG)listHeight);
 }
+
 // 0x0006a280
 __declspec(noinline) void CDownloadWindow::GetRect(RECT* out)
 {
@@ -86,6 +116,7 @@ __declspec(noinline) void CDownloadWindow::GetRect(RECT* out)
     out->top = state[4];
     out->bottom = (LONG)(state[6] + (DWORD)out->top);
 }
+
 // 0x0006a2b0
 void CDownloadWindow::Show(DWORD mode)
 {
@@ -106,6 +137,7 @@ void CDownloadWindow::Show(DWORD mode)
     ResetFonts();
     state[12] = 1;
 }
+
 // 0x0006a350
 void CDownloadWindow::Draw()
 {
@@ -119,7 +151,6 @@ void CDownloadWindow::Draw()
     GetRect(&rect);
     rect.top = (LONG)((DWORD)rect.top + *(DWORD*)((BYTE*)state[10] + 0x126) + 3);
     rect.left = (LONG)((DWORD)rect.left + 16);
-    // Native signed count is live and unbounded; three columns are initialized by construction.
     int column = 0;
     if ((LONG)state[13] > 0)
     {
@@ -136,6 +167,7 @@ void CDownloadWindow::Draw()
         while (column < (LONG)state[13]);
     }
 }
+
 // 0x0006a500
 void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
 {
@@ -160,31 +192,6 @@ void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
     created->columnWidths[1] = state[0x90];
 }
 
-#include "game/vehicle.h"
-#include "gui/objectedit.h"
-#include <stdio.h>
-#include <stdlib.h>
-// 0x0011c414
-const char g_downloadModel[6] = "Model";
-// 0x0011c40c
-const char g_downloadTexture[8] = "Texture";
-// 0x0011c404
-const char g_downloadIdFormat[5] = "0x%X";
-// 0x0011c400
-const char g_downloadZeroFormat[4] = "0%%";
-// 0x0011c3f8
-const char g_downloadPercentFormat[7] = "%.0f%%";
-// 0x0011c3e0
-const char g_downloadDetailFormat[21] = "{CC8888}(%d) %.16s..";
-// 0x0011c3c8
-const char g_downloadErrorFormat[24] = "{CC8888}Error(%d) %d/%d";
-// 0x0011c3b8
-const char g_downloadCompleteFormat[15] = "{77AA77}%.0f%%";
-// 0x0011c390
-const char g_downloadCaptionFormat[38] = "Updating models.. [%d/%d] (%.2f KB/s)";
-
-// 0x0011b918
-const float g_downloadKilobytesPerByte = 0.0009765625f;
 // 0x0006a420
 DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
 {
@@ -193,6 +200,7 @@ DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
         return 0;
     return ((DownloadRecord**)state[0])[index];
 }
+
 // 0x0006a450
 bool DownloadRecordStorage::ResizeRecords(DWORD count)
 {
@@ -223,6 +231,7 @@ bool DownloadRecordStorage::ResizeRecords(DWORD count)
     state[1] = count;
     return true;
 }
+
 // 0x0006a4c0
 void CDownloadWindow::TrimRecords()
 {
@@ -244,12 +253,12 @@ void CDownloadWindow::TrimRecords()
     else
         ResizeRecords(++last);
 }
+
 // 0x0006a610
 __declspec(noinline) int CDownloadWindow::FindRecord(DWORD id)
 {
     DWORD* state = (DWORD*)nativeState;
     DWORD count = state[1];
-    // Native assumes every visited record is non-null; holes are not skipped.
     DWORD i = 0;
     if (count)
     {
@@ -262,11 +271,13 @@ __declspec(noinline) int CDownloadWindow::FindRecord(DWORD id)
     }
     return -1;
 }
+
 // 0x0006a640
 void CDownloadWindow::ResetRecordStorage()
 {
     ResizeRecords(0);
 }
+
 // 0x0006a650
 int CDownloadWindow::AddRecord(DownloadRecord* record)
 {
@@ -292,6 +303,7 @@ int CDownloadWindow::AddRecord(DownloadRecord* record)
     ((DownloadRecord**)state[0])[count] = record;
     return (int)count;
 }
+
 // 0x0006a6b0
 __declspec(noinline) bool CDownloadWindow::RemoveRecord(DWORD index)
 {
@@ -302,6 +314,7 @@ __declspec(noinline) bool CDownloadWindow::RemoveRecord(DWORD index)
     TrimRecords();
     return true;
 }
+
 // 0x0006a6e0
 __declspec(noinline) void CDownloadWindow::ClearRecords()
 {
@@ -319,6 +332,7 @@ __declspec(noinline) void CDownloadWindow::ClearRecords()
         }
     ((CDXUTListBoxDL*)state[11])->RemoveAllItems();
 }
+
 // 0x0006ab10
 void CDownloadWindow::Hide()
 {
@@ -329,6 +343,7 @@ void CDownloadWindow::Hide()
     state[0x93] = 0;
     state[0x94] = 0xffffffff;
 }
+
 // 0x0006a720
 void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downloaded, DWORD total, int error, const char* detail)
 {

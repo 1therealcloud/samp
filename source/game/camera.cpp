@@ -12,11 +12,13 @@ CCamera::~CCamera()
     m_pAttachedTo = 0;
     *(BYTE*)&m_pMatrix = 0;
 }
+
 // 0x0009d280
 void CCamera::Fade(BOOL in)
 {
     Scripting::ProcessCommand(&g_cameraFade, 500, in);
 }
+
 // 0x0009d2a0
 void CCamera::GetMatrix(CMatrix* matrix)
 {
@@ -33,6 +35,7 @@ void CCamera::GetMatrix(CMatrix* matrix)
     matrix->position.y = m_pMatrix->position.y;
     matrix->position.z = m_pMatrix->position.z;
 }
+
 // 0x0009d320
 void CCamera::SetMatrix(CMatrix matrix)
 {
@@ -49,6 +52,7 @@ void CCamera::SetMatrix(CMatrix matrix)
     m_pMatrix->position.y = matrix.position.y;
     m_pMatrix->position.z = matrix.position.z;
 }
+
 // 0x0009d3b0
 void CCamera::TakeControl(void* target, int mode, int switchType)
 {
@@ -65,6 +69,7 @@ void CCamera::TakeControl(void* target, int mode, int switchType)
     }
     // clang-format on
 }
+
 // 0x0009d3d0
 void CCamera::SetMoveVector(CVector* from, CVector* to, int time, BYTE mode)
 {
@@ -72,18 +77,21 @@ void CCamera::SetMoveVector(CVector* from, CVector* to, int time, BYTE mode)
     Scripting::ProcessCommand(&g_cameraPersistPosition, 1);
     Scripting::ProcessCommand(&g_cameraMove, (double)from->x, (double)from->y, (double)from->z, (double)to->x, (double)to->y, (double)to->z, time, (int)mode);
 }
+
 // 0x0009d440
 void CCamera::SetTrackVector(CVector* from, CVector* to, int time, BYTE mode)
 {
     Scripting::ProcessCommand(&g_cameraPersistTrack, 1);
     Scripting::ProcessCommand(&g_cameraTrack, (double)from->x, (double)from->y, (double)from->z, (double)to->x, (double)to->y, (double)to->z, time, (int)mode);
 }
+
 // Strict bounds, ordered comparisons. Native returns AL, not a WORD or BOOL.
 // 0x000b46e0
 BYTE __cdecl GameIsCameraPointValid(const CVector* point)
 {
     return point->x < 20000.0f && point->x > -20000.0f && point->y < 20000.0f && point->y > -20000.0f && point->z < 100000.0f && point->z > -10000.0f;
 }
+
 // 0x0009d4a0
 void CCamera::Attach(CEntity* owner)
 {
@@ -96,6 +104,7 @@ void CCamera::Attach(CEntity* owner)
             SetMoveVector(&matrix.position, &matrix.position, 100, true);
     }
 }
+
 // 0x0009d4f0
 void CCamera::SetToOwner()
 {
@@ -107,6 +116,7 @@ void CCamera::SetToOwner()
             SetMoveVector(&matrix.position, &matrix.position, 100, true);
     }
 }
+
 // VC7 /O2 keeps these intermediates in x87 and returns the native unspilled result.
 // 0x0009d540
 float CCamera::GetDistanceToPoint(CVector* point)
@@ -117,6 +127,7 @@ float CCamera::GetDistanceToPoint(CVector* point)
     float x = point->x - *(const float*)0xb6f9cc;
     return (float)sqrt(x * x + y * y + z * z);
 }
+
 // 0x0009d580
 void CCamera::Restore()
 {
@@ -126,6 +137,7 @@ void CCamera::Restore()
     Scripting::ProcessCommand(&g_cameraRestoreJumpcut);
     Scripting::ProcessCommand(&g_cameraRestore);
 }
+
 // 0x0009d5c0
 void CCamera::Set(CVector position, CVector rotation)
 {
@@ -133,6 +145,7 @@ void CCamera::Set(CVector position, CVector rotation)
     m_pAttachedTo = 0;
     Scripting::ProcessCommand(&g_cameraSet, (double)position.x, (double)position.y, (double)position.z, (double)rotation.x, (double)rotation.y, (double)rotation.z);
 }
+
 // 0x0009d620
 void CCamera::PointAt(CVector point, int switchStyle)
 {
@@ -140,6 +153,7 @@ void CCamera::PointAt(CVector point, int switchStyle)
     m_pAttachedTo = 0;
     Scripting::ProcessCommand(&g_cameraPointAt, (double)point.x, (double)point.y, (double)point.z, switchStyle);
 }
+
 // 0x0009d670
 void CCamera::Detach()
 {

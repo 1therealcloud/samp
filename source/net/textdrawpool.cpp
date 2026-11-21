@@ -12,6 +12,7 @@ CTextDraw* CTextDrawPool::Get(WORD id)
         return 0;
     return draws[index];
 }
+
 // 0x0001e260
 CTextDrawPool::CTextDrawPool()
 {
@@ -22,6 +23,7 @@ CTextDrawPool::CTextDrawPool()
     }
     GameInitializeTextDrawTextures();
 }
+
 // 0x0001e2b0
 void CTextDrawPool::Delete(WORD id)
 {
@@ -32,6 +34,7 @@ void CTextDrawPool::Delete(WORD id)
     draws[id] = 0;
     active[id] = 0;
 }
+
 // 0x0001e390
 CTextDrawPool::~CTextDrawPool()
 {
@@ -45,6 +48,7 @@ CTextDrawPool::~CTextDrawPool()
         active[i] = 0;
     }
 }
+
 // 0x0001e3d0
 CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const char* text)
 {
@@ -60,6 +64,7 @@ CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const ch
     }
     return 0;
 }
+
 // 0x0001e2f0
 void CTextDrawPool::Draw()
 {
@@ -74,6 +79,7 @@ void CTextDrawPool::Draw()
         while (++i != 2304);
     }
 }
+
 // 0x0001e330
 void CTextDrawPool::Native01E330()
 {
@@ -81,6 +87,7 @@ void CTextDrawPool::Native01E330()
         if (active[i])
             draws[i]->Native0B30A0();
 }
+
 // 0x0001e360
 void CTextDrawPool::OnLostDevice()
 {

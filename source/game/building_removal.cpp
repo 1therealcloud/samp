@@ -2,11 +2,17 @@
 
 #include "game/building_removal.h"
 
+#include "game/hooks.h"
 #include "game/util.h"
 // 0x0011e338
 const float g_buildingRemovalDrop = 2000.0f;
 // 0x0011e33c
 const float g_buildingLodCoordinateScale = 0.25f;
+// 0x00188df8
+BuildingRemovalRecord g_buildingRemovalRecords[1000];
+// 0x0018dc18
+int g_buildingRemovalCount;
+
 // 0x0009ca80
 void GameHideObjectEntity(void* entity)
 {
@@ -27,12 +33,14 @@ void GameHideObjectEntity(void* entity)
     }
     // clang-format on
 }
+
 // 0x0009cab0
 void GameHideBuildingEntity(void* entity)
 {
     if (entity)
         GameHideObjectEntity(entity);
 }
+
 // 0x0009cb50
 void GameRemoveLodBuildings(float x, float y, float z, float radius)
 {
@@ -63,6 +71,7 @@ void GameRemoveLodBuildings(float x, float y, float z, float radius)
         if (inside) for (int word = 0; word < 6; word++)((short*)record)[word] = 0;
     }
 }
+
 // 0x0009cc10
 void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radius)
 {
@@ -113,6 +122,7 @@ void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radi
         }
     }
 }
+
 // 0x0009d210
 void GameRemoveBuilding(int model, float x, float y, float z, float radius)
 {
@@ -126,10 +136,6 @@ void GameRemoveBuilding(int model, float x, float y, float z, float radius)
     memcpy(&record->radius, &radius, 4);
     g_buildingRemovalCount = (int)((DWORD)count + 1);
 }
-// 0x00188df8
-BuildingRemovalRecord g_buildingRemovalRecords[1000];
-// 0x0018dc18
-int g_buildingRemovalCount;
 // Native ST0 returns an unspilled x87 result. Order is dz^2 + dy^2 + dx^2;
 // reassociation or a float temporary changes radius-boundary comparisons.
 // 0x000b4570
@@ -159,6 +165,7 @@ __declspec(naked) float __stdcall GameDistanceBetweenPoints(float x, float y, fl
     }
     // clang-format on
 }
+
 // 0x0009cae0
 BOOL GameShouldSuppressMarker(int model, float x, float y, float z)
 {
@@ -180,7 +187,6 @@ BOOL GameShouldSuppressMarker(int model, float x, float y, float z)
     return FALSE;
 }
 
-#include "game/hooks.h"
 // 0x0009cdd0
 void GameHideAllWorldEntities()
 {

@@ -2,18 +2,11 @@
 
 #include "game/scripting.h"
 
+#include "gui/chatwindow.h"
 #include "main.h"
+#include <stdarg.h>
 // 0x002a93f0
 CRunningScript* g_scriptThread;
-// 0x000b2150
-void Scripting::Initialize()
-{
-    g_scriptThread = (CRunningScript*)operator new(224);
-    memset(g_scriptThread, 0, 224);
-}
-
-#include "gui/chatwindow.h"
-#include <stdarg.h>
 // 0x002a92f0
 BYTE g_scriptBuffer[256];
 // 0x002a92a8
@@ -22,10 +15,19 @@ DWORD* g_scriptVariables[18];
 DWORD g_scriptLastOpcode;
 // 0x002a93f8
 BOOL g_scriptLocalDebug;
+
 // 0x00155390
 FARPROC g_scriptProcessOneCommand = (FARPROC)0x469eb0;
 // 0x00163a70
 int g_gameExceptionCount;
+
+// 0x000b2150
+void Scripting::Initialize()
+{
+    g_scriptThread = (CRunningScript*)operator new(224);
+    memset(g_scriptThread, 0, 224);
+}
+
 // 0x00060470
 int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, const char* warning)
 {
@@ -43,6 +45,7 @@ int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, cons
     }
     return EXCEPTION_CONTINUE_SEARCH;
 }
+
 // 0x000b1ed0
 __declspec(naked) DWORD Scripting::ExecBuffer()
 {
@@ -61,6 +64,7 @@ __declspec(naked) DWORD Scripting::ExecBuffer()
     }
     // clang-format on
 }
+
 // 0x000b1f10
 DWORD __cdecl Scripting::ProcessCommand(const OpcodeInfo* command, ...)
 {

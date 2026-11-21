@@ -21,7 +21,6 @@ public:
     void* RenderPed(int model, DWORD background, const CVector* rotation, float zoom);
     // 0x0006be00
     void* RenderVehicle(int model, DWORD background, const CVector* rotation, float zoom, int primary, int secondary);
-    // Descriptive name: constructs a CObject; the later renderer uses a raw RW object.
     // 0x0006c0b0
     void* RenderObjectEntity(int model, DWORD background, const CVector* rotation, float zoom);
     // 0x0006c3f0

@@ -29,7 +29,6 @@ public:
     // 0x00002de0
     WORD GetLocalId();
 
-    // Descriptive name: native returns a raw player-info pointer, not a BOOL.
     // Native accepts adjacent ID1004 without checking connected state.
     // 0x000010d0
     CPlayerInfo* GetPlayerInfo(WORD player);

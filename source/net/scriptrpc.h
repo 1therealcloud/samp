@@ -77,10 +77,8 @@ void ScrApplyAnimation(RPCParameters* parameters);
 void ScrClearAnimations(RPCParameters* parameters);
 // 0x0001c0f0
 void ScrMoveVehicleComponent(RPCParameters* parameters);
-// Descriptive name established by native message/opcode, RPC111.
 // 0x000185c0
 void ScrSetPlayerWidescreen(RPCParameters* parameters);
-// Descriptive name established by the native SetTires call, RPC98.
 // 0x00018670
 void ScrSetVehicleTires(RPCParameters* parameters);
 // 0x00118274
@@ -103,7 +101,6 @@ void ScrMoveObject(RPCParameters* parameters);
 void ScrStopObject(RPCParameters* parameters);
 // 0x0001d210
 void ScrSetActorAnimation(RPCParameters* parameters);
-// Descriptive name established by RPC174 and the actor ClearTasks call.
 // 0x0001d3f0
 void ScrClearActorAnimations(RPCParameters* parameters);
 // 0x0001d4b0

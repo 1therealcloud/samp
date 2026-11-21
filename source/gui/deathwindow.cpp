@@ -1,15 +1,7 @@
 #include "gui/deathwindow.h"
-// 0x0006c720
-BOOL CDeathWindow::AreAuxiliaryFontsInitialized()
-{
-    return auxiliaryFontsInitialized;
-}
-#include "render/fontrender.h"
 #include "gui/playertags.h"
+#include "render/fontrender.h"
 #include <string.h>
-extern "C" __int64 __cdecl _ftol2();
-// 0x0011c330
-const char g_deathAuxFontFace[9] = "SAMPAUX3";
 // 0x0011c34c
 const char g_deathWeaponFontFace[11] = "GTAWEAPON3";
 // 0x0011c358
@@ -20,6 +12,16 @@ const char g_deathWeaponBackgroundGlyph[2] = "G";
 const float g_deathWindowHorizontalFactor = 0.75f;
 // 0x0011c378
 const float g_deathWindowVerticalFactor = 0.3f;
+
+// 0x0011c330
+const char g_deathAuxFontFace[9] = "SAMPAUX3";
+
+// 0x0006c720
+BOOL CDeathWindow::AreAuxiliaryFontsInitialized()
+{
+    return auxiliaryFontsInitialized;
+}
+extern "C" __int64 __cdecl _ftol2();
 
 // 0x00069580
 CDeathWindow::~CDeathWindow()
@@ -237,6 +239,7 @@ void CDeathWindow::Draw()
     }
     sprite->End();
 }
+
 // 0x0006a090
 CDeathWindow::CDeathWindow(IDirect3DDevice9* device)
 {

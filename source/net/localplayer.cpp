@@ -1,71 +1,156 @@
 #include "net/localplayer.h"
 
-#include "main.h"
-#include <static_assert.h>
-// 0x00017770
-void CLocalPlayer::ReturnToClassSelection()
-{
-    m_state.wantsAnotherClass = 1;
-}
-// 0x0009e940
-DWORD CLocalPlayer::GetRCModeState()
-{
-    return m_state.rcMode;
-}
-// 0x00008170
-DWORD CLocalPlayer::GetActiveState()
-{
-    return m_state.active;
-}
-// 0x0000e2a0
-CEntity* CLocalPlayer::GetSurfingEntity()
-{
-    return m_state.surfingEntity;
-}
-// 0x00017760
-void CLocalPlayer::ClearSurfingEntityAndMode()
-{
-    m_state.surfingEntity = 0;
-    m_state.surfingMode = 0;
-}
-// 0x00017780
-void CLocalPlayer::SetTeam(BYTE team)
-{
-    m_state.team = team;
-}
-// 0x000a21d0
-BYTE CLocalPlayer::GetTeam()
-{
-    return m_state.team;
-}
 #include "BitStream.h"
 #include "RakClientInterface.h"
-#include "gui/chatwindow.h"
 #include "cmdprocs.h"
-#include "gui/cmdwindow.h"
 #include "game/actor.h"
 #include "game/aimstuff.h"
 #include "game/camera.h"
 #include "game/custommodels.h"
 #include "game/game.h"
 #include "game/gta_globals.h"
+#include "game/keystuff.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/textdraw.h"
 #include "game/util.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "gui/gui.h"
+#include "main.h"
 #include "net/actorpool.h"
 #include "net/objectpool.h"
 #include "net/playerinfo.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
+#include <static_assert.h>
 #include <stdio.h>
 #include <string.h>
-// VC7 runtime helper; library entry, not a recovered SA-MP method.
-extern "C" __int64 __cdecl _ftol2();
+// 0x00117948
+const float g_localAimZoomScale = 63.0f;
+// 0x0011794c
+const float g_localAimAspectScale = 255.0f;
+// 0x00117950
+int g_localWastedRpc = 53;
+// 0x00117978
+const float g_localUnoccupiedRange = 90.0f;
+// 0x00117880
+int g_localSpawnRpc = 52;
+// 0x0013c0a0
+DWORD g_localSkipInitialState = 1;
+// 0x0011787c
+int g_localSpawnRequestRpc = 129;
+// 0x00117954
+int g_localRequestClassRpc = 128;
+// 0x00117958
+int g_localInteriorChangeRpc = 118;
+// 0x0011795c
+int g_localChatRpc = 101;
+// 0x00117960
+int g_localEnterVehicleRpc = 26;
+// 0x00117964
+int g_localExitVehicleRpc = 154;
+// 0x0011796c
+int g_localPlayerDamageRpc = 115;
+// 0x00117974
+int g_localActorDamageRpc = 177;
+// 0x00117970
+const float g_localDamageScale = 0.33f;
+// 0x00117840
+const Scripting::OpcodeInfo g_localTrainCameraCommand = {0x158, "iii"};
+// 0x0013c0a4
+DWORD g_localTrainCameraTick = 0xffffffff;
+// 0x001569a8
+CVector g_localSurfPedTurnSpeed;
+// 0x001569b8
+CMatrix g_localSurfPedMatrix;
+// 0x001569f8
+CVector g_localSurfEntitySpeed;
+// 0x00156a08
+CMatrix g_localSurfInverseMatrix;
+// 0x00156a48
+CVector g_localSurfPedSpeed;
+// 0x00156a58
+CMatrix g_localSurfEntityMatrix;
+// 0x00156aa4
+CVector g_localSurfEntityTurnSpeed;
+// 0x0013c0a8
+DWORD g_localOnFootSendRate = 30;
+// 0x0013c0ac
+DWORD g_localInCarSendRate = 30;
+// 0x00117888
+const char g_localWorldBoundaryText[] = "Stay within the ~r~world boundries";
+// 0x00117968
+int g_localVehicleDamageRpc = 106;
+// 0x0011797c
+const float g_localPassengerEntryDistance = 8.0f;
+// 0x00117854
+const Scripting::OpcodeInfo g_localPedCameraCommand = {0x159, "iii"};
+// 0x001178ac
+const float g_localCameraRayLength = 70.0f;
+// 0x001178b0
+int g_localCameraTargetRpc = 168;
+// 0x00117920
+const char g_localCameraTargetObjectText[] = "CAMERA_TARGET_TYPE_OBJECT: ID(%u)";
+// 0x001178fc
+const char g_localCameraTargetVehicleText[] = "CAMERA_TARGET_TYPE_VEHICLE: ID(%u)";
+// 0x001178d8
+const char g_localCameraTargetPlayerText[] = "CAMERA_TARGET_TYPE_PLAYER: ID(%u)";
+// 0x001178b4
+const char g_localCameraTargetActorText[] = "CAMERA_TARGET_TYPE_ACTOR: ID(%u)";
+// 0x0013c0b0
+DWORD g_localAimSendRate = 30;
+// 0x00117980
+const char g_localClassSelectionMessage[] = "Returning to class selection after next death";
+
 // 0x00117944
 const float g_localQuaternionSyncThreshold = 0.00001f;
+
+// 0x00017770
+void CLocalPlayer::ReturnToClassSelection()
+{
+    m_state.wantsAnotherClass = 1;
+}
+
+// 0x0009e940
+DWORD CLocalPlayer::GetRCModeState()
+{
+    return m_state.rcMode;
+}
+
+// 0x00008170
+DWORD CLocalPlayer::GetActiveState()
+{
+    return m_state.active;
+}
+
+// 0x0000e2a0
+CEntity* CLocalPlayer::GetSurfingEntity()
+{
+    return m_state.surfingEntity;
+}
+
+// 0x00017760
+void CLocalPlayer::ClearSurfingEntityAndMode()
+{
+    m_state.surfingEntity = 0;
+    m_state.surfingMode = 0;
+}
+
+// 0x00017780
+void CLocalPlayer::SetTeam(BYTE team)
+{
+    m_state.team = team;
+}
+
+// 0x000a21d0
+BYTE CLocalPlayer::GetTeam()
+{
+    return m_state.team;
+}
+// VC7 runtime helper; library entry, not a recovered SA-MP method.
+extern "C" __int64 __cdecl _ftol2();
 // 0x00003390
 BYTE CLocalPlayer::GetSpecialAction()
 {
@@ -104,6 +189,7 @@ BYTE CLocalPlayer::GetSpecialAction()
         return 24;
     return GetPed()->HasDanceStyle() ? 25 : 0;
 }
+
 // 0x00004db0
 void CLocalPlayer::SendOnfootData()
 {
@@ -196,6 +282,7 @@ void CLocalPlayer::SendOnfootData()
         memcpy(&m_state.onfoot, &data, 68);
     }
 }
+
 // 0x00006e80
 void CLocalPlayer::SendIncarData()
 {
@@ -311,22 +398,19 @@ void CLocalPlayer::SendIncarData()
         SendAimData();
     }
 }
-// 0x00117948
-const float g_localAimZoomScale = 63.0f;
-// 0x0011794c
-const float g_localAimAspectScale = 255.0f;
-// 0x00117950
-int g_localWastedRpc = 53;
+
 // 0x000041c0
 DWORD CLocalPlayer::NeedsToSendOnfootData(WORD keys, WORD upDown, WORD leftRight)
 {
     return keys != m_state.onfoot.keys || upDown != m_state.onfoot.upDown || leftRight != m_state.onfoot.leftRight ? 1 : 0;
 }
+
 // 0x000041f0
 DWORD CLocalPlayer::NeedsToSendIncarData(WORD keys, WORD upDown, WORD leftRight)
 {
     return keys != m_state.incar.keys || upDown != m_state.incar.upDown || leftRight != m_state.incar.leftRight ? 1 : 0;
 }
+
 // 0x00005090
 void CLocalPlayer::SendAimData()
 {
@@ -372,6 +456,7 @@ void CLocalPlayer::SendAimData()
         memcpy(&m_state.aim, &data, 31);
     }
 }
+
 // 0x00005240
 void CLocalPlayer::SendTrailerData(WORD id)
 {
@@ -401,6 +486,7 @@ void CLocalPlayer::SendTrailerData(WORD id)
         memcpy(&m_state.trailer, &data, 54);
     }
 }
+
 // 0x00005400
 void CLocalPlayer::SendPassengerData()
 {
@@ -457,6 +543,7 @@ void CLocalPlayer::SendPassengerData()
         SendAimData();
     }
 }
+
 // 0x00005660
 void CLocalPlayer::WastedNotification()
 {
@@ -467,6 +554,7 @@ void CLocalPlayer::WastedNotification()
     stream.Write(killer);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localWastedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
+
 // 0x00005b50
 void CLocalPlayer::SendStats()
 {
@@ -478,8 +566,7 @@ void CLocalPlayer::SendStats()
     stream.Write(drunk);
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
 }
-// 0x00117978
-const float g_localUnoccupiedRange = 90.0f;
+
 // 0x00004bd0
 void CLocalPlayer::SendUnoccupiedData(WORD id, BYTE seat)
 {
@@ -510,6 +597,7 @@ void CLocalPlayer::SendUnoccupiedData(WORD id, BYTE seat)
     *(WORD*)((BYTE*)vehicles + 0x8e34 + id * 2) = players->localId;
     vehicle->m_dwLocalUnoccupiedSync = 1;
 }
+
 // 0x00006c10
 bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
 {
@@ -606,12 +694,14 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
     }
     return false;
 }
+
 // 0x0000e2b0
 void CLocalPlayer::ClearSurfingState()
 {
     m_state.surfingMode = 0;
     SetSurfingEntity(0, 0);
 }
+
 // 0x00003fb0
 void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome)
 {
@@ -626,6 +716,7 @@ void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome)
         m_state.spawnPermission = 1;
     }
 }
+
 // 0x00003af0
 void CLocalPlayer::SetSpawnInfo(const void* info)
 {
@@ -635,10 +726,7 @@ void CLocalPlayer::SetSpawnInfo(const void* info)
     *(WORD*)((BYTE*)&m_state.spawnInfo + 48) = *(const WORD*)(data + 48);
     m_state.hasSpawnInfo = 1;
 }
-// 0x00117880
-int g_localSpawnRpc = 52;
-// 0x0013c0a0
-DWORD g_localSkipInitialState = 1;
+
 // 0x00003110
 void CLocalPlayer::SetSpecialAction(BYTE action)
 {
@@ -711,6 +799,7 @@ void CLocalPlayer::SetSpecialAction(BYTE action)
             break;
     }
 }
+
 // 0x00003b20
 BOOL CLocalPlayer::Spawn()
 {
@@ -783,6 +872,7 @@ BOOL CLocalPlayer::Spawn()
     m_state.zoneDisplayTick = GetTickCount() + 1000;
     return TRUE;
 }
+
 // 0x00004080
 void CLocalPlayer::ToggleSpectating(BOOL enabled)
 {
@@ -801,6 +891,7 @@ void CLocalPlayer::ToggleSpectating(BOOL enabled)
     m_state.spectateProcessed = 0;
     m_state.spectateId = 0xffffffff;
 }
+
 // 0x000040f0
 void CLocalPlayer::SpectateVehicle(WORD id)
 {
@@ -812,6 +903,7 @@ void CLocalPlayer::SpectateVehicle(WORD id)
         m_state.spectateProcessed = 0;
     }
 }
+
 // 0x00004140
 void CLocalPlayer::SpectatePlayer(WORD id)
 {
@@ -827,18 +919,21 @@ void CLocalPlayer::SpectatePlayer(WORD id)
         m_state.spectateProcessed = 0;
     }
 }
+
 // 0x00003de0
 void CLocalPlayer::SetColor(DWORD color)
 {
     CPlayerPool* pool = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
     PlayerColors::Set(*(WORD*)pool, color);
 }
+
 // 0x00003e00
 DWORD CLocalPlayer::GetColorAsRGBA()
 {
     CPlayerPool* pool = *(CPlayerPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 8);
     return PlayerColors::Get(*(WORD*)pool);
 }
+
 // 0x00002ec0
 void CLocalPlayer::ResetData()
 {
@@ -871,6 +966,7 @@ void CLocalPlayer::ResetData()
     m_state.surfingLocked = 0;
     m_state.cameraTargetTick = last;
 }
+
 // 0x00004af0
 CLocalPlayer::CLocalPlayer()
 {
@@ -904,11 +1000,13 @@ CLocalPlayer::CLocalPlayer()
     }
     m_state.team = 0xff;
 }
+
 // 0x00002da0
 CPed* CLocalPlayer::GetPed()
 {
     return m_state.ped;
 }
+
 // 0x00003e20
 DWORD CLocalPlayer::GetColorAsARGB()
 {
@@ -919,14 +1017,6 @@ DWORD CLocalPlayer::GetColorAsARGB()
 }
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
 STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
-// 0x0011787c
-int g_localSpawnRequestRpc = 129;
-// 0x00117954
-int g_localRequestClassRpc = 128;
-// 0x00117958
-int g_localInteriorChangeRpc = 118;
-// 0x0011795c
-int g_localChatRpc = 101;
 // 0x00003970
 DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DWORD length)
 {
@@ -937,6 +1027,7 @@ DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DW
     }
     return 0;
 }
+
 // 0x00003650
 void CLocalPlayer::ProcessSurfing()
 {
@@ -1057,12 +1148,14 @@ void CLocalPlayer::ProcessSurfing()
     }
     m_state.rawSurfState2fa = 2;
 }
+
 // 0x00003a70
 void CLocalPlayer::SendSpawnRequest()
 {
     RakNet::BitStream stream;
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localSpawnRequestRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
+
 // 0x00003f40
 void CLocalPlayer::RequestSpawn()
 {
@@ -1072,6 +1165,7 @@ void CLocalPlayer::RequestSpawn()
         m_state.waitingForSpawnReply = 1;
     }
 }
+
 // 0x00005720
 void CLocalPlayer::RequestClass(int selection)
 {
@@ -1079,6 +1173,7 @@ void CLocalPlayer::RequestClass(int selection)
     stream.WriteBits((const unsigned char*)&selection, 32, true);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localRequestClassRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
+
 // 0x000057c0
 void CLocalPlayer::SendInteriorChange(BYTE interior)
 {
@@ -1087,6 +1182,7 @@ void CLocalPlayer::SendInteriorChange(BYTE interior)
     stream.WriteBits(&interior, 8, true);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localInteriorChangeRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
+
 // 0x00005860
 void CLocalPlayer::Chat(char* text)
 {
@@ -1096,6 +1192,7 @@ void CLocalPlayer::Chat(char* text)
     stream.Write(text, length);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localChatRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
+
 // 0x00005e30
 void CLocalPlayer::NextClass()
 {
@@ -1114,6 +1211,7 @@ void CLocalPlayer::NextClass()
     g_pGame->m_pAudio->Play(1052, matrix.position);
     RequestClass(m_state.selectedClass);
 }
+
 // 0x00005ec0
 void CLocalPlayer::PrevClass()
 {
@@ -1129,20 +1227,7 @@ void CLocalPlayer::PrevClass()
     g_pGame->m_pAudio->Play(1053, matrix.position);
     RequestClass(m_state.selectedClass);
 }
-// 0x00117960
-int g_localEnterVehicleRpc = 26;
-// 0x00117964
-int g_localExitVehicleRpc = 154;
-// 0x0011796c
-int g_localPlayerDamageRpc = 115;
-// 0x00117974
-int g_localActorDamageRpc = 177;
-// 0x00117970
-const float g_localDamageScale = 0.33f;
-// 0x00117840
-const Scripting::OpcodeInfo g_localTrainCameraCommand = {0x158, "iii"};
-// 0x0013c0a4
-DWORD g_localTrainCameraTick = 0xffffffff;
+
 // 0x00005920
 void CLocalPlayer::EnterVehicle(WORD vehicle, BOOL passenger)
 {
@@ -1163,6 +1248,7 @@ void CLocalPlayer::EnterVehicle(WORD vehicle, BOOL passenger)
         }
     }
 }
+
 // 0x00005a40
 void CLocalPlayer::ExitVehicle(int vehicle)
 {
@@ -1184,6 +1270,7 @@ void CLocalPlayer::ExitVehicle(int vehicle)
         ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localExitVehicleRpc, &stream, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, false);
     }
 }
+
 // 0x000066b0
 void CLocalPlayer::SendTakeDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart)
 {
@@ -1197,6 +1284,7 @@ void CLocalPlayer::SendTakeDamage(WORD player, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
+
 // 0x000067c0
 void CLocalPlayer::SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart)
 {
@@ -1209,6 +1297,7 @@ void CLocalPlayer::SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD
     stream.WriteBits((const unsigned char*)&bodyPart, 32, true);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localPlayerDamageRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
+
 // 0x000068d0
 void CLocalPlayer::SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD bodyPart)
 {
@@ -1289,22 +1378,7 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
 }
 
-#include "game/keystuff.h"
 // Shared native surfing work buffers; matrix.position aliases are not new globals.
-// 0x001569a8
-CVector g_localSurfPedTurnSpeed;
-// 0x001569b8
-CMatrix g_localSurfPedMatrix;
-// 0x001569f8
-CVector g_localSurfEntitySpeed;
-// 0x00156a08
-CMatrix g_localSurfInverseMatrix;
-// 0x00156a48
-CVector g_localSurfPedSpeed;
-// 0x00156a58
-CMatrix g_localSurfEntityMatrix;
-// 0x00156aa4
-CVector g_localSurfEntityTurnSpeed;
 
 // 0x000034b0
 void CLocalPlayer::ApplySurfingPhysics()
@@ -1335,6 +1409,7 @@ void CLocalPlayer::ApplySurfingPhysics()
         GameTransformPoint(&m_state.surfingOffset, &g_localSurfInverseMatrix, &g_localSurfPedMatrix.position);
     }
 }
+
 // 0x00003630
 __declspec(noinline) void CLocalPlayer::SetSurfingEntity(CEntity* entity, DWORD locked)
 {
@@ -1342,10 +1417,6 @@ __declspec(noinline) void CLocalPlayer::SetSurfingEntity(CEntity* entity, DWORD 
     m_state.surfingLocked = locked;
 }
 
-// 0x0013c0a8
-DWORD g_localOnFootSendRate = 30;
-// 0x0013c0ac
-DWORD g_localInCarSendRate = 30;
 // 0x000039c0
 DWORD CLocalPlayer::GetInCarSendRate()
 {
@@ -1355,6 +1426,7 @@ DWORD CLocalPlayer::GetInCarSendRate()
         return 15;
     return g_pGame->CountUsedPlayerSlots() + g_localInCarSendRate;
 }
+
 // 0x00003a00
 DWORD CLocalPlayer::GetOnFootSendRate()
 {
@@ -1364,6 +1436,7 @@ DWORD CLocalPlayer::GetOnFootSendRate()
         return 15;
     return g_pGame->CountUsedPlayerSlots() + g_localOnFootSendRate;
 }
+
 // 0x00003a40
 DWORD CLocalPlayer::GetSendRate()
 {
@@ -1373,12 +1446,6 @@ DWORD CLocalPlayer::GetSendRate()
     return ped->IsInVehicle() ? GetInCarSendRate() : GetOnFootSendRate();
 }
 
-// 0x00117888
-const char g_localWorldBoundaryText[] = "Stay within the ~r~world boundries";
-// 0x00117968
-int g_localVehicleDamageRpc = 106;
-// 0x0011797c
-const float g_localPassengerEntryDistance = 8.0f;
 // 0x00002fd0
 void CLocalPlayer::ProcessHead()
 {
@@ -1448,6 +1515,7 @@ void CLocalPlayer::ProcessHead()
         m_state.headTaskTick = now;
     }
 }
+
 // 0x00003e40
 void CLocalPlayer::ProcessWorldBoundaries()
 {
@@ -1460,6 +1528,7 @@ void CLocalPlayer::ProcessWorldBoundaries()
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
     }
 }
+
 // 0x00003ea0
 void CLocalPlayer::ProcessVehicleWorldBoundaries()
 {
@@ -1474,6 +1543,7 @@ void CLocalPlayer::ProcessVehicleWorldBoundaries()
     if (vehicle->EnforceWorldBoundries(settings->worldBounds[0], settings->worldBounds[1], settings->worldBounds[2], settings->worldBounds[3]))
         g_pGame->DisplayGameText(g_localWorldBoundaryText, 1000, 5);
 }
+
 // 0x00003f60
 void CLocalPlayer::PrepareForClassSelection()
 {
@@ -1489,6 +1559,7 @@ void CLocalPlayer::PrepareForClassSelection()
     m_state.initialSelectionTick = tick();
     m_state.classSelectionTick = tick();
 }
+
 // 0x00005c20
 void CLocalPlayer::ProcessVehicleDamage(WORD id)
 {
@@ -1528,6 +1599,7 @@ void CLocalPlayer::ProcessVehicleDamage(WORD id)
     STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE == 8);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
+
 // 0x00006de0
 void CLocalPlayer::ProcessPassengerEntry()
 {
@@ -1559,6 +1631,7 @@ void CLocalPlayer::ProcessPassengerEntry()
     m_state.ped->EnterVehicle(vehicle->m_nHandle, TRUE);
     EnterVehicle(id, TRUE);
 }
+
 // 0x00004a30
 WORD CLocalPlayer::GetAimedPlayer()
 {
@@ -1571,6 +1644,7 @@ WORD CLocalPlayer::GetAimedPlayer()
     CPlayerPool* players = ((CNetGame*)g_pNetGame)->pools->players;
     return players ? players->Find(target) : 0xffff;
 }
+
 // 0x00004a60
 WORD CLocalPlayer::GetAimedActor()
 {
@@ -1583,8 +1657,7 @@ WORD CLocalPlayer::GetAimedActor()
     CActorPool* actors = ((CNetGame*)g_pNetGame)->pools->actors;
     return actors ? (WORD)actors->Find(target) : 0xffff;
 }
-// 0x00117854
-const Scripting::OpcodeInfo g_localPedCameraCommand = {0x159, "iii"};
+
 // 0x00005f40
 void CLocalPlayer::ProcessClassSelection()
 {
@@ -1638,6 +1711,7 @@ void CLocalPlayer::ProcessClassSelection()
         NextClass();
     }
 }
+
 // 0x000060d0
 void CLocalPlayer::UpdateWeapons()
 {
@@ -1686,6 +1760,7 @@ void CLocalPlayer::UpdateWeapons()
         ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE, 0);
     }
 }
+
 // 0x00006360
 void CLocalPlayer::ProcessSpectating()
 {
@@ -1788,18 +1863,7 @@ void CLocalPlayer::ProcessSpectating()
         m_state.spectateProcessed = 1;
     }
 }
-// 0x001178ac
-const float g_localCameraRayLength = 70.0f;
-// 0x001178b0
-int g_localCameraTargetRpc = 168;
-// 0x00117920
-const char g_localCameraTargetObjectText[] = "CAMERA_TARGET_TYPE_OBJECT: ID(%u)";
-// 0x001178fc
-const char g_localCameraTargetVehicleText[] = "CAMERA_TARGET_TYPE_VEHICLE: ID(%u)";
-// 0x001178d8
-const char g_localCameraTargetPlayerText[] = "CAMERA_TARGET_TYPE_PLAYER: ID(%u)";
-// 0x001178b4
-const char g_localCameraTargetActorText[] = "CAMERA_TARGET_TYPE_ACTOR: ID(%u)";
+
 // 0x00004300
 bool CLocalPlayer::GetCameraTarget(WORD* targets)
 {
@@ -1888,6 +1952,7 @@ bool CLocalPlayer::GetCameraTarget(WORD* targets)
     }
     return true;
 }
+
 // 0x000045c0
 void CLocalPlayer::UpdateCameraTarget()
 {
@@ -1913,6 +1978,7 @@ void CLocalPlayer::UpdateCameraTarget()
     }
     m_state.cameraTargetTick = tick();
 }
+
 // 0x00004710
 void CLocalPlayer::DrawCameraTargetLabels()
 {
@@ -1953,10 +2019,7 @@ void CLocalPlayer::DrawCameraTargetLabels()
     }
     g_deviceLabel->End();
 }
-// 0x0013c0b0
-DWORD g_localAimSendRate = 30;
-// 0x00117980
-const char g_localClassSelectionMessage[] = "Returning to class selection after next death";
+
 // 0x000072d0
 BOOL CLocalPlayer::Process()
 {
@@ -2229,6 +2292,7 @@ DWORD CLocalPlayer::GetSpawnPermission()
 {
     return m_state.spawnPermission;
 }
+
 // 0x000135c0
 DWORD CLocalPlayer::IsSpectating()
 {

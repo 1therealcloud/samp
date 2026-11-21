@@ -1,7 +1,12 @@
 #include "gui/textdrawselection.h"
 
+#include "BitStream.h"
+#include "RakClientInterface.h"
 #include "gui/cmdwindow.h"
 #include "main.h"
+// 0x001182f8
+int g_textDrawClickRpc = 83;
+
 // 0x000c5120
 CTextDrawSelection::CTextDrawSelection()
 {
@@ -9,6 +14,7 @@ CTextDrawSelection::CTextDrawSelection()
     unknown08 = 0xffff;
     unknown04 = 0xffffffff;
 }
+
 // 0x00071010
 BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
 {
@@ -20,6 +26,7 @@ BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
     }
     return FALSE;
 }
+
 // 0x00070fc0
 void CTextDrawSelection::Disable()
 {
@@ -42,6 +49,7 @@ void CTextDrawSelection::Enable(DWORD color)
     unknown04 = ((color & 0xff) << 24) | ((color & 0xff00) << 8) | ((color & 0xff0000) >> 8) | ((color & 0xff000000) >> 24);
     unknown08 = 0xffff;
 }
+
 // 0x00070d50
 void CTextDrawSelection::ResetTextDraws()
 {
@@ -65,6 +73,7 @@ void CTextDrawSelection::ResetTextDraws()
         }
     }
 }
+
 // 0x00070db0
 void CTextDrawSelection::UpdateHovered()
 {
@@ -106,6 +115,7 @@ void CTextDrawSelection::UpdateHovered()
         }
     }
 }
+
 // 0x00070eb0
 void CTextDrawSelection::Process()
 {
@@ -116,10 +126,6 @@ void CTextDrawSelection::Process()
     UpdateHovered();
 }
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-// 0x001182f8
-int g_textDrawClickRpc = 83;
 // 0x00070f20
 void CTextDrawSelection::SendNotification()
 {

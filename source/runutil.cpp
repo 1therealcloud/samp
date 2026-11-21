@@ -5,6 +5,18 @@
 #include <string.h>
 
 #include "runutil.h"
+#include <stdlib.h>
+#include <windows.h>
+
+// 0x00118230
+const char g_base64Alphabet[66] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+// 0x0013c4b4
+const char* g_base64Encoding = g_base64Alphabet;
+// 0x0018dc3c
+unsigned long g_clientD3D9BaseEncoded;
+// 0x0018dc40
+unsigned long g_clientD3D9ImageSize;
 
 // 0x000172e0
 void Util_UrlUnencode(char* enc)
@@ -44,6 +56,7 @@ void Util_strupr(char* text)
         ++text;
     }
 }
+
 // 0x00017510
 int Util_strnicmp(const char* first, const char* second, size_t count)
 {
@@ -209,11 +222,6 @@ char* K_DecodeString(unsigned char* szInput)
     return st;
 }
 
-// 0x00118230
-const char g_base64Alphabet[66] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-// 0x0013c4b4
-const char* g_base64Encoding = g_base64Alphabet;
-
 // 0x00017380
 char* Util_stristr(const char* String, const char* Pattern)
 {
@@ -294,6 +302,7 @@ bool Util_IsDecimal(const char* text)
     }
     return true;
 }
+
 // 0x000b5920
 void Util_SanitizeAscii(char* text)
 {
@@ -306,7 +315,6 @@ void Util_SanitizeAscii(char* text)
     }
 }
 
-#include <windows.h>
 // Explicit ANSI x86 Toolhelp layout, independent of production UNICODE defines.
 // Observed native entry size548, module-name offset32 and base/size offsets20/24.
 struct NativeModuleEntry32A
@@ -316,10 +324,6 @@ struct NativeModuleEntry32A
     char moduleName[256];
     char executablePath[260];
 };
-// 0x0018dc3c
-unsigned long g_clientD3D9BaseEncoded;
-// 0x0018dc40
-unsigned long g_clientD3D9ImageSize;
 // 0x0009d8c0
 unsigned long Util_RefreshD3D9ModuleInfo()
 {
@@ -366,7 +370,6 @@ unsigned long Util_RefreshD3D9ModuleInfo()
     return matches;
 }
 
-#include <stdlib.h>
 // Recovered from native instructions. No callbacks into the reference samp.dll.
 
 // 0x000b5950

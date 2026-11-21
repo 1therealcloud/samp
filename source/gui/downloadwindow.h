@@ -67,7 +67,6 @@ public:
     void ResetFonts();
     // 0x0006a280
     void GetRect(RECT* out);
-    // Descriptive name; parameter is copied verbatim to native state +250.
     // 0x0006a2b0
     void Show(DWORD mode);
     // 0x0006a350

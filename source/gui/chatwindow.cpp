@@ -1,24 +1,6 @@
-#include "main.h"
-// Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
-// Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
-#include "gui/chatwindow.h"
-// 0x00068e00
-LONG CChat::GetChatWindowBottom()
-{
-    return m_nWindowBottom;
-}
-// 0x00067f20
-void CChat::SetTimestamps(BYTE enabled)
-{
-    *((BYTE*)this + offsetof(CChat, m_bTimestamps)) = enabled;
-    m_bRedraw = TRUE;
-}
-// 0x00067f40
-BYTE CChat::GetTimestamps()
-{
-    return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
-}
+#include "config.h"
 #include "gui/cmdwindow.h"
+#include "main.h"
 #include "runutil.h"
 #include <DXUT.h>
 #include <DXUTgui.h>
@@ -29,14 +11,35 @@ BYTE CChat::GetTimestamps()
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-
-// Unresolved native dependencies, with explicit VA bindings in the build report.
-// These declarations do not call back into the original DLL.
-#include "config.h"
+// Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
+// Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
+#include "gui/chatwindow.h"
 // 0x002aca3c
 extern CGame* g_pGame;
 // 0x002aca14
 extern CInput* g_pInput;
+
+// 0x00068e00
+LONG CChat::GetChatWindowBottom()
+{
+    return m_nWindowBottom;
+}
+
+// 0x00067f20
+void CChat::SetTimestamps(BYTE enabled)
+{
+    *((BYTE*)this + offsetof(CChat, m_bTimestamps)) = enabled;
+    m_bRedraw = TRUE;
+}
+
+// 0x00067f40
+BYTE CChat::GetTimestamps()
+{
+    return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
+}
+
+// Unresolved native dependencies, with explicit VA bindings in the build report.
+// These declarations do not call back into the original DLL.
 
 // 0x00060d30
 int CChat::GetMode()

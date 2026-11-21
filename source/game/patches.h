@@ -10,7 +10,6 @@ void GameInstallShotHooks();
 extern DWORD g_gameVehicleControlPatched;
 // 0x002a927c
 extern DWORD g_gameManualVehicleControl;
-// Descriptive name: native settings +0x2B selects this patch set.
 // 0x000aa800
 void GameApplyManualVehicleControlPatches();
 // 0x001546c0

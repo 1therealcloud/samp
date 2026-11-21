@@ -7,7 +7,6 @@
 #include <windows.h>
 
 #include <static_assert.h>
-// Descriptive names for the native model-file parser types.
 #pragma pack(push, 1)
 struct CModelFileStream
 {
@@ -249,7 +248,6 @@ struct CModelGeometry
     BYTE HasVertexColors();
     // 0x000bc500
     void* GetVertexColors();
-    // Descriptive name: each input's first four bytes are repeated for all vertices.
     // 0x000bc510
     DWORD SetRepeatedVertexColors(const BYTE* first, const BYTE* second);
     // 0x000bc600

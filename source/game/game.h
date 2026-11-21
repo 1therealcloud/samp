@@ -66,7 +66,6 @@ public:
     BYTE FindFreePlayerSlot();
     // 0x0009ff30
     BYTE CountUsedPlayerSlots();
-    // Descriptive name; native string consumers remain to be attributed.
     // 0x000a0120
     void SetEightByteName(const char* name);
     // Virtual scalar deletion; no pool-slot bookkeeping is performed.
@@ -572,7 +571,6 @@ extern DWORD g_gamePreviewPed[488];
 // Unchecked index; native reloads selected table after the real CRT free.
 // 0x000a7720
 void GameFreeModelInfo(int model);
-// Descriptive name; original name and unused parameters are unknown.
 // 0x0000e4f0
 void GameLoadRequestedModelsAndEndThread();
 

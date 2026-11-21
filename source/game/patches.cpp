@@ -4,6 +4,38 @@
 
 #include "game/game.h"
 #include "game/hooks.h"
+#include <stdlib.h>
+// 0x002a9278
+DWORD g_gameVehicleControlPatched = 0;
+// 0x002a927c
+DWORD g_gameManualVehicleControl = 0;
+// 0x001546c0
+BYTE g_gamePatchStreamBytes[7] = {0xb8, 0x89, 0x8f, 0x6f, 0x0, 0xff, 0xe0};
+// 0x001546c8
+DWORD g_gamePatchValue1546c8 = 0x469c4000;
+// 0x001546cc
+DWORD g_gamePatchValue1546cc = 0xc69c4000;
+// 0x001546f0
+float g_gamePatchValue1546f0 = 2.0f;
+// 0x001546f4
+DWORD g_gamePatchValue1546f4 = 0x461c4000;
+// 0x0018f498
+DWORD g_gameVersionAddressA;
+// 0x0018f49c
+DWORD g_gameVersionAddressB;
+// 0x001e04b0
+DWORD g_gameScanList[40000];
+
+// 0x002075b0
+GamePedModelRecord g_gamePedModels[319];
+// 0x0020ca70
+GameModelRecord32 g_gameModelRecords[20000];
+// 0x002a8e70
+BYTE g_gameModelFlags[1024];
+
+// 0x001546d0
+DWORD g_gameCount44OperandSites[7] = {0x410dbb, 0x410de5, 0x410f68, 0x410aa4, 0x410cc4, 0x410ead, 0x411505};
+
 // 0x000a6f00
 void GameInstallVehicleDamageFilter()
 {
@@ -15,6 +47,7 @@ void GameInstallVehicleDamageFilter()
     *(DWORD*)(site + 1) = (DWORD)GameHook_000a5090 - 0x6d7c95;
     protect(site, 5, oldProtection, &ignoredProtection);
 }
+
 // 0x000a6d50
 void GameInstallShotHooks()
 {
@@ -33,10 +66,7 @@ void GameInstallShotHooks()
         protect(site, 5, oldProtection, &ignoredProtection);
     }
 }
-// 0x002a9278
-DWORD g_gameVehicleControlPatched = 0;
-// 0x002a927c
-DWORD g_gameManualVehicleControl = 0;
+
 // 0x000aa800
 void GameApplyManualVehicleControlPatches()
 {
@@ -64,20 +94,7 @@ void GameApplyManualVehicleControlPatches()
     g_gameVehicleControlPatched = 1;
     g_gameManualVehicleControl = 1;
 }
-// 0x001546c0
-BYTE g_gamePatchStreamBytes[7] = {0xb8, 0x89, 0x8f, 0x6f, 0x0, 0xff, 0xe0};
-// 0x001546c8
-DWORD g_gamePatchValue1546c8 = 0x469c4000;
-// 0x001546cc
-DWORD g_gamePatchValue1546cc = 0xc69c4000;
-// 0x001546f0
-float g_gamePatchValue1546f0 = 2.0f;
-// 0x001546f4
-DWORD g_gamePatchValue1546f4 = 0x461c4000;
-// 0x0018f498
-DWORD g_gameVersionAddressA;
-// 0x0018f49c
-DWORD g_gameVersionAddressB;
+
 // 0x000aaad0
 void GameApplyInGamePatches()
 {
@@ -448,14 +465,6 @@ void GameInstallEventOpcodes()
 }
 
 #include "game/limit_values.inc"
-// 0x001e04b0
-DWORD g_gameScanList[40000];
-// 0x002075b0
-GamePedModelRecord g_gamePedModels[319];
-// 0x0020ca70
-GameModelRecord32 g_gameModelRecords[20000];
-// 0x002a8e70
-BYTE g_gameModelFlags[1024];
 // 0x000aa6a0
 void GameRelocateScanList()
 {
@@ -504,6 +513,7 @@ void GameRelocateScanList()
     *(DWORD*)0x40936a = (DWORD)(g_gameScanList + 1);
     memset((void*)0xb7d0b8, 0, 0x1c200);
 }
+
 // 0x000aa5e0
 void GameRelocatePedModels()
 {
@@ -515,6 +525,7 @@ void GameRelocatePedModels()
     UnFuck((void*)0x4c67ad, 4);
     *(DWORD*)0x4c67ad = (DWORD)g_gamePedModels;
 }
+
 // 0x000aa630
 void GameRelocateModelRecords()
 {
@@ -529,6 +540,7 @@ void GameRelocateModelRecords()
         *(DWORD*)g_gameModelReferenceSites[j] = (DWORD)g_gameModelRecords;
     }
 }
+
 // 0x000aa980
 void GameRelocateModelFlags()
 {
@@ -548,6 +560,7 @@ void GameRelocateModelFlags()
     UnFuck((void*)0x6a6ffa, 4);
     *(DWORD*)0x6a6ffa = (DWORD)g_gameModelFlags;
 }
+
 // 0x000aa180
 void GameIncreasePoolLimits()
 {
@@ -602,7 +615,6 @@ void _patch(DWORD address, BYTE* data, int byteCount)
     VirtualProtect((void*)address, byteCount, oldProtection, &ignoredProtection);
 }
 
-#include <stdlib.h>
 // Legacy allocation patches; native retains these allocations indefinitely.
 #define patch(a, b) _patch(a, b, sizeof(b))
 #define memadd(num, arr)                                                                                                                                                           \
@@ -674,8 +686,6 @@ void SetTimedObjects(int iTimedObjects)
 #undef patch
 #undef memadd
 
-// 0x001546d0
-DWORD g_gameCount44OperandSites[7] = {0x410dbb, 0x410de5, 0x410f68, 0x410aa4, 0x410cc4, 0x410ead, 0x411505};
 // 0x000aa0d0
 void GamePatchCount44(DWORD count)
 {
@@ -691,6 +701,7 @@ void GamePatchCount44(DWORD count)
         *(DWORD*)(g_gameCount44OperandSites[index] + 2) = bytes;
     }
 }
+
 // 0x000aa130
 void GameSetFontPatchBytes3()
 {
@@ -711,6 +722,7 @@ void GameSetFontPatchBytes3()
     *(BYTE*)0x71a5b6 = 3;
     *(BYTE*)0x71a3bb = 3;
 }
+
 // 0x000aaa50
 void GameApplyDebugInitializationPatches()
 {

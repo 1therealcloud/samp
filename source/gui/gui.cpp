@@ -6,13 +6,13 @@
 
 #include "gui/gui.h"
 
-#include "gui/chatwindow.h"
-#include "gui/cmdwindow.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
 #include "game/hooks.h"
 #include "game/playerped.h"
 #include "game/scripting.h"
+#include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/vehiclepool.h"
@@ -26,6 +26,35 @@ CDXUTDialog* g_guiPanelDialog;
 // 0x002acac8
 CDXUTDialog* g_guiDownloadDialog;
 STATIC_ASSERT(sizeof(CDXUTDialog) == 0x1ea);
+// 0x002ac9d8
+CPlayerTags* g_devicePlayerTags;
+// 0x002aca20
+CSpawnScreen* g_deviceSpawnScreen;
+// 0x002ac9ec
+CLabel* g_deviceLabel;
+// 0x002aca34
+CObjectMaterialText* g_deviceMaterialText;
+// 0x002aca18
+BYTE* g_deviceDeathWindow;
+// 0x002ac9f0
+BYTE* g_deviceObjectEdit;
+// 0x002ac9dc
+CScoreboard* g_deviceScoreboard;
+// 0x002acab0
+CDXUTDialogResourceManager* g_deviceDialogResources;
+// 0x002acacc
+IDirect3DSurface9* g_deviceCursorSurface;
+// 0x0016be80
+DWORD g_deviceResetMarker;
+// 0x0017ebe0
+BYTE g_renderMenuWasVisible;
+// 0x0018e538
+IUnknown* g_gameLastReleasedResource;
+// 0x0018dde8
+DWORD g_gameDebugStage;
+// 0x0018e1d0
+HWND g_gameInputCooperativeWindow;
+
 // 0x000c6ce0
 void ClientInitializeGui()
 {
@@ -186,6 +215,7 @@ void CALLBACK ClientGuiScoreboardEvent(UINT event, int id, CDXUTControl* control
     if (g_guiScoreboardDialog && event == 0x701 && g_deviceScoreboard)
         g_deviceScoreboard->SendNotification();
 }
+
 // 0x000c6bf0
 void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
@@ -197,6 +227,7 @@ void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, voi
             break;
     }
 }
+
 // 0x000c6c60
 void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
@@ -220,6 +251,7 @@ void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, voi
             break;
     }
 }
+
 // 0x000c6b60
 void CALLBACK ClientGuiDialogEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
@@ -253,32 +285,14 @@ void CALLBACK ClientGuiDialogEvent(UINT event, int id, CDXUTControl* control, vo
     if (event == 0x701 && g_renderDialog)
         g_renderDialog->Close(1);
 }
+
 // Both empty callbacks are confirmed native RET 16 bodies.
 // 0x000c6cc0
 void CALLBACK ClientGuiPanelEvent(UINT event, int id, CDXUTControl* control, void* context) {}
+
 // 0x000c6cd0
 void CALLBACK ClientGuiDownloadEvent(UINT event, int id, CDXUTControl* control, void* context) {}
 
-// 0x002ac9d8
-CPlayerTags* g_devicePlayerTags;
-// 0x002aca20
-CSpawnScreen* g_deviceSpawnScreen;
-// 0x002ac9ec
-CLabel* g_deviceLabel;
-// 0x002aca34
-CObjectMaterialText* g_deviceMaterialText;
-// 0x002aca18
-BYTE* g_deviceDeathWindow;
-// 0x002ac9f0
-BYTE* g_deviceObjectEdit;
-// 0x002ac9dc
-CScoreboard* g_deviceScoreboard;
-// 0x002acab0
-CDXUTDialogResourceManager* g_deviceDialogResources;
-// 0x002acacc
-IDirect3DSurface9* g_deviceCursorSurface;
-// 0x0016be80
-DWORD g_deviceResetMarker;
 // 0x000c5620
 void ClientDeviceObjectsLost()
 {
@@ -345,6 +359,7 @@ void ClientDeviceObjectsLost()
             (*(CTextDrawPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x20))->OnLostDevice();
     }
 }
+
 // 0x000c5880
 void ClientDeviceObjectsReset()
 {
@@ -408,13 +423,6 @@ void ClientDeviceObjectsReset()
     }
 }
 
-// 0x0017ebe0
-BYTE g_renderMenuWasVisible;
-// 0x0018e538
-IUnknown* g_gameLastReleasedResource;
-// 0x0018dde8
-DWORD g_gameDebugStage;
-
 // 0x000a0280
 void GameReleaseRenderResource()
 {
@@ -426,6 +434,7 @@ void GameReleaseRenderResource()
         *(IUnknown**)0xc8cfa4 = 0;
     }
 }
+
 // 0x00073f10
 void ClientProcessMenuTransition()
 {
@@ -444,6 +453,7 @@ void ClientProcessMenuTransition()
         }
     }
 }
+
 // 0x0009e2d0
 void GameDebugDraw()
 {
@@ -452,8 +462,6 @@ void GameDebugDraw()
         GameDrawDebugEntities();
 }
 
-// 0x0018e1d0
-HWND g_gameInputCooperativeWindow;
 // 0x000a02a0
 void GameReacquireInputDevice()
 {

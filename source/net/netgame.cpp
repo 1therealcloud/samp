@@ -1,37 +1,5 @@
 #include "net/netgame.h"
 
-#include "main.h"
-#include <static_assert.h>
-// 0x00001a90
-RakClientInterface* CNetGame::GetRakClient()
-{
-    return rakClient;
-}
-// 0x00017800
-CTextDrawPool* CNetGame::GetTextDrawPool()
-{
-    return pools->textDraws;
-}
-// 0x00017810
-CGangZonePool* CNetGame::GetGangZonePool()
-{
-    return pools->gangZones;
-}
-// 0x00002e50
-CActorPool* CNetGame::GetActorPool()
-{
-    return pools->actors;
-}
-// 0x00002e60
-DWORD CNetGame::GetState()
-{
-    return gameState;
-}
-// 0x00002e70
-BOOL CNetGame::LanMode()
-{
-    return (BOOL)lanMode;
-}
 #include "BitStream.h"
 #include "GetTime.h"
 #include "NetworkTypes.h"
@@ -40,7 +8,6 @@ BOOL CNetGame::LanMode()
 #include "SocketLayer.h"
 #include "anticheat.h"
 #include "archive/ArchiveFS.h"
-#include "gui/chatwindow.h"
 #include "config.h"
 #include "filechecks.h"
 #include "game/aimstuff.h"
@@ -50,7 +17,9 @@ BOOL CNetGame::LanMode()
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"
+#include "gui/chatwindow.h"
 #include "gui/gui.h"
+#include "main.h"
 #include "net/actorpool.h"
 #include "net/gangzonepool.h"
 #include "net/labelpool.h"
@@ -65,12 +34,101 @@ BOOL CNetGame::LanMode()
 #include "net/textdrawpool.h"
 #include "net/vehiclepool.h"
 #include "ttmath/ttmathuint.h"
+#include <static_assert.h>
 #include <stdlib.h>
 #include <string.h>
 // 0x00117c28
 const char g_netDefaultHostName[] = "SA-MP";
 // 0x00117b6c
 const char g_netNoNameTagStatusOption[] = "nonametagstatus";
+// 0x00117bc8
+const char g_netConnectionLostMessage[] = "Lost connection to the server. Reconnecting..";
+// 0x00117c08
+const char g_netJoiningMessage[] = "Connected. Joining the game...";
+// 0x00117bfc
+const char g_netClientVersion[] = "0.3.DL-R1";
+// 0x00117bf8
+int g_netJoinRpc = 25;
+// 0x00117ba0
+const double g_netQuaternionReciprocal = 1.0 / 65535.0;
+// 0x00117ba8
+const float g_netCompressedVectorScale = 1.0f / 32767.5f;
+
+// 0x00117bac
+const char g_netRestartingMessage[] = "The server is restarting..";
+// 0x00156b2c
+DWORD g_netVehicleProcessCounter;
+// 0x00156b30
+DWORD g_netPickupProcessCounter;
+// 0x00117a34
+const char g_netVehicleException[] = "s004";
+// 0x00117a2c
+const char g_netPickupException[] = "s005";
+// 0x00117a24
+const char g_netMenuException[] = "s006";
+// 0x00117a39
+const char g_netEmptyShoppingSubsection[] = "";
+// 0x001179dc
+const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
+// 0x00117af0
+const char g_netDisconnectedMessage[] = "Server closed the connection.";
+// 0x00117b10
+const char g_netInvalidPasswordMessage[] = "Wrong server password.";
+// 0x00117a0c
+const char g_netConnectingMessage[] = "Connecting to %s:%d...";
+// 0x00117a64
+const char g_netEncryptionFailedMessage[] = "Failed to initialize encryption.";
+// 0x00117a88
+const char g_netConnectionBannedMessage[] = "You are banned from this server.";
+// 0x00117aac
+const char g_netConnectionAcceptedMessage[] = "Server has accepted the connection.";
+// 0x00117ad0
+const char g_netServerFullMessage[] = "The server is full. Retrying...";
+// 0x00117b28
+const char g_netNoResponseMessage[] = "The server didn't respond. Retrying..";
+// 0x001179c8
+const Scripting::OpcodeInfo g_netRemoveMapIconCommand = {0x164, "i"};
+// 0x00156b38
+DWORD g_netPlayersInfoTick = 0;
+// 0x00117b98
+int g_netPlayersInfoRpc = 155;
+
+// 0x00001a90
+RakClientInterface* CNetGame::GetRakClient()
+{
+    return rakClient;
+}
+
+// 0x00017800
+CTextDrawPool* CNetGame::GetTextDrawPool()
+{
+    return pools->textDraws;
+}
+
+// 0x00017810
+CGangZonePool* CNetGame::GetGangZonePool()
+{
+    return pools->gangZones;
+}
+
+// 0x00002e50
+CActorPool* CNetGame::GetActorPool()
+{
+    return pools->actors;
+}
+
+// 0x00002e60
+DWORD CNetGame::GetState()
+{
+    return gameState;
+}
+
+// 0x00002e70
+BOOL CNetGame::LanMode()
+{
+    return (BOOL)lanMode;
+}
+
 // 0x0000b610
 CNetGame::CNetGame(const char* host, int port, const char* nickname, const char* password)
 {
@@ -117,6 +175,7 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netStartedMessage);
 }
+
 // 0x0000b290
 void CNetGame::Process()
 {
@@ -150,14 +209,7 @@ void CNetGame::Process()
     if (g_clientIntegrityFrameMarker == 69 && GameIntegrityMismatch(77, 1, 6, 12, 17, 2, 50) != 69)
         exit(0);
 }
-// 0x00117bc8
-const char g_netConnectionLostMessage[] = "Lost connection to the server. Reconnecting..";
-// 0x00117c08
-const char g_netJoiningMessage[] = "Connected. Joining the game...";
-// 0x00117bfc
-const char g_netClientVersion[] = "0.3.DL-R1";
-// 0x00117bf8
-int g_netJoinRpc = 25;
+
 // 0x00057160
 int __cdecl NetHexDigit(int value)
 {
@@ -166,6 +218,7 @@ int __cdecl NetHexDigit(int value)
         value += 7;
     return value;
 }
+
 // 0x00057170
 void __cdecl NetDigestToHex(char* output, const BYTE* digest)
 {
@@ -176,6 +229,7 @@ void __cdecl NetDigestToHex(char* output, const BYTE* digest)
     }
     output[40] = 0;
 }
+
 // 0x0005fa60
 void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor)
 {
@@ -203,6 +257,7 @@ void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor)
     value.ToString(text, 16);
     strcpy(output, text.c_str());
 }
+
 // 0x000571b0
 void __cdecl NetGenerateAuthKey(char* output, const char* challenge)
 {
@@ -240,6 +295,7 @@ void __cdecl NetGenerateAuthKey(char* output, const char* challenge)
     }
     NetDigestToHex(output, result);
 }
+
 // 0x00009df0
 void CNetGame::Packet_AuthKey(Packet* packet)
 {
@@ -263,6 +319,7 @@ void CNetGame::Packet_AuthKey(Packet* packet)
     output.Write(response, responseLength);
     rakClient->Send(&output, (PacketPriority)0, (PacketReliability)8, 0);
 }
+
 // 0x0000aa60
 void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
 {
@@ -300,6 +357,7 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     output.WriteBits((BYTE*)&challenge, 32, true);
     rakClient->RPC(&g_netJoinRpc, &output, (PacketPriority)1, (PacketReliability)8, 0, false);
 }
+
 // 0x0000a9d0
 void CNetGame::Packet_ConnectionLost(Packet* packet)
 {
@@ -320,6 +378,7 @@ void CNetGame::Packet_ConnectionLost(Packet* packet)
         g_renderAudioStream->Stop(true);
     gameState = StateWaitingToConnect;
 }
+
 // Descriptive free-function names; no native receiver use was observed.
 // 0x00008590
 BYTE __stdcall NetGetPacketId(Packet* packet)
@@ -331,6 +390,7 @@ BYTE __stdcall NetGetPacketId(Packet* packet)
         return packet->data[5];
     return id;
 }
+
 // 0x000085b0
 BYTE __stdcall NetIsTimestampedPacket(Packet* packet)
 {
@@ -338,6 +398,7 @@ BYTE __stdcall NetIsTimestampedPacket(Packet* packet)
         return 0;
     return packet->data[0] == 40;
 }
+
 // 0x0000af40
 void CNetGame::UpdateNetwork()
 {
@@ -408,16 +469,11 @@ void CNetGame::UpdateNetwork()
         packet = rakClient->Receive();
     }
 }
-// 0x00117ba0
-const double g_netQuaternionReciprocal = 1.0 / 65535.0;
-// 0x00117ba8
-const float g_netCompressedVectorScale = 1.0f / 32767.5f;
 // Source-only wrapper for the two native BitStream<float> instantiations.
 // No fields or virtual interface are added: native ECX remains the base stream.
 class NativeSyncBitStream : public RakNet::BitStream
 {
 public:
-    // Reconstruction-only forwarding constructor; no standalone native entry.
     NativeSyncBitStream(unsigned char* data, int length) : RakNet::BitStream(data, length, false) {}
     // 0x00009370
     bool ReadQuaternion(float& w, float& x, float& y, float& z);
@@ -491,6 +547,7 @@ bool NativeSyncBitStream::ReadQuaternion(float& w, float& x, float& y, float& z)
     // clang-format on
     return true;
 }
+
 // 0x0000a0a0
 bool NativeSyncBitStream::ReadVelocity(float& x, float& y, float& z)
 {
@@ -550,6 +607,7 @@ bool NativeSyncBitStream::ReadVelocity(float& x, float& y, float& z)
     // clang-format on
     return true;
 }
+
 // 0x0000a420
 void CNetGame::Packet_OnfootSync(Packet* packet)
 {
@@ -604,6 +662,7 @@ void CNetGame::Packet_OnfootSync(Packet* packet)
     if (remote)
         remote->UpdateOnfoot(&data, timestamp);
 }
+
 // 0x0000a6f0
 void CNetGame::Packet_IncarSync(Packet* packet)
 {
@@ -672,6 +731,7 @@ void CNetGame::Packet_UnoccupiedSync(Packet* packet)
     if (remote)
         remote->UpdateUnoccupied(&data);
 }
+
 // 0x00009b10
 void CNetGame::Packet_TrailerSync(Packet* packet)
 {
@@ -688,6 +748,7 @@ void CNetGame::Packet_TrailerSync(Packet* packet)
     if (remote)
         remote->UpdateTrailer(&data);
 }
+
 // 0x00009830
 void CNetGame::Packet_BulletSync(Packet* packet)
 {
@@ -708,6 +769,7 @@ void CNetGame::Packet_BulletSync(Packet* packet)
             remote->UpdateBullet(&data);
     }
 }
+
 // 0x00009930
 void CNetGame::Packet_AimSync(Packet* packet)
 {
@@ -724,6 +786,7 @@ void CNetGame::Packet_AimSync(Packet* packet)
     if (remote)
         remote->UpdateAim(&data);
 }
+
 // 0x00009a20
 void CNetGame::Packet_PassengerSync(Packet* packet)
 {
@@ -740,6 +803,7 @@ void CNetGame::Packet_PassengerSync(Packet* packet)
     if (remote)
         remote->UpdatePassenger(&data);
 }
+
 // 0x00009c00
 void CNetGame::Packet_MarkersSync(Packet* packet)
 {
@@ -776,20 +840,6 @@ void CNetGame::Packet_MarkersSync(Packet* packet)
         }
         while (++index != count);
 }
-// 0x00117bac
-const char g_netRestartingMessage[] = "The server is restarting..";
-// 0x00156b2c
-DWORD g_netVehicleProcessCounter;
-// 0x00156b30
-DWORD g_netPickupProcessCounter;
-// 0x00117a34
-const char g_netVehicleException[] = "s004";
-// 0x00117a2c
-const char g_netPickupException[] = "s005";
-// 0x00117a24
-const char g_netMenuException[] = "s006";
-// 0x00117a39
-const char g_netEmptyShoppingSubsection[] = "";
 // 0x0000a230
 void CNetGame::ShutdownForRestart()
 {
@@ -841,6 +891,7 @@ void CNetGame::ShutdownForRestart()
     g_pGame->EnableClock(false);
     g_pChat->AddInfoMessage(g_netRestartingMessage);
 }
+
 // 0x00008810
 void CNetGame::ProcessPools()
 {
@@ -908,6 +959,7 @@ void CNetGame::ProcessPools()
         }
     }
 }
+
 // 0x00008750
 void CNetGame::ProcessCustomModelWait()
 {
@@ -923,18 +975,13 @@ void CNetGame::ProcessCustomModelWait()
     if (modelWaitActive)
         modelWaitTick = (DWORD)RakNet::GetTime();
 }
-// 0x001179dc
-const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
-// 0x00117af0
-const char g_netDisconnectedMessage[] = "Server closed the connection.";
-// 0x00117b10
-const char g_netInvalidPasswordMessage[] = "Wrong server password.";
 // 0x00008450
 void CNetGame::InitialNotification()
 {
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netStartedMessage);
 }
+
 // 0x000085e0
 void CNetGame::InitializeGameLogic()
 {
@@ -945,6 +992,7 @@ void CNetGame::InitializeGameLogic()
     *(DWORD*)&settings->worldBounds[2] = 0x469c4000;
     *(DWORD*)&settings->worldBounds[3] = 0xc69c4000;
 }
+
 // 0x00008ad0
 void CNetGame::Packet_DisconnectionNotification(Packet* packet)
 {
@@ -954,6 +1002,7 @@ void CNetGame::Packet_DisconnectionNotification(Packet* packet)
         g_renderAudioStream->Stop(true);
     rakClient->Disconnect(2000, 0);
 }
+
 // 0x00008b10
 void CNetGame::Packet_InvalidPassword(Packet* packet)
 {
@@ -961,6 +1010,7 @@ void CNetGame::Packet_InvalidPassword(Packet* packet)
     g_pChat->AddDebugMessage(g_netInvalidPasswordMessage);
     rakClient->Disconnect(0, 0);
 }
+
 // 0x00009fb0
 void CNetGame::ResetMapIcons()
 {
@@ -974,6 +1024,7 @@ void CNetGame::ResetMapIcons()
         }
     }
 }
+
 // 0x00009ff0
 void CNetGame::CreateMapIcon(BYTE index, CVector position, BYTE icon, DWORD color, int type)
 {
@@ -988,6 +1039,7 @@ void CNetGame::CreateMapIcon(BYTE index, CVector position, BYTE icon, DWORD colo
         *slot = g_pGame->CreateMarker(icon, position.x, position.y, position.z, color, type);
     }
 }
+
 // 0x0000a1e0
 void CNetGame::ResetPools()
 {
@@ -1001,6 +1053,7 @@ void CNetGame::ResetPools()
     ResetObjectPool();
     ResetMenuPool();
 }
+
 // 0x00009570
 void CNetGame::Destroy()
 {
@@ -1074,18 +1127,6 @@ void CNetGame::Destroy()
         settings = 0;
     }
 }
-// 0x00117a0c
-const char g_netConnectingMessage[] = "Connecting to %s:%d...";
-// 0x00117a64
-const char g_netEncryptionFailedMessage[] = "Failed to initialize encryption.";
-// 0x00117a88
-const char g_netConnectionBannedMessage[] = "You are banned from this server.";
-// 0x00117aac
-const char g_netConnectionAcceptedMessage[] = "Server has accepted the connection.";
-// 0x00117ad0
-const char g_netServerFullMessage[] = "The server is full. Retrying...";
-// 0x00117b28
-const char g_netNoResponseMessage[] = "The server didn't respond. Retrying..";
 // 0x00008630
 void CNetGame::Connect()
 {
@@ -1099,6 +1140,7 @@ void CNetGame::Connect()
         gameState = StateConnecting;
     }
 }
+
 // 0x000086a0
 void CNetGame::SpawnScreen()
 {
@@ -1116,24 +1158,28 @@ void CNetGame::SpawnScreen()
     g_pGame->SetWorldWeather(1);
     g_pGame->EnableHUD(FALSE);
 }
+
 // 0x00008a40
 void CNetGame::Packet_RSAPublicKeyMismatch(Packet* packet)
 {
     (void)packet;
     g_pChat->AddDebugMessage(g_netEncryptionFailedMessage);
 }
+
 // 0x00008a60
 void CNetGame::Packet_ConnectionBanned(Packet* packet)
 {
     (void)packet;
     g_pChat->AddDebugMessage(g_netConnectionBannedMessage);
 }
+
 // 0x00008a80
 void CNetGame::Packet_ConnectionRequestAccepted(Packet* packet)
 {
     (void)packet;
     g_pChat->AddDebugMessage(g_netConnectionAcceptedMessage);
 }
+
 // 0x00008aa0
 void CNetGame::Packet_NoFreeIncomingConnections(Packet* packet)
 {
@@ -1141,6 +1187,7 @@ void CNetGame::Packet_NoFreeIncomingConnections(Packet* packet)
     g_pChat->AddDebugMessage(g_netServerFullMessage);
     gameState = StateWaitingToConnect;
 }
+
 // 0x00008b50
 void CNetGame::Packet_ConnectionAttemptFailed(Packet* packet)
 {
@@ -1148,6 +1195,7 @@ void CNetGame::Packet_ConnectionAttemptFailed(Packet* packet)
     g_pChat->AddDebugMessage(g_netNoResponseMessage);
     gameState = StateWaitingToConnect;
 }
+
 // 0x00008230
 void CNetGame::InitializePools()
 {
@@ -1171,6 +1219,7 @@ void CNetGame::InitializePools()
     CActorPool* actors = new CActorPool;
     pools->actors = actors;
 }
+
 // 0x00008cd0
 void CNetGame::ResetPlayerPool()
 {
@@ -1180,6 +1229,7 @@ void CNetGame::ResetPlayerPool()
     CPlayerPool* created = new CPlayerPool;
     pools->players = created;
 }
+
 // 0x00008d70
 void CNetGame::ResetVehiclePool()
 {
@@ -1189,6 +1239,7 @@ void CNetGame::ResetVehiclePool()
     CVehiclePool* created = new CVehiclePool;
     pools->vehicles = created;
 }
+
 // 0x00008e10
 void CNetGame::ResetTextDrawPool()
 {
@@ -1198,6 +1249,7 @@ void CNetGame::ResetTextDrawPool()
     CTextDrawPool* created = new CTextDrawPool;
     pools->textDraws = created;
 }
+
 // 0x00008eb0
 void CNetGame::ResetObjectPool()
 {
@@ -1207,6 +1259,7 @@ void CNetGame::ResetObjectPool()
     CObjectPool* created = new CObjectPool;
     pools->objects = created;
 }
+
 // 0x00008f50
 void CNetGame::ResetGangZonePool()
 {
@@ -1216,6 +1269,7 @@ void CNetGame::ResetGangZonePool()
     CGangZonePool* created = new CGangZonePool;
     pools->gangZones = created;
 }
+
 // 0x00008ff0
 void CNetGame::ResetPickupPool()
 {
@@ -1225,6 +1279,7 @@ void CNetGame::ResetPickupPool()
     CPickupPool* created = new CPickupPool;
     pools->pickups = created;
 }
+
 // 0x00009050
 void CNetGame::ResetMenuPool()
 {
@@ -1234,6 +1289,7 @@ void CNetGame::ResetMenuPool()
     CMenuPool* created = new CMenuPool;
     pools->menus = created;
 }
+
 // 0x000090e0
 void CNetGame::ResetLabelPool()
 {
@@ -1243,6 +1299,7 @@ void CNetGame::ResetLabelPool()
     CLabelPool* created = new CLabelPool;
     pools->labels = created;
 }
+
 // 0x00009180
 void CNetGame::ResetActorPool()
 {
@@ -1252,8 +1309,6 @@ void CNetGame::ResetActorPool()
     CActorPool* created = new CActorPool;
     pools->actors = created;
 }
-// 0x001179c8
-const Scripting::OpcodeInfo g_netRemoveMapIconCommand = {0x164, "i"};
 // 0x00008ca0
 void CNetGame::RemoveMapIcon(BYTE index)
 {
@@ -1264,16 +1319,19 @@ void CNetGame::RemoveMapIcon(BYTE index)
         *icon = 0;
     }
 }
+
 // 0x000081f0
 void CNetGame::SetGameState(DWORD state)
 {
     gameState = state;
 }
+
 // 0x000081d0
 CPickupPool* CNetGame::GetPickupPool()
 {
     return pools->pickups;
 }
+
 // 0x000085d0
 __declspec(naked) __int64 CNetGame::GetCounter()
 {
@@ -1282,6 +1340,7 @@ __declspec(naked) __int64 CNetGame::GetCounter()
     __asm jmp RakNet::GetTime
     // clang-format on
 }
+
 // 0x00008b80
 void CNetGame::ToggleNameTagStatus()
 {
@@ -1300,10 +1359,6 @@ void CNetGame::ToggleNameTagStatus()
         showNameTagStatus = 0;
     }
 }
-// 0x00156b38
-DWORD g_netPlayersInfoTick = 0;
-// 0x00117b98
-int g_netPlayersInfoRpc = 155;
 // 0x00008c00
 void CNetGame::UpdatePlayersInfo()
 {
@@ -1316,21 +1371,25 @@ void CNetGame::UpdatePlayersInfo()
             client->RPC(&g_netPlayersInfoRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
     }
 }
+
 // 0x000081e0
 CMenuPool* CNetGame::GetMenuPool()
 {
     return pools->menus;
 }
+
 // 0x00002e40
 CObjectPool* CNetGame::GetObjectPool()
 {
     return pools->objects;
 }
+
 // 0x00001180
 CVehiclePool* CNetGame::GetVehiclePool()
 {
     return pools->vehicles;
 }
+
 // 0x00001170
 CPlayerPool* CNetGame::GetPlayerPool()
 {
@@ -1342,6 +1401,7 @@ CLabelPool* CNetGame::GetLabelPool()
 {
     return pools->labels;
 }
+
 // 0x0000e3f0
 void CNetGame::SetLanMode(DWORD value)
 {

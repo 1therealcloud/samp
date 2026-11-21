@@ -1,14 +1,62 @@
 #include "gui/objectedit.h"
 
+#include "BitStream.h"
+#include "RakClientInterface.h"
+#include "d3dhook/IDirect3DDevice9Hook.h"
+#include "filehooks.h"
+#include "game/entity.h"
+#include "game/object.h"
+#include "game/playerped.h"
+#include "game/quaternion.h"
+#include "game/util.h"
+#include "gui/cmdwindow.h"
+#include "gui/gui.h"
 #include "main.h"
+#include <string.h>
+// 0x0011a7ac
+const float g_cursorRayUnsignedBias = 4294967296.0f;
+// 0x00118388
+const char g_objectEditGlyphMax[4] = "C";
+// 0x0011c340
+const char g_objectEditGlyphXPosition[4] = "6";
+// 0x0011c33c
+const char g_objectEditGlyphXRotation[4] = "3";
+// 0x00118394
+const char g_objectEditGlyphXScale[4] = "9";
+// 0x00118304
+const char g_objectEditGlyphYPosition[4] = "7";
+// 0x00117880
+const char g_objectEditGlyphYRotation[4] = "4";
+// 0x00118308
+const char g_objectEditGlyphYScale[4] = "A";
+// 0x001183e0
+const char g_objectEditGlyphZPosition[4] = "8";
+// 0x00117950
+const char g_objectEditGlyphZRotation[4] = "5";
+// 0x001184c0
+const char g_objectEditGlyphZScale[4] = "B";
+// 0x001182d8
+const char g_objectEditGlyphDefault[4] = "0";
+// 0x0011c310
+extern int g_inputCommandRpcId;
+// 0x0011c344
+const char g_objectEditGlyphScale[4] = "1";
+// 0x00118350
+const char g_objectEditGlyphSave[4] = "H";
+
+// 0x0011c768
+const float g_objectEditDistanceScale = 0.125f;
+// 0x00117f2c
+int g_objectEditRpc = 117;
+// 0x00117f30
+int g_objectEditAttachedRpc = 116;
+
 // 0x00017850
 WORD CObjectEdit::GetObjectId()
 {
     return objectId;
 }
-#include "filehooks.h"
-#include "game/entity.h"
-#include "gui/gui.h"
+
 // 0x00072ff0
 BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
 {
@@ -83,6 +131,7 @@ BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
     }
     return FALSE;
 }
+
 // 0x00071b40
 void CObjectEdit::TryChangeProcessType()
 {
@@ -117,6 +166,7 @@ void CObjectEdit::TryChangeProcessType()
     else
         unknown113 = 0xffffffff;
 }
+
 // 0x00071c90
 void CObjectEdit::SetEditMode(int mode)
 {
@@ -124,6 +174,7 @@ void CObjectEdit::SetEditMode(int mode)
         mode = 0;
     unknown7c = mode;
 }
+
 // 0x00071e60
 void CObjectEdit::ResetMousePos()
 {
@@ -135,6 +186,7 @@ void CObjectEdit::ResetMousePos()
     *(int*)(state + 0xab) = y;
     SetCursorPos(x, y);
 }
+
 // 0x00072f00
 void CObjectEdit::ApplyChanges(int axis, float difference)
 {
@@ -143,6 +195,7 @@ void CObjectEdit::ApplyChanges(int axis, float difference)
     else if (unknown78 == 2)
         ApplyAttachedChanges(axis, difference);
 }
+
 // 0x00072f20
 void CObjectEdit::ProcessMouseMove()
 {
@@ -193,10 +246,6 @@ apply:
     }
 }
 
-#include "game/object.h"
-#include "game/playerped.h"
-#include "game/util.h"
-#include <string.h>
 // 0x00072cb0
 void CObjectEdit::ApplyObjectChanges(int axis, float difference)
 {
@@ -271,7 +320,6 @@ void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
         ApplyAttachedAxis<2>(record, unknown7c, difference);
 }
 
-#include "gui/objectedit.h"
 // 0x00071600
 CObjectEdit::CObjectEdit(IDirect3DDevice9* value)
 {
@@ -293,8 +341,6 @@ CObjectEdit::CObjectEdit(IDirect3DDevice9* value)
     D3DXCreateFontA(value, 28, 0, 400, 1, FALSE, SYMBOL_CHARSET, 0, 0, 0, "SAMPAUX3", &largeFont);
 }
 
-#include "d3dhook/IDirect3DDevice9Hook.h"
-#include "game/quaternion.h"
 // 0x000716c0
 float CObjectEdit::WorldToScreen(const CVector* position, float* screen)
 {
@@ -386,8 +432,6 @@ int CObjectEdit::RenderAxes(const CMatrix* matrix, float axisSize)
     return 1;
 }
 
-// 0x0011a7ac
-const float g_cursorRayUnsignedBias = 4294967296.0f;
 // 0x000739e0
 void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector* end)
 {
@@ -486,34 +530,12 @@ height_unsigned:
     // clang-format on
 }
 
-// 0x00118388
-const char g_objectEditGlyphMax[4] = "C";
-// 0x0011c340
-const char g_objectEditGlyphXPosition[4] = "6";
-// 0x0011c33c
-const char g_objectEditGlyphXRotation[4] = "3";
-// 0x00118394
-const char g_objectEditGlyphXScale[4] = "9";
-// 0x00118304
-const char g_objectEditGlyphYPosition[4] = "7";
-// 0x00117880
-const char g_objectEditGlyphYRotation[4] = "4";
-// 0x00118308
-const char g_objectEditGlyphYScale[4] = "A";
-// 0x001183e0
-const char g_objectEditGlyphZPosition[4] = "8";
-// 0x00117950
-const char g_objectEditGlyphZRotation[4] = "5";
-// 0x001184c0
-const char g_objectEditGlyphZScale[4] = "B";
-// 0x001182d8
-const char g_objectEditGlyphDefault[4] = "0";
-
 // 0x00071a30
 const char* CObjectEdit::GetMaxSizeChar()
 {
     return g_objectEditGlyphMax;
 }
+
 // 0x00071a40
 const char* CObjectEdit::GetRenderChar(int axis)
 {
@@ -546,6 +568,7 @@ const char* CObjectEdit::GetRenderChar(int axis)
     }
     return g_objectEditGlyphDefault;
 }
+
 // 0x00071ae0
 void CObjectEdit::CenterButtonRect(RECT* out, const POINT* center)
 {
@@ -558,6 +581,7 @@ void CObjectEdit::CenterButtonRect(RECT* out, const POINT* center)
     out->top = (LONG)((DWORD)center->y - (DWORD)half);
     out->bottom = (LONG)(*(DWORD*)(unknown00 + 4) + (DWORD)out->top);
 }
+
 // 0x00071b20
 void CObjectEdit::ClearButtonRect(RECT* out)
 {
@@ -566,6 +590,7 @@ void CObjectEdit::ClearButtonRect(RECT* out)
     out->top = 0;
     out->bottom = 0;
 }
+
 // 0x00071ec0
 void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
 {
@@ -591,6 +616,7 @@ void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
     *(DWORD*)((BYTE*)this + 0x96) = *(DWORD*)(object + 0xb1);
     *(DWORD*)((BYTE*)this + 0x9a) = *(DWORD*)(object + 0xb5);
 }
+
 // 0x00071f80
 void CObjectEdit::EnterEditAttachedObject(int index)
 {
@@ -606,12 +632,6 @@ void CObjectEdit::EnterEditAttachedObject(int index)
 }
 
 // Also used as the string "2" by the native editor; share the existing RPC storage.
-// 0x0011c310
-extern int g_inputCommandRpcId;
-// 0x0011c344
-const char g_objectEditGlyphScale[4] = "1";
-// 0x00118350
-const char g_objectEditGlyphSave[4] = "H";
 // 0x00071fe0
 void CObjectEdit::DrawButton(int processType, RECT rect)
 {
@@ -656,6 +676,7 @@ void CObjectEdit::DrawButton(int processType, RECT rect)
     font->DrawTextA(0, glyph, 1, &rect, 0x105, foreground);
     CenterButtonRect((RECT*)((BYTE*)this + 8 + slot * 16), (const POINT*)&rect);
 }
+
 // 0x000726d0
 BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
 {
@@ -780,14 +801,13 @@ BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
     DrawButton(3, rect);
     return TRUE;
 }
+
 // 0x00072ca0
 BOOL CObjectEdit::RenderControls(const CMatrix* matrix, float axisSize)
 {
     return RenderControlsForObject(matrix, axisSize);
 }
 
-// 0x0011c768
-const float g_objectEditDistanceScale = 0.125f;
 // 0x00073220
 void CObjectEdit::Render()
 {
@@ -872,13 +892,6 @@ void CObjectEdit::Render()
         TryChangeProcessType();
 }
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-#include "gui/cmdwindow.h"
-// 0x00117f2c
-int g_objectEditRpc = 117;
-// 0x00117f30
-int g_objectEditAttachedRpc = 116;
 // 0x00072350
 void CObjectEdit::SendEditEndNotification(int status)
 {
@@ -922,6 +935,7 @@ void CObjectEdit::SendEditEndNotification(int status)
     stream.WriteBits((const BYTE*)&value, 32, true);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_objectEditRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
+
 // 0x00072560
 void CObjectEdit::SendAttachedEditEndNotification(int status)
 {
@@ -937,6 +951,7 @@ void CObjectEdit::SendAttachedEditEndNotification(int status)
     stream.Write((const char*)info, 52);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_objectEditAttachedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
+
 // 0x00072660
 void CObjectEdit::Disable(BOOL send)
 {

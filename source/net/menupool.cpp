@@ -8,6 +8,11 @@
 #include "main.h"
 #include "net/netgame.h"
 #include <static_assert.h>
+// 0x001179c4
+int g_menuSelectedRpc = 132;
+// 0x001179c0
+int g_menuExitedRpc = 140;
+
 // 0x000177b0
 DWORD CMenuPool::GetActiveState(BYTE id)
 {
@@ -15,6 +20,7 @@ DWORD CMenuPool::GetActiveState(BYTE id)
         return 0;
     return *(DWORD*)((BYTE*)this + 0x200 + id * 4);
 }
+
 // 0x00007b40
 CMenuPool::CMenuPool()
 {
@@ -25,6 +31,7 @@ CMenuPool::CMenuPool()
     }
     currentMenu = 128;
 }
+
 // 0x00007b90
 CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction)
 {
@@ -43,6 +50,7 @@ CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE colu
     }
     return 0;
 }
+
 // 0x00007c60
 BOOL CMenuPool::Delete(BYTE id)
 {
@@ -53,6 +61,7 @@ BOOL CMenuPool::Delete(BYTE id)
     menus[id] = 0;
     return TRUE;
 }
+
 // 0x00007cb0
 void CMenuPool::Show(BYTE id)
 {
@@ -64,6 +73,7 @@ void CMenuPool::Show(BYTE id)
     currentMenu = id;
     pendingClose = 0;
 }
+
 // 0x00007d10
 void CMenuPool::Hide(BYTE id)
 {
@@ -72,6 +82,7 @@ void CMenuPool::Hide(BYTE id)
     menus[id]->Hide();
     currentMenu = 128;
 }
+
 // 0x00007eb0
 CMenuPool::~CMenuPool()
 {
@@ -111,10 +122,6 @@ char* CMenuPool::GetTextPointer(const char* suffix)
 }
 
 STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE == 8);
-// 0x001179c4
-int g_menuSelectedRpc = 132;
-// 0x001179c0
-int g_menuExitedRpc = 140;
 // 0x00007ef0
 void CMenuPool::Process()
 {

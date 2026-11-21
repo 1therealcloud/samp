@@ -14,16 +14,44 @@ DWORD g_integrityComparisons;
 DWORD g_integrityPending;
 // 0x0018dc34
 BYTE g_integritySuppressCount;
+// 0x0015548c
+DWORD g_clientIntegrityFrameMarker = 69;
+// 0x002aca78
+DWORD g_clientIntegrityFramePrevious;
+// 0x002aca7c
+DWORD g_clientIntegrityFrameFirst;
+// 0x002aca80
+DWORD g_clientIntegrityFrameCounter;
+// 0x002aca88
+double g_clientTimerPreviousSeconds;
+
+// 0x002aca90
+__int64 g_clientTimerPreviousCounter;
+// 0x002aca98
+DWORD g_clientTimerFlags;
+// 0x002acaa0
+__int64 g_clientTimerFrequency;
+// 0x002acaa8
+DWORD g_clientTimerUsePerformanceCounter;
+// 0x002acaac
+DWORD g_clientTimerFrequencyAttempted;
+// 0x0011a920
+const double g_clientTimerUnsignedBias = 4294967296.0;
+// 0x0011a930
+const double g_clientTimerMillisecondScale = 0.001;
+
 // 0x0009d690
 DWORD* GameIntegrityVehicleArray()
 {
     return **(DWORD***)0xb74494;
 }
+
 // 0x0009d6b0
 DWORD* GameIntegrityPedArray()
 {
     return **(DWORD***)0xb74490;
 }
+
 // 0x0009d6d0
 DWORD GameIntegrityXor(const DWORD* data, DWORD count)
 {
@@ -32,6 +60,7 @@ DWORD GameIntegrityXor(const DWORD* data, DWORD count)
         value ^= data[i];
     return value;
 }
+
 // 0x0009d6f0
 void GameDeviceIntegrityCycle()
 {
@@ -78,42 +107,6 @@ void GameDeviceIntegrityCycle()
         g_integrityPending = 1;
     }
 }
-
-// 0x0015548c
-DWORD g_clientIntegrityFrameMarker = 69;
-
-// 0x002aca78
-DWORD g_clientIntegrityFramePrevious;
-
-// 0x002aca7c
-DWORD g_clientIntegrityFrameFirst;
-
-// 0x002aca80
-DWORD g_clientIntegrityFrameCounter;
-
-// 0x002aca88
-double g_clientTimerPreviousSeconds;
-
-// 0x002aca90
-__int64 g_clientTimerPreviousCounter;
-
-// 0x002aca98
-DWORD g_clientTimerFlags;
-
-// 0x002acaa0
-__int64 g_clientTimerFrequency;
-
-// 0x002acaa8
-DWORD g_clientTimerUsePerformanceCounter;
-
-// 0x002acaac
-DWORD g_clientTimerFrequencyAttempted;
-
-// 0x0011a920
-const double g_clientTimerUnsignedBias = 4294967296.0;
-
-// 0x0011a930
-const double g_clientTimerMillisecondScale = 0.001;
 
 // 0x000c5d90
 DWORD __cdecl ClientIntegrityFrame(BYTE check)
