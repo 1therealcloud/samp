@@ -120,7 +120,6 @@ const int g_rpcClientCheck = 103;
 const int g_rpcScrCreateActor = 171;
 // 0x00117f14
 const int g_rpcScrDestroyActor = 172;
-#if defined(DL_BUILD)
 // 0x00117f10
 const int g_rpcScrModelInfo = 179;
 // 0x00117f0c
@@ -129,7 +128,6 @@ const int g_rpcScrCustomModelsReset = 180;
 const int g_rpcScrModelFile = 183;
 // 0x00117f04
 const int g_rpcScrFinishedDownloading = 185;
-#endif // DL_BUILD
 
 // 0x00011f80
 void ScrCustomModelDownload(RPCParameters* parameters)
@@ -176,7 +174,6 @@ void ScrCustomModelDownload(RPCParameters* parameters)
     }
 }
 
-#if defined(DL_BUILD)
 // 0x00011d80
 void ScrCustomModelRecord(RPCParameters* parameters)
 {
@@ -230,7 +227,6 @@ void ScrCustomModelsComplete(RPCParameters* parameters)
         models->StopWorkers();
     }
 }
-#endif // DL_BUILD
 
 // 0x00010530
 void ScrInitGame(RPCParameters* parameters)
@@ -323,9 +319,7 @@ void ScrWorldPlayerAdd(RPCParameters* parameters)
     stream.Read(id);
     stream.Read(team);
     stream.Read(model);
-#if defined(DL_BUILD)
     stream.Read(customModel);
-#endif // DL_BUILD
     stream.Read(position.x);
     stream.Read(position.y);
     stream.Read(position.z);
@@ -817,19 +811,6 @@ void EditObject(RPCParameters* parameters)
     ((CObjectEdit*)g_deviceObjectEdit)->EnterEditObject(id, playerObject ? TRUE : FALSE);
 }
 
-#ifndef DL_BUILD
-#pragma pack(push, 1)
-struct ActorCreateInfoR5
-{
-    WORD id;
-    int model;
-    CVector position;
-    float heading, health;
-    BYTE invulnerable;
-};
-#pragma pack(pop)
-STATIC_ASSERT(sizeof(ActorCreateInfoR5) == 27);
-#endif // DL_BUILD
 
 // 0x0000e940
 void ScrCreateActor(RPCParameters* parameters)
@@ -839,18 +820,7 @@ void ScrCreateActor(RPCParameters* parameters)
     if (pool)
     {
         ActorCreateInfo info = {0};
-#if defined(DL_BUILD)
         stream.Read((char*)&info, sizeof(info));
-#else  // DL_BUILD
-        ActorCreateInfoR5 packet = {0};
-        stream.Read((char*)&packet, sizeof(packet));
-        info.id = packet.id;
-        info.model = packet.model;
-        info.position = packet.position;
-        info.heading = packet.heading;
-        info.health = packet.health;
-        info.invulnerable = packet.invulnerable;
-#endif // DL_BUILD
         if (GameIsPedModel(info.model))
         {
             pool->Create(&info);
@@ -1312,12 +1282,10 @@ void UnRegisterRPCs(RakClientInterface* client)
         &g_rpcClientCheck,
         &g_rpcScrCreateActor,
         &g_rpcScrDestroyActor,
-#if defined(DL_BUILD)
         &g_rpcScrModelInfo,
         &g_rpcScrCustomModelsReset,
         &g_rpcScrModelFile,
         &g_rpcScrFinishedDownloading,
-#endif // DL_BUILD
     };
     for (unsigned i = 0; i < sizeof(ids) / sizeof(ids[0]); i++)
         client->UnregisterAsRemoteProcedureCall(const_cast<int*>(ids[i]));
@@ -1372,10 +1340,8 @@ void RegisterRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcClientCheck), ClientCheck);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreateActor), ScrCreateActor);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroyActor), ScrDestroyActor);
-#if defined(DL_BUILD)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrModelInfo), ScrCustomModelRecord);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCustomModelsReset), ScrCustomModelsReset);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrModelFile), ScrCustomModelDownload);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrFinishedDownloading), ScrCustomModelsComplete);
-#endif // DL_BUILD
 }

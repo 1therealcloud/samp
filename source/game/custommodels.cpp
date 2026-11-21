@@ -15,10 +15,8 @@
 #include <BitStream.h>
 #include <LzmaDec.h>
 #include <RakClientInterface.h>
-#if defined(DL_BUILD)
 #define CURL_STATICLIB
 #include <curl/curl.h>
-#endif // DL_BUILD
 
 #include <process.h>
 #include <stdio.h>
@@ -251,10 +249,8 @@ char g_customProxy[261];
 const char g_customRegistryKey[] = "Software\\SAMP";
 // 0x0011f9dc
 const char g_customProxyValue[] = "artwork_proxy";
-#if defined(DL_BUILD)
 // 0x00117e58
 const char g_customUserAgent[] = "SAMP/0.3";
-#endif // DL_BUILD
 // 0x00117e9c
 const char g_customLogUrlsOption[] = "logurls";
 // 0x00117e8c
@@ -1005,7 +1001,6 @@ const char* CustomModelGetProxy()
     return RegQueryValueExA(key, g_customProxyValue, 0, &type, (BYTE*)g_customProxy, &length) == 0 ? g_customProxy : 0;
 }
 
-#if defined(DL_BUILD)
 // 0x0000de60
 BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
 {
@@ -1039,12 +1034,10 @@ BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
         g_customDownloadManager->FinishDownload(&worker->download);
     return TRUE;
 }
-#endif // DL_BUILD
 
 // 0x0000df90
 void __cdecl CustomModelDownloadThread(void* argument)
 {
-#if defined(DL_BUILD)
     const char* proxy = CustomModelGetProxy();
     curl_global_init(3);
     CustomModelWorker* worker = (CustomModelWorker*)argument;
@@ -1059,9 +1052,6 @@ void __cdecl CustomModelDownloadThread(void* argument)
     }
     curl_global_cleanup();
     worker->enabled = 0;
-#else  // DL_BUILD
-    (void)argument;
-#endif // DL_BUILD
 }
 
 // 0x0000dff0

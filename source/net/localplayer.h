@@ -129,11 +129,7 @@ struct LocalSpawnInfo
 
 enum
 {
-#if defined(DL_BUILD)
     LocalSpawnInfoWireSize = sizeof(LocalSpawnInfo)
-#else  // DL_BUILD
-    LocalSpawnInfoWireSize = sizeof(LocalSpawnInfo) - sizeof(int)
-#endif // DL_BUILD
 };
 
 struct LocalPlayerState

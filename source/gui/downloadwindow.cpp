@@ -318,7 +318,7 @@ bool CDownloadWindow::RemoveRecord(DWORD index)
 }
 
 // 0x0006a6e0
-svoid CDownloadWindow::ClearRecords()
+void CDownloadWindow::ClearRecords()
 {
     DWORD* state = (DWORD*)nativeState;
     int count = (int)state[1];
