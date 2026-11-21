@@ -110,7 +110,7 @@ void CDownloadWindow::ResetFonts()
 }
 
 // 0x0006a280
-__declspec(noinline) void CDownloadWindow::GetRect(RECT* out)
+void CDownloadWindow::GetRect(RECT* out)
 {
     DWORD* state = (DWORD*)nativeState;
     out->left = state[3];
@@ -257,7 +257,7 @@ void CDownloadWindow::TrimRecords()
 }
 
 // 0x0006a610
-__declspec(noinline) int CDownloadWindow::FindRecord(DWORD id)
+int CDownloadWindow::FindRecord(DWORD id)
 {
     DWORD* state = (DWORD*)nativeState;
     DWORD count = state[1];
@@ -307,7 +307,7 @@ int CDownloadWindow::AddRecord(DownloadRecord* record)
 }
 
 // 0x0006a6b0
-__declspec(noinline) bool CDownloadWindow::RemoveRecord(DWORD index)
+bool CDownloadWindow::RemoveRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
     if (index >= state[1])
@@ -318,7 +318,7 @@ __declspec(noinline) bool CDownloadWindow::RemoveRecord(DWORD index)
 }
 
 // 0x0006a6e0
-__declspec(noinline) void CDownloadWindow::ClearRecords()
+svoid CDownloadWindow::ClearRecords()
 {
     DWORD* state = (DWORD*)nativeState;
     int count = (int)state[1];
