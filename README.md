@@ -1,8 +1,7 @@
 # SA-MP 0.3.7-R5
 
-This project reimplements the SA-MP 0.3.7-R5 client through reverse engineering and matching decompilation.
+This branch archives the SA-MP 0.3.7-R5 client reconstructed from the original binary. Fixes and improvements are developed on `master`.
 
-The client is reconstructed from the original binary.\
 The 0.2x sources serve as reference material for names, organization and some code\
 (`source/archive`, `tools/arctool2`, `tools/rcon`).
 
@@ -32,9 +31,6 @@ The repository also includes the server browser and supporting tools:
 | `rcon.exe` | [`tools/rcon`](tools/rcon) | Console client for remote server administration. |
 | `arctool2.exe` | [`tools/arctool2`](tools/arctool2) | Builds SA-MP archives from a file list. |
 | `launch3.exe` | [`tools/launch3`](tools/launch3) | Alternative game launcher with DLL injection. |
-| `kdff.exe` | [`tools/dff/dfftool`](tools/dff/dfftool) | Inspects DFF files, generates and attaches COL collision data, and imports night vertex colors. |
-| `kdff.dll` | [`tools/dff/DffFormatDll`](tools/dff/DffFormatDll) | DFF/COL processing and vertex-color operations used by the DFF GUI. |
-| `kdffgui.exe` | [`tools/dff/Project1`](tools/dff/Project1) | Graphical DFF preview, collision generation and vertex-color editing. |
 
 ## Building
 
@@ -51,17 +47,11 @@ Initialize the dependencies:
 git submodule update --init --recursive
 ```
 
-Open `sa-mp.sln` in Visual Studio .NET 2003 and build the configuration for your client version.
+Open `sa-mp.sln` in Visual Studio .NET 2003 and build `Release`. The client DLL is written to `build/binaries/Release/samp.dll`.
 
-| Client | Configuration | Output |
-| --- | --- | --- |
-| 0.3.7-R5 | `Release` | `build/binaries/Release/` |
-
-The solution includes the C++ utilities: `rcon`, `arctool2`, `launch3`, `dfftool` and `DffFormatDll`.
+The solution includes `rcon`, `arctool2` and `launch3`.
 
 To build the server browser, open `tools/exgui/samp.dpr` in Delphi 7 and build the project.
-
-To build the DFF GUI, open `tools/dff/Project1/Project1.dpr` in Delphi 7 and build the project.
 
 ## Formatting
 
