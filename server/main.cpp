@@ -1,5 +1,231 @@
+#include "console.h"
+#include "query.h"
+
+#include <windows.h>
+
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+// 0x004fc43c
+CConsole* pConsole;
+
+// 0x004ebcec
+static int iOnFootRate = 30;
+// 0x004ebcf0
+static int iInCarRate = 30;
+// 0x004ebcf4
+static int iWeaponRate = 30;
+// 0x004ebcfc
+static float fStreamDistance = 200.0f;
+// 0x004ebd00
+static int iStreamRate = 1000;
+// 0x004ebd04
+static int iSleep = 5;
+// 0x004ebd08
+static int iChatLogging = 1;
+// 0x004ebd0c
+static int iMessageHoleLimit = 3000;
+// 0x004ebd10
+static int iMessagesLimit = 500;
+// 0x004ebd14
+static int iAcksLimit = 3000;
+// 0x004ebd18
+static int iPlayerTimeout = 10000;
+// 0x004ebd1c
+static int iLagCompMode = 1;
+// 0x004ebd20
+static int iMtu = 576;
+// 0x004ebd24
+static int iConnSeedTime = 300000;
+// 0x004ebd28
+static int iConnCookies = 1;
+
+// 0x004fc430
+static FILE* pLogFile;
+// 0x004fc458
+static bool bLogQueries;
+// 0x004fc45c
+static int iMaxNpc;
+// 0x004fc460
+static int iMinConnectionTime;
+// 0x004fc464
+static int iDbLogging;
+// 0x004fc468
+static int iDbLogQueries;
+// 0x004fc46c
+static bool bUseArtwork;
+// 0x004fc47c
+static int iCookieLogging;
+
+// 0x00491fa0
+void logprintf(const char* format, ...)
+{
+    char text[2048];
+    char consoleText[2048];
+    va_list args;
+    va_start(args, format);
+    _vsnprintf(text, sizeof(text) - 1, format, args);
+    va_end(args);
+    text[sizeof(text) - 1] = '\0';
+
+    CharToOemA(text, consoleText);
+    puts(consoleText);
+    fflush(stdout);
+
+    if (pLogFile)
+    {
+        if (pConsole && pConsole->GetBoolVariable("timestamp"))
+        {
+            char timeText[256] = {0};
+            time_t now = time(NULL);
+            const struct tm* local = localtime(&now);
+            if (local)
+                strftime(timeText, sizeof(timeText), pConsole->GetStringVariable("logtimeformat"), local);
+            fprintf(pLogFile, "%s %s\n", timeText, text);
+        }
+        else
+        {
+            fprintf(pLogFile, "%s\n", text);
+        }
+        fflush(pLogFile);
+    }
+    if (bRconSocketReply)
+        RconSocketReply(text);
+}
+
+// 0x00492380
+void LoadLogFile()
+{
+    const bool reload = pLogFile != NULL;
+    if (reload)
+        fclose(pLogFile);
+
+    pLogFile = fopen("server_log.txt", "a");
+    if (pLogFile)
+    {
+        logprintf("");
+        logprintf("----------");
+        if (reload)
+            logprintf("Reloaded log file: \"server_log.txt\".");
+        else
+            logprintf("Loaded log file: \"server_log.txt\".");
+        logprintf("----------");
+    }
+    else
+    {
+        logprintf("Failed to load log file: \"server_log.txt\".");
+    }
+}
+
+// 0x00491e50
+void ServerMaxPlayersChanged()
+{
+    const int maxPlayers = pConsole->GetIntVariable("maxplayers");
+    if (maxPlayers < 0)
+        pConsole->SetIntVariable("maxplayers", 0);
+    if (maxPlayers > 1000)
+        pConsole->SetIntVariable("maxplayers", 1000);
+}
+
+// 0x00491ef0
+void ServerStreamRateChanged()
+{
+    const int rate = pConsole->GetIntVariable("stream_rate");
+    if (rate < 500)
+        pConsole->SetIntVariable("stream_rate", 500);
+    if (rate > 5000)
+        pConsole->SetIntVariable("stream_rate", 5000);
+}
+
+// 0x00491f40
+void ServerStreamDistanceChanged()
+{
+    const float distance = pConsole->GetFloatVariable("stream_distance");
+    if (distance < 50.0f)
+        pConsole->SetFloatVariable("stream_distance", 50.0f);
+    if (distance > 400.0f)
+        pConsole->SetFloatVariable("stream_distance", 400.0f);
+}
+
 // 0x00492420
 int main(int argc, char** argv)
 {
+    bool bEnableAnnounce = true;
+    int iMaxPlayers = 50;
+    int iListenPort = 8192;
+    bool bLanModeEnable = false;
+    bool bAllowQuery = true;
+    bool bEnableRcon = true;
+    bool bEnableTimestamp = true;
+    bool bGameMod = false;
+
+    LoadLogFile();
+    logprintf("");
+    logprintf("SA-MP Dedicated Server");
+    logprintf("----------------------");
+    logprintf("v0.3.DL-R1, (C)2005-2018 SA-MP Team\n");
+
+    CConsole console;
+    pConsole = &console;
+    pConsole->AddVariable("announce", CON_VARTYPE_BOOL, 0, &bEnableAnnounce);
+    pConsole->AddVariable("maxplayers", CON_VARTYPE_INT, 0, &iMaxPlayers, ServerMaxPlayersChanged);
+    pConsole->AddVariable("mtu", CON_VARTYPE_INT, 0, &iMtu);
+    pConsole->AddVariable("port", CON_VARTYPE_INT, 0, &iListenPort);
+    pConsole->AddVariable("lanmode", CON_VARTYPE_BOOL, 0, &bLanModeEnable);
+    pConsole->AddVariable("query", CON_VARTYPE_BOOL, 0, &bAllowQuery);
+    pConsole->AddVariable("rcon", CON_VARTYPE_BOOL, 0, &bEnableRcon);
+    pConsole->AddVariable("logqueries", CON_VARTYPE_BOOL, 0, &bLogQueries);
+    pConsole->AddVariable("stream_rate", CON_VARTYPE_INT, 0, &iStreamRate, ServerStreamRateChanged);
+    pConsole->AddVariable("stream_distance", CON_VARTYPE_FLOAT, 0, &fStreamDistance, ServerStreamDistanceChanged);
+    pConsole->AddVariable("sleep", CON_VARTYPE_INT, 0, &iSleep);
+    pConsole->AddVariable("maxnpc", CON_VARTYPE_INT, 0, &iMaxNpc);
+    pConsole->AddVariable("onfoot_rate", CON_VARTYPE_INT, 0, &iOnFootRate);
+    pConsole->AddVariable("incar_rate", CON_VARTYPE_INT, 0, &iInCarRate);
+    pConsole->AddVariable("weapon_rate", CON_VARTYPE_INT, 0, &iWeaponRate);
+    pConsole->AddVariable("chatlogging", CON_VARTYPE_INT, 0, &iChatLogging);
+    pConsole->AddVariable("timestamp", CON_VARTYPE_BOOL, 0, &bEnableTimestamp);
+    pConsole->AddStringVariable("bind", 0, NULL);
+    pConsole->AddStringVariable("password", 0, NULL);
+    pConsole->AddStringVariable("hostname", 0, "SA-MP Server");
+    pConsole->AddStringVariable("language", 0, NULL);
+    pConsole->AddStringVariable("mapname", CON_VARFLAG_RULE, "San Andreas");
+    pConsole->AddStringVariable("weburl", CON_VARFLAG_RULE, "www.sa-mp.com");
+    pConsole->AddStringVariable("rcon_password", 0, "changeme");
+    pConsole->AddStringVariable("gravity", 0, "0.008");
+    pConsole->AddStringVariable("weather", CON_VARFLAG_RULE, "10");
+    pConsole->AddStringVariable("gamemodetext", 0, "Unknown");
+    pConsole->AddStringVariable("filterscripts", 0, "");
+    pConsole->AddStringVariable("plugins", 0, "");
+    pConsole->AddStringVariable("nosign", 0, "");
+    pConsole->AddStringVariable("logtimeformat", 0, "[%H:%M:%S]");
+    pConsole->AddVariable("messageholelimit", CON_VARTYPE_INT, 0, &iMessageHoleLimit);
+    pConsole->AddVariable("messageslimit", CON_VARTYPE_INT, 0, &iMessagesLimit);
+    pConsole->AddVariable("ackslimit", CON_VARTYPE_INT, 0, &iAcksLimit);
+    pConsole->AddVariable("playertimeout", CON_VARTYPE_INT, 0, &iPlayerTimeout);
+    pConsole->AddVariable("minconnectiontime", CON_VARTYPE_INT, 0, &iMinConnectionTime);
+    pConsole->AddVariable("myriad", CON_VARTYPE_BOOL, 0, &bGameMod);
+    pConsole->AddVariable("lagcompmode", CON_VARTYPE_INT, 0, &iLagCompMode);
+    pConsole->AddVariable("connseedtime", CON_VARTYPE_INT, 0, &iConnSeedTime);
+    pConsole->AddVariable("db_logging", CON_VARTYPE_INT, 0, &iDbLogging);
+    pConsole->AddVariable("db_log_queries", CON_VARTYPE_INT, 0, &iDbLogQueries);
+    pConsole->AddVariable("conncookies", CON_VARTYPE_INT, 0, &iConnCookies);
+    pConsole->AddVariable("cookielogging", CON_VARTYPE_INT, 0, &iCookieLogging);
+    pConsole->AddVariable("useartwork", CON_VARTYPE_BOOL, 0, &bUseArtwork);
+    pConsole->AddStringVariable("artpath", 0, "models");
+    for (unsigned int i = 0; i < 16; ++i)
+    {
+        char name[16];
+        sprintf(name, "gamemode%u", i);
+        pConsole->AddStringVariable(name, 0, "");
+    }
+
+    pConsole->Execute("exec server");
+    const char* password = pConsole->GetStringVariable("rcon_password");
+    if (password && strcmp(password, "changeme") == 0)
+        logprintf("Error: Your password must be changed from the default password, please change it.");
+
+    pConsole = NULL;
     return 0;
 }

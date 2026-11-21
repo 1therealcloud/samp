@@ -32,7 +32,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib winmm.lib"
-				OutputFile="$(OutDir)/server.exe"
+				OutputFile="$(OutDir)/samp_server.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/server.pdb"
@@ -78,7 +78,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib winmm.lib"
-				OutputFile="$(OutDir)/server.exe"
+				OutputFile="$(OutDir)/samp_server.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -313,7 +313,19 @@
 			Name="general"
 			Filter="">
 			<File
+				RelativePath=".\console.cpp">
+			</File>
+			<File
+				RelativePath=".\console.h">
+			</File>
+			<File
 				RelativePath=".\main.cpp">
+			</File>
+			<File
+				RelativePath=".\query.cpp">
+			</File>
+			<File
+				RelativePath=".\query.h">
 			</File>
 		</Filter>
 	</Files>
