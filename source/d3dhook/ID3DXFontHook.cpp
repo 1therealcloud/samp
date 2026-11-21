@@ -2,8 +2,8 @@
 
 #include "d3dhook/ID3DXFontHook.h"
 
-#include "gui/cmdwindow.h"
 #include "gui/chatwindow.h"
+#include "gui/cmdwindow.h"
 
 #include <DXUTgui.h>
 
