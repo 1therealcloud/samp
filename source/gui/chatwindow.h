@@ -12,6 +12,8 @@ class CDXUTEditBox;
 class CDXUTScrollBar;
 #include "render/fontrender.h"
 
+#include <static_assert.h>
+
 #pragma pack(push, 1)
 class CChat
 {
@@ -131,38 +133,45 @@ public:
 };
 #pragma pack(pop)
 
-#define CHAT_LAYOUT_ASSERT(name, condition) typedef char name[(condition) ? 1 : -1]
-CHAT_LAYOUT_ASSERT(chat_x86, sizeof(void*) == 4);
-CHAT_LAYOUT_ASSERT(chat_entry_size, sizeof(CChat::ChatEntry) == 0xfc);
-CHAT_LAYOUT_ASSERT(chat_size, sizeof(CChat) == 0x63ea);
-CHAT_LAYOUT_ASSERT(chat_mode_offset, offsetof(CChat, m_nMode) == 8);
-CHAT_LAYOUT_ASSERT(chat_timestamp_flag_offset, offsetof(CChat, m_bTimestamps) == 0xc);
-CHAT_LAYOUT_ASSERT(chat_log_flag_offset, offsetof(CChat, m_bDoesLogExist) == 0xd);
-CHAT_LAYOUT_ASSERT(chat_log_offset, offsetof(CChat, m_szLogPath) == 0x11);
-CHAT_LAYOUT_ASSERT(chat_dialog_offset, offsetof(CChat, m_pGameUi) == 0x116);
-CHAT_LAYOUT_ASSERT(chat_scroll_offset, offsetof(CChat, m_pScrollbar) == 0x11e);
-CHAT_LAYOUT_ASSERT(chat_text_color_offset, offsetof(CChat, m_textColor) == 0x122);
-CHAT_LAYOUT_ASSERT(chat_info_color_offset, offsetof(CChat, m_infoColor) == 0x126);
-CHAT_LAYOUT_ASSERT(chat_debug_color_offset, offsetof(CChat, m_debugColor) == 0x12a);
-CHAT_LAYOUT_ASSERT(chat_bottom_offset, offsetof(CChat, m_nWindowBottom) == 0x12e);
-CHAT_LAYOUT_ASSERT(chat_entry_offset, offsetof(CChat, m_entry) == 0x132);
-CHAT_LAYOUT_ASSERT(chat_entry_text_offset, offsetof(CChat::ChatEntry, text) == 0x20);
-CHAT_LAYOUT_ASSERT(chat_entry_type_offset, offsetof(CChat::ChatEntry, type) == 0xf0);
-CHAT_LAYOUT_ASSERT(chat_fonts_offset, offsetof(CChat, m_pFontRenderer) == 0x63a2);
-CHAT_LAYOUT_ASSERT(chat_text_sprite_offset, offsetof(CChat, m_pTextSprite) == 0x63a6);
-CHAT_LAYOUT_ASSERT(chat_sprite_offset, offsetof(CChat, m_pSprite) == 0x63aa);
-CHAT_LAYOUT_ASSERT(chat_device_offset, offsetof(CChat, m_pDevice) == 0x63ae);
-CHAT_LAYOUT_ASSERT(chat_surface_mode_offset, offsetof(CChat, m_bRenderToSurface) == 0x63b2);
-CHAT_LAYOUT_ASSERT(chat_render_to_surface_offset, offsetof(CChat, m_pRenderToSurface) == 0x63b6);
-CHAT_LAYOUT_ASSERT(chat_texture_offset, offsetof(CChat, m_pTexture) == 0x63ba);
-CHAT_LAYOUT_ASSERT(chat_surface_offset, offsetof(CChat, m_pSurface) == 0x63be);
-CHAT_LAYOUT_ASSERT(chat_display_mode_offset, offsetof(CChat, m_displayMode) == 0x63c2);
-CHAT_LAYOUT_ASSERT(chat_tick_offset, offsetof(CChat, m_lastSurfaceUpdate) == 0x63d2);
-CHAT_LAYOUT_ASSERT(chat_surface_valid_offset, offsetof(CChat, m_bSurfaceValid) == 0x63d6);
-CHAT_LAYOUT_ASSERT(chat_redraw_offset, offsetof(CChat, m_bRedraw) == 0x63da);
-CHAT_LAYOUT_ASSERT(chat_position_offset, offsetof(CChat, m_nScrollbarPos) == 0x63de);
-CHAT_LAYOUT_ASSERT(chat_height_offset, offsetof(CChat, m_nCharHeight) == 0x63e2);
-CHAT_LAYOUT_ASSERT(chat_timestamp_width_offset, offsetof(CChat, m_nTimestampWidth) == 0x63e6);
-#undef CHAT_LAYOUT_ASSERT
+STATIC_ASSERT(sizeof(void*) == 4);
+STATIC_ASSERT(sizeof(CChat::ChatEntry) == 0xfc);
+STATIC_ASSERT(sizeof(CChat) == 0x63ea);
+STATIC_ASSERT(offsetof(CChat, m_nMode) == 8);
+STATIC_ASSERT(offsetof(CChat, m_bTimestamps) == 0xc);
+STATIC_ASSERT(offsetof(CChat, m_bDoesLogExist) == 0xd);
+STATIC_ASSERT(offsetof(CChat, m_szLogPath) == 0x11);
+STATIC_ASSERT(offsetof(CChat, m_pGameUi) == 0x116);
+STATIC_ASSERT(offsetof(CChat, m_pScrollbar) == 0x11e);
+STATIC_ASSERT(offsetof(CChat, m_textColor) == 0x122);
+STATIC_ASSERT(offsetof(CChat, m_infoColor) == 0x126);
+STATIC_ASSERT(offsetof(CChat, m_debugColor) == 0x12a);
+STATIC_ASSERT(offsetof(CChat, m_nWindowBottom) == 0x12e);
+STATIC_ASSERT(offsetof(CChat, m_entry) == 0x132);
+STATIC_ASSERT(offsetof(CChat::ChatEntry, text) == 0x20);
+STATIC_ASSERT(offsetof(CChat::ChatEntry, type) == 0xf0);
+STATIC_ASSERT(offsetof(CChat, m_pFontRenderer) == 0x63a2);
+STATIC_ASSERT(offsetof(CChat, m_pTextSprite) == 0x63a6);
+STATIC_ASSERT(offsetof(CChat, m_pSprite) == 0x63aa);
+STATIC_ASSERT(offsetof(CChat, m_pDevice) == 0x63ae);
+STATIC_ASSERT(offsetof(CChat, m_bRenderToSurface) == 0x63b2);
+STATIC_ASSERT(offsetof(CChat, m_pRenderToSurface) == 0x63b6);
+STATIC_ASSERT(offsetof(CChat, m_pTexture) == 0x63ba);
+STATIC_ASSERT(offsetof(CChat, m_pSurface) == 0x63be);
+STATIC_ASSERT(offsetof(CChat, m_displayMode) == 0x63c2);
+STATIC_ASSERT(offsetof(CChat, m_lastSurfaceUpdate) == 0x63d2);
+STATIC_ASSERT(offsetof(CChat, m_bSurfaceValid) == 0x63d6);
+STATIC_ASSERT(offsetof(CChat, m_bRedraw) == 0x63da);
+STATIC_ASSERT(offsetof(CChat, m_nScrollbarPos) == 0x63de);
+STATIC_ASSERT(offsetof(CChat, m_nCharHeight) == 0x63e2);
+STATIC_ASSERT(offsetof(CChat, m_nTimestampWidth) == 0x63e6);
+
+// 0x000b5950
+int ChatIsHexDigit(char value);
+// 0x000b59c0
+unsigned long ChatParseColorTag(char* text);
+// 0x000b5c00
+void ChatStripColorTags(char* text);
+// 0x000b5c40
+int ChatPrepareMessage(char* text, int maximumLength);
 
 #endif // CHATWINDOW_H

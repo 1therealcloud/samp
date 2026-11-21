@@ -46,13 +46,4 @@ bool Util_IsDecimal(const char* text);
 // 0x000b5920
 void Util_SanitizeAscii(char* text);
 
-// 0x000b5950
-int ChatIsHexDigit(char value);
-// 0x000b59c0
-unsigned long ChatParseColorTag(char* text);
-// 0x000b5c00
-void ChatStripColorTags(char* text);
-// 0x000b5c40
-int ChatPrepareMessage(char* text, int maximumLength);
-
 #endif // RUNUTIL_H
