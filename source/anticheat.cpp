@@ -2,8 +2,11 @@
 
 #include "game/util.h"
 #include "main.h"
+#include "runutil.h" // CheckDuplicateD3D9Dlls (legacy)
 
 #include <stdlib.h>
+#include <tlhelp32.h> // CheckDuplicateD3D9Dlls (legacy)
+
 // 0x0018dc24
 DWORD g_integrityVehicleChecksum;
 // 0x0018dc28
@@ -39,6 +42,11 @@ DWORD g_clientTimerFrequencyAttempted;
 const double g_clientTimerUnsignedBias = 4294967296.0;
 // 0x0011a930
 const double g_clientTimerMillisecondScale = 0.001;
+
+// 0x0018dc3c
+unsigned long g_clientD3D9BaseEncoded; // CheckDuplicateD3D9Dlls (legacy)
+// 0x0018dc40
+unsigned long g_clientD3D9ImageSize; // CheckDuplicateD3D9Dlls (legacy)
 
 // 0x0009d690
 DWORD* GameIntegrityVehicleArray()
@@ -242,4 +250,50 @@ DWORD __stdcall GameIntegrityMismatch(DWORD code, DWORD a, DWORD b, DWORD c, DWO
         ++g_clientIntegrityFailures;
     }
     return 69;
+}
+
+// 0x0009d8c0
+unsigned long CheckDuplicateD3D9Dlls() // legacy
+{
+    unsigned long matches = 0;
+    char moduleName[MAX_PATH + 1];
+    unsigned char d3d9[] = {0x8c, 0x66, 0x8c, 0x27, 0xc5, 0x8c, 0x8d, 0x8d, 0x0};
+    char* d3d9Name = K_DecodeString(d3d9);
+    unsigned char kernel[] = {0x6d, 0xac, 0x4e, 0xcd, 0xac, 0x8d, 0x66, 0x46, 0xc5, 0x8c, 0x8d, 0x8d, 0x0};
+    char* kernelName = K_DecodeString(kernel);
+    unsigned char snapshot[] = {0x68, 0x4e, 0xac, 0x2c, 0x8e, 0xac, 0x8a, 0xed, 0xed, 0x8d, 0xd, 0xac, 0x8d, 0xe, 0x66, 0x46, 0x6a, 0xcd, 0x2c, 0xe, 0x6e, 0xd, 0xed, 0x8e, 0x0};
+    unsigned char first[] = {0xa9, 0xed, 0x8c, 0xae, 0x8d, 0xac, 0x66, 0x46, 0xc8, 0x2d, 0x4e, 0x6e, 0x8e, 0x0};
+    unsigned char next[] = {0xa9, 0xed, 0x8c, 0xae, 0x8d, 0xac, 0x66, 0x46, 0xc9, 0xac, 0xf, 0x8e, 0x0};
+    HMODULE kernelModule = GetModuleHandleA(kernelName);
+    char* snapshotName = K_DecodeString(snapshot);
+    FARPROC(WINAPI * resolve)(HMODULE, LPCSTR) = GetProcAddress;
+    typedef HANDLE(WINAPI * SnapshotFunction)(DWORD, DWORD);
+    typedef BOOL(WINAPI * ModuleFunction)(HANDLE, LPMODULEENTRY32);
+    SnapshotFunction createSnapshot = (SnapshotFunction)resolve(kernelModule, snapshotName);
+    ModuleFunction firstModule = (ModuleFunction)resolve(kernelModule, K_DecodeString(first));
+    ModuleFunction nextModule = (ModuleFunction)resolve(kernelModule, K_DecodeString(next));
+    HANDLE handle = createSnapshot(8, GetCurrentProcessId());
+    if (handle == INVALID_HANDLE_VALUE)
+        return 0;
+    MODULEENTRY32 entry;
+    entry.dwSize = sizeof(MODULEENTRY32);
+    if (!firstModule(handle, &entry))
+    {
+        CloseHandle(handle);
+        return 0;
+    }
+    do
+    {
+        // Native keeps this unbounded intermediate copy before its exact strcmp.
+        strcpy(moduleName, entry.szModule);
+        if (!strcmp(d3d9Name, moduleName))
+        {
+            g_clientD3D9BaseEncoded = (unsigned long)entry.modBaseAddr ^ 0xacacacac;
+            g_clientD3D9ImageSize = entry.modBaseSize;
+            ++matches;
+        }
+    }
+    while (nextModule(handle, &entry));
+    CloseHandle(handle);
+    return matches;
 }
