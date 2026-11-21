@@ -375,9 +375,9 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     output.Write(serial, byte);
 #if defined(DL_BUILD)
     byte = 9;
-#else
+#else // DL_BUILD
     byte = 8;
-#endif
+#endif // DL_BUILD
     output.WriteBits(&byte, 8, true);
 #if defined(DL_BUILD)
     output.Write(g_netClientVersion, 9);
