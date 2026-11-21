@@ -32,7 +32,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\launch3.exe"
+				OutputFile="$(OutDir)\samp_debug.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)\launch3.pdb"
@@ -83,7 +83,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\launch3.exe"
+				OutputFile="$(OutDir)\samp_debug.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)\launch3.pdb"
