@@ -6,42 +6,11 @@ The clients are reconstructed from the original binaries.\
 The 0.2x sources serve as reference material for names, organization and some code\
 (`source/archive`, `tools/arctool2`, `tools/rcon`).
 
-## Status
+## Branches
 
-The client is fully functional and playable, with no known issues observed during testing.\
-All SA-MP functionality is implemented.\
-Approximately **75% of the SA-MP client code** matches the original machine code.\
-The remaining **25%** follows the original logic.
-
-The match percentage and inventory below use **SA-MP 0.3.DL-R1 `samp.dll`** as the reference.
-
-SHA-256:
-
-```text
-bccdb297464bd382625635be25585df07a8fa6668bc0015650708e3eb4ffcd4b
-```
-
-The current binary inventory contains **9,093 native entries**.\
-These counts describe native entry addresses, rather than unique C++ methods or byte-matched functions.
-
-| Component | Entries |
-| --- | ---: |
-| SA-MP code | 2,407 |
-| RakNet | 1,785 |
-| zlib | 43 |
-| libcurl | 839 |
-| LZMA | 135 |
-| ttmath | 215 |
-| BASS imports | 17 |
-| Detours | 51 |
-| DXUT | 1,038 |
-| DirectX SDK helpers | 34 |
-| D3DX9 | 53 |
-| CRT / STL | 864 |
-| MSVC-generated code / exception handling | 1,333 |
-| Shared code / uncertain ownership | 213 |
-| Other import thunks | 66 |
-| **Total** | **9,093** |
+- `master` is the development branch for fixes and improvements.
+- `0.3.7-R5` contains the reconstructed SA-MP 0.3.7-R5 client.
+- `0.3.DL-R1` contains the reconstructed SA-MP 0.3.DL-R1 client.
 
 ## Dependencies
 
