@@ -4,13 +4,13 @@
 #include "game/playerped.h"
 #include "game/util.h"
 #include "gui/cmdwindow.h"
+#include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "gui/label.h"
 #include "main.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
-#include "runutil.h"
 
 #include <DXUTgui.h>
 

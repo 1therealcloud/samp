@@ -3,7 +3,7 @@
 
 #include "d3dhook/ID3DXFontHook.h"
 #include "gui/cmdwindow.h"
-#include "runutil.h"
+#include "gui/chatwindow.h"
 
 #include <DXUTgui.h>
 
