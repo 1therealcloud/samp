@@ -346,7 +346,11 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     input.ReadBits((BYTE*)&port, 16, true);
     input.ReadBits((BYTE*)&player, 16, true);
     input.ReadBits((BYTE*)&challenge, 32, true);
-    challenge ^= 0xfde;
+#if defined(DL_BUILD)
+    challenge ^= 4062; // 0xfde
+#else // DL_BUILD
+    challenge ^= 4057; // 0xfd9
+#endif // DL_BUILD
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netJoiningMessage);
     gameState = StateAwaitingInit;
@@ -369,7 +373,11 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     byte = (BYTE)strlen(serial);
     output.WriteBits(&byte, 8, true);
     output.Write(serial, byte);
+#if defined(DL_BUILD)
     byte = 9;
+#else
+    byte = 8;
+#endif
     output.WriteBits(&byte, 8, true);
 #if defined(DL_BUILD)
     output.Write(g_netClientVersion, 9);
