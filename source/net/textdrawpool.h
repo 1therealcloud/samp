@@ -1,10 +1,12 @@
 #ifndef TEXTDRAWPOOL_H
 #define TEXTDRAWPOOL_H
 
+#include "game/textdraw.h"
+
 #include <windows.h>
 
-#include "game/textdraw.h"
 #include <static_assert.h>
+
 struct RPCParameters;
 #pragma pack(push, 1)
 class CTextDrawPool

@@ -1,9 +1,3 @@
-#include <string.h>
-
-#include <DXUT.h>
-#include <DXUTgui.h>
-#include <GetTime.h>
-
 #include "gui/gui.h"
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -16,7 +10,15 @@
 #include "main.h"
 #include "net/localplayer.h"
 #include "net/vehiclepool.h"
+
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <GetTime.h>
+
+#include <string.h>
+
 #include <static_assert.h>
+
 // 0x002acab8
 CDXUTDialog* g_guiScoreboardDialog;
 // 0x002acac0

@@ -1,6 +1,3 @@
-#include <new>
-#include <string.h>
-
 #include "gui/spawnscreen.h"
 
 #include "archive/ArchiveFS.h"
@@ -10,6 +7,9 @@
 #include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "main.h"
+
+#include <new>
+#include <string.h>
 // 0x0011c74c
 const char g_spawnVersionText[] = "SA-MP 0.3.DL-R1";
 

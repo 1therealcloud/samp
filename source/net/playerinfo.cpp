@@ -1,7 +1,8 @@
-#include <string.h>
-
 #include "net/playerinfo.h"
+
 #include "net/remoteplayer.h"
+
+#include <string.h>
 // 0x0006e270
 int CPlayerInfo::GetScore()
 {

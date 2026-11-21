@@ -6,6 +6,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 class CRemotePlayer;
 #pragma pack(push, 1)
 class CPlayerInfo

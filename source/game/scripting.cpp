@@ -1,10 +1,10 @@
-#include <string.h>
-
 #include "game/scripting.h"
 
 #include "gui/chatwindow.h"
 #include "main.h"
+
 #include <stdarg.h>
+#include <string.h>
 // 0x002a93f0
 CRunningScript* g_scriptThread;
 // 0x002a92f0

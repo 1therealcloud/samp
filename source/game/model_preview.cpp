@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "game/model_preview.h"
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -11,6 +9,8 @@
 #include "game/util.h"
 #include "game/vehicle.h"
 #include "main.h"
+
+#include <string.h>
 // 0x002aca38
 CModelPreview* g_modelPreview;
 // 0x0011c654

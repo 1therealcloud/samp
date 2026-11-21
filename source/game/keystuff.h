@@ -4,6 +4,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 struct KeyPad
 {
     WORD keys1[24], keys2[24];

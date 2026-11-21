@@ -1,12 +1,13 @@
 #ifndef FONTRENDER_H
 #define FONTRENDER_H
 
+#include <d3dx9.h>
+
 #include <stddef.h>
 #include <windows.h>
 
-#include <d3dx9.h>
-
 #include <static_assert.h>
+
 // Native green-underflow branch clears red and retains green; not generic saturation.
 // 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount);

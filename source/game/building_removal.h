@@ -1,7 +1,9 @@
 #ifndef SAMP_GAME_BUILDING_REMOVAL_H
 #define SAMP_GAME_BUILDING_REMOVAL_H
-#include <static_assert.h>
 #include <windows.h>
+
+#include <static_assert.h>
+
 struct BuildingRemovalRecord
 {
     int model;

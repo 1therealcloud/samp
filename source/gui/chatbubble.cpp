@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "gui/chatbubble.h"
 
 #include "game/game.h"
@@ -9,6 +7,8 @@
 #include "main.h"
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
+
+#include <string.h>
 // 0x0011bcd0
 const float g_chatBubbleLineDistanceScale = 0.0125f;
 // 0x0011bccc

@@ -4,6 +4,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 // 0x00062b00
 char* GetSHA1Result(unsigned int* digest, char* buffer);
 

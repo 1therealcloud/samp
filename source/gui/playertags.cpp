@@ -1,7 +1,3 @@
-#include <new>
-#include <stdio.h>
-#include <string.h>
-
 #include "gui/playertags.h"
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -19,6 +15,10 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "render/fontrender.h"
+
+#include <new>
+#include <stdio.h>
+#include <string.h>
 // 0x0017e988
 CMatrix g_nametagVehicleMatrix;
 // 0x0017eb08

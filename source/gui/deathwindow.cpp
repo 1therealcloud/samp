@@ -1,6 +1,8 @@
 #include "gui/deathwindow.h"
+
 #include "gui/playertags.h"
 #include "render/fontrender.h"
+
 #include <string.h>
 // 0x0011c34c
 const char g_deathWeaponFontFace[11] = "GTAWEAPON3";

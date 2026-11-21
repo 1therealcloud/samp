@@ -1,10 +1,12 @@
 #include "game/textdraw.h"
+
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/custommodels.h"
 #include "game/font.h"
 #include "game/game.h"
 #include "game/model_preview.h"
 #include "game/util.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

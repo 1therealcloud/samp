@@ -1,7 +1,5 @@
 #include "events.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "game/patches.h"
 #include "game/playerped.h"
 #include "game/vehicle.h"
@@ -11,7 +9,12 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+
 #include <static_assert.h>
+
 // 0x00117690
 int g_scmEventRpcId = 96;
 // 0x00156988

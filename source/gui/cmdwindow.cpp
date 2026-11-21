@@ -1,19 +1,22 @@
-#include <DXUTgui.h>
-
 #include "gui/cmdwindow.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "config.h"
 #include "gui/chatwindow.h"
 #include "main.h"
 #include "runutil.h"
+
+#include <BitStream.h>
 #include <DXUT.h>
+#include <DXUTgui.h>
 #include <DXUTmisc.h>
+#include <RakClientInterface.h>
+
 #include <assert.h>
 #include <new>
-#include <static_assert.h>
 #include <string.h>
+
+#include <static_assert.h>
+
 // 0x002aca24
 extern void* g_pNetGame;
 

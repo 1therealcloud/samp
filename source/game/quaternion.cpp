@@ -1,7 +1,10 @@
 #include "game/quaternion.h"
+
 #include "game/game.h"
 #include "game/util.h"
+
 #include <d3dx9.h>
+
 #include <math.h>
 #include <string.h>
 // 0x001181a8

@@ -1,8 +1,3 @@
-#include <string.h>
-
-#include <DXUT.h>
-#include <DXUTgui.h>
-
 #include "gui/renderpanel.h"
 
 #include "game/gta_globals.h"
@@ -10,6 +5,11 @@
 #include "gui/objectedit.h"
 #include "net/objectpool.h"
 #include "render/fontrender.h"
+
+#include <DXUT.h>
+#include <DXUTgui.h>
+
+#include <string.h>
 // 0x0011c75c
 const char g_renderPanelTitle[10] = "Transform";
 // 0x00071100

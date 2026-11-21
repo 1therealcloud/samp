@@ -5,6 +5,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 // Sixteen native DWORDs copied verbatim; only the first thirteen have known uses.
 struct CMenuInteraction

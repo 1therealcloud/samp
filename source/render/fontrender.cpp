@@ -1,9 +1,12 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
 #include "render/fontrender.h"
+
 #include "d3dhook/ID3DXFontHook.h"
 #include "gui/cmdwindow.h"
 #include "runutil.h"
+
 #include <DXUTgui.h>
+
 #include <stdlib.h>
 #include <string.h>
 // 0x00118400

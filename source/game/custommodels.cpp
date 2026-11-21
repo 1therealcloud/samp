@@ -1,12 +1,5 @@
-#include <stdlib.h>
-#include <string.h>
-
 #include "game/custommodels.h"
 
-#include "Alloc.h"
-#include "BitStream.h"
-#include "LzmaDec.h"
-#include "RakClientInterface.h"
 #include "config.h"
 #include "game/game.h"
 #include "game/hooks.h"
@@ -16,11 +9,21 @@
 #include "gui/gui.h"
 #include "main.h"
 #include "net/netgame.h"
+
+#include <Alloc.h>
+#include <BitStream.h>
+#include <LzmaDec.h>
+#include <RakClientInterface.h>
 #include <curl/curl.h>
+
 #include <process.h>
-#include <static_assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+
+#include <static_assert.h>
+
 // 0x00117cd8
 const char g_customDeleteDffPattern[] = "%s\\0x%X.dff";
 // 0x00117ce4

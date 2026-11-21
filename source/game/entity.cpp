@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "game/entity.h"
 
 #include "game/camera.h"
@@ -8,7 +6,9 @@
 #include "game/util.h"
 #include "gui/chatwindow.h"
 #include "main.h"
+
 #include <math.h>
+#include <string.h>
 // 0x001181b8
 extern const float g_entityRadiansToDegrees = 57.2957763671875f;
 // 0x0011c660

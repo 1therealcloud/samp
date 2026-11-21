@@ -1,10 +1,10 @@
-#include <process.h>
-#include <string.h>
-
 #include "archive/ArchiveFS.h"
 #include "filehooks.h"
 #include "game/hooks.h"
 #include "main.h"
+
+#include <process.h>
+#include <string.h>
 
 // standard CRT integration adapter
 extern "C" BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID reserved)

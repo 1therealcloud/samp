@@ -6,6 +6,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 // Packed native pool; inclusive ID1004 accesses retain observed adjacent storage behavior.
 class CRemotePlayer;
 class CLocalPlayer;

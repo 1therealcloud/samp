@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Stream.h"
+
 #include <windows.h>
 
 // SAA_FILE_ID := {'S', 'A', 'M', 'P'} ignoring first 3 bits of each char

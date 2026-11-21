@@ -1,7 +1,5 @@
 #include "cmdprocs.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "config.h"
 #include "game/debug.h"
 #include "game/hooks.h"
@@ -15,8 +13,12 @@
 #include "gui/scoreboard.h"
 #include "main.h"
 #include "net/localplayer.h"
+
+#include <BitStream.h>
 #include <DXUT.h>
 #include <DXUTgui.h>
+#include <RakClientInterface.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,9 +1,10 @@
 #include "gui/textdrawselection.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "gui/cmdwindow.h"
 #include "main.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
 // 0x001182f8
 int g_textDrawClickRpc = 83;
 

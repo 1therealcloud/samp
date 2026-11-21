@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-
 #include "game/hooks.h"
 
 #include "cmdprocs.h"
@@ -27,6 +24,9 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 // 0x00151a60
 BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};

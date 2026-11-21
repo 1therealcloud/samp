@@ -1,10 +1,12 @@
 #ifndef SPAWNSCREEN_H
 #define SPAWNSCREEN_H
 
+#include "render/fontrender.h"
+
 #include <d3dx9.h>
 
-#include "render/fontrender.h"
 #include <static_assert.h>
+
 struct CVector;
 #pragma pack(push, 1)
 struct SpawnScreenVertex

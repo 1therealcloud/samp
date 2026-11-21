@@ -1,10 +1,10 @@
 #ifndef LABEL_H
 #define LABEL_H
 
-#include <d3dx9.h>
-
 #include "game/entity.h"
 #include "game/scripting.h"
+
+#include <d3dx9.h>
 #pragma pack(push, 1)
 class CLabel
 {

@@ -1,11 +1,11 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <windows.h>
+#include "game/entity.h"
 
 #include <d3d9.h>
 
-#include "game/entity.h"
+#include <windows.h>
 // GTA SA VA: 0x00c97c28; returns the current global, including an installed proxy.
 // 0x000c5110
 IDirect3DDevice9* GameGetCurrentD3DDevice();

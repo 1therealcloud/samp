@@ -2,7 +2,9 @@
 #define MENUPOOL_H
 
 #include "game/menu.h"
+
 #include <static_assert.h>
+
 struct RPCParameters;
 #pragma pack(push, 1)
 // Native allocation is0x402 bytes; current-menu sentinel is128.

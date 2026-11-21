@@ -2,9 +2,9 @@
 #ifndef ID3DXFONTHOOK_H
 #define ID3DXFONTHOOK_H
 
-#include <windows.h>
-
 #include <d3dx9.h>
+
+#include <windows.h>
 
 #include <static_assert.h>
 

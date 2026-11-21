@@ -1,9 +1,9 @@
-#include <string.h>
-
 #include "game/building_removal.h"
 
 #include "game/hooks.h"
 #include "game/util.h"
+
+#include <string.h>
 // 0x0011e338
 const float g_buildingRemovalDrop = 2000.0f;
 // 0x0011e33c

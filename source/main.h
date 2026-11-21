@@ -1,14 +1,14 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <string>
-#include <windows.h>
-
 #include "cmdprocs.h"
 #include "config.h"
 #include "game/debugscript.h"
 #include "game/game.h"
 #include "game/gta_globals.h"
+
+#include <string>
+#include <windows.h>
 class CInput;
 class CChat;
 // 0x002aca3c

@@ -1,11 +1,5 @@
 #include "net/netgame.h"
 
-#include "BitStream.h"
-#include "GetTime.h"
-#include "NetworkTypes.h"
-#include "RakClientInterface.h"
-#include "RakNetworkFactory.h"
-#include "SocketLayer.h"
 #include "anticheat.h"
 #include "archive/ArchiveFS.h"
 #include "config.h"
@@ -33,10 +27,20 @@
 #include "net/scriptrpc.h"
 #include "net/textdrawpool.h"
 #include "net/vehiclepool.h"
-#include "ttmath/ttmathuint.h"
-#include <static_assert.h>
+
+#include <BitStream.h>
+#include <GetTime.h>
+#include <NetworkTypes.h>
+#include <RakClientInterface.h>
+#include <RakNetworkFactory.h>
+#include <SocketLayer.h>
+#include <ttmathuint.h>
+
 #include <stdlib.h>
 #include <string.h>
+
+#include <static_assert.h>
+
 // 0x00117c28
 const char g_netDefaultHostName[] = "SA-MP";
 // 0x00117b6c

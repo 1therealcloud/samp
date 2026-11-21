@@ -1,10 +1,12 @@
 #ifndef LABELPOOL_H
 #define LABELPOOL_H
 
+#include "game/entity.h"
+
 #include <stddef.h>
 
-#include "game/entity.h"
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 struct TextLabel
 {

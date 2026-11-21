@@ -1,7 +1,3 @@
-#include <stdlib.h>
-
-#include <DXUTgui.h>
-
 #include "net/labelpool.h"
 
 #include "game/game.h"
@@ -15,6 +11,10 @@
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
 #include "runutil.h"
+
+#include <DXUTgui.h>
+
+#include <stdlib.h>
 // Native label text uses the CRT calloc/free entries.
 #include <string.h>
 // 0x0000e3c0

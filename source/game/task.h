@@ -5,6 +5,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 class CPed;
 struct CVector;
 #pragma pack(push, 1)

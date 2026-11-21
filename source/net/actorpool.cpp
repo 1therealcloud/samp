@@ -4,7 +4,9 @@
 #include "game/custommodels.h"
 #include "gui/chatwindow.h"
 #include "main.h"
+
 #include <static_assert.h>
+
 // 0x00001610
 CActor* CActorPool::Get(WORD id)
 {

@@ -1,16 +1,17 @@
-#include <tlhelp32.h>
-
 #include "exceptions.h"
 
 #include "game/game.h"
 #include "game/scripting.h"
 #include "main.h"
+
+#include <tlhelp32.h>
 // Native crash reports use the ANSI 548-byte Toolhelp record.
 #undef MODULEENTRY32
 #undef Module32First
 #undef Module32Next
 #include "httpclient.h"
 #include "runutil.h"
+
 #include <stdio.h>
 #include <string.h>
 // 0x0015fa68

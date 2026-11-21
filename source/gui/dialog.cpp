@@ -1,16 +1,5 @@
-#include <assert.h>
-#include <new>
-#include <stdlib.h>
-#include <string.h>
-
-#include <DXUT.h>
-#include <DXUTgui.h>
-#include <DXUTmisc.h>
-
 #include "gui/dialog.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "config.h"
 #include "game/game.h"
 #include "game/hooks.h"
@@ -20,6 +9,18 @@
 #include "gui/gui.h"
 #include "main.h"
 #include "runutil.h"
+
+#include <BitStream.h>
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <DXUTmisc.h>
+#include <RakClientInterface.h>
+
+#include <assert.h>
+#include <new>
+#include <stdlib.h>
+#include <string.h>
+
 #include <static_assert.h>
 
 struct DialogControlAccess : CDXUTControl

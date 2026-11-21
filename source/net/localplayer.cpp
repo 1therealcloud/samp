@@ -1,7 +1,5 @@
 #include "net/localplayer.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "cmdprocs.h"
 #include "game/actor.h"
 #include "game/aimstuff.h"
@@ -24,9 +22,15 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
-#include <static_assert.h>
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+
 #include <stdio.h>
 #include <string.h>
+
+#include <static_assert.h>
+
 // 0x00117948
 const float g_localAimZoomScale = 63.0f;
 // 0x0011794c

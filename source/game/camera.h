@@ -2,7 +2,9 @@
 #define CAMERA_H
 
 #include "game/entity.h"
+
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 class CCamera
 {

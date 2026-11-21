@@ -6,6 +6,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 // Five raw DWORDs consumed by the native collision adapter; semantic fields unresolved.
 struct GameEntityCollisionShape
 {

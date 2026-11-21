@@ -1,10 +1,12 @@
 #ifndef ACTORPOOL_H
 #define ACTORPOOL_H
 
+#include "game/actor.h"
+
 #include <windows.h>
 
-#include "game/actor.h"
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 // Packed native creation request; custom model is separate from constructor model.
 struct ActorCreateInfo

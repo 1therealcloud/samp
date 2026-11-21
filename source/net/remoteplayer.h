@@ -1,11 +1,13 @@
 #ifndef REMOTEPLAYER_H
 #define REMOTEPLAYER_H
 
+#include "net/localplayer.h"
+
 #include <stddef.h>
 #include <windows.h>
 
-#include "net/localplayer.h"
 #include <static_assert.h>
+
 struct CVector;
 class CMatrix;
 #pragma pack(push, 1)

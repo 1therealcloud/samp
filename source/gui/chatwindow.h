@@ -2,10 +2,10 @@
 #define CHATWINDOW_H
 
 // Native x86 layout. Names come from references; offsets are checked below.
+#include <d3dx9.h>
+
 #include <stddef.h>
 #include <windows.h>
-
-#include <d3dx9.h>
 
 class CDXUTDialog;
 class CDXUTEditBox;

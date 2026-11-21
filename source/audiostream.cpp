@@ -1,6 +1,5 @@
 #include "audiostream.h"
 
-#include "bass.h"
 #include "config.h"
 #include "game/entity.h"
 #include "game/game.h"
@@ -12,6 +11,9 @@
 #include "gui/gui.h"
 #include "main.h"
 #include "render/fontrender.h"
+
+#include <bass.h>
+
 #include <process.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -216,9 +218,6 @@ void CALLBACK CAudioStream::MetadataSync(DWORD, DWORD, DWORD, void*)
     ReadMetadata();
 }
 
-// MSVC CRT conversion helper, supplied by selected static runtime.
-// 0x000f9324
-extern "C" __int64 __cdecl _ftol2();
 // 0x000663e0
 BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius, bool spatial)
 {

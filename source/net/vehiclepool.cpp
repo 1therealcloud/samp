@@ -1,7 +1,5 @@
 #include "net/vehiclepool.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
 #include "game/object.h"
@@ -12,6 +10,10 @@
 #include "net/localplayer.h"
 #include "net/netgame.h"
 #include "net/playerpool.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+
 #include <string.h>
 // 0x001184f8
 const char g_vehiclePoolNotDeletedMessage[] = "Warning: vehicle %u was not deleted";

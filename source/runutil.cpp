@@ -2,10 +2,10 @@
 // Original copyright (c) 2005 Kye Bitossi.
 // Recovered against 0.3.DL-R1 instructions; verification scope is recorded in analysis.
 
-#include <string.h>
-
 #include "runutil.h"
+
 #include <stdlib.h>
+#include <string.h>
 #include <windows.h>
 
 // 0x00118230

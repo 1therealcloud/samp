@@ -1,9 +1,9 @@
-#include <math.h>
-#include <string.h>
-
 #include "game/camera.h"
 
 #include "game/scripting.h"
+
+#include <math.h>
+#include <string.h>
 // Provisional SAMP-API attribution: this entry also fits CAudio initialization.
 // No native references establish its class/lifecycle role; keep it unverified.
 // 0x0009fdb0

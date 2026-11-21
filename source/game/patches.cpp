@@ -1,10 +1,10 @@
-#include <string.h>
-
 #include "game/patches.h"
 
 #include "game/game.h"
 #include "game/hooks.h"
+
 #include <stdlib.h>
+#include <string.h>
 // 0x002a9278
 DWORD g_gameVehicleControlPatched = 0;
 // 0x002a927c

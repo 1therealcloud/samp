@@ -3,7 +3,9 @@
 
 #include "game/entity.h"
 #include "game/quaternion.h"
+
 #include <static_assert.h>
+
 // Native allocation extent is established; observed pool flags are named below.
 // Remaining storage and its untouched bytes stay explicitly unknown.
 class CVehicle;

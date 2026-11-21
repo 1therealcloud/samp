@@ -2,9 +2,11 @@
 #include "gui/cmdwindow.h"
 #include "main.h"
 #include "runutil.h"
+
 #include <DXUT.h>
 #include <DXUTgui.h>
 #include <DXUTmisc.h>
+
 #include <assert.h>
 #include <new>
 #include <stdarg.h>

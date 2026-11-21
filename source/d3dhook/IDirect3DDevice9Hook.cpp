@@ -1,15 +1,7 @@
 // IDirect3DDevice9Hook.cpp
 
-#include <stdio.h>
-#include <string.h>
-
-#include <DXUT.h>
-#include <DXUTgui.h>
-
 #include "d3dhook/IDirect3DDevice9Hook.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "anticheat.h"
 #include "game/game.h"
 #include "game/hooks.h"
@@ -20,6 +12,14 @@
 #include "gui/gui.h"
 #include "main.h"
 #include "net/vehiclepool.h"
+
+#include <BitStream.h>
+#include <DXUT.h>
+#include <DXUTgui.h>
+#include <RakClientInterface.h>
+
+#include <stdio.h>
+#include <string.h>
 
 // 0x0017ec00
 D3DMATRIX g_deviceViewMatrix;

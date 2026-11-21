@@ -1,12 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <mmsystem.h>
-
 #include "main.h"
 
-#include "RakClientInterface.h"
 #include "anticheat.h"
 #include "cmdprocs.h"
 #include "config.h"
@@ -19,6 +12,14 @@
 #include "gui/chatwindow.h"
 #include "gui/cmdwindow.h"
 #include "gui/gui.h"
+
+#include <RakClientInterface.h>
+
+#include <mmsystem.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <static_assert.h>
 
 // Client runtime globals, initialization and frame coordination.

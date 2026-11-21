@@ -69,14 +69,16 @@ SpacesInParentheses: false
 SpacesInAngles: false
 SpaceAfterCStyleCast: false
 
-# stdafx.h stays first, the rest gets sorted
 SortIncludes: CaseSensitive
-IncludeBlocks: Preserve
+IncludeBlocks: Regroup
+IncludeIsMainRegex: '$'
 IncludeCategories:
-  - Regex: '^"stdafx\.h"$'
-    Priority: -1
+  - Regex: '^<static_assert\.h>$'
+    Priority: 4
   - Regex: '^".*"$'
     Priority: 1
+  - Regex: '^<(sys/[^>]+|netinet/[^>]+|netdb\.h|(assert|ctype|errno|float|limits|locale|math|mmsystem|process|psapi|stdarg|stddef|stdio|stdlib|string|time|tlhelp32|unknwn|wchar|wctype|windows|winsock|winsock2|ws2tcpip)\.h|algorithm|exception|functional|iomanip|iostream|iterator|limits|list|map|memory|new|set|sstream|string|typeinfo|utility|vector|c(assert|ctype|errno|float|limits|locale|math|stdarg|stddef|stdio|stdlib|string|time|wchar|wctype))>$'
+    Priority: 3
   - Regex: '^<.*>$'
     Priority: 2
 FixNamespaceComments: true

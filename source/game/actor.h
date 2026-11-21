@@ -2,7 +2,9 @@
 #define ACTOR_H
 
 #include "game/entity.h"
+
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 // Observed GTA SA ped-backend prefix, not the complete GTA allocation/type.
 // Field names describe only the accesses used by this SA-MP wrapper.

@@ -2,8 +2,11 @@
 #define SAMP_RECOVERED_VEHICLE_H
 #include "game/entity.h"
 #include "game/scripting.h"
-#include <static_assert.h>
+
 #include <stddef.h>
+
+#include <static_assert.h>
+
 struct IDirect3DTexture9;
 // Native allocation extent B8 and CEntity prefix/three-slot virtual interface.
 // Opaque bytes retain unknown meaning; lifecycle follows the recovered DL bodies.

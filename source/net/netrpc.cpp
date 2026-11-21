@@ -1,11 +1,5 @@
-#include <string.h>
-
 #include "net/netrpc.h"
 
-#include "BitStream.h"
-#include "GetTime.h"
-#include "RakClientInterface.h"
-#include "StringCompressor.h"
 #include "events.h"
 #include "game/custommodels.h"
 #include "game/game.h"
@@ -27,6 +21,13 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "net/vehiclepool.h"
+
+#include <BitStream.h>
+#include <GetTime.h>
+#include <RakClientInterface.h>
+#include <StringCompressor.h>
+
+#include <string.h>
 // 0x0013c0b4
 DWORD g_rpcInitValue13C0B4 = 2;
 // 0x001180ec

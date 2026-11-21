@@ -2,7 +2,9 @@
 #define SAMP_RECOVERED_PED_H
 #include "game/entity.h"
 #include "game/scripting.h"
+
 #include <static_assert.h>
+
 struct CameraAim;
 #pragma pack(push, 1)
 // Observed firing-data extent; the first DWORD is not copied by CPed::SetBulletData.

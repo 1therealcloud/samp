@@ -5,6 +5,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 // Packed native transmit record; fields are transferred as raw bits by the constructor.
 // DL places flags first, unlike the 0.2x record. No standalone native constructor.

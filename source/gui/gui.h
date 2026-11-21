@@ -1,11 +1,6 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include <windows.h>
-
-#include <d3dx9.h>
-#include <unknwn.h>
-
 #include "audiostream.h"
 #include "game/debug.h"
 #include "gui/chatbubble.h"
@@ -30,6 +25,11 @@
 #include "render/fontrender.h"
 #include "render/licenseplate.h"
 #include "render/objectmaterialtext.h"
+
+#include <d3dx9.h>
+
+#include <unknwn.h>
+#include <windows.h>
 class CDXUTDialog;
 class CDXUTControl;
 // 0x002acab8

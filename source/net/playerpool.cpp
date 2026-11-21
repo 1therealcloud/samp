@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "net/playerpool.h"
 
 #include "game/game.h"
@@ -10,6 +8,8 @@
 #include "net/netgame.h"
 #include "net/playerinfo.h"
 #include "net/remoteplayer.h"
+
+#include <string.h>
 // 0x00156b84
 DWORD g_playerPoolProcessCount;
 // 0x0011817c

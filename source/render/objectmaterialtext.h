@@ -1,9 +1,9 @@
 #ifndef OBJECTMATERIALTEXT_H
 #define OBJECTMATERIALTEXT_H
 
-#include <d3dx9.h>
-
 #include "render/fontrender.h"
+
+#include <d3dx9.h>
 struct CVector;
 #pragma pack(push, 1)
 class CObjectMaterialText

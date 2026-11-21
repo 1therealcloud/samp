@@ -1,10 +1,10 @@
-#include <string.h>
-
-#include <d3dx9.h>
-
 #include "game/aimstuff.h"
 
 #include "game/util.h"
+
+#include <d3dx9.h>
+
+#include <string.h>
 // 0x0011e32c
 static const float g_aimCameraZoomRange = 35.0f;
 // 0x00117b9c

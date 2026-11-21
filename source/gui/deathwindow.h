@@ -1,11 +1,12 @@
 #ifndef DEATHWINDOW_H
 #define DEATHWINDOW_H
 
-#include <stddef.h>
-
 #include <d3dx9.h>
 
+#include <stddef.h>
+
 #include <static_assert.h>
+
 #pragma pack(push, 1)
 struct DeathWindowEntry
 {

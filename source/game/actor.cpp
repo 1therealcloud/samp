@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "game/actor.h"
 
 #include "game/game.h"
@@ -7,6 +5,8 @@
 #include "game/scripting.h"
 #include "game/util.h"
 #include "main.h"
+
+#include <string.h>
 // 0x0011e2d0
 const Scripting::OpcodeInfo g_actorKillCommand = {0x321, "i"};
 // 0x0011e294

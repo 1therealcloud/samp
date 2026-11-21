@@ -11,7 +11,9 @@
 //
 
 #include "TinyEncrypt.h"
+
 #include "Obfuscator.h"
+
 #include <stdio.h>
 
 //------------------------------------

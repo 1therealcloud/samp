@@ -1,13 +1,13 @@
-#include <new>
-#include <stdio.h>
-#include <string.h>
-
 #include "game/skinnedmesh.h"
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/util.h"
 #include "gui/chatwindow.h"
 #include "main.h"
+
+#include <new>
+#include <stdio.h>
+#include <string.h>
 
 // 0x0011f860
 const char g_skinTextureDirectory[] = "C:\\Users\\New\\Desktop\\SAMP_037_Desktop\\Matite2014\\newskins\\ponz\\";

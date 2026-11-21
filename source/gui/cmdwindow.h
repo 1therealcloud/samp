@@ -1,12 +1,13 @@
 #ifndef CMDWINDOW_H
 #define CMDWINDOW_H
 
+#include <d3d9.h>
+
 #include <stddef.h>
 #include <windows.h>
 
-#include <d3d9.h>
-
 #include <static_assert.h>
+
 class CDXUTDialog;
 class CDXUTEditBox;
 typedef void(__cdecl* InputCommand)(char*);

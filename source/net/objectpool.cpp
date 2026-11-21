@@ -1,13 +1,13 @@
-#include <string.h>
-
-#include <GetTime.h>
-
 #include "net/objectpool.h"
 
 #include "game/custommodels.h"
 #include "gui/gui.h"
 #include "gui/label.h"
 #include "main.h"
+
+#include <GetTime.h>
+
+#include <string.h>
 // 0x00156b74
 DWORD g_objectPoolLastTick;
 // 0x00118130

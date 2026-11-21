@@ -5,6 +5,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 struct IDirect3DDevice9;
 class CDXUTDialog;
 class CDXUTListBoxDL;

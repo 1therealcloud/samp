@@ -1,7 +1,5 @@
 #include "gui/objectedit.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "filehooks.h"
 #include "game/entity.h"
@@ -12,6 +10,10 @@
 #include "gui/cmdwindow.h"
 #include "gui/gui.h"
 #include "main.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+
 #include <string.h>
 // 0x0011a7ac
 const float g_cursorRayUnsignedBias = 4294967296.0f;

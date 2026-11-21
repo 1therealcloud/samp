@@ -4,6 +4,7 @@
 #include <windows.h>
 
 #include <static_assert.h>
+
 struct IDirect3DDevice9;
 class CDXUTDialog;
 #pragma pack(push, 1)

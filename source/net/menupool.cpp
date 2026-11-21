@@ -1,13 +1,16 @@
-#include <string.h>
-
 #include "net/menupool.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "game/keystuff.h"
 #include "main.h"
 #include "net/netgame.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+
+#include <string.h>
+
 #include <static_assert.h>
+
 // 0x001179c4
 int g_menuSelectedRpc = 132;
 // 0x001179c0

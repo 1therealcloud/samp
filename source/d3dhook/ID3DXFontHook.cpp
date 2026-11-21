@@ -1,15 +1,16 @@
 // ID3DXFontHook.cpp
 
-#include <stdlib.h>
-#include <string.h>
-#include <wchar.h>
-
-#include <DXUTgui.h>
-
 #include "d3dhook/ID3DXFontHook.h"
 
 #include "gui/cmdwindow.h"
 #include "runutil.h"
+
+#include <DXUTgui.h>
+
+#include <stdlib.h>
+#include <string.h>
+#include <wchar.h>
+
 #include <static_assert.h>
 
 // Native vtable RVA 0x0011c76c. State is shared, as in the DLL.

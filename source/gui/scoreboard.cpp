@@ -1,11 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "gui/scoreboard.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
 #include "game/game.h"
 #include "game/gta_globals.h"
 #include "game/util.h"
@@ -16,6 +10,13 @@
 #include "net/playerpool.h"
 #include "net/remoteplayer.h"
 #include "render/fontrender.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 extern "C" __int64 __cdecl _ftol2();
 // 0x0011c6d0
 int g_scoreboardNotificationRpc = 23;

@@ -12,6 +12,7 @@
 #include "gui/gui.h"
 #include "main.h"
 #include "net/vehiclepool.h"
+
 #include <string.h>
 // 0x002abe64
 void* g_vehicleTrainCursor;

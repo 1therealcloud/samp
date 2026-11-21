@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-
 #include "game/debug.h"
 
 #include "game/game.h"
@@ -13,6 +10,9 @@
 #include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "main.h"
+
+#include <stdio.h>
+#include <string.h>
 // 0x0011f56c
 const char g_taskNoneName[5] = "None";
 // 0x001518d4

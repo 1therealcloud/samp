@@ -4,6 +4,7 @@
 #include <d3dx9.h>
 
 #include <static_assert.h>
+
 class CMatrix;
 struct CVector;
 #pragma pack(push, 1)

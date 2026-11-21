@@ -1,10 +1,12 @@
 #ifndef OBJECTPOOL_H
 #define OBJECTPOOL_H
 
+#include "game/object.h"
+
 #include <windows.h>
 
-#include "game/object.h"
 #include <static_assert.h>
+
 struct RPCParameters;
 #pragma pack(push, 1)
 class CObjectPool

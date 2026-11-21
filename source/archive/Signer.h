@@ -9,6 +9,7 @@
 
 #include "Hasher.h"
 #include "KeyPair.h"
+
 #include <windows.h>
 
 class CSigner

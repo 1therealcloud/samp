@@ -4,9 +4,10 @@
 //
 //----------------------------------------------------------
 
-#include "stdafx.h"
 #include "launch3Dlg.h"
+
 #include "launch3.h"
+#include "stdafx.h"
 
 #include <stdio.h>
 #include <string.h>

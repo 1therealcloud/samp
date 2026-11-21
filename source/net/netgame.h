@@ -1,11 +1,13 @@
 #ifndef NETGAME_H
 #define NETGAME_H
 
+#include "game/scripting.h"
+
 #include <stddef.h>
 #include <windows.h>
 
-#include "game/scripting.h"
 #include <static_assert.h>
+
 // Observed coordinator fields; the unused prefix remains opaque.
 class CVehiclePool;
 class CPlayerPool;

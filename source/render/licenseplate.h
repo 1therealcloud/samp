@@ -1,9 +1,9 @@
 #ifndef LICENSEPLATE_H
 #define LICENSEPLATE_H
 
-#include <d3dx9.h>
-
 #include "render/fontrender.h"
+
+#include <d3dx9.h>
 struct CVector;
 #pragma pack(push, 1)
 class CLicensePlate

@@ -1,7 +1,3 @@
-#include <math.h>
-#include <stddef.h>
-#include <string.h>
-
 #include "game/object.h"
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
@@ -21,9 +17,16 @@
 #include "net/objectpool.h"
 #include "net/playerpool.h"
 #include "net/vehiclepool.h"
+
 #include <GetTime.h>
-#include <static_assert.h>
+
+#include <math.h>
+#include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include <static_assert.h>
+
 // Only the observed RenderWare prefixes used by these callbacks are described.
 // The complete backend layouts and ownership remain outside these views.
 enum ObjectRwObservedFlags

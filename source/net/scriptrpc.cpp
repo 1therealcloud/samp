@@ -1,10 +1,5 @@
-#include <string.h>
-
 #include "net/scriptrpc.h"
 
-#include "BitStream.h"
-#include "RakClientInterface.h"
-#include "StringCompressor.h"
 #include "game/actor.h"
 #include "game/audio.h"
 #include "game/building_removal.h"
@@ -26,6 +21,12 @@
 #include "net/remoteplayer.h"
 #include "net/textdrawpool.h"
 #include "net/vehiclepool.h"
+
+#include <BitStream.h>
+#include <RakClientInterface.h>
+#include <StringCompressor.h>
+
+#include <string.h>
 // 0x00118288
 const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand = {0x69b, "iiffffff"};
 // 0x001182b0

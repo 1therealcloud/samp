@@ -1,5 +1,3 @@
-#include <process.h>
-
 #include "game/game.h"
 
 #include "game/aimstuff.h"
@@ -16,7 +14,10 @@
 #include "game/util.h"
 #include "game/vehicle.h"
 #include "main.h"
+
 #include <GetTime.h>
+
+#include <process.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>

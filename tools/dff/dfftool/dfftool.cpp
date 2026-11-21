@@ -1,6 +1,8 @@
 #include "../DffFormatDll/clump.h"
 #include "../DffFormatDll/collision.h"
+
 #include <direct.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>

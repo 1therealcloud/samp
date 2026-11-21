@@ -1,12 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-
-#include <psapi.h>
-
 #include "gui/netstats.h"
 
-#include "RakClientInterface.h"
-#include "RakNetStatistics.h"
 #include "game/debug.h"
 #include "game/playerped.h"
 #include "gui/gui.h"
@@ -15,7 +8,16 @@
 #include "net/objectpool.h"
 #include "net/vehiclepool.h"
 #include "render/fontrender.h"
+
+#include <RakClientInterface.h>
+#include <RakNetStatistics.h>
+
+#include <psapi.h>
+#include <stdio.h>
+#include <string.h>
+
 #include <static_assert.h>
+
 // 0x00163a78
 char g_netStatsLine[1024];
 // 0x00163e78

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "CryptoContext.h"
+
 #include <windows.h>
 
 class CKeyPair

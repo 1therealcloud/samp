@@ -1,4 +1,5 @@
 #include "vector.h"
+
 #include <math.h>
 
 // 0x00002c50

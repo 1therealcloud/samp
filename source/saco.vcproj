@@ -27,7 +27,7 @@
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
 				StringPooling="TRUE"
 				ExceptionHandling="TRUE"
@@ -94,7 +94,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;CURL_STATICLIB;SAMP_DIRECT_GTA_GLOBALS"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"

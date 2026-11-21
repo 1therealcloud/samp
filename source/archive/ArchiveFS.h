@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include <stddef.h>
-#include <windows.h>
-
 #include "ArchiveCommon.h"
 #include "Obfuscator.h"
 #include "Stream.h"
+
+#include <stddef.h>
+#include <windows.h>
 
 //#include "../../archive/pkey.h"
 //#include "../../archive/skey.h"

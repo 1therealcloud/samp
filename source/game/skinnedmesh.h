@@ -1,9 +1,9 @@
 #ifndef SKINNEDMESH_H
 #define SKINNEDMESH_H
 
-#include <stddef.h>
-
 #include <d3dx9.h>
+
+#include <stddef.h>
 
 #include <static_assert.h>
 

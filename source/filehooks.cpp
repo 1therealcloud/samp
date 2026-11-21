@@ -1,12 +1,13 @@
-#include <string.h>
-
-#include <detours.h>
+#include "filehooks.h"
 
 #include "archive/ArchiveFS.h"
 #include "filechecks.h"
-#include "filehooks.h"
 #include "md5.h"
+
+#include <detours.h>
+
 #include <ctype.h>
+#include <string.h>
 // 0x0016bf60
 ArchiveFileRecord g_archiveOpenRecords[50];
 // 0x0016be98

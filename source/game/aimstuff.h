@@ -1,7 +1,9 @@
 #ifndef SAMP_RECOVERED_AIMSTUFF_H
 #define SAMP_RECOVERED_AIMSTUFF_H
-#include <static_assert.h>
 #include <windows.h>
+
+#include <static_assert.h>
+
 struct AimVector
 {
     float x, y, z;
