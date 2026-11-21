@@ -420,8 +420,13 @@ CCustomModels::CCustomModels()
 }
 
 // 0x0000c4e0
+// record indices come from the server
+static const DWORD kMaxCustomModelRecords = 65536;
+
 bool CCustomModels::ResizeRecords(DWORD count)
 {
+    if (count > kMaxCustomModelRecords)
+        return false;
     BYTE**& records = *(BYTE***)nativeState;
     DWORD& previous = *(DWORD*)(nativeState + 4);
     if (!count)
@@ -488,6 +493,8 @@ bool CCustomModels::EraseRecord(DWORD index)
 // 0x0000cff0
 bool CCustomModels::SetRecord(DWORD index, void* record)
 {
+    if (index >= kMaxCustomModelRecords)
+        return false;
     if (index >= *(DWORD*)(nativeState + 4) && !ResizeRecords(index + 1))
         return false;
     (*(void***)nativeState)[index] = record;
@@ -497,12 +504,18 @@ bool CCustomModels::SetRecord(DWORD index, void* record)
 // 0x0000d550
 DWORD CCustomModels::AddRecord(DWORD index, const void* record)
 {
-    void* copy = calloc(1, 94);
     int base = *(const int*)((const BYTE*)record + 0xc);
     if (base < 0 || base > 20000)
         return 0xffffffff;
+    void* copy = calloc(1, 94);
+    if (!copy)
+        return 0xffffffff;
     memcpy(copy, record, 94);
-    SetRecord(index, copy);
+    if (!SetRecord(index, copy))
+    {
+        free(copy);
+        return 0xffffffff;
+    }
     return index;
 }
 
@@ -583,7 +596,7 @@ int CCustomModels::MarkResourceRequests()
         do
         {
             BYTE* entry = (BYTE*)GetRecord(index);
-            if ((entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(state + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))) && !entry[6])
+            if (entry && ((entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(state + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))) && !entry[6]))
             {
                 if (!entry[0])
                 {
@@ -613,6 +626,8 @@ bool CCustomModels::IsPedEntry(int model)
     for (DWORD i = 0; i != count; i++)
     {
         BYTE* entry = (BYTE*)GetRecord(i);
+        if (!entry)
+            continue;
         if (*(int*)(entry + 0x10) == model && entry[7] == 1)
             return true;
     }
@@ -627,6 +642,8 @@ bool CCustomModels::IsObjectEntry(int model)
     for (DWORD i = 0; i != count; i++)
     {
         BYTE* entry = (BYTE*)GetRecord(i);
+        if (!entry)
+            continue;
         if (*(int*)(entry + 0x10) == model && entry[7] == 2)
             return true;
     }
@@ -641,6 +658,8 @@ BYTE CCustomModels::GetLoadedFlag(int model)
     for (DWORD i = 0; i != count; i++)
     {
         BYTE* entry = (BYTE*)GetRecord(i);
+        if (!entry)
+            continue;
         if (*(int*)(entry + 0x10) == model)
             return entry[0x58];
     }
@@ -655,6 +674,8 @@ BOOL CCustomModels::DoesExist(int model)
     for (DWORD i = 0; i != count; i++)
     {
         BYTE* entry = (BYTE*)GetRecord(i);
+        if (!entry)
+            continue;
         if (*(int*)(entry + 0x10) == model && entry[7] == 1)
         {
             if (!LoadPedModel(*(DWORD*)(entry + 0xc), *(DWORD*)(entry + 0x10), *(DWORD*)(entry + 0x46), *(DWORD*)(entry + 0x4a)))
@@ -912,10 +933,13 @@ void* __cdecl GameCreateCollisionModel()
 // 0x000b63c0
 BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collision)
 {
-    DWORD encoded = *((const DWORD*)data + 1);
-    if (encoded > length)
+    // 8 byte header (fourcc + size), then 24 more bytes before the body
+    if (length < 0x20)
         return FALSE;
-    // Native subtraction may underflow; GTA SA cdecl loader0x00537ce0 result ignored.
+    DWORD encoded = *((const DWORD*)data + 1);
+    if (encoded < 0x18 || encoded > length - 8)
+        return FALSE;
+    // GTA SA cdecl loader 0x00537ce0, result ignored.
     ((void(__cdecl*)(const void*, DWORD, void*, DWORD))0x537ce0)((const BYTE*)data + 0x20, encoded - 0x18, collision, 0);
     return TRUE;
 }
@@ -925,7 +949,11 @@ DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
 {
     if (length > 0x40000)
         return 0;
+    if (length < 4)
+        return 0;
     BYTE* data = (BYTE*)calloc(1, length);
+    if (!data)
+        return 0;
     GameReadStream(stream, data, length);
     if (*(DWORD*)data != 0x334c4f43)
     {
@@ -1021,6 +1049,9 @@ BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
     curl_easy_setopt(curl, (CURLoption)20011, CustomModelDownloadWrite);
     curl_easy_setopt(curl, (CURLoption)10001, &worker->download);
     curl_easy_setopt(curl, (CURLoption)45, 1L);
+    // the url comes from the server, http(s) only (no file:// and friends)
+    curl_easy_setopt(curl, CURLOPT_PROTOCOLS, (long)(CURLPROTO_HTTP | CURLPROTO_HTTPS));
+    curl_easy_setopt(curl, CURLOPT_REDIR_PROTOCOLS, (long)(CURLPROTO_HTTP | CURLPROTO_HTTPS));
     if (proxy && strlen(proxy))
         curl_easy_setopt(curl, (CURLoption)10004, proxy);
     CURLcode result = curl_easy_perform(curl);
@@ -1190,7 +1221,7 @@ bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
         g_pChat->AddInfoMessage(g_customDffVerifyError, hash, file.error);
         return false;
     }
-    if (!file.ReadFrames() || !file.ReadGeometries())
+    if (!file.ReadFrames() || !file.ReadGeometries() || !file.ReadAtomic())
     {
         g_pChat->AddInfoMessage(g_customDffParseError, hash, file.error, file.detail);
         return false;
@@ -1231,7 +1262,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         if (g_pChat)
             g_pChat->AddDebugMessage(g_customDownloadSizeError, download->hash, download->downloaded, download->total);
         DeleteFileA(download->temporaryPath);
-        record[6] = 1;
+        if (record)
+            if (record)
+                record[6] = 1;
         if (g_renderDownloadWindow)
             g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 100, 0);
         *(DWORD*)(nativeState + 0x213) = 2;
@@ -1242,7 +1275,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         if (g_pChat)
             g_pChat->AddDebugMessage(g_customDownloadCrcError, download->hash, download->crc);
         DeleteFileA(download->temporaryPath);
-        record[6] = 1;
+        if (record)
+            if (record)
+                record[6] = 1;
         if (g_renderDownloadWindow)
             g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 101, 0);
         *(DWORD*)(nativeState + 0x213) = 2;
@@ -1254,7 +1289,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         if (!VerifyDff(download->temporaryPath, download->hash))
         {
             DeleteFileA(download->temporaryPath);
-            record[6] = 1;
+            if (record)
+            if (record)
+                record[6] = 1;
             if (g_renderDownloadWindow)
                 g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 102, 0);
             *(DWORD*)(nativeState + 0x213) = 2;
@@ -1266,7 +1303,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         if (!VerifyTxd(download->temporaryPath, download->hash))
         {
             DeleteFileA(download->temporaryPath);
-            record[6] = 1;
+            if (record)
+            if (record)
+                record[6] = 1;
             if (g_renderDownloadWindow)
                 g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 103, 0);
             *(DWORD*)(nativeState + 0x213) = 2;
@@ -1276,7 +1315,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
     else
     {
         DeleteFileA(download->temporaryPath);
-        record[6] = 1;
+        if (record)
+            if (record)
+                record[6] = 1;
         if (g_renderDownloadWindow)
             g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 104, 0);
         *(DWORD*)(nativeState + 0x213) = 2;
@@ -1287,9 +1328,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
     else if (download->type == 2)
         _snprintf(destination, 260, g_customTxdCachePattern, (char*)this + 9, download->hash);
     MoveFileA(download->temporaryPath, destination);
-    if (download->type == 1)
+    if (record && download->type == 1)
         record[0] = 1;
-    else if (download->type == 2)
+    else if (record && download->type == 2)
         record[1] = 1;
     if (g_renderDownloadWindow)
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 4, download->downloaded, 0, -1, 0);
@@ -1372,6 +1413,12 @@ void CCustomModels::WriteDownload(CustomModelDownload* download, const void* dat
         download = (CustomModelDownload*)(nativeState + 0x222);
     if (!download->file)
         return;
+    // never write more than the record says
+    if (download->downloaded > download->total || length > download->total - download->downloaded)
+    {
+        AbortDownload(download, 100, 0);
+        return;
+    }
     download->crc = CustomModelCrc(download->crc, data, length);
     fwrite(data, 1, length, (FILE*)download->file);
     download->downloaded += length;
@@ -1435,8 +1482,14 @@ int CCustomModels::FindWorkerByFile(void* file)
 DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void* download)
 {
     CCustomModels* manager = g_customDownloadManager;
+    CustomModelDownload* current = (CustomModelDownload*)download;
+    if (count && size > 0xffffffff / count)
+        return 0;
+    // returning less than we got makes curl abort the transfer
+    if (current && (current->downloaded > current->total || size * count > current->total - current->downloaded))
+        return 0;
     if (manager && download)
-        manager->WriteDownload((CustomModelDownload*)download, data, size * count);
+        manager->WriteDownload(current, data, size * count);
     return size * count;
 }
 
@@ -1560,7 +1613,7 @@ void CCustomModels::RefreshCachedResources()
         do
         {
             BYTE* entry = (BYTE*)GetRecord(index);
-            if (entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(nativeState + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff)))
+            if (entry && (entry[7] == 1 || (entry[7] == 2 && (*(DWORD*)(entry + 8) == *(DWORD*)(nativeState + 0x217) || *(DWORD*)(entry + 8) == 0xffffffff))))
             {
                 if (!entry[0] && IsDffCached(*(DWORD*)(entry + 0x46)))
                     entry[0] = 1;
@@ -1965,7 +2018,7 @@ void CCustomModels::ProcessDelayedReleases()
         do
         {
             BYTE* entry = (BYTE*)GetRecord(index);
-            if (entry[0x58] && entry[0x59])
+            if (entry && entry[0x58] && entry[0x59])
             {
                 DWORD delay = *(DWORD*)(entry + 0x5a);
                 if (!delay)

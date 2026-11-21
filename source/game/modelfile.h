@@ -286,7 +286,7 @@ struct CDffFile
     BYTE hasCollision;
     CModelGeometryArray geometries;
     CModelFileChunk *root, *structure, *frames, *geometryList, *atomic, *extension;
-    DWORD unknown44;
+    DWORD frameCount;
     void* frameData;
     // 0x0000d820
     CDffFile();
@@ -319,6 +319,8 @@ struct CDffFile
     DWORD ReadFrames();
     // 0x000bbf00
     DWORD ReadGeometries();
+    // not native, checks the atomic indices against the frames and geometries
+    DWORD ReadAtomic();
 };
 // Collision conversion records; coordinates are signed fixed-point /128.
 struct ModelCollisionVertex

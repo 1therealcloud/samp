@@ -268,9 +268,11 @@ DWORD CModelFileStream::Write(const void* input, DWORD count)
 DWORD CModelFileStream::Read(void* output, DWORD count)
 {
     memset(output, 0, count);
-    if (position + count > length)
-        count = length - position;
-    if (count <= 0)
+    // position + count wraps for big counts coming from the file
+    DWORD left = position < length ? length - position : 0;
+    if (count > left)
+        count = left;
+    if (count == 0)
         return 0;
     memcpy(output, data + position, count);
     DWORD next = position + count;
@@ -409,27 +411,27 @@ DWORD CTxdFile::GetError()
     return error;
 }
 
-// 0x000bda10
-CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
+// the three ReadChunk copies below share this. a chunk that claims more data than
+// its parent has left is rejected (and flagged), so child streams stay in bounds
+static CModelFileChunk* ModelReadChunk(CModelFileStream* input, bool* truncated)
 {
     if (!input->length || input->ended)
         return 0;
     CModelFileChunk* chunk = (CModelFileChunk*)::operator new(0x23);
-    if (chunk)
-    {
-        chunk->stream.data = 0;
-        chunk->stream.length = 0;
-        chunk->stream.position = 0;
-        chunk->stream.ended = 0;
-        chunk->stream.owned = 0;
-        chunk->stream.compressed = 0;
-        chunk->stream.scratchLength = 0;
-        chunk->stream.scratch = 0;
-        chunk->type = 0;
-        chunk->length = 0;
-        chunk->build = 0xffff;
-        chunk->version = 0x1803;
-    }
+    if (!chunk)
+        return 0;
+    chunk->stream.data = 0;
+    chunk->stream.length = 0;
+    chunk->stream.position = 0;
+    chunk->stream.ended = 0;
+    chunk->stream.owned = 0;
+    chunk->stream.compressed = 0;
+    chunk->stream.scratchLength = 0;
+    chunk->stream.scratch = 0;
+    chunk->type = 0;
+    chunk->length = 0;
+    chunk->build = 0xffff;
+    chunk->version = 0x1803;
     DWORD word = 0;
     input->Read(&word, 4);
     chunk->type = word;
@@ -442,6 +444,15 @@ CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
     word = 0;
     input->Read(&word, 2);
     chunk->version = (WORD)word;
+    DWORD left = input->position < input->length ? input->length - input->position : 0;
+    if (chunk->length > left)
+    {
+        *truncated = true;
+        input->position = input->length;
+        input->ended = 1;
+        delete chunk;
+        return 0;
+    }
     chunk->stream.length = chunk->length;
     chunk->stream.data = input->data + input->position;
     chunk->stream.position = 0;
@@ -455,6 +466,16 @@ CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
         input->position = input->length;
         input->ended = 1;
     }
+    return chunk;
+}
+
+// 0x000bda10
+CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
+{
+    bool truncated = false;
+    CModelFileChunk* chunk = ModelReadChunk(input, &truncated);
+    if (truncated && !error)
+        error = 0xabf4;
     return chunk;
 }
 
@@ -487,6 +508,7 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
             error = 0xd2f6;
         return 0;
     }
+    DWORD platform = value;
     value = 0;
     input->Read(&value, 4);
     char name[65] = {0}, mask[65] = {0};
@@ -507,10 +529,9 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
         return 0;
     }
     strncpy(savedMask, mask, 31);
-    value = 0;
-    input->Read(&value, 4);
-    value = 0;
-    input->Read(&value, 4);
+    DWORD rasterFormat = 0, d3dFormat = 0;
+    input->Read(&rasterFormat, 4);
+    input->Read(&d3dFormat, 4);
     DWORD width = 0, height = 0;
     input->Read(&width, 2);
     input->Read(&height, 2);
@@ -520,10 +541,58 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
             error = 0xd2f7;
         return 0;
     }
+    BYTE depth = input->ReadByte();
+    BYTE mipCount = input->ReadByte();
     input->ReadByte();
-    input->ReadByte();
-    input->ReadByte();
-    input->ReadByte();
+    BYTE compression = input->ReadByte();
+    // the mip sizes come from the file and the game trusts them when it reads the pixels,
+    // so they have to match the raster. the fixed fields above are 88 bytes of the struct
+    DWORD dataLeft = header[1] >= 88 ? header[1] - 88 : 0;
+    DWORD palette = (rasterFormat & 0x2000) ? 1024 : ((rasterFormat & 0x4000) ? 128 : 0);
+    if (header[1] < 88 || dataLeft > input->Remaining() || !mipCount || mipCount > 16 || !depth || depth > 32 || palette > dataLeft)
+    {
+        if (!error)
+            error = 0xd2f8;
+        return 0;
+    }
+    input->Skip(palette);
+    dataLeft -= palette;
+    DWORD block = 0;
+    if (platform == 9)
+    {
+        if (d3dFormat == 0x31545844)
+            block = 8;
+        else if (d3dFormat >= 0x32545844 && d3dFormat <= 0x35545844)
+            block = 16;
+    }
+    else if (compression >= 1 && compression <= 5)
+        block = compression == 1 ? 8 : 16;
+    for (DWORD level = 0; level < mipCount; ++level)
+    {
+        DWORD w = (WORD)width >> level, h = (WORD)height >> level;
+        if (!w)
+            w = 1;
+        if (!h)
+            h = 1;
+        DWORD expected = block ? ((w + 3) / 4) * ((h + 3) / 4) * block : w * h * ((depth + 7) / 8);
+        DWORD size = 0;
+        if (dataLeft < 4)
+        {
+            if (!error)
+                error = 0xd2f8;
+            return 0;
+        }
+        input->Read(&size, 4);
+        dataLeft -= 4;
+        if (size > expected || size > dataLeft)
+        {
+            if (!error)
+                error = 0xd2f8;
+            return 0;
+        }
+        input->Skip(size);
+        dataLeft -= size;
+    }
     ++parsedCount;
     return 1;
 }
@@ -565,6 +634,12 @@ DWORD CTxdFile::LoadFile(const char* filename)
         return 0xffffffff;
     fileLength = stream.length;
     root = ReadChunk(&stream);
+    if (!root)
+    {
+        if (!error)
+            error = 54000;
+        return 0;
+    }
     if (root)
     {
         if (root->type != 0x16)
@@ -573,7 +648,8 @@ DWORD CTxdFile::LoadFile(const char* filename)
                 error = 54000;
             return 0;
         }
-        ReadChildren(root);
+        if (!ReadChildren(root) || error)
+            return 0;
         if (textureCount != parsedCount)
         {
             if (!error)
@@ -691,6 +767,12 @@ DWORD CDffFile::LoadFile(const char* filename)
         return 0xffffffff;
     fileLength = stream.length;
     root = ReadChunk(&stream);
+    if (!root)
+    {
+        if (!error)
+            error = 44000;
+        return 0;
+    }
     if (root)
     {
         if (root->type == 0x2b)
@@ -699,14 +781,19 @@ DWORD CDffFile::LoadFile(const char* filename)
             root = 0;
             root = ReadChunk(&stream);
         }
-        // Native does not recheck root after skipping the leading chunk.
+        if (!root)
+        {
+            if (!error)
+                error = 44000;
+            return 0;
+        }
         if (root->type != 0x10)
         {
             if (!error)
                 error = 44000;
             return 0;
         }
-        if (!ReadChildren(root))
+        if (!ReadChildren(root) || error)
             return 0;
         if (extension && extension->length)
         {
@@ -748,14 +835,7 @@ DWORD CDffFile::VerifyFrameExtension(CModelFileChunk* chunk)
         chunk->stream.Read(header, 12);
         if (header[0] == 0x253f2fe && header[1] >= 24)
             return 0;
-        DWORD next = chunk->stream.position + header[1];
-        if (next < chunk->stream.length)
-            chunk->stream.position = next;
-        else
-        {
-            chunk->stream.position = chunk->stream.length;
-            chunk->stream.ended = 1;
-        }
+        chunk->stream.Skip(header[1]);
     }
     return 1;
 }
@@ -785,8 +865,44 @@ DWORD CDffFile::ReadFrames()
         detail = count;
         return 0;
     }
+    if (!count || frames->stream.Remaining() < count * 56)
+    {
+        if (!error)
+            error = 0xabf6;
+        detail = count;
+        return 0;
+    }
     frameData = calloc(count, 56);
+    if (!frameData)
+    {
+        if (!error)
+            error = 0xabf6;
+        return 0;
+    }
     frames->stream.Read(frameData, count * 56);
+    frameCount = count;
+    // parent is a dword at +48 of every 56 byte frame: -1 or another frame, and no loops
+    for (DWORD i = 0; i < count; ++i)
+    {
+        DWORD parent = *(DWORD*)((BYTE*)frameData + i * 56 + 48);
+        bool valid = parent == 0xffffffff || parent < count;
+        for (DWORD steps = 0; valid && parent != 0xffffffff; ++steps)
+        {
+            if (steps > count)
+                valid = false;
+            else
+                parent = *(DWORD*)((BYTE*)frameData + parent * 56 + 48);
+            if (valid && parent != 0xffffffff && parent >= count)
+                valid = false;
+        }
+        if (!valid)
+        {
+            if (!error)
+                error = 0xabf6;
+            detail = i;
+            return 0;
+        }
+    }
     CModelFileChunk* chunk = ReadChunk(&frames->stream);
     while (chunk)
     {
@@ -800,55 +916,18 @@ DWORD CDffFile::ReadFrames()
         delete chunk;
         chunk = ReadChunk(&frames->stream);
     }
+    if (error)
+        return 0;
     return 1;
 }
 
 // 0x000bb170
 CModelFileChunk* CDffFile::ReadChunk(CModelFileStream* input)
 {
-    if (!input->length || input->ended)
-        return 0;
-    CModelFileChunk* chunk = (CModelFileChunk*)::operator new(0x23);
-    if (chunk)
-    {
-        chunk->stream.data = 0;
-        chunk->stream.length = 0;
-        chunk->stream.position = 0;
-        chunk->stream.ended = 0;
-        chunk->stream.owned = 0;
-        chunk->stream.compressed = 0;
-        chunk->stream.scratchLength = 0;
-        chunk->stream.scratch = 0;
-        chunk->type = 0;
-        chunk->length = 0;
-        chunk->build = 0xffff;
-        chunk->version = 0x1803;
-    }
-    DWORD word = 0;
-    input->Read(&word, 4);
-    chunk->type = word;
-    word = 0;
-    input->Read(&word, 4);
-    chunk->length = word;
-    word = 0;
-    input->Read(&word, 2);
-    chunk->build = (WORD)word;
-    word = 0;
-    input->Read(&word, 2);
-    chunk->version = (WORD)word;
-    chunk->stream.length = chunk->length;
-    chunk->stream.data = input->data + input->position;
-    chunk->stream.position = 0;
-    chunk->stream.ended = 0;
-    chunk->stream.owned = 0;
-    DWORD next = input->position + chunk->length;
-    if (next < input->length)
-        input->position = next;
-    else
-    {
-        input->position = input->length;
-        input->ended = 1;
-    }
+    bool truncated = false;
+    CModelFileChunk* chunk = ModelReadChunk(input, &truncated);
+    if (truncated && !error)
+        error = 0xabf4;
     return chunk;
 }
 
@@ -1163,7 +1242,7 @@ CDffFile::CDffFile()
     atomic = 0;
     extension = 0;
     hasCollision = 0;
-    unknown44 = 0;
+    frameCount = 0;
     frameData = 0;
 }
 
@@ -1216,49 +1295,10 @@ CDffFile::~CDffFile()
 // 0x000bc600
 CModelFileChunk* CModelGeometry::ReadChunk(CModelFileStream* input)
 {
-    if (!input->length || input->ended)
-        return 0;
-    CModelFileChunk* chunk = (CModelFileChunk*)::operator new(0x23);
-    if (chunk)
-    {
-        chunk->stream.data = 0;
-        chunk->stream.length = 0;
-        chunk->stream.position = 0;
-        chunk->stream.ended = 0;
-        chunk->stream.owned = 0;
-        chunk->stream.compressed = 0;
-        chunk->stream.scratchLength = 0;
-        chunk->stream.scratch = 0;
-        chunk->type = 0;
-        chunk->length = 0;
-        chunk->build = 0xffff;
-        chunk->version = 0x1803;
-    }
-    DWORD word = 0;
-    input->Read(&word, 4);
-    chunk->type = word;
-    word = 0;
-    input->Read(&word, 4);
-    chunk->length = word;
-    word = 0;
-    input->Read(&word, 2);
-    chunk->build = (WORD)word;
-    word = 0;
-    input->Read(&word, 2);
-    chunk->version = (WORD)word;
-    chunk->stream.length = chunk->length;
-    chunk->stream.data = input->data + input->position;
-    chunk->stream.position = 0;
-    chunk->stream.ended = 0;
-    chunk->stream.owned = 0;
-    DWORD next = input->position + chunk->length;
-    if (next < input->length)
-        input->position = next;
-    else
-    {
-        input->position = input->length;
-        input->ended = 1;
-    }
+    bool truncated = false;
+    CModelFileChunk* chunk = ModelReadChunk(input, &truncated);
+    if (truncated && !error)
+        error = 0xabf4;
     return chunk;
 }
 
@@ -1325,11 +1365,11 @@ DWORD CModelMeshArray::Insert(BYTE* entry)
 // 0x000b36c0
 DWORD CModelFileStream::Skip(DWORD count)
 {
-    DWORD next = position + count;
-    if (next < length)
+    DWORD left = position < length ? length - position : 0;
+    if (count < left)
     {
-        position = next;
-        return next;
+        position += count;
+        return position;
     }
     position = length;
     ended = 1;
@@ -1341,6 +1381,12 @@ bool CModelGeometry::ReadMaterial(CModelFileStream* input)
 {
     CModelMaterialRecord* record = (CModelMaterialRecord*)calloc(1, 0xa4);
     DWORD header[3], nested[3], failure = 9, remaining = 0;
+    if (!record)
+    {
+        if (!error)
+            error = 0xabe1;
+        return false;
+    }
     input->Read(header, 12);
     if (header[0] != 1 || header[1] != 28)
         goto malformed;
@@ -1379,6 +1425,12 @@ bool CModelGeometry::ReadMaterial(CModelFileStream* input)
             goto malformed;
         }
         input->Read(record->textures[i].name, header[1]);
+        // 32 bytes without a nul
+        if (record->textures[i].name[31])
+        {
+            failure = 5;
+            goto malformed;
+        }
         input->Read(header, 12);
         if (header[0] != 2 || header[1] > 32)
         {
@@ -1386,6 +1438,11 @@ bool CModelGeometry::ReadMaterial(CModelFileStream* input)
             goto malformed;
         }
         input->Read(record->textures[i].mask, header[1]);
+        if (record->textures[i].mask[31])
+        {
+            failure = 6;
+            goto malformed;
+        }
         input->Read(header, 12);
         if (header[0] == 3)
         {
@@ -1408,6 +1465,11 @@ bool CModelGeometry::ReadMaterial(CModelFileStream* input)
     while (remaining)
     {
         input->Read(nested, 12);
+        if (remaining < 12)
+        {
+            failure = 8;
+            goto malformed;
+        }
         remaining -= 12;
         if (nested[0] != 0x253f2fc && nested[0] != 0x253f2f6 && nested[0] != 0x120 && nested[0] != 0x135)
         {
@@ -1416,6 +1478,11 @@ bool CModelGeometry::ReadMaterial(CModelFileStream* input)
             detail = nested[0];
             free(record);
             return false;
+        }
+        if (nested[1] > remaining)
+        {
+            failure = 8;
+            goto malformed;
         }
         input->Skip(nested[1]);
         remaining -= nested[1];
@@ -1435,7 +1502,7 @@ malformed:
 bool CModelGeometry::ReadMaterials(CModelFileStream* input)
 {
     material = ReadChunk(input);
-    if (material->type != 8)
+    if (!material || material->type != 8)
     {
         if (!error)
             error = 0xabf3;
@@ -1495,6 +1562,8 @@ bool CModelGeometry::ReadSkin(CModelFileStream* input)
     skin.weights = calloc(vertexCount, 16);
     input->Read(skin.weights, (DWORD)vertexCount * 16);
     skin.matrices = calloc(skin.boneCount, 64);
+    if (!skin.usedBones || !skin.indices || !skin.weights || !skin.matrices)
+        return false;
     input->Read(skin.matrices, (DWORD)skin.boneCount * 64);
     DWORD word = 0;
     input->Read(&word, 4);
@@ -1512,7 +1581,7 @@ bool CModelGeometry::ReadSkin(CModelFileStream* input)
 bool CModelGeometry::ReadExtensions(CModelFileStream* input)
 {
     extension = ReadChunk(input);
-    if (extension->type != 3)
+    if (!extension || extension->type != 3)
     {
         if (!error)
             error = 0xabf2;
@@ -1543,19 +1612,55 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
                         error = 0xabe5;
                     return false;
                 }
+                DWORD summedIndices = 0;
                 for (DWORD i = 0; i < unknown65; ++i)
                 {
+                    DWORD indexCount = 0, materialIndex = 0;
+                    extension->stream.Read(&indexCount, 4);
+                    extension->stream.Read(&materialIndex, 4);
+                    // the count has to fit in what is left of the chunk, and the material has to exist
+                    if (indexCount > extension->stream.Remaining() / 4 || materialIndex >= (DWORD)materialCount)
+                    {
+                        if (!error)
+                            error = 0xabf9;
+                        detail = i;
+                        return false;
+                    }
                     BYTE* mesh = (BYTE*)calloc(1, 12);
-                    value = 0;
-                    extension->stream.Read(&value, 4);
-                    *(DWORD*)mesh = value;
-                    value = 0;
-                    extension->stream.Read(&value, 4);
-                    *(DWORD*)(mesh + 4) = value;
-                    void* indices = calloc(*(DWORD*)mesh, 4);
+                    DWORD* indices = (DWORD*)calloc(indexCount ? indexCount : 1, 4);
+                    if (!mesh || !indices)
+                    {
+                        free(mesh);
+                        free(indices);
+                        if (!error)
+                            error = 0xabe1;
+                        return false;
+                    }
+                    *(DWORD*)mesh = indexCount;
+                    *(DWORD*)(mesh + 4) = materialIndex;
                     *(void**)(mesh + 8) = indices;
-                    extension->stream.Read(indices, *(DWORD*)mesh * 4);
-                    meshes.Insert(mesh);
+                    extension->stream.Read(indices, indexCount * 4);
+                    summedIndices += indexCount;
+                    bool valid = true;
+                    for (DWORD k = 0; k < indexCount; ++k)
+                        if (indices[k] >= (DWORD)vertexCount)
+                            valid = false;
+                    if (!valid || meshes.Insert(mesh) == 0xffffffff)
+                    {
+                        free(indices);
+                        free(mesh);
+                        if (!error)
+                            error = 0xabf9;
+                        detail = i;
+                        return false;
+                    }
+                }
+                if (summedIndices != unknown69)
+                {
+                    if (!error)
+                        error = 0xabf9;
+                    detail = summedIndices;
+                    return false;
                 }
                 break;
             }
@@ -1645,6 +1750,14 @@ bool CModelGeometry::Read(CModelFileStream* input, WORD version)
             error = 0xabe4;
         return false;
     }
+    // only the first morph target is laid out, anything else shifts the rest of the data
+    if (morphCount != 1)
+    {
+        if (!error)
+            error = 0xabf5;
+        detail = morphCount;
+        return false;
+    }
     if (flags & 8)
     {
         hasColors = 1;
@@ -1688,6 +1801,20 @@ bool CModelGeometry::Read(CModelFileStream* input, WORD version)
         if (!error)
             error = 0xabea;
         return false;
+    }
+    // triangle: vertex2, vertex1, material, vertex3 (words)
+    {
+        const WORD* triangle = (const WORD*)triangles;
+        for (int i = 0; i < triangleCount; ++i, triangle += 4)
+        {
+            if (triangle[0] >= vertexCount || triangle[1] >= vertexCount || triangle[3] >= vertexCount || triangle[2] >= materialCount)
+            {
+                if (!error)
+                    error = 0xabf8;
+                detail = i;
+                return false;
+            }
+        }
     }
     if (!ReadExtensions(input))
     {
@@ -1734,18 +1861,61 @@ DWORD CDffFile::ReadGeometries()
             if (header[0] == 1)
             {
                 CModelGeometry* geometry = new CModelGeometry;
+                if (!geometry)
+                {
+                    if (!error)
+                        error = 0xabe1;
+                    delete chunk;
+                    return 0;
+                }
                 if (!geometry->Read(&chunk->stream, chunk->version))
                 {
                     if (!error)
                         error = geometry->error;
                     detail = geometry->detail;
                     delete geometry;
+                    delete chunk;
                     return 0;
                 }
                 geometries.Insert(geometry);
             }
         }
         delete chunk;
+    }
+    // the list says one geometry, so one has to be there
+    if (error || geometries.GetCount() != 1)
+    {
+        if (!error)
+            error = 0xabe6;
+        return 0;
+    }
+    return 1;
+}
+
+// atomic struct: frame index, geometry index, flags
+DWORD CDffFile::ReadAtomic()
+{
+    if (!atomic)
+        return 1;
+    atomic->stream.position = 0;
+    atomic->stream.ended = 0;
+    DWORD header[3];
+    atomic->stream.Read(header, 12);
+    if (header[0] != 1 || header[1] < 8 || header[1] > atomic->stream.Remaining())
+    {
+        if (!error)
+            error = 0xabf7;
+        return 0;
+    }
+    DWORD frameIndex = 0, geometryIndex = 0;
+    atomic->stream.Read(&frameIndex, 4);
+    atomic->stream.Read(&geometryIndex, 4);
+    if (frameIndex >= frameCount || geometryIndex >= geometries.GetCount())
+    {
+        if (!error)
+            error = 0xabf7;
+        detail = frameIndex;
+        return 0;
     }
     return 1;
 }
