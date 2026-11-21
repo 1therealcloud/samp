@@ -15,6 +15,7 @@
 
 #ifdef WIN32
 #include <windows.h>
+#include <winsock.h>
 #else
 #include <errno.h>
 #include <netdb.h>
@@ -398,7 +399,7 @@ void CHttpClient::HandleEntity()
     free(buffer);
 
     // check the returned header
-    if (!header_got || *(DWORD*)header != 0x50545448)
+    if (!header_got || memcmp(header, "HTTP", 4) != 0)
     { // 'HTTP'
         m_iError = HTTP_ERROR_MALFORMED_RESPONSE;
         return;

@@ -1,8 +1,6 @@
 #ifndef HTTPCLIENT_H
 #define HTTPCLIENT_H
 
-#include <winsock.h>
-
 #include <static_assert.h>
 #pragma pack(push, 1)
 //----------------------------------------------------

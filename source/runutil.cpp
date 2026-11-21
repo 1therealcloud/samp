@@ -11,7 +11,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
+//#include <windows.h>
 
 // 0x00118230
 const char g_base64Alphabet[66] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -185,17 +185,13 @@ char* Util_itoa(int v, char* s, int r)
 // 0x0009d840
 void K_EncodeString(char* szInput, char* szOutput)
 {
-    char b;
+    unsigned char b;
 
     while (*szInput)
     {
-        b = *szInput;
-        // clang-format off
-		_asm mov bl, b
-		_asm ror bl, 3
-		_asm mov b, bl
-                // clang-format on
-                *szOutput = b;
+        b = (unsigned char)*szInput;
+        b = (unsigned char)((b >> 3) | (b << 5));
+        *szOutput = (char)b;
         szInput++;
         szOutput++;
     }
@@ -210,14 +206,9 @@ char* K_DecodeString(unsigned char* szInput)
 
     while (*szInput)
     {
-        b = *szInput;
-        // clang-format off
-		_asm mov bl, b
-		_asm rol bl, 3
-		_asm mov b, bl
-                // clang-format on
-                *szInput = b;
-        szInput++;
+        unsigned char b = (unsigned char)*szInput;
+        b = (unsigned char)((b << 3) | (b >> 5));
+        *szInput++ = (char)b;
     }
 
     return st;
