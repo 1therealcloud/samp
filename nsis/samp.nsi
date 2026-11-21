@@ -61,7 +61,7 @@ DirText "Please select your Grand Theft Auto: San Andreas directory:" "Destinati
 PageEx license
   Caption " "
   LicenseText "$(LS_LicenseText)"
-  LicenseData "payload\samp-license.txt"
+  LicenseData "..\samp-license.txt"
   PageCallbacks LicensePre LicenseShow LicenseLeave
 PageExEnd
 PageEx directory
@@ -316,17 +316,17 @@ Function .onVerifyInstDir
 FunctionEnd
 Section "-San Andreas Multiplayer"
   SetOutPath "$INSTDIR"
-  File "payload\samp.exe"
-  File "payload\samp.dll"
-  File "payload\bass.dll"
+  File "..\tools\exgui\samp.exe"
+  File "..\build\binaries\release\samp.dll"
+  File "..\third-party\bass\bass.dll"
   File "payload\samp.saa"
-  File "payload\rcon.exe"
-  File "payload\samp_debug.exe"
+  File "..\build\binaries\release\rcon.exe"
+  File "..\build\binaries\release\samp_debug.exe"
   File "payload\sampgui.png"
   File "payload\mouse.png"
   File "payload\gtaweap3.ttf"
   File "payload\sampaux3.ttf"
-  File "payload\samp-license.txt"
+  File "..\samp-license.txt"
 
   Delete "$INSTDIR\models\samp.img"
   Delete "$INSTDIR\models\sampcol.img"
@@ -346,7 +346,7 @@ Section "-San Andreas Multiplayer"
   SetOverwrite on
 
   SetOutPath "$SYSDIR"
-  File "payload\d3dx9_25.dll"
+  File "d3dx9_25.dll"
   SetOutPath "$INSTDIR"
   WriteUninstaller "SAMPUninstall.exe"
   CreateDirectory "$SMPROGRAMS\San Andreas Multiplayer"
