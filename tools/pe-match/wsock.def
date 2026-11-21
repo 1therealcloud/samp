@@ -1,0 +1,27 @@
+LIBRARY WSOCK32.dll
+EXPORTS
+    WSACleanup@0
+    WSAGetLastError@0
+    WSAStartup@8
+    __WSAFDIsSet@8
+    accept@12
+    bind@12
+    closesocket@4
+    connect@12
+    gethostbyname@4
+    gethostname@8
+    getsockname@12
+    htonl@4
+    htons@4
+    inet_addr@4
+    inet_ntoa@4
+    ioctlsocket@12
+    listen@8
+    ntohs@4
+    recv@16
+    recvfrom@24
+    select@20
+    send@16
+    sendto@24
+    setsockopt@20
+    socket@12
