@@ -22,10 +22,10 @@ if errorlevel 1 (
 for /f "delims=" %%I in ('docker run -d --platform linux/386 -w /work "%IMAGE%" /bin/sh -c "while :; do sleep 3600; done"') do set "CONTAINER=%%I"
 if not defined CONTAINER exit /b 1
 
-docker exec "%CONTAINER%" mkdir -p /work/source /work/third-party
+docker exec "%CONTAINER%" mkdir -p /work/tools /work/source /work/third-party
 if errorlevel 1 goto failed
 
-docker cp "%PROJECT_DIR%\announce" "%CONTAINER%:/work/"
+docker cp "%PROJECT_DIR%\tools\announce" "%CONTAINER%:/work/tools/"
 if errorlevel 1 goto failed
 docker cp "%PROJECT_DIR%\server" "%CONTAINER%:/work/"
 if errorlevel 1 goto failed
@@ -50,12 +50,12 @@ if errorlevel 1 goto failed
 docker cp "%PROJECT_DIR%\third-party\sqlite" "%CONTAINER%:/work/third-party/"
 if errorlevel 1 goto failed
 
-docker exec -w /work/announce "%CONTAINER%" make -B CC=gcc-3.4 CXX=g++-3.4
+docker exec -w /work/tools/announce "%CONTAINER%" make -B CC=gcc-3.4 CXX=g++-3.4
 if errorlevel 1 goto failed
 docker exec -w /work/server "%CONTAINER%" make -B CC=gcc-3.4 CXX=g++-3.4
 if errorlevel 1 goto failed
 
-docker cp "%CONTAINER%:/work/announce/announce" "%OUTPUT_DIR%\announce"
+docker cp "%CONTAINER%:/work/tools/announce/announce" "%OUTPUT_DIR%\announce"
 if errorlevel 1 goto failed
 docker cp "%CONTAINER%:/work/server/samp03svr" "%OUTPUT_DIR%\samp03svr"
 if errorlevel 1 goto failed
