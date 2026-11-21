@@ -30,19 +30,19 @@ implementation
 
 {$R *.dfm}
 
-// 0x000e1888
+// 0x000e0d04
 procedure Twnd_webrunform.BitBtn2Click(Sender: TObject);
 begin
   ModalResult:= mrCancel;
 end;
 
-// 0x000e18a8
+// 0x000e0d24
 procedure Twnd_webrunform.BitBtn3Click(Sender: TObject);
 begin
   ModalResult:= mrOk;
 end;
 
-// 0x000e18c8
+// 0x000e0d44
 procedure Twnd_webrunform.BitBtn1Click(Sender: TObject);
 begin
   ModalResult:= mrYes;

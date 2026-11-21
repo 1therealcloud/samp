@@ -3,7 +3,7 @@ object fmMain: TfmMain
   Top = 297
   Width = 840
   Height = 600
-  Caption = 'San Andreas Multiplayer 0.3.DL'
+  Caption = 'San Andreas Multiplayer 0.3.7-R5'
   Color = clBtnFace
   Constraints.MinHeight = 420
   Constraints.MinWidth = 525
@@ -445,7 +445,7 @@ object fmMain: TfmMain
     DitherBackground = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBtnText
-    Font.Height = -12
+    Font.Height = -11
     Font.Name = 'Arial'
     Font.Style = [fsBold]
     StartMargin = 0
@@ -469,7 +469,7 @@ object fmMain: TfmMain
     Ctl3D = True
     Font.Charset = OEM_CHARSET
     Font.Color = clSilver
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Arial'
     Font.Style = []
     ParentCtl3D = False

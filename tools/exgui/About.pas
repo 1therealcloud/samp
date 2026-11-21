@@ -189,7 +189,7 @@ begin
   end;
 end;
 
-// 0x000e1188
+// 0x000e0604
 procedure TfmAbout.FormShow(Sender: TObject);
 var
   FontStruct: LogFont;
@@ -217,7 +217,7 @@ begin
   BeginThread(nil, 0, @RenderTimer, nil, 0, RenderThread);
 end;
 
-// 0x000e12c4
+// 0x000e0740
 procedure TfmAbout.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   EnterCriticalSection(CritSect);
@@ -234,7 +234,7 @@ begin
   LeaveCriticalSection(CritSect);
 end;
 
-// 0x000e1334
+// 0x000e07b0
 procedure TfmAbout.FormCreate(Sender: TObject);
 begin
   InitializeCriticalSection(CritSect);
@@ -259,13 +259,13 @@ begin
   end;
 end;
 
-// 0x000e1410
+// 0x000e088c
 procedure TfmAbout.FormDestroy(Sender: TObject);
 begin
   DeleteCriticalSection(CritSect);
 end;
 
-// 0x000e142c
+// 0x000e08a8
 procedure TfmAbout.FormClick(Sender: TObject);
 begin
   Close;
