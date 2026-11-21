@@ -56,6 +56,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "detours", "third-party\deto
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcproj", "{52385A70-7538-4655-8A17-4D534DF58093}"
 	ProjectSection(ProjectDependencies) = postProject
+		{781B4154-2BF0-4E95-9F30-F2D453B818B5} = {781B4154-2BF0-4E95-9F30-F2D453B818B5}
+		{837E2777-C65D-410D-BAD7-10467548789B} = {837E2777-C65D-410D-BAD7-10467548789B}
 	EndProjectSection
 EndProject
 Global
