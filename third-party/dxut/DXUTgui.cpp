@@ -8704,6 +8704,7 @@ void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
         return;
     memset(items[row]->subitems[column], 0, 128);
     strncpy(items[row]->subitems[column], value, 128);
+    items[row]->subitems[column][128] = 0;
 }
 
 // 0x0008a440

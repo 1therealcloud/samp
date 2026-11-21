@@ -13,6 +13,7 @@ BYTE g_scriptBuffer[256];
 DWORD* g_scriptVariables[18];
 // 0x002a93f4
 DWORD g_scriptLastOpcode;
+WORD g_scriptVehicleComponent;
 // 0x002a93f8
 BOOL g_scriptLocalDebug;
 
@@ -34,7 +35,15 @@ int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, cons
     if (g_pChat)
     {
         if (!strcmp(warning, "opcode"))
+        {
+            if (g_scriptLastOpcode == g_vehicleAddComponentCommand.opcode)
+            {
+                g_pChat->AddDebugMessage("Warning(add_car_component %u): Exception 0x%X at 0x%X",
+                                         (unsigned)g_scriptVehicleComponent, code, pointers->ContextRecord->Eip);
+                return EXCEPTION_EXECUTE_HANDLER;
+            }
             g_pChat->AddDebugMessage("Warning(opcode 0x%X): Exception 0x%X at 0x%X", g_scriptLastOpcode, code, pointers->ContextRecord->Eip);
+        }
         else
             g_pChat->AddDebugMessage("Warning(%s): Exception 0x%X at 0x%X", warning, code, pointers->ContextRecord->Eip);
     }

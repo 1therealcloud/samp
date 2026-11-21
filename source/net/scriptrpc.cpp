@@ -744,25 +744,13 @@ void ScrSetPlayerTeam(RPCParameters* parameters)
 void ScrSetPlayerSkin(RPCParameters* parameters)
 {
     int model = 0;
-#if defined(DL_BUILD)
-    int customModel = 0;
-#endif // DL_BUILD
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
     if (!pool)
         return;
-#if defined(DL_BUILD)
-    WORD id;
-#else  // DL_BUILD
     DWORD id;
-#endif // DL_BUILD
     stream.Read(id);
     stream.Read(model);
-#if defined(DL_BUILD)
-    stream.Read(customModel);
-    if (customModel > 20000 && (GameIsPedModel(customModel) || (g_customModels && g_customModels->DoesExist(customModel))))
-        model = customModel;
-#endif // DL_BUILD
     if (!GameIsPedModel(model))
     {
         if (g_pChat)

@@ -887,7 +887,7 @@ void CGame::ProcessCheckpoints()
     }
 }
 
-// 0x000a0b20
+// 0x000a0ce0 (0.3.7-R5)
 void CGame::DisplayGameText(const char* text, int time, int style)
 {
     if (style <= 200)
@@ -895,6 +895,12 @@ void CGame::DisplayGameText(const char* text, int time, int style)
         Scripting::ProcessCommand(&g_gameClearTextCommand);
         *(DWORD*)g_gameTextBuffer = 0;
         strncpy(g_gameTextBuffer, text, 512);
+        for (char* character = g_gameTextBuffer; *character; ++character)
+        {
+            const unsigned char value = *character;
+            if (value < 0x20 && value != '\n')
+                *character = ' ';
+        }
         // GTA SA virtual address: 0x0069f2b0, cdecl.
         // clang-format off
         __asm

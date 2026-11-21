@@ -81,15 +81,15 @@ RECT* CDialog::GetRect(RECT* rect)
     return rect;
 }
 
-// 0x0006f120
+// 0x0006f6e0 (0.3.7-R5)
 int CDialog::GetTextWidth(const char* value)
 {
     ID3DXFont* font = dialog->GetFont(1)->pFont;
     RECT rect = {0, 0, 0, 0};
-    char buffer[129];
+    char buffer[257] = {0};
     if (value && strlen(value) && font)
     {
-        strcpy(buffer, value);
+        strncpy(buffer, value, sizeof(buffer) - 1);
         ChatStripColorTags(buffer);
         font->DrawTextA(0, buffer, -1, &rect, 0x540, 0xffffffff);
         return rect.right - rect.left;
@@ -213,8 +213,8 @@ BOOL CDialog::PopulateList(const char* value, SIZE* size)
     int widest = 0, totalHeight = 0, row = 0;
     while (value && *value)
     {
-        char line[256] = {0};
-        value = CopyLine(value, line, 256);
+        char line[257] = {0};
+        value = CopyLine(value, line, sizeof(line) - 1);
         if (strlen(line))
         {
             int measured = GetTextWidth(line);
@@ -242,41 +242,31 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
 {
     list->RemoveAllItems();
     list->columnCount = 0;
-    // Observed adjacency: the native extra-column width access aliases the
-    // first DWORD of the129-byte cell buffer. No broader stack layout is claimed.
-    struct TableScratch
-    {
-        int widths[4];
-        char cell[129];
-        BYTE padding[7];
-        char line[256];
-    } scratch;
-    STATIC_ASSERT(offsetof(TableScratch, cell) == 16);
-    STATIC_ASSERT(offsetof(TableScratch, line) == 0x98);
-    memset(scratch.widths, 0, sizeof(scratch.widths));
-    memset(scratch.line, 0, sizeof(scratch.line));
+    int widths[4] = {0};
+    char cell[129];
+    char line[257] = {0};
     int totalHeight = 0;
     const char* cursor = value;
-    const char* next = CopyLine(value, scratch.line, 256);
+    const char* next = CopyLine(value, line, sizeof(line) - 1);
     if ((BYTE)header)
         cursor = next;
-    if (!strlen(scratch.line))
+    if (!strlen(line))
         return -1;
     int columns = 0;
-    const char* column = scratch.line;
+    const char* column = line;
     do
     {
         if (columns >= 4)
             break;
-        memset(scratch.cell, 0, sizeof(scratch.cell));
-        column = CopyColumn(column, scratch.cell, 128);
+        memset(cell, 0, sizeof(cell));
+        column = CopyColumn(column, cell, 128);
         memset(columnTitles[columns], 0, 129);
         if ((BYTE)header)
         {
-            strncpy(columnTitles[columns], scratch.cell, 128);
-            int measured = GetTextWidth(scratch.cell);
-            if (measured > scratch.widths[columns])
-                scratch.widths[columns] = measured;
+            strncpy(columnTitles[columns], cell, 128);
+            int measured = GetTextWidth(cell);
+            if (measured > widths[columns])
+                widths[columns] = measured;
         }
         ++columns;
     }
@@ -286,31 +276,30 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
     int row = 0;
     while (cursor && *cursor)
     {
-        memset(scratch.line, 0, sizeof(scratch.line));
-        cursor = CopyLine(cursor, scratch.line, 256);
+        memset(line, 0, sizeof(line));
+        cursor = CopyLine(cursor, line, sizeof(line) - 1);
         bool added = false;
-        if (strlen(scratch.line))
+        if (strlen(line))
         {
             int col = 0;
-            column = scratch.line;
+            column = line;
             do
             {
                 if (col > columnCount)
                     break;
-                memset(scratch.cell, 0, sizeof(scratch.cell));
-                column = CopyColumn(column, scratch.cell, 128);
-                int measured = GetTextWidth(scratch.cell);
-                int* width = (int*)((BYTE*)&scratch + col * 4);
-                if (measured > *width)
-                    *width = measured;
+                memset(cell, 0, sizeof(cell));
+                column = CopyColumn(column, cell, 128);
+                int measured = GetTextWidth(cell);
+                if (measured > widths[col])
+                    widths[col] = measured;
                 if (col == 0)
                 {
-                    list->AddItem(scratch.cell, (void*)row, -1);
+                    list->AddItem(cell, (void*)row, -1);
                     added = true;
                     totalHeight += GetFontHeight();
                 }
                 else
-                    list->SetSubItemText(row, col - 1, scratch.cell);
+                    list->SetSubItemText(row, col - 1, cell);
                 ++col;
             }
             while (column);
@@ -322,15 +311,15 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
         if (*cursor == '\n')
             ++cursor;
     }
-    list->columnWidths[0] = scratch.widths[0] + 20;
-    columnWidths[0] = scratch.widths[0] + 20;
-    list->columnWidths[1] = scratch.widths[1] + 20;
-    columnWidths[1] = scratch.widths[1] + 20;
-    list->columnWidths[2] = scratch.widths[2] + 20;
-    columnWidths[2] = scratch.widths[2] + 20;
+    list->columnWidths[0] = widths[0] + 20;
+    columnWidths[0] = widths[0] + 20;
+    list->columnWidths[1] = widths[1] + 20;
+    columnWidths[1] = widths[1] + 20;
+    list->columnWidths[2] = widths[2] + 20;
+    columnWidths[2] = widths[2] + 20;
     if (size)
     {
-        size->cx = scratch.widths[0] + scratch.widths[1] + scratch.widths[2] + scratch.widths[3] + 80;
+        size->cx = widths[0] + widths[1] + widths[2] + widths[3] + 80;
         size->cy = totalHeight;
     }
     return 1;

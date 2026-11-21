@@ -38,6 +38,8 @@ extern FARPROC g_scriptProcessOneCommand;
 // 0x00163a70
 extern int g_gameExceptionCount;
 // 0x00060470
+extern WORD g_scriptVehicleComponent;
+
 int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, const char* warning);
 #endif
 

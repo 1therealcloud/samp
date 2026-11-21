@@ -117,16 +117,17 @@ void ClientConstructCrashText(BOOL includeModules)
     sprintf(g_clientCrashText,
             "SA-MP %s\r\nException At Address: 0x%08X\r\nBase: 0x%08X\r\n\r\nRegisters:\r\nEAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\r\nESI: 0x%08X\tEDI: 0x%08X\tEBP: "
             "0x%08X\tESP: 0x%08X\r\nEFLAGS: 0x%08X\r\n\r\nStack:\r\n",
-#if defined(DL_BUILD)
-            "0.3.DL-R1",
-#else  // DL_BUILD
             "0.3.7-R5",
-#endif // DL_BUILD
             c->Eip, g_clientModule, c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
 
     ClientDumpMemory((const BYTE*)c->Esp, 640, g_clientCrashText, TRUE);
     sprintf(text, "\r\nSCM Op: 0x%X, lDbg: %d LastRendObj: %u\r\n", g_scriptLastOpcode, g_scriptLocalDebug, (unsigned)g_clientCrashLastRenderedObject);
     strcat(g_clientCrashText, text);
+    if (g_scriptLocalDebug && g_scriptLastOpcode == g_vehicleAddComponentCommand.opcode)
+    {
+        sprintf(text, "Vehicle component: %u\r\n", (unsigned)g_scriptVehicleComponent);
+        strcat(g_clientCrashText, text);
+    }
     const char* version = g_gameVersion == 1 ? "US 1.0" : g_gameVersion == 2 ? "EU 1.0" : "UNKNOWN";
     sprintf(text, "\r\nGame Version: %s\r\n", version);
     strcat(g_clientCrashText, text);

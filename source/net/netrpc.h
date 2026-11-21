@@ -5,14 +5,6 @@ class RakClientInterface;
 struct RPCParameters;
 // 0x00012310
 void RegisterRPCs(RakClientInterface* client);
-#if defined(DL_BUILD)
-// 0x00011d80
-void ScrCustomModelRecord(RPCParameters* parameters);
-// 0x0000ea40
-void ScrCustomModelsReset(RPCParameters* parameters);
-// 0x0000ead0
-void ScrCustomModelsComplete(RPCParameters* parameters);
-#endif // DL_BUILD
 // 0x00010530
 void ScrInitGame(RPCParameters* parameters);
 // 0x0013c0b4
@@ -205,15 +197,5 @@ extern const int g_rpcClientCheck;
 extern const int g_rpcScrCreateActor;
 // 0x00117f14
 extern const int g_rpcScrDestroyActor;
-#if defined(DL_BUILD)
-// 0x00117f10
-extern const int g_rpcScrModelInfo;
-// 0x00117f0c
-extern const int g_rpcScrCustomModelsReset;
-// 0x00117f08
-extern const int g_rpcScrModelFile;
-// 0x00117f04
-extern const int g_rpcScrFinishedDownloading;
-#endif // DL_BUILD
 
 #endif // NETRPC_H

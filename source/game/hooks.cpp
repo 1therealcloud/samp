@@ -1189,13 +1189,15 @@ __declspec(naked) void GameHook_000a5850()
         ret }
     // clang-format on
 }
-// Continue into GTA after its 44-byte local-frame allocation, forwarding the
-// observed argument-byte override rather than translating this into a C++ call.
-// 0x000a5d20
+// Keep the original collision flags for checkpoint placement.
+// 0x000a5fc0 (0.3.7-R5)
 __declspec(naked) void GameHook_000a5d20()
 {
     // clang-format off
-    __asm { mov eax,[esp+0x14]
+    __asm { mov eax,[esp]
+        cmp eax,0x59e8f9
+        je original
+        mov eax,[esp+0x14]
         test eax,eax
         jz original
         mov byte ptr [esp+0x20],1

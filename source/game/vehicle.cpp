@@ -989,6 +989,7 @@ BOOL CVehicle::AddComponent(WORD component)
     DWORD result = (DWORD)this;
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle) || !m_pGameVehicle || GameGetVehicleSubtype(m_pGameVehicle) != 1)
         return FALSE;
+    g_scriptVehicleComponent = component;
     unsigned int model = component;
     if (!Scripting::ProcessCommand(&g_vehicleComponentLoadedCommand, model))
     {

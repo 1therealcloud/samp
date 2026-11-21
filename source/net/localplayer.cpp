@@ -724,18 +724,12 @@ void CLocalPlayer::PrepareForClassSelection_Outcome(BOOL outcome)
 void CLocalPlayer::SetSpawnInfo(const void* info)
 {
     const BYTE* data = (const BYTE*)info;
-#if defined(DL_BUILD)
-    for (int i = 0; i < 48; i += 4)
-        *(DWORD*)((BYTE*)&m_state.spawnInfo + i) = *(const DWORD*)(data + i);
-    *(WORD*)((BYTE*)&m_state.spawnInfo + 48) = *(const WORD*)(data + 48);
-#else  // DL_BUILD
     BYTE* spawn = (BYTE*)&m_state.spawnInfo;
     const size_t customModelOffset = offsetof(LocalSpawnInfo, customModel);
     const size_t tailOffset = offsetof(LocalSpawnInfo, unknown09);
     memcpy(spawn, data, customModelOffset);
     m_state.spawnInfo.customModel = 0;
     memcpy(spawn + tailOffset, data + customModelOffset, LocalSpawnInfoWireSize - customModelOffset);
-#endif // DL_BUILD
     m_state.hasSpawnInfo = 1;
 }
 

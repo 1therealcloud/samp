@@ -15,10 +15,6 @@
 #include <BitStream.h>
 #include <LzmaDec.h>
 #include <RakClientInterface.h>
-#if defined(DL_BUILD)
-#define CURL_STATICLIB
-#include <curl/curl.h>
-#endif // DL_BUILD
 
 #include <process.h>
 #include <stdio.h>
@@ -251,10 +247,6 @@ char g_customProxy[261];
 const char g_customRegistryKey[] = "Software\\SAMP";
 // 0x0011f9dc
 const char g_customProxyValue[] = "artwork_proxy";
-#if defined(DL_BUILD)
-// 0x00117e58
-const char g_customUserAgent[] = "SAMP/0.3";
-#endif // DL_BUILD
 // 0x00117e9c
 const char g_customLogUrlsOption[] = "logurls";
 // 0x00117e8c
@@ -1005,63 +997,11 @@ const char* CustomModelGetProxy()
     return RegQueryValueExA(key, g_customProxyValue, 0, &type, (BYTE*)g_customProxy, &length) == 0 ? g_customProxy : 0;
 }
 
-#if defined(DL_BUILD)
-// 0x0000de60
-BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
-{
-    CURL* curl = curl_easy_init();
-    if (!curl)
-        return FALSE;
-    worker->failed = 0;
-    worker->result = 0;
-    curl_easy_setopt(curl, (CURLoption)10002, worker->url);
-    curl_easy_setopt(curl, (CURLoption)10102, g_netEmptyShoppingSubsection);
-    curl_easy_setopt(curl, (CURLoption)10018, g_customUserAgent);
-    curl_easy_setopt(curl, (CURLoption)43, 1L);
-    curl_easy_setopt(curl, (CURLoption)20011, CustomModelDownloadWrite);
-    curl_easy_setopt(curl, (CURLoption)10001, &worker->download);
-    curl_easy_setopt(curl, (CURLoption)45, 1L);
-    if (proxy && strlen(proxy))
-        curl_easy_setopt(curl, (CURLoption)10004, proxy);
-    CURLcode result = curl_easy_perform(curl);
-    if (result)
-    {
-        worker->failed = 1;
-        worker->result = result;
-    }
-    curl_easy_cleanup(curl);
-    if (worker->failed)
-    {
-        const char* detail = curl_easy_strerror(result);
-        g_customDownloadManager->AbortDownload(&worker->download, (int)worker->result, detail);
-    }
-    else
-        g_customDownloadManager->FinishDownload(&worker->download);
-    return TRUE;
-}
-#endif // DL_BUILD
 
 // 0x0000df90
 void __cdecl CustomModelDownloadThread(void* argument)
 {
-#if defined(DL_BUILD)
-    const char* proxy = CustomModelGetProxy();
-    curl_global_init(3);
-    CustomModelWorker* worker = (CustomModelWorker*)argument;
-    while (!worker->stop)
-    {
-        if (worker->active)
-        {
-            CustomModelFetchUrl(worker, proxy);
-            worker->active = 0;
-        }
-        Sleep(1);
-    }
-    curl_global_cleanup();
-    worker->enabled = 0;
-#else  // DL_BUILD
     (void)argument;
-#endif // DL_BUILD
 }
 
 // 0x0000dff0

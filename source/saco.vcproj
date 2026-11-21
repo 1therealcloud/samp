@@ -27,7 +27,7 @@
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE"
 				StringPooling="TRUE"
 				ExceptionHandling="TRUE"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
+				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
@@ -134,141 +134,6 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="."/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
-			Name="Debug DL|Win32"
-			OutputDirectory="$(SolutionDir)build\binaries\$(ConfigurationName)\"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="0">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;DL_BUILD"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="TRUE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				StructMemberAlignment="1"
-				RuntimeTypeInfo="FALSE"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
-				CompileAs="0"
-				ForcedIncludeFiles="dxstdafx.h"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="RakNet.lib zlib.lib libcurl.lib lzma.lib bass.lib detours.lib libcmt.lib libcpmt.lib oldnames.lib kernel32.lib psapi.lib user32.lib gdi32.lib advapi32.lib ws2_32.lib winmm.lib imm32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib shell32.lib crypt32.lib secur32.lib version.lib usp10.lib d3d9.lib d3dx9.lib dxguid.lib"
-				OutputFile="$(OutDir)\samp.dll"
-				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)\samp.pdb"
-				SubSystem="2"
-				ImportLibrary="$(SolutionDir)build\libraries\samp.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(SolutionDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;DL_BUILD"
-				Culture="1033"
-				AdditionalIncludeDirectories="."/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
-			Name="Release DL|Win32"
-			OutputDirectory="$(SolutionDir)build\binaries\$(ConfigurationName)\"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="0">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="4"
-				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories=".;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;DL_BUILD"
-				StringPooling="TRUE"
-				ExceptionHandling="TRUE"
-				RuntimeLibrary="0"
-				StructMemberAlignment="1"
-				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="TRUE"
-				RuntimeTypeInfo="FALSE"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
-				CompileAs="0"
-				ForcedIncludeFiles="dxstdafx.h"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/MERGE:.pstate=.data"
-				AdditionalDependencies="RakNet.lib zlib.lib libcurl.lib lzma.lib libcmt.lib libcpmt.lib oldnames.lib d3dx9.lib user32.lib comctl32.lib advapi32.lib kernel32.lib gdi32.lib wsock32.lib winmm.lib psapi.lib bass.lib ws2_32.lib crypt32.lib shell32.lib imm32.lib ole32.lib oleaut32.lib uuid.lib secur32.lib version.lib usp10.lib d3d9.lib dxguid.lib detours.lib"
-				OutputFile="$(OutDir)\samp.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;&quot;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86&quot;"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)\samp.pdb"
-				SubSystem="2"
-				OptimizeReferences="1"
-				EnableCOMDATFolding="1"
-				ImportLibrary="$(SolutionDir)build\libraries\samp.lib"
-				TargetMachine="1"/>
-			<Tool
-				Name="VCMIDLTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(SolutionDir)third-party\bass\bass.dll&quot; &quot;$(OutDir)\bass.dll&quot; &gt;nul"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;DL_BUILD"
 				Culture="1033"
 				AdditionalIncludeDirectories="."/>
 			<Tool
@@ -415,18 +280,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="gui\dialog.h">
@@ -447,18 +300,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -495,18 +336,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -581,18 +410,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="render\licenseplate.h">
@@ -607,18 +424,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -645,18 +450,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\actor.h">
@@ -671,18 +464,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -720,18 +501,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\building_removal.h">
@@ -752,18 +521,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -810,18 +567,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\game.h">
@@ -851,18 +596,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -897,18 +630,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\object.h">
@@ -932,18 +653,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -990,18 +699,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="game\textdraw.h">
@@ -1016,18 +713,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -1056,18 +741,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -1114,18 +787,6 @@
 						Name="VCCLCompilerTool"
 						ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ForcedIncludeFiles="winsock2.h;dxstdafx.h"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="net\netgame.h">
@@ -1152,18 +813,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -1206,18 +855,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
@@ -1321,18 +958,6 @@
 						Name="VCCLCompilerTool"
 						InlineFunctionExpansion="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release DL|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="d3dhook\IDirect3DDevice9Hook.h">
@@ -1373,19 +998,6 @@
 							Name="VCCLCompilerTool"
 							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\D3DUtil.h">
@@ -1403,19 +1015,6 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"
 							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
 					</FileConfiguration>
 				</File>
@@ -1477,12 +1076,6 @@
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\dxstdafx.h">
@@ -1491,12 +1084,6 @@
 					RelativePath="..\third-party\dxut\DXUT.cpp">
 					<FileConfiguration
 						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
@@ -1513,12 +1100,6 @@
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\DXUTenum.h">
@@ -1527,12 +1108,6 @@
 					RelativePath="..\third-party\dxut\DXUTgui.cpp">
 					<FileConfiguration
 						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
@@ -1549,12 +1124,6 @@
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\DXUTmedia.h">
@@ -1563,12 +1132,6 @@
 					RelativePath="..\third-party\dxut\DXUTMesh.cpp">
 					<FileConfiguration
 						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
@@ -1585,12 +1148,6 @@
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\DXUTmisc.h">
@@ -1599,12 +1156,6 @@
 					RelativePath="..\third-party\dxut\DXUTSettingsDlg.cpp">
 					<FileConfiguration
 						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							BufferSecurityCheck="TRUE"/>
@@ -1627,18 +1178,6 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\DXUTsound.h">
@@ -1650,18 +1189,6 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32"
 						ExcludedFromBuild="TRUE">
 						<Tool
 							Name="VCCustomBuildTool"/>

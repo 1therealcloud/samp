@@ -78,7 +78,7 @@ void GameReleaseTextDrawTexture(int slot)
 }
 
 // 0x000b3560
-svoid GameDestroyTextDrawTexture(void* texture)
+void GameDestroyTextDrawTexture(void* texture)
 {
     void* spriteTexture = texture;
     // GTA CSprite2d deletion receives the address of a one-pointer local.
