@@ -1423,7 +1423,7 @@ void CLocalPlayer::ApplySurfingPhysics()
 }
 
 // 0x00003630
-void CLocalPlayer::SetSurfingEntity(CEntity* entity, DWORD locked)
+__declspec(noinline) void CLocalPlayer::SetSurfingEntity(CEntity* entity, DWORD locked)
 {
     m_state.surfingEntity = entity;
     m_state.surfingLocked = locked;

@@ -1911,7 +1911,7 @@ void CPed::ProcessDrunk()
 }
 
 // 0x000b3770
-void* __stdcall GamePoolPedGetAt(int handle)
+__declspec(noinline) void* __stdcall GamePoolPedGetAt(int handle)
 {
     void* result;
     // GTA SA thiscall backend. The pool goes in ECX and the handle on the stack.

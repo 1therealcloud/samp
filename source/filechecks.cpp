@@ -28,7 +28,7 @@ ArchiveNameSha1::ArchiveNameSha1()
 ArchiveNameSha1::~ArchiveNameSha1() {}
 
 // 0x00063560
-void ArchiveNameSha1::Reset()
+__declspec(noinline) void ArchiveNameSha1::Reset()
 {
     lengthLow = 0;
     lengthHigh = 0;
@@ -216,13 +216,13 @@ void ArchiveNameSha1::Input(const char* data, DWORD length)
 }
 
 // 0x00063db0
-void ArchiveNameSha1::Input(BYTE value)
+__declspec(noinline) void ArchiveNameSha1::Input(BYTE value)
 {
     Input(&value, 1);
 }
 
 // 0x00063dc0
-void ArchiveNameSha1::Input(char value)
+__declspec(noinline) void ArchiveNameSha1::Input(char value)
 {
     Input((const BYTE*)&value, 1);
 }

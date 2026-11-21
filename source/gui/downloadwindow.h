@@ -29,7 +29,7 @@ struct DownloadRecordStorage
         *(DWORD*)(nativeState + 4) = 0;
     }
     ~DownloadRecordStorage();
-    bool ResizeRecords(DWORD count);
+    __declspec(noinline) bool ResizeRecords(DWORD count);
 };
 
 class CDownloadWindow : public DownloadRecordStorage

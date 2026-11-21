@@ -912,7 +912,7 @@ DWORD CModelMeshArray::GetCount()
 }
 
 // 0x0000c550
-bool CModelMaterialArray::Resize(DWORD size)
+__declspec(noinline) bool CModelMaterialArray::Resize(DWORD size)
 {
     if (!size)
     {
@@ -942,7 +942,7 @@ bool CModelMaterialArray::Resize(DWORD size)
 }
 
 // 0x0000c5c0
-bool CModelMeshArray::Resize(DWORD size)
+__declspec(noinline) bool CModelMeshArray::Resize(DWORD size)
 {
     if (!size)
     {
@@ -972,7 +972,7 @@ bool CModelMeshArray::Resize(DWORD size)
 }
 
 // 0x0000c630
-bool CModelGeometryArray::Resize(DWORD size)
+__declspec(noinline) bool CModelGeometryArray::Resize(DWORD size)
 {
     if (!size)
     {
@@ -2159,7 +2159,7 @@ DWORD CModelCollisionFile::AddSphere(ModelCollisionSphere* sphere)
 }
 
 // 0x000ba1a0
-DWORD CModelCollisionFile::AddBox(ModelCollisionBox* box)
+__declspec(noinline) DWORD CModelCollisionFile::AddBox(ModelCollisionBox* box)
 {
     return ((CModelCollisionBoxArray*)(nativeState + 0x78))->Insert(box);
 }
@@ -2427,7 +2427,7 @@ CModelCollisionNode::~CModelCollisionNode()
 }
 
 // 0x000b9d10
-void CModelCollisionNode::CountLeaves(DWORD* count)
+__declspec(noinline) void CModelCollisionNode::CountLeaves(DWORD* count)
 {
     if (left)
     {

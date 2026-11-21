@@ -199,7 +199,7 @@ BOOL CConfig::Save()
 }
 
 // 0x00065b00
-BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
+__declspec(noinline) BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -244,7 +244,7 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
 }
 
 // 0x00065c00
-BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
+__declspec(noinline) BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -419,7 +419,7 @@ const char* ClientGetCacheDirectory()
 }
 
 // 0x000b5900
-BOOL ClientPathExists(const char* path)
+__declspec(noinline) BOOL ClientPathExists(const char* path)
 {
     struct _stat info;
     return _stat(path, &info) == 0;
