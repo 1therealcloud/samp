@@ -428,7 +428,7 @@ void ClientInitializeCacheDirectory()
     // Native does not close key and does not validate value type or copied termination.
     if (!ClientPathExists(g_clientCacheDirectory))
         CreateDirectoryA(g_clientCacheDirectory, 0);
-    char local[268];
+    char local[264];
     sprintf(local, "%s\\local", g_clientCacheDirectory);
     if (!ClientPathExists(local))
         CreateDirectoryA(local, 0);
