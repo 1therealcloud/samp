@@ -196,7 +196,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;DL_BUILD"
 				Culture="1033"
 				AdditionalIncludeDirectories="."/>
 			<Tool
@@ -268,7 +268,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
+				PreprocessorDefinitions="NDEBUG;DL_BUILD"
 				Culture="1033"
 				AdditionalIncludeDirectories="."/>
 			<Tool
