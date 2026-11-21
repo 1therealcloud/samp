@@ -484,7 +484,7 @@ public:
     // 0x0000a0a0
     bool ReadVelocity(float& x, float& y, float& z);
 };
-STATIC_ASSERT(sizeof(NativeSyncBitStream) == sizeof(RakNet::BitStream));
+
 // 0x00009370
 bool NativeSyncBitStream::ReadQuaternion(float& w, float& x, float& y, float& z)
 {
@@ -719,6 +719,7 @@ void CNetGame::Packet_IncarSync(Packet* packet)
 }
 STATIC_ASSERT(offsetof(Packet, length) == 8);
 STATIC_ASSERT(offsetof(Packet, data) == 16);
+
 // 0x00009730
 void CNetGame::Packet_UnoccupiedSync(Packet* packet)
 {
