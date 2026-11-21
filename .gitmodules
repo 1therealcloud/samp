@@ -4,9 +4,6 @@
 [submodule "third-party/zlib"]
 	path = third-party/zlib
 	url = https://github.com/madler/zlib.git
-[submodule "third-party/curl"]
-	path = third-party/curl
-	url = https://github.com/curl/curl.git
 [submodule "third-party/ttmath"]
 	path = third-party/ttmath
 	url = https://github.com/openmultiplayer/ttmath.git
