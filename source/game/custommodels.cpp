@@ -1059,7 +1059,7 @@ void __cdecl CustomModelDownloadThread(void* argument)
     }
     curl_global_cleanup();
     worker->enabled = 0;
-#else // DL_BUILD
+#else  // DL_BUILD
     (void)argument;
 #endif // DL_BUILD
 }

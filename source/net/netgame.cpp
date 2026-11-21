@@ -50,11 +50,11 @@ const char g_netConnectionLostMessage[] = "Lost connection to the server. Reconn
 // 0x00117c08
 const char g_netJoiningMessage[] = "Connected. Joining the game...";
 #if defined(DL_BUILD)
-    // 0x00117bfc
-    const char g_netClientVersion[] = "0.3.DL-R1";
+// 0x00117bfc
+const char g_netClientVersion[] = "0.3.DL-R1";
 #else
-    // 0x000E5B8C (0.3.7-r5 samp.dll)
-    const char g_netClientVersion[] = "0.3.7-R5";
+// 0x000E5B8C (0.3.7-r5 samp.dll)
+const char g_netClientVersion[] = "0.3.7-R5";
 #endif
 // 0x00117bf8
 int g_netJoinRpc = 25;
@@ -78,11 +78,11 @@ const char g_netMenuException[] = "s006";
 // 0x00117a39
 const char g_netEmptyShoppingSubsection[] = "";
 #if defined(DL_BUILD)
-    // 0x001179dc
-    const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
-#else // DL_BUILD
-    // 0x000E596C (0.3.7-r5 samp.dll)
-    const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.7-R5 {FFFFFF}Started";
+// 0x001179dc
+const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
+#else  // DL_BUILD
+// 0x000E596C (0.3.7-r5 samp.dll)
+const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.7-R5 {FFFFFF}Started";
 #endif // DL_BUILD
 // 0x00117af0
 const char g_netDisconnectedMessage[] = "Server closed the connection.";
@@ -348,9 +348,9 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     input.ReadBits((BYTE*)&challenge, 32, true);
 #if defined(DL_BUILD)
     challenge ^= 4062; // 0xfde
-#else // DL_BUILD
+#else                  // DL_BUILD
     challenge ^= 4057; // 0xfd9
-#endif // DL_BUILD
+#endif                 // DL_BUILD
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netJoiningMessage);
     gameState = StateAwaitingInit;
@@ -358,9 +358,9 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     RakNet::BitStream output;
 #if defined(DL_BUILD)
     DWORD version = 4062; // 0xfde
-#else // DL_BUILD
+#else                     // DL_BUILD
     DWORD version = 4057; // 0xfd9
-#endif // DL_BUILD
+#endif                    // DL_BUILD
     BYTE byte = 1;
     output.WriteBits((BYTE*)&version, 32, true);
     output.WriteBits(&byte, 8, true);
@@ -375,13 +375,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     output.Write(serial, byte);
 #if defined(DL_BUILD)
     byte = 9;
-#else // DL_BUILD
+#else  // DL_BUILD
     byte = 8;
 #endif // DL_BUILD
     output.WriteBits(&byte, 8, true);
 #if defined(DL_BUILD)
     output.Write(g_netClientVersion, 9);
-#else // DL_BUILD
+#else  // DL_BUILD
     output.Write(g_netClientVersion, 8);
 #endif // DL_BUILD
     output.WriteBits((BYTE*)&challenge, 32, true);
