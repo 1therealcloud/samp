@@ -22,7 +22,6 @@ struct ObjectMaterialTextInfo
     DWORD fontColor, backgroundColor;
     BYTE alignment;
 };
-// Descriptive grouping of the verified render/material table region.
 struct ObjectMaterialState
 {
     DWORD frameObjectsProcessed, snapshotValid, texturesChanged, colorsChanged;
@@ -118,10 +117,8 @@ public:
     BOOL IsMoving();
     // 0x000a79c0
     BOOL IsAdded();
-    // Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
     // 0x000a8c30
     void SetupLighting();
-    // Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
     // 0x000a8c70
     void RemoveLighting();
     // 0x000a8cc0
@@ -140,7 +137,6 @@ public:
     void AttachToVehicle(CVehicle* vehicle);
     // 0x000a7eb0
     void AttachToObject(CObject* object);
-    // Downstream motion dependency of the recovered pool coordinator.
     // 0x000a9240
     void Process(float elapsedSeconds);
     // 0x000a8120
@@ -166,7 +162,6 @@ public:
     // Native angle helper ignores this but consumes two float words.
     // 0x000a7bf0
     float GetAngleDifference(float from, float to);
-    // Rotation matrix builder dependency; not a production stand-in.
     // 0x000a7fb0
     void Rotate(float x, float y, float z);
     // Original consumes seven float words.

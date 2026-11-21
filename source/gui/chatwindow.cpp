@@ -41,7 +41,6 @@ BYTE CChat::GetTimestamps()
     return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
 }
 
-// Unresolved native dependencies, with explicit VA bindings in the build report.
 // These declarations do not call back into the original DLL.
 
 // 0x00060d30
@@ -343,7 +342,6 @@ CChat::CChat(IDirect3DDevice9* device, CFonts* fonts, const char* path)
     m_nMode = DISPLAY_MODE_NORMAL;
     D3DXCreateSprite(device, &m_pTextSprite);
     D3DXCreateSprite(device, &m_pSprite);
-    // As with CopyAddresses, this groups recovered operations, not original names.
     struct ClearRange
     {
         void* destination;
@@ -489,7 +487,6 @@ void CChat::Render()
 {
     RECT rect, measure;
     // Keep the two native cursor slots in order for the VC++ 2003 stack layout.
-    // This groups recovered locals; it does not assert their original names.
     struct Cursor
     {
         int line;

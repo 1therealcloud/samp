@@ -6,7 +6,6 @@
 #include <static_assert.h>
 
 #pragma pack(push, 1)
-// Descriptive recovered class name; original identity is not established.
 class CModelPreview
 {
 public:

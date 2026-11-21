@@ -16,7 +16,6 @@ CSrvNetStats::CSrvNetStats(IDirect3DDevice9* device)
     memset(g_srvNetStatsHistory, 0, sizeof(g_srvNetStatsHistory));
 }
 
-// The original DL function is RET. This is native disabled behavior,
-// not a stand-in for an unrecovered renderer.
+// The original returns without drawing.
 // 0x00070d00
 void CSrvNetStats::Draw() {}

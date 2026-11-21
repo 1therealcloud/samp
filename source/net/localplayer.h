@@ -9,8 +9,6 @@
 
 #include <static_assert.h>
 
-// Native synchronization records shared by senders and receivers, as in 0.2x.
-// Plain packed storage; no standalone native constructors are established.
 #pragma pack(push, 1)
 struct LocalOnfootSyncData
 {
@@ -119,8 +117,6 @@ namespace Scripting
 struct OpcodeInfo;
 }
 #pragma pack(push, 1)
-// Native 50-byte spawn record. The byte at09 remains semantically unknown.
-// These packed records have no established standalone native constructors.
 struct LocalSpawnInfo
 {
     BYTE team;
@@ -290,7 +286,7 @@ public:
     void SetSpecialAction(BYTE action);
     // 0x00003b20
     BOOL Spawn();
-    // The raw DWORD state is retained; this is not normalized to bool.
+    // Returns the raw DWORD state.
     // 0x00004080
     void ToggleSpectating(BOOL enabled);
     // 0x000040f0
@@ -318,7 +314,6 @@ public:
     DWORD GetOnFootSendRate();
     // 0x00003a40
     DWORD GetSendRate();
-    // Descriptive native surfing helpers; complete local-player layout is open.
     // 0x000034b0
     void ApplySurfingPhysics();
     // 0x00003630
@@ -447,7 +442,7 @@ extern const float g_localQuaternionSyncThreshold;
 extern int g_localSpawnRequestRpc;
 // 0x00117880
 extern int g_localSpawnRpc;
-// Skip one SetInitialState call when nonzero; broader startup meaning unresolved.
+// Skips one SetInitialState call when nonzero.
 // 0x0013c0a0
 extern DWORD g_localSkipInitialState;
 // 0x00117954

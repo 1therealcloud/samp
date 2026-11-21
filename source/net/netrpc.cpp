@@ -1262,10 +1262,6 @@ void ScrDisableRaceCheckpoint(RPCParameters* parameters)
     (void)parameters;
     g_pGame->m_checkpoints.raceEnabled = 0;
 }
-// Custom-model record handler RVA0x00011d80; legacy registry name retained.
-// Custom-model reset handler RVA0x0000ea40; legacy registry name retained.
-// Custom-model download handler RVA0x00011f80; legacy registry name retained.
-// Custom-model completion handler RVA0x0000ead0; legacy registry name retained.
 // 0x0000eb60
 void UnRegisterRPCs(RakClientInterface* client)
 {

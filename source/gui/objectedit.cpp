@@ -608,7 +608,7 @@ void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
     if (!g_pNetGame)
         return;
     BYTE* pool = *(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
-    // Native permits ID2100, including its unproven adjacent storage access.
+    // The original also accepts object ID 2100.
     if (id > 2100 || !*(DWORD*)(pool + 4 + id * 4))
         return;
     BYTE* object = *(BYTE**)(pool + 0x20d4 + id * 4);
@@ -973,7 +973,6 @@ void CObjectEdit::Disable(BOOL send)
         SendEditEndNotification(notify);
 }
 
-// Descriptive ABI adapter; original class and field meaning are not established.
 // 0x00002ea0
 DWORD __fastcall NativeReadDword0080(const void* object)
 {

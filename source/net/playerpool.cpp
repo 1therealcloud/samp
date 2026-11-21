@@ -527,7 +527,7 @@ void CPlayerPool::SetPing(WORD id, DWORD value)
         info->ping = value;
 }
 
-// ECX and stack arguments unused; original class ownership is not established.
+// Does not use ECX or stack arguments.
 // 0x00003ff0
 DWORD GetCachedActivePlayerCount()
 {

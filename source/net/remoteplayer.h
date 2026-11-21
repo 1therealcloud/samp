@@ -131,7 +131,6 @@ public:
     // Team argument is consumed by ABI but not read by this native body.
     // 0x00016c50
     BOOL Spawn(BYTE team, int model, int customModel, const CVector* position, float rotation, DWORD color, BYTE fightingStyle);
-    // Descriptive overload names for native receive/cache entries.
     // 0x00016da0
     void UpdateOnfoot(const void* data, DWORD timestamp);
     // 0x00016e70

@@ -8,7 +8,7 @@
 
 #pragma pack(push, 1)
 // Packed native transmit record; fields are transferred as raw bits by the constructor.
-// DL places flags first, unlike the 0.2x record. No standalone native constructor.
+// The DL record starts with the flags.
 struct TextDrawTransmit
 {
     union
@@ -98,7 +98,6 @@ public:
     void Native0B30A0();
     // 0x000b32b0
     void OnLostDevice();
-    // Recovered drawing backends; original method names remain unestablished.
     // 0x000b2c90
     void Native0B2C90();
     // 0x000b2da0
@@ -135,7 +134,7 @@ void GameReleaseTextDrawTexture(int slot);
 extern const char g_textDrawUnmatchedTilde[23];
 // 0x0011f524
 extern const char g_textDrawLongKeyString[40];
-// Observed RenderWare rectangle order; no standalone constructor is established.
+// RenderWare rectangle field order.
 struct TextDrawRect
 {
     float left, bottom, right, top;

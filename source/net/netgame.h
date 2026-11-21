@@ -233,7 +233,6 @@ public:
     void ToggleNameTagStatus();
     // 0x0000b290
     void Process();
-    // Native destructor entry. The full networking lifecycle remains open.
     // 0x00009570
     void Destroy();
     // 0x00001180

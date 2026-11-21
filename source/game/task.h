@@ -67,7 +67,6 @@ public:
 };
 STATIC_ASSERT(sizeof(CTaskJetpack) == 16);
 STATIC_ASSERT(sizeof(CTaskTakeDamageFall) == 16);
-// Descriptive wrapper names inferred from established GTA backend identities.
 // samp.dll vtable RVA: 0x0011f488
 class CTaskUseGoggles : public CTask
 {

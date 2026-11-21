@@ -16,7 +16,6 @@ public:
     CRenderPanel(IDirect3DDevice9* device);
     // 0x00071140
     void ResetDialogControls(CDXUTDialog* dialog);
-    // Descriptive helper names established from native behavior.
     // 0x000712c0
     void UpdateLayout();
     // 0x00071320

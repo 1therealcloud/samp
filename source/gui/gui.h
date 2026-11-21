@@ -132,7 +132,6 @@ void ClientProcessMenuTransition();
 void GameReleaseRenderResource();
 // 0x0009e2d0
 void GameDebugDraw();
-// Later render/debug dependencies, not production stand-ins.
 // 0x00075040
 void ClientCaptureScreenshot();
 // 0x00073cb0

@@ -76,7 +76,7 @@ public:
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CObjectEdit) == 0x117);
-// Descriptive helper name. Output stores may alias, and API failures are ignored.
+// Output stores may alias. API failures are ignored.
 // 0x000739e0
 void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector* end);
 // 0x0011a7ac
@@ -114,7 +114,7 @@ extern int g_objectEditRpc;
 // 0x00117f30
 extern int g_objectEditAttachedRpc;
 
-// Descriptive ABI adapter; native uses ECX and returns the raw DWORD in EAX.
+// Takes the receiver in ECX and returns a DWORD in EAX.
 // 0x00002ea0
 DWORD __fastcall NativeReadDword0080(const void* object);
 

@@ -7,7 +7,7 @@
 
 #include <static_assert.h>
 
-// Five raw DWORDs consumed by the native collision adapter; semantic fields unresolved.
+// Five DWORDs passed to the collision adapter.
 struct GameEntityCollisionShape
 {
     DWORD words[5];
@@ -108,7 +108,7 @@ public:
     virtual void Add();
     // 0x0009f240
     virtual void Remove();
-    // Broader flag meaning is not established; clears backend DWORD +40 mask 0x00000008.
+    // Clears mask 0x00000008 in the backend DWORD at offset 0x40.
     // 0x0009f5c0
     void ClearBackendFlag8();
     // 0x0009e950

@@ -152,7 +152,7 @@ BYTE CLocalPlayer::GetTeam()
 {
     return m_state.team;
 }
-// VC7 runtime helper; library entry, not a recovered SA-MP method.
+// VC7 runtime helper.
 extern "C" __int64 __cdecl _ftol2();
 // 0x00003390
 BYTE CLocalPlayer::GetSpecialAction()

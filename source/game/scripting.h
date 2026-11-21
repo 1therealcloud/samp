@@ -2,7 +2,7 @@
 #define SCRIPTING_H
 
 #include <windows.h>
-// Layout fields are not established yet; native Initialize allocates and clears 224 bytes.
+// Initialize allocates and clears 224 bytes.
 struct CRunningScript
 {
     BYTE opaque[224];

@@ -482,7 +482,6 @@ void GameReacquireInputDevice()
     }
 }
 
-// Descriptive ABI adapter; original class and field meaning are unknown.
 // The unused EDX parameter leaves value in the native single stack slot.
 // 0x000841a0
 void __fastcall NativeWriteDword013f(void* object, void*, DWORD value)
@@ -490,7 +489,6 @@ void __fastcall NativeWriteDword013f(void* object, void*, DWORD value)
     *(DWORD*)((BYTE*)object + 0x13f) = value;
 }
 
-// Descriptive ABI adapter; original class and byte-field meaning are unknown.
 // 0x0006eea0
 void __fastcall NativeWriteByte0012(void* object, void*, BYTE value)
 {

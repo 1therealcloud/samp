@@ -432,7 +432,7 @@ struct CModelCollisionSphereArray
     // 0x000ba0a0
     DWORD Insert(void* value);
 };
-// Incoming ECX is unused; original owner/name not established.
+// Does not use incoming ECX.
 // 0x000b99c0
 void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value);
 // 0x000b9a00
@@ -483,7 +483,7 @@ int __stdcall ModelLzmaEncode(BYTE* destination, DWORD* destinationLength, const
 // Stack ABI is stdcall-compatible; incoming ECX is unused. Original owner/name unknown.
 // 0x000bc710
 DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk* child);
-// Incoming ECX is unused; original owner/name is not established.
+// Does not use incoming ECX.
 // 0x000bb5a0
 DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filename);
 // Other model editing/writing paths remain under recovery.

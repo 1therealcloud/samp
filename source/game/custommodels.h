@@ -58,7 +58,6 @@ struct NativeModelArrayPrefix
 STATIC_ASSERT(sizeof(NativeModelArrayPrefix) == 8);
 STATIC_ASSERT(offsetof(NativeModelArrayPrefix, count) == 4);
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
-// Download/validation paths are recovered; full native class coverage is not established.
 class CCustomModels
 {
 public:
@@ -198,7 +197,6 @@ public:
     // Native is deliberately a bare RET4; no object unload is performed here.
     // 0x0000cd40
     void ReleaseObjectEntry(int model);
-    // Descriptive query names follow observed record type bytes 1 and 2.
     // 0x0000cc80
     bool IsPedEntry(int model);
     // 0x0000ccc0
@@ -302,7 +300,6 @@ extern const char g_customNoFreeWorkerError[];
 extern const char g_customUrlInfoError[];
 // 0x00117ea4
 extern const char g_customUrlOpenError[];
-// Descriptive interfaces for observed model-info prefixes; not complete classes.
 // 0x000b5900
 BOOL GameFileExists(const char* path);
 // 0x000a77c0

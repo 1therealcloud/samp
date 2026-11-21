@@ -6,7 +6,6 @@ struct IDirect3DDevice9;
 class CHelpDialog
 {
 public:
-    // Observed allocation extent, not a complete recovered interface.
     BYTE nativeState[0x4];
     // 0x0006b560
     CHelpDialog(IDirect3DDevice9* device);

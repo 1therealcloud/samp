@@ -7,7 +7,6 @@
 
 #include <static_assert.h>
 
-// Native hierarchy extensions; names are descriptive, not original identifiers.
 struct SkinFrame : D3DXFRAME
 {
     D3DXMATRIX combined;

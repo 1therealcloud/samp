@@ -8,7 +8,7 @@
 struct IDirect3DDevice9;
 class CDXUTDialog;
 #pragma pack(push, 1)
-// Packed native per-download record; semantic names are descriptive.
+// Packed download record.
 struct DownloadRecord
 {
     DWORD row;
@@ -39,7 +39,6 @@ public:
     // 0x0006a410
     CDownloadWindow* InitializeRecordStorage();
     // First two window DWORDs are a specialized pointer-array view.
-    // Descriptive helpers retain its observed allocation behavior.
     // 0x0006a420
     DownloadRecord* GetRecord(DWORD index);
     // 0x0006a440
@@ -63,7 +62,7 @@ public:
     void Hide();
     // 0x0006aa10
     CDownloadWindow(IDirect3DDevice9* device);
-    // Native name retained; also lays out the dialog and list control.
+    // Also lays out the dialog and list control.
     // 0x0006a1a0
     void ResetFonts();
     // 0x0006a280

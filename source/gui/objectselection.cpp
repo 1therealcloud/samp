@@ -46,7 +46,7 @@ void CObjectSelection::DrawLabels()
         return;
     BYTE* pool = *(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
     WORD id = objectId;
-    // Preserve the native inclusive2100 guard; adjacent layout is unproven.
+    // The original also accepts object ID 2100.
     if (id > 2100 || !*(DWORD*)(pool + 4 + id * 4))
         return;
     CObject* object = *(DWORD*)(pool + 4 + id * 4) ? *(CObject**)(pool + 0x20d4 + id * 4) : 0;

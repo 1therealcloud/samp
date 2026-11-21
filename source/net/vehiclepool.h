@@ -6,7 +6,7 @@
 #include <static_assert.h>
 
 #pragma pack(push, 1)
-// Native40-byte record; raw words retained for existing callers.
+// Packed 40-byte record.
 struct VehiclePoolQueueEntry
 {
     union

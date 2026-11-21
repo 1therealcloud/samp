@@ -16,7 +16,6 @@ class CDialog
 public:
     // 0x0006fa50
     void Show(int id, int type, const char* title, const char* text, const char* button1, const char* button2, BOOL serverSide);
-    // Observed allocation extent, not a complete recovered interface.
     union
     {
         BYTE nativeState[0x29d];

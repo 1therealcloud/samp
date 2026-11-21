@@ -198,7 +198,6 @@ void CInput::Close()
     }
 }
 
-// Recovered from 0x10069410. Byte identity is not required for register restores.
 // 0x00069410
 void CInput::ProcessInput()
 {
@@ -274,7 +273,7 @@ STATIC_ASSERT(offsetof(InputNetGameView, client) == 0x2c);
 
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
 
-// Recovered from 0x10069340. The input length excludes the trailing NUL.
+// The input length excludes the trailing NUL.
 // 0x00069340
 void CInput::Send(const char* text)
 {

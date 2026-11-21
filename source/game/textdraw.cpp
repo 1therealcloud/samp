@@ -48,7 +48,7 @@ void CTextDraw::OnLostDevice()
 
 extern "C"
 {
-    // MSVC CRT helper, supplied by the selected static runtime, not recovered here.
+    // Provided by the static MSVC runtime.
     // 0x000f9324
     __int64 __cdecl _ftol2();
 }
@@ -143,7 +143,7 @@ void CTextDraw::Native0B2C90()
     }
     // clang-format on
     DWORD* color = (highlighted ? &data.hoverColor : &data.format.letterColor);
-    // Native has no index validation here; out-of-bank adjacency is not established.
+    // The original leaves the index unchecked.
     GameDrawTextDrawTexture(g_textDrawTextures[data.format.textureSlot], &rect, color);
     int left, top;
     // clang-format off
@@ -407,7 +407,7 @@ void CTextDraw::Native0B30A0()
     {
         int slot = GameAllocateTextDrawTexture();
         data.format.textureSlot = slot;
-        // Native publishes even slot=-1. Adjacent storage is not established here.
+        // The original publishes the slot even when it is -1.
         g_textDrawTextures[slot] = created;
     }
 }

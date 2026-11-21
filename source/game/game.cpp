@@ -2334,7 +2334,6 @@ DWORD CGame::GetWeather()
 // 0x000a09b0
 BYTE CGame::GetFrontendByteBA6769()
 {
-    // GTA SA virtual address: raw frontend byte; semantic name unestablished.
     return *(BYTE*)0xba6769;
 }
 
@@ -2365,7 +2364,6 @@ void CGame::SetTimer(DWORD value)
 // 0x000a15a0
 DWORD CGame::GetBackendWordB71804()
 {
-    // GTA SA virtual address: raw DWORD; semantic name unestablished.
     return *(DWORD*)0xb71804;
 }
 

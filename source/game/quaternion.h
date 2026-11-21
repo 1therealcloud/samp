@@ -62,7 +62,6 @@ void GameQuaternionFromVectorsHalf(GameQuaternion* out, const CVector* from, con
 // 0x000b4cc0
 float GameQuaternionLengthSquared(const GameQuaternion* quaternion);
 
-// Separate original adapters; distinct original names are unresolved.
 // 0x000b4da0
 void GameQuaternionFromMatrixComponents4DA0(const CMatrix* matrix, GameQuaternion* out);
 // 0x000b4f60

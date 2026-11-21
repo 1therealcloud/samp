@@ -15,7 +15,6 @@ void ScrCustomModelsComplete(RPCParameters* parameters);
 #endif // DL_BUILD
 // 0x00010530
 void ScrInitGame(RPCParameters* parameters);
-// Broader role of the fourth initialization DWORD is not established.
 // 0x0013c0b4
 extern unsigned long g_rpcInitValue13C0B4;
 // 0x001180ec

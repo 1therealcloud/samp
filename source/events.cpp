@@ -92,7 +92,6 @@ void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD 
     }
 }
 #pragma pack(push, 1)
-// Partial pointer views; allocation/lifecycle and other members remain unrecovered.
 struct ScmPoolsView
 {
     BYTE unknown00[0xc];

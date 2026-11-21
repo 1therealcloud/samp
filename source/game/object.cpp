@@ -28,7 +28,6 @@
 #include <static_assert.h>
 
 // Only the observed RenderWare prefixes used by these callbacks are described.
-// The complete backend layouts and ownership remain outside these views.
 enum ObjectRwObservedFlags
 {
     ObjectRwAtomicType = 1,
@@ -783,7 +782,6 @@ BOOL CObject::IsAdded()
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && backendCreationMarker ? TRUE : FALSE;
 }
 
-// Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
 // 0x000a8c30
 void CObject::SetupLighting()
 {
@@ -805,7 +803,6 @@ void CObject::SetupLighting()
     }
 }
 
-// Descriptive recovered lighting operation; original SA-MP spelling unconfirmed.
 // 0x000a8c70
 void CObject::RemoveLighting()
 {
@@ -894,7 +891,7 @@ BOOL CObject::IsMoving()
         {
             CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
             BYTE* pool = (BYTE*)pools->objects;
-            // Native accepts id2100 as well; the adjacent-state layout is unproven.
+            // The original also accepts object ID 2100.
             if (pool && object <= 2100 && *(DWORD*)(pool + 4 + object * 4))
             {
                 CObject* attached = *(CObject**)(pool + 0x20d4 + object * 4);

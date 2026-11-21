@@ -46,12 +46,11 @@ void ScrStopObjectCameraCollision(RPCParameters* parameters);
 void ScrRemoveBuildingForPlayer(RPCParameters* parameters);
 // 0x00018b40
 void ScrPlayCrimeReport(RPCParameters* parameters);
-// Opcode-specific names: higher-level native semantics not established.
 // 0x00018750
 void ScrPlayerOpcode052C(RPCParameters* parameters);
 // 0x00018800
 void ScrPlayerOpcode03FD(RPCParameters* parameters);
-// Native is a bare RET, not a reconstruction stub.
+// The original returns immediately.
 // 0x00017bd0
 void ScrRpc125(RPCParameters* parameters);
 // Native consumes and discards a WORD, with stream construction/destruction.
@@ -163,7 +162,6 @@ void ScrHideMenu(RPCParameters* parameters);
 void ScrShowTextDraw(RPCParameters* parameters);
 // 0x0001c980
 void ScrHideTextDrawForPlayer(RPCParameters* parameters);
-// Verified entry; external SAMP-API1CF70 points inside the audio-stream handler.
 // 0x0001ca30
 void ScrTextDrawSetString(RPCParameters* parameters);
 // 0x00019e60

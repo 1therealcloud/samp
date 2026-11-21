@@ -11,7 +11,6 @@ DWORD g_archiveTrackedNameDigests[3][5] = {{0x11c714fd, 0x0a46694e, 0x7aec2920, 
                                            {0x0b85a2ad, 0x344bdae1, 0xa19471d5, 0x7d49d3e9, 0x7dde6cbe},
                                            {0x7c425b89, 0xf67763c0, 0xa2e49f0e, 0x93ebf8d2, 0x0e842901}};
 
-// Reference name; exact original lexical identity is not established.
 // 0x00062b00
 char* GetSHA1Result(unsigned int* digest, char* buffer)
 {

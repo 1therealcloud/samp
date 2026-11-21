@@ -777,7 +777,6 @@ void CEntity::ProcessControl()
     // clang-format on
 }
 
-// Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // 0x0009ed60
 void CEntity::Native009ed60(DWORD argument)
@@ -796,7 +795,6 @@ void CEntity::Native009ed60(DWORD argument)
     // clang-format on
 }
 
-// Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // 0x0009f5d0
 void CEntity::Native009f5d0(DWORD argument)
@@ -820,7 +818,6 @@ void CEntity::Native009f5d0(DWORD argument)
     // clang-format on
 }
 
-// Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // 0x0009f810
 void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6)
@@ -844,7 +841,6 @@ void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DW
     // clang-format on
 }
 
-// Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // 0x0009f840
 void CEntity::Native009f840(DWORD argument)
@@ -865,7 +861,6 @@ void CEntity::Native009f840(DWORD argument)
     // clang-format on
 }
 
-// Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // clang-format off
 // 0x0009f960
@@ -949,7 +944,6 @@ __declspec(naked) void CEntity::Native009f960()
 }
 // clang-format on
 
-// Observed CEntity backend wrapper; semantic name/raw argument types remain provisional.
 // GTA callees use their original ECX/stack ABI.
 // 0x0009fba0
 void CEntity::ApplyLinearSpeed()
@@ -1177,7 +1171,7 @@ void CEntity::SetBackendFlag2000(BOOL clear)
     if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
         return;
     DWORD entity = (DWORD)m_pEntity;
-    // Observed raw physical DWORD bit13; semantic name remains unconfirmed.
+    // Tests bit 13 of the physical flags.
     // clang-format off
     if (!clear)
     {
@@ -1414,7 +1408,7 @@ __declspec(naked) void CEntity::SetEulerRotation(float x, float y, float z)
     // clang-format on
 }
 
-// Incoming ECX is unused; original owner/name is not established.
+// Does not use incoming ECX.
 // GTA SA virtual addresses: 0x00733160 and 0x00553260.
 // 0x0009f8b0
 void __cdecl GameDetachBackendRwObject(void* entity, void* object)

@@ -121,7 +121,6 @@ public:
     // Raw backend +500 or wrapper +2e6 gate; existing field names retained.
     // 0x000aca20
     BOOL HasAimTarget();
-    // Descriptive pose-state name; does not rename the historical layout fields.
     // 0x000aca70
     void SetSecondaryPoseState(DWORD state);
     // 0x000acab0
@@ -141,10 +140,8 @@ public:
     void CheckParachuteWeapon();
     // 0x000ad640
     BOOL HasTaskType401();
-    // Backend flag semantics not established; descriptive offset name.
     // 0x000adcb0
     DWORD GetBackendByte72D();
-    // Argument/return words established; higher-level semantic name remains unknown.
     // 0x000ae0d0
     DWORD CallBackend5E01C0(DWORD first, DWORD second);
     // 0x000ae120
@@ -167,7 +164,6 @@ public:
     void GiveStuff(int type);
     // 0x000ac470
     BYTE GetDeathInfo(WORD* killer);
-    // True native entry verified from opcode0713 references; API ACF90 is interior code.
     // 0x000acbb0
     BOOL EnablePassengerDrivebyMode();
     // 0x000acdf0
@@ -425,7 +421,6 @@ public:
     // Observed task-type test; does not establish a complete GTA task interface.
     // 0x000ac8f0
     BOOL HasTaskType268();
-    // Descriptive predicates for native dance state/style fields.
     // 0x000acb10
     BOOL HasDanceState();
     // 0x000aca60

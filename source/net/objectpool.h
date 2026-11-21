@@ -79,7 +79,7 @@ public:
     void UpdateLargestId();
     // 0x00012730
     int GetCount();
-    // Native permits ID2100; adjacent allocation layout is not established.
+    // The original also accepts object ID 2100.
     // 0x00012750
     BOOL Delete(WORD id);
     // Starts at slot1, snapshots largest ID and ignores active flags.

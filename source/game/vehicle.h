@@ -20,7 +20,6 @@ public:
     // 0x000b73e0
     void SetBackendFloat94CAnd950(float first, float second);
 
-    // Raw native flag; no unverified higher-level flag name assigned.
     // 0x000b6db0
     void SetBackendFlag428Bit5(BOOL enabled);
     // Native backend pointer is unchecked; result is returned in ST0.

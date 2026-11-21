@@ -99,7 +99,7 @@ public:
     // Matches the GTA ped backend and retains live pool reloads after backend calls.
     // 0x000137c0
     WORD Find(void* ped);
-    // Native accepts player <=1004; allocation adjacency is not established here.
+    // The original also accepts player ID 1004.
     // 0x000010f0
     CRemotePlayer* GetPlayer(WORD player);
     // 0x00001a80

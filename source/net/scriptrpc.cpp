@@ -654,7 +654,7 @@ void ScrPlayerOpcode03FD(RPCParameters* parameters)
         Scripting::ProcessCommand(&g_rpcPlayerOpcode03fdCommand, 0, value);
 }
 
-// Native is a bare RET; this empty body is recovered behavior, not a stub.
+// The original returns immediately.
 // 0x00017bd0
 void ScrRpc125(RPCParameters* parameters)
 {
@@ -1418,7 +1418,7 @@ void ScrSetPlayerColor(RPCParameters* parameters)
     stream.Read(color);
     if (player == pool->localId)
         pool->local->SetColor(color);
-    // Native admits1004; adjacency beyond players[] remains unproven.
+    // The original also accepts player ID 1004.
     else if (player <= 1004)
     {
         CPlayerInfo* info = pool->players[player];
@@ -1493,7 +1493,7 @@ void ScrInitMenu(RPCParameters* parameters)
     stream.Read(interaction[0]);
     for (int i = 1; i < 13; i++)
         stream.Read(interaction[i]);
-    // Native includes ID128 in this probe; adjacent allocation bytes are unproven.
+    // The original also checks menu ID 128.
     if (id <= 128 && pool->active[id])
         pool->Delete(id);
     CMenu* menu = pool->Create(id, text, x, y, (BYTE)((BYTE)twoColumns + 1), width1, width2, interaction);
@@ -1971,11 +1971,6 @@ void ScrTogglePlayerControllable(RPCParameters* parameters)
     stream.Read(enabled);
     g_pGame->GetPlayerPed()->SetControllable(enabled);
 }
-// Handler RVA0x00018750; semantic name not established.
-// Handler RVA0x00018800; semantic name not established.
-// Handler RVA0x00017bd0; semantic name not established.
-// Handler RVA0x0001a230; semantic name not established.
-// Handler RVA0x0001d780; semantic name not established.
 // 0x0001dbf0
 void RegisterScriptRPCs(RakClientInterface* client)
 {

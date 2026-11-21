@@ -169,7 +169,7 @@ void GameTransformPoint(CVector* out, const CMatrix* matrix, const CVector* delt
     out->z = ((matrix->at.z * delta->z + matrix->up.z * delta->y) + matrix->right.z * delta->x) + matrix->position.z;
 }
 
-// Native 0.2x name retained; result stays extended in x87 ST0.
+// Returns the extended-precision result in x87 ST0.
 // 0x000b44b0
 float FloatOffset(float first, float second)
 {
@@ -237,7 +237,6 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
 void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, float* angle)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eba80 : 0x7ebac0;
-    // Recovered cdecl GTA call and caller word cleanup.
     // clang-format off
     __asm {
         push angle
@@ -280,7 +279,6 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f1920 : 0x7f1960;
-    // Recovered cdecl GTA call and caller word cleanup.
     // clang-format off
     __asm {
         push matrix
@@ -298,7 +296,6 @@ void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f22c0 : 0x7f2300;
-    // Recovered cdecl GTA call and caller word cleanup.
     // clang-format off
     __asm {
         push 1
@@ -439,7 +436,7 @@ __declspec(naked) void GameInvertRwMatrix(CMatrix* out, const CMatrix* matrix)
     // clang-format on
 }
 
-// Native x87 comparisons, arithmetic order and extended ST0 return retained.
+// Returns the extended-precision result in x87 ST0.
 // 0x000b54b0
 __declspec(naked) float GameHeadingToRadians(float heading)
 {
@@ -1756,7 +1753,6 @@ void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
 // 0x000b42c0
 void GameWriteGlobal9689E0(DWORD value)
 {
-    // GTA SA virtual address; semantic meaning of this raw DWORD is unresolved.
     *(DWORD*)0x9689e0 = value;
 }
 // CRT helper consumes and returns ST0, not a C stack argument.
