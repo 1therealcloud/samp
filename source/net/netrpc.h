@@ -208,13 +208,13 @@ extern const int g_rpcScrCreateActor;
 extern const int g_rpcScrDestroyActor;
 #if defined(DL_BUILD)
 // 0x00117f10
-extern const int g_rpcUnknown00117F10;
+extern const int g_rpcScrModelInfo;
 // 0x00117f0c
-extern const int g_rpcUnknown00117F0C;
+extern const int g_rpcScrCustomModelsReset;
 // 0x00117f08
-extern const int g_rpcUnknown00117F08;
+extern const int g_rpcScrModelFile;
 // 0x00117f04
-extern const int g_rpcUnknown00117F04;
+extern const int g_rpcScrFinishedDownloading;
 #endif // DL_BUILD
 
 #endif // NETRPC_H

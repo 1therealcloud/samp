@@ -122,13 +122,13 @@ const int g_rpcScrCreateActor = 171;
 const int g_rpcScrDestroyActor = 172;
 #if defined(DL_BUILD)
 // 0x00117f10
-const int g_rpcUnknown00117F10 = 179;
+const int g_rpcScrModelInfo = 179;
 // 0x00117f0c
-const int g_rpcUnknown00117F0C = 180;
+const int g_rpcScrCustomModelsReset = 180;
 // 0x00117f08
-const int g_rpcUnknown00117F08 = 183;
+const int g_rpcScrModelFile = 183;
 // 0x00117f04
-const int g_rpcUnknown00117F04 = 185;
+const int g_rpcScrFinishedDownloading = 185;
 #endif // DL_BUILD
 
 // 0x00011f80
@@ -1317,10 +1317,10 @@ void UnRegisterRPCs(RakClientInterface* client)
         &g_rpcScrCreateActor,
         &g_rpcScrDestroyActor,
 #if defined(DL_BUILD)
-        &g_rpcUnknown00117F10,
-        &g_rpcUnknown00117F0C,
-        &g_rpcUnknown00117F08,
-        &g_rpcUnknown00117F04,
+        &g_rpcScrModelInfo,
+        &g_rpcScrCustomModelsReset,
+        &g_rpcScrModelFile,
+        &g_rpcScrFinishedDownloading,
 #endif // DL_BUILD
     };
     for (unsigned i = 0; i < sizeof(ids) / sizeof(ids[0]); i++)
@@ -1377,9 +1377,9 @@ void RegisterRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCreateActor), ScrCreateActor);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDestroyActor), ScrDestroyActor);
 #if defined(DL_BUILD)
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F10), ScrCustomModelRecord);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F0C), ScrCustomModelsReset);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F08), ScrCustomModelDownload);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown00117F04), ScrCustomModelsComplete);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrModelInfo), ScrCustomModelRecord);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrCustomModelsReset), ScrCustomModelsReset);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrModelFile), ScrCustomModelDownload);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrFinishedDownloading), ScrCustomModelsComplete);
 #endif // DL_BUILD
 }
