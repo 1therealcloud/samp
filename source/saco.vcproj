@@ -242,6 +242,12 @@
 			Name="gui"
 			Filter="">
 			<File
+				RelativePath="gui\chatbubble.cpp">
+			</File>
+			<File
+				RelativePath="gui\chatbubble.h">
+			</File>
+			<File
 				RelativePath="gui\chatwindow.cpp">
 			</File>
 			<File
@@ -252,6 +258,12 @@
 			</File>
 			<File
 				RelativePath="gui\cmdwindow.h">
+			</File>
+			<File
+				RelativePath="gui\deathwindow.cpp">
+			</File>
+			<File
+				RelativePath="gui\deathwindow.h">
 			</File>
 			<File
 				RelativePath="gui\dialog.cpp">
@@ -302,36 +314,6 @@
 				RelativePath="gui\helpdialog.h">
 			</File>
 			<File
-				RelativePath="gui\renderpanel.cpp">
-			</File>
-			<File
-				RelativePath="gui\renderpanel.h">
-			</File>
-			<File
-				RelativePath="gui\scoreboard.cpp">
-			</File>
-			<File
-				RelativePath="gui\scoreboard.h">
-			</File>
-			<File
-				RelativePath="gui\spawnscreen.cpp">
-			</File>
-			<File
-				RelativePath="gui\spawnscreen.h">
-			</File>
-			<File
-				RelativePath="gui\chatbubble.cpp">
-			</File>
-			<File
-				RelativePath="gui\chatbubble.h">
-			</File>
-			<File
-				RelativePath="gui\deathwindow.cpp">
-			</File>
-			<File
-				RelativePath="gui\deathwindow.h">
-			</File>
-			<File
 				RelativePath="gui\label.cpp">
 			</File>
 			<File
@@ -342,12 +324,6 @@
 			</File>
 			<File
 				RelativePath="gui\netstats.h">
-			</File>
-			<File
-				RelativePath="gui\playertags.cpp">
-			</File>
-			<File
-				RelativePath="gui\playertags.h">
 			</File>
 			<File
 				RelativePath="gui\objectedit.cpp">
@@ -374,10 +350,28 @@
 				RelativePath="gui\objectselection.h">
 			</File>
 			<File
-				RelativePath="gui\textdrawselection.cpp">
+				RelativePath="gui\playertags.cpp">
 			</File>
 			<File
-				RelativePath="gui\textdrawselection.h">
+				RelativePath="gui\playertags.h">
+			</File>
+			<File
+				RelativePath="gui\renderpanel.cpp">
+			</File>
+			<File
+				RelativePath="gui\renderpanel.h">
+			</File>
+			<File
+				RelativePath="gui\scoreboard.cpp">
+			</File>
+			<File
+				RelativePath="gui\scoreboard.h">
+			</File>
+			<File
+				RelativePath="gui\spawnscreen.cpp">
+			</File>
+			<File
+				RelativePath="gui\spawnscreen.h">
 			</File>
 			<File
 				RelativePath="gui\svrnetstats.cpp">
@@ -385,28 +379,16 @@
 			<File
 				RelativePath="gui\svrnetstats.h">
 			</File>
+			<File
+				RelativePath="gui\textdrawselection.cpp">
+			</File>
+			<File
+				RelativePath="gui\textdrawselection.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="render"
 			Filter="">
-			<File
-				RelativePath="render\objectmaterialtext.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="render\objectmaterialtext.h">
-			</File>
 			<File
 				RelativePath="render\fontrender.cpp">
 			</File>
@@ -430,6 +412,24 @@
 			</File>
 			<File
 				RelativePath="render\licenseplate.h">
+			</File>
+			<File
+				RelativePath="render\objectmaterialtext.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="render\objectmaterialtext.h">
 			</File>
 		</Filter>
 		<Filter
@@ -589,6 +589,24 @@
 				RelativePath="game\limit_values.inc">
 			</File>
 			<File
+				RelativePath="game\menu.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						InlineFunctionExpansion="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="game\menu.h">
+			</File>
+			<File
 				RelativePath="game\model_preview.cpp">
 			</File>
 			<File
@@ -710,24 +728,6 @@
 			</File>
 			<File
 				RelativePath="game\vehicle.h">
-			</File>
-			<File
-				RelativePath="game\menu.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						InlineFunctionExpansion="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="game\menu.h">
 			</File>
 		</Filter>
 		<Filter
@@ -1165,6 +1165,36 @@
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\DXUTSettingsDlg.h">
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTsound.cpp">
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\third-party\dxut\DXUTsound.h">
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCustomBuildTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCustomBuildTool"/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
