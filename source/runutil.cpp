@@ -292,6 +292,8 @@ void Util_Base64Encode(char* cpInput, char* cpOutput)
     return;
 }
 
+// legacy
+
 // 0x000b55e0
 bool Util_IsDecimal(const char* text)
 {
