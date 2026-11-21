@@ -678,8 +678,8 @@ void ScrSetSpawnInfo(RPCParameters* parameters)
     const int bits = (int)parameters->numberOfBitsOfData;
     RakNet::BitStream stream(input, bits / 8 + 1, false);
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
-    BYTE info[50];
-    stream.Read((char*)info, 50);
+    BYTE info[LocalSpawnInfoWireSize] = {0};
+    stream.Read((char*)info, sizeof(info));
     pool->local->SetSpawnInfo(info);
 }
 
@@ -753,7 +753,7 @@ void ScrSetPlayerSkin(RPCParameters* parameters)
         return;
 #if defined(DL_BUILD)
     WORD id;
-#else // DL_BUILD
+#else  // DL_BUILD
     DWORD id;
 #endif // DL_BUILD
     stream.Read(id);

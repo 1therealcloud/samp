@@ -593,9 +593,9 @@ void RequestClass(RPCParameters* parameters)
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
     BYTE outcome = 0;
-    BYTE info[50];
+    BYTE info[LocalSpawnInfoWireSize] = {0};
     stream.Read(outcome);
-    stream.Read((char*)info, 50);
+    stream.Read((char*)info, sizeof(info));
     if (outcome)
         local->SetSpawnInfo(info);
     local->PrepareForClassSelection_Outcome(outcome != 0);
@@ -841,7 +841,7 @@ void ScrCreateActor(RPCParameters* parameters)
         ActorCreateInfo info = {0};
 #if defined(DL_BUILD)
         stream.Read((char*)&info, sizeof(info));
-#else // DL_BUILD
+#else  // DL_BUILD
         ActorCreateInfoR5 packet = {0};
         stream.Read((char*)&packet, sizeof(packet));
         info.id = packet.id;
