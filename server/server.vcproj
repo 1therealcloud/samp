@@ -327,6 +327,9 @@
 			<File
 				RelativePath=".\query.h">
 			</File>
+			<File
+				RelativePath=".\system.h">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

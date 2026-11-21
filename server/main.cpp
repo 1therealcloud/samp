@@ -1,14 +1,12 @@
 #include "console.h"
 #include "query.h"
 
-#include <windows.h>
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 
-// 0x004fc43c
+// 0x004fc43c (Windows), 0x081d793c (Linux)
 CConsole* pConsole;
 
 // 0x004ebcec
@@ -42,7 +40,7 @@ static int iConnSeedTime = 300000;
 // 0x004ebd28
 static int iConnCookies = 1;
 
-// 0x004fc430
+// 0x004fc430 (Windows), 0x081b7d50 (Linux)
 static FILE* pLogFile;
 // 0x004fc458
 static bool bLogQueries;
@@ -59,20 +57,29 @@ static bool bUseArtwork;
 // 0x004fc47c
 static int iCookieLogging;
 
-// 0x00491fa0
+// 0x00491fa0 (Windows), 0x080b1ca0 (Linux)
 void logprintf(const char* format, ...)
 {
     char text[2048];
-    char consoleText[2048];
     va_list args;
     va_start(args, format);
+#ifdef _WIN32
     _vsnprintf(text, sizeof(text) - 1, format, args);
+#else
+    vsnprintf(text, sizeof(text), format, args);
+#endif
     va_end(args);
     text[sizeof(text) - 1] = '\0';
 
+#ifdef _WIN32
+    char consoleText[2048];
     CharToOemA(text, consoleText);
     puts(consoleText);
     fflush(stdout);
+#else
+    if (pConsole && pConsole->GetBoolVariable("output"))
+        puts(text);
+#endif
 
     if (pLogFile)
     {
@@ -95,7 +102,7 @@ void logprintf(const char* format, ...)
         RconSocketReply(text);
 }
 
-// 0x00492380
+// 0x00492380 (Windows), 0x080b1e40 (Linux)
 void LoadLogFile()
 {
     const bool reload = pLogFile != NULL;
@@ -149,7 +156,7 @@ void ServerStreamDistanceChanged()
         pConsole->SetFloatVariable("stream_distance", 400.0f);
 }
 
-// 0x00492420
+// 0x00492420 (Windows), 0x080b1ef0 (Linux)
 int main(int argc, char** argv)
 {
     bool bEnableAnnounce = true;
@@ -160,6 +167,9 @@ int main(int argc, char** argv)
     bool bEnableRcon = true;
     bool bEnableTimestamp = true;
     bool bGameMod = false;
+#ifndef _WIN32
+    bool bOutputEnable = false;
+#endif
 
     LoadLogFile();
     logprintf("");
@@ -185,6 +195,9 @@ int main(int argc, char** argv)
     pConsole->AddVariable("incar_rate", CON_VARTYPE_INT, 0, &iInCarRate);
     pConsole->AddVariable("weapon_rate", CON_VARTYPE_INT, 0, &iWeaponRate);
     pConsole->AddVariable("chatlogging", CON_VARTYPE_INT, 0, &iChatLogging);
+#ifndef _WIN32
+    pConsole->AddVariable("output", CON_VARTYPE_BOOL, 0, &bOutputEnable);
+#endif
     pConsole->AddVariable("timestamp", CON_VARTYPE_BOOL, 0, &bEnableTimestamp);
     pConsole->AddStringVariable("bind", 0, NULL);
     pConsole->AddStringVariable("password", 0, NULL);

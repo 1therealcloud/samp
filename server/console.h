@@ -1,7 +1,7 @@
 #ifndef SAMPSRV_CONSOLE_H
 #define SAMPSRV_CONSOLE_H
 
-#include <winsock2.h>
+#include "system.h"
 
 #include <map>
 #include <string>

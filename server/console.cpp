@@ -1,9 +1,30 @@
 #include "console.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
+
+static char* LowerCase(char* value)
+{
+#ifdef _WIN32
+    return _strlwr(value);
+#else
+    for (char* ch = value; *ch; ++ch)
+        *ch = (char)tolower((unsigned char)*ch);
+    return value;
+#endif
+}
+
+static char* CopyString(const char* value)
+{
+#ifdef _WIN32
+    return _strdup(value);
+#else
+    return strdup(value);
+#endif
+}
 
 // 0x00490260
 char* strrtrim(char* text)
@@ -36,7 +57,7 @@ ConsoleVariable_s* CConsole::FindVariable(const char* pVarName)
     char name[256];
     strncpy(name, pVarName, sizeof(name) - 1);
     name[sizeof(name) - 1] = '\0';
-    StringConvarMap::iterator it = ConsoleVariables.find(_strlwr(name));
+    StringConvarMap::iterator it = ConsoleVariables.find(LowerCase(name));
     return it == ConsoleVariables.end() ? NULL : it->second;
 }
 
@@ -47,7 +68,7 @@ void CConsole::AddVariable(const char* pVarName, CON_VARTYPE VarType, unsigned l
     char name[256];
     strncpy(name, pVarName, sizeof(name) - 1);
     name[sizeof(name) - 1] = '\0';
-    _strlwr(name);
+    LowerCase(name);
     if (FindVariable(name))
     {
         logprintf("Unable to add console variable '%s'. Already exists.", name);
@@ -91,7 +112,7 @@ void CConsole::PrintVariableList()
 char* CConsole::AddStringVariable(const char* pVarName, unsigned long VarFlags, const char* pInitStr,
                                  VARCHANGEFUNC VarChangeFunc)
 {
-    char* value = _strdup(pInitStr ? pInitStr : "");
+    char* value = CopyString(pInitStr ? pInitStr : "");
     if (!value)
         return NULL;
     if (FindVariable(pVarName))
@@ -110,7 +131,7 @@ void CConsole::RemoveVariable(const char* pVarName)
     char name[256];
     strncpy(name, pVarName, sizeof(name) - 1);
     name[sizeof(name) - 1] = '\0';
-    StringConvarMap::iterator it = ConsoleVariables.find(_strlwr(name));
+    StringConvarMap::iterator it = ConsoleVariables.find(LowerCase(name));
     if (it == ConsoleVariables.end())
         return;
     if (it->second->VarType == CON_VARTYPE_STRING)
@@ -140,7 +161,7 @@ void CConsole::SetStringVariable(const char* pVarName, const char* value)
     ConsoleVariable_s* variable = FindVariable(pVarName);
     if (!variable || variable->VarType != CON_VARTYPE_STRING)
         return;
-    char* replacement = _strdup(value);
+    char* replacement = CopyString(value);
     if (!replacement)
         return;
     free(variable->VarPtr);
@@ -419,7 +440,7 @@ void CConsole::Execute(const char* pExecLine)
     char* cmd = strtok(line, " ");
     if (!cmd)
         return;
-    _strlwr(cmd);
+    LowerCase(cmd);
     for (size_t i = 0; i < sizeof(ConsoleCommands) / sizeof(ConsoleCommands[0]); ++i)
     {
         const ConsoleCommand_s& command = ConsoleCommands[i];
