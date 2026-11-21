@@ -1,8 +1,8 @@
-# SA-MP 0.3.DL-R1
+# SA-MP 0.3.7 / 0.3.DL
 
-This project aims to reimplement SA-MP 0.3.DL-R1 as closely as possible to its original source code through reverse engineering and matching decompilation.
+This project reimplements the SA-MP 0.3.7-R5 and 0.3.DL-R1 clients through reverse engineering and matching decompilation.
 
-The 0.3.DL-R1 client is reconstructed from its binary.\
+The clients are reconstructed from the original binaries.\
 The 0.2x sources serve as reference material for names, organization and some code\
 (`source/archive`, `tools/arctool2`, `tools/rcon`).
 
@@ -10,11 +10,10 @@ The 0.2x sources serve as reference material for names, organization and some co
 
 The client is fully functional and playable, with no known issues observed during testing.\
 All SA-MP functionality is implemented.\
-Approximately **75% of the compiled SA-MP client code** matches the original.\
-This figure covers the client's own code.\
-Third-party code and full DLL matching are tracked separately.
+Approximately **75% of the SA-MP client code** matches the original machine code.\
+The remaining **25%** follows the original logic.
 
-Reference binary: **SA-MP 0.3.DL-R1 `samp.dll`**.
+The match percentage and inventory below use **SA-MP 0.3.DL-R1 `samp.dll`** as the reference.
 
 SHA-256:
 
@@ -90,7 +89,12 @@ Initialize the dependencies:
 git submodule update --init --recursive
 ```
 
-Open `sa-mp.sln` in Visual Studio .NET 2003 and build the solution. The output is placed in `build/binaries/`.
+Open `sa-mp.sln` in Visual Studio .NET 2003 and build the configuration for your client version.
+
+| Client | Configuration | Output |
+| --- | --- | --- |
+| 0.3.7-R5 | `Release` | `build/binaries/Release/` |
+| 0.3.DL-R1 | `Release DL` | `build/binaries/Release DL/` |
 
 The solution includes the C++ utilities: `rcon`, `arctool2`, `launch3`, `dfftool` and `DffFormatDll`.
 
