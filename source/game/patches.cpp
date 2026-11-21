@@ -453,6 +453,14 @@ void GameApplyInGamePatches()
     *(DWORD*)0x004c3a5f = 0x90909090;
     *(WORD*)0x004c3a63 = 0x9090;
     UnFuck((void*)0x0047bf54, 4);
+    // opcode 0x16c (add_hospital_restart) runs on every spawn and the game counter
+    // is unbounded, so nop the store. only if it is `mov [mem], cx` (66 89 0d)
+    BYTE* hospitalStore = (BYTE*)0x460773;
+    if (hospitalStore[0] == 0x66 && hospitalStore[1] == 0x89 && hospitalStore[2] == 0x0d)
+    {
+        UnFuck(hospitalStore, 7);
+        memset(hospitalStore, 0x90, 7);
+    }
     GameInstallEventOpcodes();
     return;
 }

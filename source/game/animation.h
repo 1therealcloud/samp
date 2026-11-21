@@ -1,7 +1,19 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include <string.h>
 #include <windows.h>
+
+// limits come from the script engine string buffers (library 16, name 24)
+const size_t kAnimationLibraryMaxLength = 15;
+const size_t kAnimationNameMaxLength = 23;
+inline bool GameIsAnimationNameValid(const char* library, const char* name)
+{
+    if (!library || !name)
+        return false;
+    size_t libraryLength = strlen(library), nameLength = strlen(name);
+    return libraryLength >= 1 && libraryLength <= kAnimationLibraryMaxLength && nameLength >= 1 && nameLength <= kAnimationNameMaxLength;
+}
 // 0x001419d0
 extern char g_animationNames[1812][36];
 // 0x001871a8

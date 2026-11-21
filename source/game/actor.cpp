@@ -1,4 +1,5 @@
 #include "game/actor.h"
+#include "game/animation.h"
 
 #include "game/game.h"
 #include "game/playerped.h"
@@ -152,6 +153,8 @@ void CActor::PerformAnimation(const char* name, const char* library, float speed
 {
     int attempts = 0;
     if (!actorBackend || !GamePoolPedGetAt(m_nHandle))
+        return;
+    if (!GameIsAnimationNameValid(library, name))
         return;
     if (_stricmp(library, g_pedBlockedAnimationLibrary) == 0)
         return;

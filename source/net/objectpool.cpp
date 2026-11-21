@@ -65,7 +65,7 @@ int CObjectPool::GetCount()
 BOOL CObjectPool::Delete(WORD id)
 {
     BYTE* state = (BYTE*)this;
-    if (id > 2100 || !*(DWORD*)(state + 4 + id * 4) || !*(CObject**)(state + 0x20d4 + id * 4))
+    if (id >= 2100 || !*(DWORD*)(state + 4 + id * 4) || !*(CObject**)(state + 0x20d4 + id * 4))
         return FALSE;
     CObject* object = *(CObject**)(state + 0x20d4 + id * 4);
     CCamera* camera = g_pGame->m_pCamera;
@@ -110,7 +110,7 @@ WORD CObjectPool::GetId(void* backend)
 CEntity* CObjectPool::Get(WORD id)
 {
     BYTE* state = (BYTE*)this;
-    if (id <= 2100 && *(DWORD*)(state + 4 + id * 4))
+    if (id < 2100 && *(DWORD*)(state + 4 + id * 4))
         return *(CEntity**)(state + 0x20d4 + id * 4);
     return 0;
 }
@@ -367,7 +367,7 @@ int CObjectPool::GetLargestId()
 // 0x00012680
 DWORD CObjectPool::IsActive(WORD id)
 {
-    if (id > 2100)
+    if (id >= 2100)
         return 0;
     return *(DWORD*)((BYTE*)this + 4 + id * 4);
 }

@@ -25,7 +25,7 @@ DWORD g_activePlayerCountCountdown = 0;
 // 0x000010d0
 CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
 {
-    if (player <= 1004)
+    if (player < 1004)
     {
         CPlayerInfo* entry = *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4);
         if (entry)
@@ -49,14 +49,14 @@ void CPlayerPool::SetLocalPlayerName(const char* text)
 // 0x00013630
 void CPlayerPool::SetAt(WORD player, CPlayerInfo* info)
 {
-    if (player <= 1004)
+    if (player < 1004)
         *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4) = info;
 }
 
 // 0x0001da50
 void CPlayerPool::SetName(WORD player, const char* text)
 {
-    if (player <= 1004 && players[player])
+    if (player < 1004 && players[player])
         players[player]->name.assign(text, strlen(text));
 }
 
@@ -170,7 +170,7 @@ CPlayerPool::CPlayerPool()
 {
     for (WORD id = 0; id < 1004; id++)
     {
-        if (id <= 1004)
+        if (id < 1004)
             players[id] = 0;
         connected[id] = 0;
     }
@@ -185,7 +185,7 @@ CPlayerPool::CPlayerPool()
 BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
 {
     CPlayerInfo* info = new CPlayerInfo(name, npc);
-    if (id > 1004)
+    if (id >= 1004)
         return FALSE;
     BYTE* state = (BYTE*)this;
     CPlayerInfo** slot = (CPlayerInfo**)(state + 0x26 + id * 4);
@@ -305,7 +305,7 @@ int CPlayerPool::GetCount(BOOL includeFlagged)
 int CPlayerPool::GetScore(WORD player)
 {
     BYTE* entry;
-    if (player > 1004)
+    if (player >= 1004)
         goto noEntry;
     entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
     if (!entry)
@@ -320,7 +320,7 @@ int CPlayerPool::GetScore(WORD player)
 DWORD CPlayerPool::GetPing(WORD player)
 {
     BYTE* entry;
-    if (player > 1004)
+    if (player >= 1004)
         goto noEntry;
     entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
     if (!entry)
@@ -346,7 +346,7 @@ DWORD CPlayerPool::GetLocalPing()
 // 0x000010f0
 CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
 {
-    if (player <= 1004)
+    if (player < 1004)
     {
         BYTE* entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
         if (entry)
@@ -367,7 +367,7 @@ DWORD CPlayerPool::IsConnected(WORD player)
 DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
 {
     BYTE* entry;
-    if (player > 1004)
+    if (player >= 1004)
         goto noEntry;
     entry = *(BYTE**)((BYTE*)this + 0x26 + player * 4);
     if (!entry)
@@ -471,7 +471,7 @@ const char* CPlayerPool::GetName(WORD player)
     BYTE* state = (BYTE*)this;
     if (player == *(WORD*)state)
         return *(DWORD*)(state + 0x1a) >= 16 ? *(char**)(state + 6) : (char*)state + 6;
-    if (player > 1004)
+    if (player >= 1004)
         return 0;
     BYTE* entry = *(BYTE**)(state + 0x26 + player * 4);
     if (!entry)
@@ -505,7 +505,7 @@ void CPlayerPool::SetScore(WORD id, int value)
         localScore = value;
         return;
     }
-    if (id > 1004)
+    if (id >= 1004)
         return;
     CPlayerInfo* info = *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)id * 4);
     if (info)
@@ -520,7 +520,7 @@ void CPlayerPool::SetPing(WORD id, DWORD value)
         localPing = value;
         return;
     }
-    if (id > 1004)
+    if (id >= 1004)
         return;
     CPlayerInfo* info = *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)id * 4);
     if (info)

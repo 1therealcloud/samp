@@ -89,7 +89,9 @@ int CDialog::GetTextWidth(const char* value)
     char buffer[129];
     if (value && strlen(value) && font)
     {
-        strcpy(buffer, value);
+        // lines can be longer than the buffer (list items go up to 255)
+        strncpy(buffer, value, sizeof(buffer) - 1);
+        buffer[sizeof(buffer) - 1] = 0;
         ChatStripColorTags(buffer);
         font->DrawTextA(0, buffer, -1, &rect, 0x540, 0xffffffff);
         return rect.right - rect.left;
@@ -214,7 +216,7 @@ BOOL CDialog::PopulateList(const char* value, SIZE* size)
     while (value && *value)
     {
         char line[256] = {0};
-        value = CopyLine(value, line, 256);
+        value = CopyLine(value, line, sizeof(line) - 1);
         if (strlen(line))
         {
             int measured = GetTextWidth(line);
@@ -257,7 +259,7 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
     memset(scratch.line, 0, sizeof(scratch.line));
     int totalHeight = 0;
     const char* cursor = value;
-    const char* next = CopyLine(value, scratch.line, 256);
+    const char* next = CopyLine(value, scratch.line, sizeof(scratch.line) - 1);
     if ((BYTE)header)
         cursor = next;
     if (!strlen(scratch.line))
@@ -287,7 +289,7 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
     while (cursor && *cursor)
     {
         memset(scratch.line, 0, sizeof(scratch.line));
-        cursor = CopyLine(cursor, scratch.line, 256);
+        cursor = CopyLine(cursor, scratch.line, sizeof(scratch.line) - 1);
         bool added = false;
         if (strlen(scratch.line))
         {

@@ -1,6 +1,7 @@
 #include "net/scriptrpc.h"
 
 #include "game/actor.h"
+#include "game/animation.h"
 #include "game/audio.h"
 #include "game/building_removal.h"
 #include "game/camera.h"
@@ -404,7 +405,7 @@ void ScrAttachObjectToPlayer(RPCParameters* parameters)
         ped = players->local->m_state.ped;
     else
     {
-        if (player > 1004 || !players->players[player] || !players->players[player]->remote)
+        if (player >= 1004 || !players->players[player] || !players->players[player]->remote)
             return;
         ped = players->players[player]->remote->m_state.ped;
     }
@@ -520,7 +521,7 @@ void ScrAttachCameraToObject(RPCParameters* parameters)
     WORD id;
     stream.Read(id);
     CObjectPool* pool = ((CNetGame*)g_pNetGame)->pools->objects;
-    if (id <= 2100 && pool->active[id])
+    if (id < 2100 && pool->active[id])
     {
         CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
         local->m_state.spectateProcessed = 1;
@@ -732,7 +733,7 @@ void ScrSetPlayerTeam(RPCParameters* parameters)
     stream.Read(team);
     if (id == pool->localId)
         pool->local->m_state.team = team;
-    else if (id <= 1004)
+    else if (id < 1004)
     {
         CPlayerInfo* info = pool->players[id];
         if (info && info->remote)
@@ -807,6 +808,8 @@ void ScrApplyAnimation(RPCParameters* parameters)
     stream.Read(time);
     library[libraryLength] = 0;
     name[nameLength] = 0;
+    if (!GameIsAnimationNameValid(library, name))
+        return;
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
     if (pool)
     {
@@ -1015,6 +1018,8 @@ void ScrSetActorAnimation(RPCParameters* parameters)
         stream.Read(time);
         library[libraryLength] = 0;
         name[nameLength] = 0;
+        if (!GameIsAnimationNameValid(library, name))
+            return;
         CActor* actor = pool->Get(id);
         if (actor)
             actor->PerformAnimation(name, library, speed, loop, lockX, lockY, freeze, time);
@@ -1377,7 +1382,8 @@ void ScrDisplayGametext(RPCParameters* parameters)
     stream.Read(style);
     stream.Read(time);
     stream.Read(length);
-    if (length > 0 && length < 201)
+    // the game has 7 styles (0..6)
+    if (length > 0 && length < 201 && style >= 0 && style <= 6)
     {
         stream.Read(text, length);
         text[length] = 0;
@@ -1419,7 +1425,7 @@ void ScrSetPlayerColor(RPCParameters* parameters)
     if (player == pool->localId)
         pool->local->SetColor(color);
     // The original also accepts player ID 1004.
-    else if (player <= 1004)
+    else if (player < 1004)
     {
         CPlayerInfo* info = pool->players[player];
         if (info && info->remote)
@@ -1477,11 +1483,16 @@ void ScrInitMenu(RPCParameters* parameters)
     if (!g_pNetGame)
         return;
     CMenuPool* pool = ((CNetGame*)g_pNetGame)->pools->menus;
+    if (!pool)
+        return;
     BYTE id;
     int twoColumns;
-    char text[32];
-    float x, y, width1, width2 = 0;
-    DWORD interaction[13];
+    // one extra byte so the strings are always terminated
+    char text[33] = {0};
+    char columnTitles[2][33] = {{0}};
+    char items[2][12][33] = {{{0}}};
+    float x = 0, y = 0, width1 = 0, width2 = 0;
+    CMenuInteraction interaction = {};
     stream.Read(id);
     stream.Read(twoColumns);
     stream.Read(text, 32);
@@ -1490,34 +1501,35 @@ void ScrInitMenu(RPCParameters* parameters)
     stream.Read(width1);
     if (twoColumns)
         stream.Read(width2);
-    stream.Read(interaction[0]);
-    for (int i = 1; i < 13; i++)
-        stream.Read(interaction[i]);
-    // The original also checks menu ID 128.
-    if (id <= 128 && pool->active[id])
+    // only the first 13 dwords are sent
+    stream.Read(interaction.enabled);
+    for (int i = 0; i < 12; i++)
+        stream.Read(interaction.rows[i]);
+    // the original also checks menu ID 128
+    if (id >= 128)
+        return;
+    // read everything before touching the pool, so a bad packet leaves it alone
+    BYTE columns = twoColumns ? 2 : 1;
+    BYTE counts[2] = {0, 0};
+    for (BYTE column = 0; column < columns; column++)
+    {
+        stream.Read(columnTitles[column], 32);
+        stream.Read(counts[column]);
+        if (counts[column] > 12)
+            return;
+        for (BYTE row = 0; row < counts[column]; row++)
+            stream.Read(items[column][row], 32);
+    }
+    if (pool->active[id])
         pool->Delete(id);
-    CMenu* menu = pool->Create(id, text, x, y, (BYTE)((BYTE)twoColumns + 1), width1, width2, interaction);
+    CMenu* menu = pool->Create(id, text, x, y, columns, width1, width2, &interaction);
     if (menu)
     {
-        stream.Read(text, 32);
-        menu->SetColumnTitle(0, text);
-        BYTE count;
-        stream.Read(count);
-        for (BYTE row = 0; row < count; row++)
+        for (BYTE column = 0; column < columns; column++)
         {
-            stream.Read(text, 32);
-            menu->AddItem(0, row, text);
-        }
-        if (twoColumns)
-        {
-            stream.Read(text, 32);
-            menu->SetColumnTitle(1, text);
-            stream.Read(count);
-            for (BYTE row = 0; row < count; row++)
-            {
-                stream.Read(text, 32);
-                menu->AddItem(1, row, text);
-            }
+            menu->SetColumnTitle(column, columnTitles[column]);
+            for (BYTE row = 0; row < counts[column]; row++)
+                menu->AddItem(column, row, items[column][row]);
         }
     }
 }

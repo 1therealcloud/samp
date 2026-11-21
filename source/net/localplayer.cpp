@@ -659,7 +659,7 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
         else
         {
             WORD player = (WORD)index;
-            if (player > 1004 || !players->players[player] || !players->players[player]->remote)
+            if (player >= 1004 || !players->players[player] || !players->players[player]->remote)
                 continue;
             ped = players->players[player]->remote->m_state.ped;
         }

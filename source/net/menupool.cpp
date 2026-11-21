@@ -19,9 +19,9 @@ int g_menuExitedRpc = 140;
 // 0x000177b0
 DWORD CMenuPool::GetActiveState(BYTE id)
 {
-    if (id > 128)
+    if (id >= 128)
         return 0;
-    return *(DWORD*)((BYTE*)this + 0x200 + id * 4);
+    return active[id];
 }
 
 // 0x00007b40
@@ -38,6 +38,8 @@ CMenuPool::CMenuPool()
 // 0x00007b90
 CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction)
 {
+    if (id >= 128)
+        return 0;
     if (menus[id])
     {
         delete menus[id];
@@ -57,7 +59,7 @@ CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE colu
 // 0x00007c60
 BOOL CMenuPool::Delete(BYTE id)
 {
-    if (!active[id] || !menus[id])
+    if (id >= 128 || !active[id] || !menus[id])
         return FALSE;
     active[id] = 0;
     delete menus[id];

@@ -890,7 +890,7 @@ void CGame::ProcessCheckpoints()
 // 0x000a0b20
 void CGame::DisplayGameText(const char* text, int time, int style)
 {
-    if (style <= 200)
+    if (style >= 0 && style <= 6)
     {
         Scripting::ProcessCommand(&g_gameClearTextCommand);
         *(DWORD*)g_gameTextBuffer = 0;

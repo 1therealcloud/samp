@@ -1032,7 +1032,7 @@ void CObject::ProcessMaterials()
 // 0x000a82a0
 void CObject::SetMaterialText(int index, const char* text, BYTE size, const char* font, BYTE fontSize, BYTE bold, DWORD fontColor, DWORD backgroundColor, BYTE alignment)
 {
-    if (index > 16)
+    if (index < 0 || index >= 16)
         return;
     void** texture = &materials.textures[index];
     if (*texture)
@@ -1082,7 +1082,7 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
 // 0x000a8120
 void CObject::SetMaterial(int model, int index, const char* dictionary, const char* texture, DWORD color)
 {
-    if (index > 16)
+    if (index < 0 || index >= 16)
         return;
     if (model > 0 && !GameModelQueryB4170(model))
         return;

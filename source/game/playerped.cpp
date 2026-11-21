@@ -1148,6 +1148,8 @@ void CPed::ApplyAnimation(const char* name, const char* library, float speed, DW
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
         return;
+    if (!GameIsAnimationNameValid(library, name))
+        return;
     if (_stricmp(library, g_pedBlockedAnimationLibrary) == 0)
         return;
     if (!g_pGame->IsAnimationLoaded(library))

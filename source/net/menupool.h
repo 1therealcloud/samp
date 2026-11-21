@@ -18,7 +18,7 @@ class CMenuPool
     BYTE currentMenu, pendingClose;
 
 public:
-    // Native includes ID128, reading a DWORD at400 across the allocation edge.
+    // native accepts id 128 and reads past the pool, we return 0 for it
     // 0x000177b0
     DWORD GetActiveState(BYTE id);
     // 0x00007ef0
