@@ -14,11 +14,6 @@
 #include "Signer.h"
 #include "TinyEncrypt.h"
 
-//#ifndef ARCTOOL
-////#include "../game/Util.h"
-// Client diagnostics header is unused in the release archive path.
-//#endif
-
 // inline
 extern void _declspec(noreturn) GameForcedExit(int iReasonCode);
 #define FORCE_EXIT(a)                                                                                                                                                              \
