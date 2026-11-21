@@ -5,72 +5,72 @@
 #include <d3dx9.h>
 
 #include <string.h>
-// 0x0011e32c
+// 0x000ec304
 static const float g_aimCameraZoomRange = 35.0f;
-// 0x00117b9c
+// 0x000e5b2c
 static const float g_aimCameraAspectBase = 1.0f;
-// 0x001419b0
+// 0x001039c8
 CameraAim* g_aimInternal = (CameraAim*)0xb6f32c;
-// 0x001419b4
+// 0x001039cc
 float* g_aimInternalStats = (float*)0xb79380;
-// 0x001419b8
+// 0x001039d0
 float* g_aimInternalAspect = (float*)0xc3efa4;
-// 0x001419bc
+// 0x001039d4
 float* g_aimInternalZoom = (float*)0xb6f250;
-// 0x0015195c
+// 0x00113974
 BYTE* g_aimInternalCameraMode = (BYTE*)0xb6f1a8;
-// 0x00182288
+// 0x001443f8
 CameraAim g_aimLocal;
-// 0x001822b8
+// 0x00144428
 CameraAim g_aimPlayers[210];
-// 0x00181e60
+// R5 address to verify
 float g_aimLocalZoom;
-// 0x00184a18
+// R5 address to verify
 float g_aimLocalAspect;
-// 0x00181f40
+// 0x001440b0
 float g_aimPlayerZoom[210];
-// 0x00184a48
+// 0x00146bb8
 float g_aimPlayerAspect[210];
-// 0x00181e68
+// 0x00143fd8
 BYTE g_aimPlayerCameraMode[210];
-// 0x00184a1c
+// 0x00146b8c
 float g_aimLocalSkills[11];
-// 0x00184d90
+// 0x00146f00
 float g_aimPlayerSkills[210][11];
-// 0x0009c240
+// 0x0009c7c0
 void __stdcall AimStuff::UpdateCamera()
 {
     memcpy(&g_aimLocalZoom, g_aimInternalZoom, 4);
     memcpy(&g_aimLocalAspect, g_aimInternalAspect, 4);
 }
 
-// 0x0009c260
+// 0x0009c7e0
 void __stdcall AimStuff::ApplyLocalCamera()
 {
     *g_aimInternalZoom = g_aimLocalZoom;
     *g_aimInternalAspect = g_aimLocalAspect;
 }
 
-// 0x0009c280
+// 0x0009c800
 void __stdcall AimStuff::SetPlayerCamera(BYTE player, float zoom, float aspect)
 {
     memcpy(&g_aimPlayerZoom[player], &zoom, 4);
     memcpy(&g_aimPlayerAspect[player], &aspect, 4);
 }
 
-// 0x0009c2a0
+// 0x0009c820
 float __stdcall AimStuff::GetAspectRatio()
 {
     return *g_aimInternalAspect - 1.0f;
 }
 
-// 0x0009c2b0
+// 0x0009c830
 float __stdcall AimStuff::GetCameraExtZoom()
 {
     return (*g_aimInternalZoom - 35.0f) / 35.0f;
 }
 
-// 0x0009c2d0
+// 0x0009c850
 void __stdcall AimStuff::ApplyPlayerCamera(BYTE player)
 {
     // clang-format off
@@ -92,25 +92,25 @@ void __stdcall AimStuff::ApplyPlayerCamera(BYTE player)
     // clang-format on
 }
 
-// 0x0009c310
+// 0x0009c890
 void __stdcall AimStuff::SetPlayerCameraMode(BYTE mode, BYTE player)
 {
     g_aimPlayerCameraMode[player] = mode;
 }
 
-// 0x0009c330
+// 0x0009c8b0
 BYTE __stdcall AimStuff::GetPlayerCameraMode(BYTE player)
 {
     return g_aimPlayerCameraMode[player];
 }
 
-// 0x0009c340
+// 0x0009c8c0
 BYTE __stdcall AimStuff::GetCameraMode()
 {
     return *g_aimInternalCameraMode;
 }
 
-// 0x0009c350
+// 0x0009c8d0
 void __stdcall AimStuff::Initialize()
 {
     memset(&g_aimLocal, 0, sizeof(g_aimLocal));
@@ -127,50 +127,50 @@ void __stdcall AimStuff::Initialize()
         g_aimPlayerZoom[n] = 1.0f;
 }
 
-// 0x0009c3c0
+// 0x0009c940
 void __stdcall AimStuff::UpdateAim()
 {
     memcpy(&g_aimLocal, g_aimInternal, sizeof(CameraAim));
 }
 
-// 0x0009c3e0
+// 0x0009c960
 void __stdcall AimStuff::ApplyLocalAim()
 {
     memcpy(g_aimInternal, &g_aimLocal, sizeof(CameraAim));
 }
 
-// 0x0009c400
+// 0x0009c980
 CameraAim* __stdcall AimStuff::GetInternalAim()
 {
     return g_aimInternal;
 }
 
-// 0x0009c410
+// 0x0009c990
 void __stdcall AimStuff::SetAim(int player, const CameraAim* aim)
 {
     memcpy(&g_aimPlayers[player], aim, sizeof(CameraAim));
 }
 
-// 0x0009c440
+// 0x0009c9c0
 void __stdcall AimStuff::ApplyPlayerAim(int player)
 {
     memcpy(g_aimInternal, &g_aimPlayers[player], sizeof(CameraAim));
 }
 
-// 0x0009c470
+// 0x0009c9f0
 CameraAim* __stdcall AimStuff::GetPlayerAim(int player)
 {
     return &g_aimPlayers[player];
 }
 
-// 0x0009c490
+// 0x0009ca10
 void __stdcall AimStuff::SetPlayerSkill(int player, int skill, WORD value)
 {
     if (skill < 11 && player < 210)
         g_aimPlayerSkills[player][skill] = (float)value;
 }
 
-// 0x0009c4c0
+// 0x0009ca40
 void __stdcall AimStuff::SetLocalSkill(int skill, WORD value)
 {
     if (skill < 11)
@@ -181,7 +181,7 @@ void __stdcall AimStuff::SetLocalSkill(int skill, WORD value)
     }
 }
 
-// 0x0009c5b0
+// 0x0009cb30
 void __stdcall AimStuff::UpdateLocalSkills()
 {
     g_aimLocalSkills[0] = g_aimInternalStats[69];
@@ -197,7 +197,7 @@ void __stdcall AimStuff::UpdateLocalSkills()
     g_aimLocalSkills[10] = g_aimInternalStats[79];
 }
 
-// 0x0009c640
+// 0x0009cbc0
 void __stdcall AimStuff::ApplyLocalSkills()
 {
     g_aimInternalStats[69] = g_aimLocalSkills[0];
@@ -213,7 +213,7 @@ void __stdcall AimStuff::ApplyLocalSkills()
     g_aimInternalStats[79] = g_aimLocalSkills[10];
 }
 
-// 0x0009c710
+// 0x0009cc90
 void __stdcall AimStuff::ResetLocalSkills()
 {
     g_aimInternalStats[69] = 999.0f;
@@ -230,7 +230,7 @@ void __stdcall AimStuff::ResetLocalSkills()
     UpdateLocalSkills();
 }
 
-// 0x0009c7a0
+// 0x0009cd20
 void __stdcall AimStuff::ApplyPlayerSkills(int player)
 {
     g_aimInternalStats[69] = g_aimPlayerSkills[player][0];
@@ -246,14 +246,14 @@ void __stdcall AimStuff::ApplyPlayerSkills(int player)
     g_aimInternalStats[79] = g_aimPlayerSkills[player][10];
 }
 
-// 0x00002d20
+// R5 address to verify
 void __stdcall AimStuff::GetCameraExtZoomAndAspectRatio(float* zoom, float* aspect)
 {
     *zoom = GetCameraExtZoom();
     *aspect = GetAspectRatio();
 }
 
-// 0x0009c4f0
+// 0x0009ca70
 void GameAimLookAtPartial(CameraAim* aim, float x, float y, float z)
 {
     CVector direction;

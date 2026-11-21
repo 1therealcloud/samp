@@ -8,23 +8,23 @@
 #include <GetTime.h>
 
 #include <string.h>
-// 0x00156b74
+// R5 address to verify
 DWORD g_objectPoolLastTick;
-// 0x00118130
+// 0x000e60a4
 const float g_objectPoolSecondsPerTick = 0.001f;
 
-// 0x00156b5c
+// R5 address to verify
 GameEntityCollisionShape g_objectPoolRayOrigin;
-// 0x00156b48
+// R5 address to verify
 GameEntityCollisionShape g_objectPoolRayEnd;
-// 0x00156b70
+// R5 address to verify
 CObject* g_objectPoolRayDebugObject;
-// 0x0011813c
+// 0x000e60b0
 const char g_objectPoolRayOriginText[8] = "Sphere1";
-// 0x00118134
+// 0x000e60a8
 const char g_objectPoolRayEndText[8] = "Sphere2";
 
-// 0x00012700
+// 0x00012800
 CObjectPool::CObjectPool()
 {
     for (int i = 0; i < 2100; ++i)
@@ -35,7 +35,7 @@ CObjectPool::CObjectPool()
     largestId = 0;
 }
 
-// 0x000126a0
+// 0x000127a0
 void CObjectPool::UpdateLargestId()
 {
     int largest = 0;
@@ -45,7 +45,7 @@ void CObjectPool::UpdateLargestId()
     largestId = largest;
 }
 
-// 0x00012730
+// 0x00012830
 int CObjectPool::GetCount()
 {
     int count = 0;
@@ -61,7 +61,7 @@ int CObjectPool::GetCount()
     return count;
 }
 
-// 0x00012750
+// 0x00012850
 BOOL CObjectPool::Delete(WORD id)
 {
     BYTE* state = (BYTE*)this;
@@ -79,14 +79,14 @@ BOOL CObjectPool::Delete(WORD id)
     return TRUE;
 }
 
-// 0x00013060
+// 0x00013160
 CObjectPool::~CObjectPool()
 {
     for (int i = 0; i < 2100; ++i)
         Delete((WORD)i);
 }
 
-// 0x000128d0
+// 0x000129d0
 CObject* CObjectPool::Find(void* backend)
 {
     int largest = largestId;
@@ -96,7 +96,7 @@ CObject* CObjectPool::Find(void* backend)
     return 0;
 }
 
-// 0x00012910
+// 0x00012a10
 WORD CObjectPool::GetId(void* backend)
 {
     int largest = largestId;
@@ -106,7 +106,7 @@ WORD CObjectPool::GetId(void* backend)
     return 0xffff;
 }
 
-// 0x00002e10
+// 0x00002de0
 CEntity* CObjectPool::Get(WORD id)
 {
     BYTE* state = (BYTE*)this;
@@ -115,7 +115,7 @@ CEntity* CObjectPool::Get(WORD id)
     return 0;
 }
 
-// 0x00012950
+// 0x00012a50
 void CObjectPool::Process()
 {
     if (!g_objectPoolLastTick)
@@ -136,7 +136,7 @@ void CObjectPool::Process()
     g_objectPoolLastTick = now;
 }
 
-// 0x00012a10
+// 0x00012b10
 void CObjectPool::ConstructMaterials()
 {
     DWORD i = 0;
@@ -155,7 +155,7 @@ void CObjectPool::ConstructMaterials()
     }
 }
 
-// 0x00012a50
+// 0x00012b50
 void CObjectPool::ShutdownMaterials()
 {
     DWORD i = 0;
@@ -174,7 +174,7 @@ void CObjectPool::ShutdownMaterials()
     }
 }
 
-// 0x000127d0
+// 0x000128d0
 BOOL CObjectPool::Create(WORD id, int model, CVector position, CVector rotation, float drawDistance)
 {
     BYTE* state = (BYTE*)this;
@@ -199,7 +199,7 @@ BOOL CObjectPool::Create(WORD id, int model, CVector position, CVector rotation,
     return FALSE;
 }
 
-// 0x00012a90
+// 0x00012b90
 void CObjectPool::Draw()
 {
     for (int i = 0; i <= largestId; ++i)
@@ -211,7 +211,7 @@ void CObjectPool::Draw()
         }
 }
 
-// 0x00012ad0
+// 0x00012bd0
 void CObjectPool::DrawLast()
 {
     float distances[1000] = {0};
@@ -245,7 +245,7 @@ void CObjectPool::DrawLast()
             ordered[j]->Draw();
 }
 
-// 0x00012ce0
+// R5 address to verify
 bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second)
 {
     const float limit = 200.0f;
@@ -274,7 +274,7 @@ bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, con
     return false;
 }
 
-// 0x00012d70
+// 0x00012e70
 WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVector* end)
 {
     GameEntityCollisionShape from, to;
@@ -336,7 +336,7 @@ WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVec
     return selected;
 }
 
-// 0x00012f50
+// R5 address to verify
 void DrawObjectPoolCollisionDebug()
 {
     if (!g_deviceLabel)
@@ -358,13 +358,13 @@ void DrawObjectPoolCollisionDebug()
     g_objectPoolRayDebugObject->Teleport(position);
 }
 
-// 0x00012670
+// R5 address to verify
 int CObjectPool::GetLargestId()
 {
     return largestId;
 }
 
-// 0x00012680
+// R5 address to verify
 DWORD CObjectPool::IsActive(WORD id)
 {
     if (id > 2100)
@@ -372,7 +372,7 @@ DWORD CObjectPool::IsActive(WORD id)
     return *(DWORD*)((BYTE*)this + 4 + id * 4);
 }
 
-// 0x000129d0
+// R5 address to verify
 void CObjectPool::UpdateAttachedObjectRotations()
 {
     DWORD i = 0;

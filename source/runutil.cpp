@@ -13,13 +13,13 @@
 #include <string.h>
 #include <windows.h>
 
-// 0x00118230
+// 0x000e61a0
 const char g_base64Alphabet[66] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-// 0x0013c4b4
+// R5 address to verify
 const char* g_base64Encoding = g_base64Alphabet;
 
-// 0x000172e0
+// R5 address to verify
 void Util_UrlUnencode(char* enc)
 {
     char* write_pos = enc;
@@ -42,13 +42,13 @@ void Util_UrlUnencode(char* enc)
     *write_pos = '\0';
 }
 
-// 0x00017360
+// R5 address to verify
 char Util_toupper(char c)
 {
     return ((c > (char)0x60) && (c < (char)0x7b)) ? c - 0x20 : c;
 }
 
-// 0x00017440
+// 0x00017930
 void Util_strupr(char* text)
 {
     while (*text)
@@ -58,7 +58,7 @@ void Util_strupr(char* text)
     }
 }
 
-// 0x00017510
+// R5 address to verify
 int Util_strnicmp(const char* first, const char* second, size_t count)
 {
     if (count == 0)
@@ -74,7 +74,7 @@ int Util_strnicmp(const char* first, const char* second, size_t count)
     return 0;
 }
 
-// 0x00017470
+// R5 address to verify
 int Util_wildcmp(char* wild, char* string)
 {
     char *cp, *mp;
@@ -120,7 +120,7 @@ int Util_wildcmp(char* wild, char* string)
     return !*wild;
 }
 
-// 0x000175b0
+// R5 address to verify
 char* Util_strrev(char* str)
 {
     char *p1, *p2;
@@ -136,7 +136,7 @@ char* Util_strrev(char* str)
     return str;
 }
 
-// 0x00017600
+// R5 address to verify
 char* Util_itoa(int v, char* s, int r)
 {
     int i, neg = 0;
@@ -182,7 +182,7 @@ char* Util_itoa(int v, char* s, int r)
     return (s);
 }
 
-// 0x0009d840
+// R5 address to verify
 void K_EncodeString(char* szInput, char* szOutput)
 {
     char b;
@@ -202,7 +202,7 @@ void K_EncodeString(char* szInput, char* szOutput)
     *szOutput = 0;
 }
 
-// 0x0009d880
+// R5 address to verify
 char* K_DecodeString(unsigned char* szInput)
 {
     char b;
@@ -223,7 +223,7 @@ char* K_DecodeString(unsigned char* szInput)
     return st;
 }
 
-// 0x00017380
+// 0x00017870
 char* Util_stristr(const char* String, const char* Pattern)
 {
     char *pptri, *sptri, *starti;
@@ -251,7 +251,7 @@ char* Util_stristr(const char* String, const char* Pattern)
     return (0);
 }
 
-// 0x000176a0
+// 0x00017b90
 void Util_Base64Encode(char* cpInput, char* cpOutput)
 {
     int nIdx[4];
@@ -294,7 +294,7 @@ void Util_Base64Encode(char* cpInput, char* cpOutput)
 
 // legacy
 
-// 0x000b55e0
+// R5 address to verify
 bool Util_IsDecimal(const char* text)
 {
     while (*text)
@@ -306,7 +306,7 @@ bool Util_IsDecimal(const char* text)
     return true;
 }
 
-// 0x000b5920
+// R5 address to verify
 void Util_SanitizeAscii(char* text)
 {
     while (*text)

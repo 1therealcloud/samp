@@ -25,18 +25,18 @@ public:
         SeekEnd,
     };
 
-    // 0x00063e70
+    // R5 address to verify
     CAbstractStream() {}
 
-    // 0x00063e80
+    // R5 address to verify
     virtual ~CAbstractStream() {}
-    // 0x00063ee0
+    // R5 address to verify
     // MSVC scalar deleting destructor emitted for ~CAbstractStream.
 
     // inline
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes) = 0;
 
-    // 0x00063e90
+    // R5 address to verify
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return Read(pbBuffer, nNumberOfElements * nElementSize);
@@ -45,7 +45,7 @@ public:
     // inline
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes) = 0;
 
-    // 0x00063eb0
+    // R5 address to verify
     virtual unsigned int Write(const void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return Write(pbBuffer, nNumberOfElements * nElementSize);
@@ -54,7 +54,7 @@ public:
     // inline
     virtual void Seek(int nOffset, eSeek seekMode) = 0;
 
-    // 0x00063ed0
+    // R5 address to verify
     virtual void Seek(int nOffset)
     {
         Seek(nOffset, SeekStart);
@@ -90,21 +90,21 @@ public:
         m_fiFile = NULL;
     }
 
-    // 0x00064bf0
+    // 0x00065170
     CFileStream(const char* szFilename, eType type, eMode mode)
     {
         m_fiFile = NULL;
         Open(szFilename, type, mode);
     }
 
-    // 0x00064d50
+    // 0x000652d0
     virtual ~CFileStream()
     {
         if (m_fiFile)
             Close();
     }
 
-    // 0x00063f00
+    // 0x00064480
     virtual bool Open(const char* szFilename, eType type, eMode mode)
     {
         if (m_fiFile)
@@ -148,13 +148,13 @@ public:
         return true;
     }
 
-    // 0x00064c50
+    // R5 address to verify
     virtual bool IsOpen()
     {
         return (m_fiFile != NULL);
     }
 
-    // 0x00064c60
+    // R5 address to verify
     virtual void Close()
     {
         if (m_fiFile)
@@ -164,31 +164,31 @@ public:
         }
     }
 
-    // 0x00064c80
+    // R5 address to verify
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes)
     {
         return (unsigned int)fread(pbBuffer, 1, nNumberOfBytes, m_fiFile);
     }
 
-    // 0x00064ca0
+    // R5 address to verify
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return (unsigned int)fread(pbBuffer, nElementSize, nNumberOfElements, m_fiFile);
     }
 
-    // 0x00064cc0
+    // R5 address to verify
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes)
     {
         return (unsigned int)fwrite(pbBuffer, 1, nNumberOfBytes, m_fiFile);
     }
 
-    // 0x00064ce0
+    // R5 address to verify
     virtual unsigned int Write(const void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return (unsigned int)fwrite(pbBuffer, nElementSize, nNumberOfElements, m_fiFile);
     }
 
-    // 0x00064d00
+    // R5 address to verify
     virtual void Seek(int nOffset, eSeek seekMode)
     {
         int mode = 0;
@@ -208,7 +208,7 @@ public:
         fseek(m_fiFile, nOffset, seekMode);
     }
 
-    // 0x00064d20
+    // R5 address to verify
     virtual unsigned int Tell()
     {
         return (unsigned int)ftell(m_fiFile);
@@ -224,7 +224,7 @@ protected:
     bool m_bCopy;
 
 public:
-    // 0x00063fb0
+    // R5 address to verify
     CMemoryStream(unsigned char* pbBuffer, unsigned int nLength, bool bCopy = true)
     {
         m_bCopy = bCopy;
@@ -242,7 +242,7 @@ public:
         }
     }
 
-    // 0x00064120
+    // 0x000646a0
     virtual ~CMemoryStream()
     {
         if (m_bCopy && m_pbBuffer)
@@ -251,7 +251,7 @@ public:
         }
     }
 
-    // 0x00064010
+    // 0x00064590
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes)
     {
         if (m_nOffset + nNumberOfBytes > m_nLength)
@@ -263,7 +263,7 @@ public:
         return nNumberOfBytes;
     }
 
-    // 0x00064060
+    // R5 address to verify
     virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes)
     {
         if (m_nOffset + nNumberOfBytes > m_nLength)
@@ -275,7 +275,7 @@ public:
         return nNumberOfBytes;
     }
 
-    // 0x000640b0
+    // R5 address to verify
     virtual void Seek(int nOffset, eSeek seekMode)
     {
         switch (seekMode)
@@ -295,7 +295,7 @@ public:
             m_nOffset = m_nLength;
     }
 
-    // 0x000640f0
+    // R5 address to verify
     virtual unsigned int Tell()
     {
         return m_nOffset;

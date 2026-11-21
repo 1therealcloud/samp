@@ -4,28 +4,28 @@
 #include "render/fontrender.h"
 
 #include <string.h>
-// 0x0011c34c
+// 0x000ea324
 const char g_deathWeaponFontFace[11] = "GTAWEAPON3";
-// 0x0011c358
+// 0x000ea330
 const char g_deathLongestNick[25] = "LONGESTNICKNICK_NICKNICK";
-// 0x00118354
+// 0x000e62d0
 const char g_deathWeaponBackgroundGlyph[2] = "G";
-// 0x0011c374
+// 0x000ea34c
 const float g_deathWindowHorizontalFactor = 0.75f;
-// 0x0011c378
+// 0x000ea350
 const float g_deathWindowVerticalFactor = 0.3f;
 
-// 0x0011c330
+// 0x000ea308
 const char g_deathAuxFontFace[9] = "SAMPAUX3";
 
-// 0x0006c720
+// R5 address to verify
 BOOL CDeathWindow::AreAuxiliaryFontsInitialized()
 {
     return auxiliaryFontsInitialized;
 }
 extern "C" __int64 __cdecl _ftol2();
 
-// 0x00069580
+// 0x00069b40
 CDeathWindow::~CDeathWindow()
 {
     if (font)
@@ -51,14 +51,14 @@ CDeathWindow::~CDeathWindow()
     // Auxiliary fonts are deliberately untouched by the native destructor.
 }
 
-// 0x00069660
+// 0x00069c20
 void CDeathWindow::PushBack()
 {
     for (size_t i = 0; i < 4 * sizeof(DeathWindowEntry); ++i)
         ((BYTE*)entries)[i] = ((BYTE*)(entries + 1))[i];
 }
 
-// 0x00069680
+// 0x00069c40
 void CDeathWindow::DrawText(const char* text, RECT rect, DWORD color, int format)
 {
     format |= 0x100;
@@ -75,7 +75,7 @@ void CDeathWindow::DrawText(const char* text, RECT rect, DWORD color, int format
     font->DrawTextA(sprite, text, -1, &rect, format, color);
 }
 
-// 0x00069780
+// 0x00069d40
 void CDeathWindow::DrawWeaponSprite(const char* glyph, RECT rect, DWORD color)
 {
     rect.top -= 5;
@@ -84,7 +84,7 @@ void CDeathWindow::DrawWeaponSprite(const char* glyph, RECT rect, DWORD color)
     weaponFont->DrawTextA(sprite, glyph, -1, &rect, 0x105, color);
 }
 
-// 0x00069810
+// 0x00069dd0
 SIZE* CDeathWindow::GetWeaponSpriteRectSize(SIZE* size)
 {
     RECT rect = {0, 0, 100, 100};
@@ -95,7 +95,7 @@ SIZE* CDeathWindow::GetWeaponSpriteRectSize(SIZE* size)
     return size;
 }
 
-// 0x00069b90
+// 0x0006a150
 void CDeathWindow::ResetFonts()
 {
     if (!device)
@@ -136,7 +136,7 @@ void CDeathWindow::ResetFonts()
     weaponHeight = GetWeaponSpriteRectSize(&second)->cy;
 }
 
-// 0x0006a010
+// 0x0006a5d0
 void CDeathWindow::AddEntry(const char* killer, const char* victim, DWORD killerColor, DWORD victimColor, BYTE weapon)
 {
     PushBack();
@@ -169,13 +169,13 @@ void CDeathWindow::AddEntry(const char* killer, const char* victim, DWORD killer
         entry->victim[0] = 0;
 }
 
-// 0x0006a0f0
+// 0x0006a6b0
 void CDeathWindow::AddMessage(const char* killer, const char* victim, DWORD killerColor, DWORD victimColor, BYTE weapon)
 {
     AddEntry(killer, victim, killerColor, victimColor, weapon);
 }
 
-// 0x00069d20
+// 0x0006a2e0
 void CDeathWindow::Draw()
 {
     int y, x;
@@ -242,7 +242,7 @@ void CDeathWindow::Draw()
     sprite->End();
 }
 
-// 0x0006a090
+// 0x0006a650
 CDeathWindow::CDeathWindow(IDirect3DDevice9* device)
 {
     *(DWORD*)(nativeState + 0x137) = 0;
@@ -258,7 +258,7 @@ CDeathWindow::CDeathWindow(IDirect3DDevice9* device)
     memset(nativeState + 4, 0, 0x127);
 }
 
-// 0x000695f0
+// 0x00069bb0
 void CDeathWindow::CreateAuxiliaryFonts()
 {
     IDirect3DDevice9* device = *(IDirect3DDevice9**)(nativeState + 0x147);
@@ -268,7 +268,7 @@ void CDeathWindow::CreateAuxiliaryFonts()
     *(DWORD*)(nativeState + 0x14b) = 1;
 }
 
-// 0x00069890
+// 0x00069e50
 const char* CDeathWindow::GetWeaponSpriteId(BYTE weapon)
 {
     switch (weapon)

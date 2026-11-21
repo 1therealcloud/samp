@@ -72,13 +72,13 @@ typedef struct _SAA_FILE_HEADER
 
     DWORD dwFakeDataSize;
 
-    // 0x00064150
+    // R5 address to verify
     _SAA_FILE_HEADER()
     {
         dwFakeDataSize = SAA_MAX_FAKEDATA;
     }
 
-    // 0x00064160
+    // R5 address to verify
     DWORD SizeOf()
     {
         return (sizeof(DWORD) * 2 + sizeof(WORD) * dwFakeDataSize + sizeof(VER2_HEADER));
@@ -107,13 +107,13 @@ typedef struct _SAA_FILE_HEADER
 
 #endif
 
-    // 0x00064170
+    // R5 address to verify
     bool VerifyIdentifier()
     {
         return ((headerV2.dwSAMPID == SAA_FILE_ID) && (headerV2.dwVersion == SAA_FILE_VERSION));
     }
 
-    // 0x000641a0
+    // R5 address to verify
     void XorV2Identifier()
     {
         this->headerV2.dwCompleteID ^= this->headerV2.dwXORKey;
@@ -126,7 +126,7 @@ typedef struct _SAA_FILE_HEADER
         fread(&headerV2, 1, sizeof(VER2_HEADER), f);
     }
 
-    // 0x000641c0
+    // 0x00064740
     void Read(CAbstractStream* pStream)
     {
         pStream->Read(&headerV1, sizeof(DWORD) * 2 + sizeof(WORD) * dwFakeDataSize);

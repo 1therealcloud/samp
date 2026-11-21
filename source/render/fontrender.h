@@ -9,10 +9,10 @@
 #include <static_assert.h>
 
 // Native green-underflow branch clears red and retains green; not generic saturation.
-// 0x0006b210
+// R5 address to verify
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount);
 // Saturates each RGB channel at255, retaining alpha.
-// 0x0006b270
+// R5 address to verify
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount);
 struct FontSize
 {
@@ -27,44 +27,44 @@ public:
     IDirect3DDevice9* m_pDevice;
     char* m_szTempBuffer;
     int m_nFontHeight, m_nLittleFontHeight;
-    // 0x0006b530
+    // 0x0006baf0
     CFonts(IDirect3DDevice9*);
-    // 0x0006ab40
+    // 0x0006b100
     ~CFonts();
-    // 0x0006abc0
+    // 0x0006b180
     void OnLostDevice();
-    // 0x0006ac00
+    // 0x0006b1c0
     void OnResetDevice();
-    // 0x0006ac40
+    // 0x0006b200
     FontSize GetTextScreenSize(const char*, int);
-    // 0x0006acf0
+    // 0x0006b2b0
     FontSize GetLittleTextScreenSize(const char*, int);
-    // 0x0006ada0
+    // 0x0006b360
     void DrawText(ID3DXSprite*, const char*, RECT, D3DCOLOR, BOOL);
-    // 0x0006af20
+    // 0x0006b4e0
     void DrawLittleText(ID3DXSprite*, const char*, RECT, int, D3DCOLOR, BOOL);
-    // 0x0006b090
+    // 0x0006b650
     void DrawLicensePlateText(const char*, RECT, D3DCOLOR);
-    // 0x0006b320
+    // 0x0006b8e0
     void Reset();
 };
 STATIC_ASSERT(sizeof(CFonts) == 40);
 STATIC_ASSERT(offsetof(CFonts, m_szTempBuffer) == 28);
 
-// 0x00118400
+// 0x000e637c
 extern const char g_fontMeasureProbe[2];
-// 0x002aca2c
+// 0x0026eb9c
 extern CFonts* g_deviceFonts;
 
-// 0x000c6950
+// 0x000c5290
 int FontGetHeight();
-// 0x000c69a0
+// 0x000c52e0
 int FontGetDeathWindowHeight();
-// 0x000c6a00
+// 0x000c5340
 int FontGetWeight();
-// 0x000c6a30
+// 0x000c5370
 const char* FontGetFace();
-// 0x000c69e0
+// R5 address to verify
 int FontGetDialogHeight();
 
 #endif // FONTRENDER_H

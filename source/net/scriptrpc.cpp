@@ -28,212 +28,212 @@
 #include <StringCompressor.h>
 
 #include <string.h>
-// 0x00118288
+// R5 address to verify
 const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand = {0x69b, "iiffffff"};
-// 0x001182b0
+// R5 address to verify
 const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand = {0x52c, "ii"};
-// 0x001182c4
+// R5 address to verify
 const Scripting::OpcodeInfo g_rpcPlayerOpcode03fdCommand = {0x3fd, "ii"};
-// 0x00118274
+// R5 address to verify
 const Scripting::OpcodeInfo g_rpcWidescreenCommand = {0x2a3, "i"};
-// 0x0011844c
+// 0x000e63bc
 const char g_rpcWidescreenMessage[] = "Widescreen = %i";
-// 0x0011845c
+// 0x000e63cc
 const char g_rpcInvalidSkinWarning[] = "Warning: SetPlayerSkin %d isn't a valid ped model.";
-// 0x0011829c
+// 0x000e620c
 const Scripting::OpcodeInfo g_rpcExplosionCommand = {0x948, "fffii"};
-// 0x00118494
+// 0x000e6404
 const char g_rpcLargeTextDrawWarning[] = "Warning: ignoring large TextDraw size=%u";
-// 0x00118448
+// 0x000e63b8
 const int g_rpcScrDisableVehicleCollisions = 167;
-// 0x00118444
+// 0x000e63b4
 const int g_rpcScrForceClassSelection = 74;
-// 0x00118440
+// 0x000e63b0
 const int g_rpcScrAttachObjectToPlayer = 75;
-// 0x0011843c
+// R5 address to verify
 const int g_rpcScrInitMenu = 76;
-// 0x00118438
+// 0x000e63a8
 const int g_rpcScrShowMenu = 77;
-// 0x00118434
+// R5 address to verify
 const int g_rpcScrHideMenu = 78;
-// 0x00118430
+// 0x000e63a0
 const int g_rpcScrSetPlayerWantedLevel = 133;
-// 0x0011842c
+// 0x000e639c
 const int g_rpcScrShowTextDraw = 134;
-// 0x00118428
+// 0x000e6398
 const int g_rpcScrHideTextDrawForPlayer = 135;
-// 0x00118424
+// 0x000e6394
 const int g_rpcScrTextDrawSetString = 105;
-// 0x00118420
+// 0x000e6390
 const int g_rpcScrGangZoneCreate = 108;
-// 0x0011841c
+// 0x000e638c
 const int g_rpcScrGangZoneDestroy = 120;
-// 0x00118418
+// 0x000e6388
 const int g_rpcScrGangZoneFlash = 121;
-// 0x00118414
+// 0x000e6384
 const int g_rpcScrGangZoneStopFlash = 85;
-// 0x00118410
+// 0x000e6380
 const int g_rpcScrApplyAnimation = 86;
-// 0x0011840c
+// 0x000e637c
 const int g_rpcScrClearAnimations = 87;
-// 0x00118408
+// 0x000e6378
 const int g_rpcScrSetPlayerSpecialAction = 88;
-// 0x00118404
+// 0x000e6374
 const int g_rpcScrEnableStuntBonusForPlayer = 104;
-// 0x00118400
+// 0x000e637c
 const int g_rpcScrSetPlayerFightingStyle = 89;
-// 0x001183fc
+// 0x000e636c
 const int g_rpcScrSetPlayerVelocity = 90;
-// 0x001183f8
+// 0x000e6368
 const int g_rpcScrSetVehicleVelocity = 91;
-// 0x001183f4
+// 0x000e6364
 const int g_rpcScrSetPlayerWidescreen = 111;
-// 0x001183f0
+// 0x000e6360
 const int g_rpcScrSetVehicleTires = 98;
-// 0x001183ec
+// R5 address to verify
 const int g_rpcUnknown001183EC = 92;
-// 0x001183e8
+// R5 address to verify
 const int g_rpcUnknown001183E8 = 150;
-// 0x001183e4
+// R5 address to verify
 const int g_rpcScrPlayCrimeReport = 112;
-// 0x001183e0
+// 0x000e635c
 const int g_rpcScrSetPlayerMapIcon = 56;
-// 0x001183dc
+// R5 address to verify
 const int g_rpcScrRemovePlayerMapIcon = 144;
-// 0x001183d8
+// R5 address to verify
 const int g_rpcScrSetPlayerAmmo = 145;
-// 0x001183d4
+// R5 address to verify
 const int g_rpcScrSetGravity = 146;
-// 0x001183d0
+// R5 address to verify
 const int g_rpcScrSetVehicleHealth = 147;
-// 0x001183cc
+// R5 address to verify
 const int g_rpcScrAttachTrailerToVehicle = 148;
-// 0x001183c8
+// R5 address to verify
 const int g_rpcScrDetachTrailerFromVehicle = 149;
-// 0x001183c4
+// R5 address to verify
 const int g_rpcScrCreateObject = 44;
-// 0x001183c0
+// R5 address to verify
 const int g_rpcScrSetObjectPosition = 45;
-// 0x001183bc
+// R5 address to verify
 const int g_rpcScrSetObjectRotation = 46;
-// 0x00117694
+// R5 address to verify
 const int g_rpcScrDestroyObject = 47;
-// 0x001183b8
+// R5 address to verify
 const int g_rpcScrCreateExplosion = 79;
-// 0x001183b4
+// R5 address to verify
 const int g_rpcScrShowPlayerNametagForPlayer = 80;
-// 0x001183b0
+// R5 address to verify
 const int g_rpcScrMoveObject = 99;
-// 0x001183ac
+// R5 address to verify
 const int g_rpcScrStopObject = 122;
-// 0x001183a8
+// R5 address to verify
 const int g_rpcScrSetNumberPlate = 123;
-// 0x001183a4
+// R5 address to verify
 const int g_rpcScrTogglePlayerSpectating = 124;
-// 0x001183a0
+// R5 address to verify
 const int g_rpcUnknown001183A0 = 125;
-// 0x0011839c
+// R5 address to verify
 const int g_rpcScrPlayerSpectatePlayer = 126;
-// 0x00118398
+// R5 address to verify
 const int g_rpcScrPlayerSpectateVehicle = 127;
-// 0x00118394
+// 0x000e6310
 const int g_rpcScrMoveVehicleComponent = 57;
-// 0x00118390
+// 0x000e630c
 const int g_rpcScrSetPlayerShopName = 33;
-// 0x0011838c
+// 0x000e6308
 const int g_rpcScrSetPlayerDrunkLevel = 35;
-// 0x00118388
+// 0x000e6304
 const int g_rpcScrSetPlayerArmedWeapon = 67;
-// 0x00118384
+// R5 address to verify
 const int g_rpcScrSetPlayerAttachedObject = 113;
-// 0x00118380
+// R5 address to verify
 const int g_rpcScrPlayAudioStream = 41;
-// 0x0011837c
+// R5 address to verify
 const int g_rpcScrStopAudioStream = 42;
-// 0x00118378
+// 0x000e62f4
 const int g_rpcScrRemoveBuildingForPlayer = 43;
-// 0x00118374
+// 0x000e62f0
 const int g_rpcScrSetSpawnInfo = 68;
-// 0x00118370
+// 0x000e62ec
 const int g_rpcScrSetPlayerTeam = 69;
-// 0x0011836c
+// R5 address to verify
 const int g_rpcScrSetPlayerName = 11;
-// 0x00118368
+// R5 address to verify
 const int g_rpcScrSetPlayerSkin = 153;
-// 0x00118364
+// 0x000e62d4
 const int g_rpcScrSetPlayerPosition = 12;
-// 0x00118360
+// 0x000e62d0
 const int g_rpcScrSetPlayerPositionFindZ = 13;
-// 0x0011835c
+// 0x000e62cc
 const int g_rpcScrSetPlayerHealth = 14;
-// 0x00118358
+// R5 address to verify
 const int g_rpcScrPutPlayerInVehicle = 70;
-// 0x00118354
+// 0x000e62d0
 const int g_rpcScrRemovePlayerFromVehicle = 71;
-// 0x00118350
+// R5 address to verify
 const int g_rpcScrSetPlayerColor = 72;
-// 0x0011834c
+// 0x000e62c8
 const int g_rpcScrDisplayGametext = 73;
-// 0x00118348
+// 0x000e62b8
 const int g_rpcScrSetPlayerInterior = 156;
-// 0x00118344
+// 0x000e62b4
 const int g_rpcScrSetPlayerCameraPosition = 157;
-// 0x00118340
+// 0x000e62b0
 const int g_rpcScrSetPlayerCameraLookAt = 158;
-// 0x0011833c
+// 0x000e62ac
 const int g_rpcScrSetVehiclePosition = 159;
-// 0x00118338
+// 0x000e62a8
 const int g_rpcScrSetVehicleZAngle = 160;
-// 0x00118334
+// 0x000e62a4
 const int g_rpcScrSetVehicleParamsForPlayer = 161;
-// 0x00118330
+// 0x000e62a0
 const int g_rpcScrSetCameraBehindPlayer = 162;
-// 0x0011832c
+// 0x000e629c
 const int g_rpcScrTogglePlayerControllable = 15;
-// 0x00118328
+// 0x000e6298
 const int g_rpcScrPlaySound = 16;
-// 0x00118324
+// 0x000e6294
 const int g_rpcScrSetPlayerWorldBounds = 17;
-// 0x00118320
+// 0x000e6290
 const int g_rpcScrGivePlayerMoney = 18;
-// 0x0011831c
+// 0x000e628c
 const int g_rpcScrSetPlayerFacingAngle = 19;
-// 0x00118318
+// 0x000e6288
 const int g_rpcScrResetPlayerMoney = 20;
-// 0x00118314
+// 0x000e6284
 const int g_rpcScrResetPlayerWeapons = 21;
-// 0x00118310
+// R5 address to verify
 const int g_rpcScrGivePlayerWeapon = 22;
-// 0x0011830c
+// R5 address to verify
 const int g_rpcUnknown0011830C = 64;
-// 0x00118308
+// 0x000e6284
 const int g_rpcScrLinkVehicleToInterior = 65;
-// 0x00118304
+// 0x000e6280
 const int g_rpcScrDeathMessage = 55;
-// 0x00118300
+// R5 address to verify
 const int g_rpcScrAttachCameraToObject = 81;
-// 0x001182fc
+// R5 address to verify
 const int g_rpcScrInterpolateCamera = 82;
-// 0x001182f4
+// 0x000e6264
 const int g_rpcScrSetObjectMaterial = 84;
-// 0x001182f0
+// 0x000e6260
 const int g_rpcScrStopObjectCameraCollision = 169;
-// 0x001182ec
+// 0x000e625c
 const int g_rpcScrSetActorAnimation = 173;
-// 0x001182e8
+// 0x000e6258
 const int g_rpcScrClearActorAnimations = 174;
-// 0x001182e4
+// 0x000e6254
 const int g_rpcScrSetActorRotation = 175;
-// 0x001182e0
+// 0x000e6250
 const int g_rpcScrSetActorPosition = 176;
-// 0x001182dc
+// 0x000e624c
 const int g_rpcScrSetActorHealth = 178;
-// 0x001182d8
+// R5 address to verify
 const int g_rpcUnknown001182D8 = 48;
-// 0x001184c0
+// R5 address to verify
 const int g_rpcScrSetPlayerArmor = 66;
 
-// 0x0001aba0
+// 0x0001b070
 void ObjectReadMaterials(BYTE count, CObject* object, RakNet::BitStream* stream)
 {
     DWORD color = 0;
@@ -284,7 +284,7 @@ void ObjectReadMaterials(BYTE count, CObject* object, RakNet::BitStream* stream)
     }
 }
 
-// 0x0001ae70
+// 0x0001b340
 void ScrCreateObject(RPCParameters* parameters)
 {
     WORD id = 0xffff, vehicle = 0xffff, attachedObject = 0xffff;
@@ -332,7 +332,7 @@ void ScrCreateObject(RPCParameters* parameters)
         ((BYTE*)object)[0x53] = 1;
 }
 
-// 0x0001b1d0
+// 0x0001b6a0
 void ScrSetObjectMaterial(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -380,7 +380,7 @@ void ScrSetObjectMaterial(RPCParameters* parameters)
     }
 }
 
-// 0x0001c1d0
+// 0x0001c6a0
 void ScrAttachObjectToPlayer(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -412,7 +412,7 @@ void ScrAttachObjectToPlayer(RPCParameters* parameters)
                               (double)offset.z, (double)rotation.x, (double)rotation.y, (double)rotation.z);
 }
 
-// 0x00018a00
+// 0x00018f00
 void ScrSetPlayerAttachedObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -447,7 +447,7 @@ void ScrSetPlayerAttachedObject(RPCParameters* parameters)
     }
 }
 
-// 0x0001d780
+// 0x0001dcc0
 void ScrRpc48(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -464,7 +464,7 @@ void ScrRpc48(RPCParameters* parameters)
     }
 }
 
-// 0x0001da90
+// 0x0001dfd0
 void ScrSetPlayerName(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -486,7 +486,7 @@ void ScrSetPlayerName(RPCParameters* parameters)
     }
 }
 
-// 0x000188b0
+// 0x00018db0
 void ScrSetPlayerDrunkLevel(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -499,7 +499,7 @@ void ScrSetPlayerDrunkLevel(RPCParameters* parameters)
         ped->SetDrunkLevel(level);
 }
 
-// 0x00018950
+// 0x00018e50
 void ScrSetPlayerArmedWeapon(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -513,7 +513,7 @@ void ScrSetPlayerArmedWeapon(RPCParameters* parameters)
     }
 }
 
-// 0x00019b20
+// 0x00019ff0
 void ScrAttachCameraToObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -529,7 +529,7 @@ void ScrAttachCameraToObject(RPCParameters* parameters)
     }
 }
 
-// 0x00019c20
+// 0x0001a0f0
 void ScrInterpolateCamera(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -559,7 +559,7 @@ void ScrInterpolateCamera(RPCParameters* parameters)
     }
 }
 
-// 0x0001d110
+// 0x0001d650
 void ClickTextDraw(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -581,7 +581,7 @@ void ClickTextDraw(RPCParameters* parameters)
     }
 }
 
-// 0x0001bca0
+// 0x0001c170
 void ScrStopObjectCameraCollision(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -592,7 +592,7 @@ void ScrStopObjectCameraCollision(RPCParameters* parameters)
         ((BYTE*)object)[0x53] = 1;
 }
 
-// 0x0001cff0
+// 0x0001d530
 void ScrRemoveBuildingForPlayer(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -607,7 +607,7 @@ void ScrRemoveBuildingForPlayer(RPCParameters* parameters)
     GameRemoveBuilding(model, position.x, position.y, position.z, radius);
 }
 
-// 0x00018b40
+// 0x00019050
 void ScrPlayCrimeReport(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -630,7 +630,7 @@ void ScrPlayCrimeReport(RPCParameters* parameters)
     g_pGame->ApplyPreviewAnimation(first, (DWORD)&position, useVehicle, model, color);
 }
 
-// 0x00018750
+// R5 address to verify
 void ScrPlayerOpcode052C(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -642,7 +642,7 @@ void ScrPlayerOpcode052C(RPCParameters* parameters)
         Scripting::ProcessCommand(&g_rpcPlayerOpcode052cCommand, 0, value);
 }
 
-// 0x00018800
+// R5 address to verify
 void ScrPlayerOpcode03FD(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -655,13 +655,13 @@ void ScrPlayerOpcode03FD(RPCParameters* parameters)
 }
 
 // The original returns immediately.
-// 0x00017bd0
+// R5 address to verify
 void ScrRpc125(RPCParameters* parameters)
 {
     (void)parameters;
 }
 
-// 0x0001a230
+// 0x0001a700
 void ScrRpc64(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -671,7 +671,7 @@ void ScrRpc64(RPCParameters* parameters)
     stream.Read(ignored);
 }
 
-// 0x00017a60
+// 0x00017f50
 void ScrSetSpawnInfo(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -683,7 +683,7 @@ void ScrSetSpawnInfo(RPCParameters* parameters)
     pool->local->SetSpawnInfo(info);
 }
 
-// 0x00018250
+// 0x00018740
 void ScrSetPlayerFightingStyle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -709,7 +709,7 @@ void ScrSetPlayerFightingStyle(RPCParameters* parameters)
     }
 }
 
-// 0x0001a740
+// 0x0001ac10
 void ScrSetPlayerAmmo(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -721,7 +721,7 @@ void ScrSetPlayerAmmo(RPCParameters* parameters)
     local->m_state.ped->SetWeaponAmmo(weapon, ammo);
 }
 
-// 0x00019240
+// 0x00019710
 void ScrSetPlayerTeam(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -740,7 +740,7 @@ void ScrSetPlayerTeam(RPCParameters* parameters)
     }
 }
 
-// 0x00018c80
+// 0x00019190
 void ScrSetPlayerSkin(RPCParameters* parameters)
 {
     int model = 0;
@@ -772,7 +772,7 @@ void ScrSetPlayerSkin(RPCParameters* parameters)
     }
 }
 
-// 0x0001a480
+// 0x0001a950
 void ScrApplyAnimation(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -814,7 +814,7 @@ void ScrApplyAnimation(RPCParameters* parameters)
     }
 }
 
-// 0x00018090
+// 0x00018580
 void ScrClearAnimations(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -843,7 +843,7 @@ void ScrClearAnimations(RPCParameters* parameters)
     }
 }
 
-// 0x0001c0f0
+// 0x0001c5c0
 void ScrMoveVehicleComponent(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -858,7 +858,7 @@ void ScrMoveVehicleComponent(RPCParameters* parameters)
     }
 }
 
-// 0x000185c0
+// 0x00018ac0
 void ScrSetPlayerWidescreen(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -870,7 +870,7 @@ void ScrSetPlayerWidescreen(RPCParameters* parameters)
     Scripting::ProcessCommand(&g_rpcWidescreenCommand, (int)enabled);
 }
 
-// 0x00018670
+// R5 address to verify
 void ScrSetVehicleTires(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -884,7 +884,7 @@ void ScrSetVehicleTires(RPCParameters* parameters)
         vehicle->SetTires(tires);
 }
 
-// 0x0001b540
+// 0x0001ba10
 void ScrSetObjectPosition(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -901,7 +901,7 @@ void ScrSetObjectPosition(RPCParameters* parameters)
         object->Teleport(position);
 }
 
-// 0x0001b650
+// 0x0001bb20
 void ScrSetObjectRotation(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -920,7 +920,7 @@ void ScrSetObjectRotation(RPCParameters* parameters)
     }
 }
 
-// 0x0001b750
+// 0x0001bc20
 void ScrDestroyObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -940,7 +940,7 @@ void ScrDestroyObject(RPCParameters* parameters)
     }
 }
 
-// 0x0001ba30
+// 0x0001bf00
 void ScrMoveObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -966,7 +966,7 @@ void ScrMoveObject(RPCParameters* parameters)
         object->Move(position, speed, rotation);
 }
 
-// 0x0001bbe0
+// 0x0001c0b0
 void ScrStopObject(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -977,7 +977,7 @@ void ScrStopObject(RPCParameters* parameters)
         object->Stop();
 }
 
-// 0x0001d210
+// 0x0001d750
 void ScrSetActorAnimation(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1009,7 +1009,7 @@ void ScrSetActorAnimation(RPCParameters* parameters)
     }
 }
 
-// 0x0001d3f0
+// R5 address to verify
 void ScrClearActorAnimations(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1024,7 +1024,7 @@ void ScrClearActorAnimations(RPCParameters* parameters)
     }
 }
 
-// 0x0001d4b0
+// 0x0001d9f0
 void ScrSetActorRotation(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1041,7 +1041,7 @@ void ScrSetActorRotation(RPCParameters* parameters)
     }
 }
 
-// 0x0001d590
+// 0x0001dad0
 void ScrSetActorPosition(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1060,7 +1060,7 @@ void ScrSetActorPosition(RPCParameters* parameters)
     }
 }
 
-// 0x0001d6a0
+// 0x0001dbe0
 void ScrSetActorHealth(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1077,7 +1077,7 @@ void ScrSetActorHealth(RPCParameters* parameters)
     }
 }
 
-// 0x0001a2c0
+// 0x0001a790
 void ScrSetPlayerMapIcon(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1094,7 +1094,7 @@ void ScrSetPlayerMapIcon(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->CreateMapIcon(id, position, icon, color, type);
 }
 
-// 0x0001a3e0
+// 0x0001a8b0
 void ScrRemovePlayerMapIcon(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1105,7 +1105,7 @@ void ScrRemovePlayerMapIcon(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->RemoveMapIcon(id);
 }
 
-// 0x0001b840
+// 0x0001bd10
 void ScrCreateExplosion(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1121,7 +1121,7 @@ void ScrCreateExplosion(RPCParameters* parameters)
     Scripting::ProcessCommand(&g_rpcExplosionCommand, (double)position.x, (double)position.y, (double)position.z, type, (double)radius);
 }
 
-// 0x0001b950
+// 0x0001be20
 void ScrShowPlayerNametagForPlayer(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1137,7 +1137,7 @@ void ScrShowPlayerNametagForPlayer(RPCParameters* parameters)
     }
 }
 
-// 0x000197a0
+// 0x00019c70
 void ScrSetVehiclePosition(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1155,7 +1155,7 @@ void ScrSetVehiclePosition(RPCParameters* parameters)
     }
 }
 
-// 0x000198b0
+// 0x00019d80
 void ScrSetVehicleZAngle(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1170,7 +1170,7 @@ void ScrSetVehicleZAngle(RPCParameters* parameters)
         pool->m_pObjects[id]->SetRotation(angle);
 }
 
-// 0x00019990
+// 0x00019e60
 void ScrSetVehicleParamsForPlayer(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1186,7 +1186,7 @@ void ScrSetVehicleParamsForPlayer(RPCParameters* parameters)
         pool->AssignSpecialParams(id, objective, locked);
 }
 
-// 0x00019a60
+// 0x00019f30
 void ScrLinkVehicleToInterior(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1197,7 +1197,7 @@ void ScrLinkVehicleToInterior(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->pools->vehicles->ChangeInterior(id, interior);
 }
 
-// 0x0001a8a0
+// 0x0001ad70
 void ScrSetVehicleHealth(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1214,7 +1214,7 @@ void ScrSetVehicleHealth(RPCParameters* parameters)
     }
 }
 
-// 0x0001a980
+// 0x0001ae50
 void ScrAttachTrailerToVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1232,7 +1232,7 @@ void ScrAttachTrailerToVehicle(RPCParameters* parameters)
     }
 }
 
-// 0x0001aac0
+// 0x0001af90
 void ScrDetachTrailerFromVehicle(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1250,7 +1250,7 @@ void ScrDetachTrailerFromVehicle(RPCParameters* parameters)
     }
 }
 
-// 0x00018450
+// 0x00018950
 void ScrSetVehicleVelocity(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1279,7 +1279,7 @@ void ScrSetVehicleVelocity(RPCParameters* parameters)
     }
 }
 
-// 0x0001bd60
+// 0x0001c230
 void ScrSetNumberPlate(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1297,7 +1297,7 @@ void ScrSetNumberPlate(RPCParameters* parameters)
     }
 }
 
-// 0x0001be80
+// 0x0001c350
 void ScrTogglePlayerSpectating(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1306,7 +1306,7 @@ void ScrTogglePlayerSpectating(RPCParameters* parameters)
     ((CNetGame*)g_pNetGame)->pools->players->local->ToggleSpectating(enabled);
 }
 
-// 0x0001bf30
+// 0x0001c400
 void ScrPlayerSpectatePlayer(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1320,7 +1320,7 @@ void ScrPlayerSpectatePlayer(RPCParameters* parameters)
     local->SpectatePlayer(id);
 }
 
-// 0x0001c010
+// 0x0001c4e0
 void ScrPlayerSpectateVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1334,7 +1334,7 @@ void ScrPlayerSpectateVehicle(RPCParameters* parameters)
     local->SpectateVehicle(id);
 }
 
-// 0x00019130
+// 0x00019600
 void ScrPutPlayerInVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1348,7 +1348,7 @@ void ScrPutPlayerInVehicle(RPCParameters* parameters)
         g_pGame->GetPlayerPed()->PutIntoVehicle(ref, seat);
 }
 
-// 0x00017b00
+// 0x00017ff0
 void ScrRemovePlayerFromVehicle(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1356,7 +1356,7 @@ void ScrRemovePlayerFromVehicle(RPCParameters* parameters)
     local->m_state.ped->ExitVehicle();
 }
 
-// 0x00019420
+// 0x000198f0
 void ScrDisplayGametext(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1373,7 +1373,7 @@ void ScrDisplayGametext(RPCParameters* parameters)
     }
 }
 
-// 0x00017960
+// 0x00017e50
 void ScrSetPlayerShopName(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1395,7 +1395,7 @@ void ScrSetPlayerShopName(RPCParameters* parameters)
     }
 }
 
-// 0x00019330
+// 0x00019800
 void ScrSetPlayerColor(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1415,7 +1415,7 @@ void ScrSetPlayerColor(RPCParameters* parameters)
     }
 }
 
-// 0x0001d830
+// 0x0001dd70
 void ScrDeathMessage(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1458,7 +1458,7 @@ void ScrDeathMessage(RPCParameters* parameters)
         ((CDeathWindow*)g_deviceDeathWindow)->AddMessage(killerName, victimName, killerColor, victimColor, weapon);
 }
 
-// 0x0001c390
+// 0x0001c870
 void ScrInitMenu(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1510,7 +1510,7 @@ void ScrInitMenu(RPCParameters* parameters)
     }
 }
 
-// 0x0001c650
+// 0x0001cb90
 void ScrShowMenu(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1522,7 +1522,7 @@ void ScrShowMenu(RPCParameters* parameters)
     }
 }
 
-// 0x0001c700
+// 0x0001cc40
 void ScrHideMenu(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1534,7 +1534,7 @@ void ScrHideMenu(RPCParameters* parameters)
     }
 }
 
-// 0x0001c850
+// 0x0001cd90
 void ScrShowTextDraw(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1559,7 +1559,7 @@ void ScrShowTextDraw(RPCParameters* parameters)
     }
 }
 
-// 0x0001c980
+// 0x0001cec0
 void ScrHideTextDrawForPlayer(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1574,7 +1574,7 @@ void ScrHideTextDrawForPlayer(RPCParameters* parameters)
     }
 }
 
-// 0x0001ca30
+// 0x0001cf70
 void ScrTextDrawSetString(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1599,7 +1599,7 @@ void ScrTextDrawSetString(RPCParameters* parameters)
     }
 }
 
-// 0x00019e60
+// 0x0001a330
 void ScrPlaySound(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1612,7 +1612,7 @@ void ScrPlaySound(RPCParameters* parameters)
     g_pGame->m_pAudio->Play(sound, position);
 }
 
-// 0x0001ce80
+// 0x0001d3c0
 void ScrPlayAudioStream(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1632,7 +1632,7 @@ void ScrPlayAudioStream(RPCParameters* parameters)
         g_renderAudioStream->Play(url, position.x, position.y, position.z, radius, spatial);
 }
 
-// 0x00017c00
+// 0x000180f0
 void ScrStopAudioStream(RPCParameters* parameters)
 {
     (void)parameters;
@@ -1640,7 +1640,7 @@ void ScrStopAudioStream(RPCParameters* parameters)
         g_renderAudioStream->Stop(false);
 }
 
-// 0x000195d0
+// 0x00019aa0
 void ScrSetPlayerCameraPosition(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1651,7 +1651,7 @@ void ScrSetPlayerCameraPosition(RPCParameters* parameters)
     g_pGame->m_pCamera->Set(position, rotation);
 }
 
-// 0x000196a0
+// 0x00019b70
 void ScrSetPlayerCameraLookAt(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1666,14 +1666,14 @@ void ScrSetPlayerCameraLookAt(RPCParameters* parameters)
     g_pGame->m_pCamera->PointAt(position, style);
 }
 
-// 0x00017b90
+// 0x00018080
 void ScrSetCameraBehindPlayer(RPCParameters* parameters)
 {
     (void)parameters;
     g_pGame->m_pCamera->Restore();
 }
 
-// 0x00018e50
+// 0x00019320
 void ScrSetPlayerPosition(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1694,7 +1694,7 @@ void ScrSetPlayerPosition(RPCParameters* parameters)
     }
 }
 
-// 0x00018f70
+// 0x00019440
 void ScrSetPlayerPositionFindZ(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1709,7 +1709,7 @@ void ScrSetPlayerPositionFindZ(RPCParameters* parameters)
     local->m_state.ped->Teleport(position);
 }
 
-// 0x00018350
+// 0x00018850
 void ScrSetPlayerVelocity(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1728,7 +1728,7 @@ void ScrSetPlayerVelocity(RPCParameters* parameters)
     }
 }
 
-// 0x00019f40
+// 0x0001a410
 void ScrSetPlayerWorldBounds(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1738,7 +1738,7 @@ void ScrSetPlayerWorldBounds(RPCParameters* parameters)
     stream.ReadBits(*(BYTE**)((BYTE*)g_pNetGame + 0x3d5) + 0x11, 32, true);
 }
 
-// 0x0001a0d0
+// 0x0001a5a0
 void ScrSetPlayerFacingAngle(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1749,7 +1749,7 @@ void ScrSetPlayerFacingAngle(RPCParameters* parameters)
     g_pGame->GetPlayerPed()->SetRotation(angle);
 }
 
-// 0x00017860
+// 0x00017d50
 void ScrEnableStuntBonusForPlayer(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1760,7 +1760,7 @@ void ScrEnableStuntBonusForPlayer(RPCParameters* parameters)
     g_pGame->EnableStuntBonus((BYTE)enabled);
 }
 
-// 0x00017be0
+// 0x000180d0
 void ScrForceClassSelection(RPCParameters* parameters)
 {
     (void)parameters;
@@ -1768,7 +1768,7 @@ void ScrForceClassSelection(RPCParameters* parameters)
     local->m_state.wantsAnotherClass = 1;
 }
 
-// 0x00017bb0
+// 0x000180a0
 void ScrResetPlayerWeapons(RPCParameters* parameters)
 {
     (void)parameters;
@@ -1776,7 +1776,7 @@ void ScrResetPlayerWeapons(RPCParameters* parameters)
     local->m_state.ped->ClearWeapons();
 }
 
-// 0x0001a170
+// 0x0001a640
 void ScrGivePlayerWeapon(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1787,7 +1787,7 @@ void ScrGivePlayerWeapon(RPCParameters* parameters)
     local->m_state.ped->GiveWeapon(weapon, ammo);
 }
 
-// 0x0001cb40
+// 0x0001d080
 void ScrGangZoneCreate(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1809,7 +1809,7 @@ void ScrGangZoneCreate(RPCParameters* parameters)
     }
 }
 
-// 0x0001cc60
+// 0x0001d1a0
 void ScrGangZoneDestroy(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1824,7 +1824,7 @@ void ScrGangZoneDestroy(RPCParameters* parameters)
     }
 }
 
-// 0x0001cd10
+// 0x0001d250
 void ScrGangZoneFlash(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1841,7 +1841,7 @@ void ScrGangZoneFlash(RPCParameters* parameters)
     }
 }
 
-// 0x0001cdd0
+// 0x0001d310
 void ScrGangZoneStopFlash(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1856,7 +1856,7 @@ void ScrGangZoneStopFlash(RPCParameters* parameters)
     }
 }
 
-// 0x000178f0
+// 0x00017de0
 void ScrDisableVehicleCollisions(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1866,7 +1866,7 @@ void ScrDisableVehicleCollisions(RPCParameters* parameters)
         ((CNetGame*)g_pNetGame)->disableVehicleCollisions = (BYTE)disabled;
 }
 
-// 0x0001a800
+// 0x0001acd0
 void ScrSetGravity(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1877,7 +1877,7 @@ void ScrSetGravity(RPCParameters* parameters)
     g_pGame->SetWorldGravity(gravity);
 }
 
-// 0x0001c7b0
+// 0x0001ccf0
 void ScrSetPlayerWantedLevel(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1889,7 +1889,7 @@ void ScrSetPlayerWantedLevel(RPCParameters* parameters)
     }
 }
 
-// 0x00019080
+// 0x00019550
 void ScrSetPlayerHealth(RPCParameters* parameters)
 {
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
@@ -1899,7 +1899,7 @@ void ScrSetPlayerHealth(RPCParameters* parameters)
     local->m_state.ped->SetHealth(health);
 }
 
-// 0x0001a690
+// 0x0001ab60
 void ScrSetPlayerArmor(RPCParameters* parameters)
 {
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
@@ -1909,7 +1909,7 @@ void ScrSetPlayerArmor(RPCParameters* parameters)
     local->m_state.ped->SetArmour(armour);
 }
 
-// 0x00019530
+// 0x00019a00
 void ScrSetPlayerInterior(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1920,7 +1920,7 @@ void ScrSetPlayerInterior(RPCParameters* parameters)
     g_pGame->GetPlayerPed()->LinkToInterior(interior, TRUE);
 }
 
-// 0x0001a030
+// 0x0001a500
 void ScrGivePlayerMoney(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1931,14 +1931,14 @@ void ScrGivePlayerMoney(RPCParameters* parameters)
     g_pGame->IncreasePlayerMoney(amount);
 }
 
-// 0x00017ba0
+// 0x00018090
 void ScrResetPlayerMoney(RPCParameters* parameters)
 {
     (void)parameters;
     g_pGame->ResetMoney();
 }
 
-// 0x000181a0
+// 0x00018690
 void ScrSetPlayerSpecialAction(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
@@ -1949,7 +1949,7 @@ void ScrSetPlayerSpecialAction(RPCParameters* parameters)
         players->local->SetSpecialAction(action);
 }
 
-// 0x00019dc0
+// 0x0001a290
 void ScrTogglePlayerControllable(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
@@ -1959,7 +1959,7 @@ void ScrTogglePlayerControllable(RPCParameters* parameters)
     stream.Read(enabled);
     g_pGame->GetPlayerPed()->SetControllable(enabled);
 }
-// 0x0001dbf0
+// 0x0001e130
 void RegisterScriptRPCs(RakClientInterface* client)
 {
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDisableVehicleCollisions), ScrDisableVehicleCollisions);
@@ -2059,7 +2059,7 @@ void RegisterScriptRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001182D8), ScrRpc48);
 }
 
-// 0x00017c20
+// 0x00018110
 void UnRegisterScriptRPCs(RakClientInterface* client)
 {
     const int* ids[] = {

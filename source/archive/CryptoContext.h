@@ -12,13 +12,13 @@
 class CCryptoContext
 {
 private:
-    // 0x0016c37c
+    // 0x0012e364
     static DWORD ms_dwRefCount;
-    // 0x0014077c
+    // 0x00102794
     static DWORD ms_dwProviderType;
-    // 0x0016c380
+    // 0x0012e368
     static LPSTR ms_szProviderName;
-    // 0x00140780
+    // 0x00102798
     static LPSTR ms_szContainerName;
 
     // legacy
@@ -27,12 +27,12 @@ private:
     HCRYPTPROV m_hCryptProv;
 
 public:
-    // 0x00065030
+    // 0x000655b0
     CCryptoContext(void);
-    // 0x000650a0
+    // 0x00065620
     ~CCryptoContext(void);
 
-    // 0x000650e0
+    // 0x00065660
     HCRYPTPROV GetProvider();
 
 #ifdef ARCTOOL

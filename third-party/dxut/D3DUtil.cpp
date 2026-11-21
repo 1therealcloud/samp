@@ -19,7 +19,6 @@
 // Desc: Returns the DirectX SDK media path, as stored in the system registry
 //       during the SDK install.
 //-----------------------------------------------------------------------------
-// 0x00075980
 const TCHAR* D3DUtil_GetDXSDKMediaPath()
 {
     static TCHAR strNull[2] = _T("");
@@ -67,7 +66,6 @@ const TCHAR* D3DUtil_GetDXSDKMediaPath()
 // Desc: Helper function called to build a DDSURFACEDESC2 structure,
 //       typically before calling CreateSurface() or GetSurfaceDesc()
 //-----------------------------------------------------------------------------
-// 0x00075a60
 VOID D3DUtil_InitSurfaceDesc( DDSURFACEDESC2& ddsd, DWORD dwFlags,
                               DWORD dwCaps )
 {
@@ -83,7 +81,6 @@ VOID D3DUtil_InitSurfaceDesc( DDSURFACEDESC2& ddsd, DWORD dwFlags,
 // Name: D3DUtil_InitMaterial()
 // Desc: Helper function called to build a D3DMATERIAL7 structure
 //-----------------------------------------------------------------------------
-// 0x00075a90
 VOID D3DUtil_InitMaterial( D3DMATERIAL7& mtrl, FLOAT r, FLOAT g, FLOAT b,
                            FLOAT a )
 {
@@ -99,7 +96,6 @@ VOID D3DUtil_InitMaterial( D3DMATERIAL7& mtrl, FLOAT r, FLOAT g, FLOAT b,
 // Name: D3DUtil_InitLight()
 // Desc: Initializes a D3DLIGHT7 structure
 //-----------------------------------------------------------------------------
-// 0x00075ae0
 VOID D3DUtil_InitLight( D3DLIGHT7& light, D3DLIGHTTYPE ltType,
                         FLOAT x, FLOAT y, FLOAT z )
 {
@@ -122,7 +118,6 @@ VOID D3DUtil_InitLight( D3DLIGHT7& light, D3DLIGHTTYPE ltType,
 // Desc: Given an eye point, a lookat point, and an up vector, this
 //       function builds a 4x4 view matrix.
 //-----------------------------------------------------------------------------
-// 0x00075de0
 HRESULT D3DUtil_SetViewMatrix( D3DMATRIX& mat, D3DVECTOR& vFrom,
                                D3DVECTOR& vAt, D3DVECTOR& vWorldUp )
 {
@@ -190,7 +185,6 @@ HRESULT D3DUtil_SetViewMatrix( D3DMATRIX& mat, D3DVECTOR& vFrom,
 //       element [3][4] to be 1.0. This is performed so that W-based range fog
 //       will work correctly.
 //-----------------------------------------------------------------------------
-// 0x00075b50
 HRESULT D3DUtil_SetProjectionMatrix( D3DMATRIX& mat, FLOAT fFOV, FLOAT fAspect,
                                      FLOAT fNearPlane, FLOAT fFarPlane )
 {
@@ -218,7 +212,6 @@ HRESULT D3DUtil_SetProjectionMatrix( D3DMATRIX& mat, FLOAT fFOV, FLOAT fAspect,
 // Name: D3DUtil_SetRotateXMatrix()
 // Desc: Create Rotation matrix about X axis
 //-----------------------------------------------------------------------------
-// 0x00075be0
 VOID D3DUtil_SetRotateXMatrix( D3DMATRIX& mat, FLOAT fRads )
 {
     D3DUtil_SetIdentityMatrix( mat );
@@ -233,7 +226,6 @@ VOID D3DUtil_SetRotateXMatrix( D3DMATRIX& mat, FLOAT fRads )
 // Name: D3DUtil_SetRotateYMatrix()
 // Desc: Create Rotation matrix about Y axis
 //-----------------------------------------------------------------------------
-// 0x00075c30
 VOID D3DUtil_SetRotateYMatrix( D3DMATRIX& mat, FLOAT fRads )
 {
     D3DUtil_SetIdentityMatrix( mat );
@@ -248,7 +240,6 @@ VOID D3DUtil_SetRotateYMatrix( D3DMATRIX& mat, FLOAT fRads )
 // Name: D3DUtil_SetRotateZMatrix()
 // Desc: Create Rotation matrix about Z axis
 //-----------------------------------------------------------------------------
-// 0x00075c80
 VOID D3DUtil_SetRotateZMatrix( D3DMATRIX& mat, FLOAT fRads )
 {
     D3DUtil_SetIdentityMatrix( mat );
@@ -263,7 +254,6 @@ VOID D3DUtil_SetRotateZMatrix( D3DMATRIX& mat, FLOAT fRads )
 // Name: D3DUtil_SetRotationMatrix
 // Desc: Create a Rotation matrix about vector direction
 //-----------------------------------------------------------------------------
-// 0x000760e0
 VOID D3DUtil_SetRotationMatrix( D3DMATRIX& mat, D3DVECTOR& vDir, FLOAT fRads )
 {
     FLOAT     fCos = cosf( fRads );

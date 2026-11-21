@@ -2,55 +2,55 @@
 #define ANTICHEAT_H
 
 #include <windows.h>
-// 0x0018dc24
+// R5 address to verify
 extern DWORD g_integrityVehicleChecksum;
-// 0x0018dc28
+// R5 address to verify
 extern DWORD g_integrityPedChecksum;
-// 0x0018dc2c
+// 0x0014fd98
 extern DWORD g_integrityComparisons;
-// 0x0018dc30
+// R5 address to verify
 extern DWORD g_integrityPending;
-// 0x0018dc34
+// R5 address to verify
 extern BYTE g_integritySuppressCount;
-// 0x0009d690
+// 0x0009d850
 DWORD* GameIntegrityVehicleArray();
-// 0x0009d6b0
+// 0x0009d870
 DWORD* GameIntegrityPedArray();
-// 0x0009d6d0
+// 0x0009d890
 DWORD GameIntegrityXor(const DWORD* data, DWORD count);
 // Seven DWORD words are supplied by reviewed callers; native body ignores them.
-// 0x000c5c10
+// 0x000c4530
 DWORD __stdcall GameIntegrityMismatch(DWORD code, DWORD a, DWORD b, DWORD c, DWORD d, DWORD e, DWORD f);
-// 0x0009d6f0
+// 0x0009d8b0
 void GameDeviceIntegrityCycle();
 // Native ST0 result retains its extended precision until the caller stores it.
-// 0x000c5b00
+// 0x000c4420
 double __cdecl ClientGetFrameElapsed();
-// 0x000c5d90
+// 0x000c46b0
 DWORD __cdecl ClientIntegrityFrame(BYTE check);
-// 0x0015548c
+// 0x00117478
 extern DWORD g_clientIntegrityFrameMarker;
-// 0x002aca78
+// R5 address to verify
 extern DWORD g_clientIntegrityFramePrevious;
-// 0x002aca7c
+// R5 address to verify
 extern DWORD g_clientIntegrityFrameFirst;
-// 0x002aca80
+// R5 address to verify
 extern DWORD g_clientIntegrityFrameCounter;
-// 0x002aca88
+// R5 address to verify
 extern double g_clientTimerPreviousSeconds;
-// 0x002aca90
+// R5 address to verify
 extern __int64 g_clientTimerPreviousCounter;
-// 0x002aca98
+// R5 address to verify
 extern DWORD g_clientTimerFlags;
-// 0x002acaa0
+// R5 address to verify
 extern __int64 g_clientTimerFrequency;
-// 0x002acaa8
+// R5 address to verify
 extern DWORD g_clientTimerUsePerformanceCounter;
-// 0x002acaac
+// R5 address to verify
 extern DWORD g_clientTimerFrequencyAttempted;
-// 0x0011a920
+// 0x000e8890
 extern const double g_clientTimerUnsignedBias;
-// 0x0011a930
+// 0x000e88a0
 extern const double g_clientTimerMillisecondScale;
 
 #endif // ANTICHEAT_H

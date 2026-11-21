@@ -7,12 +7,12 @@ class CSrvNetStats
 {
 public:
     BYTE nativeState[0x18];
-    // 0x00070cc0
+    // 0x00071220
     CSrvNetStats(IDirect3DDevice9* device);
-    // 0x00070d00
+    // 0x00071260
     void Draw();
 };
-// 0x0016c7f8
+// 0x0012e968
 extern DWORD g_srvNetStatsHistory[74];
 
 #endif // SVRNETSTATS_H

@@ -49,24 +49,24 @@ private:
     BYTE** m_pFileData;
 
 public:
-    // 0x00060500
+    // 0x00060a80
     CFileSystem();
-    // 0x00060690
+    // R5 address to verify
     virtual ~CFileSystem();
 
-    // 0x000606b0
+    // 0x00060c30
     virtual bool Load(char* szFileName);
-    // 0x00060520
+    // 0x00060aa0
     virtual void Unload();
 
-    // 0x00060580
+    // 0x00060b00
     virtual DWORD GetFileIndex(char* szFileName);
-    // 0x000605e0
+    // R5 address to verify
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-    // 0x00060610
+    // R5 address to verify
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 
-    // 0x00060640
+    // 0x00060bc0
     void DecryptData(BYTE* pData, DWORD dwDataLen, WORD wKey);
 };
 

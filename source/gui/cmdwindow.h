@@ -27,7 +27,7 @@ class CInput
 {
 public:
     // Returns the raw DWORD; distinct from the AL bool getter IsActive.
-    // 0x00002e80
+    // R5 address to verify
     DWORD GetEnabledState();
     IDirect3DDevice9* m_pDevice;
     CDXUTDialog* m_pGameUi;
@@ -39,37 +39,37 @@ public:
     char m_szInput[129], m_szRecallBuffer[10][129], m_szCurrentBuffer[129];
     int m_nCurrentRecall, m_nTotalRecall;
     InputCommand m_pDefaultCommand;
-    // 0x00068e10
+    // 0x000693d0
     CInput(IDirect3DDevice9*);
-    // 0x00068e80
+    // 0x00069440
     InputRect* GetRect(InputRect*);
-    // 0x00068ec0
+    // 0x00069480
     void Open();
-    // 0x00068fc0
+    // 0x00069580
     void Close();
-    // 0x00069010
+    // 0x000695d0
     void AddRecall(const char*);
-    // 0x00069070
+    // 0x00069630
     void RecallUp();
-    // 0x000690e0
+    // 0x000696a0
     void RecallDown();
-    // 0x00069130
+    // 0x000696f0
     void EnableCursor();
-    // 0x00069150
+    // 0x00069710
     InputCommand GetCommandHandler(const char*);
-    // 0x000691a0
+    // 0x00069760
     void SetDefaultCommand(InputCommand);
-    // 0x000691b0
+    // 0x00069770
     void AddCommand(const char*, InputCommand);
-    // 0x00069210
+    // 0x000697d0
     BOOL MsgProc(int, int, int);
-    // 0x00069280
+    // 0x00069840
     void ResetDialogControls(CDXUTDialog*);
-    // 0x00069340
+    // 0x00069900
     void Send(const char*);
-    // 0x00069410
+    // 0x000699d0
     void ProcessInput();
-    // 0x00069250
+    // 0x00069810
     bool IsActive();
 };
 #pragma pack(pop)

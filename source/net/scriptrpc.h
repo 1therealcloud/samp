@@ -13,408 +13,408 @@ class BitStream;
 }
 class CObject;
 // Reads count material records from an existing borrowed stream.
-// 0x0001aba0
+// 0x0001b070
 void ObjectReadMaterials(unsigned char count, CObject* object, RakNet::BitStream* stream);
-// 0x0001ae70
+// 0x0001b340
 void ScrCreateObject(RPCParameters* parameters);
-// 0x0001b1d0
+// 0x0001b6a0
 void ScrSetObjectMaterial(RPCParameters* parameters);
-// 0x0001c1d0
+// 0x0001c6a0
 void ScrAttachObjectToPlayer(RPCParameters* parameters);
-// 0x00018a00
+// 0x00018f00
 void ScrSetPlayerAttachedObject(RPCParameters* parameters);
 // Native updates custom-model state; higher-level name remains unestablished.
-// 0x0001d780
+// 0x0001dcc0
 void ScrRpc48(RPCParameters* parameters);
-// 0x00118288
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand;
-// 0x0001da90
+// 0x0001dfd0
 void ScrSetPlayerName(RPCParameters* parameters);
-// 0x000188b0
+// 0x00018db0
 void ScrSetPlayerDrunkLevel(RPCParameters* parameters);
-// 0x00018950
+// 0x00018e50
 void ScrSetPlayerArmedWeapon(RPCParameters* parameters);
-// 0x00019b20
+// 0x00019ff0
 void ScrAttachCameraToObject(RPCParameters* parameters);
-// 0x00019c20
+// 0x0001a0f0
 void ScrInterpolateCamera(RPCParameters* parameters);
-// 0x0001d110
+// 0x0001d650
 void ClickTextDraw(RPCParameters* parameters);
-// 0x0001bca0
+// 0x0001c170
 void ScrStopObjectCameraCollision(RPCParameters* parameters);
-// 0x0001cff0
+// 0x0001d530
 void ScrRemoveBuildingForPlayer(RPCParameters* parameters);
-// 0x00018b40
+// 0x00019050
 void ScrPlayCrimeReport(RPCParameters* parameters);
-// 0x00018750
+// R5 address to verify
 void ScrPlayerOpcode052C(RPCParameters* parameters);
-// 0x00018800
+// R5 address to verify
 void ScrPlayerOpcode03FD(RPCParameters* parameters);
 // The original returns immediately.
-// 0x00017bd0
+// R5 address to verify
 void ScrRpc125(RPCParameters* parameters);
 // Native consumes and discards a WORD, with stream construction/destruction.
-// 0x0001a230
+// 0x0001a700
 void ScrRpc64(RPCParameters* parameters);
-// 0x001182b0
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand;
-// 0x001182c4
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_rpcPlayerOpcode03fdCommand;
-// 0x00017a60
+// 0x00017f50
 void ScrSetSpawnInfo(RPCParameters* parameters);
-// 0x00018250
+// 0x00018740
 void ScrSetPlayerFightingStyle(RPCParameters* parameters);
-// 0x0001a740
+// 0x0001ac10
 void ScrSetPlayerAmmo(RPCParameters* parameters);
-// 0x00019240
+// 0x00019710
 void ScrSetPlayerTeam(RPCParameters* parameters);
-// 0x00018c80
+// 0x00019190
 void ScrSetPlayerSkin(RPCParameters* parameters);
-// 0x0001a480
+// 0x0001a950
 void ScrApplyAnimation(RPCParameters* parameters);
-// 0x00018090
+// 0x00018580
 void ScrClearAnimations(RPCParameters* parameters);
-// 0x0001c0f0
+// 0x0001c5c0
 void ScrMoveVehicleComponent(RPCParameters* parameters);
-// 0x000185c0
+// 0x00018ac0
 void ScrSetPlayerWidescreen(RPCParameters* parameters);
-// 0x00018670
+// R5 address to verify
 void ScrSetVehicleTires(RPCParameters* parameters);
-// 0x00118274
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_rpcWidescreenCommand;
-// 0x0011844c
+// 0x000e63bc
 extern const char g_rpcWidescreenMessage[];
-// 0x0011845c
+// 0x000e63cc
 extern const char g_rpcInvalidSkinWarning[];
-// 0x0011829c
+// 0x000e620c
 extern const Scripting::OpcodeInfo g_rpcExplosionCommand;
-// 0x0001b540
+// 0x0001ba10
 void ScrSetObjectPosition(RPCParameters* parameters);
-// 0x0001b650
+// 0x0001bb20
 void ScrSetObjectRotation(RPCParameters* parameters);
-// 0x0001b750
+// 0x0001bc20
 void ScrDestroyObject(RPCParameters* parameters);
-// 0x0001ba30
+// 0x0001bf00
 void ScrMoveObject(RPCParameters* parameters);
-// 0x0001bbe0
+// 0x0001c0b0
 void ScrStopObject(RPCParameters* parameters);
-// 0x0001d210
+// 0x0001d750
 void ScrSetActorAnimation(RPCParameters* parameters);
-// 0x0001d3f0
+// R5 address to verify
 void ScrClearActorAnimations(RPCParameters* parameters);
-// 0x0001d4b0
+// 0x0001d9f0
 void ScrSetActorRotation(RPCParameters* parameters);
-// 0x0001d590
+// 0x0001dad0
 void ScrSetActorPosition(RPCParameters* parameters);
-// 0x0001d6a0
+// 0x0001dbe0
 void ScrSetActorHealth(RPCParameters* parameters);
-// 0x0001a2c0
+// 0x0001a790
 void ScrSetPlayerMapIcon(RPCParameters* parameters);
-// 0x0001a3e0
+// 0x0001a8b0
 void ScrRemovePlayerMapIcon(RPCParameters* parameters);
-// 0x0001b840
+// 0x0001bd10
 void ScrCreateExplosion(RPCParameters* parameters);
-// 0x0001b950
+// 0x0001be20
 void ScrShowPlayerNametagForPlayer(RPCParameters* parameters);
-// 0x000197a0
+// 0x00019c70
 void ScrSetVehiclePosition(RPCParameters* parameters);
-// 0x000198b0
+// 0x00019d80
 void ScrSetVehicleZAngle(RPCParameters* parameters);
-// 0x00019990
-void ScrSetVehicleParamsForPlayer(RPCParameters* parameters);
-// 0x00019a60
-void ScrLinkVehicleToInterior(RPCParameters* parameters);
-// 0x0001a8a0
-void ScrSetVehicleHealth(RPCParameters* parameters);
-// 0x0001a980
-void ScrAttachTrailerToVehicle(RPCParameters* parameters);
-// 0x0001aac0
-void ScrDetachTrailerFromVehicle(RPCParameters* parameters);
-// 0x00018450
-void ScrSetVehicleVelocity(RPCParameters* parameters);
-// 0x0001bd60
-void ScrSetNumberPlate(RPCParameters* parameters);
-// 0x0001be80
-void ScrTogglePlayerSpectating(RPCParameters* parameters);
-// 0x0001bf30
-void ScrPlayerSpectatePlayer(RPCParameters* parameters);
-// 0x0001c010
-void ScrPlayerSpectateVehicle(RPCParameters* parameters);
-// 0x00019130
-void ScrPutPlayerInVehicle(RPCParameters* parameters);
-// 0x00017b00
-void ScrRemovePlayerFromVehicle(RPCParameters* parameters);
-// 0x00019420
-void ScrDisplayGametext(RPCParameters* parameters);
-// 0x00017960
-void ScrSetPlayerShopName(RPCParameters* parameters);
-// 0x00019330
-void ScrSetPlayerColor(RPCParameters* parameters);
-// 0x0001d830
-void ScrDeathMessage(RPCParameters* parameters);
-// 0x0001c390
-void ScrInitMenu(RPCParameters* parameters);
-// 0x0001c650
-void ScrShowMenu(RPCParameters* parameters);
-// 0x0001c700
-void ScrHideMenu(RPCParameters* parameters);
-// 0x0001c850
-void ScrShowTextDraw(RPCParameters* parameters);
-// 0x0001c980
-void ScrHideTextDrawForPlayer(RPCParameters* parameters);
-// 0x0001ca30
-void ScrTextDrawSetString(RPCParameters* parameters);
 // 0x00019e60
+void ScrSetVehicleParamsForPlayer(RPCParameters* parameters);
+// 0x00019f30
+void ScrLinkVehicleToInterior(RPCParameters* parameters);
+// 0x0001ad70
+void ScrSetVehicleHealth(RPCParameters* parameters);
+// 0x0001ae50
+void ScrAttachTrailerToVehicle(RPCParameters* parameters);
+// 0x0001af90
+void ScrDetachTrailerFromVehicle(RPCParameters* parameters);
+// 0x00018950
+void ScrSetVehicleVelocity(RPCParameters* parameters);
+// 0x0001c230
+void ScrSetNumberPlate(RPCParameters* parameters);
+// 0x0001c350
+void ScrTogglePlayerSpectating(RPCParameters* parameters);
+// 0x0001c400
+void ScrPlayerSpectatePlayer(RPCParameters* parameters);
+// 0x0001c4e0
+void ScrPlayerSpectateVehicle(RPCParameters* parameters);
+// 0x00019600
+void ScrPutPlayerInVehicle(RPCParameters* parameters);
+// 0x00017ff0
+void ScrRemovePlayerFromVehicle(RPCParameters* parameters);
+// 0x000198f0
+void ScrDisplayGametext(RPCParameters* parameters);
+// 0x00017e50
+void ScrSetPlayerShopName(RPCParameters* parameters);
+// 0x00019800
+void ScrSetPlayerColor(RPCParameters* parameters);
+// 0x0001dd70
+void ScrDeathMessage(RPCParameters* parameters);
+// 0x0001c870
+void ScrInitMenu(RPCParameters* parameters);
+// 0x0001cb90
+void ScrShowMenu(RPCParameters* parameters);
+// 0x0001cc40
+void ScrHideMenu(RPCParameters* parameters);
+// 0x0001cd90
+void ScrShowTextDraw(RPCParameters* parameters);
+// 0x0001cec0
+void ScrHideTextDrawForPlayer(RPCParameters* parameters);
+// 0x0001cf70
+void ScrTextDrawSetString(RPCParameters* parameters);
+// 0x0001a330
 void ScrPlaySound(RPCParameters* parameters);
-// 0x0001ce80
+// 0x0001d3c0
 void ScrPlayAudioStream(RPCParameters* parameters);
-// 0x00017c00
+// 0x000180f0
 void ScrStopAudioStream(RPCParameters* parameters);
-// 0x00118494
+// 0x000e6404
 extern const char g_rpcLargeTextDrawWarning[];
-// 0x000195d0
+// 0x00019aa0
 void ScrSetPlayerCameraPosition(RPCParameters* parameters);
-// 0x000196a0
+// 0x00019b70
 void ScrSetPlayerCameraLookAt(RPCParameters* parameters);
-// 0x00017b90
+// 0x00018080
 void ScrSetCameraBehindPlayer(RPCParameters* parameters);
-// 0x00018e50
+// 0x00019320
 void ScrSetPlayerPosition(RPCParameters* parameters);
-// 0x00018f70
+// 0x00019440
 void ScrSetPlayerPositionFindZ(RPCParameters* parameters);
-// 0x00018350
+// 0x00018850
 void ScrSetPlayerVelocity(RPCParameters* parameters);
-// 0x00019f40
+// 0x0001a410
 void ScrSetPlayerWorldBounds(RPCParameters* parameters);
-// 0x0001a0d0
+// 0x0001a5a0
 void ScrSetPlayerFacingAngle(RPCParameters* parameters);
-// 0x00017860
+// 0x00017d50
 void ScrEnableStuntBonusForPlayer(RPCParameters* parameters);
-// 0x00017be0
+// 0x000180d0
 void ScrForceClassSelection(RPCParameters* parameters);
-// 0x00017bb0
+// 0x000180a0
 void ScrResetPlayerWeapons(RPCParameters* parameters);
-// 0x0001a170
+// 0x0001a640
 void ScrGivePlayerWeapon(RPCParameters* parameters);
-// 0x0001cb40
+// 0x0001d080
 void ScrGangZoneCreate(RPCParameters* parameters);
-// 0x0001cc60
+// 0x0001d1a0
 void ScrGangZoneDestroy(RPCParameters* parameters);
-// 0x0001cd10
+// 0x0001d250
 void ScrGangZoneFlash(RPCParameters* parameters);
-// 0x0001cdd0
+// 0x0001d310
 void ScrGangZoneStopFlash(RPCParameters* parameters);
-// 0x000178f0
+// 0x00017de0
 void ScrDisableVehicleCollisions(RPCParameters* parameters);
-// 0x0001a800
+// 0x0001acd0
 void ScrSetGravity(RPCParameters* parameters);
-// 0x0001c7b0
+// 0x0001ccf0
 void ScrSetPlayerWantedLevel(RPCParameters* parameters);
-// 0x00019080
+// 0x00019550
 void ScrSetPlayerHealth(RPCParameters* parameters);
-// 0x0001a690
+// 0x0001ab60
 void ScrSetPlayerArmor(RPCParameters* parameters);
-// 0x00019530
+// 0x00019a00
 void ScrSetPlayerInterior(RPCParameters* parameters);
-// 0x0001a030
+// 0x0001a500
 void ScrGivePlayerMoney(RPCParameters* parameters);
-// 0x00017ba0
+// 0x00018090
 void ScrResetPlayerMoney(RPCParameters* parameters);
-// 0x000181a0
+// 0x00018690
 void ScrSetPlayerSpecialAction(RPCParameters* parameters);
-// 0x00019dc0
+// 0x0001a290
 void ScrTogglePlayerControllable(RPCParameters* parameters);
-// 0x001184c0
+// R5 address to verify
 extern const int g_rpcScrSetPlayerArmor;
-// 0x0001dbf0
+// 0x0001e130
 void RegisterScriptRPCs(RakClientInterface* client);
-// 0x00017c20
+// 0x00018110
 void UnRegisterScriptRPCs(RakClientInterface* client);
-// 0x00118448
+// 0x000e63b8
 extern const int g_rpcScrDisableVehicleCollisions;
-// 0x00118444
+// 0x000e63b4
 extern const int g_rpcScrForceClassSelection;
-// 0x00118440
+// 0x000e63b0
 extern const int g_rpcScrAttachObjectToPlayer;
-// 0x0011843c
+// R5 address to verify
 extern const int g_rpcScrInitMenu;
-// 0x00118438
+// 0x000e63a8
 extern const int g_rpcScrShowMenu;
-// 0x00118434
+// R5 address to verify
 extern const int g_rpcScrHideMenu;
-// 0x00118430
+// 0x000e63a0
 extern const int g_rpcScrSetPlayerWantedLevel;
-// 0x0011842c
+// 0x000e639c
 extern const int g_rpcScrShowTextDraw;
-// 0x00118428
+// 0x000e6398
 extern const int g_rpcScrHideTextDrawForPlayer;
-// 0x00118424
+// 0x000e6394
 extern const int g_rpcScrTextDrawSetString;
-// 0x00118420
+// 0x000e6390
 extern const int g_rpcScrGangZoneCreate;
-// 0x0011841c
+// 0x000e638c
 extern const int g_rpcScrGangZoneDestroy;
-// 0x00118418
+// 0x000e6388
 extern const int g_rpcScrGangZoneFlash;
-// 0x00118414
+// 0x000e6384
 extern const int g_rpcScrGangZoneStopFlash;
-// 0x00118410
+// 0x000e6380
 extern const int g_rpcScrApplyAnimation;
-// 0x0011840c
+// 0x000e637c
 extern const int g_rpcScrClearAnimations;
-// 0x00118408
+// 0x000e6378
 extern const int g_rpcScrSetPlayerSpecialAction;
-// 0x00118404
+// 0x000e6374
 extern const int g_rpcScrEnableStuntBonusForPlayer;
-// 0x00118400
+// 0x000e637c
 extern const int g_rpcScrSetPlayerFightingStyle;
-// 0x001183fc
+// 0x000e636c
 extern const int g_rpcScrSetPlayerVelocity;
-// 0x001183f8
+// 0x000e6368
 extern const int g_rpcScrSetVehicleVelocity;
-// 0x001183f4
+// 0x000e6364
 extern const int g_rpcScrSetPlayerWidescreen;
-// 0x001183f0
+// 0x000e6360
 extern const int g_rpcScrSetVehicleTires;
-// 0x001183ec
+// R5 address to verify
 extern const int g_rpcUnknown001183EC;
-// 0x001183e8
+// R5 address to verify
 extern const int g_rpcUnknown001183E8;
-// 0x001183e4
+// R5 address to verify
 extern const int g_rpcScrPlayCrimeReport;
-// 0x001183e0
+// 0x000e635c
 extern const int g_rpcScrSetPlayerMapIcon;
-// 0x001183dc
+// R5 address to verify
 extern const int g_rpcScrRemovePlayerMapIcon;
-// 0x001183d8
+// R5 address to verify
 extern const int g_rpcScrSetPlayerAmmo;
-// 0x001183d4
+// R5 address to verify
 extern const int g_rpcScrSetGravity;
-// 0x001183d0
+// R5 address to verify
 extern const int g_rpcScrSetVehicleHealth;
-// 0x001183cc
+// R5 address to verify
 extern const int g_rpcScrAttachTrailerToVehicle;
-// 0x001183c8
+// R5 address to verify
 extern const int g_rpcScrDetachTrailerFromVehicle;
-// 0x001183c4
+// R5 address to verify
 extern const int g_rpcScrCreateObject;
-// 0x001183c0
+// R5 address to verify
 extern const int g_rpcScrSetObjectPosition;
-// 0x001183bc
+// R5 address to verify
 extern const int g_rpcScrSetObjectRotation;
-// 0x00117694
+// R5 address to verify
 extern const int g_rpcScrDestroyObject;
-// 0x001183b8
+// R5 address to verify
 extern const int g_rpcScrCreateExplosion;
-// 0x001183b4
+// R5 address to verify
 extern const int g_rpcScrShowPlayerNametagForPlayer;
-// 0x001183b0
+// R5 address to verify
 extern const int g_rpcScrMoveObject;
-// 0x001183ac
+// R5 address to verify
 extern const int g_rpcScrStopObject;
-// 0x001183a8
+// R5 address to verify
 extern const int g_rpcScrSetNumberPlate;
-// 0x001183a4
+// R5 address to verify
 extern const int g_rpcScrTogglePlayerSpectating;
-// 0x001183a0
+// R5 address to verify
 extern const int g_rpcUnknown001183A0;
-// 0x0011839c
+// R5 address to verify
 extern const int g_rpcScrPlayerSpectatePlayer;
-// 0x00118398
+// R5 address to verify
 extern const int g_rpcScrPlayerSpectateVehicle;
-// 0x00118394
+// 0x000e6310
 extern const int g_rpcScrMoveVehicleComponent;
-// 0x00118390
+// 0x000e630c
 extern const int g_rpcScrSetPlayerShopName;
-// 0x0011838c
+// 0x000e6308
 extern const int g_rpcScrSetPlayerDrunkLevel;
-// 0x00118388
+// 0x000e6304
 extern const int g_rpcScrSetPlayerArmedWeapon;
-// 0x00118384
+// R5 address to verify
 extern const int g_rpcScrSetPlayerAttachedObject;
-// 0x00118380
+// R5 address to verify
 extern const int g_rpcScrPlayAudioStream;
-// 0x0011837c
+// R5 address to verify
 extern const int g_rpcScrStopAudioStream;
-// 0x00118378
+// 0x000e62f4
 extern const int g_rpcScrRemoveBuildingForPlayer;
-// 0x00118374
+// 0x000e62f0
 extern const int g_rpcScrSetSpawnInfo;
-// 0x00118370
+// 0x000e62ec
 extern const int g_rpcScrSetPlayerTeam;
-// 0x0011836c
+// R5 address to verify
 extern const int g_rpcScrSetPlayerName;
-// 0x00118368
+// R5 address to verify
 extern const int g_rpcScrSetPlayerSkin;
-// 0x00118364
+// 0x000e62d4
 extern const int g_rpcScrSetPlayerPosition;
-// 0x00118360
+// 0x000e62d0
 extern const int g_rpcScrSetPlayerPositionFindZ;
-// 0x0011835c
+// 0x000e62cc
 extern const int g_rpcScrSetPlayerHealth;
-// 0x00118358
+// R5 address to verify
 extern const int g_rpcScrPutPlayerInVehicle;
-// 0x00118354
+// 0x000e62d0
 extern const int g_rpcScrRemovePlayerFromVehicle;
-// 0x00118350
+// R5 address to verify
 extern const int g_rpcScrSetPlayerColor;
-// 0x0011834c
+// 0x000e62c8
 extern const int g_rpcScrDisplayGametext;
-// 0x00118348
+// 0x000e62b8
 extern const int g_rpcScrSetPlayerInterior;
-// 0x00118344
+// 0x000e62b4
 extern const int g_rpcScrSetPlayerCameraPosition;
-// 0x00118340
+// 0x000e62b0
 extern const int g_rpcScrSetPlayerCameraLookAt;
-// 0x0011833c
+// 0x000e62ac
 extern const int g_rpcScrSetVehiclePosition;
-// 0x00118338
+// 0x000e62a8
 extern const int g_rpcScrSetVehicleZAngle;
-// 0x00118334
+// 0x000e62a4
 extern const int g_rpcScrSetVehicleParamsForPlayer;
-// 0x00118330
+// 0x000e62a0
 extern const int g_rpcScrSetCameraBehindPlayer;
-// 0x0011832c
+// 0x000e629c
 extern const int g_rpcScrTogglePlayerControllable;
-// 0x00118328
+// 0x000e6298
 extern const int g_rpcScrPlaySound;
-// 0x00118324
+// 0x000e6294
 extern const int g_rpcScrSetPlayerWorldBounds;
-// 0x00118320
+// 0x000e6290
 extern const int g_rpcScrGivePlayerMoney;
-// 0x0011831c
+// 0x000e628c
 extern const int g_rpcScrSetPlayerFacingAngle;
-// 0x00118318
+// 0x000e6288
 extern const int g_rpcScrResetPlayerMoney;
-// 0x00118314
+// 0x000e6284
 extern const int g_rpcScrResetPlayerWeapons;
-// 0x00118310
+// R5 address to verify
 extern const int g_rpcScrGivePlayerWeapon;
-// 0x0011830c
+// R5 address to verify
 extern const int g_rpcUnknown0011830C;
-// 0x00118308
+// 0x000e6284
 extern const int g_rpcScrLinkVehicleToInterior;
-// 0x00118304
+// 0x000e6280
 extern const int g_rpcScrDeathMessage;
-// 0x00118300
+// R5 address to verify
 extern const int g_rpcScrAttachCameraToObject;
-// 0x001182fc
+// R5 address to verify
 extern const int g_rpcScrInterpolateCamera;
-// 0x001182f4
+// 0x000e6264
 extern const int g_rpcScrSetObjectMaterial;
-// 0x001182f0
+// 0x000e6260
 extern const int g_rpcScrStopObjectCameraCollision;
-// 0x001182ec
+// 0x000e625c
 extern const int g_rpcScrSetActorAnimation;
-// 0x001182e8
+// 0x000e6258
 extern const int g_rpcScrClearActorAnimations;
-// 0x001182e4
+// 0x000e6254
 extern const int g_rpcScrSetActorRotation;
-// 0x001182e0
+// 0x000e6250
 extern const int g_rpcScrSetActorPosition;
-// 0x001182dc
+// 0x000e624c
 extern const int g_rpcScrSetActorHealth;
-// 0x001182d8
+// R5 address to verify
 extern const int g_rpcUnknown001182D8;
 
 #endif // SCRIPTRPC_H

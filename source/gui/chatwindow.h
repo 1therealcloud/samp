@@ -18,12 +18,12 @@ class CDXUTScrollBar;
 class CChat
 {
 public:
-    // 0x00068e00
+    // R5 address to verify
     LONG GetChatWindowBottom();
     // Stores the raw timestamp byte and always requests redraw.
-    // 0x00067f20
+    // R5 address to verify
     void SetTimestamps(BYTE enabled);
-    // 0x00067f40
+    // R5 address to verify
     BYTE GetTimestamps();
     enum EntryType
     {
@@ -78,57 +78,57 @@ public:
     BOOL m_bRedraw;
     long m_nScrollbarPos, m_nCharHeight, m_nTimestampWidth;
 
-    // 0x00067df0
+    // 0x00068380
     CChat(IDirect3DDevice9*, CFonts*, const char*);
-    // 0x00060d30
+    // 0x000612b0
     int GetMode();
-    // 0x00060d40
+    // 0x000612c0
     void SwitchMode();
-    // 0x00066b90
+    // 0x00067120
     void RecalcFontSize();
-    // 0x00066c10
+    // 0x000671a0
     void OnLostDevice();
-    // 0x00066c70
+    // 0x00067200
     void UpdateScrollbar();
-    // 0x00066d10
+    // 0x000672a0
     void SetPageSize(int);
-    // 0x00066d40
+    // 0x000672d0
     void PageUp();
-    // 0x00066da0
+    // 0x00067330
     void PageDown();
-    // 0x00066e00
+    // 0x00067390
     void ScrollToBottom();
-    // 0x00066e30
+    // 0x000673c0
     void Scroll(int);
-    // 0x00066e90
+    // 0x00067420
     void FilterOutInvalidChars(char*);
-    // 0x00066ec0
+    // 0x00067450
     void PushBack();
-    // 0x00067240
+    // 0x000677d0
     void Log(int, const char*, const char*);
-    // 0x00067310
+    // 0x000678a0
     void ResetDialogControls(CDXUTDialog*);
-    // 0x00067650
-    void AddEntry(int, const char*, const char*, D3DCOLOR, D3DCOLOR);
-    // 0x00067a90
-    void AddChatMessage(const char*, D3DCOLOR, char*);
     // 0x00067be0
+    void AddEntry(int, const char*, const char*, D3DCOLOR, D3DCOLOR);
+    // 0x00068020
+    void AddChatMessage(const char*, D3DCOLOR, char*);
+    // 0x00068170
     void AddMessage(D3DCOLOR, char*);
-    // 0x00067ae0
+    // 0x00068070
     void AddInfoMessage(const char*, ...);
-    // 0x00067b60
+    // 0x000680f0
     void AddDebugMessage(const char*, ...);
 
     // Rendering is reconstructed too; exact-match status is per method.
-    // 0x00066ee0
+    // 0x00067470
     void RenderEntry(const char*, RECT, D3DCOLOR);
-    // 0x000673b0
-    void Render();
-    // 0x00067870
-    void Draw();
     // 0x00067940
+    void Render();
+    // 0x00067e00
+    void Draw();
+    // 0x00067ed0
     void RenderToSurface();
-    // 0x00067c40
+    // 0x000681d0
     void OnResetDevice();
 };
 #pragma pack(pop)
@@ -165,13 +165,13 @@ STATIC_ASSERT(offsetof(CChat, m_nScrollbarPos) == 0x63de);
 STATIC_ASSERT(offsetof(CChat, m_nCharHeight) == 0x63e2);
 STATIC_ASSERT(offsetof(CChat, m_nTimestampWidth) == 0x63e6);
 
-// 0x000b5950
+// 0x000b5e10
 int ChatIsHexDigit(char value);
-// 0x000b59c0
+// 0x000b5e80
 unsigned long ChatParseColorTag(char* text);
-// 0x000b5c00
+// 0x000b60c0
 void ChatStripColorTags(char* text);
-// 0x000b5c40
+// 0x000b6100
 int ChatPrepareMessage(char* text, int maximumLength);
 
 #endif // CHATWINDOW_H

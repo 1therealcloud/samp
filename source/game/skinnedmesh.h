@@ -26,17 +26,17 @@ struct SkinMeshContainer : D3DXMESHCONTAINER
 class CSkinHierarchyAllocator : public ID3DXAllocateHierarchy
 {
 public:
-    // 0x000b9340
+    // R5 address to verify
     CSkinHierarchyAllocator();
-    // 0x000b8ad0
+    // R5 address to verify
     HRESULT __stdcall CreateFrame(LPCSTR name, D3DXFRAME** out);
     // Native does not validate mesh type, allocation or mesh/skin API results.
-    // 0x000b8800
+    // R5 address to verify
     HRESULT __stdcall CreateMeshContainer(LPCSTR name, const D3DXMESHDATA* mesh, const D3DXMATERIAL* materials, const D3DXEFFECTINSTANCE* effects, DWORD materialCount,
                                           const DWORD* adjacency, ID3DXSkinInfo* skin, D3DXMESHCONTAINER** out);
-    // 0x000b86b0
+    // R5 address to verify
     HRESULT __stdcall DestroyFrame(D3DXFRAME* frame);
-    // 0x000b86e0
+    // R5 address to verify
     HRESULT __stdcall DestroyMeshContainer(D3DXMESHCONTAINER* container);
 };
 
@@ -54,33 +54,33 @@ public:
     float radius;
     DWORD maximumBones, currentAnimation, animationCapacity;
     ID3DXAnimationController* controller;
-    // 0x000b8bc0
+    // R5 address to verify
     CSkinnedMesh(IDirect3DDevice9* device);
-    // 0x000b9510
+    // R5 address to verify
     virtual ~CSkinnedMesh();
     // Stores pointers even when FrameFind returns null (native result becomes50).
-    // 0x000b8c30
+    // R5 address to verify
     void SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent);
     // Guard uses controller capacity, not actual registered animation-set count.
-    // 0x000b8d10
+    // R5 address to verify
     void SetAnimation(DWORD index);
     // Returns1 without device,2 without mesh,0 after drawing.
-    // 0x000b8d60
+    // R5 address to verify
     int Render(const CMatrix* matrix);
-    // 0x000b9190
+    // R5 address to verify
     void DrawFrame(SkinFrame* frame);
     // Actual native RET12; original parameter meanings/identifier not established.
-    // 0x000b9250
+    // R5 address to verify
     void NativeNoOp3Words(DWORD first, DWORD second, DWORD third);
-    // 0x000b9260
+    // R5 address to verify
     void DumpBones();
-    // 0x000b92e0
+    // R5 address to verify
     void UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* parent);
     // Failure1/success0. Existing hierarchy/storage is not cleaned before loading.
-    // 0x000b9350
+    // R5 address to verify
     int Load(const char* filename);
     // Native ignores its one stack word; it does not advance animation time.
-    // 0x000b9450
+    // R5 address to verify
     void UpdateSkin(DWORD unused);
 };
 
@@ -98,17 +98,17 @@ STATIC_ASSERT(sizeof(D3DMATERIAL9) == 68);
 STATIC_ASSERT(sizeof(CSkinHierarchyAllocator) == 4);
 
 // Original development path is retained; no alternate texture search is invented.
-// 0x0011f860
+// R5 address to verify
 extern const char g_skinTextureDirectory[];
-// 0x0011f84c
+// R5 address to verify
 extern const char g_skinTextureFailed[];
-// 0x0011f838
+// R5 address to verify
 extern const char g_skinTextureLoaded[];
-// 0x0011c92c
+// 0x000ea904
 extern const char g_skinTexturePathFormat[];
-// 0x0011f8a4
+// R5 address to verify
 extern const char g_skinBoneNameFormat[];
-// 0x0011f8b8
+// R5 address to verify
 extern const char g_skinBoneCountFormat[];
 
 #endif // SKINNEDMESH_H

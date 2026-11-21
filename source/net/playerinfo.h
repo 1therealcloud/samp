@@ -12,20 +12,20 @@ class CRemotePlayer;
 class CPlayerInfo
 {
 public:
-    // 0x0006e270
+    // R5 address to verify
     int GetScore();
-    // 0x0006e280
+    // R5 address to verify
     DWORD GetPing();
     // Native VC7 string length is at info+24; no terminator scan.
-    // 0x0006e300
+    // R5 address to verify
     DWORD GetNameLength();
-    // 0x000170c0
+    // R5 address to verify
     const char* GetName();
-    // 0x0000e2d0
+    // R5 address to verify
     DWORD GetNpcFlag();
-    // 0x0000e2e0
+    // R5 address to verify
     void SetScore(int value);
-    // 0x0000e2f0
+    // R5 address to verify
     void SetPing(DWORD value);
 
     int score;
@@ -33,11 +33,11 @@ public:
     CRemotePlayer* remote;
     DWORD ping;
     std::string name;
-    // 0x0001da20
+    // R5 address to verify
     void SetName(const char* text);
-    // 0x00014060
+    // 0x000141b0
     CPlayerInfo(const char* name, DWORD npc);
-    // 0x00013e10
+    // 0x00013f60
     ~CPlayerInfo();
 };
 #pragma pack(pop)

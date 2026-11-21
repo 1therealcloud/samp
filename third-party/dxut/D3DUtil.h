@@ -53,7 +53,6 @@ HRESULT D3DUtil_SetProjectionMatrix( D3DMATRIX& mat, FLOAT fFOV = 1.570795f,
                                      FLOAT fNearPlane = 1.0f,
                                      FLOAT fFarPlane = 1000.0f );
 
-// 0x00075940
 inline VOID D3DUtil_SetIdentityMatrix( D3DMATRIX& m )
 {
     m._12 = m._13 = m._14 = m._21 = m._23 = m._24 = 0.0f;

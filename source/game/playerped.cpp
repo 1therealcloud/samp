@@ -29,101 +29,101 @@
 #include <time.h>
 // Linker orders these BSS subsections by suffix, preserving native adjacency.
 #pragma bss_seg(".pstate$a")
-// 0x002a9a50
+// R5 address to verify
 DWORD g_gamePlayerFlags[210];
 #pragma bss_seg(".pstate$b")
 // Shared raw raster snapshots (+14 and +0C), between flags and matrix caches.
-// 0x002a9d98
+// 0x0026bf00
 DWORD g_gamePlayerTableUnknown2A9D98[2];
 #pragma bss_seg(".pstate$c")
-// 0x002a9da0
+// R5 address to verify
 DWORD g_gameLocalPedMatrix;
 #pragma bss_seg(".pstate$d")
-// 0x002a9da4
+// R5 address to verify
 DWORD g_gameVehicleMatrix;
 #pragma bss_seg(".pstate$e")
-// 0x002a9da8
+// 0x0026bf10
 void* g_gamePlayerPeds[210];
 #pragma bss_seg(".pstate$f")
-// 0x002aa0f0
+// R5 address to verify
 BYTE g_gamePlayerControllerState[210][16];
 #pragma bss_seg()
 
-// 0x002a92a0
+// R5 address to verify
 void* g_pedCommandTaskSnapshot;
-// 0x0011f258
+// R5 address to verify
 const float g_pedFloorRayLength = 1.75f;
-// 0x0018f4a4
+// R5 address to verify
 DWORD g_pedVehicleEntryFlag;
-// 0x002a92a4
+// R5 address to verify
 DWORD g_pedDrunkVehicleTick;
-// 0x001181c0
+// 0x000e6130
 const float g_pedDrunkShakeScale = 0.02f;
-// 0x00117668
+// 0x000e55f8
 const float g_pedDrunkSpeedThreshold = 0.05f;
-// 0x0011f15c
+// 0x000ed050
 const Scripting::OpcodeInfo g_pedDetachParachute = {0x682, "ifffi"};
-// 0x0011f148
+// 0x000ed03c
 const Scripting::OpcodeInfo g_pedDestroyParachute = {0x9a2, "i"};
-// 0x0011f238
+// 0x000ed12c
 const Scripting::OpcodeInfo g_pedDropStuff = {0x70a, "iifffiissi"};
-// 0x0011efcc
+// 0x000ecec0
 const Scripting::OpcodeInfo g_pedWarpFromVehicle = {0x362, "ifff"};
-// 0x0011f320
+// 0x000ed210
 const char g_pedNullAnimation[5] = "NULL";
-// 0x0011ef54
+// 0x000ece48
 const Scripting::OpcodeInfo g_pedGetCurrentWeaponCommand = {0x470, "iv"};
-// 0x0011ef40
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedSetArmedWeaponCommand = {0x1b9, "ii"};
-// 0x0011f0d0
+// 0x000ecfc4
 const Scripting::OpcodeInfo g_pedCommand087e = {0x87e, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ef90
+// 0x000ece84
 const Scripting::OpcodeInfo g_pedCommand0446 = {0x446, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e604
+// 0x000ec50c
 const Scripting::OpcodeInfo g_entityTeleportCommand = {0x7c7, {0x69, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f1c0
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedFightingStyleCommand = {0x7fe, {0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f198
+// 0x000ed08c
 const Scripting::OpcodeInfo g_pedCellphoneCommand = {0x729, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eef0
+// 0x000ecdf8
 const Scripting::OpcodeInfo g_pedDeleteArrowCommand = {0x164, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ef18
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedSpawnInfoCommand = {0x16c, {0x66, 0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f1ac
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedHandsUpCommand = {0x5c4, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ef7c
+// 0x000ece70
 const Scripting::OpcodeInfo g_pedImmunitiesCommand = {0x2ab, {0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f01c
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedRotationCommand = {0x173, {0x69, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f1d4
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedParachuteCleanupCommand = {0x108, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ee8c
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedCreateArrowCommand = {0x187, {0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ef04
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedArrowColorCommand = {0x165, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f184
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedArrowModeCommand = {0x18b, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ae68
+// 0x000e8dd8
 const double g_pedParachuteZero = 0.0;
-// 0x0011f1e8
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedStopUrinationEffectCommand = {0x650, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f008
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedExitVehicleCommand = {0x5cd, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f0a8
+// 0x000ecf9c
 const Scripting::OpcodeInfo g_pedApplyAnimationCommand = {0x812, {0x69, 0x73, 0x73, 0x66, 0x69, 0x69, 0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f0bc
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedIsPerformingAnimationCommand = {0x611, {0x69, 0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e324
+// 0x000ec2fc
 const char g_pedBlockedAnimationLibrary[4] = {0x53, 0x45, 0x58, 0x0};
-// 0x00154db0
+// 0x00116dd8
 char g_pedDanceLibraries[4][16] = {0x57, 0x4f, 0x50, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x47, 0x46, 0x55, 0x4e, 0x4b, 0x0,
                                    0x0,  0x0,  0x0,  0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0, 0x52, 0x55, 0x4e, 0x4e, 0x49, 0x4e, 0x47, 0x4d, 0x41, 0x4e, 0x0,  0x0,
                                    0x0,  0x0,  0x0,  0x0, 0x53, 0x54, 0x52, 0x49, 0x50, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0};
-// 0x00154df0
+// 0x00116e18
 char g_pedDanceNames[4][16] = {0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x4c, 0x4f, 0x4f, 0x50, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f,
                                0x4c, 0x4f, 0x4f, 0x50, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x4c, 0x4f, 0x4f, 0x50, 0x0,  0x0,
                                0x0,  0x0,  0x0,  0x0,  0x53, 0x54, 0x52, 0x5f, 0x4c, 0x6f, 0x6f, 0x70, 0x5f, 0x42, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0};
-// 0x00154e30
+// 0x00116e58
 char g_pedDanceMoveTables[3][16][16] = {
     0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x47, 0x31, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x47, 0x32, 0x0,  0x0,  0x0,  0x0,  0x0,
     0x0,  0x0,  0x0,  0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x47, 0x33, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x44, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x47, 0x34, 0x0,  0x0,
@@ -152,127 +152,127 @@ char g_pedDanceMoveTables[3][16][16] = {
     0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x53, 0x54, 0x52, 0x5f, 0x43, 0x32, 0x42, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x53, 0x54, 0x52, 0x5f, 0x41,
     0x32, 0x42, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x53, 0x54, 0x52, 0x5f, 0x42, 0x32, 0x43, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x53, 0x54,
     0x52, 0x5f, 0x43, 0x32, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0};
-// 0x00117a39
+// 0x000e59c9
 const char g_pedEmptyDanceAnimation[1] = {0x0};
-// 0x0011eec8
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedSelectInteriorCommand = {0x4bb, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f0f8
+// 0x000ecfec
 const Scripting::OpcodeInfo g_pedLinkInteriorCommand = {0x860, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f058
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedRefreshInteriorCommand = {0x4e4, {0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ef2c
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedControllableCommand = {0x1b4, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f044
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedFreezeCommand = {0x4d7, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f080
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedKillCommand = {0x321, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f06c
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedWarpPassengerCommand = {0x430, {0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eff4
+// 0x000ecee8
 const Scripting::OpcodeInfo g_pedEnterPassengerCommand = {0x5ca, {0x69, 0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011efe0
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedEnterDriverCommand = {0x5cb, {0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f1fc
+// 0x000ed0f0
 const Scripting::OpcodeInfo g_pedCreateUrinationEffectCommand = {0x66a, {0x73, 0x69, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f210
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedStartUrinationEffectCommand = {0x64c, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eacc
+// 0x000ec9d4
 const char g_pedUrinationLibrary[9] = {0x50, 0x41, 0x55, 0x4c, 0x4e, 0x4d, 0x41, 0x43, 0x0};
-// 0x0011f378
+// 0x000ed268
 const char g_pedUrinationAnimation[10] = {0x50, 0x49, 0x53, 0x53, 0x5f, 0x4c, 0x4f, 0x4f, 0x50, 0x0};
-// 0x0011f354
+// 0x000ed244
 const char g_pedUrinationEffect[10] = {0x50, 0x45, 0x54, 0x52, 0x4f, 0x4c, 0x43, 0x41, 0x4e, 0x0};
-// 0x0011f360
+// 0x000ed250
 const double g_pedUrinationOffsetY = 0.57999998331069946;
-// 0x0011f368
+// 0x000ed258
 const double g_pedUrinationOffsetZ = -0.079999998211860657;
-// 0x0011f370
+// 0x000ed260
 const double g_pedUrinationDirectionY = 0.0099999997764825821;
-// 0x0011ef68
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedWarpDriverCommand = {0x36a, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eedc
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedTrainCameraCommand = {0x158, {0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011ead8
+// 0x000ec9e0
 const char g_pedSmokeLibrary[6] = {0x47, 0x41, 0x4e, 0x47, 0x53, 0x0};
-// 0x0011f348
+// 0x000ed238
 const char g_pedSmokeAnimation[12] = {0x73, 0x6d, 0x6b, 0x63, 0x69, 0x67, 0x5f, 0x70, 0x72, 0x74, 0x6c, 0x0};
-// 0x0011eae0
+// 0x000ec9e8
 const char g_pedDrinkLibrary[4] = {0x42, 0x41, 0x52, 0x0};
-// 0x0011f338
+// 0x000ed228
 const char g_pedDrinkAnimationM[15] = {0x64, 0x6e, 0x6b, 0x5f, 0x73, 0x74, 0x6e, 0x64, 0x4d, 0x5f, 0x6c, 0x6f, 0x6f, 0x70, 0x0};
-// 0x0011f328
+// 0x000ed218
 const char g_pedDrinkAnimationF[15] = {0x64, 0x6e, 0x6b, 0x5f, 0x73, 0x74, 0x6e, 0x64, 0x46, 0x5f, 0x6c, 0x6f, 0x6f, 0x70, 0x0};
-// 0x0011f224
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedDrunkShakeCommand = {0x52c, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eea0
+// 0x000ecda8
 const Scripting::OpcodeInfo g_pedCreatePlayerCommand = {0x53, "vfffv"};
-// 0x0011eeb4
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedGetPlayerHandleCommand = {0x1f5, "vv"};
-// 0x0011f0e4
+// 0x000ecfd8
 const Scripting::OpcodeInfo g_pedCommand03fe = {0x3fe, "ii"};
-// 0x0011f388
+// 0x000ed278
 const float g_pedSpawnLift = 0.15f;
-// 0x0011f094
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedBehaviorWalkStyleCommand = {0x245, "is"};
-// 0x0011f030
+// 0x000ecf24
 const Scripting::OpcodeInfo g_pedBehaviorDrivebyCommand = {0x713, "iiiffffiii"};
-// 0x0011efa4
+// 0x000ece98
 const Scripting::OpcodeInfo g_pedBehaviorCreateObjectCommand = {0x107, "ifffv"};
-// 0x0011f120
+// 0x000ed014
 const Scripting::OpcodeInfo g_pedBehaviorAttachCommand = {0x69b, "iiffffff"};
-// 0x0011f134
+// 0x000ed028
 const Scripting::OpcodeInfo g_pedBehaviorObjectFlagCommand = {0x750, "ii"};
-// 0x0011f170
+// R5 address to verify
 const Scripting::OpcodeInfo g_pedBehaviorObjectScalarCommand = {0x8d2, "if"};
-// 0x0011f10c
+// 0x000ed000
 const Scripting::OpcodeInfo g_pedBehaviorObjectAnimationCommand = {0x75a, "issfii"};
-// 0x0011efb8
+// 0x000eceac
 const Scripting::OpcodeInfo g_pedBehaviorEffectCommand = {0x18c, "fffi"};
-// 0x0011f314
+// 0x000ed204
 const char g_pedParachuteOpen[10] = "PARA_OPEN";
-// 0x0011f308
+// 0x000ed1f8
 const char g_pedParachuteDecel[11] = "PARA_DECEL";
-// 0x0011f2ec
+// 0x000ed1dc
 const char g_pedParachuteFloat[11] = "PARA_FLOAT";
-// 0x0011f2d0
+// 0x000ed1c0
 const char g_pedParachuteSteerRight[12] = "PARA_STEERR";
-// 0x0011f2b4
+// 0x000ed1a4
 const char g_pedParachuteSteerLeft[12] = "PARA_STEERL";
-// 0x0011f294
+// 0x000ed184
 const char g_pedParachuteLandWater[16] = "PARA_LAND_WATER";
-// 0x0011f268
+// 0x000ed158
 const char g_pedParachuteOpenObject[12] = "PARA_OPEN_O";
-// 0x0011f2f8
+// 0x000ed1e8
 const char g_pedParachuteDecelObject[13] = "PARA_DECEL_O";
-// 0x0011f2dc
+// 0x000ed1cc
 const char g_pedParachuteFloatObject[13] = "PARA_FLOAT_O";
-// 0x0011f2c0
+// 0x000ed1b0
 const char g_pedParachuteSteerRightObject[14] = "PARA_STEERR_O";
-// 0x0011f2a4
+// 0x000ed194
 const char g_pedParachuteSteerLeftObject[14] = "PARA_STEERL_O";
-// 0x0011f280
+// 0x000ed170
 const char g_pedParachuteLandWaterObject[18] = "PARA_LAND_WATER_O";
-// 0x0011a928
+// 0x000e8898
 const double g_pedParachuteOne = 1.0;
-// 0x0011f278
+// 0x000ed168
 const double g_pedParachuteOpeningSpeed = 1000.0;
-// 0x0011f260
+// 0x000ed150
 const double g_pedDrivebyDistance = 300.0;
-// 0x0011f3a8
+// 0x000ed298
 const double g_pedStuffOffset1X = 0.05000000074505806;
-// 0x0011f3b0
+// 0x000ed2a0
 const double g_pedStuffOffset1Y = 0.029999999329447746;
-// 0x0011f3b8
+// 0x000ed2a8
 const double g_pedStuffOffset1Z = -0.30000001192092896;
-// 0x0011f3a0
+// 0x000ed290
 const double g_pedStuffOffset2Z = -0.05000000074505806;
-// 0x0011f390
+// 0x000ed280
 const double g_pedStuffOffset3X = 0.03999999910593033;
-// 0x0011c988
+// 0x000ea960
 const double g_pedStuffOffset3Y = 0.10000000149011612;
-// 0x0011f398
+// 0x000ed288
 const double g_pedStuffOffset3Z = -0.019999999552965164;
-// 0x00155298
+// R5 address to verify
 static const DWORD g_pedDancePose[9][5] = {
     {0x00000009, 0xbf2b14fd, 0x3e38cda7, 0xbf38b8e1, 0xbc4c0bdd}, {0x0000000a, 0x3d2bd2b7, 0x3f07455a, 0x3d9ce0fc, 0x3f583090},
     {0x0000000b, 0xbdcc5543, 0x3f0e6245, 0x3e959429, 0x3f4586fd}, {0x0000000c, 0xbf05aa93, 0xbec5dfa8, 0xbee184a1, 0x3f1ea37b},
@@ -280,7 +280,7 @@ static const DWORD g_pedDancePose[9][5] = {
     {0x00000010, 0x3c69ff0d, 0xbf01e00d, 0x3de86163, 0x3f5aa876}, {0x00000011, 0x3e027aea, 0xbf0cee39, 0x3ea91eeb, 0x3f418bc6},
     {0x00000012, 0x3f1470da, 0x3eede311, 0xbe784a0e, 0x3f1fb0a3},
 };
-// 0x00155130
+// R5 address to verify
 static const DWORD g_pedSecondaryPose[12][5] = {
     {0x00000007, 0x3d440e17, 0xbd80895d, 0x3f147b03, 0x3f4f8f69}, {0x00000009, 0xbf24ab2e, 0xbd978a2b, 0xbf3f8cfc, 0xbe140a28},
     {0x0000000e, 0x00000000, 0x00000000, 0x3dee03b4, 0x3f7e43ee}, {0x00000013, 0x397fda40, 0x00000000, 0x3e2d883c, 0x3f7c4c16},
@@ -289,22 +289,22 @@ static const DWORD g_pedSecondaryPose[12][5] = {
     {0x0000000f, 0x3f25b888, 0x3db5097d, 0xbf3d89be, 0xbe21c865}, {0x00000010, 0x3e368944, 0xbf13e76d, 0xbd8b06c4, 0x3f4b2a39},
     {0x00000011, 0x00000000, 0x00000000, 0xbf1228dd, 0x3f522cba}, {0x00000012, 0xbf768134, 0xbd170a3d, 0xbc68101f, 0x3e88a99b},
 };
-// 0x002a9280
+// R5 address to verify
 char g_pedShoppingName[32];
-// 0x0018f664
+// R5 address to verify
 CPed* g_pedFiringContext;
-// 0x0018f668
+// R5 address to verify
 void* g_pedFiringData;
-// 0x0011c6d4
+// 0x000ea6ac
 const char g_pedBoneIdFormat[3] = "%d";
 
-// 0x00013570
+// R5 address to verify
 void* CPed::GetGtaActor()
 {
     return m_pGamePed;
 }
 
-// 0x000ab690
+// 0x000aba70
 CPed::CPed()
 {
     m_nHandle = 1;
@@ -339,13 +339,13 @@ CPed::CPed()
     unknown2f9 = 0;
 }
 
-// 0x000b0ea0
+// R5 address to verify
 CPed::~CPed()
 {
     Destroy();
 }
 
-// 0x000aba90
+// 0x000abe70
 BOOL CPed::IsInVehicle()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -354,7 +354,7 @@ BOOL CPed::IsInVehicle()
     return (*(DWORD*)(ped + 0x46c) >> 8) & 1;
 }
 
-// 0x000abbe0
+// 0x000abfc0
 BOOL CPed::IsPassenger()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -372,49 +372,49 @@ CPed* CGame::GetPlayerPed()
     return m_pPlayerPed;
 }
 
-// 0x000adca0
+// 0x000ae0a0
 BOOL CPed::UsingCellphone()
 {
     return m_bUsingCellphone;
 }
 
-// 0x000ad890
+// 0x000adc90
 DWORD CPed::GetStuff()
 {
     return m_stuffType;
 }
 
-// 0x000ade60
+// 0x000ae260
 BOOL CPed::DoesUrinating()
 {
     return m_bUrinating;
 }
 
-// 0x000aba60
+// 0x000abe40
 BYTE CPed::GetState()
 {
     return *((BYTE*)m_pGamePed + 0x530);
 }
 
-// 0x000abc20
+// 0x000ac000
 void* CPed::GetVehicle()
 {
     return *(void**)((BYTE*)m_pGamePed + 0x58c);
 }
 
-// 0x000adbb0
+// 0x000adfb0
 void CPed::SetDrunkLevel(DWORD level)
 {
     m_drunkLevel = level;
 }
 
-// 0x000ad760
+// 0x000adb60
 BOOL CPed::DoesDancing()
 {
     return unknown2d2 != 0;
 }
 
-// 0x000ab9f0
+// 0x000abdd0
 DWORD CPed::GetFlags()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -423,35 +423,35 @@ DWORD CPed::GetFlags()
     return *(DWORD*)(ped + 0x46c);
 }
 
-// 0x000ab7d0
+// 0x000abbb0
 void CPed::ResetPointers()
 {
     m_pGamePed = GamePoolPedGetAt(m_nHandle);
     m_pGameEntity = m_pGamePed;
 }
 
-// 0x000ab990
+// 0x000abd70
 void CPed::SetHealth(float health)
 {
     if (m_pGamePed)
         *(DWORD*)((BYTE*)m_pGamePed + 0x540) = *(DWORD*)&health;
 }
 
-// 0x000ab9d0
+// 0x000abdb0
 void CPed::SetArmour(float armour)
 {
     if (m_pGamePed)
         *(DWORD*)((BYTE*)m_pGamePed + 0x548) = *(DWORD*)&armour;
 }
 
-// 0x000aba10
+// 0x000abdf0
 void CPed::SetFlags(DWORD flags)
 {
     if (m_pGamePed)
         *(DWORD*)((BYTE*)m_pGamePed + 0x46c) = flags;
 }
 
-// 0x000ab8b0
+// 0x000abc90
 DWORD CPed::GetVehicleRef()
 {
     if (!m_pGamePed)
@@ -459,7 +459,7 @@ DWORD CPed::GetVehicleRef()
     return GamePoolVehicleGetIndex(*(void**)((BYTE*)m_pGamePed + 0x58c));
 }
 
-// 0x000ab970
+// 0x000abd50
 float CPed::GetHealth()
 {
     if (!m_pGamePed)
@@ -467,7 +467,7 @@ float CPed::GetHealth()
     return *(float*)((BYTE*)m_pGamePed + 0x540);
 }
 
-// 0x000ab9b0
+// 0x000abd90
 float CPed::GetArmour()
 {
     if (!m_pGamePed)
@@ -475,33 +475,33 @@ float CPed::GetArmour()
     return *(float*)((BYTE*)m_pGamePed + 0x548);
 }
 
-// 0x000aba70
+// 0x000abe50
 void CPed::SetState(BYTE state)
 {
     if (m_pGamePed)
         *(DWORD*)((BYTE*)m_pGamePed + 0x530) = state;
 }
 
-// 0x000ad480
+// 0x000ad860
 BOOL CPed::IsOnGround()
 {
     return m_pGamePed && (*((BYTE*)m_pGamePed + 0x46c) & 3) ? TRUE : FALSE;
 }
 
-// 0x000abd60
+// 0x000ac140
 void* CPed::GetCurrentWeaponSlot()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     return ped ? ped + 0x5a0 + ped[0x718] * 0x1c : 0;
 }
 
-// 0x000ab850
+// 0x000abc30
 void CPed::SetAim(const CameraAim* aim)
 {
     AimStuff::SetAim(m_nPlayerNumber, aim);
 }
 
-// 0x000ab7f0
+// 0x000abbd0
 void CPed::SetInitialState()
 {
     // GTA SA virtual address: 0x0060cd20, backend ECX, one callee-popped argument.
@@ -515,7 +515,7 @@ void CPed::SetInitialState()
     // clang-format on
 }
 
-// 0x000adee0
+// 0x000ae2e0
 const char* CPed::GetLoadedShoppingDataSubsection()
 {
     if (!m_pGamePed)
@@ -524,7 +524,7 @@ const char* CPed::GetLoadedShoppingDataSubsection()
     return GamePoolPedGetAt(m_nHandle) ? (const char*)0xa9a7d8 : 0;
 }
 
-// 0x000abd30
+// 0x000ac110
 void CPed::RemoveWeaponWhenEnteringVehicle()
 {
     void* ped = m_pGamePed;
@@ -541,7 +541,7 @@ void CPed::RemoveWeaponWhenEnteringVehicle()
     }
 }
 
-// 0x000aeb60
+// 0x000aef60
 void* CPed::GetAimedPed()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -555,7 +555,7 @@ void* CPed::GetAimedPed()
     return *(void**)(ped + 0x79c);
 }
 
-// 0x00013580
+// 0x00013680
 void* CPed::GetAccessory(int index)
 {
     if (index < 0 || index >= 10 || !m_accessoryOccupied[index])
@@ -563,7 +563,7 @@ void* CPed::GetAccessory(int index)
     return m_accessoryObjects[index];
 }
 
-// 0x000ad4a0
+// 0x000ad880
 void CPed::ResetDamageEntity()
 {
     if (m_pGamePed)
@@ -573,14 +573,14 @@ void CPed::ResetDamageEntity()
     }
 }
 
-// 0x000adcd0
+// 0x000ae0d0
 void CPed::SetFightingStyle(int style)
 {
     if (m_pGamePed)
         Scripting::ProcessCommand(&g_pedFightingStyleCommand, m_nHandle, style, 6);
 }
 
-// 0x000aeab0
+// 0x000aeeb0
 BOOL CPed::GetAccessoryState(int index)
 {
     if (index < 0 || index >= 10)
@@ -588,7 +588,7 @@ BOOL CPed::GetAccessoryState(int index)
     return m_accessoryOccupied[index] == 1;
 }
 
-// 0x000adc70
+// 0x000ae070
 void CPed::EnableCellphone(BOOL enabled)
 {
     if (m_pGamePed)
@@ -598,7 +598,7 @@ void CPed::EnableCellphone(BOOL enabled)
     }
 }
 
-// 0x000ab8d0
+// 0x000abcb0
 void CPed::DeleteArrow()
 {
     if (m_arrow)
@@ -608,7 +608,7 @@ void CPed::DeleteArrow()
     m_arrow = 0;
 }
 
-// 0x000adf00
+// 0x000ae300
 void CPed::LoadShoppingDataSubsection(const char* name)
 {
     const char* end = name;
@@ -621,13 +621,13 @@ void CPed::LoadShoppingDataSubsection(const char* name)
     }
 }
 
-// 0x000ac370
+// 0x000ac750
 void CPed::SetSpawnInfo(const CVector* position, float rotation)
 {
     Scripting::ProcessCommand(&g_pedSpawnInfoCommand, (double)position->x, (double)position->y, (double)position->z, (double)rotation, 0);
 }
 
-// 0x000aba30
+// 0x000abe10
 BOOL CPed::IsDead()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -648,7 +648,7 @@ BOOL CPed::IsDead()
     return dead;
 }
 
-// 0x000acdb0
+// 0x000ad190
 void* CPed::GetWeaponSlot(DWORD weapon)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -662,7 +662,7 @@ void* CPed::GetWeaponSlot(DWORD weapon)
     return 0;
 }
 
-// 0x000afc80
+// 0x000b0080
 void CPed::SetWeaponAmmo(BYTE weapon, WORD ammo)
 {
     if (m_pGamePed)
@@ -673,7 +673,7 @@ void CPed::SetWeaponAmmo(BYTE weapon, WORD ammo)
     }
 }
 
-// 0x000ab810
+// 0x000abbf0
 BYTE CPed::GetAim()
 {
     KeyPad* keys = KeyStuff::GetInternalKeys();
@@ -685,7 +685,7 @@ BYTE CPed::GetAim()
     return mask & 3;
 }
 
-// 0x000ad600
+// 0x000ada00
 BOOL CPed::PerformingCustomAnimation()
 {
     if (!m_pGamePed || !CEntity::DoesExist())
@@ -694,7 +694,7 @@ BOOL CPed::PerformingCustomAnimation()
     return *(DWORD*)(tasks + 0x10) != 0;
 }
 
-// 0x000ac9e0
+// 0x000acdc0
 BOOL CPed::HasJetpack()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -708,7 +708,7 @@ BOOL CPed::HasJetpack()
     return *(DWORD*)task == 0x8705c4;
 }
 
-// 0x000ad720
+// 0x000adb20
 void CPed::StopDancing()
 {
     CMatrix matrix;
@@ -717,7 +717,7 @@ void CPed::StopDancing()
     Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
 }
 
-// 0x000ad510
+// 0x000ad8f0
 float CPed::GetAimZ()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -727,7 +727,7 @@ float CPed::GetAimZ()
     return *(float*)(state + 0x54);
 }
 
-// 0x000abd80
+// 0x000ac160
 BOOL CPed::CurrentWeaponHasAmmo()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -742,7 +742,7 @@ BOOL CPed::CurrentWeaponHasAmmo()
     return FALSE;
 }
 
-// 0x000ad4d0
+// 0x000ad8b0
 void CPed::RemoveWeaponModel(int weapon)
 {
     void* ped = m_pGamePed;
@@ -761,7 +761,7 @@ void CPed::RemoveWeaponModel(int weapon)
     }
 }
 
-// 0x000ae080
+// 0x000ae480
 DWORD CPed::GetBonePosition(int bone, CVector* position)
 {
     void* ped = m_pGamePed;
@@ -782,7 +782,7 @@ DWORD CPed::GetBonePosition(int bone, CVector* position)
     return result;
 }
 
-// 0x000abc30
+// 0x000ac010
 void CPed::ClearWeapons()
 {
     void* ped = m_pGamePed;
@@ -800,7 +800,7 @@ void CPed::ClearWeapons()
     *g_clientCrashPedContext = 0;
 }
 
-// 0x000ac930
+// 0x000acd10
 void CPed::EnableJetpack()
 {
     if (m_pGamePed)
@@ -814,21 +814,21 @@ void CPed::EnableJetpack()
     }
 }
 
-// 0x000ac730
+// 0x000acb10
 void CPed::HandsUp()
 {
     if (m_pGamePed && !(*(DWORD*)((BYTE*)m_pGamePed + 0x46c) & 0x100) && CEntity::DoesExist() && GamePoolPedGetAt(m_nHandle))
         Scripting::ProcessCommand(&g_pedHandsUpCommand, m_nHandle, -2);
 }
 
-// 0x000ab920
+// 0x000abd00
 void CPed::SetImmunities(DWORD bullet, DWORD fire, DWORD explosion, DWORD collision, DWORD melee)
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle))
         Scripting::ProcessCommand(&g_pedImmunitiesCommand, m_nHandle, bullet, fire, explosion, collision, melee);
 }
 
-// 0x000ac7e0
+// 0x000acbc0
 void CPed::HoldObject(DWORD object)
 {
     if (m_pGamePed && CEntity::DoesExist() && GamePoolPedGetAt(m_nHandle))
@@ -846,7 +846,7 @@ void CPed::HoldObject(DWORD object)
     }
 }
 
-// 0x000ad550
+// 0x000ad930
 void CPed::SetAimZ(float value)
 {
     DWORD accepted;
@@ -875,7 +875,7 @@ void CPed::SetAimZ(float value)
     }
 }
 
-// 0x000adbd0
+// 0x000adfd0
 void CPed::ApplyCommandTask(const char* name, int p1, int p2, int p3, const CVector* p4, int p5, float p6, int p7, int p8, int p9)
 {
     void* ped = m_pGamePed;
@@ -902,7 +902,7 @@ void CPed::ApplyCommandTask(const char* name, int p1, int p2, int p3, const CVec
     }
 }
 
-// 0x000adc20
+// 0x000ae020
 void CPed::DestroyCommandTask()
 {
     if (m_pGamePed)
@@ -926,7 +926,7 @@ void CPed::DestroyCommandTask()
     }
 }
 
-// 0x000ac780
+// 0x000acb60
 BOOL CPed::DoesHandsUp()
 {
     if (m_pGamePed && !(*(DWORD*)((BYTE*)m_pGamePed + 0x46c) & 0x100) && CEntity::DoesExist() && GamePoolPedGetAt(m_nHandle))
@@ -939,7 +939,7 @@ BOOL CPed::DoesHandsUp()
     return FALSE;
 }
 
-// 0x000ac980
+// 0x000acd60
 void CPed::DisableJetpack()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -964,7 +964,7 @@ void CPed::DisableJetpack()
     }
 }
 
-// 0x000abb30
+// 0x000abf10
 void CPed::ForceRotation(float rotation)
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle))
@@ -974,7 +974,7 @@ void CPed::ForceRotation(float rotation)
     }
 }
 
-// 0x000abb80
+// 0x000abf60
 void CPed::SetRotation(float rotation)
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle))
@@ -985,7 +985,7 @@ void CPed::SetRotation(float rotation)
     }
 }
 
-// 0x000aea50
+// 0x000aee50
 void CPed::DeleteAccessory(int index)
 {
     if (index < 0 || index >= 10 || m_accessoryOccupied[index] != 1)
@@ -999,7 +999,7 @@ void CPed::DeleteAccessory(int index)
     m_accessoryOccupied[index] = 0;
 }
 
-// 0x000abdc0
+// 0x000ac1a0
 __declspec(naked) float CPed::GetDistanceToEntity(CEntity* entity)
 {
     // clang-format off
@@ -1036,7 +1036,7 @@ __declspec(naked) float CPed::GetDistanceToEntity(CEntity* entity)
     // clang-format on
 }
 
-// 0x000ad000
+// 0x000ad3e0
 void CPed::DestroyParachute()
 {
     if (m_parachuteObject)
@@ -1047,7 +1047,7 @@ void CPed::DestroyParachute()
     }
 }
 
-// 0x000af330
+// 0x000af730
 void CPed::CreateArrow(DWORD color)
 {
     if (m_arrow)
@@ -1060,7 +1060,7 @@ void CPed::CreateArrow(DWORD color)
     Scripting::ProcessCommand(&g_pedArrowModeCommand, m_arrow, 2);
 }
 
-// 0x000abe20
+// 0x000ac200
 int CPed::GetVehicleSeatIndex()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -1075,7 +1075,7 @@ int CPed::GetVehicleSeatIndex()
     return -1;
 }
 
-// 0x000adde0
+// 0x000ae1e0
 void CPed::StopUrinating()
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle) && m_bUrinating)
@@ -1093,7 +1093,7 @@ void CPed::StopUrinating()
     }
 }
 
-// 0x000ac100
+// 0x000ac4e0
 void CPed::ExitVehicle()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -1115,7 +1115,7 @@ void CPed::ExitVehicle()
     Scripting::ProcessCommand(&g_pedExitVehicleCommand, m_nHandle, GetVehicleRef());
 }
 
-// 0x000afb50
+// 0x000aff50
 void CPed::SetModelIndex(int model)
 {
     void* ped = m_pGamePed;
@@ -1143,7 +1143,7 @@ void CPed::SetModelIndex(int model)
     }
 }
 
-// 0x000ace50
+// 0x000ad230
 void CPed::ApplyAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time)
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -1169,7 +1169,7 @@ void CPed::ApplyAnimation(const char* name, const char* library, float speed, DW
     Scripting::ProcessCommand(&g_pedApplyAnimationCommand, m_nHandle, name, library, (double)speed, loop, lockX, lockY, freeze, time);
 }
 
-// 0x000acf20
+// R5 address to verify
 BOOL CPed::IsPerformingAnimation(const char* name)
 {
     if (m_pGamePed)
@@ -1177,7 +1177,7 @@ BOOL CPed::IsPerformingAnimation(const char* name)
     return FALSE;
 }
 
-// 0x000ad6d0
+// 0x000adad0
 void CPed::StartDancing(int style)
 {
     if (style < 0 || style > 3)
@@ -1188,7 +1188,7 @@ void CPed::StartDancing(int style)
         ApplyAnimation(g_pedDanceNames[style], g_pedDanceLibraries[style], 16.0f, 1, 0, 0, 0, -1);
 }
 
-// 0x000abab0
+// 0x000abe90
 __declspec(naked) float CPed::GetRotation()
 {
     // clang-format off
@@ -1240,7 +1240,7 @@ __declspec(naked) float CPed::GetRotation()
     // clang-format on
 }
 
-// 0x000ac6e0
+// 0x000acac0
 __declspec(naked) void* CPed::GetCurrentWeaponInfo()
 {
     // clang-format off
@@ -1277,7 +1277,7 @@ __declspec(naked) void* CPed::GetCurrentWeaponInfo()
     // clang-format on
 }
 
-// 0x000ad5c0
+// R5 address to verify
 DWORD CPed::GetModelTable28()
 {
     if (!m_pGamePed)
@@ -1285,7 +1285,7 @@ DWORD CPed::GetModelTable28()
     return GameReadPedModelTable28(*(short*)((BYTE*)m_pGamePed + 0x22));
 }
 
-// 0x000ad5e0
+// 0x000ad9e0
 DWORD CPed::GetModelTable24()
 {
     if (!m_pGamePed)
@@ -1293,7 +1293,7 @@ DWORD CPed::GetModelTable24()
     return GameReadPedModelTable24(*(short*)((BYTE*)m_pGamePed + 0x22));
 }
 
-// 0x000ad770
+// 0x000adb70
 const char* CPed::GetAnimationForDance(int move)
 {
     if (unknown2d2)
@@ -1312,7 +1312,7 @@ const char* CPed::GetAnimationForDance(int move)
     return g_pedEmptyDanceAnimation;
 }
 
-// 0x000acf60
+// 0x000ad340
 void CPed::LinkToInterior(BYTE interior, BOOL refresh)
 {
     if (!m_pGamePed)
@@ -1332,7 +1332,7 @@ void CPed::LinkToInterior(BYTE interior, BOOL refresh)
         Scripting::ProcessCommand(&g_pedLinkInteriorCommand, m_nHandle, (DWORD)interior);
 }
 
-// 0x000ac3b0
+// 0x000ac790
 void CPed::SetControllable(BOOL enabled)
 {
     if (!GamePoolPedGetAt(m_nHandle))
@@ -1354,7 +1354,7 @@ void CPed::SetControllable(BOOL enabled)
     }
 }
 
-// 0x000acd10
+// 0x000ad0f0
 void CPed::CallBackend730AndVehicle490()
 {
     if (m_pGamePed)
@@ -1391,7 +1391,7 @@ void CPed::CallBackend730AndVehicle490()
     }
 }
 
-// 0x000afbd0
+// 0x000affd0
 void CPed::Kill()
 {
     if (!m_nHandle || !m_pGamePed)
@@ -1408,7 +1408,7 @@ void CPed::Kill()
     *g_clientCrashPedContext = 0;
 }
 
-// 0x000ac630
+// 0x000aca10
 __declspec(naked) void* CPed::GetFloor()
 {
     // clang-format off
@@ -1475,7 +1475,7 @@ __declspec(naked) void* CPed::GetFloor()
     // clang-format on
 }
 
-// 0x000ac030
+// 0x000ac410
 void CPed::EnterVehicle(int vehicle, BOOL passenger)
 {
     if (!m_pGamePed)
@@ -1497,7 +1497,7 @@ void CPed::EnterVehicle(int vehicle, BOOL passenger)
         Scripting::ProcessCommand(&g_pedEnterDriverCommand, m_nHandle, vehicle, 3000);
 }
 
-// 0x000add00
+// 0x000ae100
 void CPed::StartUrinating()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle) || m_bUrinating)
@@ -1510,7 +1510,7 @@ void CPed::StartUrinating()
     m_bUrinating = 1;
 }
 
-// 0x000abeb0
+// 0x000ac290
 void CPed::PutIntoVehicle(int vehicle, int seat)
 {
     if (!m_pGamePed || !GamePoolVehicleGetAt(vehicle) || !GamePoolPedGetAt(m_nHandle))
@@ -1560,7 +1560,7 @@ void CPed::PutIntoVehicle(int vehicle, int seat)
     }
 }
 
-// 0x000ad8a0
+// 0x000adca0
 BOOL CPed::ApplyStuff()
 {
     if (!m_stuffType || !m_pGamePed || !CEntity::DoesExist())
@@ -1594,7 +1594,7 @@ BOOL CPed::ApplyStuff()
     return FALSE;
 }
 
-// 0x000af1d0
+// 0x000af5d0
 WORD CPed::GetKeys(WORD* leftRight, WORD* upDown)
 {
     KeyPad* keys = KeyStuff::GetInternalKeys();
@@ -1658,7 +1658,7 @@ WORD CPed::GetKeys(WORD* leftRight, WORD* upDown)
     return (WORD)bits;
 }
 
-// 0x000aef40
+// 0x000af340
 void CPed::SetKeys(WORD mask, WORD leftRight, WORD upDown)
 {
     KeyPad* keys = KeyStuff::GetPlayerKeys(m_nPlayerNumber);
@@ -1817,11 +1817,11 @@ void CPed::SetKeys(WORD mask, WORD leftRight, WORD upDown)
 extern "C"
 {
     // MSVC CRT x87 conversion helper, provided by selected runtime.
-    // 0x000f9324
+    // 0x000c7444
     __int64 __cdecl _ftol2();
 }
 
-// 0x000ad9f0
+// 0x000addf0
 void CPed::ProcessDrunk()
 {
     int level = (int)m_drunkLevel;
@@ -1910,7 +1910,7 @@ void CPed::ProcessDrunk()
     }
 }
 
-// 0x000b3770
+// 0x000b3b70
 void* __stdcall GamePoolPedGetAt(int handle)
 {
     void* result;
@@ -1928,7 +1928,7 @@ void* __stdcall GamePoolPedGetAt(int handle)
     return result;
 }
 
-// 0x000aea30
+// 0x000aee30
 BOOL CPed::HasAccessory()
 {
     for (int i = 0; i < 10; ++i)
@@ -1937,7 +1937,7 @@ BOOL CPed::HasAccessory()
     return FALSE;
 }
 
-// 0x000b06b0
+// 0x000b0ab0
 void CPed::DeleteAllAccessories()
 {
     for (int i = 0; i < 10; ++i)
@@ -1955,7 +1955,7 @@ void CPed::DeleteAllAccessories()
         }
 }
 
-// 0x000ad800
+// 0x000adc00
 void CPed::DropStuff()
 {
     if (m_stuffObject)
@@ -1969,14 +1969,14 @@ void CPed::DropStuff()
     m_stuffType = 0;
 }
 
-// 0x000ac190
+// 0x000ac570
 void CPed::WarpFromVehicle(float x, float y, float z)
 {
     if (GamePoolPedGetAt(m_nHandle) && m_pGamePed && (*(DWORD*)((BYTE*)m_pGamePed + 0x46c) & 0x100))
         Scripting::ProcessCommand(&g_pedWarpFromVehicle, m_nHandle, (double)x, (double)y, (double)z);
 }
 
-// 0x000b0ba0
+// 0x000b0fa0
 void CPed::Destroy()
 {
     BYTE* original = (BYTE*)m_pGamePed;
@@ -2008,19 +2008,19 @@ void CPed::Destroy()
     m_nHandle = 0;
 }
 
-// 0x000acb10
+// 0x000acef0
 BOOL CPed::HasDanceState()
 {
     return m_bDancing != 0;
 }
 
-// 0x000aca60
+// 0x000ace40
 BOOL CPed::HasDanceStyle()
 {
     return m_danceStyle != 0;
 }
 
-// 0x000ab870
+// 0x000abc50
 DWORD CPed::GetCurrentWeapon()
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle))
@@ -2032,7 +2032,7 @@ DWORD CPed::GetCurrentWeapon()
     return 0;
 }
 
-// 0x000abc80
+// 0x000ac060
 void CPed::SetArmedWeapon(DWORD weapon, BYTE direct)
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle))
@@ -2055,13 +2055,13 @@ void CPed::SetArmedWeapon(DWORD weapon, BYTE direct)
     }
 }
 
-// 0x000adba0
+// 0x000adfa0
 DWORD CPed::GetDrunkLevel()
 {
     return m_drunkLevel;
 }
 
-// 0x000715d0
+// 0x00071b30
 PedAccessoryState* CPed::GetAccessoryInfo(int index)
 {
     if (index < 0 || index >= 10 || !m_accessoryOccupied[index])
@@ -2069,7 +2069,7 @@ PedAccessoryState* CPed::GetAccessoryInfo(int index)
     return &m_accessoryInfo[index];
 }
 
-// 0x000ae680
+// 0x000aea80
 void CPed::GetBoneMatrixById(CMatrix* out, int bone)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2092,7 +2092,7 @@ void CPed::GetBoneMatrixById(CMatrix* out, int bone)
         destination[i] = source[i];
 }
 
-// 0x000ae810
+// R5 address to verify
 void CPed::GetBoneMatrix(CMatrix* out, int bone)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2100,13 +2100,13 @@ void CPed::GetBoneMatrix(CMatrix* out, int bone)
     GetBoneMatrixById(out, *(int*)(entry + 0x14));
 }
 
-// 0x000ab840
+// 0x000abc20
 CameraAim* CPed::GetCameraAim()
 {
     return AimStuff::GetInternalAim();
 }
 
-// 0x000b3dc0
+// 0x000b41c0
 BOOL __stdcall GameIsBackendOnScreen(void* backend)
 {
     // GTA SA virtual address: thiscall backend, raw EAX normalized to BOOL.
@@ -2122,49 +2122,49 @@ BOOL __stdcall GameIsBackendOnScreen(void* backend)
     return result != 0;
 }
 
-// 0x000ab900
+// 0x000abce0
 BOOL CPed::IsOnScreen()
 {
     return m_pGamePed ? GameIsBackendOnScreen(m_pGamePed) : FALSE;
 }
 
-// 0x000ad5a0
+// 0x000ad9a0
 void* CPed::GetContactEntity()
 {
     return *(void**)((BYTE*)m_pGamePed + 0x584);
 }
 
-// 0x000ad5b0
+// 0x000ad9b0
 void* CPed::GetContactVehicle()
 {
     return *(void**)((BYTE*)m_pGamePed + 0x568);
 }
 
-// 0x000141e0
+// 0x00014340
 void CPed::SetCameraMode(BYTE mode)
 {
     AimStuff::SetPlayerCameraMode(mode, m_nPlayerNumber);
 }
 
-// 0x00014200
+// 0x00014360
 void CPed::SetCameraExtZoomAndAspectRatio(float zoom, float aspect)
 {
     AimStuff::SetPlayerCamera(m_nPlayerNumber, zoom, aspect);
 }
 
-// 0x00002d00
+// 0x00002cd0
 BYTE CPed::GetCameraMode()
 {
     return m_nPlayerNumber ? AimStuff::GetPlayerCameraMode(m_nPlayerNumber) : AimStuff::GetCameraMode();
 }
 
-// 0x000b40c0
+// 0x000b44c0
 void __stdcall GameSetPlayerFlag(BYTE player, DWORD value)
 {
     g_gamePlayerFlags[player] = value;
 }
 
-// 0x000b08e0
+// 0x000b0ce0
 CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
 {
     DWORD handle = 0, scriptPlayer = (BYTE)player;
@@ -2232,7 +2232,7 @@ CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
     memset(unknown2fd, 0, 44);
 }
 
-// 0x000b0710
+// 0x000b0b10
 void CPed::AddAccessory(int index, const PedAccessoryState* info)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2262,7 +2262,7 @@ void CPed::AddAccessory(int index, const PedAccessoryState* info)
     m_accessoryOccupied[index] = 1;
 }
 
-// 0x000ac470
+// 0x000ac850
 BYTE CPed::GetDeathInfo(WORD* killer)
 {
     if (g_pNetGame)
@@ -2318,7 +2318,7 @@ BYTE CPed::GetDeathInfo(WORD* killer)
     return 0xff;
 }
 
-// 0x000acbb0
+// 0x000acf90
 BOOL CPed::EnablePassengerDrivebyMode()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2335,14 +2335,14 @@ BOOL CPed::EnablePassengerDrivebyMode()
     return TRUE;
 }
 
-// 0x000acdf0
+// 0x000ad1d0
 void CPed::SetWalkStyle(const char* name)
 {
     if (m_pGamePed)
         Scripting::ProcessCommand(&g_pedBehaviorWalkStyleCommand, m_nHandle, name);
 }
 
-// 0x000ad0f0
+// 0x000ad4d0
 BOOL CPed::OpenParachute()
 {
     if (m_parachuteObject)
@@ -2365,7 +2365,7 @@ BOOL CPed::OpenParachute()
     return TRUE;
 }
 
-// 0x000ad240
+// 0x000ad620
 void CPed::ProcessParachuteEvent(const char* name)
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -2428,7 +2428,7 @@ void CPed::ProcessParachuteEvent(const char* name)
         Scripting::ProcessCommand(&g_pedBehaviorObjectAnimationCommand, m_parachuteObject, animation, g_gameParachuteLibrary, g_pedParachuteOne, loop, 1);
 }
 
-// 0x000afcb0
+// 0x000b00b0
 void CPed::ProcessDancing()
 {
     if (!unknown2d2 || !m_pGamePed || !CEntity::DoesExist() || m_nPlayerNumber)
@@ -2466,7 +2466,7 @@ void CPed::ProcessDancing()
     }
 }
 
-// 0x000afed0
+// 0x000b02d0
 void CPed::GiveStuff(int type)
 {
     if (m_stuffObject)
@@ -2517,7 +2517,7 @@ void CPed::GiveStuff(int type)
 
 // Raw quaternion DWORDs from the native animation-frame tables.
 
-// 0x000ae7b0
+// 0x000aebb0
 void* CPed::GetBoneQuaternion(int bone)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2533,7 +2533,7 @@ void* CPed::GetBoneQuaternion(int bone)
     return (void*)((DWORD)animation + 0x4c + *(DWORD*)(animation + 0x24) * (DWORD)bone);
 }
 
-// 0x000ae8b0
+// 0x000aecb0
 void CPed::ApplySecondaryPose()
 {
     for (int i = 0; i < 12; i++)
@@ -2557,7 +2557,7 @@ void CPed::ApplySecondaryPose()
     }
 }
 
-// 0x000b0360
+// 0x000b0760
 void CPed::ApplyDancePose()
 {
     for (int i = 0; i < 9; i++)
@@ -2639,7 +2639,7 @@ void CPed::ApplyDancePose()
     }
 }
 
-// 0x000b0e70
+// 0x000b1270
 void CPed::ProcessAnimationPose()
 {
     if (m_bDancing)
@@ -2648,7 +2648,7 @@ void CPed::ProcessAnimationPose()
         ApplySecondaryPose();
 }
 
-// 0x000b0180
+// 0x000b0580
 void CPed::ProcessAccessories()
 {
     bool bonesUpdated = false;
@@ -2728,7 +2728,7 @@ void CPed::ProcessAccessories()
     }
 }
 
-// 0x000ac8f0
+// 0x000accd0
 BOOL CPed::HasTaskType268()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2741,7 +2741,7 @@ BOOL CPed::HasTaskType268()
     return FALSE;
 }
 
-// 0x000ac1f0
+// 0x000ac5d0
 int CPed::GetVehicleTransitionTaskState()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !m_pGamePed)
@@ -2760,7 +2760,7 @@ int CPed::GetVehicleTransitionTaskState()
     return 0;
 }
 
-// 0x000ac260
+// 0x000ac640
 BOOL CPed::HasTaskType704()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !m_pGamePed)
@@ -2772,7 +2772,7 @@ BOOL CPed::HasTaskType704()
     return task ? GameGetTaskType(task) == 704 : FALSE;
 }
 
-// 0x000ac2b0
+// 0x000ac690
 BOOL CPed::IsDucking()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !m_pGamePed)
@@ -2780,7 +2780,7 @@ BOOL CPed::IsDucking()
     return (*(DWORD*)((BYTE*)m_pGamePed + 0x46c) >> 26) & 1;
 }
 
-// 0x000ac2e0
+// 0x000ac6c0
 void CPed::ClearTasksIfOnFoot()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !m_pGamePed)
@@ -2804,7 +2804,7 @@ void CPed::ClearTasksIfOnFoot()
     }
 }
 
-// 0x000ac340
+// 0x000ac720
 void CPed::ClearDuckingFlag()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !m_pGamePed)
@@ -2812,7 +2812,7 @@ void CPed::ClearDuckingFlag()
     *(DWORD*)((BYTE*)m_pGamePed + 0x46c) &= 0xfbffffff;
 }
 
-// 0x000ac830
+// 0x000acc10
 BOOL CPed::HasTaskType211()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2823,7 +2823,7 @@ BOOL CPed::HasTaskType211()
     return task ? GameGetTaskType(task) == 211 : FALSE;
 }
 
-// 0x000ac870
+// R5 address to verify
 BOOL CPed::HasTaskType1016()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2834,7 +2834,7 @@ BOOL CPed::HasTaskType1016()
     return task ? GameGetTaskType(task) == 1016 : FALSE;
 }
 
-// 0x000ac8b0
+// 0x000acc90
 BOOL CPed::HasTaskType208()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2845,7 +2845,7 @@ BOOL CPed::HasTaskType208()
     return task ? GameGetTaskType(task) == 208 : FALSE;
 }
 
-// 0x000aca20
+// R5 address to verify
 BOOL CPed::HasAimTarget()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2856,14 +2856,14 @@ BOOL CPed::HasAimTarget()
     return FALSE;
 }
 
-// 0x000aca70
+// 0x000ace50
 void CPed::SetSecondaryPoseState(DWORD state)
 {
     m_danceStyle = state;
     unknown2f7 = unknown2f6 = unknown2f8 = state != 0;
 }
 
-// 0x000acab0
+// 0x000ace90
 void CPed::ProcessSecondaryPoseWeapon()
 {
     if (!m_danceStyle || !m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -2874,14 +2874,14 @@ void CPed::ProcessSecondaryPoseWeapon()
         SetArmedWeapon(0, 0);
 }
 
-// 0x000acb20
+// 0x000acf00
 void CPed::SetDancePoseState(DWORD state)
 {
     m_bDancing = state;
     unknown2f8 = state != 0;
 }
 
-// 0x000acb40
+// 0x000acf20
 void CPed::ProcessDancePoseWeapon()
 {
     if (!m_bDancing)
@@ -2896,7 +2896,7 @@ void CPed::ProcessDancePoseWeapon()
         SetArmedWeapon(0, 0);
 }
 
-// 0x000acc50
+// 0x000ad030
 BOOL CPed::HasTaskType1022()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -2905,7 +2905,7 @@ BOOL CPed::HasTaskType1022()
     return task ? GameGetTaskType(task) == 1022 : FALSE;
 }
 
-// 0x000acca0
+// 0x000ad080
 void CPed::StopTaskType1022()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -2926,14 +2926,14 @@ void CPed::StopTaskType1022()
     *(DWORD*)(*(BYTE**)((BYTE*)m_pGamePed + 0x47c) + 0x10) = 0;
 }
 
-// 0x000ace20
+// 0x000ad200
 void CPed::SetMoney(int amount)
 {
     Scripting::ProcessCommand(&g_pedCommand03fe, m_nHandle, 0);
     Scripting::ProcessCommand(&g_pedCommand03fe, m_nHandle, amount);
 }
 
-// 0x000ad060
+// 0x000ad440
 void CPed::CheckParachuteWeapon()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !DoesExist() || !m_parachuteObject)
@@ -2945,7 +2945,7 @@ void CPed::CheckParachuteWeapon()
     m_parachuteObject = 0;
 }
 
-// 0x000ad640
+// 0x000ada40
 BOOL CPed::HasTaskType401()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2970,7 +2970,7 @@ BOOL CPed::HasTaskType401()
     return FALSE;
 }
 
-// 0x000adcb0
+// R5 address to verify
 DWORD CPed::GetBackendByte72D()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -2979,7 +2979,7 @@ DWORD CPed::GetBackendByte72D()
     return ped[0x72d];
 }
 
-// 0x000ae0d0
+// 0x000ae4d0
 DWORD CPed::CallBackend5E01C0(DWORD first, DWORD second)
 {
     void* ped = m_pGamePed;
@@ -3001,14 +3001,14 @@ DWORD CPed::CallBackend5E01C0(DWORD first, DWORD second)
     return result;
 }
 
-// 0x000ae120
+// R5 address to verify
 void CPed::ResetLocalControlWord()
 {
     // GTA SA virtual address: local control word.
     *(WORD*)0xb7cedc = 0;
 }
 
-// 0x000ae160
+// 0x000ae560
 void CPed::ApplyClumpAnimation(int mode, DWORD first, DWORD second, DWORD third)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3024,7 +3024,7 @@ void CPed::ApplyClumpAnimation(int mode, DWORD first, DWORD second, DWORD third)
         ((void(__cdecl*)(void*, DWORD, DWORD, DWORD))0x4d4610)(clump, first, second, third);
 }
 
-// 0x000ae5e0
+// 0x000ae9e0
 int CPed::GetBoneCount()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3038,7 +3038,7 @@ int CPed::GetBoneCount()
     return *(int*)(hierarchy + 4);
 }
 
-// 0x000ae630
+// 0x000aea30
 CMatrix* CPed::GetBoneMatrices()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3052,7 +3052,7 @@ CMatrix* CPed::GetBoneMatrices()
     return *(CMatrix**)(hierarchy + 8);
 }
 
-// 0x000ae710
+// 0x000aeb10
 void CPed::SetBoneMatrixById(const CMatrix* matrix, int bone)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3074,14 +3074,14 @@ void CPed::SetBoneMatrixById(const CMatrix* matrix, int bone)
     destination[3] &= 0xfffdfffc;
 }
 
-// 0x000ae850
+// R5 address to verify
 void CPed::SetBoneMatrix(const CMatrix* matrix, int bone)
 {
     BYTE* entry = *(BYTE**)((BYTE*)m_pGamePed + 0x488 + (DWORD)bone * 4);
     SetBoneMatrixById(matrix, *(int*)(entry + 0x14));
 }
 
-// 0x000aee20
+// 0x000af220
 float CPed::GetRootPoseFactor()
 {
     void* quaternion = GetBoneQuaternion(0);
@@ -3094,7 +3094,7 @@ float CPed::GetRootPoseFactor()
     return 1.0f - axis.z;
 }
 
-// 0x000ae1f0
+// 0x000ae5f0
 DWORD CPed::PackAnimationTask(const void* task)
 {
     const BYTE* data = (const BYTE*)task;
@@ -3108,7 +3108,7 @@ DWORD CPed::PackAnimationTask(const void* task)
     return (DWORD)(int)(short)index | ((DWORD)speed << 16) | (packedFlags << 24);
 }
 
-// 0x000ae2a0
+// 0x000ae6a0
 DWORD CPed::PackQueuedAnimation()
 {
     DWORD key = GameGetAnimationGroupKey(g_hookQueuedAnimationGroup, g_hookQueuedAnimationId);
@@ -3117,7 +3117,7 @@ DWORD CPed::PackQueuedAnimation()
     return (DWORD)(int)index | ((0xffff8000u | (DWORD)speed) << 16);
 }
 
-// 0x000ae2e0
+// 0x000ae6e0
 void* CPed::FindAnimationTask()
 {
     void* task = *(void**)(*(BYTE**)((BYTE*)m_pGamePed + 0x47c) + 0x10);
@@ -3140,7 +3140,7 @@ void* CPed::FindAnimationTask()
     return 0;
 }
 
-// 0x000ae390
+// 0x000ae790
 DWORD CPed::GetPackedAnimation()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3154,7 +3154,7 @@ DWORD CPed::GetPackedAnimation()
     return task ? PackAnimationTask(task) : PackQueuedAnimation();
 }
 
-// 0x000ae3d0
+// 0x000ae7d0
 void CPed::ApplyPackedAnimation(DWORD packed)
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3181,14 +3181,14 @@ void CPed::ApplyPackedAnimation(DWORD packed)
         ProcessParachuteEvent(name);
 }
 
-// 0x000ae560
+// 0x000ae960
 int CPed::GetBoneId(int bone)
 {
     BYTE* entry = *(BYTE**)((BYTE*)m_pGamePed + 0x488 + (DWORD)bone * 4);
     return *(int*)(entry + 0x14);
 }
 
-// 0x000ae590
+// 0x000ae990
 DWORD CPed::GetBoneHierarchyFlags()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3202,7 +3202,7 @@ DWORD CPed::GetBoneHierarchyFlags()
     return *(DWORD*)hierarchy;
 }
 
-// 0x000ae890
+// 0x000aec90
 __forceinline void CPed::UpdateBoneMatrices()
 {
     void* ped = m_pGamePed;
@@ -3219,7 +3219,7 @@ __forceinline void CPed::UpdateBoneMatrices()
     }
 }
 
-// 0x000adf30
+// 0x000ae330
 const char* CPed::GetBackendShoppingName()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -3227,7 +3227,7 @@ const char* CPed::GetBackendShoppingName()
     return *(const char**)((BYTE*)m_pGamePed + 0x78c);
 }
 
-// 0x000adf80
+// 0x000ae380
 void CPed::SetBackendShoppingName(const char* name)
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -3248,7 +3248,7 @@ void CPed::SetBackendShoppingName(const char* name)
     }
 }
 
-// 0x000aeae0
+// 0x000aeee0
 void CPed::GetAimOffsetMatrix(CMatrix* matrix)
 {
     GetBoneMatrix(matrix, 2);
@@ -3259,7 +3259,7 @@ void CPed::GetAimOffsetMatrix(CMatrix* matrix)
     matrix->position.z = matrix->position.z + 0.08f;
 }
 
-// 0x000af5c0
+// 0x000af9c0
 BOOL CPed::GetWeaponAimOffsets(BOOL alternate, CVector* position, CVector* weaponOffsetOut)
 {
     int bone = alternate ? 34 : 24;
@@ -3300,7 +3300,7 @@ BOOL CPed::GetWeaponAimOffsets(BOOL alternate, CVector* position, CVector* weapo
     return TRUE;
 }
 
-// 0x000af490
+// 0x000af890
 void* CPed::GetAimHit(CVector* position)
 {
     if (!m_pGamePed || GetCameraMode() != 4)
@@ -3336,7 +3336,7 @@ void* CPed::GetAimHit(CVector* position)
     return entity;
 }
 
-// 0x000af870
+// 0x000afc70
 void CPed::GetCameraAimRay(CVector* origin, CVector* target)
 {
     CVector source = {0, 0, 0}, destination = {0, 0, 0};
@@ -3420,7 +3420,7 @@ void CPed::GetCameraAimRay(CVector* origin, CVector* target)
     }
 }
 
-// 0x000b0ce0
+// 0x000b10e0
 void* CPed::GetCameraAimHit(CVector* position)
 {
     if (!m_pGamePed)
@@ -3447,7 +3447,7 @@ void* CPed::GetCameraAimHit(CVector* position)
     return entity;
 }
 
-// 0x000af670
+// 0x000afa70
 BOOL CPed::FireWeapon()
 {
     BYTE savedMode;
@@ -3497,7 +3497,7 @@ BOOL CPed::FireWeapon()
     return TRUE;
 }
 
-// 0x000aeb90
+// 0x000aef90
 void CPed::DrawBoneIds()
 {
     if (!g_deviceLabel)
@@ -3516,7 +3516,7 @@ void CPed::DrawBoneIds()
     g_deviceLabel->End();
 }
 
-// 0x000aec20
+// R5 address to verify
 void CPed::DrawMappedBoneIds()
 {
     if (!g_deviceLabel)
@@ -3535,7 +3535,7 @@ void CPed::DrawMappedBoneIds()
     g_deviceLabel->End();
 }
 
-// 0x000aecf0
+// 0x000af0f0
 void CPed::DrawAnimationFrameIds()
 {
     if (!g_deviceLabel)
@@ -3557,14 +3557,14 @@ void CPed::DrawAnimationFrameIds()
     g_deviceLabel->End();
 }
 
-// 0x000aedf0
+// 0x000af1f0
 void CPed::UpdateAndDrawBoneIds()
 {
     UpdateBoneMatrices();
     DrawBoneIds();
 }
 
-// 0x000b0d90
+// 0x000b1190
 void CPed::ProcessAimMarker()
 {
     CVector position;
@@ -3588,7 +3588,7 @@ void CPed::ProcessAimMarker()
     }
 }
 
-// 0x000afb10
+// 0x000aff10
 void CPed::ClearAimTarget()
 {
     void* ped = m_pGamePed;
@@ -3607,7 +3607,7 @@ void CPed::ClearAimTarget()
     // clang-format on
 }
 
-// 0x000ade70
+// 0x000ae270
 void CPed::ProcessVehicleHorn()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -3624,7 +3624,7 @@ void CPed::ProcessVehicleHorn()
         *(BYTE*)(vehicle + 0x514) = *(WORD*)((BYTE*)keys + 0x24) != 0;
 }
 
-// 0x000ae050
+// 0x000ae450
 void CPed::SetWeaponSkill(int skill, WORD value)
 {
     BYTE player = m_nPlayerNumber;
@@ -3633,7 +3633,7 @@ void CPed::SetWeaponSkill(int skill, WORD value)
     AimStuff::SetPlayerSkill(player, skill, value);
 }
 
-// 0x000ae130
+// 0x000ae530
 void CPed::UpdateClumpAnimations(float timeStep, DWORD onScreen)
 {
     if (!m_pGamePed)
@@ -3643,13 +3643,13 @@ void CPed::UpdateClumpAnimations(float timeStep, DWORD onScreen)
         GameRwUpdateClumpAnimations(clump, timeStep, onScreen);
 }
 
-// 0x000ae1d0
+// R5 address to verify
 BYTE* CPed::GetControlFlags()
 {
     return m_nPlayerNumber ? GameGetPlayerControlFlags(m_nPlayerNumber) : 0;
 }
 
-// 0x000ae960
+// R5 address to verify
 float CPed::GetArmBoneDistance()
 {
     CMatrix first, second;
@@ -3660,7 +3660,7 @@ float CPed::GetArmBoneDistance()
     return GameDistanceBetweenPoints(first.position.x, first.position.y, first.position.z, second.position.x, second.position.y, second.position.z);
 }
 
-// 0x000aee80
+// 0x000af280
 void CPed::SetBulletData(PedBulletData* data)
 {
     volatile DWORD* destination = (volatile DWORD*)unknown2fd;
@@ -3684,7 +3684,7 @@ void CPed::SetBulletData(PedBulletData* data)
         (*(CLocalPlayer**)((BYTE*)players + 0x1e))->SendBullet(data);
 }
 
-// 0x000af390
+// 0x000af790
 void CPed::GiveWeapon(int weapon, int ammo)
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
@@ -3719,7 +3719,7 @@ void CPed::GiveWeapon(int weapon, int ammo)
     *g_clientCrashPedContext = 0;
 }
 
-// 0x000afa60
+// 0x000afe60
 void CPed::EnableGoggles()
 {
     if (m_pGamePed && (*(DWORD*)((BYTE*)m_pGamePed + 0x500) || m_lastDanceMove))
@@ -3732,13 +3732,13 @@ void CPed::EnableGoggles()
     m_lastDanceMove = 1;
 }
 
-// 0x000b3fd0
+// R5 address to verify
 BYTE* __stdcall GameGetPlayerControlFlags(BYTE player)
 {
     return player < 210 ? g_gamePlayerControllerState[player] : 0;
 }
 
-// 0x000b3a20
+// 0x000b3e20
 int __stdcall GameGetWeaponModel(int weapon)
 {
     switch (weapon)
@@ -3834,7 +3834,7 @@ int __stdcall GameGetWeaponModel(int weapon)
     }
 }
 
-// 0x000acd70
+// 0x000ad150
 WORD CPed::GetCurrentWeaponTotalAmmo()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
@@ -3849,7 +3849,7 @@ WORD CPed::GetCurrentWeaponTotalAmmo()
     return *(WORD*)(slot + 0xc);
 }
 
-// 0x000b0ef0
+// 0x000b12f0
 void CPed::ProcessCameraAimMarker()
 {
     CVector position;
@@ -3873,7 +3873,7 @@ void CPed::ProcessCameraAimMarker()
     }
 }
 
-// 0x000b3f00
+// R5 address to verify
 void GameInitializePlayerPedTables()
 {
     memset(g_gamePlayerPeds, 0, sizeof(g_gamePlayerPeds));
@@ -3881,13 +3881,13 @@ void GameInitializePlayerPedTables()
 }
 
 // Native byte index is unchecked;210..255 reaches the adjacent controller state.
-// 0x000b3f50
+// R5 address to verify
 void* __stdcall GameGetPlayerPedUnchecked(BYTE player)
 {
     return g_gamePlayerPeds[player];
 }
 
-// 0x000b3f90
+// R5 address to verify
 void __stdcall GameSetPlayerControllerWords(BYTE player, DWORD first, DWORD second, DWORD third, DWORD fourth)
 {
     if (player < 210)
@@ -3900,7 +3900,7 @@ void __stdcall GameSetPlayerControllerWords(BYTE player, DWORD first, DWORD seco
     }
 }
 
-// 0x000b3ff0
+// R5 address to verify
 BYTE __stdcall GameFindPlayerIndexByClump(void* clump)
 {
     BYTE player = 0;
@@ -3920,13 +3920,13 @@ BYTE __stdcall GameFindPlayerIndexByClump(void* clump)
 }
 
 // Native byte index is unchecked, unlike the existing bounded flags getter.
-// 0x000b40b0
+// R5 address to verify
 DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player)
 {
     return g_gamePlayerFlags[player];
 }
 
-// 0x000ab670
+// R5 address to verify
 PedBulletData* CPed::GetBulletData()
 {
     return *(DWORD*)(unknown2fd + 44) ? (PedBulletData*)unknown2fd : 0;

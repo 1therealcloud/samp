@@ -9,28 +9,28 @@
 class CTextDrawSelection
 {
 public:
-    // 0x000c5120
+    // R5 address to verify
     CTextDrawSelection();
     DWORD enabled, unknown04;
     WORD unknown08;
-    // 0x00070ee0
+    // 0x00071440
     void Enable(DWORD color);
-    // 0x00070db0
+    // 0x00071310
     void UpdateHovered();
-    // 0x00070f20
+    // 0x00071480
     void SendNotification();
-    // 0x00070d50
+    // R5 address to verify
     void ResetTextDraws();
-    // 0x00071010
+    // 0x00071570
     BOOL MsgProc(UINT message, WPARAM wparam, LPARAM lparam);
-    // 0x00070fc0
+    // 0x00071520
     void Disable();
-    // 0x00070eb0
+    // 0x00071410
     void Process();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
-// 0x001182f8
+// 0x000e6268
 extern int g_textDrawClickRpc;
 
 #endif // TEXTDRAWSELECTION_H

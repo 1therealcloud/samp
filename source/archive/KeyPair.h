@@ -21,9 +21,9 @@ private:
     CCryptoContext* m_pContext;
 
 public:
-    // 0x00065360
+    // 0x000658e0
     CKeyPair(CCryptoContext* pContext);
-    // 0x00065430
+    // R5 address to verify
     ~CKeyPair(void);
 
 #ifdef ARCTOOL
@@ -33,11 +33,11 @@ public:
     void WriteCHeaderFile(PCHAR szFileName);
 #endif
 
-    // 0x000653a0
+    // 0x00065920
     void LoadFromMemory(DWORD dwPubKeySize, BYTE* pbPubKeyBlob, BYTE bytXORKey);
-    // 0x00065380
+    // 0x00065900
     void ReleaseKey();
 
-    // 0x00065420
+    // R5 address to verify
     HCRYPTKEY GetContainer();
 };

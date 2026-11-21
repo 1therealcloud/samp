@@ -1,5 +1,5 @@
 #include "game/font.h"
-// 0x0009fc80
+// 0x0009fe40
 void Font_PrintString(float x, float y, char* text)
 {
     // GTA SA cdecl backend. Forward the three argument words.
@@ -17,7 +17,7 @@ void Font_PrintString(float x, float y, char* text)
     // clang-format on
 }
 
-// 0x0009fca0
+// R5 address to verify
 __declspec(naked) void Font_SetColor(DWORD color)
 {
     // clang-format off
@@ -26,7 +26,7 @@ __declspec(naked) void Font_SetColor(DWORD color)
     // clang-format on
 }
 
-// 0x0009fcb0
+// R5 address to verify
 __declspec(naked) void Font_SetDropColor(DWORD color)
 {
     // clang-format off
@@ -35,7 +35,7 @@ __declspec(naked) void Font_SetDropColor(DWORD color)
     // clang-format on
 }
 
-// 0x0009fcc0
+// R5 address to verify
 __declspec(naked) void Font_SetOutline(int outline)
 {
     // clang-format off
@@ -44,7 +44,7 @@ __declspec(naked) void Font_SetOutline(int outline)
     // clang-format on
 }
 
-// 0x0009fcd0
+// R5 address to verify
 __declspec(naked) void Font_Unk12(int value)
 {
     // clang-format off
@@ -53,7 +53,7 @@ __declspec(naked) void Font_Unk12(int value)
     // clang-format on
 }
 
-// 0x0009fce0
+// R5 address to verify
 __declspec(naked) void Font_SetScale(float x, float y)
 {
     // clang-format off
@@ -62,7 +62,7 @@ __declspec(naked) void Font_SetScale(float x, float y)
     // clang-format on
 }
 
-// 0x0009fcf0
+// R5 address to verify
 __declspec(naked) void Font_SetJustify(int justify)
 {
     // clang-format off
@@ -71,7 +71,7 @@ __declspec(naked) void Font_SetJustify(int justify)
     // clang-format on
 }
 
-// 0x0009fd00
+// R5 address to verify
 __declspec(naked) void Font_SetFontStyle(int style)
 {
     // clang-format off
@@ -80,7 +80,7 @@ __declspec(naked) void Font_SetFontStyle(int style)
     // clang-format on
 }
 
-// 0x0009fd10
+// R5 address to verify
 __declspec(naked) void Font_SetProportional(int proportional)
 {
     // clang-format off
@@ -89,7 +89,7 @@ __declspec(naked) void Font_SetProportional(int proportional)
     // clang-format on
 }
 
-// 0x0009fd20
+// R5 address to verify
 __declspec(naked) void Font_SetRightJustifyWrap(float wrap)
 {
     // clang-format off
@@ -98,7 +98,7 @@ __declspec(naked) void Font_SetRightJustifyWrap(float wrap)
     // clang-format on
 }
 
-// 0x0009fd30
+// R5 address to verify
 __declspec(naked) void Font_UseBox(int use, int unknown)
 {
     // clang-format off
@@ -107,7 +107,7 @@ __declspec(naked) void Font_UseBox(int use, int unknown)
     // clang-format on
 }
 
-// 0x0009fd40
+// R5 address to verify
 __declspec(naked) void Font_UseBoxColor(DWORD color)
 {
     // clang-format off
@@ -116,7 +116,7 @@ __declspec(naked) void Font_UseBoxColor(DWORD color)
     // clang-format on
 }
 
-// 0x0009fd50
+// R5 address to verify
 __declspec(naked) void Font_SetLineWidth(float width)
 {
     // clang-format off
@@ -125,7 +125,7 @@ __declspec(naked) void Font_SetLineWidth(float width)
     // clang-format on
 }
 
-// 0x0009fd60
+// R5 address to verify
 __declspec(naked) void Font_SetLineHeight(float height)
 {
     // clang-format off
@@ -134,7 +134,7 @@ __declspec(naked) void Font_SetLineHeight(float height)
     // clang-format on
 }
 
-// 0x0009fd70
+// R5 address to verify
 __declspec(naked) void Font_SetShadow(int shadow)
 {
     // clang-format off
@@ -143,14 +143,14 @@ __declspec(naked) void Font_SetShadow(int shadow)
     // clang-format on
 }
 
-// 0x0009fd90
+// R5 address to verify
 __declspec(naked) void Font_UnkConv2(char* text){
     // clang-format off
     __asm mov eax,0x69e160 // GTA SA virtual address.
     __asm jmp eax
     // clang-format on
 } // Native returns this GTA address without calling it.
-// 0x0009fd80
+// R5 address to verify
 DWORD Font_UnkConv(char* text, int a, int b, int c, int d, int e, int f, char* output)
 {
     return 0x69de90;

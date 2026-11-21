@@ -13,24 +13,24 @@ public:
     bool m_bOutdoorAmbienceTrackDisabled;
     // inline
     CAudio() : m_bSoundLoaded(FALSE), m_bOutdoorAmbienceTrackDisabled(false) {}
-    // 0x000a2030
+    // 0x000a2210
     int GetRadioStation();
-    // 0x000a2060
+    // 0x000a2240
     void StartRadio(int station);
     // Native wrapper at A2080; external A2260 anchor points into HUD code.
-    // 0x000a2080
+    // 0x000a2260
     void StopRadio();
-    // 0x000a20a0
+    // 0x000a2280
     float GetRadioVolume();
-    // 0x000a20b0
+    // 0x000a2290
     void StopOutdoorAmbienceTrack();
-    // 0x000a20c0
+    // 0x000a22a0
     void SetOutdoorAmbienceTrack(int track);
-    // 0x000a21c0
+    // 0x000a23a0
     bool IsOutdoorAmbienceTrackDisabled();
-    // 0x000a20e0
+    // 0x000a22c0
     void Play(int sound, CVector position);
-    // 0x000a1ff0
+    // 0x000a21d0
     void Process();
 };
 #pragma pack(pop)

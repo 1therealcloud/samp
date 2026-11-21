@@ -22,360 +22,360 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 0x0018e1d8
+// 0x00150340
 BOOL g_gameUsedPlayerSlots[210];
 
-// 0x002ac9d0
+// 0x0026eb40
 IDirect3DDevice9* g_gameD3DDevice;
-// 0x002ac9b8
+// 0x0026eb28
 int g_gameVersion;
-// 0x0018e1c8
+// R5 address to verify
 DWORD g_gameMouseDummy;
-// 0x00151918
+// 0x00113930
 BYTE g_gameKeyCall[5] = {0xe8, 0x46, 0xf3, 0xfe, 0xff};
-// 0x00151920
+// 0x00113938
 BYTE g_gameMouseCallEU[5] = {0xe8, 0x04, 0x7b, 0x20, 0x00};
-// 0x00151928
+// 0x00113940
 BYTE g_gameMouseCallUS[5] = {0xe8, 0xb4, 0x7a, 0x20, 0x00};
 
-// 0x0018e1cc
+// 0x00150334
 char* g_gameTextBuffer;
-// 0x002a9270
+// R5 address to verify
 DWORD g_gamePhysicalMegabytes;
-// 0x002a9274
+// R5 address to verify
 DWORD g_gameStreamingBytes;
-// 0x0011ee84
+// R5 address to verify
 const char g_gameStartupTitle[6] = "title";
-// 0x0018f388
+// R5 address to verify
 char g_gameFrameNodeError[256];
-// 0x0018f6b4
+// 0x0015181c
 bool g_gameCustomStreamRead;
-// 0x0018f6b8
+// R5 address to verify
 void* g_gameStreamBuffer;
-// 0x001c0444
+// R5 address to verify
 void* g_gameCustomModelInfo[32768];
-// 0x001e0444
+// 0x001a25ac
 DWORD g_gameUseCustomModelInfo;
-// 0x00152ae0
+// 0x00114b08
 void** g_gameModelInfoTable = g_gameCustomModelInfo;
-// 0x001a0448
+// R5 address to verify
 DWORD g_gameCustomModelPrefix[32767];
-// 0x0011e664
+// 0x000ec56c
 const Scripting::OpcodeInfo g_gameRequestModelCommand = {0x247, "i"};
-// 0x0011e678
+// 0x000ec580
 const Scripting::OpcodeInfo g_gameLoadModelsCommand = {0x38b, ""};
-// 0x0011e6a0
+// 0x000ec5a8
 const Scripting::OpcodeInfo g_gameModelAvailableCommand = {0x248, "i"};
-// 0x0011e618
+// 0x000ec520
 const char g_gameModelTimeoutWarning[41] = "Warning: Model %u wouldn't load in time!";
-// 0x0011e68c
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameSetWorldTime = {0xc0, "ii"};
-// 0x0011e410
+// R5 address to verify
 const Scripting::OpcodeInfo g_cameraFade = {0x16a, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e424
+// R5 address to verify
 const Scripting::OpcodeInfo g_cameraRestoreJumpcut = {0x373, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e438
+// 0x000ec340
 const Scripting::OpcodeInfo g_cameraPointAt = {0x160, {0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e44c
+// R5 address to verify
 const Scripting::OpcodeInfo g_cameraRestore = {0x2eb, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e460
+// 0x000ec368
 const Scripting::OpcodeInfo g_cameraSet = {0x15f, {0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e474
+// 0x000ec37c
 const Scripting::OpcodeInfo g_cameraStop = {0x925, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e488
+// 0x000ec390
 const Scripting::OpcodeInfo g_cameraMove = {0x936, {0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e49c
+// 0x000ec3a4
 const Scripting::OpcodeInfo g_cameraTrack = {0x920, {0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e4b0
+// 0x000ec3b8
 const Scripting::OpcodeInfo g_cameraPersistTrack = {0x92f, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e4c4
+// 0x000ec3cc
 const Scripting::OpcodeInfo g_cameraPersistPosition = {0x930, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eaf0
+// 0x000ec9f8
 const Scripting::OpcodeInfo g_audioPlay = {0x18c, {0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eb04
+// R5 address to verify
 const Scripting::OpcodeInfo g_audioLoad = {0x3cf, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eb40
+// R5 address to verify
 const Scripting::OpcodeInfo g_audioUnload = {0x40d, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eb54
+// 0x000eca5c
 const Scripting::OpcodeInfo g_audioSetPosition = {0x3d7, {0x69, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eb18
+// R5 address to verify
 const Scripting::OpcodeInfo g_audioIsLoaded = {0x3d0, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eb2c
+// R5 address to verify
 const Scripting::OpcodeInfo g_audioStart = {0x3d1, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f7a4
+// 0x000ed6a0
 const Scripting::OpcodeInfo g_vehicleChangeInteriorCommand = {0x840, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f678
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleIsSunkCommand = {0x2bf, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f7b8
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleAttachTrailerCommand = {0x893, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f7cc
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleDetachTrailerCommand = {0x7ac, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f77c
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleRemoveComponentCommand = {0x6e8, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f72c
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehiclePaintjobCommand = {0x6ed, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f614
+// 0x000ed510
 const Scripting::OpcodeInfo g_vehicleRotationCommand = {0x175, {0x69, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f6a0
+// 0x000ed59c
 const Scripting::OpcodeInfo g_vehicleProofsCommand = {0x2ac, {0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f790
+// 0x000ed68c
 const Scripting::OpcodeInfo g_vehicleDamageableCommand = {0x53f, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f6b4
+// 0x000ed5b0
 const Scripting::OpcodeInfo g_vehicleWarpPedCommand = {0x362, {0x69, 0x66, 0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f740
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleAddComponentCommand = {0x6e7, {0x69, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f754
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleComponentLoadedCommand = {0x6ea, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f768
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleRequestComponentCommand = {0x6e9, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f628
+// 0x000ed524
 const Scripting::OpcodeInfo g_vehicleCreateMarkerCommand = {0x161, {0x69, 0x69, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f63c
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleDestroyMarkerCommand = {0x164, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f650
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleMarkerColorCommand = {0x165, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f664
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleMarkerModeCommand = {0x168, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f600
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleDestroyCommand = {0xa6, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f6dc
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleDestroyTrainCommand = {0x7bd, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f5ec
+// 0x000ed4e8
 const Scripting::OpcodeInfo g_vehicleCreateCommand = {0xa5, {0x69, 0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f6f0
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleGasTankExplosionCommand = {0x9c4, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f718
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleHydraulicsCommand = {0x7ff, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011f6c8
+// 0x000ed5c4
 const Scripting::OpcodeInfo g_vehicleCreateTrainCommand = {0x6d8, {0x69, 0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e790
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameDisableTrainTrafficCommand = {0x6d7, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e7e0
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameRequestAnimationCommand = {0x4ed, {0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e7f4
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameIsAnimationLoadedCommand = {0x4ee, {0x73, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e6b4
+// 0x000ec5bc
 const Scripting::OpcodeInfo g_gameDeleteMarkerCommand = {0x164, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e740
+// 0x000ec648
 const Scripting::OpcodeInfo g_gameIncreaseMoneyCommand = {0x109, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e86c
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameZoneDisplayCommand = {0x9ba, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e754
+// 0x000ec65c
 const Scripting::OpcodeInfo g_gameFindGroundZCommand = {0x2ce, {0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e7cc
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameRefreshRendererCommand = {0x4e4, {0x66, 0x66, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e77c
+// 0x000ec684
 const Scripting::OpcodeInfo g_gameDeleteRacingCheckpointCommand = {0x6d6, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e6dc
+// 0x000ec5e4
 const Scripting::OpcodeInfo g_gameCreateMarkerCommand = {0x4ce, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e718
+// 0x000ec620
 const Scripting::OpcodeInfo g_gameCreateMarkerType1Command = {0x2a8, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e858
+// 0x000ec760
 const Scripting::OpcodeInfo g_gameCreateMarkerType2Command = {0x570, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e704
+// 0x000ec60c
 const Scripting::OpcodeInfo g_gameCreateMarkerType3Command = {0x2a7, {0x66, 0x66, 0x66, 0x69, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e6c8
+// 0x000ec5d0
 const Scripting::OpcodeInfo g_gameMarkerColorCommand = {0x165, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e6f0
+// 0x000ec5f8
 const Scripting::OpcodeInfo g_gameMarkerModeCommand = {0x168, {0x69, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e768
+// 0x000ec670
 const Scripting::OpcodeInfo g_gameCreateRacingCheckpointCommand = {0x6d5, {0x69, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e72c
+// 0x000ec634
 const Scripting::OpcodeInfo g_gameLocateCheckpointCommand = {0xfe, {0x69, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e81c
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameClearTextCommand = {0xbe, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e830
+// 0x000ec738
 const Scripting::OpcodeInfo g_gameCreatePickupCommand = {0x213, {0x69, 0x69, 0x66, 0x66, 0x66, 0x76, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011e7a4
+// 0x000ec6ac
 const Scripting::OpcodeInfo g_gameReleaseModelCommand = {0x249, {0x69, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}};
-// 0x0011eae4
+// 0x000ec9ec
 const char g_gameParachuteLibrary[10] = {0x50, 0x41, 0x52, 0x41, 0x43, 0x48, 0x55, 0x54, 0x45, 0x0};
-// 0x00118224
+// 0x000e6194
 const char g_gameVendingLibrary[8] = {0x56, 0x45, 0x4e, 0x44, 0x49, 0x4e, 0x47, 0x0};
-// 0x0011eac4
+// 0x000ec9cc
 const char g_gameFightBLibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x42, 0x0};
-// 0x0011eabc
+// 0x000ec9c4
 const char g_gameFightCLibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x43, 0x0};
-// 0x0011eab4
+// 0x000ec9bc
 const char g_gameFightDLibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x44, 0x0};
-// 0x0011eaac
+// 0x000ec9b4
 const char g_gameFightELibrary[8] = {0x46, 0x49, 0x47, 0x48, 0x54, 0x5f, 0x45, 0x0};
-// 0x0018e520
+// R5 address to verify
 BYTE g_frameKeyCycle;
-// 0x0018e524
+// R5 address to verify
 DWORD g_frameKeyCycleTick;
-// 0x0018e528
+// R5 address to verify
 DWORD g_frameSampleCount;
-// 0x0018e52c
+// R5 address to verify
 DWORD g_frameSampleTick;
-// 0x0018e530
+// R5 address to verify
 DWORD g_frameSleepTick;
-// 0x0018e534
+// R5 address to verify
 float g_frameScale;
-// 0x001181d8
+// 0x000e6148
 const float g_frameScaleMultiplier = 3.0f;
-// 0x0011c664
+// 0x000ea63c
 const float g_frameScaleNumerator = 50.0f;
-// 0x0011e844
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameCreateWeaponPickupCommand = {0x32b, "iiifffv"};
-// 0x002abe58
+// R5 address to verify
 BYTE g_gameLineSphereResult;
-// 0x0011e808
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameReleaseAnimationCommand = {0x4ef, "s"};
-// 0x0011e8e0
+// R5 address to verify
 const float g_gameFarClipBase = 1250.0f;
-// 0x0011e8dc
+// R5 address to verify
 const float g_gameFarClipMinimum = 700.0f;
-// 0x0015196c
+// R5 address to verify
 float g_gameFarClipDistance = 1400.0f;
-// 0x0011ea9c
+// 0x000ec9a4
 const char g_gameWeaponName01[15] = "Brass Knuckles";
-// 0x0011ea90
+// 0x000ec998
 const char g_gameWeaponName02[10] = "Golf Club";
-// 0x0011ea84
+// 0x000ec98c
 const char g_gameWeaponName03[11] = "Nite Stick";
-// 0x0011ea7c
+// 0x000ec984
 const char g_gameWeaponName04[6] = "Knife";
-// 0x0011ea6c
+// 0x000ec974
 const char g_gameWeaponName05[13] = "Baseball Bat";
-// 0x0011ea64
+// 0x000ec96c
 const char g_gameWeaponName06[7] = "Shovel";
-// 0x0011ea58
+// 0x000ec960
 const char g_gameWeaponName07[9] = "Pool Cue";
-// 0x0011ea50
+// 0x000ec958
 const char g_gameWeaponName08[7] = "Katana";
-// 0x0011ea44
+// 0x000ec94c
 const char g_gameWeaponName09[9] = "Chainsaw";
-// 0x0011ea3c
+// 0x000ec944
 const char g_gameWeaponName10[6] = "Dildo";
-// 0x0011ea30
+// 0x000ec938
 const char g_gameWeaponName12[9] = "Vibrator";
-// 0x0011ea28
+// 0x000ec930
 const char g_gameWeaponName14[8] = "Flowers";
-// 0x0011ea20
+// 0x000ec928
 const char g_gameWeaponName15[5] = "Cane";
-// 0x0011ea18
+// 0x000ec920
 const char g_gameWeaponName16[8] = "Grenade";
-// 0x0011ea10
+// 0x000ec918
 const char g_gameWeaponName17[8] = "Teargas";
-// 0x0011ea08
+// 0x000ec910
 const char g_gameWeaponName18[8] = "Molotov";
-// 0x0011ea00
+// 0x000ec908
 const char g_gameWeaponName22[8] = "Colt 45";
-// 0x0011e9f0
+// 0x000ec8f8
 const char g_gameWeaponName23[16] = "Silenced Pistol";
-// 0x0011e9e0
+// 0x000ec8e8
 const char g_gameWeaponName24[13] = "Desert Eagle";
-// 0x0011e9d8
+// 0x000ec8e0
 const char g_gameWeaponName25[8] = "Shotgun";
-// 0x0011e9c4
+// 0x000ec8cc
 const char g_gameWeaponName26[17] = "Sawn-off Shotgun";
-// 0x0011e9b4
+// 0x000ec8bc
 const char g_gameWeaponName27[15] = "Combat Shotgun";
-// 0x0011e9b0
+// 0x000ec8b8
 const char g_gameWeaponName28[4] = "UZI";
-// 0x0011e9ac
+// 0x000ec8b4
 const char g_gameWeaponName29[4] = "MP5";
-// 0x0011e9a4
+// 0x000ec8ac
 const char g_gameWeaponName30[5] = "AK47";
-// 0x0011e9a0
+// 0x000ec8a8
 const char g_gameWeaponName31[3] = "M4";
-// 0x0011e998
+// 0x000ec8a0
 const char g_gameWeaponName32[5] = "TEC9";
-// 0x0011e990
+// 0x000ec898
 const char g_gameWeaponName33[6] = "Rifle";
-// 0x0011e980
+// 0x000ec888
 const char g_gameWeaponName34[13] = "Sniper Rifle";
-// 0x0011e970
+// 0x000ec878
 const char g_gameWeaponName35[16] = "Rocket Launcher";
-// 0x0011e964
+// 0x000ec86c
 const char g_gameWeaponName36[12] = "Heat Seaker";
-// 0x0011e954
+// 0x000ec85c
 const char g_gameWeaponName37[13] = "Flamethrower";
-// 0x0011e94c
+// 0x000ec854
 const char g_gameWeaponName38[8] = "Minigun";
-// 0x0011e938
+// 0x000ec840
 const char g_gameWeaponName39[19] = "Satchel Explosives";
-// 0x0011e930
+// 0x000ec838
 const char g_gameWeaponName40[5] = "Bomb";
-// 0x0011e924
+// 0x000ec82c
 const char g_gameWeaponName41[10] = "Spray Can";
-// 0x0011e910
+// 0x000ec818
 const char g_gameWeaponName42[18] = "Fire Extinguisher";
-// 0x0011e908
+// 0x000ec810
 const char g_gameWeaponName43[7] = "Camera";
-// 0x0011e8fc
+// 0x000ec804
 const char g_gameWeaponName46[10] = "Parachute";
-// 0x0011e8f4
+// 0x000ec7fc
 const char g_gameWeaponName49[8] = "Vehicle";
-// 0x0011e8ec
+// 0x000ec7f4
 const char g_gameWeaponName53[8] = "Drowned";
-// 0x0011e8e4
+// 0x000ec7ec
 const char g_gameWeaponName54[6] = "Splat";
-// 0x00151950
+// R5 address to verify
 char g_gameEightByteName[9] = "SAMP03";
-// 0x0018e53c
+// R5 address to verify
 BYTE g_gameTimerOverridden;
-// 0x0018eb98
+// R5 address to verify
 DWORD g_gamePreviewPed[488];
-// 0x0011e7b8
+// R5 address to verify
 const Scripting::OpcodeInfo g_gameCurrentInteriorCommand = {0x77e, "v"};
 
-// 0x000607b0
+// R5 address to verify
 int CGame::GetScreenWidth()
 {
     return *(int*)0xc17044;
 }
 
-// 0x00065ee0
+// R5 address to verify
 int CGame::GetScreenHeight()
 {
     return *(int*)0xc17048;
 }
 
-// 0x000b26d0
+// R5 address to verify
 float CGame::GetHudVertScale()
 {
     return *(const float*)0x859524;
 }
 
-// 0x000b26e0
+// R5 address to verify
 float CGame::GetHudHorizScale()
 {
     return *(const float*)0x859520;
 }
 
-// 0x00060d20
+// R5 address to verify
 int CGame::GetCursorMode()
 {
     return m_nCursorMode;
 }
 
-// 0x0006d430
+// R5 address to verify
 void CGame::ResetInputEnableWait()
 {
     m_nInputEnableWaitFrames = 0;
 }
 
-// 0x00067f10
+// R5 address to verify
 void CGame::SetHeadMovement(BOOL enabled)
 {
     m_bHeadMove = enabled;
 }
 
-// 0x000080f0
+// R5 address to verify
 void CGame::SetCheckpointEnabled(DWORD enabled)
 {
     m_checkpoints.enabled = enabled;
 }
 
-// 0x00008100
+// R5 address to verify
 void CGame::SetRacingCheckpointEnabled(DWORD enabled)
 {
     m_checkpoints.raceEnabled = enabled;
 }
 
-// 0x0009fdc0
+// 0x0009ff80
 CGame::CGame()
 {
     m_pAudio = new CAudio;
@@ -395,7 +395,7 @@ CGame::CGame()
     m_nFrameLimiter = 90;
 }
 
-// 0x000a1190
+// 0x000a1370
 IDirect3DDevice9* CGame::GetDevice()
 {
     // Legacy 0.2x source matches this native body; both RenderWare calls take no stack arguments.
@@ -419,13 +419,13 @@ IDirect3DDevice9* CGame::GetDevice()
     return device;
 }
 
-// 0x000a0770
+// 0x000a0930
 BOOL CGame::IsStarted()
 {
     return *(BYTE*)0xba6831 == 0;
 }
 
-// 0x000a09f0
+// 0x000a0bb0
 void CGame::SetFrameLimiter(int value)
 {
     m_nFrameLimiter = value;
@@ -433,7 +433,7 @@ void CGame::SetFrameLimiter(int value)
     *(DWORD*)0xc1704c = 200;
 }
 
-// 0x000a1280
+// 0x000a1460
 void CGame::EnableClock(bool enable)
 {
     char format[] = {'%', '0', '2', 'd', ':', '%', '0', '2', 'd', '\0'};
@@ -454,25 +454,25 @@ void CGame::EnableClock(bool enable)
     }
 }
 
-// 0x00002d40
+// 0x00002d10
 void* CGame::GetWindowHandle()
 {
     return *(void**)0xc97c1c;
 }
 
-// 0x00002d50
+// 0x00002d20
 CAudio* CGame::GetAudio()
 {
     return m_pAudio;
 }
 
-// 0x00002d60
+// 0x00002d30
 CCamera* CGame::GetCamera()
 {
     return m_pCamera;
 }
 
-// 0x00002d70
+// 0x00002d40
 BOOL CGame::DoesHeadMoves()
 {
     return m_bHeadMove;
@@ -480,7 +480,7 @@ BOOL CGame::DoesHeadMoves()
 
 // GTA SA virtual addresses: fixed range8E6C10..8E7C8C, stride20 (211 records).
 // Tests the entire DWORD, never substitute a live vehicle-pool count.
-// 0x000a1410
+// 0x000a15f0
 int CGame::CountBackendVehicleModelRecords()
 {
     int count = 0;
@@ -493,78 +493,78 @@ int CGame::CountBackendVehicleModelRecords()
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// 0x000a0db0
+// 0x000a0f90
 int CGame::GetPlayerMoney()
 {
     return *(int*)0xb7ce50;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// 0x000a13f0
+// 0x000a15d0
 DWORD CGame::GetUsedMemory()
 {
     return *(DWORD*)0x8e4cb4;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// 0x000a1400
+// 0x000a15e0
 DWORD CGame::GetStreamingMemory()
 {
     return *(DWORD*)0x8a5a80;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// 0x000a1240
+// 0x000a1420
 void CGame::SetWantedLevel(BYTE level)
 {
     *(BYTE*)0x58db60 = level;
 }
 
 // GTA SA virtual addresses: direct original game storage; no SA-MP-owned alias.
-// 0x000a0920
+// 0x000a0ae0
 void CGame::GetWorldTime(BYTE* hour, BYTE* minute)
 {
     *minute = *(BYTE*)0xb70152;
     *hour = *(BYTE*)0xb70153;
 }
 
-// 0x000a0a50
+// 0x000a0c10
 void CGame::DisableTrainTraffic()
 {
     Scripting::ProcessCommand(&g_gameDisableTrainTrafficCommand, 0);
 }
 
-// 0x000a0a90
+// 0x000a0c50
 void CGame::RequestAnimation(const char* name)
 {
     Scripting::ProcessCommand(&g_gameRequestAnimationCommand, name);
 }
 
-// 0x000a0ab0
+// 0x000a0c70
 DWORD CGame::IsAnimationLoaded(const char* name)
 {
     return Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, name);
 }
 
-// 0x000a0ce0
+// 0x000a0ec0
 void CGame::DeleteMarker(DWORD marker)
 {
     Scripting::ProcessCommand(&g_gameDeleteMarkerCommand, marker);
 }
 
-// 0x000a0d90
+// 0x000a0f70
 void CGame::IncreasePlayerMoney(int amount)
 {
     Scripting::ProcessCommand(&g_gameIncreaseMoneyCommand, 0, amount);
 }
 
-// 0x000a1340
+// 0x000a1520
 void CGame::EnableZoneDisplaying(BYTE enabled)
 {
     Scripting::ProcessCommand(&g_gameZoneDisplayCommand, (DWORD)enabled);
 }
 
-// 0x000a1360
+// 0x000a1540
 void CGame::EnableStuntBonus(BYTE enabled)
 {
     // GTA SA virtual address: 0x00a4a474.
@@ -572,7 +572,7 @@ void CGame::EnableStuntBonus(BYTE enabled)
     *(DWORD*)0xa4a474 = enabled;
 }
 
-// 0x000a1220
+// 0x000a1400
 void CGame::SetWorldGravity(float gravity)
 {
     // GTA SA virtual address: 0x00863984; store raw float bits without x87 conversion.
@@ -580,7 +580,7 @@ void CGame::SetWorldGravity(float gravity)
     *(DWORD*)0x863984 = *(DWORD*)&gravity;
 }
 
-// 0x000a13d0
+// 0x000a15b0
 void CGame::LoadScene(const char* name)
 {
     // GTA SA virtual address: 0x005b8700, cdecl.
@@ -595,7 +595,7 @@ void CGame::LoadScene(const char* name)
     // clang-format on
 }
 
-// 0x000a19a0
+// 0x000a1b80
 void CGame::LoadCollisionFile(const char* name)
 {
     // GTA SA virtual address: 0x005b4e60, cdecl; native second argument is zero.
@@ -612,7 +612,7 @@ void CGame::LoadCollisionFile(const char* name)
     // clang-format on
 }
 
-// 0x000a19c0
+// 0x000a1ba0
 void CGame::LoadCullZone(const char* name)
 {
     // GTA SA virtual address: 0x005b4b40, cdecl.
@@ -627,7 +627,7 @@ void CGame::LoadCullZone(const char* name)
     // clang-format on
 }
 
-// 0x000a1200
+// 0x000a13e0
 void* CGame::GetWeaponInfo(int weapon, int skill)
 {
     // GTA SA virtual address: 0x00743c60, cdecl; raw backend pointer.
@@ -647,7 +647,7 @@ void* CGame::GetWeaponInfo(int weapon, int skill)
     return info;
 }
 
-// 0x000a19f0
+// 0x000a1bd0
 void CGame::DisableAutoAiming()
 {
     // GTA SA virtual addresses: 0x0060dc50 and 0x0060e530..0x0060e532.
@@ -659,7 +659,7 @@ void CGame::DisableAutoAiming()
     *(BYTE*)0x60e532 = 0;
 }
 
-// 0x000a1380
+// 0x000a1560
 void CGame::DisableEnterExits()
 {
     // GTA SA virtual address: 0x0096a7d8; unchecked native array/count prefix.
@@ -690,20 +690,20 @@ void CGame::DisableEnterExits()
     }
 }
 
-// 0x000a0240
+// 0x000a0400
 float CGame::FindGroundZ(float x, float y, float z)
 {
     Scripting::ProcessCommand(&g_gameFindGroundZCommand, (double)x, (double)y, (double)z, &z);
     return z;
 }
 
-// 0x000a0a60
+// 0x000a0c20
 void CGame::RefreshRenderer(float x, float y)
 {
     Scripting::ProcessCommand(&g_gameRefreshRendererCommand, (double)x, (double)y);
 }
 
-// 0x000a0090
+// 0x000a0250
 CVehicle* CGame::CreateVehicle(int model, float x, float y, float z, float rotation, BOOL siren)
 {
     // Native indexes this+model-0x122 without a model-range check.
@@ -715,7 +715,7 @@ CVehicle* CGame::CreateVehicle(int model, float x, float y, float z, float rotat
     return vehicle->m_pGameVehicle ? vehicle : 0;
 }
 
-// 0x000a0050
+// 0x000a0210
 BOOL CGame::RemovePed(CPed* ped)
 {
     if (ped)
@@ -728,7 +728,7 @@ BOOL CGame::RemovePed(CPed* ped)
     return FALSE;
 }
 
-// 0x000a1ee0
+// 0x000a20c0
 void CGame::ResetMoney()
 {
     // GTA SA virtual address: 0x00b7ce50; native abs/negation also preserves INT_MIN on x86.
@@ -742,7 +742,7 @@ void CGame::ResetMoney()
     }
 }
 
-// 0x000a0b80
+// 0x000a0d60
 void CGame::DeleteRacingCheckpoint()
 {
     if (m_checkpoints.raceCheckpoint)
@@ -753,7 +753,7 @@ void CGame::DeleteRacingCheckpoint()
     m_checkpoints.raceEnabled = 0;
 }
 
-// 0x000a0bb0
+// 0x000a0d90
 DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int type)
 {
     DWORD marker = 0;
@@ -783,7 +783,7 @@ DWORD CGame::CreateMarker(int icon, float x, float y, float z, DWORD color, int 
     return marker;
 }
 
-// 0x000a1c00
+// 0x000a1de0
 void CGame::SetCheckpoint(const CVector* position, const CVector* size)
 {
     GameCheckpointState* s = &m_checkpoints;
@@ -801,7 +801,7 @@ void CGame::SetCheckpoint(const CVector* position, const CVector* size)
     }
 }
 
-// 0x000a1cc0
+// 0x000a1ea0
 void CGame::CreateRacingCheckpoint()
 {
     GameCheckpointState* s = &m_checkpoints;
@@ -816,7 +816,7 @@ void CGame::CreateRacingCheckpoint()
     s->raceEnabled = 1;
 }
 
-// 0x000a1f20
+// 0x000a2100
 void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVector* next, float size)
 {
     m_checkpoints.racePosition = *position;
@@ -837,7 +837,7 @@ void CGame::SetRacingCheckpoint(BYTE type, const CVector* position, const CVecto
     CreateRacingCheckpoint();
 }
 
-// 0x000a1d40
+// 0x000a1f20
 void CGame::ProcessCheckpoints()
 {
     GameCheckpointState* s = &m_checkpoints;
@@ -916,7 +916,7 @@ void CGame::DisplayGameText(const char* text, int time, int style)
     }
 }
 
-// 0x000a1010
+// 0x000a11f0
 DWORD CGame::CreatePickup(int model, int type, float x, float y, float z, DWORD* index)
 {
     int selected = model;
@@ -944,14 +944,14 @@ createPickup:
     return (DWORD)model;
 }
 
-// 0x000a1260
+// 0x000a1440
 void CGame::DrawGangZone(const float* position, DWORD color)
 {
     // GTA SA virtual addresses: radar flag0x00ba67a4 and cdecl draw0x005853d0.
     ((void(__cdecl*)(const float*, DWORD*, BYTE))0x5853d0)(position, &color, *(BYTE*)0xba67a4);
 }
 
-// 0x000a07e0
+// 0x000a09a0
 void CGame::ReleaseModel(int model, BYTE force)
 {
     if (model >= 0)
@@ -985,7 +985,7 @@ void CGame::ReleaseModel(int model, BYTE force)
     }
 }
 
-// 0x000a1430
+// 0x000a1610
 void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
 {
     memset(m_aKeepLoadedVehicleModels, 0, sizeof(m_aKeepLoadedVehicleModels));
@@ -1046,7 +1046,7 @@ void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
     while (++i != 80);
 }
 
-// 0x000a16c0
+// 0x000a18a0
 void CGame::LoadAnimationsAndModels()
 {
     if (!Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, g_gameParachuteLibrary))
@@ -1087,7 +1087,7 @@ void CGame::LoadAnimationsAndModels()
         Scripting::ProcessCommand(&g_gameRequestModelCommand, 330);
 }
 
-// 0x000aa0b0
+// 0x000aa4c0
 void UnFuck(void* address, SIZE_T size)
 {
     DWORD oldProtect;
@@ -1100,7 +1100,7 @@ void UnFuck(void* address, SIZE_T size)
 #define CALL_GTA_UPDATE_MOUSE() __asm { mov edx, 0x541dd0 } __asm { call edx }
 // clang-format on
 
-// 0x000a02f0
+// 0x000a04b0
 void GameClearMouseDelta()
 {
     *(DWORD*)0xb73424 = 0;
@@ -1110,7 +1110,7 @@ void GameClearMouseDelta()
     // clang-format on
 }
 
-// 0x000a0310
+// R5 address to verify
 void GameUpdateMouse()
 {
     // clang-format off
@@ -1118,7 +1118,7 @@ void GameUpdateMouse()
     // clang-format on
 }
 
-// 0x000a0320
+// 0x000a04e0
 void GameDisableMousePointers()
 {
     *(DWORD*)0xb7340c = 0;
@@ -1132,7 +1132,7 @@ void GameDisableMousePointers()
     *(DWORD*)0x53f4b3 = (DWORD)&g_gameMouseDummy;
 }
 
-// 0x000a0370
+// 0x000a0530
 void GameRestoreMousePointers()
 {
     UnFuck((void*)0x53f47a, 4);
@@ -1143,7 +1143,7 @@ void GameRestoreMousePointers()
     *(DWORD*)0x53f4b3 = 0xb7340c;
 }
 
-// 0x000a03c0
+// 0x000a0580
 void GameDisableMouseCalls()
 {
     UnFuck((void*)0x53f417, 5);
@@ -1155,13 +1155,13 @@ void GameDisableMouseCalls()
     *(BYTE*)0x53f422 = 0x84;
 }
 
-// 0x000a0760
+// 0x000a0920
 BOOL CGame::IsMenuVisible()
 {
     return *(DWORD*)0xba67a4 != 0;
 }
 
-// 0x000a0530
+// 0x000a06f0
 void CGame::SetCursorMode(int mode, BOOL immediately)
 {
     CGame* state = this;
@@ -1231,7 +1231,7 @@ void CGame::SetCursorMode(int mode, BOOL immediately)
     }
 }
 
-// 0x000a0410
+// 0x000a05d0
 void CGame::ProcessInputEnabling()
 {
     CGame* state = this;
@@ -1282,7 +1282,7 @@ void CGame::ProcessInputEnabling()
 #undef CALL_GTA_CLEAR_MOUSE_DELTA
 #undef CALL_GTA_UPDATE_MOUSE
 
-// 0x000a06d0
+// 0x000a0890
 void CGame::InitGame()
 {
     g_gameTextBuffer = (char*)calloc(1, 513);
@@ -1296,7 +1296,7 @@ void CGame::InitGame()
     }
 }
 
-// 0x000aa060
+// 0x000aa470
 void GameWaitUnprotect(BYTE* address, SIZE_T size, BYTE expected)
 {
     DWORD oldProtect;
@@ -1312,7 +1312,7 @@ void GameWaitUnprotect(BYTE* address, SIZE_T size, BYTE expected)
     }
 }
 
-// 0x000aa300
+// 0x000aa710
 BOOL GameInitializeVersionPatches()
 {
     BYTE* version = (BYTE*)0x747483;
@@ -1384,7 +1384,7 @@ BOOL GameInitializeVersionPatches()
     return TRUE;
 }
 
-// 0x000a5c10
+// 0x000a5eb0
 DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2)
 {
     if (length > 23)
@@ -1403,7 +1403,7 @@ DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2)
     return ((DWORD(__cdecl*)(void*, DWORD, void*))0x72fa50)(arg0, length, arg2);
 }
 
-// 0x000a5c90
+// 0x000a5f30
 DWORD __cdecl GameDataReadHook(void* arg0, DWORD length, void* arg2)
 {
     if (g_gameCustomStreamRead)
@@ -1421,14 +1421,14 @@ DWORD __cdecl GameDataReadHook(void* arg0, DWORD length, void* arg2)
     return ((DWORD(__cdecl*)(void*, DWORD, void*))0x6f9fd0)(arg0, length, arg2);
 }
 
-// 0x000b1a40
+// 0x000b1e40
 DWORD GameReadStream(void* stream, void* buffer, DWORD length)
 {
     DWORD address = g_gameVersion == 1 ? 0x7ec9d0 : 0x7eca10;
     return ((DWORD(__cdecl*)(void*, void*, DWORD))address)(stream, buffer, length);
 }
 
-// 0x000a0720
+// 0x000a08e0
 void CGame::StartGame()
 {
     GameApplyInGamePatches();
@@ -1441,26 +1441,26 @@ void CGame::StartGame()
     *(BYTE*)0xba677b = 0;
 }
 
-// 0x000b41a0
+// 0x000b45a0
 DWORD __stdcall GameGetModelData1c(int model)
 {
     return *(DWORD*)((BYTE*)GameGetModelInfo(model) + 0x1c);
 }
 
-// 0x000a0780
+// 0x000a0940
 void CGame::RequestModel(int model, int loadingStream)
 {
     (void)loadingStream;
     Scripting::ProcessCommand(&g_gameRequestModelCommand, model);
 }
 
-// 0x000a07a0
+// 0x000a0960
 void CGame::LoadRequestedModels()
 {
     Scripting::ProcessCommand(&g_gameLoadModelsCommand);
 }
 
-// 0x0000e4f0
+// R5 address to verify
 void GameLoadRequestedModelsAndEndThread()
 {
     g_pGame->LoadRequestedModels();
@@ -1468,7 +1468,7 @@ void GameLoadRequestedModelsAndEndThread()
 }
 
 // Invalid IDs report TRUE. Preserve the inclusive upper bound and raw result.
-// 0x000a07b0
+// 0x000a0970
 BOOL CGame::IsModelAvailable(int model)
 {
     if (model <= 20000 && model >= 0)
@@ -1476,13 +1476,13 @@ BOOL CGame::IsModelAvailable(int model)
     return TRUE;
 }
 
-// 0x000b39b0
+// 0x000b3db0
 BOOL __stdcall GameHasModelInfo(int model)
 {
     return GameGetModelInfo(model) != 0;
 }
 
-// 0x000b39d0
+// 0x000b3dd0
 BOOL __stdcall GameIsPedModel(int model)
 {
     if (model >= 0 && model <= 30000)
@@ -1495,7 +1495,7 @@ BOOL __stdcall GameIsPedModel(int model)
     return FALSE;
 }
 
-// 0x000b4170
+// 0x000b4570
 BOOL __stdcall GameModelQueryB4170(int model)
 {
     void* info = GameGetModelInfo(model);
@@ -1504,7 +1504,7 @@ BOOL __stdcall GameModelQueryB4170(int model)
 
 // Vtable slot semantics remain unknown; do not relabel this as model type.
 // Both successful lookup checks are native, including the second null guard.
-// 0x000b5d90
+// 0x000b6250
 DWORD __cdecl GameQueryModelVirtual2c(int model)
 {
     if (!g_pGame || !GameGetModelInfo(model))
@@ -1524,7 +1524,7 @@ DWORD __cdecl GameQueryModelVirtual2c(int model)
     return result;
 }
 
-// 0x000b3d00
+// 0x000b4100
 DWORD __cdecl GameReadPedModelTable28(int model)
 {
     if (model < 0 || model > 30000)
@@ -1538,7 +1538,7 @@ DWORD __cdecl GameReadPedModelTable28(int model)
     return *(DWORD*)(table + 0x28);
 }
 
-// 0x000b3d40
+// R5 address to verify
 DWORD __cdecl GameReadPedModelTable2c(int model)
 {
     if (model < 0 || model > 30000)
@@ -1552,7 +1552,7 @@ DWORD __cdecl GameReadPedModelTable2c(int model)
     return *(DWORD*)(table + 0x2c);
 }
 
-// 0x000b3d80
+// 0x000b4180
 DWORD __cdecl GameReadPedModelTable24(int model)
 {
     if (model < 0 || model > 30000)
@@ -1567,7 +1567,7 @@ DWORD __cdecl GameReadPedModelTable24(int model)
 }
 
 // Preserve the second lookup: its result is deliberately not null-checked again.
-// 0x000b5ef0
+// 0x000b63b0
 float __cdecl GameSetModelCollisionRadius(int model, float radius)
 {
     if (GameGetModelInfo(model))
@@ -1584,7 +1584,7 @@ float __cdecl GameSetModelCollisionRadius(int model, float radius)
 }
 
 // Publish one raw DWORD at a time, preserving alias order and NaN payload bits.
-// 0x000b5f50
+// 0x000b6410
 BOOL __cdecl GameGetModelCollisionCentre(int model, CVector* centre)
 {
     if (GameGetModelInfo(model))
@@ -1603,7 +1603,7 @@ BOOL __cdecl GameGetModelCollisionCentre(int model, CVector* centre)
 }
 
 // Native exposes only AL; no meaning is assigned to individual flag bits.
-// 0x000b5fe0
+// 0x000b64a0
 BYTE __stdcall GameGetModelFlagsByte(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1614,7 +1614,7 @@ BYTE __stdcall GameGetModelFlagsByte(int model)
 }
 
 // Native exposes AX; this reads the full overlapping two-byte field.
-// 0x000b6000
+// 0x000b64c0
 WORD __stdcall GameGetModelFlagsWord(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1625,13 +1625,13 @@ WORD __stdcall GameGetModelFlagsWord(int model)
 }
 
 // These helpers receive an existing backend model-info pointer, not a model ID.
-// 0x000b4150
+// 0x000b4550
 void __stdcall GameSetModelDrawDistance(void* info, float distance)
 {
     *(float*)((BYTE*)info + 0x18) = distance;
 }
 
-// 0x000b4160
+// R5 address to verify
 float __stdcall GameGetModelDrawDistance(const void* info)
 {
     return *(const float*)((const BYTE*)info + 0x18);
@@ -1639,7 +1639,7 @@ float __stdcall GameGetModelDrawDistance(const void* info)
 
 // Native writes +1C before invoking the backend virtual slot. Its meaning
 // remains unresolved; preserve the unchecked model lookup and callee-pop call.
-// 0x000b4200
+// 0x000b4600
 void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1656,7 +1656,7 @@ void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 }
 
 // GTA SA virtual address: 0x004C4BC0; ECX=model info, initPairedModel=0.
-// 0x000b4230
+// 0x000b4630
 void __stdcall GameSetModelCollision(int model, void* collision)
 {
     void* info = GameGetModelInfo(model);
@@ -1672,7 +1672,7 @@ void __stdcall GameSetModelCollision(int model, void* collision)
 }
 
 // Native zero-extends the WORD, including FFFF -> 65535; lookup failure -> -1.
-// 0x000b4280
+// 0x000b4680
 DWORD __stdcall GameGetModelTxdIndex(int model)
 {
     const BYTE* info = (const BYTE*)GameGetModelInfo(model);
@@ -1680,14 +1680,14 @@ DWORD __stdcall GameGetModelTxdIndex(int model)
 }
 
 // No null check is present in either of the following native entries.
-// 0x000b42d0
+// 0x000b46d0
 void* __stdcall GameGetModelCollision(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
     return *(void**)(info + 0x14);
 }
 
-// 0x000b4300
+// 0x000b4700
 WORD __stdcall GameGetModelReferenceCount(int model)
 {
     const void* info = GameGetModelInfo(model);
@@ -1705,7 +1705,7 @@ WORD __stdcall GameGetModelReferenceCount(int model)
 
 // Native preserves the first model-info pointer across the second lookup made
 // by the TXD-index helper. Backend call is ECX, no added failure cleanup.
-// 0x000b1c40
+// 0x000b2040
 BOOL GameCleanupModelAndTxd(int model)
 {
     void* info = GameGetModelInfo(model);
@@ -1728,7 +1728,7 @@ BOOL GameCleanupModelAndTxd(int model)
 }
 
 // Clear the observed collision slot only; no destructor or release is native.
-// 0x000b1070
+// R5 address to verify
 void GameClearModelCollision(int model)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -1736,7 +1736,7 @@ void GameClearModelCollision(int model)
         *(void**)(info + 0x14) = 0;
 }
 
-// 0x000a0980
+// 0x000a0b40
 void CGame::SetWorldWeather(int weather)
 {
     // GTA SA virtual addresses: 0x00c81318, 0x00c8131c, 0x00c81320.
@@ -1750,7 +1750,7 @@ void CGame::SetWorldWeather(int weather)
     }
 }
 
-// 0x000a08f0
+// 0x000a0ab0
 void CGame::SetWorldTime(int hour, int minute)
 {
     // GTA SA virtual addresses: minute 0x00b70152, hour 0x00b70153.
@@ -1759,7 +1759,7 @@ void CGame::SetWorldTime(int hour, int minute)
     Scripting::ProcessCommand(&g_gameSetWorldTime, hour, minute);
 }
 
-// 0x000a0a20
+// 0x000a0be0
 void CGame::SetMaxStats()
 {
     // clang-format off
@@ -1775,7 +1775,7 @@ void CGame::SetMaxStats()
     *(BYTE*)0x55a070 = 0xc3;
 }
 
-// 0x000a0940
+// 0x000a0b00
 void CGame::LetTimeGo(char enabled)
 {
     UnFuck((void*)0x52cf10, 1);
@@ -1792,13 +1792,13 @@ void CGame::LetTimeGo(char enabled)
 }
 
 // GTA SA virtual address: 0x00745C70; no additional validation is native.
-// 0x000b5d10
+// 0x000b61d0
 void GameSetVideoMode(DWORD mode)
 {
     ((void(__cdecl*)(DWORD))0x745c70)(mode);
 }
 
-// 0x0009fe50
+// 0x000a0010
 void CGame::UpdateKeyCycle()
 {
     DWORD now = RakNet::GetTime();
@@ -1817,7 +1817,7 @@ void CGame::UpdateKeyCycle()
     *(BYTE*)0xb7356e = g_frameKeyCycle;
 }
 
-// 0x0009fed0
+// 0x000a0090
 void CGame::Sleep(int elapsed, int limit)
 {
     if (elapsed && limit)
@@ -1828,7 +1828,7 @@ void CGame::Sleep(int elapsed, int limit)
     }
 }
 
-// 0x000a1a30
+// 0x000a1c10
 void CGame::ProcessFrameLimiter()
 {
     DWORD now = RakNet::GetTime();
@@ -1896,7 +1896,7 @@ void CGame::ProcessFrameLimiter()
     g_frameSleepTick = RakNet::GetTime();
 }
 
-// 0x000a1bd0
+// 0x000a1db0
 void CGame::EnableHUD(BOOL enabled)
 {
     if (enabled)
@@ -1911,7 +1911,7 @@ void CGame::EnableHUD(BOOL enabled)
     }
 }
 
-// 0x000a10f0
+// 0x000a12d0
 DWORD CGame::CreateWeaponPickup(int model, int ammo, float x, float y, float z)
 {
     int selected = model;
@@ -1926,7 +1926,7 @@ DWORD CGame::CreateWeaponPickup(int model, int ammo, float x, float y, float z)
     return (DWORD)model;
 }
 
-// 0x000b3df0
+// 0x000b41f0
 int __cdecl GameCameraSphereQuery(const void* sphere)
 {
     void* camera = *(void**)0xc1703c;
@@ -1937,7 +1937,7 @@ int __cdecl GameCameraSphereQuery(const void* sphere)
     return query(camera, sphere);
 }
 
-// 0x000b6110
+// 0x000b65d0
 BYTE __stdcall GameTestEntityLineSphere(const CVector* origin, const CVector* end, void* backend, const CVector* centre, float scale, BYTE cameraCheck)
 {
     if (!backend || !*(void**)((BYTE*)backend + 0x14))
@@ -2002,27 +2002,27 @@ radius_scale:
     return g_gameLineSphereResult;
 }
 
-// 0x000a0170
+// 0x000a0330
 CObject* CGame::NewObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE firstHour, BYTE lastHour)
 {
     return new CObject(model, x, y, z, rotation, drawDistance, 0, firstHour, lastHour);
 }
 
-// 0x000a0ad0
+// 0x000a0c90
 void CGame::ReleaseAnimation(const char* name)
 {
     if (Scripting::ProcessCommand(&g_gameIsAnimationLoadedCommand, name))
         Scripting::ProcessCommand(&g_gameReleaseAnimationCommand, name);
 }
 
-// 0x000a0b00
+// 0x000a0cc0
 void CGame::EnableRadar(BOOL enabled)
 {
     // GTA SA virtual address: radar-disable byte.
     *(BYTE*)0xbaa3fb = enabled == 0;
 }
 
-// 0x000a0d20
+// 0x000a0f00
 void CGame::UpdateFarClippingPlane()
 {
     EntityBackendPrefix* ped = (EntityBackendPrefix*)GameFindLocalPed();
@@ -2043,7 +2043,7 @@ void CGame::UpdateFarClippingPlane()
         g_gameFarClipDistance = g_gameFarClipBase;
 }
 
-// 0x000a0dc0
+// 0x000a0fa0
 const char* CGame::GetWeaponName(int weapon)
 {
     switch (weapon)
@@ -2150,7 +2150,7 @@ const char* CGame::GetWeaponName(int weapon)
     }
 }
 
-// 0x000a11d0
+// 0x000a13b0
 void CGame::Restart()
 {
     // GTA SA virtual addresses: restart flags and three no-argument backend calls.
@@ -2170,25 +2170,25 @@ void CGame::Restart()
     *(BYTE*)0xba6831 = 1;
 }
 
-// 0x000a1250
+// 0x000a1430
 void CGame::SetNumberOfIntroTextLinesThisFrame(WORD value)
 {
     *(WORD*)0xa44b68 = value;
 }
 
-// 0x000a1590
+// 0x000a1770
 int CGame::GetTimer()
 {
     return *(int*)0xb7cb84;
 }
 
-// 0x000a19e0
+// 0x000a1bc0
 BOOL CGame::UsingGamepad()
 {
     return *(BYTE*)0xba6818 != 0;
 }
 
-// 0x0009ff50
+// 0x000a0110
 CPed* CGame::CreatePed(int model, CVector position, float rotation, DWORD, BOOL playerFlag)
 {
     BYTE slot = 2;
@@ -2215,7 +2215,7 @@ foundSlot:
     return ped;
 }
 
-// 0x0009fea0
+// R5 address to verify
 void CGame::SetTimeScale(float scale)
 {
     *(float*)0xb7cb5c = scale;
@@ -2223,7 +2223,7 @@ void CGame::SetTimeScale(float scale)
     g_gamePatchValue1546f0 = scale * g_frameScaleMultiplier;
 }
 
-// 0x0009ff00
+// R5 address to verify
 BYTE CGame::FindFreePlayerSlot()
 {
     BYTE player = 2;
@@ -2236,7 +2236,7 @@ BYTE CGame::FindFreePlayerSlot()
     return 0;
 }
 
-// 0x0009ff30
+// 0x000a00f0
 BYTE CGame::CountUsedPlayerSlots()
 {
     BYTE count = 0;
@@ -2252,14 +2252,14 @@ BYTE CGame::CountUsedPlayerSlots()
     return count;
 }
 
-// 0x000a0120
+// R5 address to verify
 void CGame::SetEightByteName(const char* name)
 {
     if (name && *name && strlen(name) <= 8)
         GameSetEightByteName(name);
 }
 
-// 0x000a0150
+// R5 address to verify
 BOOL CGame::DeleteEntity(CEntity* entity)
 {
     if (entity)
@@ -2270,20 +2270,20 @@ BOOL CGame::DeleteEntity(CEntity* entity)
     return FALSE;
 }
 
-// 0x000a0210
+// R5 address to verify
 int CGame::GetWeaponModel(int weapon)
 {
     return GameGetWeaponModel(weapon);
 }
 
-// 0x000a0220
+// R5 address to verify
 BOOL CGame::IsKeyPressed(int key)
 {
     KeyPad* keys = KeyStuff::GetInternalKeys();
     return *((WORD*)keys + key) != 0;
 }
 
-// 0x000a0870
+// 0x000a0a30
 BOOL CGame::LoadModelNow(int model)
 {
     DWORD offset = (DWORD)model * 20;
@@ -2330,34 +2330,34 @@ BOOL CGame::LoadModelNow(int model)
     return FALSE;
 }
 
-// 0x000a09a0
+// R5 address to verify
 DWORD CGame::GetWeather()
 {
     // GTA SA virtual address: raw weather DWORD.
     return *(DWORD*)0xc81318;
 }
 
-// 0x000a09b0
+// R5 address to verify
 BYTE CGame::GetFrontendByteBA6769()
 {
     return *(BYTE*)0xba6769;
 }
 
-// 0x000a09d0
+// R5 address to verify
 BOOL CGame::IsFrontendFlagBA6794Set()
 {
     // GTA SA virtual address: frontend flag, normalized to BOOL.
     return *(BYTE*)0xba6794 != 0;
 }
 
-// 0x000a09e0
+// R5 address to verify
 void CGame::SetFrontendFlagBA6794()
 {
     // GTA SA virtual address: native writes exactly one byte.
     *(BYTE*)0xba6794 = 1;
 }
 
-// 0x000a1570
+// 0x000a1750
 void CGame::SetTimer(DWORD value)
 {
     if (m_bClockEnabled)
@@ -2367,7 +2367,7 @@ void CGame::SetTimer(DWORD value)
     g_gameTimerOverridden = 1;
 }
 
-// 0x000a15a0
+// R5 address to verify
 DWORD CGame::GetBackendWordB71804()
 {
     return *(DWORD*)0xb71804;
@@ -2376,7 +2376,7 @@ DWORD CGame::GetBackendWordB71804()
 // Eight bytes are read by the native getter; the wrapper also permits8 chars
 // plus the terminating NUL. Longer native-helper overflow adjacency is unproven.
 
-// 0x000a3ed0
+// R5 address to verify
 void GameSetEightByteName(const char* name)
 {
     volatile DWORD* words = (volatile DWORD*)g_gameEightByteName;
@@ -2391,7 +2391,7 @@ void GameSetEightByteName(const char* name)
     while (*name++);
 }
 
-// 0x000a3f00
+// R5 address to verify
 bool GameCopyEightByteName(void* output)
 {
     volatile DWORD* out = (volatile DWORD*)output;
@@ -2403,7 +2403,7 @@ bool GameCopyEightByteName(void* output)
     return true;
 }
 
-// 0x000a15b0
+// 0x000a1790
 void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, int model, DWORD color)
 {
     CVehicle* vehicle = 0;
@@ -2444,7 +2444,7 @@ void CGame::ApplyPreviewAnimation(DWORD first, DWORD second, BOOL useVehicle, in
         delete vehicle;
 }
 
-// 0x000a7720
+// R5 address to verify
 void GameFreeModelInfo(int model)
 {
     void* info = g_gameModelInfoTable[model];
@@ -2455,7 +2455,7 @@ void GameFreeModelInfo(int model)
     }
 }
 
-// 0x000a0d00
+// 0x000a0ee0
 BYTE CGame::GetCurrentInterior()
 {
     DWORD interior;

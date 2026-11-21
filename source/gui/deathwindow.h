@@ -18,11 +18,11 @@ class CDeathWindow
 {
 public:
     // Raw initialization DWORD, without normalization.
-    // 0x0006c720
+    // R5 address to verify
     BOOL AreAuxiliaryFontsInitialized();
-    // 0x00069580
+    // 0x00069b40
     ~CDeathWindow();
-    // 0x000695f0
+    // 0x00069bb0
     void CreateAuxiliaryFonts();
     union
     {
@@ -39,43 +39,43 @@ public:
             ID3DXFont *auxiliaryFont, *auxiliaryBackgroundFont;
         };
     };
-    // 0x00069660
+    // 0x00069c20
     void PushBack();
-    // 0x00069680
+    // 0x00069c40
     void DrawText(const char* text, RECT rect, DWORD color, int format);
-    // 0x00069780
+    // 0x00069d40
     void DrawWeaponSprite(const char* glyph, RECT rect, DWORD color);
     // Native returns the caller-provided output pointer in EAX.
-    // 0x00069810
+    // 0x00069dd0
     SIZE* GetWeaponSpriteRectSize(SIZE* size);
-    // 0x00069890
+    // 0x00069e50
     const char* GetWeaponSpriteId(BYTE weapon);
-    // 0x0006a010
+    // 0x0006a5d0
     void AddEntry(const char* killer, const char* victim, DWORD killerColor, DWORD victimColor, BYTE weapon);
-    // 0x0006a0f0
+    // 0x0006a6b0
     void AddMessage(const char* killer, const char* victim, DWORD killerColor, DWORD victimColor, BYTE weapon);
-    // 0x0006a090
+    // 0x0006a650
     CDeathWindow(IDirect3DDevice9* device);
-    // 0x00069b90
+    // 0x0006a150
     void ResetFonts();
-    // 0x00069d20
+    // 0x0006a2e0
     void Draw();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(DeathWindowEntry) == 59);
 STATIC_ASSERT(sizeof(CDeathWindow) == 0x157);
 STATIC_ASSERT(offsetof(CDeathWindow, font) == 0x137);
-// 0x0011c330
+// 0x000ea308
 extern const char g_deathAuxFontFace[9];
-// 0x0011c34c
+// 0x000ea324
 extern const char g_deathWeaponFontFace[11];
-// 0x0011c358
+// 0x000ea330
 extern const char g_deathLongestNick[25];
-// 0x00118354
+// 0x000e62d0
 extern const char g_deathWeaponBackgroundGlyph[2];
-// 0x0011c374
+// 0x000ea34c
 extern const float g_deathWindowHorizontalFactor;
-// 0x0011c378
+// 0x000ea350
 extern const float g_deathWindowVerticalFactor;
 
 #endif // DEATHWINDOW_H

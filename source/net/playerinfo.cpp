@@ -3,37 +3,37 @@
 #include "net/remoteplayer.h"
 
 #include <string.h>
-// 0x0006e270
+// R5 address to verify
 int CPlayerInfo::GetScore()
 {
     return score;
 }
 
-// 0x0006e280
+// R5 address to verify
 DWORD CPlayerInfo::GetPing()
 {
     return ping;
 }
 
-// 0x0006e300
+// R5 address to verify
 DWORD CPlayerInfo::GetNameLength()
 {
     return (DWORD)name.size();
 }
 
-// 0x000170c0
+// R5 address to verify
 const char* CPlayerInfo::GetName()
 {
     return name.c_str();
 }
 
-// 0x0001da20
+// R5 address to verify
 void CPlayerInfo::SetName(const char* text)
 {
     name.assign(text, strlen(text));
 }
 
-// 0x00014060
+// 0x000141b0
 CPlayerInfo::CPlayerInfo(const char* text, DWORD isNpc)
 {
     npc = isNpc;
@@ -43,7 +43,7 @@ CPlayerInfo::CPlayerInfo(const char* text, DWORD isNpc)
     remote = new CRemotePlayer;
 }
 
-// 0x00013e10
+// 0x00013f60
 CPlayerInfo::~CPlayerInfo()
 {
     if (remote)
@@ -53,19 +53,19 @@ CPlayerInfo::~CPlayerInfo()
     }
 }
 
-// 0x0000e2d0
+// R5 address to verify
 DWORD CPlayerInfo::GetNpcFlag()
 {
     return npc;
 }
 
-// 0x0000e2e0
+// R5 address to verify
 void CPlayerInfo::SetScore(int value)
 {
     score = value;
 }
 
-// 0x0000e2f0
+// R5 address to verify
 void CPlayerInfo::SetPing(DWORD value)
 {
     ping = value;

@@ -7,7 +7,7 @@ struct CRunningScript
 {
     BYTE opaque[224];
 };
-// 0x002a93f0
+// 0x0026b558
 extern CRunningScript* g_scriptThread;
 namespace Scripting
 {
@@ -18,26 +18,26 @@ struct OpcodeInfo
     char parameters[16];
 };
 #pragma pack(pop)
-// 0x000b2150
+// 0x000b2550
 void Initialize();
-// 0x000b1ed0
+// 0x000b22d0
 DWORD ExecBuffer();
-// 0x000b1f10
+// 0x000b2310
 DWORD __cdecl ProcessCommand(const OpcodeInfo* command, ...);
 } // namespace Scripting
-// 0x002a92f0
+// 0x0026b458
 extern BYTE g_scriptBuffer[256];
-// 0x002a92a8
+// R5 address to verify
 extern DWORD* g_scriptVariables[18];
-// 0x002a93f4
+// 0x0026b55c
 extern DWORD g_scriptLastOpcode;
-// 0x002a93f8
+// 0x0026b560
 extern BOOL g_scriptLocalDebug;
-// 0x00155390
+// 0x001173b8
 extern FARPROC g_scriptProcessOneCommand;
-// 0x00163a70
+// R5 address to verify
 extern int g_gameExceptionCount;
-// 0x00060470
+// 0x000609b0
 extern WORD g_scriptVehicleComponent;
 
 int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, const char* warning);
@@ -45,255 +45,255 @@ int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, cons
 
 #ifndef SAMP_PED_COMMANDS_H
 #define SAMP_PED_COMMANDS_H
-// 0x0011f0d0
+// 0x000ecfc4
 extern const Scripting::OpcodeInfo g_pedCommand087e;
-// 0x0011ef90
+// 0x000ece84
 extern const Scripting::OpcodeInfo g_pedCommand0446;
-// 0x0011e604
+// 0x000ec50c
 extern const Scripting::OpcodeInfo g_entityTeleportCommand;
-// 0x0011f15c
+// 0x000ed050
 extern const Scripting::OpcodeInfo g_pedDetachParachute;
-// 0x0011f148
+// 0x000ed03c
 extern const Scripting::OpcodeInfo g_pedDestroyParachute;
-// 0x0011f238
+// 0x000ed12c
 extern const Scripting::OpcodeInfo g_pedDropStuff;
-// 0x0011efcc
+// 0x000ecec0
 extern const Scripting::OpcodeInfo g_pedWarpFromVehicle;
-// 0x0011f320
+// 0x000ed210
 extern const char g_pedNullAnimation[5];
-// 0x0011ef54
+// 0x000ece48
 extern const Scripting::OpcodeInfo g_pedGetCurrentWeaponCommand;
-// 0x0011ef40
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedSetArmedWeaponCommand;
-// 0x0011f1c0
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedFightingStyleCommand;
-// 0x0011f198
+// 0x000ed08c
 extern const Scripting::OpcodeInfo g_pedCellphoneCommand;
-// 0x0011eef0
+// 0x000ecdf8
 extern const Scripting::OpcodeInfo g_pedDeleteArrowCommand;
-// 0x0011ef18
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedSpawnInfoCommand;
-// 0x0011f1ac
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedHandsUpCommand;
-// 0x0011ef7c
+// 0x000ece70
 extern const Scripting::OpcodeInfo g_pedImmunitiesCommand;
-// 0x0011f01c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedRotationCommand;
-// 0x0011f1d4
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedParachuteCleanupCommand;
-// 0x0011ee8c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedCreateArrowCommand;
-// 0x0011ef04
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedArrowColorCommand;
-// 0x0011f184
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedArrowModeCommand;
-// 0x0011ae68
+// 0x000e8dd8
 extern const double g_pedParachuteZero;
-// 0x0011f1e8
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedStopUrinationEffectCommand;
-// 0x0011f008
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedExitVehicleCommand;
-// 0x0011f0a8
+// 0x000ecf9c
 extern const Scripting::OpcodeInfo g_pedApplyAnimationCommand;
-// 0x0011f0bc
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedIsPerformingAnimationCommand;
-// 0x0011e324
+// 0x000ec2fc
 extern const char g_pedBlockedAnimationLibrary[4];
-// 0x00154db0
+// 0x00116dd8
 extern char g_pedDanceLibraries[4][16];
-// 0x00154df0
+// 0x00116e18
 extern char g_pedDanceNames[4][16];
-// 0x00154e30
+// 0x00116e58
 extern char g_pedDanceMoveTables[3][16][16];
-// 0x00117a39
+// 0x000e59c9
 extern const char g_pedEmptyDanceAnimation[1];
-// 0x0011eec8
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedSelectInteriorCommand;
-// 0x0011f0f8
+// 0x000ecfec
 extern const Scripting::OpcodeInfo g_pedLinkInteriorCommand;
-// 0x0011f058
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedRefreshInteriorCommand;
-// 0x0011ef2c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedControllableCommand;
-// 0x0011f044
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedFreezeCommand;
-// 0x0011f080
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedKillCommand;
-// 0x0011f06c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedWarpPassengerCommand;
-// 0x0011eff4
+// 0x000ecee8
 extern const Scripting::OpcodeInfo g_pedEnterPassengerCommand;
-// 0x0011efe0
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedEnterDriverCommand;
-// 0x0011f1fc
+// 0x000ed0f0
 extern const Scripting::OpcodeInfo g_pedCreateUrinationEffectCommand;
-// 0x0011f210
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedStartUrinationEffectCommand;
-// 0x0011eacc
+// 0x000ec9d4
 extern const char g_pedUrinationLibrary[9];
-// 0x0011f378
+// 0x000ed268
 extern const char g_pedUrinationAnimation[10];
-// 0x0011f354
+// 0x000ed244
 extern const char g_pedUrinationEffect[10];
-// 0x0011f360
+// 0x000ed250
 extern const double g_pedUrinationOffsetY;
-// 0x0011f368
+// 0x000ed258
 extern const double g_pedUrinationOffsetZ;
-// 0x0011f370
+// 0x000ed260
 extern const double g_pedUrinationDirectionY;
-// 0x0011ef68
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedWarpDriverCommand;
-// 0x0011eedc
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedTrainCameraCommand;
-// 0x0011ead8
+// 0x000ec9e0
 extern const char g_pedSmokeLibrary[6];
-// 0x0011f348
+// 0x000ed238
 extern const char g_pedSmokeAnimation[12];
-// 0x0011eae0
+// 0x000ec9e8
 extern const char g_pedDrinkLibrary[4];
-// 0x0011f338
+// 0x000ed228
 extern const char g_pedDrinkAnimationM[15];
-// 0x0011f328
+// 0x000ed218
 extern const char g_pedDrinkAnimationF[15];
-// 0x0011f224
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_pedDrunkShakeCommand;
 #endif
 
 #ifndef SAMP_WRAPPER_COMMANDS_H
 #define SAMP_WRAPPER_COMMANDS_H
-// 0x0011edfc
+// 0x000ecd04
 extern const Scripting::OpcodeInfo g_objectSetRotationCommand;
-// 0x0011e410
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_cameraFade;
-// 0x0011e424
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_cameraRestoreJumpcut;
-// 0x0011e438
+// 0x000ec340
 extern const Scripting::OpcodeInfo g_cameraPointAt;
-// 0x0011e44c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_cameraRestore;
-// 0x0011e460
+// 0x000ec368
 extern const Scripting::OpcodeInfo g_cameraSet;
-// 0x0011e474
+// 0x000ec37c
 extern const Scripting::OpcodeInfo g_cameraStop;
-// 0x0011e488
+// 0x000ec390
 extern const Scripting::OpcodeInfo g_cameraMove;
-// 0x0011e49c
+// 0x000ec3a4
 extern const Scripting::OpcodeInfo g_cameraTrack;
-// 0x0011e4b0
+// 0x000ec3b8
 extern const Scripting::OpcodeInfo g_cameraPersistTrack;
-// 0x0011e4c4
+// 0x000ec3cc
 extern const Scripting::OpcodeInfo g_cameraPersistPosition;
-// 0x0011eaf0
+// 0x000ec9f8
 extern const Scripting::OpcodeInfo g_audioPlay;
-// 0x0011eb04
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_audioLoad;
-// 0x0011eb40
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_audioUnload;
-// 0x0011eb54
+// 0x000eca5c
 extern const Scripting::OpcodeInfo g_audioSetPosition;
-// 0x0011eb18
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_audioIsLoaded;
-// 0x0011eb2c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_audioStart;
-// 0x0011e68c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameSetWorldTime;
-// 0x0011f7a4
+// 0x000ed6a0
 extern const Scripting::OpcodeInfo g_vehicleChangeInteriorCommand;
-// 0x0011f678
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleIsSunkCommand;
-// 0x0011f7b8
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleAttachTrailerCommand;
-// 0x0011f7cc
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleDetachTrailerCommand;
-// 0x0011f77c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleRemoveComponentCommand;
-// 0x0011f72c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehiclePaintjobCommand;
-// 0x0011f614
+// 0x000ed510
 extern const Scripting::OpcodeInfo g_vehicleRotationCommand;
-// 0x0011f6a0
+// 0x000ed59c
 extern const Scripting::OpcodeInfo g_vehicleProofsCommand;
-// 0x0011f790
+// 0x000ed68c
 extern const Scripting::OpcodeInfo g_vehicleDamageableCommand;
-// 0x0011f6b4
+// 0x000ed5b0
 extern const Scripting::OpcodeInfo g_vehicleWarpPedCommand;
-// 0x0011f740
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleAddComponentCommand;
-// 0x0011f754
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleComponentLoadedCommand;
-// 0x0011f768
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleRequestComponentCommand;
-// 0x0011f628
+// 0x000ed524
 extern const Scripting::OpcodeInfo g_vehicleCreateMarkerCommand;
-// 0x0011f63c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleDestroyMarkerCommand;
-// 0x0011f650
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleMarkerColorCommand;
-// 0x0011f664
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleMarkerModeCommand;
-// 0x0011f600
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleDestroyCommand;
-// 0x0011f6dc
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleDestroyTrainCommand;
-// 0x0011f5ec
+// 0x000ed4e8
 extern const Scripting::OpcodeInfo g_vehicleCreateCommand;
-// 0x0011f6f0
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleGasTankExplosionCommand;
-// 0x0011f718
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleHydraulicsCommand;
-// 0x0011f6c8
+// 0x000ed5c4
 extern const Scripting::OpcodeInfo g_vehicleCreateTrainCommand;
-// 0x0011e790
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameDisableTrainTrafficCommand;
-// 0x0011e7e0
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameRequestAnimationCommand;
-// 0x0011e7f4
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameIsAnimationLoadedCommand;
-// 0x0011e6b4
+// 0x000ec5bc
 extern const Scripting::OpcodeInfo g_gameDeleteMarkerCommand;
-// 0x0011e740
+// 0x000ec648
 extern const Scripting::OpcodeInfo g_gameIncreaseMoneyCommand;
-// 0x0011e86c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameZoneDisplayCommand;
-// 0x0011e754
+// 0x000ec65c
 extern const Scripting::OpcodeInfo g_gameFindGroundZCommand;
-// 0x0011e7cc
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameRefreshRendererCommand;
-// 0x0011e77c
+// 0x000ec684
 extern const Scripting::OpcodeInfo g_gameDeleteRacingCheckpointCommand;
-// 0x0011e6dc
+// 0x000ec5e4
 extern const Scripting::OpcodeInfo g_gameCreateMarkerCommand;
-// 0x0011e718
+// 0x000ec620
 extern const Scripting::OpcodeInfo g_gameCreateMarkerType1Command;
-// 0x0011e858
+// 0x000ec760
 extern const Scripting::OpcodeInfo g_gameCreateMarkerType2Command;
-// 0x0011e704
+// 0x000ec60c
 extern const Scripting::OpcodeInfo g_gameCreateMarkerType3Command;
-// 0x0011e6c8
+// 0x000ec5d0
 extern const Scripting::OpcodeInfo g_gameMarkerColorCommand;
-// 0x0011e6f0
+// 0x000ec5f8
 extern const Scripting::OpcodeInfo g_gameMarkerModeCommand;
-// 0x0011e768
+// 0x000ec670
 extern const Scripting::OpcodeInfo g_gameCreateRacingCheckpointCommand;
-// 0x0011e72c
+// 0x000ec634
 extern const Scripting::OpcodeInfo g_gameLocateCheckpointCommand;
-// 0x0011e81c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_gameClearTextCommand;
-// 0x0011e830
+// 0x000ec738
 extern const Scripting::OpcodeInfo g_gameCreatePickupCommand;
-// 0x0011e7a4
+// 0x000ec6ac
 extern const Scripting::OpcodeInfo g_gameReleaseModelCommand;
-// 0x0011eae4
+// 0x000ec9ec
 extern const char g_gameParachuteLibrary[10];
-// 0x00118224
+// 0x000e6194
 extern const char g_gameVendingLibrary[8];
-// 0x0011eac4
+// 0x000ec9cc
 extern const char g_gameFightBLibrary[8];
-// 0x0011eabc
+// 0x000ec9c4
 extern const char g_gameFightCLibrary[8];
-// 0x0011eab4
+// 0x000ec9bc
 extern const char g_gameFightDLibrary[8];
-// 0x0011eaac
+// 0x000ec9b4
 extern const char g_gameFightELibrary[8];
 
 #endif // SCRIPTING_H

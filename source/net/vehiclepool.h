@@ -31,53 +31,53 @@ class CVehiclePool
 {
 public:
     // Unchecked WORD index into the native unoccupied-sync owner table.
-    // 0x00002df0
+    // R5 address to verify
     void SetUnoccupiedSyncOwner(WORD vehicle, WORD player);
     // First native stack word unused; endpoints are the second and third words.
-    // 0x0001e970
+    // 0x0001eeb0
     WORD FindInLine(DWORD unused, const CVector* origin, const CVector* end);
 
     // Fourth raw word is copied into both native ray records.
-    // 0x0001e9f0
+    // 0x0001ef30
     WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord);
-    // 0x0001ee80
+    // 0x0001f3c0
     void Process();
     // Native Create indexes the WORD ID without a bounds guard.
-    // 0x0001eb40
+    // 0x0001f080
     BOOL Create(const VehiclePoolQueueEntry* entry);
     // Mutates queued train IDs/models in place and clears active even on failure.
-    // 0x0001edc0
+    // 0x0001f300
     void ProcessWaitingList();
     // Does not consume this; original stack argument is a WORD vehicle ID.
-    // 0x0001ecf0
+    // 0x0001f230
     void SendDestroyNotification(WORD id);
-    // 0x0001e470
+    // 0x0001e9b0
     void UpdateLargestId();
-    // 0x0001e4d0
+    // 0x0001ea10
     CVehiclePool();
-    // 0x0001eb20
+    // 0x0001f060
     ~CVehiclePool();
-    // 0x0001e540
+    // 0x0001ea80
     BOOL Delete(WORD id);
     // Native unchecked WORD index.
-    // 0x0001e5c0
+    // 0x0001eb00
     void ChangeInterior(WORD id, int interior);
-    // 0x0001e5f0
+    // 0x0001eb30
     void AssignSpecialParams(WORD id, BYTE objective, BYTE locked);
-    // 0x0001e6c0
+    // 0x0001ec00
     WORD FindNearestToLocalPlayer();
-    // 0x0001e730
+    // 0x0001ec70
     WORD FindNearestToPoint(float x, float y, float z);
-    // 0x0001e7d0
+    // 0x0001ed10
     void Queue(const VehiclePoolQueueEntry* entry);
     // Native ID overload has no bounds check.
-    // 0x0001e680
+    // 0x0001ebc0
     DWORD GetRef(int id);
     // No this data is consumed by the backend overload.
-    // 0x0001e6a0
+    // 0x0001ebe0
     DWORD GetRef(void* backend);
     // Native unbounded live-largest-ID scan; returns bool in AL.
-    // 0x0001e8e0
+    // 0x0001ee20
     bool TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second);
     int m_nLargestId;
     VehiclePoolQueueEntry queue[100];
@@ -92,15 +92,15 @@ public:
     DWORD licensePlatesReady;
     // 0x00001150
     BOOL DoesExist(WORD id);
-    // 0x0001e650
+    // 0x0001eb90
     WORD Find(void* gameObject);
     // 0x00001120
     CVehicle* Get(WORD id);
     // Native unbounded largest-ID loop; complete pool extent remains open.
-    // 0x0001e8a0
+    // 0x0001ede0
     void ShutdownLicensePlates();
     // Native readiness gate and largest-ID loop.
-    // 0x0001e830
+    // 0x0001ed70
     void ConstructLicensePlates();
 };
 #pragma pack(pop)
@@ -116,11 +116,11 @@ STATIC_ASSERT(sizeof(VehiclePoolQueueEntry) == 40);
 STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, model) == 2);
 STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, health) == 0x18);
 STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, siren) == 0x27);
-// 0x001184f8
+// 0x000e6468
 extern const char g_vehiclePoolNotDeletedMessage[];
-// 0x0011851c
+// R5 address to verify
 extern int g_vehiclePoolDestroyRpc;
-// 0x001184c4
+// 0x000e6434
 extern const char g_vehiclePoolQueueFullMessage[];
 
 #endif // VEHICLEPOOL_H

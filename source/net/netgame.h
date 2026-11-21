@@ -83,123 +83,123 @@ public:
         StateRestarting = 11
     };
     // Raw selected client pointer; no initialization or connection-state gate.
-    // 0x00001a90
+    // R5 address to verify
     RakClientInterface* GetRakClient();
-    // 0x00017800
+    // R5 address to verify
     CTextDrawPool* GetTextDrawPool();
-    // 0x00017810
+    // R5 address to verify
     CGangZonePool* GetGangZonePool();
     // Raw first settings byte, zero-extended; no settings pointer guard.
-    // 0x000a21f0
+    // R5 address to verify
     DWORD GetSettingsByte0();
 
-    // 0x0000e3e0
+    // R5 address to verify
     CLabelPool* GetLabelPool();
-    // 0x0000e3f0
+    // R5 address to verify
     void SetLanMode(DWORD value);
 
-    // 0x00002e50
+    // 0x00002e20
     CActorPool* GetActorPool();
-    // 0x00002e60
+    // 0x00002e30
     DWORD GetState();
     // Returns the raw DWORD at239, without bool normalization.
-    // 0x00002e70
+    // 0x00002e40
     BOOL LanMode();
-    // 0x0000af40
+    // 0x0000b260
     void UpdateNetwork();
-    // 0x00009df0
+    // 0x0000a100
     void Packet_AuthKey(Packet* packet);
-    // 0x0000aa60
+    // 0x0000ad80
     void Packet_ConnectionSucceeded(Packet* packet);
-    // 0x0000a9d0
+    // 0x0000acf0
     void Packet_ConnectionLost(Packet* packet);
-    // 0x0000a420
+    // 0x0000a740
     void Packet_OnfootSync(Packet* packet);
-    // 0x0000a6f0
+    // 0x0000aa10
     void Packet_IncarSync(Packet* packet);
-    // 0x00009730
+    // 0x00009a40
     void Packet_UnoccupiedSync(Packet* packet);
-    // 0x00009b10
+    // 0x00009e20
     void Packet_TrailerSync(Packet* packet);
-    // 0x00009830
+    // 0x00009b40
     void Packet_BulletSync(Packet* packet);
-    // 0x00009930
+    // 0x00009c40
     void Packet_AimSync(Packet* packet);
-    // 0x00009a20
+    // 0x00009d30
     void Packet_PassengerSync(Packet* packet);
-    // 0x00009c00
+    // 0x00009f10
     void Packet_MarkersSync(Packet* packet);
-    // 0x0000a230
+    // 0x0000a540
     void ShutdownForRestart();
     // Descriptive native pool/frame pass with three separate SEH regions.
-    // 0x00008810
+    // 0x00008b20
     void ProcessPools();
-    // 0x00008750
+    // 0x00008a60
     void ProcessCustomModelWait();
-    // 0x00008450
+    // 0x00008760
     void InitialNotification();
-    // 0x000085e0
+    // 0x000088f0
     void InitializeGameLogic();
-    // 0x00008ad0
+    // 0x00008de0
     void Packet_DisconnectionNotification(Packet* packet);
-    // 0x00008b10
+    // 0x00008e20
     void Packet_InvalidPassword(Packet* packet);
-    // 0x00009fb0
+    // 0x0000a2c0
     void ResetMapIcons();
-    // 0x00009ff0
+    // 0x0000a300
     void CreateMapIcon(BYTE index, CVector position, BYTE icon, DWORD color, int type);
     // Native excludes the player pool from this reset sequence.
-    // 0x0000a1e0
+    // 0x0000a4f0
     void ResetPools();
-    // 0x00008630
+    // 0x00008940
     void Connect();
-    // 0x000086a0
+    // 0x000089b0
     void SpawnScreen();
     // Packet arguments are deliberately ignored by these notification entries.
-    // 0x00008a40
+    // 0x00008d50
     void Packet_RSAPublicKeyMismatch(Packet* packet);
-    // 0x00008a60
-    void Packet_ConnectionBanned(Packet* packet);
-    // 0x00008a80
-    void Packet_ConnectionRequestAccepted(Packet* packet);
-    // 0x00008aa0
-    void Packet_NoFreeIncomingConnections(Packet* packet);
-    // 0x00008b50
-    void Packet_ConnectionAttemptFailed(Packet* packet);
-    // 0x00008230
-    void InitializePools();
-    // 0x00008cd0
-    void ResetPlayerPool();
     // 0x00008d70
+    void Packet_ConnectionBanned(Packet* packet);
+    // 0x00008d90
+    void Packet_ConnectionRequestAccepted(Packet* packet);
+    // 0x00008db0
+    void Packet_NoFreeIncomingConnections(Packet* packet);
+    // 0x00008e60
+    void Packet_ConnectionAttemptFailed(Packet* packet);
+    // 0x00008540
+    void InitializePools();
+    // 0x00008fe0
+    void ResetPlayerPool();
+    // 0x00009080
     void ResetVehiclePool();
-    // 0x00008e10
+    // 0x00009110
     void ResetTextDrawPool();
-    // 0x00008eb0
+    // 0x000091b0
     void ResetObjectPool();
-    // 0x00008f50
+    // 0x00009250
     void ResetGangZonePool();
-    // 0x00008ff0
+    // 0x000092f0
     void ResetPickupPool();
-    // 0x00009050
+    // 0x00009350
     void ResetMenuPool();
-    // 0x000090e0
+    // 0x000093f0
     void ResetLabelPool();
-    // 0x00009180
+    // 0x00009490
     void ResetActorPool();
-    // 0x00008ca0
+    // 0x00008fb0
     void RemoveMapIcon(BYTE index);
-    // 0x000081f0
+    // 0x00008500
     void SetGameState(DWORD state);
-    // 0x000081d0
+    // 0x000084e0
     CPickupPool* GetPickupPool();
     // Native tail adapter exposes the complete EDX:EAX counter result.
-    // 0x000085d0
+    // 0x000088e0
     __int64 GetCounter();
-    // 0x00008c00
+    // 0x00008f10
     void UpdatePlayersInfo();
-    // 0x000081e0
+    // 0x000084f0
     CMenuPool* GetMenuPool();
-    // 0x00002e40
+    // 0x00002e10
     CObjectPool* GetObjectPool();
     // Native coordinator allocation extent. Both strings have an extra byte;
     // construction clears only 256 bytes, while InitGame clears 257 hostname bytes.
@@ -226,14 +226,14 @@ public:
             CNetGamePools* pools;
         };
     };
-    // 0x0000b610
+    // 0x0000b930
     CNetGame(const char* host, int port, const char* nickname, const char* password);
     // Address-only command dependency.
-    // 0x00008b80
+    // 0x00008e90
     void ToggleNameTagStatus();
-    // 0x0000b290
+    // 0x0000b5b0
     void Process();
-    // 0x00009570
+    // 0x00009880
     void Destroy();
     // 0x00001180
     CVehiclePool* GetVehiclePool();
@@ -258,73 +258,73 @@ STATIC_ASSERT(offsetof(CNetGame, settings) == 0x3d5);
 STATIC_ASSERT(offsetof(CNetGame, modelWaitActive) == 0x3d9);
 STATIC_ASSERT(offsetof(CNetGame, modelWaitTick) == 0x3da);
 STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
-// 0x00156b38
+// 0x00118a18
 extern DWORD g_netPlayersInfoTick;
-// 0x00117b98
+// 0x000e5b28
 extern int g_netPlayersInfoRpc;
-// 0x001179c8
+// 0x000e5958
 extern const Scripting::OpcodeInfo g_netRemoveMapIconCommand;
-// 0x00117a0c
+// 0x000e599c
 extern const char g_netConnectingMessage[];
-// 0x00117a64
+// 0x000e59f4
 extern const char g_netEncryptionFailedMessage[];
-// 0x00117a88
+// 0x000e5a18
 extern const char g_netConnectionBannedMessage[];
-// 0x00117aac
+// 0x000e5a3c
 extern const char g_netConnectionAcceptedMessage[];
-// 0x00117ad0
+// 0x000e5a60
 extern const char g_netServerFullMessage[];
-// 0x00117b28
+// 0x000e5ab8
 extern const char g_netNoResponseMessage[];
-// 0x001179dc
+// 0x000e596c
 extern const char g_netStartedMessage[];
-// 0x00117c28
+// 0x000e5bb8
 extern const char g_netDefaultHostName[];
-// 0x00117b6c
+// 0x000e5afc
 extern const char g_netNoNameTagStatusOption[];
-// 0x00117af0
+// 0x000e5a80
 extern const char g_netDisconnectedMessage[];
-// 0x00117bac
+// 0x000e5b3c
 extern const char g_netRestartingMessage[];
-// 0x00156b2c
+// R5 address to verify
 extern DWORD g_netVehicleProcessCounter;
-// 0x00156b30
+// 0x00118a10
 extern DWORD g_netPickupProcessCounter;
-// 0x00117a34
+// R5 address to verify
 extern const char g_netVehicleException[];
-// 0x00117a2c
+// 0x000e59bc
 extern const char g_netPickupException[];
-// 0x00117a24
+// 0x000e59b4
 extern const char g_netMenuException[];
-// 0x00117a39
+// 0x000e59c9
 extern const char g_netEmptyShoppingSubsection[];
-// 0x00117b10
+// 0x000e5aa0
 extern const char g_netInvalidPasswordMessage[];
-// 0x00117ba0
+// 0x000e5b30
 extern const double g_netQuaternionReciprocal;
-// 0x00117ba8
+// 0x000e5b38
 extern const float g_netCompressedVectorScale;
-// 0x00057160
+// 0x000576a0
 int __cdecl NetHexDigit(int value);
-// 0x00057170
+// 0x000576b0
 void __cdecl NetDigestToHex(char* output, const BYTE* digest);
-// 0x000571b0
+// 0x000576f0
 void __cdecl NetGenerateAuthKey(char* output, const char* challenge);
-// 0x0005fa60
+// 0x0005ffa0
 void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor);
-// 0x00117bc8
+// 0x000e5b58
 extern const char g_netConnectionLostMessage[];
-// 0x00117c08
+// 0x000e5b98
 extern const char g_netJoiningMessage[];
-// 0x00117bfc
+// R5 address to verify
 extern const char g_netClientVersion[];
-// 0x00117bf8
+// R5 address to verify
 extern int g_netJoinRpc;
 
 // Native entries ignore ECX and pop one pointer argument.
-// 0x00008590
+// R5 address to verify
 BYTE __stdcall NetGetPacketId(Packet* packet);
-// 0x000085b0
+// R5 address to verify
 BYTE __stdcall NetIsTimestampedPacket(Packet* packet);
 
 #endif // NETGAME_H

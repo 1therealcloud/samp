@@ -9,23 +9,23 @@
 #include <stdio.h>
 #include <string.h>
 
-// 0x0011f860
+// R5 address to verify
 const char g_skinTextureDirectory[] = "C:\\Users\\New\\Desktop\\SAMP_037_Desktop\\Matite2014\\newskins\\ponz\\";
-// 0x0011f84c
+// R5 address to verify
 const char g_skinTextureFailed[] = "FAILED texture: %s";
-// 0x0011f838
+// R5 address to verify
 const char g_skinTextureLoaded[] = "LOADED texture: %s";
-// 0x0011c92c
+// 0x000ea904
 const char g_skinTexturePathFormat[] = "%s%s";
-// 0x0011f8a4
+// R5 address to verify
 const char g_skinBoneNameFormat[] = "Bone(%u) name: %s";
-// 0x0011f8b8
+// R5 address to verify
 const char g_skinBoneCountFormat[] = "Num bones: %u";
 
-// 0x000b9340
+// R5 address to verify
 CSkinHierarchyAllocator::CSkinHierarchyAllocator() {}
 
-// 0x000b8ad0
+// R5 address to verify
 HRESULT __stdcall CSkinHierarchyAllocator::CreateFrame(LPCSTR name, D3DXFRAME** out)
 {
     SkinFrame* frame = (SkinFrame*)::operator new(sizeof(SkinFrame));
@@ -48,7 +48,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::CreateFrame(LPCSTR name, D3DXFRAME** 
     return S_OK;
 }
 
-// 0x000b8800
+// R5 address to verify
 HRESULT __stdcall CSkinHierarchyAllocator::CreateMeshContainer(LPCSTR name, const D3DXMESHDATA* mesh, const D3DXMATERIAL* materials, const D3DXEFFECTINSTANCE* effects,
                                                                DWORD materialCount, const DWORD* adjacency, ID3DXSkinInfo* skin, D3DXMESHCONTAINER** out)
 {
@@ -127,7 +127,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::CreateMeshContainer(LPCSTR name, cons
     return S_OK;
 }
 
-// 0x000b86b0
+// R5 address to verify
 HRESULT __stdcall CSkinHierarchyAllocator::DestroyFrame(D3DXFRAME* frame)
 {
     if (frame->Name)
@@ -139,7 +139,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::DestroyFrame(D3DXFRAME* frame)
     return S_OK;
 }
 
-// 0x000b86e0
+// R5 address to verify
 HRESULT __stdcall CSkinHierarchyAllocator::DestroyMeshContainer(D3DXMESHCONTAINER* base)
 {
     SkinMeshContainer* container = (SkinMeshContainer*)base;
@@ -206,7 +206,7 @@ HRESULT __stdcall CSkinHierarchyAllocator::DestroyMeshContainer(D3DXMESHCONTAINE
     return S_OK;
 }
 
-// 0x000b8bc0
+// R5 address to verify
 CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9* inputDevice)
 {
     device = inputDevice;
@@ -221,7 +221,7 @@ CSkinnedMesh::CSkinnedMesh(IDirect3DDevice9* inputDevice)
     mesh = 0;
 }
 
-// 0x000b9510
+// R5 address to verify
 CSkinnedMesh::~CSkinnedMesh()
 {
     if (controller)
@@ -243,7 +243,7 @@ CSkinnedMesh::~CSkinnedMesh()
     device = 0;
 }
 
-// 0x000b8c30
+// R5 address to verify
 void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
 {
     do
@@ -278,7 +278,7 @@ void CSkinnedMesh::SetupBonePointers(SkinFrame* frame, const D3DXMATRIX* parent)
     while (true);
 }
 
-// 0x000b8d10
+// R5 address to verify
 void CSkinnedMesh::SetAnimation(DWORD index)
 {
     if (index == currentAnimation || index >= animationCapacity)
@@ -291,7 +291,7 @@ void CSkinnedMesh::SetAnimation(DWORD index)
         set->Release();
 }
 
-// 0x000b9190
+// R5 address to verify
 void CSkinnedMesh::DrawFrame(SkinFrame* frame)
 {
     for (;;)
@@ -315,10 +315,10 @@ void CSkinnedMesh::DrawFrame(SkinFrame* frame)
     }
 }
 
-// 0x000b9250
+// R5 address to verify
 void CSkinnedMesh::NativeNoOp3Words(DWORD, DWORD, DWORD) {}
 
-// 0x000b9260
+// R5 address to verify
 void CSkinnedMesh::DumpBones()
 {
     if (!root || !mesh || !mesh->pSkinInfo)
@@ -335,7 +335,7 @@ void CSkinnedMesh::DumpBones()
         }
 }
 
-// 0x000b92e0
+// R5 address to verify
 void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* parent)
 {
     for (;;)
@@ -354,7 +354,7 @@ void CSkinnedMesh::UpdateFrameMatrices(SkinFrame* frame, const D3DXMATRIX* paren
     }
 }
 
-// 0x000b9350
+// R5 address to verify
 int CSkinnedMesh::Load(const char* filename)
 {
     CSkinHierarchyAllocator allocator;
@@ -372,7 +372,7 @@ int CSkinnedMesh::Load(const char* filename)
     return 0;
 }
 
-// 0x000b9450
+// R5 address to verify
 void CSkinnedMesh::UpdateSkin(DWORD)
 {
     if (!root)
@@ -392,7 +392,7 @@ void CSkinnedMesh::UpdateSkin(DWORD)
     container->MeshData.pMesh->UnlockVertexBuffer();
 }
 
-// 0x000b8d60
+// R5 address to verify
 int CSkinnedMesh::Render(const CMatrix* matrix)
 {
     if (!device)

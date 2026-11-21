@@ -15,20 +15,20 @@
 #include <RakClientInterface.h>
 
 #include <string.h>
-// 0x001184f8
+// 0x000e6468
 const char g_vehiclePoolNotDeletedMessage[] = "Warning: vehicle %u was not deleted";
-// 0x0011851c
+// R5 address to verify
 int g_vehiclePoolDestroyRpc = 136;
-// 0x001184c4
+// 0x000e6434
 const char g_vehiclePoolQueueFullMessage[] = "All vehicle waiting slots are consumed!";
 
-// 0x00002df0
+// R5 address to verify
 void CVehiclePool::SetUnoccupiedSyncOwner(WORD vehicle, WORD player)
 {
     *(WORD*)((BYTE*)this + 0x8e34 + vehicle * 2) = player;
 }
 
-// 0x0001e9f0
+// 0x0001ef30
 WORD CVehiclePool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord)
 {
     struct RayPoint
@@ -87,7 +87,7 @@ WORD CVehiclePool::FindInRay(float maxCameraDistance, const CVector* origin, con
     }
     return selected;
 }
-// 0x0001ee80
+// 0x0001f3c0
 void CVehiclePool::Process()
 {
     DWORD now = GetTickCount();
@@ -178,7 +178,7 @@ void CVehiclePool::Process()
     }
     while ((int)id <= m_nLargestId);
 }
-// 0x0001eb40
+// 0x0001f080
 BOOL CVehiclePool::Create(const VehiclePoolQueueEntry* entry)
 {
     if (m_pObjects[entry->id])
@@ -210,7 +210,7 @@ BOOL CVehiclePool::Create(const VehiclePoolQueueEntry* entry)
     return TRUE;
 }
 
-// 0x0001edc0
+// 0x0001f300
 void CVehiclePool::ProcessWaitingList()
 {
     for (int i = 0; i < 100; ++i)
@@ -242,7 +242,7 @@ void CVehiclePool::ProcessWaitingList()
         }
 }
 
-// 0x0001ecf0
+// 0x0001f230
 void CVehiclePool::SendDestroyNotification(WORD id)
 {
     CLocalPlayer* local = ((CNetGame*)g_pNetGame)->pools->players->local;
@@ -256,7 +256,7 @@ void CVehiclePool::SendDestroyNotification(WORD id)
     }
 }
 
-// 0x0001e470
+// 0x0001e9b0
 void CVehiclePool::UpdateLargestId()
 {
     int largest = 0;
@@ -266,7 +266,7 @@ void CVehiclePool::UpdateLargestId()
     m_nLargestId = largest;
 }
 
-// 0x0001e4d0
+// 0x0001ea10
 CVehiclePool::CVehiclePool()
 {
     DWORD(WINAPI * tick)() = GetTickCount;
@@ -282,7 +282,7 @@ CVehiclePool::CVehiclePool()
     licensePlatesReady = 1;
 }
 
-// 0x0001e540
+// 0x0001ea80
 BOOL CVehiclePool::Delete(WORD id)
 {
     if (id >= 2000 || !m_bNotEmpty[id] || !m_pObjects[id])
@@ -297,21 +297,21 @@ BOOL CVehiclePool::Delete(WORD id)
     return TRUE;
 }
 
-// 0x0001eb20
+// 0x0001f060
 CVehiclePool::~CVehiclePool()
 {
     for (WORD id = 0; id < 2000; id++)
         Delete(id);
 }
 
-// 0x0001e5c0
+// 0x0001eb00
 void CVehiclePool::ChangeInterior(WORD id, int interior)
 {
     if (m_bNotEmpty[id])
         m_pObjects[id]->ChangeInterior(interior);
 }
 
-// 0x0001e5f0
+// 0x0001eb30
 void CVehiclePool::AssignSpecialParams(WORD id, BYTE objective, BYTE locked)
 {
     if (id >= 2000 || !m_bNotEmpty[id])
@@ -327,7 +327,7 @@ void CVehiclePool::AssignSpecialParams(WORD id, BYTE objective, BYTE locked)
     vehicle->Lock(locked);
 }
 
-// 0x0001e6c0
+// 0x0001ec00
 WORD CVehiclePool::FindNearestToLocalPlayer()
 {
     WORD selected = 0xffff;
@@ -364,7 +364,7 @@ WORD CVehiclePool::FindNearestToLocalPlayer()
     return selected;
 }
 
-// 0x0001e730
+// 0x0001ec70
 WORD CVehiclePool::FindNearestToPoint(float x, float y, float z)
 {
     WORD selected = 0xffff;
@@ -403,7 +403,7 @@ WORD CVehiclePool::FindNearestToPoint(float x, float y, float z)
     while ((int)(WORD)++id <= m_nLargestId);
     return selected;
 }
-// 0x0001e7d0
+// 0x0001ed10
 void CVehiclePool::Queue(const VehiclePoolQueueEntry* entry)
 {
     int slot = 0;
@@ -422,19 +422,19 @@ void CVehiclePool::Queue(const VehiclePoolQueueEntry* entry)
     queue[slot] = *entry;
 }
 
-// 0x0001e680
+// 0x0001ebc0
 DWORD CVehiclePool::GetRef(int id)
 {
     return m_pGameObjects[id] ? GamePoolVehicleGetIndex(m_pGameObjects[id]) : 0xffff;
 }
 
-// 0x0001e6a0
+// 0x0001ebe0
 DWORD CVehiclePool::GetRef(void* backend)
 {
     return backend ? GamePoolVehicleGetIndex(backend) : 0xffff;
 }
 
-// 0x0001e650
+// 0x0001eb90
 WORD CVehiclePool::Find(void* gameObject)
 {
     for (int i = 1; i <= m_nLargestId; i++)
@@ -458,7 +458,7 @@ BOOL CVehiclePool::DoesExist(WORD id)
     return m_bNotEmpty[id];
 }
 
-// 0x0001e8e0
+// 0x0001ee20
 bool CVehiclePool::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second)
 {
     for (int index = 0; index <= m_nLargestId; index++)
@@ -476,7 +476,7 @@ bool CVehiclePool::TestCollisionShapes(const GameEntityCollisionShape* first, co
     return false;
 }
 
-// 0x0001e830
+// 0x0001ed70
 void CVehiclePool::ConstructLicensePlates()
 {
     BYTE* state = (BYTE*)this;
@@ -500,7 +500,7 @@ void CVehiclePool::ConstructLicensePlates()
     }
 }
 
-// 0x0001e8a0
+// 0x0001ede0
 void CVehiclePool::ShutdownLicensePlates()
 {
     BYTE* state = (BYTE*)this;
@@ -517,7 +517,7 @@ void CVehiclePool::ShutdownLicensePlates()
     }
 }
 
-// 0x0001e970
+// 0x0001eeb0
 WORD CVehiclePool::FindInLine(DWORD unused, const CVector* origin, const CVector* end)
 {
     BYTE collision[52];

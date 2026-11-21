@@ -9,9 +9,9 @@
 #include <DXUTgui.h>
 
 #include <string.h>
-// 0x0011c75c
+// 0x000ea734
 const char g_renderPanelTitle[10] = "Transform";
-// 0x00071100
+// 0x00071660
 CRenderPanel::CRenderPanel(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -25,7 +25,7 @@ CRenderPanel::CRenderPanel(IDirect3DDevice9* device)
     state[7] = 38;
 }
 
-// 0x000710d0
+// R5 address to verify
 void CDXUTSlider::SetColorOverride(D3DXCOLOR color)
 {
     BYTE* slider = (BYTE*)this;
@@ -33,7 +33,7 @@ void CDXUTSlider::SetColorOverride(D3DXCOLOR color)
     memcpy(slider + 0x77, &color, sizeof(color));
 }
 
-// 0x00071140
+// 0x000716a0
 void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -52,7 +52,7 @@ void CRenderPanel::ResetDialogControls(CDXUTDialog* dialog)
     ((CDXUTDialog*)state[8])->GetSlider(34)->SetColorOverride(D3DXCOLOR(low, high, low, 1.0f));
 }
 
-// 0x000712c0
+// 0x00071820
 void CRenderPanel::UpdateLayout()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -64,7 +64,7 @@ void CRenderPanel::UpdateLayout()
     ((CDXUTDialog*)state[8])->SetLocation(x, y);
 }
 
-// 0x00071320
+// R5 address to verify
 void CRenderPanel::GetRect(RECT* out)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -74,7 +74,7 @@ void CRenderPanel::GetRect(RECT* out)
     out->bottom = (LONG)(state[4] + (DWORD)out->top);
 }
 
-// 0x00071350
+// 0x000718b0
 void CRenderPanel::Show()
 {
     FontSize measured = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
@@ -88,7 +88,7 @@ void CRenderPanel::Show()
     state[9] = 1;
 }
 
-// 0x000713c0
+// R5 address to verify
 void CRenderPanel::Hide()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -96,7 +96,7 @@ void CRenderPanel::Hide()
     state[9] = 0;
 }
 
-// 0x000713d0
+// 0x00071930
 void CRenderPanel::ProcessControls()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -114,7 +114,7 @@ void CRenderPanel::ProcessControls()
         ((CObjectEdit*)g_deviceObjectEdit)->ApplyChanges(2, value * g_objectPoolSecondsPerTick);
 }
 
-// 0x00071480
+// 0x000719e0
 void CRenderPanel::DrawLabels()
 {
     CObjectEdit* editor = (CObjectEdit*)g_deviceObjectEdit;
@@ -136,7 +136,7 @@ void CRenderPanel::DrawLabels()
     font->DrawTextA(0, ((CObjectEdit*)g_deviceObjectEdit)->GetRenderChar(2), 1, &rect, 0x105, 0xff99cc99);
 }
 
-// 0x00071560
+// 0x00071ac0
 void CRenderPanel::Draw()
 {
     DWORD* state = (DWORD*)nativeState;

@@ -1,14 +1,11 @@
 #include "dxstdafx.h"
-// 0x00181ac8
 char g_dxutMediaSearchPath[MAX_PATH];
-// 0x00093290
 char* InputDxutMediaSearchPath()
 {
     return g_dxutMediaSearchPath;
 }
 
 //--------------------------------------------------------------------------------------
-// 0x000972b0
 HRESULT DXUTFindDXSDKMediaFileCch(char* strDestPath, int cchDest, const char* strFilename)
 {
     bool bFound;
@@ -91,7 +88,6 @@ HRESULT DXUTFindDXSDKMediaFileCch(char* strDestPath, int cchDest, const char* st
 //--------------------------------------------------------------------------------------
 // Search a set of typical directories
 //--------------------------------------------------------------------------------------
-// 0x000961c0
 bool DXUTFindMediaSearchTypicalDirs(char* strSearchPath, int cchSearch, const char* strLeaf, char* strExePath, char* strExeName)
 {
     // Typical directories:
@@ -166,7 +162,6 @@ bool DXUTFindMediaSearchTypicalDirs(char* strSearchPath, int cchSearch, const ch
 // Search parent directories starting at strStartAt, and appending strLeafName
 // at each parent directory.  It stops at the root directory.
 //--------------------------------------------------------------------------------------
-// 0x00096320
 bool DXUTFindMediaSearchParentDirs(char* strSearchPath, int cchSearch, char* strStartAt, char* strLeafName)
 {
     char strFullPath[MAX_PATH] = {0};

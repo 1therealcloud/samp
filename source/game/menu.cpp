@@ -3,32 +3,32 @@
 #include "game/scripting.h"
 
 #include <string.h>
-// 0x0013c0c8
+// 0x000fe0c8
 extern const char g_menuItemKeys[24][32] = {"SAMP000", "SAMP100", "SAMP001", "SAMP101", "SAMP002", "SAMP102", "SAMP003", "SAMP103", "SAMP004", "SAMP104", "SAMP005", "SAMP105",
                                             "SAMP006", "SAMP106", "SAMP007", "SAMP107", "SAMP008", "SAMP108", "SAMP009", "SAMP109", "SAMP010", "SAMP110", "SAMP011", "SAMP111"};
-// 0x0011ecf4
+// 0x000ecbfc
 extern const char g_menuDummy[6] = "DUMMY";
-// 0x0011ecfc
+// 0x000ecc04
 const char g_menuHeaderKey1[] = "SAMPRW2";
-// 0x0011ed04
+// 0x000ecc0c
 const char g_menuHeaderKey0[] = "SAMPRW1";
-// 0x0011ed0c
+// 0x000ecc14
 const char g_menuTitleKey[] = "SAMPHED";
 
-// 0x0011ec7c
+// R5 address to verify
 const Scripting::OpcodeInfo g_menuHideCommand = {0x8da, "i"};
-// 0x0011ec90
+// R5 address to verify
 const Scripting::OpcodeInfo g_menuCreateCommand = {0x8d4, "sfffiiiiv"};
-// 0x0011eca4
+// R5 address to verify
 const Scripting::OpcodeInfo g_menuItemsCommand = {0x8db, "iisssssssssssss"};
-// 0x0011ecb8
+// R5 address to verify
 const Scripting::OpcodeInfo g_menuWidthCommand = {0x9db, "iii"};
-// 0x0011eccc
+// R5 address to verify
 const Scripting::OpcodeInfo g_menuRowCommand = {0x8d9, "iii"};
-// 0x0011ece0
+// R5 address to verify
 const Scripting::OpcodeInfo g_menuSelectionCommand = {0x8d7, "iv"};
 
-// 0x000a7160
+// 0x000a7420
 CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction)
 {
     for (int row = 0; row < 12; ++row)
@@ -49,50 +49,50 @@ CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, fl
     handle = 0;
 }
 
-// 0x000a7200
+// 0x000a7580
 void CMenu::AddItem(BYTE column, BYTE row, const char* text)
 {
     strcpy(items[row][column], text);
 }
 
-// 0x000a7230
+// 0x000a7600
 void CMenu::SetColumnTitle(BYTE column, const char* text)
 {
     strcpy(columnTitles[column], text);
 }
 
-// 0x000a7280
+// 0x000a7690
 char* CMenu::GetItem(BYTE column, BYTE row)
 {
     return items[row][column];
 }
 
-// 0x000a72a0
+// 0x000a76b0
 char* CMenu::GetTitle()
 {
     return title;
 }
 
-// 0x000a72b0
+// R5 address to verify
 char* CMenu::GetColumnTitle(BYTE column)
 {
     return columnTitles[column];
 }
 
-// 0x000a7260
+// 0x000a7670
 void CMenu::Hide()
 {
     Scripting::ProcessCommand(&g_menuHideCommand, handle);
 }
 
-// 0x000a72d0
+// 0x000a76e0
 const char* CMenu::MS(BYTE row, BYTE column)
 {
     int index = column + row * 2;
     return ((char*)items)[index * 32] ? ((const char*)g_menuItemKeys) + index * 32 : g_menuDummy;
 }
 
-// 0x000a7300
+// 0x000a7710
 BYTE CMenu::GetActiveRow()
 {
     if (!interaction.enabled)
@@ -102,7 +102,7 @@ BYTE CMenu::GetActiveRow()
     return (BYTE)row;
 }
 
-// 0x000a7330
+// 0x000a7740
 void CMenu::Show()
 {
     Scripting::ProcessCommand(&g_menuCreateCommand, title[0] ? g_menuTitleKey : g_menuDummy, (double)x, (double)y, (widths[0] + widths[1]) / columns, (int)columns,

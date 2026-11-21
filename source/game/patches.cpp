@@ -5,38 +5,38 @@
 
 #include <stdlib.h>
 #include <string.h>
-// 0x002a9278
+// R5 address to verify
 DWORD g_gameVehicleControlPatched = 0;
-// 0x002a927c
+// R5 address to verify
 DWORD g_gameManualVehicleControl = 0;
-// 0x001546c0
+// 0x001166e8
 BYTE g_gamePatchStreamBytes[7] = {0xb8, 0x89, 0x8f, 0x6f, 0x0, 0xff, 0xe0};
-// 0x001546c8
+// 0x001166f0
 DWORD g_gamePatchValue1546c8 = 0x469c4000;
-// 0x001546cc
+// 0x001166f4
 DWORD g_gamePatchValue1546cc = 0xc69c4000;
-// 0x001546f0
+// 0x00116718
 float g_gamePatchValue1546f0 = 2.0f;
-// 0x001546f4
+// 0x0011671c
 DWORD g_gamePatchValue1546f4 = 0x461c4000;
-// 0x0018f498
+// R5 address to verify
 DWORD g_gameVersionAddressA;
-// 0x0018f49c
+// R5 address to verify
 DWORD g_gameVersionAddressB;
-// 0x001e04b0
+// R5 address to verify
 DWORD g_gameScanList[40000];
 
-// 0x002075b0
+// 0x001c9718
 GamePedModelRecord g_gamePedModels[319];
-// 0x0020ca70
+// 0x001cebd8
 GameModelRecord32 g_gameModelRecords[20000];
-// 0x002a8e70
+// R5 address to verify
 BYTE g_gameModelFlags[1024];
 
-// 0x001546d0
+// R5 address to verify
 DWORD g_gameCount44OperandSites[7] = {0x410dbb, 0x410de5, 0x410f68, 0x410aa4, 0x410cc4, 0x410ead, 0x411505};
 
-// 0x000a6f00
+// 0x000a71c0
 void GameInstallVehicleDamageFilter()
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -48,7 +48,7 @@ void GameInstallVehicleDamageFilter()
     protect(site, 5, oldProtection, &ignoredProtection);
 }
 
-// 0x000a6d50
+// 0x000a7010
 void GameInstallShotHooks()
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -67,7 +67,7 @@ void GameInstallShotHooks()
     }
 }
 
-// 0x000aa800
+// 0x000aabe0
 void GameApplyManualVehicleControlPatches()
 {
     if (g_gameVehicleControlPatched)
@@ -95,7 +95,7 @@ void GameApplyManualVehicleControlPatches()
     g_gameManualVehicleControl = 1;
 }
 
-// 0x000aaad0
+// 0x000aaeb0
 void GameApplyInGamePatches()
 {
     DWORD* patch;
@@ -457,7 +457,7 @@ void GameApplyInGamePatches()
     return;
 }
 
-// 0x00002130
+// 0x00002100
 void GameInstallEventOpcodes()
 {
     *(DWORD*)0x47bf54 = (DWORD)GameSetEventOpcode;
@@ -465,7 +465,7 @@ void GameInstallEventOpcodes()
 }
 
 #include "game/limit_values.inc"
-// 0x000aa6a0
+// 0x000aaa80
 void GameRelocateScanList()
 {
     memset(g_gameScanList, 0, sizeof(g_gameScanList));
@@ -514,7 +514,7 @@ void GameRelocateScanList()
     memset((void*)0xb7d0b8, 0, 0x1c200);
 }
 
-// 0x000aa5e0
+// 0x000aa9c0
 void GameRelocatePedModels()
 {
     for (int i = 0; i < 319; i++)
@@ -526,7 +526,7 @@ void GameRelocatePedModels()
     *(DWORD*)0x4c67ad = (DWORD)g_gamePedModels;
 }
 
-// 0x000aa630
+// 0x000aaa10
 void GameRelocateModelRecords()
 {
     for (int i = 0; i < 20000; i++)
@@ -541,7 +541,7 @@ void GameRelocateModelRecords()
     }
 }
 
-// 0x000aa980
+// 0x000aad60
 void GameRelocateModelFlags()
 {
     memcpy(g_gameModelFlags, g_gameDefaultModelFlags, 1024);
@@ -561,7 +561,7 @@ void GameRelocateModelFlags()
     *(DWORD*)0x6a6ffa = (DWORD)g_gameModelFlags;
 }
 
-// 0x000aa180
+// 0x000aa590
 void GameIncreasePoolLimits()
 {
     GameWaitUnprotect((BYTE*)0x551024, 7, 0x68);
@@ -593,7 +593,7 @@ void GameIncreasePoolLimits()
 }
 
 // Legacy helper name retained from the 0.2x source; API failures are ignored.
-// 0x000a9d10
+// 0x000aa120
 void _patch(DWORD address, BYTE* data, int byteCount)
 {
     DWORD oldProtection, ignoredProtection;
@@ -622,7 +622,7 @@ void _patch(DWORD address, BYTE* data, int byteCount)
     cBytes = (char*)&dwAlloc;                                                                                                                                                      \
     for (int i = 0; i < 4; i++)                                                                                                                                                    \
     arr[i] = cBytes[i]
-// 0x000a9d60
+// 0x000aa170
 void SetIPLs(int iIPLs, int iGtaVersion)
 {
     DWORD dwAlloc = (DWORD)malloc((DWORD)iIPLs + 4);
@@ -650,7 +650,7 @@ void SetIPLs(int iIPLs, int iGtaVersion)
     }
 }
 
-// 0x000a9e70
+// 0x000aa280
 void SetTimedObjects(int iTimedObjects)
 {
     DWORD dwAlloc = (DWORD)malloc((0x24 * (DWORD)iTimedObjects) + 4);
@@ -686,7 +686,7 @@ void SetTimedObjects(int iTimedObjects)
 #undef patch
 #undef memadd
 
-// 0x000aa0d0
+// R5 address to verify
 void GamePatchCount44(DWORD count)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -702,7 +702,7 @@ void GamePatchCount44(DWORD count)
     }
 }
 
-// 0x000aa130
+// R5 address to verify
 void GameSetFontPatchBytes3()
 {
     // GTA SA virtual addresses; native does not call VirtualProtect here.
@@ -723,7 +723,7 @@ void GameSetFontPatchBytes3()
     *(BYTE*)0x71a3bb = 3;
 }
 
-// 0x000aaa50
+// R5 address to verify
 void GameApplyDebugInitializationPatches()
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;

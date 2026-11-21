@@ -12,35 +12,35 @@ class CNetStats
 public:
     DWORD lastTotalSent, lastTotalReceived, lastUpdateTick, uploadRate, downloadRate;
     IDirect3DDevice9* device;
-    // 0x000607c0
+    // 0x00060d40
     CNetStats(IDirect3DDevice9* device);
-    // 0x000607f0
+    // 0x00060d70
     void Draw();
 };
 STATIC_ASSERT(sizeof(CNetStats) == 24);
 STATIC_ASSERT(offsetof(CNetStats, lastUpdateTick) == 8);
 // Native buffers have unsafe writes/concatenations; overflow adjacency is unproven.
-// 0x00163a78
+// R5 address to verify
 extern char g_netStatsLine[1024];
-// 0x00163e78
+// R5 address to verify
 extern char g_netStatsScratch[16384];
-// 0x00167e78
+// R5 address to verify
 extern char g_netStatsDisplay[16384];
-// 0x00156ab0
+// R5 address to verify
 extern DWORD g_netStatsShotCompMode;
-// 0x0011b8e4
+// 0x000e98ac
 extern const char g_netStatsRatesFormat[49];
-// 0x0011b858
+// 0x000e9820
 extern const char g_netStatsModelsFormat[140];
-// 0x0011b83c
+// 0x000e9804
 extern const char g_netStatsOnFootFormat[22];
-// 0x0011b824
+// 0x000e97ec
 extern const char g_netStatsInCarFormat[21];
-// 0x0011b7f4
+// 0x000e97bc
 extern const char g_netStatsMemoryFormat[46];
-// 0x0011b7cc
+// 0x000e9794
 extern const char g_netStatsProcessFormat[37];
-// 0x0011b7b4
+// 0x000e977c
 extern const char g_netStatsTitle[21];
 
 #endif // NETSTATS_H

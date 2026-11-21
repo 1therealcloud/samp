@@ -12,22 +12,22 @@
 struct CModelFileStream
 {
     // Borrowed buffer; scratch/compression fields start cleared.
-    // 0x000b3630
+    // R5 address to verify
     CModelFileStream(BYTE* buffer, DWORD size);
-    // 0x000b3660
+    // R5 address to verify
     float ReadFloat();
-    // 0x000b3680
+    // R5 address to verify
     int ReadInt();
 
-    // 0x000bb040
+    // R5 address to verify
     void SetBuffer(BYTE* buffer, DWORD size);
-    // 0x000bb060
+    // R5 address to verify
     DWORD WriteByte(BYTE value);
-    // 0x000bb070
+    // R5 address to verify
     WORD ReadWord();
-    // 0x000bb090
+    // R5 address to verify
     BYTE* GetBuffer();
-    // 0x000bb0a0
+    // R5 address to verify
     DWORD GetLength();
     BYTE* data;
     DWORD position, length;
@@ -35,65 +35,65 @@ struct CModelFileStream
     BYTE* scratch;
     DWORD scratchLength;
     BYTE compressed;
-    // 0x0000b800
+    // R5 address to verify
     CModelFileStream();
-    // 0x0000b820
+    // 0x0000bb40
     ~CModelFileStream();
-    // 0x000bc250
+    // 0x000ba850
     int Compress();
-    // 0x000bc300
+    // 0x000ba900
     int Decompress(DWORD outputLength);
-    // 0x000bc060
+    // 0x000ba660
     DWORD WriteFileChunks(FILE* file);
-    // 0x000bc0c0
+    // 0x000ba6c0
     DWORD SaveFile(const char* filename);
-    // 0x000bc100
+    // R5 address to verify
     DWORD SaveHandle(FILE* file);
-    // 0x000bc110
+    // 0x000ba710
     bool CopyBuffer();
-    // 0x000bc150
+    // 0x000ba750
     DWORD Write(const void* input, DWORD count);
-    // 0x000bc1d0
+    // 0x000ba7d0
     DWORD Read(void* output, DWORD count);
-    // 0x000bc390
+    // 0x000ba990
     DWORD LoadFile(const char* filename);
     // Equivalent native forwarding entry at RVA 0x000b9590; original duplicate identity unknown.
-    // 0x000bc450
+    // R5 address to verify
     DWORD WriteDword(DWORD value);
-    // 0x000bc460
+    // R5 address to verify
     DWORD WriteWord(WORD value);
-    // 0x000bc470
+    // 0x000baa70
     DWORD ReadDword();
-    // 0x000b36a0
+    // 0x000b3aa0
     BYTE ReadByte();
-    // 0x000bc490
+    // R5 address to verify
     BYTE* Current();
-    // 0x000bc4a0
+    // R5 address to verify
     DWORD Remaining();
-    // 0x000b36c0
+    // 0x000b3ac0
     DWORD Skip(DWORD count);
-    // 0x000b36f0
+    // R5 address to verify
     void Reset();
     // Returns the raw BYTE EOF flag.
-    // 0x000b3700
+    // R5 address to verify
     BYTE HasEnded();
 };
 struct CModelFileChunk
 {
-    // 0x000bb0b0
+    // 0x000b9570
     CModelFileChunk();
-    // 0x000bb0e0
+    // R5 address to verify
     void SetBuffer(BYTE* buffer, DWORD size);
-    // 0x000bb100
+    // R5 address to verify
     void UpdateLength();
     DWORD type, length;
     WORD build, version;
     CModelFileStream stream;
-    // 0x0000b850
+    // 0x0000bb70
     ~CModelFileChunk();
-    // 0x0000b8a0
+    // R5 address to verify
     DWORD GetType();
-    // 0x0000b8b0
+    // R5 address to verify
     DWORD GetLength();
 };
 struct CTxdFile
@@ -103,23 +103,23 @@ struct CTxdFile
     DWORD fileLength;
     CModelFileChunk *root, *structure;
     WORD textureCount, parsedCount;
-    // 0x0000b8c0
+    // R5 address to verify
     CTxdFile();
-    // 0x0000b8f0
+    // 0x0000bc10
     ~CTxdFile();
-    // 0x0000b970
+    // R5 address to verify
     DWORD GetTextureCount();
-    // 0x0000b980
+    // R5 address to verify
     DWORD GetError();
-    // 0x000bda10
+    // 0x000bc340
     CModelFileChunk* ReadChunk(CModelFileStream* input);
-    // 0x000bdb20
+    // 0x000bc450
     DWORD ReadStructure(CModelFileChunk* chunk);
-    // 0x000bdb60
+    // 0x000bc490
     DWORD ReadTexture(CModelFileChunk* chunk);
-    // 0x000bdd80
+    // 0x000bc6b0
     DWORD ReadChildren(CModelFileChunk* chunk);
-    // 0x000bde10
+    // 0x000bc740
     DWORD LoadFile(const char* filename);
 };
 struct CModelGeometry;
@@ -131,16 +131,16 @@ struct CModelGeometryArray
     CModelGeometry* Get(DWORD index);
     // inline
     DWORD GetCount();
-    // 0x0000cf80
+    // R5 address to verify
     void Clear();
-    // 0x0000d610
+    // R5 address to verify
     ~CModelGeometryArray();
 
     CModelGeometry** items;
     DWORD count;
-    // 0x0000c630
+    // 0x0000cac0
     bool Resize(DWORD size);
-    // 0x000bbe20
+    // R5 address to verify
     DWORD Insert(CModelGeometry* geometry);
 };
 struct CModelMaterialArray
@@ -151,16 +151,16 @@ struct CModelMaterialArray
     void* Get(DWORD index);
     // inline
     DWORD GetCount();
-    // 0x0000cfa0
+    // R5 address to verify
     void Clear();
-    // 0x0000d5f0
+    // R5 address to verify
     ~CModelMaterialArray();
 
     void** items;
     DWORD count;
-    // 0x0000c550
+    // 0x0000c9e0
     bool Resize(DWORD size);
-    // 0x000bcdb0
+    // 0x000bb6e0
     DWORD Insert(void* material);
 };
 struct CModelMeshArray
@@ -171,16 +171,16 @@ struct CModelMeshArray
     BYTE* Get(DWORD index);
     // inline
     DWORD GetCount();
-    // 0x0000cfb0
+    // R5 address to verify
     void Clear();
-    // 0x0000d600
+    // R5 address to verify
     ~CModelMeshArray();
 
     BYTE** items;
     DWORD count;
-    // 0x0000c5c0
+    // 0x0000ca50
     bool Resize(DWORD size);
-    // 0x000bce10
+    // 0x000bb740
     DWORD Insert(BYTE* mesh);
 };
 struct CModelMaterialRecord
@@ -201,13 +201,13 @@ struct CModelSkin
 };
 struct CModelGeometry
 {
-    // 0x000bc900
+    // 0x000bb230
     CModelFileChunk* BuildStructure();
-    // 0x000bca90
+    // 0x000bb3c0
     bool RemoveExtension(DWORD type);
-    // 0x000bcbc0
+    // R5 address to verify
     bool CopySecondaryColors(const CModelGeometry* other);
-    // 0x000bcc40
+    // 0x000bb570
     CModelFileChunk* BuildChunk();
     BYTE modified, modifiedOther;
     DWORD error, detail;
@@ -229,56 +229,56 @@ struct CModelGeometry
         BYTE opaque75[44];
         CModelSkin skin;
     };
-    // 0x000bbe80
+    // 0x000ba340
     CModelGeometry();
-    // 0x0000d620
+    // 0x0000dbb0
     ~CModelGeometry();
-    // 0x000bb110
+    // R5 address to verify
     bool IsModified();
-    // 0x000bb130
+    // R5 address to verify
     DWORD GetError();
-    // 0x000bb140
+    // R5 address to verify
     DWORD GetDetail();
-    // 0x000bc4b0
+    // R5 address to verify
     void SetError(DWORD value);
-    // 0x000bc4d0
+    // R5 address to verify
     void SetDetail(DWORD value);
-    // 0x000bc4e0
+    // R5 address to verify
     int GetVertexCount();
-    // 0x000bc4f0
+    // R5 address to verify
     BYTE HasVertexColors();
-    // 0x000bc500
+    // R5 address to verify
     void* GetVertexColors();
-    // 0x000bc510
+    // R5 address to verify
     DWORD SetRepeatedVertexColors(const BYTE* first, const BYTE* second);
-    // 0x000bc600
+    // 0x000baf30
     CModelFileChunk* ReadChunk(CModelFileStream* input);
-    // 0x000bd180
+    // 0x000bbab0
     bool ReadMaterial(CModelFileStream* input);
-    // 0x000bd5f0
+    // 0x000bbf20
     bool ReadMaterials(CModelFileStream* input);
-    // 0x000bc760
+    // 0x000bb090
     bool ReadSkin(CModelFileStream* input);
-    // 0x000bce70
+    // 0x000bb7a0
     bool ReadExtensions(CModelFileStream* input);
-    // 0x000bd700
+    // 0x000bc030
     bool Read(CModelFileStream* input, WORD version);
 };
 struct CDffFile
 {
-    // 0x000bbcc0
+    // 0x000ba180
     bool RebuildGeometryList();
-    // 0x000bb640
+    // 0x000b9b00
     DWORD SaveFile(const char* filename);
-    // 0x000bb820
+    // 0x000b9ce0
     DWORD SaveCompressedFile(const char* filename);
-    // 0x000bb150
+    // R5 address to verify
     void SetError(DWORD value);
-    // 0x000bb160
+    // R5 address to verify
     void SetDetail(DWORD value);
-    // 0x000bb940
+    // 0x000b9e00
     DWORD AppendChunk(CModelFileChunk* parent, const CModelFileChunk* child);
-    // 0x000bb990
+    // 0x000b9e50
     DWORD AppendCollisionFile(const char* filename);
     DWORD error, detail;
     CModelFileStream stream;
@@ -288,36 +288,36 @@ struct CDffFile
     CModelFileChunk *root, *structure, *frames, *geometryList, *atomic, *extension;
     DWORD unknown44;
     void* frameData;
-    // 0x0000d820
+    // R5 address to verify
     CDffFile();
-    // 0x0000d8f0
+    // 0x0000de80
     ~CDffFile();
     // Native dereferences every indexed geometry without a null check.
-    // 0x000bbc80
+    // R5 address to verify
     bool IsModified();
-    // 0x000bb170
+    // 0x000b9630
     CModelFileChunk* ReadChunk(CModelFileStream* input);
-    // 0x000bb280
+    // 0x000b9740
     DWORD StoreFrames(CModelFileChunk* chunk);
-    // 0x000bb2a0
+    // 0x000b9760
     DWORD StoreGeometryList(CModelFileChunk* chunk);
-    // 0x000bb2c0
+    // 0x000b9780
     DWORD StoreAtomic(CModelFileChunk* chunk);
-    // 0x000bb2e0
+    // 0x000b97a0
     DWORD StoreStructure(CModelFileChunk* chunk);
-    // 0x000bb300
+    // 0x000b97c0
     DWORD StoreExtension(CModelFileChunk* chunk);
-    // 0x000bb320
+    // 0x000b97e0
     DWORD ReadChildren(CModelFileChunk* chunk);
-    // 0x000bb460
+    // 0x000b9920
     DWORD LoadFile(const char* filename);
-    // 0x000bb520
+    // R5 address to verify
     DWORD LoadCollisionFile(const char* filename);
-    // 0x000bbaa0
+    // 0x000b9f60
     DWORD VerifyFrameExtension(CModelFileChunk* chunk);
-    // 0x000bbb30
+    // 0x000b9ff0
     DWORD ReadFrames();
-    // 0x000bbf00
+    // R5 address to verify
     DWORD ReadGeometries();
 };
 // Collision conversion records; coordinates are signed fixed-point /128.
@@ -355,32 +355,32 @@ class CModelCollisionFile
 public:
     BYTE nativeState[0xa0];
     // Returns1 even if the final file save fails; secondary API results ignored.
-    // 0x000b9d50
+    // 0x000b9150
     DWORD SaveFile(const char* filename, const char* modelName);
     // Reorders the existing triangle buffer and replaces the group pointer.
-    // 0x000baec0
+    // R5 address to verify
     DWORD BuildFaceGroups();
     // Pointer publication only; no copy, validation or cleanup on insert failure.
-    // 0x000ba190
+    // R5 address to verify
     DWORD AddSphere(ModelCollisionSphere* sphere);
-    // 0x000ba1a0
+    // R5 address to verify
     DWORD AddBox(ModelCollisionBox* box);
     // Creates one28-byte box from bounds; ignores bounds/insert failure results.
-    // 0x000ba240
+    // R5 address to verify
     DWORD BuildBoxFromGeometry(const CModelGeometry* geometry);
-    // 0x000b95d0
+    // 0x000b8b90
     DWORD SetInitialHeaderSize();
     // Native entry does not consume this. Writes sentinel bounds before checking vertices.
-    // 0x000b95e0
+    // 0x000b8ba0
     DWORD CalculateGeometryBounds(const CModelGeometry* geometry, float* minimum, float* maximum);
-    // 0x000b96e0
+    // 0x000b8ca0
     DWORD SetGeometryBounds(const CModelGeometry* geometry);
-    // 0x000b9710
+    // 0x000b8cd0
     DWORD BuildGeometry(const CModelGeometry* geometry);
-    // 0x000b98a0
+    // 0x000b8e70
     bool ContainsVertex(const ModelCollisionVertex* vertex, const ModelCollisionBounds* bounds);
     // Tests any vertex inside, not full triangle/box intersection.
-    // 0x000b9950
+    // 0x000b8f20
     bool TriangleHasVertexInBounds(const ModelCollisionTriangle* triangle, const ModelCollisionBounds* bounds);
 };
 typedef std::vector<ModelCollisionTriangle> ModelCollisionTriangleVector;
@@ -391,17 +391,17 @@ struct CModelCollisionNode
     CModelCollisionNode *left, *right;
     ModelCollisionTriangleVector triangles;
     // Leaves bounds, unknown18 and vector allocator byte untouched.
-    // 0x000bab60
+    // R5 address to verify
     CModelCollisionNode();
-    // 0x000ba750
+    // R5 address to verify
     ~CModelCollisionNode();
     // Asymmetric traversal assumes paired children; no added null-right guard.
-    // 0x000b9d10
+    // R5 address to verify
     void CountLeaves(DWORD* count);
-    // 0x000ba320
+    // R5 address to verify
     void WriteLeaves(CModelCollisionFile* file);
     // No added depth limit or progress guard; native recurses for child count>80.
-    // 0x000babf0
+    // R5 address to verify
     void Split(CModelCollisionFile* file);
 };
 // Native tail adapters establish boxes at78 and spheres at80. Original template
@@ -410,32 +410,32 @@ struct CModelCollisionBoxArray
 {
     void** items;
     DWORD count;
-    // 0x000b9a40
+    // R5 address to verify
     void* Get(DWORD index);
-    // 0x000b9a60
+    // R5 address to verify
     DWORD GetCount();
-    // 0x000b9b70
+    // R5 address to verify
     bool Resize(DWORD size);
-    // 0x000ba040
+    // R5 address to verify
     DWORD Insert(void* value);
 };
 struct CModelCollisionSphereArray
 {
     void** items;
     DWORD count;
-    // 0x000b9a70
+    // R5 address to verify
     void* Get(DWORD index);
-    // 0x000b9a90
+    // R5 address to verify
     DWORD GetCount();
-    // 0x000b9be0
+    // R5 address to verify
     bool Resize(DWORD size);
-    // 0x000ba0a0
+    // R5 address to verify
     DWORD Insert(void* value);
 };
 // Does not use incoming ECX.
-// 0x000b99c0
+// 0x000b8f90
 void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value);
-// 0x000b9a00
+// 0x000b8fd0
 void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value);
 #pragma pack(pop)
 
@@ -451,9 +451,9 @@ STATIC_ASSERT(offsetof(CModelCollisionNode, left) == 0x1c);
 STATIC_ASSERT(offsetof(CModelCollisionNode, triangles) == 0x24);
 STATIC_ASSERT(sizeof(CModelCollisionBoxArray) == 8);
 STATIC_ASSERT(sizeof(CModelCollisionSphereArray) == 8);
-// 0x0011f8d8
+// R5 address to verify
 extern const float g_modelCollisionVertexScale;
-// 0x0011f8dc
+// R5 address to verify
 extern const float g_modelCollisionVertexInvScale;
 STATIC_ASSERT(sizeof(CModelFileStream) == 0x17);
 STATIC_ASSERT(sizeof(CModelFileChunk) == 0x23);
@@ -466,28 +466,28 @@ STATIC_ASSERT(offsetof(CModelGeometry, materials) == 0x58);
 STATIC_ASSERT(offsetof(CModelGeometry, meshes) == 0x6d);
 STATIC_ASSERT(offsetof(CDffFile, frames) == 0x34);
 STATIC_ASSERT(offsetof(CModelFileStream, owned) == 0xd);
-// 0x00117c9c
+// 0x000e5c6c
 extern const char g_customTxdVerifyError[];
-// 0x00117c60
+// 0x000e5c30
 extern const char g_customTxdCountError[];
-// 0x00117dac
+// 0x000e5ddc
 extern const char g_customDffVerifyError[];
-// 0x00117d68
+// 0x000e5d98
 extern const char g_customDffParseError[];
-// 0x00155470
+// R5 address to verify
 extern const BYTE g_modelLzmaProperties[5];
 // Uses the selected LZMA backend and allocator; preserves the native stdcall adapter.
-// 0x000c5040
+// 0x000c3970
 int __stdcall ModelLzmaEncode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD sourceLength, BYTE* properties, DWORD* propertySize, int level,
                               DWORD dictionary, int lc, int lp, int pb, int fastBytes, int threads);
 // Stack ABI is stdcall-compatible; incoming ECX is unused. Original owner/name unknown.
-// 0x000bc710
+// 0x000bb040
 DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk* child);
 // Does not use incoming ECX.
-// 0x000bb5a0
+// 0x000b9a60
 DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filename);
 // Other model editing/writing paths remain under recovery.
-// 0x000b6610
+// 0x000b6ad0
 void GameParseStreamData(const void* data, DWORD length, void* destination);
 
 #endif // MODELFILE_H

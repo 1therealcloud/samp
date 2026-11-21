@@ -6,11 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 // Native record allocation is malloc; release calls operator delete.
-// 0x001569a0
+// R5 address to verify
 BYTE g_gangZoneFlashPhase = 0;
-// 0x001569a4
+// R5 address to verify
 DWORD g_gangZoneFlashTick = 0;
-// 0x00002150
+// 0x00002120
 CGangZonePool::CGangZonePool()
 {
     for (WORD i = 0; i < 1024; ++i)
@@ -20,7 +20,7 @@ CGangZonePool::CGangZonePool()
     }
 }
 
-// 0x00002180
+// 0x00002150
 CGangZonePool::~CGangZonePool()
 {
     for (WORD i = 0; i < 1024; ++i)
@@ -31,7 +31,7 @@ CGangZonePool::~CGangZonePool()
         }
 }
 
-// 0x000021b0
+// 0x00002180
 void CGangZonePool::Create(WORD id, float minX, float minY, float maxX, float maxY, DWORD color)
 {
     if (zones[id])
@@ -53,21 +53,21 @@ void CGangZonePool::Create(WORD id, float minX, float minY, float maxX, float ma
     active[id] = 1;
 }
 
-// 0x00002230
+// 0x00002200
 void CGangZonePool::StartFlashing(WORD id, DWORD color)
 {
     if (zones[id])
         zones[id]->flashColor = color;
 }
 
-// 0x00002250
+// 0x00002220
 void CGangZonePool::StopFlashing(WORD id)
 {
     if (zones[id])
         zones[id]->flashColor = zones[id]->color;
 }
 
-// 0x00002270
+// 0x00002240
 void CGangZonePool::Delete(WORD id)
 {
     if (zones[id])
@@ -78,7 +78,7 @@ void CGangZonePool::Delete(WORD id)
     }
 }
 
-// 0x000022a0
+// 0x00002270
 void CGangZonePool::Draw()
 {
     DWORD now = GetTickCount();

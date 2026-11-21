@@ -10,13 +10,13 @@
 
 #include <new>
 #include <string.h>
-// 0x000EA724
+// R5 address to verify
 const char g_spawnVersionText[] = "SA-MP 0.3.7-R5";
 
-// 0x000705c0
+// R5 address to verify
 SpawnScreenVertex::SpawnScreenVertex() {}
 
-// 0x000705d0
+// R5 address to verify
 SpawnScreenVertex::SpawnScreenVertex(const CVector& position, float w, DWORD color, float tu, float tv)
 {
     memcpy(&x, &position.x, 4);
@@ -28,7 +28,7 @@ SpawnScreenVertex::SpawnScreenVertex(const CVector& position, float w, DWORD col
     memcpy(&v, &tv, 4);
 }
 
-// 0x000709d0
+// 0x00070f30
 CSpawnScreen::~CSpawnScreen()
 {
     char* text = *(char**)(unknown00 + 4);
@@ -44,7 +44,7 @@ CSpawnScreen::~CSpawnScreen()
     }
 }
 
-// 0x00070a30
+// 0x00070f90
 void CSpawnScreen::Draw()
 {
     if (!fonts || !*(char**)(unknown00 + 4))
@@ -106,7 +106,7 @@ void CSpawnScreen::Draw()
     fonts->DrawText(0, g_spawnVersionText, versionRect, 0xff27abfa, TRUE);
 }
 
-// 0x00070630
+// 0x00070b90
 void CSpawnScreen::SetText(const char* value)
 {
     char*& text = *(char**)(unknown00 + 4);
@@ -120,7 +120,7 @@ void CSpawnScreen::SetText(const char* value)
     }
 }
 
-// 0x00070940
+// 0x00070ea0
 void CSpawnScreen::OnLostDevice()
 {
     if (texture)
@@ -139,7 +139,7 @@ void CSpawnScreen::OnLostDevice()
     }
 }
 
-// 0x00070690
+// 0x00070bf0
 void CSpawnScreen::OnResetDevice()
 {
     if (device)
@@ -192,7 +192,7 @@ void CSpawnScreen::OnResetDevice()
         fonts->OnResetDevice();
 }
 
-// 0x00070990
+// 0x00070ef0
 CSpawnScreen::CSpawnScreen(IDirect3DDevice9* value)
 {
     device = value;

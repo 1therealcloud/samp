@@ -14,82 +14,82 @@ struct ArchiveFileRecord
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(ArchiveFileRecord) == 20);
-// 0x0016bf60
+// 0x0012df48
 extern ArchiveFileRecord g_archiveOpenRecords[50];
-// 0x0016be98
+// 0x0012de80
 extern BOOL g_archiveRecordUsed[50];
-// 0x0016c378
+// 0x0012e360
 extern BOOL g_archiveHooksInstalled;
-// 0x0016c34c
+// 0x0012e334
 extern BYTE* g_archiveRealGetFileSize;
-// 0x0016c350
+// 0x0012e338
 extern BYTE* g_archiveRealSetFilePointer;
-// 0x0016c354
+// 0x0012e33c
 extern BYTE* g_archiveRealCreateFileA;
-// 0x0016c35c
+// 0x0012e344
 extern BYTE* g_archiveRealReadFile;
-// 0x0016c360
+// 0x0012e348
 extern BYTE* g_archiveRealCloseHandle;
-// 0x0016c364
+// 0x0012e34c
 extern BYTE* g_archiveRealGetFileType;
-// 0x0016c368
+// R5 address to verify
 extern BYTE* g_archiveRealShowCursor;
-// 0x00062720
+// 0x00062ca0
 void ArchiveInstallFileHooks();
-// 0x000623f0
+// R5 address to verify
 void ArchiveInstallCursorHook();
-// 0x00062810
+// 0x00062d90
 void ArchiveRemoveHooks();
-// 0x000623e0
+// R5 address to verify
 int WINAPI Arch_ShowCursor(BOOL visible);
-// 0x00140338
+// 0x00102350
 extern DWORD g_archiveNextHandle;
-// 0x00062000
+// 0x00062580
 BOOL ArchiveIsCustomHandle(DWORD handle);
-// 0x00062020
+// 0x000625a0
 int ArchiveFindUnusedRecord();
-// 0x00062040
+// 0x000625c0
 int ArchiveFindRecord(HANDLE handle);
-// 0x00062070
+// 0x000625f0
 HANDLE ArchiveCreateRecord(DWORD index);
 // This native helper removes ONE trailing space in place, despite the const
 // filename type in CreateFileA. Leading separator at byte zero is not skipped.
-// 0x00062410
+// 0x00062990
 char* ArchiveFileNameOnly(char* path);
-// 0x000624d0
+// 0x00062a50
 char* ArchiveLowercaseName(char* name);
 // Additional observed callback; native installer62720 does not install this entry.
-// 0x0016c358
+// R5 address to verify
 extern BYTE* g_archiveRealCreateFileAValidation;
 // Three-byte prefix check only: no terminator requirement.
-// 0x00061df0
+// R5 address to verify
 BOOL ArchiveIsIdeOrIplExtension(const char* extension);
 // Signed byte accumulation and arithmetic shifts, not unsigned Jenkins hashing.
-// 0x00061f90
+// R5 address to verify
 DWORD ArchiveHashLowercaseName(const char* name);
 // Removes one trailing space, then finds the last non-leading dot.
-// 0x00062470
+// R5 address to verify
 char* ArchiveFileExtension(char* path);
 // Observed digest comparison has no enforcement or published result.
-// 0x00061e50
+// R5 address to verify
 void ArchiveCheckFileDigest(DWORD hash, HANDLE file);
-// 0x000626b0
+// R5 address to verify
 HANDLE WINAPI Arch_CreateFileAWithValidation(LPCSTR name, DWORD access, DWORD share, LPSECURITY_ATTRIBUTES security, DWORD disposition, DWORD flags, HANDLE templateFile);
-// 0x000625d0
+// 0x00062b50
 HANDLE WINAPI Arch_CreateFileA(LPCSTR name, DWORD access, DWORD share, LPSECURITY_ATTRIBUTES security, DWORD disposition, DWORD flags, HANDLE templateFile);
-// 0x000620f0
+// 0x00062670
 BOOL WINAPI Arch_ReadFile(HANDLE file, LPVOID buffer, DWORD requested, LPDWORD read, LPOVERLAPPED overlapped);
-// 0x00062270
+// 0x000627f0
 DWORD WINAPI Arch_GetFileSize(HANDLE file, PDWORD high);
-// 0x000622c0
+// 0x00062840
 DWORD WINAPI Arch_SetFilePointer(HANDLE file, LONG distance, PLONG high, DWORD method);
-// 0x00062360
+// 0x000628e0
 BOOL WINAPI Arch_CloseHandle(HANDLE file);
-// 0x000623a0
+// 0x00062920
 DWORD WINAPI Arch_GetFileType(HANDLE file);
 
 // Takes the receiver in ECX and no stack arguments.
-// 0x00061ff0
+// R5 address to verify
 void __fastcall NativeIncrementDword0055(void* object);
 
 #endif // FILEHOOKS_H

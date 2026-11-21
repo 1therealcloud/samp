@@ -9,55 +9,55 @@
 #include <new>
 #include <stdlib.h>
 #include <string.h>
-// 0x00155470
+// R5 address to verify
 const BYTE g_modelLzmaProperties[5] = {0x5d, 0, 0, 1, 0};
-// 0x00117c9c
+// 0x000e5c6c
 const char g_customTxdVerifyError[] = "[warning] Could not verify 0x%X.txd. Error(%d) Deleting..";
-// 0x00117c60
+// 0x000e5c30
 const char g_customTxdCountError[] = "[warning] Too many textures in 0x%X.txd. (%u) Deleting..";
-// 0x00117dac
+// 0x000e5ddc
 const char g_customDffVerifyError[] = "[warning] Could not validate 0x%X.dff. Error(%d) Deleting..";
-// 0x00117d68
+// 0x000e5d98
 const char g_customDffParseError[] = "[warning] Could not validate 0x%X.dff. Error(%d:0x%X) Deleting..";
-// 0x0011f8d8
+// R5 address to verify
 const float g_modelCollisionVertexScale = 128.0f;
-// 0x0011f8dc
+// R5 address to verify
 const float g_modelCollisionVertexInvScale = 0.0078125f;
-// 0x00117884
+// 0x000e5814
 extern const float g_textDrawHalf;
 
-// 0x000b36f0
+// R5 address to verify
 void CModelFileStream::Reset()
 {
     position = 0;
     ended = 0;
 }
 
-// 0x000b3700
+// R5 address to verify
 BYTE CModelFileStream::HasEnded()
 {
     return ended;
 }
 
-// 0x000bc4e0
+// R5 address to verify
 int CModelGeometry::GetVertexCount()
 {
     return vertexCount;
 }
 
-// 0x000bc4f0
+// R5 address to verify
 BYTE CModelGeometry::HasVertexColors()
 {
     return hasColors;
 }
 
-// 0x000bc500
+// R5 address to verify
 void* CModelGeometry::GetVertexColors()
 {
     return colors;
 }
 
-// 0x000bc510
+// R5 address to verify
 DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE* first, const BYTE* second)
 {
     modified = 1;
@@ -90,7 +90,7 @@ DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE* first, const BYTE* sec
     return 1;
 }
 
-// 0x000bbc80
+// R5 address to verify
 bool CDffFile::IsModified()
 {
     DWORD count = geometries.count;
@@ -100,7 +100,7 @@ bool CDffFile::IsModified()
     return false;
 }
 
-// 0x000bc710
+// 0x000bb040
 DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk* child)
 {
     if (!parent || !child)
@@ -111,7 +111,7 @@ DWORD __stdcall ModelAppendChunk(CModelFileChunk* parent, const CModelFileChunk*
     return 1;
 }
 
-// 0x000c5040
+// 0x000c3970
 int __stdcall ModelLzmaEncode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD sourceLength, BYTE* properties, DWORD* propertySize, int level,
                               DWORD dictionary, int lc, int lp, int pb, int fastBytes, int threads)
 {
@@ -127,7 +127,7 @@ int __stdcall ModelLzmaEncode(BYTE* destination, DWORD* destinationLength, const
     return LzmaEncode(destination, (SizeT*)destinationLength, source, sourceLength, &options, properties, (SizeT*)propertySize, 0, 0, &g_Alloc, &g_Alloc);
 }
 
-// 0x0000b800
+// R5 address to verify
 CModelFileStream::CModelFileStream()
 {
     data = 0;
@@ -140,7 +140,7 @@ CModelFileStream::CModelFileStream()
     scratch = 0;
 }
 
-// 0x0000b820
+// 0x0000bb40
 CModelFileStream::~CModelFileStream()
 {
     if (owned && data)
@@ -150,7 +150,7 @@ CModelFileStream::~CModelFileStream()
     }
 }
 
-// 0x000bc250
+// 0x000ba850
 int CModelFileStream::Compress()
 {
     BYTE properties[5];
@@ -175,7 +175,7 @@ int CModelFileStream::Compress()
     return result;
 }
 
-// 0x000bc300
+// 0x000ba900
 int CModelFileStream::Decompress(DWORD outputLength)
 {
     if (!compressed)
@@ -197,7 +197,7 @@ int CModelFileStream::Decompress(DWORD outputLength)
     return result;
 }
 
-// 0x000bc060
+// 0x000ba660
 DWORD CModelFileStream::WriteFileChunks(FILE* file)
 {
     BYTE* buffer = data;
@@ -219,7 +219,7 @@ DWORD CModelFileStream::WriteFileChunks(FILE* file)
     return length;
 }
 
-// 0x000bc0c0
+// 0x000ba6c0
 DWORD CModelFileStream::SaveFile(const char* filename)
 {
     FILE* file = fopen(filename, g_customDownloadWriteMode);
@@ -230,13 +230,13 @@ DWORD CModelFileStream::SaveFile(const char* filename)
     return length;
 }
 
-// 0x000bc100
+// R5 address to verify
 DWORD CModelFileStream::SaveHandle(FILE* file)
 {
     return WriteFileChunks(file);
 }
 
-// 0x000bc110
+// 0x000ba710
 bool CModelFileStream::CopyBuffer()
 {
     BYTE* copy = (BYTE*)malloc(length);
@@ -248,7 +248,7 @@ bool CModelFileStream::CopyBuffer()
     return true;
 }
 
-// 0x000bc150
+// 0x000ba750
 DWORD CModelFileStream::Write(const void* input, DWORD count)
 {
     if (position + count > length)
@@ -264,7 +264,7 @@ DWORD CModelFileStream::Write(const void* input, DWORD count)
     return count;
 }
 
-// 0x000bc1d0
+// 0x000ba7d0
 DWORD CModelFileStream::Read(void* output, DWORD count)
 {
     memset(output, 0, count);
@@ -284,7 +284,7 @@ DWORD CModelFileStream::Read(void* output, DWORD count)
     return count;
 }
 
-// 0x000bc390
+// 0x000ba990
 DWORD CModelFileStream::LoadFile(const char* filename)
 {
     BYTE buffer[2048];
@@ -313,19 +313,19 @@ DWORD CModelFileStream::LoadFile(const char* filename)
 }
 
 // Equivalent native forwarding entry at RVA 0x000b9590; original duplicate identity unknown.
-// 0x000bc450
+// R5 address to verify
 DWORD CModelFileStream::WriteDword(DWORD value)
 {
     return Write(&value, 4);
 }
 
-// 0x000bc460
+// R5 address to verify
 DWORD CModelFileStream::WriteWord(WORD value)
 {
     return Write(&value, 2);
 }
 
-// 0x000bc470
+// 0x000baa70
 DWORD CModelFileStream::ReadDword()
 {
     DWORD value = 0;
@@ -333,7 +333,7 @@ DWORD CModelFileStream::ReadDword()
     return value;
 }
 
-// 0x000b36a0
+// 0x000b3aa0
 BYTE CModelFileStream::ReadByte()
 {
     BYTE value = 0;
@@ -341,37 +341,37 @@ BYTE CModelFileStream::ReadByte()
     return value;
 }
 
-// 0x000bc490
+// R5 address to verify
 BYTE* CModelFileStream::Current()
 {
     return data + position;
 }
 
-// 0x000bc4a0
+// R5 address to verify
 DWORD CModelFileStream::Remaining()
 {
     return length - position;
 }
 
-// 0x0000b850
+// 0x0000bb70
 CModelFileChunk::~CModelFileChunk()
 {
     // The stream member performs the native owned-buffer cleanup.
 }
 
-// 0x0000b8a0
+// R5 address to verify
 DWORD CModelFileChunk::GetType()
 {
     return type;
 }
 
-// 0x0000b8b0
+// R5 address to verify
 DWORD CModelFileChunk::GetLength()
 {
     return length;
 }
 
-// 0x0000b8c0
+// R5 address to verify
 CTxdFile::CTxdFile()
 {
     error = 0;
@@ -382,7 +382,7 @@ CTxdFile::CTxdFile()
     parsedCount = 0;
 }
 
-// 0x0000b8f0
+// 0x0000bc10
 CTxdFile::~CTxdFile()
 {
     if (structure)
@@ -397,19 +397,19 @@ CTxdFile::~CTxdFile()
     }
 }
 
-// 0x0000b970
+// R5 address to verify
 DWORD CTxdFile::GetTextureCount()
 {
     return textureCount;
 }
 
-// 0x0000b980
+// R5 address to verify
 DWORD CTxdFile::GetError()
 {
     return error;
 }
 
-// 0x000bda10
+// 0x000bc340
 CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
 {
     if (!input->length || input->ended)
@@ -458,7 +458,7 @@ CModelFileChunk* CTxdFile::ReadChunk(CModelFileStream* input)
     return chunk;
 }
 
-// 0x000bdb20
+// 0x000bc450
 DWORD CTxdFile::ReadStructure(CModelFileChunk* chunk)
 {
     if (structure)
@@ -470,7 +470,7 @@ DWORD CTxdFile::ReadStructure(CModelFileChunk* chunk)
     return 1;
 }
 
-// 0x000bdb60
+// 0x000bc490
 DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
 {
     DWORD header[3];
@@ -528,7 +528,7 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
     return 1;
 }
 
-// 0x000bdd80
+// 0x000bc6b0
 DWORD CTxdFile::ReadChildren(CModelFileChunk* parent)
 {
     CModelFileStream* input = &parent->stream;
@@ -558,7 +558,7 @@ DWORD CTxdFile::ReadChildren(CModelFileChunk* parent)
     return 1;
 }
 
-// 0x000bde10
+// 0x000bc740
 DWORD CTxdFile::LoadFile(const char* filename)
 {
     if (!stream.LoadFile(filename))
@@ -584,7 +584,7 @@ DWORD CTxdFile::LoadFile(const char* filename)
     return 1;
 }
 
-// 0x000bb280
+// 0x000b9740
 DWORD CDffFile::StoreFrames(CModelFileChunk* chunk)
 {
     if (!frames)
@@ -595,7 +595,7 @@ DWORD CDffFile::StoreFrames(CModelFileChunk* chunk)
     return 0;
 }
 
-// 0x000bb2a0
+// 0x000b9760
 DWORD CDffFile::StoreGeometryList(CModelFileChunk* chunk)
 {
     if (!geometryList)
@@ -606,7 +606,7 @@ DWORD CDffFile::StoreGeometryList(CModelFileChunk* chunk)
     return 0;
 }
 
-// 0x000bb2c0
+// 0x000b9780
 DWORD CDffFile::StoreAtomic(CModelFileChunk* chunk)
 {
     if (!atomic)
@@ -617,7 +617,7 @@ DWORD CDffFile::StoreAtomic(CModelFileChunk* chunk)
     return 0;
 }
 
-// 0x000bb2e0
+// 0x000b97a0
 DWORD CDffFile::StoreStructure(CModelFileChunk* chunk)
 {
     if (!structure)
@@ -628,7 +628,7 @@ DWORD CDffFile::StoreStructure(CModelFileChunk* chunk)
     return 0;
 }
 
-// 0x000bb300
+// 0x000b97c0
 DWORD CDffFile::StoreExtension(CModelFileChunk* chunk)
 {
     if (!extension)
@@ -639,7 +639,7 @@ DWORD CDffFile::StoreExtension(CModelFileChunk* chunk)
     return 0;
 }
 
-// 0x000bb320
+// 0x000b97e0
 DWORD CDffFile::ReadChildren(CModelFileChunk* parent)
 {
     CModelFileStream* input = &parent->stream;
@@ -684,7 +684,7 @@ DWORD CDffFile::ReadChildren(CModelFileChunk* parent)
     return 1;
 }
 
-// 0x000bb460
+// 0x000b9920
 DWORD CDffFile::LoadFile(const char* filename)
 {
     if (!stream.LoadFile(filename))
@@ -719,7 +719,7 @@ DWORD CDffFile::LoadFile(const char* filename)
     return 1;
 }
 
-// 0x000bb520
+// R5 address to verify
 DWORD CDffFile::LoadCollisionFile(const char* filename)
 {
     if (!stream.LoadFile(filename))
@@ -739,7 +739,7 @@ DWORD CDffFile::LoadCollisionFile(const char* filename)
     return 1;
 }
 
-// 0x000bbaa0
+// 0x000b9f60
 DWORD CDffFile::VerifyFrameExtension(CModelFileChunk* chunk)
 {
     while (!chunk->stream.ended)
@@ -760,7 +760,7 @@ DWORD CDffFile::VerifyFrameExtension(CModelFileChunk* chunk)
     return 1;
 }
 
-// 0x000bbb30
+// 0x000b9ff0
 DWORD CDffFile::ReadFrames()
 {
     if (!frames)
@@ -803,7 +803,7 @@ DWORD CDffFile::ReadFrames()
     return 1;
 }
 
-// 0x000bb170
+// 0x000b9630
 CModelFileChunk* CDffFile::ReadChunk(CModelFileStream* input)
 {
     if (!input->length || input->ended)
@@ -911,7 +911,7 @@ DWORD CModelMeshArray::GetCount()
     return count;
 }
 
-// 0x0000c550
+// 0x0000c9e0
 bool CModelMaterialArray::Resize(DWORD size)
 {
     if (!size)
@@ -941,7 +941,7 @@ bool CModelMaterialArray::Resize(DWORD size)
     return true;
 }
 
-// 0x0000c5c0
+// 0x0000ca50
 bool CModelMeshArray::Resize(DWORD size)
 {
     if (!size)
@@ -971,7 +971,7 @@ bool CModelMeshArray::Resize(DWORD size)
     return true;
 }
 
-// 0x0000c630
+// 0x0000cac0
 bool CModelGeometryArray::Resize(DWORD size)
 {
     if (!size)
@@ -1001,7 +1001,7 @@ bool CModelGeometryArray::Resize(DWORD size)
     return true;
 }
 
-// 0x000bbe20
+// R5 address to verify
 DWORD CModelGeometryArray::Insert(CModelGeometry* geometry)
 {
     DWORD previous = count, index = 0;
@@ -1031,7 +1031,7 @@ DWORD CModelGeometryArray::Insert(CModelGeometry* geometry)
     return previous;
 }
 
-// 0x000bbe80
+// 0x000ba340
 CModelGeometry::CModelGeometry()
 {
     error = 0;
@@ -1060,7 +1060,7 @@ CModelGeometry::CModelGeometry()
     extension = 0;
 }
 
-// 0x0000d620
+// 0x0000dbb0
 CModelGeometry::~CModelGeometry()
 {
     // These plugin buffer roles remain opaque; only the native ownership is established.
@@ -1117,7 +1117,7 @@ CModelGeometry::~CModelGeometry()
     // Member destructors clear meshes, then materials, matching native order.
 }
 
-// 0x000bb110
+// R5 address to verify
 bool CModelGeometry::IsModified()
 {
     if (modified || modifiedOther)
@@ -1125,32 +1125,32 @@ bool CModelGeometry::IsModified()
     return false;
 }
 
-// 0x000bb130
+// R5 address to verify
 DWORD CModelGeometry::GetError()
 {
     return error;
 }
 
-// 0x000bb140
+// R5 address to verify
 DWORD CModelGeometry::GetDetail()
 {
     return detail;
 }
 
-// 0x000bc4b0
+// R5 address to verify
 void CModelGeometry::SetError(DWORD value)
 {
     if (!error)
         error = value;
 }
 
-// 0x000bc4d0
+// R5 address to verify
 void CModelGeometry::SetDetail(DWORD value)
 {
     detail = value;
 }
 
-// 0x0000d820
+// R5 address to verify
 CDffFile::CDffFile()
 {
     error = 0;
@@ -1167,7 +1167,7 @@ CDffFile::CDffFile()
     frameData = 0;
 }
 
-// 0x0000d8f0
+// 0x0000de80
 CDffFile::~CDffFile()
 {
     if (extension)
@@ -1213,7 +1213,7 @@ CDffFile::~CDffFile()
     geometries.Resize(0);
 }
 
-// 0x000bc600
+// 0x000baf30
 CModelFileChunk* CModelGeometry::ReadChunk(CModelFileStream* input)
 {
     if (!input->length || input->ended)
@@ -1262,7 +1262,7 @@ CModelFileChunk* CModelGeometry::ReadChunk(CModelFileStream* input)
     return chunk;
 }
 
-// 0x000bcdb0
+// 0x000bb6e0
 DWORD CModelMaterialArray::Insert(void* entry)
 {
     DWORD previous = count, index = 0;
@@ -1292,7 +1292,7 @@ DWORD CModelMaterialArray::Insert(void* entry)
     return previous;
 }
 
-// 0x000bce10
+// 0x000bb740
 DWORD CModelMeshArray::Insert(BYTE* entry)
 {
     DWORD previous = count, index = 0;
@@ -1322,7 +1322,7 @@ DWORD CModelMeshArray::Insert(BYTE* entry)
     return previous;
 }
 
-// 0x000b36c0
+// 0x000b3ac0
 DWORD CModelFileStream::Skip(DWORD count)
 {
     DWORD next = position + count;
@@ -1336,7 +1336,7 @@ DWORD CModelFileStream::Skip(DWORD count)
     return length;
 }
 
-// 0x000bd180
+// 0x000bbab0
 bool CModelGeometry::ReadMaterial(CModelFileStream* input)
 {
     CModelMaterialRecord* record = (CModelMaterialRecord*)calloc(1, 0xa4);
@@ -1431,7 +1431,7 @@ malformed:
     return false;
 }
 
-// 0x000bd5f0
+// 0x000bbf20
 bool CModelGeometry::ReadMaterials(CModelFileStream* input)
 {
     material = ReadChunk(input);
@@ -1469,7 +1469,7 @@ bool CModelGeometry::ReadMaterials(CModelFileStream* input)
     return true;
 }
 
-// 0x000bc760
+// 0x000bb090
 bool CModelGeometry::ReadSkin(CModelFileStream* input)
 {
     if (vertexCount <= 0)
@@ -1508,7 +1508,7 @@ bool CModelGeometry::ReadSkin(CModelFileStream* input)
     return !skin.unknown14 && !skin.unknown18 && !skin.unknown1c;
 }
 
-// 0x000bce70
+// 0x000bb7a0
 bool CModelGeometry::ReadExtensions(CModelFileStream* input)
 {
     extension = ReadChunk(input);
@@ -1604,7 +1604,7 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
     return true;
 }
 
-// 0x000bd700
+// 0x000bc030
 bool CModelGeometry::Read(CModelFileStream* input, WORD version)
 {
     DWORD value = 0;
@@ -1702,7 +1702,7 @@ incomplete:
     return false;
 }
 
-// 0x000bbf00
+// R5 address to verify
 DWORD CDffFile::ReadGeometries()
 {
     if (!geometryList)
@@ -1750,7 +1750,7 @@ DWORD CDffFile::ReadGeometries()
     return 1;
 }
 
-// 0x000bb040
+// R5 address to verify
 void CModelFileStream::SetBuffer(BYTE* buffer, DWORD size)
 {
     data = buffer;
@@ -1760,13 +1760,13 @@ void CModelFileStream::SetBuffer(BYTE* buffer, DWORD size)
     owned = 0;
 }
 
-// 0x000bb060
+// R5 address to verify
 DWORD CModelFileStream::WriteByte(BYTE value)
 {
     return Write(&value, 1);
 }
 
-// 0x000bb070
+// R5 address to verify
 WORD CModelFileStream::ReadWord()
 {
     WORD value = 0;
@@ -1774,19 +1774,19 @@ WORD CModelFileStream::ReadWord()
     return value;
 }
 
-// 0x000bb090
+// R5 address to verify
 BYTE* CModelFileStream::GetBuffer()
 {
     return data;
 }
 
-// 0x000bb0a0
+// R5 address to verify
 DWORD CModelFileStream::GetLength()
 {
     return length;
 }
 
-// 0x000bb0b0
+// 0x000b9570
 CModelFileChunk::CModelFileChunk()
 {
     type = 0;
@@ -1795,7 +1795,7 @@ CModelFileChunk::CModelFileChunk()
     version = 0x1803;
 }
 
-// 0x000bb0e0
+// R5 address to verify
 void CModelFileChunk::SetBuffer(BYTE* buffer, DWORD size)
 {
     stream.data = buffer;
@@ -1805,26 +1805,26 @@ void CModelFileChunk::SetBuffer(BYTE* buffer, DWORD size)
     stream.owned = 0;
 }
 
-// 0x000bb100
+// R5 address to verify
 void CModelFileChunk::UpdateLength()
 {
     length = stream.length;
 }
 
-// 0x000bb150
+// R5 address to verify
 void CDffFile::SetError(DWORD value)
 {
     if (!error)
         error = value;
 }
 
-// 0x000bb160
+// R5 address to verify
 void CDffFile::SetDetail(DWORD value)
 {
     detail = value;
 }
 
-// 0x000bb940
+// 0x000b9e00
 DWORD CDffFile::AppendChunk(CModelFileChunk* parent, const CModelFileChunk* child)
 {
     if (!parent || !child)
@@ -1835,7 +1835,7 @@ DWORD CDffFile::AppendChunk(CModelFileChunk* parent, const CModelFileChunk* chil
     return 1;
 }
 
-// 0x000bb990
+// 0x000b9e50
 DWORD CDffFile::AppendCollisionFile(const char* filename)
 {
     CModelFileChunk chunk;
@@ -1848,7 +1848,7 @@ DWORD CDffFile::AppendCollisionFile(const char* filename)
     return AppendChunk(extension, &chunk);
 }
 
-// 0x000bb5a0
+// 0x000b9a60
 DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filename)
 {
     CModelFileStream output;
@@ -1857,7 +1857,7 @@ DWORD __stdcall ModelSaveChunk(const CModelFileChunk* chunk, const char* filenam
     return output.SaveFile(filename);
 }
 
-// 0x000bcbc0
+// R5 address to verify
 bool CModelGeometry::CopySecondaryColors(const CModelGeometry* other)
 {
     if (!other->hasColors)
@@ -1878,7 +1878,7 @@ bool CModelGeometry::CopySecondaryColors(const CModelGeometry* other)
     return true;
 }
 
-// 0x000bc900
+// 0x000bb230
 CModelFileChunk* CModelGeometry::BuildStructure()
 {
     CModelFileChunk* chunk = new CModelFileChunk;
@@ -1911,7 +1911,7 @@ CModelFileChunk* CModelGeometry::BuildStructure()
     return chunk;
 }
 
-// 0x000bca90
+// 0x000bb3c0
 bool CModelGeometry::RemoveExtension(DWORD type)
 {
     CModelFileChunk* replacement = new CModelFileChunk;
@@ -1938,7 +1938,7 @@ bool CModelGeometry::RemoveExtension(DWORD type)
     return true;
 }
 
-// 0x000bcc40
+// 0x000bb570
 CModelFileChunk* CModelGeometry::BuildChunk()
 {
     CModelFileChunk* chunk = new CModelFileChunk;
@@ -1964,7 +1964,7 @@ CModelFileChunk* CModelGeometry::BuildChunk()
     return chunk;
 }
 
-// 0x000bbcc0
+// 0x000ba180
 bool CDffFile::RebuildGeometryList()
 {
     if (!geometries.count)
@@ -1994,7 +1994,7 @@ bool CDffFile::RebuildGeometryList()
     return true;
 }
 
-// 0x000bb640
+// 0x000b9b00
 DWORD CDffFile::SaveFile(const char* filename)
 {
     CModelFileStream output;
@@ -2023,7 +2023,7 @@ DWORD CDffFile::SaveFile(const char* filename)
     return output.SaveFile(filename);
 }
 
-// 0x000bb820
+// 0x000b9ce0
 DWORD CDffFile::SaveCompressedFile(const char* filename)
 {
     CModelFileStream output;
@@ -2042,7 +2042,7 @@ DWORD CDffFile::SaveCompressedFile(const char* filename)
     return output.SaveFile(filename);
 }
 
-// 0x000b3630
+// R5 address to verify
 CModelFileStream::CModelFileStream(BYTE* buffer, DWORD size)
 {
     data = buffer;
@@ -2055,7 +2055,7 @@ CModelFileStream::CModelFileStream(BYTE* buffer, DWORD size)
     scratch = 0;
 }
 
-// 0x000b3660
+// R5 address to verify
 float CModelFileStream::ReadFloat()
 {
     float value = 0;
@@ -2063,7 +2063,7 @@ float CModelFileStream::ReadFloat()
     return value;
 }
 
-// 0x000b3680
+// R5 address to verify
 int CModelFileStream::ReadInt()
 {
     int value = 0;
@@ -2071,51 +2071,51 @@ int CModelFileStream::ReadInt()
     return value;
 }
 
-// 0x0000cf80
+// R5 address to verify
 void CModelGeometryArray::Clear()
 {
     Resize(0);
 }
 
-// 0x0000cfa0
+// R5 address to verify
 void CModelMaterialArray::Clear()
 {
     Resize(0);
 }
 
-// 0x0000cfb0
+// R5 address to verify
 void CModelMeshArray::Clear()
 {
     Resize(0);
 }
 
-// 0x0000d5f0
+// R5 address to verify
 CModelMaterialArray::~CModelMaterialArray()
 {
     Resize(0);
 }
 
-// 0x0000d600
+// R5 address to verify
 CModelMeshArray::~CModelMeshArray()
 {
     Resize(0);
 }
 
-// 0x0000d610
+// R5 address to verify
 CModelGeometryArray::~CModelGeometryArray()
 {
     Resize(0);
 }
 
 extern "C" __int64 __cdecl _ftol2();
-// 0x000b95d0
+// 0x000b8b90
 DWORD CModelCollisionFile::SetInitialHeaderSize()
 {
     *(DWORD*)(nativeState + 4) = 0x74;
     return 1;
 }
 
-// 0x000b95e0
+// 0x000b8ba0
 DWORD CModelCollisionFile::CalculateGeometryBounds(const CModelGeometry* geometry, float* minimum, float* maximum)
 {
     minimum[0] = 100000.0f;
@@ -2144,7 +2144,7 @@ DWORD CModelCollisionFile::CalculateGeometryBounds(const CModelGeometry* geometr
     return 1;
 }
 
-// 0x000b96e0
+// 0x000b8ca0
 DWORD CModelCollisionFile::SetGeometryBounds(const CModelGeometry* geometry)
 {
     CalculateGeometryBounds(geometry, (float*)(nativeState + 0x20), (float*)(nativeState + 0x2c));
@@ -2152,19 +2152,19 @@ DWORD CModelCollisionFile::SetGeometryBounds(const CModelGeometry* geometry)
     return 1;
 }
 
-// 0x000ba190
+// R5 address to verify
 DWORD CModelCollisionFile::AddSphere(ModelCollisionSphere* sphere)
 {
     return ((CModelCollisionSphereArray*)(nativeState + 0x80))->Insert(sphere);
 }
 
-// 0x000ba1a0
+// R5 address to verify
 DWORD CModelCollisionFile::AddBox(ModelCollisionBox* box)
 {
     return ((CModelCollisionBoxArray*)(nativeState + 0x78))->Insert(box);
 }
 
-// 0x000ba240
+// R5 address to verify
 DWORD CModelCollisionFile::BuildBoxFromGeometry(const CModelGeometry* geometry)
 {
     CalculateGeometryBounds(geometry, (float*)(nativeState + 0x20), (float*)(nativeState + 0x2c));
@@ -2178,7 +2178,7 @@ DWORD CModelCollisionFile::BuildBoxFromGeometry(const CModelGeometry* geometry)
     return 1;
 }
 
-// 0x000b9710
+// 0x000b8cd0
 DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry* geometry)
 {
     CalculateGeometryBounds(geometry, (float*)(nativeState + 0x20), (float*)(nativeState + 0x2c));
@@ -2218,7 +2218,7 @@ DWORD CModelCollisionFile::BuildGeometry(const CModelGeometry* geometry)
     return 0;
 }
 
-// 0x000b98a0
+// 0x000b8e70
 bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex* vertex, const ModelCollisionBounds* bounds)
 {
     float point[3];
@@ -2231,7 +2231,7 @@ bool CModelCollisionFile::ContainsVertex(const ModelCollisionVertex* vertex, con
     return false;
 }
 
-// 0x000b9950
+// 0x000b8f20
 bool CModelCollisionFile::TriangleHasVertexInBounds(const ModelCollisionTriangle* triangle, const ModelCollisionBounds* bounds)
 {
     ModelCollisionVertex* vertices = *(ModelCollisionVertex**)(nativeState + 0x90);
@@ -2241,7 +2241,7 @@ bool CModelCollisionFile::TriangleHasVertexInBounds(const ModelCollisionTriangle
     return false;
 }
 
-// 0x000b99c0
+// 0x000b8f90
 void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value)
 {
     if (value->values[0] < target->values[0])
@@ -2252,7 +2252,7 @@ void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const Model
         target->values[2] = value->values[2];
 }
 
-// 0x000b9a00
+// 0x000b8fd0
 void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value)
 {
     if (value->values[0] > target->values[0])
@@ -2263,7 +2263,7 @@ void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const Model
         target->values[2] = value->values[2];
 }
 
-// 0x000b9a40
+// R5 address to verify
 void* CModelCollisionBoxArray::Get(DWORD index)
 {
     if (index >= count)
@@ -2271,13 +2271,13 @@ void* CModelCollisionBoxArray::Get(DWORD index)
     return items[index];
 }
 
-// 0x000b9a60
+// R5 address to verify
 DWORD CModelCollisionBoxArray::GetCount()
 {
     return count;
 }
 
-// 0x000b9b70
+// R5 address to verify
 bool CModelCollisionBoxArray::Resize(DWORD size)
 {
     if (!size)
@@ -2307,7 +2307,7 @@ bool CModelCollisionBoxArray::Resize(DWORD size)
     return true;
 }
 
-// 0x000ba040
+// R5 address to verify
 DWORD CModelCollisionBoxArray::Insert(void* value)
 {
     DWORD previous = count, index = 0;
@@ -2337,7 +2337,7 @@ DWORD CModelCollisionBoxArray::Insert(void* value)
     return previous;
 }
 
-// 0x000b9a70
+// R5 address to verify
 void* CModelCollisionSphereArray::Get(DWORD index)
 {
     if (index >= count)
@@ -2345,13 +2345,13 @@ void* CModelCollisionSphereArray::Get(DWORD index)
     return items[index];
 }
 
-// 0x000b9a90
+// R5 address to verify
 DWORD CModelCollisionSphereArray::GetCount()
 {
     return count;
 }
 
-// 0x000b9be0
+// R5 address to verify
 bool CModelCollisionSphereArray::Resize(DWORD size)
 {
     if (!size)
@@ -2381,7 +2381,7 @@ bool CModelCollisionSphereArray::Resize(DWORD size)
     return true;
 }
 
-// 0x000ba0a0
+// R5 address to verify
 DWORD CModelCollisionSphereArray::Insert(void* value)
 {
     DWORD previous = count, index = 0;
@@ -2412,21 +2412,21 @@ DWORD CModelCollisionSphereArray::Insert(void* value)
 }
 
 // Shared native half constant, already maintained by textdraw.
-// 0x000bab60
+// R5 address to verify
 CModelCollisionNode::CModelCollisionNode()
 {
     right = 0;
     left = 0;
 }
 
-// 0x000ba750
+// R5 address to verify
 CModelCollisionNode::~CModelCollisionNode()
 {
     delete left;
     delete right;
 }
 
-// 0x000b9d10
+// R5 address to verify
 void CModelCollisionNode::CountLeaves(DWORD* count)
 {
     if (left)
@@ -2439,7 +2439,7 @@ void CModelCollisionNode::CountLeaves(DWORD* count)
         ++*count;
 }
 
-// 0x000ba320
+// R5 address to verify
 void CModelCollisionNode::WriteLeaves(CModelCollisionFile* file)
 {
     CModelCollisionNode* node = this;
@@ -2483,7 +2483,7 @@ void CModelCollisionNode::WriteLeaves(CModelCollisionFile* file)
     *(DWORD*)(state + 0x8c) += node->triangles.size();
 }
 
-// 0x000babf0
+// R5 address to verify
 void CModelCollisionNode::Split(CModelCollisionFile* file)
 {
     CModelCollisionNode* first = new CModelCollisionNode;
@@ -2531,7 +2531,7 @@ void CModelCollisionNode::Split(CModelCollisionFile* file)
         right->Split(file);
 }
 
-// 0x000baec0
+// R5 address to verify
 DWORD CModelCollisionFile::BuildFaceGroups()
 {
     CModelCollisionNode root;
@@ -2555,7 +2555,7 @@ DWORD CModelCollisionFile::BuildFaceGroups()
     return count;
 }
 
-// 0x000b9d50
+// 0x000b9150
 DWORD CModelCollisionFile::SaveFile(const char* filename, const char* modelName)
 {
     CModelFileStream output;
@@ -2623,7 +2623,7 @@ DWORD CModelCollisionFile::SaveFile(const char* filename, const char* modelName)
     return 1;
 }
 
-// 0x000b6610
+// 0x000b6ad0
 void GameParseStreamData(const void* data, DWORD length, void* destination)
 {
     CModelFileStream* reader = new CModelFileStream((BYTE*)data, length);

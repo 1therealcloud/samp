@@ -31,7 +31,7 @@ class CActorPool
     DWORD state3e84[1000];
 
 public:
-    // 0x00001610
+    // R5 address to verify
     CActor* Get(WORD id);
     // Raw active DWORD, not normalized to bool.
     // 0x00001640

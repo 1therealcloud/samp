@@ -21,7 +21,7 @@ class CLabelPool
 {
 public:
     // Returns the raw activity DWORD; out-of-range IDs return zero.
-    // 0x0000e3c0
+    // R5 address to verify
     DWORD IsActive(WORD id);
     TextLabel labels[2048];
     DWORD active[2048];

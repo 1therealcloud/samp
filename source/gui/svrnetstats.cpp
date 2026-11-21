@@ -1,9 +1,9 @@
 #include "gui/svrnetstats.h"
 
 #include <string.h>
-// 0x0016c7f8
+// 0x0012e968
 DWORD g_srvNetStatsHistory[74];
-// 0x00070cc0
+// 0x00071220
 CSrvNetStats::CSrvNetStats(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -17,5 +17,5 @@ CSrvNetStats::CSrvNetStats(IDirect3DDevice9* device)
 }
 
 // The original returns without drawing.
-// 0x00070d00
+// 0x00071260
 void CSrvNetStats::Draw() {}

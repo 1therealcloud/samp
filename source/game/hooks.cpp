@@ -28,499 +28,499 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x00151a60
+// R5 address to verify
 BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};
 
-// 0x0018f624
+// R5 address to verify
 CPlayerPool* g_hookDamagePlayerPool;
-// 0x00151afc
+// R5 address to verify
 WORD g_hookDamagePlayerId = 0xffff;
-// 0x0018f628
+// R5 address to verify
 DWORD g_hookVehicleDamageAttacker;
-// 0x0018f62c
+// R5 address to verify
 DWORD g_hookVehicleDamageReceiver;
-// 0x0018f630
+// R5 address to verify
 DWORD g_hookVehicleDamageWord;
-// 0x0018f634
+// R5 address to verify
 DWORD g_hookVehicleDamageBlocked;
-// 0x0018f638
+// R5 address to verify
 DWORD g_hookVehicleDamageReturn;
-// 0x0018f644
+// R5 address to verify
 void* g_hookBulletHitEntity;
-// 0x0018e590
+// R5 address to verify
 PedBulletData g_hookBulletHitData;
-// 0x0018e828
+// R5 address to verify
 CMatrix g_hookBulletInverseMatrix;
-// 0x0018ea60
+// R5 address to verify
 CMatrix g_hookBulletOrthoMatrix;
-// 0x0018f66c
+// R5 address to verify
 DWORD g_hookShotArguments[8];
-// 0x0018eb7c
+// R5 address to verify
 CVector g_hookAdjustedShotPoint;
-// 0x0018f648
+// R5 address to verify
 DWORD g_hookShotLineResult;
-// 0x002ac9cc
+// 0x0026eb3c
 DWORD g_gameLoopAddress;
-// 0x0018f56c
+// R5 address to verify
 DWORD g_gameHookFarClipReturn;
-// 0x00151a10
+// 0x00113a28
 BYTE g_gameHookJump00151a10[10] = {0xff, 0x25, 0x34, 0x39, 0x4d, 0x00, 0x90, 0x90, 0x90, 0x90};
-// 0x00151a1c
+// 0x00113a34
 BYTE g_gameHookJump00151a1c[7] = {0xff, 0x25, 0x09, 0x46, 0x4d, 0x00, 0x90};
-// 0x0015197c
+// 0x00113994
 BYTE g_gameHookJump0015197c[7] = {0xff, 0x25, 0xbb, 0x19, 0x69, 0x00, 0x90};
-// 0x00151984
+// 0x0011399c
 BYTE g_gameHookJump00151984[7] = {0xff, 0x25, 0xba, 0xb8, 0x63, 0x00, 0x90};
-// 0x00151994
+// 0x001139ac
 BYTE g_gameHookJump00151994[7] = {0xff, 0x25, 0xaa, 0x85, 0x43, 0x00, 0x90};
-// 0x0015198c
+// 0x001139a4
 BYTE g_gameHookJump0015198c[7] = {0xff, 0x25, 0x79, 0x4a, 0x58, 0x00, 0x90};
-// 0x001519b0
+// 0x001139c8
 BYTE g_gameHookJump001519b0[7] = {0xff, 0x25, 0xf1, 0xc8, 0x53, 0x00, 0x90};
-// 0x001519b8
+// 0x001139d0
 BYTE g_gameHookJump001519b8[6] = {0xff, 0x25, 0xbc, 0x5a, 0x4b, 0x00};
-// 0x001519e8
+// 0x00113a00
 BYTE g_gameHookJump001519e8[6] = {0xff, 0x25, 0x1b, 0x8b, 0x73, 0x00};
-// 0x001519f0
+// 0x00113a08
 BYTE g_gameHookJump001519f0[6] = {0xff, 0x25, 0x5b, 0x88, 0x73, 0x00};
-// 0x001519d4
+// 0x001139ec
 BYTE g_gameHookJump001519d4[9] = {0xff, 0x25, 0x43, 0x00, 0x6a, 0x00, 0x90, 0x90, 0x90};
-// 0x00151a34
+// 0x00113a4c
 BYTE g_gameHookJump00151a34[6] = {0xff, 0x25, 0x21, 0xc7, 0x59, 0x00};
-// 0x00151a3c
+// 0x00113a54
 BYTE g_gameHookJump00151a3c[7] = {0xff, 0x25, 0x84, 0x80, 0x53, 0x00, 0x90};
-// 0x00151a44
+// 0x00113a5c
 BYTE g_gameHookJump00151a44[9] = {0xff, 0x25, 0xa6, 0x34, 0x55, 0x00, 0x90, 0x90, 0x90};
-// 0x00151a50
+// 0x00113a68
 BYTE g_gameHookJump00151a50[6] = {0xff, 0x25, 0x33, 0x34, 0x4b, 0x00};
-// 0x00151a68
+// R5 address to verify
 BYTE g_gameHookJump00151a68[6] = {0xff, 0x25, 0xdb, 0x74, 0x56, 0x00};
-// 0x0018f4c8
+// R5 address to verify
 DWORD g_hookRadarIndex;
-// 0x0018f4cc
+// R5 address to verify
 DWORD g_hookCheatFunction;
-// 0x0018f4b0
+// R5 address to verify
 DWORD g_hookCameraPed;
-// 0x0018f540
+// R5 address to verify
 DWORD g_hookRenderEsi;
-// 0x0018f544
+// R5 address to verify
 DWORD g_hookRenderEbx;
-// 0x0018f568
+// R5 address to verify
 DWORD g_hookFreedBuffer;
-// 0x00151ab8
+// R5 address to verify
 DWORD g_hookKeepBuffer = 1;
-// 0x0018f560
+// 0x001516c8
 DWORD g_hookCachedBuffer;
-// 0x00151abc
+// R5 address to verify
 DWORD g_hookAllocateFunction = 0x7fb270;
-// 0x0018f570
+// R5 address to verify
 DWORD g_hookSavedEsi;
-// 0x0018f5c4
+// R5 address to verify
 DWORD g_hookRenderReturn;
-// 0x00151ac8
+// R5 address to verify
 BYTE g_hookRenderRestore[3] = {0xff, 0x52, 0x20};
-// 0x0018f5d4
+// R5 address to verify
 DWORD g_hookSavedFontA;
-// 0x0018f5d8
+// R5 address to verify
 DWORD g_hookSavedFontB;
-// 0x0018f508
+// R5 address to verify
 DWORD g_hookHudScaleY;
-// 0x0018f50c
+// R5 address to verify
 float g_hookHudWidth;
-// 0x0018f510
+// R5 address to verify
 float g_hookHudHeight;
-// 0x00151a6e
+// R5 address to verify
 BYTE g_hookHudAspectFix = 1;
-// 0x0011c728
+// 0x000ea700
 const float g_hookHudAspectThreshold = 1.6f;
-// 0x0011eb68
+// R5 address to verify
 const float g_hookHudScaleNumerator = 0.00221999991f;
-// 0x002aca6c
+// R5 address to verify
 DWORD g_hookFogEnabled;
-// 0x002aca70
+// 0x0026ebe0
 DWORD g_hookDisableFog;
-// 0x0018e560
+// R5 address to verify
 DWORD g_hookCollisionPed;
-// 0x0018e8e0
+// R5 address to verify
 DWORD g_hookSavedMatrix[16];
-// 0x0018eab4
+// R5 address to verify
 DWORD g_hookSavedSpeed[3];
-// 0x0018f52c
+// R5 address to verify
 DWORD g_hookHornArgument;
-// 0x0018f530
+// R5 address to verify
 DWORD g_hookHornThis;
-// 0x0018eb24
+// R5 address to verify
 DWORD g_hookHornVehicle;
-// 0x0018f534
+// R5 address to verify
 BYTE g_hookHornStatus;
-// 0x0018f4c4
+// R5 address to verify
 DWORD g_hookAnimationReturn;
-// 0x0018e584
+// R5 address to verify
 DWORD g_hookAnimationClump;
-// 0x0018f548
+// R5 address to verify
 DWORD g_hookAnimationGroup;
-// 0x0018f54c
+// R5 address to verify
 DWORD g_hookAnimationId;
-// 0x0018f550
+// R5 address to verify
 DWORD g_hookAnimationBlend;
-// 0x0018eb90
+// R5 address to verify
 DWORD g_hookAnimationPed;
-// 0x0018eb88
+// R5 address to verify
 DWORD g_hookAnimationLocalClump;
-// 0x0018f4ec
+// R5 address to verify
 DWORD g_hookAnimationType;
-// 0x0018f4f0
+// R5 address to verify
 DWORD g_hookQueuedAnimationGroup;
-// 0x0018f4f4
+// R5 address to verify
 DWORD g_hookQueuedAnimationId;
-// 0x0018f4f8
+// R5 address to verify
 DWORD g_hookQueuedAnimationBlend;
-// 0x00151aa4
+// R5 address to verify
 DWORD g_hookAnimationContinueA = 0x4d3aaa;
-// 0x00151aa8
+// R5 address to verify
 DWORD g_hookAnimationContinueB = 0x4d4617;
-// 0x0018f5cc
+// R5 address to verify
 DWORD g_hookRenderObject;
-// 0x00151acc
+// R5 address to verify
 BYTE g_hookObjectRestore[5] = {0xe8, 0x3c, 0xff, 0xff, 0xff};
-// 0x0018f5b4
+// R5 address to verify
 DWORD g_hookMarker;
-// 0x0018f5b8
+// R5 address to verify
 DWORD g_hookMarkerArgument;
-// 0x0018f5bc
+// R5 address to verify
 DWORD g_hookSuppressAllMarkers;
 BYTE g_hookCameraHudPrepared;
-// 0x0018f6a8
+// R5 address to verify
 DWORD g_hookAudioSavedState;
-// 0x0018f6ac
+// R5 address to verify
 DWORD g_hookAudioArgument0;
-// 0x0018f6b0
+// R5 address to verify
 DWORD g_hookAudioArgument1;
 CObjectPool* g_debugObjectPool;
-// 0x00151964
+// 0x0011397c
 WORD* g_hookCameraModeWord = (WORD*)0xb6f858;
-// 0x0018f4ac
+// R5 address to verify
 BYTE g_hookSavedPlayer;
-// 0x0018f4b4
+// R5 address to verify
 BYTE g_hookPlayerIndex;
-// 0x0018f4c0
+// R5 address to verify
 DWORD g_hookPedControlThis;
-// 0x0018f51c
+// R5 address to verify
 DWORD g_hookWeaponResult;
-// 0x0018f520
+// R5 address to verify
 DWORD g_hookRestoreSkills;
-// 0x0018f524
+// R5 address to verify
 DWORD g_hookLocalPedControl;
-// 0x0018f528
+// R5 address to verify
 DWORD g_hookRestoreKeys;
-// 0x0018ea58
+// R5 address to verify
 BYTE g_hookSavedCameraMode;
-// 0x0018e5c8
+// R5 address to verify
 WORD g_hookSavedCameraModeWord;
-// 0x0018e810
+// R5 address to verify
 DWORD g_hookVehicleProcess;
-// 0x0018e8d0
+// R5 address to verify
 DWORD g_hookControlVehicle;
-// 0x0018ea54
+// R5 address to verify
 DWORD g_hookVehicleVtable;
-// 0x0018e934
+// R5 address to verify
 DWORD g_hookVehicleKeys;
-// 0x0018e938
+// R5 address to verify
 BYTE g_hookVehicleStatus;
-// 0x0018eb20
+// R5 address to verify
 DWORD g_hookVehicleLean;
-// 0x0018e8cc
+// R5 address to verify
 DWORD g_hookVehicleLeanTarget;
-// 0x002a9a44
+// R5 address to verify
 int g_gameVehicleModel;
-// 0x002a9a48
+// R5 address to verify
 DWORD g_gameLinkedVehicle;
-// 0x002a9a4c
+// R5 address to verify
 float g_gameVehicleDistanceSquared;
-// 0x0011f5dc
+// 0x000ed4d8
 const float g_gameStreamingDistanceSquared = 40000.0f;
-// 0x0018f694
+// R5 address to verify
 DWORD g_hookContactOther;
-// 0x0018f698
+// R5 address to verify
 DWORD g_hookContactReturn;
-// 0x0018f69c
+// R5 address to verify
 DWORD g_hookSirenVehicle;
-// 0x0018f6a0
+// R5 address to verify
 BYTE g_hookSirenResult;
-// 0x0018f6a4
+// R5 address to verify
 DWORD g_hookSirenOnce;
-// 0x00151b0c
+// R5 address to verify
 WORD g_hookSirenVehicleId = 0xffff;
-// 0x0018f63c
+// R5 address to verify
 DWORD g_hookPedQueryThis;
-// 0x0018f640
+// R5 address to verify
 DWORD g_hookPedQueryPed;
-// 0x0018e7f8
+// R5 address to verify
 DWORD g_hookPickupBackend;
-// 0x0018e5cc
+// R5 address to verify
 DWORD g_hookMenuTextResult;
-// 0x0018f5a8
+// R5 address to verify
 CVector g_hookPassengerCameraPosition;
-// 0x0018e580
+// R5 address to verify
 DWORD g_hookTrailerBackend;
-// 0x0018e7fc
+// R5 address to verify
 CVehiclePool* g_hookTrailerPool;
-// 0x0018e7f0
+// R5 address to verify
 WORD g_hookTrailerId;
-// 0x0018f5e0
+// R5 address to verify
 CVehicle* g_hookTrailerVehicle;
-// 0x0018f600
+// R5 address to verify
 DWORD g_hookObjectSavedStack;
-// 0x0018f5f8
+// R5 address to verify
 DWORD g_hookObjectBackend;
-// 0x0018f604
+// R5 address to verify
 DWORD g_hookObjectResult;
-// 0x0018f5fc
+// R5 address to verify
 CObject* g_hookObjectRotationWrapper;
-// 0x0018f614
+// R5 address to verify
 CObjectPool* g_hookObjectDrawPool;
-// 0x0018f618
+// R5 address to verify
 DWORD g_hookObjectDrawBackend;
-// 0x0018f578
+// R5 address to verify
 CObject* g_hookObjectDrawWrapper;
-// 0x0018f580
+// R5 address to verify
 DWORD g_hookMaterialReturn;
-// 0x0018f574
+// R5 address to verify
 DWORD g_hookMaterialBackend;
-// 0x0018f57c
+// R5 address to verify
 CPlayerPool* g_hookMaterialPlayerPool;
-// 0x0018f5a4
+// R5 address to verify
 DWORD g_hookSurfingIndex;
-// 0x0018e7f4
+// R5 address to verify
 CRemotePlayer* g_hookSurfingRemote;
-// 0x0018eac0
+// R5 address to verify
 GameEntityCollisionShape g_hookCollisionFirst;
-// 0x0018e56c
+// R5 address to verify
 GameEntityCollisionShape g_hookCollisionSecond;
-// 0x0018f68c
+// R5 address to verify
 BYTE g_hookCollisionResult;
-// 0x0011e508
+// R5 address to verify
 const float g_hookCollisionBoundHigh = 3000.0f;
-// 0x0011ec3c
+// R5 address to verify
 const float g_hookCollisionBoundLow = -3000.0f;
-// 0x0018f4d0
+// R5 address to verify
 DWORD g_hookGate18F4D0;
-// 0x0018eb2c
+// R5 address to verify
 DWORD g_hookRandomReturn;
-// 0x0018e8b8
+// R5 address to verify
 DWORD g_hookRecordReturn18E8B8;
-// 0x0018f5c8
+// R5 address to verify
 DWORD g_hookRecordEcx18F5C8;
-// 0x0011ec04
+// 0x000ecb0c
 const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
-// 0x00151aac
+// R5 address to verify
 DWORD g_hookCapture00151AAC = 0x4d4417;
-// 0x00151ab0
+// R5 address to verify
 DWORD g_hookCapture00151AB0 = 0x4d3b30;
-// 0x00151ab4
+// R5 address to verify
 WORD g_hookCapture00151AB4 = 0xffff;
-// 0x00151ac4
+// R5 address to verify
 WORD g_hookCapture00151AC4 = 0xffff;
-// 0x0018e540
+// R5 address to verify
 DWORD g_hookCapture0018E540;
-// 0x0018e544
+// R5 address to verify
 DWORD g_hookCapture0018E544;
-// 0x0018e564
+// R5 address to verify
 DWORD g_hookCapture0018E564;
-// 0x0018e588
+// R5 address to verify
 DWORD g_hookCapture0018E588;
-// 0x0018e58c
+// R5 address to verify
 DWORD g_hookCapture0018E58C;
-// 0x0018e5c4
+// R5 address to verify
 DWORD g_hookCapture0018E5C4;
-// 0x0018e5d8
+// R5 address to verify
 DWORD g_hookCapture0018E5D8;
-// 0x0018e800
+// R5 address to verify
 CVector g_hookAimRayTarget;
-// 0x0018e814
+// R5 address to verify
 DWORD g_hookCapture0018E814;
-// 0x0018e818
+// R5 address to verify
 DWORD g_hookCapture0018E818;
-// 0x0018e86c
+// R5 address to verify
 DWORD g_hookCapture0018E86C;
-// 0x0018e874
+// R5 address to verify
 DWORD g_hookCapture0018E874;
-// 0x0018e8c8
+// R5 address to verify
 DWORD g_hookCapture0018E8C8;
-// 0x0018e8d4
+// R5 address to verify
 DWORD g_hookCapture0018E8D4;
-// 0x0018e924
+// R5 address to verify
 DWORD g_hookCapture0018E924;
-// 0x0018e928
+// R5 address to verify
 DWORD g_hookCapture0018E928;
-// 0x0018ea40
+// R5 address to verify
 CVector g_hookAimRayOrigin;
-// 0x0018eaa0
+// R5 address to verify
 DWORD g_hookCapture0018EAA0;
-// 0x0018eaa4
+// R5 address to verify
 DWORD g_hookCapture0018EAA4;
-// 0x0018eaa8
+// R5 address to verify
 DWORD g_hookCapture0018EAA8;
-// 0x0018eab0
+// R5 address to verify
 DWORD g_hookCapture0018EAB0;
-// 0x0018eb1c
+// R5 address to verify
 DWORD g_hookCapture0018EB1C;
-// 0x0018eb70
+// R5 address to verify
 DWORD g_hookCapture0018EB70;
-// 0x0018eb78
+// R5 address to verify
 DWORD g_hookCapture0018EB78;
-// 0x0018eb8c
+// R5 address to verify
 DWORD g_hookCapture0018EB8C;
-// 0x0018f33c
+// R5 address to verify
 DWORD g_hookCapture0018F33C;
-// 0x0018f340
+// R5 address to verify
 DWORD g_hookCapture0018F340;
-// 0x0018f34c
+// R5 address to verify
 DWORD g_hookCapture0018F34C;
-// 0x0018f350
+// R5 address to verify
 DWORD g_hookCapture0018F350;
-// 0x0018f354
+// R5 address to verify
 DWORD g_hookCapture0018F354;
-// 0x0018f360
+// R5 address to verify
 DWORD g_hookCapture0018F360;
-// 0x0018f368
+// R5 address to verify
 DWORD g_hookCapture0018F368;
-// 0x0018f37c
+// R5 address to verify
 DWORD g_hookCapture0018F37C;
-// 0x0018f558
+// R5 address to verify
 DWORD g_hookCapture0018F558;
-// 0x0018f55c
+// R5 address to verify
 DWORD g_hookCapture0018F55C;
-// 0x0018f594
+// R5 address to verify
 DWORD g_hookCapture0018F594;
-// 0x0018f598
+// R5 address to verify
 DWORD g_hookCapture0018F598;
-// 0x0018f59c
+// R5 address to verify
 DWORD g_hookCapture0018F59C;
-// 0x0018f5a0
+// R5 address to verify
 DWORD g_hookCapture0018F5A0;
-// 0x0018f5e4
+// R5 address to verify
 DWORD g_hookCapture0018F5E4;
-// 0x0018f658
+// R5 address to verify
 DWORD g_hookCapture0018F658;
-// 0x0018f65c
+// R5 address to verify
 DWORD g_hookCapture0018F65C;
-// 0x0018f660
+// R5 address to verify
 DWORD g_hookCapture0018F660;
-// 0x0018e878
+// R5 address to verify
 CMatrix g_hookAimOffsetMatrix;
-// 0x0018ead8
+// R5 address to verify
 CMatrix g_hookMountedMatrix;
-// 0x00151ad4
+// R5 address to verify
 DWORD g_hookPatchOverride151AD4[3] = {0x0, 0x0, 0x41700000};
-// 0x00151ae0
+// R5 address to verify
 BYTE g_hookRestore5543C0[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
-// 0x00151af8
+// R5 address to verify
 WORD g_hookRestore5543DC = 0x4774;
-// 0x0018e548
+// R5 address to verify
 DWORD g_hookCapture0018E548;
-// 0x0018e54c
+// R5 address to verify
 DWORD g_hookCapture0018E54C;
-// 0x0018e7e4
+// R5 address to verify
 DWORD g_hookCapture0018E7E4;
-// 0x0018e7e8
+// R5 address to verify
 DWORD g_hookCapture0018E7E8;
-// 0x0018e7ec
+// R5 address to verify
 DWORD g_hookCapture0018E7EC;
-// 0x0018e80c
+// R5 address to verify
 DWORD g_hookCapture0018E80C;
-// 0x0018e92c
+// R5 address to verify
 DWORD g_hookCapture0018E92C;
-// 0x0018eaac
+// R5 address to verify
 DWORD g_hookCapture0018EAAC;
-// 0x0018eb74
+// R5 address to verify
 DWORD g_hookCapture0018EB74;
-// 0x0018f338
+// R5 address to verify
 DWORD g_hookCapture0018F338;
-// 0x0018f344
+// R5 address to verify
 DWORD g_hookCapture0018F344;
-// 0x0018f348
+// R5 address to verify
 DWORD g_hookCapture0018F348;
-// 0x0018f358
+// R5 address to verify
 DWORD g_hookCapture0018F358;
-// 0x0018f35c
+// R5 address to verify
 DWORD g_hookCapture0018F35C;
-// 0x0018f364
+// R5 address to verify
 DWORD g_hookCapture0018F364;
-// 0x0018f380
+// R5 address to verify
 DWORD g_hookCapture0018F380;
-// 0x0018f48c
+// R5 address to verify
 DWORD g_hookCapture0018F48C;
-// 0x0018f490
+// R5 address to verify
 DWORD g_hookCapture0018F490;
-// 0x0018f608
+// R5 address to verify
 DWORD g_hookCapture0018F608;
-// 0x0018f60c
+// R5 address to verify
 DWORD g_hookCapture0018F60C;
-// 0x0018f610
+// R5 address to verify
 DWORD g_hookCapture0018F610;
-// 0x002aca54
+// R5 address to verify
 DWORD g_clientRenderCaller;
-// 0x002aca58
+// R5 address to verify
 DWORD g_clientRenderState;
-// 0x002aca5c
+// R5 address to verify
 DWORD g_clientRenderValue;
-// 0x0018e550
+// R5 address to verify
 DWORD g_hookExitTask;
-// 0x0018e5d4
+// R5 address to verify
 CVehiclePool* g_hookEventVehiclePool;
-// 0x0018e568
+// R5 address to verify
 WORD g_hookEventVehicleId;
-// 0x0018e868
+// R5 address to verify
 CVehicle* g_hookExitVehicle;
-// 0x0018eb18
+// R5 address to verify
 CLocalPlayer* g_hookEventLocalPlayer;
-// 0x0018eb30
+// R5 address to verify
 CMatrix g_hookExitMatrix;
-// 0x00151aa0
+// R5 address to verify
 DWORD g_hookExitTaskArgument = 0xffffffff;
-// 0x0011c65c
+// 0x000ea634
 const float g_hookTrainExitOffset = 2.5f;
-// 0x0018e5bc
+// R5 address to verify
 DWORD g_hookQuitDeadline;
-// 0x0018f538
+// R5 address to verify
 DWORD g_hookDamageResponse;
-// 0x0018f53c
+// R5 address to verify
 DWORD g_hookDamagePed;
-// 0x0018e8c0
+// R5 address to verify
 DWORD g_hookPedControlField540;
-// 0x0018f378
+// R5 address to verify
 CPlayerPool* g_hookFaultPlayerPool;
-// 0x00151970
+// R5 address to verify
 WORD g_hookFaultPlayerId = 0xffff;
-// 0x0018e824
+// R5 address to verify
 CRemotePlayer* g_hookFaultRemotePlayer;
-// 0x00151a70
+// R5 address to verify
 const BYTE g_hookPedRestoreA[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
-// 0x00151a88
+// R5 address to verify
 const BYTE g_hookPedRestoreB[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
-// 0x00151a90
+// R5 address to verify
 const BYTE g_hookPedRemoteRestore[5] = {0xe8, 0x17, 0x88, 0xff, 0xff};
-// 0x0011ebcc
+// 0x000ecad4
 const char g_hookPedExceptionLabel[10] = "playerped";
-// 0x0011ebac
+// 0x000ecab4
 const char g_hookPedRemovedMessage[32] = "Removed player %u due to error.";
 
 // GTA CWeather::Update adapter. No native caller has been established.
-// 0x0018f504
+// R5 address to verify
 DWORD g_hookHudScaleX;
-// 0x0018f690
+// R5 address to verify
 DWORD g_hookContactThis;
-// 0x0018e81c
+// R5 address to verify
 CVehicle* g_hookEnterVehicle;
-// 0x0011ebe4
+// 0x000ecaec
 const char g_hookPedSayFormat[] = "CPed::Say(%u,%u,%f,%u,%u,%u)";
-// 0x002aca50
+// R5 address to verify
 DWORD g_clientPreviousRenderState;
-// 0x0018f4a8
+// R5 address to verify
 DWORD g_hookIgnoreNextExit;
 
-// 0x000a5b80
+// R5 address to verify
 __declspec(naked) void GameUpdateWeather()
 {
     // clang-format off
@@ -532,7 +532,7 @@ __declspec(naked) void GameUpdateWeather()
     // clang-format on
 }
 
-// 0x000a5bf0
+// R5 address to verify
 __declspec(naked) void GameHook_000a5bf0()
 {
     // clang-format off
@@ -552,14 +552,14 @@ __declspec(naked) void GameHook_000a5bf0()
     // clang-format on
 }
 
-// 0x000a6d30
+// 0x000a6ff0
 void GameInstallModelInfoHook()
 {
     GameInstallHook(0x4087ea, (DWORD)GameHook_000a5bf0, 0x4087d7, g_gameCustomModelHookJump, 6);
 }
 
 // Raw installed callback: EAX returns the preview-ped backing storage.
-// 0x000a3ec0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3ec0()
 {
     // clang-format off
@@ -570,7 +570,7 @@ __declspec(naked) void GameHook_000a3ec0()
     // clang-format on
 }
 
-// 0x000a5d80
+// 0x000a6040
 void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size)
 {
     DWORD oldProtect, ignored;
@@ -582,7 +582,7 @@ void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* j
     VirtualProtect((void*)address, size, oldProtect, &ignored);
 }
 
-// 0x000a5e30
+// 0x000a60f0
 void GamePrepareHooks()
 {
     DWORD local_8;
@@ -628,7 +628,7 @@ void GamePrepareHooks()
     return;
 }
 
-// 0x000a6020
+// 0x000a62e0
 void GameInstallHooks()
 {
     DWORD local_8;
@@ -884,7 +884,7 @@ void GameInstallHooks()
 }
 
 // Yield before entering the original game update routine.
-// 0x000a2200
+// R5 address to verify
 __declspec(naked) void GameHook_000a2200()
 {
     // clang-format off
@@ -895,7 +895,7 @@ __declspec(naked) void GameHook_000a2200()
     // clang-format on
 }
 // The original argument remains on the caller's stack; Get consumes its copy.
-// 0x000a37a0
+// R5 address to verify
 __declspec(naked) void GameHook_000a37a0()
 {
     // clang-format off
@@ -908,7 +908,7 @@ __declspec(naked) void GameHook_000a37a0()
     // clang-format on
 }
 
-// 0x000a37c0
+// R5 address to verify
 __declspec(naked) void GameHook_000a37c0()
 {
     // clang-format off
@@ -924,10 +924,10 @@ __declspec(naked) void GameHook_000a37c0()
 }
 // clang-format off
 // Intentional native one-RET callback, not a replacement for an unknown body.
-// 0x000a3ac0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3ac0() { __asm ret }
 // clang-format on
-// 0x000a3ad0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3ad0()
 {
     // clang-format off
@@ -946,7 +946,7 @@ __declspec(naked) void GameHook_000a3ad0()
     // clang-format on
 }
 // Preserve the sign bit while replacing the remaining float bits by 1.0f.
-// 0x000a3b00
+// R5 address to verify
 __declspec(naked) void GameHook_000a3b00()
 {
     // clang-format off
@@ -958,7 +958,7 @@ __declspec(naked) void GameHook_000a3b00()
     // clang-format on
 }
 // The non-null branch continues after GTA's original PUSH EDI prologue.
-// 0x000a3b20
+// 0x000a3dc0
 __declspec(naked) void GameHook_000a3b20()
 {
     // clang-format off
@@ -974,7 +974,7 @@ __declspec(naked) void GameHook_000a3b20()
     // clang-format on
 }
 
-// 0x000a3ce0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3ce0()
 {
     // clang-format off
@@ -1002,7 +1002,7 @@ __declspec(naked) void GameHook_000a3ce0()
     // clang-format on
 }
 // EBP is an incoming GTA frame pointer, not a compiler-owned C++ frame.
-// 0x000a3d20
+// R5 address to verify
 __declspec(naked) void GameHook_000a3d20()
 {
     // clang-format off
@@ -1020,7 +1020,7 @@ __declspec(naked) void GameHook_000a3d20()
     // clang-format on
 }
 
-// 0x000a3e50
+// R5 address to verify
 __declspec(naked) void GameHook_000a3e50()
 {
     // clang-format off
@@ -1039,7 +1039,7 @@ __declspec(naked) void GameHook_000a3e50()
     // clang-format on
 }
 
-// 0x000a4190
+// R5 address to verify
 __declspec(naked) void GameHook_000a4190()
 {
     // clang-format off
@@ -1066,7 +1066,7 @@ __declspec(naked) void GameHook_000a4190()
     // clang-format on
 }
 // Preserve the native sticky allocator selection and four POP EBX operations.
-// 0x000a4280
+// R5 address to verify
 __declspec(naked) void GameHook_000a4280()
 {
     // clang-format off
@@ -1094,11 +1094,11 @@ __declspec(naked) void GameHook_000a4280()
     // clang-format on
 }
 // clang-format off
-// 0x000a42c0
+// R5 address to verify
 __declspec(naked) void GameHook_000a42c0() { __asm { mov g_hookSavedEsi,esi
         ret } }
 // clang-format on
-// 0x000a4850
+// R5 address to verify
 __declspec(naked) void GameHook_000a4850()
 {
     // clang-format off
@@ -1127,7 +1127,7 @@ __declspec(naked) void GameHook_000a4850()
     // clang-format on
 }
 
-// 0x000a4960
+// R5 address to verify
 __declspec(naked) void GameHook_000a4960()
 {
     // clang-format off
@@ -1158,7 +1158,7 @@ __declspec(naked) void GameHook_000a4960()
     // clang-format on
 }
 
-// 0x000a5150
+// R5 address to verify
 __declspec(naked) void GameHook_000a5150()
 {
     // clang-format off
@@ -1172,7 +1172,7 @@ __declspec(naked) void GameHook_000a5150()
     // clang-format on
 }
 
-// 0x000a5850
+// R5 address to verify
 __declspec(naked) void GameHook_000a5850()
 {
     // clang-format off
@@ -1210,7 +1210,7 @@ __declspec(naked) void GameHook_000a5d20()
 
 // The comparison and repeated division retain x87 precision until the final
 // float store. A rounded float ratio changes the native 16:10 boundary.
-// 0x000a2220
+// R5 address to verify
 void GamePrepareHudDraw()
 {
     g_hookHudScaleX = *(DWORD*)0x859520;
@@ -1239,7 +1239,7 @@ void GamePrepareHudDraw()
     }
 }
 
-// 0x000c5400
+// 0x000c3d30
 void GameSetupD3DFog(DWORD enabled)
 {
     if (g_hookDisableFog)
@@ -1252,7 +1252,7 @@ void GameSetupD3DFog(DWORD enabled)
     }
 }
 
-// 0x000a22c0
+// R5 address to verify
 __declspec(naked) void GameHook_000a22c0()
 {
     // clang-format off
@@ -1273,7 +1273,7 @@ __declspec(naked) void GameHook_000a22c0()
     // clang-format on
 }
 
-// 0x000a29d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a29d0()
 {
     // clang-format off
@@ -1346,7 +1346,7 @@ __declspec(naked) void GameHook_000a29d0()
 }
 // Original thiscall consumes one stack argument and restores only the status
 // byte it saved, leaving the GTA callee's other results intact.
-// 0x000a33c0
+// R5 address to verify
 __declspec(naked) void GameHook_000a33c0()
 {
     // clang-format off
@@ -1382,7 +1382,7 @@ __declspec(naked) void GameHook_000a33c0()
     // clang-format on
 }
 
-// 0x000a3b90
+// R5 address to verify
 __declspec(naked) void GameHook_000a3b90()
 {
     // clang-format off
@@ -1411,7 +1411,7 @@ __declspec(naked) void GameHook_000a3b90()
     // clang-format on
 }
 
-// 0x000a3f30
+// R5 address to verify
 __declspec(naked) void GameHook_000a3f30()
 {
     // clang-format off
@@ -1458,7 +1458,7 @@ __declspec(naked) void GameHook_000a3f30()
     // clang-format on
 }
 
-// 0x000a3fe0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3fe0()
 {
     // clang-format off
@@ -1509,7 +1509,7 @@ __declspec(naked) void GameHook_000a3fe0()
     // clang-format on
 }
 
-// 0x000a47d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a47d0()
 {
     // clang-format off
@@ -1554,7 +1554,7 @@ __declspec(naked) void GameHook_000a47d0()
     // clang-format on
 }
 
-// 0x000a48c0
+// R5 address to verify
 __declspec(naked) void GameHook_000a48c0()
 {
     // clang-format off
@@ -1607,10 +1607,10 @@ __declspec(naked) void GameHook_000a48c0()
     // clang-format on
 }
 
-// 0x0018f514
+// R5 address to verify
 
 // Raw GTA entry ABIs: preserve live registers and native CALL/JMP/RET behavior.
-// 0x000a22f0
+// R5 address to verify
 __declspec(naked) void GameHook_000a22f0()
 {
     // clang-format off
@@ -1658,7 +1658,7 @@ __declspec(naked) void GameHook_000a22f0()
     // clang-format on
 }
 
-// 0x000a2370
+// R5 address to verify
 __declspec(naked) void GameHook_000a2370()
 {
     // clang-format off
@@ -1681,7 +1681,7 @@ __declspec(naked) void GameHook_000a2370()
     // clang-format on
 }
 
-// 0x000a23a0
+// R5 address to verify
 __declspec(naked) void GameHook_000a23a0()
 {
     // clang-format off
@@ -1701,7 +1701,7 @@ __declspec(naked) void GameHook_000a23a0()
     // clang-format on
 }
 
-// 0x000a5b90
+// R5 address to verify
 __declspec(naked) void GameHook_000a5b90()
 {
     // clang-format off
@@ -1732,9 +1732,9 @@ __declspec(naked) void GameHook_000a5b90()
     // clang-format on
 }
 
-// 0x0018de44
+// 0x0014ffac
 
-// 0x000a23d0
+// 0x000a2660
 void GameHook_000a23d0()
 {
     if (g_pGame)
@@ -1806,7 +1806,7 @@ using KeyStuff::UpdateKeys;
 // Raw entry ABI: weapon ECX=ped; ped control ECX=this, [ESP+4]=ped;
 // vehicle ECX=vehicle. Vehicle control preserves PUSHAD registers.
 
-// 0x000b3f60
+// 0x000b4360
 BYTE __stdcall GameFindPlayerPedIndex(void* ped)
 {
     for (BYTE player = 0; player != 210; ++player)
@@ -1815,7 +1815,7 @@ BYTE __stdcall GameFindPlayerPedIndex(void* ped)
     return 0;
 }
 
-// 0x000b4410
+// R5 address to verify
 BOOL __stdcall GameIsTrainVehicle(void* vehicle)
 {
     if (vehicle)
@@ -1827,7 +1827,7 @@ BOOL __stdcall GameIsTrainVehicle(void* vehicle)
     return FALSE;
 }
 
-// 0x000b4460
+// 0x000b4860
 BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
 {
     if (!vehicle)
@@ -1840,7 +1840,7 @@ BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
     return driver && (*(DWORD*)(driver + 0x46c) & 0x100) ? TRUE : FALSE;
 }
 
-// 0x000a2ab0
+// R5 address to verify
 __declspec(naked) void GameHook_000a2ab0()
 {
     // clang-format off
@@ -1888,7 +1888,7 @@ __declspec(naked) void GameHook_000a2ab0()
     // clang-format on
 }
 
-// 0x000a2b50
+// R5 address to verify
 __declspec(naked) void GameHook_000a2b50()
 {
     // clang-format off
@@ -1986,7 +1986,7 @@ __declspec(naked) void GameHook_000a2b50()
     // clang-format on
 }
 
-// 0x000a2e70
+// R5 address to verify
 __declspec(naked) void GameHook_000a2e70()
 {
     // clang-format off
@@ -2335,7 +2335,7 @@ __declspec(naked) void GameHook_000a2e70()
     // clang-format on
 }
 // Retain the unrounded x87 threshold test and native argument cleanup.
-// 0x000b6490
+// 0x000b6950
 __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
 {
     // clang-format off
@@ -2400,7 +2400,7 @@ __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a5870
+// R5 address to verify
 __declspec(naked) void GameHook_000a5870()
 {
     // clang-format off
@@ -2447,7 +2447,7 @@ __declspec(naked) void GameHook_000a5870()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a5910
+// R5 address to verify
 __declspec(naked) void GameHook_000a5910()
 {
     // clang-format off
@@ -2494,7 +2494,7 @@ __declspec(naked) void GameHook_000a5910()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a59b0
+// R5 address to verify
 __declspec(naked) void GameHook_000a59b0()
 {
     // clang-format off
@@ -2541,7 +2541,7 @@ __declspec(naked) void GameHook_000a59b0()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a5a50
+// R5 address to verify
 __declspec(naked) void GameHook_000a5a50()
 {
     // clang-format off
@@ -2587,7 +2587,7 @@ __declspec(naked) void GameHook_000a5a50()
     // clang-format on
 }
 
-// 0x000a5820
+// R5 address to verify
 __declspec(naked) void GameHook_000a5820()
 {
     // clang-format off
@@ -2610,7 +2610,7 @@ __declspec(naked) void GameHook_000a5820()
     // clang-format on
 }
 
-// 0x000a5100
+// R5 address to verify
 __declspec(naked) void GameHook_000a5100()
 {
     // clang-format off
@@ -2643,7 +2643,7 @@ __declspec(naked) void GameHook_000a5100()
     // clang-format on
 }
 // Raw siren query returns AL. The one-shot path deliberately leaves upper EAX.
-// 0x000a5af0
+// R5 address to verify
 __declspec(naked) void GameHook_000a5af0()
 {
     // clang-format off
@@ -2695,7 +2695,7 @@ __declspec(naked) void GameHook_000a5af0()
     // clang-format on
 }
 
-// 0x000a3430
+// R5 address to verify
 BOOL GameNotifyEnterVehicle()
 {
     if (!g_pNetGame)
@@ -2743,7 +2743,7 @@ BOOL GameNotifyEnterVehicle()
     return TRUE;
 }
 
-// 0x000a3840
+// R5 address to verify
 WORD GameResolveDamagePlayer(void* entity)
 {
     if (!entity)
@@ -2777,7 +2777,7 @@ WORD GameResolveDamagePlayer(void* entity)
     return result;
 }
 
-// 0x000a38e0
+// R5 address to verify
 WORD GameResolveDamageActor(void* entity)
 {
     if (!entity)
@@ -2792,7 +2792,7 @@ struct GameDamageResponsePrefix
     float damage;
     DWORD bodyPart, weapon;
 };
-// 0x000a3910
+// R5 address to verify
 BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
 {
     void* local = GameFindLocalPed();
@@ -2853,7 +2853,7 @@ BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3c60
+// R5 address to verify
 __declspec(naked) void GameHook_000a3c60()
 {
     // clang-format off
@@ -2875,7 +2875,7 @@ __declspec(naked) void GameHook_000a3c60()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3c80
+// R5 address to verify
 __declspec(naked) void GameHook_000a3c80()
 {
     // clang-format off
@@ -2899,7 +2899,7 @@ __declspec(naked) void GameHook_000a3c80()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3ca0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3ca0()
 {
     // clang-format off
@@ -2929,7 +2929,7 @@ __declspec(naked) void GameHook_000a3ca0()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3d90
+// 0x000a4030
 __declspec(naked) void GameHook_000a3d90()
 {
     // clang-format off
@@ -2988,7 +2988,7 @@ __declspec(naked) void GameHook_000a3d90()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4770
+// R5 address to verify
 __declspec(naked) void GameHook_000a4770()
 {
     // clang-format off
@@ -3021,7 +3021,7 @@ __declspec(naked) void GameHook_000a4770()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a49d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a49d0()
 {
     // clang-format off
@@ -3077,7 +3077,7 @@ __declspec(naked) void GameHook_000a49d0()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4c30
+// R5 address to verify
 __declspec(naked) void GameHook_000a4c30()
 {
     // clang-format off
@@ -3113,7 +3113,7 @@ __declspec(naked) void GameHook_000a4c30()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4df0
+// R5 address to verify
 __declspec(naked) void GameHook_000a4df0()
 {
     // clang-format off
@@ -3141,7 +3141,7 @@ __declspec(naked) void GameHook_000a4df0()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4e30
+// R5 address to verify
 __declspec(naked) void GameHook_000a4e30()
 {
     // clang-format off
@@ -3169,7 +3169,7 @@ __declspec(naked) void GameHook_000a4e30()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4e70
+// 0x000a5110
 __declspec(naked) void GameHook_000a4e70()
 {
     // clang-format off
@@ -3258,7 +3258,7 @@ __declspec(naked) void GameHook_000a4e70()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// 0x000a42d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a42d0()
 {
     // clang-format off
@@ -3349,7 +3349,7 @@ __declspec(naked) void GameHook_000a42d0()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// 0x000a46b0
+// R5 address to verify
 __declspec(naked) void GameHook_000a46b0()
 {
     // clang-format off
@@ -3420,7 +3420,7 @@ __declspec(naked) void GameHook_000a46b0()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// 0x000a56b0
+// 0x000a5950
 __declspec(naked) void GameHook_000a56b0()
 {
     // clang-format off
@@ -3545,7 +3545,7 @@ __declspec(naked) void GameHook_000a56b0()
     // clang-format on
 }
 
-// 0x000a4fa0
+// 0x000a5240
 BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
 {
     (void)unused;
@@ -3569,7 +3569,7 @@ BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
     return net->pools->players->GetPlayer(id)->nativeState[0x19] == team ? TRUE : FALSE;
 }
 
-// 0x000a5090
+// R5 address to verify
 __declspec(naked) void GameHook_000a5090()
 {
     // clang-format off
@@ -3607,7 +3607,7 @@ __declspec(naked) void GameHook_000a5090()
     // clang-format on
 }
 
-// 0x000a5170
+// 0x000a5410
 void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target, const CVector* collision, void** entity)
 {
     (void)target;
@@ -3656,7 +3656,7 @@ void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target,
     g_pGame->GetPlayerPed()->SetBulletData(&g_hookBulletHitData);
 }
 
-// 0x000a5540
+// R5 address to verify
 __declspec(naked) void GameHook_000a5540()
 {
     // clang-format off
@@ -3719,7 +3719,7 @@ __declspec(naked) void GameHook_000a5540()
     // clang-format on
 }
 
-// 0x000a5600
+// R5 address to verify
 __declspec(naked) void GameHook_000a5600()
 {
     // clang-format off
@@ -3750,7 +3750,7 @@ __declspec(naked) void GameHook_000a5600()
     // clang-format on
 }
 
-// 0x000a5650
+// 0x000a58f0
 __declspec(naked) void GameHook_000a5650()
 {
     // clang-format off
@@ -3785,7 +3785,7 @@ __declspec(naked) void GameHook_000a5650()
     // clang-format on
 }
 
-// 0x000a5360
+// R5 address to verify
 __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* collision, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
                                                    DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
 {
@@ -3945,7 +3945,7 @@ __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVecto
 }
 
 // Native leaves the cache published during the hooked raster-destroy call.
-// 0x000a4200
+// 0x000a44a0
 void GameReleaseCachedRasterBuffer()
 {
     DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
@@ -3954,7 +3954,7 @@ void GameReleaseCachedRasterBuffer()
     g_hookCachedBuffer = 0;
 }
 
-// 0x000a2690
+// 0x000a2920
 void GameDisablePedRemoteCall()
 {
     // GTA SA virtual address: five-byte call site; page remains writable.
@@ -3963,7 +3963,7 @@ void GameDisablePedRemoteCall()
     *(BYTE*)0x5e92f8 = 0x90;
 }
 
-// 0x000a26b0
+// R5 address to verify
 void GameRestorePedRemoteCall()
 {
     // Native restore does not call VirtualProtect or flush the instruction cache.
@@ -3971,7 +3971,7 @@ void GameRestorePedRemoteCall()
     *(BYTE*)0x5e92f8 = g_hookPedRemoteRestore[4];
 }
 
-// 0x000a5d40
+// R5 address to verify
 void GameWriteProtectedDword(DWORD address, DWORD value)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -3982,7 +3982,7 @@ void GameWriteProtectedDword(DWORD address, DWORD value)
 }
 
 // Opcode byte is passed through without restricting it to CALL/JMP.
-// 0x000a5df0
+// R5 address to verify
 void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -3993,7 +3993,7 @@ void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
     protect((void*)address, 5, oldProtection, &ignoredProtection);
 }
 
-// 0x000a22a0
+// R5 address to verify
 __declspec(naked) void GameRestoreHudDraw()
 {
     // clang-format off
@@ -4007,7 +4007,7 @@ __declspec(naked) void GameRestoreHudDraw()
     // clang-format on
 }
 
-// 0x000a2630
+// R5 address to verify
 __declspec(naked) void GameDisablePedControlCalls()
 {
     // clang-format off
@@ -4025,7 +4025,7 @@ __declspec(naked) void GameDisablePedControlCalls()
     // clang-format on
 }
 
-// 0x000a2650
+// R5 address to verify
 __declspec(naked) void GameRestorePedControlCalls()
 {
     // clang-format off
@@ -4045,7 +4045,7 @@ __declspec(naked) void GameRestorePedControlCalls()
     // clang-format on
 }
 
-// 0x000a3780
+// R5 address to verify
 __declspec(naked) void GameHook_000a3780()
 {
     // clang-format off
@@ -4064,7 +4064,7 @@ __declspec(naked) void GameHook_000a3780()
     // clang-format on
 }
 
-// 0x000a37e0
+// R5 address to verify
 __declspec(naked) void GameHook_000a37e0()
 {
     // clang-format off
@@ -4078,7 +4078,7 @@ __declspec(naked) void GameHook_000a37e0()
     // clang-format on
 }
 
-// 0x000a3b40
+// R5 address to verify
 __declspec(naked) void GameHook_000a3b40()
 {
     // clang-format off
@@ -4095,7 +4095,7 @@ __declspec(naked) void GameHook_000a3b40()
     // clang-format on
 }
 
-// 0x000a3d50
+// R5 address to verify
 __declspec(naked) void GameHook_000a3d50()
 {
     // clang-format off
@@ -4114,7 +4114,7 @@ __declspec(naked) void GameHook_000a3d50()
     // clang-format on
 }
 
-// 0x000a3d70
+// R5 address to verify
 __declspec(naked) void GameHook_000a3d70()
 {
     // clang-format off
@@ -4131,7 +4131,7 @@ __declspec(naked) void GameHook_000a3d70()
     // clang-format on
 }
 
-// 0x000a3e40
+// R5 address to verify
 __declspec(naked) void GameHook_000a3e40()
 {
     // clang-format off
@@ -4144,7 +4144,7 @@ __declspec(naked) void GameHook_000a3e40()
     // clang-format on
 }
 
-// 0x000a4240
+// R5 address to verify
 __declspec(naked) void* GameAllocateHookBuffer()
 {
     // clang-format off
@@ -4171,7 +4171,7 @@ __declspec(naked) void* GameAllocateHookBuffer()
     // clang-format on
 }
 
-// 0x000a4c10
+// R5 address to verify
 __declspec(naked) void GameHook_000a4c10()
 {
     // clang-format off
@@ -4193,7 +4193,7 @@ __declspec(naked) void GameHook_000a4c10()
     // clang-format on
 }
 
-// 0x000a4c90
+// R5 address to verify
 __declspec(naked) void GameHook_000a4c90()
 {
     // clang-format off
@@ -4210,7 +4210,7 @@ __declspec(naked) void GameHook_000a4c90()
     // clang-format on
 }
 
-// 0x000a4cb0
+// R5 address to verify
 __declspec(naked) void GameHook_000a4cb0()
 {
     // clang-format off
@@ -4223,7 +4223,7 @@ __declspec(naked) void GameHook_000a4cb0()
     // clang-format on
 }
 
-// 0x000a4170
+// R5 address to verify
 __declspec(naked) void GameHook_000a4170()
 {
     // clang-format off
@@ -4238,7 +4238,7 @@ __declspec(naked) void GameHook_000a4170()
     // clang-format on
 }
 
-// 0x000a48a0
+// R5 address to verify
 __declspec(naked) void GameHook_000a48a0()
 {
     // clang-format off
@@ -4254,7 +4254,7 @@ __declspec(naked) void GameHook_000a48a0()
     // clang-format on
 }
 
-// 0x000a2cd0
+// R5 address to verify
 __declspec(naked) void GameHook_000a2cd0()
 {
     // clang-format off
@@ -4282,7 +4282,7 @@ __declspec(naked) void GameHook_000a2cd0()
     // clang-format on
 }
 
-// 0x000a3b60
+// R5 address to verify
 __declspec(naked) void GameHook_000a3b60()
 {
     // clang-format off
@@ -4303,7 +4303,7 @@ __declspec(naked) void GameHook_000a3b60()
     // clang-format on
 }
 
-// 0x000a3bc0
+// R5 address to verify
 __declspec(naked) void GameHook_000a3bc0()
 {
     // clang-format off
@@ -4353,7 +4353,7 @@ __declspec(naked) void GameHook_000a3bc0()
     // clang-format on
 }
 
-// 0x000a3e70
+// R5 address to verify
 __declspec(naked) void GameHook_000a3e70()
 {
     // clang-format off
@@ -4380,7 +4380,7 @@ __declspec(naked) void GameHook_000a3e70()
     // clang-format on
 }
 
-// 0x000a40a0
+// R5 address to verify
 __declspec(naked) void GameHook_000a40a0()
 {
     // clang-format off
@@ -4415,7 +4415,7 @@ __declspec(naked) void GameHook_000a40a0()
     // clang-format on
 }
 
-// 0x000a4110
+// R5 address to verify
 __declspec(naked) void GameHook_000a4110()
 {
     // clang-format off
@@ -4446,7 +4446,7 @@ __declspec(naked) void GameHook_000a4110()
     // clang-format on
 }
 
-// 0x000a43d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a43d0()
 {
     // clang-format off
@@ -4489,7 +4489,7 @@ __declspec(naked) void GameHook_000a43d0()
     // clang-format on
 }
 
-// 0x000a4450
+// R5 address to verify
 __declspec(naked) void GameHook_000a4450()
 {
     // clang-format off
@@ -4540,7 +4540,7 @@ __declspec(naked) void GameHook_000a4450()
     // clang-format on
 }
 
-// 0x000a4aa0
+// R5 address to verify
 __declspec(naked) void GameHook_000a4aa0()
 {
     // clang-format off
@@ -4576,7 +4576,7 @@ __declspec(naked) void GameHook_000a4aa0()
     // clang-format on
 }
 
-// 0x000a4b20
+// R5 address to verify
 __declspec(naked) void GameHook_000a4b20()
 {
     // clang-format off
@@ -4608,7 +4608,7 @@ __declspec(naked) void GameHook_000a4b20()
     // clang-format on
 }
 
-// 0x000a4b80
+// R5 address to verify
 __declspec(naked) void GameHook_000a4b80()
 {
     // clang-format off
@@ -4648,7 +4648,7 @@ __declspec(naked) void GameHook_000a4b80()
     // clang-format on
 }
 
-// 0x000a5290
+// R5 address to verify
 __declspec(naked) void GameHook_000a5290()
 {
     // clang-format off
@@ -4675,7 +4675,7 @@ __declspec(naked) void GameHook_000a5290()
     // clang-format on
 }
 
-// 0x000a52d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a52d0()
 {
     // clang-format off
@@ -4721,7 +4721,7 @@ __declspec(naked) void GameHook_000a52d0()
 
 // Additional native control/camera/patch callbacks and their shared aggregates.
 
-// 0x000a2d30
+// R5 address to verify
 __declspec(naked) void GameHook_000a2d30()
 {
     // clang-format off
@@ -4773,7 +4773,7 @@ __declspec(naked) void GameHook_000a2d30()
     // clang-format on
 }
 
-// 0x000a2de0
+// R5 address to verify
 __declspec(naked) void GameHook_000a2de0()
 {
     // clang-format off
@@ -4817,7 +4817,7 @@ __declspec(naked) void GameHook_000a2de0()
     // clang-format on
 }
 
-// 0x000a4510
+// R5 address to verify
 __declspec(naked) void GameHook_000a4510()
 {
     // clang-format off
@@ -4907,7 +4907,7 @@ __declspec(naked) void GameHook_000a4510()
     // clang-format on
 }
 
-// 0x000a4680
+// R5 address to verify
 __declspec(naked) void GameHook_000a4680()
 {
     // clang-format off
@@ -4926,7 +4926,7 @@ __declspec(naked) void GameHook_000a4680()
     // clang-format on
 }
 
-// 0x000a4cc0
+// R5 address to verify
 __declspec(naked) void GameHook_000a4cc0()
 {
     // clang-format off
@@ -5008,7 +5008,7 @@ __declspec(naked) void GameHook_000a4cc0()
     // clang-format on
 }
 
-// 0x000c54c0
+// R5 address to verify
 void ClientInstallRenderStateHook()
 {
     // GTA SA VA: 0x00c97b24; capture the engine table once, as native does.
@@ -5017,7 +5017,7 @@ void ClientInstallRenderStateHook()
     *(DWORD*)(table + 0x20) = (DWORD)ClientRenderStateHook;
 }
 
-// 0x000c5450
+// R5 address to verify
 __declspec(naked) void ClientRenderStateHook()
 {
     // clang-format off
@@ -5052,7 +5052,7 @@ __declspec(naked) void ClientRenderStateHook()
 }
 
 // Raw GTA task ABI: continuation jumps and original constructor stack words.
-// 0x000a3580
+// R5 address to verify
 __declspec(naked) void GameHook_000a3580()
 {
     // clang-format off
@@ -5092,7 +5092,7 @@ __declspec(naked) void GameHook_000a3580()
     // clang-format on
 }
 
-// 0x000a35e0
+// R5 address to verify
 __declspec(naked) void GameHook_000a35e0()
 {
     // clang-format off
@@ -5185,7 +5185,7 @@ __declspec(naked) void GameHook_000a35e0()
     // clang-format on
 }
 
-// 0x000a3a70
+// R5 address to verify
 __declspec(naked) void GameHook_000a3a70()
 {
     // clang-format off
@@ -5217,7 +5217,7 @@ __declspec(naked) void GameHook_000a3a70()
     // clang-format on
 }
 // Native does not return. Preserve its unsigned deadline comparison/wrap behavior.
-// 0x000a3800
+// R5 address to verify
 __declspec(naked) void GameHook_000a3800()
 {
     // clang-format off
@@ -5244,7 +5244,7 @@ __declspec(naked) void GameHook_000a3800()
     // clang-format on
 }
 
-// 0x000a2530
+// 0x000a27c0
 void GameRunPedControlBackend()
 {
     __try
@@ -5359,7 +5359,7 @@ void GameProcessPedControlBody()
     }
 }
 // Raw entry: ECX=GTA ped; original preserves all PUSHAD registers and returns.
-// 0x000a26d0
+// R5 address to verify
 __declspec(naked) void GameHook_000a26d0()
 {
     // clang-format off

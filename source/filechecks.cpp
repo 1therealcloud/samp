@@ -6,28 +6,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x0014033c
+// 0x00102354
 DWORD g_archiveTrackedNameDigests[3][5] = {{0x11c714fd, 0x0a46694e, 0x7aec2920, 0x2100e2e4, 0x94f7372e},
                                            {0x0b85a2ad, 0x344bdae1, 0xa19471d5, 0x7d49d3e9, 0x7dde6cbe},
                                            {0x7c425b89, 0xf67763c0, 0xa2e49f0e, 0x93ebf8d2, 0x0e842901}};
 
-// 0x00062b00
+// R5 address to verify
 char* GetSHA1Result(unsigned int* digest, char* buffer)
 {
     sprintf(buffer, "%08X%08X%08X%08X%08X", digest[4], digest[2], digest[3], digest[1], digest[0]);
     return buffer;
 }
 
-// 0x000635c0
+// 0x00063b40
 ArchiveNameSha1::ArchiveNameSha1()
 {
     Reset();
 }
 
-// 0x00063550
+// 0x00063ad0
 ArchiveNameSha1::~ArchiveNameSha1() {}
 
-// 0x00063560
+// 0x00063ae0
 void ArchiveNameSha1::Reset()
 {
     lengthLow = 0;
@@ -42,7 +42,7 @@ void ArchiveNameSha1::Reset()
     corrupted = false;
 }
 
-// 0x000635f0
+// 0x00063b70
 void ArchiveNameSha1::ProcessBlock()
 {
     DWORD words[80];
@@ -92,7 +92,7 @@ void ArchiveNameSha1::ProcessBlock()
     blockIndex = 0;
 }
 
-// 0x00063d30
+// 0x000642b0
 void ArchiveNameSha1::Input(const BYTE* data, DWORD length)
 {
     if (!length)
@@ -122,7 +122,7 @@ void ArchiveNameSha1::Input(const BYTE* data, DWORD length)
     while (length);
 }
 
-// 0x00063c20
+// 0x000641a0
 void ArchiveNameSha1::Pad()
 {
     DWORD previous = blockIndex;
@@ -146,7 +146,7 @@ void ArchiveNameSha1::Pad()
     ProcessBlock();
 }
 
-// 0x00063ce0
+// 0x00064260
 bool ArchiveNameSha1::Result(DWORD* digest)
 {
     if (corrupted)
@@ -161,7 +161,7 @@ bool ArchiveNameSha1::Result(DWORD* digest)
     return true;
 }
 
-// 0x00062a60
+// 0x00062fe0
 void ArchiveComputeNameDigest(const void* data, DWORD length, DWORD* digest)
 {
     ArchiveNameSha1 sha;
@@ -173,7 +173,7 @@ void ArchiveComputeNameDigest(const void* data, DWORD length, DWORD* digest)
     }
 }
 
-// 0x00062500
+// 0x00062a80
 void ArchivePublishNameDigest(const DWORD* digest)
 {
     for (int entry = 0; entry < 3; entry++)
@@ -186,7 +186,7 @@ void ArchivePublishNameDigest(const DWORD* digest)
     }
 }
 
-// 0x00062950
+// 0x00062ed0
 void ArchiveComputeFileDigest(const char* filename, DWORD* digest)
 {
     ArchiveNameSha1 sha;
@@ -209,25 +209,25 @@ void ArchiveComputeFileDigest(const char* filename, DWORD* digest)
     }
 }
 
-// 0x00063da0
+// 0x00064320
 void ArchiveNameSha1::Input(const char* data, DWORD length)
 {
     Input((const BYTE*)data, length);
 }
 
-// 0x00063db0
+// R5 address to verify
 void ArchiveNameSha1::Input(BYTE value)
 {
     Input(&value, 1);
 }
 
-// 0x00063dc0
+// R5 address to verify
 void ArchiveNameSha1::Input(char value)
 {
     Input((const BYTE*)&value, 1);
 }
 
-// 0x00063dd0
+// R5 address to verify
 ArchiveNameSha1& ArchiveNameSha1::operator<<(const char* text)
 {
     while (*text)
@@ -238,7 +238,7 @@ ArchiveNameSha1& ArchiveNameSha1::operator<<(const char* text)
     return *this;
 }
 
-// 0x00063e00
+// R5 address to verify
 ArchiveNameSha1& ArchiveNameSha1::operator<<(const BYTE* text)
 {
     while (*text)
@@ -249,21 +249,21 @@ ArchiveNameSha1& ArchiveNameSha1::operator<<(const BYTE* text)
     return *this;
 }
 
-// 0x00063e30
+// R5 address to verify
 ArchiveNameSha1& ArchiveNameSha1::operator<<(char value)
 {
     Input((const BYTE*)&value, 1);
     return *this;
 }
 
-// 0x00063e50
+// R5 address to verify
 ArchiveNameSha1& ArchiveNameSha1::operator<<(BYTE value)
 {
     Input(&value, 1);
     return *this;
 }
 
-// 0x000635a0
+// R5 address to verify
 DWORD ArchiveNameSha1::CircularShift(int bits, DWORD word)
 {
     DWORD amount = (DWORD)bits & 31;

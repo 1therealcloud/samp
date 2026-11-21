@@ -17,7 +17,7 @@
 #include <stdlib.h>
 // Native label text uses the CRT calloc/free entries.
 #include <string.h>
-// 0x0000e3c0
+// R5 address to verify
 DWORD CLabelPool::IsActive(WORD id)
 {
     if (id >= 2048)

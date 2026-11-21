@@ -11,27 +11,27 @@ struct RPCParameters;
 #pragma pack(push, 1)
 class CTextDrawPool
 {
-    // 0x0001ca30
+    // 0x0001cf70
     friend void ScrTextDrawSetString(RPCParameters* parameters);
     DWORD active[2304];
     CTextDraw* draws[2304];
 
 public:
-    // 0x000177d0
+    // R5 address to verify
     CTextDraw* Get(WORD id);
-    // 0x0001e260
+    // 0x0001e7a0
     CTextDrawPool();
-    // 0x0001e390
+    // 0x0001e8d0
     ~CTextDrawPool();
-    // 0x0001e2b0
+    // 0x0001e7f0
     void Delete(WORD id);
-    // 0x0001e3d0
+    // 0x0001e910
     CTextDraw* Create(WORD id, const TextDrawTransmit* info, const char* text);
-    // 0x0001e2f0
+    // 0x0001e830
     void Draw();
-    // 0x0001e330
+    // R5 address to verify
     void Native01E330();
-    // 0x0001e360
+    // R5 address to verify
     void OnLostDevice();
 };
 #pragma pack(pop)

@@ -14,36 +14,36 @@
 #include "net/vehiclepool.h"
 
 #include <string.h>
-// 0x002abe64
+// R5 address to verify
 void* g_vehicleTrainCursor;
-// 0x002abe68
+// R5 address to verify
 DWORD g_vehicleLastCreatedHandle;
-// 0x0011e33c
+// 0x000ec314
 const float g_vehicleCreationLift = 0.25f;
-// 0x0011f7e0
+// 0x000ed6dc
 const char g_vehicleBadCarriageWarning[29] = "Warning: bad train carriages";
-// 0x0011f800
+// 0x000ed6fc
 const char g_vehicleCreationWarning[42] = "Warning: couldn't create vehicle type: %u";
-// 0x0018f5dc
+// R5 address to verify
 DWORD g_vehicleDetachingTrailer;
 
 const float g_vehicleTrainSpeedMinimum = -100.0f;
-// 0x001181a4
+// 0x000e6114
 const float g_vehicleTrainSpeedMaximum = 100.0f;
-// 0x0011812c
+// 0x000e60a0
 const float g_vehicleMarkerDistance = 200.0f;
-// 0x0011f704
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleLockedCommand = {0x519, "ii"};
-// 0x0011f68c
+// R5 address to verify
 const Scripting::OpcodeInfo g_vehicleWreckedCommand = {0x119, "i"};
 
-// 0x0000e290
+// R5 address to verify
 void CVehicle::SetObjective(BYTE objective)
 {
     m_byteObjective = objective;
 }
 
-// 0x000b6e20
+// 0x000b72e0
 void CVehicle::SetColor(int primary, int secondary)
 {
     BYTE color = (BYTE)secondary;
@@ -57,7 +57,7 @@ void CVehicle::SetColor(int primary, int secondary)
     m_bColorChanged = TRUE;
 }
 
-// 0x000b8420
+// 0x000b88f0
 CVehicle::~CVehicle()
 {
     m_pGameVehicle = GamePoolVehicleGetAt(m_nHandle);
@@ -102,7 +102,7 @@ CVehicle::~CVehicle()
 }
 
 // Preserve base qualification and virtual dispatch to an existing trailer.
-// 0x000b8540
+// 0x000b8a10
 void CVehicle::Add()
 {
     if (!CEntity::DoesExist())
@@ -115,7 +115,7 @@ void CVehicle::Add()
 }
 
 // Trailer is removed before the qualified base vehicle removal.
-// 0x000b8570
+// 0x000b8a40
 void CVehicle::Remove()
 {
     if (CEntity::DoesExist())
@@ -128,7 +128,7 @@ void CVehicle::Remove()
 }
 
 // Preserve base construction, untouched early-return bytes and native global reloads.
-// 0x000b7f00
+// 0x000b83d0
 CVehicle::CVehicle(int model, float x, float y, float z, float rotation, DWORD keepLoaded, BOOL siren)
 {
     DWORD handle = 0;
@@ -261,7 +261,7 @@ initialized:
     memset(m_szLicensePlateText, 0, 33);
 }
 
-// 0x000b7940
+// 0x000b7e00
 BOOL CVehicle::IsRC()
 {
     if (!m_pGameVehicle)
@@ -272,13 +272,13 @@ BOOL CVehicle::IsRC()
     return model == 0x1b9 || model == 0x1d0 || model == 0x1d1 || model == 0x252 || model == 0x1f5 || model == 0x234;
 }
 
-// 0x000b7e60
+// 0x000b8330
 BOOL CVehicle::HasSiren()
 {
     return m_dwSiren != 0;
 }
 
-// 0x000b7e70
+// 0x000b8340
 BYTE CVehicle::GetMaxPassengers()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -286,19 +286,19 @@ BYTE CVehicle::GetMaxPassengers()
     return 0;
 }
 
-// 0x000b6de0
+// 0x000b72a0
 float CVehicle::GetHealth()
 {
     return m_pGameVehicle ? *(float*)((BYTE*)m_pGameVehicle + 0x4c0) : g_objectScaleLowerBound;
 }
 
-// 0x000b6ed0
+// 0x000b7390
 int CVehicle::GetSubtype()
 {
     return m_pGameVehicle ? GameGetVehicleSubtype(m_pGameVehicle) : 0;
 }
 
-// 0x000b6c00
+// 0x000b70c0
 void CVehicle::ResetPointers()
 {
     if (m_pGameVehicle)
@@ -308,7 +308,7 @@ void CVehicle::ResetPointers()
     }
 }
 
-// 0x000b6c20
+// 0x000b70e0
 BOOL CVehicle::HasDriver()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle)
@@ -320,7 +320,7 @@ BOOL CVehicle::HasDriver()
     return FALSE;
 }
 
-// 0x000b6c70
+// 0x000b7130
 BOOL CVehicle::IsOccupied()
 {
     if (m_pGameVehicle)
@@ -332,14 +332,14 @@ BOOL CVehicle::IsOccupied()
     return FALSE;
 }
 
-// 0x000b6e00
+// 0x000b72c0
 void CVehicle::SetHealth(float health)
 {
     if (m_pGameVehicle)
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x4c0) = *(DWORD*)&health;
 }
 
-// 0x000b6f30
+// 0x000b73f0
 BOOL CVehicle::DriverIsPlayerPed()
 {
     if (m_pGameVehicle)
@@ -351,7 +351,7 @@ BOOL CVehicle::DriverIsPlayerPed()
     return FALSE;
 }
 
-// 0x000b6f60
+// 0x000b7420
 BOOL CVehicle::HasPlayerPed()
 {
     if (m_pGameVehicle)
@@ -363,39 +363,39 @@ BOOL CVehicle::HasPlayerPed()
     return FALSE;
 }
 
-// 0x000b7080
+// 0x000b7540
 void CVehicle::EnableSiren(BYTE enabled)
 {
     BYTE* vehicle = (BYTE*)m_pGameVehicle;
     vehicle[0x42d] = (BYTE)((vehicle[0x42d] & 0x7f) | (enabled << 7));
 }
 
-// 0x000b70a0
+// 0x000b7560
 BOOL CVehicle::SirenEnabled()
 {
     return (BYTE)(*(BYTE*)((BYTE*)m_pGameVehicle + 0x42d) & 0x80) == 0x80;
 }
 
-// 0x000b70c0
+// 0x000b7580
 void CVehicle::SetBackendWord45c(WORD value)
 {
     *(WORD*)((BYTE*)m_pGameVehicle + 0x45c) = value;
 }
 
-// 0x000b71e0
+// 0x000b76a0
 void CVehicle::SetHydraThrusters(DWORD value)
 {
     if (m_pGameVehicle)
         *(DWORD*)((BYTE*)m_pGameVehicle + 0x86c) = value;
 }
 
-// 0x000b7200
+// 0x000b76c0
 DWORD CVehicle::GetHydraThrusters()
 {
     return m_pGameVehicle ? *(DWORD*)((BYTE*)m_pGameVehicle + 0x86c) : 0;
 }
 
-// 0x000b7420
+// 0x000b78e0
 float CVehicle::GetTrainSpeed()
 {
     if (!m_pGameVehicle)
@@ -404,7 +404,7 @@ float CVehicle::GetTrainSpeed()
     return *(float*)&speed;
 }
 
-// 0x000b76c0
+// 0x000b7b80
 DWORD CVehicle::GetPanelsDamage()
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -412,7 +412,7 @@ DWORD CVehicle::GetPanelsDamage()
     return 0;
 }
 
-// 0x000b76f0
+// 0x000b7bb0
 DWORD CVehicle::GetDoorsDamage()
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -420,7 +420,7 @@ DWORD CVehicle::GetDoorsDamage()
     return 0;
 }
 
-// 0x000b7720
+// 0x000b7be0
 BYTE CVehicle::GetLightsDamage()
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -428,13 +428,13 @@ BYTE CVehicle::GetLightsDamage()
     return 0;
 }
 
-// 0x000b77c0
+// 0x000b7c80
 void CVehicle::SetTrailer(CVehicle* trailer)
 {
     m_pTrailer = trailer;
 }
 
-// 0x000b7910
+// 0x000b7dd0
 BOOL CVehicle::IsTowtruck()
 {
     if (!m_pGameVehicle)
@@ -444,44 +444,44 @@ BOOL CVehicle::IsTowtruck()
     return FALSE;
 }
 
-// 0x000b7c70
+// 0x000b8140
 bool CVehicle::DoesExist()
 {
     return GamePoolVehicleGetAt(m_nHandle) != 0;
 }
 
-// 0x000b7d40
+// R5 address to verify
 void CVehicle::SetField50(DWORD value)
 {
     m_dwField50 = value;
 }
 
-// 0x000b7d50
+// R5 address to verify
 DWORD CVehicle::GetField50()
 {
     return m_dwField50;
 }
 
-// 0x000b7d60
+// R5 address to verify
 void CVehicle::SetField54(DWORD value)
 {
     m_dwField54 = value;
 }
 
-// 0x000b7d70
+// R5 address to verify
 DWORD CVehicle::GetField54()
 {
     return m_dwField54;
 }
 
-// 0x000b6bd0
+// 0x000b7090
 void CVehicle::ChangeInterior(int interior)
 {
     if (GamePoolVehicleGetAt(m_nHandle))
         Scripting::ProcessCommand(&g_vehicleChangeInteriorCommand, m_nHandle, interior);
 }
 
-// 0x000b6e70
+// 0x000b7330
 void CVehicle::UpdateColor()
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_bColorChanged && !m_bInModShop)
@@ -494,7 +494,7 @@ void CVehicle::UpdateColor()
     }
 }
 
-// 0x000b6ef0
+// 0x000b73b0
 DWORD CVehicle::IsSunk()
 {
     if (!m_pGameVehicle)
@@ -502,14 +502,14 @@ DWORD CVehicle::IsSunk()
     return Scripting::ProcessCommand(&g_vehicleIsSunkCommand, m_nHandle);
 }
 
-// 0x000b6fe0
+// 0x000b74a0
 BOOL CVehicle::HasTurret()
 {
     int model = ((CEntity*)this)->GetModelIndex();
     return model == 0x1b0 || model == 0x234 || model == 0x197 || model == 0x259;
 }
 
-// 0x000b7010
+// 0x000b74d0
 void CVehicle::SetBackendBytes1f6And514(BYTE value)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -525,7 +525,7 @@ void CVehicle::SetBackendBytes1f6And514(BYTE value)
     }
 }
 
-// 0x000b7380
+// 0x000b7840
 void CVehicle::Lock(BOOL locked)
 {
     if (locked)
@@ -540,7 +540,7 @@ void CVehicle::Lock(BOOL locked)
     }
 }
 
-// 0x000b73b0
+// 0x000b7870
 BOOL CVehicle::UpdateLastDrivenTime()
 {
     if (m_pGameVehicle && *(void**)((BYTE*)m_pGameVehicle + 0x460))
@@ -552,7 +552,7 @@ BOOL CVehicle::UpdateLastDrivenTime()
     return FALSE;
 }
 
-// 0x000b7750
+// 0x000b7c10
 void CVehicle::AttachTrailer()
 {
     CVehicle* trailer = m_pTrailer;
@@ -560,7 +560,7 @@ void CVehicle::AttachTrailer()
         Scripting::ProcessCommand(&g_vehicleAttachTrailerCommand, trailer->m_nHandle, m_nHandle);
 }
 
-// 0x000b7770
+// 0x000b7c30
 void CVehicle::DetachTrailer()
 {
     g_vehicleDetachingTrailer = 1;
@@ -571,7 +571,7 @@ void CVehicle::DetachTrailer()
     g_vehicleDetachingTrailer = 0;
 }
 
-// 0x000b7990
+// 0x000b7e50
 void CVehicle::EnableLights(BYTE enabled)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
@@ -589,7 +589,7 @@ void CVehicle::EnableLights(BYTE enabled)
     }
 }
 
-// 0x000b79f0
+// 0x000b7eb0
 BYTE CVehicle::GetBackendLightsDisabledFlag()
 {
     if (!m_pGameVehicle)
@@ -604,7 +604,7 @@ BYTE CVehicle::GetBackendLightsDisabledFlag()
     return 1;
 }
 
-// 0x000b7be0
+// 0x000b80b0
 BOOL CVehicle::RemoveComponent(WORD component)
 {
     if (!m_pGameVehicle)
@@ -618,7 +618,7 @@ BOOL CVehicle::RemoveComponent(WORD component)
     return TRUE;
 }
 
-// 0x000b7c20
+// 0x000b80f0
 void CVehicle::SetPaintjob(BYTE paintjob)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1 && paintjob <= 3)
@@ -627,26 +627,26 @@ void CVehicle::SetPaintjob(BYTE paintjob)
     }
 }
 
-// 0x000b7c80
+// 0x000b8150
 void CVehicle::SetLicensePlateText(const char* text)
 {
     strncpy(m_szLicensePlateText, text, 32);
 }
 
-// 0x000b7ca0
+// 0x000b8170
 void CVehicle::SetRotation(float angle)
 {
     if (GamePoolVehicleGetAt(m_nHandle))
         Scripting::ProcessCommand(&g_vehicleRotationCommand, m_nHandle, (double)angle);
 }
 
-// 0x000b7de0
+// 0x000b82b0
 float CVehicle::GetBackendFloat648()
 {
     return m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) ? *(float*)((BYTE*)m_pGameVehicle + 0x648) : g_objectScaleLowerBound;
 }
 
-// 0x000b7ea0
+// 0x000b8370
 void CVehicle::SetWindowOpenFlag(BYTE window)
 {
     if (m_pGameVehicle)
@@ -665,7 +665,7 @@ void CVehicle::SetWindowOpenFlag(BYTE window)
     }
 }
 
-// 0x000b7ed0
+// 0x000b83a0
 void CVehicle::ClearWindowOpenFlag(BYTE window)
 {
     if (m_pGameVehicle)
@@ -684,9 +684,9 @@ void CVehicle::ClearWindowOpenFlag(BYTE window)
     }
 }
 
-// 0x001181a0
+// 0x000e6110
 
-// 0x000b6cd0
+// 0x000b7190
 void CVehicle::SetInvulnerable(BOOL enabled)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && *(DWORD*)m_pGameVehicle != 0x863c40)
@@ -706,7 +706,7 @@ void CVehicle::SetInvulnerable(BOOL enabled)
     }
 }
 
-// 0x000b70e0
+// 0x000b75a0
 void CVehicle::SetLandingGearState(int state)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 5)
@@ -747,7 +747,7 @@ void CVehicle::SetLandingGearState(int state)
     }
 }
 
-// 0x000b7170
+// 0x000b7630
 BOOL CVehicle::GetLandingGearState()
 {
     if (!m_pGameVehicle)
@@ -767,7 +767,7 @@ BOOL CVehicle::GetLandingGearState()
     return TRUE;
 }
 
-// 0x000b7480
+// 0x000b7940
 void CVehicle::SetTires(BYTE tires)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -805,7 +805,7 @@ void CVehicle::SetTires(BYTE tires)
     }
 }
 
-// 0x000b7570
+// 0x000b7a30
 BYTE CVehicle::GetTires()
 {
     BYTE result = 0;
@@ -838,7 +838,7 @@ BYTE CVehicle::GetTires()
     return result;
 }
 
-// 0x000b7600
+// 0x000b7ac0
 void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
 {
     if (!m_pGameVehicle)
@@ -869,7 +869,7 @@ void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
     // clang-format on
 }
 
-// 0x000b78b0
+// 0x000b7d70
 BOOL CVehicle::IsTrailer()
 {
     if (!m_pGameVehicle)
@@ -880,7 +880,7 @@ BOOL CVehicle::IsTrailer()
     return model == 0x1b3 || model == 0x1c2 || model == 0x248 || model == 0x24f || model == 0x25e || model == 0x25f || model == 0x260 || model == 0x262 || model == 0x263;
 }
 
-// 0x000b7d80
+// 0x000b8250
 void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
@@ -903,7 +903,7 @@ void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
     }
 }
 
-// 0x000b7440
+// 0x000b7900
 void CVehicle::SetTrainSpeed(float speed)
 {
     // The native bounds checks allow unordered inputs.
@@ -911,7 +911,7 @@ void CVehicle::SetTrainSpeed(float speed)
         *(float*)((BYTE*)m_pGameVehicle + 0x5a4) = speed;
 }
 
-// 0x000b7e10
+// 0x000b82e0
 void CVehicle::SetBackendFloat64c(float speed)
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
@@ -920,7 +920,7 @@ void CVehicle::SetBackendFloat64c(float speed)
         *(float*)((BYTE*)m_pGameVehicle + 0x64c) = speed;
 }
 
-// 0x000b77d0
+// 0x000b7c90
 CVehicle* CVehicle::GetTrailer()
 {
     if (!m_pGameVehicle)
@@ -937,7 +937,7 @@ CVehicle* CVehicle::GetTrailer()
     return 0;
 }
 
-// 0x000b7830
+// 0x000b7cf0
 CVehicle* CVehicle::GetTractor()
 {
     if (!m_pGameVehicle)
@@ -957,7 +957,7 @@ CVehicle* CVehicle::GetTractor()
     return 0;
 }
 
-// 0x000b7a20
+// 0x000b7ee0
 void CVehicle::RemovePassengers()
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
@@ -983,7 +983,7 @@ void CVehicle::RemovePassengers()
     }
 }
 
-// 0x000b7b00
+// 0x000b7fc0
 BOOL CVehicle::AddComponent(WORD component)
 {
     DWORD result = (DWORD)this;
@@ -1011,7 +1011,7 @@ BOOL CVehicle::AddComponent(WORD component)
 }
 
 // Raw wrapper views do not establish the full allocation extent.
-// 0x000b7220
+// 0x000b76e0
 void CVehicle::ProcessMarkers()
 {
     if (!m_pGameVehicle)
@@ -1056,7 +1056,7 @@ void CVehicle::ProcessMarkers()
 
 // GTA SA backend: 0x004FCF40, ECX=original backend+138.
 // GTA SA shared word 0x00B6B990 is saved only around that backend call.
-// 0x000b85a0
+// 0x000b8a70
 void CVehicle::EnableEngine(BOOL enabled)
 {
     if (!m_pGameVehicle)
@@ -1092,7 +1092,7 @@ void CVehicle::EnableEngine(BOOL enabled)
 }
 
 // Raw GTA driver interface, no complete ped/vtable allocation is inferred.
-// 0x000b3eb0
+// 0x000b42b0
 void __stdcall GameRemoveDriverByState598(void* vehicle)
 {
     if (!vehicle)
@@ -1114,7 +1114,7 @@ void __stdcall GameRemoveDriverByState598(void* vehicle)
     *(void**)((BYTE*)vehicle + 0x460) = 0;
 }
 
-// 0x000b7cd0
+// 0x000b81a0
 void CVehicle::ConstructLicensePlate()
 {
     if (!m_pLicensePlateTexture)
@@ -1125,7 +1125,7 @@ void CVehicle::ConstructLicensePlate()
     }
 }
 
-// 0x000b7d20
+// 0x000b81f0
 void CVehicle::ShutdownLicensePlate()
 {
     IDirect3DTexture9** texture = &m_pLicensePlateTexture;
@@ -1136,7 +1136,7 @@ void CVehicle::ShutdownLicensePlate()
     }
 }
 
-// 0x000b6d70
+// 0x000b7230
 void CVehicle::SetLocked(BOOL locked)
 {
     if (m_pGameVehicle)
@@ -1148,7 +1148,7 @@ void CVehicle::SetLocked(BOOL locked)
     }
 }
 
-// 0x000b6f10
+// 0x000b73d0
 BOOL CVehicle::IsWrecked()
 {
     if (!m_pGameVehicle)
@@ -1156,7 +1156,7 @@ BOOL CVehicle::IsWrecked()
     return Scripting::ProcessCommand(&g_vehicleWreckedCommand, m_nHandle);
 }
 
-// 0x000b6db0
+// R5 address to verify
 void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
 {
     if (m_pGameVehicle)
@@ -1168,26 +1168,26 @@ void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
     }
 }
 
-// 0x000b7400
+// R5 address to verify
 float CVehicle::GetBackendFloat94C()
 {
     return *(float*)((BYTE*)m_pGameVehicle + 0x94c);
 }
 
-// 0x000b7410
+// R5 address to verify
 float CVehicle::GetBackendFloat950()
 {
     return *(float*)((BYTE*)m_pGameVehicle + 0x950);
 }
 
-// 0x000b73e0
+// R5 address to verify
 void CVehicle::SetBackendFloat94CAnd950(float first, float second)
 {
     memcpy((BYTE*)m_pGameVehicle + 0x94c, &first, 4);
     memcpy((BYTE*)m_pGameVehicle + 0x950, &second, 4);
 }
 
-// 0x000b6fa0
+// 0x000b7460
 BOOL CVehicle::IsTrainPart()
 {
     if (m_pGameVehicle)

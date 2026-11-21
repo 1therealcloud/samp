@@ -3,34 +3,34 @@
 
 #include "game/entity.h"
 class CObjectPool;
-// 0x0018de38
+// R5 address to verify
 extern CVector g_debugScriptCameraPosition;
-// 0x0018de44
+// 0x0014ffac
 extern CObjectPool* g_debugScriptObjects;
-// 0x0018de48
+// R5 address to verify
 extern WORD g_debugScriptObjectCount;
 namespace DebugScript
 {
 // Mutates the caller's line; native leaves one old byte before its terminator.
-// 0x0009e2f0
+// 0x0009e4b0
 char* GetCommandParams(char* line);
-// 0x0009e340
+// 0x0009e500
 void CreateObject(const char* params);
-// 0x0009e450
+// 0x0009e610
 void CreateVehicle(const char* params);
-// 0x0009e560
+// 0x0009e720
 void SetPlayerCameraPos(const char* params);
-// 0x0009e5d0
+// 0x0009e790
 void RemoveBuildingForPlayer(const char* params);
 // Confirmed native RET; ProcessLine still extracts/mutates params first.
-// 0x0009e680
+// R5 address to verify
 void SetPlayerCameraLookAt(const char* params);
-// 0x0009e690
+// 0x0009e850
 void SetPlayerInterior(const char* params);
 // Input must be writable despite the historical const API spelling.
-// 0x0009e6e0
+// 0x0009e8a0
 void ProcessLine(const char* line);
-// 0x0009e7f0
+// 0x0009e9b0
 void Initialize(const char* filename);
 } // namespace DebugScript
 

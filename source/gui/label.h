@@ -9,27 +9,27 @@
 class CLabel
 {
 public:
-    // 0x0006b5f0
+    // 0x0006bbb0
     CLabel(IDirect3DDevice9* device);
-    // 0x0006b610
+    // 0x0006bbd0
     ~CLabel();
     IDirect3DDevice9* device;
     ID3DXSprite* sprite;
-    // 0x0006b630
+    // 0x0006bbf0
     void OnLostDevice();
-    // 0x0006b640
+    // 0x0006bc00
     void OnResetDevice();
-    // 0x0006b650
+    // 0x0006bc10
     BOOL HasLineOfSight(float x, float y, float z);
-    // 0x0006b6b0
+    // 0x0006bc70
     void Begin();
-    // 0x0006b6c0
+    // 0x0006bc80
     void End();
-    // 0x0006b6d0
+    // 0x0006bc90
     void Draw(const CVector* position, const char* text, DWORD color, BOOL shadow, BOOL status);
 };
 #pragma pack(pop)
-// 0x0011c640
+// 0x000ea618
 extern const Scripting::OpcodeInfo g_labelLineOfSightCommand;
 
 #endif // LABEL_H

@@ -17,19 +17,19 @@
 
 #include <static_assert.h>
 
-// 0x002aca24
+// 0x0026eb94
 extern void* g_pNetGame;
 
-// 0x0011c310
+// 0x000ea2e8
 int g_inputCommandRpcId = 50;
 
-// 0x00002e80
+// R5 address to verify
 DWORD CInput::GetEnabledState()
 {
     return m_bEnabled;
 }
 
-// 0x00068e10
+// 0x000693d0
 CInput::CInput(IDirect3DDevice9* device)
 {
     m_bEnabled = FALSE;
@@ -43,7 +43,7 @@ CInput::CInput(IDirect3DDevice9* device)
     memset(m_szCurrentBuffer, 0, sizeof(m_szCurrentBuffer));
 }
 
-// 0x00068e80
+// 0x00069440
 InputRect* CInput::GetRect(InputRect* rect)
 {
     memset(rect, 0, sizeof(*rect));
@@ -55,7 +55,7 @@ InputRect* CInput::GetRect(InputRect* rect)
     return rect;
 }
 
-// 0x00068ec0
+// 0x00069480
 void CInput::Open()
 {
     if (!m_bEnabled)
@@ -80,7 +80,7 @@ void CInput::Open()
     }
 }
 
-// 0x00069010
+// 0x000695d0
 void CInput::AddRecall(const char* text)
 {
     for (int i = 8; i >= 0; --i)
@@ -90,7 +90,7 @@ void CInput::AddRecall(const char* text)
         ++m_nTotalRecall;
 }
 
-// 0x00069070
+// 0x00069630
 void CInput::RecallUp()
 {
     if (m_nCurrentRecall < m_nTotalRecall - 1)
@@ -105,7 +105,7 @@ void CInput::RecallUp()
     }
 }
 
-// 0x000690e0
+// 0x000696a0
 void CInput::RecallDown()
 {
     --m_nCurrentRecall;
@@ -119,14 +119,14 @@ void CInput::RecallDown()
     m_nCurrentRecall = -1;
 }
 
-// 0x00069130
+// 0x000696f0
 void CInput::EnableCursor()
 {
     if (m_bEnabled)
         g_pGame->SetCursorMode(2, FALSE);
 }
 
-// 0x00069150
+// 0x00069710
 InputCommand CInput::GetCommandHandler(const char* name)
 {
     for (int i = 0; i != m_nCommandCount; ++i)
@@ -135,13 +135,13 @@ InputCommand CInput::GetCommandHandler(const char* name)
     return 0;
 }
 
-// 0x000691a0
+// 0x00069760
 void CInput::SetDefaultCommand(InputCommand command)
 {
     m_pDefaultCommand = command;
 }
 
-// 0x000691b0
+// 0x00069770
 void CInput::AddCommand(const char* name, InputCommand command)
 {
     if (m_nCommandCount < 144 && strlen(name) < 32)
@@ -152,7 +152,7 @@ void CInput::AddCommand(const char* name, InputCommand command)
     }
 }
 
-// 0x00069210
+// 0x000697d0
 BOOL CInput::MsgProc(int message, int wparam, int lparam)
 {
     if (m_bEnabled && m_pEditbox && CDXUTIMEEditBox::StaticMsgProc(message, wparam, lparam))
@@ -160,7 +160,7 @@ BOOL CInput::MsgProc(int message, int wparam, int lparam)
     return FALSE;
 }
 
-// 0x00069280
+// 0x00069840
 void CInput::ResetDialogControls(CDXUTDialog* dialog)
 {
     m_pGameUi = dialog;
@@ -182,7 +182,7 @@ void CInput::ResetDialogControls(CDXUTDialog* dialog)
     }
 }
 
-// 0x00068fc0
+// 0x00069580
 void CInput::Close()
 {
     if (m_bEnabled)
@@ -198,7 +198,7 @@ void CInput::Close()
     }
 }
 
-// 0x00069410
+// 0x000699d0
 void CInput::ProcessInput()
 {
     if (!m_pEditbox)
@@ -274,7 +274,7 @@ STATIC_ASSERT(offsetof(InputNetGameView, client) == 0x2c);
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
 
 // The input length excludes the trailing NUL.
-// 0x00069340
+// 0x00069900
 void CInput::Send(const char* text)
 {
     if (g_pNetGame)
@@ -288,7 +288,7 @@ void CInput::Send(const char* text)
     }
 }
 
-// 0x00069250
+// 0x00069810
 bool CInput::IsActive()
 {
     if (m_pEditbox)

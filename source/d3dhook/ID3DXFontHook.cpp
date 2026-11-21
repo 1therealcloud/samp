@@ -17,142 +17,142 @@
 class CFontColorSprite : public ID3DXSprite
 {
 public:
-    // 0x00073960
+    // R5 address to verify
     CFontColorSprite();
-    // 0x00073880
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void** output);
-    // 0x00073890
+    // R5 address to verify
     virtual ULONG STDMETHODCALLTYPE AddRef();
-    // 0x000738a0
+    // R5 address to verify
     virtual ULONG STDMETHODCALLTYPE Release();
-    // 0x000738b0
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE GetDevice(IDirect3DDevice9** device);
-    // 0x000738c0
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE GetTransform(D3DXMATRIX* transform);
-    // 0x000738d0
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE SetTransform(const D3DXMATRIX* transform);
-    // 0x000738e0
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE SetWorldViewRH(const D3DXMATRIX* world, const D3DXMATRIX* view);
-    // 0x000738f0
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE SetWorldViewLH(const D3DXMATRIX* world, const D3DXMATRIX* view);
-    // 0x00073900
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE Begin(DWORD flags);
-    // 0x00073660
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE Draw(IDirect3DTexture9* texture, const RECT* rect, const D3DXVECTOR3* center, const D3DXVECTOR3* position, D3DCOLOR color);
-    // 0x00073910
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE Flush();
-    // 0x00073920
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE End();
-    // 0x00073930
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE OnLostDevice();
-    // 0x00073940
+    // R5 address to verify
     virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
 };
-// 0x00140bd8
+// R5 address to verify
 static CFontColorSprite g_fontColorSprite;
-// 0x0017e97c
+// R5 address to verify
 char* g_fontOriginalText;
-// 0x0017e980
+// R5 address to verify
 char* g_fontStrippedText;
-// 0x00174d38
+// R5 address to verify
 wchar_t g_fontWideText[20000];
-// 0x00174d30
+// R5 address to verify
 ID3DXSprite* g_fontRealSprite;
-// 0x00174d20
+// R5 address to verify
 D3DCOLOR g_fontGlyphColor;
-// 0x00174d34
+// R5 address to verify
 int g_fontGlyphCursor;
 
-// 0x00073960
+// R5 address to verify
 CFontColorSprite::CFontColorSprite() {}
 
 STATIC_ASSERT(sizeof(CFontColorSprite) == 4);
 
-// 0x00073770
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::QueryInterface(REFIID iid, void** output)
 {
     return font->QueryInterface(iid, output);
 }
 
-// 0x00073780
+// R5 address to verify
 ULONG STDMETHODCALLTYPE CFontWrapper::AddRef()
 {
     return font->AddRef();
 }
 
-// 0x00073790
+// R5 address to verify
 ULONG STDMETHODCALLTYPE CFontWrapper::Release()
 {
     return font->Release();
 }
 
-// 0x000737a0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::GetDevice(IDirect3DDevice9** device)
 {
     return font->GetDevice(device);
 }
 
-// 0x000737b0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::GetDescA(D3DXFONT_DESCA* desc)
 {
     return font->GetDescA(desc);
 }
 
-// 0x000737c0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::GetDescW(D3DXFONT_DESCW* desc)
 {
     return font->GetDescW(desc);
 }
 
-// 0x000737d0
+// R5 address to verify
 BOOL STDMETHODCALLTYPE CFontWrapper::GetTextMetricsA(TEXTMETRICA* metrics)
 {
     return font->GetTextMetricsA(metrics);
 }
 
-// 0x000737e0
+// R5 address to verify
 BOOL STDMETHODCALLTYPE CFontWrapper::GetTextMetricsW(TEXTMETRICW* metrics)
 {
     return font->GetTextMetricsW(metrics);
 }
 
-// 0x000737f0
+// R5 address to verify
 HDC STDMETHODCALLTYPE CFontWrapper::GetDC()
 {
     return font->GetDC();
 }
 
-// 0x00073800
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::GetGlyphData(UINT glyph, IDirect3DTexture9** texture, RECT* box, POINT* increment)
 {
     return font->GetGlyphData(glyph, texture, box, increment);
 }
 
-// 0x00073810
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::PreloadCharacters(UINT first, UINT last)
 {
     return font->PreloadCharacters(first, last);
 }
 
-// 0x00073820
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::PreloadGlyphs(UINT first, UINT last)
 {
     return font->PreloadGlyphs(first, last);
 }
 
-// 0x00073830
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::PreloadTextA(const char* text, INT count)
 {
     return font->PreloadTextA(text, count);
 }
 
-// 0x00073840
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::PreloadTextW(const wchar_t* text, INT count)
 {
     return font->PreloadTextW(text, count);
 }
 
-// 0x00073680
+// R5 address to verify
 INT STDMETHODCALLTYPE CFontWrapper::DrawTextA(ID3DXSprite* sprite, const char* text, INT count, RECT* rect, DWORD format, D3DCOLOR color)
 {
     if (sprite)
@@ -171,19 +171,19 @@ INT STDMETHODCALLTYPE CFontWrapper::DrawTextA(ID3DXSprite* sprite, const char* t
     return font->DrawTextA(0, text, count, rect, format, color);
 }
 
-// 0x00073850
+// R5 address to verify
 INT STDMETHODCALLTYPE CFontWrapper::DrawTextW(ID3DXSprite* sprite, const wchar_t* text, INT count, RECT* rect, DWORD format, D3DCOLOR color)
 {
     return font->DrawTextW(sprite, text, count, rect, format, color);
 }
 
-// 0x00073860
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::OnLostDevice()
 {
     return font->OnLostDevice();
 }
 
-// 0x00073870
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontWrapper::OnResetDevice()
 {
     return font->OnResetDevice();
@@ -196,7 +196,7 @@ void InitializeFontDrawBuffers()
     g_fontStrippedText = (char*)calloc(1, 100001);
 }
 
-// 0x00073440
+// R5 address to verify
 void FontAnsiToWide(const char* text, wchar_t* output, int capacity)
 {
     memset(output, 0, capacity * sizeof(wchar_t));
@@ -205,13 +205,13 @@ void FontAnsiToWide(const char* text, wchar_t* output, int capacity)
         MultiByteToWideChar(CP_ACP, 0, text, (int)strlen(text), output, length);
 }
 
-// 0x000b5980
+// 0x000b5e40
 int FontIsWideHexDigit(unsigned short value)
 {
     return (value >= '0' && value <= '9') || (value >= 'A' && value <= 'F') || (value >= 'a' && value <= 'f');
 }
 
-// 0x000b5ad0
+// 0x000b5f90
 unsigned long FontParseWideColorTag(const wchar_t* text)
 {
     if (text[0] && text[0] == L'{' && text[1] && FontIsWideHexDigit(text[1]) && text[2] && FontIsWideHexDigit(text[2]) && text[3] && FontIsWideHexDigit(text[3]) && text[4] &&
@@ -225,7 +225,7 @@ unsigned long FontParseWideColorTag(const wchar_t* text)
     return 0xffffffff;
 }
 
-// 0x000734b0
+// R5 address to verify
 void FontNextAnsiGlyphColor()
 {
     char ch = g_fontOriginalText[g_fontGlyphCursor];
@@ -251,7 +251,7 @@ void FontNextAnsiGlyphColor()
     }
 }
 
-// 0x00073580
+// 0x00073ae0
 void FontNextGlyphColor()
 {
     wchar_t ch = g_fontWideText[g_fontGlyphCursor];
@@ -272,86 +272,86 @@ void FontNextGlyphColor()
         ++g_fontGlyphCursor;
 }
 
-// 0x00073880
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::QueryInterface(REFIID iid, void** output)
 {
     return g_fontRealSprite->QueryInterface(iid, output);
 }
 
-// 0x00073890
+// R5 address to verify
 ULONG STDMETHODCALLTYPE CFontColorSprite::AddRef()
 {
     return g_fontRealSprite->AddRef();
 }
 
-// 0x000738a0
+// R5 address to verify
 ULONG STDMETHODCALLTYPE CFontColorSprite::Release()
 {
     return g_fontRealSprite->Release();
 }
 
-// 0x000738b0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::GetDevice(IDirect3DDevice9** device)
 {
     return g_fontRealSprite->GetDevice(device);
 }
 
-// 0x000738c0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::GetTransform(D3DXMATRIX* transform)
 {
     return g_fontRealSprite->GetTransform(transform);
 }
 
-// 0x000738d0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::SetTransform(const D3DXMATRIX* transform)
 {
     return g_fontRealSprite->SetTransform(transform);
 }
 
-// 0x000738e0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::SetWorldViewRH(const D3DXMATRIX* world, const D3DXMATRIX* view)
 {
     return g_fontRealSprite->SetWorldViewRH(world, view);
 }
 
-// 0x000738f0
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::SetWorldViewLH(const D3DXMATRIX* world, const D3DXMATRIX* view)
 {
     return g_fontRealSprite->SetWorldViewLH(world, view);
 }
 
-// 0x00073900
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::Begin(DWORD flags)
 {
     return g_fontRealSprite->Begin(flags);
 }
 
-// 0x00073660
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::Draw(IDirect3DTexture9* texture, const RECT* rect, const D3DXVECTOR3* center, const D3DXVECTOR3* position, D3DCOLOR color)
 {
     FontNextGlyphColor();
     return g_fontRealSprite->Draw(texture, rect, center, position, g_fontGlyphColor);
 }
 
-// 0x00073910
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::Flush()
 {
     return g_fontRealSprite->Flush();
 }
 
-// 0x00073920
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::End()
 {
     return g_fontRealSprite->End();
 }
 
-// 0x00073930
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::OnLostDevice()
 {
     return g_fontRealSprite->OnLostDevice();
 }
 
-// 0x00073940
+// R5 address to verify
 HRESULT STDMETHODCALLTYPE CFontColorSprite::OnResetDevice()
 {
     return g_fontRealSprite->OnResetDevice();

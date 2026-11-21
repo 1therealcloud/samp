@@ -7,7 +7,7 @@
 
 #include <static_assert.h>
 
-// 0x00001610
+// R5 address to verify
 CActor* CActorPool::Get(WORD id)
 {
     return id < 1000 && active[id] ? actors[id] : 0;

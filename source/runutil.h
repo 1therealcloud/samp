@@ -12,40 +12,40 @@
 
 #include <stddef.h>
 
-// 0x00118230
+// 0x000e61a0
 extern const char g_base64Alphabet[66];
-// 0x0013c4b4
+// R5 address to verify
 extern const char* g_base64Encoding;
 
-// 0x00017510
+// R5 address to verify
 int Util_strnicmp(const char* first, const char* second, size_t count);
-// 0x00017440
+// 0x00017930
 void Util_strupr(char* text);
-// 0x00017380
+// 0x00017870
 char* Util_stristr(const char* string, const char* pattern);
-// 0x000176a0
+// 0x00017b90
 void Util_Base64Encode(char* input, char* output);
 
-// 0x000172e0
+// R5 address to verify
 void Util_UrlUnencode(char* enc);
-// 0x00017360
+// R5 address to verify
 char Util_toupper(char c);
-// 0x00017470
+// R5 address to verify
 int Util_wildcmp(char* wild, char* string);
-// 0x000175b0
+// R5 address to verify
 char* Util_strrev(char* str);
-// 0x00017600
+// R5 address to verify
 char* Util_itoa(int v, char* s, int r);
-// 0x0009d840
+// R5 address to verify
 void K_EncodeString(char* szInput, char* szOutput);
-// 0x0009d880
+// R5 address to verify
 char* K_DecodeString(unsigned char* szInput);
 
 // legacy
 
-// 0x000b55e0
+// R5 address to verify
 bool Util_IsDecimal(const char* text);
-// 0x000b5920
+// R5 address to verify
 void Util_SanitizeAscii(char* text);
 
 #endif // RUNUTIL_H

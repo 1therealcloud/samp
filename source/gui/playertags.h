@@ -13,73 +13,73 @@ struct PlayerTagVertex
 class CPlayerTags
 {
 public:
-    // 0x0006cae0
+    // 0x0006d0a0
     void DrawHealthBar(const CVector* position, float health, float armour, float distance);
-    // 0x0006d0f0
+    // 0x0006d6b0
     void BeginHealthBar();
-    // 0x0006c760
+    // 0x0006cd20
     ~CPlayerTags();
-    // 0x0006c790
+    // 0x0006cd50
     void EndHealthBar();
-    // 0x0006c7c0
+    // 0x0006cd80
     void BeginLabel();
-    // 0x0006c7d0
+    // 0x0006cd90
     void EndLabel();
     // Raw status byte and integer words are retained.
-    // 0x0006c7e0
+    // 0x0006cda0
     void DrawLabel(const CVector* position, const char* text, DWORD color, float distance, BYTE drawStatus, int status);
-    // 0x0006c730
+    // 0x0006ccf0
     CPlayerTags(IDirect3DDevice9* device);
     IDirect3DDevice9* device;
     IDirect3DStateBlock9* state;
     ID3DXSprite* sprite;
-    // 0x0006d090
+    // 0x0006d650
     void OnLostDevice();
-    // 0x0006d0c0
+    // 0x0006d680
     void OnResetDevice();
 };
-// 0x0011c670
+// 0x000ea648
 extern const float g_playerTagDistanceHeight;
-// 0x00118388
+// 0x000e6304
 extern const char g_playerTagStatusBack[2];
-// 0x00118370
+// 0x000e62ec
 extern const char g_playerTagStatusFront[2];
-// 0x0017e988
+// R5 address to verify
 extern CMatrix g_nametagVehicleMatrix;
-// 0x0017eb08
+// R5 address to verify
 extern char g_nametagName[128];
-// 0x0017eb88
+// R5 address to verify
 extern CMatrix g_nametagLocalMatrix;
-// 0x0017ebcc
+// R5 address to verify
 extern CVector g_nametagBone;
-// 0x0017ebf4
+// R5 address to verify
 extern CVector g_nametagDrawPosition;
-// 0x0011c7a4
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_nametagLineOfSightCommand;
-// 0x0011c7b8
+// 0x000ea790
 extern const char g_nametagNameFormat[8];
-// 0x00074dc0
+// 0x00075330
 void ClientDrawLabels();
-// 0x00073cb0
+// 0x00074210
 void ClientDrawPlayerTags();
 // Border, background and fill: four vertices each, sharing native mutable storage.
-// 0x00140878
+// R5 address to verify
 extern PlayerTagVertex g_playerTagVertices[12];
-// 0x0011c674
+// 0x000ea64c
 extern const float g_playerTagFillScale;
-// 0x0011c678
+// 0x000ea650
 extern const float g_playerTagInnerBottom;
-// 0x0011c67c
+// 0x000ea654
 extern const float g_playerTagHalfWidth;
-// 0x0011c680
+// 0x000ea658
 extern const float g_playerTagOuterRight;
-// 0x0011c684
+// 0x000ea65c
 extern const float g_playerTagOuterBottom;
-// 0x0011c688
+// 0x000ea660
 extern const float g_playerTagOuterTop;
-// 0x00117874
+// 0x000e5804
 extern const float g_playerTagOuterLeft;
-// 0x0011797c
+// 0x000e590c
 extern const float g_playerTagArmourOffset;
 #endif
 
@@ -92,7 +92,7 @@ private:
     struct NameTextVertex_s
     {
         float x, y, z, tu, tv;
-        // 0x0006d8b0
+        // R5 address to verify
         void Initialise(float fX, float fY, float fTu, float fTv);
     };
 
@@ -107,34 +107,34 @@ private:
     float m_fScale;
 
 public:
-    // 0x0006d8e0
+    // R5 address to verify
     CLegacyPlayerTags(IDirect3DDevice9* pDevice);
-    // 0x0006d910
+    // 0x0006ded0
     ~CLegacyPlayerTags();
 
-    // 0x0006df10
+    // 0x0006e4d0
     void Begin();
-    // 0x0006df50
+    // 0x0006e510
     void End();
-    // 0x0006df80
+    // R5 address to verify
     void Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD dwColor, float fHealth);
-    // 0x0006d950
+    // 0x0006df10
     void InitQuad(char c, float x, float y2, NameTextVertex_s* pVB);
-    // 0x0006da80
+    // 0x0006e040
     void DeleteDeviceObjects();
-    // 0x0006dad0
+    // 0x0006e090
     void RestoreDeviceObjects();
 };
 
 // Contiguous health vertices192 bytes followed by metrics256. Signed character
 // indexing reaches the preceding mutable vertices in the original binary.
-// 0x00140998
+// R5 address to verify
 extern BYTE g_legacyPlayerTagStorage[448];
-// 0x0011c6bc
+// 0x000ea694
 extern const char g_legacyPlayerTagTextureName[];
-// 0x0011c6b4
+// 0x000ea68c
 extern const float g_legacyPlayerTagInv256;
-// 0x0011c6b8
+// 0x000ea690
 extern const float g_legacyPlayerTagInv16;
 
 #endif // PLAYERTAGS_H

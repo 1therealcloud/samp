@@ -18,13 +18,13 @@ struct MD5Context
     unsigned char in[64];
 };
 
-// 0x00062b30
+// 0x000630b0
 void MD5Init(struct MD5Context* context);
-// 0x000633e0
+// 0x00063960
 void MD5Update(struct MD5Context* context, unsigned char const* buf, unsigned len);
-// 0x000634b0
+// 0x00063a30
 void MD5Final(unsigned char digest[16], struct MD5Context* context);
-// 0x00062b60
+// 0x000630e0
 void MD5Transform(uint32 buf[4], uint32 const in[16]);
 
 /*

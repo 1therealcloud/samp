@@ -4,75 +4,75 @@
 #include <windows.h>
 // Names follow the 0.2x task helper family; DL name lookup is disabled natively.
 // The unused task parameter follows that reference; DL consumes no argument.
-// 0x000b3cf0
+// R5 address to verify
 const char* GameGetTaskName(void* task);
-// 0x0011f56c
+// R5 address to verify
 extern const char g_taskNoneName[5];
-// 0x000b3ca0
+// 0x000b40a0
 DWORD GameGetTaskType(void* task);
 // Validates the raw GTA vtable range before calling virtual slot +8.
-// 0x000b3c50
+// 0x000b4050
 void* GameGetTaskChild(void* task);
 struct CVector;
 struct KeyPad;
 class CCamera;
 class CVehicle;
-// 0x0009dee0
+// 0x0009e0a0
 void GameSetDebugState(DWORD first, DWORD second, DWORD stage);
-// 0x0009df00
+// R5 address to verify
 void GameClearDebugState();
-// 0x001518d4
+// 0x001138ec
 extern DWORD g_debugSelectedVehicleModel;
-// 0x0018dd48
+// R5 address to verify
 extern KeyPad* g_debugVehicleKeys;
-// 0x0018dd4c
+// R5 address to verify
 extern CCamera* g_debugVehicleCamera;
-// 0x0018de30
+// R5 address to verify
 extern DWORD g_debugVehicleSelectionActive;
-// 0x0018de34
+// 0x0014ff9c
 extern CVehicle* g_debugSelectedVehicle;
-// 0x0018ddec
+// 0x0014ff54
 extern DWORD g_debugSelectionFlagA;
-// 0x0018ddf0
+// 0x0014ff58
 extern DWORD g_debugSelectionFlagB;
-// 0x0011e530
+// 0x000ec438
 extern const char g_debugVehicleSelectText[15];
-// 0x0011c198
+// 0x000ea170
 extern const char g_debugVehicleTypeFormat[8];
-// 0x0009df10
+// 0x0009e0d0
 void GameRebuildDebugVehicle();
 // Historical public name; the body is the native vehicle selector.
-// 0x0009df50
+// 0x0009e110
 void GameDrawDebugEntities();
-// 0x000b3a00
+// 0x000b3e00
 DWORD __stdcall GameCountUnusedModelSlots();
 #endif
 
 // Raw original debug export state; broader flag semantics remain unresolved.
-// 0x0018dc20
+// R5 address to verify
 extern BYTE g_nativeDebugFlag18DC20;
-// 0x0018dd50
+// R5 address to verify
 extern float g_debugHeightmapStartX;
-// 0x0018dde4
+// R5 address to verify
 extern float g_debugHeightmapStartY;
-// 0x0018de18
+// R5 address to verify
 extern DWORD g_debugHeightmapStage;
-// 0x0018de28
+// R5 address to verify
 extern DWORD g_debugHeightmapFlagCopy;
-// 0x0018de2c
+// R5 address to verify
 extern FILE* g_debugHeightmapFile;
-// 0x0011e50c
+// 0x000ec414
 extern const char g_debugHeightmapFilename[];
 // Existing shared mode storage in custommodels.cpp.
-// 0x00117d30
+// 0x000e5d34
 extern const char g_customDownloadWriteMode[];
-// 0x0009dc80
+// 0x0009de40
 float GameDebugGroundHeight(const CVector* position);
-// 0x0009dcd0
+// 0x0009de90
 void GameDebugWriteHeightmap();
-// 0x0009dda0
+// R5 address to verify
 void GameDebugOpenHeightmap();
-// 0x0009d3a0
+// R5 address to verify
 void __stdcall GameSetNativeDebugFlag18DC20(BYTE value);
 
 #ifndef SAMP_GAME_DEBUG_PLACEMENT_H
@@ -86,62 +86,62 @@ struct GameDebugPlacementRecord
     int raw24;
 };
 #pragma pack(pop)
-// 0x0018dc1c
+// R5 address to verify
 extern FILE* g_debugPlacementFile;
-// 0x0011e3d8
+// R5 address to verify
 extern const char g_debugPlacementFilename[];
-// 0x0011e3a8
+// R5 address to verify
 extern const char g_debugPlacementFormat[];
-// 0x0011e340
+// R5 address to verify
 extern const char g_debugEntityPlacementFormat[];
-// 0x0011d7c0
+// 0x000eb798
 extern const double g_debugEulerNegativeOne;
-// 0x0011e36c
+// R5 address to verify
 extern const float g_debugPlacementMaxDrawDistance;
-// 0x0011e368
+// R5 address to verify
 extern const float g_debugPlacementMaxZ;
 // Raw GTA backend entity; not a SA-MP CEntity wrapper pointer.
-// 0x0009ce60
+// R5 address to verify
 void GameDebugWriteEntityPlacement(void* entity, FILE* file);
-// 0x0009d100
+// R5 address to verify
 int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record);
 
 #endif
 
-// 0x001518d0
+// R5 address to verify
 extern DWORD g_debugHeightmapTileEnd;
-// 0x0018de1c
+// R5 address to verify
 extern DWORD g_debugHeightmapFinished;
-// 0x0018de20
+// R5 address to verify
 extern DWORD g_debugHeightmapTilePrepared;
-// 0x0018de24
+// R5 address to verify
 extern DWORD g_debugHeightmapWaitFrames;
-// 0x0011e4d8
+// 0x000ec3e0
 extern const char g_debugHeightmapBlockFormat[];
-// 0x0011e524
+// 0x000ec42c
 extern const char g_debugHeightmapFinishedText[];
-// 0x0009dba0
+// R5 address to verify
 void GameDebugSelectHeightmapBlock(int index);
-// 0x0009dc30
+// R5 address to verify
 void GameDebugMoveToHeightmapBlock();
-// 0x0009ddd0
+// R5 address to verify
 void GameDebugProcessHeightmap();
 
-// 0x0011e370
+// R5 address to verify
 extern const char g_debugAllBuildingsFilename[];
-// 0x0011f594
+// 0x000ed484
 extern const char g_debugRasterMissingText[];
-// 0x0011f5cc
+// 0x000ed4bc
 extern const char g_debugRasterFirstFilename[];
-// 0x0011f5a0
+// 0x000ed490
 extern const char g_debugRasterSecondFilename[];
-// 0x0011f5ac
+// 0x000ed49c
 extern const char g_debugRasterDimensionsFormat[];
-// 0x0009cf80
+// R5 address to verify
 void GameDebugExportWorldPlacements();
-// 0x000b5610
+// R5 address to verify
 void GameDebugBindRasterResult();
-// 0x000b5690
+// 0x000b5b50
 void GameDebugWriteRasterImage(void* raster, const char* filename);
-// 0x000b5700
+// R5 address to verify
 void GameDebugDumpRasterImages();

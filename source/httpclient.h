@@ -80,28 +80,28 @@ private:
     HTTP_RESPONSE m_Response;
     int m_iError;
 
-    // 0x000029d0
+    // 0x000029a0
     bool Connect(char* szHost, int iPort);
-    // 0x00002470
+    // 0x00002440
     void CloseConnection();
-    // 0x00002480
+    // 0x00002450
     bool Send(char* szData);
-    // 0x000024c0
+    // 0x00002490
     int Recv(char* szBuffer, int iBufferSize);
 
-    // 0x000024e0
+    // 0x000024b0
     void InitRequest(int iType, char* szURL, char* szPostData, char* szReferer);
-    // 0x000026b0
+    // 0x00002680
     void HandleEntity();
 
-    // 0x00002a90
+    // 0x00002a60
     void Process();
 
 public:
-    // 0x00002c70
+    // 0x00002c40
     int ProcessURL(int iType, char* szURL, char* szData, char* szReferer);
 
-    // 0x000023e0
+    // 0x000023b0
     bool GetHeaderValue(char* szHeaderName, char* szReturnBuffer, int iBufSize);
     // inline
     int GetResponseCode()
@@ -129,9 +129,9 @@ public:
         return m_Response.response_len;
     };
 
-    // 0x00002310
+    // 0x000022e0
     CHttpClient();
-    // 0x00002370
+    // 0x00002340
     ~CHttpClient();
 };
 

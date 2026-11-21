@@ -13,92 +13,92 @@
 
 #include <stdio.h>
 #include <string.h>
-// 0x0011f56c
+// R5 address to verify
 const char g_taskNoneName[5] = "None";
-// 0x001518d4
+// 0x001138ec
 DWORD g_debugSelectedVehicleModel = 400;
-// 0x0018dd48
+// R5 address to verify
 KeyPad* g_debugVehicleKeys;
-// 0x0018dd4c
+// R5 address to verify
 CCamera* g_debugVehicleCamera;
-// 0x0018de30
+// R5 address to verify
 DWORD g_debugVehicleSelectionActive;
-// 0x0018de34
+// 0x0014ff9c
 CVehicle* g_debugSelectedVehicle;
-// 0x0018ddec
+// 0x0014ff54
 DWORD g_debugSelectionFlagA;
-// 0x0018ddf0
+// 0x0014ff58
 DWORD g_debugSelectionFlagB;
-// 0x0011e530
+// 0x000ec438
 const char g_debugVehicleSelectText[15] = "Vehicle Select";
-// 0x0011c198
+// 0x000ea170
 const char g_debugVehicleTypeFormat[8] = "TYPE_%d";
-// 0x0018dc20
+// R5 address to verify
 BYTE g_nativeDebugFlag18DC20 = 0;
-// 0x0018dd50
+// R5 address to verify
 float g_debugHeightmapStartX = 0;
-// 0x0018dde4
+// R5 address to verify
 float g_debugHeightmapStartY = 0;
-// 0x0018de18
+// R5 address to verify
 DWORD g_debugHeightmapStage = 0;
-// 0x0018de28
+// R5 address to verify
 DWORD g_debugHeightmapFlagCopy = 0;
-// 0x0018de2c
+// R5 address to verify
 FILE* g_debugHeightmapFile = 0;
-// 0x0011e50c
+// 0x000ec414
 const char g_debugHeightmapFilename[] = "c:\\blocks\\SA2_bos.hmap";
-// 0x0018dc1c
+// R5 address to verify
 FILE* g_debugPlacementFile = 0;
-// 0x0011e3d8
+// R5 address to verify
 const char g_debugPlacementFilename[] = "c:\\0\\lc2sa_LoadObjectInstance_1_noipllods_Zonly_Q2E.txt";
-// 0x0011e3a8
+// R5 address to verify
 const char g_debugPlacementFormat[] = "%d,%.7f,%.7f,%.7f,%.5f,%.5f,%.5f,%.2f,%u,%X\n";
-// 0x0011e340
+// R5 address to verify
 const char g_debugEntityPlacementFormat[] = "%u,%.5f,%.5f,%.5f,0.0,0.0,%.5f,%.5f\n";
-// 0x0011d7c0
+// 0x000eb798
 const double g_debugEulerNegativeOne = -1.0;
-// 0x0011e36c
+// R5 address to verify
 const float g_debugPlacementMaxDrawDistance = 299.0f;
-// 0x0011e368
+// R5 address to verify
 const float g_debugPlacementMaxZ = 500.0f;
-// 0x001518d0
+// R5 address to verify
 DWORD g_debugHeightmapTileEnd = 900;
-// 0x0018de1c
+// R5 address to verify
 DWORD g_debugHeightmapFinished = 0;
-// 0x0018de20
+// R5 address to verify
 DWORD g_debugHeightmapTilePrepared = 0;
-// 0x0018de24
+// R5 address to verify
 DWORD g_debugHeightmapWaitFrames = 0;
-// 0x0011e4d8
+// 0x000ec3e0
 const char g_debugHeightmapBlockFormat[] = "HM Setup Block: %d Row/Col: %d,%d XY: %.2f,%.2f";
-// 0x0011e524
+// 0x000ec42c
 const char g_debugHeightmapFinishedText[] = "Finished HM";
 
-// 0x0011e370
+// R5 address to verify
 const char g_debugAllBuildingsFilename[] = "c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
-// 0x0011f594
+// 0x000ed484
 const char g_debugRasterMissingText[] = "No texture!";
-// 0x0011f5cc
+// 0x000ed4bc
 const char g_debugRasterFirstFilename[] = "Raster1.bmp";
-// 0x0011f5a0
+// 0x000ed490
 const char g_debugRasterSecondFilename[] = "Raster2.bmp";
-// 0x0011f5ac
+// 0x000ed49c
 const char g_debugRasterDimensionsFormat[] = "Width %u Height: %u Depth: %u";
 
 // Native returns this constant even for a null task; no task dereference.
 #pragma bss_seg(".pstate$g")
-// 0x002aae10
+// R5 address to verify
 void* g_rwImageScratch;
 #pragma bss_seg()
 
-// 0x000b3cf0
+// R5 address to verify
 const char* GameGetTaskName(void* task)
 {
     (void)task;
     return g_taskNoneName;
 }
 
-// 0x000b3ca0
+// 0x000b40a0
 DWORD GameGetTaskType(void* task)
 {
     DWORD result = 0;
@@ -125,7 +125,7 @@ DWORD GameGetTaskType(void* task)
     return 0;
 }
 
-// 0x000b3c50
+// 0x000b4050
 void* GameGetTaskChild(void* task)
 {
     void* result = 0;
@@ -153,7 +153,7 @@ void* GameGetTaskChild(void* task)
     return 0;
 }
 
-// 0x0009dee0
+// 0x0009e0a0
 void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
 {
     g_gameDebugStage = stage;
@@ -161,13 +161,13 @@ void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
     g_debugSelectionFlagB = second;
 }
 
-// 0x0009df00
+// R5 address to verify
 void GameClearDebugState()
 {
     g_gameDebugStage = 0;
 }
 
-// 0x0009df10
+// 0x0009e0d0
 void GameRebuildDebugVehicle()
 {
     if (g_debugSelectedVehicle)
@@ -175,7 +175,7 @@ void GameRebuildDebugVehicle()
     g_debugSelectedVehicle = g_pGame->CreateVehicle(g_debugSelectedVehicleModel, 5, 5, 500, 0, FALSE);
 }
 
-// 0x0009df50
+// 0x0009e110
 void GameDrawDebugEntities()
 {
     if (!g_debugVehicleSelectionActive)
@@ -255,7 +255,7 @@ void GameDrawDebugEntities()
     }
 }
 
-// 0x000b3a00
+// 0x000b3e00
 DWORD __stdcall GameCountUnusedModelSlots()
 {
     DWORD count = 0;
@@ -266,14 +266,14 @@ DWORD __stdcall GameCountUnusedModelSlots()
     return count;
 }
 
-// 0x0009d3a0
+// R5 address to verify
 void __stdcall GameSetNativeDebugFlag18DC20(BYTE value)
 {
     g_nativeDebugFlag18DC20 = value;
 }
 
 // Ignores GTA result and returns raw collision-position Z, even on failure.
-// 0x0009dc80
+// 0x0009de40
 float GameDebugGroundHeight(const CVector* position)
 {
     CVector end;
@@ -284,7 +284,7 @@ float GameDebugGroundHeight(const CVector* position)
     return *(float*)(collision + 8);
 }
 
-// 0x0009dda0
+// R5 address to verify
 void GameDebugOpenHeightmap()
 {
     g_debugHeightmapFile = fopen(g_debugHeightmapFilename, g_customDownloadWriteMode);
@@ -292,7 +292,7 @@ void GameDebugOpenHeightmap()
     g_debugHeightmapStage = 1;
 }
 
-// 0x0009dcd0
+// 0x0009de90
 void GameDebugWriteHeightmap()
 {
     DWORD firstX;
@@ -328,7 +328,7 @@ void GameDebugWriteHeightmap()
     }
 }
 
-// 0x0009ce60
+// R5 address to verify
 void GameDebugWriteEntityPlacement(void* entity, FILE* file)
 {
     if (!entity)
@@ -401,7 +401,7 @@ void GameDebugWriteEntityPlacement(void* entity, FILE* file)
                                                                      (double)position.y, (double)position.z, (double)heading, (double)distance);
 }
 
-// 0x0009d100
+// R5 address to verify
 int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
 {
     if (!g_debugPlacementFile)
@@ -437,7 +437,7 @@ int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
     return 0;
 }
 
-// 0x0009dba0
+// R5 address to verify
 void GameDebugSelectHeightmapBlock(int index)
 {
     int row = index > 29 ? index / 30 : 0;
@@ -459,7 +459,7 @@ void GameDebugSelectHeightmapBlock(int index)
     g_pChat->AddDebugMessage(g_debugHeightmapBlockFormat, index, row, column, (double)g_debugHeightmapStartX, displayY);
 }
 
-// 0x0009dc30
+// R5 address to verify
 void GameDebugMoveToHeightmapBlock()
 {
     GameDebugSelectHeightmapBlock((int)g_debugHeightmapFlagCopy);
@@ -467,7 +467,7 @@ void GameDebugMoveToHeightmapBlock()
     ped->Teleport(g_debugHeightmapStartX + g_vehicleTrainSpeedMaximum, g_debugHeightmapStartY - g_vehicleTrainSpeedMaximum, 540.0f);
 }
 
-// 0x0009ddd0
+// R5 address to verify
 void GameDebugProcessHeightmap()
 {
     if (!g_debugHeightmapStage)
@@ -508,13 +508,13 @@ void GameDebugProcessHeightmap()
     --g_debugHeightmapWaitFrames;
 }
 
-// 0x002abe40
+// R5 address to verify
 #define g_debugRasterSource (*(void**)(g_entityCollisionScratch + 0x1028))
-// 0x002abe44
+// R5 address to verify
 #define g_debugRasterResult (*(void**)(g_entityCollisionScratch + 0x102c))
-// 0x002abe48
+// 0x0026dfb0
 #define g_debugRasterAlternate (*(void**)(g_entityCollisionScratch + 0x1030))
-// 0x0009cf80
+// R5 address to verify
 void GameDebugExportWorldPlacements()
 {
     FILE* file = fopen(g_debugAllBuildingsFilename, (const char*)&g_renderMapClickRpc);
@@ -535,7 +535,7 @@ void GameDebugExportWorldPlacements()
     fclose(file);
 }
 
-// 0x000b5610
+// R5 address to verify
 void GameDebugBindRasterResult()
 {
     void* volatile& source = g_debugRasterSource;
@@ -552,7 +552,7 @@ void GameDebugBindRasterResult()
     *(DWORD*)0x8a7780 = 0x40000000;
 }
 
-// 0x000b5690
+// 0x000b5b50
 void GameDebugWriteRasterImage(void* raster, const char* filename)
 {
     // Read the published scratch pointer again before every RenderWare call.
@@ -564,7 +564,7 @@ void GameDebugWriteRasterImage(void* raster, const char* filename)
     ((DWORD(__cdecl*)(void*))0x802740)(image);
 }
 
-// 0x000b5700
+// R5 address to verify
 void GameDebugDumpRasterImages()
 {
     g_debugRasterSource = *(void**)0xc402d8;

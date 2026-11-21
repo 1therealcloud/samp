@@ -14,21 +14,21 @@
 #ifdef GetSystemMetrics
 #undef GetSystemMetrics
 #endif
-// 0x0016be84
+// R5 address to verify
 DWORD g_clientInputOutsideClick;
-// 0x0016be88
+// R5 address to verify
 DWORD g_clientScoreboardOutsideClick;
-// 0x0011b928
+// 0x000e98f0
 const char g_screenshotFilenamePattern[] = "\\screens\\sa-mp-%03i.png";
-// 0x0011c7dc
+// 0x000ea7b4
 const char g_screenshotTakenMessage[] = "Screenshot Taken - sa-mp-%03i.png";
-// 0x0011c7c0
+// 0x000ea798
 const char g_screenshotFailureMessage[] = "Unable to save screenshot.";
 
-// 0x0016be78
+// R5 address to verify
 WNDPROC g_clientPreviousWindowProcedure;
 
-// 0x000610d0
+// 0x00061650
 LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
     if (g_clientIntegrityFailures > 10)
@@ -138,11 +138,11 @@ LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam,
                      (edit && *(DWORD*)(edit + 0x80)) || (selection && selection->enabled) || (text && text->enabled)))
                     return 0;
                 break;
-            // 0x00060de0
+            // 0x00061360
             case WM_KEYUP:
                 ClientHandleKeyRelease(wparam);
                 break;
-            // 0x00061010
+            // 0x00061590
             case WM_CHAR:
                 ClientHandleCharacter(wparam);
                 break;
@@ -206,7 +206,7 @@ LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam,
     return CallWindowProcA(g_clientPreviousWindowProcedure, window, message, wparam, lparam);
 }
 
-// 0x00061010
+// 0x00061590
 BOOL ClientHandleCharacter(unsigned int character)
 {
     if (g_pInput && g_pInput->m_bEnabled)
@@ -242,7 +242,7 @@ BOOL ClientHandleCharacter(unsigned int character)
     return FALSE;
 }
 
-// 0x00060d90
+// 0x00061310
 void ClientToggleWindowedMode()
 {
     // GTA SA virtual addresses: current mode C97C18, mode table C97C48, change-mode 745C70.
@@ -254,7 +254,7 @@ void ClientToggleWindowedMode()
     *(int*)0xc97c18 = mode;
 }
 
-// 0x00061cf0
+// 0x00062270
 int ClientFindScreenshotFilename(std::string* path)
 {
     path->assign(ClientGetDataDirectory());
@@ -274,7 +274,7 @@ int ClientFindScreenshotFilename(std::string* path)
     return index;
 }
 
-// 0x00073b80
+// 0x000740e0
 int ClientSaveRenderTarget(IDirect3DDevice9* device, const char* filename)
 {
     IDirect3DSurface9 *target = 0, *surface = 0;
@@ -301,7 +301,7 @@ int ClientSaveRenderTarget(IDirect3DDevice9* device, const char* filename)
     return 0;
 }
 
-// 0x00075040
+// 0x000755c0
 void ClientCaptureScreenshot()
 {
     g_renderScreenshotRequested = 0;
@@ -331,7 +331,7 @@ void ClientCaptureScreenshot()
     // Original does not release surface and does not check create/save HRESULTs.
 }
 
-// 0x00061940
+// 0x00061ec0
 void ClientRefreshWindowProcedure()
 {
     HWND window = (*(HWND*)0x00c97c1c);
@@ -343,7 +343,7 @@ void ClientRefreshWindowProcedure()
     }
 }
 
-// 0x00061970
+// 0x00061ef0
 BOOL ClientInstallWindowProcedure()
 {
     HWND window = (*(HWND*)0x00c97c1c);
@@ -362,7 +362,7 @@ BOOL ClientInstallWindowProcedure()
     return TRUE;
 }
 
-// 0x00060de0
+// 0x00061360
 BOOL ClientHandleKeyRelease(unsigned int key)
 {
     switch (key)
@@ -422,7 +422,7 @@ BOOL ClientHandleKeyRelease(unsigned int key)
         case VK_F7:
             g_pChat->SwitchMode();
             return FALSE;
-        // 0x0016be7c
+        // 0x0012de64
         case VK_F8:
             g_renderScreenshotRequested = 1;
             return FALSE;

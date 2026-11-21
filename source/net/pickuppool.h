@@ -30,32 +30,32 @@ class CPickupPool
     Pickup pickups[Capacity];
 
 public:
-    // 0x00013080
+    // 0x00013180
     void CreateWeapon(int model, float x, float y, float z, int ammo, WORD owner);
-    // 0x00013340
+    // 0x00013440
     void SendNotification(int index);
-    // 0x00013420
+    // 0x00013520
     void Process();
-    // 0x00008190
+    // 0x000084a0
     CPickupPool();
-    // 0x00013310
+    // 0x00013410
     ~CPickupPool();
-    // 0x00013170
+    // 0x00013270
     void Create(const Pickup* pickup, int id);
-    // 0x00013220
+    // 0x00013320
     void Delete(int id);
-    // 0x00013280
+    // 0x00013380
     void DeleteWeapon(WORD owner);
-    // 0x000132e0
+    // 0x000133e0
     int GetIndex(int index);
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(Pickup) == 20);
 STATIC_ASSERT(sizeof(WeaponPickupState) == 3);
 STATIC_ASSERT(sizeof(CPickupPool) == 0x23004);
-// 0x0011816c
+// R5 address to verify
 extern int g_pickupCollectedRpc;
-// 0x00118170
+// 0x000e60e4
 extern int g_weaponPickupCollectedRpc;
 
 #endif // PICKUPPOOL_H

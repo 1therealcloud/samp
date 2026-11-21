@@ -10,13 +10,13 @@
 
 #include <new>
 #include <string.h>
-// 0x0006d420
+// 0x0006d9e0
 CLicensePlate::~CLicensePlate()
 {
     OnLostDevice();
 }
 
-// 0x0006d1f0
+// 0x0006d7b0
 void CLicensePlate::OnLostDevice()
 {
     if (surface)
@@ -41,7 +41,7 @@ void CLicensePlate::OnLostDevice()
     }
 }
 
-// 0x0006d240
+// 0x0006d800
 void CLicensePlate::OnResetDevice()
 {
     device->GetDisplayMode(0, &mode);
@@ -54,7 +54,7 @@ void CLicensePlate::OnResetDevice()
     }
 }
 
-// 0x0006d3f0
+// 0x0006d9b0
 CLicensePlate::CLicensePlate(IDirect3DDevice9* value)
 {
     defaultTexture = 0;
@@ -65,7 +65,7 @@ CLicensePlate::CLicensePlate(IDirect3DDevice9* value)
     OnResetDevice();
 }
 
-// 0x0006d2c0
+// 0x0006d880
 IDirect3DTexture9* CLicensePlate::Create(const char* text)
 {
     if (!device || !g_deviceFonts || !renderer || !texture || !surface)

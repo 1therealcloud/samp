@@ -11,7 +11,7 @@
 
 //------------------------------------
 
-// 0x00065440
+// 0x000659c0
 CSigner::CSigner(void)
 {
     m_dwLength = 0;
@@ -20,7 +20,7 @@ CSigner::CSigner(void)
 
 //------------------------------------
 
-// 0x00065450
+// R5 address to verify
 CSigner::~CSigner(void)
 {
     if (m_pbSignature != NULL)
@@ -62,7 +62,7 @@ DWORD CSigner::GetSignatureLength()
 
 //------------------------------------
 
-// 0x00065460
+// 0x000659e0
 void CSigner::SetSignature(DWORD dwLength, BYTE* pbSignature)
 {
     if (m_pbSignature != NULL)
@@ -75,7 +75,7 @@ void CSigner::SetSignature(DWORD dwLength, BYTE* pbSignature)
 
 //------------------------------------
 
-// 0x000654b0
+// 0x00065a30
 BOOL CSigner::VerifySignature(CHasher* pHasher, CKeyPair* pKeyPair)
 {
     HCRYPTHASH hCryptHash = pHasher->GetContainer();

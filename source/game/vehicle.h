@@ -15,22 +15,22 @@ class CVehicle : public CEntity
 {
 public:
     // Stores the raw byte; does not reset/create the objective blip.
-    // 0x0000e290
+    // R5 address to verify
     void SetObjective(BYTE objective);
-    // 0x000b73e0
+    // R5 address to verify
     void SetBackendFloat94CAnd950(float first, float second);
 
-    // 0x000b6db0
+    // R5 address to verify
     void SetBackendFlag428Bit5(BOOL enabled);
     // Native backend pointer is unchecked; result is returned in ST0.
-    // 0x000b7400
+    // R5 address to verify
     float GetBackendFloat94C();
     // Native backend pointer is unchecked; result is returned in ST0.
-    // 0x000b7410
+    // R5 address to verify
     float GetBackendFloat950();
-    // 0x000b6d70
+    // 0x000b7230
     void SetLocked(BOOL locked);
-    // 0x000b6f10
+    // 0x000b73d0
     BOOL IsWrecked();
 
     CVehicle* m_pTrailer;
@@ -50,145 +50,145 @@ public:
     char m_szLicensePlateText[33];
     DWORD m_dwMarker;
     // Native constructor with ordinary, train and carriage paths.
-    // 0x000b7f00
+    // 0x000b83d0
     CVehicle(int model, float x, float y, float z, float rotation, DWORD keepLoaded, BOOL siren);
-    // 0x000b8420
+    // 0x000b88f0
     virtual ~CVehicle();
-    // 0x000b8540
+    // 0x000b8a10
     virtual void Add();
-    // 0x000b8570
+    // 0x000b8a40
     virtual void Remove();
-    // 0x000b85a0
+    // 0x000b8a70
     void EnableEngine(BOOL enabled);
-    // 0x000b7220
+    // 0x000b76e0
     void ProcessMarkers();
-    // 0x000b77d0
+    // 0x000b7c90
     CVehicle* GetTrailer();
-    // 0x000b7830
+    // 0x000b7cf0
     CVehicle* GetTractor();
-    // 0x000b7a20
+    // 0x000b7ee0
     void RemovePassengers();
-    // 0x000b7b00
+    // 0x000b7fc0
     BOOL AddComponent(WORD component);
-    // 0x000b6cd0
+    // 0x000b7190
     void SetInvulnerable(BOOL enabled);
-    // 0x000b70e0
+    // 0x000b75a0
     void SetLandingGearState(int state);
-    // 0x000b7170
+    // 0x000b7630
     BOOL GetLandingGearState();
-    // 0x000b7480
-    void SetTires(BYTE tires);
-    // 0x000b7570
-    BYTE GetTires();
-    // 0x000b7600
-    void UpdateDamage(DWORD panels, DWORD doors, BYTE lights);
-    // 0x000b78b0
-    BOOL IsTrailer();
-    // 0x000b7d80
-    void CallBackend6a6ae0(DWORD first, DWORD second, DWORD third);
-    // 0x000b7440
-    void SetTrainSpeed(float speed);
-    // 0x000b7e10
-    void SetBackendFloat64c(float speed);
-    // 0x000b6bd0
-    void ChangeInterior(int interior);
-    // 0x000b6e70
-    void UpdateColor();
-    // 0x000b6ef0
-    DWORD IsSunk();
-    // 0x000b6fe0
-    BOOL HasTurret();
-    // 0x000b7010
-    void SetBackendBytes1f6And514(BYTE value);
-    // 0x000b7380
-    void Lock(BOOL locked);
-    // 0x000b73b0
-    BOOL UpdateLastDrivenTime();
-    // 0x000b7750
-    void AttachTrailer();
-    // 0x000b7770
-    void DetachTrailer();
-    // 0x000b7990
-    void EnableLights(BYTE enabled);
-    // 0x000b79f0
-    BYTE GetBackendLightsDisabledFlag();
-    // 0x000b7be0
-    BOOL RemoveComponent(WORD component);
-    // 0x000b7c20
-    void SetPaintjob(BYTE paintjob);
-    // 0x000b7c80
-    void SetLicensePlateText(const char* text);
-    // 0x000b7ca0
-    void SetRotation(float angle);
-    // 0x000b7de0
-    float GetBackendFloat648();
-    // 0x000b7ea0
-    void SetWindowOpenFlag(BYTE window);
-    // 0x000b7ed0
-    void ClearWindowOpenFlag(BYTE window);
-    // 0x000b6c00
-    void ResetPointers();
-    // 0x000b6c20
-    BOOL HasDriver();
-    // 0x000b6c70
-    BOOL IsOccupied();
-    // 0x000b6e00
-    void SetHealth(float health);
-    // 0x000b6f30
-    BOOL DriverIsPlayerPed();
-    // 0x000b6f60
-    BOOL HasPlayerPed();
-    // 0x000b7080
-    void EnableSiren(BYTE enabled);
-    // 0x000b70a0
-    BOOL SirenEnabled();
-    // 0x000b70c0
-    void SetBackendWord45c(WORD value);
-    // 0x000b71e0
-    void SetHydraThrusters(DWORD value);
-    // 0x000b7200
-    DWORD GetHydraThrusters();
-    // 0x000b7420
-    float GetTrainSpeed();
-    // 0x000b76c0
-    DWORD GetPanelsDamage();
-    // 0x000b76f0
-    DWORD GetDoorsDamage();
-    // 0x000b7720
-    BYTE GetLightsDamage();
-    // 0x000b77c0
-    void SetTrailer(CVehicle* trailer);
-    // 0x000b7910
-    BOOL IsTowtruck();
-    // 0x000b7c70
-    bool DoesExist();
-    // 0x000b7d40
-    void SetField50(DWORD value);
-    // 0x000b7d50
-    DWORD GetField50();
-    // 0x000b7d60
-    void SetField54(DWORD value);
-    // 0x000b7d70
-    DWORD GetField54();
-    // 0x000b6e20
-    void SetColor(int primary, int secondary);
-    // 0x000b6fa0
-    BOOL IsTrainPart();
     // 0x000b7940
+    void SetTires(BYTE tires);
+    // 0x000b7a30
+    BYTE GetTires();
+    // 0x000b7ac0
+    void UpdateDamage(DWORD panels, DWORD doors, BYTE lights);
+    // 0x000b7d70
+    BOOL IsTrailer();
+    // 0x000b8250
+    void CallBackend6a6ae0(DWORD first, DWORD second, DWORD third);
+    // 0x000b7900
+    void SetTrainSpeed(float speed);
+    // 0x000b82e0
+    void SetBackendFloat64c(float speed);
+    // 0x000b7090
+    void ChangeInterior(int interior);
+    // 0x000b7330
+    void UpdateColor();
+    // 0x000b73b0
+    DWORD IsSunk();
+    // 0x000b74a0
+    BOOL HasTurret();
+    // 0x000b74d0
+    void SetBackendBytes1f6And514(BYTE value);
+    // 0x000b7840
+    void Lock(BOOL locked);
+    // 0x000b7870
+    BOOL UpdateLastDrivenTime();
+    // 0x000b7c10
+    void AttachTrailer();
+    // 0x000b7c30
+    void DetachTrailer();
+    // 0x000b7e50
+    void EnableLights(BYTE enabled);
+    // 0x000b7eb0
+    BYTE GetBackendLightsDisabledFlag();
+    // 0x000b80b0
+    BOOL RemoveComponent(WORD component);
+    // 0x000b80f0
+    void SetPaintjob(BYTE paintjob);
+    // 0x000b8150
+    void SetLicensePlateText(const char* text);
+    // 0x000b8170
+    void SetRotation(float angle);
+    // 0x000b82b0
+    float GetBackendFloat648();
+    // 0x000b8370
+    void SetWindowOpenFlag(BYTE window);
+    // 0x000b83a0
+    void ClearWindowOpenFlag(BYTE window);
+    // 0x000b70c0
+    void ResetPointers();
+    // 0x000b70e0
+    BOOL HasDriver();
+    // 0x000b7130
+    BOOL IsOccupied();
+    // 0x000b72c0
+    void SetHealth(float health);
+    // 0x000b73f0
+    BOOL DriverIsPlayerPed();
+    // 0x000b7420
+    BOOL HasPlayerPed();
+    // 0x000b7540
+    void EnableSiren(BYTE enabled);
+    // 0x000b7560
+    BOOL SirenEnabled();
+    // 0x000b7580
+    void SetBackendWord45c(WORD value);
+    // 0x000b76a0
+    void SetHydraThrusters(DWORD value);
+    // 0x000b76c0
+    DWORD GetHydraThrusters();
+    // 0x000b78e0
+    float GetTrainSpeed();
+    // 0x000b7b80
+    DWORD GetPanelsDamage();
+    // 0x000b7bb0
+    DWORD GetDoorsDamage();
+    // 0x000b7be0
+    BYTE GetLightsDamage();
+    // 0x000b7c80
+    void SetTrailer(CVehicle* trailer);
+    // 0x000b7dd0
+    BOOL IsTowtruck();
+    // 0x000b8140
+    bool DoesExist();
+    // R5 address to verify
+    void SetField50(DWORD value);
+    // R5 address to verify
+    DWORD GetField50();
+    // R5 address to verify
+    void SetField54(DWORD value);
+    // R5 address to verify
+    DWORD GetField54();
+    // 0x000b72e0
+    void SetColor(int primary, int secondary);
+    // 0x000b7460
+    BOOL IsTrainPart();
+    // 0x000b7e00
     BOOL IsRC();
     // Raw wrapper DWORD at +8B, normalized by the native query.
-    // 0x000b7e60
+    // 0x000b8330
     BOOL HasSiren();
     // Additional stage 2 wrapper dependencies; no complete allocation claim.
-    // 0x000b7e70
+    // 0x000b8340
     BYTE GetMaxPassengers();
-    // 0x000b6de0
+    // 0x000b72a0
     float GetHealth();
-    // 0x000b6ed0
+    // 0x000b7390
     int GetSubtype();
-    // 0x000b7cd0
+    // 0x000b81a0
     void ConstructLicensePlate();
-    // 0x000b7d20
+    // 0x000b81f0
     void ShutdownLicensePlate();
 };
 #pragma pack(pop)
@@ -212,34 +212,34 @@ STATIC_ASSERT(offsetof(CVehicle, m_dwSiren) == 0x8b);
 STATIC_ASSERT(offsetof(CVehicle, m_pLicensePlateTexture) == 0x8f);
 STATIC_ASSERT(offsetof(CVehicle, m_szLicensePlateText) == 0x93);
 STATIC_ASSERT(offsetof(CVehicle, m_dwMarker) == 0xb4);
-// 0x000b37d0
+// 0x000b3bd0
 void* __stdcall GamePoolVehicleGetAt(int handle);
 // GTA SA vtable classification helper; values are native 0..7 tags.
-// 0x000b5d20
+// 0x000b61e0
 int GameGetVehicleSubtype(void* vehicle);
-// 0x0018f5dc
+// R5 address to verify
 extern DWORD g_vehicleDetachingTrailer;
-// 0x001181a0
+// 0x000e6110
 extern const float g_vehicleTrainSpeedMinimum;
-// 0x001181a4
+// 0x000e6114
 extern const float g_vehicleTrainSpeedMaximum;
-// 0x0011812c
+// 0x000e60a0
 extern const float g_vehicleMarkerDistance;
-// 0x000b3eb0
+// 0x000b42b0
 void __stdcall GameRemoveDriverByState598(void* vehicle);
-// 0x002abe64
+// R5 address to verify
 extern void* g_vehicleTrainCursor;
-// 0x002abe68
+// R5 address to verify
 extern DWORD g_vehicleLastCreatedHandle;
-// 0x0011e33c
+// 0x000ec314
 extern const float g_vehicleCreationLift;
-// 0x0011f7e0
+// 0x000ed6dc
 extern const char g_vehicleBadCarriageWarning[29];
-// 0x0011f800
+// 0x000ed6fc
 extern const char g_vehicleCreationWarning[42];
 #endif
 
-// 0x0011f704
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleLockedCommand;
-// 0x0011f68c
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_vehicleWreckedCommand;

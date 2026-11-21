@@ -19,9 +19,9 @@ private:
     DWORD m_dwLength;
 
 public:
-    // 0x00065440
+    // 0x000659c0
     CSigner(void);
-    // 0x00065450
+    // R5 address to verify
     ~CSigner(void);
 
 #ifdef ARCTOOL
@@ -30,8 +30,8 @@ public:
     DWORD GetSignatureLength();
 #endif
 
-    // 0x00065460
+    // 0x000659e0
     void SetSignature(DWORD dwLength, BYTE* pbSignature);
-    // 0x000654b0
+    // 0x00065a30
     BOOL VerifySignature(CHasher* pHasher, CKeyPair* pKeyPair);
 };

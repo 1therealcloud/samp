@@ -19,45 +19,45 @@
 
 #include <static_assert.h>
 
-// 0x002acab8
+// R5 address to verify
 CDXUTDialog* g_guiScoreboardDialog;
-// 0x002acac0
+// R5 address to verify
 CDXUTDialog* g_guiServerDialog;
-// 0x002acac4
+// R5 address to verify
 CDXUTDialog* g_guiPanelDialog;
-// 0x002acac8
+// R5 address to verify
 CDXUTDialog* g_guiDownloadDialog;
 STATIC_ASSERT(sizeof(CDXUTDialog) == 0x1ea);
-// 0x002ac9d8
+// R5 address to verify
 CPlayerTags* g_devicePlayerTags;
-// 0x002aca20
+// R5 address to verify
 CSpawnScreen* g_deviceSpawnScreen;
-// 0x002ac9ec
+// 0x0026eb5c
 CLabel* g_deviceLabel;
-// 0x002aca34
+// R5 address to verify
 CObjectMaterialText* g_deviceMaterialText;
-// 0x002aca18
+// 0x0026eb88
 BYTE* g_deviceDeathWindow;
-// 0x002ac9f0
+// 0x0026eb60
 BYTE* g_deviceObjectEdit;
-// 0x002ac9dc
+// 0x0026eb4c
 CScoreboard* g_deviceScoreboard;
-// 0x002acab0
+// 0x0026ec20
 CDXUTDialogResourceManager* g_deviceDialogResources;
-// 0x002acacc
+// R5 address to verify
 IDirect3DSurface9* g_deviceCursorSurface;
-// 0x0016be80
+// R5 address to verify
 DWORD g_deviceResetMarker;
-// 0x0017ebe0
+// R5 address to verify
 BYTE g_renderMenuWasVisible;
-// 0x0018e538
+// R5 address to verify
 IUnknown* g_gameLastReleasedResource;
-// 0x0018dde8
+// 0x0014ff50
 DWORD g_gameDebugStage;
-// 0x0018e1d0
+// R5 address to verify
 HWND g_gameInputCooperativeWindow;
 
-// 0x000c6ce0
+// 0x000c5620
 void ClientInitializeGui()
 {
     if (g_guiScoreboardDialog)
@@ -184,7 +184,7 @@ STATIC_ASSERT(sizeof(CChatBubble) == 0x44a20);
 
 // Allocation extent and packed manager layout observed in the original constructor.
 STATIC_ASSERT(sizeof(CDXUTDialogResourceManager) == 36);
-// 0x000c6a60
+// 0x000c53a0
 void ClientInitializeDialogResources()
 {
     g_deviceDialogResources = new CDXUTDialogResourceManager;
@@ -192,7 +192,7 @@ void ClientInitializeDialogResources()
     g_deviceDialogResources->OnResetDevice();
 }
 
-// 0x000c6af0
+// R5 address to verify
 void ClientRefreshGuiFonts()
 {
     if (g_guiScoreboardDialog)
@@ -211,14 +211,14 @@ void ClientRefreshGuiFonts()
         g_renderDownloadWindow->ResetFonts();
 }
 
-// 0x000c6c30
+// 0x000c5570
 void CALLBACK ClientGuiScoreboardEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
     if (g_guiScoreboardDialog && event == 0x701 && g_deviceScoreboard)
         g_deviceScoreboard->SendNotification();
 }
 
-// 0x000c6bf0
+// 0x000c5530
 void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
     switch (id)
@@ -230,7 +230,7 @@ void CALLBACK ClientGuiInputEvent(UINT event, int id, CDXUTControl* control, voi
     }
 }
 
-// 0x000c6c60
+// 0x000c55a0
 void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
     // Native resolves these pointers even for events that do not dispatch a command.
@@ -254,7 +254,7 @@ void CALLBACK ClientGuiSpawnEvent(UINT event, int id, CDXUTControl* control, voi
     }
 }
 
-// 0x000c6b60
+// 0x000c54a0
 void CALLBACK ClientGuiDialogEvent(UINT event, int id, CDXUTControl* control, void* context)
 {
     switch (id)
@@ -289,13 +289,13 @@ void CALLBACK ClientGuiDialogEvent(UINT event, int id, CDXUTControl* control, vo
 }
 
 // Both empty callbacks are confirmed native RET 16 bodies.
-// 0x000c6cc0
+// R5 address to verify
 void CALLBACK ClientGuiPanelEvent(UINT event, int id, CDXUTControl* control, void* context) {}
 
-// 0x000c6cd0
+// R5 address to verify
 void CALLBACK ClientGuiDownloadEvent(UINT event, int id, CDXUTControl* control, void* context) {}
 
-// 0x000c5620
+// 0x000c3f50
 void ClientDeviceObjectsLost()
 {
     if (g_devicePlayerTags)
@@ -362,7 +362,7 @@ void ClientDeviceObjectsLost()
     }
 }
 
-// 0x000c5880
+// 0x000c41b0
 void ClientDeviceObjectsReset()
 {
     SetCursor(0);
@@ -425,7 +425,7 @@ void ClientDeviceObjectsReset()
     }
 }
 
-// 0x000a0280
+// 0x000a0440
 void GameReleaseRenderResource()
 {
     IUnknown* resource = *(IUnknown**)0xc8cfa4;
@@ -437,7 +437,7 @@ void GameReleaseRenderResource()
     }
 }
 
-// 0x00073f10
+// 0x00074480
 void ClientProcessMenuTransition()
 {
     if (g_pGame)
@@ -456,7 +456,7 @@ void ClientProcessMenuTransition()
     }
 }
 
-// 0x0009e2d0
+// 0x0009e490
 void GameDebugDraw()
 {
     DWORD stage = g_gameDebugStage;
@@ -464,7 +464,7 @@ void GameDebugDraw()
         GameDrawDebugEntities();
 }
 
-// 0x000a02a0
+// R5 address to verify
 void GameReacquireInputDevice()
 {
     // GTA SA virtual addresses: DirectInput device slot and main HWND.
@@ -483,13 +483,13 @@ void GameReacquireInputDevice()
 }
 
 // The unused EDX parameter leaves value in the native single stack slot.
-// 0x000841a0
+// R5 address to verify
 void __fastcall NativeWriteDword013f(void* object, void*, DWORD value)
 {
     *(DWORD*)((BYTE*)object + 0x13f) = value;
 }
 
-// 0x0006eea0
+// R5 address to verify
 void __fastcall NativeWriteByte0012(void* object, void*, BYTE value)
 {
     *((BYTE*)object + 0x12) = value;

@@ -13,21 +13,21 @@
 #include <stdio.h>
 #include <string.h>
 
-// 0x0011c6b0
+// R5 address to verify
 const float g_objectSelectionMaxDistance = 150.0f;
-// 0x0011c68c
+// 0x000ea664
 const char g_objectSelectionLabelFormat[36] = "[id: %d, type: %d]\nDistance: %.2fm\n";
-// 0x00117f28
+// 0x000e5e9c
 int g_objectSelectionRpc = 27;
 
-// 0x0006d440
+// 0x0006da00
 CObjectSelection::CObjectSelection()
 {
     enabled = 0;
     objectId = 0xffff;
 }
 
-// 0x0006d450
+// 0x0006da10
 WORD CObjectSelection::DefineObject()
 {
     if (!g_pNetGame)
@@ -39,7 +39,7 @@ WORD CObjectSelection::DefineObject()
     return pool->FindInRay(150.0f, &origin, &end);
 }
 
-// 0x0006d4a0
+// 0x0006da60
 void CObjectSelection::DrawLabels()
 {
     if (!g_pNetGame)
@@ -86,7 +86,7 @@ void CObjectSelection::DrawLabels()
     g_deviceLabel->End();
 }
 
-// 0x0006d5c0
+// 0x0006db80
 void CObjectSelection::Enable(BOOL on)
 {
     if (enabled)
@@ -115,7 +115,7 @@ void CObjectSelection::Enable(BOOL on)
     enabled = on;
 }
 
-// 0x0006d640
+// 0x0006dc00
 void CObjectSelection::Draw()
 {
     if (!enabled)
@@ -148,7 +148,7 @@ void CObjectSelection::Draw()
     }
 }
 
-// 0x0006d710
+// 0x0006dcd0
 void CObjectSelection::SendNotification()
 {
     BYTE* pool = *(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
@@ -176,7 +176,7 @@ void CObjectSelection::SendNotification()
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_objectSelectionRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }
 
-// 0x0006d880
+// 0x0006de40
 BOOL CObjectSelection::MsgProc(UINT message, WPARAM, LPARAM)
 {
     if (enabled && message == WM_LBUTTONUP)

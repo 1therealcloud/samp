@@ -14,16 +14,16 @@
 
 #include <stdio.h>
 #include <string.h>
-// 0x0015fa68
+// 0x00121a50
 CONTEXT* g_clientExceptionContext;
-// 0x0015fa70
+// 0x00121a58
 char g_clientCrashText[16384];
-// 0x00151960
+// 0x00113978
 BYTE* g_clientCrashPedContext = (BYTE*)0xb7cd74; // GTA SA virtual address.
-// 0x0018f584
+// R5 address to verify
 WORD g_clientCrashLastRenderedObject;
 
-// 0x00060260
+// 0x000607a0
 void ClientSendCrashReport()
 {
     CHttpClient http;
@@ -35,7 +35,7 @@ void ClientSendCrashReport()
     http.ProcessURL(HTTP_POST, url, encoded, "www.sa-mp.com");
 }
 
-// 0x0005fd50
+// 0x00060290
 void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
 {
     char line[16384];
@@ -56,7 +56,7 @@ void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
     }
 }
 
-// 0x0005fc20
+// R5 address to verify
 void ClientDumpNetworkState(char* text)
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -78,7 +78,7 @@ void ClientDumpNetworkState(char* text)
     }
 }
 
-// 0x0005fee0
+// 0x00060420
 void ClientDumpLoadedModules(char* text)
 {
     MODULEENTRY32 entry;
@@ -109,7 +109,7 @@ void ClientDumpLoadedModules(char* text)
     CloseHandle(snapshot);
 }
 
-// 0x00060070
+// 0x000605b0
 void ClientConstructCrashText(BOOL includeModules)
 {
     char text[16384];
@@ -143,7 +143,7 @@ void ClientConstructCrashText(BOOL includeModules)
     }
 }
 
-// 0x00060330
+// 0x00060870
 INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -178,7 +178,7 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
     return FALSE;
 }
 
-// 0x00060430
+// 0x00060970
 LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS* exception)
 {
     g_clientExceptionContext = exception->ContextRecord;

@@ -11,28 +11,28 @@ class CObjectSelection
 public:
     DWORD enabled;
     WORD objectId;
-    // 0x0006d450
+    // 0x0006da10
     WORD DefineObject();
-    // 0x0006d4a0
+    // 0x0006da60
     void DrawLabels();
-    // 0x0006d710
+    // 0x0006dcd0
     void SendNotification();
-    // 0x0006d880
+    // 0x0006de40
     BOOL MsgProc(UINT message, WPARAM wparam, LPARAM lparam);
-    // 0x0006d5c0
+    // 0x0006db80
     void Enable(BOOL enabled);
-    // 0x0006d440
+    // 0x0006da00
     CObjectSelection();
-    // 0x0006d640
+    // 0x0006dc00
     void Draw();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CObjectSelection) == 6);
-// 0x0011c6b0
+// R5 address to verify
 extern const float g_objectSelectionMaxDistance;
-// 0x0011c68c
+// 0x000ea664
 extern const char g_objectSelectionLabelFormat[36];
-// 0x00117f28
+// 0x000e5e9c
 extern int g_objectSelectionRpc;
 
 #endif // OBJECTSELECTION_H

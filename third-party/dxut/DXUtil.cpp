@@ -34,7 +34,6 @@ bool DXUtil_FindMediaSearchTypicalDirs( TCHAR* strSearchPath, int cchSearch, LPC
 //       cchDest is the size in TCHARs of strDest.  Be careful not to 
 //       pass in sizeof(strDest) on UNICODE builds.
 //-----------------------------------------------------------------------------
-// 0x00076200
 HRESULT DXUtil_GetDXSDKMediaPathCch( TCHAR* strDest, int cchDest )
 {
     if( strDest == NULL || cchDest < 1 )
@@ -79,7 +78,6 @@ HRESULT DXUtil_GetDXSDKMediaPathCch( TCHAR* strDest, int cchDest )
 //       cchDest is the size in TCHARs of strDestPath.  Be careful not to 
 //       pass in sizeof(strDest) on UNICODE builds.
 //-----------------------------------------------------------------------------
-// 0x000778f0
 HRESULT DXUtil_FindMediaFileCch( TCHAR* strDestPath, int cchDest, LPCTSTR strFilename )
 {
     bool bFound;
@@ -170,7 +168,6 @@ HRESULT DXUtil_FindMediaFileCch( TCHAR* strDestPath, int cchDest, LPCTSTR strFil
 //--------------------------------------------------------------------------------------
 // Search a set of typical directories
 //--------------------------------------------------------------------------------------
-// 0x000762f0
 bool DXUtil_FindMediaSearchTypicalDirs( TCHAR* strSearchPath, int cchSearch, LPCTSTR strLeaf, 
                                         TCHAR* strExePath, TCHAR* strExeName, TCHAR* strMediaDir )
 {
@@ -244,7 +241,6 @@ bool DXUtil_FindMediaSearchTypicalDirs( TCHAR* strSearchPath, int cchSearch, LPC
 // Search parent directories starting at strStartAt, and appending strLeafName
 // at each parent directory.  It stops at the root directory.
 //--------------------------------------------------------------------------------------
-// 0x00076470
 bool DXUtil_FindMediaSearchParentDirs( TCHAR* strSearchPath, int cchSearch, TCHAR* strStartAt, TCHAR* strLeafName )
 {
     TCHAR strFullPath[MAX_PATH] = {0};
@@ -386,7 +382,6 @@ HRESULT DXUtil_WriteFloatRegKey( HKEY hKey, LPCTSTR strRegName, FLOAT fValue )
 // Name: DXUtil_ReadIntRegKey()
 // Desc: Helper function to read a registry key int
 //-----------------------------------------------------------------------------
-// 0x000767b0
 HRESULT DXUtil_ReadIntRegKey( HKEY hKey, LPCTSTR strRegName, DWORD* pdwDest, 
                               DWORD dwDefault )
 {
@@ -434,7 +429,6 @@ HRESULT DXUtil_WriteIntRegKey( HKEY hKey, LPCTSTR strRegName, DWORD dwValue )
 // Name: DXUtil_ReadBoolRegKey()
 // Desc: Helper function to read a registry key BOOL
 //-----------------------------------------------------------------------------
-// 0x00076840
 HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, LPCTSTR strRegName, BOOL* pbDest, 
                               BOOL bDefault )
 {
@@ -482,7 +476,6 @@ HRESULT DXUtil_WriteBoolRegKey( HKEY hKey, LPCTSTR strRegName, BOOL bValue )
 // Name: DXUtil_ReadGuidRegKey()
 // Desc: Helper function to read a registry key guid
 //-----------------------------------------------------------------------------
-// 0x000768d0
 HRESULT DXUtil_ReadGuidRegKey( HKEY hKey, LPCTSTR strRegName, GUID* pGuidDest, 
                                GUID& guidDefault )
 {
@@ -1137,7 +1130,6 @@ VOID DXUtil_Trace( LPCTSTR strMsg, ... )
 // Name: DXUtil_ConvertStringToGUID()
 // Desc: Converts a string to a GUID
 //-----------------------------------------------------------------------------
-// 0x00077420
 HRESULT DXUtil_ConvertStringToGUID( const TCHAR* strSrc, GUID* pGuidDest )
 {
     UINT aiTmp[10];

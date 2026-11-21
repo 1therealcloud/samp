@@ -27,25 +27,25 @@ public:
     CMenuInteraction interaction;
     BYTE unknown3b2[2];
     DWORD handle;
-    // 0x000a7260
+    // 0x000a7670
     void Hide();
-    // 0x000a72d0
+    // 0x000a76e0
     const char* MS(BYTE row, BYTE column);
-    // 0x000a7300
+    // 0x000a7710
     BYTE GetActiveRow();
-    // 0x000a7330
+    // 0x000a7740
     void Show();
-    // 0x000a7160
+    // 0x000a7420
     CMenu(const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction);
-    // 0x000a7200
+    // 0x000a7580
     void AddItem(BYTE column, BYTE row, const char* text);
-    // 0x000a7230
+    // 0x000a7600
     void SetColumnTitle(BYTE column, const char* text);
-    // 0x000a7280
+    // 0x000a7690
     char* GetItem(BYTE column, BYTE row);
-    // 0x000a72a0
+    // 0x000a76b0
     char* GetTitle();
-    // 0x000a72b0
+    // R5 address to verify
     char* GetColumnTitle(BYTE column);
 };
 #pragma pack(pop)
@@ -59,9 +59,9 @@ STATIC_ASSERT(offsetof(CMenu, widths) == 0x369);
 STATIC_ASSERT(offsetof(CMenu, columns) == 0x371);
 STATIC_ASSERT(offsetof(CMenu, interaction) == 0x372);
 STATIC_ASSERT(offsetof(CMenu, handle) == 0x3b4);
-// 0x0013c0c8
+// 0x000fe0c8
 extern const char g_menuItemKeys[24][32];
-// 0x0011ecf4
+// 0x000ecbfc
 extern const char g_menuDummy[6];
 
 #endif // MENU_H

@@ -12,28 +12,28 @@ class CRenderPanel
 {
 public:
     BYTE nativeState[0x28];
-    // 0x00071100
+    // 0x00071660
     CRenderPanel(IDirect3DDevice9* device);
-    // 0x00071140
+    // 0x000716a0
     void ResetDialogControls(CDXUTDialog* dialog);
-    // 0x000712c0
+    // 0x00071820
     void UpdateLayout();
-    // 0x00071320
+    // R5 address to verify
     void GetRect(RECT* out);
-    // 0x00071350
+    // 0x000718b0
     void Show();
-    // 0x000713c0
+    // R5 address to verify
     void Hide();
-    // 0x000713d0
+    // 0x00071930
     void ProcessControls();
-    // 0x00071480
+    // 0x000719e0
     void DrawLabels();
-    // 0x00071560
+    // 0x00071ac0
     void Draw();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CRenderPanel) == 0x28);
-// 0x0011c75c
+// 0x000ea734
 extern const char g_renderPanelTitle[10];
 
 #endif // RENDERPANEL_H

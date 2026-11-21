@@ -14,7 +14,7 @@
 
 //----------------------------------------------------------
 
-// 0x00060500
+// 0x00060a80
 CFileSystem::CFileSystem()
 {
     m_bLoaded = false;
@@ -25,7 +25,7 @@ CFileSystem::CFileSystem()
 
 //----------------------------------------------------------
 
-// 0x00060690
+// R5 address to verify
 CFileSystem::~CFileSystem()
 {
     if (m_bLoaded)
@@ -34,7 +34,7 @@ CFileSystem::~CFileSystem()
 
 //----------------------------------------------------------
 
-// 0x000606b0
+// 0x00060c30
 bool CFileSystem::Load(char* szFileName)
 {
     if (m_bLoaded)
@@ -88,7 +88,7 @@ bool CFileSystem::Load(char* szFileName)
 
 //----------------------------------------------------------
 
-// 0x00060520
+// 0x00060aa0
 void CFileSystem::Unload()
 {
     if (!m_bLoaded)
@@ -112,7 +112,7 @@ void CFileSystem::Unload()
 
 //----------------------------------------------------------
 
-// 0x00060580
+// 0x00060b00
 DWORD CFileSystem::GetFileIndex(char* szFileName)
 {
     if (!m_bLoaded)
@@ -131,7 +131,7 @@ DWORD CFileSystem::GetFileIndex(char* szFileName)
 
 //----------------------------------------------------------
 
-// 0x000605e0
+// R5 address to verify
 DWORD CFileSystem::GetFileSize(DWORD dwFileIndex)
 {
     if ((!m_bLoaded) || (dwFileIndex == FS_INVALID_FILE) || (dwFileIndex >= m_dwFileCount))
@@ -142,7 +142,7 @@ DWORD CFileSystem::GetFileSize(DWORD dwFileIndex)
 
 //----------------------------------------------------------
 
-// 0x00060610
+// R5 address to verify
 BYTE* CFileSystem::GetFileData(DWORD dwFileIndex)
 {
     if ((!m_bLoaded) || (dwFileIndex == FS_INVALID_FILE) || (dwFileIndex >= m_dwFileCount))
@@ -153,7 +153,7 @@ BYTE* CFileSystem::GetFileData(DWORD dwFileIndex)
 
 //----------------------------------------------------------
 
-// 0x00060640
+// 0x00060bc0
 void CFileSystem::DecryptData(BYTE* pData, DWORD dwDataLen, WORD wKey)
 {
     BYTE x, o;

@@ -9,17 +9,17 @@ struct CVector;
 class CObjectMaterialText
 {
 public:
-    // 0x00070350
+    // 0x000708b0
     IDirect3DTexture9* Create(const char* text, const char* font, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold, BYTE alignment);
-    // 0x00070320
+    // 0x00070880
     CObjectMaterialText(IDirect3DDevice9* device);
-    // 0x00070340
+    // 0x000708a0
     ~CObjectMaterialText();
     IDirect3DDevice9* device;
     ID3DXSprite *first, *second;
-    // 0x000702d0
+    // 0x00070830
     void OnLostDevice();
-    // 0x00070300
+    // 0x00070860
     void OnResetDevice();
 };
 #pragma pack(pop)

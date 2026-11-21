@@ -5,31 +5,31 @@
 
 #include <stdarg.h>
 #include <string.h>
-// 0x002a93f0
+// 0x0026b558
 CRunningScript* g_scriptThread;
-// 0x002a92f0
+// 0x0026b458
 BYTE g_scriptBuffer[256];
-// 0x002a92a8
+// R5 address to verify
 DWORD* g_scriptVariables[18];
-// 0x002a93f4
+// 0x0026b55c
 DWORD g_scriptLastOpcode;
 WORD g_scriptVehicleComponent;
-// 0x002a93f8
+// 0x0026b560
 BOOL g_scriptLocalDebug;
 
-// 0x00155390
+// 0x001173b8
 FARPROC g_scriptProcessOneCommand = (FARPROC)0x469eb0;
-// 0x00163a70
+// R5 address to verify
 int g_gameExceptionCount;
 
-// 0x000b2150
+// 0x000b2550
 void Scripting::Initialize()
 {
     g_scriptThread = (CRunningScript*)operator new(224);
     memset(g_scriptThread, 0, 224);
 }
 
-// 0x00060470
+// 0x000609b0
 int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, const char* warning)
 {
     if (g_pChat)
@@ -55,7 +55,7 @@ int __stdcall GameExceptionFilter(DWORD code, EXCEPTION_POINTERS* pointers, cons
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-// 0x000b1ed0
+// 0x000b22d0
 __declspec(naked) DWORD Scripting::ExecBuffer()
 {
     // The backend receives the script thread in ECX and can replace it.
@@ -74,7 +74,7 @@ __declspec(naked) DWORD Scripting::ExecBuffer()
     // clang-format on
 }
 
-// 0x000b1f10
+// 0x000b2310
 DWORD __cdecl Scripting::ProcessCommand(const OpcodeInfo* command, ...)
 {
     va_list args;

@@ -18,31 +18,31 @@
 
 #include <static_assert.h>
 
-// 0x00163a78
+// R5 address to verify
 char g_netStatsLine[1024];
-// 0x00163e78
+// R5 address to verify
 char g_netStatsScratch[16384];
-// 0x00167e78
+// R5 address to verify
 char g_netStatsDisplay[16384];
-// 0x00156ab0
+// R5 address to verify
 DWORD g_netStatsShotCompMode;
-// 0x0011b8e4
+// 0x000e98ac
 const char g_netStatsRatesFormat[49] = "Download Rate: %.2f KB/s\nUpload Rate: %.2f KB/s\n";
-// 0x0011b858
+// 0x000e9820
 const char g_netStatsModelsFormat[140] =
     "Vehicles: %u\nVehicle Models: %u\nVehicle Models Loaded: %u\nRWObjects: %u\nPedSlotsUsed: %u\nObjectSlotsUsed: %u\nShotCompMode: %u\nFreeIDEs: %u\n";
-// 0x0011b83c
+// 0x000e9804
 const char g_netStatsOnFootFormat[22] = "OnFoot Send Rate: %u\n";
-// 0x0011b824
+// 0x000e97ec
 const char g_netStatsInCarFormat[21] = "InCar Send Rate: %u\n";
-// 0x0011b7f4
+// 0x000e97bc
 const char g_netStatsMemoryFormat[46] = "Streaming Mem: %uMB Total: %uMB System: %uMB\n";
-// 0x0011b7cc
+// 0x000e9794
 const char g_netStatsProcessFormat[37] = "Process Mem: %uKB Working Set: %uKB\n";
-// 0x0011b7b4
+// 0x000e977c
 const char g_netStatsTitle[21] = "Client Network Stats";
 
-// 0x000607c0
+// 0x00060d40
 CNetStats::CNetStats(IDirect3DDevice9* value)
 {
     lastUpdateTick = GetTickCount();
@@ -53,7 +53,7 @@ CNetStats::CNetStats(IDirect3DDevice9* value)
     device = value;
 }
 
-// 0x000607f0
+// 0x00060d70
 void CNetStats::Draw()
 {
     if (!g_pNetGame)

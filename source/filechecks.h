@@ -5,7 +5,7 @@
 
 #include <static_assert.h>
 
-// 0x00062b00
+// R5 address to verify
 char* GetSHA1Result(unsigned int* digest, char* buffer);
 
 #pragma pack(push, 1)
@@ -19,51 +19,51 @@ public:
     BYTE block[64];
     DWORD blockIndex;
     bool computed, corrupted;
-    // 0x000635c0
+    // 0x00063b40
     ArchiveNameSha1();
-    // 0x00063550
+    // 0x00063ad0
     virtual ~ArchiveNameSha1();
-    // 0x00063560
+    // 0x00063ae0
     void Reset();
-    // 0x00063d30
+    // 0x000642b0
     void Input(const BYTE* data, DWORD length);
-    // 0x00063da0
+    // 0x00064320
     void Input(const char* data, DWORD length);
-    // 0x00063db0
+    // R5 address to verify
     void Input(BYTE value);
-    // 0x00063dc0
+    // R5 address to verify
     void Input(char value);
     // String forms stop before NUL; single-byte forms also consume zero.
-    // 0x00063dd0
+    // R5 address to verify
     ArchiveNameSha1& operator<<(const char* text);
-    // 0x00063e00
+    // R5 address to verify
     ArchiveNameSha1& operator<<(const BYTE* text);
-    // 0x00063e30
+    // R5 address to verify
     ArchiveNameSha1& operator<<(char value);
-    // 0x00063e50
+    // R5 address to verify
     ArchiveNameSha1& operator<<(BYTE value);
     // Native SHL/SHR mask counts modulo32, including zero/negative inputs.
-    // 0x000635a0
+    // R5 address to verify
     DWORD CircularShift(int bits, DWORD word);
-    // 0x00063ce0
+    // 0x00064260
     bool Result(DWORD* digest);
-    // 0x00063c20
+    // 0x000641a0
     void Pad();
-    // 0x000635f0
+    // 0x00063b70
     void ProcessBlock();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(ArchiveNameSha1) == 102);
 // Three independent native digest comparisons: handling.cfg, weapon.dat,
 // melee.dat. Publication increments CGame's observed DWORD at offset 0x55.
-// 0x0014033c
+// 0x00102354
 extern DWORD g_archiveTrackedNameDigests[3][5];
-// 0x00062500
+// 0x00062a80
 void ArchivePublishNameDigest(const DWORD* digest);
 // Leaves output zero on allocation/open failure; failed open leaks the32K buffer.
-// 0x00062950
+// 0x00062ed0
 void ArchiveComputeFileDigest(const char* filename, DWORD* digest);
-// 0x00062a60
+// 0x00062fe0
 void ArchiveComputeNameDigest(const void* data, DWORD length, DWORD* digest);
 
 #endif // FILECHECKS_H

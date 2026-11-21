@@ -78,29 +78,29 @@ class CTextDraw
     };
 
 public:
-    // 0x000b32e0
+    // 0x000b36e0
     CTextDraw(const TextDrawTransmit* info, const char* text);
-    // 0x00070d10
+    // R5 address to verify
     RECT* GetSelectableRect();
-    // 0x00070d30
+    // R5 address to verify
     void SetHover(BYTE active, DWORD color);
-    // 0x000b2b50
+    // 0x000b2f50
     ~CTextDraw();
-    // 0x000b2b60
+    // 0x000b2f60
     void SetText(const char* text);
     // Texture-name resolution; descriptive recovered method name.
-    // 0x000b28d0
+    // 0x000b2cd0
     void LoadTexture();
-    // 0x000b3080
+    // 0x000b3480
     void Draw();
     // Preview coordinator; actual GTA preview execution remains unverified.
-    // 0x000b30a0
+    // 0x000b34a0
     void Native0B30A0();
-    // 0x000b32b0
+    // 0x000b36b0
     void OnLostDevice();
-    // 0x000b2c90
+    // 0x000b3090
     void Native0B2C90();
-    // 0x000b2da0
+    // 0x000b31a0
     void Native0B2DA0();
 };
 #pragma pack(pop)
@@ -128,36 +128,36 @@ STATIC_ASSERT(offsetof(TextDrawState, hovered) == 0x9d1);
 STATIC_ASSERT(sizeof(TextDrawState) == 0x9d6);
 STATIC_ASSERT(sizeof(CTextDraw) == 0x9d6);
 // Shared texture-slot release entry.
-// 0x000b2750
+// 0x000b2b50
 void GameReleaseTextDrawTexture(int slot);
-// 0x0011f54c
+// 0x000ed43c
 extern const char g_textDrawUnmatchedTilde[23];
-// 0x0011f524
+// 0x000ed414
 extern const char g_textDrawLongKeyString[40];
 // RenderWare rectangle field order.
 struct TextDrawRect
 {
     float left, bottom, right, top;
 };
-// 0x002a9400
+// 0x0026b568
 extern void* g_textDrawTextures[200];
-// 0x002a9720
+// 0x0026b888
 extern DWORD g_textDrawTextureUsed[200];
-// 0x00117884
+// 0x000e5814
 extern const float g_textDrawHalf;
-// 0x0011f564
+// 0x000ed454
 extern const float g_textDrawVirtualWidth;
-// 0x0011f568
+// 0x000ed458
 extern const float g_textDrawVirtualHeight;
-// 0x000b2720
+// 0x000b2b20
 int GameAllocateTextDrawTexture();
-// 0x000b2750
+// 0x000b2b50
 void GameReleaseTextDrawTexture(int slot);
-// 0x000b3560
+// 0x000b3960
 void GameDestroyTextDrawTexture(void* texture);
-// 0x000b28a0
+// 0x000b2ca0
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color);
-// 0x000b26f0
+// 0x000b2af0
 BOOL GameInitializeTextDrawTextures();
 
 #endif // TEXTDRAW_H

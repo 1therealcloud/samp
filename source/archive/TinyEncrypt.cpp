@@ -18,18 +18,18 @@
 
 //------------------------------------
 
-// 0x00140798
+// 0x001027b0
 DWORD CTinyEncrypt::ms_dwRounds = 32;
-// 0x0014079c
+// 0x001027b4
 DWORD CTinyEncrypt::ms_dwInitDelta = OBFUSCATE_DATA(0x9E3779B9);
-// 0x0016c3a8
+// 0x0012e390
 DWORD CTinyEncrypt::ms_dwInitSum = 0;
-// 0x0016c3ac
+// R5 address to verify
 BOOL CTinyEncrypt::ms_bInitDone = FALSE;
 
 //------------------------------------
 
-// 0x000654e0
+// 0x00065a60
 CTinyEncrypt::CTinyEncrypt(void)
 {
     if (!ms_bInitDone)
@@ -42,12 +42,12 @@ CTinyEncrypt::CTinyEncrypt(void)
 
 //------------------------------------
 
-// 0x00065530
+// 0x00065ab0
 CTinyEncrypt::~CTinyEncrypt(void) {}
 
 //------------------------------------
 
-// 0x00065540
+// 0x00065ac0
 void CTinyEncrypt::SetKey(BYTE* pbKey, BYTE bytXORKey)
 {
     memcpy(m_pdwKey, pbKey, TEA_KEY_SIZE);
@@ -83,7 +83,7 @@ void CTinyEncrypt::EncryptBlock(DWORD& dwV0, DWORD& dwV1)
 
 //------------------------------------
 
-// 0x00065580
+// 0x00065b00
 void CTinyEncrypt::DecryptBlock(DWORD& dwV0, DWORD& dwV1)
 {
     DWORD dwSum = ms_dwInitSum;
@@ -120,7 +120,7 @@ void CTinyEncrypt::EncryptData(DWORD dwLength, BYTE* pbData)
 
 //------------------------------------
 
-// 0x00065640
+// 0x00065bc0
 void CTinyEncrypt::DecryptData(DWORD dwLength, BYTE* pbData)
 {
     DWORD dwBlocks = dwLength / 4;

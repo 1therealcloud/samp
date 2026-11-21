@@ -50,10 +50,10 @@ STATIC_ASSERT(offsetof(EntityBackendPrefix, matrix) == 0x14);
 STATIC_ASSERT(offsetof(EntityBackendPrefix, speed) == 0x44);
 STATIC_ASSERT(offsetof(EntityBackendPrefix, turnSpeed) == 0x50);
 STATIC_ASSERT(sizeof(EntityBackendPrefix) == 0x5c);
-// 0x000b3990
+// 0x000b3d90
 void GameChangeBackendEntityModel(void* entity, DWORD model);
 // Raw helper; no full object type or vtable meaning established.
-// 0x000b4120
+// R5 address to verify
 DWORD __stdcall GameReadBackendDword(const void* backend);
 #pragma pack(push, 1)
 // samp.dll vtable RVA: 0x0011e30c
@@ -61,26 +61,26 @@ class CEntity
 {
 public:
     // Five history vectors occupy existing bytes04..3F; in-place shift order retained.
-    // 0x0009eb80
+    // R5 address to verify
     void SetAveragedSpeed(CVector speed);
     // Native x87 sine/cosine; writes nine coefficients, preserving matrix padding/position.
-    // 0x0009f630
+    // R5 address to verify
     void SetEulerRotation(float x, float y, float z);
 
     // Descriptive raw flag names; invalid GTA backend vtable is excluded.
     // Clearing bit40000 invokes virtual Add afterwards.
-    // 0x0009f500
+    // R5 address to verify
     void SetBackendFlag40000(BOOL enabled);
-    // 0x0009f540
+    // R5 address to verify
     void SetBackendFlags80400();
     // Nonzero argument clears bit2000; zero sets it.
-    // 0x0009f580
+    // R5 address to verify
     void SetBackendFlag2000(BOOL clear);
-    // 0x0009f610
+    // R5 address to verify
     DWORD GetRwObjectWord38();
-    // 0x0009f7a0
+    // R5 address to verify
     void GetRwMatrixAngles(float* x, float* y, float* z);
-    // 0x0009f870
+    // R5 address to verify
     int GetModelAtomicCount();
 
     union
@@ -95,102 +95,102 @@ public:
         EntityBackendPrefix* m_pEntity;
     };
     DWORD m_nHandle;
-    // 0x0009bce0
+    // 0x0009c260
     CEntity()
     {
         memset(m_aSpeedHistory, 0, sizeof(m_aSpeedHistory));
     }
 
     // Native only resets the vptr; backend/history storage is untouched.
-    // 0x0009bd00
+    // R5 address to verify
     virtual ~CEntity() {}
-    // 0x0009f140
+    // 0x0009f300
     virtual void Add();
-    // 0x0009f240
+    // 0x0009f400
     virtual void Remove();
     // Clears mask 0x00000008 in the backend DWORD at offset 0x40.
-    // 0x0009f5c0
+    // 0x0009f780
     void ClearBackendFlag8();
-    // 0x0009e950
+    // 0x0009eb10
     void GetMatrix(CMatrix* matrix);
-    // 0x0009fb40
+    // 0x0009fd00
     void ApplyMatrix(CMatrix matrix);
-    // 0x0009f0f0
+    // 0x0009f2b0
     float GetDistanceToPoint(float x, float y, float z);
-    // 0x0009ea00
+    // 0x0009ebc0
     void SetMatrix(CMatrix matrix);
-    // 0x0009eb20
+    // 0x0009ece0
     void GetSpeed(CVector* speed);
-    // 0x0009eb50
+    // 0x0009ed10
     void SetSpeed(CVector speed);
-    // 0x0009ec70
+    // 0x0009ee30
     void GetTurnSpeed(CVector* speed);
-    // 0x0009eca0
+    // 0x0009ee60
     void SetTurnSpeed(CVector speed);
-    // 0x0009ecd0
+    // 0x0009ee90
     void ApplyTurnSpeed();
-    // 0x0009ecf0
+    // 0x0009eeb0
     float GetDistanceFromCentreOfMassToBaseOfModel();
-    // 0x0009ed30
+    // 0x0009eef0
     void GetBoundCentre(CVector* centre);
-    // 0x0009ee70
+    // 0x0009f030
     int GetModelIndex();
     // Uses camera position for the two observed local-player mode flags.
-    // 0x0009ef00
+    // 0x0009f0c0
     float GetDistanceToLocalPlayer();
-    // 0x0009efd0
+    // 0x0009f190
     float GetDistanceToCamera();
-    // 0x0009f030
+    // 0x0009f1f0
     float GetDistanceToLocalPlayerNoHeight();
-    // 0x0009f560
+    // 0x0009f720
     void SetBackendHighFlag();
-    // 0x0009fa20
+    // 0x0009fbe0
     void ProcessControl();
     // Additional native wrappers; original names/semantic argument types are unresolved.
-    // 0x0009ed60
+    // 0x0009ef20
     void Native009ed60(DWORD argument);
-    // 0x0009f5d0
+    // 0x0009f790
     void Native009f5d0(DWORD argument);
-    // 0x0009f810
+    // 0x0009f9d0
     void Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6);
-    // 0x0009f840
+    // 0x0009fa00
     void Native009f840(DWORD argument);
-    // 0x0009f960
+    // 0x0009fb20
     void Native009f960();
-    // 0x0009fba0
+    // 0x0009fd60
     void ApplyLinearSpeed();
-    // 0x0009fa40
+    // R5 address to verify
     bool TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode);
     // Returns TRUE only when this call requested/loaded the model, not merely
     // when the entity's model was successfully changed.
-    // 0x0009ed90
+    // 0x0009ef50
     BOOL SetModelIndex(int model);
-    // 0x0009f210
+    // 0x0009f3d0
     BOOL DoesExist();
-    // 0x0009f260
+    // 0x0009f420
     BOOL EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY);
-    // 0x0009f400
+    // 0x0009f5c0
     BOOL HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY);
     // Native returns the complete masked EAX word (0 or 1).
-    // 0x0009f4a0
+    // 0x0009f660
     DWORD GetCollisionFlag();
-    // 0x0009f470
+    // 0x0009f630
     void SetCollisionFlag(BOOL enabled);
-    // 0x0009f4c0
+    // 0x0009f680
     void SetCollisionProcessed(BOOL processed);
-    // 0x0009f730
+    // 0x0009f8f0
     void GetEulerInverted(float* x, float* y, float* z);
-    // 0x0009f8a0
+    // 0x0009fa60
     DWORD* GetRwObject();
-    // 0x0009f9f0
+    // 0x0009fbb0
     void DeleteRwObject();
-    // 0x0009fb20
+    // 0x0009fce0
     bool IsIgnored();
-    // 0x0009fc20
+    // 0x0009fde0
     BOOL IsStationary();
-    // 0x0009eac0
+    // 0x0009ec80
     void UpdateRwFrame();
-    // 0x0009ee80
+    // 0x0009f040
     void Teleport(float x, float y, float z);
     // Source adapter only; no established separate native entry.
     void Teleport(CVector position)
@@ -202,17 +202,17 @@ public:
 STATIC_ASSERT(sizeof(CEntity) == 72);
 STATIC_ASSERT(offsetof(CEntity, m_aSpeedHistory) == 4);
 STATIC_ASSERT(offsetof(CEntity, m_pGameEntity) == 0x40);
-// 0x000b3720
+// 0x000b3b20
 void __stdcall GameWorldAdd(void* entity);
-// 0x000b3740
+// 0x000b3b40
 void __stdcall GameWorldRemove(void* entity);
-// 0x001181b8
+// 0x000e6128
 extern const float g_entityRadiansToDegrees;
-// 0x0011c660
+// 0x000ea638
 extern const float g_entityEulerSign;
-// 0x0011b31c
+// 0x000e928c
 extern const float g_entityBoundaryLift;
-// 0x0011e644
+// 0x000ec54c
 extern const float g_entityUnavailableDistance;
 #endif
 
@@ -222,25 +222,25 @@ extern const float g_entityUnavailableDistance;
 typedef bool(__cdecl* GameEntityCollisionBackend)(const GameEntityCollisionShape*, const GameEntityCollisionShape*, void*);
 // Opaque native scratch span ends at saved-context RVA 002ABE5C.
 // No typed collision-object layout or broader initialization completeness is claimed.
-// 0x0018de60
+// R5 address to verify
 extern GameEntityCollisionShape g_entityCollisionShapeA;
-// 0x0018de4c
+// R5 address to verify
 extern GameEntityCollisionShape g_entityCollisionShapeB;
-// 0x0018de7c
+// R5 address to verify
 extern void* g_entityCollisionEntity;
-// 0x00155404
+// 0x0011742c
 extern GameEntityCollisionBackend g_entityCollisionBackend;
-// 0x00155408
+// 0x00117430
 extern void** g_entityCollisionContextSlot;
-// 0x002abe5c
+// R5 address to verify
 extern void* g_entityCollisionSavedContext;
-// 0x002abe60
+// R5 address to verify
 extern BYTE g_entityCollisionResult;
-// 0x000b5ea0
+// 0x000b6360
 float __cdecl GameGetModelCollisionRadius(int model);
-// 0x000b6070
+// 0x000b6530
 bool __stdcall GameEntityCollisionQueryDirect(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity);
-// 0x000b6090
+// 0x000b6550
 bool __stdcall GameEntityCollisionQueryScoped(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity);
 // Only the four-float sphere prefix is read by this GTA query.
 struct GameCollisionSphere
@@ -248,13 +248,13 @@ struct GameCollisionSphere
     CVector centre;
     float radius;
 };
-// 0x000b60e0
+// 0x000b65a0
 BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollisionSphere* second);
 // Semantics unresolved; this is the observed pointer/zero backend adapter.
-// 0x000b43f0
+// 0x000b47f0
 BYTE GameQueryBackend410ce0(const void* data);
 // Raw native flag words are forwarded without bool normalization; result is AL.
-// 0x000b3710
+// 0x000b3b10
 BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, void* colPoint, void** entity, DWORD buildings, DWORD vehicles, DWORD peds, DWORD objects,
                                DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough);
 #endif
@@ -262,14 +262,14 @@ BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, voi
 #ifndef SAMP_ENTITY_DETACH_H
 #define SAMP_ENTITY_DETACH_H
 // Shared original constants; definitions already maintained by chatbubble/object.
-// 0x0011bcc8
+// 0x000e9c90
 extern const float g_chatBubbleHeightLift;
-// 0x0011e648
+// 0x000ec550
 extern const float g_objectDegreesToRadians;
-// 0x0011e64c
+// 0x000ec554
 extern const char g_entityDetachExceptionLabel[5];
 // Original owner/name unknown; ECX unused, two cdecl stack arguments.
-// 0x0009f8b0
+// 0x0009fa70
 void __cdecl GameDetachBackendRwObject(void* entity, void* object);
 
 #endif // ENTITY_H

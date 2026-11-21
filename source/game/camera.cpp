@@ -6,20 +6,20 @@
 #include <string.h>
 // Provisional SAMP-API attribution: this entry also fits CAudio initialization.
 // No native references establish its class/lifecycle role; keep it unverified.
-// 0x0009fdb0
+// 0x0009ff70
 CCamera::~CCamera()
 {
     m_pAttachedTo = 0;
     *(BYTE*)&m_pMatrix = 0;
 }
 
-// 0x0009d280
+// 0x0009d440
 void CCamera::Fade(BOOL in)
 {
     Scripting::ProcessCommand(&g_cameraFade, 500, in);
 }
 
-// 0x0009d2a0
+// 0x0009d460
 void CCamera::GetMatrix(CMatrix* matrix)
 {
     matrix->right.x = m_pMatrix->right.x;
@@ -36,7 +36,7 @@ void CCamera::GetMatrix(CMatrix* matrix)
     matrix->position.z = m_pMatrix->position.z;
 }
 
-// 0x0009d320
+// 0x0009d4e0
 void CCamera::SetMatrix(CMatrix matrix)
 {
     m_pMatrix->right.x = matrix.right.x;
@@ -53,7 +53,7 @@ void CCamera::SetMatrix(CMatrix matrix)
     m_pMatrix->position.z = matrix.position.z;
 }
 
-// 0x0009d3b0
+// 0x0009d570
 void CCamera::TakeControl(void* target, int mode, int switchType)
 {
     // The native adapter forwards complete stack DWORDs to GTA's thiscall.
@@ -70,7 +70,7 @@ void CCamera::TakeControl(void* target, int mode, int switchType)
     // clang-format on
 }
 
-// 0x0009d3d0
+// 0x0009d590
 void CCamera::SetMoveVector(CVector* from, CVector* to, int time, BYTE mode)
 {
     Scripting::ProcessCommand(&g_cameraStop);
@@ -78,7 +78,7 @@ void CCamera::SetMoveVector(CVector* from, CVector* to, int time, BYTE mode)
     Scripting::ProcessCommand(&g_cameraMove, (double)from->x, (double)from->y, (double)from->z, (double)to->x, (double)to->y, (double)to->z, time, (int)mode);
 }
 
-// 0x0009d440
+// 0x0009d600
 void CCamera::SetTrackVector(CVector* from, CVector* to, int time, BYTE mode)
 {
     Scripting::ProcessCommand(&g_cameraPersistTrack, 1);
@@ -86,13 +86,13 @@ void CCamera::SetTrackVector(CVector* from, CVector* to, int time, BYTE mode)
 }
 
 // Strict bounds, ordered comparisons. Native returns AL, not a WORD or BOOL.
-// 0x000b46e0
+// 0x000b4b50
 BYTE __cdecl GameIsCameraPointValid(const CVector* point)
 {
     return point->x < 20000.0f && point->x > -20000.0f && point->y < 20000.0f && point->y > -20000.0f && point->z < 100000.0f && point->z > -10000.0f;
 }
 
-// 0x0009d4a0
+// 0x0009d660
 void CCamera::Attach(CEntity* owner)
 {
     m_pAttachedTo = owner;
@@ -105,7 +105,7 @@ void CCamera::Attach(CEntity* owner)
     }
 }
 
-// 0x0009d4f0
+// 0x0009d6b0
 void CCamera::SetToOwner()
 {
     if (m_pAttachedTo && m_pAttachedTo->m_pGameEntity)
@@ -118,7 +118,7 @@ void CCamera::SetToOwner()
 }
 
 // VC7 /O2 keeps these intermediates in x87 and returns the native unspilled result.
-// 0x0009d540
+// 0x0009d700
 float CCamera::GetDistanceToPoint(CVector* point)
 {
     // GTA SA camera position VA: 0x00b6f9cc; native read order is Z, Y, X.
@@ -128,7 +128,7 @@ float CCamera::GetDistanceToPoint(CVector* point)
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-// 0x0009d580
+// 0x0009d740
 void CCamera::Restore()
 {
     Scripting::ProcessCommand(&g_cameraPersistPosition, 0);
@@ -138,7 +138,7 @@ void CCamera::Restore()
     Scripting::ProcessCommand(&g_cameraRestore);
 }
 
-// 0x0009d5c0
+// 0x0009d780
 void CCamera::Set(CVector position, CVector rotation)
 {
     Scripting::ProcessCommand(&g_cameraStop);
@@ -146,7 +146,7 @@ void CCamera::Set(CVector position, CVector rotation)
     Scripting::ProcessCommand(&g_cameraSet, (double)position.x, (double)position.y, (double)position.z, (double)rotation.x, (double)rotation.y, (double)rotation.z);
 }
 
-// 0x0009d620
+// 0x0009d7e0
 void CCamera::PointAt(CVector point, int switchStyle)
 {
     Scripting::ProcessCommand(&g_cameraStop);
@@ -154,7 +154,7 @@ void CCamera::PointAt(CVector point, int switchStyle)
     Scripting::ProcessCommand(&g_cameraPointAt, (double)point.x, (double)point.y, (double)point.z, switchStyle);
 }
 
-// 0x0009d670
+// 0x0009d830
 void CCamera::Detach()
 {
     m_pAttachedTo = 0;

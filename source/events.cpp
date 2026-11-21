@@ -15,19 +15,19 @@
 
 #include <static_assert.h>
 
-// 0x00117690
+// 0x000e5620
 int g_scmEventRpcId = 96;
-// 0x00156988
+// R5 address to verify
 DWORD g_scmEventParameters[4];
 
-// 0x00156980
+// R5 address to verify
 CPed* g_driverPed;
-// 0x00156998
+// R5 address to verify
 BOOL g_driverCompareFlag;
-// 0x0015699c
+// R5 address to verify
 void* g_driverScriptThread;
 
-// 0x00001aa0
+// 0x00001a60
 void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD param2, DWORD param3)
 {
     if (!g_pNetGame || g_localSkipInitialState)
@@ -106,7 +106,7 @@ struct ScmNetGameView
 };
 #pragma pack(pop)
 STATIC_ASSERT(offsetof(ScmNetGameView, pools) == 0x3de);
-// 0x00001d10
+// 0x00001ce0
 void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, DWORD eventType)
 {
     if (g_pNetGame)
@@ -143,7 +143,7 @@ void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, D
     }
 }
 
-// 0x000020c0
+// R5 address to verify
 __declspec(naked) void GameSetEventOpcode()
 {
     // clang-format off
@@ -174,7 +174,7 @@ __declspec(naked) void GameSetEventOpcode()
     // clang-format on
 }
 
-// 0x00001c60
+// R5 address to verify
 __declspec(naked) void GamePlayerDriverOpcode()
 {
     // clang-format off

@@ -10,13 +10,13 @@
 
 #include <new>
 #include <string.h>
-// 0x00070340
+// 0x000708a0
 CObjectMaterialText::~CObjectMaterialText()
 {
     OnLostDevice();
 }
 
-// 0x000702d0
+// 0x00070830
 void CObjectMaterialText::OnLostDevice()
 {
     if (second)
@@ -31,14 +31,14 @@ void CObjectMaterialText::OnLostDevice()
     }
 }
 
-// 0x00070300
+// 0x00070860
 void CObjectMaterialText::OnResetDevice()
 {
     D3DXCreateSprite(device, &first);
     D3DXCreateSprite(device, &second);
 }
 
-// 0x00070320
+// 0x00070880
 CObjectMaterialText::CObjectMaterialText(IDirect3DDevice9* value)
 {
     device = value;
@@ -47,7 +47,7 @@ CObjectMaterialText::CObjectMaterialText(IDirect3DDevice9* value)
     OnResetDevice();
 }
 
-// 0x00070350
+// 0x000708b0
 IDirect3DTexture9* CObjectMaterialText::Create(const char* text, const char* face, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold,
                                                BYTE alignment)
 {

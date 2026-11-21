@@ -17,60 +17,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 0x0016c7cc
+// 0x0012e7b4
 DWORD g_audioStreamHandle;
-// 0x001407b0
+// 0x001027c8
 char g_audioStreamAgent[10] = "SA-MP/0.3";
-// 0x0016c7d0
+// 0x0012e7b8
 BYTE g_audioStreamRadioActive;
-// 0x0016c5c0
+// 0x0012e5a8
 char g_audioStreamTitle[257];
-// 0x0016c3b0
+// 0x0012e398
 char g_audioStreamStation[257];
-// 0x0011bbf0
+// 0x000e9bb8
 const char g_audioStreamInfoFormat[8] = "%s - %s";
-// 0x001407ba
+// 0x001027d2
 BYTE g_audioStreamStopRequested;
-// 0x0011bc08
+// 0x000e9bd0
 const char g_audioStreamIcyTitleMarker[14] = "StreamTitle='";
-// 0x0011bc00
+// 0x000e9bc8
 const char g_audioStreamArtistMarker[8] = "artist=";
-// 0x0011bbf8
+// 0x000e9bc0
 const char g_audioStreamTitleMarker[7] = "title=";
-// 0x001185d8
+// 0x000e6548
 const char g_audioStreamStringFormat[3] = "%s";
-// 0x0016c6c8
+// R5 address to verify
 char g_audioStreamStationUrl[257];
 
-// 0x0016c7d4
+// R5 address to verify
 CVector g_audioStreamPosition;
-// 0x0016c7e0
+// R5 address to verify
 BYTE g_audioStreamSpatial;
-// 0x001407bc
+// 0x001027d4
 float g_audioStreamRadius = 50.0f;
-// 0x0011bbec
+// 0x000e9bb4
 const float g_audioStreamVolumeScale = 7000.0f;
-// 0x0011bc18
+// R5 address to verify
 const float g_audioStreamSpatialVolumeScale = 8000.0f;
-// 0x0011bc28
+// 0x000e9bf0
 const char g_audioStreamStationMarker[10] = "icy-name:";
-// 0x0011bc1c
+// 0x000e9be4
 const char g_audioStreamStationUrlMarker[9] = "icy-url:";
-// 0x0011bc48
+// 0x000e9c10
 const char g_audioStreamMessageOffKey[12] = "audiomsgoff";
-// 0x0011bc34
+// 0x000e9bfc
 const char g_audioStreamMessageFormat[17] = "Audio stream: %s";
-// 0x0011bc98
+// 0x000e9c60
 const char g_audioStreamOffsetFormat[45] = "BASS_ChannelSet3DAttributes offset: %f %f %f";
-// 0x0011bc74
+// 0x000e9c3c
 const char g_audioStreamAttributesError[34] = "BASS_ChannelSet3DAttributes Error";
-// 0x0011bc54
+// 0x000e9c1c
 const char g_audioStreamPositionError[32] = "BASS_ChannelSet3DPosition Error";
 
-// 0x0016c4b8
+// R5 address to verify
 char g_audioStreamUrl[257];
 
-// 0x00065f00
+// 0x00066480
 BOOL CAudioStream::Reset()
 {
     g_audioStreamHandle = 0;
@@ -93,7 +93,7 @@ BOOL CAudioStream::Reset()
     return FALSE;
 }
 
-// 0x00066500
+// 0x00066a80
 void CAudioStream::ControlGameRadio()
 {
     if (initialized && g_audioStreamRadioActive)
@@ -103,7 +103,7 @@ void CAudioStream::ControlGameRadio()
     }
 }
 
-// 0x00066530
+// 0x00066ab0
 void CAudioStream::DrawInfo()
 {
     if (!initialized || !g_audioStreamRadioActive)
@@ -123,7 +123,7 @@ void CAudioStream::DrawInfo()
     g_deviceFonts->DrawLittleText(0, text, rect, 0x100, 0x99ffffff, FALSE);
 }
 
-// 0x00066610
+// R5 address to verify
 void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
 {
     // clang-format off
@@ -141,7 +141,7 @@ void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
     // clang-format on
 }
 
-// 0x00066630
+// R5 address to verify
 void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
 {
     // clang-format off
@@ -160,7 +160,7 @@ void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
     // clang-format on
 }
 
-// 0x00065fe0
+// 0x00066560
 BOOL CAudioStream::Stop(bool wait)
 {
     if (!initialized || !g_audioStreamRadioActive)
@@ -174,7 +174,7 @@ BOOL CAudioStream::Stop(bool wait)
     return TRUE;
 }
 
-// 0x00066040
+// 0x000665c0
 void CAudioStream::ReadMetadata()
 {
     memset(g_audioStreamTitle, 0, 257);
@@ -211,13 +211,13 @@ void CAudioStream::ReadMetadata()
         _snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, title);
 }
 
-// 0x00066170
+// 0x000666f0
 void CALLBACK CAudioStream::MetadataSync(DWORD, DWORD, DWORD, void*)
 {
     ReadMetadata();
 }
 
-// 0x000663e0
+// 0x00066960
 BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius, bool spatial)
 {
     if (!initialized)
@@ -247,7 +247,7 @@ BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius
     return TRUE;
 }
 
-// 0x00066180
+// 0x00066700
 void __cdecl CAudioStream::Worker(void*)
 {
     g_audioStreamRadioActive = 1;
@@ -313,7 +313,7 @@ void __cdecl CAudioStream::Worker(void*)
     g_audioStreamRadioActive = 0;
 }
 
-// 0x00066650
+// R5 address to verify
 void CAudioStream::Update3D()
 {
     CPed* ped = g_pGame->GetPlayerPed();

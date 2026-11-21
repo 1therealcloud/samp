@@ -2,7 +2,7 @@
 
 #include "game/textdraw.h"
 #include "gui/gui.h"
-// 0x000177d0
+// R5 address to verify
 CTextDraw* CTextDrawPool::Get(WORD id)
 {
     if (id >= 2304)
@@ -13,7 +13,7 @@ CTextDraw* CTextDrawPool::Get(WORD id)
     return draws[index];
 }
 
-// 0x0001e260
+// 0x0001e7a0
 CTextDrawPool::CTextDrawPool()
 {
     for (int i = 0; i != 2304; ++i)
@@ -24,7 +24,7 @@ CTextDrawPool::CTextDrawPool()
     GameInitializeTextDrawTextures();
 }
 
-// 0x0001e2b0
+// 0x0001e7f0
 void CTextDrawPool::Delete(WORD id)
 {
     CTextDraw* draw = draws[id];
@@ -35,7 +35,7 @@ void CTextDrawPool::Delete(WORD id)
     active[id] = 0;
 }
 
-// 0x0001e390
+// 0x0001e8d0
 CTextDrawPool::~CTextDrawPool()
 {
     for (int i = 0; i < 2304; ++i)
@@ -49,7 +49,7 @@ CTextDrawPool::~CTextDrawPool()
     }
 }
 
-// 0x0001e3d0
+// 0x0001e910
 CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const char* text)
 {
     DWORD index = id;
@@ -65,7 +65,7 @@ CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const ch
     return 0;
 }
 
-// 0x0001e2f0
+// 0x0001e830
 void CTextDrawPool::Draw()
 {
     int i = 0;
@@ -80,7 +80,7 @@ void CTextDrawPool::Draw()
     }
 }
 
-// 0x0001e330
+// R5 address to verify
 void CTextDrawPool::Native01E330()
 {
     for (int i = 0; i != 2304; i++)
@@ -88,7 +88,7 @@ void CTextDrawPool::Native01E330()
             draws[i]->Native0B30A0();
 }
 
-// 0x0001e360
+// R5 address to verify
 void CTextDrawPool::OnLostDevice()
 {
     for (int i = 0; i != 2304; i++)

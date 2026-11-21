@@ -9,9 +9,9 @@ struct CVector;
 class CLicensePlate
 {
 public:
-    // 0x0006d3f0
+    // 0x0006d9b0
     CLicensePlate(IDirect3DDevice9* device);
-    // 0x0006d420
+    // 0x0006d9e0
     ~CLicensePlate();
     IDirect3DDevice9* device;
     ID3DXRenderToSurface* renderer;
@@ -19,11 +19,11 @@ public:
     IDirect3DSurface9* surface;
     D3DDISPLAYMODE mode;
     IDirect3DTexture9* defaultTexture;
-    // 0x0006d1f0
+    // 0x0006d7b0
     void OnLostDevice();
-    // 0x0006d240
+    // 0x0006d800
     void OnResetDevice();
-    // 0x0006d2c0
+    // 0x0006d880
     IDirect3DTexture9* Create(const char* text);
 };
 #pragma pack(pop)

@@ -11,24 +11,24 @@
 #include "main.h"
 
 #include <string.h>
-// 0x002aca38
+// R5 address to verify
 CModelPreview* g_modelPreview;
-// 0x0011c654
+// 0x000ea62c
 const float g_previewPedDistanceScale = -2.25f;
-// 0x0011c658
+// 0x000ea630
 const float g_previewBoatDistance = -5.5f;
-// 0x0011c65c
+// 0x000ea634
 const float g_previewBoatRadiusScale = 2.5f;
-// 0x0011c660
+// 0x000ea638
 const float g_previewVehicleDistance = -1.0f;
-// 0x0011c664
+// 0x000ea63c
 const float g_previewHeight = 50.0f;
-// 0x0011c668
+// 0x000ea640
 const float g_previewObjectDistance = -0.1f;
-// 0x0011c66c
+// 0x000ea644
 const float g_previewObjectRadiusScale = 2.25f;
 
-// 0x0006c700
+// 0x0006ccc0
 CModelPreview::CModelPreview()
 {
     camera = 0;
@@ -39,7 +39,7 @@ CModelPreview::CModelPreview()
     Reset();
 }
 
-// 0x0006b880
+// 0x0006be40
 bool CModelPreview::Reset()
 {
     light = GameRwCreateLight(2);
@@ -70,7 +70,7 @@ bool CModelPreview::Reset()
     return false;
 }
 
-// 0x0006b9d0
+// 0x0006bf90
 void CModelPreview::RenderTestScene(int model)
 {
     CVector initialRotation = {0, 0, 0};
@@ -101,7 +101,7 @@ void CModelPreview::RenderTestScene(int model)
     GameRwWorldRemoveLight(light);
 }
 
-// 0x0006bb80
+// 0x0006c140
 void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotation, float zoom)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -145,7 +145,7 @@ void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotat
     return result;
 }
 
-// 0x0006be00
+// 0x0006c3c0
 void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* rotation, float zoom, int primary, int secondary)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -196,7 +196,7 @@ void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* r
     return result;
 }
 
-// 0x0006c0b0
+// 0x0006c670
 void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVector* rotation, float zoom)
 {
     CVector initialRotation = {0, 0, 0};
@@ -253,7 +253,7 @@ void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVect
     return result;
 }
 
-// 0x0006c3f0
+// 0x0006c9b0
 void* CModelPreview::RenderObject(int model, DWORD background, const CVector* rotation, float zoom)
 {
     void* raster = GameRwCreateRaster(256, 256, 0, 0x505);
@@ -315,7 +315,7 @@ void* CModelPreview::RenderObject(int model, DWORD background, const CVector* ro
     return result;
 }
 
-// 0x0006c6b0
+// R5 address to verify
 void CModelPreview::Draw()
 {
     if (texture)

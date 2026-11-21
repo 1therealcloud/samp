@@ -16,29 +16,29 @@ public:
     BOOL m_bSelfCreated;
     CPed* m_pPlayerPed;
     BYTE* m_pTaskType;
-    // 0x000b2180
+    // 0x000b2580
     CTask();
-    // 0x000b2560
+    // 0x000b2960
     CTask(DWORD size);
-    // 0x000b2590
+    // 0x000b2990
     CTask(BYTE* task);
-    // 0x000b21a0
+    // R5 address to verify
     virtual ~CTask();
-    // 0x000b21b0
-    void Create(DWORD size);
-    // 0x000b21e0
-    void Create(BYTE* task);
     // 0x000b25b0
+    void Create(DWORD size);
+    // 0x000b25e0
+    void Create(BYTE* task);
+    // 0x000b29b0
     virtual CTask* CreateCopy();
-    // 0x000b2200
+    // 0x000b2600
     virtual void Destroy();
-    // 0x000b2260
+    // 0x000b2660
     virtual void ApplyToPed(CPed* ped);
-    // 0x000b22c0
+    // 0x000b26c0
     virtual DWORD GetID();
-    // 0x000b22e0
+    // R5 address to verify
     virtual BOOL IsDestroyed();
-    // 0x000b2300
+    // 0x000b2700
     virtual BOOL IsSimple();
 };
 #pragma pack(pop)
@@ -49,20 +49,20 @@ STATIC_ASSERT(offsetof(CTask, m_pPlayerPed) == 8);
 class CTaskJetpack : public CTask
 {
 public:
-    // 0x000b2330
+    // 0x000b2730
     CTaskJetpack();
-    // 0x000b2380
+    // R5 address to verify
     CTaskJetpack(BYTE* task);
-    // 0x000b23b0
+    // 0x000b27b0
     virtual ~CTaskJetpack();
 };
 // samp.dll vtable RVA: 0x0011f46c
 class CTaskTakeDamageFall : public CTask
 {
 public:
-    // 0x000b2410
+    // 0x000b2810
     CTaskTakeDamageFall(DWORD fallType, DWORD number);
-    // 0x000b2630
+    // R5 address to verify
     virtual ~CTaskTakeDamageFall();
 };
 STATIC_ASSERT(sizeof(CTaskJetpack) == 16);
@@ -71,9 +71,9 @@ STATIC_ASSERT(sizeof(CTaskTakeDamageFall) == 16);
 class CTaskUseGoggles : public CTask
 {
 public:
-    // 0x000b2460
+    // 0x000b2860
     CTaskUseGoggles();
-    // 0x000b2660
+    // R5 address to verify
     virtual ~CTaskUseGoggles();
 };
 // samp.dll vtable RVA: 0x0011f4a4
@@ -81,9 +81,9 @@ class CTaskGoToPoint : public CTask
 {
 public:
     // Full native DWORD flag words are forwarded without bool normalization.
-    // 0x000b24a0
+    // 0x000b28a0
     CTaskGoToPoint(DWORD moveState, const CVector* target, float radius, DWORD moveTowards, DWORD finalFlag);
-    // 0x000b2690
+    // R5 address to verify
     virtual ~CTaskGoToPoint();
 };
 // samp.dll vtable RVA: 0x0011f4c0
@@ -91,9 +91,9 @@ class CTaskKillPedOnFootArmed : public CTask
 {
 public:
     // Wrapper argument order differs from the GTA constructor. Target is opaque GTA ped.
-    // 0x000b24f0
+    // 0x000b28f0
     CTaskKillPedOnFootArmed(DWORD competence, DWORD duckTime, DWORD duckChance, DWORD duckingConditions, void* target);
-    // 0x000b26c0
+    // R5 address to verify
     virtual ~CTaskKillPedOnFootArmed();
 };
 STATIC_ASSERT(sizeof(CTaskUseGoggles) == 16);

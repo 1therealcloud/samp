@@ -11,23 +11,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x002a9400
+// 0x0026b568
 void* g_textDrawTextures[200];
-// 0x002a9720
+// 0x0026b888
 DWORD g_textDrawTextureUsed[200];
-// 0x00117884
+// 0x000e5814
 const float g_textDrawHalf = 0.5f;
-// 0x0011f564
+// 0x000ed454
 const float g_textDrawVirtualWidth = 640.0f;
-// 0x0011f568
+// 0x000ed458
 const float g_textDrawVirtualHeight = 448.0f;
 
-// 0x0011f54c
+// 0x000ed43c
 const char g_textDrawUnmatchedTilde[23] = "Error: unmatched tilde";
-// 0x0011f524
+// 0x000ed414
 const char g_textDrawLongKeyString[40] = "Error: can't use k-codes in long string";
 
-// 0x000b3080
+// 0x000b3480
 void CTextDraw::Draw()
 {
     if (data.format.textureSlot != -1)
@@ -36,7 +36,7 @@ void CTextDraw::Draw()
         Native0B2DA0();
 }
 
-// 0x000b32b0
+// 0x000b36b0
 void CTextDraw::OnLostDevice()
 {
     if (data.format.style == 5 && data.format.textureSlot != -1)
@@ -49,11 +49,11 @@ void CTextDraw::OnLostDevice()
 extern "C"
 {
     // Provided by the static MSVC runtime.
-    // 0x000f9324
+    // 0x000c7444
     __int64 __cdecl _ftol2();
 }
 
-// 0x000b2720
+// 0x000b2b20
 int GameAllocateTextDrawTexture()
 {
     for (int i = 0; i != 200; i++)
@@ -65,7 +65,7 @@ int GameAllocateTextDrawTexture()
     return -1;
 }
 
-// 0x000b2750
+// 0x000b2b50
 void GameReleaseTextDrawTexture(int slot)
 {
     if (slot >= 0 && slot < 200)
@@ -77,7 +77,7 @@ void GameReleaseTextDrawTexture(int slot)
     }
 }
 
-// 0x000b3560
+// 0x000b3960
 void GameDestroyTextDrawTexture(void* texture)
 {
     void* spriteTexture = texture;
@@ -91,7 +91,7 @@ void GameDestroyTextDrawTexture(void* texture)
     // clang-format on
 }
 
-// 0x000b28a0
+// 0x000b2ca0
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
 {
     if (texture)
@@ -110,7 +110,7 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
     }
 }
 
-// 0x000b2c90
+// 0x000b3090
 void CTextDraw::Native0B2C90()
 {
     BYTE* state = (BYTE*)this;
@@ -172,7 +172,7 @@ void CTextDraw::Native0B2C90()
     data.hasSelectableRect = 1;
 }
 
-// 0x000b2da0
+// 0x000b31a0
 void CTextDraw::Native0B2DA0()
 {
     BYTE* state = (BYTE*)this;
@@ -351,7 +351,7 @@ void CTextDraw::Native0B2DA0()
 }
 
 // Native clears usage flags first, then texture words, without releasing them.
-// 0x000b26f0
+// 0x000b2af0
 BOOL GameInitializeTextDrawTextures()
 {
     memset(g_textDrawTextureUsed, 0, sizeof(g_textDrawTextureUsed));
@@ -359,7 +359,7 @@ BOOL GameInitializeTextDrawTextures()
     return TRUE;
 }
 
-// 0x000b30a0
+// 0x000b34a0
 void CTextDraw::Native0B30A0()
 {
     if (data.format.style != 5 || data.format.textureSlot != -1)
@@ -412,26 +412,26 @@ void CTextDraw::Native0B30A0()
     }
 }
 
-// 0x00070d10
+// R5 address to verify
 RECT* CTextDraw::GetSelectableRect()
 {
     return data.format.selectable && data.hasSelectableRect ? &data.selectableRect : 0;
 }
 
-// 0x00070d30
+// R5 address to verify
 void CTextDraw::SetHover(BYTE active, DWORD color)
 {
     data.hovered = active;
     data.hoverColor = color;
 }
 
-// 0x000b2b50
+// 0x000b2f50
 CTextDraw::~CTextDraw()
 {
     GameReleaseTextDrawTexture(data.format.textureSlot);
 }
 
-// 0x000b2b60
+// 0x000b2f60
 void CTextDraw::SetText(const char* text)
 {
     BYTE* state = (BYTE*)this;
@@ -483,7 +483,7 @@ void CTextDraw::SetText(const char* text)
     }
 }
 
-// 0x000b28d0
+// 0x000b2cd0
 void CTextDraw::LoadTexture()
 {
     char dictionary[65] = {0}, texture[65] = {0}, selected[65] = {0};
@@ -531,7 +531,7 @@ void CTextDraw::LoadTexture()
     g_textDrawTextures[data.format.textureSlot] = loaded;
 }
 
-// 0x000b32e0
+// 0x000b36e0
 CTextDraw::CTextDraw(const TextDrawTransmit* info, const char* text)
 {
     memset(&data.format, 0, sizeof(data.format));

@@ -22,35 +22,35 @@
 #include <static_assert.h>
 
 // Client runtime globals, initialization and frame coordination.
-// 0x002aca3c
+// 0x0026ebac
 CGame* g_pGame;
-// 0x002aca14
+// 0x0026eb84
 CInput* g_pInput;
-// 0x002aca10
+// 0x0026eb80
 CChat* g_pChat;
-// 0x002aca24
+// 0x0026eb94
 void* g_pNetGame;
 
-// 0x002abe70
+// R5 address to verify
 IDirect3DDevice9* g_clientSavedGameDevice;
-// 0x002aca40
+// R5 address to verify
 DWORD g_clientDeviceInitialized;
-// 0x002aca44
+// R5 address to verify
 DWORD g_clientNetworkInitialized;
 STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
 STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
-// 0x002aca60
+// 0x0026ebd0
 DWORD g_clientIntegrityFailures;
-// 0x002aca64
+// R5 address to verify
 DWORD g_clientIntegrityFailed;
-// 0x002aca68
+// R5 address to verify
 DWORD g_clientSkipGameFrame;
-// 0x002ac9c0
+// R5 address to verify
 DWORD g_clientQuitRequested;
-// 0x002ac9c4
+// R5 address to verify
 DWORD g_clientQuitStarted;
 
-// 0x000c5e70
+// 0x000c4790
 void ClientInitializeDeviceAndGui()
 {
     if (g_clientDeviceInitialized)
@@ -142,7 +142,7 @@ void ClientInitializeDeviceAndGui()
     g_clientDeviceInitialized = 1;
 }
 
-// 0x000c6630
+// 0x000c4f70
 void ClientProcessFrame()
 {
     ClientInitializeDeviceAndGui();
@@ -160,7 +160,7 @@ void ClientProcessFrame()
         g_pGame->m_pAudio->Process();
 }
 
-// 0x000c66b0
+// 0x000c4ff0
 __declspec(naked) void ClientGameLoop()
 {
     // clang-format off
@@ -237,7 +237,7 @@ __declspec(naked) void ClientGameLoop()
     // clang-format on
 }
 
-// 0x000c5550
+// 0x000c3e80
 void ClientRequestQuit()
 {
     if (g_pNetGame && *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) == 5)
@@ -246,7 +246,7 @@ void ClientRequestQuit()
     g_clientQuitStarted = GetTickCount();
 }
 
-// 0x000c6950
+// 0x000c5290
 int FontGetHeight()
 {
     int height;
@@ -261,7 +261,7 @@ int FontGetHeight()
     return height + g_pConfig->GetIntValue("fontsize") * 2;
 }
 
-// 0x000c69a0
+// 0x000c52e0
 int FontGetDeathWindowHeight()
 {
     int base = 14;
@@ -271,7 +271,7 @@ int FontGetDeathWindowHeight()
     return adjusted < base ? base : adjusted;
 }
 
-// 0x000c6a00
+// 0x000c5340
 int FontGetWeight()
 {
     int weight = g_pConfig->GetIntValue("fontweight");
@@ -280,7 +280,7 @@ int FontGetWeight()
     return weight == 1 ? 400 : 700;
 }
 
-// 0x000c6a30
+// 0x000c5370
 const char* FontGetFace()
 {
     if (g_pConfig && g_pConfig->GetStringValue("fontface"))
@@ -288,7 +288,7 @@ const char* FontGetFace()
     return "Arial";
 }
 
-// 0x000c69e0
+// R5 address to verify
 int FontGetDialogHeight()
 {
     return g_pConfig->GetIntValue("fontsize") * 2 + 20;

@@ -14,20 +14,20 @@
 class CHasher
 {
 private:
-    // 0x00140790
+    // 0x001027a8
     static DWORD ms_dwHashAlgorithm;
 
     HCRYPTHASH m_hCryptHash;
     CCryptoContext* m_pContext;
 
 public:
-    // 0x000652f0
+    // 0x00065870
     CHasher(CCryptoContext* pContext);
-    // 0x00065320
+    // R5 address to verify
     ~CHasher(void);
 
-    // 0x00065330
+    // 0x000658b0
     void AddData(DWORD dwDataLength, BYTE* pbData);
-    // 0x00065350
+    // R5 address to verify
     HCRYPTHASH GetContainer();
 };

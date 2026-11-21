@@ -21,66 +21,66 @@ STATIC_ASSERT(sizeof(CVector) == sizeof(D3DXVECTOR3));
 STATIC_ASSERT(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x));
 STATIC_ASSERT(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y));
 STATIC_ASSERT(offsetof(CVector, z) == offsetof(D3DXVECTOR3, z));
-// 0x0011e3a0
+// R5 address to verify
 const double g_aimVectorHalfPi = 1.5707963705062866;
 
-// 0x001181c4
+// 0x000e6134
 extern const float g_objectRotationFactor = 10.0f;
-// 0x0011f578
+// 0x000ed468
 extern const float g_angleUpperBound = 180.0f;
-// 0x0011f574
+// 0x000ed464
 extern const float g_angleLowerBound = -180.0f;
-// 0x001181b4
+// 0x000e6124
 extern const float g_anglePeriod = 360.0f;
-// 0x001179b0
+// 0x000e5940
 extern const float g_objectScaleLowerBound = 0.0f;
-// 0x001553d8
+// 0x00117400
 const CVector g_rwRotationAxes[3] = {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
 
-// 0x001553d4
+// R5 address to verify
 GameRwPointTransformBackend g_rwPointTransformBackend = (GameRwPointTransformBackend)0x7edd90;
-// 0x001553fc
+// 0x00117424
 GameRwAxisRotateBackend g_rwAxisRotateBackend = (GameRwAxisRotateBackend)0x7f1fd0;
-// 0x0011f58c
+// 0x000ed47c
 const float g_headingInverseHalfTurn = 0.0055555556900799274f;
-// 0x0011f590
+// 0x000ed480
 const float g_headingPi = 3.1415927410125732f;
-// 0x002a9a40
+// 0x0026bba8
 int g_rwImageHeight;
-// 0x00155400
+// 0x00117428
 void** g_rwSceneCameraSlot = (void**)0xc1703c;
-// 0x0011f414
+// 0x000ed304
 const char g_rwMaterialCountText[] = "NumMaterials = %d";
-// 0x0011f3f0
+// 0x000ed2e0
 const char g_rwMaterialNameText[] = "Material Index: %d TextureName: %s";
-// 0x0011f3cc
+// 0x000ed2bc
 const char g_rwMaterialNullText[] = "Material Index: %d Texture: NULL";
-// 0x0018f6c0
+// 0x00151828
 DWORD g_playerColors[1000];
-// 0x0015535c
+// R5 address to verify
 const CVector g_rwPreviewAxes[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 
 #pragma bss_seg(".pstate$h")
-// 0x002aae14
+// R5 address to verify
 float g_rwQueryAngle;
 #pragma bss_seg()
 
-// 0x001181ac
+// 0x000e611c
 extern const float g_objectMutationStep = 0.1f;
-// 0x002aae18
+// R5 address to verify
 BYTE g_entityCollisionScratch[0x1044];
-// 0x00151b20
+// 0x00113b48
 DWORD g_playerDefaultColors[1000] = {
 #include "game/player_color_values.inc"
 };
 
-// 0x000c5110
+// R5 address to verify
 IDirect3DDevice9* GameGetCurrentD3DDevice()
 {
     return *(IDirect3DDevice9**)0xc97c28;
 }
 
-// 0x000c5510
+// 0x000c3e40
 __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
 {
     // clang-format off
@@ -101,7 +101,7 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
     // clang-format on
 }
 
-// 0x000b6440
+// 0x000b6900
 __declspec(naked) void __stdcall GameBuildAimUpVector(const CVector* direction, CVector* up)
 {
     // clang-format off
@@ -137,7 +137,7 @@ __declspec(naked) void __stdcall GameBuildAimUpVector(const CVector* direction, 
     }
     // clang-format on
 }
-// 0x000b44e0
+// 0x000b48e0
 __declspec(naked) float __cdecl GameNormalizeAngle(float angle)
 {
     // clang-format off
@@ -161,7 +161,7 @@ __declspec(naked) float __cdecl GameNormalizeAngle(float angle)
     // clang-format on
 }
 
-// 0x000b4850
+// 0x000b4d10
 void GameTransformPoint(CVector* out, const CMatrix* matrix, const CVector* delta)
 {
     out->x = ((matrix->at.x * delta->z + matrix->up.x * delta->y) + matrix->right.x * delta->x) + matrix->position.x;
@@ -170,7 +170,7 @@ void GameTransformPoint(CVector* out, const CMatrix* matrix, const CVector* delt
 }
 
 // Returns the extended-precision result in x87 ST0.
-// 0x000b44b0
+// 0x000b48b0
 float FloatOffset(float first, float second)
 {
     if (first >= second)
@@ -179,7 +179,7 @@ float FloatOffset(float first, float second)
 }
 
 // GTA SA virtual addresses: USA 7EB7C0; all other version values use 7EB800.
-// 0x000b5320
+// 0x000b57e0
 void __cdecl GameRotateRwQuaternion(void* quaternion, int axis, float angle, int combine)
 {
     const CVector* direction = &g_rwRotationAxes[axis];
@@ -203,7 +203,7 @@ void __cdecl GameRotateRwQuaternion(void* quaternion, int axis, float angle, int
 
 // Shared fields are views into the existing native backing span, not new globals.
 // GTA SA virtual addresses: USA 7F2720; all other version values use 7F2760.
-// 0x000b5370
+// 0x000b5830
 void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angle)
 {
     CVector* queryAxis = (CVector*)(g_entityCollisionScratch + 0x101c);
@@ -233,7 +233,7 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
 }
 
 // GTA SA virtual addresses: USA 7EBA80; all other version values use 7EBAC0.
-// 0x000b53e0
+// 0x000b58a0
 void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, float* angle)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eba80 : 0x7ebac0;
@@ -252,7 +252,7 @@ void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, f
 }
 
 // GTA SA virtual addresses: USA 7F1FD0; all other version values use 7F2010.
-// 0x000b5410
+// 0x000b58d0
 void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angle)
 {
     const CVector* direction = axis;
@@ -275,7 +275,7 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
 }
 
 // GTA SA virtual addresses: USA 7F1920; all other version values use 7F1960.
-// 0x000b5450
+// 0x000b5910
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f1920 : 0x7f1960;
@@ -292,7 +292,7 @@ void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 }
 
 // GTA SA virtual addresses: USA 7F22C0; all other version values use 7F2300.
-// 0x000b5480
+// 0x000b5940
 void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f22c0 : 0x7f2300;
@@ -311,7 +311,7 @@ void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 }
 
 // GTA SA virtual address: 0x0059C910, ECX receives the vector.
-// 0x000b4630
+// 0x000b4a30
 void GameNormalizeVector(CVector* vector)
 {
     // clang-format off
@@ -323,13 +323,13 @@ void GameNormalizeVector(CVector* vector)
     // clang-format on
 }
 // GTA SA virtual address: 0x0059C730, cdecl out/left/right, returns out in EAX.
-// 0x000b4750
+// 0x000b4bc0
 CVector* GameVectorCrossProduct(CVector* out, const CVector* left, const CVector* right)
 {
     return ((CVector * (__cdecl*)(CVector*, const CVector*, const CVector*))0x59c730)(out, left, right);
 }
 // GTA SA virtual address: 0x0059C810, cdecl out/vector/matrix.
-// 0x000b4790
+// 0x000b4c00
 CVector* GameTransformVectorByTranspose(CVector* out, const CVector* vector, const CMatrix* matrix)
 {
     return ((CVector * (__cdecl*)(CVector*, const CVector*, const CMatrix*))0x59c810)(out, vector, matrix);
@@ -337,7 +337,7 @@ CVector* GameTransformVectorByTranspose(CVector* out, const CVector* vector, con
 
 // Backend quaternion layout is deliberately opaque, as in the other RW adapters.
 // GTA SA virtual addresses: USA 0x007EB5C0; all other values use 0x007EB600.
-// 0x000b4d20
+// 0x000b51e0
 void GameRwQuaternionFromMatrix(void* quaternion, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eb5c0 : 0x7eb600;
@@ -354,7 +354,7 @@ void GameRwQuaternionFromMatrix(void* quaternion, const CMatrix* matrix)
 }
 
 // GTA SA virtual address: 0x007EDDC0, fixed vector transform (no translation).
-// 0x000b5210
+// 0x000b56d0
 CVector* GameTransformRwVector(CVector* out, const CVector* vector, const CMatrix* matrix)
 {
     return ((CVector * (__cdecl*)(CVector*, const CVector*, const CMatrix*))0x7eddc0)(out, vector, matrix);
@@ -362,7 +362,7 @@ CVector* GameTransformRwVector(CVector* out, const CVector* vector, const CMatri
 
 // The version-2 switch is sticky: other versions do not reset this pointer.
 // GTA SA virtual addresses: initial 0x007EDD90, version-2 target 0x007EDDD0.
-// 0x000b5230
+// 0x000b56f0
 CVector* GameTransformRwPoint(CVector* out, const CVector* point, const CMatrix* matrix)
 {
     if (g_gameVersion == 2)
@@ -372,7 +372,7 @@ CVector* GameTransformRwPoint(CVector* out, const CVector* point, const CMatrix*
 
 // Raw register-preserving native ABI; shared fields are existing arena views.
 // Input +1000, output +1004, target +1008 (native RVAs 2ABE18/1C/20).
-// 0x000b5260
+// 0x000b5720
 __declspec(naked) void GameRepeatRwMatrixInvert()
 {
     // clang-format off
@@ -398,7 +398,7 @@ __declspec(naked) void GameRepeatRwMatrixInvert()
 
 // Raw register-preserving native ABI; shared fields are existing arena views.
 // Input +1000, output +1004, target +1008 (native RVAs 2ABE18/1C/20).
-// 0x000b5280
+// 0x000b5740
 __declspec(naked) void GameInvertRwMatrix(CMatrix* out, const CMatrix* matrix)
 {
     // clang-format off
@@ -437,7 +437,7 @@ __declspec(naked) void GameInvertRwMatrix(CMatrix* out, const CMatrix* matrix)
 }
 
 // Returns the extended-precision result in x87 ST0.
-// 0x000b54b0
+// 0x000b5970
 __declspec(naked) float GameHeadingToRadians(float heading)
 {
     // clang-format off
@@ -477,7 +477,7 @@ rw_100b550f:
 
 // Native unbounded axis lookup; target publication occurs before the call.
 // GTA SA virtual addresses: USA 0x007F1FD0, fallback 0x007F2010.
-// 0x000b52d0
+// 0x000b5790
 void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
 {
     const CVector* direction = &g_rwRotationAxes[axis];
@@ -500,7 +500,7 @@ void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
 }
 
 // GTA SA virtual address: 0x007498E0 (fixed).
-// 0x000b1010
+// 0x000b1410
 int GameRwCountClumpAtomics(void* clump)
 {
     int result = 0;
@@ -517,7 +517,7 @@ int GameRwCountClumpAtomics(void* clump)
 }
 
 // GTA SA virtual address: 0x00749B70 (fixed).
-// 0x000b1090
+// 0x000b1490
 void* GameRwForAllAtomics(void* clump, GameRwObjectCallback callback, void* data)
 {
     void* result = 0;
@@ -539,7 +539,7 @@ void* GameRwForAllAtomics(void* clump, GameRwObjectCallback callback, void* data
 }
 
 // GTA SA virtual address: 0x007F1200; every non-USA version uses +0x40.
-// 0x000b10c0
+// 0x000b14c0
 void* GameRwForAllFrameObjects(void* frame, GameRwObjectCallback callback, void* data)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f1200 : 0x7f1240;
@@ -561,7 +561,7 @@ void* GameRwForAllFrameObjects(void* frame, GameRwObjectCallback callback, void*
 }
 
 // GTA SA virtual address: 0x007F3820; every non-USA version uses +0x40.
-// 0x000b1360
+// 0x000b1760
 void GameRwDestroyTexture(void* texture)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f3820 : 0x7f3860;
@@ -576,7 +576,7 @@ void GameRwDestroyTexture(void* texture)
 }
 
 // GTA SA virtual address: 0x007F05A0; every non-USA version uses +0x40.
-// 0x000b13d0
+// 0x000b17d0
 void GameRwDestroyFrame(void* frame)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f05a0 : 0x7f05e0;
@@ -591,7 +591,7 @@ void GameRwDestroyFrame(void* frame)
 }
 
 // GTA SA virtual address: 0x00749DC0; every non-USA version uses +0x50.
-// 0x000b1400
+// 0x000b1800
 void GameRwDestroyAtomic(void* atomic)
 {
     DWORD target = g_gameVersion == 1 ? 0x749dc0 : 0x749e10;
@@ -606,7 +606,7 @@ void GameRwDestroyAtomic(void* atomic)
 }
 
 // GTA SA virtual address: 0x007FB020; every non-USA version uses +0x40.
-// 0x000b1470
+// 0x000b1870
 void GameRwDestroyRaster(void* raster)
 {
     DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
@@ -621,7 +621,7 @@ void GameRwDestroyRaster(void* raster)
 }
 
 // GTA SA virtual address: 0x007EE340; every non-USA version uses +0x40.
-// 0x000b14f0
+// 0x000b18f0
 void GameRwClearCamera(void* camera, const void* color, DWORD flags)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee340 : 0x7ee380;
@@ -640,7 +640,7 @@ void GameRwClearCamera(void* camera, const void* color, DWORD flags)
 }
 
 // GTA SA virtual address: 0x007EE190; every non-USA version uses +0x40.
-// 0x000b1520
+// 0x000b1920
 void GameRwBeginCameraUpdate(void* camera)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee190 : 0x7ee1d0;
@@ -655,7 +655,7 @@ void GameRwBeginCameraUpdate(void* camera)
 }
 
 // GTA SA virtual address: 0x007EE180; every non-USA version uses +0x40.
-// 0x000b1550
+// 0x000b1950
 void GameRwEndCameraUpdate(void* camera)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee180 : 0x7ee1c0;
@@ -670,7 +670,7 @@ void GameRwEndCameraUpdate(void* camera)
 }
 
 // GTA SA virtual address: 0x00749B20; every non-USA version uses +0x50.
-// 0x000b15d0
+// 0x000b19d0
 void GameRwRenderClump(void* clump)
 {
     DWORD target = g_gameVersion == 1 ? 0x749b20 : 0x749b70;
@@ -685,7 +685,7 @@ void GameRwRenderClump(void* clump)
 }
 
 // GTA SA virtual address: 0x0074A4F0; every non-USA version uses +0x50.
-// 0x000b1740
+// 0x000b1b40
 void GameRwAddClumpLight(void* clump, void* light)
 {
     DWORD target = g_gameVersion == 1 ? 0x74a4f0 : 0x74a540;
@@ -705,7 +705,7 @@ void GameRwAddClumpLight(void* clump, void* light)
 }
 
 // GTA SA virtual address: 0x00751A70 (fixed).
-// 0x000b17a0
+// 0x000b1ba0
 void GameRwSetLightRadius(void* light, float radius)
 {
     DWORD target = 0x751a70;
@@ -722,7 +722,7 @@ void GameRwSetLightRadius(void* light, float radius)
 }
 
 // GTA SA virtual address: 0x0074A310; every non-USA version uses +0x50.
-// 0x000b1880
+// 0x000b1c80
 BOOL GameRwDestroyClump(void* clump)
 {
     int result = 0;
@@ -741,7 +741,7 @@ BOOL GameRwDestroyClump(void* clump)
 
 // Native object tag must be1 before the raw +48 field is read.
 // B5E30 establishes this field as the atomic render callback; keep raw view.
-// 0x000b1030
+// 0x000b1430
 void* GameRwQueryAtomic48(const void* object)
 {
     const BYTE* bytes = (const BYTE*)object;
@@ -749,7 +749,7 @@ void* GameRwQueryAtomic48(const void* object)
 }
 
 // Nullable raw +34 read; no full backend object layout is inferred.
-// 0x000b1130
+// 0x000b1530
 void* __stdcall GameRwReadField34(const void* object)
 {
     void* result = 0;
@@ -772,7 +772,7 @@ void* __stdcall GameRwReadField34(const void* object)
 
 // Each entry snapshots GTA world slot C17038 once, and tests only that world.
 // GTA SA virtual backend: 0x00750F20; non-USA fallback +0x50.
-// 0x000b14b0
+// 0x000b18b0
 void GameRwWorldAddCamera(void* camera)
 {
     void* world = *(void**)0xc17038;
@@ -793,7 +793,7 @@ void GameRwWorldAddCamera(void* camera)
 }
 
 // GTA SA virtual backend: 0x00751300 (fixed for every version).
-// 0x000b1600
+// 0x000b1a00
 void GameRwWorldAddClump(void* clump)
 {
     void* world = *(void**)0xc17038;
@@ -813,7 +813,7 @@ void GameRwWorldAddClump(void* clump)
 }
 
 // GTA SA virtual backend: 0x00751460 (fixed for every version).
-// 0x000b1630
+// 0x000b1a30
 void GameRwWorldRemoveClump(void* clump)
 {
     void* world = *(void**)0xc17038;
@@ -833,7 +833,7 @@ void GameRwWorldRemoveClump(void* clump)
 }
 
 // GTA SA virtual backend: 0x0074F570 (fixed for every version).
-// 0x000b1660
+// 0x000b1a60
 void GameRwWorldRender()
 {
     void* world = *(void**)0xc17038;
@@ -851,7 +851,7 @@ void GameRwWorldRender()
 }
 
 // GTA SA virtual backend: 0x00751910; non-USA fallback +0x50.
-// 0x000b17c0
+// 0x000b1bc0
 void GameRwWorldAddLight(void* light)
 {
     void* world = *(void**)0xc17038;
@@ -872,7 +872,7 @@ void GameRwWorldAddLight(void* light)
 }
 
 // GTA SA virtual backend: 0x00751960; non-USA fallback +0x50.
-// 0x000b1800
+// 0x000b1c00
 void GameRwWorldRemoveLight(void* light)
 {
     void* world = *(void**)0xc17038;
@@ -893,7 +893,7 @@ void GameRwWorldRemoveLight(void* light)
 }
 
 // GTA SA virtual address: 0x00749F70, fixed even for non-USA version values.
-// 0x000b1850
+// 0x000b1c50
 void* GameRwCloneClump(void* clump)
 {
     void* result = 0;
@@ -914,7 +914,7 @@ void* GameRwCloneClump(void* clump)
 // Raw return ABI: stack cleanup POPs intentionally overwrite backend EAX.
 // GTA SA engine slot C97B24, entry+20; slot purpose remains unresolved.
 // Two raw words are passed, and the final popped second word is returned.
-// 0x000b0ff0
+// 0x000b13f0
 __declspec(naked) DWORD GameRwInvokeEngineSlot20(DWORD first, DWORD second)
 {
     // clang-format off
@@ -935,7 +935,7 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot20(DWORD first, DWORD second)
 }
 
 // GTA SA virtual address74C800. Return input word, not backend result.
-// 0x000b1100
+// 0x000b1500
 __declspec(naked) void* GameRwUnlockGeometry(void* geometry)
 {
     // clang-format off
@@ -953,7 +953,7 @@ __declspec(naked) void* GameRwUnlockGeometry(void* geometry)
 }
 
 // GTA SA virtual address74C7D0. Pass lock maskFFF, then return that word.
-// 0x000b1110
+// 0x000b1510
 __declspec(naked) DWORD GameRwLockGeometry(void* geometry)
 {
     // clang-format off
@@ -973,7 +973,7 @@ __declspec(naked) DWORD GameRwLockGeometry(void* geometry)
 }
 
 // GTA SA virtual address: 0x007328C0, static visibility camera setter.
-// 0x000b1840
+// 0x000b1c40
 void GameRwSetVisibilityCamera(void* camera)
 {
     // clang-format off
@@ -987,7 +987,7 @@ void GameRwSetVisibilityCamera(void* camera)
 }
 // GTA SA virtual addresses: hierarchy lookup734A40, matrix update7C51D0.
 // No additional null hierarchy guard is native.
-// 0x000b1980
+// 0x000b1d80
 void GameRwUpdateClumpHierarchy(void* clump)
 {
     // clang-format off
@@ -1004,7 +1004,7 @@ void GameRwUpdateClumpHierarchy(void* clump)
     // clang-format on
 }
 // GTA SA virtual address: 0x004D34F0; full native on-screen word is forwarded.
-// 0x000b19a0
+// 0x000b1da0
 void GameRwUpdateClumpAnimations(void* clump, float timeStep, DWORD onScreen)
 {
     // clang-format off
@@ -1022,7 +1022,7 @@ void GameRwUpdateClumpAnimations(void* clump, float timeStep, DWORD onScreen)
 }
 
 // Return the address at +7C, not the pointer stored there; tag1 only.
-// 0x000b1050
+// R5 address to verify
 void* GameRwQueryAtomic7c(void* object)
 {
     BYTE* bytes = (BYTE*)object;
@@ -1030,7 +1030,7 @@ void* GameRwQueryAtomic7c(void* object)
 }
 
 // Snapshot frame before atomic destruction; clump path has no frame teardown.
-// 0x000b5df0
+// 0x000b62b0
 void GameRwDestroyObject(void* object)
 {
     if (!object)
@@ -1048,7 +1048,7 @@ void GameRwDestroyObject(void* object)
 }
 
 // Native callback is cdecl, unchecked, and its return value is ignored.
-// 0x000b5e30
+// 0x000b62f0
 BOOL __stdcall GameRwRenderAtomic(void* object)
 {
     if (!object || *(BYTE*)object != 1)
@@ -1066,7 +1066,7 @@ BOOL __stdcall GameRwRenderAtomic(void* object)
 }
 
 // Dispatch opaque backend tags1/2 only; native entry pops its one argument.
-// 0x000b5e70
+// 0x000b6330
 void __stdcall GameRwRenderObject(void* object)
 {
     if (!object)
@@ -1079,7 +1079,7 @@ void __stdcall GameRwRenderObject(void* object)
 }
 
 // GTA SA virtual addresses: pool slot B74490, thiscall backend 4442D0.
-// 0x000b37a0
+// 0x000b3ba0
 int __stdcall GamePoolPedGetIndex(void* ped)
 {
     int result;
@@ -1096,7 +1096,7 @@ int __stdcall GamePoolPedGetIndex(void* ped)
     return result;
 }
 
-// 0x000b5d20
+// 0x000b61e0
 int GameGetVehicleSubtype(void* vehicle)
 {
     if (!vehicle)
@@ -1119,7 +1119,7 @@ int GameGetVehicleSubtype(void* vehicle)
 }
 
 // GTA SA virtual addresses: pool slot B74494, thiscall backend 4048E0.
-// 0x000b37d0
+// 0x000b3bd0
 void* __stdcall GamePoolVehicleGetAt(int handle)
 {
     void* result;
@@ -1137,7 +1137,7 @@ void* __stdcall GamePoolVehicleGetAt(int handle)
 }
 
 // GTA SA virtual addresses: pool slot B74494, thiscall backend 424160.
-// 0x000b3800
+// 0x000b3c00
 DWORD __stdcall GamePoolVehicleGetIndex(void* vehicle)
 {
     DWORD result = 0;
@@ -1155,7 +1155,7 @@ DWORD __stdcall GamePoolVehicleGetIndex(void* vehicle)
 }
 
 // GTA SA virtual pool-pointer address: 0x00B74498.
-// 0x000b3870
+// 0x000b3c70
 void* GamePoolBuildingGetArray()
 {
     void* array;
@@ -1171,7 +1171,7 @@ void* GamePoolBuildingGetArray()
 }
 
 // GTA SA virtual pool-pointer address: 0x00B744A0.
-// 0x000b3890
+// 0x000b3c90
 void* GamePoolDummyGetArray()
 {
     void* array;
@@ -1187,7 +1187,7 @@ void* GamePoolDummyGetArray()
 }
 
 // GTA SA virtual pool-pointer address: 0x00B7449C.
-// 0x000b38b0
+// 0x000b3cb0
 void* GamePoolObjectGetArray()
 {
     void* array;
@@ -1205,7 +1205,7 @@ void* GamePoolObjectGetArray()
 // Native scans exactly 3100 records of 412 bytes, independent of pool metadata.
 // Preserve the signed model-word comparison and the 863C40 vtable exclusion.
 // GTA SA virtual address: object-pool pointer B7449C.
-// 0x000b3930
+// 0x000b3d30
 bool GamePoolHasObjectModel(int model)
 {
     DWORD address = (DWORD) * *(void***)0xb7449c;
@@ -1219,7 +1219,7 @@ bool GamePoolHasObjectModel(int model)
 
 // GTA SA virtual addresses: scan A9C068 inclusive through AAE948 exclusive.
 // Exactly 19000 DWORD slots; do not use the relocated/custom SA-MP bank here.
-// 0x000b3a00
+// 0x000b3e00
 int GameCountEmptyBackendModelSlots()
 {
     int count = 0;
@@ -1246,7 +1246,7 @@ void GameWriteRasterBmp(void* raster, const char* filename)
 
 // Allocate only when both raster slots are null. A partial success is retained.
 // GTA SA virtual addresses: source raster slot C402D8; RwRasterCreate 7FB230.
-// 0x000b57d0
+// 0x000b5c90
 void GameCreateSceneRasters()
 {
     if (SCENE_COLOR_RASTER || SCENE_DEPTH_RASTER)
@@ -1263,7 +1263,7 @@ void GameCreateSceneRasters()
 // Preserve all PUSHAD registers, camera publication, call order and saved-slot
 // reloads. Shared saved slots at RVAs 2ABE50/54 make this path non-reentrant.
 // GTA SA virtual address C9BCC0 is written but not restored by the native body.
-// 0x000b5860
+// 0x000b5d20
 __declspec(naked) void GameRenderWithSceneRasters()
 {
     // clang-format off
@@ -1311,7 +1311,7 @@ __declspec(naked) void GameRenderWithSceneRasters()
     // clang-format on
 }
 
-// 0x000b3e40
+// 0x000b4240
 DWORD __stdcall GameTestCameraSphere(const CVector* centre, float radius)
 {
     DWORD sphere[4];
@@ -1325,7 +1325,7 @@ DWORD __stdcall GameTestCameraSphere(const CVector* centre, float radius)
     return ((DWORD(__cdecl*)(void*, const void*))target)(camera, sphere);
 }
 
-// 0x000b1170
+// R5 address to verify
 void __stdcall GameRwReplaceField34(void* object, void* replacement)
 {
     IUnknown* previous = 0;
@@ -1356,7 +1356,7 @@ void __stdcall GameRwReplaceField34(void* object, void* replacement)
     }
 }
 
-// 0x000b11c0
+// R5 address to verify
 void* GameRwDumpAtomicMaterials(void* object, void* data)
 {
     BYTE* atomic = (BYTE*)object;
@@ -1388,7 +1388,7 @@ void* GameRwDumpAtomicMaterials(void* object, void* data)
     return object;
 }
 
-// 0x000b1260
+// R5 address to verify
 void* __stdcall GameRwDumpObjectFrameMaterials(void* object)
 {
     void* frame = *(void**)((BYTE*)object + 4);
@@ -1397,13 +1397,13 @@ void* __stdcall GameRwDumpObjectFrameMaterials(void* object)
     return frame;
 }
 
-// 0x000b1280
+// R5 address to verify
 void* GameRwKeepType1Object(void* object, void* data)
 {
     return *(BYTE*)object == 1 ? object : 0;
 }
 
-// 0x000b12a0
+// R5 address to verify
 void* __stdcall GameRwEnumerateObjectFrameType1(void* object)
 {
     void* frame = *(void**)((BYTE*)object + 4);
@@ -1412,7 +1412,7 @@ void* __stdcall GameRwEnumerateObjectFrameType1(void* object)
     return GameRwForAllFrameObjects(frame, GameRwKeepType1Object, 0);
 }
 
-// 0x000b1970
+// R5 address to verify
 void* GameRwGetObjectFrame(const void* object)
 {
     if (!object)
@@ -1420,7 +1420,7 @@ void* GameRwGetObjectFrame(const void* object)
     return *(void**)((const BYTE*)object + 4);
 }
 
-// 0x000b1e90
+// R5 address to verify
 void* GameRwGetClumpWord8Minus64(void* clump, int index)
 {
     int count = GameRwCountClumpAtomics(clump);
@@ -1439,7 +1439,7 @@ void* GameRwGetClumpWord8Minus64(void* clump, int index)
 }
 
 // Native x87 intermediate precision, spill locations and input bit pattern matter.
-// 0x000b55a0
+// R5 address to verify
 __declspec(naked) float GameApproximateSqrt(float value)
 {
     // clang-format off
@@ -1462,7 +1462,7 @@ __declspec(naked) float GameApproximateSqrt(float value)
     // clang-format on
 }
 
-// 0x000b62f0
+// 0x000b67b0
 BOOL GameCopyBackendBoneMatrix(void* entity, CMatrix* out, int bone)
 {
     if (!entity || *(DWORD*)entity == 0x863c40)
@@ -1481,7 +1481,7 @@ BOOL GameCopyBackendBoneMatrix(void* entity, CMatrix* out, int bone)
 
 // Preserves raw EAX from the fixed GTA backend; argument meaning unresolved.
 // GTA SA virtual address: 0x00705B60.
-// 0x000b14a0
+// 0x000b18a0
 DWORD GameCall705B60(DWORD argument)
 {
     return ((DWORD(__cdecl*)(DWORD))0x705b60)(argument);
@@ -1489,13 +1489,13 @@ DWORD GameCall705B60(DWORD argument)
 
 // Backend consumes three stack DWORDs (RET12); semantic types are unknown.
 // GTA SA virtual address: 0x0059C790.
-// 0x000b4770
+// 0x000b4be0
 DWORD GameCall59C790(DWORD first, DWORD second, DWORD third)
 {
     return ((DWORD(__stdcall*)(DWORD, DWORD, DWORD))0x59c790)(first, second, third);
 }
 
-// 0x000b4360
+// 0x000b4760
 void GameReplaceBuildingPoolModels(int model, int replacement)
 {
     CEntity temporary;
@@ -1514,28 +1514,28 @@ void GameReplaceBuildingPoolModels(int model, int replacement)
 }
 
 // Returns the unspilled extended difference.
-// 0x000b44a0
+// R5 address to verify
 float GameSubtractFloats(float first, float second)
 {
     return first - second;
 }
 
 // dy squared plus dx squared, no intermediate float spill.
-// 0x000b4510
+// R5 address to verify
 float __stdcall GameSquaredDistance2D(float x, float y, float otherX, float otherY)
 {
     return (y - otherY) * (y - otherY) + (x - otherX) * (x - otherX);
 }
 
 // Square root of dy squared plus dx squared.
-// 0x000b4540
+// R5 address to verify
 float __stdcall GameDistance2D(float x, float y, float otherX, float otherY)
 {
     return (float)sqrt((y - otherY) * (y - otherY) + (x - otherX) * (x - otherX));
 }
 
 // dz squared plus dy squared then dx squared.
-// 0x000b45b0
+// R5 address to verify
 __declspec(naked) float __stdcall GameSquaredDistance3D(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
     // clang-format off
@@ -1563,7 +1563,7 @@ __declspec(naked) float __stdcall GameSquaredDistance3D(float x, float y, float 
 }
 
 // dx squared plus dy squared then dz squared; RET8.
-// 0x000b45f0
+// R5 address to verify
 __declspec(naked) float __stdcall GameSquaredDistanceVectors(const CVector* first, const CVector* second)
 {
     // clang-format off
@@ -1593,21 +1593,21 @@ __declspec(naked) float __stdcall GameSquaredDistanceVectors(const CVector* firs
 }
 
 // x squared plus y squared then z squared.
-// 0x000b4640
+// R5 address to verify
 float GameVectorLengthSquared(const CVector* vector)
 {
     return D3DXVec3LengthSq((const D3DXVECTOR3*)vector);
 }
 
 // Inclusive signed unit bounds for all components; unordered values rejected.
-// 0x000b4670
+// R5 address to verify
 bool GameIsVectorWithinUnitBounds(const CVector* vector)
 {
     return vector->x <= 1.0f && vector->x >= -1.0f && vector->y <= 1.0f && vector->y >= -1.0f && vector->z <= 1.0f && vector->z >= -1.0f;
 }
 
 // Sequential stores and input reloads preserve native alias behavior.
-// 0x000b47b0
+// R5 address to verify
 __declspec(naked) void GameVectorCrossProductLocal(CVector* out, const CVector* left, const CVector* right)
 {
     // clang-format off
@@ -1639,35 +1639,35 @@ __declspec(naked) void GameVectorCrossProductLocal(CVector* out, const CVector* 
 }
 
 // Square root of x squared plus y squared then z squared.
-// 0x000b47f0
+// R5 address to verify
 float GameVectorLength(const CVector* vector)
 {
     return D3DXVec3Length((const D3DXVECTOR3*)vector);
 }
 
 // Separate native entry, same arithmetic as RVA000B4640; original name unknown.
-// 0x000b4820
+// R5 address to verify
 float GameVectorLengthSquared4820(const CVector* vector)
 {
     return D3DXVec3LengthSq((const D3DXVECTOR3*)vector);
 }
 
 // x squared plus y squared then z squared; cdecl.
-// 0x000b4b20
+// R5 address to verify
 float GameLengthSquared3D(float x, float y, float z)
 {
     return (x * x + y * y) + z * z;
 }
 
 // z products plus y products then x products.
-// 0x000b4b40
+// R5 address to verify
 float GameVectorDotProduct(const CVector* first, const CVector* second)
 {
     return D3DXVec3Dot((const D3DXVECTOR3*)first, (const D3DXVECTOR3*)second);
 }
 
 // Three sequential component stores; native input/output alias behavior.
-// 0x000b4cf0
+// R5 address to verify
 void GameScaleVector(CVector* out, const CVector* vector, float scale)
 {
     out->x = scale * vector->x;
@@ -1676,7 +1676,7 @@ void GameScaleVector(CVector* out, const CVector* vector, float scale)
 }
 
 // Native inclusive0..360 gate accepts NaN; preserves branch arithmetic.
-// 0x000b5520
+// R5 address to verify
 __declspec(naked) float GameHeadingToRadiansBounded(float heading)
 {
     // clang-format off
@@ -1716,7 +1716,7 @@ __declspec(naked) float GameHeadingToRadiansBounded(float heading)
     // clang-format on
 }
 
-// 0x000b38d0
+// R5 address to verify
 DWORD GameCountNonzeroPoolBytesB7449C()
 {
     // GTA SA virtual address: pool global. Bytes are inline at +4, not indirect.
@@ -1729,7 +1729,7 @@ DWORD GameCountNonzeroPoolBytesB7449C()
     return count;
 }
 
-// 0x000b3900
+// R5 address to verify
 DWORD GameCountNonzeroPoolBytesC8800C()
 {
     // GTA SA virtual address: pool global. Preserve the same raw inline-byte scan.
@@ -1742,7 +1742,7 @@ DWORD GameCountNonzeroPoolBytesC8800C()
     return count;
 }
 
-// 0x000b4130
+// R5 address to verify
 void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
 {
     // GTA SA virtual addresses: source and replacement vtables.
@@ -1750,22 +1750,22 @@ void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
         *(DWORD*)entity = 0x85bd30;
 }
 
-// 0x000b42c0
+// R5 address to verify
 void GameWriteGlobal9689E0(DWORD value)
 {
     *(DWORD*)0x9689e0 = value;
 }
 // CRT helper consumes and returns ST0, not a C stack argument.
-// 0x000fce60
+// 0x000cb570
 extern "C" void __cdecl _CIasin();
-// 0x000b3620
+// R5 address to verify
 float GameAsin(float value)
 {
     return (float)asin(value);
 }
 
 // Raw GTA backend, sequential position publication and live matrix reloads.
-// 0x000b6260
+// R5 address to verify
 __declspec(naked) void GameGetBackendPositionAndHeading(void* entity, CVector* position, float* heading)
 {
     // clang-format off
@@ -1823,7 +1823,7 @@ __declspec(naked) void GameGetBackendPositionAndHeading(void* entity, CVector* p
     // clang-format on
 }
 
-// 0x000b3720
+// 0x000b3b20
 void __stdcall GameWorldAdd(void* entity)
 {
     // GTA SA cdecl backend, one caller-popped pointer.
@@ -1837,7 +1837,7 @@ void __stdcall GameWorldAdd(void* entity)
     // clang-format on
 }
 
-// 0x000b3740
+// 0x000b3b40
 void __stdcall GameWorldRemove(void* entity)
 {
     // GTA SA cdecl backend, one caller-popped pointer.
@@ -1851,7 +1851,7 @@ void __stdcall GameWorldRemove(void* entity)
     // clang-format on
 }
 
-// 0x000b3830
+// 0x000b3c30
 void* __stdcall GamePoolObjectGetAt(int handle)
 {
     void* result;
@@ -1871,7 +1871,7 @@ void* __stdcall GamePoolObjectGetAt(int handle)
 
 // GTA SA virtual addresses: GetPad 0x0053FB70; Clear 0x00541A70.
 // VC7 ABI bridge: GetPad(0), then ECX=pad and two unmodified argument words.
-// 0x000b58e0
+// 0x000b5da0
 __declspec(naked) void GameClearLocalPad(DWORD first, DWORD second)
 {
     // clang-format off
@@ -1897,7 +1897,7 @@ __declspec(naked) void GameClearLocalPad(DWORD first, DWORD second)
 // adapters set ECX and keep the backend callee-pop and raw AL return intact.
 
 // GTA SA virtual address: 0x0073FB10.
-// 0x000b6020
+// 0x000b64e0
 __declspec(naked) bool __stdcall GameWeaponFireInstantHit(void* weapon, void* shooter, const CVector* origin, const CVector* muzzle, void* victim, const CVector* target,
                                                           const CVector* driveBy, DWORD crossHair, DWORD effects)
 {
@@ -1923,7 +1923,7 @@ __declspec(naked) bool __stdcall GameWeaponFireInstantHit(void* weapon, void* sh
 }
 
 // GTA SA virtual address: 0x0073AAC0.
-// 0x000b6050
+// 0x000b6510
 __declspec(naked) bool __stdcall GameWeaponFireSniper(void* weapon, void* shooter)
 {
     // clang-format off
@@ -1942,20 +1942,20 @@ __declspec(naked) bool __stdcall GameWeaponFireSniper(void* weapon, void* shoote
     // clang-format on
 }
 
-// 0x000a6fc0
+// 0x000a7280
 void PlayerColors::Initialize()
 {
     memcpy(g_playerColors, g_playerDefaultColors, sizeof(g_playerColors));
 }
 
-// 0x000a6f50
+// 0x000a7210
 void __stdcall PlayerColors::Set(DWORD index, DWORD color)
 {
     if (index < sizeof(g_playerColors))
         g_playerColors[index] = color;
 }
 
-// 0x000a6f70
+// 0x000a7230
 DWORD __stdcall PlayerColors::Get(DWORD index)
 {
     if (index == 1004)
@@ -1969,7 +1969,7 @@ DWORD __stdcall PlayerColors::Get(DWORD index)
     return index;
 }
 
-// 0x000b1700
+// 0x000b1b00
 void* GameRwCreateLight(int lightType)
 {
     void* result = 0;
@@ -1986,7 +1986,7 @@ void* GameRwCreateLight(int lightType)
     return result;
 }
 
-// 0x000b1770
+// 0x000b1b70
 void GameRwSetLightColor(void* light, const float* rgba)
 {
     DWORD target = g_gameVersion == 1 ? 0x751a90 : 0x751ae0;
@@ -2002,7 +2002,7 @@ void GameRwSetLightColor(void* light, const float* rgba)
     // clang-format on
 }
 
-// 0x000b12d0
+// 0x000b16d0
 void* GameRwCreateRaster(int width, int height, int depth, int flags)
 {
     void* result = 0;
@@ -2025,7 +2025,7 @@ void* GameRwCreateRaster(int width, int height, int depth, int flags)
     return result;
 }
 
-// 0x000b1430
+// 0x000b1830
 void* GameRwCreateCamera()
 {
     void* result = 0;
@@ -2040,7 +2040,7 @@ void* GameRwCreateCamera()
     return result;
 }
 
-// 0x000b1390
+// 0x000b1790
 void* GameRwCreateFrame()
 {
     void* result = 0;
@@ -2055,7 +2055,7 @@ void* GameRwCreateFrame()
     return result;
 }
 
-// 0x000b18f0
+// 0x000b1cf0
 void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f0e30 : 0x7f0e70;
@@ -2073,7 +2073,7 @@ void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
     // clang-format on
 }
 
-// 0x000b1920
+// 0x000b1d20
 void GameRwRotateFrame(void* frame, int axis, float angle)
 {
     const CVector* direction = g_rwPreviewAxes + axis;
@@ -2094,7 +2094,7 @@ void GameRwRotateFrame(void* frame, int axis, float angle)
     // clang-format on
 }
 
-// 0x000b15b0
+// 0x000b19b0
 void GameRwSetCameraRasters(void* camera, void* color, void* depth)
 {
     // clang-format off
@@ -2108,7 +2108,7 @@ void GameRwSetCameraRasters(void* camera, void* color, void* depth)
     // clang-format on
 }
 
-// 0x000b1580
+// 0x000b1980
 void GameRwSetObjectFrame(void* object, void* frame)
 {
     DWORD target = g_gameVersion == 1 ? 0x804ef0 : 0x804f30;
@@ -2124,7 +2124,7 @@ void GameRwSetObjectFrame(void* object, void* frame)
     // clang-format on
 }
 
-// 0x000b1680
+// 0x000b1a80
 void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
 {
     DWORD farAddress, nearAddress;
@@ -2156,7 +2156,7 @@ void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
     // clang-format on
 }
 
-// 0x000b16d0
+// 0x000b1ad0
 void GameRwSetViewWindow(void* camera, const float* window)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee410 : 0x7ee450;
@@ -2172,7 +2172,7 @@ void GameRwSetViewWindow(void* camera, const float* window)
     // clang-format on
 }
 
-// 0x000b18c0
+// 0x000b1cc0
 void GameRwSetProjection(void* camera, int projection)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee3a0 : 0x7ee3e0;
@@ -2188,7 +2188,7 @@ void GameRwSetProjection(void* camera, int projection)
     // clang-format on
 }
 
-// 0x000b1320
+// 0x000b1720
 void* GameRwCreateTexture(void* raster)
 {
     void* result = 0;
@@ -2205,7 +2205,7 @@ void* GameRwCreateTexture(void* raster)
     return result;
 }
 
-// 0x000b2790
+// 0x000b2b90
 BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE fromSamp)
 {
     char directory[65], path[129];
@@ -2227,7 +2227,7 @@ BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE from
     return FALSE;
 }
 
-// 0x000b2860
+// 0x000b2c60
 void* GameLoadDictionaryTexture(const char* dictionary, const char* name)
 {
     int index = GameTxdFind(dictionary);
@@ -2240,7 +2240,7 @@ void* GameLoadDictionaryTexture(const char* dictionary, const char* name)
     return texture;
 }
 
-// 0x000b3480
+// 0x000b3880
 int GameTxdFind(const char* name)
 {
     int result;
@@ -2257,7 +2257,7 @@ int GameTxdFind(const char* name)
     return result;
 }
 
-// 0x000b3510
+// 0x000b3910
 void GameTxdPush()
 {
     // clang-format off
@@ -2268,7 +2268,7 @@ void GameTxdPush()
     // clang-format on
 }
 
-// 0x000b3520
+// R5 address to verify
 void GameTxdPop()
 {
     // clang-format off
@@ -2279,7 +2279,7 @@ void GameTxdPop()
     // clang-format on
 }
 
-// 0x000b3530
+// 0x000b3930
 void GameTxdSetCurrent(int index)
 {
     // clang-format off
@@ -2292,7 +2292,7 @@ void GameTxdSetCurrent(int index)
     // clang-format on
 }
 
-// 0x000b3540
+// 0x000b3940
 void* GameTxdReadTexture(const char* name)
 {
     // Native constructs a one-pointer CSprite2d on the stack; this is an out-object, not the EAX result.
@@ -2308,7 +2308,7 @@ void* GameTxdReadTexture(const char* name)
 
 // Texture dictionary reference/slot adapters. Only the native -1 gates are
 // applied; other indices pass through unchanged to their GTA backends.
-// 0x000b34f0
+// 0x000b38f0
 void GameTxdAddRef(int index)
 {
     // clang-format off
@@ -2321,7 +2321,7 @@ void GameTxdAddRef(int index)
     // clang-format on
 }
 
-// 0x000b3500
+// 0x000b3900
 void GameTxdRemoveRef(int index)
 {
     // clang-format off
@@ -2334,28 +2334,28 @@ void GameTxdRemoveRef(int index)
     // clang-format on
 }
 
-// 0x000b35b0
+// 0x000b39b0
 void GameTxdRemove(int index)
 {
     if (index != -1)
         ((void(__cdecl*)(int))0x731e90)(index);
 }
 
-// 0x000b35d0
+// 0x000b39d0
 void GameTxdRemoveSlot(int index)
 {
     if (index != -1)
         ((void(__cdecl*)(int))0x731cd0)(index);
 }
 
-// 0x000b35f0
+// 0x000b39f0
 DWORD GameTxdGetReferenceCount(int index)
 {
     return index == -1 ? 0xffffffffu : ((DWORD(__cdecl*)(int))0x731aa0)(index);
 }
 
 // Native performs name lookup, then removes the slot only when it is not -1.
-// 0x000b3580
+// 0x000b3980
 void GameTxdRemoveSlotByName(const char* name)
 {
     int index = GameTxdFind(name);
@@ -2364,7 +2364,7 @@ void GameTxdRemoveSlotByName(const char* name)
 }
 
 // GTA SA virtual addresses: USA7C7550, fallback7C7590. Exactly one argument.
-// 0x000b1ce0
+// 0x000b20e0
 void* GameRwGetGeometrySkin(void* geometry)
 {
     DWORD target = g_gameVersion == 1 ? 0x7c7550 : 0x7c7590;
@@ -2373,7 +2373,7 @@ void* GameRwGetGeometrySkin(void* geometry)
 
 // GTA SA virtual addresses: backend74BDD0/+50; initialization flag C97B20.
 // Callback addresses are opaque GTA code pointers; no invented callable types.
-// 0x000b1da0
+// 0x000b21a0
 int GameRwRegisterClumpPlugin(DWORD pluginId)
 {
     DWORD target = g_gameVersion == 1 ? 0x74bdd0 : 0x74be20;
@@ -2385,7 +2385,7 @@ int GameRwRegisterClumpPlugin(DWORD pluginId)
 
 // GTA SA virtual addresses: backend74BE70/+50, callbacks41B2F0/41B300.
 // Native forces the flag back to1, not to its previous value, even on failure.
-// 0x000b1e00
+// 0x000b2200
 int GameRwRegisterClumpPluginStream(DWORD pluginId, DWORD readCallback)
 {
     DWORD target = g_gameVersion == 1 ? 0x74be70 : 0x74bec0;
@@ -2396,7 +2396,7 @@ int GameRwRegisterClumpPluginStream(DWORD pluginId, DWORD readCallback)
 }
 
 // GTA SA virtual addresses: USA7F3560, fallback7F35A0; fixed enable argument1.
-// 0x000b1e60
+// 0x000b2260
 void GameRwEnableAutoMipmapping()
 {
     DWORD target = g_gameVersion == 1 ? 0x7f3560 : 0x7f35a0;
@@ -2404,7 +2404,7 @@ void GameRwEnableAutoMipmapping()
 }
 
 // GTA SA virtual addresses: USA734820, all other version values734880 (+60).
-// 0x000b1ca0
+// 0x000b20a0
 void* GameRwGetFirstAtomic(void* clump)
 {
     DWORD target = g_gameVersion == 1 ? 0x734820 : 0x734880;
@@ -2412,27 +2412,27 @@ void* GameRwGetFirstAtomic(void* clump)
 }
 
 // GTA SA virtual address: 0x00734B10, exactly one clump argument.
-// 0x000b1d40
+// 0x000b2140
 void* GameRwGetClumpAnimHierarchy(void* clump)
 {
     return ((void*(__cdecl*)(void*))0x734b10)(clump);
 }
 
 // GTA SA virtual address: 0x004D60E0, exactly one hierarchy argument.
-// 0x000b1d70
+// 0x000b2170
 void* GameRwCreateHierarchyAnimation(void* hierarchy)
 {
     return ((void*(__cdecl*)(void*))0x4d60e0)(hierarchy);
 }
 
-// 0x000b1d20
+// R5 address to verify
 void* GameRwGetClumpSkin(void* clump)
 {
     void* atomic = GameRwGetFirstAtomic(clump);
     return GameRwGetGeometrySkin(*(void**)((BYTE*)atomic + 0x18));
 }
 
-// 0x000a7630
+// 0x000a7a40
 void* __stdcall GameGetModelInfo(int model)
 {
     if (g_gameUseCustomModelInfo)
@@ -2442,13 +2442,13 @@ void* __stdcall GameGetModelInfo(int model)
     return 0;
 }
 
-// 0x000b3860
+// 0x000b3c60
 void* __stdcall GameFindLocalPed()
 {
     return *(void**)0xb7cd98;
 }
 
-// 0x000b3f20
+// 0x000b4320
 void __stdcall GameAssignPlayerPed(BYTE player, void* ped)
 {
     g_gamePlayerPeds[player] = ped;

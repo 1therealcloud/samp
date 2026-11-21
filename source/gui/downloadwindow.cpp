@@ -12,30 +12,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x0011c37c
+// 0x000ea354
 const char g_downloadWindowTitle[18] = "Updating models..";
-// 0x0011c414
+// 0x000ea3ec
 const char g_downloadModel[6] = "Model";
-// 0x0011c40c
+// 0x000ea3e4
 const char g_downloadTexture[8] = "Texture";
-// 0x0011c404
+// 0x000ea3dc
 const char g_downloadIdFormat[5] = "0x%X";
-// 0x0011c400
+// 0x000ea3d8
 const char g_downloadZeroFormat[4] = "0%%";
-// 0x0011c3f8
+// 0x000ea3d0
 const char g_downloadPercentFormat[7] = "%.0f%%";
-// 0x0011c3e0
+// 0x000ea3b8
 const char g_downloadDetailFormat[21] = "{CC8888}(%d) %.16s..";
-// 0x0011c3c8
+// 0x000ea3a0
 const char g_downloadErrorFormat[24] = "{CC8888}Error(%d) %d/%d";
-// 0x0011c3b8
+// 0x000ea390
 const char g_downloadCompleteFormat[15] = "{77AA77}%.0f%%";
-// 0x0011c390
+// 0x000ea368
 const char g_downloadCaptionFormat[38] = "Updating models.. [%d/%d] (%.2f KB/s)";
-// 0x0011b918
+// 0x000e98e0
 const float g_downloadKilobytesPerByte = 0.0009765625f;
 
-// 0x0006a410
+// 0x0006a9d0
 CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
 {
     *(DWORD*)nativeState = 0;
@@ -43,19 +43,19 @@ CDownloadWindow* CDownloadWindow::InitializeRecordStorage()
     return this;
 }
 
-// 0x0006aa00
+// R5 address to verify
 DownloadRecordStorage::~DownloadRecordStorage()
 {
     ResizeRecords(0);
 }
 
-// 0x0006a440
+// R5 address to verify
 int CDownloadWindow::GetFilesCount()
 {
     return *(int*)(nativeState + 4);
 }
 
-// 0x0006aa10
+// 0x0006afd0
 CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -80,7 +80,7 @@ CDownloadWindow::CDownloadWindow(IDirect3DDevice9* device)
     state[0x95] = started;
 }
 
-// 0x0006a1a0
+// 0x0006a760
 void CDownloadWindow::ResetFonts()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -109,7 +109,7 @@ void CDownloadWindow::ResetFonts()
     list->SetSize((LONG)listWidth, (LONG)listHeight);
 }
 
-// 0x0006a280
+// 0x0006a840
 void CDownloadWindow::GetRect(RECT* out)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -119,7 +119,7 @@ void CDownloadWindow::GetRect(RECT* out)
     out->bottom = (LONG)(state[6] + (DWORD)out->top);
 }
 
-// 0x0006a2b0
+// 0x0006a870
 void CDownloadWindow::Show(DWORD mode)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -140,7 +140,7 @@ void CDownloadWindow::Show(DWORD mode)
     state[12] = 1;
 }
 
-// 0x0006a350
+// 0x0006a910
 void CDownloadWindow::Draw()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -170,7 +170,7 @@ void CDownloadWindow::Draw()
     }
 }
 
-// 0x0006a500
+// 0x0006aac0
 void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -194,7 +194,7 @@ void CDownloadWindow::ResetDialogControls(CDXUTDialog* dialog)
     created->columnWidths[1] = state[0x90];
 }
 
-// 0x0006a420
+// R5 address to verify
 DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -203,7 +203,7 @@ DownloadRecord* CDownloadWindow::GetRecord(DWORD index)
     return ((DownloadRecord**)state[0])[index];
 }
 
-// 0x0006a450
+// R5 address to verify
 bool DownloadRecordStorage::ResizeRecords(DWORD count)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -234,7 +234,7 @@ bool DownloadRecordStorage::ResizeRecords(DWORD count)
     return true;
 }
 
-// 0x0006a4c0
+// R5 address to verify
 void CDownloadWindow::TrimRecords()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -256,7 +256,7 @@ void CDownloadWindow::TrimRecords()
         ResizeRecords(++last);
 }
 
-// 0x0006a610
+// 0x0006abd0
 int CDownloadWindow::FindRecord(DWORD id)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -274,13 +274,13 @@ int CDownloadWindow::FindRecord(DWORD id)
     return -1;
 }
 
-// 0x0006a640
+// R5 address to verify
 void CDownloadWindow::ResetRecordStorage()
 {
     ResizeRecords(0);
 }
 
-// 0x0006a650
+// 0x0006ac10
 int CDownloadWindow::AddRecord(DownloadRecord* record)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -306,7 +306,7 @@ int CDownloadWindow::AddRecord(DownloadRecord* record)
     return (int)count;
 }
 
-// 0x0006a6b0
+// 0x0006ac70
 bool CDownloadWindow::RemoveRecord(DWORD index)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -317,7 +317,7 @@ bool CDownloadWindow::RemoveRecord(DWORD index)
     return true;
 }
 
-// 0x0006a6e0
+// 0x0006aca0
 void CDownloadWindow::ClearRecords()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -335,7 +335,7 @@ void CDownloadWindow::ClearRecords()
     ((CDXUTListBoxDL*)state[11])->RemoveAllItems();
 }
 
-// 0x0006ab10
+// 0x0006b0d0
 void CDownloadWindow::Hide()
 {
     DWORD* state = (DWORD*)nativeState;
@@ -346,7 +346,7 @@ void CDownloadWindow::Hide()
     state[0x94] = 0xffffffff;
 }
 
-// 0x0006a720
+// 0x0006ace0
 void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downloaded, DWORD total, int error, const char* detail)
 {
     DWORD* state = (DWORD*)nativeState;

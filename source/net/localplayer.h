@@ -181,29 +181,29 @@ class CLocalPlayer
 {
 public:
     // Requests next class selection; does not spawn or change active state.
-    // 0x00017770
+    // 0x00017c60
     void ReturnToClassSelection();
     // Raw DWORD flag used while the local ped is removed for RC driving.
-    // 0x0009e940
+    // R5 address to verify
     DWORD GetRCModeState();
     // Returns the raw DWORD, without bool normalization.
-    // 0x00008170
+    // R5 address to verify
     DWORD GetActiveState();
-    // 0x0000e2a0
+    // R5 address to verify
     CEntity* GetSurfingEntity();
     // Clears only the entity and mode, retaining lock and offset state.
-    // 0x00017760
+    // R5 address to verify
     void ClearSurfingEntityAndMode();
-    // 0x00017780
+    // R5 address to verify
     void SetTeam(BYTE team);
-    // 0x000a21d0
+    // R5 address to verify
     BYTE GetTeam();
-    // 0x00004230
+    // R5 address to verify
     BYTE GetAimTargetOffset(WORD* id, CVector* offset);
 
-    // 0x00002db0
+    // R5 address to verify
     DWORD GetSpawnPermission();
-    // 0x000135c0
+    // R5 address to verify
     DWORD IsSpectating();
 
     union
@@ -211,135 +211,135 @@ public:
         LocalPlayerState m_state;
         BYTE nativeState[0x328];
     };
-    // 0x000072d0
+    // 0x000074c0
     BOOL Process();
-    // 0x00002fd0
+    // 0x00002fa0
     void ProcessHead();
-    // 0x00003e40
+    // 0x00003f50
     void ProcessWorldBoundaries();
-    // 0x00003ea0
+    // 0x00003fc0
     void ProcessVehicleWorldBoundaries();
-    // 0x00003f60
+    // 0x00004080
     void PrepareForClassSelection();
-    // 0x00005c20
+    // 0x00005de0
     void ProcessVehicleDamage(WORD vehicle);
-    // 0x00006de0
+    // 0x00006fe0
     void ProcessPassengerEntry();
-    // 0x00004a30
+    // R5 address to verify
     WORD GetAimedPlayer();
-    // 0x00004a60
+    // R5 address to verify
     WORD GetAimedActor();
-    // 0x00005f40
+    // 0x00006100
     void ProcessClassSelection();
-    // 0x000060d0
+    // 0x00006290
     void UpdateWeapons();
-    // 0x00006360
+    // 0x00006540
     void ProcessSpectating();
     // Native returns true in AL; this pointer is unused.
-    // 0x00004300
+    // 0x00004440
     bool GetCameraTarget(WORD* targets);
-    // 0x000045c0
+    // 0x00004700
     void UpdateCameraTarget();
-    // 0x00004710
+    // 0x00004850
     void DrawCameraTargetLabels();
-    // 0x00003390
+    // 0x00003410
     BYTE GetSpecialAction();
-    // 0x00004db0
+    // 0x00004f00
     void SendOnfootData();
-    // 0x00006e80
+    // 0x00007080
     void SendIncarData();
-    // 0x000041c0
+    // 0x00004300
     DWORD NeedsToSendOnfootData(WORD keys, WORD upDown, WORD leftRight);
-    // 0x000041f0
+    // 0x00004340
     DWORD NeedsToSendIncarData(WORD keys, WORD upDown, WORD leftRight);
-    // 0x00005090
+    // 0x00005210
     void SendAimData();
-    // 0x00005240
+    // 0x000053d0
     void SendTrailerData(WORD vehicle);
-    // 0x00005400
+    // 0x00005590
     void SendPassengerData();
-    // 0x00005660
+    // 0x00005810
     void WastedNotification();
-    // 0x00005b50
+    // 0x00005d00
     void SendStats();
-    // 0x00004bd0
+    // 0x00004d30
     void SendUnoccupiedData(WORD vehicle, BYTE seat);
     // Native bool result in AL; deliberately retains player0 selection behavior.
-    // 0x00006c10
+    // 0x00006e00
     bool ProcessUnoccupiedSync(WORD id, CVehicle* vehicle);
-    // 0x0000e2b0
+    // R5 address to verify
     void ClearSurfingState();
-    // 0x00003fb0
+    // 0x000040e0
     void PrepareForClassSelection_Outcome(BOOL outcome);
     // Copies the raw50-byte spawn record forward and marks it available.
-    // 0x00003af0
+    // 0x00003be0
     void SetSpawnInfo(const void* info);
-    // 0x00004af0
+    // 0x00004c50
     CLocalPlayer();
-    // 0x00002ec0
+    // 0x00002e90
     void ResetData();
-    // 0x00003110
+    // 0x000030f0
     void SetSpecialAction(BYTE action);
-    // 0x00003b20
+    // 0x00003c20
     BOOL Spawn();
     // Returns the raw DWORD state.
-    // 0x00004080
+    // 0x000041c0
     void ToggleSpectating(BOOL enabled);
-    // 0x000040f0
+    // 0x00004230
     void SpectateVehicle(WORD vehicle);
-    // 0x00004140
+    // 0x00004280
     void SpectatePlayer(WORD player);
-    // 0x00003de0
+    // 0x00003ed0
     void SetColor(DWORD color);
-    // 0x00003e00
+    // 0x00003f00
     DWORD GetColorAsRGBA();
     // Raw DWORD result: returns1 after500ms or when any byte differs.
-    // 0x00003970
+    // 0x00003a60
     DWORD HasDataChanged(const void* previous, const void* current, DWORD length);
-    // 0x00003a70
+    // R5 address to verify
     void SendSpawnRequest();
-    // 0x00005720
+    // 0x000058d0
     void RequestClass(int selection);
-    // 0x000057c0
+    // 0x00005970
     void SendInteriorChange(BYTE interior);
-    // 0x00003e20
+    // 0x00003f20
     DWORD GetColorAsARGB();
-    // 0x000039c0
+    // 0x00003ab0
     DWORD GetInCarSendRate();
-    // 0x00003a00
+    // 0x00003af0
     DWORD GetOnFootSendRate();
-    // 0x00003a40
+    // 0x00003b30
     DWORD GetSendRate();
-    // 0x000034b0
+    // 0x00003570
     void ApplySurfingPhysics();
-    // 0x00003630
+    // 0x00003710
     void SetSurfingEntity(CEntity* entity, DWORD locked);
     // May transform data->offset in place for an unclassified backend target.
-    // 0x000069d0
+    // R5 address to verify
     void SendBullet(PedBulletData* data);
-    // 0x00002da0
+    // 0x00002d70
     CPed* GetPed();
     // Damage amount is a native float; take/give apply scaling before serialization.
-    // 0x00005920
+    // 0x00005ad0
     void EnterVehicle(WORD vehicle, BOOL passenger);
-    // 0x000066b0
+    // 0x000068a0
     void SendTakeDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart);
-    // 0x000067c0
+    // 0x000069b0
     void SendGiveDamage(WORD player, float damage, DWORD weapon, DWORD bodyPart);
-    // 0x000068d0
+    // R5 address to verify
     void SendActorDamage(WORD actor, float damage, DWORD weapon, DWORD bodyPart);
-    // 0x00005a40
+    // 0x00005bf0
     void ExitVehicle(int vehicle);
     // Network/pool dependency used only when Move finds a player pool.
-    // 0x00003650
+    // 0x00003730
     void ProcessSurfing();
-    // 0x00005860
+    // 0x00005a10
     void Chat(char* text);
-    // 0x00003f40
+    // 0x00004060
     void RequestSpawn();
-    // 0x00005e30
+    // 0x00005ff0
     void NextClass();
-    // 0x00005ec0
+    // 0x00006080
     void PrevClass();
 };
 #pragma pack(pop)
@@ -400,88 +400,88 @@ STATIC_ASSERT(offsetof(LocalPlayerState, lightsDamage) == 0x326);
 STATIC_ASSERT(offsetof(LocalPlayerState, tiresDamage) == 0x327);
 STATIC_ASSERT(sizeof(LocalPlayerState) == 0x328);
 STATIC_ASSERT(sizeof(CLocalPlayer) == 0x328);
-// 0x00117978
+// R5 address to verify
 extern const float g_localUnoccupiedRange;
-// 0x00117948
+// R5 address to verify
 extern const float g_localAimZoomScale;
-// 0x0011794c
+// 0x000e58dc
 extern const float g_localAimAspectScale;
-// 0x00117950
+// 0x000e58e0
 extern int g_localWastedRpc;
-// 0x00117968
+// 0x000e58f8
 extern int g_localVehicleDamageRpc;
-// 0x0011797c
+// 0x000e590c
 extern const float g_localPassengerEntryDistance;
-// 0x00117888
+// 0x000e5818
 extern const char g_localWorldBoundaryText[];
-// 0x00117854
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_localPedCameraCommand;
-// 0x001178ac
+// R5 address to verify
 extern const float g_localCameraRayLength;
-// 0x001178b0
+// R5 address to verify
 extern int g_localCameraTargetRpc;
-// 0x00117920
+// 0x000e58b0
 extern const char g_localCameraTargetObjectText[];
-// 0x001178fc
+// 0x000e588c
 extern const char g_localCameraTargetVehicleText[];
-// 0x001178d8
+// 0x000e5868
 extern const char g_localCameraTargetPlayerText[];
-// 0x001178b4
+// 0x000e5844
 extern const char g_localCameraTargetActorText[];
-// 0x0013c0b0
+// 0x000fe0b0
 extern DWORD g_localAimSendRate;
-// 0x00117980
+// 0x000e5910
 extern const char g_localClassSelectionMessage[];
-// 0x00117944
+// 0x000e58d4
 extern const float g_localQuaternionSyncThreshold;
-// 0x0011787c
+// 0x000e580c
 extern int g_localSpawnRequestRpc;
-// 0x00117880
+// 0x000e5810
 extern int g_localSpawnRpc;
 // Skips one SetInitialState call when nonzero.
-// 0x0013c0a0
+// R5 address to verify
 extern DWORD g_localSkipInitialState;
-// 0x00117954
+// 0x000e58e4
 extern int g_localRequestClassRpc;
-// 0x00117958
+// 0x000e58e8
 extern int g_localInteriorChangeRpc;
-// 0x0011795c
+// 0x000e58ec
 extern int g_localChatRpc;
-// 0x00117960
+// 0x000e58f0
 extern int g_localEnterVehicleRpc;
-// 0x00117964
+// 0x000e58f4
 extern int g_localExitVehicleRpc;
-// 0x0011796c
+// R5 address to verify
 extern int g_localPlayerDamageRpc;
-// 0x00117974
+// R5 address to verify
 extern int g_localActorDamageRpc;
-// 0x00117970
+// R5 address to verify
 extern const float g_localDamageScale;
-// 0x00117840
+// R5 address to verify
 extern const Scripting::OpcodeInfo g_localTrainCameraCommand;
-// 0x0013c0a4
+// R5 address to verify
 extern DWORD g_localTrainCameraTick;
 
 struct CVector;
 class CMatrix;
-// 0x001569a8
+// R5 address to verify
 extern CVector g_localSurfPedTurnSpeed;
-// 0x001569b8
+// R5 address to verify
 extern CMatrix g_localSurfPedMatrix;
-// 0x001569f8
+// R5 address to verify
 extern CVector g_localSurfEntitySpeed;
-// 0x00156a08
+// R5 address to verify
 extern CMatrix g_localSurfInverseMatrix;
-// 0x00156a48
+// R5 address to verify
 extern CVector g_localSurfPedSpeed;
-// 0x00156a58
+// R5 address to verify
 extern CMatrix g_localSurfEntityMatrix;
-// 0x00156aa4
+// R5 address to verify
 extern CVector g_localSurfEntityTurnSpeed;
 
-// 0x0013c0a8
+// 0x000fe0a8
 extern DWORD g_localOnFootSendRate;
-// 0x0013c0ac
+// 0x000fe0ac
 extern DWORD g_localInCarSendRate;
 
 #endif // LOCALPLAYER_H

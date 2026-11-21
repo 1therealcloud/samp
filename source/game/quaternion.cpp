@@ -7,24 +7,24 @@
 
 #include <math.h>
 #include <string.h>
-// 0x001181a8
+// 0x000e6118
 const float g_quaternionMatrixTwo = 2.0f;
-// 0x00117b9c
+// 0x000e5b2c
 const float g_quaternionMatrixOne = 1.0f;
-// 0x0011f588
+// 0x000ed478
 const float g_quaternionOppositeThreshold = 0.0001f;
 
-// 0x0011d7c8
+// 0x000eb7a0
 const float g_quaternionEulerNegativeTwo = -2.0f;
 
-// 0x000b65c0
+// R5 address to verify
 void GameQuaternionToMatrixComponents(const GameQuaternion* quaternion, CMatrix* matrix)
 {
     GameQuaternionComponentsToMatrix(quaternion->w, quaternion->x, quaternion->y, quaternion->z, &matrix->right.x, &matrix->right.y, &matrix->right.z, &matrix->up.x, &matrix->up.y,
                                      &matrix->up.z, &matrix->at.x, &matrix->at.y, &matrix->at.z);
 }
 
-// 0x000b4d50
+// 0x000b5210
 void GameQuaternionFromMatrix(const CMatrix* matrix, GameQuaternion* out)
 {
     D3DXQUATERNION quaternion;
@@ -42,7 +42,7 @@ void GameQuaternionFromMatrix(const CMatrix* matrix, GameQuaternion* out)
     memcpy(&out->x, &quaternion.x, 12);
 }
 
-// 0x000b5040
+// 0x000b5500
 void GameQuaternionNormalize(GameQuaternion* quaternion)
 {
     D3DXQUATERNION input, output;
@@ -57,7 +57,7 @@ void GameQuaternionNormalize(GameQuaternion* quaternion)
 // products to float. VC7 C++ reschedules/spills these differently; explicit x87
 // preserves the native rounding boundaries and caller precision control.
 // Flags, padding and translation are untouched; zero input is not special-cased.
-// 0x000b4e40
+// 0x000b5300
 __declspec(naked) void GameQuaternionToMatrixBody(const GameQuaternion* quaternion, CMatrix* matrix)
 {
     // clang-format off
@@ -164,7 +164,7 @@ __declspec(naked) void GameQuaternionToMatrixBody(const GameQuaternion* quaterni
 }
 
 // Native forwarding entry shares the cdecl argument frame with the body.
-// 0x000b4fb0
+// R5 address to verify
 __declspec(naked) void GameQuaternionToMatrix(const GameQuaternion* quaternion, CMatrix* matrix)
 {
     // clang-format off
@@ -173,11 +173,11 @@ __declspec(naked) void GameQuaternionToMatrix(const GameQuaternion* quaternion, 
 }
 
 // CRT helper uses x87 ST0 for its argument/result, rather than a C stack argument.
-// 0x000fce60
+// 0x000cb570
 extern "C" void __cdecl _CIasin();
 
 // Snapshot both inputs in D3DX x,y,z,w order before publishing the result.
-// 0x000b4fc0
+// 0x000b5480
 void GameQuaternionSlerp(GameQuaternion* out, const GameQuaternion* from, const GameQuaternion* to, float amount)
 {
     D3DXQUATERNION first, second, result;
@@ -198,7 +198,7 @@ void GameQuaternionSlerp(GameQuaternion* out, const GameQuaternion* from, const 
 
 // Euler inputs are radians. Native FSIN/FCOS and mixed float/x87 intermediates
 // implement the half-angle rotation; all inputs are consumed before output stores.
-// 0x000b50a0
+// 0x000b5560
 __declspec(naked) void GameQuaternionFromEuler(const CVector* angles, GameQuaternion* quaternion)
 {
     // clang-format off
@@ -270,7 +270,7 @@ __declspec(naked) void GameQuaternionFromEuler(const CVector* angles, GameQuater
 
 // Native FPATAN and CRT asin return radians, without clamping or normalization.
 // Inputs are re-read after each output store; overlapping buffers follow that order.
-// 0x000b5160
+// 0x000b5620
 __declspec(naked) void GameQuaternionToEuler(const GameQuaternion* quaternion, CVector* angles)
 {
     // clang-format off
@@ -341,13 +341,13 @@ __declspec(naked) void GameQuaternionToEuler(const GameQuaternion* quaternion, C
 }
 
 // Selected static CRT helper, not a recovered SA-MP implementation.
-// 0x000fd048
+// 0x000cb098
 extern "C" double __cdecl _copysign(double magnitude, double sign);
 
 // Native register/spill boundaries and unordered comparisons are observable.
 // Square-root terms are clamped with the original x87 status tests, then signs
 // are copied from the three antisymmetric differences by the selected CRT.
-// 0x000b48b0
+// 0x000b4d70
 void GameMatrixComponentsToQuaternion(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22, float* w, float* x, float* y, float* z)
 {
     float term = m00 + m11 + m22 + 1.0f;
@@ -384,7 +384,7 @@ void GameMatrixComponentsToQuaternion(float m00, float m01, float m02, float m10
 }
 
 // Inputs are passed by value before the conversion publishes w,x,y,z.
-// 0x000b4df0
+// R5 address to verify
 void GameQuaternionFromMatrixComponents(const CMatrix* matrix, GameQuaternion* out)
 {
     GameMatrixComponentsToQuaternion(matrix->right.x, matrix->right.y, matrix->right.z, matrix->up.x, matrix->up.y, matrix->up.z, matrix->at.x, matrix->at.y, matrix->at.z, &out->w,
@@ -394,7 +394,7 @@ void GameQuaternionFromMatrixComponents(const CMatrix* matrix, GameQuaternion* o
 // Inputs are snapshotted before output. Preserve the original near-opposite
 // fallback (-from.z,from.y,from.x), float spills, and final x,y,z,w store order.
 // There is no additional zero-length guard.
-// 0x000b4b60
+// 0x000b5020
 __declspec(naked) void GameQuaternionFromVectors(GameQuaternion* out, const CVector* from, const CVector* to)
 {
     // clang-format off
@@ -511,7 +511,7 @@ q_vectors_normalize:
 // The four input components are passed by value, without normalization.
 // Keep products in x87 registers until the native output stores. Output order
 // is 00,11,22,10,01,20,02,21,12; output pointers may alias.
-// 0x000b4a50
+// 0x000b4f10
 void GameQuaternionComponentsToMatrix(float w, float x, float y, float z, float* m00, float* m01, float* m02, float* m10, float* m11, float* m12, float* m20, float* m21,
                                       float* m22)
 {
@@ -531,7 +531,7 @@ void GameQuaternionComponentsToMatrix(float w, float x, float y, float z, float*
 }
 
 // Native scalar x,y,z,w inputs; double output order and x87 spill boundaries matter.
-// 0x0009d040
+// R5 address to verify
 __declspec(naked) void GameQuaternionDoubleToEuler(double x, double y, double z, double w, double* roll, double* pitch, double* yaw)
 {
     // clang-format off
@@ -598,7 +598,7 @@ __declspec(naked) void GameQuaternionDoubleToEuler(double x, double y, double z,
 }
 
 // Half cross-product and half(1+dot), then normalization; no opposite fallback.
-// 0x000b6530
+// 0x000b69f0
 __declspec(naked) void GameQuaternionFromVectorsHalf(GameQuaternion* out, const CVector* from, const CVector* to)
 {
     // clang-format off
@@ -653,7 +653,7 @@ __declspec(naked) void GameQuaternionFromVectorsHalf(GameQuaternion* out, const 
 }
 
 // x squared plus y squared plus z squared then w squared.
-// 0x000b4cc0
+// R5 address to verify
 __declspec(naked) float GameQuaternionLengthSquared(const GameQuaternion* quaternion)
 {
     // clang-format off
@@ -684,7 +684,7 @@ __declspec(naked) float GameQuaternionLengthSquared(const GameQuaternion* quater
 }
 
 // Separate identical native adapter; original distinct name is unresolved.
-// 0x000b4da0
+// R5 address to verify
 void GameQuaternionFromMatrixComponents4DA0(const CMatrix* matrix, GameQuaternion* out)
 {
     GameMatrixComponentsToQuaternion(matrix->right.x, matrix->right.y, matrix->right.z, matrix->up.x, matrix->up.y, matrix->up.z, matrix->at.x, matrix->at.y, matrix->at.z, &out->w,
@@ -692,7 +692,7 @@ void GameQuaternionFromMatrixComponents4DA0(const CMatrix* matrix, GameQuaternio
 }
 
 // Separate identical native adapter, no implicit normalization.
-// 0x000b4f60
+// R5 address to verify
 void GameQuaternionToMatrixComponents4F60(const GameQuaternion* quaternion, CMatrix* matrix)
 {
     GameQuaternionComponentsToMatrix(quaternion->w, quaternion->x, quaternion->y, quaternion->z, &matrix->right.x, &matrix->right.y, &matrix->right.z, &matrix->up.x, &matrix->up.y,

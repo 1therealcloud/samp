@@ -35,51 +35,51 @@ public:
             int sortMode;
         };
     };
-    // 0x0006e460
+    // 0x0006ea30
     CScoreboard(IDirect3DDevice9* device);
-    // 0x0006e360
+    // 0x0006e930
     void Recalc();
-    // 0x0006e3c0
+    // 0x0006e990
     void GetRect(RECT* rect);
-    // 0x0006e410
+    // 0x0006e9e0
     void Close(bool restoreCursor);
-    // 0x0006ee10
+    // 0x0006f3d0
     void Enable();
-    // 0x0006e4e0
+    // 0x0006eab0
     void ResetDialogControls(CDXUTDialog* parent);
-    // 0x0006e640
+    // 0x0006ec10
     void SendNotification();
-    // 0x0006e760
+    // 0x0006ed30
     void UpdateList();
-    // 0x0006eaf0
+    // 0x0006f0b0
     void Draw();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CScoreboard) == 0x44);
 STATIC_ASSERT(sizeof(ScoreboardRow) == 45);
-// 0x0006e310
+// R5 address to verify
 void ScoreboardSwapRows(ScoreboardRow* first, ScoreboardRow* second);
-// 0x0011c6d0
+// R5 address to verify
 extern int g_scoreboardNotificationRpc;
-// 0x0011c6d4
+// 0x000ea6ac
 extern const char g_scoreboardSignedFormat[];
-// 0x0011b3d4
+// 0x000e9344
 extern const char g_scoreboardUnsignedFormat[];
-// 0x0011c6d8
+// 0x000ea6b0
 extern const char g_scoreboardPingTitle[];
-// 0x0011c6e0
+// 0x000ea6b8
 extern const char g_scoreboardScoreTitle[];
-// 0x0011c6e8
+// 0x000ea6c0
 extern const char g_scoreboardNameTitle[];
-// 0x0011c6f0
+// R5 address to verify
 extern const char g_scoreboardIdTitle[];
-// 0x0011c6f4
+// R5 address to verify
 extern const float g_scoreboardIdRight;
-// 0x0011c6f8
+// 0x000ea6d0
 extern const char g_scoreboardCountProbe[];
-// 0x0011c708
+// 0x000ea6e0
 extern const char g_scoreboardCountFormat[];
-// 0x0011c194
+// 0x000ea16c
 extern const float g_scoreboardHeaderInset;
 
 #endif // SCOREBOARD_H

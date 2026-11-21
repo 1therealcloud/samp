@@ -46,75 +46,75 @@ class CObjectPool
     STATIC_ASSERT(offsetof(CObject, materials) == 0x1c3);
     STATIC_ASSERT(offsetof(CObject, materialPassState) == 0x118f);
     STATIC_ASSERT(offsetof(CObject, hasMaterials) == 0x118b);
-    // 0x00019b20
+    // 0x00019ff0
     friend void ScrAttachCameraToObject(RPCParameters* parameters);
     int largestId;
     DWORD active[2100];
     CObject* objects[2100];
 
 public:
-    // 0x00012670
+    // R5 address to verify
     int GetLargestId();
-    // 0x00012680
+    // R5 address to verify
     DWORD IsActive(WORD id);
-    // 0x000129d0
+    // R5 address to verify
     void UpdateAttachedObjectRotations();
 
-    // 0x00012d70
+    // 0x00012e70
     WORD FindInRay(float maxDistance, const CVector* origin, const CVector* end);
-    // 0x00012ce0
+    // R5 address to verify
     bool TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second);
-    // 0x00012a90
+    // 0x00012b90
     void Draw();
-    // 0x00012ad0
+    // 0x00012bd0
     void DrawLast();
     // Native Create has no ID bounds guard.
-    // 0x000127d0
+    // 0x000128d0
     BOOL Create(WORD id, int model, CVector position, CVector rotation, float drawDistance);
-    // 0x00012700
+    // 0x00012800
     CObjectPool();
-    // 0x00013060
+    // 0x00013160
     ~CObjectPool();
-    // 0x000126a0
+    // 0x000127a0
     void UpdateLargestId();
-    // 0x00012730
+    // 0x00012830
     int GetCount();
     // The original also accepts object ID 2100.
-    // 0x00012750
+    // 0x00012850
     BOOL Delete(WORD id);
     // Starts at slot1, snapshots largest ID and ignores active flags.
-    // 0x000128d0
+    // 0x000129d0
     CObject* Find(void* backend);
-    // 0x00012910
-    WORD GetId(void* backend);
-    // 0x00002e10
-    CEntity* Get(WORD id);
-    // 0x00012950
-    void Process();
     // 0x00012a10
-    void ConstructMaterials();
+    WORD GetId(void* backend);
+    // 0x00002de0
+    CEntity* Get(WORD id);
     // 0x00012a50
+    void Process();
+    // 0x00012b10
+    void ConstructMaterials();
+    // 0x00012b50
     void ShutdownMaterials();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CObjectPool) == 0x41a4);
 // Native copies all five words; the fifth is intentionally uninitialized stack data.
-// 0x00156b5c
+// R5 address to verify
 extern GameEntityCollisionShape g_objectPoolRayOrigin;
-// 0x00156b48
+// R5 address to verify
 extern GameEntityCollisionShape g_objectPoolRayEnd;
-// 0x00156b70
+// R5 address to verify
 extern CObject* g_objectPoolRayDebugObject;
-// 0x0011813c
+// 0x000e60b0
 extern const char g_objectPoolRayOriginText[8];
-// 0x00118134
+// 0x000e60a8
 extern const char g_objectPoolRayEndText[8];
 // No this pointer is consumed; class ownership and callers are not established.
-// 0x00012f50
+// R5 address to verify
 void DrawObjectPoolCollisionDebug();
-// 0x00156b74
+// R5 address to verify
 extern DWORD g_objectPoolLastTick;
-// 0x00118130
+// 0x000e60a4
 extern const float g_objectPoolSecondsPerTick;
 
 #endif // OBJECTPOOL_H

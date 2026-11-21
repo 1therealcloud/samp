@@ -12,16 +12,16 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     return ClientDllMainForward(module, reason, reserved);
 }
 
-// 0x002ac9c8
+// 0x0026eb38
 HMODULE g_clientModule;
 
-// 0x002ac9d4
+// 0x0026eb44
 CArchiveFS* g_pArchive;
 
-// 0x0018dc38
+// R5 address to verify
 DWORD g_clientStartupMarker;
 
-// 0x000c6780
+// 0x000c50c0
 BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
 {
     if (reason == DLL_PROCESS_ATTACH)
@@ -61,19 +61,19 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     return TRUE;
 }
 
-// 0x000c6930
+// 0x000c5270
 BOOL WINAPI ClientDllMainForward(HINSTANCE module, DWORD reason, LPVOID reserved)
 {
     return ClientDllMain(module, reason, reserved);
 }
 
-// 0x0009db90
+// R5 address to verify
 void GameMarkStartupStage()
 {
     g_clientStartupMarker = 1;
 }
 
-// 0x000c5150
+// R5 address to verify
 void __cdecl ClientStartupThread(void* argument)
 {
     (void)argument;

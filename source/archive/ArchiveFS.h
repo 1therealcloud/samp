@@ -35,7 +35,7 @@ typedef struct _AFS_ENTRYBT_NODE
     _AFS_ENTRYBT_NODE* pRNode;
     BYTE* pbData;
 
-    // 0x000641f0
+    // R5 address to verify
     _AFS_ENTRYBT_NODE()
     {
         this->pEntry = NULL;
@@ -44,7 +44,7 @@ typedef struct _AFS_ENTRYBT_NODE
         this->pbData = NULL;
     }
 
-    // 0x00064200
+    // R5 address to verify
     _AFS_ENTRYBT_NODE(SAA_ENTRY* pSAAEntry)
     {
         this->pEntry = pSAAEntry;
@@ -53,7 +53,7 @@ typedef struct _AFS_ENTRYBT_NODE
         this->pbData = NULL;
     }
 
-    // 0x00064220
+    // 0x000647a0
     void AddEntry(SAA_ENTRY* pSAAEntry)
     {
         if (this->pEntry == NULL)
@@ -79,7 +79,7 @@ typedef struct _AFS_ENTRYBT_NODE
         }
     }
 
-    // 0x000642b0
+    // 0x00064830
     _AFS_ENTRYBT_NODE* FindEntry(DWORD dwHash)
     {
         if (this->pEntry->dwFileNameHash == dwHash)
@@ -105,7 +105,7 @@ typedef struct _AFS_ENTRYBT_NODE
         }
     }
 
-    // 0x00064d80
+    // 0x00065300
     ~_AFS_ENTRYBT_NODE()
     {
         if (this->pLNode != NULL)
@@ -155,41 +155,41 @@ private:
     DWORD m_dwObfsMask;
     DWORD m_dwNumEntries;
 
-    // 0x00064550
+    // 0x00064ad0
     void LoadEntries();
 
-    // 0x00140778
+    // R5 address to verify
     static DWORD ms_dwHashInit;
-    // 0x00064300
+    // 0x00064880
     DWORD HashString(PCHAR szString);
 
 public:
-    // 0x00064dd0
+    // 0x00065350
     CArchiveFS(void);
-    // 0x00064e20
+    // 0x000653a0
     CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize);
-    // 0x00064e80
+    // 0x00065400
     virtual ~CArchiveFS(void);
 
-    // 0x00064f20
+    // 0x000654a0
     virtual bool Load(char* szFileName);
-    // 0x000647b0
+    // 0x00064d30
     virtual bool Load(BYTE* pbData, DWORD nLength);
-    // 0x00064890
+    // 0x00064e10
     virtual void Unload();
 
-    // 0x000648c0
+    // R5 address to verify
     virtual DWORD GetFileIndex(DWORD dwFileHash);
-    // 0x00064940
+    // R5 address to verify
     virtual DWORD GetFileIndex(char* szFileName);
-    // 0x000649a0
+    // R5 address to verify
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-    // 0x000649e0
+    // 0x00064f60
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 
-    // 0x00064bd0
+    // 0x00065150
     virtual void UnloadData(DWORD dwFileIndex);
 };
 
-// 0x002ac9d4
+// 0x0026eb44
 extern CArchiveFS* g_pArchive;

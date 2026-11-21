@@ -7,60 +7,60 @@
 #include <stdlib.h>
 #include <tlhelp32.h> // CheckDuplicateD3D9Dlls (legacy)
 
-// 0x0018dc24
+// R5 address to verify
 DWORD g_integrityVehicleChecksum;
-// 0x0018dc28
+// R5 address to verify
 DWORD g_integrityPedChecksum;
-// 0x0018dc2c
+// 0x0014fd98
 DWORD g_integrityComparisons;
-// 0x0018dc30
+// R5 address to verify
 DWORD g_integrityPending;
-// 0x0018dc34
+// R5 address to verify
 BYTE g_integritySuppressCount;
-// 0x0015548c
+// 0x00117478
 DWORD g_clientIntegrityFrameMarker = 69;
-// 0x002aca78
+// R5 address to verify
 DWORD g_clientIntegrityFramePrevious;
-// 0x002aca7c
+// R5 address to verify
 DWORD g_clientIntegrityFrameFirst;
-// 0x002aca80
+// R5 address to verify
 DWORD g_clientIntegrityFrameCounter;
-// 0x002aca88
+// R5 address to verify
 double g_clientTimerPreviousSeconds;
 
-// 0x002aca90
+// R5 address to verify
 __int64 g_clientTimerPreviousCounter;
-// 0x002aca98
+// R5 address to verify
 DWORD g_clientTimerFlags;
-// 0x002acaa0
+// R5 address to verify
 __int64 g_clientTimerFrequency;
-// 0x002acaa8
+// R5 address to verify
 DWORD g_clientTimerUsePerformanceCounter;
-// 0x002acaac
+// R5 address to verify
 DWORD g_clientTimerFrequencyAttempted;
-// 0x0011a920
+// 0x000e8890
 const double g_clientTimerUnsignedBias = 4294967296.0;
-// 0x0011a930
+// 0x000e88a0
 const double g_clientTimerMillisecondScale = 0.001;
 
-// 0x0018dc3c
+// R5 address to verify
 unsigned long g_clientD3D9BaseEncoded; // CheckDuplicateD3D9Dlls (legacy)
-// 0x0018dc40
+// R5 address to verify
 unsigned long g_clientD3D9ImageSize; // CheckDuplicateD3D9Dlls (legacy)
 
-// 0x0009d690
+// 0x0009d850
 DWORD* GameIntegrityVehicleArray()
 {
     return **(DWORD***)0xb74494;
 }
 
-// 0x0009d6b0
+// 0x0009d870
 DWORD* GameIntegrityPedArray()
 {
     return **(DWORD***)0xb74490;
 }
 
-// 0x0009d6d0
+// 0x0009d890
 DWORD GameIntegrityXor(const DWORD* data, DWORD count)
 {
     DWORD value = 0;
@@ -69,7 +69,7 @@ DWORD GameIntegrityXor(const DWORD* data, DWORD count)
     return value;
 }
 
-// 0x0009d6f0
+// 0x0009d8b0
 void GameDeviceIntegrityCycle()
 {
     DWORD vehicles = 0, peds = 0;
@@ -116,7 +116,7 @@ void GameDeviceIntegrityCycle()
     }
 }
 
-// 0x000c5d90
+// 0x000c46b0
 DWORD __cdecl ClientIntegrityFrame(BYTE check)
 {
     if (g_clientIntegrityFrameMarker == 69)
@@ -140,7 +140,7 @@ DWORD __cdecl ClientIntegrityFrame(BYTE check)
 }
 
 // Native clock initialization, QPC delta and multimedia fallback; preserve ST0.
-// 0x000c5b00
+// 0x000c4420
 __declspec(naked) double __cdecl ClientGetFrameElapsed()
 {
     // clang-format off
@@ -234,7 +234,7 @@ __declspec(naked) double __cdecl ClientGetFrameElapsed()
     // clang-format on
 }
 
-// 0x000c5c10
+// 0x000c4530
 DWORD __stdcall GameIntegrityMismatch(DWORD code, DWORD a, DWORD b, DWORD c, DWORD d, DWORD e, DWORD f)
 {
     if (g_pNetGame && g_pGame)
@@ -252,7 +252,7 @@ DWORD __stdcall GameIntegrityMismatch(DWORD code, DWORD a, DWORD b, DWORD c, DWO
     return 69;
 }
 
-// 0x0009d8c0
+// R5 address to verify
 unsigned long CheckDuplicateD3D9Dlls() // legacy
 {
     unsigned long matches = 0;

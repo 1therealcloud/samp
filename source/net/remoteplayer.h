@@ -52,35 +52,35 @@ class CRemotePlayer
 {
 public:
     // Any nonzero input byte becomes DWORD1; this is not a raw BOOL copy.
-    // 0x00017790
+    // R5 address to verify
     void ShowNameTag(BYTE show);
     // Synchronization caches, not queries to the GTA ped backend.
-    // 0x000739c0
+    // R5 address to verify
     float GetReportedHealth();
-    // 0x000739d0
+    // R5 address to verify
     float GetReportedArmour();
-    // 0x00008180
+    // R5 address to verify
     void SetTeam(BYTE team);
-    // 0x000a21e0
+    // R5 address to verify
     BYTE GetTeam();
-    // 0x00001070
+    // R5 address to verify
     CPed* GetPed();
-    // 0x000010a0
+    // R5 address to verify
     CVehicle* GetVehicle();
 
-    // 0x00002dc0
+    // R5 address to verify
     BYTE GetState();
-    // 0x000135d0
+    // R5 address to verify
     void SetId(WORD id);
-    // 0x000135e0
+    // R5 address to verify
     WORD GetId();
-    // 0x000135f0
+    // R5 address to verify
     void SetRawFlag1C(DWORD value);
-    // 0x00013600
+    // R5 address to verify
     void ResetStateAndLabels();
-    // 0x00014220
+    // R5 address to verify
     BYTE GetSpecialAction();
-    // 0x00014230
+    // R5 address to verify
     DWORD GetRawFlag1C();
 
     union
@@ -89,96 +89,96 @@ public:
         // Existing raw view is retained for installed hooks and x87 assembly.
         BYTE nativeState[0x1fd];
     };
-    // 0x00015600
+    // 0x000158d0
     void UpdateUnoccupied(const void* data);
-    // 0x00015950
+    // 0x00015c90
     void UpdateTrailer(const void* data);
-    // 0x00016010
+    // 0x00016370
     void UpdateBullet(const void* data);
-    // 0x00016230
+    // R5 address to verify
     void SetState(BYTE state);
-    // 0x00016310
+    // 0x000166b0
     void Process();
-    // 0x00014240
+    // 0x000143a0
     void ProcessHead();
     // Raw DWORD state is retained, not normalized to bool.
-    // 0x00014390
+    // 0x00014500
     void SetMarkerState(BOOL enabled);
-    // 0x000143d0
+    // 0x00014540
     void SetMarkerPosition(short x, short y, short z);
-    // 0x00014470
+    // 0x000145f0
     BOOL HasSurfingTarget();
-    // 0x000144a0
+    // 0x00014620
     BOOL SurfingOnObject();
-    // 0x00014780
+    // 0x00014950
     void ProcessSpecialAction();
-    // 0x000149f0
+    // 0x00014c40
     void UpdateOnfootSpeedAndPosition();
-    // 0x00014c00
+    // R5 address to verify
     void UpdateOnfootXYSpeedAndPosition();
-    // 0x00014ec0
+    // 0x00015140
     void UpdateIncarSpeedAndPosition();
-    // 0x00014d80
+    // 0x00014ff0
     void UpdateOnfootRotation();
-    // 0x000151c0
+    // 0x00015460
     void UpdateIncarRotation();
-    // 0x000153a0
+    // 0x00015650
     void UpdateTrain(const CMatrix* matrix, const CVector* speed, float trainSpeed);
-    // 0x00014e50
+    // 0x000150d0
     void SetOnfootTarget(const CVector* position, const CVector* speed);
-    // 0x00015330
+    // 0x000155e0
     void SetIncarTarget(const CMatrix* matrix, const CVector* position, const CVector* speed);
     // Team argument is consumed by ABI but not read by this native body.
-    // 0x00016c50
+    // 0x00017130
     BOOL Spawn(BYTE team, int model, int customModel, const CVector* position, float rotation, DWORD color, BYTE fightingStyle);
-    // 0x00016da0
+    // 0x00017260
     void UpdateOnfoot(const void* data, DWORD timestamp);
-    // 0x00016e70
+    // 0x00017340
     void UpdateIncar(const void* data, DWORD timestamp);
-    // 0x00016f60
+    // 0x00017440
     void UpdatePassenger(const void* data);
-    // 0x000154a0
+    // 0x00015760
     void UpdateAim(const void* data);
-    // 0x00014660
+    // 0x00014800
     void OnEnterVehicle();
-    // 0x00014730
+    // 0x000148f0
     void OnExitVehicle();
-    // 0x00017120
+    // 0x00017610
     void Chat(char* text);
-    // 0x00016250
+    // 0x000165e0
     CRemotePlayer();
-    // 0x000162c0
+    // 0x00016660
     ~CRemotePlayer();
-    // 0x00015c60
+    // 0x00015fa0
     void ResetData();
     // Native distance returns extended ST0; the other ped has no extra null guard.
-    // 0x00015d50
+    // 0x000160a0
     float GetDistanceToPlayer(CRemotePlayer* other);
-    // 0x00015dd0
+    // 0x00016120
     float GetDistanceToLocalPlayer();
-    // 0x00015e00
+    // 0x00016150
     void SetColor(DWORD color);
-    // 0x00015e20
+    // 0x00016170
     DWORD GetColorAsRGBA();
-    // 0x00015e50
+    // 0x000161a0
     void EnterVehicle(WORD id, BOOL passenger);
-    // 0x00015ee0
+    // 0x00016230
     void ExitVehicle();
-    // 0x00015f10
+    // 0x00016270
     void ChangeState(BYTE newState, BYTE oldState);
-    // 0x00017080
+    // 0x00017570
     void Kill();
-    // 0x00015e30
+    // 0x00016180
     DWORD GetColorAsARGB();
-    // 0x00015fd0
+    // 0x00016330
     int GetStatus();
     // Requires a ped pointer and nonzero native state byte.
     // 0x00001080
     BOOL IsActive();
     // Native on-foot attachment/surfing matrix pass.
-    // 0x000144d0
+    // 0x00014650
     void ApplySurfingMatrix();
-    // 0x00017040
+    // 0x00017530
     void Remove();
 };
 #pragma pack(pop)
@@ -212,47 +212,47 @@ STATIC_ASSERT(offsetof(RemotePlayerState, markerX) == 0x1ed);
 STATIC_ASSERT(offsetof(RemotePlayerState, marker) == 0x1f9);
 STATIC_ASSERT(sizeof(RemotePlayerState) == 0x1fd);
 STATIC_ASSERT(sizeof(CRemotePlayer) == 0x1fd);
-// 0x001181e4
+// R5 address to verify
 extern const float g_remoteAbsentDistance;
-// 0x001181e8
+// 0x000e6158
 extern const char g_remoteCarJackedText[];
-// 0x001181c8
+// R5 address to verify
 extern const float g_remoteAimZoomScale;
-// 0x001181cc
+// 0x000e613c
 extern const float g_remoteAimAspectScale;
 // Raw native switch, default1. Other native writers remain unreviewed.
-// 0x0013c4a0
+// R5 address to verify
 extern DWORD g_remoteClampTurnSpeed;
-// 0x001181bc
+// R5 address to verify
 extern const float g_remoteTurnSpeedMinimum;
 // Raw correction coefficients; native default values, other writers unreviewed.
-// 0x0013c498
+// R5 address to verify
 extern float g_remoteOnfootCorrection;
-// 0x0013c49c
+// R5 address to verify
 extern float g_remoteIncarCorrection;
-// 0x0011797c
+// 0x000e590c
 extern const float g_remoteIncarTeleportDistance;
-// 0x00117874
+// 0x000e5804
 extern const float g_remoteHeadDistance;
-// 0x00117868
+// 0x000e57f8
 extern const char g_remoteHeadTask[];
-// 0x00118218
+// 0x000e6188
 extern const char g_remoteVendingAnimation[];
-// 0x00118224
+// 0x000e6194
 extern const char g_remoteVendingLibrary[];
-// 0x00118204
+// 0x000e6174
 extern const char g_remoteCarryAnimation[];
-// 0x00118210
+// 0x000e6180
 extern const char g_remoteCarryLibrary[];
-// 0x001181fc
+// R5 address to verify
 extern const float g_remoteBulletOffsetMinimum;
-// 0x00118200
+// 0x000e6170
 extern const float g_remoteBulletOffsetMaximum;
-// 0x001181dc
+// R5 address to verify
 extern const float g_remoteVehicleAxisTeleportDistance;
-// 0x001181d0
+// 0x000e6140
 extern const double g_remoteUnoccupiedCorrectionThreshold;
-// 0x001181e0
+// R5 address to verify
 extern const float g_remoteTrailerCorrection;
 
 #endif // REMOTEPLAYER_H

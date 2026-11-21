@@ -14,7 +14,7 @@ class CDXUTIMEEditBox;
 class CDialog
 {
 public:
-    // 0x0006fa50
+    // 0x0006ffb0
     void Show(int id, int type, const char* title, const char* text, const char* button1, const char* button2, BOOL serverSide);
     union
     {
@@ -37,35 +37,35 @@ public:
             int columnWidths[4];
         };
     };
-    // 0x0006eec0
+    // 0x0006f480
     CDialog(IDirect3DDevice9* device);
-    // 0x0006f460
+    // 0x0006fa20
     void ResetDialogControls(CDXUTDialog* dialog);
-    // 0x000700d0
+    // 0x00070630
     void Close(char response);
-    // 0x0006ef10
+    // R5 address to verify
     bool MsgProc(UINT message, WPARAM wparam, LPARAM lparam);
-    // 0x0006ef30
+    // R5 address to verify
     bool IsInputHidden();
-    // 0x0006f2d0
+    // 0x0006f890
     void Draw();
-    // 0x0006ef40
+    // 0x0006f500
     void Recalc();
-    // 0x0006f0f0
+    // 0x0006f6b0
     RECT* GetRect(RECT* rect);
-    // 0x0006f120
+    // 0x0006f6e0
     int GetTextWidth(const char* text);
-    // 0x0006f1e0
+    // 0x0006f7a0
     int GetFontHeight();
-    // 0x0006f200
+    // 0x0006f7c0
     const char* CopyColumn(const char* text, char* output, int limit);
-    // 0x0006f260
+    // 0x0006f820
     const char* CopyLine(const char* text, char* output, int limit);
-    // 0x0006f2a0
+    // 0x0006f860
     void Hide();
-    // 0x0006f630
+    // R5 address to verify
     BOOL PopulateList(const char* text, SIZE* size);
-    // 0x0006f730
+    // R5 address to verify
     int PopulateTable(const char* text, SIZE* size, BOOL header);
 };
 #pragma pack(pop)
@@ -75,14 +75,14 @@ STATIC_ASSERT(offsetof(CDialog, title) == 0x40);
 STATIC_ASSERT(offsetof(CDialog, serverSide) == 0x81);
 STATIC_ASSERT(offsetof(CDialog, columnTitles) == 0x89);
 STATIC_ASSERT(offsetof(CDialog, columnWidths) == 0x28d);
-// 0x0011c304
+// 0x000ea2dc
 extern const float g_dialogNegativeLineScale;
-// 0x00118490
+// 0x000e6400
 extern const float g_dialogLineScale;
 
-// 0x0011c724
+// 0x000ea6fc
 extern const float g_dialogEditPadding;
-// 0x0011c348
+// 0x000ea320
 extern int g_dialogResponseRpcId;
 
 #endif // DIALOG_H

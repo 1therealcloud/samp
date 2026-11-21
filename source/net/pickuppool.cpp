@@ -13,17 +13,17 @@
 
 #include <static_assert.h>
 
-// 0x00118158
+// 0x000e60cc
 const Scripting::OpcodeInfo g_pickupDestroyCommand = {0x215, "i"};
-// 0x0011816c
+// R5 address to verify
 int g_pickupCollectedRpc = 131;
-// 0x00118170
+// 0x000e60e4
 int g_weaponPickupCollectedRpc = 97;
 
-// 0x00118144
+// R5 address to verify
 const Scripting::OpcodeInfo g_pickupCollectedCommand = {0x214, "i"};
 
-// 0x00008190
+// 0x000084a0
 CPickupPool::CPickupPool()
 {
     STATIC_ASSERT(offsetof(CPickupPool, count) == 0);
@@ -43,7 +43,7 @@ CPickupPool::CPickupPool()
     }
 }
 
-// 0x00013170
+// 0x00013270
 void CPickupPool::Create(const Pickup* pickup, int id)
 {
     if (count >= Capacity || id < 0 || id >= Capacity)
@@ -59,7 +59,7 @@ void CPickupPool::Create(const Pickup* pickup, int id)
     ++count;
 }
 
-// 0x00013220
+// 0x00013320
 void CPickupPool::Delete(int id)
 {
     if (count <= 0 || id < 0 || id >= Capacity || !handles[id])
@@ -71,7 +71,7 @@ void CPickupPool::Delete(int id)
     --count;
 }
 
-// 0x00013280
+// 0x00013380
 void CPickupPool::DeleteWeapon(WORD owner)
 {
     for (int i = 0; i < Capacity; ++i)
@@ -86,7 +86,7 @@ void CPickupPool::DeleteWeapon(WORD owner)
     }
 }
 
-// 0x000132e0
+// 0x000133e0
 int CPickupPool::GetIndex(int index)
 {
     for (int i = 0; i != Capacity; ++i)
@@ -95,7 +95,7 @@ int CPickupPool::GetIndex(int index)
     return -1;
 }
 
-// 0x00013310
+// 0x00013410
 CPickupPool::~CPickupPool()
 {
     for (int i = 0; i < Capacity; ++i)
@@ -106,7 +106,7 @@ CPickupPool::~CPickupPool()
 }
 
 STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
-// 0x00013340
+// 0x00013440
 void CPickupPool::SendNotification(int index)
 {
     int id = GetIndex(index);
@@ -118,7 +118,7 @@ void CPickupPool::SendNotification(int index)
     cooldown[id] = 15;
 }
 
-// 0x00013420
+// 0x00013520
 void CPickupPool::Process()
 {
     for (int i = 0; i < Capacity; ++i)
@@ -147,7 +147,7 @@ void CPickupPool::Process()
     }
 }
 
-// 0x00013080
+// 0x00013180
 void CPickupPool::CreateWeapon(int model, float x, float y, float z, int ammo, WORD owner)
 {
     if (count >= Capacity)

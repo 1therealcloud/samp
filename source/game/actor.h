@@ -41,46 +41,46 @@ class CActor : public CEntity
 
 public:
     // Five native stack DWORDs; scalar coordinates preserve the 20-byte ABI.
-    // 0x0009bd30
+    // 0x0009c2b0
     CActor(int model, float x, float y, float z, float heading);
-    // 0x0009bee0
+    // 0x0009c460
     void PerformAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time);
-    // 0x0009bfd0
+    // R5 address to verify
     void ClearTasks();
-    // 0x0009c1d0
+    // R5 address to verify
     virtual ~CActor();
-    // 0x0009be80
+    // 0x0009c400
     void Destroy();
-    // 0x0009bff0
+    // 0x0009c570
     void SetRotation(float heading);
-    // 0x0009c030
+    // 0x0009c5b0
     float GetHealth();
-    // 0x0009c050
+    // 0x0009c5d0
     void SetHealth(float health);
-    // 0x0009c090
+    // R5 address to verify
     float GetArmour();
-    // 0x0009c0b0
+    // R5 address to verify
     void SetArmour(float armour);
-    // 0x0009c0d0
+    // R5 address to verify
     DWORD GetBackendFlags();
-    // 0x0009c0e0
+    // R5 address to verify
     void SetBackendFlags(DWORD flags);
-    // 0x0009c100
+    // R5 address to verify
     BOOL IsDead();
-    // 0x0009c130
+    // R5 address to verify
     BYTE GetBackendByte530();
-    // 0x0009c140
+    // R5 address to verify
     void SetBackendByte530(BYTE value);
-    // 0x0009c160
+    // R5 address to verify
     DWORD HasBackendFlag100();
-    // 0x0009c180
+    // 0x0009c700
     void SetInvulnerable(BYTE enabled);
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CActor) == 0x56);
-// 0x00181e5c
+// R5 address to verify
 extern void* g_actorTaskBackend;
-// 0x0009bfb0
+// 0x0009c530
 DWORD GameClearActorTasks();
 
 #endif // ACTOR_H

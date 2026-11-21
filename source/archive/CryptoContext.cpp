@@ -11,20 +11,20 @@
 
 //------------------------------------
 
-// 0x0016c37c
+// 0x0012e364
 DWORD CCryptoContext::ms_dwRefCount = 0;
-// 0x0014077c
+// 0x00102794
 DWORD CCryptoContext::ms_dwProviderType = PROV_RSA_FULL;
-// 0x0016c380
+// 0x0012e368
 LPSTR CCryptoContext::ms_szProviderName = NULL;
-// 0x00140780
+// 0x00102798
 LPSTR CCryptoContext::ms_szContainerName = (LPSTR) "SAMP";
 // legacy
 HMODULE CCryptoContext::ms_hAdvApi32 = NULL;
 
 //------------------------------------
 
-// 0x00065030
+// 0x000655b0
 CCryptoContext::CCryptoContext(void)
 {
     /*
@@ -48,7 +48,7 @@ CCryptoContext::CCryptoContext(void)
 
 //------------------------------------
 
-// 0x000650a0
+// 0x00065620
 CCryptoContext::~CCryptoContext(void)
 {
     // Release the context
@@ -70,7 +70,7 @@ CCryptoContext::~CCryptoContext(void)
 
 //------------------------------------
 
-// 0x000650e0
+// 0x00065660
 HCRYPTPROV CCryptoContext::GetProvider()
 {
     return m_hCryptProv;

@@ -6,21 +6,21 @@
 #include <string.h>
 #include <sys/stat.h>
 
-// 0x002aca0c
+// 0x0026eb7c
 CConfig* g_pConfig;
 
-// 0x002abe78
+// 0x0026dfe8
 ClientSettings g_clientSettings;
-// 0x002ac7a8
+// 0x0026e918
 char g_clientDataDirectory[261];
-// 0x002ac8b0
+// R5 address to verify
 char g_clientCacheDirectory[261];
-// 0x002ac498
+// R5 address to verify
 char g_clientConfigFilename[520];
-// 0x002ac6a0
+// R5 address to verify
 char g_clientChatFilename[264];
 
-// 0x00065e60
+// 0x000663e0
 CConfig::CConfig(const char* file)
 {
     for (int i = 0; i < MAX_ENTRIES; ++i)
@@ -37,7 +37,7 @@ CConfig::CConfig(const char* file)
     }
 }
 
-// 0x00065680
+// 0x00065c00
 CConfig::~CConfig()
 {
     for (int i = 0; i < MAX_ENTRIES; ++i)
@@ -48,7 +48,7 @@ CConfig::~CConfig()
     }
 }
 
-// 0x000656c0
+// 0x00065c40
 void CConfig::FindFirstFree()
 {
     int last = 0;
@@ -58,7 +58,7 @@ void CConfig::FindFirstFree()
     upperBound = last + 1;
 }
 
-// 0x00065710
+// 0x00065c90
 int CConfig::GetIndex(const char* name)
 {
     // Native mutates the supplied key despite the const signature in references.
@@ -69,7 +69,7 @@ int CConfig::GetIndex(const char* name)
     return -1;
 }
 
-// 0x000657b0
+// 0x00065d30
 bool CConfig::DoesExist(const char* name)
 {
     if (GetIndex(name) >= 0)
@@ -77,7 +77,7 @@ bool CConfig::DoesExist(const char* name)
     return false;
 }
 
-// 0x000657d0
+// 0x00065d50
 int CConfig::CreateEntry(const char* name)
 {
     int index = 0;
@@ -100,7 +100,7 @@ int CConfig::CreateEntry(const char* name)
     return index;
 }
 
-// 0x00065890
+// 0x00065e10
 int CConfig::GetIntValue(const char* name)
 {
     int i = GetIndex(name);
@@ -111,7 +111,7 @@ int CConfig::GetIntValue(const char* name)
     return entries[i].intValue;
 }
 
-// 0x000658c0
+// 0x00065e40
 const char* CConfig::GetStringValue(const char* name)
 {
     int i = GetIndex(name);
@@ -122,7 +122,7 @@ const char* CConfig::GetStringValue(const char* name)
     return entries[i].stringValue;
 }
 
-// 0x000658f0
+// 0x00065e70
 float CConfig::GetFloatValue(const char* name)
 {
     int i = GetIndex(name);
@@ -133,7 +133,7 @@ float CConfig::GetFloatValue(const char* name)
     return entries[i].floatValue;
 }
 
-// 0x00065920
+// 0x00065ea0
 BOOL CConfig::Free(const char* name)
 {
     int i = GetIndex(name);
@@ -147,20 +147,20 @@ BOOL CConfig::Free(const char* name)
     return TRUE;
 }
 
-// 0x00065980
+// 0x00065f00
 int CConfig::GetValueType(const char* name)
 {
     int i = GetIndex(name);
     return i < 0 ? VALUE_TYPE_NONE : entries[i].type;
 }
 
-// 0x000659b0
+// 0x00065f30
 CConfig::ConfigEntry* CConfig::GetEntry(int index)
 {
     return index >= 0 && index < MAX_ENTRIES && occupied[index] ? &entries[index] : 0;
 }
 
-// 0x000659e0
+// 0x00065f60
 int CConfig::GetType(const char* text)
 {
     if (!text || !strlen(text))
@@ -170,7 +170,7 @@ int CConfig::GetType(const char* text)
     return strchr(text, '.') ? VALUE_TYPE_FLOAT : VALUE_TYPE_INT;
 }
 
-// 0x00065a50
+// 0x00065fd0
 BOOL CConfig::Save()
 {
     FILE* file = fopen(filename, "w");
@@ -198,7 +198,7 @@ BOOL CConfig::Save()
     return TRUE;
 }
 
-// 0x00065b00
+// 0x00066080
 BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
 {
     int i = GetIndex(name);
@@ -219,7 +219,7 @@ BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
     return TRUE;
 }
 
-// 0x00065b60
+// 0x000660e0
 BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnly)
 {
     int i = GetIndex(name);
@@ -243,7 +243,7 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
     return TRUE;
 }
 
-// 0x00065c00
+// 0x00066180
 BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
 {
     int i = GetIndex(name);
@@ -264,7 +264,7 @@ BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
     return TRUE;
 }
 
-// 0x00065c60
+// 0x000661e0
 void CConfig::Write(const char* name, char* value)
 {
     switch (GetType(value))
@@ -286,7 +286,7 @@ void CConfig::Write(const char* name, char* value)
     }
 }
 
-// 0x00065cf0
+// 0x00066270
 BOOL CConfig::Load()
 {
     FILE* file = fopen(filename, "r");
@@ -342,7 +342,7 @@ BOOL CConfig::Load()
 
 // Native parsers have no destination bound; missing opening quotes also have
 // no terminator guard. Retain that behavior instead of silently truncating.
-// 0x000c5590
+// 0x000c3ec0
 void Settings::GetFromCommandLine(const char* line, char* output)
 {
     while (*line == ' ')
@@ -352,7 +352,7 @@ void Settings::GetFromCommandLine(const char* line, char* output)
     *output = 0;
 }
 
-// 0x000c55e0
+// 0x000c3f10
 void Settings::GetFromQuotes(const char* line, char* output)
 {
     while (*line != '"')
@@ -365,7 +365,7 @@ void Settings::GetFromQuotes(const char* line, char* output)
 
 // The scanner keeps walking through argument values, including quoted paths.
 // Later -c/-d occurrences overwrite earlier debug/online selection.
-// 0x000c5c90
+// 0x000c45b0
 void Settings::Initialize()
 {
     const char* line = GetCommandLineA();
@@ -406,26 +406,26 @@ void Settings::Initialize()
     }
 }
 
-// 0x000c51a0
+// R5 address to verify
 const char* ClientGetDataDirectory()
 {
     return g_clientDataDirectory;
 }
 
-// 0x000c51b0
+// R5 address to verify
 const char* ClientGetCacheDirectory()
 {
     return g_clientCacheDirectory;
 }
 
-// 0x000b5900
+// 0x000b5dc0
 BOOL ClientPathExists(const char* path)
 {
     struct _stat info;
     return _stat(path, &info) == 0;
 }
 
-// 0x000c51c0
+// 0x000c3af0
 void ClientInitializeCacheDirectory()
 {
     memset(g_clientCacheDirectory, 0, 261);
@@ -448,7 +448,7 @@ void ClientInitializeCacheDirectory()
         CreateDirectoryA(local, 0);
 }
 
-// 0x000c5340
+// 0x000c3c70
 void ClientInitializePaths()
 {
     memset(g_clientDataDirectory, 0, 261);

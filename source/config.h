@@ -35,43 +35,43 @@ public:
     BOOL occupied[MAX_ENTRIES];
     char filename[261];
     int upperBound; // Native FindFirstFree computes highest occupied index + 1.
-    // 0x00065e60
+    // 0x000663e0
     CConfig(const char*);
-    // 0x00065680
-    ~CConfig();
-    // 0x000656c0
-    void FindFirstFree();
-    // 0x00065710
-    int GetIndex(const char*);
-    // 0x000657b0
-    bool DoesExist(const char*);
-    // 0x000657d0
-    int CreateEntry(const char*);
-    // 0x00065890
-    int GetIntValue(const char*);
-    // 0x000658c0
-    const char* GetStringValue(const char*);
-    // 0x000658f0
-    float GetFloatValue(const char*);
-    // 0x00065920
-    BOOL Free(const char*);
-    // 0x00065980
-    int GetValueType(const char*);
-    // 0x000659b0
-    ConfigEntry* GetEntry(int);
-    // 0x000659e0
-    int GetType(const char*);
-    // 0x00065a50
-    BOOL Save();
-    // 0x00065b00
-    BOOL WriteIntValue(const char*, int, BOOL = FALSE);
-    // 0x00065b60
-    BOOL WriteStringValue(const char*, const char*, BOOL = FALSE);
     // 0x00065c00
+    ~CConfig();
+    // 0x00065c40
+    void FindFirstFree();
+    // 0x00065c90
+    int GetIndex(const char*);
+    // 0x00065d30
+    bool DoesExist(const char*);
+    // 0x00065d50
+    int CreateEntry(const char*);
+    // 0x00065e10
+    int GetIntValue(const char*);
+    // 0x00065e40
+    const char* GetStringValue(const char*);
+    // 0x00065e70
+    float GetFloatValue(const char*);
+    // 0x00065ea0
+    BOOL Free(const char*);
+    // 0x00065f00
+    int GetValueType(const char*);
+    // 0x00065f30
+    ConfigEntry* GetEntry(int);
+    // 0x00065f60
+    int GetType(const char*);
+    // 0x00065fd0
+    BOOL Save();
+    // 0x00066080
+    BOOL WriteIntValue(const char*, int, BOOL = FALSE);
+    // 0x000660e0
+    BOOL WriteStringValue(const char*, const char*, BOOL = FALSE);
+    // 0x00066180
     BOOL WriteFloatValue(const char*, float, BOOL = FALSE);
-    // 0x00065c60
+    // 0x000661e0
     void Write(const char*, char*);
-    // 0x00065cf0
+    // 0x00066270
     BOOL Load();
 };
 #pragma pack(pop)
@@ -80,7 +80,7 @@ STATIC_ASSERT(sizeof(CConfig) == 0x8309);
 STATIC_ASSERT(offsetof(CConfig, occupied) == 0x7a00);
 STATIC_ASSERT(offsetof(CConfig, filename) == 0x8200);
 STATIC_ASSERT(offsetof(CConfig, upperBound) == 0x8305);
-// 0x002aca0c
+// 0x0026eb7c
 extern CConfig* g_pConfig;
 
 #pragma pack(push, 1)
@@ -94,48 +94,48 @@ struct ClientSettings
 STATIC_ASSERT(sizeof(ClientSettings) == 1297);
 STATIC_ASSERT(offsetof(ClientSettings, host) == 0x10d);
 STATIC_ASSERT(offsetof(ClientSettings, debugScript) == 0x410);
-// 0x002abe78
+// 0x0026dfe8
 extern ClientSettings g_clientSettings;
 
 namespace Settings
 {
-// 0x000c5c90
+// 0x000c45b0
 void Initialize();
-// 0x000c5590
+// 0x000c3ec0
 void GetFromCommandLine(const char* line, char* output);
-// 0x000c55e0
+// 0x000c3f10
 void GetFromQuotes(const char* line, char* output);
 } // namespace Settings
 
 // Native start addresses; buffer backing windows are bounded by the next known native buffer.
 // Overflow adjacency is not established by these declarations.
-// 0x002ac498
+// R5 address to verify
 extern char g_clientConfigFilename[520];
 
-// 0x002ac6a0
+// R5 address to verify
 extern char g_clientChatFilename[264];
 
 // Observed native buffers include the 261st byte cleared by startup.
-// 0x002ac7a8
+// 0x0026e918
 extern char g_clientDataDirectory[261];
 
-// 0x002ac8b0
+// R5 address to verify
 extern char g_clientCacheDirectory[261];
 
-// 0x000c51a0
+// R5 address to verify
 const char* ClientGetDataDirectory();
 
-// 0x000c51b0
+// R5 address to verify
 const char* ClientGetCacheDirectory();
 
 // Native _stat success test accepts any existing file type.
-// 0x000b5900
+// 0x000b5dc0
 BOOL ClientPathExists(const char* path);
 
-// 0x000c51c0
+// 0x000c3af0
 void ClientInitializeCacheDirectory();
 
-// 0x000c5340
+// 0x000c3c70
 void ClientInitializePaths();
 
 #endif // CONFIG_H
