@@ -1,6 +1,5 @@
 #include "gui/renderpanel.h"
 
-#include "game/gta_globals.h"
 #include "gui/gui.h"
 #include "gui/objectedit.h"
 #include "net/objectpool.h"
@@ -59,7 +58,7 @@ void CRenderPanel::UpdateLayout()
     DWORD* state = (DWORD*)nativeState;
     ((CDXUTDialog*)state[8])->SetSize(state[3], state[4]);
     RECT rect;
-    GetClientRect(g_inputGameWindow, &rect);
+    GetClientRect((*(HWND*)0x00c97c1c), &rect);
     LONG x = state[1] = rect.right - (LONG)state[3] - 5;
     LONG y = state[2] = rect.bottom - (LONG)state[4] - 10;
     ((CDXUTDialog*)state[8])->SetLocation(x, y);

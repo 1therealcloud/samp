@@ -16,6 +16,7 @@
 #include <LzmaDec.h>
 #include <RakClientInterface.h>
 #ifdef DL_BUILD
+#define CURL_STATICLIB
 #include <curl/curl.h>
 #endif
 

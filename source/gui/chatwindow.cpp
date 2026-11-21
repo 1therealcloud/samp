@@ -564,7 +564,7 @@ void CChat::RenderEntry(const char* text, RECT rect, D3DCOLOR color)
         strncpy(plain, text, 511);
         ChatStripColorTags(plain);
         int plainLength = strlen(plain);
-        if (g_chatScreenWidth > 1280)
+        if ((*(int*)0x00c17044) > 1280)
         {
             rect.top -= 2;
             rect.bottom -= 2;

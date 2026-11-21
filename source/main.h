@@ -5,7 +5,6 @@
 #include "config.h"
 #include "game/debugscript.h"
 #include "game/game.h"
-#include "game/gta_globals.h"
 
 #include <string>
 #include <windows.h>

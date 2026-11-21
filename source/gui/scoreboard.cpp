@@ -1,7 +1,6 @@
 #include "gui/scoreboard.h"
 
 #include "game/game.h"
-#include "game/gta_globals.h"
 #include "game/util.h"
 #include "gui/gui.h"
 #include "main.h"
@@ -339,7 +338,7 @@ CScoreboard::CScoreboard(IDirect3DDevice9* device)
     state[15] = 0;
     state[16] = 0;
     state[1] = 0;
-    if (!g_pGame || g_chatScreenWidth <= 800)
+    if (!g_pGame || (*(int*)0x00c17044) <= 800)
     {
         state[5] = 0x44200000;
         state[6] = 0x43f00000;
@@ -362,7 +361,7 @@ CScoreboard::CScoreboard(IDirect3DDevice9* device)
 void CScoreboard::Recalc()
 {
     RECT rect;
-    GetClientRect(g_inputGameWindow, &rect);
+    GetClientRect((*(HWND*)0x00c97c1c), &rect);
     *(float*)(nativeState + 0x10) = 1.0f;
     *(float*)(nativeState + 8) = (float)rect.right * 0.5f - *(float*)(nativeState + 0x14) * 0.5f;
     *(float*)(nativeState + 12) = (float)rect.bottom * 0.5f - *(float*)(nativeState + 0x18) * 0.5f;

@@ -3,7 +3,6 @@
 #include "config.h"
 #include "game/entity.h"
 #include "game/game.h"
-#include "game/gta_globals.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
 #include "game/util.h"
@@ -115,7 +114,7 @@ void CAudioStream::DrawInfo()
         return;
     _snprintf(text, 256, g_audioStreamInfoFormat, g_audioStreamTitle, g_audioStreamStation);
     // GTA SA virtual addresses: screen height0x00c17048, width0x00c17044.
-    DWORD height = *(DWORD*)0xc17048, width = (DWORD)g_chatScreenWidth;
+    DWORD height = *(DWORD*)0xc17048, width = (DWORD)(*(int*)0x00c17044);
     RECT rect;
     rect.left = 15;
     rect.top = (LONG)(height - 20);
@@ -281,7 +280,7 @@ void __cdecl CAudioStream::Worker(void*)
         BASS_StreamGetFilePosition(g_audioStreamHandle, 4);
         if (!g_pGame->IsMenuVisible())
         {
-            HWND window = g_inputGameWindow;
+            HWND window = (*(HWND*)0x00c97c1c);
             if (GetForegroundWindow() == window)
             {
                 if (g_audioStreamSpatial)

@@ -1386,7 +1386,7 @@ DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2)
         if (g_pGame)
         {
             _snprintf(g_gameFrameNodeError, 256, "SA-MP: FrameNode name was too long (%u). SA-MP must exit.", length);
-            ShowWindow(g_inputGameWindow, SW_MINIMIZE);
+            ShowWindow((*(HWND*)0x00c97c1c), SW_MINIMIZE);
             MessageBoxA(0, g_gameFrameNodeError, "SA-MP", MB_ICONWARNING);
         }
         // clang-format off

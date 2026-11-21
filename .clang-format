@@ -73,6 +73,8 @@ SortIncludes: CaseSensitive
 IncludeBlocks: Regroup
 IncludeIsMainRegex: '$'
 IncludeCategories:
+  - Regex: '^"stdafx\.h"$'
+    Priority: -1
   - Regex: '^<static_assert\.h>$'
     Priority: 4
   - Regex: '^".*"$'

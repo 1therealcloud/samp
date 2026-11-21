@@ -6,7 +6,6 @@
 #include "game/camera.h"
 #include "game/custommodels.h"
 #include "game/game.h"
-#include "game/gta_globals.h"
 #include "game/keystuff.h"
 #include "game/playerped.h"
 #include "game/quaternion.h"
@@ -1676,7 +1675,7 @@ void CLocalPlayer::ProcessClassSelection()
     {
         *((BYTE*)g_renderSecondDialog + 0x13) = 1;
         RECT rectangle;
-        GetClientRect(g_inputGameWindow, &rectangle);
+        GetClientRect((*(HWND*)0x00c97c1c), &rectangle);
         BYTE* dialog = (BYTE*)g_renderSecondDialog;
         int y = rectangle.bottom - *(int*)(dialog + 0x122) - 50;
         int x = rectangle.right / 2 - *(int*)(dialog + 0x11e) / 2;

@@ -9,7 +9,6 @@
 #include "config.h"
 
 #include "main.h"
-#include "game/gta_globals.h"
 #include "d3dhook/ID3DXFontHook.h"
 #include "render/fontrender.h"
 
@@ -5018,8 +5017,8 @@ HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 {
     _ImmDisableTextFrameService((DWORD)-1);
     // Save the default input context
-    s_hImcDef = _ImmGetContext(g_inputGameWindow );
-    _ImmReleaseContext(g_inputGameWindow, s_hImcDef );
+    s_hImcDef = _ImmGetContext((*(HWND*)0x00c97c1c) );
+    _ImmReleaseContext((*(HWND*)0x00c97c1c), s_hImcDef );
 
     return S_OK;
 }
@@ -5233,7 +5232,7 @@ void CDXUTIMEEditBox::CheckToggleState()
     s_bChineseIME = ( GetPrimaryLanguage() == LANG_CHINESE ) && bIme;
 
     HIMC hImc;
-    if( NULL != ( hImc = _ImmGetContext(g_inputGameWindow ) ) )
+    if( NULL != ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) )
     {
         if( s_bChineseIME )
         {
@@ -5245,7 +5244,7 @@ void CDXUTIMEEditBox::CheckToggleState()
         {
             s_ImeState = ( bIme && _ImmGetOpenStatus( hImc ) != 0 ) ? IMEUI_STATE_ON : IMEUI_STATE_OFF;
         }
-        _ImmReleaseContext(g_inputGameWindow, hImc );
+        _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
     }
     else
         s_ImeState = IMEUI_STATE_OFF;
@@ -5311,8 +5310,8 @@ void CDXUTIMEEditBox::TruncateCompString( bool bUseBackSpace, int iNewStrLen )
     // Send right arrow keystrokes to move the caret
     //   to the end of the composition string.
     for (int i = 0; i < cc - s_nCompCaret; ++i )
-        SendMessageA(g_inputGameWindow, WM_KEYDOWN, VK_RIGHT, 0 );
-    SendMessageA(g_inputGameWindow, WM_KEYUP, VK_RIGHT, 0 );
+        SendMessageA((*(HWND*)0x00c97c1c), WM_KEYDOWN, VK_RIGHT, 0 );
+    SendMessageA((*(HWND*)0x00c97c1c), WM_KEYUP, VK_RIGHT, 0 );
 
     if( bUseBackSpace || m_bInsertMode )
         iNewStrLen = 0;
@@ -5328,18 +5327,18 @@ void CDXUTIMEEditBox::TruncateCompString( bool bUseBackSpace, int iNewStrLen )
     {
         for( int i = 0; i < cc - iNewStrLen; ++i )
         {
-            SendMessageA(g_inputGameWindow, WM_KEYDOWN, VK_BACK, 0 );  // Backspace character
-            SendMessageW(g_inputGameWindow, WM_CHAR, VK_BACK, 0 );
+            SendMessageA((*(HWND*)0x00c97c1c), WM_KEYDOWN, VK_BACK, 0 );  // Backspace character
+            SendMessageW((*(HWND*)0x00c97c1c), WM_CHAR, VK_BACK, 0 );
         }
-        SendMessageA(g_inputGameWindow, WM_KEYUP, VK_BACK, 0 );
+        SendMessageA((*(HWND*)0x00c97c1c), WM_KEYUP, VK_BACK, 0 );
     }
     else
         iNewStrLen = cc;
 
     // Move the caret to the beginning by sending left keystrokes
     for (int i = 0; i < iNewStrLen; ++i )
-        SendMessageA(g_inputGameWindow, WM_KEYDOWN, VK_LEFT, 0 );
-    SendMessageA(g_inputGameWindow, WM_KEYUP, VK_LEFT, 0 );
+        SendMessageA((*(HWND*)0x00c97c1c), WM_KEYDOWN, VK_LEFT, 0 );
+    SendMessageA((*(HWND*)0x00c97c1c), WM_KEYUP, VK_LEFT, 0 );
 }
 
 
@@ -5360,7 +5359,7 @@ void CDXUTIMEEditBox::SendCompString()
 void CDXUTIMEEditBox::FinalizeString( bool bSend )
 {
     HIMC hImc;
-    if( NULL == ( hImc = _ImmGetContext(g_inputGameWindow ) ) )
+    if( NULL == ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) )
         return;
 
     // 0x00181A8C
@@ -5369,7 +5368,7 @@ void CDXUTIMEEditBox::FinalizeString( bool bSend )
     if( bProcessing )    // avoid infinite recursion
     {
         DXUTTRACE( "CDXUTIMEEditBox::FinalizeString: Reentrant detected!\n" );
-        _ImmReleaseContext(g_inputGameWindow, hImc );
+        _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
         return;
     }
     bProcessing = true;
@@ -5393,7 +5392,7 @@ void CDXUTIMEEditBox::FinalizeString( bool bSend )
     // the following line is necessary as Korean IME doesn't close cand list
     // when comp string is cancelled.
     _ImmNotifyIME( hImc, NI_CLOSECANDIDATE, 0, 0 ); 
-    _ImmReleaseContext(g_inputGameWindow, hImc );
+    _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
     bProcessing = false;
 }
 
@@ -5447,7 +5446,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
     }
 
     HIMC hImc;
-    hImc = _ImmGetContext(g_inputGameWindow );
+    hImc = _ImmGetContext((*(HWND*)0x00c97c1c) );
     if( !hImc )
     {
         s_bShowReadingWindow = false;
@@ -5473,7 +5472,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
             if( !pwszReadingStringBuffer )
             {
                 // Out of memory. Exit.
-                _ImmReleaseContext(g_inputGameWindow, hImc );
+                _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
                 return;
             }
 
@@ -5618,7 +5617,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
         _ImmUnlockIMC( hImc );
         GetReadingWindowOrientation( dwId );
     }
-    _ImmReleaseContext(g_inputGameWindow, hImc );
+    _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
 
     if( pwszReadingStringBuffer )
         HeapFree( GetProcessHeap(), 0, pwszReadingStringBuffer );
@@ -5673,19 +5672,19 @@ void CDXUTIMEEditBox::OnFocusIn()
 
     if(! s_bEnableImeSystem )
         return;
-        _ImmAssociateContext(g_inputGameWindow, s_hImcDef );
+        _ImmAssociateContext((*(HWND*)0x00c97c1c), s_hImcDef );
         CheckToggleState();
 
     //
     // Set up the IME global state according to the current instance state
     //
     HIMC hImc;
-    if( NULL != ( hImc = _ImmGetContext(g_inputGameWindow ) ) ) 
+    if( NULL != ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) ) 
     {
         if( !s_bEnableImeSystem )
             s_ImeState = IMEUI_STATE_OFF;
 
-        _ImmReleaseContext(g_inputGameWindow, hImc );
+        _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
         CheckToggleState();
     }
 }
@@ -5702,7 +5701,7 @@ void CDXUTIMEEditBox::OnFocusOut()
 
     FinalizeString( false );  // Don't send the comp string as to match RichEdit behavior
 
-    _ImmAssociateContext(g_inputGameWindow, NULL );
+    _ImmAssociateContext((*(HWND*)0x00c97c1c), NULL );
 }
 
 
@@ -5819,10 +5818,10 @@ bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                 SetupImeApi();
                 if( _ShowReadingWindow )
                 {
-                    if ( NULL != ( hImc = _ImmGetContext(g_inputGameWindow ) ) )
+                    if ( NULL != ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) )
                     {
                         _ShowReadingWindow( hImc, false );
-                        _ImmReleaseContext(g_inputGameWindow, hImc );
+                        _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
                     }
                 }
             }
@@ -5892,12 +5891,12 @@ bool CDXUTIMEEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lP
                 // Now generate keypress events to move the comp string cursor
                 // to the click point.  First, if the candidate window is displayed,
                 // send Esc to close it.
-                HIMC hImc = _ImmGetContext(g_inputGameWindow );
+                HIMC hImc = _ImmGetContext((*(HWND*)0x00c97c1c) );
                 if( !hImc )
                     return true;
 
                 _ImmNotifyIME( hImc, NI_CLOSECANDIDATE, 0, 0 );
-                _ImmReleaseContext(g_inputGameWindow, hImc );
+                _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
 
                 switch( GetPrimaryLanguage() )
                 {
@@ -6073,7 +6072,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                 WCHAR wszCompStr[MAX_COMPSTRING_SIZE];
 
                 *trapped = true;
-                if( NULL == ( hImc = _ImmGetContext(g_inputGameWindow ) ) )
+                if( NULL == ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) )
                 {
                     break;
                 }
@@ -6193,8 +6192,8 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                             int nCount = lstrlenW( s_CompString.GetBuffer() + s_nCompCaret );
                             // Send left keystrokes
                             for( int i = 0; i < nCount; ++i )
-                                SendMessageA(g_inputGameWindow, WM_KEYDOWN, VK_LEFT, 0 );
-                            SendMessageA(g_inputGameWindow, WM_KEYUP, VK_LEFT, 0 );
+                                SendMessageA((*(HWND*)0x00c97c1c), WM_KEYDOWN, VK_LEFT, 0 );
+                            SendMessageA((*(HWND*)0x00c97c1c), WM_KEYUP, VK_LEFT, 0 );
                         }
                     }
 
@@ -6216,7 +6215,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                     s_adwCompStringClause[lRet / sizeof(DWORD)] = 0;  // Terminate
                 }
 
-                _ImmReleaseContext(g_inputGameWindow, hImc );
+                _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
             }
             break;
 
@@ -6250,7 +6249,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                     s_CandList.bShowWindow = true;
                     g_inputImeActivityTick = GetTickCount();
                     *trapped = true;
-                    if( NULL == ( hImc = _ImmGetContext(g_inputGameWindow ) ) )
+                    if( NULL == ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) )
                         break;
 
                     LPCANDIDATELIST lpCandList = NULL;
@@ -6313,7 +6312,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                             s_CandList.dwCount = lpCandList->dwPageSize;
 
                         HeapFree( GetProcessHeap(), 0, lpCandList );
-                        _ImmReleaseContext(g_inputGameWindow, hImc );
+                        _ImmReleaseContext((*(HWND*)0x00c97c1c), hImc );
 
                         // Korean and old Chinese IME can't have selection.
                         // User must use the number hotkey or Enter to select
@@ -7994,7 +7993,7 @@ public:
 // 0x00085460
 void InputResetIme()
 {
-    InputImeAccess::ResetDefaultContext(g_inputGameWindow);
+    InputImeAccess::ResetDefaultContext((*(HWND*)0x00c97c1c));
 }
 // 0x00085940
 void InputEnableIme(bool enable)

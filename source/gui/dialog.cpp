@@ -150,7 +150,7 @@ void CDialog::Recalc()
         width = buttonWidth * 2 + 30;
     dialog->SetSize(width, height);
     RECT client;
-    GetClientRect(g_inputGameWindow, &client);
+    GetClientRect((*(HWND*)0x00c97c1c), &client);
     x = client.right / 2 - width / 2;
     y = client.bottom / 2 - height / 2;
     dialog->SetLocation(x, y);

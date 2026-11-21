@@ -1,6 +1,5 @@
 #include "gui/downloadwindow.h"
 
-#include "game/gta_globals.h"
 #include "game/vehicle.h"
 #include "gui/gui.h"
 #include "gui/objectedit.h"
@@ -91,7 +90,7 @@ void CDownloadWindow::ResetFonts()
     *(DWORD*)(dialog + 0x11e) = width;
     *(DWORD*)(dialog + 0x122) = height;
     RECT client;
-    GetClientRect(g_inputGameWindow, &client);
+    GetClientRect((*(HWND*)0x00c97c1c), &client);
     DWORD left = (DWORD)(client.right / 2) - (DWORD)((LONG)state[5] / 2);
     DWORD top = (DWORD)(*(const volatile LONG*)&client.bottom / 2) - (DWORD)((LONG)state[6] / 2);
     state[3] = left;

@@ -8,7 +8,6 @@
 #pragma once
 
 #include <windows.h>
-#include <string.h>
 #include <vector>
 
 #include "ArchiveCommon.h"

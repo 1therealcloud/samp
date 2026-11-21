@@ -280,8 +280,8 @@ int ClientSaveRenderTarget(IDirect3DDevice9* device, const char* filename)
     IDirect3DSurface9 *target = 0, *surface = 0;
     POINT origin = {0, 0};
     RECT rect;
-    ClientToScreen(g_inputGameWindow, &origin);
-    GetClientRect(g_inputGameWindow, &rect);
+    ClientToScreen((*(HWND*)0x00c97c1c), &origin);
+    GetClientRect((*(HWND*)0x00c97c1c), &rect);
     rect.left += origin.x;
     rect.right += origin.x;
     rect.top += origin.y;
@@ -316,9 +316,9 @@ void ClientCaptureScreenshot()
     if (SUCCEEDED(g_gameD3DDevice->GetFrontBufferData(0, surface)))
     {
         POINT origin = {0, 0};
-        ClientToScreen(g_inputGameWindow, &origin);
+        ClientToScreen((*(HWND*)0x00c97c1c), &origin);
         RECT rect;
-        GetClientRect(g_inputGameWindow, &rect);
+        GetClientRect((*(HWND*)0x00c97c1c), &rect);
         rect.left += origin.x;
         rect.right += origin.x;
         rect.top += origin.y;
@@ -334,7 +334,7 @@ void ClientCaptureScreenshot()
 // 0x00061940
 void ClientRefreshWindowProcedure()
 {
-    HWND window = g_inputGameWindow;
+    HWND window = (*(HWND*)0x00c97c1c);
     if (window)
     {
         g_clientPreviousWindowProcedure = (WNDPROC)GetWindowLongA(window, GWL_WNDPROC);
@@ -346,11 +346,11 @@ void ClientRefreshWindowProcedure()
 // 0x00061970
 BOOL ClientInstallWindowProcedure()
 {
-    HWND window = g_inputGameWindow;
+    HWND window = (*(HWND*)0x00c97c1c);
     if (!window)
         return FALSE;
     SetClassLongA(window, GCL_STYLE, GetClassLongA(window, GCL_STYLE) | CS_DBLCLKS);
-    HWND current = g_inputGameWindow;
+    HWND current = (*(HWND*)0x00c97c1c);
     if (current)
     {
         g_clientPreviousWindowProcedure = (WNDPROC)GetWindowLongA(current, GWL_WNDPROC);

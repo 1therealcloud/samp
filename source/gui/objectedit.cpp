@@ -73,8 +73,8 @@ BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
             state[0xa3] = 1;
             GetCursorPos((POINT*)(state + 0xa7));
             GetCursorPos((POINT*)(state + 0xaf));
-            ScreenToClient(g_inputGameWindow, (POINT*)(state + 0xaf));
-            SetCapture(g_inputGameWindow);
+            ScreenToClient((*(HWND*)0x00c97c1c), (POINT*)(state + 0xaf));
+            SetCapture((*(HWND*)0x00c97c1c));
             ((int(WINAPI*)(BOOL))g_archiveRealShowCursor)(FALSE);
             ClipCursor(0);
             CObjectPool* pool = *(CObjectPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
@@ -100,7 +100,7 @@ BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
                 point = *(POINT*)(state + 0x28);
             else
                 point = *(POINT*)(state + 0xaf);
-            ClientToScreen(g_inputGameWindow, &point);
+            ClientToScreen((*(HWND*)0x00c97c1c), &point);
             SetCursorPos(point.x, point.y);
             TryChangeProcessType();
             return TRUE;
@@ -139,7 +139,7 @@ void CObjectEdit::TryChangeProcessType()
 {
     POINT point;
     GetCursorPos(&point);
-    ScreenToClient(g_inputGameWindow, &point);
+    ScreenToClient((*(HWND*)0x00c97c1c), &point);
     if (!unknown84)
     {
         unknown113 = 0xffffffff;
@@ -181,7 +181,7 @@ void CObjectEdit::SetEditMode(int mode)
 void CObjectEdit::ResetMousePos()
 {
     RECT rect;
-    GetClientRect(g_inputGameWindow, &rect);
+    GetClientRect((*(HWND*)0x00c97c1c), &rect);
     int x = (LONG)((DWORD)rect.right - (DWORD)rect.left) / 2, y = (LONG)((DWORD)rect.bottom - (DWORD)rect.top) / 2;
     BYTE* state = (BYTE*)this;
     *(int*)(state + 0xa7) = x;
@@ -444,7 +444,7 @@ void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector*
     surface->Release();
     POINT point;
     GetCursorPos(&point);
-    ScreenToClient(g_inputGameWindow, &point);
+    ScreenToClient((*(HWND*)0x00c97c1c), &point);
     LONG x = point.x, y = point.y;
     DWORD width = description.Width, height = description.Height;
     float normalizedX, normalizedY;

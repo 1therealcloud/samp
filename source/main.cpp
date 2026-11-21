@@ -6,7 +6,6 @@
 #include "d3dhook/ID3DXFontHook.h"
 #include "d3dhook/IDirect3DDevice9Hook.h"
 #include "game/game.h"
-#include "game/gta_globals.h"
 #include "game/hooks.h"
 #include "game/model_preview.h"
 #include "gui/chatwindow.h"
@@ -251,11 +250,11 @@ void ClientRequestQuit()
 int FontGetHeight()
 {
     int height;
-    if (g_chatScreenWidth < 1024)
+    if ((*(int*)0x00c17044) < 1024)
         height = 14;
-    else if (g_chatScreenWidth < 1400)
+    else if ((*(int*)0x00c17044) < 1400)
         height = 16;
-    else if (g_chatScreenWidth < 1600)
+    else if ((*(int*)0x00c17044) < 1600)
         height = 18;
     else
         height = 20;
@@ -266,7 +265,7 @@ int FontGetHeight()
 int FontGetDeathWindowHeight()
 {
     int base = 14;
-    if (g_chatScreenWidth < 1024)
+    if ((*(int*)0x00c17044) < 1024)
         base = 12;
     int adjusted = (int)((DWORD)base + (DWORD)g_pConfig->GetIntValue("fontsize") * 2);
     return adjusted < base ? base : adjusted;

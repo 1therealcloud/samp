@@ -63,7 +63,7 @@ void CInput::Open()
         if (m_pEditbox)
         {
             RECT rect;
-            GetClientRect(g_inputGameWindow, &rect);
+            GetClientRect((*(HWND*)0x00c97c1c), &rect);
             int width = (int)(rect.right * 0.6f);
             if (width > 800)
                 width = 800;

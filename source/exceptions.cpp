@@ -143,8 +143,8 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
     {
         case WM_DESTROY:
             EndDialog(dialog, TRUE);
-            ShowWindow(g_inputGameWindow, SW_HIDE);
-            DestroyWindow(g_inputGameWindow);
+            ShowWindow((*(HWND*)0x00c97c1c), SW_HIDE);
+            DestroyWindow((*(HWND*)0x00c97c1c));
             break;
         case WM_INITDIALOG:
             ClientConstructCrashText(FALSE);
@@ -175,7 +175,7 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
 LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS* exception)
 {
     g_clientExceptionContext = exception->ContextRecord;
-    ShowWindow(g_inputGameWindow, SW_MINIMIZE);
-    DialogBoxParamA(g_clientModule, MAKEINTRESOURCEA(101), g_inputGameWindow, ClientExceptionDialog, 0);
+    ShowWindow((*(HWND*)0x00c97c1c), SW_MINIMIZE);
+    DialogBoxParamA(g_clientModule, MAKEINTRESOURCEA(101), (*(HWND*)0x00c97c1c), ClientExceptionDialog, 0);
     return EXCEPTION_EXECUTE_HANDLER;
 }

@@ -4,10 +4,11 @@
 //
 //----------------------------------------------------------
 
+#include "stdafx.h"
+
 #include "launch3.h"
 
 #include "launch3Dlg.h"
-#include "stdafx.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
