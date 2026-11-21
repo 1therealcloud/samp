@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)-debug"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
@@ -22,11 +22,11 @@
 				AdditionalIncludeDirectories="$(ProjectDir)RakNet\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
-				StructMemberAlignment="1"
 				ExceptionHandling="TRUE"
-				RuntimeTypeInfo="FALSE"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
+				StructMemberAlignment="1"
+				RuntimeTypeInfo="FALSE"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
@@ -57,23 +57,23 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(ProjectDir)RakNet\Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="TRUE"
+				AdditionalIncludeDirectories="$(ProjectDir)RakNet\Include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
-				EnableFunctionLevelLinking="TRUE"
-				StructMemberAlignment="1"
 				ExceptionHandling="TRUE"
-				RuntimeTypeInfo="FALSE"
 				RuntimeLibrary="0"
+				StructMemberAlignment="1"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeTypeInfo="FALSE"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
@@ -111,73 +111,16 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\RakNet\Source\BitStream.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\CheckSum.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\DS_HuffmanEncodingTree.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\GetTime.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\InternalPacketPool.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\NetworkTypes.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\PluginInterface.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\RakClient.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\RakNetStatistics.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\RakNetworkFactory.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\RakPeer.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\rakserver.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\RakSleep.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\Rand.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\ReliabilityLayer.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\RPCMap.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\SimpleMutex.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\SocketLayer.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\StringCompressor.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\StringTable.cpp">
-			</File>
-			<File
-				RelativePath=".\RakNet\Source\TEABlockEncryptor.cpp">
-			</File>
-			<File
 				RelativePath=".\RakNet\Source\_findfirst.cpp">
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\AsynchronousFileIO.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\BitStream.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\CheckSum.cpp">
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\CommandParserInterface.cpp">
@@ -199,6 +142,9 @@
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\DS_ByteQueue.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\DS_HuffmanEncodingTree.cpp">
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\DS_Table.cpp">
@@ -225,6 +171,12 @@
 				RelativePath=".\RakNet\Source\FullyConnectedMesh.cpp">
 			</File>
 			<File
+				RelativePath=".\RakNet\Source\GetTime.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\InternalPacketPool.cpp">
+			</File>
+			<File
 				RelativePath=".\RakNet\Source\LightweightDatabaseClient.cpp">
 			</File>
 			<File
@@ -246,6 +198,9 @@
 				RelativePath=".\RakNet\Source\NetworkIDGenerator.cpp">
 			</File>
 			<File
+				RelativePath=".\RakNet\Source\NetworkTypes.cpp">
+			</File>
+			<File
 				RelativePath=".\RakNet\Source\PacketConsoleLogger.cpp">
 			</File>
 			<File
@@ -255,10 +210,37 @@
 				RelativePath=".\RakNet\Source\PacketLogger.cpp">
 			</File>
 			<File
+				RelativePath=".\RakNet\Source\PluginInterface.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\RakClient.cpp">
+			</File>
+			<File
 				RelativePath=".\RakNet\Source\RakNetCommandParser.cpp">
 			</File>
 			<File
+				RelativePath=".\RakNet\Source\RakNetStatistics.cpp">
+			</File>
+			<File
 				RelativePath=".\RakNet\Source\RakNetTransport.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\RakNetworkFactory.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\RakPeer.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\rakserver.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\RakSleep.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\Rand.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\ReliabilityLayer.cpp">
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\replicamanager.cpp">
@@ -270,7 +252,22 @@
 				RelativePath=".\RakNet\Source\Router.cpp">
 			</File>
 			<File
+				RelativePath=".\RakNet\Source\RPCMap.cpp">
+			</File>
+			<File
 				RelativePath=".\RakNet\Source\SHA1.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\SimpleMutex.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\SocketLayer.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\StringCompressor.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\StringTable.cpp">
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\SystemAddressList.cpp">
@@ -286,6 +283,9 @@
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\TCPInterface.cpp">
+			</File>
+			<File
+				RelativePath=".\RakNet\Source\TEABlockEncryptor.cpp">
 			</File>
 			<File
 				RelativePath=".\RakNet\Source\TelnetTransport.cpp">

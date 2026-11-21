@@ -10,8 +10,13 @@
 
 #include <new>
 #include <string.h>
+#if defined(DL_BUILD)
 // 0x0011c74c
 const char g_spawnVersionText[] = "SA-MP 0.3.DL-R1";
+#else // DL_BUILD
+// 0x000EA724
+const char g_spawnVersionText[] = "SA-MP 0.3.7-R5";
+#endif // DL_BUILD
 
 // 0x000705c0
 SpawnScreenVertex::SpawnScreenVertex() {}

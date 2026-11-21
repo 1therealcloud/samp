@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)-debug"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
@@ -54,20 +54,20 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Oy-"
 				Optimization="2"
+				OmitFramePointers="FALSE"
 				AdditionalIncludeDirectories="$(ProjectDir)zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				OmitFramePointers="FALSE"
-				AdditionalOptions="/Oy-"
+				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
-				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"

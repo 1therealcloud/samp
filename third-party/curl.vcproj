@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)-debug"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
@@ -55,8 +55,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
@@ -68,8 +68,8 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BUILDING_LIBCURL;CURL_STATICLIB;USE_WINDOWS_SSPI;USE_SCHANNEL;HTTP_ONLY;HAVE_LIBZ;HAVE_ZLIB_H"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
-				BufferSecurityCheck="FALSE"
 				StructMemberAlignment="4"
+				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"

@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)-debug"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
@@ -23,8 +23,8 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				StructMemberAlignment="1"
 				RuntimeLibrary="1"
+				StructMemberAlignment="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
@@ -55,23 +55,23 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)build\libraries"
-			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)build\libraries\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)build\intermediate\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Ob1"
 				Optimization="2"
+				InlineFunctionExpansion="1"
+				EnableIntrinsicFunctions="TRUE"
 				AdditionalIncludeDirectories="$(ProjectDir)lzma\C"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_7ZIP_ST"
-				InlineFunctionExpansion="1"
-				AdditionalOptions="/Ob1"
-				EnableIntrinsicFunctions="TRUE"
 				StringPooling="TRUE"
-				EnableFunctionLevelLinking="TRUE"
+				RuntimeLibrary="0"
 				StructMemberAlignment="1"
 				BufferSecurityCheck="FALSE"
-				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
