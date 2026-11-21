@@ -5,12 +5,14 @@ class RakClientInterface;
 struct RPCParameters;
 // 0x00012310
 void RegisterRPCs(RakClientInterface* client);
+#ifdef DL_BUILD
 // 0x00011d80
 void ScrCustomModelRecord(RPCParameters* parameters);
 // 0x0000ea40
 void ScrCustomModelsReset(RPCParameters* parameters);
 // 0x0000ead0
 void ScrCustomModelsComplete(RPCParameters* parameters);
+#endif
 // 0x00010530
 void ScrInitGame(RPCParameters* parameters);
 // Broader role of the fourth initialization DWORD is not established.
@@ -204,6 +206,7 @@ extern const int g_rpcClientCheck;
 extern const int g_rpcScrCreateActor;
 // 0x00117f14
 extern const int g_rpcScrDestroyActor;
+#ifdef DL_BUILD
 // 0x00117f10
 extern const int g_rpcUnknown00117F10;
 // 0x00117f0c
@@ -212,5 +215,6 @@ extern const int g_rpcUnknown00117F0C;
 extern const int g_rpcUnknown00117F08;
 // 0x00117f04
 extern const int g_rpcUnknown00117F04;
+#endif
 
 #endif // NETRPC_H

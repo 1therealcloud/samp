@@ -280,8 +280,6 @@ int __stdcall CustomModelLzmaDecode(BYTE* destination, DWORD* destinationLength,
 extern const char g_customDownloadSizeError[];
 // 0x00117de8
 extern const char g_customDownloadCrcError[];
-// 0x0000de60
-BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy);
 // 0x0000df90
 void __cdecl CustomModelDownloadThread(void* worker);
 // 0x000c52d0

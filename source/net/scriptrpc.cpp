@@ -15,6 +15,7 @@
 #include "net/localplayer.h"
 #include "net/menupool.h"
 #include "net/netgame.h"
+#include "net/netrpc.h"
 #include "net/objectpool.h"
 #include "net/playerinfo.h"
 #include "net/playerpool.h"
@@ -742,17 +743,26 @@ void ScrSetPlayerTeam(RPCParameters* parameters)
 // 0x00018c80
 void ScrSetPlayerSkin(RPCParameters* parameters)
 {
-    int model = 0, customModel = 0;
+    int model = 0;
+#ifdef DL_BUILD
+    int customModel = 0;
+#endif
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
     if (!pool)
         return;
+#ifdef DL_BUILD
     WORD id;
+#else
+    DWORD id;
+#endif
     stream.Read(id);
     stream.Read(model);
+#ifdef DL_BUILD
     stream.Read(customModel);
     if (customModel > 20000 && (GameIsPedModel(customModel) || (g_customModels && g_customModels->DoesExist(customModel))))
         model = customModel;
+#endif
     if (!GameIsPedModel(model))
     {
         if (g_pChat)
@@ -761,12 +771,12 @@ void ScrSetPlayerSkin(RPCParameters* parameters)
     }
     if (id == pool->localId)
         pool->local->m_state.ped->SetModelIndex(model);
-    else if (id < 1004 && pool->connected[id])
+    else if ((WORD)id < 1004 && pool->connected[(WORD)id])
     {
-        CRemotePlayer* remote = pool->GetPlayer(id);
+        CRemotePlayer* remote = pool->GetPlayer((WORD)id);
         if (remote->m_state.ped && remote->m_state.playerState)
         {
-            remote = pool->GetPlayer(id);
+            remote = pool->GetPlayer((WORD)id);
             CPed* ped = remote->m_state.ped;
             if (ped)
                 ped->SetModelIndex(model);
