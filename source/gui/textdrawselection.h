@@ -11,8 +11,8 @@ class CTextDrawSelection
 public:
     // 0x000c5120
     CTextDrawSelection();
-    DWORD enabled, unknown04;
-    WORD unknown08;
+    DWORD enabled, hoverColor;
+    WORD hoveredTextDrawId;
     // 0x00070ee0
     void Enable(DWORD color);
     // 0x00070db0
