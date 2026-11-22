@@ -1414,7 +1414,7 @@ void CNetGame::SetLanMode(DWORD value)
 }
 
 // 0x000a21f0
-DWORD CNetGame::GetSettingsByte0()
+DWORD CNetGame::GetUseCJWalk()
 {
     return settings->useCJWalk;
 }

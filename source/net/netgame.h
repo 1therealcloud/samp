@@ -91,7 +91,7 @@ public:
     CGangZonePool* GetGangZonePool();
     // Raw first settings byte, zero-extended; no settings pointer guard.
     // 0x000a21f0
-    DWORD GetSettingsByte0();
+    DWORD GetUseCJWalk();
 
     // 0x0000e3e0
     CLabelPool* GetLabelPool();
