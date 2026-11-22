@@ -88,8 +88,4 @@ BOOL WINAPI Arch_CloseHandle(HANDLE file);
 // 0x00062920
 DWORD WINAPI Arch_GetFileType(HANDLE file);
 
-// Takes the receiver in ECX and no stack arguments.
-// R5 address to verify
-void __fastcall NativeIncrementDword0055(void* object);
-
 #endif // FILEHOOKS_H

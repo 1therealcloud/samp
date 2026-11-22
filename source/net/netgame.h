@@ -91,7 +91,7 @@ public:
     CGangZonePool* GetGangZonePool();
     // Raw first settings byte, zero-extended; no settings pointer guard.
     // R5 address to verify
-    DWORD GetSettingsByte0();
+    DWORD GetUseCJWalk();
 
     // R5 address to verify
     CLabelPool* GetLabelPool();

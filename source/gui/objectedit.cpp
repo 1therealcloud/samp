@@ -972,9 +972,3 @@ void CObjectEdit::Disable(BOOL send)
     if (unknown78 == 1)
         SendEditEndNotification(notify);
 }
-
-// R5 address to verify
-DWORD __fastcall NativeReadDword0080(const void* object)
-{
-    return *(const DWORD*)((const BYTE*)object + 0x80);
-}

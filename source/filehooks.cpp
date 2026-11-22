@@ -365,9 +365,3 @@ HANDLE WINAPI Arch_CreateFileAWithValidation(LPCSTR name, DWORD access, DWORD sh
         ArchiveCheckFileDigest(ArchiveHashLowercaseName(ArchiveLowercaseName(ArchiveFileNameOnly((char*)name))), file);
     return file;
 }
-
-// R5 address to verify
-void __fastcall NativeIncrementDword0055(void* object)
-{
-    ++*(DWORD*)((BYTE*)object + 0x55);
-}

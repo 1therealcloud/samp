@@ -114,8 +114,4 @@ extern int g_objectEditRpc;
 // 0x000e5ea4
 extern int g_objectEditAttachedRpc;
 
-// Takes the receiver in ECX and returns a DWORD in EAX.
-// R5 address to verify
-DWORD __fastcall NativeReadDword0080(const void* object);
-
 #endif // OBJECTEDIT_H

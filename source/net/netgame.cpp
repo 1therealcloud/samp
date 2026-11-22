@@ -1414,7 +1414,7 @@ void CNetGame::SetLanMode(DWORD value)
 }
 
 // R5 address to verify
-DWORD CNetGame::GetSettingsByte0()
+DWORD CNetGame::GetUseCJWalk()
 {
     return settings->useCJWalk;
 }

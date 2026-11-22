@@ -147,10 +147,4 @@ void GameReacquireInputDevice();
 // 0x000c53a0
 void ClientInitializeDialogResources();
 
-// Descriptive ABI adapter; ECX receiver and one DWORD stack argument.
-// R5 address to verify
-void __fastcall NativeWriteDword013f(void* object, void* unusedEdx, DWORD value);
-// R5 address to verify
-void __fastcall NativeWriteByte0012(void* object, void* unusedEdx, BYTE value);
-
 #endif // GUI_H

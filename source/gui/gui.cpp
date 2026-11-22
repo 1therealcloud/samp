@@ -481,16 +481,3 @@ void GameReacquireInputDevice()
         ((HRESULT(WINAPI*)(IUnknown*))(*(DWORD**)device)[7])(device);
     }
 }
-
-// The unused EDX parameter leaves value in the native single stack slot.
-// R5 address to verify
-void __fastcall NativeWriteDword013f(void* object, void*, DWORD value)
-{
-    *(DWORD*)((BYTE*)object + 0x13f) = value;
-}
-
-// R5 address to verify
-void __fastcall NativeWriteByte0012(void* object, void*, BYTE value)
-{
-    *((BYTE*)object + 0x12) = value;
-}
