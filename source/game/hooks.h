@@ -415,21 +415,21 @@ extern CMatrix g_hookAimOffsetMatrix;
 // R5 address to verify
 extern CMatrix g_hookMountedMatrix;
 // R5 address to verify
-extern DWORD g_hookPatchOverride151AD4[3];
+extern DWORD g_hookVisibilityCameraPosition[3];
 // R5 address to verify
-extern BYTE g_hookRestore5543C0[22];
+extern BYTE g_hookVisibilityCheckOriginalCode[22];
 // R5 address to verify
-extern WORD g_hookRestore5543DC;
+extern WORD g_hookVisibilityBranchOriginalCode;
 // R5 address to verify
 extern DWORD g_hookCapture0018E548;
 // R5 address to verify
 extern DWORD g_hookCapture0018E54C;
 // R5 address to verify
-extern DWORD g_hookCapture0018E7E4;
+extern DWORD g_hookSavedRendererCameraX;
 // R5 address to verify
-extern DWORD g_hookCapture0018E7E8;
+extern DWORD g_hookSavedRendererCameraY;
 // R5 address to verify
-extern DWORD g_hookCapture0018E7EC;
+extern DWORD g_hookSavedRendererCameraZ;
 // R5 address to verify
 extern DWORD g_hookCapture0018E80C;
 // R5 address to verify
@@ -443,7 +443,7 @@ extern DWORD g_hookCapture0018F338;
 // R5 address to verify
 extern DWORD g_hookStreamingThirdStackWord;
 // R5 address to verify
-extern DWORD g_hookCapture0018F348;
+extern DWORD g_hookVisibilityDistanceOut;
 // R5 address to verify
 extern DWORD g_hookCapture0018F358;
 // R5 address to verify
@@ -457,11 +457,11 @@ extern DWORD g_hookCapture0018F48C;
 // R5 address to verify
 extern DWORD g_hookStreamingModelId;
 // R5 address to verify
-extern DWORD g_hookCapture0018F608;
+extern DWORD g_hookVisibilityOverrideEntity;
 // R5 address to verify
-extern DWORD g_hookCapture0018F60C;
+extern DWORD g_hookVisibilityEntity;
 // R5 address to verify
-extern DWORD g_hookCapture0018F610;
+extern DWORD g_hookVisibilityResult;
 // R5 address to verify
 void GameHookApplyRemoteSkillContextA();
 // R5 address to verify

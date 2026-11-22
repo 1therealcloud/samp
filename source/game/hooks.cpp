@@ -412,21 +412,21 @@ CMatrix g_hookAimOffsetMatrix;
 // R5 address to verify
 CMatrix g_hookMountedMatrix;
 // R5 address to verify
-DWORD g_hookPatchOverride151AD4[3] = {0x0, 0x0, 0x41700000};
+DWORD g_hookVisibilityCameraPosition[3] = {0x0, 0x0, 0x41700000};
 // R5 address to verify
-BYTE g_hookRestore5543C0[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
+BYTE g_hookVisibilityCheckOriginalCode[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
 // R5 address to verify
-WORD g_hookRestore5543DC = 0x4774;
+WORD g_hookVisibilityBranchOriginalCode = 0x4774;
 // R5 address to verify
 DWORD g_hookCapture0018E548;
 // R5 address to verify
 DWORD g_hookCapture0018E54C;
 // R5 address to verify
-DWORD g_hookCapture0018E7E4;
+DWORD g_hookSavedRendererCameraX;
 // R5 address to verify
-DWORD g_hookCapture0018E7E8;
+DWORD g_hookSavedRendererCameraY;
 // R5 address to verify
-DWORD g_hookCapture0018E7EC;
+DWORD g_hookSavedRendererCameraZ;
 // R5 address to verify
 DWORD g_hookCapture0018E80C;
 // R5 address to verify
@@ -440,7 +440,7 @@ DWORD g_hookCapture0018F338;
 // R5 address to verify
 DWORD g_hookStreamingThirdStackWord;
 // R5 address to verify
-DWORD g_hookCapture0018F348;
+DWORD g_hookVisibilityDistanceOut;
 // R5 address to verify
 DWORD g_hookCapture0018F358;
 // R5 address to verify
@@ -454,11 +454,11 @@ DWORD g_hookCapture0018F48C;
 // R5 address to verify
 DWORD g_hookStreamingModelId;
 // R5 address to verify
-DWORD g_hookCapture0018F608;
+DWORD g_hookVisibilityOverrideEntity;
 // R5 address to verify
-DWORD g_hookCapture0018F60C;
+DWORD g_hookVisibilityEntity;
 // R5 address to verify
-DWORD g_hookCapture0018F610;
+DWORD g_hookVisibilityResult;
 // R5 address to verify
 DWORD g_clientRenderCaller;
 // R5 address to verify
@@ -4932,30 +4932,30 @@ __declspec(naked) void GameHookPatchCustomObjectRenderPath()
     // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
-        mov edx, dword ptr [g_hookCapture0018F608]
+        mov edx, dword ptr [g_hookVisibilityOverrideEntity]
         cmp eax, edx
         je context_a4cd5
         mov edx, 0x554230
         jmp edx
     context_a4cd5:
         mov edx, dword ptr [esp + 4]
-        mov dword ptr [g_hookCapture0018F60C], edx
+        mov dword ptr [g_hookVisibilityEntity], edx
         mov edx, dword ptr [esp + 8]
-        mov dword ptr [g_hookCapture0018F348], edx
+        mov dword ptr [g_hookVisibilityDistanceOut], edx
         pushad
         mov eax, 0xb76870
         mov ecx, dword ptr [eax]
-        mov dword ptr [g_hookCapture0018E7E4], ecx
+        mov dword ptr [g_hookSavedRendererCameraX], ecx
         mov edx, dword ptr [eax + 4]
-        mov dword ptr [g_hookCapture0018E7E8], edx
+        mov dword ptr [g_hookSavedRendererCameraY], edx
         mov eax, dword ptr [eax + 8]
-        mov dword ptr [g_hookCapture0018E7EC], eax
+        mov dword ptr [g_hookSavedRendererCameraZ], eax
         mov ecx, 0xb76870
-        mov edx, dword ptr [g_hookPatchOverride151AD4]
+        mov edx, dword ptr [g_hookVisibilityCameraPosition]
         mov dword ptr [ecx], edx
-        mov eax, dword ptr [g_hookPatchOverride151AD4+0x4]
+        mov eax, dword ptr [g_hookVisibilityCameraPosition+0x4]
         mov dword ptr [ecx + 4], eax
-        mov edx, dword ptr [g_hookPatchOverride151AD4+0x8]
+        mov edx, dword ptr [g_hookVisibilityCameraPosition+0x8]
         mov dword ptr [ecx + 8], edx
         push 0x20
         push 0x5543c0
@@ -4972,37 +4972,37 @@ __declspec(naked) void GameHookPatchCustomObjectRenderPath()
         mov edx, 0x90909090
         mov eax, 0x5543dc
         mov word ptr [eax], dx
-        push dword ptr [g_hookCapture0018F348]
-        push dword ptr [g_hookCapture0018F60C]
+        push dword ptr [g_hookVisibilityDistanceOut]
+        push dword ptr [g_hookVisibilityEntity]
         mov edx, 0x554230
         call edx
-        mov dword ptr [g_hookCapture0018F610], eax
+        mov dword ptr [g_hookVisibilityResult], eax
         pop edx
         pop edx
         mov ecx, 0xb76870
-        mov edx, dword ptr [g_hookCapture0018E7E4]
+        mov edx, dword ptr [g_hookSavedRendererCameraX]
         mov dword ptr [ecx], edx
-        mov eax, dword ptr [g_hookCapture0018E7E8]
+        mov eax, dword ptr [g_hookSavedRendererCameraY]
         mov dword ptr [ecx + 4], eax
-        mov edx, dword ptr [g_hookCapture0018E7EC]
+        mov edx, dword ptr [g_hookSavedRendererCameraZ]
         mov dword ptr [ecx + 8], edx
         mov eax, 0x5543c0
-        mov ecx, dword ptr [g_hookRestore5543C0]
+        mov ecx, dword ptr [g_hookVisibilityCheckOriginalCode]
         mov dword ptr [eax], ecx
-        mov edx, dword ptr [g_hookRestore5543C0+0x4]
+        mov edx, dword ptr [g_hookVisibilityCheckOriginalCode+0x4]
         mov dword ptr [eax + 4], edx
-        mov ecx, dword ptr [g_hookRestore5543C0+0x8]
+        mov ecx, dword ptr [g_hookVisibilityCheckOriginalCode+0x8]
         mov dword ptr [eax + 8], ecx
-        mov edx, dword ptr [g_hookRestore5543C0+0xc]
+        mov edx, dword ptr [g_hookVisibilityCheckOriginalCode+0xc]
         mov dword ptr [eax + 0xc], edx
-        mov ecx, dword ptr [g_hookRestore5543C0+0x10]
+        mov ecx, dword ptr [g_hookVisibilityCheckOriginalCode+0x10]
         mov dword ptr [eax + 0x10], ecx
-        mov dx, word ptr [g_hookRestore5543C0+0x14]
+        mov dx, word ptr [g_hookVisibilityCheckOriginalCode+0x14]
         mov word ptr [eax + 0x14], dx
-        mov ax, word ptr [g_hookRestore5543DC]
+        mov ax, word ptr [g_hookVisibilityBranchOriginalCode]
         mov word ptr ds:[0x5543dc], ax
         popad
-        mov eax, dword ptr [g_hookCapture0018F610]
+        mov eax, dword ptr [g_hookVisibilityResult]
         ret
     }
     // clang-format on
