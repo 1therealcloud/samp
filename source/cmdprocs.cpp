@@ -128,8 +128,6 @@ void Commands::DebugCreateVehicle(char* params)
     }
     CMatrix matrix;
     ped->GetMatrix(&matrix);
-    char type[9] = {0};
-    sprintf(type, g_debugVehicleTypeFormat, model);
     CVector position = matrix.position;
     position.z += g_quaternionMatrixOne;
     position.y -= g_scoreboardHeaderInset;
