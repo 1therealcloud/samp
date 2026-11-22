@@ -1338,74 +1338,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="d3d"
-				Filter="">
-				<File
-					RelativePath="..\third-party\dxut\D3DUtil.cpp">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\third-party\dxut\D3DUtil.h">
-				</File>
-				<File
-					RelativePath="..\third-party\dxut\DXUtil.cpp">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"
-							ForcedIncludeFiles="windows.h;$(NoInherit)"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\third-party\dxut\DXUtil.h">
-				</File>
-			</Filter>
-			<Filter
 				Name="ttmath"
 				Filter="">
 				<File
@@ -1542,62 +1474,6 @@
 					RelativePath="..\third-party\dxut\DXUTmedia.h">
 				</File>
 				<File
-					RelativePath="..\third-party\dxut\DXUTMesh.cpp">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"
-							BufferSecurityCheck="TRUE"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\third-party\dxut\DXUTMesh.h">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\third-party\dxut\DXUTmisc.cpp">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -1632,60 +1508,6 @@
 				</File>
 				<File
 					RelativePath="..\third-party\dxut\DXUTSettingsDlg.h">
-				</File>
-				<File
-					RelativePath="..\third-party\dxut\DXUTsound.cpp">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\third-party\dxut\DXUTsound.h">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release DL|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCustomBuildTool"/>
-					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
