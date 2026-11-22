@@ -297,13 +297,13 @@ extern WORD g_hookCapture00151AB4;
 // 0x00151ac4
 extern WORD g_hookCapture00151AC4;
 // 0x0018e540
-extern DWORD g_hookCapture0018E540;
+extern DWORD g_hookCameraTargetThis;
 // 0x0018e544
 extern DWORD g_hookCapture0018E544;
 // 0x0018e564
 extern DWORD g_hookCapture0018E564;
 // 0x0018e588
-extern DWORD g_hookCapture0018E588;
+extern DWORD g_hookSavedGunTaskParameter;
 // 0x0018e58c
 extern DWORD g_hookCapture0018E58C;
 // 0x0018e5c4
@@ -315,23 +315,23 @@ extern CVector g_hookAimRayTarget;
 // 0x0018e814
 extern DWORD g_hookCapture0018E814;
 // 0x0018e818
-extern DWORD g_hookCapture0018E818;
+extern DWORD g_hookCameraTargetSourceOut;
 // 0x0018e86c
 extern DWORD g_hookCapture0018E86C;
 // 0x0018e874
-extern DWORD g_hookCapture0018E874;
+extern DWORD g_hookCameraTargetOriginY;
 // 0x0018e8c8
 extern DWORD g_hookCapture0018E8C8;
 // 0x0018e8d4
 extern DWORD g_hookCapture0018E8D4;
 // 0x0018e924
-extern DWORD g_hookCapture0018E924;
+extern DWORD g_hookCameraTargetDestinationOut;
 // 0x0018e928
 extern DWORD g_hookCapture0018E928;
 // 0x0018ea40
 extern CVector g_hookAimRayOrigin;
 // 0x0018eaa0
-extern DWORD g_hookCapture0018EAA0;
+extern DWORD g_hookCameraTargetOriginX;
 // 0x0018eaa4
 extern DWORD g_hookCapture0018EAA4;
 // 0x0018eaa8
@@ -341,7 +341,7 @@ extern DWORD g_hookCapture0018EAB0;
 // 0x0018eb1c
 extern DWORD g_hookCapture0018EB1C;
 // 0x0018eb70
-extern DWORD g_hookCapture0018EB70;
+extern DWORD g_hookCameraTargetOriginZ;
 // 0x0018eb78
 extern DWORD g_hookCapture0018EB78;
 // 0x0018eb8c
@@ -357,11 +357,11 @@ extern DWORD g_hookCapture0018F350;
 // 0x0018f354
 extern DWORD g_hookCapture0018F354;
 // 0x0018f360
-extern DWORD g_hookCapture0018F360;
+extern DWORD g_hookCameraTargetRange;
 // 0x0018f368
 extern DWORD g_hookCapture0018F368;
 // 0x0018f37c
-extern DWORD g_hookCapture0018F37C;
+extern DWORD g_hookGunTaskResult;
 // 0x0018f558
 extern DWORD g_hookCapture0018F558;
 // 0x0018f55c
