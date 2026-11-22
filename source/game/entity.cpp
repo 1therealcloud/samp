@@ -159,13 +159,8 @@ void CEntity::ApplyTurnSpeed()
     if (!entity)
         return;
     // GTA SA virtual address: ECX thiscall backend.
-    // clang-format off
-    __asm {
-        mov ecx,entity
-        mov eax,0x542e20
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int);
+    reinterpret_cast<BackendFn>(0x542e20)((void*)entity, 0);
 }
 
 // GTA returns raw float bits in EAX, not an ST0 float result.
@@ -195,14 +190,8 @@ void CEntity::GetBoundCentre(CVector* centre)
     if (!entity)
         return;
     // GTA SA virtual address: ECX entity, one callee-popped pointer.
-    // clang-format off
-    __asm {
-        push centre
-        mov ecx,entity
-        mov edx,0x534250
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, void*);
+    reinterpret_cast<BackendFn>(0x534250)((void*)entity, 0, (void*)centre);
 }
 
 // 0x0009ee70
@@ -336,17 +325,8 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
         if (matrix)
         {
             // GTA SA virtual address: ECX matrix and four callee-popped words.
-            // clang-format off
-            __asm {
-                push 0x15
-                push z
-                push y
-                push x
-                mov ecx,matrix
-                mov eax,0x59a840
-                call eax
-            }
-            // clang-format on
+            typedef void (__fastcall *BackendFn)(void*, int, void*, void*, void*, DWORD);
+            reinterpret_cast<BackendFn>(0x59a840)((void*)matrix, 0, (void*)x, (void*)y, (void*)z, 0x15);
         }
         // clang-format off
         // Keep the two native x87 multiplies and the store only at the end.
@@ -562,14 +542,8 @@ BOOL CEntity::SetModelIndex(int model)
 // 0x000b3990
 void GameChangeBackendEntityModel(void* entity, DWORD model)
 {
-    // clang-format off
-    __asm {
-        push model
-        mov ecx,entity
-        mov edx,0x403ec0
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+    reinterpret_cast<BackendFn>(0x403ec0)((void*)entity, 0, model);
 }
 // Caller context/semantic object type is not established; raw first DWORD only.
 // 0x000b4120
@@ -784,15 +758,9 @@ void CEntity::Native009ed60(DWORD argument)
     void* entity = m_pGameEntity;
     if (!entity)
         return;
-    // clang-format off
     // GTA SA virtual address: 0x00534120; ECX=entity, one callee-popped word.
-    __asm {
-        push argument
-        mov ecx,entity
-        mov edx,0x534120
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+    reinterpret_cast<BackendFn>(0x534120)((void*)entity, 0, argument);
 }
 
 // GTA callees use their original ECX/stack ABI.
@@ -825,20 +793,9 @@ void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DW
     void* entity = m_pGameEntity;
     if (!entity)
         return;
-    // clang-format off
     // GTA SA virtual address: 0x00542A50; six raw words, callee pops 24 bytes.
-    __asm {
-        push a6
-        push a5
-        push a4
-        push a3
-        push a2
-        push a1
-        mov eax,0x542a50
-        mov ecx,entity
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x542a50)((void*)entity, 0, a1, a2, a3, a4, a5, a6);
 }
 
 // GTA callees use their original ECX/stack ABI.

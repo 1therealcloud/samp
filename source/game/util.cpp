@@ -185,20 +185,8 @@ void __cdecl GameRotateRwQuaternion(void* quaternion, int axis, float angle, int
     const CVector* direction = &g_rwRotationAxes[axis];
     DWORD target = g_gameVersion == 1 ? 0x7eb7c0 : 0x7eb800;
     // Native cdecl GTA bridge keeps the four argument words and EDX call target.
-    // clang-format off
-    __asm {
-        push combine
-        push angle
-        push direction
-        push quaternion
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    reinterpret_cast<BackendFn>(target)(quaternion, (void*)direction, angle, (DWORD)combine);
 }
 
 // Shared fields are views into the existing native backing span, not new globals.
@@ -237,18 +225,8 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
 void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, float* angle)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eba80 : 0x7ebac0;
-    // clang-format off
-    __asm {
-        push angle
-        push axis
-        push quaternion
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, void*);
+    reinterpret_cast<BackendFn>(target)((void*)quaternion, (void*)axis, (void*)angle);
 }
 
 // GTA SA virtual addresses: USA 7F1FD0; all other version values use 7F2010.
@@ -258,20 +236,8 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
     const CVector* direction = axis;
     DWORD target = g_gameVersion == 1 ? 0x7f1fd0 : 0x7f2010;
     // Native captures the axis before reusing its argument home for the target.
-    // clang-format off
-    __asm {
-        push 1
-        push angle
-        push direction
-        push matrix
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    reinterpret_cast<BackendFn>(target)((void*)matrix, (void*)direction, angle, 1);
 }
 
 // GTA SA virtual addresses: USA 7F1920; all other version values use 7F1960.
@@ -279,16 +245,8 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f1920 : 0x7f1960;
-    // clang-format off
-    __asm {
-        push matrix
-        push out
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*);
+    reinterpret_cast<BackendFn>(target)((void*)out, (void*)matrix);
 }
 
 // GTA SA virtual addresses: USA 7F22C0; all other version values use 7F2300.
@@ -296,31 +254,16 @@ void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f22c0 : 0x7f2300;
-    // clang-format off
-    __asm {
-        push 1
-        push scale
-        push matrix
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, DWORD);
+    reinterpret_cast<BackendFn>(target)((void*)matrix, (void*)scale, 1);
 }
 
 // GTA SA virtual address: 0x0059C910, ECX receives the vector.
 // 0x000b4630
 void GameNormalizeVector(CVector* vector)
 {
-    // clang-format off
-    __asm {
-        mov ecx,vector
-        mov edx,0x59c910
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int);
+    reinterpret_cast<BackendFn>(0x59c910)((void*)vector, 0);
 }
 // GTA SA virtual address: 0x0059C730, cdecl out/left/right, returns out in EAX.
 // 0x000b4750
@@ -341,16 +284,8 @@ CVector* GameTransformVectorByTranspose(CVector* out, const CVector* vector, con
 void GameRwQuaternionFromMatrix(void* quaternion, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eb5c0 : 0x7eb600;
-    // clang-format off
-    __asm {
-        push matrix
-        push quaternion
-        mov eax,target
-        call eax
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*);
+    reinterpret_cast<BackendFn>(target)(quaternion, (void*)matrix);
 }
 
 // GTA SA virtual address: 0x007EDDC0, fixed vector transform (no translation).
@@ -483,20 +418,8 @@ void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
     const CVector* direction = &g_rwRotationAxes[axis];
     g_rwAxisRotateBackend = (GameRwAxisRotateBackend)(g_gameVersion == 1 ? 0x7f1fd0 : 0x7f2010);
     // Native reloads the published target into saved EBX after pushing arguments.
-    // clang-format off
-    __asm {
-        push 1
-        push angle
-        push direction
-        push matrix
-        mov ebx,g_rwAxisRotateBackend
-        call ebx
-        pop ebx
-        pop ebx
-        pop ebx
-        pop ebx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    reinterpret_cast<BackendFn>(g_rwAxisRotateBackend)((void*)matrix, (void*)direction, angle, 1);
 }
 
 // GTA SA virtual address: 0x007498E0 (fixed).
@@ -504,15 +427,8 @@ void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
 int GameRwCountClumpAtomics(void* clump)
 {
     int result = 0;
-    // clang-format off
-    __asm {
-        push clump
-        mov edx,0x7498e0
-        call edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__cdecl *BackendFn)(void*);
+    result = (int)reinterpret_cast<BackendFn>(0x7498e0)(clump);
     return result;
 }
 
@@ -565,14 +481,8 @@ void* GameRwForAllFrameObjects(void* frame, GameRwObjectCallback callback, void*
 void GameRwDestroyTexture(void* texture)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f3820 : 0x7f3860;
-    // clang-format off
-    __asm {
-        push texture
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(texture);
 }
 
 // GTA SA virtual address: 0x007F05A0; every non-USA version uses +0x40.
@@ -580,14 +490,8 @@ void GameRwDestroyTexture(void* texture)
 void GameRwDestroyFrame(void* frame)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f05a0 : 0x7f05e0;
-    // clang-format off
-    __asm {
-        push frame
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(frame);
 }
 
 // GTA SA virtual address: 0x00749DC0; every non-USA version uses +0x50.
@@ -595,14 +499,8 @@ void GameRwDestroyFrame(void* frame)
 void GameRwDestroyAtomic(void* atomic)
 {
     DWORD target = g_gameVersion == 1 ? 0x749dc0 : 0x749e10;
-    // clang-format off
-    __asm {
-        push atomic
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(atomic);
 }
 
 // GTA SA virtual address: 0x007FB020; every non-USA version uses +0x40.
@@ -610,14 +508,8 @@ void GameRwDestroyAtomic(void* atomic)
 void GameRwDestroyRaster(void* raster)
 {
     DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
-    // clang-format off
-    __asm {
-        push raster
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(raster);
 }
 
 // GTA SA virtual address: 0x007EE340; every non-USA version uses +0x40.
@@ -625,18 +517,8 @@ void GameRwDestroyRaster(void* raster)
 void GameRwClearCamera(void* camera, const void* color, DWORD flags)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee340 : 0x7ee380;
-    // clang-format off
-    __asm {
-        push flags
-        push color
-        push camera
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, DWORD);
+    reinterpret_cast<BackendFn>(target)(camera, (void*)color, flags);
 }
 
 // GTA SA virtual address: 0x007EE190; every non-USA version uses +0x40.
@@ -644,14 +526,8 @@ void GameRwClearCamera(void* camera, const void* color, DWORD flags)
 void GameRwBeginCameraUpdate(void* camera)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee190 : 0x7ee1d0;
-    // clang-format off
-    __asm {
-        push camera
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(camera);
 }
 
 // GTA SA virtual address: 0x007EE180; every non-USA version uses +0x40.
@@ -659,14 +535,8 @@ void GameRwBeginCameraUpdate(void* camera)
 void GameRwEndCameraUpdate(void* camera)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee180 : 0x7ee1c0;
-    // clang-format off
-    __asm {
-        push camera
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(camera);
 }
 
 // GTA SA virtual address: 0x00749B20; every non-USA version uses +0x50.
@@ -674,14 +544,8 @@ void GameRwEndCameraUpdate(void* camera)
 void GameRwRenderClump(void* clump)
 {
     DWORD target = g_gameVersion == 1 ? 0x749b20 : 0x749b70;
-    // clang-format off
-    __asm {
-        push clump
-        mov edx,target
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(target)(clump);
 }
 
 // GTA SA virtual address: 0x0074A4F0; every non-USA version uses +0x50.
@@ -691,17 +555,8 @@ void GameRwAddClumpLight(void* clump, void* light)
     DWORD target = g_gameVersion == 1 ? 0x74a4f0 : 0x74a540;
     void* result;
     // Native captures the backend return word but does not expose it.
-    // clang-format off
-    __asm {
-        push light
-        push clump
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(void*, void*);
+    result = (void*)reinterpret_cast<BackendFn>(target)(clump, light);
 }
 
 // GTA SA virtual address: 0x00751A70 (fixed).
@@ -709,16 +564,8 @@ void GameRwAddClumpLight(void* clump, void* light)
 void GameRwSetLightRadius(void* light, float radius)
 {
     DWORD target = 0x751a70;
-    // clang-format off
-    __asm {
-        push radius
-        push light
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, float);
+    reinterpret_cast<BackendFn>(target)(light, radius);
 }
 
 // GTA SA virtual address: 0x0074A310; every non-USA version uses +0x50.
@@ -727,15 +574,8 @@ BOOL GameRwDestroyClump(void* clump)
 {
     int result = 0;
     DWORD target = g_gameVersion == 1 ? 0x74a310 : 0x74a360;
-    // clang-format off
-    __asm {
-        push clump
-        mov eax,target
-        call eax
-        mov result,eax
-        pop eax
-    }
-    // clang-format on
+    typedef DWORD (__cdecl *BackendFn)(void*);
+    result = (int)reinterpret_cast<BackendFn>(target)(clump);
     return result;
 }
 
@@ -779,16 +619,8 @@ void GameRwWorldAddCamera(void* camera)
     if (world)
     {
         DWORD target = g_gameVersion == 1 ? 0x750f20 : 0x750f70;
-        // clang-format off
-        __asm {
-            push camera
-            push world
-            mov edx,target
-            call edx
-            pop edx
-            pop edx
-        }
-        // clang-format on
+        typedef void (__cdecl *BackendFn)(void*, void*);
+        reinterpret_cast<BackendFn>(target)((void*)world, camera);
     }
 }
 
@@ -799,16 +631,8 @@ void GameRwWorldAddClump(void* clump)
     void* world = *(void**)0xc17038;
     if (world)
     {
-        // clang-format off
-        __asm {
-            push clump
-            push world
-            mov edx,0x751300
-            call edx
-            pop edx
-            pop edx
-        }
-        // clang-format on
+        typedef void (__cdecl *BackendFn)(void*, void*);
+        reinterpret_cast<BackendFn>(0x751300)((void*)world, clump);
     }
 }
 
@@ -819,16 +643,8 @@ void GameRwWorldRemoveClump(void* clump)
     void* world = *(void**)0xc17038;
     if (world)
     {
-        // clang-format off
-        __asm {
-            push clump
-            push world
-            mov edx,0x751460
-            call edx
-            pop edx
-            pop edx
-        }
-        // clang-format on
+        typedef void (__cdecl *BackendFn)(void*, void*);
+        reinterpret_cast<BackendFn>(0x751460)((void*)world, clump);
     }
 }
 
@@ -839,14 +655,8 @@ void GameRwWorldRender()
     void* world = *(void**)0xc17038;
     if (world)
     {
-        // clang-format off
-        __asm {
-            push world
-            mov edx,0x74f570
-            call edx
-            pop edx
-        }
-        // clang-format on
+        typedef void (__cdecl *BackendFn)(void*);
+        reinterpret_cast<BackendFn>(0x74f570)((void*)world);
     }
 }
 
@@ -858,16 +668,8 @@ void GameRwWorldAddLight(void* light)
     if (world)
     {
         DWORD target = g_gameVersion == 1 ? 0x751910 : 0x751960;
-        // clang-format off
-        __asm {
-            push light
-            push world
-            mov edx,target
-            call edx
-            pop edx
-            pop edx
-        }
-        // clang-format on
+        typedef void (__cdecl *BackendFn)(void*, void*);
+        reinterpret_cast<BackendFn>(target)((void*)world, light);
     }
 }
 
@@ -879,16 +681,8 @@ void GameRwWorldRemoveLight(void* light)
     if (world)
     {
         DWORD target = g_gameVersion == 1 ? 0x751960 : 0x7519b0;
-        // clang-format off
-        __asm {
-            push light
-            push world
-            mov edx,target
-            call edx
-            pop edx
-            pop edx
-        }
-        // clang-format on
+        typedef void (__cdecl *BackendFn)(void*, void*);
+        reinterpret_cast<BackendFn>(target)((void*)world, light);
     }
 }
 
@@ -899,15 +693,8 @@ void* GameRwCloneClump(void* clump)
     void* result = 0;
     if (!clump)
         return 0;
-    // clang-format off
-    __asm {
-        push clump
-        mov edx,0x749f70
-        call edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(void*);
+    result = (void*)reinterpret_cast<BackendFn>(0x749f70)(clump);
     return result;
 }
 
@@ -976,14 +763,8 @@ __declspec(naked) DWORD GameRwLockGeometry(void* geometry)
 // 0x000b1840
 void GameRwSetVisibilityCamera(void* camera)
 {
-    // clang-format off
-    __asm {
-        push camera
-        mov edx,0x7328c0
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(0x7328c0)(camera);
 }
 // GTA SA virtual addresses: hierarchy lookup734A40, matrix update7C51D0.
 // No additional null hierarchy guard is native.
@@ -1007,18 +788,8 @@ void GameRwUpdateClumpHierarchy(void* clump)
 // 0x000b19a0
 void GameRwUpdateClumpAnimations(void* clump, float timeStep, DWORD onScreen)
 {
-    // clang-format off
-    __asm {
-        push onScreen
-        push timeStep
-        push clump
-        mov edx,0x4d34f0
-        call edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, float, DWORD);
+    reinterpret_cast<BackendFn>(0x4d34f0)(clump, timeStep, onScreen);
 }
 
 // Return the address at +7C, not the pointer stored there; tag1 only.
@@ -1054,14 +825,8 @@ BOOL __stdcall GameRwRenderAtomic(void* object)
     if (!object || *(BYTE*)object != 1)
         return FALSE;
     void* callback = GameRwQueryAtomic48(object);
-    // clang-format off
-    __asm {
-        push object
-        mov ebx,callback
-        call ebx
-        pop ebx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(callback)(object);
     return TRUE;
 }
 
@@ -1083,16 +848,8 @@ void __stdcall GameRwRenderObject(void* object)
 int __stdcall GamePoolPedGetIndex(void* ped)
 {
     int result;
-    // clang-format off
-    __asm {
-        mov ebx,0xb74490
-        mov ecx,dword ptr [ebx]
-        push ped
-        mov ebx,0x4442d0
-        call ebx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__fastcall *BackendFn)(void*, int, void*);
+    result = (int)reinterpret_cast<BackendFn>(0x4442d0)(*(void**)0xb74490, 0, ped);
     return result;
 }
 
@@ -1123,16 +880,8 @@ int GameGetVehicleSubtype(void* vehicle)
 void* __stdcall GamePoolVehicleGetAt(int handle)
 {
     void* result;
-    // clang-format off
-    __asm {
-        mov ebx,0xb74494
-        mov ecx,dword ptr [ebx]
-        push handle
-        mov ebx,0x4048e0
-        call ebx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__fastcall *BackendFn)(void*, int, DWORD);
+    result = (void*)reinterpret_cast<BackendFn>(0x4048e0)(*(void**)0xb74494, 0, (DWORD)handle);
     return result;
 }
 
@@ -1141,16 +890,8 @@ void* __stdcall GamePoolVehicleGetAt(int handle)
 DWORD __stdcall GamePoolVehicleGetIndex(void* vehicle)
 {
     DWORD result = 0;
-    // clang-format off
-    __asm {
-        mov eax,0xb74494
-        mov ecx,dword ptr [eax]
-        push vehicle
-        mov edx,0x424160
-        call edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__fastcall *BackendFn)(void*, int, void*);
+    result = (DWORD)reinterpret_cast<BackendFn>(0x424160)(*(void**)0xb74494, 0, vehicle);
     return result;
 }
 
@@ -1827,28 +1568,16 @@ __declspec(naked) void GameGetBackendPositionAndHeading(void* entity, CVector* p
 void __stdcall GameWorldAdd(void* entity)
 {
     // GTA SA cdecl backend, one caller-popped pointer.
-    // clang-format off
-    __asm {
-        push entity
-        mov ebx,0x563220
-        call ebx
-        pop ebx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(0x563220)(entity);
 }
 
 // 0x000b3740
 void __stdcall GameWorldRemove(void* entity)
 {
     // GTA SA cdecl backend, one caller-popped pointer.
-    // clang-format off
-    __asm {
-        push entity
-        mov ebx,0x563280
-        call ebx
-        pop ebx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*);
+    reinterpret_cast<BackendFn>(0x563280)(entity);
 }
 
 // 0x000b3830
@@ -1856,16 +1585,8 @@ void* __stdcall GamePoolObjectGetAt(int handle)
 {
     void* result;
     // GTA SA object pool B7449C and lookup465040, native thiscall bridge.
-    // clang-format off
-    __asm {
-        mov ebx,0xb7449c
-        mov ecx,[ebx]
-        push handle
-        mov ebx,0x465040
-        call ebx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__fastcall *BackendFn)(void*, int, DWORD);
+    result = (void*)reinterpret_cast<BackendFn>(0x465040)(*(void**)0xb7449c, 0, (DWORD)handle);
     return result;
 }
 
@@ -1974,15 +1695,8 @@ void* GameRwCreateLight(int lightType)
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x752110 : 0x752160;
-    // clang-format off
-    __asm {
-        push lightType
-        mov edx,target
-        call edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(DWORD);
+    result = (void*)reinterpret_cast<BackendFn>(target)((DWORD)lightType);
     return result;
 }
 
@@ -1990,16 +1704,8 @@ void* GameRwCreateLight(int lightType)
 void GameRwSetLightColor(void* light, const float* rgba)
 {
     DWORD target = g_gameVersion == 1 ? 0x751a90 : 0x751ae0;
-    // clang-format off
-    __asm {
-        push rgba
-        push light
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*);
+    reinterpret_cast<BackendFn>(target)(light, (void*)rgba);
 }
 
 // 0x000b12d0
@@ -2007,21 +1713,8 @@ void* GameRwCreateRaster(int width, int height, int depth, int flags)
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7fb230 : 0x7fb270;
-    // clang-format off
-    __asm {
-        push flags
-        push depth
-        push height
-        push width
-        mov edx,target
-        call edx
-        mov result,eax
-        pop edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(DWORD, DWORD, DWORD, DWORD);
+    result = (void*)reinterpret_cast<BackendFn>(target)((DWORD)width, (DWORD)height, (DWORD)depth, (DWORD)flags);
     return result;
 }
 
@@ -2030,13 +1723,8 @@ void* GameRwCreateCamera()
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7ee4f0 : 0x7ee530;
-    // clang-format off
-    __asm {
-        mov edx,target
-        call edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(void);
+    result = (void*)reinterpret_cast<BackendFn>(target)();
     return result;
 }
 
@@ -2045,13 +1733,8 @@ void* GameRwCreateFrame()
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7f0410 : 0x7f0450;
-    // clang-format off
-    __asm {
-        mov edx,target
-        call edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(void);
+    result = (void*)reinterpret_cast<BackendFn>(target)();
     return result;
 }
 
@@ -2059,18 +1742,8 @@ void* GameRwCreateFrame()
 void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f0e30 : 0x7f0e70;
-    // clang-format off
-    __asm {
-        push combine
-        push position
-        push frame
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, DWORD);
+    reinterpret_cast<BackendFn>(target)(frame, (void*)position, (DWORD)combine);
 }
 
 // 0x000b1920
@@ -2078,20 +1751,8 @@ void GameRwRotateFrame(void* frame, int axis, float angle)
 {
     const CVector* direction = g_rwPreviewAxes + axis;
     DWORD target = g_gameVersion == 1 ? 0x7f1010 : 0x7f1050;
-    // clang-format off
-    __asm {
-        push 1
-        push angle
-        push direction
-        push frame
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    reinterpret_cast<BackendFn>(target)(frame, (void*)direction, angle, 1);
 }
 
 // 0x000b15b0
@@ -2112,16 +1773,8 @@ void GameRwSetCameraRasters(void* camera, void* color, void* depth)
 void GameRwSetObjectFrame(void* object, void* frame)
 {
     DWORD target = g_gameVersion == 1 ? 0x804ef0 : 0x804f30;
-    // clang-format off
-    __asm {
-        push frame
-        push object
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*);
+    reinterpret_cast<BackendFn>(target)(object, frame);
 }
 
 // 0x000b1680
@@ -2160,32 +1813,16 @@ void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
 void GameRwSetViewWindow(void* camera, const float* window)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee410 : 0x7ee450;
-    // clang-format off
-    __asm {
-        push window
-        push camera
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, void*);
+    reinterpret_cast<BackendFn>(target)(camera, (void*)window);
 }
 
 // 0x000b18c0
 void GameRwSetProjection(void* camera, int projection)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee3a0 : 0x7ee3e0;
-    // clang-format off
-    __asm {
-        push projection
-        push camera
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void*, DWORD);
+    reinterpret_cast<BackendFn>(target)(camera, (DWORD)projection);
 }
 
 // 0x000b1320
@@ -2193,15 +1830,8 @@ void* GameRwCreateTexture(void* raster)
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7f37c0 : 0x7f3800;
-    // clang-format off
-    __asm {
-        push raster
-        mov edx,target
-        call edx
-        mov result,eax
-        pop edx
-    }
-    // clang-format on
+    typedef void* (__cdecl *BackendFn)(void*);
+    result = (void*)reinterpret_cast<BackendFn>(target)(raster);
     return result;
 }
 
@@ -2245,51 +1875,30 @@ int GameTxdFind(const char* name)
 {
     int result;
     // Native GTA adapter: preserve the EDX call target and caller cleanup.
-    // clang-format off
-    __asm {
-        push name
-        mov edx,0x731850
-        call edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__cdecl *BackendFn)(void*);
+    result = (int)reinterpret_cast<BackendFn>(0x731850)((void*)name);
     return result;
 }
 
 // 0x000b3510
 void GameTxdPush()
 {
-    // clang-format off
-    __asm {
-        mov edx,0x7316a0
-        call edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void);
+    reinterpret_cast<BackendFn>(0x7316a0)();
 }
 
 // 0x000b3520
 void GameTxdPop()
 {
-    // clang-format off
-    __asm {
-        mov edx,0x7316b0
-        call edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(void);
+    reinterpret_cast<BackendFn>(0x7316b0)();
 }
 
 // 0x000b3530
 void GameTxdSetCurrent(int index)
 {
-    // clang-format off
-    __asm {
-        push index
-        mov edx,0x7319c0
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(DWORD);
+    reinterpret_cast<BackendFn>(0x7319c0)((DWORD)index);
 }
 
 // 0x000b3540
@@ -2311,27 +1920,15 @@ void* GameTxdReadTexture(const char* name)
 // 0x000b34f0
 void GameTxdAddRef(int index)
 {
-    // clang-format off
-    __asm {
-        push index
-        mov edx,0x731a00
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(DWORD);
+    reinterpret_cast<BackendFn>(0x731a00)((DWORD)index);
 }
 
 // 0x000b3500
 void GameTxdRemoveRef(int index)
 {
-    // clang-format off
-    __asm {
-        push index
-        mov edx,0x731a30
-        call edx
-        pop edx
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(DWORD);
+    reinterpret_cast<BackendFn>(0x731a30)((DWORD)index);
 }
 
 // 0x000b35b0

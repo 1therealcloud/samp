@@ -3,18 +3,8 @@
 void Font_PrintString(float x, float y, char* text)
 {
     // GTA SA cdecl backend. Forward the three argument words.
-    // clang-format off
-    __asm {
-        push text
-        push y
-        push x
-        mov eax,0x71a700
-        call eax
-        pop eax
-        pop eax
-        pop eax
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(float, float, void*);
+    reinterpret_cast<BackendFn>(0x71a700)(x, y, (void*)text);
 }
 
 // 0x0009fca0

@@ -86,14 +86,8 @@ CVehicle::~CVehicle()
             Scripting::ProcessCommand(&g_vehicleDestroyCommand, m_nHandle);
             if (GameGetModelReferenceCount(modelSnapshot) == 0 && !m_dwKeepLoaded && g_pGame->CountBackendVehicleModelRecords() > 80 && g_pGame->IsModelAvailable(modelSnapshot))
             {
-                // clang-format off
-                __asm {
-                    push modelSnapshot
-                    mov edx,0x4089a0
-                    call edx
-                    pop edx
-                }
-                // clang-format on
+                typedef void (__cdecl *BackendFn)(DWORD);
+                reinterpret_cast<BackendFn>(0x4089a0)((DWORD)modelSnapshot);
             }
         }
         else
@@ -725,24 +719,14 @@ void CVehicle::SetLandingGearState(int state)
         {
             if (position == g_objectScaleLowerBound)
             {
-                // clang-format off
-                __asm {
-                    mov ecx,backend
-                    mov edx,0x6cac20
-                    call edx
-                }
-                // clang-format on
+                typedef void (__fastcall *BackendFn)(void*, int);
+                reinterpret_cast<BackendFn>(0x6cac20)((void*)backend, 0);
             }
         }
         else if (state == 0 && position == g_quaternionMatrixOne)
         {
-            // clang-format off
-            __asm {
-                mov ecx,backend
-                mov edx,0x6cac70
-                call edx
-            }
-            // clang-format on
+            typedef void (__fastcall *BackendFn2)(void*, int);
+            reinterpret_cast<BackendFn2>(0x6cac70)((void*)backend, 0);
         }
     }
 }
@@ -851,22 +835,16 @@ void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
     if (!panels && !doors && !lights && (*(DWORD*)((BYTE*)m_pGameVehicle + 0x5b4) || *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9) || *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b0)))
     {
         void* backend = m_pGameVehicle;
-        // clang-format off
-        __asm { mov ecx,backend
-            mov edx,0x6a3440
-            call edx }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int);
+        reinterpret_cast<BackendFn>(0x6a3440)((void*)backend, 0);
         return;
     }
     *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b4) = panels;
     *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9) = doors;
     *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b0) = lights;
     void* backend = m_pGameVehicle;
-    // clang-format off
-    __asm { mov ecx,backend
-        mov edx,0x6b3e90
-        call edx }
-    // clang-format on
+    typedef void (__fastcall *BackendFn2)(void*, int);
+    reinterpret_cast<BackendFn2>(0x6b3e90)((void*)backend, 0);
 }
 
 // 0x000b78b0
@@ -888,18 +866,8 @@ void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
         void* backend = m_pGameVehicle;
         int enable = 1;
         int mode = 0;
-        // clang-format off
-        __asm {
-            push enable
-            push third
-            push first
-            push second
-            push mode
-            mov ecx,backend
-            mov ebx,0x6a6ae0
-            call ebx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD, DWORD);
+        reinterpret_cast<BackendFn>(0x6a6ae0)((void*)backend, 0, (DWORD)mode, second, first, third, (DWORD)enable);
     }
 }
 

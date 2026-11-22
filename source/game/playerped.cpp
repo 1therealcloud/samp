@@ -506,13 +506,8 @@ void CPed::SetInitialState()
 {
     // GTA SA virtual address: 0x0060cd20, backend ECX, one callee-popped argument.
     void* ped = m_pGamePed;
-    // clang-format off
-    __asm { push 0
-        mov ecx,ped
-        mov edx,0x60cd20
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+    reinterpret_cast<BackendFn>(0x60cd20)((void*)ped, 0, 0);
 }
 
 // 0x000adee0
@@ -530,14 +525,9 @@ void CPed::RemoveWeaponWhenEnteringVehicle()
     void* ped = m_pGamePed;
     if (ped)
     {
-        // clang-format off
         // GTA SA virtual address: 0x005e6370, backend ECX, argument0.
-        __asm { mov ecx,ped
-            push 0
-            mov edx,0x5e6370
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+        reinterpret_cast<BackendFn>(0x5e6370)((void*)ped, 0, 0);
     }
 }
 
@@ -750,14 +740,9 @@ void CPed::RemoveWeaponModel(int weapon)
     {
         BYTE* info = (BYTE*)g_pGame->GetWeaponInfo(weapon, 1);
         DWORD model = *(DWORD*)(info + 0x0c);
-        // clang-format off
         // GTA SA virtual address: 0x005e3990, ECX original backend, argument model.
-        __asm { push model
-            mov ecx,ped
-            mov edx,0x5e3990
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+        reinterpret_cast<BackendFn>(0x5e3990)((void*)ped, 0, model);
     }
 }
 
@@ -769,16 +754,8 @@ DWORD CPed::GetBonePosition(int bone, CVector* position)
     if (!ped || *(DWORD*)ped == 0x863c40)
         return 0;
     DWORD result;
-    // clang-format off
-    __asm { push 0
-        push bone
-        push position
-        mov ecx,ped
-        mov edx,0x5e4280
-        call edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__fastcall *BackendFn)(void*, int, void*, DWORD, DWORD);
+    result = (DWORD)reinterpret_cast<BackendFn>(0x5e4280)((void*)ped, 0, (void*)position, (DWORD)bone, 0);
     return result;
 }
 
@@ -789,13 +766,9 @@ void CPed::ClearWeapons()
     *g_clientCrashPedContext = m_nPlayerNumber;
     if (ped)
     {
-        // clang-format off
         // GTA SA virtual address: 0x005e6320, unchecked backend ECX, no stack arguments.
-        __asm { mov ecx,ped
-            mov eax,0x5e6320
-            call eax
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int);
+        reinterpret_cast<BackendFn>(0x5e6320)((void*)ped, 0);
     }
     *g_clientCrashPedContext = 0;
 }
@@ -834,15 +807,9 @@ void CPed::HoldObject(DWORD object)
     if (m_pGamePed && CEntity::DoesExist() && GamePoolPedGetAt(m_nHandle))
     {
         void* ped = m_pGamePed;
-        // clang-format off
         // GTA SA virtual address: 0x005e4390, ECX backend, arguments object/1.
-        __asm { push 1
-            push object
-            mov ecx,ped
-            mov edx,0x5e4390
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD);
+        reinterpret_cast<BackendFn>(0x5e4390)((void*)ped, 0, object, 1);
     }
 }
 
@@ -881,24 +848,9 @@ void CPed::ApplyCommandTask(const char* name, int p1, int p2, int p3, const CVec
     void* ped = m_pGamePed;
     if (ped)
     {
-        // clang-format off
         // GTA SA virtual addresses: receiver0x00c15448, callee0x00618970.
-        __asm { push p9
-            push p8
-            push p7
-            push p6
-            push p5
-            push p4
-            push p3
-            push p2
-            push p1
-            push ped
-            push name
-            mov ecx,0xc15448
-            mov edx,0x618970
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, void*, void*, DWORD, DWORD, DWORD, void*, DWORD, float, DWORD, DWORD, DWORD);
+        reinterpret_cast<BackendFn>(0x618970)((void*)0xc15448, 0, (void*)name, ped, (DWORD)p1, (DWORD)p2, (DWORD)p3, (void*)p4, (DWORD)p5, p6, (DWORD)p7, (DWORD)p8, (DWORD)p9);
     }
 }
 
@@ -951,13 +903,8 @@ void CPed::DisableJetpack()
         if (task && *(DWORD*)task == 0x8705c4)
         {
             void* backendTask = task;
-            // clang-format off
-            __asm { mov ecx,backendTask
-                mov edx,0x6801d0
-                push 1
-                call edx
-            }
-            // clang-format on
+            typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+            reinterpret_cast<BackendFn>(0x6801d0)((void*)backendTask, 0, 1);
             manager = *(BYTE**)((BYTE*)m_pGamePed + 0x47c);
             *(DWORD*)(manager + 0x10) = 0;
         }
@@ -1364,13 +1311,9 @@ void CPed::CallBackend730AndVehicle490()
         void* state = *(void**)((BYTE*)m_pGamePed + 0x730);
         if (state)
         {
-            // clang-format off
             // GTA SA virtual address: 0x005393f0, ECX raw state/no arguments.
-            __asm { mov ecx,state
-                mov eax,0x5393f0
-                call eax
-            }
-            // clang-format on
+            typedef void (__fastcall *BackendFn)(void*, int);
+            reinterpret_cast<BackendFn>(0x5393f0)((void*)state, 0);
         }
         BYTE* ped = (BYTE*)m_pGamePed;
         if (*(DWORD*)(ped + 0x46c) & 0x100)
@@ -1381,12 +1324,8 @@ void CPed::CallBackend730AndVehicle490()
                 state = *(void**)(vehicle + 0x490);
                 if (state)
                 {
-                    // clang-format off
-                    __asm { mov ecx,state
-                        mov eax,0x5393f0
-                        call eax
-                    }
-                    // clang-format on
+                    typedef void (__fastcall *BackendFn2)(void*, int);
+                    reinterpret_cast<BackendFn2>(0x5393f0)((void*)state, 0);
                 }
             }
         }
@@ -1917,16 +1856,8 @@ void* __stdcall GamePoolPedGetAt(int handle)
 {
     void* result;
     // GTA SA thiscall backend. The pool goes in ECX and the handle on the stack.
-    // clang-format off
-    __asm {
-        mov ebx,0xb74490
-        mov ecx,[ebx]
-        push handle
-        mov ebx,0x404910
-        call ebx
-        mov result,eax
-    }
-    // clang-format on
+    typedef void* (__fastcall *BackendFn)(void*, int, DWORD);
+    result = (void*)reinterpret_cast<BackendFn>(0x404910)(*(void**)0xb74490, 0, (DWORD)handle);
     return result;
 }
 
@@ -2113,14 +2044,8 @@ BOOL __stdcall GameIsBackendOnScreen(void* backend)
 {
     // GTA SA virtual address: thiscall backend, raw EAX normalized to BOOL.
     int result = 0;
-    // clang-format off
-    __asm {
-        mov ecx,backend
-        mov edx,534540h
-        call edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__fastcall *BackendFn)(void*, int);
+    result = (int)reinterpret_cast<BackendFn>(0x534540)((void*)backend, 0);
     return result != 0;
 }
 
@@ -2548,14 +2473,9 @@ void CPed::ApplySecondaryPose()
     void* backend = m_pGamePed;
     if (backend)
     {
-        // clang-format off
         // GTA SA virtual address: update ped bone matrices, thiscall.
-        __asm {
-            mov ecx,backend
-            mov eax,532b20h
-            call eax
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int);
+        reinterpret_cast<BackendFn>(0x532b20)((void*)backend, 0);
     }
 }
 
@@ -2630,14 +2550,9 @@ void CPed::ApplyDancePose()
     void* backend = m_pGamePed;
     if (backend)
     {
-        // clang-format off
         // GTA SA virtual address: update ped bone matrices, thiscall.
-        __asm {
-            mov ecx,backend
-            mov eax,532b20h
-            call eax
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int);
+        reinterpret_cast<BackendFn>(0x532b20)((void*)backend, 0);
     }
 }
 
@@ -2673,14 +2588,9 @@ void CPed::ProcessAccessories()
             void* ped = m_pGamePed;
             if (ped)
             {
-                // clang-format off
                 // GTA SA virtual address: update ped bone matrices, thiscall.
-                __asm {
-                    mov ecx,ped
-                    mov eax,532b20h
-                    call eax
-                }
-                // clang-format on
+                typedef void (__fastcall *BackendFn)(void*, int);
+                reinterpret_cast<BackendFn>(0x532b20)((void*)ped, 0);
             }
             bonesUpdated = true;
         }
@@ -2794,15 +2704,9 @@ void CPed::ClearTasksIfOnFoot()
     void* tasks = *(void**)((BYTE*)m_pGamePed + 0x47c);
     if (tasks)
     {
-        // clang-format off
         // GTA SA virtual address: task-manager thiscall, argument 0.
-        __asm {
-            push 0
-            mov ecx,tasks
-            mov edx,601230h
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+        reinterpret_cast<BackendFn>(0x601230)((void*)tasks, 0, 0);
     }
 }
 
@@ -2915,15 +2819,9 @@ void CPed::StopTaskType1022()
     void* task = *(void**)(*(BYTE**)((BYTE*)m_pGamePed + 0x47c) + 0x10);
     if (!task || GameGetTaskType(task) != 1022)
         return;
-    // clang-format off
     // GTA SA virtual address: original task teardown, thiscall/1.
-    __asm {
-        push 1
-        mov ecx,task
-        mov edx,6275e0h
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+    reinterpret_cast<BackendFn>(0x6275e0)((void*)task, 0, 1);
     // Native reloads the backend and task manager after teardown.
     *(DWORD*)(*(BYTE**)((BYTE*)m_pGamePed + 0x47c) + 0x10) = 0;
 }
@@ -2988,18 +2886,9 @@ DWORD CPed::CallBackend5E01C0(DWORD first, DWORD second)
     if (!ped || *(DWORD*)ped == 0x863c40)
         return 0;
     DWORD result;
-    // clang-format off
     // GTA SA virtual address: thiscall backend(second,first,0).
-    __asm {
-        push 0
-        push first
-        push second
-        mov ecx,ped
-        mov edx,5e01c0h
-        call edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD);
+    result = (DWORD)reinterpret_cast<BackendFn>(0x5e01c0)((void*)ped, 0, second, first, 0);
     return result;
 }
 
@@ -3210,14 +3099,9 @@ __forceinline void CPed::UpdateBoneMatrices()
     void* ped = m_pGamePed;
     if (ped)
     {
-        // clang-format off
         // GTA SA virtual address: native thiscall backend.
-        __asm {
-            mov ecx,ped
-            mov eax,532b20h
-            call eax
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int);
+        reinterpret_cast<BackendFn>(0x532b20)((void*)ped, 0);
     }
 }
 
@@ -3271,33 +3155,17 @@ BOOL CPed::GetWeaponAimOffsets(BOOL alternate, CVector* position, CVector* weapo
     void* ped = m_pGamePed;
     if (ped && *(DWORD*)ped != 0x863c40)
     {
-        // clang-format off
         // GTA SA virtual address: backend(position,bone,0), thiscall.
-        __asm {
-            push 0
-            push bone
-            push position
-            mov ecx,ped
-            mov edx,5e4280h
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn)(void*, int, void*, DWORD, DWORD);
+        reinterpret_cast<BackendFn>(0x5e4280)((void*)ped, 0, (void*)position, (DWORD)bone, 0);
     }
     position->z = (weaponOffset->z + position->z) + g_pedSpawnLift;
     ped = m_pGamePed;
     if (ped && *(DWORD*)ped != 0x863c40)
     {
-        // clang-format off
         // GTA SA virtual address: backend(weaponOffsetOut,bone,0), thiscall.
-        __asm {
-            push 0
-            push bone
-            push weaponOffsetOut
-            mov ecx,ped
-            mov edx,5e01c0h
-            call edx
-        }
-        // clang-format on
+        typedef void (__fastcall *BackendFn2)(void*, int, void*, DWORD, DWORD);
+        reinterpret_cast<BackendFn2>(0x5e01c0)((void*)ped, 0, (void*)weaponOffsetOut, (DWORD)bone, 0);
     }
     return TRUE;
 }
@@ -3375,17 +3243,9 @@ void CPed::GetCameraAimRay(CVector* origin, CVector* target)
         void* ped = m_pGamePed;
         if (ped && *(DWORD*)ped != 0x863c40)
         {
-            // clang-format off
             // GTA SA virtual address: backend(origin,24,0), thiscall.
-            __asm {
-                push 0
-                push 24
-                push origin
-                mov ecx,ped
-                mov edx,5e4280h
-                call edx
-            }
-            // clang-format on
+            typedef void (__fastcall *BackendFn)(void*, int, void*, DWORD, DWORD);
+            reinterpret_cast<BackendFn>(0x5e4280)((void*)ped, 0, (void*)origin, 24, 0);
         }
         origin->z = (weaponOffset->z + origin->z) + g_pedSpawnLift;
     }
@@ -3599,14 +3459,9 @@ void CPed::ClearAimTarget()
     if (!*(DWORD*)((BYTE*)ped + 0x500) && !m_lastDanceMove)
         return;
     m_lastDanceMove = 0;
-    // clang-format off
     // GTA SA virtual address: native thiscall backend, no arguments.
-    __asm {
-        mov ecx,ped
-        mov eax,5e6010h
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int);
+    reinterpret_cast<BackendFn>(0x5e6010)((void*)ped, 0);
 }
 
 // 0x000ade70
@@ -3705,17 +3560,9 @@ void CPed::GiveWeapon(int weapon, int ammo)
     AimStuff::UpdateLocalSkills();
     AimStuff::ApplyPlayerSkills(m_nPlayerNumber);
     void* ped = m_pGamePed;
-    // clang-format off
     // GTA SA virtual address: backend GiveWeapon(weapon,ammo,1), thiscall.
-    __asm {
-        push 1
-        push ammo
-        push weapon
-        mov ecx,ped
-        mov edx,5e6080h
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x5e6080)((void*)ped, 0, (DWORD)weapon, (DWORD)ammo, 1);
     AimStuff::ApplyLocalSkills();
     SetArmedWeapon(weapon, 0);
     *g_clientCrashPedContext = 0;

@@ -57,17 +57,8 @@ void CCamera::SetMatrix(CMatrix matrix)
 void CCamera::TakeControl(void* target, int mode, int switchType)
 {
     // The native adapter forwards complete stack DWORDs to GTA's thiscall.
-    // clang-format off
-    __asm {
-        push 1
-        push switchType
-        push mode
-        push target
-        mov ecx,0xb6f028
-        mov edx,0x50c7c0
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, void*, DWORD, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x50c7c0)((void*)0xb6f028, 0, target, (DWORD)mode, (DWORD)switchType, 1);
 }
 
 // 0x0009d3d0

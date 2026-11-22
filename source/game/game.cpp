@@ -402,19 +402,13 @@ IDirect3DDevice9* CGame::GetDevice()
     IDirect3DDevice9* device = 0;
     if (g_gameVersion == 1)
     {
-        // clang-format off
-        __asm mov edx,0x7f9d50
-        __asm call edx
-        __asm mov device,eax
-        // clang-format on
+        typedef void* (__cdecl *BackendFn)(void);
+        device = (IDirect3DDevice9*)reinterpret_cast<BackendFn>(0x7f9d50)();
     }
     else if (g_gameVersion == 2)
     {
-        // clang-format off
-        __asm mov edx,0x7f9d90
-        __asm call edx
-        __asm mov device,eax
-        // clang-format on
+        typedef void* (__cdecl *BackendFn2)(void);
+        device = (IDirect3DDevice9*)reinterpret_cast<BackendFn2>(0x7f9d90)();
     }
     return device;
 }
@@ -1654,15 +1648,8 @@ void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 void __stdcall GameSetModelCollision(int model, void* collision)
 {
     void* info = GameGetModelInfo(model);
-    // clang-format off
-    __asm {
-        mov ecx,info
-        push 0
-        push collision
-        mov edx,0x4c4bc0
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, void*, DWORD);
+    reinterpret_cast<BackendFn>(0x4c4bc0)((void*)info, 0, collision, 0);
 }
 
 // Native zero-extends the WORD, including FFFF -> 65535; lookup failure -> -1.
@@ -1706,13 +1693,8 @@ BOOL GameCleanupModelAndTxd(int model)
     if (!info)
         return FALSE;
     int index = (int)GameGetModelTxdIndex(model);
-    // clang-format off
-    __asm {
-        mov ecx,info
-        mov edx,0x4c4d50
-        call edx
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int);
+    reinterpret_cast<BackendFn>(0x4c4d50)((void*)info, 0);
     if (GameTxdGetReferenceCount(index) == 0)
     {
         GameTxdRemove(index);

@@ -171,17 +171,8 @@ CTaskJetpack::CTaskJetpack()
     m_pPlayerPed = 0;
     Create(112);
     BYTE* task = m_pTaskType;
-    // clang-format off
-    __asm {
-        push 0
-        push 0
-        push 0x41200000
-        push 0
-        mov ecx,task
-        mov eax,0x67b4e0
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x67b4e0)((void*)task, 0, 0, 0x41200000, 0, 0);
 }
 
 // 0x000b2380
@@ -209,16 +200,8 @@ CTaskTakeDamageFall::CTaskTakeDamageFall(DWORD fallType, DWORD number)
     m_pPlayerPed = 0;
     Create(24);
     BYTE* task = m_pTaskType;
-    // clang-format off
-    __asm {
-        push number
-        push 0
-        push fallType
-        mov ecx,task
-        mov eax,0x6786c0
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x6786c0)((void*)task, 0, fallType, 0, number);
 }
 // Native thunk delegates to base destruction only; it does not call Destroy.
 // 0x000b2630
@@ -251,18 +234,8 @@ CTaskGoToPoint::CTaskGoToPoint(DWORD moveState, const CVector* target, float rad
     m_pPlayerPed = 0;
     Create(48);
     BYTE* task = m_pTaskType;
-    // clang-format off
-    __asm {
-        push finalFlag
-        push moveTowards
-        push radius
-        push target
-        push moveState
-        mov ecx,task
-        mov eax,0x667cd0
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, DWORD, void*, float, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x667cd0)((void*)task, 0, moveState, (void*)target, radius, moveTowards, finalFlag);
 }
 
 // 0x000b2690
@@ -275,18 +248,8 @@ CTaskKillPedOnFootArmed::CTaskKillPedOnFootArmed(DWORD competence, DWORD duckTim
     m_pPlayerPed = 0;
     Create(92);
     BYTE* task = m_pTaskType;
-    // clang-format off
-    __asm {
-        push competence
-        push duckChance
-        push duckTime
-        push duckingConditions
-        push target
-        mov ecx,task
-        mov eax,0x621190
-        call eax
-    }
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int, void*, DWORD, DWORD, DWORD, DWORD);
+    reinterpret_cast<BackendFn>(0x621190)((void*)task, 0, target, duckingConditions, duckTime, duckChance, competence);
 }
 
 // 0x000b26c0

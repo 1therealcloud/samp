@@ -821,15 +821,8 @@ void __stdcall GamePublishPedClump(int model, void* clump)
 int GameTxdAdd(const char* name)
 {
     int result;
-    // clang-format off
-    __asm {
-        push name
-        mov edx,0x731c80
-        call edx
-        pop edx
-        mov result,eax
-    }
-    // clang-format on
+    typedef DWORD (__cdecl *BackendFn)(void*);
+    result = (int)reinterpret_cast<BackendFn>(0x731c80)((void*)name);
     return result;
 }
 
@@ -922,11 +915,8 @@ void* __cdecl GameCreateCollisionModel()
 {
     // GTA SA virtual addresses: allocator0x0040fc30 and thiscall constructor0x0040fb60.
     void* collision = ((void*(__cdecl*)(DWORD))0x40fc30)(0x30);
-    // clang-format off
-    __asm {mov ecx,collision
-        mov eax,0x40fb60
-        call eax}
-    // clang-format on
+    typedef void (__fastcall *BackendFn)(void*, int);
+    reinterpret_cast<BackendFn>(0x40fb60)((void*)collision, 0);
     return collision;
 }
 
