@@ -166,9 +166,6 @@ public:
     // Returns-1 while disabled; marks flags and counts resources not requested by earlier entries.
     // 0x0000c9b0
     int MarkResourceRequests();
-    // Native is deliberately a bare RET4; no object unload is performed here.
-    // 0x0000cd40
-    void ReleaseObjectEntry(int model);
     // 0x0000cc80
     bool IsPedEntry(int model);
     // 0x0000ccc0
