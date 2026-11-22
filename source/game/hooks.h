@@ -289,17 +289,17 @@ extern const char g_hookPedSayFormat[];
 // 0x000ecb0c
 extern const char g_hookGamepadAimFormat[];
 // R5 address to verify
-extern DWORD g_hookCapture00151AAC;
+extern DWORD g_hookPedAnimationRequestContinue;
 // R5 address to verify
-extern DWORD g_hookCapture00151AB0;
+extern DWORD g_hookResolveAnimationContinue;
 // R5 address to verify
-extern WORD g_hookCapture00151AB4;
+extern WORD g_hookResolvedAnimationIndex;
 // R5 address to verify
-extern WORD g_hookCapture00151AC4;
+extern WORD g_hookVehicleFlagId;
 // R5 address to verify
 extern DWORD g_hookCameraTargetThis;
 // R5 address to verify
-extern DWORD g_hookCapture0018E544;
+extern DWORD g_hookSpeechForceAudible;
 // R5 address to verify
 extern DWORD g_hookCapture0018E564;
 // R5 address to verify
@@ -321,21 +321,21 @@ extern DWORD g_hookCapture0018E86C;
 // R5 address to verify
 extern DWORD g_hookCameraTargetOriginY;
 // R5 address to verify
-extern DWORD g_hookCapture0018E8C8;
+extern DWORD g_hookSpeechContext;
 // R5 address to verify
 extern DWORD g_hookCapture0018E8D4;
 // R5 address to verify
 extern DWORD g_hookCameraTargetDestinationOut;
 // R5 address to verify
-extern DWORD g_hookCapture0018E928;
+extern DWORD g_hookSpeechFrontEnd;
 // R5 address to verify
 extern CVector g_hookAimRayOrigin;
 // R5 address to verify
 extern DWORD g_hookCameraTargetOriginX;
 // R5 address to verify
-extern DWORD g_hookCapture0018EAA4;
+extern DWORD g_hookSpeechProbability;
 // R5 address to verify
-extern DWORD g_hookCapture0018EAA8;
+extern DWORD g_hookDoorAnimationCaller;
 // R5 address to verify
 extern DWORD g_hookCapture0018EAB0;
 // R5 address to verify
@@ -347,9 +347,9 @@ extern DWORD g_hookCapture0018EB78;
 // R5 address to verify
 extern DWORD g_hookCapture0018EB8C;
 // R5 address to verify
-extern DWORD g_hookCapture0018F33C;
+extern DWORD g_hookSpeechOverrideSilence;
 // R5 address to verify
-extern DWORD g_hookCapture0018F340;
+extern DWORD g_hookSpeechStartDelay;
 // R5 address to verify
 extern DWORD g_hookCapture0018F34C;
 // R5 address to verify
@@ -365,15 +365,15 @@ extern DWORD g_hookGunTaskResult;
 // R5 address to verify
 extern DWORD g_hookCapture0018F558;
 // R5 address to verify
-extern DWORD g_hookCapture0018F55C;
+extern DWORD g_hookResolvedAnimationKey;
 // R5 address to verify
-extern DWORD g_hookCapture0018F594;
+extern DWORD g_hookDoorAnimationPed;
 // R5 address to verify
-extern DWORD g_hookCapture0018F598;
+extern DWORD g_hookVehicleFlagGameVehicle;
 // R5 address to verify
-extern DWORD g_hookCapture0018F59C;
+extern DWORD g_hookVehicleFlagPool;
 // R5 address to verify
-extern DWORD g_hookCapture0018F5A0;
+extern DWORD g_hookVehicleFlagWrapper;
 // R5 address to verify
 extern DWORD g_hookCapture0018F5E4;
 // R5 address to verify

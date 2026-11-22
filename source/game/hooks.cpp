@@ -314,17 +314,17 @@ DWORD g_hookCapturedObject;
 // 0x000ecb0c
 const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
 // R5 address to verify
-DWORD g_hookCapture00151AAC = 0x4d4417;
+DWORD g_hookPedAnimationRequestContinue = 0x4d4417;
 // R5 address to verify
-DWORD g_hookCapture00151AB0 = 0x4d3b30;
+DWORD g_hookResolveAnimationContinue = 0x4d3b30;
 // R5 address to verify
-WORD g_hookCapture00151AB4 = 0xffff;
+WORD g_hookResolvedAnimationIndex = 0xffff;
 // R5 address to verify
-WORD g_hookCapture00151AC4 = 0xffff;
+WORD g_hookVehicleFlagId = 0xffff;
 // R5 address to verify
 DWORD g_hookCameraTargetThis;
 // R5 address to verify
-DWORD g_hookCapture0018E544;
+DWORD g_hookSpeechForceAudible;
 // R5 address to verify
 DWORD g_hookCapture0018E564;
 // R5 address to verify
@@ -346,21 +346,21 @@ DWORD g_hookCapture0018E86C;
 // R5 address to verify
 DWORD g_hookCameraTargetOriginY;
 // R5 address to verify
-DWORD g_hookCapture0018E8C8;
+DWORD g_hookSpeechContext;
 // R5 address to verify
 DWORD g_hookCapture0018E8D4;
 // R5 address to verify
 DWORD g_hookCameraTargetDestinationOut;
 // R5 address to verify
-DWORD g_hookCapture0018E928;
+DWORD g_hookSpeechFrontEnd;
 // R5 address to verify
 CVector g_hookAimRayOrigin;
 // R5 address to verify
 DWORD g_hookCameraTargetOriginX;
 // R5 address to verify
-DWORD g_hookCapture0018EAA4;
+DWORD g_hookSpeechProbability;
 // R5 address to verify
-DWORD g_hookCapture0018EAA8;
+DWORD g_hookDoorAnimationCaller;
 // R5 address to verify
 DWORD g_hookCapture0018EAB0;
 // R5 address to verify
@@ -372,9 +372,9 @@ DWORD g_hookCapture0018EB78;
 // R5 address to verify
 DWORD g_hookCapture0018EB8C;
 // R5 address to verify
-DWORD g_hookCapture0018F33C;
+DWORD g_hookSpeechOverrideSilence;
 // R5 address to verify
-DWORD g_hookCapture0018F340;
+DWORD g_hookSpeechStartDelay;
 // R5 address to verify
 DWORD g_hookCapture0018F34C;
 // R5 address to verify
@@ -390,15 +390,15 @@ DWORD g_hookGunTaskResult;
 // R5 address to verify
 DWORD g_hookCapture0018F558;
 // R5 address to verify
-DWORD g_hookCapture0018F55C;
+DWORD g_hookResolvedAnimationKey;
 // R5 address to verify
-DWORD g_hookCapture0018F594;
+DWORD g_hookDoorAnimationPed;
 // R5 address to verify
-DWORD g_hookCapture0018F598;
+DWORD g_hookVehicleFlagGameVehicle;
 // R5 address to verify
-DWORD g_hookCapture0018F59C;
+DWORD g_hookVehicleFlagPool;
 // R5 address to verify
-DWORD g_hookCapture0018F5A0;
+DWORD g_hookVehicleFlagWrapper;
 // R5 address to verify
 DWORD g_hookCapture0018F5E4;
 // R5 address to verify
@@ -4309,34 +4309,34 @@ __declspec(naked) void GameHookLogPedSpeech()
     // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
-        mov dword ptr [g_hookCapture0018E8C8], eax
+        mov dword ptr [g_hookSpeechContext], eax
         mov eax, dword ptr [esp + 8]
-        mov dword ptr [g_hookCapture0018F340], eax
+        mov dword ptr [g_hookSpeechStartDelay], eax
         mov eax, dword ptr [esp + 0xc]
-        mov dword ptr [g_hookCapture0018EAA4], eax
+        mov dword ptr [g_hookSpeechProbability], eax
         mov eax, dword ptr [esp + 0x10]
-        mov dword ptr [g_hookCapture0018F33C], eax
+        mov dword ptr [g_hookSpeechOverrideSilence], eax
         mov eax, dword ptr [esp + 0x14]
-        mov dword ptr [g_hookCapture0018E544], eax
+        mov dword ptr [g_hookSpeechForceAudible], eax
         mov eax, dword ptr [esp + 0x18]
-        mov dword ptr [g_hookCapture0018E928], eax
+        mov dword ptr [g_hookSpeechFrontEnd], eax
         pushad
-        cmp dword ptr [g_hookCapture0018E8C8], 0x2d
+        cmp dword ptr [g_hookSpeechContext], 0x2d
         je raw_a3c4a
         cmp dword ptr [g_pChat], 0
         je raw_a3c4a
-        mov eax, dword ptr [g_hookCapture0018E928]
+        mov eax, dword ptr [g_hookSpeechFrontEnd]
         push eax
-        mov ecx, dword ptr [g_hookCapture0018E544]
+        mov ecx, dword ptr [g_hookSpeechForceAudible]
         push ecx
-        mov edx, dword ptr [g_hookCapture0018F33C]
+        mov edx, dword ptr [g_hookSpeechOverrideSilence]
         push edx
-        fld dword ptr [g_hookCapture0018EAA4]
+        fld dword ptr [g_hookSpeechProbability]
         sub esp, 8
         fstp qword ptr [esp]
-        mov eax, dword ptr [g_hookCapture0018F340]
+        mov eax, dword ptr [g_hookSpeechStartDelay]
         push eax
-        mov ecx, dword ptr [g_hookCapture0018E8C8]
+        mov ecx, dword ptr [g_hookSpeechContext]
         push ecx
         push offset g_hookPedSayFormat
         mov edx, dword ptr [g_pChat]
@@ -4410,7 +4410,7 @@ __declspec(naked) void GameHookCapturePedAnimationRequest()
         popad
         push -1
         push 0x83bd6b
-        jmp dword ptr [g_hookCapture00151AAC]
+        jmp dword ptr [g_hookPedAnimationRequestContinue]
     }
     // clang-format on
 }
@@ -4434,14 +4434,14 @@ __declspec(naked) void GameHookResolveAnimationByKey()
         mov ecx, dword ptr [g_hookAnimationGroup]
         push ecx
         call GameGetAnimationGroupKey
-        mov dword ptr [g_hookCapture0018F55C], eax
-        mov edx, dword ptr [g_hookCapture0018F55C]
+        mov dword ptr [g_hookResolvedAnimationKey], eax
+        mov edx, dword ptr [g_hookResolvedAnimationKey]
         push edx
         call GameFindAnimationByKey
         add esp, 4
-        mov word ptr [g_hookCapture00151AB4], ax
+        mov word ptr [g_hookResolvedAnimationIndex], ax
         popad
-        jmp dword ptr [g_hookCapture00151AB0]
+        jmp dword ptr [g_hookResolveAnimationContinue]
     }
     // clang-format on
 }
@@ -4452,9 +4452,9 @@ __declspec(naked) void GameHookSkipVehicleDoorWhenDancing()
     // clang-format off
     __asm {
         mov eax, dword ptr [esp]
-        mov dword ptr [g_hookCapture0018EAA8], eax
+        mov dword ptr [g_hookDoorAnimationCaller], eax
         mov eax, dword ptr [esp + 4]
-        mov dword ptr [g_hookCapture0018F594], eax
+        mov dword ptr [g_hookDoorAnimationPed], eax
         mov eax, dword ptr [esp + 8]
         mov dword ptr [g_hookCapture0018EB78], eax
         mov eax, dword ptr [esp + 0xc]
@@ -4465,7 +4465,7 @@ __declspec(naked) void GameHookSkipVehicleDoorWhenDancing()
         mov dword ptr [g_hookCapture0018F354], eax
         pushad
         call GameFindLocalPed
-        cmp dword ptr [g_hookCapture0018F594], eax
+        cmp dword ptr [g_hookDoorAnimationPed], eax
         jne raw_a4444
         cmp dword ptr [g_pNetGame], 0
         je raw_a4444
@@ -4494,43 +4494,43 @@ __declspec(naked) void GameHookUpdateVehicleStateFlags()
 {
     // clang-format off
     __asm {
-        mov dword ptr [g_hookCapture0018F598], esi
+        mov dword ptr [g_hookVehicleFlagGameVehicle], esi
         pushad
         cmp dword ptr [g_pNetGame], 0
         je raw_a4505
         mov ecx, dword ptr [g_pNetGame]
         call CNetGame::GetVehiclePool
-        mov dword ptr [g_hookCapture0018F59C], eax
-        mov eax, dword ptr [g_hookCapture0018F598]
+        mov dword ptr [g_hookVehicleFlagPool], eax
+        mov eax, dword ptr [g_hookVehicleFlagGameVehicle]
         push eax
-        mov ecx, dword ptr [g_hookCapture0018F59C]
+        mov ecx, dword ptr [g_hookVehicleFlagPool]
         call CVehiclePool::Find
-        mov word ptr [g_hookCapture00151AC4], ax
-        movzx ecx, word ptr [g_hookCapture00151AC4]
+        mov word ptr [g_hookVehicleFlagId], ax
+        movzx ecx, word ptr [g_hookVehicleFlagId]
         cmp ecx, 0xffff
         je raw_a4505
-        mov dx, word ptr [g_hookCapture00151AC4]
+        mov dx, word ptr [g_hookVehicleFlagId]
         push edx
-        mov ecx, dword ptr [g_hookCapture0018F59C]
+        mov ecx, dword ptr [g_hookVehicleFlagPool]
         call CVehiclePool::Get
-        mov dword ptr [g_hookCapture0018F5A0], eax
-        cmp dword ptr [g_hookCapture0018F5A0], 0
+        mov dword ptr [g_hookVehicleFlagWrapper], eax
+        cmp dword ptr [g_hookVehicleFlagWrapper], 0
         je raw_a4505
-        mov ecx, dword ptr [g_hookCapture0018F5A0]
+        mov ecx, dword ptr [g_hookVehicleFlagWrapper]
         call CVehicle::GetLightsState
         test eax, eax
         je raw_a44e7
-        mov eax, dword ptr [g_hookCapture0018F598]
+        mov eax, dword ptr [g_hookVehicleFlagGameVehicle]
         movzx ecx, byte ptr [eax + 0x428]
         or ecx, 0x40
-        mov edx, dword ptr [g_hookCapture0018F598]
+        mov edx, dword ptr [g_hookVehicleFlagGameVehicle]
         mov byte ptr [edx + 0x428], cl
         jmp raw_a4505
     raw_a44e7:
-        mov eax, dword ptr [g_hookCapture0018F598]
+        mov eax, dword ptr [g_hookVehicleFlagGameVehicle]
         movzx ecx, byte ptr [eax + 0x428]
         and ecx, 0xbf
-        mov edx, dword ptr [g_hookCapture0018F598]
+        mov edx, dword ptr [g_hookVehicleFlagGameVehicle]
         mov byte ptr [edx + 0x428], cl
     raw_a4505:
         popad
