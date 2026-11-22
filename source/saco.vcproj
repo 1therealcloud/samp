@@ -290,12 +290,6 @@
 			Name="general"
 			Filter="">
 			<File
-				RelativePath="anticheat.cpp">
-			</File>
-			<File
-				RelativePath="anticheat.h">
-			</File>
-			<File
 				RelativePath="audiostream.cpp">
 			</File>
 			<File

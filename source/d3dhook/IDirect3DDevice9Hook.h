@@ -271,9 +271,6 @@ void ClientDeviceObjectsLost();
 // Implemented in gui/gui.cpp; downstream UI dependencies remain.
 // 0x000c5880
 void ClientDeviceObjectsReset();
-// Implemented in anticheat.cpp.
-// 0x0009d6f0
-void GameDeviceIntegrityCycle();
 
 // 0x001e0490
 extern BOOL g_deviceMaterialOverrideEnabled;

@@ -1,6 +1,5 @@
 #include "net/netgame.h"
 
-#include "anticheat.h"
 #include "archive/ArchiveFS.h"
 #include "config.h"
 #include "filechecks.h"
@@ -193,8 +192,6 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
 // 0x0000b290
 void CNetGame::Process()
 {
-    ClientGetFrameElapsed();
-    DWORD start = ClientIntegrityFrame(1);
     UpdateNetwork();
     CNetGameSettings* settings = this->settings;
     if (settings->holdWorldTime)
@@ -218,10 +215,6 @@ void CNetGame::Process()
         SpawnScreen();
     if (gameState == StateWaitingToConnect)
         Connect();
-    if ((int)(ClientIntegrityFrame(0) - start) < 1 && GameIntegrityMismatch(69, 1, 6, 12, 17, 2, 50) != 69)
-        exit(0);
-    if (g_clientIntegrityFrameMarker == 69 && GameIntegrityMismatch(77, 1, 6, 12, 17, 2, 50) != 69)
-        exit(0);
 }
 
 // 0x00057160

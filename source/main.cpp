@@ -1,6 +1,5 @@
 #include "main.h"
 
-#include "anticheat.h"
 #include "cmdprocs.h"
 #include "config.h"
 #include "d3dhook/ID3DXFontHook.h"
@@ -39,10 +38,6 @@ DWORD g_clientDeviceInitialized;
 DWORD g_clientNetworkInitialized;
 STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
 STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
-// 0x002aca60
-DWORD g_clientIntegrityFailures;
-// 0x002aca64
-DWORD g_clientIntegrityFailed;
 // 0x002aca68
 DWORD g_clientSkipGameFrame;
 // 0x002ac9c0
@@ -226,12 +221,8 @@ __declspec(naked) void ClientGameLoop()
         ret
     continue_game:
         cmp ecx,edi
-        je check_failures
+        je finish
         call CGame::ProcessInputEnabling
-    check_failures:
-        cmp g_clientIntegrityFailures,10
-        jbe finish
-        mov g_clientIntegrityFailed,1
         jmp finish
     }
     // clang-format on

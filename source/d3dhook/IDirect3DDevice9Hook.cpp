@@ -2,7 +2,6 @@
 
 #include "d3dhook/IDirect3DDevice9Hook.h"
 
-#include "anticheat.h"
 #include "game/game.h"
 #include "game/hooks.h"
 #include "game/playerped.h"
@@ -332,10 +331,7 @@ HRESULT __stdcall IDirect3DDevice9Hook::BeginScene()
 // 0x000742c0
 HRESULT __stdcall IDirect3DDevice9Hook::EndScene()
 {
-    GameDeviceIntegrityCycle();
-    HRESULT result = g_gameD3DDevice->EndScene();
-    GameDeviceIntegrityCycle();
-    return result;
+    return g_gameD3DDevice->EndScene();
 }
 
 // 0x000742f0
@@ -994,8 +990,5 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* source, CONST RECT* 
 present:
     if (g_clientSettings.debug)
         GameDebugDraw();
-    GameDeviceIntegrityCycle();
-    HRESULT result = g_gameD3DDevice->Present(source, dest, window, dirty);
-    GameDeviceIntegrityCycle();
-    return result;
+    return g_gameD3DDevice->Present(source, dest, window, dirty);
 }

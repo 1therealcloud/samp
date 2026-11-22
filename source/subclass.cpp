@@ -31,8 +31,6 @@ WNDPROC g_clientPreviousWindowProcedure;
 // 0x000610d0
 LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
-    if (g_clientIntegrityFailures > 10)
-        return 0;
     if (message == WM_ACTIVATEAPP && wparam == 1 && g_pGame && g_gameD3DDevice && !g_pGame->IsMenuVisible() && !g_pGame->m_nCursorMode)
         g_gameD3DDevice->ShowCursor(FALSE);
     if (g_pInput)

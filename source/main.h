@@ -85,10 +85,6 @@ void ClientToggleWindowedMode();
 // 0x00060de0
 BOOL ClientHandleKeyRelease(unsigned int key);
 
-// 0x002aca60
-extern DWORD g_clientIntegrityFailures;
-// 0x002aca64
-extern DWORD g_clientIntegrityFailed;
 // 0x002aca68
 extern DWORD g_clientSkipGameFrame;
 // 0x002ac9c0
