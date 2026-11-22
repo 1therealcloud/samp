@@ -341,12 +341,6 @@
 				RelativePath="filesystem.h">
 			</File>
 			<File
-				RelativePath="httpclient.cpp">
-			</File>
-			<File
-				RelativePath="httpclient.h">
-			</File>
-			<File
 				RelativePath="main.cpp">
 			</File>
 			<File

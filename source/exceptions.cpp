@@ -9,8 +9,11 @@
 #undef MODULEENTRY32
 #undef Module32First
 #undef Module32Next
+
+/*
 #include "httpclient.h"
 #include "runutil.h"
+*/
 
 #include <stdio.h>
 #include <string.h>
@@ -24,6 +27,7 @@ BYTE* g_clientCrashPedContext = (BYTE*)0xb7cd74; // GTA SA virtual address.
 WORD g_clientCrashLastRenderedObject;
 
 // 0x00060260
+/*
 void ClientSendCrashReport()
 {
     CHttpClient http;
@@ -34,6 +38,7 @@ void ClientSendCrashReport()
     sprintf(url, "team.sa-mp.com/report_037.php?addr=0x%X&gta=sa", g_clientExceptionContext->Eip);
     http.ProcessURL(HTTP_POST, url, encoded, "www.sa-mp.com");
 }
+*/
 
 // 0x0005fd50
 void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
@@ -167,7 +172,7 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
                     EndDialog(dialog, TRUE);
                     break;
                 case 1002:
-                    ClientSendCrashReport();
+                    //ClientSendCrashReport();
                     EnableWindow(GetDlgItem(dialog, 1002), FALSE);
                     SetDlgItemTextA(dialog, 1000, "Thanks for reporting this problem.");
                     break;
