@@ -122,42 +122,28 @@ void CAudioStream::DrawInfo()
     rect.right = (LONG)width;
     g_deviceFonts->DrawLittleText(0, text, rect, 0x100, 0x99ffffff, FALSE);
 }
-
 // 0x00066610
 void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
 {
-    // clang-format off
-    __asm {
-        mov eax,input
-        fld dword ptr [eax]
-        mov ecx,output
-        fchs
-        fstp dword ptr [ecx]
-        mov edx,dword ptr [eax+8]
-        mov dword ptr [ecx+4],edx
-        mov eax,dword ptr [eax+4]
-        mov dword ptr [ecx+8],eax
-    }
-    // clang-format on
+    float x = input->x;
+    float y = input->y;
+    float z = input->z;
+
+    output->x = -x;
+    output->y = z;
+    output->z = y;
 }
 
 // 0x00066630
 void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
 {
-    // clang-format off
-    __asm {
-        mov eax,input
-        mov edx,dword ptr [eax]
-        mov ecx,output
-        mov dword ptr [ecx],edx
-        fld dword ptr [eax+8]
-        fchs
-        fstp dword ptr [ecx+4]
-        fld dword ptr [eax+4]
-        fchs
-        fstp dword ptr [ecx+8]
-    }
-    // clang-format on
+    float x = input->x;
+    float y = input->y;
+    float z = input->z;
+
+    output->x = x;
+    output->y = -z;
+    output->z = -y;
 }
 
 // 0x00065fe0
@@ -342,31 +328,17 @@ void CAudioStream::Update3D()
     {
         CChat* chat = g_pChat;
         CVector offset;
-        double debugX, debugY, debugZ;
         const float *listenerData = (const float*)&listener, *sourceData = (const float*)&source;
         float* offsetData = (float*)&offset;
-        // clang-format off
-        __asm {
-            mov ecx,listenerData
-            mov edx,sourceData
-            mov eax,offsetData
-            fld dword ptr [ecx]
-            fsub dword ptr [edx]
-            fstp dword ptr [eax]
-            fld dword ptr [ecx+4]
-            fsub dword ptr [edx+4]
-            fstp dword ptr [eax+4]
-            fld dword ptr [ecx+8]
-            fsub dword ptr [edx+8]
-            fst dword ptr [eax+8]
-            fstp debugZ
-            fld dword ptr [eax+4]
-            fstp debugY
-            fld dword ptr [eax]
-            fstp debugX
-        }
-        // clang-format on
-        // Native Z debug value retains the difference before its float store.
+
+        double debugZ = (double)listenerData[2] - (double)sourceData[2];
+        offsetData[0] = (float)((double)listenerData[0] - (double)sourceData[0]);
+        offsetData[1] = (float)((double)listenerData[1] - (double)sourceData[1]);
+        offsetData[2] = (float)debugZ;
+
+        double debugX = offsetData[0];
+        double debugY = offsetData[1];
+
         chat->AddDebugMessage(g_audioStreamOffsetFormat, debugX, debugY, debugZ);
         if (!BASS_ChannelSet3DAttributes(g_audioStreamHandle, 1, 10.0f, 100.0f, 360, 360, 1.0f))
             g_pChat->AddDebugMessage(g_audioStreamAttributesError);

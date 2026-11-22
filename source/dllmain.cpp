@@ -43,7 +43,7 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
             if (!g_pArchive->Load("samp.saa"))
             {
                 // clang-format off
-                __asm { int 3 }
+                __asm { int 3 } // debugbreak
                 // clang-format on
             }
             AddFontResourceA("gtaweap3.ttf");

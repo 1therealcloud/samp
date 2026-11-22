@@ -111,47 +111,30 @@ void CChatBubble::Draw()
         ped = *(CPed**)((BYTE*)remote + 4);
         if (!ped)
             continue;
-        BYTE nearby;
-        float* limit = &entry->drawDistance;
-        // clang-format off
-        __asm {
-            mov ecx,ped
-            call CEntity::GetDistanceToLocalPlayer
-            mov edx,limit
-            fcomp dword ptr [edx]
-            fnstsw ax
-            test ah,41h
-            setnp nearby
-        }
-        // clang-format on
-        if (!nearby) continue;
+
+        // fcomp + test ah,41h + setnp  =>  nearby = (distance <= drawDistance), NaN => false
+        float distance = ped->GetDistanceToLocalPlayer();
+        if (!(distance <= entry->drawDistance))
+            continue;
+
         CVector bone;
         ped->GetBonePosition(8, &bone);
         CVector position;
         memcpy(&position, &bone, 12);
+
         int adjustment = (int)((DWORD)entry->rows - 1u);
-        float padding, factor;
-        float* height = &position.z;
-        // clang-format off
-        __asm {
-            fild adjustment
-            fld g_pedDrunkShakeScale
-            fmul st(0),st(1)
-            fstp padding
-            fmul g_chatBubbleLineDistanceScale
-            fstp factor
-            mov ecx,ped
-            call CEntity::GetDistanceToCamera
-            fld factor
-            fadd g_chatBubbleDistanceBase
-            fmulp st(1),st(0)
-            fadd padding
-            mov edx,height
-            fadd dword ptr [edx]
-            fadd g_chatBubbleHeightLift
-            fstp dword ptr [edx]
-        }
-        // clang-format on
+
+        // padding і factor в asm зберігаються як float (fstp), далі розрахунок іде на стеку FPU
+        float padding = (float)((double)g_pedDrunkShakeScale * (double)adjustment);
+        float factor  = (float)((double)adjustment * (double)g_chatBubbleLineDistanceScale);
+
+        double cameraDistance = (double)ped->GetDistanceToCamera();
+        double result = cameraDistance * ((double)factor + (double)g_chatBubbleDistanceBase);
+        result += (double)padding;
+        result += (double)position.z;
+        result += (double)g_chatBubbleHeightLift;
+        position.z = (float)result;
+
         // Original per-entry draw is unconditional even if Begin was skipped.
         g_deviceLabel->Draw(&position, entry->text, entry->color, TRUE, FALSE);
     }

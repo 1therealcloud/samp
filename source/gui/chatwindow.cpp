@@ -670,19 +670,24 @@ int ChatPrepareMessage(char* text, int maximumLength)
     if (text && strlen(text) < 400 && strstr(text, "~k~"))
     {
         strcpy(buffer, text);
-        // clang-format off
+
         // GTA SA's key-token expansion routine, outside samp.dll.
         // Native GTA bridge preserves the target's register/stack convention.
-        __asm lea edx, buffer
-        __asm push edx
-        __asm mov edx, 0x69e160
-        __asm call edx
-        __asm pop edx
-            // clang-format on
-            if ((int)strlen(buffer) <= maximumLength)
+        // clang-format off
+        __asm {
+            lea edx,buffer
+            push edx
+            mov edx,0x69e160
+            call edx
+            pop edx
+        }
+        // clang-format on
+
+        int length = (int)strlen(buffer);
+        if (length <= maximumLength)
         {
             strcpy(text, buffer);
-            return (int)strlen(buffer);
+            return length;
         }
     }
     return 0;

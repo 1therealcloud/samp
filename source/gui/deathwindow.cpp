@@ -179,19 +179,12 @@ void CDeathWindow::AddMessage(const char* killer, const char* victim, DWORD kill
 void CDeathWindow::Draw()
 {
     int y, x;
-    // clang-format off
     // GTA SA virtual addresses: screen height 0x00c17048, width 0x00c17044.
-    __asm {
-        fild dword ptr ds:[0c17048h]
-        fmul g_deathWindowVerticalFactor
-        call _ftol2
-        mov y,eax
-        fild dword ptr ds:[0c17044h]
-        fmul g_deathWindowHorizontalFactor
-        call _ftol2
-        mov x,eax
-    }
-    // clang-format on
+    int screenHeight = *(int*)0x00C17048;
+    int screenWidth  = *(int*)0x00C17044;
+    y = (int)((double)screenHeight * (double)g_deathWindowVerticalFactor);
+    x = (int)((double)screenWidth  * (double)g_deathWindowHorizontalFactor);
+
     int totalWidth = weaponWidth + longestNickWidth * 2;
     if (x + totalWidth > *(int*)0xc17044)
         x = *(int*)0xc17044 - totalWidth;
