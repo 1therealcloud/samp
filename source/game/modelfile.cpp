@@ -67,25 +67,25 @@ DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE* first, const BYTE* sec
         free(colors);
         colors = 0;
     }
-    if (unknown20)
+    if (secondaryColors)
     {
-        free(unknown20);
-        unknown20 = 0;
+        free(secondaryColors);
+        secondaryColors = 0;
     }
     hasColors = 1;
     unknown1b = 1;
     colors = calloc(vertexCount, 4);
-    unknown20 = calloc(vertexCount, 4);
+    secondaryColors = calloc(vertexCount, 4);
     for (DWORD i = 0; i != (DWORD)vertexCount; ++i)
     {
         ((BYTE*)colors)[i * 4] = first[0];
         ((BYTE*)colors)[i * 4 + 1] = first[1];
         ((BYTE*)colors)[i * 4 + 2] = first[2];
         ((BYTE*)colors)[i * 4 + 3] = first[3];
-        ((BYTE*)unknown20)[i * 4] = second[0];
-        ((BYTE*)unknown20)[i * 4 + 1] = second[1];
-        ((BYTE*)unknown20)[i * 4 + 2] = second[2];
-        ((BYTE*)unknown20)[i * 4 + 3] = second[3];
+        ((BYTE*)secondaryColors)[i * 4] = second[0];
+        ((BYTE*)secondaryColors)[i * 4 + 1] = second[1];
+        ((BYTE*)secondaryColors)[i * 4 + 2] = second[2];
+        ((BYTE*)secondaryColors)[i * 4 + 3] = second[3];
     }
     return 1;
 }
@@ -1123,15 +1123,15 @@ CModelGeometry::CModelGeometry()
     hasColors = 0;
     colors = 0;
     unknown1b = 0;
-    unknown20 = 0;
+    secondaryColors = 0;
     uv = 0;
     triangles = 0;
     memset((BYTE*)this + offsetof(CModelGeometry, sphere), 0, offsetof(CModelGeometry, material) - offsetof(CModelGeometry, sphere));
     materialCount = 0;
-    unknown60 = 0;
-    unknown61 = 0;
-    unknown65 = 0;
-    unknown69 = 0;
+    hasBinMesh = 0;
+    binMeshFlags = 0;
+    binMeshCount = 0;
+    binMeshIndexCount = 0;
     modified = 0;
     modifiedOther = 0;
     memset(opaque75, 0, 44);
@@ -1148,7 +1148,7 @@ CModelGeometry::~CModelGeometry()
                         &triangles,
                         &uv,
                         &colors,
-                        &unknown20,
+                        &secondaryColors,
                         (void**)(opaque75 + 4),
                         (void**)(opaque75 + 8),
                         (void**)(opaque75 + 12),
@@ -1596,24 +1596,24 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
         {
             case 0x50e:
             {
-                unknown60 = 1;
+                hasBinMesh = 1;
                 DWORD value = 0;
                 extension->stream.Read(&value, 4);
-                unknown61 = value;
+                binMeshFlags = value;
                 value = 0;
                 extension->stream.Read(&value, 4);
-                unknown65 = value;
+                binMeshCount = value;
                 value = 0;
                 extension->stream.Read(&value, 4);
-                unknown69 = value;
-                if (unknown65 >= 100000)
+                binMeshIndexCount = value;
+                if (binMeshCount >= 100000)
                 {
                     if (!error)
                         error = 0xabe5;
                     return false;
                 }
                 DWORD summedIndices = 0;
-                for (DWORD i = 0; i < unknown65; ++i)
+                for (DWORD i = 0; i < binMeshCount; ++i)
                 {
                     DWORD indexCount = 0, materialIndex = 0;
                     extension->stream.Read(&indexCount, 4);
@@ -1655,7 +1655,7 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
                         return false;
                     }
                 }
-                if (summedIndices != unknown69)
+                if (summedIndices != binMeshIndexCount)
                 {
                     if (!error)
                         error = 0xabf9;
@@ -1672,15 +1672,15 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
                 {
                     unknown1b = 1;
                     extension->stream.Skip(4);
-                    unknown20 = calloc(vertexCount, 4);
-                    if (!unknown20 || extension->stream.Remaining() < (DWORD)vertexCount * 4)
+                    secondaryColors = calloc(vertexCount, 4);
+                    if (!secondaryColors || extension->stream.Remaining() < (DWORD)vertexCount * 4)
                     {
                         if (!error)
                             error = 0xabe1;
                         detail = 0x253f2f9;
                         return false;
                     }
-                    extension->stream.Read(unknown20, (DWORD)vertexCount * 4);
+                    extension->stream.Read(secondaryColors, (DWORD)vertexCount * 4);
                 }
                 break;
             case 0x116:
@@ -2032,17 +2032,17 @@ bool CModelGeometry::CopySecondaryColors(const CModelGeometry* other)
 {
     if (!other->hasColors)
         return false;
-    if (unknown20)
+    if (secondaryColors)
     {
-        free(unknown20);
-        unknown20 = 0;
+        free(secondaryColors);
+        secondaryColors = 0;
     }
-    unknown20 = calloc(vertexCount, 4);
-    memcpy(unknown20, colors, (DWORD)vertexCount * 4);
+    secondaryColors = calloc(vertexCount, 4);
+    memcpy(secondaryColors, colors, (DWORD)vertexCount * 4);
     int count = other->vertexCount;
     if (count > vertexCount)
         count = vertexCount;
-    memcpy(unknown20, other->colors, (DWORD)count * 4);
+    memcpy(secondaryColors, other->colors, (DWORD)count * 4);
     unknown1b = 1;
     modified = 1;
     return true;
@@ -2118,13 +2118,13 @@ CModelFileChunk* CModelGeometry::BuildChunk()
     if (structure)
         delete structure;
     ModelAppendChunk(chunk, material);
-    if (unknown20)
+    if (secondaryColors)
     {
         CModelFileChunk* secondary = new CModelFileChunk;
         secondary->type = 0x253f2f9;
         DWORD marker = 0x37505050;
         secondary->stream.Write(&marker, 4);
-        secondary->stream.Write(unknown20, (DWORD)vertexCount * 4);
+        secondary->stream.Write(secondaryColors, (DWORD)vertexCount * 4);
         secondary->length = secondary->stream.length;
         RemoveExtension(0x253f2f9);
         ModelAppendChunk(extension, secondary);
