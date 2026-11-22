@@ -47,13 +47,13 @@ DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* c
                                  DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough);
 // Raw GTA callback ABIs; address-only declarations, never ordinary void() calls.
 // R5 address to verify
-void GameHook_000a5090();
+void GameHookFilterVehicleDamage();
 // R5 address to verify
-void GameHook_000a5540();
+void GameHookProcessShotLineOfSight();
 // R5 address to verify
-void GameHook_000a5600();
+void GameHookProcessShotLineOfSightSimple();
 // 0x000a58f0
-void GameHook_000a5650();
+void GameHookAdjustShotRayPoint();
 // 0x0026eb3c
 extern DWORD g_gameLoopAddress;
 // R5 address to verify
@@ -94,127 +94,127 @@ extern BYTE g_gameHookJump00151a68[6];
 // entry ABIs are tracked in the callback review; remaining bodies stay open.
 // Do not call these through the provisional void() types from ordinary C++.
 // R5 address to verify
-void GameHook_000a2200();
+void GameHookYieldBeforeWorldUpdate();
 // R5 address to verify
-void GameHook_000a22c0();
+void GameHookDrawScaledRadar();
 // R5 address to verify
-void GameHook_000a22f0();
+void GameHookDrawScaledCrosshair();
 // R5 address to verify
-void GameHook_000a2370();
+void GameHookPostProcessRemotePeds();
 // R5 address to verify
-void GameHook_000a23a0();
+void GameHookUpdateCameraOwner();
 // 0x000a2660
-void GameHook_000a23d0();
+void GameHookProcessMultiplayerFrame();
 // R5 address to verify
-void GameHook_000a26d0();
+void GameHookProcessPedControl();
 // R5 address to verify
-void GameHook_000a29d0();
+void GameHookPreservePedTransform();
 // R5 address to verify
-void GameHook_000a2ab0();
+void GameHookApplyRemoteWeaponSkills();
 // R5 address to verify
-void GameHook_000a2b50();
+void GameHookProcessRemoteGunTask();
 // R5 address to verify
-void GameHook_000a2e70();
+void GameHookProcessRemoteVehicleControl();
 // R5 address to verify
-void GameHook_000a33c0();
+void GameHookHandleVehicleHorn();
 // R5 address to verify
-void GameHook_000a3580();
+void GameHookNotifyVehicleEnter();
 // R5 address to verify
-void GameHook_000a35e0();
+void GameHookNotifyVehicleExit();
 // R5 address to verify
-void GameHook_000a37a0();
+void GameHookTranslateRadarColor();
 // R5 address to verify
-void GameHook_000a37c0();
+void GameHookDisableCheatProcessing();
 // R5 address to verify
-void GameHook_000a3800();
+void GameHookDeferGameShutdown();
 // R5 address to verify
-void GameHook_000a3a70();
+void GameHookNotifyPedDamage();
 // R5 address to verify
-void GameHook_000a3ac0();
+void GameHookDisableSniperCameraShake();
 // R5 address to verify
-void GameHook_000a3ad0();
+void GameHookSetLocalCameraFlags();
 // R5 address to verify
-void GameHook_000a3b00();
+void GameHookPreserveTrainSpeedOnDerailment();
 // 0x000a3dc0
-void GameHook_000a3b20();
+void GameHookGuardAnimationDecompression();
 // R5 address to verify
-void GameHook_000a3b90();
+void GameHookOverrideFogDuringRender();
 // R5 address to verify
-void GameHook_000a3c60();
+void GameHookDrawGangZones();
 // R5 address to verify
-void GameHook_000a3c80();
+void GameHookMarkRemotePedState();
 // R5 address to verify
-void GameHook_000a3ca0();
+void GameHookNotifyPickupCollected();
 // R5 address to verify
-void GameHook_000a3ce0();
+void GameHookGuardMissingRenderMaterial();
 // R5 address to verify
-void GameHook_000a3d20();
+void GameHookFilterRenderStateType();
 // 0x000a4030
-void GameHook_000a3d90();
+void GameHookResolveMultiplayerMenuText();
 // R5 address to verify
-void GameHook_000a3e50();
+void GameHookGuardPhysicalProcessCollision();
 // Raw installed ABI: no arguments, returns the preview backing pointer in EAX.
 // The void() declaration is an installation-address type, not a calling prototype.
 // R5 address to verify
-void GameHook_000a3ec0();
+void GameHookGetPreviewPedBuffer();
 // R5 address to verify
-void GameHook_000a3f30();
+void GameHookAddPedAnimation();
 // R5 address to verify
-void GameHook_000a3fe0();
+void GameHookBlendPedAnimation();
 // R5 address to verify
-void GameHook_000a4190();
+void GameHookPreserveCachedRenderBuffer();
 // R5 address to verify
-void GameHook_000a4280();
+void GameHookAllocateCachedRenderBuffer();
 // R5 address to verify
-void GameHook_000a42c0();
+void GameHookCaptureRenderEsi();
 // R5 address to verify
-void GameHook_000a42d0();
+void GameHookApplyCustomObjectMaterials();
 // R5 address to verify
-void GameHook_000a46b0();
+void GameHookUpdateSurfingAttachment();
 // R5 address to verify
-void GameHook_000a4770();
+void GameHookGetContextPlayerSpeed();
 // R5 address to verify
-void GameHook_000a47d0();
+void GameHookSuppressWorldMarker();
 // R5 address to verify
-void GameHook_000a4850();
+void GameHookPatchRenderCallback();
 // R5 address to verify
-void GameHook_000a48c0();
+void GameHookRenderCustomObjects();
 // R5 address to verify
-void GameHook_000a4960();
+void GameHookAdjustFontScale();
 // R5 address to verify
-void GameHook_000a49d0();
+void GameHookHandleVehicleTowLink();
 // R5 address to verify
-void GameHook_000a4c30();
+void GameHookUpdateAttachedObjectRotation();
 // R5 address to verify
-void GameHook_000a4df0();
+void GameHookRenderMultiplayerObjects();
 // R5 address to verify
-void GameHook_000a4e30();
+void GameHookRenderLateMultiplayerObjects();
 // 0x000a5110
-void GameHook_000a4e70();
+void GameHookFilterObjectRenderList();
 // R5 address to verify
-void GameHook_000a5100();
+void GameHookResolvePedPlayerContext();
 // R5 address to verify
-void GameHook_000a5150();
+void GameHookGuardNullVehicleArgument();
 // 0x000a5950
-void GameHook_000a56b0();
+void GameHookTestMultiplayerCollisionShapes();
 // R5 address to verify
-void GameHook_000a5820();
+void GameHookFilterCollisionTest();
 // R5 address to verify
-void GameHook_000a5850();
+void GameHookFilterCameraIgnoredObject();
 // R5 address to verify
-void GameHook_000a5870();
+void GameHookFilterAutomobileCollision();
 // R5 address to verify
-void GameHook_000a5910();
+void GameHookFilterBikeCollision();
 // R5 address to verify
-void GameHook_000a59b0();
+void GameHookFilterBoatCollision();
 // R5 address to verify
-void GameHook_000a5a50();
+void GameHookFilterPhysicalEntityCollision();
 // R5 address to verify
-void GameHook_000a5af0();
+void GameHookOverrideVehicleSiren();
 // R5 address to verify
-void GameHook_000a5b90();
+void GameHookOverrideVehicleAudioState();
 // R5 address to verify
-void GameHook_000a5d20();
+void GameHookOverrideVerticalLineCollisionFlags();
 // 0x000a6040
 void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size);
 // 0x000a60f0
@@ -223,7 +223,7 @@ void GamePrepareHooks();
 void GameInstallHooks();
 // Raw GTA callback; not an ordinary void() call interface.
 // R5 address to verify
-void GameHook_000a5bf0();
+void GameHookValidateCustomModelIndex();
 // 0x000a6ff0
 void GameInstallModelInfoHook();
 // R5 address to verify
@@ -251,23 +251,23 @@ void GameDisablePedControlCalls();
 // R5 address to verify
 void GameRestorePedControlCalls();
 // R5 address to verify
-void GameHook_000a3780();
+void GameHookFilterVehicleCreation();
 // R5 address to verify
-void GameHook_000a37e0();
+void GameHookOverrideFarClipDistance();
 // R5 address to verify
-void GameHook_000a3b40();
+void GameHookGuardGameWindowState();
 // R5 address to verify
-void GameHook_000a3d50();
+void GameHookGuardNullPedTask();
 // R5 address to verify
-void GameHook_000a3d70();
+void GameHookGuardVehicleColorAccess();
 // R5 address to verify
-void GameHook_000a3e40();
+void GameHookCaptureRandomResult();
 // R5 address to verify
 void* GameAllocateHookBuffer();
 // R5 address to verify
-void GameHook_000a4c10();
+void GameHookApplyFrameLimiter();
 // R5 address to verify
-void GameHook_000a4c90();
+void GameHookGuardMenuState();
 // R5 address to verify
 void GameHook_000a4cb0();
 // R5 address to verify
@@ -383,31 +383,31 @@ extern DWORD g_hookCapture0018F65C;
 // R5 address to verify
 extern DWORD g_hookCapture0018F660;
 // R5 address to verify
-void GameHook_000a2cd0();
+void GameHookOverrideGunTaskParameter();
 // R5 address to verify
-void GameHook_000a3b60();
+void GameHookAllocatePedTask();
 // R5 address to verify
-void GameHook_000a3bc0();
+void GameHookLogPedSpeech();
 // R5 address to verify
-void GameHook_000a3e70();
+void GameHookTemporarilyBypassRenderInit();
 // R5 address to verify
-void GameHook_000a40a0();
+void GameHookCapturePedAnimationRequest();
 // R5 address to verify
-void GameHook_000a4110();
+void GameHookResolveAnimationByKey();
 // R5 address to verify
-void GameHook_000a43d0();
+void GameHookSkipVehicleDoorWhenDancing();
 // R5 address to verify
-void GameHook_000a4450();
+void GameHookUpdateVehicleStateFlags();
 // R5 address to verify
 void GameHook_000a4aa0();
 // R5 address to verify
-void GameHook_000a4b20();
+void GameHookCaptureWeaponAimRay();
 // R5 address to verify
-void GameHook_000a4b80();
+void GameHookCaptureCameraAimRay();
 // R5 address to verify
-void GameHook_000a5290();
+void GameHookSkipGamepadInputPath();
 // R5 address to verify
-void GameHook_000a52d0();
+void GameHookLogGamepadAimUpdate();
 
 // Raw installation-only entries; register/stack ABI is documented in analysis.
 // R5 address to verify
@@ -463,15 +463,15 @@ extern DWORD g_hookCapture0018F60C;
 // R5 address to verify
 extern DWORD g_hookCapture0018F610;
 // R5 address to verify
-void GameHook_000a2d30();
+void GameHookApplyRemoteSkillContextA();
 // R5 address to verify
-void GameHook_000a2de0();
+void GameHookApplyRemoteSkillContextB();
 // R5 address to verify
-void GameHook_000a4510();
+void GameHookAdjustVehicleAimMatrix();
 // R5 address to verify
 void GameHook_000a4680();
 // R5 address to verify
-void GameHook_000a4cc0();
+void GameHookPatchCustomObjectRenderPath();
 
 // Raw ABI entries are declared in hooks.h for address installation only.
 // Recovered bodies are naked because callers supply registers or an in-flight
