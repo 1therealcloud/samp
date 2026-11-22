@@ -415,21 +415,21 @@ extern CMatrix g_hookAimOffsetMatrix;
 // 0x0018ead8
 extern CMatrix g_hookMountedMatrix;
 // 0x00151ad4
-extern DWORD g_hookPatchOverride151AD4[3];
+extern DWORD g_hookVisibilityCameraPosition[3];
 // 0x00151ae0
-extern BYTE g_hookRestore5543C0[22];
+extern BYTE g_hookVisibilityCheckOriginalCode[22];
 // 0x00151af8
-extern WORD g_hookRestore5543DC;
+extern WORD g_hookVisibilityBranchOriginalCode;
 // 0x0018e548
 extern DWORD g_hookCapture0018E548;
 // 0x0018e54c
 extern DWORD g_hookCapture0018E54C;
 // 0x0018e7e4
-extern DWORD g_hookCapture0018E7E4;
+extern DWORD g_hookSavedRendererCameraX;
 // 0x0018e7e8
-extern DWORD g_hookCapture0018E7E8;
+extern DWORD g_hookSavedRendererCameraY;
 // 0x0018e7ec
-extern DWORD g_hookCapture0018E7EC;
+extern DWORD g_hookSavedRendererCameraZ;
 // 0x0018e80c
 extern DWORD g_hookCapture0018E80C;
 // 0x0018e92c
@@ -443,7 +443,7 @@ extern DWORD g_hookCapture0018F338;
 // 0x0018f344
 extern DWORD g_hookStreamingThirdStackWord;
 // 0x0018f348
-extern DWORD g_hookCapture0018F348;
+extern DWORD g_hookVisibilityDistanceOut;
 // 0x0018f358
 extern DWORD g_hookCapture0018F358;
 // 0x0018f35c
@@ -457,11 +457,11 @@ extern DWORD g_hookCapture0018F48C;
 // 0x0018f490
 extern DWORD g_hookStreamingModelId;
 // 0x0018f608
-extern DWORD g_hookCapture0018F608;
+extern DWORD g_hookVisibilityOverrideEntity;
 // 0x0018f60c
-extern DWORD g_hookCapture0018F60C;
+extern DWORD g_hookVisibilityEntity;
 // 0x0018f610
-extern DWORD g_hookCapture0018F610;
+extern DWORD g_hookVisibilityResult;
 // 0x000a2d30
 void GameHookApplyRemoteSkillContextA();
 // 0x000a2de0
