@@ -34,7 +34,7 @@ DWORD g_gamePlayerFlags[210];
 #pragma bss_seg(".pstate$b")
 // Shared raw raster snapshots (+14 and +0C), between flags and matrix caches.
 // 0x0026bf00
-DWORD g_gamePlayerTableUnknown2A9D98[2];
+DWORD g_sceneRasterDepthAndWidth[2];
 #pragma bss_seg(".pstate$c")
 // R5 address to verify
 DWORD g_gameLocalPedMatrix;

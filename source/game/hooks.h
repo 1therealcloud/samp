@@ -269,7 +269,7 @@ void GameHookApplyFrameLimiter();
 // R5 address to verify
 void GameHookGuardMenuState();
 // R5 address to verify
-void GameHook_000a4cb0();
+void GameHookSetGunMoveAnimation();
 // R5 address to verify
 void GameHook_000a4170();
 // R5 address to verify
@@ -399,7 +399,7 @@ void GameHookSkipVehicleDoorWhenDancing();
 // R5 address to verify
 void GameHookUpdateVehicleStateFlags();
 // R5 address to verify
-void GameHook_000a4aa0();
+void GameHookCaptureThirdPersonCameraTarget();
 // R5 address to verify
 void GameHookCaptureWeaponAimRay();
 // R5 address to verify

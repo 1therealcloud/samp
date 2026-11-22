@@ -11,11 +11,11 @@ void Font_SetDropColor(DWORD color);
 // R5 address to verify
 void Font_SetOutline(int outline);
 // R5 address to verify
-void Font_Unk12(int value);
+void Font_SetJustify(int value);
 // R5 address to verify
 void Font_SetScale(float x, float y);
 // R5 address to verify
-void Font_SetJustify(int justify);
+void Font_SetOrientation(int justify);
 // R5 address to verify
 void Font_SetFontStyle(int style);
 // R5 address to verify

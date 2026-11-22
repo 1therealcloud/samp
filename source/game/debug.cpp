@@ -557,7 +557,7 @@ void GameDebugWriteRasterImage(void* raster, const char* filename)
 {
     // Read the published scratch pointer again before every RenderWare call.
     void* volatile& image = g_rwImageScratch;
-    image = ((void*(__cdecl*)(DWORD, DWORD, DWORD))0x8026e0)(g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
+    image = ((void*(__cdecl*)(DWORD, DWORD, DWORD))0x8026e0)(g_sceneRasterDepthAndWidth[1], g_rwImageHeight, g_sceneRasterDepthAndWidth[0]);
     ((void*(__cdecl*)(void*))0x8027a0)(image);
     ((void*(__cdecl*)(void*, void*))0x804250)(image, raster);
     ((void*(__cdecl*)(void*, const char*))0x7ce990)(image, filename);
@@ -570,24 +570,24 @@ void GameDebugDumpRasterImages()
     g_debugRasterSource = *(void**)0xc402d8;
     BYTE* raster = (BYTE*)g_debugRasterSource;
     // Native dereferences the first pointer BEFORE checking it for null.
-    g_gamePlayerTableUnknown2A9D98[0] = *(DWORD*)(raster + 0x14);
+    g_sceneRasterDepthAndWidth[0] = *(DWORD*)(raster + 0x14);
     g_rwImageHeight = *(DWORD*)(raster + 0x10);
-    g_gamePlayerTableUnknown2A9D98[1] = *(DWORD*)(raster + 0xc);
+    g_sceneRasterDepthAndWidth[1] = *(DWORD*)(raster + 0xc);
     if (g_debugRasterSource)
     {
         GameDebugWriteRasterImage(g_debugRasterSource, g_debugRasterFirstFilename);
-        g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
+        g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_sceneRasterDepthAndWidth[1], g_rwImageHeight, g_sceneRasterDepthAndWidth[0]);
     }
     if (g_debugRasterAlternate)
     {
         raster = (BYTE*)g_debugRasterAlternate;
-        g_gamePlayerTableUnknown2A9D98[0] = *(DWORD*)(raster + 0x14);
+        g_sceneRasterDepthAndWidth[0] = *(DWORD*)(raster + 0x14);
         g_rwImageHeight = *(DWORD*)(raster + 0x10);
-        g_gamePlayerTableUnknown2A9D98[1] = *(DWORD*)(raster + 0xc);
+        g_sceneRasterDepthAndWidth[1] = *(DWORD*)(raster + 0xc);
         if (g_debugRasterAlternate)
         {
             GameDebugWriteRasterImage(g_debugRasterAlternate, g_debugRasterSecondFilename);
-            g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
+            g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_sceneRasterDepthAndWidth[1], g_rwImageHeight, g_sceneRasterDepthAndWidth[0]);
         }
     }
 }
