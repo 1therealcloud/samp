@@ -1,5 +1,6 @@
 #include "query.h"
 #include "console.h"
+#include "netgame.h"
 
 #include <string.h>
 #include <string>
@@ -91,6 +92,12 @@ void WriteQueryWord(char*& cursor, unsigned int value)
     *cursor++ = static_cast<char>((value >> 8) & 0xff);
 }
 
+void WriteQueryDword(char*& cursor, unsigned int value)
+{
+    WriteQueryWord(cursor, value);
+    WriteQueryWord(cursor, value >> 16);
+}
+
 void WriteQueryString(char*& cursor, const char* value, unsigned int limit)
 {
     unsigned int length = value ? static_cast<unsigned int>(strlen(value)) : 0;
@@ -165,7 +172,7 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
             char* cursor = response + QueryHeaderSize;
             const char* password = pConsole->GetStringVariable("password");
             *cursor++ = password && *password ? 1 : 0;
-            WriteQueryWord(cursor, 0);
+            WriteQueryWord(cursor, pNetGame ? pNetGame->GetPlayerPool().GetCount() : 0);
             WriteQueryWord(cursor, pConsole->GetIntVariable("maxplayers"));
             WriteQueryString(cursor, pConsole->GetStringVariable("hostname"), 50);
             WriteQueryString(cursor, pConsole->GetStringVariable("gamemodetext"), 30);
@@ -180,11 +187,33 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
         case 'c':
         case 'd':
         {
-            char response[QueryHeaderSize + 2];
+            const CPlayerPool* players = pNetGame ? &pNetGame->GetPlayerPool() : NULL;
+            const unsigned short count = players ? players->GetCount() : 0;
+            if (count > 100)
+                break;
+
+            char response[QueryHeaderSize + 2 + 100 * (CPlayerPool::MaxNameLength + 10)];
             memcpy(response, data, QueryHeaderSize);
             char* cursor = response + QueryHeaderSize;
-            WriteQueryWord(cursor, 0);
-            sendto(socket, response, sizeof(response), 0, reinterpret_cast<const sockaddr*>(&to), sizeof(to));
+            WriteQueryWord(cursor, count);
+            const bool detailed = data[10] == 'd';
+            for (int i = 0; players && i < CPlayerPool::MaxPlayers; ++i)
+            {
+                const CPlayerPool::Slot* player = players->GetAt(i);
+                if (!player)
+                    continue;
+                if (detailed)
+                    *cursor++ = static_cast<char>(i);
+                const size_t nameLength = strlen(player->name);
+                *cursor++ = static_cast<char>(nameLength);
+                memcpy(cursor, player->name, nameLength);
+                cursor += nameLength;
+                WriteQueryDword(cursor, 0);
+                if (detailed)
+                    WriteQueryDword(cursor, pNetGame->GetPlayerPing(player->address));
+            }
+            sendto(socket, response, static_cast<int>(cursor - response), 0,
+                   reinterpret_cast<const sockaddr*>(&to), sizeof(to));
             break;
         }
     }

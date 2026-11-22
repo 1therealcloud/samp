@@ -49,6 +49,8 @@ docker cp "%PROJECT_DIR%\third-party\lzma" "%CONTAINER%:/work/third-party/"
 if errorlevel 1 goto failed
 docker cp "%PROJECT_DIR%\third-party\RakNet" "%CONTAINER%:/work/third-party/"
 if errorlevel 1 goto failed
+docker cp "%PROJECT_DIR%\third-party\ttmath" "%CONTAINER%:/work/third-party/"
+if errorlevel 1 goto failed
 docker cp "%PROJECT_DIR%\third-party\sqlite" "%CONTAINER%:/work/third-party/"
 if errorlevel 1 goto failed
 

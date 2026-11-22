@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\third-party\amx\source\amx;..\third-party\RakNet\Include"
+				AdditionalIncludeDirectories="..\third-party\amx\source\amx;..\third-party\RakNet\Include;..\third-party\ttmath\ttmath"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;SAMPSRV"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -68,7 +68,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\third-party\amx\source\amx;..\third-party\RakNet\Include"
+				AdditionalIncludeDirectories="..\third-party\amx\source\amx;..\third-party\RakNet\Include;..\third-party\ttmath\ttmath"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SAMPSRV;_CRT_SECURE_NO_DEPRECATE;AMX_NODYNALOAD"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"

@@ -8,7 +8,7 @@ RAKNET_COMPAT = .raknet-include
 RAKNET_CASE_ALIASES = RakPeer.h RakPeerInterface.h RakServerInterface.h SystemAddressList.h
 SQLITE = ../third-party/sqlite
 
-INCLUDES = -I$(AMX) -I$(AMX_LINUX) -I$(RAKNET)/Include -I$(RAKNET_COMPAT) -I$(SQLITE)
+INCLUDES = -I$(AMX) -I$(AMX_LINUX) -I$(RAKNET)/Include -I$(RAKNET_COMPAT) -I$(SQLITE) -I../third-party/ttmath/ttmath
 DEFINES = -DLINUX -DSAMPSRV -DAMX_NODYNALOAD -DHAVE_I64
 
 COMMON_FLAGS = -m32 -O2 -w $(INCLUDES) $(DEFINES)
