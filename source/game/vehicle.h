@@ -163,13 +163,13 @@ public:
     // 0x000b7c70
     bool DoesExist();
     // 0x000b7d40
-    void SetField50(DWORD value);
+    void SetEngineState(DWORD value);
     // 0x000b7d50
-    DWORD GetField50();
+    DWORD GetEngineState();
     // 0x000b7d60
-    void SetField54(DWORD value);
+    void SetLightsState(DWORD value);
     // 0x000b7d70
-    DWORD GetField54();
+    DWORD GetLightsState();
     // 0x000b6e20
     void SetColor(int primary, int secondary);
     // 0x000b6fa0

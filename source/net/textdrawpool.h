@@ -30,7 +30,7 @@ public:
     // 0x0001e2f0
     void Draw();
     // 0x0001e330
-    void Native01E330();
+    void PrepareModelPreviews();
     // 0x0001e360
     void OnLostDevice();
 };

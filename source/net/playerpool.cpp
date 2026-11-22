@@ -402,7 +402,7 @@ WORD CPlayerPool::Find(void* ped)
 }
 
 // 0x00013840
-void CPlayerPool::Native013840()
+void CPlayerPool::ProcessPlayerPosesAndAccessories()
 {
     CLocalPlayer* local = this->local;
     if (local && local->m_state.ped)

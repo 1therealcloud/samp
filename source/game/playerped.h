@@ -397,7 +397,7 @@ public:
     // 0x000ade60
     BOOL DoesUrinating();
     // 0x000ad890
-    DWORD GetStuff();
+    DWORD GetHeldObjectType();
     // 0x000adca0
     BOOL UsingCellphone();
     // 0x000b0ea0

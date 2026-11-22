@@ -451,25 +451,25 @@ bool CVehicle::DoesExist()
 }
 
 // 0x000b7d40
-void CVehicle::SetField50(DWORD value)
+void CVehicle::SetEngineState(DWORD value)
 {
     m_dwField50 = value;
 }
 
 // 0x000b7d50
-DWORD CVehicle::GetField50()
+DWORD CVehicle::GetEngineState()
 {
     return m_dwField50;
 }
 
 // 0x000b7d60
-void CVehicle::SetField54(DWORD value)
+void CVehicle::SetLightsState(DWORD value)
 {
     m_dwField54 = value;
 }
 
 // 0x000b7d70
-DWORD CVehicle::GetField54()
+DWORD CVehicle::GetLightsState()
 {
     return m_dwField54;
 }
