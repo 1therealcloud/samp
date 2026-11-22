@@ -31,7 +31,7 @@
 // 0x002a9a50
 DWORD g_gamePlayerFlags[210];
 // 0x002a9d98
-DWORD g_gamePlayerTableUnknown2A9D98[2];
+DWORD g_sceneRasterDepthAndWidth[2];
 // 0x002a9da0
 DWORD g_gameLocalPedMatrix;
 // 0x002a9da4

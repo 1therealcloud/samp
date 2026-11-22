@@ -595,4 +595,4 @@ DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player);
 
 // Shared raw raster snapshot words (+14/+0C), retaining native table adjacency.
 // 0x002a9d98
-extern DWORD g_gamePlayerTableUnknown2A9D98[2];
+extern DWORD g_sceneRasterDepthAndWidth[2];

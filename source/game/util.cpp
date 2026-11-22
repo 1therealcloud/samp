@@ -985,11 +985,11 @@ void GameCreateSceneRasters()
         return;
     SCENE_SOURCE_RASTER = *(void**)0xc402d8;
     BYTE* source = (BYTE*)SCENE_SOURCE_RASTER;
-    g_gamePlayerTableUnknown2A9D98[0] = *(int*)(source + 0x14);
+    g_sceneRasterDepthAndWidth[0] = *(int*)(source + 0x14);
     g_rwImageHeight = *(int*)(source + 0x10);
-    g_gamePlayerTableUnknown2A9D98[1] = *(int*)(source + 0xc);
-    SCENE_COLOR_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_gamePlayerTableUnknown2A9D98[0], 5);
-    SCENE_DEPTH_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_gamePlayerTableUnknown2A9D98[0], 1);
+    g_sceneRasterDepthAndWidth[1] = *(int*)(source + 0xc);
+    SCENE_COLOR_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_sceneRasterDepthAndWidth[0], 5);
+    SCENE_DEPTH_RASTER = ((void*(__cdecl*)(int, int, int, int))0x7fb230)(2048, 1024, g_sceneRasterDepthAndWidth[0], 1);
 }
 
 // Preserve all PUSHAD registers, camera publication, call order and saved-slot

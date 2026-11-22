@@ -35,7 +35,7 @@ __declspec(naked) void Font_SetOutline(int outline)
 }
 
 // 0x0009fcd0
-__declspec(naked) void Font_Unk12(int value)
+__declspec(naked) void Font_SetJustify(int value)
 {
     // clang-format off
     __asm mov eax,0x719600 // GTA SA virtual address.
@@ -53,7 +53,7 @@ __declspec(naked) void Font_SetScale(float x, float y)
 }
 
 // 0x0009fcf0
-__declspec(naked) void Font_SetJustify(int justify)
+__declspec(naked) void Font_SetOrientation(int justify)
 {
     // clang-format off
     __asm mov eax,0x719610 // GTA SA virtual address.

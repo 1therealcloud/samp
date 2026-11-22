@@ -202,8 +202,8 @@ void CTextDraw::DrawText()
     // clang-format on
     Font_SetScale(scaleX, scaleY);
     Font_SetColor(*(data.hovered ? &data.hoverColor : &data.format.letterColor));
-    Font_Unk12(0);
-    Font_SetJustify(data.format.alignRight ? 2 : (data.format.centered ? 0 : 1));
+    Font_SetJustify(0);
+    Font_SetOrientation(data.format.alignRight ? 2 : (data.format.centered ? 0 : 1));
     // clang-format off
     __asm {
         mov eax,state
