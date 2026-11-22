@@ -289,17 +289,17 @@ extern const char g_hookPedSayFormat[];
 // 0x0011ec04
 extern const char g_hookGamepadAimFormat[];
 // 0x00151aac
-extern DWORD g_hookCapture00151AAC;
+extern DWORD g_hookPedAnimationRequestContinue;
 // 0x00151ab0
-extern DWORD g_hookCapture00151AB0;
+extern DWORD g_hookResolveAnimationContinue;
 // 0x00151ab4
-extern WORD g_hookCapture00151AB4;
+extern WORD g_hookResolvedAnimationIndex;
 // 0x00151ac4
-extern WORD g_hookCapture00151AC4;
+extern WORD g_hookVehicleFlagId;
 // 0x0018e540
 extern DWORD g_hookCameraTargetThis;
 // 0x0018e544
-extern DWORD g_hookCapture0018E544;
+extern DWORD g_hookSpeechForceAudible;
 // 0x0018e564
 extern DWORD g_hookCapture0018E564;
 // 0x0018e588
@@ -321,21 +321,21 @@ extern DWORD g_hookCapture0018E86C;
 // 0x0018e874
 extern DWORD g_hookCameraTargetOriginY;
 // 0x0018e8c8
-extern DWORD g_hookCapture0018E8C8;
+extern DWORD g_hookSpeechContext;
 // 0x0018e8d4
 extern DWORD g_hookCapture0018E8D4;
 // 0x0018e924
 extern DWORD g_hookCameraTargetDestinationOut;
 // 0x0018e928
-extern DWORD g_hookCapture0018E928;
+extern DWORD g_hookSpeechFrontEnd;
 // 0x0018ea40
 extern CVector g_hookAimRayOrigin;
 // 0x0018eaa0
 extern DWORD g_hookCameraTargetOriginX;
 // 0x0018eaa4
-extern DWORD g_hookCapture0018EAA4;
+extern DWORD g_hookSpeechProbability;
 // 0x0018eaa8
-extern DWORD g_hookCapture0018EAA8;
+extern DWORD g_hookDoorAnimationCaller;
 // 0x0018eab0
 extern DWORD g_hookCapture0018EAB0;
 // 0x0018eb1c
@@ -347,9 +347,9 @@ extern DWORD g_hookCapture0018EB78;
 // 0x0018eb8c
 extern DWORD g_hookCapture0018EB8C;
 // 0x0018f33c
-extern DWORD g_hookCapture0018F33C;
+extern DWORD g_hookSpeechOverrideSilence;
 // 0x0018f340
-extern DWORD g_hookCapture0018F340;
+extern DWORD g_hookSpeechStartDelay;
 // 0x0018f34c
 extern DWORD g_hookCapture0018F34C;
 // 0x0018f350
@@ -365,15 +365,15 @@ extern DWORD g_hookGunTaskResult;
 // 0x0018f558
 extern DWORD g_hookCapture0018F558;
 // 0x0018f55c
-extern DWORD g_hookCapture0018F55C;
+extern DWORD g_hookResolvedAnimationKey;
 // 0x0018f594
-extern DWORD g_hookCapture0018F594;
+extern DWORD g_hookDoorAnimationPed;
 // 0x0018f598
-extern DWORD g_hookCapture0018F598;
+extern DWORD g_hookVehicleFlagGameVehicle;
 // 0x0018f59c
-extern DWORD g_hookCapture0018F59C;
+extern DWORD g_hookVehicleFlagPool;
 // 0x0018f5a0
-extern DWORD g_hookCapture0018F5A0;
+extern DWORD g_hookVehicleFlagWrapper;
 // 0x0018f5e4
 extern DWORD g_hookCapture0018F5E4;
 // 0x0018f658
