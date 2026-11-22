@@ -27,27 +27,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-// Linker orders these BSS subsections by suffix, preserving native adjacency.
-#pragma bss_seg(".pstate$a")
+
 // 0x002a9a50
 DWORD g_gamePlayerFlags[210];
-#pragma bss_seg(".pstate$b")
-// Shared raw raster snapshots (+14 and +0C), between flags and matrix caches.
 // 0x002a9d98
 DWORD g_gamePlayerTableUnknown2A9D98[2];
-#pragma bss_seg(".pstate$c")
 // 0x002a9da0
 DWORD g_gameLocalPedMatrix;
-#pragma bss_seg(".pstate$d")
 // 0x002a9da4
 DWORD g_gameVehicleMatrix;
-#pragma bss_seg(".pstate$e")
 // 0x002a9da8
 void* g_gamePlayerPeds[210];
-#pragma bss_seg(".pstate$f")
 // 0x002aa0f0
 BYTE g_gamePlayerControllerState[210][16];
-#pragma bss_seg()
 
 // 0x002a92a0
 void* g_pedCommandTaskSnapshot;

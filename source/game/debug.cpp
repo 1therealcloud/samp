@@ -85,11 +85,8 @@ const char g_debugRasterSecondFilename[] = "Raster2.bmp";
 // 0x0011f5ac
 const char g_debugRasterDimensionsFormat[] = "Width %u Height: %u Depth: %u";
 
-// Native returns this constant even for a null task; no task dereference.
-#pragma bss_seg(".pstate$g")
 // 0x002aae10
 void* g_rwImageScratch;
-#pragma bss_seg()
 
 // 0x000b3cf0
 const char* GameGetTaskName(void* task)

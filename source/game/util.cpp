@@ -60,10 +60,8 @@ DWORD g_playerColors[1000];
 // 0x0015535c
 const CVector g_rwPreviewAxes[3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 
-#pragma bss_seg(".pstate$h")
 // 0x002aae14
 float g_rwQueryAngle;
-#pragma bss_seg()
 
 // 0x001181ac
 extern const float g_objectMutationStep = 0.1f;
