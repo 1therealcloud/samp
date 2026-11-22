@@ -322,13 +322,13 @@ WORD g_hookCapture00151AB4 = 0xffff;
 // 0x00151ac4
 WORD g_hookCapture00151AC4 = 0xffff;
 // 0x0018e540
-DWORD g_hookCapture0018E540;
+DWORD g_hookCameraTargetThis;
 // 0x0018e544
 DWORD g_hookCapture0018E544;
 // 0x0018e564
 DWORD g_hookCapture0018E564;
 // 0x0018e588
-DWORD g_hookCapture0018E588;
+DWORD g_hookSavedGunTaskParameter;
 // 0x0018e58c
 DWORD g_hookCapture0018E58C;
 // 0x0018e5c4
@@ -340,23 +340,23 @@ CVector g_hookAimRayTarget;
 // 0x0018e814
 DWORD g_hookCapture0018E814;
 // 0x0018e818
-DWORD g_hookCapture0018E818;
+DWORD g_hookCameraTargetSourceOut;
 // 0x0018e86c
 DWORD g_hookCapture0018E86C;
 // 0x0018e874
-DWORD g_hookCapture0018E874;
+DWORD g_hookCameraTargetOriginY;
 // 0x0018e8c8
 DWORD g_hookCapture0018E8C8;
 // 0x0018e8d4
 DWORD g_hookCapture0018E8D4;
 // 0x0018e924
-DWORD g_hookCapture0018E924;
+DWORD g_hookCameraTargetDestinationOut;
 // 0x0018e928
 DWORD g_hookCapture0018E928;
 // 0x0018ea40
 CVector g_hookAimRayOrigin;
 // 0x0018eaa0
-DWORD g_hookCapture0018EAA0;
+DWORD g_hookCameraTargetOriginX;
 // 0x0018eaa4
 DWORD g_hookCapture0018EAA4;
 // 0x0018eaa8
@@ -366,7 +366,7 @@ DWORD g_hookCapture0018EAB0;
 // 0x0018eb1c
 DWORD g_hookCapture0018EB1C;
 // 0x0018eb70
-DWORD g_hookCapture0018EB70;
+DWORD g_hookCameraTargetOriginZ;
 // 0x0018eb78
 DWORD g_hookCapture0018EB78;
 // 0x0018eb8c
@@ -382,11 +382,11 @@ DWORD g_hookCapture0018F350;
 // 0x0018f354
 DWORD g_hookCapture0018F354;
 // 0x0018f360
-DWORD g_hookCapture0018F360;
+DWORD g_hookCameraTargetRange;
 // 0x0018f368
 DWORD g_hookCapture0018F368;
 // 0x0018f37c
-DWORD g_hookCapture0018F37C;
+DWORD g_hookGunTaskResult;
 // 0x0018f558
 DWORD g_hookCapture0018F558;
 // 0x0018f55c
@@ -4264,17 +4264,17 @@ __declspec(naked) void GameHookOverrideGunTaskParameter()
         push 0x858ef0
         call UnFuck
         mov eax, dword ptr ds:[0x858ef0]
-        mov dword ptr [g_hookCapture0018E588], eax
+        mov dword ptr [g_hookSavedGunTaskParameter], eax
         add esp, 8
         mov dword ptr ds:[0x858ef0], 0x40000000
         mov ecx, dword ptr [g_hookPedControlThis]
         push dword ptr [g_hookCameraPed]
         mov eax, 0x62a380
         call eax
-        mov dword ptr [g_hookCapture0018F37C], eax
-        mov ecx, dword ptr [g_hookCapture0018E588]
+        mov dword ptr [g_hookGunTaskResult], eax
+        mov ecx, dword ptr [g_hookSavedGunTaskParameter]
         mov dword ptr ds:[0x858ef0], ecx
-        mov eax, dword ptr [g_hookCapture0018F37C]
+        mov eax, dword ptr [g_hookGunTaskResult]
         ret 4
     }
     // clang-format on
@@ -4543,28 +4543,28 @@ __declspec(naked) void GameHookCaptureThirdPersonCameraTarget()
 {
     // clang-format off
     __asm {
-        mov dword ptr [g_hookCapture0018E540], ecx
+        mov dword ptr [g_hookCameraTargetThis], ecx
         mov eax, dword ptr [esp + 4]
-        mov dword ptr [g_hookCapture0018F360], eax
+        mov dword ptr [g_hookCameraTargetRange], eax
         mov eax, dword ptr [esp + 8]
-        mov dword ptr [g_hookCapture0018EAA0], eax
+        mov dword ptr [g_hookCameraTargetOriginX], eax
         mov eax, dword ptr [esp + 0xc]
-        mov dword ptr [g_hookCapture0018E874], eax
+        mov dword ptr [g_hookCameraTargetOriginY], eax
         mov eax, dword ptr [esp + 0x10]
-        mov dword ptr [g_hookCapture0018EB70], eax
+        mov dword ptr [g_hookCameraTargetOriginZ], eax
         mov eax, dword ptr [esp + 0x14]
-        mov dword ptr [g_hookCapture0018E818], eax
+        mov dword ptr [g_hookCameraTargetSourceOut], eax
         mov eax, dword ptr [esp + 0x18]
-        mov dword ptr [g_hookCapture0018E924], eax
+        mov dword ptr [g_hookCameraTargetDestinationOut], eax
         pushad
         popad
-        push dword ptr [g_hookCapture0018E924]
-        push dword ptr [g_hookCapture0018E818]
-        push dword ptr [g_hookCapture0018EB70]
-        push dword ptr [g_hookCapture0018E874]
-        push dword ptr [g_hookCapture0018EAA0]
-        push dword ptr [g_hookCapture0018F360]
-        mov ecx, dword ptr [g_hookCapture0018E540]
+        push dword ptr [g_hookCameraTargetDestinationOut]
+        push dword ptr [g_hookCameraTargetSourceOut]
+        push dword ptr [g_hookCameraTargetOriginZ]
+        push dword ptr [g_hookCameraTargetOriginY]
+        push dword ptr [g_hookCameraTargetOriginX]
+        push dword ptr [g_hookCameraTargetRange]
+        mov ecx, dword ptr [g_hookCameraTargetThis]
         mov eax, 0x514970
         call eax
         pushad
