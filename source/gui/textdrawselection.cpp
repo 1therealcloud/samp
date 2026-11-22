@@ -12,8 +12,8 @@ int g_textDrawClickRpc = 83;
 CTextDrawSelection::CTextDrawSelection()
 {
     enabled = 0;
-    unknown08 = 0xffff;
-    unknown04 = 0xffffffff;
+    hoveredTextDrawId = 0xffff;
+    hoverColor = 0xffffffff;
 }
 
 // 0x00071570
@@ -21,7 +21,7 @@ BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
 {
     if (enabled && message == WM_LBUTTONUP)
     {
-        if (unknown08 != 0xffff)
+        if (hoveredTextDrawId != 0xffff)
             SendNotification();
         return TRUE;
     }
@@ -38,7 +38,7 @@ void CTextDrawSelection::Disable()
         g_pInput->Close();
         g_pInput->Open();
     }
-    unknown08 = 0xffff;
+    hoveredTextDrawId = 0xffff;
     SendNotification();
     ResetTextDraws();
 }
@@ -47,8 +47,8 @@ void CTextDrawSelection::Disable()
 void CTextDrawSelection::Enable(DWORD color)
 {
     enabled = 1;
-    unknown04 = ((color & 0xff) << 24) | ((color & 0xff00) << 8) | ((color & 0xff0000) >> 8) | ((color & 0xff000000) >> 24);
-    unknown08 = 0xffff;
+    hoverColor = ((color & 0xff) << 24) | ((color & 0xff00) << 8) | ((color & 0xff0000) >> 8) | ((color & 0xff000000) >> 24);
+    hoveredTextDrawId = 0xffff;
 }
 
 // R5 address to verify
@@ -89,7 +89,7 @@ void CTextDrawSelection::UpdateHovered()
     if (!pool)
         return;
     int i = 0;
-    unknown08 = 0xffff;
+    hoveredTextDrawId = 0xffff;
     for (; i != 2304; ++i)
     {
         WORD id = (WORD)i;
@@ -108,9 +108,9 @@ void CTextDrawSelection::UpdateHovered()
                 continue;
             if (!PtInRect(rect, point))
                 continue;
-            unknown08 = i;
+            hoveredTextDrawId = i;
             draw = *(DWORD*)(pool + id * 4) == 0 ? 0 : *(BYTE**)(pool + 0x2400 + id * 4);
-            DWORD color = unknown04;
+            DWORD color = hoverColor;
             draw[0x9d1] = 1;
             *(DWORD*)(draw + 0x9d2) = color;
         }
@@ -131,6 +131,6 @@ void CTextDrawSelection::Process()
 void CTextDrawSelection::SendNotification()
 {
     RakNet::BitStream stream;
-    stream.Write(unknown08);
+    stream.Write(hoveredTextDrawId);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_textDrawClickRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);
 }

@@ -11,8 +11,8 @@ class CTextDrawSelection
 public:
     // R5 address to verify
     CTextDrawSelection();
-    DWORD enabled, unknown04;
-    WORD unknown08;
+    DWORD enabled, hoverColor;
+    WORD hoveredTextDrawId;
     // 0x00071440
     void Enable(DWORD color);
     // 0x00071310
