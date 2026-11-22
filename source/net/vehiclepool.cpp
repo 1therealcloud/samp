@@ -151,20 +151,20 @@ void CVehiclePool::Process()
                 BYTE* settings = *(BYTE**)((BYTE*)g_pNetGame + 0x3d5);
                 if (settings[0x2b])
                 {
-                    vehicle->EnableEngine((int)vehicle->GetField50() > 0);
-                    vehicle->EnableLights((BYTE)((int)vehicle->GetField54() > 0));
+                    vehicle->EnableEngine((int)vehicle->GetEngineState() > 0);
+                    vehicle->EnableLights((BYTE)((int)vehicle->GetLightsState() > 0));
                 }
                 else
                 {
-                    if (vehicle->GetField50() == 0xffffffff)
+                    if (vehicle->GetEngineState() == 0xffffffff)
                         vehicle->EnableEngine(vehicle->HasDriver() ? TRUE : FALSE);
-                    else if (vehicle->GetField50() == 0)
+                    else if (vehicle->GetEngineState() == 0)
                         vehicle->EnableEngine(FALSE);
-                    else if (vehicle->GetField50() == 1)
+                    else if (vehicle->GetEngineState() == 1)
                         vehicle->EnableEngine(TRUE);
-                    if (vehicle->GetField54() == 0)
+                    if (vehicle->GetLightsState() == 0)
                         vehicle->EnableLights(0);
-                    else if (vehicle->GetField54() == 1)
+                    else if (vehicle->GetLightsState() == 1)
                         vehicle->EnableLights(1);
                 }
                 if (vehicle->m_pGameVehicle != m_pGameObjects[id])

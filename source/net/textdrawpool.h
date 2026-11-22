@@ -30,7 +30,7 @@ public:
     // 0x0001e830
     void Draw();
     // R5 address to verify
-    void Native01E330();
+    void PrepareModelPreviews();
     // R5 address to verify
     void OnLostDevice();
 };

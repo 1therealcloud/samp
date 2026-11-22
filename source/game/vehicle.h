@@ -163,13 +163,13 @@ public:
     // 0x000b8140
     bool DoesExist();
     // R5 address to verify
-    void SetField50(DWORD value);
+    void SetEngineState(DWORD value);
     // R5 address to verify
-    DWORD GetField50();
+    DWORD GetEngineState();
     // R5 address to verify
-    void SetField54(DWORD value);
+    void SetLightsState(DWORD value);
     // R5 address to verify
-    DWORD GetField54();
+    DWORD GetLightsState();
     // 0x000b72e0
     void SetColor(int primary, int secondary);
     // 0x000b7460

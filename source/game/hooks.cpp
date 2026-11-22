@@ -1673,7 +1673,7 @@ __declspec(naked) void GameHookPostProcessRemotePeds()
         mov ecx,[eax+8]
         test ecx,ecx
         jz finish
-        call CPlayerPool::Native013840
+        call CPlayerPool::ProcessPlayerPosesAndAccessories
     finish:
         popad
         ret
@@ -1785,7 +1785,7 @@ void GameHookProcessMultiplayerFrame()
     {
         CTextDrawPool* textdraws = *(CTextDrawPool**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x20);
         if (textdraws)
-            textdraws->Native01E330();
+            textdraws->PrepareModelPreviews();
     }
 }
 
@@ -4517,7 +4517,7 @@ __declspec(naked) void GameHookUpdateVehicleStateFlags()
         cmp dword ptr [g_hookCapture0018F5A0], 0
         je raw_a4505
         mov ecx, dword ptr [g_hookCapture0018F5A0]
-        call CVehicle::GetField54
+        call CVehicle::GetLightsState
         test eax, eax
         je raw_a44e7
         mov eax, dword ptr [g_hookCapture0018F598]

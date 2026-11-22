@@ -25,7 +25,7 @@ void ScrAttachObjectToPlayer(RPCParameters* parameters);
 void ScrSetPlayerAttachedObject(RPCParameters* parameters);
 // Native updates custom-model state; higher-level name remains unestablished.
 // 0x0001dcc0
-void ScrRpc48(RPCParameters* parameters);
+void ScrSetCustomModelVirtualWorld(RPCParameters* parameters);
 // R5 address to verify
 extern const Scripting::OpcodeInfo g_rpcAttachObjectToPlayerCommand;
 // 0x0001dfd0

@@ -81,11 +81,11 @@ void CTextDrawPool::Draw()
 }
 
 // R5 address to verify
-void CTextDrawPool::Native01E330()
+void CTextDrawPool::PrepareModelPreviews()
 {
     for (int i = 0; i != 2304; i++)
         if (active[i])
-            draws[i]->Native0B30A0();
+            draws[i]->PrepareModelPreview();
 }
 
 // R5 address to verify

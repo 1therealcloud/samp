@@ -451,25 +451,25 @@ bool CVehicle::DoesExist()
 }
 
 // R5 address to verify
-void CVehicle::SetField50(DWORD value)
+void CVehicle::SetEngineState(DWORD value)
 {
     m_dwField50 = value;
 }
 
 // R5 address to verify
-DWORD CVehicle::GetField50()
+DWORD CVehicle::GetEngineState()
 {
     return m_dwField50;
 }
 
 // R5 address to verify
-void CVehicle::SetField54(DWORD value)
+void CVehicle::SetLightsState(DWORD value)
 {
     m_dwField54 = value;
 }
 
 // R5 address to verify
-DWORD CVehicle::GetField54()
+DWORD CVehicle::GetLightsState()
 {
     return m_dwField54;
 }

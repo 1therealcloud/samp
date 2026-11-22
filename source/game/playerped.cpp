@@ -379,7 +379,7 @@ BOOL CPed::UsingCellphone()
 }
 
 // 0x000adc90
-DWORD CPed::GetStuff()
+DWORD CPed::GetHeldObjectType()
 {
     return m_stuffType;
 }

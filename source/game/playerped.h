@@ -397,7 +397,7 @@ public:
     // 0x000ae260
     BOOL DoesUrinating();
     // 0x000adc90
-    DWORD GetStuff();
+    DWORD GetHeldObjectType();
     // 0x000ae0a0
     BOOL UsingCellphone();
     // R5 address to verify

@@ -448,7 +448,7 @@ void ScrSetPlayerAttachedObject(RPCParameters* parameters)
 }
 
 // 0x0001dcc0
-void ScrRpc48(RPCParameters* parameters)
+void ScrSetCustomModelVirtualWorld(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
     const int bits = (int)parameters->numberOfBitsOfData;
@@ -2056,7 +2056,7 @@ void RegisterScriptRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorRotation), ScrSetActorRotation);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorPosition), ScrSetActorPosition);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorHealth), ScrSetActorHealth);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001182D8), ScrRpc48);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001182D8), ScrSetCustomModelVirtualWorld);
 }
 
 // 0x00018110

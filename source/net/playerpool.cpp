@@ -402,7 +402,7 @@ WORD CPlayerPool::Find(void* ped)
 }
 
 // R5 address to verify
-void CPlayerPool::Native013840()
+void CPlayerPool::ProcessPlayerPosesAndAccessories()
 {
     CLocalPlayer* local = this->local;
     if (local && local->m_state.ped)
