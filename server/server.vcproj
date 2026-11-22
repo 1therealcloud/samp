@@ -320,8 +320,20 @@
 			<File
 				RelativePath=".\console.h">
 			</File>
+			<File RelativePath=".\filterscripts.cpp">
+			</File>
+			<File RelativePath=".\filterscripts.h">
+			</File>
+			<File RelativePath=".\gamemodes.cpp">
+			</File>
+			<File RelativePath=".\gamemodes.h">
+			</File>
 			<File
 				RelativePath=".\main.cpp">
+			</File>
+			<File RelativePath=".\plugins.cpp">
+			</File>
+			<File RelativePath=".\plugins.h">
 			</File>
 			<File
 				RelativePath=".\query.cpp">

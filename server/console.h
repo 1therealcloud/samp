@@ -53,5 +53,6 @@ public:
 
 extern CConsole* pConsole;
 void logprintf(const char* format, ...);
+void RequestServerExit();
 
 #endif

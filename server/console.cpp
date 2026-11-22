@@ -316,6 +316,7 @@ void con_varlist()
 // 0x0048fbc0
 void con_exit()
 {
+    RequestServerExit();
 }
 
 // 0x0048fc00

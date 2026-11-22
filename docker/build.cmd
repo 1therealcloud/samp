@@ -27,6 +27,8 @@ if errorlevel 1 goto failed
 
 docker cp "%PROJECT_DIR%\tools\announce" "%CONTAINER%:/work/tools/"
 if errorlevel 1 goto failed
+docker cp "%PROJECT_DIR%\tools\plugin-sdk" "%CONTAINER%:/work/tools/"
+if errorlevel 1 goto failed
 docker cp "%PROJECT_DIR%\server" "%CONTAINER%:/work/"
 if errorlevel 1 goto failed
 

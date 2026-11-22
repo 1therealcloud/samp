@@ -1,10 +1,20 @@
 #include "console.h"
+#include "filterscripts.h"
+#include "gamemodes.h"
+#include "plugins.h"
 #include "query.h"
 
+#include <signal.h>
+#include <sstream>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+#ifndef _WIN32
+#include <sys/time.h>
+#include <unistd.h>
+#endif
 
 // 0x004fc43c (Windows), 0x081d793c (Linux)
 CConsole* pConsole;
@@ -56,6 +66,97 @@ static int iDbLogQueries;
 static bool bUseArtwork;
 // 0x004fc47c
 static int iCookieLogging;
+
+static volatile sig_atomic_t bQuitApp;
+
+void RequestServerExit()
+{
+    bQuitApp = 1;
+}
+
+#ifdef _WIN32
+static BOOL WINAPI HandleConsoleEvent(DWORD event)
+{
+    if (event != CTRL_C_EVENT && event != CTRL_BREAK_EVENT)
+        return FALSE;
+    RequestServerExit();
+    return TRUE;
+}
+#else
+static void HandleSignal(int)
+{
+    RequestServerExit();
+}
+#endif
+
+static unsigned int GetMilliseconds()
+{
+#ifdef _WIN32
+    return GetTickCount();
+#else
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    return static_cast<unsigned int>(now.tv_sec) * 1000U + now.tv_usec / 1000U;
+#endif
+}
+
+static void RunScripts()
+{
+    const char* modeSetting = pConsole->GetStringVariable("gamemode0");
+    std::istringstream modeEntry(modeSetting ? modeSetting : "");
+    std::string modeName;
+    if (!(modeEntry >> modeName))
+    {
+        logprintf("Error: It needs a gamemode0 line at the very least.");
+        return;
+    }
+
+#ifdef _WIN32
+    SetConsoleCtrlHandler(HandleConsoleEvent, TRUE);
+#else
+    signal(SIGINT, HandleSignal);
+    signal(SIGTERM, HandleSignal);
+#endif
+
+    {
+        CFilterScripts filters;
+        CGameMode game;
+        CPlugins plugins;
+        pFilterScripts = &filters;
+        pGameMode = &game;
+        pPlugins = &plugins;
+
+        logprintf("Server Plugins");
+        logprintf("--------------");
+        logprintf(" Loaded %u plugins.", plugins.LoadPlugins("plugins"));
+
+        filters.LoadFilterScripts(pConsole->GetStringVariable("filterscripts"));
+        const std::string path = "gamemodes/" + modeName + ".amx";
+        if (game.Load(path.c_str()))
+        {
+            unsigned int previous = GetMilliseconds();
+            while (!bQuitApp)
+            {
+                const unsigned int now = GetMilliseconds();
+                game.Frame(static_cast<float>(now - previous) / 1000.0f);
+                previous = now;
+                plugins.DoProcessTick();
+                const unsigned int delay = iSleep > 0 ? static_cast<unsigned int>(iSleep) : 0;
+#ifdef _WIN32
+                Sleep(delay);
+#else
+                usleep(delay * 1000U);
+#endif
+            }
+        }
+
+        game.Unload();
+        filters.UnloadFilterScripts();
+    }
+    pPlugins = NULL;
+    pGameMode = NULL;
+    pFilterScripts = NULL;
+}
 
 // 0x00491fa0 (Windows), 0x080b1ca0 (Linux)
 void logprintf(const char* format, ...)
@@ -238,6 +339,8 @@ int main(int argc, char** argv)
     const char* password = pConsole->GetStringVariable("rcon_password");
     if (password && strcmp(password, "changeme") == 0)
         logprintf("Error: Your password must be changed from the default password, please change it.");
+    else
+        RunScripts();
 
     pConsole = NULL;
     return 0;
