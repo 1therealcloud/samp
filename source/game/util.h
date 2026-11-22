@@ -186,8 +186,6 @@ extern int g_rwImageHeight;
 extern void* g_rwImageScratch;
 // 0x00155400
 extern void** g_rwSceneCameraSlot;
-// Compatibility name for GameDebugWriteRasterImage.
-void GameWriteRasterBmp(void* raster, const char* filename);
 // 0x000b57d0
 void GameCreateSceneRasters();
 // Raw GPR-preserving entry, not a RenderWare camera method.

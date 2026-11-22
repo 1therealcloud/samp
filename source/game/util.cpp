@@ -976,13 +976,6 @@ int GameCountEmptyBackendModelSlots()
 #define SCENE_COLOR_RASTER (*(void**)(g_entityCollisionScratch + 0x1030))
 #define SCENE_DEPTH_RASTER (*(void**)(g_entityCollisionScratch + 0x1034))
 
-// Native ignores all failures and reloads the published image between calls.
-// GTA SA virtual addresses: image create/allocate/from-raster/BMP write/destroy.
-void GameWriteRasterBmp(void* raster, const char* filename)
-{
-    GameDebugWriteRasterImage(raster, filename);
-}
-
 // Allocate only when both raster slots are null. A partial success is retained.
 // GTA SA virtual addresses: source raster slot C402D8; RwRasterCreate 7FB230.
 // 0x000b57d0
