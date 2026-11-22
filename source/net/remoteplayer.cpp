@@ -609,7 +609,7 @@ void CRemotePlayer::Process()
         if (m_state.vehicle && m_state.vehicle->IsRC())
             m_state.ped->Remove();
         CVector* speed = &m_state.incar.speed;
-        if (m_state.rawFlag1c && speed->x == 0 && speed->y == 0 && speed->z == 0 && m_state.vehicle)
+        if (m_state.isNpc && speed->x == 0 && speed->y == 0 && speed->z == 0 && m_state.vehicle)
             m_state.vehicle->SetSpeed(*speed);
         m_state.ped->SetKeys(m_state.incar.keys, m_state.incar.leftRight, m_state.incar.upDown);
         m_state.ped->ProcessVehicleHorn();
@@ -647,7 +647,7 @@ void CRemotePlayer::Process()
 void CRemotePlayer::ProcessHead()
 {
     CPed* ped = m_state.ped;
-    if (!ped || !ped->DoesExist() || m_state.rawFlag1c)
+    if (!ped || !ped->DoesExist() || m_state.isNpc)
         return;
     if (g_pGame && !*(DWORD*)((BYTE*)g_pGame + 0x59))
         return;
@@ -1206,7 +1206,7 @@ BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* 
         g_pGame->RemovePed(ped);
         m_state.ped = 0;
     }
-    ped = g_pGame->CreatePed(model, *position, rotation, 1, (BOOL)m_state.rawFlag1c);
+    ped = g_pGame->CreatePed(model, *position, rotation, 1, (BOOL)m_state.isNpc);
     if (!ped)
     {
         if (m_state.playerState)
@@ -1421,7 +1421,7 @@ CRemotePlayer::CRemotePlayer()
     m_state.jetpackState = 0;
     m_state.marker = 0;
     m_state.specialAction = 0;
-    m_state.rawFlag1c = 0;
+    m_state.isNpc = 0;
     m_state.scriptedAnimation = 0;
     m_state.lastHeadUpdateTick = tick();
     m_state.lastHeadTaskTick = tick();
@@ -1725,9 +1725,9 @@ WORD CRemotePlayer::GetId()
 }
 
 // R5 address to verify
-void CRemotePlayer::SetRawFlag1C(DWORD value)
+void CRemotePlayer::SetNpc(DWORD value)
 {
-    m_state.rawFlag1c = value;
+    m_state.isNpc = value;
 }
 
 // R5 address to verify
@@ -1744,9 +1744,9 @@ BYTE CRemotePlayer::GetSpecialAction()
 }
 
 // R5 address to verify
-DWORD CRemotePlayer::GetRawFlag1C()
+DWORD CRemotePlayer::IsNpc()
 {
-    return m_state.rawFlag1c;
+    return m_state.isNpc;
 }
 
 // R5 address to verify

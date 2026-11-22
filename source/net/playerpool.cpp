@@ -196,7 +196,7 @@ BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
     if (npc)
     {
         CRemotePlayer* remote = *slot ? (*slot)->remote : 0;
-        remote->m_state.rawFlag1c = 1;
+        remote->m_state.isNpc = 1;
     }
     *(DWORD*)(state + 0xfd6 + id * 4) = 1;
     UpdateLargestId();

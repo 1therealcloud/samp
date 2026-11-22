@@ -144,14 +144,14 @@ __declspec(naked) void Font_SetShadow(int shadow)
 }
 
 // R5 address to verify
-__declspec(naked) void Font_UnkConv2(char* text){
+__declspec(naked) void Font_ExpandKeyTokens(char* text){
     // clang-format off
     __asm mov eax,0x69e160 // GTA SA virtual address.
     __asm jmp eax
     // clang-format on
 } // Native returns this GTA address without calling it.
 // R5 address to verify
-DWORD Font_UnkConv(char* text, int a, int b, int c, int d, int e, int f, char* output)
+DWORD Font_GetTextSubstitutionAddress(char* text, int a, int b, int c, int d, int e, int f, char* output)
 {
     return 0x69de90;
 }

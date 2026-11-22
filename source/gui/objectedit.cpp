@@ -63,11 +63,11 @@ WORD CObjectEdit::GetObjectId()
 BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
 {
     BYTE* state = (BYTE*)this;
-    if (!unknown80)
+    if (!editing)
         return FALSE;
     if (message == WM_LBUTTONDOWN)
     {
-        DWORD type = unknown113;
+        DWORD type = hoveredControl;
         if (!state[0xa3] && (type == 0 || type == 1 || type == 2))
         {
             state[0xa3] = 1;
@@ -92,11 +92,11 @@ BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
             ReleaseCapture();
             ((int(WINAPI*)(BOOL))g_archiveRealShowCursor)(TRUE);
             POINT point;
-            if (unknown113 == 0)
+            if (hoveredControl == 0)
                 point = *(POINT*)(state + 8);
-            else if (unknown113 == 1)
+            else if (hoveredControl == 1)
                 point = *(POINT*)(state + 0x18);
-            else if (unknown113 == 2)
+            else if (hoveredControl == 2)
                 point = *(POINT*)(state + 0x28);
             else
                 point = *(POINT*)(state + 0xaf);
@@ -105,22 +105,22 @@ BOOL CObjectEdit::MsgProc(UINT message, WPARAM, LPARAM)
             TryChangeProcessType();
             return TRUE;
         }
-        if (unknown113 == 3)
+        if (hoveredControl == 3)
         {
             SetEditMode(0);
             return TRUE;
         }
-        if (unknown113 == 4)
+        if (hoveredControl == 4)
         {
             SetEditMode(1);
             return TRUE;
         }
-        if (unknown113 == 5)
+        if (hoveredControl == 5)
         {
             SetEditMode(2);
             return TRUE;
         }
-        if (unknown113 == 10)
+        if (hoveredControl == 10)
         {
             Disable(TRUE);
             return TRUE;
@@ -140,41 +140,41 @@ void CObjectEdit::TryChangeProcessType()
     POINT point;
     GetCursorPos(&point);
     ScreenToClient((*(HWND*)0x00c97c1c), &point);
-    if (!unknown84)
+    if (!controlsVisible)
     {
-        unknown113 = 0xffffffff;
+        hoveredControl = 0xffffffff;
         return;
     }
     if (!g_pGame->m_nCursorMode)
     {
-        unknown113 = 0xffffffff;
+        hoveredControl = 0xffffffff;
         return;
     }
     BYTE* state = (BYTE*)this;
     if (PtInRect((RECT*)(state + 0x8), point))
-        unknown113 = 0;
+        hoveredControl = 0;
     else if (PtInRect((RECT*)(state + 0x18), point))
-        unknown113 = 1;
+        hoveredControl = 1;
     else if (PtInRect((RECT*)(state + 0x28), point))
-        unknown113 = 2;
+        hoveredControl = 2;
     else if (PtInRect((RECT*)(state + 0x38), point))
-        unknown113 = 3;
+        hoveredControl = 3;
     else if (PtInRect((RECT*)(state + 0x48), point))
-        unknown113 = 4;
+        hoveredControl = 4;
     else if (PtInRect((RECT*)(state + 0x58), point))
-        unknown113 = 5;
+        hoveredControl = 5;
     else if (PtInRect((RECT*)(state + 0x68), point))
-        unknown113 = 10;
+        hoveredControl = 10;
     else
-        unknown113 = 0xffffffff;
+        hoveredControl = 0xffffffff;
 }
 
 // 0x000721f0
 void CObjectEdit::SetEditMode(int mode)
 {
-    if (unknown78 == 1 && mode == 2)
+    if (editTarget == 1 && mode == 2)
         mode = 0;
-    unknown7c = mode;
+    editMode = mode;
 }
 
 // 0x000723c0
@@ -192,9 +192,9 @@ void CObjectEdit::ResetMousePos()
 // 0x00073460
 void CObjectEdit::ApplyChanges(int axis, float difference)
 {
-    if (unknown78 == 1)
+    if (editTarget == 1)
         ApplyObjectChanges(axis, difference);
-    else if (unknown78 == 2)
+    else if (editTarget == 2)
         ApplyAttachedChanges(axis, difference);
 }
 
@@ -205,7 +205,7 @@ void CObjectEdit::ProcessMouseMove()
     DWORD vertical = 0;
     GetCursorPos(&point);
     BYTE* state = (BYTE*)this;
-    int axis = (int)unknown113;
+    int axis = (int)hoveredControl;
     BYTE reverse = 0;
     if (axis == 0)
     {
@@ -223,7 +223,7 @@ void CObjectEdit::ProcessMouseMove()
         vertical = *(DWORD*)(state + 0xbf);
     }
     int delta;
-    if (unknown7c == 1)
+    if (editMode == 1)
     {
         if (vertical)
             goto horizontal;
@@ -263,7 +263,7 @@ void CObjectEdit::ApplyObjectChanges(int axis, float difference)
     CVector position = matrix.position, delta = {0, 0, 0};
     if (axis >= 0 && axis < 3)
     {
-        if (unknown7c == 0)
+        if (editMode == 0)
         {
             ((float*)&delta)[axis] = difference;
             GameTransformPoint(&position, &matrix, &delta);
@@ -271,7 +271,7 @@ void CObjectEdit::ApplyObjectChanges(int axis, float difference)
             CVector noRotation = {-1000.0f, -1000.0f, -1000.0f};
             object->Move(position, 1.0f, noRotation);
         }
-        else if (unknown7c == 1)
+        else if (editMode == 1)
         {
             float* angle = (float*)((BYTE*)this + 0x92 + axis * 4);
             *angle = GameNormalizeAngle(difference * g_objectRotationFactor + *angle);
@@ -315,22 +315,22 @@ void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
     if (!record)
         return;
     if (axis == 0)
-        ApplyAttachedAxis<0>(record, unknown7c, difference);
+        ApplyAttachedAxis<0>(record, editMode, difference);
     else if (axis == 1)
-        ApplyAttachedAxis<1>(record, unknown7c, difference);
+        ApplyAttachedAxis<1>(record, editMode, difference);
     else if (axis == 2)
-        ApplyAttachedAxis<2>(record, unknown7c, difference);
+        ApplyAttachedAxis<2>(record, editMode, difference);
 }
 
 // 0x00071b60
 CObjectEdit::CObjectEdit(IDirect3DDevice9* value)
 {
     device = value;
-    unknown7c = 0;
-    unknown113 = 0xffffffff;
-    unknown80 = 0;
-    unknown84 = 0;
-    unknown78 = 0;
+    editMode = 0;
+    hoveredControl = 0xffffffff;
+    editing = 0;
+    controlsVisible = 0;
+    editTarget = 0;
     flags[1] = 0;
     flags[2] = 0;
     flags[3] = 0;
@@ -543,29 +543,29 @@ const char* CObjectEdit::GetRenderChar(int axis)
 {
     if (axis == 0)
     {
-        if (unknown7c == 0)
+        if (editMode == 0)
             return g_objectEditGlyphXPosition;
-        if (unknown7c == 1)
+        if (editMode == 1)
             return g_objectEditGlyphXRotation;
-        if (unknown7c == 2)
+        if (editMode == 2)
             return g_objectEditGlyphXScale;
     }
     else if (axis == 1)
     {
-        if (unknown7c == 0)
+        if (editMode == 0)
             return g_objectEditGlyphYPosition;
-        if (unknown7c == 1)
+        if (editMode == 1)
             return g_objectEditGlyphYRotation;
-        if (unknown7c == 2)
+        if (editMode == 2)
             return g_objectEditGlyphYScale;
     }
     else if (axis == 2)
     {
-        if (unknown7c == 0)
+        if (editMode == 0)
             return g_objectEditGlyphZPosition;
-        if (unknown7c == 1)
+        if (editMode == 1)
             return g_objectEditGlyphZRotation;
-        if (unknown7c == 2)
+        if (editMode == 2)
             return g_objectEditGlyphZScale;
     }
     return g_objectEditGlyphDefault;
@@ -574,14 +574,14 @@ const char* CObjectEdit::GetRenderChar(int axis)
 // 0x00072040
 void CObjectEdit::CenterButtonRect(RECT* out, const POINT* center)
 {
-    LONG width = *(LONG*)unknown00;
+    LONG width = *(LONG*)controlLayout;
     LONG half = width / 2;
     out->left = (LONG)((DWORD)center->x - (DWORD)half);
-    out->right = (LONG)(*(DWORD*)unknown00 + (DWORD)out->left);
-    LONG height = *(LONG*)(unknown00 + 4);
+    out->right = (LONG)(*(DWORD*)controlLayout + (DWORD)out->left);
+    LONG height = *(LONG*)(controlLayout + 4);
     half = height / 2;
     out->top = (LONG)((DWORD)center->y - (DWORD)half);
-    out->bottom = (LONG)(*(DWORD*)(unknown00 + 4) + (DWORD)out->top);
+    out->bottom = (LONG)(*(DWORD*)(controlLayout + 4) + (DWORD)out->top);
 }
 
 // 0x00072080
@@ -596,8 +596,8 @@ void CObjectEdit::ClearButtonRect(RECT* out)
 // 0x00072420
 void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
 {
-    unknown80 = 1;
-    unknown78 = 1;
+    editing = 1;
+    editTarget = 1;
     SetEditMode(0);
     objectId = id;
     *(BOOL*)((BYTE*)this + 0x8e) = playerObject;
@@ -622,8 +622,8 @@ void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
 // 0x000724e0
 void CObjectEdit::EnterEditAttachedObject(int index)
 {
-    unknown80 = 1;
-    unknown78 = 2;
+    editing = 1;
+    editTarget = 2;
     SetEditMode(0);
     *(int*)((BYTE*)this + 0x8a) = index;
     objectId = 0xffff;
@@ -642,22 +642,22 @@ void CObjectEdit::DrawButton(int processType, RECT rect)
     if (processType >= 0 && processType <= 2)
     {
         slot = processType;
-        if (unknown113 == (DWORD)processType)
+        if (hoveredControl == (DWORD)processType)
             background = flags[1] ? 0xff774444 : 0xffaaaaaa;
         foreground = processType == 0 ? 0xff9999cc : processType == 1 ? 0xffcc9999 : 0xff99cc99;
     }
     else if (processType >= 3 && processType <= 5)
     {
         slot = processType;
-        if (unknown113 == (DWORD)processType)
+        if (hoveredControl == (DWORD)processType)
             background = 0xffaaaaaa;
-        if (unknown7c == (DWORD)(processType - 3))
+        if (editMode == (DWORD)(processType - 3))
             background = 0xff774444;
     }
     else if (processType == 10)
     {
         slot = 6;
-        if (unknown113 == 10)
+        if (hoveredControl == 10)
             background = 0xffaaaaaa;
     }
     else
@@ -687,8 +687,8 @@ BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
     RECT measured; // Native does not initialize this, including the null-font path.
     if (largeFont)
         largeFont->DrawTextA(0, GetMaxSizeChar(), -1, &measured, 0x505, 0xff000000);
-    *(DWORD*)unknown00 = (DWORD)measured.right - (DWORD)measured.left;
-    *(DWORD*)(unknown00 + 4) = (DWORD)measured.bottom - (DWORD)measured.top;
+    *(DWORD*)controlLayout = (DWORD)measured.right - (DWORD)measured.left;
+    *(DWORD*)(controlLayout + 4) = (DWORD)measured.bottom - (DWORD)measured.top;
     line->SetAntialias(TRUE);
     D3DXVECTOR2 vertices[2];
     const DWORD colors[3] = {0xff9999cc, 0xffcc9999, 0xff99cc99};
@@ -786,18 +786,18 @@ BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
     DrawButton(10, rect);
     if (flags[0])
     {
-        DWORD shift = 0xfffffffe - *(DWORD*)unknown00;
+        DWORD shift = 0xfffffffe - *(DWORD*)controlLayout;
         rect.left = (LONG)((DWORD)rect.left + shift);
         rect.right = (LONG)((DWORD)rect.right + shift);
         DrawButton(5, rect);
     }
     else
         ClearButtonRect((RECT*)((BYTE*)this + 0x58));
-    DWORD shift = 0xfffffffe - *(DWORD*)unknown00;
+    DWORD shift = 0xfffffffe - *(DWORD*)controlLayout;
     rect.left = (LONG)((DWORD)rect.left + shift);
     rect.right = (LONG)((DWORD)rect.right + shift);
     DrawButton(4, rect);
-    shift = 0xfffffffe - *(DWORD*)unknown00;
+    shift = 0xfffffffe - *(DWORD*)controlLayout;
     rect.left = (LONG)((DWORD)rect.left + shift);
     rect.right = (LONG)((DWORD)rect.right + shift);
     DrawButton(3, rect);
@@ -813,8 +813,8 @@ BOOL CObjectEdit::RenderControls(const CMatrix* matrix, float axisSize)
 // 0x00073780
 void CObjectEdit::Render()
 {
-    unknown84 = 0;
-    if (!unknown80)
+    controlsVisible = 0;
+    if (!editing)
         return;
     WORD leftRight, upDown;
     WORD keys = g_pGame->GetPlayerPed()->GetKeys(&leftRight, &upDown);
@@ -829,7 +829,7 @@ void CObjectEdit::Render()
     }
     if (!g_pNetGame)
         return;
-    if (unknown78 == 1)
+    if (editTarget == 1)
     {
         WORD id = objectId;
         BYTE* pool = *(BYTE**)(*(BYTE**)((BYTE*)g_pNetGame + 0x3de) + 0x14);
@@ -849,11 +849,11 @@ void CObjectEdit::Render()
                     fstp distance
                 }
                 // clang-format on
-                if (RenderControls(&matrix, distance)) unknown84 = 1;
+                if (RenderControls(&matrix, distance)) controlsVisible = 1;
             }
         }
     }
-    else if (unknown78 == 2)
+    else if (editTarget == 2)
     {
         int index = *(int*)((BYTE*)this + 0x8a);
         CEntity* object = (CEntity*)g_pGame->GetPlayerPed()->GetAccessory(index);
@@ -871,7 +871,7 @@ void CObjectEdit::Render()
                 fstp distance
             }
             // clang-format on
-            if (!unknown7c)
+            if (!editMode)
             {
                 CMatrix boneMatrix;
                 g_pGame->GetPlayerPed()->GetBoneMatrix(&boneMatrix, *(int*)((BYTE*)info + 4));
@@ -887,7 +887,7 @@ void CObjectEdit::Render()
                 fstp distance
             }
             // clang-format on
-            if (RenderControls(&matrix, distance)) unknown84 = 1;
+            if (RenderControls(&matrix, distance)) controlsVisible = 1;
         }
     }
     if (!flags[1])
@@ -960,15 +960,15 @@ void CObjectEdit::Disable(BOOL send)
     BOOL notify = FALSE;
     if (send)
         notify = TRUE;
-    unknown80 = 0;
+    editing = 0;
     g_pGame->SetCursorMode(0, TRUE);
     if (g_pInput->m_bEnabled)
     {
         g_pInput->Close();
         g_pInput->Open();
     }
-    if (unknown78 == 2)
+    if (editTarget == 2)
         SendAttachedEditEndNotification(notify);
-    if (unknown78 == 1)
+    if (editTarget == 1)
         SendEditEndNotification(notify);
 }

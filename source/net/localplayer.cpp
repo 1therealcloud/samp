@@ -811,9 +811,9 @@ BOOL CLocalPlayer::Spawn()
 {
     if (!m_state.hasSpawnInfo)
         return FALSE;
-    if (m_state.rawFlag30a == 1)
+    if (m_state.classSelectionActive == 1)
     {
-        m_state.rawFlag30a = 0;
+        m_state.classSelectionActive = 0;
         if (g_renderSecondDialog)
             *((BYTE*)g_renderSecondDialog + 0x13) = 0;
         g_pGame->SetCursorMode(0, FALSE);
@@ -983,7 +983,7 @@ CLocalPlayer::CLocalPlayer()
     m_state.rcMode = 0;
     m_state.surfingMode = 0;
     m_state.surfingTick = tick();
-    m_state.rawSurfState2fa = 0;
+    m_state.surfingContactState = 0;
     m_state.ped = g_pGame->GetPlayerPed();
     m_state.active = 0;
     m_state.wasted = 0;
@@ -997,7 +997,7 @@ CLocalPlayer::CLocalPlayer()
     m_state.spectating = 0;
     m_state.spectateType = 0;
     m_state.spectateId = 0xffffffff;
-    m_state.rawFlag30a = 0;
+    m_state.classSelectionActive = 0;
     ResetData();
     for (int slot = 0; slot < 13; slot++)
     {
@@ -1081,7 +1081,7 @@ void CLocalPlayer::ProcessSurfing()
     }
     if (m_state.ped->HasTaskType208() || m_state.ped->HasTaskType704() || m_state.ped->GetVehicleTransitionTaskState())
     {
-        m_state.rawSurfState2fa = 0;
+        m_state.surfingContactState = 0;
         m_state.surfingEntity = 0;
         m_state.surfingLocked = 0;
         return;
@@ -1090,7 +1090,7 @@ void CLocalPlayer::ProcessSurfing()
     {
         if (!m_state.surfingMode)
         {
-            m_state.rawSurfState2fa = 0;
+            m_state.surfingContactState = 0;
             m_state.surfingEntity = 0;
             m_state.surfingLocked = 0;
             return;
@@ -1102,7 +1102,7 @@ void CLocalPlayer::ProcessSurfing()
             m_state.surfingId = 0xffff;
             m_state.surfingEntity = 0;
             m_state.surfingLocked = 0;
-            m_state.rawSurfState2fa = 0;
+            m_state.surfingContactState = 0;
         }
         if (m_state.surfingMode == 1 && GetTickCount() - m_state.surfingTick < 2000)
         {
@@ -1113,10 +1113,10 @@ void CLocalPlayer::ProcessSurfing()
                 m_state.surfingEntity = entity;
                 m_state.surfingLocked = 1;
             }
-            m_state.rawSurfState2fa = 1;
+            m_state.surfingContactState = 1;
         }
         else
-            m_state.rawSurfState2fa = 0xffffffff;
+            m_state.surfingContactState = 0xffffffff;
         return;
     }
     if (mode == 1)
@@ -1152,7 +1152,7 @@ void CLocalPlayer::ProcessSurfing()
             m_state.surfingLocked = 1;
         }
     }
-    m_state.rawSurfState2fa = 2;
+    m_state.surfingContactState = 2;
 }
 
 // R5 address to verify
@@ -1165,7 +1165,7 @@ void CLocalPlayer::SendSpawnRequest()
 // 0x00004060
 void CLocalPlayer::RequestSpawn()
 {
-    if (m_state.rawFlag30a)
+    if (m_state.classSelectionActive)
     {
         SendSpawnRequest();
         m_state.waitingForSpawnReply = 1;
@@ -1202,7 +1202,7 @@ void CLocalPlayer::Chat(char* text)
 // 0x00005ff0
 void CLocalPlayer::NextClass()
 {
-    if (!m_state.rawFlag30a)
+    if (!m_state.classSelectionActive)
         return;
     m_state.spawnPermission = 0;
     CMatrix matrix;
@@ -1221,7 +1221,7 @@ void CLocalPlayer::NextClass()
 // 0x00006080
 void CLocalPlayer::PrevClass()
 {
-    if (!m_state.rawFlag30a)
+    if (!m_state.classSelectionActive)
         return;
     m_state.spawnPermission = 0;
     CMatrix matrix;
@@ -1674,7 +1674,7 @@ void CLocalPlayer::ProcessClassSelection()
     }
     if (g_renderDialog && g_renderDialog->active)
         return;
-    if (!m_state.rawFlag30a)
+    if (!m_state.classSelectionActive)
     {
         *((BYTE*)g_renderSecondDialog + 0x13) = 1;
         RECT rectangle;
@@ -1684,7 +1684,7 @@ void CLocalPlayer::ProcessClassSelection()
         int x = rectangle.right / 2 - *(int*)(dialog + 0x11e) / 2;
         *(int*)(dialog + 0x11a) = y;
         *(int*)(dialog + 0x116) = x;
-        m_state.rawFlag30a = 1;
+        m_state.classSelectionActive = 1;
         RequestClass(m_state.selectedClass);
         return;
     }
@@ -2245,9 +2245,9 @@ BOOL CLocalPlayer::Process()
     }
     if (m_state.spectating && !m_state.active)
     {
-        if (m_state.rawFlag30a == 1)
+        if (m_state.classSelectionActive == 1)
         {
-            m_state.rawFlag30a = 0;
+            m_state.classSelectionActive = 0;
             if (g_renderSecondDialog)
                 *((BYTE*)g_renderSecondDialog + 0x13) = 0;
             g_pGame->SetCursorMode(0, FALSE);

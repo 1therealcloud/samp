@@ -13,8 +13,8 @@ class CObjectEdit
 public:
     // R5 address to verify
     WORD GetObjectId();
-    BYTE unknown00[0x78];
-    DWORD unknown78, unknown7c, unknown80, unknown84;
+    BYTE controlLayout[0x78];
+    DWORD editTarget, editMode, editing, controlsVisible;
     WORD objectId;
     BYTE unknown8a[0x14];
     DWORD lastTick;
@@ -22,7 +22,7 @@ public:
     IDirect3DDevice9* device;
     ID3DXLine* line;
     ID3DXFont *smallFont, *largeFont;
-    DWORD unknown113;
+    DWORD hoveredControl;
     // 0x00071f90
     static const char* GetMaxSizeChar();
     // Selector is an axis (0..2), not a boolean font selector.

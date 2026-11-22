@@ -177,9 +177,9 @@ void ScrInitGame(RPCParameters* parameters)
     BYTE stunt, holdTime, length, models[212];
     stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->zoneNames);
     stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->useCJWalk);
-    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->unknown15);
-    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->unknown39);
-    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->unknown34, 32, true);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->allowWeapons);
+    stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->limitGlobalChatRadius);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->globalChatRadius, 32, true);
     stream.Read(*(bool*)&stunt);
     stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->nameTagDrawDistance, 32, true);
     stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->disableEnterExits);
@@ -194,7 +194,7 @@ void ScrInitGame(RPCParameters* parameters)
     stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->weather, 8, true);
     stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->gravity, 32, true);
     stream.Read(*(bool*)&holdTime);
-    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->unknown01, 32, true);
+    stream.ReadBits((BYTE*)&((CNetGame*)g_pNetGame)->settings->deathDropMoney, 32, true);
     stream.Read(*(bool*)&((CNetGame*)g_pNetGame)->settings->instantKill);
     stream.ReadBits((BYTE*)&g_localOnFootSendRate, 32, true);
     stream.ReadBits((BYTE*)&g_localInCarSendRate, 32, true);
@@ -696,7 +696,7 @@ void EnterEditObject(RPCParameters* parameters)
     if (g_renderTextDrawSelection && g_renderTextDrawSelection->enabled)
         g_renderTextDrawSelection->Disable();
     CObjectEdit* edit = (CObjectEdit*)g_deviceObjectEdit;
-    if (edit && edit->unknown80)
+    if (edit && edit->editing)
         edit->Disable(FALSE);
     if (g_renderObjectSelection)
         g_renderObjectSelection->Enable(TRUE);
@@ -707,7 +707,7 @@ void ScrCancelEdit(RPCParameters* parameters)
 {
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     CObjectEdit* edit = (CObjectEdit*)g_deviceObjectEdit;
-    if (edit && edit->unknown80)
+    if (edit && edit->editing)
         edit->Disable(FALSE);
     if (g_renderObjectSelection && g_renderObjectSelection->enabled)
         g_renderObjectSelection->Enable(FALSE);
