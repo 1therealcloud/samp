@@ -273,9 +273,9 @@ void CObjectEdit::ApplyObjectChanges(int axis, float difference)
         }
         else if (editMode == 1)
         {
-            float* angle = (float*)((BYTE*)this + 0x92 + axis * 4);
+            float* angle = (float*)(objectRotation + axis * 4);
             *angle = GameNormalizeAngle(difference * g_objectRotationFactor + *angle);
-            object->SetRotation((CVector*)((BYTE*)this + 0x92));
+            object->SetRotation((CVector*)(objectRotation));
         }
     }
     SendEditEndNotification(2);
@@ -307,7 +307,7 @@ static __forceinline void ApplyAttachedAxis(BYTE* record, DWORD mode, const vola
 // 0x00071cb0
 void CObjectEdit::ApplyAttachedChanges(int axis, float difference)
 {
-    int slot = *(int*)((BYTE*)this + 0x8a);
+    int slot = attachedObjectSlot;
     CPed* ped = g_pGame->GetPlayerPed();
     if (slot < 0 || slot >= 10 || !ped->m_accessoryOccupied[slot])
         return;
@@ -600,7 +600,7 @@ void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
     editTarget = 1;
     SetEditMode(0);
     objectId = id;
-    *(BOOL*)((BYTE*)this + 0x8e) = playerObject;
+    this->playerObject = playerObject;
     flags[0] = 0;
     g_pGame->SetCursorMode(0, TRUE);
     g_pGame->m_nInputEnableWaitFrames = 0;
@@ -614,9 +614,9 @@ void CObjectEdit::EnterEditObject(WORD id, BOOL playerObject)
     BYTE* object = *(BYTE**)(pool + 0x20d4 + id * 4);
     if (!object)
         return;
-    *(DWORD*)((BYTE*)this + 0x92) = *(DWORD*)(object + 0xad);
-    *(DWORD*)((BYTE*)this + 0x96) = *(DWORD*)(object + 0xb1);
-    *(DWORD*)((BYTE*)this + 0x9a) = *(DWORD*)(object + 0xb5);
+    *(DWORD*)(objectRotation) = *(DWORD*)(object + 0xad);
+    *(DWORD*)(objectRotation + 4) = *(DWORD*)(object + 0xb1);
+    *(DWORD*)(objectRotation + 8) = *(DWORD*)(object + 0xb5);
 }
 
 // 0x00071f80
@@ -625,7 +625,7 @@ void CObjectEdit::EnterEditAttachedObject(int index)
     editing = 1;
     editTarget = 2;
     SetEditMode(0);
-    *(int*)((BYTE*)this + 0x8a) = index;
+    attachedObjectSlot = index;
     objectId = 0xffff;
     flags[0] = 1;
     g_pGame->SetCursorMode(0, TRUE);
@@ -855,10 +855,10 @@ void CObjectEdit::Render()
     }
     else if (editTarget == 2)
     {
-        int index = *(int*)((BYTE*)this + 0x8a);
+        int index = attachedObjectSlot;
         CEntity* object = (CEntity*)g_pGame->GetPlayerPed()->GetAccessory(index);
         // Reload the index and player after the first call, even when object is null.
-        PedAccessoryState* info = g_pGame->GetPlayerPed()->GetAccessoryInfo(*(int*)((BYTE*)this + 0x8a));
+        PedAccessoryState* info = g_pGame->GetPlayerPed()->GetAccessoryInfo(attachedObjectSlot);
         if (object)
         {
             CMatrix matrix;
@@ -908,14 +908,14 @@ void CObjectEdit::SendEditEndNotification(int status)
         return;
     DWORD tick = GetTickCount();
     DWORD rotation[3];
-    rotation[0] = *(DWORD*)((BYTE*)this + 0x92);
-    rotation[2] = *(DWORD*)((BYTE*)this + 0x9a);
+    rotation[0] = *(DWORD*)(objectRotation);
+    rotation[2] = *(DWORD*)(objectRotation + 8);
     lastTick = tick;
-    rotation[1] = *(DWORD*)((BYTE*)this + 0x96);
+    rotation[1] = *(DWORD*)(objectRotation + 4);
     CMatrix matrix;
     object->GetMatrix(&matrix);
     RakNet::BitStream stream;
-    if (*(DWORD*)((BYTE*)this + 0x8e))
+    if (playerObject)
         stream.Write1();
     else
         stream.Write0();
@@ -942,13 +942,13 @@ void CObjectEdit::SendEditEndNotification(int status)
 void CObjectEdit::SendAttachedEditEndNotification(int status)
 {
     RakNet::BitStream stream;
-    int index = *(int*)((BYTE*)this + 0x8a);
+    int index = attachedObjectSlot;
     CPed* ped = g_pGame->GetPlayerPed();
     // Inline native occupancy/bounds lookup; the 52-byte record remains live.
     PedAccessoryState* info = index >= 0 && index < 10 && ped->m_accessoryOccupied[index] ? &ped->m_accessoryInfo[index] : 0;
     DWORD value = status;
     stream.WriteBits((const BYTE*)&value, 32, true);
-    value = *(DWORD*)((BYTE*)this + 0x8a);
+    value = (DWORD)attachedObjectSlot;
     stream.WriteBits((const BYTE*)&value, 32, true);
     stream.Write((const char*)info, 52);
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->RPC(&g_objectEditAttachedRpc, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, false);

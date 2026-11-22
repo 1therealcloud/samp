@@ -73,7 +73,7 @@ DWORD CModelGeometry::SetRepeatedVertexColors(const BYTE* first, const BYTE* sec
         secondaryColors = 0;
     }
     hasColors = 1;
-    unknown1b = 1;
+    hasSecondaryColors = 1;
     colors = calloc(vertexCount, 4);
     secondaryColors = calloc(vertexCount, 4);
     for (DWORD i = 0; i != (DWORD)vertexCount; ++i)
@@ -1122,7 +1122,7 @@ CModelGeometry::CModelGeometry()
     morphCount = 0;
     hasColors = 0;
     colors = 0;
-    unknown1b = 0;
+    hasSecondaryColors = 0;
     secondaryColors = 0;
     uv = 0;
     triangles = 0;
@@ -1670,7 +1670,7 @@ bool CModelGeometry::ReadExtensions(CModelFileStream* input)
             case 0x253f2f9:
                 if (((header[1] - 4) >> 2) == (DWORD)vertexCount)
                 {
-                    unknown1b = 1;
+                    hasSecondaryColors = 1;
                     extension->stream.Skip(4);
                     secondaryColors = calloc(vertexCount, 4);
                     if (!secondaryColors || extension->stream.Remaining() < (DWORD)vertexCount * 4)
@@ -2043,7 +2043,7 @@ bool CModelGeometry::CopySecondaryColors(const CModelGeometry* other)
     if (count > vertexCount)
         count = vertexCount;
     memcpy(secondaryColors, other->colors, (DWORD)count * 4);
-    unknown1b = 1;
+    hasSecondaryColors = 1;
     modified = 1;
     return true;
 }

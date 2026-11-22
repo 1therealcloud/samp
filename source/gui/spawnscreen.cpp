@@ -36,7 +36,7 @@ SpawnScreenVertex::SpawnScreenVertex(const CVector& position, float w, DWORD col
 // 0x000709d0
 CSpawnScreen::~CSpawnScreen()
 {
-    char* text = *(char**)(unknown00 + 4);
+    char* text = spawnText;
     if (text)
         ::operator delete(text);
     if (texture || states[1] || states[0])
@@ -52,13 +52,13 @@ CSpawnScreen::~CSpawnScreen()
 // 0x00070a30
 void CSpawnScreen::Draw()
 {
-    if (!fonts || !*(char**)(unknown00 + 4))
+    if (!fonts || !spawnText)
         return;
-    FontSize measured = fonts->GetTextScreenSize(*(char**)(unknown00 + 4), 0);
+    FontSize measured = fonts->GetTextScreenSize(spawnText, 0);
     // GTA SA virtual address: screen height 0x00C17048. Integer arithmetic wraps.
     LONG bottom = (LONG)(*(DWORD*)0xc17048 - 30), top = (LONG)((DWORD)bottom - (DWORD)measured.cy);
     RECT textRect = {20, top, (LONG)(20u + (DWORD)measured.cx), bottom};
-    fonts->DrawText(0, *(char**)(unknown00 + 4), textRect, 0xffffffff, TRUE);
+    fonts->DrawText(0, spawnText, textRect, 0xffffffff, TRUE);
     int imageTop = (int)((DWORD)top - 103), imageBottom = (int)((DWORD)imageTop + 73);
     if (texture)
     {
@@ -114,7 +114,7 @@ void CSpawnScreen::Draw()
 // 0x00070630
 void CSpawnScreen::SetText(const char* value)
 {
-    char*& text = *(char**)(unknown00 + 4);
+    char*& text = spawnText;
     if (text)
         ::operator delete(text);
     text = 0;
@@ -201,7 +201,7 @@ void CSpawnScreen::OnResetDevice()
 CSpawnScreen::CSpawnScreen(IDirect3DDevice9* value)
 {
     device = value;
-    *(DWORD*)(unknown00 + 4) = 0;
+    spawnText = 0;
     texture = 0;
     states[1] = 0;
     states[0] = 0;

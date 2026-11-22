@@ -32,7 +32,8 @@ public:
     ~CSpawnScreen();
     // 0x00070a30
     void Draw();
-    BYTE unknown00[8];
+    BYTE unknown00[4];
+    char* spawnText;
     CFonts* fonts;
     IDirect3DDevice9* device;
     IDirect3DTexture9* texture;
@@ -47,5 +48,6 @@ public:
 // 0x0011c74c
 extern const char g_spawnVersionText[];
 STATIC_ASSERT(sizeof(SpawnScreenVertex) == 28);
+STATIC_ASSERT(offsetof(CSpawnScreen, spawnText) == 4);
 
 #endif // SPAWNSCREEN_H
