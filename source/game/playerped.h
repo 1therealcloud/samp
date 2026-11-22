@@ -197,18 +197,18 @@ public:
     BYTE m_nPlayerNumber;
     BYTE unknown2b1[8];
     DWORD m_parachuteObject;
-    BYTE unknown2bd[4];
+    BYTE m_urinationEffectHandle[4];
     DWORD m_stuffType, m_stuffObject, m_drunkLevel, m_arrow;
     BYTE unknown2d1;
-    DWORD unknown2d2;
-    BYTE unknown2d6[8];
+    DWORD m_dancing;
+    BYTE m_danceMoveState[8];
     BOOL m_bDancing;
     DWORD m_danceStyle, m_lastDanceMove;
     BYTE unknown2ea[8];
     BOOL m_bUrinating;
-    BYTE unknown2f6, unknown2f7, unknown2f8;
-    DWORD unknown2f9;
-    BYTE unknown2fd[48];
+    BYTE m_blockPedInputAt1C, m_blockPedInputAt24, m_blockPedInputAt20;
+    DWORD m_aimMarker;
+    BYTE m_bulletData[48];
     // 0x000ab690
     CPed();
     // 0x000b08e0

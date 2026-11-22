@@ -319,7 +319,7 @@ CPed::CPed()
     m_arrow = 0;
     m_parachuteObject = 0;
     m_bUrinating = 0;
-    unknown2d2 = 0;
+    m_dancing = 0;
     m_bDancing = 0;
     m_danceStyle = 0;
     m_bUsingCellphone = 0;
@@ -327,16 +327,16 @@ CPed::CPed()
     m_stuffType = 0;
     m_stuffObject = 0;
     m_drunkLevel = 0;
-    unknown2f6 = 0;
-    unknown2f7 = 0;
-    unknown2f8 = 0;
+    m_blockPedInputAt1C = 0;
+    m_blockPedInputAt24 = 0;
+    m_blockPedInputAt20 = 0;
     for (int i = 0; i < 10; i++)
     {
         m_accessoryOccupied[i] = FALSE;
         m_accessoryObjects[i] = 0;
         memset(&m_accessoryInfo[i], 0, 52);
     }
-    unknown2f9 = 0;
+    m_aimMarker = 0;
 }
 
 // 0x000b0ea0
@@ -411,7 +411,7 @@ void CPed::SetDrunkLevel(DWORD level)
 // 0x000ad760
 BOOL CPed::DoesDancing()
 {
-    return unknown2d2 != 0;
+    return m_dancing != 0;
 }
 
 // 0x000ab9f0
@@ -712,7 +712,7 @@ BOOL CPed::HasJetpack()
 void CPed::StopDancing()
 {
     CMatrix matrix;
-    unknown2d2 = 0;
+    m_dancing = 0;
     GetMatrix(&matrix);
     Teleport(matrix.position.x, matrix.position.y, matrix.position.z);
 }
@@ -1080,7 +1080,7 @@ void CPed::StopUrinating()
 {
     if (m_pGamePed && GamePoolPedGetAt(m_nHandle) && m_bUrinating)
     {
-        DWORD* effect = (DWORD*)unknown2bd;
+        DWORD* effect = (DWORD*)m_urinationEffectHandle;
         if (*effect)
         {
             Scripting::ProcessCommand(&g_pedStopUrinationEffectCommand, *effect);
@@ -1182,8 +1182,8 @@ void CPed::StartDancing(int style)
 {
     if (style < 0 || style > 3)
         return;
-    unknown2d2 = 1;
-    *(DWORD*)unknown2d6 = style;
+    m_dancing = 1;
+    *(DWORD*)m_danceMoveState = style;
     if (m_nPlayerNumber == 0)
         ApplyAnimation(g_pedDanceNames[style], g_pedDanceLibraries[style], 16.0f, 1, 0, 0, 0, -1);
 }
@@ -1296,9 +1296,9 @@ DWORD CPed::GetModelTable24()
 // 0x000ad770
 const char* CPed::GetAnimationForDance(int move)
 {
-    if (unknown2d2)
+    if (m_dancing)
     {
-        int style = *(int*)unknown2d6;
+        int style = *(int*)m_danceMoveState;
         DWORD offset = (DWORD)move << 4;
         if (style >= 0 && style <= 2)
         {
@@ -1505,8 +1505,8 @@ void CPed::StartUrinating()
     if (m_nPlayerNumber == 0)
         ApplyAnimation(g_pedUrinationAnimation, g_pedUrinationLibrary, 4.0f, 1, 0, 0, 0, -1);
     Scripting::ProcessCommand(&g_pedCreateUrinationEffectCommand, g_pedUrinationEffect, m_nHandle, g_pedParachuteZero, g_pedUrinationOffsetY, g_pedUrinationOffsetZ,
-                              g_pedParachuteZero, g_pedUrinationDirectionY, g_pedParachuteZero, 1, (DWORD*)unknown2bd);
-    Scripting::ProcessCommand(&g_pedStartUrinationEffectCommand, *(DWORD*)unknown2bd);
+                              g_pedParachuteZero, g_pedUrinationDirectionY, g_pedParachuteZero, 1, (DWORD*)m_urinationEffectHandle);
+    Scripting::ProcessCommand(&g_pedStartUrinationEffectCommand, *(DWORD*)m_urinationEffectHandle);
     m_bUrinating = 1;
 }
 
@@ -2192,7 +2192,7 @@ CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
     m_parachuteObject = 0;
     m_bUsingCellphone = 0;
     m_danceStyle = 0;
-    unknown2d2 = 0;
+    m_dancing = 0;
     m_bUrinating = 0;
     m_bDancing = 0;
     m_lastDanceMove = 0;
@@ -2202,11 +2202,11 @@ CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
     m_stuffType = 0;
     m_stuffObject = 0;
     m_drunkLevel = 0;
-    unknown2f6 = 0;
-    unknown2f7 = 0;
-    unknown2f8 = 0;
+    m_blockPedInputAt1C = 0;
+    m_blockPedInputAt24 = 0;
+    m_blockPedInputAt20 = 0;
     *(DWORD*)((BYTE*)this + 0x329) = 0;
-    memset(unknown2fd, 0, 44);
+    memset(m_bulletData, 0, 44);
     CMatrix matrix;
     GetMatrix(&matrix);
     memcpy(&matrix.position.x, &x, 4);
@@ -2227,9 +2227,9 @@ CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
         m_accessoryObjects[i] = 0;
         memset(&m_accessoryInfo[i], 0, 52);
     }
-    unknown2f9 = 0;
+    m_aimMarker = 0;
     *(DWORD*)((BYTE*)this + 0x329) = 0;
-    memset(unknown2fd, 0, 44);
+    memset(m_bulletData, 0, 44);
 }
 
 // 0x000b0710
@@ -2431,13 +2431,13 @@ void CPed::ProcessParachuteEvent(const char* name)
 // 0x000afcb0
 void CPed::ProcessDancing()
 {
-    if (!unknown2d2 || !m_pGamePed || !CEntity::DoesExist() || m_nPlayerNumber)
+    if (!m_dancing || !m_pGamePed || !CEntity::DoesExist() || m_nPlayerNumber)
         return;
     KeyPad* keys = KeyStuff::GetInternalKeys();
     short vertical = (short)keys->keys2[1], horizontal = (short)keys->keys2[0];
     if (!PerformingCustomAnimation())
     {
-        DWORD style = *(DWORD*)unknown2d6;
+        DWORD style = *(DWORD*)m_danceMoveState;
         ApplyAnimation(g_pedDanceNames[style], g_pedDanceLibraries[style], 4.0f, 1, 0, 0, 0, 0);
     }
     bool alternate = keys->keys1[16] != 0;
@@ -2454,14 +2454,14 @@ void CPed::ProcessDancing()
         return;
     if (alternate)
         move += 8;
-    DWORD* last = (DWORD*)(unknown2d6 + 4);
+    DWORD* last = (DWORD*)(m_danceMoveState + 4);
     if (*last == (DWORD)move)
         return;
     *last = move;
     const char* animation = GetAnimationForDance(move);
     if (animation)
     {
-        DWORD style = *(DWORD*)unknown2d6;
+        DWORD style = *(DWORD*)m_danceMoveState;
         ApplyAnimation(animation, g_pedDanceLibraries[style], 4.0f, 0, 0, 0, 0, 0);
     }
 }
@@ -2860,7 +2860,7 @@ BOOL CPed::HasAimTarget()
 void CPed::SetSecondaryPoseState(DWORD state)
 {
     m_danceStyle = state;
-    unknown2f7 = unknown2f6 = unknown2f8 = state != 0;
+    m_blockPedInputAt24 = m_blockPedInputAt1C = m_blockPedInputAt20 = state != 0;
 }
 
 // 0x000acab0
@@ -2878,7 +2878,7 @@ void CPed::ProcessSecondaryPoseWeapon()
 void CPed::SetDancePoseState(DWORD state)
 {
     m_bDancing = state;
-    unknown2f8 = state != 0;
+    m_blockPedInputAt20 = state != 0;
 }
 
 // 0x000acb40
@@ -2887,7 +2887,7 @@ void CPed::ProcessDancePoseWeapon()
     if (!m_bDancing)
         return;
     if (g_deviceObjectEdit && *(DWORD*)(g_deviceObjectEdit + 0x80))
-        unknown2f8 = 0;
+        m_blockPedInputAt20 = 0;
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
         return;
     DWORD weapon;
@@ -3468,7 +3468,7 @@ BOOL CPed::FireWeapon()
         AimStuff::ApplyPlayerSkills(m_nPlayerNumber);
     }
     g_pedFiringContext = this;
-    g_pedFiringData = *(DWORD*)(unknown2fd + 44) ? unknown2fd : 0;
+    g_pedFiringData = *(DWORD*)(m_bulletData + 44) ? m_bulletData : 0;
     CVector origin = {0, 0, 0}, muzzle = {0, 0, 0};
     DWORD weapon;
     bool sniper = false;
@@ -3570,21 +3570,21 @@ void CPed::ProcessAimMarker()
     CVector position;
     if (GetAimHit(&position))
     {
-        if (!unknown2f9)
+        if (!m_aimMarker)
         {
             CVector rotation = {0, 0, 0};
             srand((unsigned)time(0));
             CObject* object = g_pGame->NewObject(19282, 0, 0, 0, rotation, 200.0f, 0, 0);
-            unknown2f9 = (DWORD)object;
+            m_aimMarker = (DWORD)object;
             object->SetCollisionFlag(0);
-            ((CEntity*)unknown2f9)->Add();
+            ((CEntity*)m_aimMarker)->Add();
         }
-        ((CEntity*)unknown2f9)->Teleport(position);
+        ((CEntity*)m_aimMarker)->Teleport(position);
     }
-    else if (unknown2f9)
+    else if (m_aimMarker)
     {
-        delete (CObject*)unknown2f9;
-        unknown2f9 = 0;
+        delete (CObject*)m_aimMarker;
+        m_aimMarker = 0;
     }
 }
 
@@ -3663,7 +3663,7 @@ float CPed::GetArmBoneDistance()
 // 0x000aee80
 void CPed::SetBulletData(PedBulletData* data)
 {
-    volatile DWORD* destination = (volatile DWORD*)unknown2fd;
+    volatile DWORD* destination = (volatile DWORD*)m_bulletData;
     if (!data)
     {
         destination[11] = 0;
@@ -3855,21 +3855,21 @@ void CPed::ProcessCameraAimMarker()
     CVector position;
     if (GetCameraAimHit(&position))
     {
-        if (!unknown2f9)
+        if (!m_aimMarker)
         {
             CVector rotation = {0, 0, 0};
             srand((unsigned)time(0));
             CObject* object = g_pGame->NewObject(3065, 0, 0, 0, rotation, 200.0f, 0, 0);
-            unknown2f9 = (DWORD)object;
+            m_aimMarker = (DWORD)object;
             object->SetCollisionFlag(0);
-            ((CEntity*)unknown2f9)->Add();
+            ((CEntity*)m_aimMarker)->Add();
         }
-        ((CEntity*)unknown2f9)->Teleport(position);
+        ((CEntity*)m_aimMarker)->Teleport(position);
     }
-    else if (unknown2f9)
+    else if (m_aimMarker)
     {
-        delete (CObject*)unknown2f9;
-        unknown2f9 = 0;
+        delete (CObject*)m_aimMarker;
+        m_aimMarker = 0;
     }
 }
 
@@ -3929,5 +3929,5 @@ DWORD __stdcall GameGetPlayerFlagsUnchecked(BYTE player)
 // 0x000ab670
 PedBulletData* CPed::GetBulletData()
 {
-    return *(DWORD*)(unknown2fd + 44) ? (PedBulletData*)unknown2fd : 0;
+    return *(DWORD*)(m_bulletData + 44) ? (PedBulletData*)m_bulletData : 0;
 }

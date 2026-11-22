@@ -214,15 +214,15 @@ struct CModelGeometry
     WORD flags, textureSets;
     int triangleCount, vertexCount, morphCount;
     BYTE hasColors, unknown1b;
-    void *colors, *unknown20, *uv, *triangles;
+    void *colors, *secondaryColors, *uv, *triangles;
     float sphere[4];
     DWORD hasVertices, hasNormals;
     void *vertices, *normals;
     CModelFileChunk *material, *extension;
     int materialCount;
     CModelMaterialArray materials;
-    BYTE unknown60;
-    DWORD unknown61, unknown65, unknown69;
+    BYTE hasBinMesh;
+    DWORD binMeshFlags, binMeshCount, binMeshIndexCount;
     CModelMeshArray meshes;
     union
     {
