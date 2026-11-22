@@ -308,9 +308,9 @@ DWORD g_hookGate18F4D0;
 // 0x0018eb2c
 DWORD g_hookRandomReturn;
 // 0x0018e8b8
-DWORD g_hookRecordReturn18E8B8;
+DWORD g_hookVehicleSetClumpCaller;
 // 0x0018f5c8
-DWORD g_hookRecordEcx18F5C8;
+DWORD g_hookCapturedObject;
 // 0x0011ec04
 const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
 // 0x00151aac
@@ -432,13 +432,13 @@ DWORD g_hookCapture0018E80C;
 // 0x0018e92c
 DWORD g_hookCapture0018E92C;
 // 0x0018eaac
-DWORD g_hookCapture0018EAAC;
+DWORD g_hookStreamingFileBuffer;
 // 0x0018eb74
 DWORD g_hookCapture0018EB74;
 // 0x0018f338
 DWORD g_hookCapture0018F338;
 // 0x0018f344
-DWORD g_hookCapture0018F344;
+DWORD g_hookStreamingThirdStackWord;
 // 0x0018f348
 DWORD g_hookCapture0018F348;
 // 0x0018f358
@@ -452,7 +452,7 @@ DWORD g_hookCapture0018F380;
 // 0x0018f48c
 DWORD g_hookCapture0018F48C;
 // 0x0018f490
-DWORD g_hookCapture0018F490;
+DWORD g_hookStreamingModelId;
 // 0x0018f608
 DWORD g_hookCapture0018F608;
 // 0x0018f60c
@@ -4222,12 +4222,12 @@ __declspec(naked) void GameHookSetGunMoveAnimation()
 }
 
 // 0x000a4170
-__declspec(naked) void GameHook_000a4170()
+__declspec(naked) void GameHookCaptureVehicleSetClumpCaller()
 {
     // clang-format off
     __asm {
         mov eax, dword ptr [esp]
-        mov dword ptr [g_hookRecordReturn18E8B8], eax
+        mov dword ptr [g_hookVehicleSetClumpCaller], eax
         pushad
         popad
         mov eax, 0x4c95c0
@@ -4237,13 +4237,13 @@ __declspec(naked) void GameHook_000a4170()
 }
 
 // 0x000a48a0
-__declspec(naked) void GameHook_000a48a0()
+__declspec(naked) void GameHookCaptureObjectCall()
 {
     // clang-format off
     __asm {
         mov eax, dword ptr [esp]
         mov dword ptr [g_hookRenderReturn], eax
-        mov dword ptr [g_hookRecordEcx18F5C8], ecx
+        mov dword ptr [g_hookCapturedObject], ecx
         pushad
         popad
         mov eax, 0x5a2bd0
@@ -4906,16 +4906,16 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
 }
 
 // 0x000a4680
-__declspec(naked) void GameHook_000a4680()
+__declspec(naked) void GameHookCaptureStreamingConversion()
 {
     // clang-format off
     __asm {
         mov eax, dword ptr [esp + 4]
-        mov dword ptr [g_hookCapture0018EAAC], eax
+        mov dword ptr [g_hookStreamingFileBuffer], eax
         mov eax, dword ptr [esp + 8]
-        mov dword ptr [g_hookCapture0018F490], eax
+        mov dword ptr [g_hookStreamingModelId], eax
         mov eax, dword ptr [esp + 0xc]
-        mov dword ptr [g_hookCapture0018F344], eax
+        mov dword ptr [g_hookStreamingThirdStackWord], eax
         pushad
         popad
         mov eax, 0x40c6b0

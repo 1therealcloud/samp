@@ -271,17 +271,17 @@ void GameHookGuardMenuState();
 // 0x000a4cb0
 void GameHookSetGunMoveAnimation();
 // 0x000a4170
-void GameHook_000a4170();
+void GameHookCaptureVehicleSetClumpCaller();
 // 0x000a48a0
-void GameHook_000a48a0();
+void GameHookCaptureObjectCall();
 // 0x0018f4d0
 extern DWORD g_hookGate18F4D0;
 // 0x0018eb2c
 extern DWORD g_hookRandomReturn;
 // 0x0018e8b8
-extern DWORD g_hookRecordReturn18E8B8;
+extern DWORD g_hookVehicleSetClumpCaller;
 // 0x0018f5c8
-extern DWORD g_hookRecordEcx18F5C8;
+extern DWORD g_hookCapturedObject;
 
 // Additional raw hook entries: address-only declarations, not C++ call interfaces.
 // 0x0011ebe4
@@ -435,13 +435,13 @@ extern DWORD g_hookCapture0018E80C;
 // 0x0018e92c
 extern DWORD g_hookCapture0018E92C;
 // 0x0018eaac
-extern DWORD g_hookCapture0018EAAC;
+extern DWORD g_hookStreamingFileBuffer;
 // 0x0018eb74
 extern DWORD g_hookCapture0018EB74;
 // 0x0018f338
 extern DWORD g_hookCapture0018F338;
 // 0x0018f344
-extern DWORD g_hookCapture0018F344;
+extern DWORD g_hookStreamingThirdStackWord;
 // 0x0018f348
 extern DWORD g_hookCapture0018F348;
 // 0x0018f358
@@ -455,7 +455,7 @@ extern DWORD g_hookCapture0018F380;
 // 0x0018f48c
 extern DWORD g_hookCapture0018F48C;
 // 0x0018f490
-extern DWORD g_hookCapture0018F490;
+extern DWORD g_hookStreamingModelId;
 // 0x0018f608
 extern DWORD g_hookCapture0018F608;
 // 0x0018f60c
@@ -469,7 +469,7 @@ void GameHookApplyRemoteSkillContextB();
 // 0x000a4510
 void GameHookAdjustVehicleAimMatrix();
 // 0x000a4680
-void GameHook_000a4680();
+void GameHookCaptureStreamingConversion();
 // 0x000a4cc0
 void GameHookPatchCustomObjectRenderPath();
 
