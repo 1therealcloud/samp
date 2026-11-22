@@ -213,7 +213,7 @@ struct CModelGeometry
     DWORD error, detail;
     WORD flags, textureSets;
     int triangleCount, vertexCount, morphCount;
-    BYTE hasColors, unknown1b;
+    BYTE hasColors, hasSecondaryColors;
     void *colors, *secondaryColors, *uv, *triangles;
     float sphere[4];
     DWORD hasVertices, hasNormals;

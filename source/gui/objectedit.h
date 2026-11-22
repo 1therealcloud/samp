@@ -16,7 +16,9 @@ public:
     BYTE controlLayout[0x78];
     DWORD editTarget, editMode, editing, controlsVisible;
     WORD objectId;
-    BYTE unknown8a[0x14];
+    int attachedObjectSlot;
+    BOOL playerObject;
+    BYTE objectRotation[12];
     DWORD lastTick;
     BYTE flags[5], unknowna7[0x5c];
     IDirect3DDevice9* device;
@@ -76,6 +78,9 @@ public:
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(CObjectEdit) == 0x117);
+STATIC_ASSERT(offsetof(CObjectEdit, attachedObjectSlot) == 0x8a);
+STATIC_ASSERT(offsetof(CObjectEdit, playerObject) == 0x8e);
+STATIC_ASSERT(offsetof(CObjectEdit, objectRotation) == 0x92);
 // Output stores may alias. API failures are ignored.
 // 0x00073f40
 void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector* end);
