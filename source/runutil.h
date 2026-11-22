@@ -41,11 +41,4 @@ void K_EncodeString(char* szInput, char* szOutput);
 // 0x0009d880
 char* K_DecodeString(unsigned char* szInput);
 
-// legacy
-
-// 0x000b55e0
-bool Util_IsDecimal(const char* text);
-// 0x000b5920
-void Util_SanitizeAscii(char* text);
-
 #endif // RUNUTIL_H
