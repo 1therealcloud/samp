@@ -91,9 +91,9 @@ const int g_rpcScrSetPlayerWidescreen = 111;
 // 0x001183f0
 const int g_rpcScrSetVehicleTires = 98;
 // 0x001183ec
-const int g_rpcUnknown001183EC = 92;
+const int g_rpcPlayerOpcode052C = 92;
 // 0x001183e8
-const int g_rpcUnknown001183E8 = 150;
+const int g_rpcPlayerOpcode03FD = 150;
 // 0x001183e4
 const int g_rpcScrPlayCrimeReport = 112;
 // 0x001183e0
@@ -229,7 +229,7 @@ const int g_rpcScrSetActorPosition = 176;
 // 0x001182dc
 const int g_rpcScrSetActorHealth = 178;
 // 0x001182d8
-const int g_rpcUnknown001182D8 = 48;
+const int g_rpcSetCustomModelVirtualWorld = 48;
 // 0x001184c0
 const int g_rpcScrSetPlayerArmor = 66;
 
@@ -570,7 +570,7 @@ void ClickTextDraw(RPCParameters* parameters)
     if (g_renderObjectSelection && g_renderObjectSelection->enabled)
         g_renderObjectSelection->Enable(FALSE);
     CObjectEdit* edit = (CObjectEdit*)g_deviceObjectEdit;
-    if (edit && edit->unknown80)
+    if (edit && edit->editing)
         edit->Disable(FALSE);
     if (g_renderTextDrawSelection)
     {
@@ -963,7 +963,7 @@ void ScrMoveObject(RPCParameters* parameters)
     stream.Read(rotation.y);
     stream.Read(rotation.z);
     CObjectEdit* edit = (CObjectEdit*)g_deviceObjectEdit;
-    if (edit && edit->unknown80 && edit->objectId == id)
+    if (edit && edit->editing && edit->objectId == id)
         return;
     CObject* object = (CObject*)((CNetGame*)g_pNetGame)->pools->objects->Get(id);
     if (object)
@@ -2010,8 +2010,8 @@ void RegisterScriptRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleVelocity), ScrSetVehicleVelocity);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerWidescreen), ScrSetPlayerWidescreen);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetVehicleTires), ScrSetVehicleTires);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183EC), ScrPlayerOpcode052C);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183E8), ScrPlayerOpcode03FD);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcPlayerOpcode052C), ScrPlayerOpcode052C);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcPlayerOpcode03FD), ScrPlayerOpcode03FD);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayCrimeReport), ScrPlayCrimeReport);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetSpawnInfo), ScrSetSpawnInfo);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerTeam), ScrSetPlayerTeam);
@@ -2060,7 +2060,7 @@ void RegisterScriptRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorRotation), ScrSetActorRotation);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorPosition), ScrSetActorPosition);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetActorHealth), ScrSetActorHealth);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001182D8), ScrSetCustomModelVirtualWorld);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcSetCustomModelVirtualWorld), ScrSetCustomModelVirtualWorld);
 }
 
 // 0x00017c20
@@ -2090,8 +2090,8 @@ void UnRegisterScriptRPCs(RakClientInterface* client)
         &g_rpcScrSetVehicleVelocity,
         &g_rpcScrSetPlayerWidescreen,
         &g_rpcScrSetVehicleTires,
-        &g_rpcUnknown001183EC,
-        &g_rpcUnknown001183E8,
+        &g_rpcPlayerOpcode052C,
+        &g_rpcPlayerOpcode03FD,
         &g_rpcScrPlayCrimeReport,
         &g_rpcScrSetPlayerMapIcon,
         &g_rpcScrRemovePlayerMapIcon,
@@ -2160,7 +2160,7 @@ void UnRegisterScriptRPCs(RakClientInterface* client)
         &g_rpcScrSetActorRotation,
         &g_rpcScrSetActorPosition,
         &g_rpcScrSetActorHealth,
-        &g_rpcUnknown001182D8,
+        &g_rpcSetCustomModelVirtualWorld,
     };
     for (unsigned i = 0; i < sizeof(ids) / sizeof(ids[0]); i++)
         client->UnregisterAsRemoteProcedureCall(const_cast<int*>(ids[i]));

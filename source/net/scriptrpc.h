@@ -277,9 +277,9 @@ extern const int g_rpcScrSetPlayerWidescreen;
 // 0x001183f0
 extern const int g_rpcScrSetVehicleTires;
 // 0x001183ec
-extern const int g_rpcUnknown001183EC;
+extern const int g_rpcPlayerOpcode052C;
 // 0x001183e8
-extern const int g_rpcUnknown001183E8;
+extern const int g_rpcPlayerOpcode03FD;
 // 0x001183e4
 extern const int g_rpcScrPlayCrimeReport;
 // 0x001183e0
@@ -415,6 +415,6 @@ extern const int g_rpcScrSetActorPosition;
 // 0x001182dc
 extern const int g_rpcScrSetActorHealth;
 // 0x001182d8
-extern const int g_rpcUnknown001182D8;
+extern const int g_rpcSetCustomModelVirtualWorld;
 
 #endif // SCRIPTRPC_H
