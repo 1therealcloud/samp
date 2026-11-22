@@ -240,10 +240,8 @@ void __cdecl NetDigestToHex(char* output, const BYTE* digest)
 // 0x0005fa60
 void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor)
 {
-    ArchiveNameSha1 sha;
     DWORD digest[5] = {0};
-    sha.Input((const BYTE*)seed, (DWORD)strlen(seed));
-    sha.Result(digest);
+    ArchiveComputeNameDigest(seed, (DWORD)strlen(seed), digest);
     BYTE transformed[20];
     memcpy(transformed, digest, 20);
     for (int i = 0; i < 20; ++i)
@@ -268,15 +266,13 @@ void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor)
 // 0x000571b0
 void __cdecl NetGenerateAuthKey(char* output, const char* challenge)
 {
-    ArchiveNameSha1 sha;
     if (!g_pGame || !GameFindLocalPed())
         return;
     CVector position = {1093.0f, -2036.0f, 90.0f}, rotation = {0, 0, 0}, target = {384.0f, -1557.0f, 20.0f};
     g_pGame->GetCamera()->Set(position, rotation);
     g_pGame->GetCamera()->PointAt(target, 2);
     DWORD digest[5] = {0};
-    sha.Input((const BYTE*)challenge, (DWORD)strlen(challenge));
-    sha.Result(digest);
+    ArchiveComputeNameDigest(challenge, (DWORD)strlen(challenge), digest);
     BYTE result[20];
     memcpy(result, digest, 20);
     g_pGame->GetPlayerPed()->GetDistanceToCamera();
