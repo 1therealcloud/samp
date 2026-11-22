@@ -29,34 +29,6 @@ STATIC_ASSERT(sizeof(CustomModelDownload) == 0x11e);
 STATIC_ASSERT(sizeof(CustomModelWorker) == 0x230);
 STATIC_ASSERT(offsetof(CustomModelWorker, download) == 0x112);
 STATIC_ASSERT(offsetof(CustomModelWorker, failed) == 0x10d);
-// Shared observed memory prefix for nine otherwise unidentified native entries.
-// This view does not assign their original classes/template types to CCustomModels.
-// Element values stay raw DWORDs; their pointer/value semantics are unconfirmed.
-struct NativeModelArrayPrefix
-{
-    DWORD* slots;
-    DWORD count;
-    // 0x0000c440
-    DWORD Read0000c440(DWORD index);
-    // 0x0000c460
-    DWORD Count0000c460();
-    // 0x0000c470
-    DWORD Read0000c470(DWORD index);
-    // 0x0000c490
-    DWORD Count0000c490();
-    // 0x0000c4a0
-    NativeModelArrayPrefix* Initialize0000c4a0();
-    // 0x0000c4b0
-    DWORD Read0000c4b0(DWORD index);
-    // 0x0000c4d0
-    DWORD Count0000c4d0();
-    // 0x000bbc60
-    NativeModelArrayPrefix* Initialize000bbc60();
-    // 0x000bbc70
-    NativeModelArrayPrefix* Initialize000bbc70();
-};
-STATIC_ASSERT(sizeof(NativeModelArrayPrefix) == 8);
-STATIC_ASSERT(offsetof(NativeModelArrayPrefix, count) == 4);
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 class CCustomModels
 {
