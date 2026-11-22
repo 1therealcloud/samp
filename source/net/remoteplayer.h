@@ -22,7 +22,7 @@ struct RemotePlayerState
     CVehicle* vehicle;
     DWORD unknown0c, showNameTag, jetpackState;
     BYTE specialAction, team, playerState, seat;
-    DWORD rawFlag1c, passengerDriveby;
+    DWORD isNpc, passengerDriveby;
     LocalPassengerSyncData passenger;
     LocalOnfootSyncData onfoot;
     LocalIncarSyncData incar;
@@ -75,13 +75,13 @@ public:
     // 0x000135e0
     WORD GetId();
     // 0x000135f0
-    void SetRawFlag1C(DWORD value);
+    void SetNpc(DWORD value);
     // 0x00013600
     void ResetStateAndLabels();
     // 0x00014220
     BYTE GetSpecialAction();
     // 0x00014230
-    DWORD GetRawFlag1C();
+    DWORD IsNpc();
 
     union
     {
@@ -187,7 +187,7 @@ STATIC_ASSERT(offsetof(RemotePlayerState, vehicle) == 8);
 STATIC_ASSERT(offsetof(RemotePlayerState, showNameTag) == 0x10);
 STATIC_ASSERT(offsetof(RemotePlayerState, specialAction) == 0x18);
 STATIC_ASSERT(offsetof(RemotePlayerState, playerState) == 0x1a);
-STATIC_ASSERT(offsetof(RemotePlayerState, rawFlag1c) == 0x1c);
+STATIC_ASSERT(offsetof(RemotePlayerState, isNpc) == 0x1c);
 STATIC_ASSERT(offsetof(RemotePlayerState, passenger) == 0x24);
 STATIC_ASSERT(offsetof(RemotePlayerState, onfoot) == 0x3c);
 STATIC_ASSERT(offsetof(RemotePlayerState, incar) == 0x80);

@@ -233,9 +233,9 @@ void CTextDraw::DrawText()
     else
         Font_SetShadow(data.format.shadow);
     Font_SetFontStyle(data.format.style);
-    Font_UnkConv(buffer, -1, -1, -1, -1, -1, -1, buffer);
+    Font_GetTextSubstitutionAddress(buffer, -1, -1, -1, -1, -1, -1, buffer);
     if (data.hasKeyCodes)
-        Font_UnkConv2(buffer);
+        Font_ExpandKeyTokens(buffer);
     // clang-format off
     __asm {
         mov eax,state

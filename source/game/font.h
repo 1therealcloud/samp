@@ -33,8 +33,8 @@ void Font_SetLineHeight(float height);
 // 0x0009fd70
 void Font_SetShadow(int shadow);
 // 0x0009fd90
-void Font_UnkConv2(char* text);
+void Font_ExpandKeyTokens(char* text);
 // 0x0009fd80
-DWORD Font_UnkConv(char* text, int a, int b, int c, int d, int e, int f, char* output);
+DWORD Font_GetTextSubstitutionAddress(char* text, int a, int b, int c, int d, int e, int f, char* output);
 
 #endif // FONT_H

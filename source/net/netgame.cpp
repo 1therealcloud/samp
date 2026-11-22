@@ -162,7 +162,7 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
     memset(mapIcons, 0, 100 * 4);
     g_pGame->EnableClock(false);
     g_pGame->EnableZoneDisplaying(0);
-    settings->unknown01 = 0;
+    settings->deathDropMoney = 0;
     settings->spawnsAvailable = 0;
     settings->nameTagLineOfSight = 1;
     settings->holdWorldTime = 1;
@@ -900,7 +900,7 @@ void CNetGame::ShutdownForRestart()
     settings->nameTagLineOfSight = 1;
     settings->useCJWalk = 0;
     *(DWORD*)&settings->gravity = 0x3c03126f;
-    settings->unknown01 = 0;
+    settings->deathDropMoney = 0;
     *(DWORD*)((BYTE*)g_pGame + 0x4d) = 0;
     *(DWORD*)((BYTE*)g_pGame + 0x29) = 0;
     g_pGame->GetPlayerPed()->LinkToInterior(0, TRUE);

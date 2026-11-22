@@ -27,9 +27,9 @@ struct CVector;
 struct CNetGameSettings
 {
     BYTE useCJWalk;
-    DWORD unknown01;
+    DWORD deathDropMoney;
     float worldBounds[4];
-    BYTE unknown15;
+    BYTE allowWeapons;
     float gravity;
     BYTE disableEnterExits;
     DWORD vehicleDamageFilter;
@@ -43,9 +43,9 @@ struct CNetGameSettings
     BYTE worldHour, worldMinute, weather;
     BYTE nameTagLineOfSight;
     DWORD playerMarkersMode;
-    DWORD unknown34;
+    DWORD globalChatRadius;
     BYTE showNameTags;
-    BYTE unknown39;
+    BYTE limitGlobalChatRadius;
 };
 STATIC_ASSERT(sizeof(CNetGameSettings) == 0x3a);
 STATIC_ASSERT(offsetof(CNetGameSettings, worldBounds) == 5);
@@ -57,7 +57,7 @@ STATIC_ASSERT(offsetof(CNetGameSettings, nameTagDrawDistance) == 0x27);
 STATIC_ASSERT(offsetof(CNetGameSettings, worldHour) == 0x2c);
 STATIC_ASSERT(offsetof(CNetGameSettings, playerMarkersMode) == 0x30);
 STATIC_ASSERT(offsetof(CNetGameSettings, showNameTags) == 0x38);
-STATIC_ASSERT(offsetof(CNetGameSettings, unknown39) == 0x39);
+STATIC_ASSERT(offsetof(CNetGameSettings, limitGlobalChatRadius) == 0x39);
 struct CNetGamePools
 {
     CMenuPool* menus;
