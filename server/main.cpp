@@ -1,6 +1,7 @@
 #include "console.h"
 #include "filterscripts.h"
 #include "gamemodes.h"
+#include "netgame.h"
 #include "plugins.h"
 #include "query.h"
 
@@ -122,6 +123,10 @@ static void RunScripts()
         CFilterScripts filters;
         CGameMode game;
         CPlugins plugins;
+        CNetGame netGame;
+        if (!netGame.Start())
+            return;
+
         pFilterScripts = &filters;
         pGameMode = &game;
         pPlugins = &plugins;
@@ -137,6 +142,7 @@ static void RunScripts()
             unsigned int previous = GetMilliseconds();
             while (!bQuitApp)
             {
+                netGame.Process();
                 const unsigned int now = GetMilliseconds();
                 game.Frame(static_cast<float>(now - previous) / 1000.0f);
                 previous = now;
@@ -336,6 +342,10 @@ int main(int argc, char** argv)
     }
 
     pConsole->Execute("exec server");
+    pConsole->AddStringVariable("artwork", CON_VARFLAG_RULE | CON_VARFLAG_READONLY, bUseArtwork ? "Yes" : "No");
+    pConsole->AddStringVariable("lagcomp", CON_VARFLAG_RULE | CON_VARFLAG_READONLY, iLagCompMode ? "On" : "Off");
+    pConsole->AddStringVariable("version", CON_VARFLAG_RULE | CON_VARFLAG_READONLY, "0.3.DL-R1");
+    pConsole->AddStringVariable("worldtime", CON_VARFLAG_RULE | CON_VARFLAG_READONLY, "12:00");
     const char* password = pConsole->GetStringVariable("rcon_password");
     if (password && strcmp(password, "changeme") == 0)
         logprintf("Error: Your password must be changed from the default password, please change it.");

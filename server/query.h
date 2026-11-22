@@ -4,6 +4,7 @@
 #include "system.h"
 
 extern BOOL bRconSocketReply;
-void RconSocketReply(char* message);
+int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* data, int length, SOCKET socket);
+void RconSocketReply(const char* message);
 
 #endif
