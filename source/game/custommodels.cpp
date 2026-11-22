@@ -612,13 +612,6 @@ BOOL CCustomModels::LoadObjectEntry(int model)
     return FALSE;
 }
 
-// The reference entry is exactly RET4; this empty behavior is native.
-// 0x0000cd40
-void CCustomModels::ReleaseObjectEntry(int model)
-{
-    (void)model;
-}
-
 // 0x000a7670
 void* GameClonePedModelInfo(int base, int model)
 {
