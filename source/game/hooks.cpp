@@ -4209,7 +4209,7 @@ __declspec(naked) void GameHookGuardMenuState()
 }
 
 // 0x000a4cb0
-__declspec(naked) void GameHook_000a4cb0()
+__declspec(naked) void GameHookSetGunMoveAnimation()
 {
     // clang-format off
     __asm {
@@ -4539,7 +4539,7 @@ __declspec(naked) void GameHookUpdateVehicleStateFlags()
 }
 
 // 0x000a4aa0
-__declspec(naked) void GameHook_000a4aa0()
+__declspec(naked) void GameHookCaptureThirdPersonCameraTarget()
 {
     // clang-format off
     __asm {

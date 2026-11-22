@@ -11,11 +11,11 @@ void Font_SetDropColor(DWORD color);
 // 0x0009fcc0
 void Font_SetOutline(int outline);
 // 0x0009fcd0
-void Font_Unk12(int value);
+void Font_SetJustify(int value);
 // 0x0009fce0
 void Font_SetScale(float x, float y);
 // 0x0009fcf0
-void Font_SetJustify(int justify);
+void Font_SetOrientation(int justify);
 // 0x0009fd00
 void Font_SetFontStyle(int style);
 // 0x0009fd10

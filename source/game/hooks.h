@@ -269,7 +269,7 @@ void GameHookApplyFrameLimiter();
 // 0x000a4c90
 void GameHookGuardMenuState();
 // 0x000a4cb0
-void GameHook_000a4cb0();
+void GameHookSetGunMoveAnimation();
 // 0x000a4170
 void GameHook_000a4170();
 // 0x000a48a0
@@ -399,7 +399,7 @@ void GameHookSkipVehicleDoorWhenDancing();
 // 0x000a4450
 void GameHookUpdateVehicleStateFlags();
 // 0x000a4aa0
-void GameHook_000a4aa0();
+void GameHookCaptureThirdPersonCameraTarget();
 // 0x000a4b20
 void GameHookCaptureWeaponAimRay();
 // 0x000a4b80
