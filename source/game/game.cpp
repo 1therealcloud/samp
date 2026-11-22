@@ -973,10 +973,6 @@ void CGame::ReleaseModel(int model, BYTE force)
             Scripting::ProcessCommand(&g_gameReleaseModelCommand, model);
         }
     }
-    else if (g_customModels && g_customModels->IsObjectEntry(model) && !GamePoolHasObjectModel(model))
-    {
-        g_customModels->ReleaseObjectEntry(model);
-    }
 }
 
 // 0x000a1430
@@ -991,8 +987,6 @@ void CGame::SetRequiredVehicleModels(BYTE* volatile priorities)
             if (model < 20000 && Scripting::ProcessCommand(&g_gameModelAvailableCommand, model))
                 Scripting::ProcessCommand(&g_gameReleaseModelCommand, model);
         }
-        else if (g_customModels && g_customModels->IsObjectEntry(model) && !GamePoolHasObjectModel(model))
-            g_customModels->ReleaseObjectEntry(model);
     }
     while (++model != 612);
     int models[212];
