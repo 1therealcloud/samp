@@ -271,17 +271,17 @@ void GameHookGuardMenuState();
 // R5 address to verify
 void GameHookSetGunMoveAnimation();
 // R5 address to verify
-void GameHook_000a4170();
+void GameHookCaptureVehicleSetClumpCaller();
 // R5 address to verify
-void GameHook_000a48a0();
+void GameHookCaptureObjectCall();
 // R5 address to verify
 extern DWORD g_hookGate18F4D0;
 // R5 address to verify
 extern DWORD g_hookRandomReturn;
 // R5 address to verify
-extern DWORD g_hookRecordReturn18E8B8;
+extern DWORD g_hookVehicleSetClumpCaller;
 // R5 address to verify
-extern DWORD g_hookRecordEcx18F5C8;
+extern DWORD g_hookCapturedObject;
 
 // Additional raw hook entries: address-only declarations, not C++ call interfaces.
 // 0x000ecaec
@@ -435,13 +435,13 @@ extern DWORD g_hookCapture0018E80C;
 // R5 address to verify
 extern DWORD g_hookCapture0018E92C;
 // R5 address to verify
-extern DWORD g_hookCapture0018EAAC;
+extern DWORD g_hookStreamingFileBuffer;
 // R5 address to verify
 extern DWORD g_hookCapture0018EB74;
 // R5 address to verify
 extern DWORD g_hookCapture0018F338;
 // R5 address to verify
-extern DWORD g_hookCapture0018F344;
+extern DWORD g_hookStreamingThirdStackWord;
 // R5 address to verify
 extern DWORD g_hookCapture0018F348;
 // R5 address to verify
@@ -455,7 +455,7 @@ extern DWORD g_hookCapture0018F380;
 // R5 address to verify
 extern DWORD g_hookCapture0018F48C;
 // R5 address to verify
-extern DWORD g_hookCapture0018F490;
+extern DWORD g_hookStreamingModelId;
 // R5 address to verify
 extern DWORD g_hookCapture0018F608;
 // R5 address to verify
@@ -469,7 +469,7 @@ void GameHookApplyRemoteSkillContextB();
 // R5 address to verify
 void GameHookAdjustVehicleAimMatrix();
 // R5 address to verify
-void GameHook_000a4680();
+void GameHookCaptureStreamingConversion();
 // R5 address to verify
 void GameHookPatchCustomObjectRenderPath();
 
