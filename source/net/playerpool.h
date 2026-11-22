@@ -95,7 +95,7 @@ public:
     CObject* FindAccessory(void* backend);
     // Local pose/accessories first, then remote slots whose connected DWORD equals1.
     // 0x00013840
-    void Native013840();
+    void ProcessPlayerPosesAndAccessories();
     // Matches the GTA ped backend and retains live pool reloads after backend calls.
     // 0x000137c0
     WORD Find(void* ped);

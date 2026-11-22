@@ -651,7 +651,7 @@ void CRemotePlayer::ProcessHead()
         return;
     if (g_pGame && !*(DWORD*)((BYTE*)g_pGame + 0x59))
         return;
-    if (m_state.ped->GetStuff())
+    if (m_state.ped->GetHeldObjectType())
         return;
     CMatrix matrix;
     m_state.ped->GetMatrix(&matrix);
@@ -806,15 +806,15 @@ void CRemotePlayer::ProcessSpecialAction()
         m_state.ped->StartUrinating();
     if (m_state.ped->DoesUrinating() && m_state.specialAction != 68)
         m_state.ped->StopUrinating();
-    if (m_state.specialAction == 20 && m_state.ped->GetStuff() != 1)
+    if (m_state.specialAction == 20 && m_state.ped->GetHeldObjectType() != 1)
         m_state.ped->GiveStuff(1);
-    if (m_state.specialAction == 22 && m_state.ped->GetStuff() != 2)
+    if (m_state.specialAction == 22 && m_state.ped->GetHeldObjectType() != 2)
         m_state.ped->GiveStuff(2);
-    if (m_state.specialAction == 23 && m_state.ped->GetStuff() != 3)
+    if (m_state.specialAction == 23 && m_state.ped->GetHeldObjectType() != 3)
         m_state.ped->GiveStuff(3);
-    if (m_state.specialAction == 21 && m_state.ped->GetStuff() != 4)
+    if (m_state.specialAction == 21 && m_state.ped->GetHeldObjectType() != 4)
         m_state.ped->GiveStuff(4);
-    if (m_state.ped->GetStuff())
+    if (m_state.ped->GetHeldObjectType())
     {
         BYTE action = m_state.specialAction;
         if (action == 20 || action == 22 || action == 23 || action == 21)

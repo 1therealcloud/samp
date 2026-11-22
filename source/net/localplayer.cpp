@@ -177,15 +177,15 @@ BYTE CLocalPlayer::GetSpecialAction()
         return 3;
     if (GetPed()->HasTaskType704())
         return 4;
-    if (GetPed()->GetStuff())
+    if (GetPed()->GetHeldObjectType())
     {
-        if (GetPed()->GetStuff() == 1)
+        if (GetPed()->GetHeldObjectType() == 1)
             return 20;
-        if (GetPed()->GetStuff() == 2)
+        if (GetPed()->GetHeldObjectType() == 2)
             return 22;
-        if (GetPed()->GetStuff() == 3)
+        if (GetPed()->GetHeldObjectType() == 3)
             return 23;
-        if (GetPed()->GetStuff() == 4)
+        if (GetPed()->GetHeldObjectType() == 4)
             return 21;
     }
     if (GetPed()->HasDanceState())
@@ -751,7 +751,7 @@ void CLocalPlayer::SetSpecialAction(BYTE action)
                 GetPed()->EnableCellphone(FALSE);
             if (GetPed()->DoesUrinating())
                 GetPed()->StopUrinating();
-            if (GetPed()->GetStuff())
+            if (GetPed()->GetHeldObjectType())
                 GetPed()->DropStuff();
             if (GetPed()->HasJetpack())
                 GetPed()->DisableJetpack();
@@ -1466,7 +1466,7 @@ void CLocalPlayer::ProcessHead()
         return;
     if (g_pGame && !*(DWORD*)((BYTE*)g_pGame + 0x59))
         return;
-    if (ped->GetStuff())
+    if (ped->GetHeldObjectType())
         return;
     if (g_deviceObjectEdit && *(DWORD*)(g_deviceObjectEdit + 0x80))
         return;
@@ -2058,7 +2058,7 @@ BOOL CLocalPlayer::Process()
                 m_state.ped->EnableCellphone(FALSE);
             if (m_state.ped->DoesUrinating())
                 m_state.ped->StopUrinating();
-            if (m_state.ped->GetStuff())
+            if (m_state.ped->GetHeldObjectType())
                 m_state.ped->DropStuff();
             m_state.ped->SetDrunkLevel(0);
             m_state.ped->SetControllable(TRUE);
@@ -2098,7 +2098,7 @@ BOOL CLocalPlayer::Process()
             m_state.ped->SetControllable(TRUE);
         if ((m_state.ped->DoesUrinating() && *(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e)) || (m_state.ped->DoesUrinating() && m_state.ped->IsInVehicle()))
             m_state.ped->StopUrinating();
-        if (m_state.ped->GetStuff())
+        if (m_state.ped->GetHeldObjectType())
         {
             if (!*(WORD*)((BYTE*)KeyStuff::GetInternalKeys() + 0x1e) && !m_state.ped->IsInVehicle())
                 m_state.ped->ApplyStuff();

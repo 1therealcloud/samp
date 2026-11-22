@@ -95,13 +95,13 @@ public:
     void Draw();
     // Preview coordinator; actual GTA preview execution remains unverified.
     // 0x000b30a0
-    void Native0B30A0();
+    void PrepareModelPreview();
     // 0x000b32b0
     void OnLostDevice();
     // 0x000b2c90
-    void Native0B2C90();
+    void DrawTexture();
     // 0x000b2da0
-    void Native0B2DA0();
+    void DrawText();
 };
 #pragma pack(pop)
 STATIC_ASSERT(sizeof(TextDrawTransmit) == 63);

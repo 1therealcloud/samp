@@ -31,9 +31,9 @@ const char g_textDrawLongKeyString[40] = "Error: can't use k-codes in long strin
 void CTextDraw::Draw()
 {
     if (data.format.textureSlot != -1)
-        Native0B2C90();
+        DrawTexture();
     else
-        Native0B2DA0();
+        DrawText();
 }
 
 // 0x000b32b0
@@ -104,7 +104,7 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
 }
 
 // 0x000b2c90
-void CTextDraw::Native0B2C90()
+void CTextDraw::DrawTexture()
 {
     BYTE* state = (BYTE*)this;
     BYTE highlighted = data.hovered;
@@ -166,7 +166,7 @@ void CTextDraw::Native0B2C90()
 }
 
 // 0x000b2da0
-void CTextDraw::Native0B2DA0()
+void CTextDraw::DrawText()
 {
     BYTE* state = (BYTE*)this;
     if (!state)
@@ -353,7 +353,7 @@ BOOL GameInitializeTextDrawTextures()
 }
 
 // 0x000b30a0
-void CTextDraw::Native0B30A0()
+void CTextDraw::PrepareModelPreview()
 {
     if (data.format.style != 5 || data.format.textureSlot != -1)
         return;

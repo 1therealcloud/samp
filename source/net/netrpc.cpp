@@ -907,9 +907,9 @@ void ScrSetVehicleParamsEx(RPCParameters* parameters)
     if (!vehicle)
         return;
     if (params[0] <= 1)
-        vehicle->SetField50(params[0]);
+        vehicle->SetEngineState(params[0]);
     if (params[1] <= 1)
-        vehicle->SetField54(params[1]);
+        vehicle->SetLightsState(params[1]);
     if (params[3] <= 1)
         vehicle->Lock(params[3]);
     if (params[6] <= 1)
