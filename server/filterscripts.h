@@ -15,6 +15,7 @@ public:
     bool UnloadOneFilterScript(const char* name);
     void UnloadFilterScripts();
     int CallPublic(const char* name);
+    int CallPublic(const char* name, const cell* arguments, int count, cell defaultResult);
     void OnGameModeInit();
     void OnGameModeExit();
 

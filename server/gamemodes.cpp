@@ -70,19 +70,24 @@ void CGameMode::Frame(float elapsed)
 // 0x0046dba0 (Windows)
 int CGameMode::CallPublic(const char* name)
 {
-    cell result = 0;
+    return CallPublic(name, 0, 0, 0);
+}
+
+int CGameMode::CallPublic(const char* name, const cell* arguments, int count, cell defaultResult)
+{
+    cell result = defaultResult;
     if (!m_active)
         return result;
 
     if (!m_sleeping)
     {
-        CallScriptPublic(&m_amx, name, result);
+        CallScriptPublic(&m_amx, name, result, arguments, count);
         return result;
     }
 
     // amx_Exec updates the registers needed by AMX_EXEC_CONT.
     const AMX suspended = m_amx;
-    CallScriptPublic(&m_amx, name, result);
+    CallScriptPublic(&m_amx, name, result, arguments, count);
     m_amx.cip = suspended.cip;
     m_amx.frm = suspended.frm;
     m_amx.hea = suspended.hea;

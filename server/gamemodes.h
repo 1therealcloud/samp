@@ -12,6 +12,7 @@ public:
     void Unload();
     void Frame(float elapsed);
     int CallPublic(const char* name);
+    int CallPublic(const char* name, const cell* arguments, int count, cell defaultResult);
 
 private:
     CGameMode(const CGameMode&);

@@ -94,10 +94,15 @@ void CFilterScripts::UnloadFilterScripts()
 // 0x0046ada0 (Windows)
 int CFilterScripts::CallPublic(const char* name)
 {
-    cell result = 0;
+    return CallPublic(name, 0, 0, 0);
+}
+
+int CFilterScripts::CallPublic(const char* name, const cell* arguments, int count, cell defaultResult)
+{
+    cell result = defaultResult;
     for (int i = 0; i < MaxFilterScripts; ++i)
     {
-        if (m_scripts[i].active && CallScriptPublic(&m_scripts[i].amx, name, result) && !result)
+        if (m_scripts[i].active && CallScriptPublic(&m_scripts[i].amx, name, result, arguments, count) && !result)
             break;
     }
     return result;

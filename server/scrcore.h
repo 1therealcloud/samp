@@ -7,7 +7,7 @@ int AMXAPI aux_LoadProgram(AMX* amx, const char* filename);
 int AMXAPI aux_FreeProgram(AMX* amx);
 bool LoadScript(AMX* amx, const char* filename);
 void UnloadScript(AMX* amx);
-bool CallScriptPublic(AMX* amx, const char* name, cell& result);
+bool CallScriptPublic(AMX* amx, const char* name, cell& result, const cell* arguments = 0, int count = 0);
 void ReportScriptError(const char* name, int error);
 
 #endif
