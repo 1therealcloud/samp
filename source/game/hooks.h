@@ -297,13 +297,13 @@ extern WORD g_hookCapture00151AB4;
 // R5 address to verify
 extern WORD g_hookCapture00151AC4;
 // R5 address to verify
-extern DWORD g_hookCapture0018E540;
+extern DWORD g_hookCameraTargetThis;
 // R5 address to verify
 extern DWORD g_hookCapture0018E544;
 // R5 address to verify
 extern DWORD g_hookCapture0018E564;
 // R5 address to verify
-extern DWORD g_hookCapture0018E588;
+extern DWORD g_hookSavedGunTaskParameter;
 // R5 address to verify
 extern DWORD g_hookCapture0018E58C;
 // R5 address to verify
@@ -315,23 +315,23 @@ extern CVector g_hookAimRayTarget;
 // R5 address to verify
 extern DWORD g_hookCapture0018E814;
 // R5 address to verify
-extern DWORD g_hookCapture0018E818;
+extern DWORD g_hookCameraTargetSourceOut;
 // R5 address to verify
 extern DWORD g_hookCapture0018E86C;
 // R5 address to verify
-extern DWORD g_hookCapture0018E874;
+extern DWORD g_hookCameraTargetOriginY;
 // R5 address to verify
 extern DWORD g_hookCapture0018E8C8;
 // R5 address to verify
 extern DWORD g_hookCapture0018E8D4;
 // R5 address to verify
-extern DWORD g_hookCapture0018E924;
+extern DWORD g_hookCameraTargetDestinationOut;
 // R5 address to verify
 extern DWORD g_hookCapture0018E928;
 // R5 address to verify
 extern CVector g_hookAimRayOrigin;
 // R5 address to verify
-extern DWORD g_hookCapture0018EAA0;
+extern DWORD g_hookCameraTargetOriginX;
 // R5 address to verify
 extern DWORD g_hookCapture0018EAA4;
 // R5 address to verify
@@ -341,7 +341,7 @@ extern DWORD g_hookCapture0018EAB0;
 // R5 address to verify
 extern DWORD g_hookCapture0018EB1C;
 // R5 address to verify
-extern DWORD g_hookCapture0018EB70;
+extern DWORD g_hookCameraTargetOriginZ;
 // R5 address to verify
 extern DWORD g_hookCapture0018EB78;
 // R5 address to verify
@@ -357,11 +357,11 @@ extern DWORD g_hookCapture0018F350;
 // R5 address to verify
 extern DWORD g_hookCapture0018F354;
 // R5 address to verify
-extern DWORD g_hookCapture0018F360;
+extern DWORD g_hookCameraTargetRange;
 // R5 address to verify
 extern DWORD g_hookCapture0018F368;
 // R5 address to verify
-extern DWORD g_hookCapture0018F37C;
+extern DWORD g_hookGunTaskResult;
 // R5 address to verify
 extern DWORD g_hookCapture0018F558;
 // R5 address to verify
