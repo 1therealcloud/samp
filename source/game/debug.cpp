@@ -4,14 +4,12 @@
 #include "game/hooks.h"
 #include "game/keystuff.h"
 #include "game/playerped.h"
-#include "game/quaternion.h"
 #include "game/util.h"
 #include "game/vehicle.h"
 #include "gui/chatwindow.h"
 #include "gui/gui.h"
 #include "main.h"
 
-#include <stdio.h>
 #include <string.h>
 // 0x0011f56c
 const char g_taskNoneName[5] = "None";
@@ -31,63 +29,10 @@ DWORD g_debugSelectionFlagA;
 DWORD g_debugSelectionFlagB;
 // 0x0011e530
 const char g_debugVehicleSelectText[15] = "Vehicle Select";
-// 0x0011c198
-const char g_debugVehicleTypeFormat[8] = "TYPE_%d";
 // 0x0018dc20
 BYTE g_nativeDebugFlag18DC20 = 0;
-// 0x0018dd50
-float g_debugHeightmapStartX = 0;
-// 0x0018dde4
-float g_debugHeightmapStartY = 0;
-// 0x0018de18
-DWORD g_debugHeightmapStage = 0;
-// 0x0018de28
-DWORD g_debugHeightmapFlagCopy = 0;
-// 0x0018de2c
-FILE* g_debugHeightmapFile = 0;
-// 0x0011e50c
-const char g_debugHeightmapFilename[] = "c:\\blocks\\SA2_bos.hmap";
-// 0x0018dc1c
-FILE* g_debugPlacementFile = 0;
-// 0x0011e3d8
-const char g_debugPlacementFilename[] = "c:\\0\\lc2sa_LoadObjectInstance_1_noipllods_Zonly_Q2E.txt";
-// 0x0011e3a8
-const char g_debugPlacementFormat[] = "%d,%.7f,%.7f,%.7f,%.5f,%.5f,%.5f,%.2f,%u,%X\n";
-// 0x0011e340
-const char g_debugEntityPlacementFormat[] = "%u,%.5f,%.5f,%.5f,0.0,0.0,%.5f,%.5f\n";
-// 0x0011d7c0
-const double g_debugEulerNegativeOne = -1.0;
-// 0x0011e36c
-const float g_debugPlacementMaxDrawDistance = 299.0f;
-// 0x0011e368
-const float g_debugPlacementMaxZ = 500.0f;
-// 0x001518d0
-DWORD g_debugHeightmapTileEnd = 900;
-// 0x0018de1c
-DWORD g_debugHeightmapFinished = 0;
-// 0x0018de20
-DWORD g_debugHeightmapTilePrepared = 0;
-// 0x0018de24
-DWORD g_debugHeightmapWaitFrames = 0;
-// 0x0011e4d8
-const char g_debugHeightmapBlockFormat[] = "HM Setup Block: %d Row/Col: %d,%d XY: %.2f,%.2f";
-// 0x0011e524
-const char g_debugHeightmapFinishedText[] = "Finished HM";
-
-// 0x0011e370
-const char g_debugAllBuildingsFilename[] = "c:\\0\\AllBuildingsLC2SA_1_raw_nolod_noint.txt";
 // 0x0011f594
 const char g_debugRasterMissingText[] = "No texture!";
-// 0x0011f5cc
-const char g_debugRasterFirstFilename[] = "Raster1.bmp";
-// 0x0011f5a0
-const char g_debugRasterSecondFilename[] = "Raster2.bmp";
-// 0x0011f5ac
-const char g_debugRasterDimensionsFormat[] = "Width %u Height: %u Depth: %u";
-
-// 0x002aae10
-void* g_rwImageScratch;
-
 // 0x000b3cf0
 const char* GameGetTaskName(void* task)
 {
@@ -237,9 +182,6 @@ void GameDrawDebugEntities()
         {
             CMatrix matrix;
             ped->GetMatrix(&matrix);
-            // Native still formats this unused temporary model label.
-            char type[9] = {0};
-            sprintf(type, g_debugVehicleTypeFormat, g_debugSelectedVehicleModel);
             CVehicle* created = g_pGame->CreateVehicle(g_debugSelectedVehicleModel, matrix.position.x - 5.0f, matrix.position.y - 5.0f, matrix.position.z + 1.0f, 0, FALSE);
             if (created)
                 ped->PutIntoVehicle(created->m_nHandle, 0);
@@ -281,257 +223,10 @@ float GameDebugGroundHeight(const CVector* position)
     return *(float*)(collision + 8);
 }
 
-// 0x0009dda0
-void GameDebugOpenHeightmap()
-{
-    g_debugHeightmapFile = fopen(g_debugHeightmapFilename, g_customDownloadWriteMode);
-    g_debugHeightmapFlagCopy = g_debugSelectionFlagA;
-    g_debugHeightmapStage = 1;
-}
-
-// 0x0009dcd0
-void GameDebugWriteHeightmap()
-{
-    DWORD firstX;
-    memcpy(&firstX, &g_debugHeightmapStartX, 4);
-    if (!g_debugHeightmapFile)
-        return;
-    CVector start;
-    memcpy(&start.y, &g_debugHeightmapStartY, 4);
-    start.z = 530.0f;
-    for (int row = 0; row < 200; ++row)
-    {
-        // clang-format off
-        __asm {
-            fld dword ptr firstX
-            fstp dword ptr start
-        }
-        // clang-format on
-        for (int column = 0; column < 200; ++column)
-        {
-            CVector end;
-            end.x = start.x;
-            memcpy(&end.y, &start.y, 4);
-            end.z = -100.0f;
-            BYTE collision[52];
-            void* entity;
-            GameProcessLineOfSightRaw(&start, &end, collision, &entity, 1, 0, 0, 1, 1, 1, 0, 0);
-            DWORD height;
-            memcpy(&height, collision + 8, 4);
-            fwrite(&height, 1, 4, g_debugHeightmapFile);
-            start.x += 1.0f;
-        }
-        start.y -= 1.0f;
-    }
-}
-
-// 0x0009ce60
-void GameDebugWriteEntityPlacement(void* entity, FILE* file)
-{
-    if (!entity)
-        return;
-    BYTE* backend = (BYTE*)entity;
-    float heading;
-    CVector position;
-    void* matrix = *(void**)(backend + 0x14);
-    if (matrix)
-    {
-        // clang-format off
-        __asm {
-            mov ecx,matrix
-            fld dword ptr [ecx+0x10]
-            fchs
-            fld dword ptr [ecx+0x14]
-            fpatan
-            fmul g_entityRadiansToDegrees
-            fst heading
-            fcomp g_objectScaleLowerBound
-            fld heading
-            fnstsw ax
-            test ah,5
-            jp nonnegative_heading
-            fadd g_anglePeriod
-            fstp heading
-            jmp heading_done
-        nonnegative_heading:
-            fcomp g_anglePeriod
-            fnstsw ax
-            test ah,1
-            jne heading_done
-            fld heading
-            fsub g_anglePeriod
-            fstp heading
-        heading_done:
-        }
-        // clang-format on
-        matrix = *(void**)(backend + 0x14);
-        memcpy(&position, (BYTE*)matrix + 0x30, 12);
-    }
-    else
-    {
-        // clang-format off
-        __asm {
-            mov eax,backend
-            fld dword ptr [eax+0x10]
-            fmul g_entityRadiansToDegrees
-            fstp heading
-        }
-        // clang-format on
-        memcpy(&position, backend + 4, 12);
-    }
-    void* info = GameGetModelInfo(*(short*)(backend + 0x22));
-    float distance;
-    BYTE withinDistance;
-    // clang-format off
-    // Native compares ST0 before the stored float distance is reloaded for output.
-    __asm {
-        push info
-        call GameGetModelDrawDistance
-        fst distance
-        fcomp g_debugPlacementMaxDrawDistance
-        fnstsw ax
-        test ah,0x41
-        setnp withinDistance
-    }
-    // clang-format on
-    if (withinDistance && position.z < g_debugPlacementMaxZ) fprintf(file, g_debugEntityPlacementFormat, (DWORD)(int)*(short*)(backend + 0x22), (double)position.x,
-                                                                     (double)position.y, (double)position.z, (double)heading, (double)distance);
-}
-
-// 0x0009d100
-int GameDebugWritePlacementRecord(const GameDebugPlacementRecord* record)
-{
-    if (!g_debugPlacementFile)
-    {
-        // Native mode address11BBD4 shares its bytes with RPC integer119 ("w").
-        g_debugPlacementFile = fopen(g_debugPlacementFilename, (const char*)&g_renderMapClickRpc);
-        if (!g_debugPlacementFile)
-            return 0;
-    }
-    double roll, pitch, yaw;
-    GameQuaternionDoubleToEuler(record->qx, record->qy, record->qz, record->qw, &roll, &pitch, &yaw);
-    float heading;
-    // clang-format off
-    __asm {
-        fld yaw
-        fmul g_debugEulerNegativeOne
-        fstp heading
-    }
-    // clang-format on
-    float distance = GameGetModelDrawDistance(GameGetModelInfo(record->model));
-    WORD flags = GameGetModelFlagsWord(record->model);
-    DWORD nonnegative = record->raw24 >= 0 ? 1 : 0;
-    double angle;
-    // clang-format off
-    __asm {
-        fld heading
-        fmul g_entityRadiansToDegrees
-        fstp angle
-    }
-    // clang-format on
-    fprintf(g_debugPlacementFile, g_debugPlacementFormat, record->model, (double)record->x, (double)record->y, (double)record->z, g_pedParachuteZero, g_pedParachuteZero, angle,
-            (double)distance, nonnegative, (DWORD)flags);
-    return 0;
-}
-
-// 0x0009dba0
-void GameDebugSelectHeightmapBlock(int index)
-{
-    int row = index > 29 ? index / 30 : 0;
-    int column = (int)((DWORD)index - (DWORD)row * 30);
-    int rawX = (int)((DWORD)column * 200), rawY = (int)((DWORD)row * 200);
-    double displayY;
-    // clang-format off
-    // Native prints Y before a float reload, but X after its float spill.
-    __asm {
-        fild rawX
-        fsub g_hookCollisionBoundHigh
-        fstp g_debugHeightmapStartX
-        fild rawY
-        fsubr g_hookCollisionBoundHigh
-        fst g_debugHeightmapStartY
-        fstp displayY
-    }
-    // clang-format on
-    g_pChat->AddDebugMessage(g_debugHeightmapBlockFormat, index, row, column, (double)g_debugHeightmapStartX, displayY);
-}
-
-// 0x0009dc30
-void GameDebugMoveToHeightmapBlock()
-{
-    GameDebugSelectHeightmapBlock((int)g_debugHeightmapFlagCopy);
-    CPed* ped = g_pGame->GetPlayerPed();
-    ped->Teleport(g_debugHeightmapStartX + g_vehicleTrainSpeedMaximum, g_debugHeightmapStartY - g_vehicleTrainSpeedMaximum, 540.0f);
-}
-
-// 0x0009ddd0
-void GameDebugProcessHeightmap()
-{
-    if (!g_debugHeightmapStage)
-    {
-        GameDebugOpenHeightmap();
-        return;
-    }
-    if (g_debugHeightmapFinished)
-    {
-        // Native leaves stage, completion flag and the closed FILE pointer intact.
-        g_pChat->AddDebugMessage(g_debugHeightmapFinishedText);
-        fclose(g_debugHeightmapFile);
-        CPed* ped = g_pGame->GetPlayerPed();
-        ped->SetCollisionProcessed(TRUE);
-        ped->SetCollisionFlag(TRUE);
-        return;
-    }
-    CPed* ped = g_pGame->GetPlayerPed();
-    ped->SetCollisionProcessed(FALSE);
-    ped->SetCollisionFlag(FALSE);
-    if (!g_debugHeightmapTilePrepared)
-    {
-        GameDebugMoveToHeightmapBlock();
-        g_debugHeightmapTilePrepared = 1;
-        g_debugHeightmapWaitFrames = 110;
-        return;
-    }
-    if (!g_debugHeightmapWaitFrames)
-    {
-        GameDebugWriteHeightmap();
-        DWORD next = g_debugHeightmapFlagCopy + 1;
-        g_debugHeightmapTilePrepared = 0;
-        g_debugHeightmapFlagCopy = next;
-        if (next == g_debugHeightmapTileEnd)
-            g_debugHeightmapFinished = 1;
-        return;
-    }
-    --g_debugHeightmapWaitFrames;
-}
-
 // 0x002abe40
 #define g_debugRasterSource (*(void**)(g_entityCollisionScratch + 0x1028))
 // 0x002abe44
 #define g_debugRasterResult (*(void**)(g_entityCollisionScratch + 0x102c))
-// 0x002abe48
-#define g_debugRasterAlternate (*(void**)(g_entityCollisionScratch + 0x1030))
-// 0x0009cf80
-void GameDebugExportWorldPlacements()
-{
-    FILE* file = fopen(g_debugAllBuildingsFilename, (const char*)&g_renderMapClickRpc);
-    if (!file)
-        return;
-    BYTE* cursor = (BYTE*)GamePoolBuildingGetArray();
-    for (int count = 20000; count; --count, cursor += 56)
-        if (*(DWORD*)cursor && *(DWORD*)cursor != 0x863c40)
-            GameDebugWriteEntityPlacement(cursor, file);
-    cursor = (BYTE*)GamePoolDummyGetArray();
-    for (int count = 16000; count; --count, cursor += 56)
-        if (*(DWORD*)cursor && *(DWORD*)cursor != 0x863c40)
-            GameDebugWriteEntityPlacement(cursor, file);
-    cursor = (BYTE*)GamePoolObjectGetArray();
-    for (int count = 3100; count; --count, cursor += 412)
-        if (*(DWORD*)cursor && *(DWORD*)cursor != 0x863c40)
-            GameDebugWriteEntityPlacement(cursor, file);
-    fclose(file);
-}
-
 // 0x000b5610
 void GameDebugBindRasterResult()
 {
@@ -547,44 +242,4 @@ void GameDebugBindRasterResult()
     *(void**)0xb4e47c = result;
     *(void**)0xb4e3ec = result;
     *(DWORD*)0x8a7780 = 0x40000000;
-}
-
-// 0x000b5690
-void GameDebugWriteRasterImage(void* raster, const char* filename)
-{
-    // Read the published scratch pointer again before every RenderWare call.
-    void* volatile& image = g_rwImageScratch;
-    image = ((void*(__cdecl*)(DWORD, DWORD, DWORD))0x8026e0)(g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
-    ((void*(__cdecl*)(void*))0x8027a0)(image);
-    ((void*(__cdecl*)(void*, void*))0x804250)(image, raster);
-    ((void*(__cdecl*)(void*, const char*))0x7ce990)(image, filename);
-    ((DWORD(__cdecl*)(void*))0x802740)(image);
-}
-
-// 0x000b5700
-void GameDebugDumpRasterImages()
-{
-    g_debugRasterSource = *(void**)0xc402d8;
-    BYTE* raster = (BYTE*)g_debugRasterSource;
-    // Native dereferences the first pointer BEFORE checking it for null.
-    g_gamePlayerTableUnknown2A9D98[0] = *(DWORD*)(raster + 0x14);
-    g_rwImageHeight = *(DWORD*)(raster + 0x10);
-    g_gamePlayerTableUnknown2A9D98[1] = *(DWORD*)(raster + 0xc);
-    if (g_debugRasterSource)
-    {
-        GameDebugWriteRasterImage(g_debugRasterSource, g_debugRasterFirstFilename);
-        g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
-    }
-    if (g_debugRasterAlternate)
-    {
-        raster = (BYTE*)g_debugRasterAlternate;
-        g_gamePlayerTableUnknown2A9D98[0] = *(DWORD*)(raster + 0x14);
-        g_rwImageHeight = *(DWORD*)(raster + 0x10);
-        g_gamePlayerTableUnknown2A9D98[1] = *(DWORD*)(raster + 0xc);
-        if (g_debugRasterAlternate)
-        {
-            GameDebugWriteRasterImage(g_debugRasterAlternate, g_debugRasterSecondFilename);
-            g_pChat->AddDebugMessage(g_debugRasterDimensionsFormat, g_gamePlayerTableUnknown2A9D98[1], g_rwImageHeight, g_gamePlayerTableUnknown2A9D98[0]);
-        }
-    }
 }
