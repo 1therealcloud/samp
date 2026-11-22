@@ -5332,19 +5332,19 @@ void GameProcessPedControlBody()
         }
         if (g_pGame->GetPlayerPed())
         {
-            if (g_pGame->GetPlayerPed()->unknown2f7)
+            if (g_pGame->GetPlayerPed()->m_blockPedInputAt24)
             {
                 g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
                 *(WORD*)(g_hookVehicleKeys + 0x24) = 0;
                 *(WORD*)(g_hookVehicleKeys + 0x54) = 0;
             }
-            if (g_pGame->GetPlayerPed()->unknown2f6)
+            if (g_pGame->GetPlayerPed()->m_blockPedInputAt1C)
             {
                 g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
                 *(WORD*)(g_hookVehicleKeys + 0x1c) = 0;
                 *(WORD*)(g_hookVehicleKeys + 0x4c) = 0;
             }
-            if (g_pGame->GetPlayerPed()->unknown2f8)
+            if (g_pGame->GetPlayerPed()->m_blockPedInputAt20)
             {
                 g_hookVehicleKeys = (DWORD)KeyStuff::GetInternalKeys();
                 *(WORD*)(g_hookVehicleKeys + 0x20) = 0;
