@@ -913,8 +913,9 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* source, CONST RECT* 
                     int subtype = vehicle->GetSubtype();
                     int model = entity->GetModelIndex();
                     char text[256];
-                    snprintf(text, sizeof(text), "[id: %d, type: %d subtype: %d Health: %.1f preloaded: %u]\nDistance: %.2fm\nPassengerSeats: %u\ncPos: %.3f,%.3f,%.3f\nsPos: %.3f,%.3f,%.3f", i,
-                            model, subtype, health, preloaded, distance, seats, cx, cy, cz, sx, sy, sz);
+                    snprintf(text, sizeof(text),
+                             "[id: %d, type: %d subtype: %d Health: %.1f preloaded: %u]\nDistance: %.2fm\nPassengerSeats: %u\ncPos: %.3f,%.3f,%.3f\nsPos: %.3f,%.3f,%.3f", i, model,
+                             subtype, health, preloaded, distance, seats, cx, cy, cz, sx, sy, sz);
                     g_deviceLabel->Draw(&position, text, 0xff358bd4, TRUE, FALSE);
                 }
             }

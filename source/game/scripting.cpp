@@ -136,6 +136,7 @@ DWORD __cdecl Scripting::ProcessCommand(const OpcodeInfo* command, ...)
             memcpy(g_scriptVariables[i], g_scriptThread->opaque + 0x3c + i * 4, 4);
         _statusfp();
     }
-    __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), "opcode")) {}
+    __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), "opcode"))
+    {}
     return result;
 }

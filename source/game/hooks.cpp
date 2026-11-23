@@ -1250,8 +1250,7 @@ static bool IsObjectDrawDistanceFar(const BYTE* object)
 
 static bool IsCollisionPointWithinBounds(const float* point)
 {
-    return !(point[0] > g_hookCollisionBoundHigh || point[0] < g_hookCollisionBoundLow ||
-             point[1] > g_hookCollisionBoundHigh || point[1] < g_hookCollisionBoundLow);
+    return !(point[0] > g_hookCollisionBoundHigh || point[0] < g_hookCollisionBoundLow || point[1] > g_hookCollisionBoundHigh || point[1] < g_hookCollisionBoundLow);
 }
 
 static void ScaleShotRayPoint(float* point)
@@ -4281,8 +4280,8 @@ static void LogPedSpeech()
         return;
     float probability;
     memcpy(&probability, &g_hookSpeechProbability, sizeof(probability));
-    g_pChat->AddDebugMessage(g_hookPedSayFormat, g_hookSpeechContext, g_hookSpeechStartDelay, (double)probability,
-                             g_hookSpeechOverrideSilence, g_hookSpeechForceAudible, g_hookSpeechFrontEnd);
+    g_pChat->AddDebugMessage(g_hookPedSayFormat, g_hookSpeechContext, g_hookSpeechStartDelay, (double)probability, g_hookSpeechOverrideSilence, g_hookSpeechForceAudible,
+                             g_hookSpeechFrontEnd);
 }
 
 // 0x000a3bc0

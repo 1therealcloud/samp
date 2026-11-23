@@ -54,8 +54,8 @@ void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asD
         }
         else
         {
-            snprintf(line, sizeof(line), "+%04X: %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X\r\n", offset, p[0], p[1], p[2], p[3], p[4], p[5], p[6],
-                    p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);
+            snprintf(line, sizeof(line), "+%04X: %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X\r\n", offset, p[0], p[1], p[2], p[3], p[4],
+                     p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);
         }
         strncat_s(text, line, _TRUNCATE);
     }
@@ -120,14 +120,14 @@ void ClientConstructCrashText(BOOL includeModules)
     char text[16384];
     CONTEXT* c = g_clientExceptionContext;
     snprintf(g_clientCrashText, sizeof(g_clientCrashText),
-            "SA-MP %s\r\nException At Address: 0x%08X\r\nBase: 0x%08X\r\n\r\nRegisters:\r\nEAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\r\nESI: 0x%08X\tEDI: 0x%08X\tEBP: "
-            "0x%08X\tESP: 0x%08X\r\nEFLAGS: 0x%08X\r\n\r\nStack:\r\n",
+             "SA-MP %s\r\nException At Address: 0x%08X\r\nBase: 0x%08X\r\n\r\nRegisters:\r\nEAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\r\nESI: 0x%08X\tEDI: 0x%08X\tEBP: "
+             "0x%08X\tESP: 0x%08X\r\nEFLAGS: 0x%08X\r\n\r\nStack:\r\n",
 #if defined(DL_BUILD)
-            "0.3.DL-R1",
+             "0.3.DL-R1",
 #else  // DL_BUILD
-            "0.3.7-R5",
+             "0.3.7-R5",
 #endif // DL_BUILD
-            c->Eip, reinterpret_cast<UINT_PTR>(g_clientModule), c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
+             c->Eip, reinterpret_cast<UINT_PTR>(g_clientModule), c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
 
     ClientDumpMemory((const BYTE*)c->Esp, 640, g_clientCrashText, TRUE);
     snprintf(text, sizeof(text), "\r\nSCM Op: 0x%X, lDbg: %d LastRendObj: %u\r\n", g_scriptLastOpcode, g_scriptLocalDebug, (unsigned)g_clientCrashLastRenderedObject);

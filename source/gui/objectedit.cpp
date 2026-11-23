@@ -671,7 +671,8 @@ void CObjectEdit::Render()
                 CMatrix matrix;
                 object->GetMatrix(&matrix);
                 const float distance = (float)((double)object->GetDistanceToCamera() * g_objectEditDistanceScale);
-                if (RenderControls(&matrix, distance)) controlsVisible = 1;
+                if (RenderControls(&matrix, distance))
+                    controlsVisible = 1;
             }
         }
     }
@@ -695,7 +696,8 @@ void CObjectEdit::Render()
                 memcpy(&matrix.right, &boneMatrix.right, 12);
                 memcpy(&matrix.at, &boneMatrix.at, 12);
             }
-            if (RenderControls(&matrix, distance * g_objectEditDistanceScale)) controlsVisible = 1;
+            if (RenderControls(&matrix, distance * g_objectEditDistanceScale))
+                controlsVisible = 1;
         }
     }
     if (!flags[1])

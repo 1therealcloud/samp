@@ -119,11 +119,9 @@ void GameQuaternionToEuler(const GameQuaternion* quaternion, CVector* angles)
     const volatile float xx = quaternion->x * quaternion->x;
     const volatile float yy = quaternion->y * quaternion->y;
     const volatile float zz = quaternion->z * quaternion->z;
-    angles->x = (float)atan2(2.0 * ((double)quaternion->y * quaternion->x + (double)quaternion->z * quaternion->w),
-                            ((double)xx - yy) - zz + ww);
+    angles->x = (float)atan2(2.0 * ((double)quaternion->y * quaternion->x + (double)quaternion->z * quaternion->w), ((double)xx - yy) - zz + ww);
     angles->y = (float)asin(-2.0 * ((double)quaternion->z * quaternion->x - (double)quaternion->y * quaternion->w));
-    angles->z = (float)atan2(2.0 * ((double)quaternion->z * quaternion->y + (double)quaternion->x * quaternion->w),
-                            (double)zz - ((double)yy + xx) + ww);
+    angles->z = (float)atan2(2.0 * ((double)quaternion->z * quaternion->y + (double)quaternion->x * quaternion->w), (double)zz - ((double)yy + xx) + ww);
 }
 
 // Selected static CRT helper, not a recovered SA-MP implementation.
@@ -258,8 +256,7 @@ void GameQuaternionFromVectorsHalf(GameQuaternion* out, const CVector* from, con
 // 0x000b4cc0
 float GameQuaternionLengthSquared(const GameQuaternion* quaternion)
 {
-    return quaternion->x * quaternion->x + quaternion->y * quaternion->y
-        + quaternion->z * quaternion->z + quaternion->w * quaternion->w;
+    return quaternion->x * quaternion->x + quaternion->y * quaternion->y + quaternion->z * quaternion->z + quaternion->w * quaternion->w;
 }
 
 // Separate identical native adapter; original distinct name is unresolved.

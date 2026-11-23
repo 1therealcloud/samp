@@ -1,7 +1,7 @@
 #include "filechecks.h"
 
-#include "main.h"
 #include "SHA1.h"
+#include "main.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -27,10 +27,7 @@ static void ArchiveFinishSha1(CSHA1& sha, DWORD* digest)
     for (int i = 0; i < 5; ++i)
     {
         const int offset = i * 4;
-        digest[i] = ((DWORD)hash[offset] << 24) |
-                    ((DWORD)hash[offset + 1] << 16) |
-                    ((DWORD)hash[offset + 2] << 8) |
-                    (DWORD)hash[offset + 3];
+        digest[i] = ((DWORD)hash[offset] << 24) | ((DWORD)hash[offset + 1] << 16) | ((DWORD)hash[offset + 2] << 8) | (DWORD)hash[offset + 3];
     }
 }
 

@@ -1,6 +1,6 @@
 #include "game/actor.h"
-#include "game/animation.h"
 
+#include "game/animation.h"
 #include "game/game.h"
 #include "game/playerped.h"
 #include "game/scripting.h"

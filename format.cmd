@@ -1,28 +1,18 @@
 @echo off
 setlocal EnableExtensions DisableDelayedExpansion
 cd /d "%~dp0"
-if not "%~1"=="" goto :usage
 
-set "CF=%CLANG_FORMAT%"
-set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
-if not defined CF if exist "%VSWHERE%" (
-    for /f "usebackq delims=" %%I in (`"%VSWHERE%" -latest -products * -property installationPath`) do (
-        if exist "%%I\VC\Tools\Llvm\x64\bin\clang-format.exe" (
-            set "CF=%%I\VC\Tools\Llvm\x64\bin\clang-format.exe"
-        ) else if exist "%%I\VC\Tools\Llvm\bin\clang-format.exe" (
-            set "CF=%%I\VC\Tools\Llvm\bin\clang-format.exe"
-        )
-    )
+set "CF=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\bin\clang-format.exe"
+if not exist "%CF%" (
+    echo ERROR: clang-format.exe not found: %CF%
+    pause
+    exit /b 1
 )
-if not defined CF if exist "%ProgramFiles%\LLVM\bin\clang-format.exe" set "CF=%ProgramFiles%\LLVM\bin\clang-format.exe"
-if not defined CF for %%I in (clang-format.exe) do set "CF=%%~$PATH:I"
-if not defined CF goto :missing_formatter
-if not exist "%CF%" goto :missing_formatter
 
 echo Directory: %CD%
-echo Formatter: %CF%
 "%CF%" --version
 if errorlevel 1 goto :failed
+
 set "FORMAT_COUNT=0"
 for %%R in (source tools) do (
     for /f "delims=" %%F in ('dir /s /b /a-d "%%R\*" 2^>nul ^| findstr /v /i /r /c:"[\\]tools[\\]rcon[\\]" /c:"[\\]tools[\\]arctool2[\\]" /c:"[\\]tools[\\]exgui[\\]" /c:"[\\]tools[\\]dff[\\]Project1[\\]"') do (
@@ -34,24 +24,12 @@ for %%R in (source tools) do (
         )
     )
 )
+
 echo Formatted %FORMAT_COUNT% files.
-set "FORMAT_EXIT=0"
-goto :finish
-
-:usage
-echo Usage: format.cmd
-set "FORMAT_EXIT=1"
-goto :finish
-
-:missing_formatter
-echo ERROR: clang-format.exe not found. Install LLVM or set CLANG_FORMAT to its full path.
-set "FORMAT_EXIT=1"
-goto :finish
+pause
+exit /b 0
 
 :failed
 echo ERROR: formatting failed.
-set "FORMAT_EXIT=1"
-
-:finish
 pause
-exit /b %FORMAT_EXIT%
+exit /b 1

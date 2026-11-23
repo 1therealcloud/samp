@@ -402,12 +402,12 @@ IDirect3DDevice9* CGame::GetDevice()
     IDirect3DDevice9* device = 0;
     if (g_gameVersion == 1)
     {
-        typedef void* (__cdecl *BackendFn)(void);
+        typedef void*(__cdecl * BackendFn)(void);
         device = (IDirect3DDevice9*)reinterpret_cast<BackendFn>(0x7f9d50)();
     }
     else if (g_gameVersion == 2)
     {
-        typedef void* (__cdecl *BackendFn2)(void);
+        typedef void*(__cdecl * BackendFn2)(void);
         device = (IDirect3DDevice9*)reinterpret_cast<BackendFn2>(0x7f9d90)();
     }
     return device;
@@ -1642,7 +1642,7 @@ void __stdcall GameSetModelRenderObjectCall3c(int model, void* object)
 void __stdcall GameSetModelCollision(int model, void* collision)
 {
     void* info = GameGetModelInfo(model);
-    typedef void (__fastcall *BackendFn)(void*, int, void*, DWORD);
+    typedef void(__fastcall * BackendFn)(void*, int, void*, DWORD);
     reinterpret_cast<BackendFn>(0x4c4bc0)((void*)info, 0, collision, 0);
 }
 
@@ -1687,7 +1687,7 @@ BOOL GameCleanupModelAndTxd(int model)
     if (!info)
         return FALSE;
     int index = (int)GameGetModelTxdIndex(model);
-    typedef void (__fastcall *BackendFn)(void*, int);
+    typedef void(__fastcall * BackendFn)(void*, int);
     reinterpret_cast<BackendFn>(0x4c4d50)((void*)info, 0);
     if (GameTxdGetReferenceCount(index) == 0)
     {

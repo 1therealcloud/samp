@@ -283,7 +283,8 @@ WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVec
             CObject* object = objects[i];
             // The original calls the distance method before checking the slot pointer.
             const volatile float distance = object->GetDistanceToPoint(origin->x, origin->y, origin->z);
-            if (!object || !object->IsAdded() || object->GetModelIndex() == 19300 || !(distance < closest)) continue;
+            if (!object || !object->IsAdded() || object->GetModelIndex() == 19300 || !(distance < closest))
+                continue;
             BYTE* collision = (BYTE*)GameGetModelCollision(object->GetModelIndex());
             if (!collision)
                 continue;

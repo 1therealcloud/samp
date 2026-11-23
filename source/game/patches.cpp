@@ -55,8 +55,9 @@ void GameInstallShotHooks()
     DWORD oldProtection, ignoredProtection;
     // GTA SA virtual addresses; each original call has its own protection pair.
     const DWORD sites[] = {0x742495, 0x7424ec, 0x742548, 0x740721, 0x740b69, 0x736247, 0x7424cb, 0x73ac4b};
-    const DWORD targets[] = {(DWORD)GameHookProcessShotLineOfSight,          (DWORD)GameHookProcessShotLineOfSight,          (DWORD)GameHookProcessShotLineOfSight, (DWORD)GameProcessShotLineOfSight,
-                             (DWORD)GameProcessShotLineOfSight, (DWORD)GameProcessShotLineOfSight, (DWORD)GameHookProcessShotLineOfSightSimple, (DWORD)GameHookAdjustShotRayPoint};
+    const DWORD targets[] = {(DWORD)GameHookProcessShotLineOfSight,       (DWORD)GameHookProcessShotLineOfSight, (DWORD)GameHookProcessShotLineOfSight,
+                             (DWORD)GameProcessShotLineOfSight,           (DWORD)GameProcessShotLineOfSight,     (DWORD)GameProcessShotLineOfSight,
+                             (DWORD)GameHookProcessShotLineOfSightSimple, (DWORD)GameHookAdjustShotRayPoint};
     for (int i = 0; i < 8; ++i)
     {
         BYTE* site = (BYTE*)sites[i];

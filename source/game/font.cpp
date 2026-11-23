@@ -3,7 +3,7 @@
 void Font_PrintString(float x, float y, char* text)
 {
     // GTA SA cdecl backend. Forward the three argument words.
-    typedef void (__cdecl *BackendFn)(float, float, void*);
+    typedef void(__cdecl * BackendFn)(float, float, void*);
     reinterpret_cast<BackendFn>(0x71a700)(x, y, (void*)text);
 }
 

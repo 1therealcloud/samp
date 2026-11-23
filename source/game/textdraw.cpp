@@ -91,7 +91,7 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
     {
         ClientSetRenderState(9, 2);
         // GTA SA virtual address; raw handle remains the this argument.
-        typedef void (__fastcall *BackendFn)(void*, int, void*, void*);
+        typedef void(__fastcall * BackendFn)(void*, int, void*, void*);
         reinterpret_cast<BackendFn>(0x728350)((void*)texture, 0, (void*)rect, (void*)color);
     }
 }

@@ -124,7 +124,7 @@ void CChatBubble::Draw()
 
         // padding і factor в asm зберігаються як float (fstp), далі розрахунок іде на стеку FPU
         float padding = (float)((double)g_pedDrunkShakeScale * (double)adjustment);
-        float factor  = (float)((double)adjustment * (double)g_chatBubbleLineDistanceScale);
+        float factor = (float)((double)adjustment * (double)g_chatBubbleLineDistanceScale);
 
         double cameraDistance = (double)ped->GetDistanceToCamera();
         double result = cameraDistance * ((double)factor + (double)g_chatBubbleDistanceBase);

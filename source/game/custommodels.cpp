@@ -738,7 +738,7 @@ void __stdcall GamePublishPedClump(int model, void* clump)
 int GameTxdAdd(const char* name)
 {
     int result;
-    typedef DWORD (__cdecl *BackendFn)(void*);
+    typedef DWORD(__cdecl * BackendFn)(void*);
     result = (int)reinterpret_cast<BackendFn>(0x731c80)((void*)name);
     return result;
 }
@@ -832,7 +832,7 @@ void* __cdecl GameCreateCollisionModel()
 {
     // GTA SA virtual addresses: allocator0x0040fc30 and thiscall constructor0x0040fb60.
     void* collision = ((void*(__cdecl*)(DWORD))0x40fc30)(0x30);
-    typedef void (__fastcall *BackendFn)(void*, int);
+    typedef void(__fastcall * BackendFn)(void*, int);
     reinterpret_cast<BackendFn>(0x40fb60)((void*)collision, 0);
     return collision;
 }
@@ -1199,8 +1199,8 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         {
             DeleteFileA(download->temporaryPath);
             if (record)
-            if (record)
-                record[6] = 1;
+                if (record)
+                    record[6] = 1;
             if (g_renderDownloadWindow)
                 g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 102, 0);
             *(DWORD*)(nativeState + 0x213) = 2;
@@ -1213,8 +1213,8 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         {
             DeleteFileA(download->temporaryPath);
             if (record)
-            if (record)
-                record[6] = 1;
+                if (record)
+                    record[6] = 1;
             if (g_renderDownloadWindow)
                 g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 3, download->downloaded, 0, 103, 0);
             *(DWORD*)(nativeState + 0x213) = 2;

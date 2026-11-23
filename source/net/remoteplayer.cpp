@@ -234,7 +234,8 @@ void CRemotePlayer::UpdateBullet(const void* data)
         {
             float* component = &bullet.offset.x + axis;
             const bool accepted = !(*component > g_remoteBulletOffsetMaximum || *component < g_remoteBulletOffsetMinimum);
-            if (!accepted) return;
+            if (!accepted)
+                return;
         }
         if (type == 1)
         {
@@ -1225,7 +1226,6 @@ float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-
 // 0x00015dd0
 float CRemotePlayer::GetDistanceToLocalPlayer()
 {
@@ -1304,7 +1304,8 @@ void CRemotePlayer::ApplySurfingMatrix()
     {
         float* component = (float*)&m_state.onfoot.surfingOffset + axis;
         const bool accepted = !(*component > g_vehicleTrainSpeedMaximum || *component < g_vehicleTrainSpeedMinimum);
-        if (!accepted) return;
+        if (!accepted)
+            return;
     }
     CMatrix entityMatrix, pedMatrix;
     CVector speed, turnSpeed, position;

@@ -163,7 +163,7 @@ void CEntity::ApplyTurnSpeed()
     if (!entity)
         return;
     // GTA SA virtual address: ECX thiscall backend.
-    typedef void (__fastcall *BackendFn)(void*, int);
+    typedef void(__fastcall * BackendFn)(void*, int);
     reinterpret_cast<BackendFn>(0x542e20)((void*)entity, 0);
 }
 
@@ -194,7 +194,7 @@ void CEntity::GetBoundCentre(CVector* centre)
     if (!entity)
         return;
     // GTA SA virtual address: ECX entity, one callee-popped pointer.
-    typedef void (__fastcall *BackendFn)(void*, int, void*);
+    typedef void(__fastcall * BackendFn)(void*, int, void*);
     reinterpret_cast<BackendFn>(0x534250)((void*)entity, 0, (void*)centre);
 }
 
@@ -329,7 +329,7 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
         if (matrix)
         {
             // GTA SA virtual address: ECX matrix and four callee-popped words.
-            typedef void (__fastcall *BackendFn)(void*, int, void*, void*, void*, DWORD);
+            typedef void(__fastcall * BackendFn)(void*, int, void*, void*, void*, DWORD);
             reinterpret_cast<BackendFn>(0x59a840)((void*)matrix, 0, (void*)x, (void*)y, (void*)z, 0x15);
         }
         *x = (float)((double)*x * g_entityRadiansToDegrees * g_entityEulerSign);
@@ -540,7 +540,7 @@ BOOL CEntity::SetModelIndex(int model)
 // 0x000b3990
 void GameChangeBackendEntityModel(void* entity, DWORD model)
 {
-    typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+    typedef void(__fastcall * BackendFn)(void*, int, DWORD);
     reinterpret_cast<BackendFn>(0x403ec0)((void*)entity, 0, model);
 }
 // Caller context/semantic object type is not established; raw first DWORD only.
@@ -639,7 +639,7 @@ void CEntity::GetBackendBoundRect(DWORD argument)
     if (!entity)
         return;
     // GTA SA virtual address: 0x00534120; ECX=entity, one callee-popped word.
-    typedef void (__fastcall *BackendFn)(void*, int, DWORD);
+    typedef void(__fastcall * BackendFn)(void*, int, DWORD);
     reinterpret_cast<BackendFn>(0x534120)((void*)entity, 0, argument);
 }
 
@@ -674,7 +674,7 @@ void CEntity::ApplyBackendTurnForce(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWOR
     if (!entity)
         return;
     // GTA SA virtual address: 0x00542A50; six raw words, callee pops 24 bytes.
-    typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD);
+    typedef void(__fastcall * BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD);
     reinterpret_cast<BackendFn>(0x542a50)((void*)entity, 0, a1, a2, a3, a4, a5, a6);
 }
 

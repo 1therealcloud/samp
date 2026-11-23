@@ -60,7 +60,6 @@ void ArchiveInstallCursorHook()
     MH_EnableHook(MH_ALL_HOOKS);
 }
 
-
 // 0x00062810
 /*
 void ArchiveRemoveHooks()

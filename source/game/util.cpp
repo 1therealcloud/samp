@@ -141,7 +141,7 @@ void __cdecl GameRotateRwQuaternion(void* quaternion, int axis, float angle, int
     const CVector* direction = &g_rwRotationAxes[axis];
     DWORD target = g_gameVersion == 1 ? 0x7eb7c0 : 0x7eb800;
     // Native cdecl GTA bridge keeps the four argument words and EDX call target.
-    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, float, DWORD);
     reinterpret_cast<BackendFn>(target)(quaternion, (void*)direction, angle, (DWORD)combine);
 }
 
@@ -153,7 +153,7 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
     CVector* queryAxis = (CVector*)(g_entityCollisionScratch + 0x101c);
     *queryAxis = g_rwRotationAxes[axis];
     DWORD target = g_gameVersion == 1 ? 0x7f2720 : 0x7f2760;
-    typedef void (__cdecl *BackendFn)(const CMatrix*, CVector*, float*, CVector*);
+    typedef void(__cdecl * BackendFn)(const CMatrix*, CVector*, float*, CVector*);
     reinterpret_cast<BackendFn>(target)(matrix, queryAxis, &g_rwQueryAngle, (CVector*)(g_entityCollisionScratch + 0x1010));
     *angle = g_rwQueryAngle;
 }
@@ -163,7 +163,7 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
 void __cdecl GameQueryRwQuaternionAngle(const void* quaternion, CVector* axis, float* angle)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eba80 : 0x7ebac0;
-    typedef void (__cdecl *BackendFn)(void*, void*, void*);
+    typedef void(__cdecl * BackendFn)(void*, void*, void*);
     reinterpret_cast<BackendFn>(target)((void*)quaternion, (void*)axis, (void*)angle);
 }
 
@@ -174,7 +174,7 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
     const CVector* direction = axis;
     DWORD target = g_gameVersion == 1 ? 0x7f1fd0 : 0x7f2010;
     // Native captures the axis before reusing its argument home for the target.
-    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, float, DWORD);
     reinterpret_cast<BackendFn>(target)((void*)matrix, (void*)direction, angle, 1);
 }
 
@@ -183,7 +183,7 @@ void __cdecl GameRotateRwMatrix(CMatrix* matrix, const CVector* axis, float angl
 void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f1920 : 0x7f1960;
-    typedef void (__cdecl *BackendFn)(void*, void*);
+    typedef void(__cdecl * BackendFn)(void*, void*);
     reinterpret_cast<BackendFn>(target)((void*)out, (void*)matrix);
 }
 
@@ -192,7 +192,7 @@ void __cdecl GameOrthoNormalizeRwMatrix(CMatrix* out, const CMatrix* matrix)
 void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f22c0 : 0x7f2300;
-    typedef void (__cdecl *BackendFn)(void*, void*, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, DWORD);
     reinterpret_cast<BackendFn>(target)((void*)matrix, (void*)scale, 1);
 }
 
@@ -200,7 +200,7 @@ void __cdecl GameScaleRwMatrix(CMatrix* matrix, const CVector* scale)
 // 0x000b4630
 void GameNormalizeVector(CVector* vector)
 {
-    typedef void (__fastcall *BackendFn)(void*, int);
+    typedef void(__fastcall * BackendFn)(void*, int);
     reinterpret_cast<BackendFn>(0x59c910)((void*)vector, 0);
 }
 // GTA SA virtual address: 0x0059C730, cdecl out/left/right, returns out in EAX.
@@ -222,7 +222,7 @@ CVector* GameTransformVectorByTranspose(CVector* out, const CVector* vector, con
 void GameRwQuaternionFromMatrix(void* quaternion, const CMatrix* matrix)
 {
     DWORD target = g_gameVersion == 1 ? 0x7eb5c0 : 0x7eb600;
-    typedef void (__cdecl *BackendFn)(void*, void*);
+    typedef void(__cdecl * BackendFn)(void*, void*);
     reinterpret_cast<BackendFn>(target)(quaternion, (void*)matrix);
 }
 
@@ -327,7 +327,7 @@ void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
     const CVector* direction = &g_rwRotationAxes[axis];
     g_rwAxisRotateBackend = (GameRwAxisRotateBackend)(g_gameVersion == 1 ? 0x7f1fd0 : 0x7f2010);
     // Native reloads the published target into saved EBX after pushing arguments.
-    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, float, DWORD);
     reinterpret_cast<BackendFn>(g_rwAxisRotateBackend)((void*)matrix, (void*)direction, angle, 1);
 }
 
@@ -336,7 +336,7 @@ void GameRotateRwMatrixOnAxis(CMatrix* matrix, int axis, float angle)
 int GameRwCountClumpAtomics(void* clump)
 {
     int result = 0;
-    typedef DWORD (__cdecl *BackendFn)(void*);
+    typedef DWORD(__cdecl * BackendFn)(void*);
     result = (int)reinterpret_cast<BackendFn>(0x7498e0)(clump);
     return result;
 }
@@ -390,7 +390,7 @@ void* GameRwForAllFrameObjects(void* frame, GameRwObjectCallback callback, void*
 void GameRwDestroyTexture(void* texture)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f3820 : 0x7f3860;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(texture);
 }
 
@@ -399,7 +399,7 @@ void GameRwDestroyTexture(void* texture)
 void GameRwDestroyFrame(void* frame)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f05a0 : 0x7f05e0;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(frame);
 }
 
@@ -408,7 +408,7 @@ void GameRwDestroyFrame(void* frame)
 void GameRwDestroyAtomic(void* atomic)
 {
     DWORD target = g_gameVersion == 1 ? 0x749dc0 : 0x749e10;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(atomic);
 }
 
@@ -417,7 +417,7 @@ void GameRwDestroyAtomic(void* atomic)
 void GameRwDestroyRaster(void* raster)
 {
     DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(raster);
 }
 
@@ -426,7 +426,7 @@ void GameRwDestroyRaster(void* raster)
 void GameRwClearCamera(void* camera, const void* color, DWORD flags)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee340 : 0x7ee380;
-    typedef void (__cdecl *BackendFn)(void*, void*, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, DWORD);
     reinterpret_cast<BackendFn>(target)(camera, (void*)color, flags);
 }
 
@@ -435,7 +435,7 @@ void GameRwClearCamera(void* camera, const void* color, DWORD flags)
 void GameRwBeginCameraUpdate(void* camera)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee190 : 0x7ee1d0;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(camera);
 }
 
@@ -444,7 +444,7 @@ void GameRwBeginCameraUpdate(void* camera)
 void GameRwEndCameraUpdate(void* camera)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee180 : 0x7ee1c0;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(camera);
 }
 
@@ -453,7 +453,7 @@ void GameRwEndCameraUpdate(void* camera)
 void GameRwRenderClump(void* clump)
 {
     DWORD target = g_gameVersion == 1 ? 0x749b20 : 0x749b70;
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(target)(clump);
 }
 
@@ -464,7 +464,7 @@ void GameRwAddClumpLight(void* clump, void* light)
     DWORD target = g_gameVersion == 1 ? 0x74a4f0 : 0x74a540;
     void* result;
     // Native captures the backend return word but does not expose it.
-    typedef void* (__cdecl *BackendFn)(void*, void*);
+    typedef void*(__cdecl * BackendFn)(void*, void*);
     result = (void*)reinterpret_cast<BackendFn>(target)(clump, light);
 }
 
@@ -473,7 +473,7 @@ void GameRwAddClumpLight(void* clump, void* light)
 void GameRwSetLightRadius(void* light, float radius)
 {
     DWORD target = 0x751a70;
-    typedef void (__cdecl *BackendFn)(void*, float);
+    typedef void(__cdecl * BackendFn)(void*, float);
     reinterpret_cast<BackendFn>(target)(light, radius);
 }
 
@@ -483,7 +483,7 @@ BOOL GameRwDestroyClump(void* clump)
 {
     int result = 0;
     DWORD target = g_gameVersion == 1 ? 0x74a310 : 0x74a360;
-    typedef DWORD (__cdecl *BackendFn)(void*);
+    typedef DWORD(__cdecl * BackendFn)(void*);
     result = (int)reinterpret_cast<BackendFn>(target)(clump);
     return result;
 }
@@ -528,7 +528,7 @@ void GameRwWorldAddCamera(void* camera)
     if (world)
     {
         DWORD target = g_gameVersion == 1 ? 0x750f20 : 0x750f70;
-        typedef void (__cdecl *BackendFn)(void*, void*);
+        typedef void(__cdecl * BackendFn)(void*, void*);
         reinterpret_cast<BackendFn>(target)((void*)world, camera);
     }
 }
@@ -540,7 +540,7 @@ void GameRwWorldAddClump(void* clump)
     void* world = *(void**)0xc17038;
     if (world)
     {
-        typedef void (__cdecl *BackendFn)(void*, void*);
+        typedef void(__cdecl * BackendFn)(void*, void*);
         reinterpret_cast<BackendFn>(0x751300)((void*)world, clump);
     }
 }
@@ -552,7 +552,7 @@ void GameRwWorldRemoveClump(void* clump)
     void* world = *(void**)0xc17038;
     if (world)
     {
-        typedef void (__cdecl *BackendFn)(void*, void*);
+        typedef void(__cdecl * BackendFn)(void*, void*);
         reinterpret_cast<BackendFn>(0x751460)((void*)world, clump);
     }
 }
@@ -564,7 +564,7 @@ void GameRwWorldRender()
     void* world = *(void**)0xc17038;
     if (world)
     {
-        typedef void (__cdecl *BackendFn)(void*);
+        typedef void(__cdecl * BackendFn)(void*);
         reinterpret_cast<BackendFn>(0x74f570)((void*)world);
     }
 }
@@ -577,7 +577,7 @@ void GameRwWorldAddLight(void* light)
     if (world)
     {
         DWORD target = g_gameVersion == 1 ? 0x751910 : 0x751960;
-        typedef void (__cdecl *BackendFn)(void*, void*);
+        typedef void(__cdecl * BackendFn)(void*, void*);
         reinterpret_cast<BackendFn>(target)((void*)world, light);
     }
 }
@@ -590,7 +590,7 @@ void GameRwWorldRemoveLight(void* light)
     if (world)
     {
         DWORD target = g_gameVersion == 1 ? 0x751960 : 0x7519b0;
-        typedef void (__cdecl *BackendFn)(void*, void*);
+        typedef void(__cdecl * BackendFn)(void*, void*);
         reinterpret_cast<BackendFn>(target)((void*)world, light);
     }
 }
@@ -602,7 +602,7 @@ void* GameRwCloneClump(void* clump)
     void* result = 0;
     if (!clump)
         return 0;
-    typedef void* (__cdecl *BackendFn)(void*);
+    typedef void*(__cdecl * BackendFn)(void*);
     result = (void*)reinterpret_cast<BackendFn>(0x749f70)(clump);
     return result;
 }
@@ -672,7 +672,7 @@ __declspec(naked) DWORD GameRwLockGeometry(void* geometry)
 // 0x000b1840
 void GameRwSetVisibilityCamera(void* camera)
 {
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(0x7328c0)(camera);
 }
 // GTA SA virtual addresses: hierarchy lookup734A40, matrix update7C51D0.
@@ -697,7 +697,7 @@ void GameRwUpdateClumpHierarchy(void* clump)
 // 0x000b19a0
 void GameRwUpdateClumpAnimations(void* clump, float timeStep, DWORD onScreen)
 {
-    typedef void (__cdecl *BackendFn)(void*, float, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, float, DWORD);
     reinterpret_cast<BackendFn>(0x4d34f0)(clump, timeStep, onScreen);
 }
 
@@ -734,7 +734,7 @@ BOOL __stdcall GameRwRenderAtomic(void* object)
     if (!object || *(BYTE*)object != 1)
         return FALSE;
     void* callback = GameRwQueryAtomic48(object);
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(callback)(object);
     return TRUE;
 }
@@ -757,7 +757,7 @@ void __stdcall GameRwRenderObject(void* object)
 int __stdcall GamePoolPedGetIndex(void* ped)
 {
     int result;
-    typedef DWORD (__fastcall *BackendFn)(void*, int, void*);
+    typedef DWORD(__fastcall * BackendFn)(void*, int, void*);
     result = (int)reinterpret_cast<BackendFn>(0x4442d0)(*(void**)0xb74490, 0, ped);
     return result;
 }
@@ -789,7 +789,7 @@ int GameGetVehicleSubtype(void* vehicle)
 void* __stdcall GamePoolVehicleGetAt(int handle)
 {
     void* result;
-    typedef void* (__fastcall *BackendFn)(void*, int, DWORD);
+    typedef void*(__fastcall * BackendFn)(void*, int, DWORD);
     result = (void*)reinterpret_cast<BackendFn>(0x4048e0)(*(void**)0xb74494, 0, (DWORD)handle);
     return result;
 }
@@ -799,8 +799,8 @@ void* __stdcall GamePoolVehicleGetAt(int handle)
 DWORD __stdcall GamePoolVehicleGetIndex(void* vehicle)
 {
     DWORD result = 0;
-    typedef DWORD (__fastcall *BackendFn)(void*, int, void*);
-    result = (DWORD)reinterpret_cast<BackendFn>(0x424160)(*(void**)0xb74494, 0, vehicle);
+    typedef DWORD(__fastcall * BackendFn)(void*, int, void*);
+    result = (DWORD) reinterpret_cast<BackendFn>(0x424160)(*(void**)0xb74494, 0, vehicle);
     return result;
 }
 
@@ -1336,7 +1336,7 @@ void GameGetBackendPositionAndHeading(void* entity, CVector* position, float* he
 void __stdcall GameWorldAdd(void* entity)
 {
     // GTA SA cdecl backend, one caller-popped pointer.
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(0x563220)(entity);
 }
 
@@ -1344,7 +1344,7 @@ void __stdcall GameWorldAdd(void* entity)
 void __stdcall GameWorldRemove(void* entity)
 {
     // GTA SA cdecl backend, one caller-popped pointer.
-    typedef void (__cdecl *BackendFn)(void*);
+    typedef void(__cdecl * BackendFn)(void*);
     reinterpret_cast<BackendFn>(0x563280)(entity);
 }
 
@@ -1353,7 +1353,7 @@ void* __stdcall GamePoolObjectGetAt(int handle)
 {
     void* result;
     // GTA SA object pool B7449C and lookup465040, native thiscall bridge.
-    typedef void* (__fastcall *BackendFn)(void*, int, DWORD);
+    typedef void*(__fastcall * BackendFn)(void*, int, DWORD);
     result = (void*)reinterpret_cast<BackendFn>(0x465040)(*(void**)0xb7449c, 0, (DWORD)handle);
     return result;
 }
@@ -1463,7 +1463,7 @@ void* GameRwCreateLight(int lightType)
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x752110 : 0x752160;
-    typedef void* (__cdecl *BackendFn)(DWORD);
+    typedef void*(__cdecl * BackendFn)(DWORD);
     result = (void*)reinterpret_cast<BackendFn>(target)((DWORD)lightType);
     return result;
 }
@@ -1472,7 +1472,7 @@ void* GameRwCreateLight(int lightType)
 void GameRwSetLightColor(void* light, const float* rgba)
 {
     DWORD target = g_gameVersion == 1 ? 0x751a90 : 0x751ae0;
-    typedef void (__cdecl *BackendFn)(void*, void*);
+    typedef void(__cdecl * BackendFn)(void*, void*);
     reinterpret_cast<BackendFn>(target)(light, (void*)rgba);
 }
 
@@ -1481,7 +1481,7 @@ void* GameRwCreateRaster(int width, int height, int depth, int flags)
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7fb230 : 0x7fb270;
-    typedef void* (__cdecl *BackendFn)(DWORD, DWORD, DWORD, DWORD);
+    typedef void*(__cdecl * BackendFn)(DWORD, DWORD, DWORD, DWORD);
     result = (void*)reinterpret_cast<BackendFn>(target)((DWORD)width, (DWORD)height, (DWORD)depth, (DWORD)flags);
     return result;
 }
@@ -1491,7 +1491,7 @@ void* GameRwCreateCamera()
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7ee4f0 : 0x7ee530;
-    typedef void* (__cdecl *BackendFn)(void);
+    typedef void*(__cdecl * BackendFn)(void);
     result = (void*)reinterpret_cast<BackendFn>(target)();
     return result;
 }
@@ -1501,7 +1501,7 @@ void* GameRwCreateFrame()
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7f0410 : 0x7f0450;
-    typedef void* (__cdecl *BackendFn)(void);
+    typedef void*(__cdecl * BackendFn)(void);
     result = (void*)reinterpret_cast<BackendFn>(target)();
     return result;
 }
@@ -1510,7 +1510,7 @@ void* GameRwCreateFrame()
 void GameRwTranslateFrame(void* frame, const CVector* position, int combine)
 {
     DWORD target = g_gameVersion == 1 ? 0x7f0e30 : 0x7f0e70;
-    typedef void (__cdecl *BackendFn)(void*, void*, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, DWORD);
     reinterpret_cast<BackendFn>(target)(frame, (void*)position, (DWORD)combine);
 }
 
@@ -1519,7 +1519,7 @@ void GameRwRotateFrame(void* frame, int axis, float angle)
 {
     const CVector* direction = g_rwPreviewAxes + axis;
     DWORD target = g_gameVersion == 1 ? 0x7f1010 : 0x7f1050;
-    typedef void (__cdecl *BackendFn)(void*, void*, float, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, void*, float, DWORD);
     reinterpret_cast<BackendFn>(target)(frame, (void*)direction, angle, 1);
 }
 
@@ -1541,7 +1541,7 @@ void GameRwSetCameraRasters(void* camera, void* color, void* depth)
 void GameRwSetObjectFrame(void* object, void* frame)
 {
     DWORD target = g_gameVersion == 1 ? 0x804ef0 : 0x804f30;
-    typedef void (__cdecl *BackendFn)(void*, void*);
+    typedef void(__cdecl * BackendFn)(void*, void*);
     reinterpret_cast<BackendFn>(target)(object, frame);
 }
 
@@ -1581,7 +1581,7 @@ void GameRwSetClipDistances(void* camera, float farClip, float nearClip)
 void GameRwSetViewWindow(void* camera, const float* window)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee410 : 0x7ee450;
-    typedef void (__cdecl *BackendFn)(void*, void*);
+    typedef void(__cdecl * BackendFn)(void*, void*);
     reinterpret_cast<BackendFn>(target)(camera, (void*)window);
 }
 
@@ -1589,7 +1589,7 @@ void GameRwSetViewWindow(void* camera, const float* window)
 void GameRwSetProjection(void* camera, int projection)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ee3a0 : 0x7ee3e0;
-    typedef void (__cdecl *BackendFn)(void*, DWORD);
+    typedef void(__cdecl * BackendFn)(void*, DWORD);
     reinterpret_cast<BackendFn>(target)(camera, (DWORD)projection);
 }
 
@@ -1598,7 +1598,7 @@ void* GameRwCreateTexture(void* raster)
 {
     void* result = 0;
     DWORD target = g_gameVersion == 1 ? 0x7f37c0 : 0x7f3800;
-    typedef void* (__cdecl *BackendFn)(void*);
+    typedef void*(__cdecl * BackendFn)(void*);
     result = (void*)reinterpret_cast<BackendFn>(target)(raster);
     return result;
 }
@@ -1643,7 +1643,7 @@ int GameTxdFind(const char* name)
 {
     int result;
     // Native GTA adapter: preserve the EDX call target and caller cleanup.
-    typedef DWORD (__cdecl *BackendFn)(void*);
+    typedef DWORD(__cdecl * BackendFn)(void*);
     result = (int)reinterpret_cast<BackendFn>(0x731850)((void*)name);
     return result;
 }
@@ -1651,21 +1651,21 @@ int GameTxdFind(const char* name)
 // 0x000b3510
 void GameTxdPush()
 {
-    typedef void (__cdecl *BackendFn)(void);
+    typedef void(__cdecl * BackendFn)(void);
     reinterpret_cast<BackendFn>(0x7316a0)();
 }
 
 // 0x000b3520
 void GameTxdPop()
 {
-    typedef void (__cdecl *BackendFn)(void);
+    typedef void(__cdecl * BackendFn)(void);
     reinterpret_cast<BackendFn>(0x7316b0)();
 }
 
 // 0x000b3530
 void GameTxdSetCurrent(int index)
 {
-    typedef void (__cdecl *BackendFn)(DWORD);
+    typedef void(__cdecl * BackendFn)(DWORD);
     reinterpret_cast<BackendFn>(0x7319c0)((DWORD)index);
 }
 
@@ -1688,14 +1688,14 @@ void* GameTxdReadTexture(const char* name)
 // 0x000b34f0
 void GameTxdAddRef(int index)
 {
-    typedef void (__cdecl *BackendFn)(DWORD);
+    typedef void(__cdecl * BackendFn)(DWORD);
     reinterpret_cast<BackendFn>(0x731a00)((DWORD)index);
 }
 
 // 0x000b3500
 void GameTxdRemoveRef(int index)
 {
-    typedef void (__cdecl *BackendFn)(DWORD);
+    typedef void(__cdecl * BackendFn)(DWORD);
     reinterpret_cast<BackendFn>(0x731a30)((DWORD)index);
 }
 

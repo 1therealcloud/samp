@@ -61,12 +61,12 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     }
     else if (reason == DLL_PROCESS_DETACH && (g_clientSettings.debug || g_clientSettings.online))
     {
-    //ArchiveRemoveHooks();
+        //ArchiveRemoveHooks();
         if (reserved == NULL)
         {
             //MH_DisableHook(MH_ALL_HOOKS);
             //MH_RemoveHook(MH_ALL_HOOKS);
-            
+
             MH_Uninitialize();
         }
     }

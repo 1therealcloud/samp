@@ -86,7 +86,7 @@ CVehicle::~CVehicle()
             Scripting::ProcessCommand(&g_vehicleDestroyCommand, m_nHandle);
             if (GameGetModelReferenceCount(modelSnapshot) == 0 && !m_dwKeepLoaded && g_pGame->CountBackendVehicleModelRecords() > 80 && g_pGame->IsModelAvailable(modelSnapshot))
             {
-                typedef void (__cdecl *BackendFn)(DWORD);
+                typedef void(__cdecl * BackendFn)(DWORD);
                 reinterpret_cast<BackendFn>(0x4089a0)((DWORD)modelSnapshot);
             }
         }
@@ -719,13 +719,13 @@ void CVehicle::SetLandingGearState(int state)
         {
             if (position == g_objectScaleLowerBound)
             {
-                typedef void (__fastcall *BackendFn)(void*, int);
+                typedef void(__fastcall * BackendFn)(void*, int);
                 reinterpret_cast<BackendFn>(0x6cac20)((void*)backend, 0);
             }
         }
         else if (state == 0 && position == g_quaternionMatrixOne)
         {
-            typedef void (__fastcall *BackendFn2)(void*, int);
+            typedef void(__fastcall * BackendFn2)(void*, int);
             reinterpret_cast<BackendFn2>(0x6cac70)((void*)backend, 0);
         }
     }
@@ -835,7 +835,7 @@ void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
     if (!panels && !doors && !lights && (*(DWORD*)((BYTE*)m_pGameVehicle + 0x5b4) || *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9) || *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b0)))
     {
         void* backend = m_pGameVehicle;
-        typedef void (__fastcall *BackendFn)(void*, int);
+        typedef void(__fastcall * BackendFn)(void*, int);
         reinterpret_cast<BackendFn>(0x6a3440)((void*)backend, 0);
         return;
     }
@@ -843,7 +843,7 @@ void CVehicle::UpdateDamage(DWORD panels, DWORD doors, BYTE lights)
     *(DWORD*)((BYTE*)m_pGameVehicle + 0x5a9) = doors;
     *(DWORD*)((BYTE*)m_pGameVehicle + 0x5b0) = lights;
     void* backend = m_pGameVehicle;
-    typedef void (__fastcall *BackendFn2)(void*, int);
+    typedef void(__fastcall * BackendFn2)(void*, int);
     reinterpret_cast<BackendFn2>(0x6b3e90)((void*)backend, 0);
 }
 
@@ -866,7 +866,7 @@ void CVehicle::OpenAutomobileDoor(DWORD first, DWORD second, DWORD third)
         void* backend = m_pGameVehicle;
         int enable = 1;
         int mode = 0;
-        typedef void (__fastcall *BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD, DWORD);
+        typedef void(__fastcall * BackendFn)(void*, int, DWORD, DWORD, DWORD, DWORD, DWORD);
         reinterpret_cast<BackendFn>(0x6a6ae0)((void*)backend, 0, (DWORD)mode, second, first, third, (DWORD)enable);
     }
 }

@@ -181,9 +181,9 @@ void CDeathWindow::Draw()
     int y, x;
     // GTA SA virtual addresses: screen height 0x00c17048, width 0x00c17044.
     int screenHeight = *(int*)0x00C17048;
-    int screenWidth  = *(int*)0x00C17044;
+    int screenWidth = *(int*)0x00C17044;
     y = (int)((double)screenHeight * (double)g_deathWindowVerticalFactor);
-    x = (int)((double)screenWidth  * (double)g_deathWindowHorizontalFactor);
+    x = (int)((double)screenWidth * (double)g_deathWindowHorizontalFactor);
 
     int totalWidth = weaponWidth + longestNickWidth * 2;
     if (x + totalWidth > *(int*)0xc17044)
