@@ -3,6 +3,7 @@
 #include "game/hooks.h"
 #include "game/util.h"
 
+#include <math.h>
 #include <string.h>
 // 0x000ec310
 const float g_buildingRemovalDrop = 2000.0f;
@@ -139,31 +140,12 @@ void GameRemoveBuilding(int model, float x, float y, float z, float radius)
 // Native ST0 returns an unspilled x87 result. Order is dz^2 + dy^2 + dx^2;
 // reassociation or a float temporary changes radius-boundary comparisons.
 // 0x000b4970
-__declspec(naked) float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ)
+float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp+4]
-        fsub dword ptr [esp+16]
-        fld dword ptr [esp+8]
-        fsub dword ptr [esp+20]
-        fld dword ptr [esp+12]
-        fsub dword ptr [esp+24]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 24
-    }
-    // clang-format on
+    const float dx = x - otherX;
+    const float dy = y - otherY;
+    const float dz = z - otherZ;
+    return (float)sqrt(dz * dz + dy * dy + dx * dx);
 }
 
 // 0x0009d050
