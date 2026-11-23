@@ -509,7 +509,8 @@ void CChat::Render()
         ChatEntry& entry = m_entry[pos];
         if (m_bTimestamps)
         {
-            tm* timeInfo = localtime(&entry.timestamp);
+            time_t entryTime = (time_t)entry.timestamp;
+            tm* timeInfo = localtime(&entryTime);
             memset(stamp, 0, 64);
             if (timeInfo)
                 strftime(stamp, 64, "[%H:%M:%S]", timeInfo);

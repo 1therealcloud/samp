@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CConfig
 {
@@ -75,11 +73,11 @@ public:
     BOOL Load();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CConfig::ConfigEntry) == 0x3d);
-STATIC_ASSERT(sizeof(CConfig) == 0x8309);
-STATIC_ASSERT(offsetof(CConfig, occupied) == 0x7a00);
-STATIC_ASSERT(offsetof(CConfig, filename) == 0x8200);
-STATIC_ASSERT(offsetof(CConfig, upperBound) == 0x8305);
+static_assert(sizeof(CConfig::ConfigEntry) == 0x3d);
+static_assert(sizeof(CConfig) == 0x8309);
+static_assert(offsetof(CConfig, occupied) == 0x7a00);
+static_assert(offsetof(CConfig, filename) == 0x8200);
+static_assert(offsetof(CConfig, upperBound) == 0x8305);
 // 0x002aca0c
 extern CConfig* g_pConfig;
 
@@ -91,9 +89,9 @@ struct ClientSettings
     char password[257], host[257], port[257], nickname[257], debugScript[257];
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(ClientSettings) == 1297);
-STATIC_ASSERT(offsetof(ClientSettings, host) == 0x10d);
-STATIC_ASSERT(offsetof(ClientSettings, debugScript) == 0x410);
+static_assert(sizeof(ClientSettings) == 1297);
+static_assert(offsetof(ClientSettings, host) == 0x10d);
+static_assert(offsetof(ClientSettings, debugScript) == 0x410);
 // 0x002abe78
 extern ClientSettings g_clientSettings;
 

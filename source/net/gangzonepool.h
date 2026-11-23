@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct GangZone
 {
@@ -33,8 +31,8 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(GangZone) == 24);
-STATIC_ASSERT(sizeof(CGangZonePool) == 0x2000);
+static_assert(sizeof(GangZone) == 24);
+static_assert(sizeof(CGangZonePool) == 0x2000);
 // 0x001569a0
 extern BYTE g_gangZoneFlashPhase;
 // 0x001569a4

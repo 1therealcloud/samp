@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct ArchiveFileRecord
 {
@@ -13,7 +11,7 @@ struct ArchiveFileRecord
     BYTE *start, *current;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(ArchiveFileRecord) == 20);
+static_assert(sizeof(ArchiveFileRecord) == 20);
 // 0x0016bf60
 extern ArchiveFileRecord g_archiveOpenRecords[50];
 // 0x0016be98

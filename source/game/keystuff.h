@@ -3,14 +3,12 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct KeyPad
 {
     WORD keys1[24], keys2[24];
     BYTE opaque[212];
 };
-STATIC_ASSERT(sizeof(KeyPad) == 308);
+static_assert(sizeof(KeyPad) == 308);
 // 0x00152ac0
 extern KeyPad* g_keysInternal;
 // 0x00152ac4

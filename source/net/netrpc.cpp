@@ -828,7 +828,7 @@ struct ActorCreateInfoR5
     BYTE invulnerable;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(ActorCreateInfoR5) == 27);
+static_assert(sizeof(ActorCreateInfoR5) == 27);
 #endif // DL_BUILD
 
 // 0x0000e940

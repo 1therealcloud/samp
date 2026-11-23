@@ -12,8 +12,6 @@ class CDXUTEditBox;
 class CDXUTScrollBar;
 #include "render/fontrender.h"
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CChat
 {
@@ -133,37 +131,37 @@ public:
 };
 #pragma pack(pop)
 
-STATIC_ASSERT(sizeof(void*) == 4);
-STATIC_ASSERT(sizeof(CChat::ChatEntry) == 0xfc);
-STATIC_ASSERT(sizeof(CChat) == 0x63ea);
-STATIC_ASSERT(offsetof(CChat, m_nMode) == 8);
-STATIC_ASSERT(offsetof(CChat, m_bTimestamps) == 0xc);
-STATIC_ASSERT(offsetof(CChat, m_bDoesLogExist) == 0xd);
-STATIC_ASSERT(offsetof(CChat, m_szLogPath) == 0x11);
-STATIC_ASSERT(offsetof(CChat, m_pGameUi) == 0x116);
-STATIC_ASSERT(offsetof(CChat, m_pScrollbar) == 0x11e);
-STATIC_ASSERT(offsetof(CChat, m_textColor) == 0x122);
-STATIC_ASSERT(offsetof(CChat, m_infoColor) == 0x126);
-STATIC_ASSERT(offsetof(CChat, m_debugColor) == 0x12a);
-STATIC_ASSERT(offsetof(CChat, m_nWindowBottom) == 0x12e);
-STATIC_ASSERT(offsetof(CChat, m_entry) == 0x132);
-STATIC_ASSERT(offsetof(CChat::ChatEntry, text) == 0x20);
-STATIC_ASSERT(offsetof(CChat::ChatEntry, type) == 0xf0);
-STATIC_ASSERT(offsetof(CChat, m_pFontRenderer) == 0x63a2);
-STATIC_ASSERT(offsetof(CChat, m_pTextSprite) == 0x63a6);
-STATIC_ASSERT(offsetof(CChat, m_pSprite) == 0x63aa);
-STATIC_ASSERT(offsetof(CChat, m_pDevice) == 0x63ae);
-STATIC_ASSERT(offsetof(CChat, m_bRenderToSurface) == 0x63b2);
-STATIC_ASSERT(offsetof(CChat, m_pRenderToSurface) == 0x63b6);
-STATIC_ASSERT(offsetof(CChat, m_pTexture) == 0x63ba);
-STATIC_ASSERT(offsetof(CChat, m_pSurface) == 0x63be);
-STATIC_ASSERT(offsetof(CChat, m_displayMode) == 0x63c2);
-STATIC_ASSERT(offsetof(CChat, m_lastSurfaceUpdate) == 0x63d2);
-STATIC_ASSERT(offsetof(CChat, m_bSurfaceValid) == 0x63d6);
-STATIC_ASSERT(offsetof(CChat, m_bRedraw) == 0x63da);
-STATIC_ASSERT(offsetof(CChat, m_nScrollbarPos) == 0x63de);
-STATIC_ASSERT(offsetof(CChat, m_nCharHeight) == 0x63e2);
-STATIC_ASSERT(offsetof(CChat, m_nTimestampWidth) == 0x63e6);
+static_assert(sizeof(void*) == 4);
+static_assert(sizeof(CChat::ChatEntry) == 0xfc);
+static_assert(sizeof(CChat) == 0x63ea);
+static_assert(offsetof(CChat, m_nMode) == 8);
+static_assert(offsetof(CChat, m_bTimestamps) == 0xc);
+static_assert(offsetof(CChat, m_bDoesLogExist) == 0xd);
+static_assert(offsetof(CChat, m_szLogPath) == 0x11);
+static_assert(offsetof(CChat, m_pGameUi) == 0x116);
+static_assert(offsetof(CChat, m_pScrollbar) == 0x11e);
+static_assert(offsetof(CChat, m_textColor) == 0x122);
+static_assert(offsetof(CChat, m_infoColor) == 0x126);
+static_assert(offsetof(CChat, m_debugColor) == 0x12a);
+static_assert(offsetof(CChat, m_nWindowBottom) == 0x12e);
+static_assert(offsetof(CChat, m_entry) == 0x132);
+static_assert(offsetof(CChat::ChatEntry, text) == 0x20);
+static_assert(offsetof(CChat::ChatEntry, type) == 0xf0);
+static_assert(offsetof(CChat, m_pFontRenderer) == 0x63a2);
+static_assert(offsetof(CChat, m_pTextSprite) == 0x63a6);
+static_assert(offsetof(CChat, m_pSprite) == 0x63aa);
+static_assert(offsetof(CChat, m_pDevice) == 0x63ae);
+static_assert(offsetof(CChat, m_bRenderToSurface) == 0x63b2);
+static_assert(offsetof(CChat, m_pRenderToSurface) == 0x63b6);
+static_assert(offsetof(CChat, m_pTexture) == 0x63ba);
+static_assert(offsetof(CChat, m_pSurface) == 0x63be);
+static_assert(offsetof(CChat, m_displayMode) == 0x63c2);
+static_assert(offsetof(CChat, m_lastSurfaceUpdate) == 0x63d2);
+static_assert(offsetof(CChat, m_bSurfaceValid) == 0x63d6);
+static_assert(offsetof(CChat, m_bRedraw) == 0x63da);
+static_assert(offsetof(CChat, m_nScrollbarPos) == 0x63de);
+static_assert(offsetof(CChat, m_nCharHeight) == 0x63e2);
+static_assert(offsetof(CChat, m_nTimestampWidth) == 0x63e6);
 
 // 0x000b5950
 int ChatIsHexDigit(char value);

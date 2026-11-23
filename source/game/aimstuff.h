@@ -2,8 +2,6 @@
 #define SAMP_RECOVERED_AIMSTUFF_H
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct AimVector
 {
     float x, y, z;
@@ -12,7 +10,7 @@ struct CameraAim
 {
     AimVector front, source, sourceBeforeLookBehind, up;
 };
-STATIC_ASSERT(sizeof(CameraAim) == 48);
+static_assert(sizeof(CameraAim) == 48);
 // 0x001419b0
 extern CameraAim* g_aimInternal;
 // 0x001419b4

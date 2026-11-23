@@ -5,8 +5,6 @@
 
 #include <stddef.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct DeathWindowEntry
 {
@@ -62,9 +60,9 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(DeathWindowEntry) == 59);
-STATIC_ASSERT(sizeof(CDeathWindow) == 0x157);
-STATIC_ASSERT(offsetof(CDeathWindow, font) == 0x137);
+static_assert(sizeof(DeathWindowEntry) == 59);
+static_assert(sizeof(CDeathWindow) == 0x157);
+static_assert(offsetof(CDeathWindow, font) == 0x137);
 // 0x0011c330
 extern const char g_deathAuxFontFace[9];
 // 0x0011c34c

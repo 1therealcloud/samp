@@ -6,8 +6,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 class CDXUTDialog;
 class CDXUTEditBox;
 typedef void(__cdecl* InputCommand)(char*);
@@ -73,8 +71,8 @@ public:
     bool IsActive();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CInput) == 0x1afc);
-STATIC_ASSERT(offsetof(CInput, m_bEnabled) == 0x14e0);
-STATIC_ASSERT(offsetof(CInput, m_szRecallBuffer) == 0x1565);
+static_assert(sizeof(CInput) == 0x1afc);
+static_assert(offsetof(CInput, m_bEnabled) == 0x14e0);
+static_assert(offsetof(CInput, m_szRecallBuffer) == 0x1565);
 
 #endif // CMDWINDOW_H

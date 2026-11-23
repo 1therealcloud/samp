@@ -5,47 +5,45 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct RPCParameters;
 #pragma pack(push, 1)
 class CObjectPool
 {
-    STATIC_ASSERT(offsetof(CObject, renderReady) == 0x49);
-    STATIC_ASSERT(offsetof(CObject, cameraCollisionDisabled) == 0x53);
-    STATIC_ASSERT(offsetof(CObject, drawLast) == 0x6c);
-    STATIC_ASSERT(offsetof(CObject, eulerRotation) == 0xad);
-    STATIC_ASSERT(offsetof(CObject, attachedVehicle) == 0xbe);
-    STATIC_ASSERT(offsetof(CObject, attachedObject) == 0xc0);
-    STATIC_ASSERT(offsetof(CObject, attachmentOffset) == 0xc2);
-    STATIC_ASSERT(offsetof(CObject, attachmentRotation) == 0xce);
-    STATIC_ASSERT(offsetof(CObject, attachmentRotationSync) == 0xda);
-    STATIC_ASSERT(offsetof(CObject, targetMatrix) == 0xdb);
-    STATIC_ASSERT(offsetof(CObject, baseMatrix) == 0x11b);
-    STATIC_ASSERT(offsetof(CObject, moveDistance) == 0x15b);
-    STATIC_ASSERT(offsetof(CObject, moveStartTick) == 0x15f);
-    STATIC_ASSERT(offsetof(CObject, lastMoveTick) == 0x163);
-    STATIC_ASSERT(offsetof(CObject, targetQuaternion) == 0x167);
-    STATIC_ASSERT(offsetof(CObject, interpolatedQuaternion) == 0x177);
-    STATIC_ASSERT(offsetof(CObject, startQuaternion) == 0x187);
-    STATIC_ASSERT(offsetof(CObject, targetEuler) == 0x197);
-    STATIC_ASSERT(offsetof(CObject, angleDelta) == 0x1a3);
-    STATIC_ASSERT(offsetof(CObject, motionFlags) == 0x1af);
-    STATIC_ASSERT(offsetof(CObject, moveSpeed) == 0x1b0);
-    STATIC_ASSERT(offsetof(CObject, rotationEnabled) == 0x1b5);
-    STATIC_ASSERT(offsetof(CObject, streamingHideCount) == 0x4a);
-    STATIC_ASSERT(offsetof(CObject, modelIndex) == 0x4e);
-    STATIC_ASSERT(offsetof(CObject, usesModelDrawDistance) == 0x52);
-    STATIC_ASSERT(offsetof(CObject, streamingDistance) == 0x54);
-    STATIC_ASSERT(offsetof(CObject, collisionRadius) == 0x58);
-    STATIC_ASSERT(offsetof(CObject, worldCentre) == 0x5c);
-    STATIC_ASSERT(offsetof(CObject, cameraDistance) == 0x68);
-    STATIC_ASSERT(offsetof(CObject, timeVisibilityEnabled) == 0x1199);
-    STATIC_ASSERT(offsetof(CObject, visibilityStartHour) == 0x119a);
-    STATIC_ASSERT(offsetof(CObject, visibilityEndHour) == 0x119b);
-    STATIC_ASSERT(offsetof(CObject, materials) == 0x1c3);
-    STATIC_ASSERT(offsetof(CObject, materialPassState) == 0x118f);
-    STATIC_ASSERT(offsetof(CObject, hasMaterials) == 0x118b);
+    static_assert(offsetof(CObject, renderReady) == 0x49);
+    static_assert(offsetof(CObject, cameraCollisionDisabled) == 0x53);
+    static_assert(offsetof(CObject, drawLast) == 0x6c);
+    static_assert(offsetof(CObject, eulerRotation) == 0xad);
+    static_assert(offsetof(CObject, attachedVehicle) == 0xbe);
+    static_assert(offsetof(CObject, attachedObject) == 0xc0);
+    static_assert(offsetof(CObject, attachmentOffset) == 0xc2);
+    static_assert(offsetof(CObject, attachmentRotation) == 0xce);
+    static_assert(offsetof(CObject, attachmentRotationSync) == 0xda);
+    static_assert(offsetof(CObject, targetMatrix) == 0xdb);
+    static_assert(offsetof(CObject, baseMatrix) == 0x11b);
+    static_assert(offsetof(CObject, moveDistance) == 0x15b);
+    static_assert(offsetof(CObject, moveStartTick) == 0x15f);
+    static_assert(offsetof(CObject, lastMoveTick) == 0x163);
+    static_assert(offsetof(CObject, targetQuaternion) == 0x167);
+    static_assert(offsetof(CObject, interpolatedQuaternion) == 0x177);
+    static_assert(offsetof(CObject, startQuaternion) == 0x187);
+    static_assert(offsetof(CObject, targetEuler) == 0x197);
+    static_assert(offsetof(CObject, angleDelta) == 0x1a3);
+    static_assert(offsetof(CObject, motionFlags) == 0x1af);
+    static_assert(offsetof(CObject, moveSpeed) == 0x1b0);
+    static_assert(offsetof(CObject, rotationEnabled) == 0x1b5);
+    static_assert(offsetof(CObject, streamingHideCount) == 0x4a);
+    static_assert(offsetof(CObject, modelIndex) == 0x4e);
+    static_assert(offsetof(CObject, usesModelDrawDistance) == 0x52);
+    static_assert(offsetof(CObject, streamingDistance) == 0x54);
+    static_assert(offsetof(CObject, collisionRadius) == 0x58);
+    static_assert(offsetof(CObject, worldCentre) == 0x5c);
+    static_assert(offsetof(CObject, cameraDistance) == 0x68);
+    static_assert(offsetof(CObject, timeVisibilityEnabled) == 0x1199);
+    static_assert(offsetof(CObject, visibilityStartHour) == 0x119a);
+    static_assert(offsetof(CObject, visibilityEndHour) == 0x119b);
+    static_assert(offsetof(CObject, materials) == 0x1c3);
+    static_assert(offsetof(CObject, materialPassState) == 0x118f);
+    static_assert(offsetof(CObject, hasMaterials) == 0x118b);
     // 0x00019b20
     friend void ScrAttachCameraToObject(RPCParameters* parameters);
     int largestId;
@@ -97,7 +95,7 @@ public:
     void ShutdownMaterials();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CObjectPool) == 0x41a4);
+static_assert(sizeof(CObjectPool) == 0x41a4);
 // Native copies all five words; the fifth is intentionally uninitialized stack data.
 // 0x00156b5c
 extern GameEntityCollisionShape g_objectPoolRayOrigin;

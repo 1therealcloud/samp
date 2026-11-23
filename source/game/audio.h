@@ -3,8 +3,6 @@
 
 #include "game/entity.h"
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CAudio
 {
@@ -34,6 +32,6 @@ public:
     void Process();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CAudio) == 5);
+static_assert(sizeof(CAudio) == 5);
 
 #endif // AUDIO_H

@@ -6,8 +6,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 // Native green-underflow branch clears red and retains green; not generic saturation.
 // 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount);
@@ -48,8 +46,8 @@ public:
     // 0x0006b320
     void Reset();
 };
-STATIC_ASSERT(sizeof(CFonts) == 40);
-STATIC_ASSERT(offsetof(CFonts, m_szTempBuffer) == 28);
+static_assert(sizeof(CFonts) == 40);
+static_assert(offsetof(CFonts, m_szTempBuffer) == 28);
 
 // 0x00118400
 extern const char g_fontMeasureProbe[2];

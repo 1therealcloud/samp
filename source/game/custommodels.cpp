@@ -26,8 +26,6 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include <static_assert.h>
-
 // 0x00117cd8
 const char g_customDeleteDffPattern[] = "%s\\0x%X.dff";
 // 0x00117ce4
@@ -929,7 +927,7 @@ void CCustomModels::Initialize()
     nativeState[8] = 1;
     *(DWORD*)(nativeState + 0x213) = 2;
 }
-STATIC_ASSERT(sizeof(SizeT) == 4);
+static_assert(sizeof(SizeT) == 4);
 // 0x000c52d0
 const char* CustomModelGetProxy()
 {
@@ -1265,7 +1263,7 @@ DWORD __cdecl CustomModelFileCrc(const char* filename)
     if (!file)
         return crc;
     BYTE data[1024];
-    while (!(file->_flag & _IOEOF))
+    while (!feof(file))
     {
         DWORD length = (DWORD)fread(data, 1, 1024, file);
         crc = CustomModelCrc(crc, data, length);

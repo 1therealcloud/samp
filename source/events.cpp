@@ -13,8 +13,6 @@
 #include <BitStream.h>
 #include <RakClientInterface.h>
 
-#include <static_assert.h>
-
 // 0x00117690
 int g_scmEventRpcId = 96;
 // 0x00156988
@@ -105,7 +103,7 @@ struct ScmNetGameView
     ScmPoolsView* pools;
 };
 #pragma pack(pop)
-STATIC_ASSERT(offsetof(ScmNetGameView, pools) == 0x3de);
+static_assert(offsetof(ScmNetGameView, pools) == 0x3de);
 // 0x00001d10
 void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, DWORD eventType)
 {

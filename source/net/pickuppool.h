@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct Pickup
 {
@@ -50,9 +48,9 @@ public:
     int GetIndex(int index);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(Pickup) == 20);
-STATIC_ASSERT(sizeof(WeaponPickupState) == 3);
-STATIC_ASSERT(sizeof(CPickupPool) == 0x23004);
+static_assert(sizeof(Pickup) == 20);
+static_assert(sizeof(WeaponPickupState) == 3);
+static_assert(sizeof(CPickupPool) == 0x23004);
 // 0x0011816c
 extern int g_pickupCollectedRpc;
 // 0x00118170

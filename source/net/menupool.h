@@ -3,8 +3,6 @@
 
 #include "game/menu.h"
 
-#include <static_assert.h>
-
 struct RPCParameters;
 #pragma pack(push, 1)
 // Native allocation is0x402 bytes; current-menu sentinel is128.
@@ -39,7 +37,7 @@ public:
     void Hide(BYTE id);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CMenuPool) == 0x402);
+static_assert(sizeof(CMenuPool) == 0x402);
 // 0x001179c4
 extern int g_menuSelectedRpc;
 // 0x001179c0

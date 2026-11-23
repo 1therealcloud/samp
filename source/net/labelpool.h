@@ -5,8 +5,6 @@
 
 #include <stddef.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct TextLabel
 {
@@ -38,9 +36,9 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(TextLabel) == 29);
-STATIC_ASSERT(offsetof(TextLabel, attachedPlayer) == 0x19);
-STATIC_ASSERT(offsetof(CLabelPool, active) == 0xe800);
-STATIC_ASSERT(sizeof(CLabelPool) == 0x10800);
+static_assert(sizeof(TextLabel) == 29);
+static_assert(offsetof(TextLabel, attachedPlayer) == 0x19);
+static_assert(offsetof(CLabelPool, active) == 0xe800);
+static_assert(sizeof(CLabelPool) == 0x10800);
 
 #endif // LABELPOOL_H

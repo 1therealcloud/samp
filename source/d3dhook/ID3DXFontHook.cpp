@@ -11,8 +11,6 @@
 #include <string.h>
 #include <wchar.h>
 
-#include <static_assert.h>
-
 // Native vtable RVA 0x0011c76c. State is shared, as in the DLL.
 class CFontColorSprite : public ID3DXSprite
 {
@@ -66,7 +64,7 @@ int g_fontGlyphCursor;
 // 0x00073960
 CFontColorSprite::CFontColorSprite() {}
 
-STATIC_ASSERT(sizeof(CFontColorSprite) == 4);
+static_assert(sizeof(CFontColorSprite) == 4);
 
 // 0x00073770
 HRESULT STDMETHODCALLTYPE CFontWrapper::QueryInterface(REFIID iid, void** output)

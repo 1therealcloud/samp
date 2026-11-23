@@ -211,7 +211,7 @@ void CPlayerTags::DrawHealthBar(const CVector* position, float health, float arm
     fill[2].x = fill[3].x = right;
     if (armour > g_objectScaleLowerBound)
     {
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             border[i].y += g_playerTagArmourOffset;
             background[i].y = fill[i].y + g_playerTagArmourOffset;
@@ -224,12 +224,12 @@ void CPlayerTags::DrawHealthBar(const CVector* position, float health, float arm
     device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, fill, sizeof(PlayerTagVertex));
     if (armour > g_objectScaleLowerBound)
     {
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             fill[i].color = 0xffc8c8c8;
             background[i].color = 0xff282828;
         }
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             border[i].y -= g_playerTagArmourOffset;
             background[i].y -= g_playerTagArmourOffset;

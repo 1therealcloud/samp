@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct IDirect3DDevice9;
 class CDXUTDialog;
 #pragma pack(push, 1)
@@ -32,7 +30,7 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CRenderPanel) == 0x28);
+static_assert(sizeof(CRenderPanel) == 0x28);
 // 0x0011c75c
 extern const char g_renderPanelTitle[10];
 

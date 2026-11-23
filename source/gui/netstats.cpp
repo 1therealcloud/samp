@@ -16,8 +16,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x00163a78
 char g_netStatsLine[1024];
 // 0x00163e78

@@ -17,8 +17,6 @@
 
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x002acab8
 CDXUTDialog* g_guiScoreboardDialog;
 // 0x002acac0
@@ -27,7 +25,7 @@ CDXUTDialog* g_guiServerDialog;
 CDXUTDialog* g_guiPanelDialog;
 // 0x002acac8
 CDXUTDialog* g_guiDownloadDialog;
-STATIC_ASSERT(sizeof(CDXUTDialog) == 0x1ea);
+static_assert(sizeof(CDXUTDialog) == 0x1ea);
 // 0x002ac9d8
 CPlayerTags* g_devicePlayerTags;
 // 0x002aca20
@@ -172,18 +170,18 @@ void ClientInitializeGui()
 }
 
 // Constructor-only opaque storage is intentional: the full UI interfaces remain open.
-STATIC_ASSERT(sizeof(CDeathWindow) == 0x157);
-STATIC_ASSERT(sizeof(CScoreboard) == 0x44);
-STATIC_ASSERT(sizeof(CDialog) == 0x29d);
-STATIC_ASSERT(sizeof(CRenderPanel) == 0x28);
-STATIC_ASSERT(sizeof(CDownloadWindow) == 0x260);
-STATIC_ASSERT(sizeof(CNetStats) == 0x18);
-STATIC_ASSERT(sizeof(CSrvNetStats) == 0x18);
-STATIC_ASSERT(sizeof(CHelpDialog) == 0x4);
-STATIC_ASSERT(sizeof(CChatBubble) == 0x44a20);
+static_assert(sizeof(CDeathWindow) == 0x157);
+static_assert(sizeof(CScoreboard) == 0x44);
+static_assert(sizeof(CDialog) == 0x29d);
+static_assert(sizeof(CRenderPanel) == 0x28);
+static_assert(sizeof(CDownloadWindow) == 0x260);
+static_assert(sizeof(CNetStats) == 0x18);
+static_assert(sizeof(CSrvNetStats) == 0x18);
+static_assert(sizeof(CHelpDialog) == 0x4);
+static_assert(sizeof(CChatBubble) == 0x44a20);
 
 // Allocation extent and packed manager layout observed in the original constructor.
-STATIC_ASSERT(sizeof(CDXUTDialogResourceManager) == 36);
+static_assert(sizeof(CDXUTDialogResourceManager) == 36);
 // 0x000c6a60
 void ClientInitializeDialogResources()
 {

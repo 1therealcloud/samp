@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 // Sixteen native DWORDs copied verbatim; only the first thirteen have known uses.
 struct CMenuInteraction
@@ -49,16 +47,16 @@ public:
     char* GetColumnTitle(BYTE column);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CMenuInteraction) == 64);
-STATIC_ASSERT(sizeof(CMenu) == 0x3b8);
-STATIC_ASSERT(offsetof(CMenu, title) == 1);
-STATIC_ASSERT(offsetof(CMenu, items) == 0x21);
-STATIC_ASSERT(offsetof(CMenu, columnTitles) == 0x321);
-STATIC_ASSERT(offsetof(CMenu, x) == 0x361);
-STATIC_ASSERT(offsetof(CMenu, widths) == 0x369);
-STATIC_ASSERT(offsetof(CMenu, columns) == 0x371);
-STATIC_ASSERT(offsetof(CMenu, interaction) == 0x372);
-STATIC_ASSERT(offsetof(CMenu, handle) == 0x3b4);
+static_assert(sizeof(CMenuInteraction) == 64);
+static_assert(sizeof(CMenu) == 0x3b8);
+static_assert(offsetof(CMenu, title) == 1);
+static_assert(offsetof(CMenu, items) == 0x21);
+static_assert(offsetof(CMenu, columnTitles) == 0x321);
+static_assert(offsetof(CMenu, x) == 0x361);
+static_assert(offsetof(CMenu, widths) == 0x369);
+static_assert(offsetof(CMenu, columns) == 0x371);
+static_assert(offsetof(CMenu, interaction) == 0x372);
+static_assert(offsetof(CMenu, handle) == 0x3b4);
 // 0x0013c0c8
 extern const char g_menuItemKeys[24][32];
 // 0x0011ecf4

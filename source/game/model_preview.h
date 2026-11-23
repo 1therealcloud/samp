@@ -3,8 +3,6 @@
 
 #include "game/entity.h"
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CModelPreview
 {
@@ -30,7 +28,7 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CModelPreview) == 28);
+static_assert(sizeof(CModelPreview) == 28);
 // 0x002aca38
 extern CModelPreview* g_modelPreview;
 // 0x0011c654

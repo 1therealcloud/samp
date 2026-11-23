@@ -5,8 +5,6 @@
 
 #include <d3dx9.h>
 
-#include <static_assert.h>
-
 struct CVector;
 #pragma pack(push, 1)
 struct SpawnScreenVertex
@@ -47,7 +45,7 @@ public:
 #pragma pack(pop)
 // 0x0011c74c
 extern const char g_spawnVersionText[];
-STATIC_ASSERT(sizeof(SpawnScreenVertex) == 28);
-STATIC_ASSERT(offsetof(CSpawnScreen, spawnText) == 4);
+static_assert(sizeof(SpawnScreenVertex) == 28);
+static_assert(offsetof(CSpawnScreen, spawnText) == 4);
 
 #endif // SPAWNSCREEN_H

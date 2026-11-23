@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct ChatBubbleEntry
 {
@@ -28,9 +26,9 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(ChatBubbleEntry) == 280);
-STATIC_ASSERT(offsetof(ChatBubbleEntry, created) == 0x104);
-STATIC_ASSERT(sizeof(CChatBubble) == 0x44a20);
+static_assert(sizeof(ChatBubbleEntry) == 280);
+static_assert(offsetof(ChatBubbleEntry, created) == 0x104);
+static_assert(sizeof(CChatBubble) == 0x44a20);
 // Mutates the caller buffer; valid length<=512 does not bound resulting length.
 // 0x000171a0
 int FormatChatBubbleText(char* text, int width, int tolerance);

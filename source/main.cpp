@@ -18,8 +18,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 // Client runtime globals, initialization and frame coordination.
 // 0x002aca3c
 CGame* g_pGame;
@@ -36,8 +34,8 @@ IDirect3DDevice9* g_clientSavedGameDevice;
 DWORD g_clientDeviceInitialized;
 // 0x002aca44
 DWORD g_clientNetworkInitialized;
-STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
-STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
+static_assert(sizeof(CNetGame) == 0x3e2);
+static_assert(sizeof(CTextDrawSelection) == 10);
 // 0x002aca68
 DWORD g_clientSkipGameFrame;
 // 0x002ac9c0

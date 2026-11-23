@@ -21,8 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 struct DialogControlAccess : CDXUTControl
 {
     using CDXUTControl::UpdateRects;
@@ -253,8 +251,8 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
         BYTE padding[7];
         char line[256];
     } scratch;
-    STATIC_ASSERT(offsetof(TableScratch, cell) == 16);
-    STATIC_ASSERT(offsetof(TableScratch, line) == 0x98);
+    static_assert(offsetof(TableScratch, cell) == 16);
+    static_assert(offsetof(TableScratch, line) == 0x98);
     memset(scratch.widths, 0, sizeof(scratch.widths));
     memset(scratch.line, 0, sizeof(scratch.line));
     int totalHeight = 0;

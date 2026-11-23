@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct IDirect3DDevice9;
 class CNetStats
 {
@@ -17,8 +15,8 @@ public:
     // 0x000607f0
     void Draw();
 };
-STATIC_ASSERT(sizeof(CNetStats) == 24);
-STATIC_ASSERT(offsetof(CNetStats, lastUpdateTick) == 8);
+static_assert(sizeof(CNetStats) == 24);
+static_assert(offsetof(CNetStats, lastUpdateTick) == 8);
 // Native buffers have unsafe writes/concatenations; overflow adjacency is unproven.
 // 0x00163a78
 extern char g_netStatsLine[1024];

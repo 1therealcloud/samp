@@ -6,8 +6,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct CVector;
 class CMatrix;
 #pragma pack(push, 1)
@@ -182,36 +180,36 @@ public:
     void Remove();
 };
 #pragma pack(pop)
-STATIC_ASSERT(offsetof(RemotePlayerState, ped) == 4);
-STATIC_ASSERT(offsetof(RemotePlayerState, vehicle) == 8);
-STATIC_ASSERT(offsetof(RemotePlayerState, showNameTag) == 0x10);
-STATIC_ASSERT(offsetof(RemotePlayerState, specialAction) == 0x18);
-STATIC_ASSERT(offsetof(RemotePlayerState, playerState) == 0x1a);
-STATIC_ASSERT(offsetof(RemotePlayerState, isNpc) == 0x1c);
-STATIC_ASSERT(offsetof(RemotePlayerState, passenger) == 0x24);
-STATIC_ASSERT(offsetof(RemotePlayerState, onfoot) == 0x3c);
-STATIC_ASSERT(offsetof(RemotePlayerState, incar) == 0x80);
-STATIC_ASSERT(offsetof(RemotePlayerState, unknownf5) == 0xf5);
-STATIC_ASSERT(offsetof(RemotePlayerState, onfootTargetPosition) == 0x120);
-STATIC_ASSERT(offsetof(RemotePlayerState, incarTargetPosition) == 0x138);
-STATIC_ASSERT(offsetof(RemotePlayerState, positionInaccuracy) == 0x190);
-STATIC_ASSERT(offsetof(RemotePlayerState, incarTargetRotation) == 0x19c);
-STATIC_ASSERT(offsetof(RemotePlayerState, reportedArmour) == 0x1ac);
-STATIC_ASSERT(offsetof(RemotePlayerState, reportedHealth) == 0x1b0);
-STATIC_ASSERT(offsetof(RemotePlayerState, appliedAnimation) == 0x1c0);
-STATIC_ASSERT(offsetof(RemotePlayerState, updateType) == 0x1c4);
-STATIC_ASSERT(offsetof(RemotePlayerState, lastUpdateTick) == 0x1c5);
-STATIC_ASSERT(offsetof(RemotePlayerState, lastNetworkTimestamp) == 0x1c9);
-STATIC_ASSERT(offsetof(RemotePlayerState, scriptedAnimation) == 0x1cd);
-STATIC_ASSERT(offsetof(RemotePlayerState, status) == 0x1d1);
-STATIC_ASSERT(offsetof(RemotePlayerState, headDirection) == 0x1d5);
-STATIC_ASSERT(offsetof(RemotePlayerState, lastHeadUpdateTick) == 0x1e1);
-STATIC_ASSERT(offsetof(RemotePlayerState, lastHeadTaskTick) == 0x1e5);
-STATIC_ASSERT(offsetof(RemotePlayerState, markerEnabled) == 0x1e9);
-STATIC_ASSERT(offsetof(RemotePlayerState, markerX) == 0x1ed);
-STATIC_ASSERT(offsetof(RemotePlayerState, marker) == 0x1f9);
-STATIC_ASSERT(sizeof(RemotePlayerState) == 0x1fd);
-STATIC_ASSERT(sizeof(CRemotePlayer) == 0x1fd);
+static_assert(offsetof(RemotePlayerState, ped) == 4);
+static_assert(offsetof(RemotePlayerState, vehicle) == 8);
+static_assert(offsetof(RemotePlayerState, showNameTag) == 0x10);
+static_assert(offsetof(RemotePlayerState, specialAction) == 0x18);
+static_assert(offsetof(RemotePlayerState, playerState) == 0x1a);
+static_assert(offsetof(RemotePlayerState, isNpc) == 0x1c);
+static_assert(offsetof(RemotePlayerState, passenger) == 0x24);
+static_assert(offsetof(RemotePlayerState, onfoot) == 0x3c);
+static_assert(offsetof(RemotePlayerState, incar) == 0x80);
+static_assert(offsetof(RemotePlayerState, unknownf5) == 0xf5);
+static_assert(offsetof(RemotePlayerState, onfootTargetPosition) == 0x120);
+static_assert(offsetof(RemotePlayerState, incarTargetPosition) == 0x138);
+static_assert(offsetof(RemotePlayerState, positionInaccuracy) == 0x190);
+static_assert(offsetof(RemotePlayerState, incarTargetRotation) == 0x19c);
+static_assert(offsetof(RemotePlayerState, reportedArmour) == 0x1ac);
+static_assert(offsetof(RemotePlayerState, reportedHealth) == 0x1b0);
+static_assert(offsetof(RemotePlayerState, appliedAnimation) == 0x1c0);
+static_assert(offsetof(RemotePlayerState, updateType) == 0x1c4);
+static_assert(offsetof(RemotePlayerState, lastUpdateTick) == 0x1c5);
+static_assert(offsetof(RemotePlayerState, lastNetworkTimestamp) == 0x1c9);
+static_assert(offsetof(RemotePlayerState, scriptedAnimation) == 0x1cd);
+static_assert(offsetof(RemotePlayerState, status) == 0x1d1);
+static_assert(offsetof(RemotePlayerState, headDirection) == 0x1d5);
+static_assert(offsetof(RemotePlayerState, lastHeadUpdateTick) == 0x1e1);
+static_assert(offsetof(RemotePlayerState, lastHeadTaskTick) == 0x1e5);
+static_assert(offsetof(RemotePlayerState, markerEnabled) == 0x1e9);
+static_assert(offsetof(RemotePlayerState, markerX) == 0x1ed);
+static_assert(offsetof(RemotePlayerState, marker) == 0x1f9);
+static_assert(sizeof(RemotePlayerState) == 0x1fd);
+static_assert(sizeof(CRemotePlayer) == 0x1fd);
 // 0x001181e4
 extern const float g_remoteAbsentDistance;
 // 0x001181e8

@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CTextDrawSelection
 {
@@ -29,7 +27,7 @@ public:
     void Process();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CTextDrawSelection) == 10);
+static_assert(sizeof(CTextDrawSelection) == 10);
 // 0x001182f8
 extern int g_textDrawClickRpc;
 

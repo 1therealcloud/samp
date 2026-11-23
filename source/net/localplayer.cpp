@@ -28,8 +28,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x00117948
 const float g_localAimZoomScale = 63.0f;
 // 0x0011794c
@@ -912,7 +910,7 @@ DWORD CLocalPlayer::GetColorAsARGB()
     return (color >> 8) | 0xff000000;
 }
 // The selected RakNet dependency uses SA-MP's shifted reliability enumeration.
-STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
+static_assert(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
 // 0x00003970
 DWORD CLocalPlayer::HasDataChanged(const void* previous, const void* current, DWORD length)
 {
@@ -1260,7 +1258,7 @@ void CLocalPlayer::SendBullet(PedBulletData* data)
     BYTE packet = 206;
     stream.WriteBits(&packet, 8, true);
     stream.Write((const char*)&payload, 40);
-    STATIC_ASSERT(HIGH_PRIORITY == 1 && UNRELIABLE_SEQUENCED == 7);
+    static_assert(HIGH_PRIORITY == 1 && UNRELIABLE_SEQUENCED == 7);
     ((CNetGame*)g_pNetGame)->rakClient->Send(&stream, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0);
 }
 
@@ -1450,7 +1448,7 @@ void CLocalPlayer::ProcessVehicleDamage(WORD id)
     stream.WriteBits(&lights, 8, true);
     BYTE tires = m_state.tiresDamage;
     stream.WriteBits(&tires, 8, true);
-    STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE == 8);
+    static_assert(HIGH_PRIORITY == 1 && RELIABLE == 8);
     ((CNetGame*)g_pNetGame)->rakClient->RPC(&g_localVehicleDamageRpc, &stream, HIGH_PRIORITY, RELIABLE, 0, false);
 }
 

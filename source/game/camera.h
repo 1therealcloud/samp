@@ -3,8 +3,6 @@
 
 #include "game/entity.h"
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CCamera
 {
@@ -49,7 +47,7 @@ public:
     void Detach();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CCamera) == 8);
+static_assert(sizeof(CCamera) == 8);
 // 0x000b46e0
 BYTE __cdecl GameIsCameraPointValid(const CVector* point);
 

@@ -6,8 +6,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 // Observed coordinator fields; the unused prefix remains opaque.
 class CVehiclePool;
 class CPlayerPool;
@@ -47,17 +45,17 @@ struct CNetGameSettings
     BYTE showNameTags;
     BYTE limitGlobalChatRadius;
 };
-STATIC_ASSERT(sizeof(CNetGameSettings) == 0x3a);
-STATIC_ASSERT(offsetof(CNetGameSettings, worldBounds) == 5);
-STATIC_ASSERT(offsetof(CNetGameSettings, gravity) == 0x16);
-STATIC_ASSERT(offsetof(CNetGameSettings, vehicleDamageFilter) == 0x1b);
-STATIC_ASSERT(offsetof(CNetGameSettings, holdWorldTime) == 0x1f);
-STATIC_ASSERT(offsetof(CNetGameSettings, spawnsAvailable) == 0x23);
-STATIC_ASSERT(offsetof(CNetGameSettings, nameTagDrawDistance) == 0x27);
-STATIC_ASSERT(offsetof(CNetGameSettings, worldHour) == 0x2c);
-STATIC_ASSERT(offsetof(CNetGameSettings, playerMarkersMode) == 0x30);
-STATIC_ASSERT(offsetof(CNetGameSettings, showNameTags) == 0x38);
-STATIC_ASSERT(offsetof(CNetGameSettings, limitGlobalChatRadius) == 0x39);
+static_assert(sizeof(CNetGameSettings) == 0x3a);
+static_assert(offsetof(CNetGameSettings, worldBounds) == 5);
+static_assert(offsetof(CNetGameSettings, gravity) == 0x16);
+static_assert(offsetof(CNetGameSettings, vehicleDamageFilter) == 0x1b);
+static_assert(offsetof(CNetGameSettings, holdWorldTime) == 0x1f);
+static_assert(offsetof(CNetGameSettings, spawnsAvailable) == 0x23);
+static_assert(offsetof(CNetGameSettings, nameTagDrawDistance) == 0x27);
+static_assert(offsetof(CNetGameSettings, worldHour) == 0x2c);
+static_assert(offsetof(CNetGameSettings, playerMarkersMode) == 0x30);
+static_assert(offsetof(CNetGameSettings, showNameTags) == 0x38);
+static_assert(offsetof(CNetGameSettings, limitGlobalChatRadius) == 0x39);
 struct CNetGamePools
 {
     CMenuPool* menus;
@@ -241,23 +239,23 @@ public:
     CPlayerPool* GetPlayerPool();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CNetGamePools) == 0x24);
-STATIC_ASSERT(offsetof(CNetGame, pools) == 0x3de);
-STATIC_ASSERT(offsetof(CNetGame, rakClient) == 0x2c);
-STATIC_ASSERT(offsetof(CNetGame, hostOrIp) == 0x30);
-STATIC_ASSERT(offsetof(CNetGame, hostName) == 0x131);
-STATIC_ASSERT(offsetof(CNetGame, disableVehicleCollisions) == 0x232);
-STATIC_ASSERT(offsetof(CNetGame, updateCameraTarget) == 0x233);
-STATIC_ASSERT(offsetof(CNetGame, showNameTagStatus) == 0x234);
-STATIC_ASSERT(offsetof(CNetGame, serverPort) == 0x235);
-STATIC_ASSERT(offsetof(CNetGame, lanMode) == 0x239);
-STATIC_ASSERT(offsetof(CNetGame, mapIcons) == 0x23d);
-STATIC_ASSERT(offsetof(CNetGame, gameState) == 0x3cd);
-STATIC_ASSERT(offsetof(CNetGame, lastConnectAttempt) == 0x3d1);
-STATIC_ASSERT(offsetof(CNetGame, settings) == 0x3d5);
-STATIC_ASSERT(offsetof(CNetGame, modelWaitActive) == 0x3d9);
-STATIC_ASSERT(offsetof(CNetGame, modelWaitTick) == 0x3da);
-STATIC_ASSERT(sizeof(CNetGame) == 0x3e2);
+static_assert(sizeof(CNetGamePools) == 0x24);
+static_assert(offsetof(CNetGame, pools) == 0x3de);
+static_assert(offsetof(CNetGame, rakClient) == 0x2c);
+static_assert(offsetof(CNetGame, hostOrIp) == 0x30);
+static_assert(offsetof(CNetGame, hostName) == 0x131);
+static_assert(offsetof(CNetGame, disableVehicleCollisions) == 0x232);
+static_assert(offsetof(CNetGame, updateCameraTarget) == 0x233);
+static_assert(offsetof(CNetGame, showNameTagStatus) == 0x234);
+static_assert(offsetof(CNetGame, serverPort) == 0x235);
+static_assert(offsetof(CNetGame, lanMode) == 0x239);
+static_assert(offsetof(CNetGame, mapIcons) == 0x23d);
+static_assert(offsetof(CNetGame, gameState) == 0x3cd);
+static_assert(offsetof(CNetGame, lastConnectAttempt) == 0x3d1);
+static_assert(offsetof(CNetGame, settings) == 0x3d5);
+static_assert(offsetof(CNetGame, modelWaitActive) == 0x3d9);
+static_assert(offsetof(CNetGame, modelWaitTick) == 0x3da);
+static_assert(sizeof(CNetGame) == 0x3e2);
 // 0x00156b38
 extern DWORD g_netPlayersInfoTick;
 // 0x00117b98

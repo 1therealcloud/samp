@@ -5,8 +5,6 @@
 #include "gui/chatwindow.h"
 #include "main.h"
 
-#include <static_assert.h>
-
 // 0x00001610
 CActor* CActorPool::Get(WORD id)
 {
@@ -126,7 +124,7 @@ WORD CActorPool::FindInRay(float maxCameraDistance, const CVector* origin, const
         float value;
         DWORD unknown10;
     };
-    STATIC_ASSERT(sizeof(RayPoint) == 20);
+    static_assert(sizeof(RayPoint) == 20);
     RayPoint from, to;
     from.point.x = origin->x;
     from.point.y = origin->y;

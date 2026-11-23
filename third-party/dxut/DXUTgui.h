@@ -12,8 +12,6 @@
 #include <usp10.h>
 #include <dimm.h>
 
-#include <static_assert.h>
-
 //--------------------------------------------------------------------------------------
 // Defines and macros 
 //--------------------------------------------------------------------------------------
@@ -980,8 +978,6 @@ private:
 
 };
 
-STATIC_ASSERT(sizeof(CUniBuffer) == 0x13);
-
 //-----------------------------------------------------------------------------
 // EditBox control
 //-----------------------------------------------------------------------------
@@ -1481,8 +1477,6 @@ extern int g_dxutScrollThumbOffsetY;
 extern bool g_dxutListScrollInitialized;
 class CDXUTListBoxDL : public CDXUTControl
 {
-    STATIC_ASSERT(offsetof(CDXUTScrollBar, m_nPosition) == 0x8e);
-    STATIC_ASSERT(offsetof(CDXUTScrollBar, m_dArrowTS) == 0xaa);
     friend class CDialog;
 
 public:
@@ -1543,18 +1537,5 @@ public:
     CDXUTScrollBar* GetScrollBar();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(DXUTListBoxItemDL) == 0x29e);
-STATIC_ASSERT(sizeof(CDXUTControl) == 0x4d);
-STATIC_ASSERT(sizeof(CDXUTStaticDL) == 0x151);
-STATIC_ASSERT(sizeof(CDXUTButtonDL) == 0x152);
-STATIC_ASSERT(offsetof(DXUTListBoxItemDL, data) == 0x284);
-STATIC_ASSERT(sizeof(CDXUTScrollBar) == 0xb2);
-STATIC_ASSERT(sizeof(CDXUTListBoxDL) == 0x158);
-STATIC_ASSERT(offsetof(CDXUTListBoxDL, scrollBar) == 0x5d);
-STATIC_ASSERT(offsetof(CDXUTListBoxDL, textRect) == 0x10f);
-STATIC_ASSERT(offsetof(CDXUTListBoxDL, selectionRect) == 0x11f);
-STATIC_ASSERT(offsetof(CDXUTListBoxDL, items) == 0x14c);
-
-
 
 #endif // DXUT_GUI_H

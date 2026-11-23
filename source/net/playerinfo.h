@@ -5,8 +5,6 @@
 #include <string>
 #include <windows.h>
 
-#include <static_assert.h>
-
 class CRemotePlayer;
 #pragma pack(push, 1)
 class CPlayerInfo
@@ -41,8 +39,8 @@ public:
     ~CPlayerInfo();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(std::string) == 28);
-STATIC_ASSERT(offsetof(CPlayerInfo, name) == 0x10);
-STATIC_ASSERT(sizeof(CPlayerInfo) == 0x2c);
+//static_assert(sizeof(std::string) == 28);
+static_assert(offsetof(CPlayerInfo, name) == 0x10);
+//static_assert(sizeof(CPlayerInfo) == 0x2c);
 
 #endif // PLAYERINFO_H

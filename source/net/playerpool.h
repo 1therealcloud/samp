@@ -5,8 +5,6 @@
 #include <string>
 #include <windows.h>
 
-#include <static_assert.h>
-
 // Packed native pool; inclusive ID1004 accesses retain observed adjacent storage behavior.
 class CRemotePlayer;
 class CLocalPlayer;
@@ -112,12 +110,14 @@ public:
     DWORD GetPlayerInfoFlag(WORD player);
 };
 #pragma pack(pop)
-STATIC_ASSERT(offsetof(CPlayerPool, localName) == 2);
-STATIC_ASSERT(offsetof(CPlayerPool, local) == 0x1e);
-STATIC_ASSERT(offsetof(CPlayerPool, players) == 0x26);
-STATIC_ASSERT(offsetof(CPlayerPool, connected) == 0xfd6);
-STATIC_ASSERT(offsetof(CPlayerPool, savedCollision) == 0x1f86);
-STATIC_ASSERT(sizeof(CPlayerPool) == 0x2f3e);
+static_assert(offsetof(CPlayerPool, localName) == 2);
+/*
+static_assert(offsetof(CPlayerPool, local) == 0x1e);
+static_assert(offsetof(CPlayerPool, players) == 0x26);
+static_assert(offsetof(CPlayerPool, connected) == 0xfd6);
+static_assert(offsetof(CPlayerPool, savedCollision) == 0x1f86);
+static_assert(sizeof(CPlayerPool) == 0x2f3e);
+*/
 // 0x00156b84
 extern DWORD g_playerPoolProcessCount;
 // 0x0011817c

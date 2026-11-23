@@ -10,8 +10,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 class CPed;
 class CVehicle;
 struct CVector;
@@ -268,15 +266,15 @@ public:
     void EnableHUD(BOOL enabled);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CGame) == 0x142);
-STATIC_ASSERT(sizeof(GameCheckpointState) == 0x49);
-STATIC_ASSERT(offsetof(GameCheckpointState, marker) == 0x45);
-STATIC_ASSERT(offsetof(GameCheckpointState, raceMarker) == 0x21);
-STATIC_ASSERT(offsetof(CGame, m_checkpoints) == 0x0c);
-STATIC_ASSERT(offsetof(CGame, m_nTrackedNameDigestMatches) == 0x55);
-STATIC_ASSERT(offsetof(CGame, m_nCursorMode) == 0x61);
-STATIC_ASSERT(offsetof(CGame, m_nInputEnableWaitFrames) == 0x65);
-STATIC_ASSERT(offsetof(CGame, m_bClockEnabled) == 0x69);
+static_assert(sizeof(CGame) == 0x142);
+static_assert(sizeof(GameCheckpointState) == 0x49);
+static_assert(offsetof(GameCheckpointState, marker) == 0x45);
+static_assert(offsetof(GameCheckpointState, raceMarker) == 0x21);
+static_assert(offsetof(CGame, m_checkpoints) == 0x0c);
+static_assert(offsetof(CGame, m_nTrackedNameDigestMatches) == 0x55);
+static_assert(offsetof(CGame, m_nCursorMode) == 0x61);
+static_assert(offsetof(CGame, m_nInputEnableWaitFrames) == 0x65);
+static_assert(offsetof(CGame, m_bClockEnabled) == 0x69);
 // 0x0018e1d8
 extern BOOL g_gameUsedPlayerSlots[210];
 
@@ -323,7 +321,7 @@ struct GameModelReferencePatch
     BYTE opcode;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(GameModelReferencePatch) == 5);
+static_assert(sizeof(GameModelReferencePatch) == 5);
 // Addresses stored in these records are GTA SA virtual addresses.
 // 0x00152ae8
 extern const GameModelReferencePatch g_gameModelReferencePatchesUS[707];

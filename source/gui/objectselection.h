@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 class CObjectSelection
 {
@@ -27,7 +25,7 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CObjectSelection) == 6);
+static_assert(sizeof(CObjectSelection) == 6);
 // 0x0011c6b0
 extern const float g_objectSelectionMaxDistance;
 // 0x0011c68c

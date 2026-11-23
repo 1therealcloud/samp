@@ -3,8 +3,6 @@
 #ifndef MD5_H
 #define MD5_H
 
-#include <static_assert.h>
-
 #ifdef __alpha
 typedef unsigned int uint32;
 #else

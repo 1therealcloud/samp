@@ -96,7 +96,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -110,10 +110,11 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalOptions>/MERGE:.pstate=.data %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>RakNet.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -125,6 +126,7 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
@@ -138,7 +140,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -151,9 +153,10 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>RakNet.lib;lzma.lib;bass.lib;detours.lib;libcmt.lib;libcpmt.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;lzma.lib;bass.lib;minhook.lib;libcmt.lib;libcpmt.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -162,6 +165,7 @@
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
@@ -175,7 +179,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -188,9 +192,10 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;detours.lib;libcmt.lib;libcpmt.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;minhook.lib;libcmt.lib;libcpmt.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -199,6 +204,7 @@
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
@@ -216,7 +222,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\detours;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -230,10 +236,11 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalOptions>/MERGE:.pstate=.data %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -244,6 +251,7 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>

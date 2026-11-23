@@ -11,8 +11,6 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x00118158
 const Scripting::OpcodeInfo g_pickupDestroyCommand = {0x215, "i"};
 // 0x0011816c
@@ -26,12 +24,12 @@ const Scripting::OpcodeInfo g_pickupCollectedCommand = {0x214, "i"};
 // 0x00008190
 CPickupPool::CPickupPool()
 {
-    STATIC_ASSERT(offsetof(CPickupPool, count) == 0);
-    STATIC_ASSERT(offsetof(CPickupPool, handles) == 4);
-    STATIC_ASSERT(offsetof(CPickupPool, indices) == 0x4004);
-    STATIC_ASSERT(offsetof(CPickupPool, cooldown) == 0x8004);
-    STATIC_ASSERT(offsetof(CPickupPool, weapons) == 0xc004);
-    STATIC_ASSERT(offsetof(CPickupPool, pickups) == 0xf004);
+    static_assert(offsetof(CPickupPool, count) == 0);
+    static_assert(offsetof(CPickupPool, handles) == 4);
+    static_assert(offsetof(CPickupPool, indices) == 0x4004);
+    static_assert(offsetof(CPickupPool, cooldown) == 0x8004);
+    static_assert(offsetof(CPickupPool, weapons) == 0xc004);
+    static_assert(offsetof(CPickupPool, pickups) == 0xf004);
     // Native deliberately leaves the weapon-owner records untouched.
     memset(pickups, 0, sizeof(pickups));
     count = 0;
@@ -105,7 +103,7 @@ CPickupPool::~CPickupPool()
     }
 }
 
-STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
+static_assert(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
 // 0x00013340
 void CPickupPool::SendNotification(int index)
 {

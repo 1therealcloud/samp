@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct CustomModelDownload
 {
@@ -25,10 +23,10 @@ struct CustomModelWorker
     CustomModelDownload download;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CustomModelDownload) == 0x11e);
-STATIC_ASSERT(sizeof(CustomModelWorker) == 0x230);
-STATIC_ASSERT(offsetof(CustomModelWorker, download) == 0x112);
-STATIC_ASSERT(offsetof(CustomModelWorker, failed) == 0x10d);
+static_assert(sizeof(CustomModelDownload) == 0x11e);
+static_assert(sizeof(CustomModelWorker) == 0x230);
+static_assert(offsetof(CustomModelWorker, download) == 0x112);
+static_assert(offsetof(CustomModelWorker, failed) == 0x10d);
 // Native allocation extent0x206D; fields remain opaque except observed accesses.
 class CCustomModels
 {
@@ -192,7 +190,7 @@ public:
     // 0x0000c2e0
     BOOL LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash);
 };
-STATIC_ASSERT(sizeof(CCustomModels) == 0x206d);
+static_assert(sizeof(CCustomModels) == 0x206d);
 // 0x002aca28
 extern CCustomModels* g_customModels;
 // 0x00117c48

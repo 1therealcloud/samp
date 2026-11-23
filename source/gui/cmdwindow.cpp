@@ -15,8 +15,6 @@
 #include <new>
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x002aca24
 extern void* g_pNetGame;
 
@@ -269,7 +267,7 @@ struct InputNetGameView
     RakClientInterface* client;
 };
 #pragma pack(pop)
-STATIC_ASSERT(offsetof(InputNetGameView, client) == 0x2c);
+static_assert(offsetof(InputNetGameView, client) == 0x2c);
 
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.
 

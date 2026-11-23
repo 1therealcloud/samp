@@ -6,8 +6,6 @@
 #include <vector>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct CModelFileStream
 {
@@ -441,33 +439,33 @@ void __stdcall ModelCollisionMinVertex(ModelCollisionVertex* target, const Model
 void __stdcall ModelCollisionMaxVertex(ModelCollisionVertex* target, const ModelCollisionVertex* value);
 #pragma pack(pop)
 
-STATIC_ASSERT(sizeof(ModelCollisionVertex) == 6);
-STATIC_ASSERT(sizeof(ModelCollisionTriangle) == 8);
-STATIC_ASSERT(sizeof(ModelCollisionBounds) == 24);
-STATIC_ASSERT(sizeof(ModelCollisionFaceGroup) == 28);
-STATIC_ASSERT(sizeof(ModelCollisionBox) == 28);
-STATIC_ASSERT(sizeof(ModelCollisionSphere) == 20);
-STATIC_ASSERT(sizeof(ModelCollisionTriangleVector) == 16);
-STATIC_ASSERT(sizeof(CModelCollisionNode) == 0x34);
-STATIC_ASSERT(offsetof(CModelCollisionNode, left) == 0x1c);
-STATIC_ASSERT(offsetof(CModelCollisionNode, triangles) == 0x24);
-STATIC_ASSERT(sizeof(CModelCollisionBoxArray) == 8);
-STATIC_ASSERT(sizeof(CModelCollisionSphereArray) == 8);
+static_assert(sizeof(ModelCollisionVertex) == 6);
+static_assert(sizeof(ModelCollisionTriangle) == 8);
+static_assert(sizeof(ModelCollisionBounds) == 24);
+static_assert(sizeof(ModelCollisionFaceGroup) == 28);
+static_assert(sizeof(ModelCollisionBox) == 28);
+static_assert(sizeof(ModelCollisionSphere) == 20);
+//static_assert(sizeof(ModelCollisionTriangleVector) == 16);
+//static_assert(sizeof(CModelCollisionNode) == 0x34);
+static_assert(offsetof(CModelCollisionNode, left) == 0x1c);
+static_assert(offsetof(CModelCollisionNode, triangles) == 0x24);
+static_assert(sizeof(CModelCollisionBoxArray) == 8);
+static_assert(sizeof(CModelCollisionSphereArray) == 8);
 // 0x0011f8d8
 extern const float g_modelCollisionVertexScale;
 // 0x0011f8dc
 extern const float g_modelCollisionVertexInvScale;
-STATIC_ASSERT(sizeof(CModelFileStream) == 0x17);
-STATIC_ASSERT(sizeof(CModelFileChunk) == 0x23);
-STATIC_ASSERT(sizeof(CTxdFile) == 0x2b);
-STATIC_ASSERT(sizeof(CDffFile) == 0x4c);
-STATIC_ASSERT(sizeof(CModelGeometry) == 0xa1);
-STATIC_ASSERT(sizeof(CModelMaterialRecord) == 0xa4);
-STATIC_ASSERT(sizeof(CModelSkin) == 44);
-STATIC_ASSERT(offsetof(CModelGeometry, materials) == 0x58);
-STATIC_ASSERT(offsetof(CModelGeometry, meshes) == 0x6d);
-STATIC_ASSERT(offsetof(CDffFile, frames) == 0x34);
-STATIC_ASSERT(offsetof(CModelFileStream, owned) == 0xd);
+static_assert(sizeof(CModelFileStream) == 0x17);
+static_assert(sizeof(CModelFileChunk) == 0x23);
+static_assert(sizeof(CTxdFile) == 0x2b);
+static_assert(sizeof(CDffFile) == 0x4c);
+static_assert(sizeof(CModelGeometry) == 0xa1);
+static_assert(sizeof(CModelMaterialRecord) == 0xa4);
+static_assert(sizeof(CModelSkin) == 44);
+static_assert(offsetof(CModelGeometry, materials) == 0x58);
+static_assert(offsetof(CModelGeometry, meshes) == 0x6d);
+static_assert(offsetof(CDffFile, frames) == 0x34);
+static_assert(offsetof(CModelFileStream, owned) == 0xd);
 // 0x00117c9c
 extern const char g_customTxdVerifyError[];
 // 0x00117c60

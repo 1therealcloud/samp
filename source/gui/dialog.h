@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct IDirect3DDevice9;
 class CDXUTDialog;
 class CDXUTListBoxDL;
@@ -69,12 +67,12 @@ public:
     int PopulateTable(const char* text, SIZE* size, BOOL header);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CDialog) == 0x29d);
-STATIC_ASSERT(offsetof(CDialog, active) == 0x28);
-STATIC_ASSERT(offsetof(CDialog, title) == 0x40);
-STATIC_ASSERT(offsetof(CDialog, serverSide) == 0x81);
-STATIC_ASSERT(offsetof(CDialog, columnTitles) == 0x89);
-STATIC_ASSERT(offsetof(CDialog, columnWidths) == 0x28d);
+static_assert(sizeof(CDialog) == 0x29d);
+static_assert(offsetof(CDialog, active) == 0x28);
+static_assert(offsetof(CDialog, title) == 0x40);
+static_assert(offsetof(CDialog, serverSide) == 0x81);
+static_assert(offsetof(CDialog, columnTitles) == 0x89);
+static_assert(offsetof(CDialog, columnWidths) == 0x28d);
 // 0x0011c304
 extern const float g_dialogNegativeLineScale;
 // 0x00118490

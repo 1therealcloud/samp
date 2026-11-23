@@ -409,17 +409,27 @@ void CEntity::UpdateRwFrame()
     }
 }
 
+namespace ApplyMatrix
+{
+enum
+{
+    Backend = offsetof(CEntity, m_pGameEntity),
+    Matrix = offsetof(EntityBackendPrefix, matrix),
+    MatrixBytes = sizeof(CMatrix),
+    MatrixWords = sizeof(CMatrix) / sizeof(DWORD),
+    FrameBytes = 8,
+    TableLocal = 8,
+    EntityLocal = 4,
+    Slot3 = 3 * sizeof(DWORD),
+    Slot2 = 2 * sizeof(DWORD)
+};
+} // namespace ApplyMatrix
+
 // clang-format off
 // 0x0009fb40
 __declspec(naked) void CEntity::ApplyMatrix(CMatrix matrix)
 {
-    enum {
-        Backend = offsetof(CEntity, m_pGameEntity),
-        Matrix = offsetof(EntityBackendPrefix, matrix),
-        MatrixBytes = sizeof(CMatrix), MatrixWords = sizeof(CMatrix) / sizeof(DWORD),
-        FrameBytes = 8, TableLocal = 8, EntityLocal = 4,
-        Slot3 = 3 * sizeof(DWORD), Slot2 = 2 * sizeof(DWORD)
-    };
+    using namespace ApplyMatrix;
     __asm {
         push ebp
         mov ebp,esp
@@ -463,6 +473,7 @@ __declspec(naked) void CEntity::ApplyMatrix(CMatrix matrix)
     }
 }
 // clang-format on
+
 // 0x0009f0f0
 float CEntity::GetDistanceToPoint(float x, float y, float z)
 {
@@ -687,19 +698,32 @@ void CEntity::AddVehicleAudioEvent(DWORD argument)
     // clang-format on
 }
 
+namespace RenderForModelPreview
+{
+enum
+{
+    Backend = offsetof(CEntity, m_pGameEntity),
+    RwObject = offsetof(EntityBackendPrefix, rwObject),
+    Model = offsetof(EntityBackendPrefix, model),
+    FrameBytes = 12,
+    TableLocal = 12,
+    RenderLocal = 8,
+    EntityLocal = 4,
+    Slot17 = 17 * sizeof(DWORD),
+    FirstVehicle = 400,
+    LastVehicle = 611,
+    Backend733160 = 0x733160,
+    Backend553260 = 0x553260
+};
+} // namespace RenderForModelPreview
+
 // GTA callees use their original ECX/stack ABI.
 // clang-format off
 // 0x0009f960
 __declspec(naked) void CEntity::RenderForModelPreview()
 {
-    enum {
-        Backend = offsetof(CEntity, m_pGameEntity),
-        RwObject = offsetof(EntityBackendPrefix, rwObject),
-        Model = offsetof(EntityBackendPrefix, model),
-        FrameBytes = 12, TableLocal = 12, RenderLocal = 8, EntityLocal = 4,
-        Slot17 = 17 * sizeof(DWORD), FirstVehicle = 400, LastVehicle = 611,
-        Backend733160 = 0x733160, Backend553260 = 0x553260
-    };
+    using namespace RenderForModelPreview;
+
     // Preserve native signed model tests and captured pointers across GTA calls.
     __asm {
         push ebp

@@ -15,12 +15,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <static_assert.h>
-
-STATIC_ASSERT(sizeof(CVector) == sizeof(D3DXVECTOR3));
-STATIC_ASSERT(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x));
-STATIC_ASSERT(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y));
-STATIC_ASSERT(offsetof(CVector, z) == offsetof(D3DXVECTOR3, z));
+static_assert(sizeof(CVector) == sizeof(D3DXVECTOR3));
+static_assert(offsetof(CVector, x) == offsetof(D3DXVECTOR3, x));
+static_assert(offsetof(CVector, y) == offsetof(D3DXVECTOR3, y));
+static_assert(offsetof(CVector, z) == offsetof(D3DXVECTOR3, z));
 // 0x0011e3a0
 const double g_aimVectorHalfPi = 1.5707963705062866;
 

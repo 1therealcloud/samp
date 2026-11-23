@@ -19,49 +19,17 @@ CObjectPool* g_debugScriptObjects;
 WORD g_debugScriptObjectCount;
 
 // 0x0009e2f0
-__declspec(naked) char* DebugScript::GetCommandParams(char* line)
+char* DebugScript::GetCommandParams(char* line)
 {
-    __asm
-    {
-        push ebx
-        push esi
-        mov esi, [esp+0Ch] // line
-        push 28h // '('
-        push esi
-        call strchr
-        push 29h // ')'
-        push esi
-        mov ebx, eax // Opening delimiter
-        call strchr
-        add esp, 10h
-        test ebx, ebx
-        jz missingDelimiter
-        test eax, eax
-        jz missingDelimiter
+    char* openingParenthesis = strchr(line, '(');
+    char* closingParenthesis = strchr(line, ')');
+    if (!openingParenthesis || !closingParenthesis)
+        return NULL;
 
-        push edi
-        mov edi, eax
-        sub edi, ebx // Distance between delimiters
-        lea eax, [edi-1]
-        push eax
-        inc ebx
-        push ebx
-        push esi
-        call strncpy
-        add esp, 0Ch
-        mov byte ptr [edi+esi], 0
-        pop edi
-        mov eax, esi
-        pop esi
-        pop ebx
-        ret
-
-    missingDelimiter:
-        pop esi
-        xor eax, eax
-        pop ebx
-        ret
-    }
+    size_t parameterLength = closingParenthesis - openingParenthesis - 1;
+    memmove(line, openingParenthesis + 1, parameterLength);
+    line[parameterLength] = 0;
+    return line;
 }
 
 // 0x0009e340

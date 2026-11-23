@@ -3,8 +3,6 @@
 
 #include "game/vehicle.h"
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 // Packed 40-byte record.
 struct VehiclePoolQueueEntry
@@ -104,18 +102,18 @@ public:
     void ConstructLicensePlates();
 };
 #pragma pack(pop)
-STATIC_ASSERT(offsetof(CVehiclePool, m_pObjects) == 0x1134);
-STATIC_ASSERT(offsetof(CVehiclePool, m_bNotEmpty) == 0x3074);
-STATIC_ASSERT(offsetof(CVehiclePool, m_pGameObjects) == 0x4fb4);
-STATIC_ASSERT(offsetof(CVehiclePool, queueActive) == 0xfa4);
-STATIC_ASSERT(offsetof(CVehiclePool, lastTick) == 0x9dd4);
-STATIC_ASSERT(offsetof(CVehiclePool, stateBD14) == 0xbd14);
-STATIC_ASSERT(offsetof(CVehiclePool, licensePlatesReady) == 0x17894);
-STATIC_ASSERT(sizeof(CVehiclePool) == 0x17898);
-STATIC_ASSERT(sizeof(VehiclePoolQueueEntry) == 40);
-STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, model) == 2);
-STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, health) == 0x18);
-STATIC_ASSERT(offsetof(VehiclePoolQueueEntry, siren) == 0x27);
+static_assert(offsetof(CVehiclePool, m_pObjects) == 0x1134);
+static_assert(offsetof(CVehiclePool, m_bNotEmpty) == 0x3074);
+static_assert(offsetof(CVehiclePool, m_pGameObjects) == 0x4fb4);
+static_assert(offsetof(CVehiclePool, queueActive) == 0xfa4);
+static_assert(offsetof(CVehiclePool, lastTick) == 0x9dd4);
+static_assert(offsetof(CVehiclePool, stateBD14) == 0xbd14);
+static_assert(offsetof(CVehiclePool, licensePlatesReady) == 0x17894);
+static_assert(sizeof(CVehiclePool) == 0x17898);
+static_assert(sizeof(VehiclePoolQueueEntry) == 40);
+static_assert(offsetof(VehiclePoolQueueEntry, model) == 2);
+static_assert(offsetof(VehiclePoolQueueEntry, health) == 0x18);
+static_assert(offsetof(VehiclePoolQueueEntry, siren) == 0x27);
 // 0x001184f8
 extern const char g_vehiclePoolNotDeletedMessage[];
 // 0x0011851c

@@ -6,8 +6,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 // Native vtable RVA 0x0011c438. No added destructor or reference count.
 class CFontWrapper : public ID3DXFont
 {
@@ -54,7 +52,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE OnResetDevice();
 };
 
-STATIC_ASSERT(sizeof(CFontWrapper) == 8);
+static_assert(sizeof(CFontWrapper) == 8);
 
 // 0x0017e97c
 extern char* g_fontOriginalText;

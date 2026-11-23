@@ -5,8 +5,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 // Packed native creation request; custom model is separate from constructor model.
 struct ActorCreateInfo
@@ -17,11 +15,11 @@ struct ActorCreateInfo
     float heading, health;
     BYTE invulnerable;
 };
-STATIC_ASSERT(sizeof(ActorCreateInfo) == 31);
+static_assert(sizeof(ActorCreateInfo) == 31);
 class CActorPool
 {
-    STATIC_ASSERT(offsetof(CActor, actorBackend) == 0x48);
-    STATIC_ASSERT(offsetof(CActor, invulnerable) == 0x55);
+    static_assert(offsetof(CActor, actorBackend) == 0x48);
+    static_assert(offsetof(CActor, invulnerable) == 0x55);
     int largestId;
     CActor* actors[1000];
     DWORD active[1000];
@@ -54,6 +52,6 @@ public:
     WORD Find(void* ped);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CActorPool) == 0x4e24);
+static_assert(sizeof(CActorPool) == 0x4e24);
 
 #endif // ACTORPOOL_H

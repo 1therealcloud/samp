@@ -9,8 +9,6 @@
 
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x001179c4
 int g_menuSelectedRpc = 132;
 // 0x001179c0
@@ -126,7 +124,7 @@ char* CMenuPool::GetTextPointer(const char* suffix)
     return 0;
 }
 
-STATIC_ASSERT(HIGH_PRIORITY == 1 && RELIABLE == 8);
+static_assert(HIGH_PRIORITY == 1 && RELIABLE == 8);
 // 0x00007ef0
 void CMenuPool::Process()
 {

@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 class CPed;
 struct CVector;
 #pragma pack(push, 1)
@@ -42,9 +40,9 @@ public:
     virtual BOOL IsSimple();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CTask) == 16);
-STATIC_ASSERT(offsetof(CTask, m_pTaskType) == 12);
-STATIC_ASSERT(offsetof(CTask, m_pPlayerPed) == 8);
+static_assert(sizeof(CTask) == 16);
+static_assert(offsetof(CTask, m_pTaskType) == 12);
+static_assert(offsetof(CTask, m_pPlayerPed) == 8);
 // samp.dll vtable RVA: 0x0011f450
 class CTaskJetpack : public CTask
 {
@@ -65,8 +63,8 @@ public:
     // 0x000b2630
     virtual ~CTaskTakeDamageFall();
 };
-STATIC_ASSERT(sizeof(CTaskJetpack) == 16);
-STATIC_ASSERT(sizeof(CTaskTakeDamageFall) == 16);
+static_assert(sizeof(CTaskJetpack) == 16);
+static_assert(sizeof(CTaskTakeDamageFall) == 16);
 // samp.dll vtable RVA: 0x0011f488
 class CTaskUseGoggles : public CTask
 {
@@ -96,8 +94,8 @@ public:
     // 0x000b26c0
     virtual ~CTaskKillPedOnFootArmed();
 };
-STATIC_ASSERT(sizeof(CTaskUseGoggles) == 16);
-STATIC_ASSERT(sizeof(CTaskGoToPoint) == 16);
-STATIC_ASSERT(sizeof(CTaskKillPedOnFootArmed) == 16);
+static_assert(sizeof(CTaskUseGoggles) == 16);
+static_assert(sizeof(CTaskGoToPoint) == 16);
+static_assert(sizeof(CTaskKillPedOnFootArmed) == 16);
 
 #endif // TASK_H

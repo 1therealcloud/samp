@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 // Packed native transmit record; fields are transferred as raw bits by the constructor.
 // The DL record starts with the flags.
@@ -104,29 +102,29 @@ public:
     void DrawText();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(TextDrawTransmit) == 63);
-STATIC_ASSERT(offsetof(TextDrawTransmit, letterWidth) == 1);
-STATIC_ASSERT(offsetof(TextDrawTransmit, shadow) == 0x19);
-STATIC_ASSERT(offsetof(TextDrawTransmit, style) == 0x1f);
-STATIC_ASSERT(offsetof(TextDrawTransmit, x) == 0x21);
-STATIC_ASSERT(offsetof(TextDrawTransmit, model) == 0x29);
-STATIC_ASSERT(offsetof(TextDrawTransmit, rotation) == 0x2b);
-STATIC_ASSERT(offsetof(TextDrawTransmit, zoom) == 0x37);
-STATIC_ASSERT(offsetof(TextDrawTransmit, vehicleColor1) == 0x3b);
-STATIC_ASSERT(sizeof(TextDrawData) == 91);
-STATIC_ASSERT(offsetof(TextDrawData, lineWidth) == 0x0f);
-STATIC_ASSERT(offsetof(TextDrawData, backgroundColor) == 0x1c);
-STATIC_ASSERT(offsetof(TextDrawData, style) == 0x24);
-STATIC_ASSERT(offsetof(TextDrawData, textureSlot) == 0x40);
-STATIC_ASSERT(offsetof(TextDrawData, model) == 0x45);
-STATIC_ASSERT(offsetof(TextDrawState, processedText) == 0x321);
-STATIC_ASSERT(offsetof(TextDrawState, format) == 0x963);
-STATIC_ASSERT(offsetof(TextDrawState, hasSelectableRect) == 0x9bf);
-STATIC_ASSERT(offsetof(TextDrawState, hasKeyCodes) == 0x9c0);
-STATIC_ASSERT(offsetof(TextDrawState, selectableRect) == 0x9c1);
-STATIC_ASSERT(offsetof(TextDrawState, hovered) == 0x9d1);
-STATIC_ASSERT(sizeof(TextDrawState) == 0x9d6);
-STATIC_ASSERT(sizeof(CTextDraw) == 0x9d6);
+static_assert(sizeof(TextDrawTransmit) == 63);
+static_assert(offsetof(TextDrawTransmit, letterWidth) == 1);
+static_assert(offsetof(TextDrawTransmit, shadow) == 0x19);
+static_assert(offsetof(TextDrawTransmit, style) == 0x1f);
+static_assert(offsetof(TextDrawTransmit, x) == 0x21);
+static_assert(offsetof(TextDrawTransmit, model) == 0x29);
+static_assert(offsetof(TextDrawTransmit, rotation) == 0x2b);
+static_assert(offsetof(TextDrawTransmit, zoom) == 0x37);
+static_assert(offsetof(TextDrawTransmit, vehicleColor1) == 0x3b);
+static_assert(sizeof(TextDrawData) == 91);
+static_assert(offsetof(TextDrawData, lineWidth) == 0x0f);
+static_assert(offsetof(TextDrawData, backgroundColor) == 0x1c);
+static_assert(offsetof(TextDrawData, style) == 0x24);
+static_assert(offsetof(TextDrawData, textureSlot) == 0x40);
+static_assert(offsetof(TextDrawData, model) == 0x45);
+static_assert(offsetof(TextDrawState, processedText) == 0x321);
+static_assert(offsetof(TextDrawState, format) == 0x963);
+static_assert(offsetof(TextDrawState, hasSelectableRect) == 0x9bf);
+static_assert(offsetof(TextDrawState, hasKeyCodes) == 0x9c0);
+static_assert(offsetof(TextDrawState, selectableRect) == 0x9c1);
+static_assert(offsetof(TextDrawState, hovered) == 0x9d1);
+static_assert(sizeof(TextDrawState) == 0x9d6);
+static_assert(sizeof(CTextDraw) == 0x9d6);
 // Shared texture-slot release entry.
 // 0x000b2750
 void GameReleaseTextDrawTexture(int slot);

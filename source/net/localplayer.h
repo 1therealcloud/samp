@@ -7,8 +7,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct LocalOnfootSyncData
 {
@@ -31,8 +29,8 @@ struct LocalIncarSyncData
     DWORD modelData;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(LocalOnfootSyncData) == 68);
-STATIC_ASSERT(sizeof(LocalIncarSyncData) == 63);
+static_assert(sizeof(LocalOnfootSyncData) == 68);
+static_assert(sizeof(LocalIncarSyncData) == 63);
 
 #pragma pack(push, 1)
 struct LocalAimSyncData
@@ -57,9 +55,9 @@ struct LocalPassengerSyncData
     CVector position;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(LocalAimSyncData) == 31);
-STATIC_ASSERT(sizeof(LocalTrailerSyncData) == 54);
-STATIC_ASSERT(sizeof(LocalPassengerSyncData) == 24);
+static_assert(sizeof(LocalAimSyncData) == 31);
+static_assert(sizeof(LocalTrailerSyncData) == 54);
+static_assert(sizeof(LocalPassengerSyncData) == 24);
 
 #pragma pack(push, 1)
 struct UnoccupiedSyncData
@@ -70,7 +68,7 @@ struct UnoccupiedSyncData
     float health;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(UnoccupiedSyncData) == 67);
+static_assert(sizeof(UnoccupiedSyncData) == 67);
 
 #pragma pack(push, 1)
 struct BulletSyncData
@@ -81,31 +79,31 @@ struct BulletSyncData
     BYTE weapon;
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(BulletSyncData) == 40);
-STATIC_ASSERT(offsetof(LocalOnfootSyncData, position) == 6);
-STATIC_ASSERT(offsetof(LocalOnfootSyncData, rotation) == 0x12);
-STATIC_ASSERT(offsetof(LocalOnfootSyncData, health) == 0x22);
-STATIC_ASSERT(offsetof(LocalOnfootSyncData, speed) == 0x26);
-STATIC_ASSERT(offsetof(LocalOnfootSyncData, surfingOffset) == 0x32);
-STATIC_ASSERT(offsetof(LocalOnfootSyncData, animation) == 0x40);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, rotation) == 8);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, position) == 0x18);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, speed) == 0x24);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, health) == 0x30);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, pedHealth) == 0x34);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, trailer) == 0x39);
-STATIC_ASSERT(offsetof(LocalIncarSyncData, modelData) == 0x3b);
-STATIC_ASSERT(offsetof(LocalAimSyncData, aimZ) == 25);
-STATIC_ASSERT(offsetof(LocalAimSyncData, zoomWeapon) == 29);
-STATIC_ASSERT(offsetof(LocalTrailerSyncData, rotation) == 14);
-STATIC_ASSERT(offsetof(LocalTrailerSyncData, speed) == 30);
-STATIC_ASSERT(offsetof(LocalPassengerSyncData, keys) == 10);
-STATIC_ASSERT(offsetof(LocalPassengerSyncData, position) == 12);
-STATIC_ASSERT(offsetof(UnoccupiedSyncData, position) == 27);
-STATIC_ASSERT(offsetof(UnoccupiedSyncData, health) == 63);
-STATIC_ASSERT(offsetof(BulletSyncData, targetId) == 1);
-STATIC_ASSERT(offsetof(BulletSyncData, origin) == 3);
-STATIC_ASSERT(offsetof(BulletSyncData, weapon) == 39);
+static_assert(sizeof(BulletSyncData) == 40);
+static_assert(offsetof(LocalOnfootSyncData, position) == 6);
+static_assert(offsetof(LocalOnfootSyncData, rotation) == 0x12);
+static_assert(offsetof(LocalOnfootSyncData, health) == 0x22);
+static_assert(offsetof(LocalOnfootSyncData, speed) == 0x26);
+static_assert(offsetof(LocalOnfootSyncData, surfingOffset) == 0x32);
+static_assert(offsetof(LocalOnfootSyncData, animation) == 0x40);
+static_assert(offsetof(LocalIncarSyncData, rotation) == 8);
+static_assert(offsetof(LocalIncarSyncData, position) == 0x18);
+static_assert(offsetof(LocalIncarSyncData, speed) == 0x24);
+static_assert(offsetof(LocalIncarSyncData, health) == 0x30);
+static_assert(offsetof(LocalIncarSyncData, pedHealth) == 0x34);
+static_assert(offsetof(LocalIncarSyncData, trailer) == 0x39);
+static_assert(offsetof(LocalIncarSyncData, modelData) == 0x3b);
+static_assert(offsetof(LocalAimSyncData, aimZ) == 25);
+static_assert(offsetof(LocalAimSyncData, zoomWeapon) == 29);
+static_assert(offsetof(LocalTrailerSyncData, rotation) == 14);
+static_assert(offsetof(LocalTrailerSyncData, speed) == 30);
+static_assert(offsetof(LocalPassengerSyncData, keys) == 10);
+static_assert(offsetof(LocalPassengerSyncData, position) == 12);
+static_assert(offsetof(UnoccupiedSyncData, position) == 27);
+static_assert(offsetof(UnoccupiedSyncData, health) == 63);
+static_assert(offsetof(BulletSyncData, targetId) == 1);
+static_assert(offsetof(BulletSyncData, origin) == 3);
+static_assert(offsetof(BulletSyncData, weapon) == 39);
 
 class CPed;
 class CEntity;
@@ -347,63 +345,63 @@ public:
     void PrevClass();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(LocalSpawnInfo) == 50);
-STATIC_ASSERT(offsetof(LocalSpawnInfo, position) == 10);
-STATIC_ASSERT(offsetof(LocalSpawnInfo, weapons) == 26);
-STATIC_ASSERT(offsetof(LocalSpawnInfo, ammo) == 38);
-STATIC_ASSERT(offsetof(LocalPlayerState, ped) == 0x0);
-STATIC_ASSERT(offsetof(LocalPlayerState, trailer) == 0x4);
-STATIC_ASSERT(offsetof(LocalPlayerState, onfoot) == 0x3a);
-STATIC_ASSERT(offsetof(LocalPlayerState, passenger) == 0x7e);
-STATIC_ASSERT(offsetof(LocalPlayerState, incar) == 0x96);
-STATIC_ASSERT(offsetof(LocalPlayerState, aim) == 0xd5);
-STATIC_ASSERT(offsetof(LocalPlayerState, active) == 0xf4);
-STATIC_ASSERT(offsetof(LocalPlayerState, wasted) == 0xf8);
-STATIC_ASSERT(offsetof(LocalPlayerState, currentVehicle) == 0xfc);
-STATIC_ASSERT(offsetof(LocalPlayerState, cameraTargets) == 0x108);
-STATIC_ASSERT(offsetof(LocalPlayerState, headDirection) == 0x114);
-STATIC_ASSERT(offsetof(LocalPlayerState, headUpdateTick) == 0x120);
-STATIC_ASSERT(offsetof(LocalPlayerState, spectating) == 0x12c);
-STATIC_ASSERT(offsetof(LocalPlayerState, team) == 0x130);
-STATIC_ASSERT(offsetof(LocalPlayerState, unknown131) == 0x131);
-STATIC_ASSERT(offsetof(LocalPlayerState, lastSendTick) == 0x133);
-STATIC_ASSERT(offsetof(LocalPlayerState, spawnPermission) == 0x143);
-STATIC_ASSERT(offsetof(LocalPlayerState, classSelectionTick) == 0x147);
-STATIC_ASSERT(offsetof(LocalPlayerState, initialSelectionTick) == 0x14b);
-STATIC_ASSERT(offsetof(LocalPlayerState, spawnInfo) == 0x14f);
-STATIC_ASSERT(offsetof(LocalPlayerState, hasSpawnInfo) == 0x181);
-STATIC_ASSERT(offsetof(LocalPlayerState, weaponsUpdateTick) == 0x185);
-STATIC_ASSERT(offsetof(LocalPlayerState, aimedPlayer) == 0x189);
-STATIC_ASSERT(offsetof(LocalPlayerState, lastWeapons) == 0x18e);
-STATIC_ASSERT(offsetof(LocalPlayerState, lastAmmo) == 0x19b);
-STATIC_ASSERT(offsetof(LocalPlayerState, passengerDriveby) == 0x1cf);
-STATIC_ASSERT(offsetof(LocalPlayerState, interior) == 0x1d3);
-STATIC_ASSERT(offsetof(LocalPlayerState, rcMode) == 0x1d4);
-STATIC_ASSERT(offsetof(LocalPlayerState, unknown1d8) == 0x1d8);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingId) == 0x2d8);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingTick) == 0x2da);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingEntity) == 0x2de);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingLocked) == 0x2e2);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingMode) == 0x2e6);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingOffset) == 0x2ea);
-STATIC_ASSERT(offsetof(LocalPlayerState, unknown2f6) == 0x2f6);
-STATIC_ASSERT(offsetof(LocalPlayerState, surfingContactState) == 0x2fa);
-STATIC_ASSERT(offsetof(LocalPlayerState, wantsAnotherClass) == 0x2fe);
-STATIC_ASSERT(offsetof(LocalPlayerState, selectedClass) == 0x302);
-STATIC_ASSERT(offsetof(LocalPlayerState, waitingForSpawnReply) == 0x306);
-STATIC_ASSERT(offsetof(LocalPlayerState, classSelectionActive) == 0x30a);
-STATIC_ASSERT(offsetof(LocalPlayerState, zoneDisplayTick) == 0x30e);
-STATIC_ASSERT(offsetof(LocalPlayerState, spectateCameraMode) == 0x312);
-STATIC_ASSERT(offsetof(LocalPlayerState, spectateType) == 0x313);
-STATIC_ASSERT(offsetof(LocalPlayerState, spectateId) == 0x314);
-STATIC_ASSERT(offsetof(LocalPlayerState, spectateProcessed) == 0x318);
-STATIC_ASSERT(offsetof(LocalPlayerState, damageVehicle) == 0x31c);
-STATIC_ASSERT(offsetof(LocalPlayerState, panelsDamage) == 0x31e);
-STATIC_ASSERT(offsetof(LocalPlayerState, doorsDamage) == 0x322);
-STATIC_ASSERT(offsetof(LocalPlayerState, lightsDamage) == 0x326);
-STATIC_ASSERT(offsetof(LocalPlayerState, tiresDamage) == 0x327);
-STATIC_ASSERT(sizeof(LocalPlayerState) == 0x328);
-STATIC_ASSERT(sizeof(CLocalPlayer) == 0x328);
+static_assert(sizeof(LocalSpawnInfo) == 50);
+static_assert(offsetof(LocalSpawnInfo, position) == 10);
+static_assert(offsetof(LocalSpawnInfo, weapons) == 26);
+static_assert(offsetof(LocalSpawnInfo, ammo) == 38);
+static_assert(offsetof(LocalPlayerState, ped) == 0x0);
+static_assert(offsetof(LocalPlayerState, trailer) == 0x4);
+static_assert(offsetof(LocalPlayerState, onfoot) == 0x3a);
+static_assert(offsetof(LocalPlayerState, passenger) == 0x7e);
+static_assert(offsetof(LocalPlayerState, incar) == 0x96);
+static_assert(offsetof(LocalPlayerState, aim) == 0xd5);
+static_assert(offsetof(LocalPlayerState, active) == 0xf4);
+static_assert(offsetof(LocalPlayerState, wasted) == 0xf8);
+static_assert(offsetof(LocalPlayerState, currentVehicle) == 0xfc);
+static_assert(offsetof(LocalPlayerState, cameraTargets) == 0x108);
+static_assert(offsetof(LocalPlayerState, headDirection) == 0x114);
+static_assert(offsetof(LocalPlayerState, headUpdateTick) == 0x120);
+static_assert(offsetof(LocalPlayerState, spectating) == 0x12c);
+static_assert(offsetof(LocalPlayerState, team) == 0x130);
+static_assert(offsetof(LocalPlayerState, unknown131) == 0x131);
+static_assert(offsetof(LocalPlayerState, lastSendTick) == 0x133);
+static_assert(offsetof(LocalPlayerState, spawnPermission) == 0x143);
+static_assert(offsetof(LocalPlayerState, classSelectionTick) == 0x147);
+static_assert(offsetof(LocalPlayerState, initialSelectionTick) == 0x14b);
+static_assert(offsetof(LocalPlayerState, spawnInfo) == 0x14f);
+static_assert(offsetof(LocalPlayerState, hasSpawnInfo) == 0x181);
+static_assert(offsetof(LocalPlayerState, weaponsUpdateTick) == 0x185);
+static_assert(offsetof(LocalPlayerState, aimedPlayer) == 0x189);
+static_assert(offsetof(LocalPlayerState, lastWeapons) == 0x18e);
+static_assert(offsetof(LocalPlayerState, lastAmmo) == 0x19b);
+static_assert(offsetof(LocalPlayerState, passengerDriveby) == 0x1cf);
+static_assert(offsetof(LocalPlayerState, interior) == 0x1d3);
+static_assert(offsetof(LocalPlayerState, rcMode) == 0x1d4);
+static_assert(offsetof(LocalPlayerState, unknown1d8) == 0x1d8);
+static_assert(offsetof(LocalPlayerState, surfingId) == 0x2d8);
+static_assert(offsetof(LocalPlayerState, surfingTick) == 0x2da);
+static_assert(offsetof(LocalPlayerState, surfingEntity) == 0x2de);
+static_assert(offsetof(LocalPlayerState, surfingLocked) == 0x2e2);
+static_assert(offsetof(LocalPlayerState, surfingMode) == 0x2e6);
+static_assert(offsetof(LocalPlayerState, surfingOffset) == 0x2ea);
+static_assert(offsetof(LocalPlayerState, unknown2f6) == 0x2f6);
+static_assert(offsetof(LocalPlayerState, surfingContactState) == 0x2fa);
+static_assert(offsetof(LocalPlayerState, wantsAnotherClass) == 0x2fe);
+static_assert(offsetof(LocalPlayerState, selectedClass) == 0x302);
+static_assert(offsetof(LocalPlayerState, waitingForSpawnReply) == 0x306);
+static_assert(offsetof(LocalPlayerState, classSelectionActive) == 0x30a);
+static_assert(offsetof(LocalPlayerState, zoneDisplayTick) == 0x30e);
+static_assert(offsetof(LocalPlayerState, spectateCameraMode) == 0x312);
+static_assert(offsetof(LocalPlayerState, spectateType) == 0x313);
+static_assert(offsetof(LocalPlayerState, spectateId) == 0x314);
+static_assert(offsetof(LocalPlayerState, spectateProcessed) == 0x318);
+static_assert(offsetof(LocalPlayerState, damageVehicle) == 0x31c);
+static_assert(offsetof(LocalPlayerState, panelsDamage) == 0x31e);
+static_assert(offsetof(LocalPlayerState, doorsDamage) == 0x322);
+static_assert(offsetof(LocalPlayerState, lightsDamage) == 0x326);
+static_assert(offsetof(LocalPlayerState, tiresDamage) == 0x327);
+static_assert(sizeof(LocalPlayerState) == 0x328);
+static_assert(sizeof(CLocalPlayer) == 0x328);
 // 0x00117978
 extern const float g_localUnoccupiedRange;
 // 0x00117948

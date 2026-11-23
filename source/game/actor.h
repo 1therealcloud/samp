@@ -3,8 +3,6 @@
 
 #include "game/entity.h"
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 // Observed GTA SA ped-backend prefix, not the complete GTA allocation/type.
 // Field names describe only the accesses used by this SA-MP wrapper.
@@ -24,12 +22,12 @@ struct ActorBackendPrefix
     BYTE unknown54c[0x10];
     float heading;
 };
-STATIC_ASSERT(offsetof(ActorBackendPrefix, flags) == 0x46c);
-STATIC_ASSERT(offsetof(ActorBackendPrefix, tasks) == 0x47c);
-STATIC_ASSERT(offsetof(ActorBackendPrefix, state530) == 0x530);
-STATIC_ASSERT(offsetof(ActorBackendPrefix, health) == 0x540);
-STATIC_ASSERT(offsetof(ActorBackendPrefix, armour) == 0x548);
-STATIC_ASSERT(offsetof(ActorBackendPrefix, heading) == 0x55c);
+static_assert(offsetof(ActorBackendPrefix, flags) == 0x46c);
+static_assert(offsetof(ActorBackendPrefix, tasks) == 0x47c);
+static_assert(offsetof(ActorBackendPrefix, state530) == 0x530);
+static_assert(offsetof(ActorBackendPrefix, health) == 0x540);
+static_assert(offsetof(ActorBackendPrefix, armour) == 0x548);
+static_assert(offsetof(ActorBackendPrefix, heading) == 0x55c);
 // Native SA-MP allocation is0x56; bytes4C..54 remain untouched/unresolved.
 // samp.dll vtable RVA: 0x0011e318
 class CActor : public CEntity
@@ -77,7 +75,7 @@ public:
     void SetInvulnerable(BYTE enabled);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CActor) == 0x56);
+static_assert(sizeof(CActor) == 0x56);
 // 0x00181e5c
 extern void* g_actorTaskBackend;
 // 0x0009bfb0

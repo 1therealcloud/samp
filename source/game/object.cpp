@@ -25,8 +25,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 // Only the observed RenderWare prefixes used by these callbacks are described.
 enum ObjectRwObservedFlags
 {
@@ -39,8 +37,8 @@ struct ObjectRwObjectPrefix
     BYTE type, subType, flags, privateFlags;
     void* parent;
 };
-STATIC_ASSERT(sizeof(ObjectRwObjectPrefix) == 8);
-STATIC_ASSERT(offsetof(ObjectRwObjectPrefix, parent) == 4);
+static_assert(sizeof(ObjectRwObjectPrefix) == 8);
+static_assert(offsetof(ObjectRwObjectPrefix, parent) == 4);
 struct ObjectRwTexturePrefix
 {
     void* raster;
@@ -48,8 +46,8 @@ struct ObjectRwTexturePrefix
     // Whole raw filtering/addressing word; native increments all32 bits.
     DWORD filterAddressing;
 };
-STATIC_ASSERT(offsetof(ObjectRwTexturePrefix, raster) == 0);
-STATIC_ASSERT(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50);
+static_assert(offsetof(ObjectRwTexturePrefix, raster) == 0);
+static_assert(offsetof(ObjectRwTexturePrefix, filterAddressing) == 0x50);
 struct ObjectRwColor
 {
     BYTE red, green, blue, alpha;
@@ -83,15 +81,15 @@ struct ObjectRwAtomicPrefix
     BYTE unknown08[0x10];
     ObjectRwGeometryPrefix* geometry;
 };
-STATIC_ASSERT(sizeof(ObjectRwColor) == 4);
-STATIC_ASSERT(sizeof(ObjectRwSurface) == 12);
-STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, texture) == 0);
-STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, color) == 4);
-STATIC_ASSERT(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
+static_assert(sizeof(ObjectRwColor) == 4);
+static_assert(sizeof(ObjectRwSurface) == 12);
+static_assert(offsetof(ObjectRwMaterialPrefix, texture) == 0);
+static_assert(offsetof(ObjectRwMaterialPrefix, color) == 4);
+static_assert(offsetof(ObjectRwMaterialPrefix, surface.ambient) == 0xc && offsetof(ObjectRwMaterialPrefix, surface.specular) == 0x10 &&
               offsetof(ObjectRwMaterialPrefix, surface.diffuse) == 0x14);
-STATIC_ASSERT(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
+static_assert(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwGeometryPrefix, materialList.materials) == 0x20 &&
               offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24);
-STATIC_ASSERT(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18);
+static_assert(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18);
 
 // 0x0011edfc
 const Scripting::OpcodeInfo g_objectSetRotationCommand = {0x453, "ifff"};

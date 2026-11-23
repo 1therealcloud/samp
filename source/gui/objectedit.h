@@ -3,8 +3,6 @@
 
 #include <d3dx9.h>
 
-#include <static_assert.h>
-
 class CMatrix;
 struct CVector;
 #pragma pack(push, 1)
@@ -77,10 +75,10 @@ public:
     void Render();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CObjectEdit) == 0x117);
-STATIC_ASSERT(offsetof(CObjectEdit, attachedObjectSlot) == 0x8a);
-STATIC_ASSERT(offsetof(CObjectEdit, playerObject) == 0x8e);
-STATIC_ASSERT(offsetof(CObjectEdit, objectRotation) == 0x92);
+static_assert(sizeof(CObjectEdit) == 0x117);
+static_assert(offsetof(CObjectEdit, attachedObjectSlot) == 0x8a);
+static_assert(offsetof(CObjectEdit, playerObject) == 0x8e);
+static_assert(offsetof(CObjectEdit, objectRotation) == 0x92);
 // Output stores may alias. API failures are ignored.
 // 0x000739e0
 void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector* end);

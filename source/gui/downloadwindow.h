@@ -3,8 +3,6 @@
 
 #include <windows.h>
 
-#include <static_assert.h>
-
 struct IDirect3DDevice9;
 class CDXUTDialog;
 #pragma pack(push, 1)
@@ -17,7 +15,7 @@ struct DownloadRecord
     BYTE status;
     DWORD downloaded, total;
 };
-STATIC_ASSERT(sizeof(DownloadRecord) == 18);
+static_assert(sizeof(DownloadRecord) == 18);
 // The record storage is the first subobject of the window.
 struct DownloadRecordStorage
 {
@@ -75,7 +73,7 @@ public:
     void ResetDialogControls(CDXUTDialog* dialog);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CDownloadWindow) == 0x260);
+static_assert(sizeof(CDownloadWindow) == 0x260);
 // 0x0011c37c
 extern const char g_downloadWindowTitle[18];
 // 0x0011c414

@@ -4,8 +4,6 @@
 #include <DXUTgui.h>
 #include <d3dx9.h>
 
-#include <static_assert.h>
-
 #pragma pack(push, 1)
 struct ScoreboardRow
 {
@@ -55,8 +53,8 @@ public:
     void Draw();
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(CScoreboard) == 0x44);
-STATIC_ASSERT(sizeof(ScoreboardRow) == 45);
+static_assert(sizeof(CScoreboard) == 0x44);
+static_assert(sizeof(ScoreboardRow) == 45);
 // 0x0006e310
 void ScoreboardSwapRows(ScoreboardRow* first, ScoreboardRow* second);
 // 0x0011c6d0

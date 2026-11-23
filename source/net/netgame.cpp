@@ -39,8 +39,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <static_assert.h>
-
 // 0x00117c28
 const char g_netDefaultHostName[] = "SA-MP";
 // 0x00117b6c
@@ -670,8 +668,8 @@ void CNetGame::Packet_IncarSync(Packet* packet)
     if (remote)
         remote->UpdateIncar(&data, timestamp);
 }
-STATIC_ASSERT(offsetof(Packet, length) == 8);
-STATIC_ASSERT(offsetof(Packet, data) == 16);
+static_assert(offsetof(Packet, length) == 8);
+static_assert(offsetof(Packet, data) == 16);
 
 // 0x00009730
 void CNetGame::Packet_UnoccupiedSync(Packet* packet)

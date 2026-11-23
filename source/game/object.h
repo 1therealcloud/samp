@@ -4,8 +4,6 @@
 #include "game/entity.h"
 #include "game/quaternion.h"
 
-#include <static_assert.h>
-
 // Native allocation extent is established; observed pool flags are named below.
 // Remaining storage and its untouched bytes stay explicitly unknown.
 class CVehicle;
@@ -169,20 +167,20 @@ public:
     void Move(CVector position, float speed, CVector rotation);
 };
 #pragma pack(pop)
-STATIC_ASSERT(sizeof(ObjectMaterialTextInfo) == 0xd7);
-STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, size) == 0x8a);
-STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, font) == 0x8b);
-STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, fontColor) == 0xce);
-STATIC_ASSERT(offsetof(ObjectMaterialTextInfo, alignment) == 0xd6);
-STATIC_ASSERT(sizeof(ObjectMaterialState) == 0xfc8);
-STATIC_ASSERT(offsetof(ObjectMaterialState, textures) == 0x54);
-STATIC_ASSERT(offsetof(ObjectMaterialState, colors) == 0x94);
-STATIC_ASSERT(offsetof(ObjectMaterialState, types) == 0x118);
-STATIC_ASSERT(offsetof(ObjectMaterialState, textInfo) == 0x198);
-STATIC_ASSERT(offsetof(ObjectMaterialState, text) == 0xf08);
-STATIC_ASSERT(offsetof(ObjectMaterialState, rasterField34) == 0xf48);
-STATIC_ASSERT(offsetof(ObjectMaterialState, renderedText) == 0xf88);
-STATIC_ASSERT(sizeof(CObject) == 0x119c);
+static_assert(sizeof(ObjectMaterialTextInfo) == 0xd7);
+static_assert(offsetof(ObjectMaterialTextInfo, size) == 0x8a);
+static_assert(offsetof(ObjectMaterialTextInfo, font) == 0x8b);
+static_assert(offsetof(ObjectMaterialTextInfo, fontColor) == 0xce);
+static_assert(offsetof(ObjectMaterialTextInfo, alignment) == 0xd6);
+static_assert(sizeof(ObjectMaterialState) == 0xfc8);
+static_assert(offsetof(ObjectMaterialState, textures) == 0x54);
+static_assert(offsetof(ObjectMaterialState, colors) == 0x94);
+static_assert(offsetof(ObjectMaterialState, types) == 0x118);
+static_assert(offsetof(ObjectMaterialState, textInfo) == 0x198);
+static_assert(offsetof(ObjectMaterialState, text) == 0xf08);
+static_assert(offsetof(ObjectMaterialState, rasterField34) == 0xf48);
+static_assert(offsetof(ObjectMaterialState, renderedText) == 0xf88);
+static_assert(sizeof(CObject) == 0x119c);
 // 0x0011ee80
 extern const float g_objectRenderDistanceThreshold;
 // 0x00118200
