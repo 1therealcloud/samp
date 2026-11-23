@@ -31,6 +31,9 @@ public:
     CRemotePlayer* remote;
     DWORD ping;
     std::string name;
+#ifndef _DEBUG
+    BYTE namePadding[4]; // Preserve the native record size.
+#endif
     // 0x0001da20
     void SetName(const char* text);
     // 0x00014060
@@ -39,8 +42,12 @@ public:
     ~CPlayerInfo();
 };
 #pragma pack(pop)
-//static_assert(sizeof(std::string) == 28);
+#ifdef _DEBUG
+static_assert(sizeof(std::string) == 28);
+#else
+static_assert(sizeof(std::string) == 24);
+#endif
 static_assert(offsetof(CPlayerInfo, name) == 0x10);
-//static_assert(sizeof(CPlayerInfo) == 0x2c);
+static_assert(sizeof(CPlayerInfo) == 0x2c);
 
 #endif // PLAYERINFO_H

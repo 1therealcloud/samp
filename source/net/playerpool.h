@@ -46,6 +46,9 @@ public:
     WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord);
     WORD localId;
     std::string localName;
+#ifndef _DEBUG
+    BYTE localNamePadding[4]; // Preserve the offsets used by native hooks.
+#endif
     CLocalPlayer* local;
     int largestId;
     CPlayerInfo* players[1004];
@@ -111,13 +114,11 @@ public:
 };
 #pragma pack(pop)
 static_assert(offsetof(CPlayerPool, localName) == 2);
-/*
 static_assert(offsetof(CPlayerPool, local) == 0x1e);
 static_assert(offsetof(CPlayerPool, players) == 0x26);
 static_assert(offsetof(CPlayerPool, connected) == 0xfd6);
 static_assert(offsetof(CPlayerPool, savedCollision) == 0x1f86);
 static_assert(sizeof(CPlayerPool) == 0x2f3e);
-*/
 // 0x00156b84
 extern DWORD g_playerPoolProcessCount;
 // 0x0011817c
