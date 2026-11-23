@@ -26,9 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="launch3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="launch3Dlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>

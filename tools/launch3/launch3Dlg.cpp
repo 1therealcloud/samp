@@ -8,22 +8,17 @@
 
 #include "launch3Dlg.h"
 
-#include "launch3.h"
+#include "resource.h"
 
 #include <stdio.h>
 #include <string.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+#include <string>
 
 //----------------------------------------------------
 
 typedef BOOL(WINAPI* PFN_CREATE_PROCESS_A)(LPCSTR, LPSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES, BOOL, DWORD, LPVOID, LPCSTR, LPSTARTUPINFOA, LPPROCESS_INFORMATION);
 
-CString GetAppPath();
 void LaunchGame(LPCSTR szDirectory, LPSTR szArguments, DWORD dwUnused);
 BOOL WINAPI CreateProcessWithDll(LPCSTR application, LPSTR arguments, LPSECURITY_ATTRIBUTES processAttributes, LPSECURITY_ATTRIBUTES threadAttributes, BOOL inheritHandles,
                                  DWORD flags, LPVOID environment, LPCSTR currentDirectory, LPSTARTUPINFOA startupInfo, LPPROCESS_INFORMATION processInfo, LPCSTR dllPath,
@@ -47,13 +42,15 @@ static STARTUPINFOA g_startupInformation;        // 0x1F790
 //----------------------------------------------------
 
 // 0x12B0
-CString GetAppPath()
+static std::string GetAppPath()
 {
     char module[MAX_PATH];
-    module[0] = '\0';
-    GetModuleFileNameA(AfxGetInstanceHandle(), module, MAX_PATH);
-    CString path(module);
-    return path.Left(path.ReverseFind('\\') + 1);
+    const DWORD length = GetModuleFileNameA(nullptr, module, MAX_PATH);
+    if (length == 0 || length >= MAX_PATH)
+        return {};
+    const std::string path(module, length);
+    const size_t separator = path.rfind('\\');
+    return separator == std::string::npos ? std::string() : path.substr(0, separator + 1);
 }
 
 //----------------------------------------------------
@@ -296,109 +293,60 @@ BYTE* EmitCallRel32(BYTE* code, DWORD target, DWORD instructionVA)
 }
 
 //----------------------------------------------------
-// CLaunch3Dlg dialog
-
-// 0x1200
-CLaunch3Dlg::CLaunch3Dlg(CWnd* pParent /*=NULL*/) : CDialog(CLaunch3Dlg::IDD, pParent)
+INT_PTR CALLBACK LaunchDialogProc(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-}
-
-//----------------------------------------------------
-
-// 0x1290
-void CLaunch3Dlg::DoDataExchange(CDataExchange* pDX)
-{
-    (void)pDX;
-}
-
-//----------------------------------------------------
-
-BEGIN_MESSAGE_MAP(CLaunch3Dlg, CDialog)
-ON_WM_PAINT()
-ON_WM_QUERYDRAGICON()
-ON_EN_CHANGE(IDC_NICK, OnChangeNick)
-ON_BN_CLICKED(IDC_LAUNCH, OnLaunch)
-ON_BN_CLICKED(IDC_BUTTON2, OnButton2)
-ON_BN_CLICKED(IDC_BUTTON3, OnButton3)
-END_MESSAGE_MAP()
-
-//----------------------------------------------------
-// CLaunch3Dlg message handlers
-
-// 0x1390
-BOOL CLaunch3Dlg::OnInitDialog()
-{
-    CDialog::OnInitDialog();
-
-    SetIcon(m_hIcon, TRUE);
-    SetIcon(m_hIcon, FALSE);
-
-    return TRUE;
-}
-
-//----------------------------------------------------
-
-// 0x13D0
-void CLaunch3Dlg::OnPaint()
-{
-    if (IsIconic())
+    switch (message)
     {
-        CPaintDC dc(this);
-        SendMessage(WM_ICONERASEBKGND, (WPARAM)dc.GetSafeHdc(), 0);
-
-        int cxIcon = GetSystemMetrics(SM_CXICON);
-        int cyIcon = GetSystemMetrics(SM_CYICON);
-        CRect rect;
-        GetClientRect(&rect);
-        int x = (rect.Width() - cxIcon + 1) / 2;
-        int y = (rect.Height() - cyIcon + 1) / 2;
-        dc.DrawIcon(x, y, m_hIcon);
+        case WM_INITDIALOG:
+        {
+            const HICON icon = LoadIconA(reinterpret_cast<HINSTANCE>(lParam), MAKEINTRESOURCEA(IDR_MAINFRAME));
+            SendMessageA(dialog, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
+            SendMessageA(dialog, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(icon));
+            return TRUE;
+        }
+        case WM_PAINT:
+            if (IsIconic(dialog))
+            {
+                PAINTSTRUCT paint;
+                HDC dc = BeginPaint(dialog, &paint);
+                SendMessageA(dialog, WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc), 0);
+                RECT rect;
+                GetClientRect(dialog, &rect);
+                const int x = (rect.right - rect.left - GetSystemMetrics(SM_CXICON) + 1) / 2;
+                const int y = (rect.bottom - rect.top - GetSystemMetrics(SM_CYICON) + 1) / 2;
+                DrawIcon(dc, x, y, reinterpret_cast<HICON>(SendMessageA(dialog, WM_GETICON, ICON_BIG, 0)));
+                EndPaint(dialog, &paint);
+                return TRUE;
+            }
+            break;
+        case WM_QUERYDRAGICON:
+            return SendMessageA(dialog, WM_GETICON, ICON_BIG, 0);
+        case WM_COMMAND:
+            if (HIWORD(wParam) != BN_CLICKED)
+                break;
+            switch (LOWORD(wParam))
+            {
+                case IDC_LAUNCH:
+                {
+                    char arguments[] = "-d";
+                    LaunchGame(GetAppPath().c_str(), arguments, 0);
+                    return TRUE;
+                }
+                case IDC_BUTTON3:
+                {
+                    char arguments[] = "-c -h 127.0.0.1 -p 7777 -n Player";
+                    LaunchGame(GetAppPath().c_str(), arguments, 0);
+                    return TRUE;
+                }
+                case IDC_BUTTON2:
+                case IDCANCEL:
+                    EndDialog(dialog, 0);
+                    return TRUE;
+            }
+            break;
+        case WM_CLOSE:
+            EndDialog(dialog, 0);
+            return TRUE;
     }
-    else
-    {
-        CDialog::OnPaint();
-    }
+    return FALSE;
 }
-
-//----------------------------------------------------
-
-// 0x1490
-HCURSOR CLaunch3Dlg::OnQueryDragIcon()
-{
-    return (HCURSOR)m_hIcon;
-}
-
-//----------------------------------------------------
-
-// 0x14A0
-void CLaunch3Dlg::OnChangeNick() {}
-
-//----------------------------------------------------
-
-// 0x14B0
-void CLaunch3Dlg::OnLaunch()
-{
-    CString strAppPath = GetAppPath();
-    LaunchGame((LPCSTR)strAppPath, "-d", 0);
-}
-
-//----------------------------------------------------
-
-// 0x14E0
-void CLaunch3Dlg::OnButton2()
-{
-    OnCancel();
-}
-
-//----------------------------------------------------
-
-// 0x14F0
-void CLaunch3Dlg::OnButton3()
-{
-    CString strAppPath = GetAppPath();
-    LaunchGame((LPCSTR)strAppPath, "-c -h 127.0.0.1 -p 7777 -n Player", 0);
-}
-
-//----------------------------------------------------
-// EOF

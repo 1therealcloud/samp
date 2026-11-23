@@ -14,12 +14,8 @@
 #define _WIN32_WINNT 0x0501
 #endif
 
-#define VC_EXTRALEAN
-
-#include <afxcmn.h>
-#include <afxdisp.h>
-#include <afxext.h>
-#include <afxwin.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 //----------------------------------------------------
 // EOF
