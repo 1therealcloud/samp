@@ -1000,40 +1000,15 @@ void CPed::DeleteAccessory(int index)
 }
 
 // 0x000ac1a0
-__declspec(naked) float CPed::GetDistanceToEntity(CEntity* entity)
+float CPed::GetDistanceToEntity(CEntity* entity)
 {
-    // clang-format off
-    // Native uninitialized matrix outputs and extended x87 return are intentional.
-    __asm { sub esp,0x80
-        lea eax,[esp]
-        push eax
-        call CEntity::GetMatrix
-        lea ecx,[esp+0x40]
-        push ecx
-        mov ecx,[esp+0x88]
-        call CEntity::GetMatrix
-        fld dword ptr [esp+0x38]
-        fsub dword ptr [esp+0x78]
-        fld dword ptr [esp+0x34]
-        fsub dword ptr [esp+0x74]
-        fld dword ptr [esp+0x30]
-        fsub dword ptr [esp+0x70]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        add esp,0x80
-        ret 4
-    }
-    // clang-format on
+    CMatrix first, second;
+    GetMatrix(&first);
+    entity->GetMatrix(&second);
+    const double z = (double)first.position.z - second.position.z;
+    const double y = (double)first.position.y - second.position.y;
+    const double x = (double)first.position.x - second.position.x;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
 // 0x000ad3e0
