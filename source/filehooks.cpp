@@ -4,7 +4,7 @@
 #include "filechecks.h"
 #include "md5.h"
 
-#include <detours.h>
+#include <MinHook.h>
 
 #include <ctype.h>
 #include <string.h>
@@ -38,24 +38,31 @@ void ArchiveInstallFileHooks()
 {
     if (g_archiveHooksInstalled)
         return;
+
     memset(g_archiveOpenRecords, 0, 1000);
     memset(g_archiveRecordUsed, 0, 200);
-    g_archiveRealCreateFileA = DetourFunction(DetourFindFunction("kernel32.dll", "CreateFileA"), (BYTE*)Arch_CreateFileA);
-    g_archiveRealReadFile = DetourFunction(DetourFindFunction("kernel32.dll", "ReadFile"), (BYTE*)Arch_ReadFile);
-    g_archiveRealGetFileSize = DetourFunction(DetourFindFunction("kernel32.dll", "GetFileSize"), (BYTE*)Arch_GetFileSize);
-    g_archiveRealSetFilePointer = DetourFunction(DetourFindFunction("kernel32.dll", "SetFilePointer"), (BYTE*)Arch_SetFilePointer);
-    g_archiveRealCloseHandle = DetourFunction(DetourFindFunction("kernel32.dll", "CloseHandle"), (BYTE*)Arch_CloseHandle);
-    g_archiveRealGetFileType = DetourFunction(DetourFindFunction("kernel32.dll", "GetFileType"), (BYTE*)Arch_GetFileType);
+
+    MH_CreateHookApi(L"kernel32", "CreateFileA", (LPVOID)Arch_CreateFileA, (LPVOID*)&g_archiveRealCreateFileA);
+    MH_CreateHookApi(L"kernel32", "ReadFile", (LPVOID)Arch_ReadFile, (LPVOID*)&g_archiveRealReadFile);
+    MH_CreateHookApi(L"kernel32", "GetFileSize", (LPVOID)Arch_GetFileSize, (LPVOID*)&g_archiveRealGetFileSize);
+    MH_CreateHookApi(L"kernel32", "SetFilePointer", (LPVOID)Arch_SetFilePointer, (LPVOID*)&g_archiveRealSetFilePointer);
+    MH_CreateHookApi(L"kernel32", "CloseHandle", (LPVOID)Arch_CloseHandle, (LPVOID*)&g_archiveRealCloseHandle);
+    MH_CreateHookApi(L"kernel32", "GetFileType", (LPVOID)Arch_GetFileType, (LPVOID*)&g_archiveRealGetFileType);
+
+    MH_EnableHook(MH_ALL_HOOKS);
     g_archiveHooksInstalled = TRUE;
 }
 
 // 0x000623f0
 void ArchiveInstallCursorHook()
 {
-    g_archiveRealShowCursor = DetourFunction(DetourFindFunction("user32.dll", "ShowCursor"), (BYTE*)Arch_ShowCursor);
+    MH_CreateHookApi(L"user32", "ShowCursor", (LPVOID)Arch_ShowCursor, (LPVOID*)&g_archiveRealShowCursor);
+    MH_EnableHook(MH_ALL_HOOKS);
 }
 
+
 // 0x00062810
+/*
 void ArchiveRemoveHooks()
 {
     if (!g_archiveHooksInstalled)
@@ -69,6 +76,7 @@ void ArchiveRemoveHooks()
     DetourRemove(g_archiveRealShowCursor, (BYTE*)Arch_ShowCursor);
     g_archiveHooksInstalled = FALSE;
 }
+*/
 
 // 0x000623e0
 int WINAPI Arch_ShowCursor(BOOL visible)

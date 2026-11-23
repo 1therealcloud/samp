@@ -39,7 +39,7 @@ void ArchiveInstallFileHooks();
 // 0x000623f0
 void ArchiveInstallCursorHook();
 // 0x00062810
-void ArchiveRemoveHooks();
+//void ArchiveRemoveHooks();
 // 0x000623e0
 int WINAPI Arch_ShowCursor(BOOL visible);
 // 0x00140338

@@ -591,10 +591,6 @@
       <Project>{5ebb02b7-d1dd-41ff-965b-0dc7fc1e1fb4}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\third-party\detours.vcxproj">
-      <Project>{361d5f1f-4c9d-461f-86e8-949fde7dc7e0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\third-party\lzma.vcxproj">
       <Project>{837e2777-c65d-410d-bad7-10467548789b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

@@ -3,6 +3,8 @@
 #include "game/hooks.h"
 #include "main.h"
 
+#include <MinHook.h>
+
 #include <process.h>
 #include <string.h>
 
@@ -31,6 +33,9 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
         if (g_clientSettings.debug || g_clientSettings.online)
         {
             SetUnhandledExceptionFilter(ClientExceptionFilter);
+
+            MH_Initialize();
+
             g_gameLoopAddress = (DWORD)ClientGameLoop;
             char archivePath[MAX_PATH];
             GetModuleFileNameA(g_clientModule, archivePath, MAX_PATH);
@@ -56,7 +61,14 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     }
     else if (reason == DLL_PROCESS_DETACH && (g_clientSettings.debug || g_clientSettings.online))
     {
-        ArchiveRemoveHooks();
+    //ArchiveRemoveHooks();
+        if (reserved == NULL)
+        {
+            //MH_DisableHook(MH_ALL_HOOKS);
+            //MH_RemoveHook(MH_ALL_HOOKS);
+            
+            MH_Uninitialize();
+        }
     }
     return TRUE;
 }
