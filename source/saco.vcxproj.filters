@@ -1,0 +1,661 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="general">
+      <UniqueIdentifier>{f1e04c3b-fe7b-4976-95c7-5cdc02ada410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{fccbda3e-76c6-4179-b896-5ebfd7cb13bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{35ce7f17-e600-4e86-983b-6d687c3f4ebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{d7785b92-1978-4b50-a650-bcc234bea789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{b89e7d46-29c0-44d9-9899-5cce66698c7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="archive">
+      <UniqueIdentifier>{8783c05a-8ea3-4166-81fd-6580df1e9f39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="archive\keys">
+      <UniqueIdentifier>{1c736c90-7681-4a60-a299-d29c6f3797a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="d3dhook">
+      <UniqueIdentifier>{8a5a9f00-3b0c-4880-a4ec-a678b217fef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{ce5a474d-0149-4a8f-bb14-2ce9d5b76b71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party">
+      <UniqueIdentifier>{cdfb8a7d-1f9f-484b-be78-d43fd6b61a14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\bass">
+      <UniqueIdentifier>{2cb9933c-f38c-4f6d-8666-f70d94eabb91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\ttmath">
+      <UniqueIdentifier>{b28bce40-0b13-4051-bc52-3743a859cd25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party\dxut">
+      <UniqueIdentifier>{22a5e12f-fd42-4348-9853-6d18be0b07af}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="audiostream.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="cmdprocs.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="events.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="filechecks.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="filehooks.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="md5.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="runutil.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="subclass.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\chatbubble.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\chatwindow.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\cmdwindow.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\deathwindow.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\dialog.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\downloadwindow.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\gui.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\helpdialog.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\label.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\netstats.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\objectedit.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\objectselection.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\playertags.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\renderpanel.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\scoreboard.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\spawnscreen.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\svrnetstats.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\textdrawselection.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="render\fontrender.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\licenseplate.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\objectmaterialtext.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actor.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\aimstuff.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\animation.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\audio.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\building_removal.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\camera.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\custommodels.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\debug.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\debugscript.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\entity.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\font.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\game.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\hooks.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\keystuff.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\menu.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\model_preview.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\modelfile.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\object.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\patches.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\playerped.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\quaternion.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scripting.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\task.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\textdraw.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\util.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\vehicle.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="net\actorpool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\gangzonepool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\labelpool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\localplayer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\menupool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\netgame.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\netrpc.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\objectpool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\pickuppool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\playerinfo.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\playerpool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\remoteplayer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\scriptrpc.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\textdrawpool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\vehiclepool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\ArchiveFS.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\CryptoContext.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\CryptoFns.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\Hasher.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\KeyPair.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\Signer.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="archive\TinyEncrypt.cpp">
+      <Filter>archive</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dhook\ID3DXFontHook.cpp">
+      <Filter>d3dhook</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dhook\IDirect3DDevice9Hook.cpp">
+      <Filter>d3dhook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\dxstdafx.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\DXUT.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\DXUTenum.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\DXUTgui.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\DXUTmedia.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\DXUTmisc.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\dxut\DXUTSettingsDlg.cpp">
+      <Filter>third-party\dxut</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="audiostream.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="cmdprocs.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="events.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="filechecks.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="filehooks.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="md5.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="runutil.h">
+      <Filter>general</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\chatbubble.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\chatwindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\cmdwindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\deathwindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\dialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\downloadwindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\gui.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\helpdialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\label.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\netstats.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\objectedit.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\objectselection.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\playertags.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\renderpanel.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\scoreboard.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\spawnscreen.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\svrnetstats.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\textdrawselection.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="render\fontrender.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\licenseplate.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\objectmaterialtext.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actor.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\aimstuff.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\animation.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\audio.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\building_removal.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\camera.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\custommodels.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\debug.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\debugscript.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\entity.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\font.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\game.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\hooks.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\keystuff.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\menu.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\model_preview.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\modelfile.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\object.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\patches.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\playerped.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\quaternion.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scripting.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\task.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\textdraw.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\util.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\vehicle.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="net\actorpool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\gangzonepool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\labelpool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\localplayer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\menupool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\netgame.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\netrpc.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\objectpool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\pickuppool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\playerinfo.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\playerpool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\remoteplayer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\scriptrpc.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\textdrawpool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\vehiclepool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\ArchiveCommon.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\ArchiveFS.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\CryptoContext.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\CryptoFns.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\Hasher.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\KeyPair.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\Obfuscator.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\Signer.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\Stream.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\TinyEncrypt.h">
+      <Filter>archive</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\keys\pkey.h">
+      <Filter>archive\keys</Filter>
+    </ClInclude>
+    <ClInclude Include="archive\keys\skey.h">
+      <Filter>archive\keys</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dhook\ID3DXFontHook.h">
+      <Filter>d3dhook</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dhook\IDirect3DDevice9Hook.h">
+      <Filter>d3dhook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\bass\bass.h">
+      <Filter>third-party\bass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmath.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathbig.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathdec.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathint.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathmisc.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathobjects.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathparser.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmaththreads.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathtypes.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint_noasm.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint_x86.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint_x86_64.h">
+      <Filter>third-party\ttmath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\dxstdafx.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\DXUT.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\DXUTenum.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\DXUTgui.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\DXUTmedia.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\DXUTmisc.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third-party\dxut\DXUTSettingsDlg.h">
+      <Filter>third-party\dxut</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game\animation_names.inc">
+      <Filter>game</Filter>
+    </None>
+    <None Include="game\limit_values.inc">
+      <Filter>game</Filter>
+    </None>
+    <None Include="game\player_color_values.inc">
+      <Filter>game</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="samp.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
