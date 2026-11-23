@@ -255,19 +255,8 @@ bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, con
             CObject* object = objects[i];
             if (!object || !object->IsAdded() || object->cameraCollisionDisabled)
                 continue;
-            // Compare extended ST0 directly; rounding to float can change this gate.
-            BYTE nearby;
-            // clang-format off
-        __asm {
-            mov ecx,object
-            call CEntity::GetDistanceToCamera
-            fcomp limit
-            fnstsw ax
-            test ah,5
-            setnp nearby
-        }
-            // clang-format on
-            if (!nearby || object->IsIgnored()) continue;
+            if (!(object->GetDistanceToCamera() < limit) || object->IsIgnored())
+                continue;
             if (object->CEntity::TestCollisionShapes(first, second, 1))
                 return true;
         }

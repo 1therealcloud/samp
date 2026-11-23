@@ -354,17 +354,8 @@ float CObjectEdit::WorldToScreen(const CVector* position, float* screen)
     D3DXMatrixIdentity(&identity);
     D3DXVECTOR3 projected;
     D3DXVec3Project(&projected, (const D3DXVECTOR3*)&point, &viewport, (const D3DXMATRIX*)&g_deviceProjectionMatrix, (const D3DXMATRIX*)&g_deviceViewMatrix, &identity);
-    const float* projectedData = (const float*)&projected;
-    // clang-format off
-    __asm {
-        mov eax,screen
-        mov ecx,projectedData
-        fld dword ptr [ecx]
-        fstp dword ptr [eax]
-        mov edx,[ecx+4]
-        mov [eax+4],edx
-    }
-    // clang-format on
+    screen[0] = projected.x;
+    memcpy(&screen[1], &projected.y, sizeof(float));
     return projected.z;
 }
 

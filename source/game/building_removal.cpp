@@ -17,22 +17,14 @@ int g_buildingRemovalCount;
 // 0x0009ca80
 void GameHideObjectEntity(void* entity)
 {
-    // clang-format off
-    __asm {
-        mov eax,entity
-        fld dword ptr [eax+0ch]
-        mov byte ptr [eax+2fh],1
-        fsub g_buildingRemovalDrop
-        fstp dword ptr [eax+0ch]
-        mov eax,dword ptr [eax+14h]
-        test eax,eax
-        jz hidden
-        fld dword ptr [eax+38h]
-        fsub g_buildingRemovalDrop
-        fstp dword ptr [eax+38h]
-    hidden:
-    }
-    // clang-format on
+    BYTE* object = static_cast<BYTE*>(entity);
+    const float z = *reinterpret_cast<float*>(object + 0x0c);
+    object[0x2f] = 1;
+    *reinterpret_cast<float*>(object + 0x0c) = z - g_buildingRemovalDrop;
+
+    BYTE* matrix = *reinterpret_cast<BYTE**>(object + 0x14);
+    if (matrix)
+        *reinterpret_cast<float*>(matrix + 0x38) -= g_buildingRemovalDrop;
 }
 
 // 0x0009cab0

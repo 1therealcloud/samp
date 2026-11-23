@@ -1615,20 +1615,8 @@ void CLocalPlayer::ProcessPassengerEntry()
     if (id >= 2000 || !vehicles->m_bNotEmpty[id])
         return;
     CVehicle* vehicle = vehicles->Get(id);
-    BYTE nearEnough = 0;
-    // clang-format off
-    __asm {
-        mov ecx,vehicle
-        call CEntity::GetDistanceToLocalPlayer
-        fcomp dword ptr [g_localPassengerEntryDistance]
-        fnstsw ax
-        test ah,5
-        jp passenger_too_far
-        mov nearEnough,1
-    passenger_too_far:
-    }
-    // clang-format on
-    if (!nearEnough) return;
+    if (!(vehicle->GetDistanceToLocalPlayer() < g_localPassengerEntryDistance))
+        return;
     if ((BYTE)m_state.ped->GetCurrentWeapon() == 46)
         m_state.ped->SetArmedWeapon(0, 0);
     m_state.ped->EnterVehicle(vehicle->m_nHandle, TRUE);

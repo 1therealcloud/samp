@@ -1517,72 +1517,28 @@ DWORD CRemotePlayer::GetColorAsRGBA()
 }
 
 // 0x00015d50
-__declspec(naked) float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
+float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
 {
-    // clang-format off
-    __asm {
-        mov ecx,dword ptr [ecx+4]
-        sub esp,80h
-        test ecx,ecx
-        jnz have_ped
-        fld g_remoteAbsentDistance
-        add esp,80h
-        ret 4
-    have_ped:
-        lea eax,[esp]
-        push eax
-        call CEntity::GetMatrix
-        mov edx,dword ptr [esp+84h]
-        lea ecx,[esp+40h]
-        push ecx
-        mov ecx,dword ptr [edx+4]
-        call CEntity::GetMatrix
-        fld dword ptr [esp+38h]
-        fsub dword ptr [esp+78h]
-        fld dword ptr [esp+34h]
-        fsub dword ptr [esp+74h]
-        fld dword ptr [esp+30h]
-        fsub dword ptr [esp+70h]
-        fld st(0)
-        fmul st,st(1)
-        fld st(2)
-        fmul st,st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st,st(4)
-        faddp st(1),st
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        add esp,80h
-        ret 4
-    }
-    // clang-format on
+    if (!m_state.ped)
+        return g_remoteAbsentDistance;
+    CMatrix first, second;
+    m_state.ped->GetMatrix(&first);
+    other->m_state.ped->GetMatrix(&second);
+    const double z = (double)first.position.z - second.position.z;
+    const double y = (double)first.position.y - second.position.y;
+    const double x = (double)first.position.x - second.position.x;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
 // 0x00015dd0
-__declspec(naked) float CRemotePlayer::GetDistanceToLocalPlayer()
+float CRemotePlayer::GetDistanceToLocalPlayer()
 {
-    // clang-format off
-    __asm {
-        mov eax,ecx
-        mov ecx,dword ptr [eax+4]
-        test ecx,ecx
-        jnz select_entity
-        fld g_remoteAbsentDistance
-        ret
-    select_entity:
-        cmp byte ptr [eax+1ah],13h
-        jne selected
-        mov eax,dword ptr [eax+8]
-        test eax,eax
-        jz selected
-        mov ecx,eax
-    selected:
-        jmp CEntity::GetDistanceToLocalPlayer
-    }
-    // clang-format on
+    if (!m_state.ped)
+        return g_remoteAbsentDistance;
+    CEntity* entity = m_state.ped;
+    if (m_state.playerState == 0x13 && m_state.vehicle)
+        entity = m_state.vehicle;
+    return entity->GetDistanceToLocalPlayer();
 }
 
 // 0x00015e50
