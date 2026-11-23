@@ -46,8 +46,8 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
                 __asm { int 3 } // debugbreak
                 // clang-format on
             }
-            AddFontResourceA("gtaweap3.ttf");
-            AddFontResourceA("sampaux3.ttf");
+            AddFontResourceExA("gtaweap3.ttf", FR_PRIVATE, NULL);
+            AddFontResourceExA("sampaux3.ttf", FR_PRIVATE, NULL);
             ArchiveInstallFileHooks();
             ArchiveInstallCursorHook();
             g_pGame = new CGame;
