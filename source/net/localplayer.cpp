@@ -2067,7 +2067,7 @@ BOOL CLocalPlayer::Process()
                 CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
                 m_state.lastVehicle = vehicles->Find(m_state.ped->GetVehicle());
             }
-            m_state.ped->CallBackend730AndVehicle490();
+            m_state.ped->ExtinguishPedAndVehicleFire();
             WastedNotification();
             m_state.active = 0;
             m_state.wasted = 1;

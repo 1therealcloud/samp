@@ -52,10 +52,10 @@ void ScrPlayerOpcode052C(RPCParameters* parameters);
 void ScrPlayerOpcode03FD(RPCParameters* parameters);
 // The original returns immediately.
 // R5 address to verify
-void ScrRpc125(RPCParameters* parameters);
+void ScrIgnoreRpc125(RPCParameters* parameters);
 // Native consumes and discards a WORD, with stream construction/destruction.
 // 0x0001a700
-void ScrRpc64(RPCParameters* parameters);
+void ScrReadAndDiscardRpc64(RPCParameters* parameters);
 // R5 address to verify
 extern const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand;
 // R5 address to verify

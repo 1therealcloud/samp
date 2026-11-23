@@ -403,9 +403,9 @@ DWORD GameCountNonzeroPoolBytesB7449C();
 // R5 address to verify
 DWORD GameCountNonzeroPoolBytesC8800C();
 // R5 address to verify
-void __stdcall GameReplaceBackendVtable85BBF0(void* entity);
+void __stdcall GameReplaceAtomicModelInfoVtableWithClump(void* entity);
 // R5 address to verify
-void GameWriteGlobal9689E0(DWORD value);
+void GameSetCollisionPluginCurrentModel(DWORD value);
 // R5 address to verify
 float GameAsin(float value);
 

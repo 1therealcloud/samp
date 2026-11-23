@@ -85,7 +85,7 @@ public:
     // 0x000b7d70
     BOOL IsTrailer();
     // 0x000b8250
-    void CallBackend6a6ae0(DWORD first, DWORD second, DWORD third);
+    void OpenAutomobileDoor(DWORD first, DWORD second, DWORD third);
     // 0x000b7900
     void SetTrainSpeed(float speed);
     // 0x000b82e0

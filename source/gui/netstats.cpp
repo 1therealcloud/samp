@@ -104,7 +104,7 @@ void CNetStats::Draw()
         DWORD freeModels = GameCountUnusedModelSlots();
         DWORD shotComp = g_netStatsShotCompMode;
         BYTE pedSlots = g_pGame->CountUsedPlayerSlots();
-        DWORD rwObjects = g_pGame->GetBackendWordB71804();
+        DWORD rwObjects = g_pGame->GetRenderedBuildingCount();
         char text[256];
         sprintf(text, g_netStatsModelsFormat, vehicleCount, uniqueModels, loadedModels, rwObjects, (DWORD)pedSlots, objectCount, shotComp, freeModels);
         strcat(g_netStatsDisplay, text);

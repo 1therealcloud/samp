@@ -143,7 +143,7 @@ public:
     // R5 address to verify
     DWORD GetBackendByte72D();
     // 0x000ae4d0
-    DWORD CallBackend5E01C0(DWORD first, DWORD second);
+    DWORD GetTransformedBonePosition(DWORD first, DWORD second);
     // R5 address to verify
     void ResetLocalControlWord();
     // 0x000ae560
@@ -232,7 +232,7 @@ public:
     // 0x000affd0
     void Kill();
     // 0x000ad0f0
-    void CallBackend730AndVehicle490();
+    void ExtinguishPedAndVehicleFire();
     // 0x000ac790
     void SetControllable(BOOL enabled);
     // 0x000ad340

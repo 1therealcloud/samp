@@ -68,9 +68,9 @@ public:
     // R5 address to verify
     BOOL IsDead();
     // R5 address to verify
-    BYTE GetBackendByte530();
+    BYTE GetPedState();
     // R5 address to verify
-    void SetBackendByte530(BYTE value);
+    void SetPedState(BYTE value);
     // R5 address to verify
     DWORD HasBackendFlag100();
     // 0x0009c700

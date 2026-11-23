@@ -881,7 +881,7 @@ BOOL CVehicle::IsTrailer()
 }
 
 // 0x000b8250
-void CVehicle::CallBackend6a6ae0(DWORD first, DWORD second, DWORD third)
+void CVehicle::OpenAutomobileDoor(DWORD first, DWORD second, DWORD third)
 {
     if (m_pGameVehicle && GameGetVehicleSubtype(m_pGameVehicle) == 1)
     {
