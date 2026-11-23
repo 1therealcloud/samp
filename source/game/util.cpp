@@ -1536,60 +1536,22 @@ float __stdcall GameDistance2D(float x, float y, float otherX, float otherY)
 
 // dz squared plus dy squared then dx squared.
 // 0x000b45b0
-__declspec(naked) float __stdcall GameSquaredDistance3D(float x, float y, float z, float otherX, float otherY, float otherZ)
+float __stdcall GameSquaredDistance3D(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp + 4]
-        fsub dword ptr [esp + 0x10]
-        fld dword ptr [esp + 8]
-        fsub dword ptr [esp + 0x14]
-        fld dword ptr [esp + 0xc]
-        fsub dword ptr [esp + 0x18]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 0x18
-    }
-    // clang-format on
+    const float dx = x - otherX;
+    const float dy = y - otherY;
+    const float dz = z - otherZ;
+    return dz * dz + dy * dy + dx * dx;
 }
 
 // dx squared plus dy squared then dz squared; RET8.
 // 0x000b45f0
-__declspec(naked) float __stdcall GameSquaredDistanceVectors(const CVector* first, const CVector* second)
+float __stdcall GameSquaredDistanceVectors(const CVector* first, const CVector* second)
 {
-    // clang-format off
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        mov ecx, dword ptr [esp + 8]
-        fld dword ptr [eax + 8]
-        fsub dword ptr [ecx + 8]
-        fld dword ptr [eax + 4]
-        fsub dword ptr [ecx + 4]
-        fld dword ptr [eax]
-        fsub dword ptr [ecx]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 8
-    }
-    // clang-format on
+    const float dz = first->z - second->z;
+    const float dy = first->y - second->y;
+    const float dx = first->x - second->x;
+    return dx * dx + dy * dy + dz * dz;
 }
 
 // x squared plus y squared then z squared.
