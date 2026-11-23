@@ -85,11 +85,11 @@ public:
     // 0x000a09a0
     DWORD GetWeather();
     // 0x000a09b0
-    BYTE GetFrontendByteBA6769();
+    BYTE GetShowHudPreference();
     // 0x000a09d0
-    BOOL IsFrontendFlagBA6794Set();
+    BOOL IsVSyncEnabled();
     // 0x000a09e0
-    void SetFrontendFlagBA6794();
+    void EnableVSync();
     // 0x000a1570
     void SetTimer(DWORD value);
     // 0x000a15a0
