@@ -18,16 +18,16 @@ public:
     // R5 address to verify
     void SetObjective(BYTE objective);
     // R5 address to verify
-    void SetBackendFloat94CAnd950(float first, float second);
+    void SetTurretRotation(float first, float second);
 
     // R5 address to verify
-    void SetBackendFlag428Bit5(BOOL enabled);
+    void SetHandbrakeOn(BOOL enabled);
     // Native backend pointer is unchecked; result is returned in ST0.
     // R5 address to verify
-    float GetBackendFloat94C();
+    float GetTurretVerticalRotation();
     // Native backend pointer is unchecked; result is returned in ST0.
     // R5 address to verify
-    float GetBackendFloat950();
+    float GetTurretHorizontalRotation();
     // 0x000b7230
     void SetLocked(BOOL locked);
     // 0x000b73d0
@@ -89,7 +89,7 @@ public:
     // 0x000b7900
     void SetTrainSpeed(float speed);
     // 0x000b82e0
-    void SetBackendFloat64c(float speed);
+    void SetBikeDesiredLeanAngle(float speed);
     // 0x000b7090
     void ChangeInterior(int interior);
     // 0x000b7330
@@ -99,7 +99,7 @@ public:
     // 0x000b74a0
     BOOL HasTurret();
     // 0x000b74d0
-    void SetBackendBytes1f6And514(BYTE value);
+    void SetVehicleAudioHornAndCounter(BYTE value);
     // 0x000b7840
     void Lock(BOOL locked);
     // 0x000b7870
@@ -121,7 +121,7 @@ public:
     // 0x000b8170
     void SetRotation(float angle);
     // 0x000b82b0
-    float GetBackendFloat648();
+    float GetBikeLeanAngle();
     // 0x000b8370
     void SetWindowOpenFlag(BYTE window);
     // 0x000b83a0
@@ -143,7 +143,7 @@ public:
     // 0x000b7560
     BOOL SirenEnabled();
     // 0x000b7580
-    void SetBackendWord45c(WORD value);
+    void SetAlarmState(WORD value);
     // 0x000b76a0
     void SetHydraThrusters(DWORD value);
     // 0x000b76c0

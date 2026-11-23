@@ -92,7 +92,7 @@ void CActor::SetPedState(BYTE value)
 }
 
 // R5 address to verify
-DWORD CActor::HasBackendFlag100()
+DWORD CActor::IsInVehicle()
 {
     if (!actorBackend)
         return 0;

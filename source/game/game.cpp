@@ -1850,7 +1850,7 @@ void CGame::ProcessFrameLimiter()
     }
     CPed* ped = GetPlayerPed();
     DWORD elapsed;
-    if (ped && GetPlayerPed()->HasTaskType268())
+    if (ped && GetPlayerPed()->HasInWaterTask())
     {
         if (*(BYTE*)0xba6794 && (DWORD)m_nFrameLimiter <= 45)
         {
@@ -2332,20 +2332,20 @@ DWORD CGame::GetWeather()
 }
 
 // R5 address to verify
-BYTE CGame::GetFrontendByteBA6769()
+BYTE CGame::GetShowHudPreference()
 {
     return *(BYTE*)0xba6769;
 }
 
 // R5 address to verify
-BOOL CGame::IsFrontendFlagBA6794Set()
+BOOL CGame::IsVSyncEnabled()
 {
     // GTA SA virtual address: frontend flag, normalized to BOOL.
     return *(BYTE*)0xba6794 != 0;
 }
 
 // R5 address to verify
-void CGame::SetFrontendFlagBA6794()
+void CGame::EnableVSync()
 {
     // GTA SA virtual address: native writes exactly one byte.
     *(BYTE*)0xba6794 = 1;

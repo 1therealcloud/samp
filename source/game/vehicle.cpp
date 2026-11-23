@@ -377,7 +377,7 @@ BOOL CVehicle::SirenEnabled()
 }
 
 // 0x000b7580
-void CVehicle::SetBackendWord45c(WORD value)
+void CVehicle::SetAlarmState(WORD value)
 {
     *(WORD*)((BYTE*)m_pGameVehicle + 0x45c) = value;
 }
@@ -510,7 +510,7 @@ BOOL CVehicle::HasTurret()
 }
 
 // 0x000b74d0
-void CVehicle::SetBackendBytes1f6And514(BYTE value)
+void CVehicle::SetVehicleAudioHornAndCounter(BYTE value)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle))
     {
@@ -641,7 +641,7 @@ void CVehicle::SetRotation(float angle)
 }
 
 // 0x000b82b0
-float CVehicle::GetBackendFloat648()
+float CVehicle::GetBikeLeanAngle()
 {
     return m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) ? *(float*)((BYTE*)m_pGameVehicle + 0x648) : g_objectScaleLowerBound;
 }
@@ -912,7 +912,7 @@ void CVehicle::SetTrainSpeed(float speed)
 }
 
 // 0x000b82e0
-void CVehicle::SetBackendFloat64c(float speed)
+void CVehicle::SetBikeDesiredLeanAngle(float speed)
 {
     if (!m_pGameVehicle || !GamePoolVehicleGetAt(m_nHandle))
         return;
@@ -1157,7 +1157,7 @@ BOOL CVehicle::IsWrecked()
 }
 
 // R5 address to verify
-void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
+void CVehicle::SetHandbrakeOn(BOOL enabled)
 {
     if (m_pGameVehicle)
     {
@@ -1169,19 +1169,19 @@ void CVehicle::SetBackendFlag428Bit5(BOOL enabled)
 }
 
 // R5 address to verify
-float CVehicle::GetBackendFloat94C()
+float CVehicle::GetTurretVerticalRotation()
 {
     return *(float*)((BYTE*)m_pGameVehicle + 0x94c);
 }
 
 // R5 address to verify
-float CVehicle::GetBackendFloat950()
+float CVehicle::GetTurretHorizontalRotation()
 {
     return *(float*)((BYTE*)m_pGameVehicle + 0x950);
 }
 
 // R5 address to verify
-void CVehicle::SetBackendFloat94CAnd950(float first, float second)
+void CVehicle::SetTurretRotation(float first, float second)
 {
     memcpy((BYTE*)m_pGameVehicle + 0x94c, &first, 4);
     memcpy((BYTE*)m_pGameVehicle + 0x950, &second, 4);

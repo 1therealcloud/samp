@@ -85,11 +85,11 @@ public:
     // R5 address to verify
     DWORD GetWeather();
     // R5 address to verify
-    BYTE GetFrontendByteBA6769();
+    BYTE GetShowHudPreference();
     // R5 address to verify
-    BOOL IsFrontendFlagBA6794Set();
+    BOOL IsVSyncEnabled();
     // R5 address to verify
-    void SetFrontendFlagBA6794();
+    void EnableVSync();
     // 0x000a1750
     void SetTimer(DWORD value);
     // R5 address to verify

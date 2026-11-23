@@ -472,7 +472,7 @@ void CRemotePlayer::Process()
             m_state.appliedAnimation = animation;
             m_state.scriptedAnimation = 0;
         }
-        if (!m_state.scriptedAnimation && !animation && m_state.ped->HasTaskType401())
+        if (!m_state.scriptedAnimation && !animation && m_state.ped->HasNamedAnimationTask())
             m_state.ped->ApplyAnimation(g_remoteCarryAnimation, g_remoteCarryLibrary, 4.0f, 0, 0, 0, 0, 0);
         m_state.vehicle = 0;
         m_state.updateType = 0;
@@ -497,7 +497,7 @@ void CRemotePlayer::Process()
         if (m_state.vehicle->GetModelIndex() == 520)
             m_state.vehicle->SetHydraThrusters(m_state.incar.modelData);
         if (m_state.vehicle->GetSubtype() == 2 || m_state.vehicle->GetSubtype() == 6)
-            m_state.vehicle->SetBackendFloat64c(*(float*)&m_state.incar.modelData);
+            m_state.vehicle->SetBikeDesiredLeanAngle(*(float*)&m_state.incar.modelData);
         m_state.vehicle->EnableSiren(m_state.incar.siren);
         m_state.vehicle->SetLandingGearState(m_state.incar.landingGear);
         m_state.vehicle->SetHealth(m_state.incar.health);
@@ -544,11 +544,11 @@ void CRemotePlayer::Process()
         }
         if (m_state.ped->GetState() == 50)
         {
-            if ((m_state.passenger.seatFlags & 0x40) && !m_state.ped->HasTaskType1022() && m_state.ped->DoesExist() && m_state.ped->EnablePassengerDrivebyMode())
+            if ((m_state.passenger.seatFlags & 0x40) && !m_state.ped->HasGangDrivebyTask() && m_state.ped->DoesExist() && m_state.ped->EnablePassengerDrivebyMode())
                 m_state.passengerDriveby = 1;
-            if (!(m_state.passenger.seatFlags & 0x40) && m_state.ped->HasTaskType1022() && m_state.ped->DoesExist())
+            if (!(m_state.passenger.seatFlags & 0x40) && m_state.ped->HasGangDrivebyTask() && m_state.ped->DoesExist())
             {
-                m_state.ped->StopTaskType1022();
+                m_state.ped->StopGangDrivebyTask();
                 m_state.passengerDriveby = 0;
             }
         }
@@ -1282,7 +1282,7 @@ void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
     if (*(int*)&m_state.onfoot.animation < 0)
         m_state.onfoot.animation = 0;
     CPed* ped = m_state.ped;
-    if (ped && ped->IsInVehicle() && m_state.specialAction != 3 && m_state.specialAction != 4 && !m_state.ped->HasTaskType704())
+    if (ped && ped->IsInVehicle() && m_state.specialAction != 3 && m_state.specialAction != 4 && !m_state.ped->HasLeaveCarTask())
         OnExitVehicle();
     if (m_state.playerState != 17)
         m_state.playerState = 17;
@@ -1701,7 +1701,7 @@ DWORD CRemotePlayer::GetColorAsARGB()
 // 0x00016330
 int CRemotePlayer::GetStatus()
 {
-    if (!m_state.ped || !m_state.ped->DoesExist() || m_state.ped->GetVehicleTransitionTaskState() || m_state.ped->HasTaskType704())
+    if (!m_state.ped || !m_state.ped->DoesExist() || m_state.ped->GetVehicleTransitionTaskState() || m_state.ped->HasLeaveCarTask())
         return 0;
     return (int)m_state.status;
 }

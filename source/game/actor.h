@@ -72,7 +72,7 @@ public:
     // R5 address to verify
     void SetPedState(BYTE value);
     // R5 address to verify
-    DWORD HasBackendFlag100();
+    DWORD IsInVehicle();
     // 0x0009c700
     void SetInvulnerable(BYTE enabled);
 };

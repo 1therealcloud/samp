@@ -2729,7 +2729,7 @@ void CPed::ProcessAccessories()
 }
 
 // 0x000accd0
-BOOL CPed::HasTaskType268()
+BOOL CPed::HasInWaterTask()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     if (ped && !(*(DWORD*)(ped + 0x46c) & 0x100))
@@ -2761,7 +2761,7 @@ int CPed::GetVehicleTransitionTaskState()
 }
 
 // 0x000ac640
-BOOL CPed::HasTaskType704()
+BOOL CPed::HasLeaveCarTask()
 {
     if (!GamePoolPedGetAt(m_nHandle) || !m_pGamePed)
         return FALSE;
@@ -2813,7 +2813,7 @@ void CPed::ClearDuckingFlag()
 }
 
 // 0x000acc10
-BOOL CPed::HasTaskType211()
+BOOL CPed::HasJumpTask()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     if (!ped || (*(DWORD*)(ped + 0x46c) & 0x100))
@@ -2824,7 +2824,7 @@ BOOL CPed::HasTaskType211()
 }
 
 // R5 address to verify
-BOOL CPed::HasTaskType1016()
+BOOL CPed::HasFightTask()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     if (!ped || (*(DWORD*)(ped + 0x46c) & 0x100))
@@ -2835,7 +2835,7 @@ BOOL CPed::HasTaskType1016()
 }
 
 // 0x000acc90
-BOOL CPed::HasTaskType208()
+BOOL CPed::HasFallAndGetUpTask()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     if (!ped || (*(DWORD*)(ped + 0x46c) & 0x100))
@@ -2897,7 +2897,7 @@ void CPed::ProcessDancePoseWeapon()
 }
 
 // 0x000ad030
-BOOL CPed::HasTaskType1022()
+BOOL CPed::HasGangDrivebyTask()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
         return FALSE;
@@ -2906,7 +2906,7 @@ BOOL CPed::HasTaskType1022()
 }
 
 // 0x000ad080
-void CPed::StopTaskType1022()
+void CPed::StopGangDrivebyTask()
 {
     if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
         return;
@@ -2946,7 +2946,7 @@ void CPed::CheckParachuteWeapon()
 }
 
 // 0x000ada40
-BOOL CPed::HasTaskType401()
+BOOL CPed::HasNamedAnimationTask()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     // GTA SA virtual address: excluded backend vtable.
@@ -2971,7 +2971,7 @@ BOOL CPed::HasTaskType401()
 }
 
 // R5 address to verify
-DWORD CPed::GetBackendByte72D()
+DWORD CPed::GetFightingStyle()
 {
     BYTE* ped = (BYTE*)m_pGamePed;
     if (!ped)

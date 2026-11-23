@@ -70,12 +70,12 @@ public:
     // Descriptive raw flag names; invalid GTA backend vtable is excluded.
     // Clearing bit40000 invokes virtual Add afterwards.
     // R5 address to verify
-    void SetBackendFlag40000(BOOL enabled);
+    void SetStaticWaitingForCollision(BOOL enabled);
     // R5 address to verify
-    void SetBackendFlags80400();
+    void DisableStreamingAndDeletion();
     // Nonzero argument clears bit2000; zero sets it.
     // R5 address to verify
-    void SetBackendFlag2000(BOOL clear);
+    void SetSpeedApplicationEnabled(BOOL clear);
     // R5 address to verify
     DWORD GetRwObjectWord38();
     // R5 address to verify
