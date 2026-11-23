@@ -399,7 +399,7 @@ void CTextDraw::PrepareModelPreview()
     {
         if (*model >= 0)
             return;
-        if (!GameModelQueryB4170(*model))
+        if (!GameHasModelInfoForObject(*model))
             *model = 0x48c7;
         created = g_modelPreview->RenderObject(*model, data.format.backgroundColor, (CVector*)data.format.rotation, data.format.zoom);
     }

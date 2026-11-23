@@ -95,7 +95,7 @@ void CModelPreview::RenderTestScene(int model)
     GameRotateRwMatrixOnAxis(&matrix, 2, -40.0f);
     object->ApplyMatrix(matrix);
     object->SetModelIndex(model);
-    object->Native009f960();
+    object->RenderForModelPreview();
     delete object;
     GameRwEndCameraUpdate(camera);
     GameRwWorldRemoveLight(light);
@@ -135,7 +135,7 @@ void* CModelPreview::RenderPed(int model, DWORD background, const CVector* rotat
     ClientSetRenderState(14, 0);
     ped->Add();
     ped->UpdateClumpAnimations(100.0f, 1);
-    ped->Native009f960();
+    ped->RenderForModelPreview();
     GameRwEndCameraUpdate(camera);
     GameRwWorldRemoveLight(light);
     ped->Remove();
@@ -188,7 +188,7 @@ void* CModelPreview::RenderVehicle(int model, DWORD background, const CVector* r
     ClientSetRenderState(14, 0);
     vehicle->Add();
     g_hookDisableFog = 1;
-    vehicle->Native009f960();
+    vehicle->RenderForModelPreview();
     g_hookDisableFog = 0;
     GameRwEndCameraUpdate(camera);
     GameRwWorldRemoveLight(light);
@@ -243,7 +243,7 @@ void* CModelPreview::RenderObjectEntity(int model, DWORD background, const CVect
     ClientSetRenderState(7, 2);
     ClientSetRenderState(14, 0);
     if (object->GetRwObject())
-        object->Native009f960();
+        object->RenderForModelPreview();
     GameGetModelInfo(model);
     GameRwEndCameraUpdate(camera);
     GameRwWorldRemoveLight(light);

@@ -93,7 +93,7 @@ public:
     // 0x000a1570
     void SetTimer(DWORD value);
     // 0x000a15a0
-    DWORD GetBackendWordB71804();
+    DWORD GetRenderedBuildingCount();
     // Native reserves slots2..209; sixth argument is ignored.
     // 0x0009ff50
     CPed* CreatePed(int model, CVector position, float rotation, DWORD unused, BOOL playerFlag);
@@ -370,7 +370,7 @@ BOOL __stdcall GameHasModelInfo(int model);
 BOOL __stdcall GameIsPedModel(int model);
 // Observed wrapped vtable-address-plus-14 test, not a slot-content query.
 // 0x000b4170
-BOOL __stdcall GameModelQueryB4170(int model);
+BOOL __stdcall GameHasModelInfoForObject(int model);
 struct CVector;
 // 0x000b5ef0
 float __cdecl GameSetModelCollisionRadius(int model, float radius);

@@ -79,13 +79,13 @@ BOOL CActor::IsDead()
 }
 
 // 0x0009c130
-BYTE CActor::GetBackendByte530()
+BYTE CActor::GetPedState()
 {
     return *(BYTE*)&actorBackend->state530;
 }
 
 // 0x0009c140
-void CActor::SetBackendByte530(BYTE value)
+void CActor::SetPedState(BYTE value)
 {
     if (actorBackend)
         actorBackend->state530 = value;

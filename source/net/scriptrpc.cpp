@@ -656,13 +656,13 @@ void ScrPlayerOpcode03FD(RPCParameters* parameters)
 
 // The original returns immediately.
 // 0x00017bd0
-void ScrRpc125(RPCParameters* parameters)
+void ScrIgnoreRpc125(RPCParameters* parameters)
 {
     (void)parameters;
 }
 
 // 0x0001a230
-void ScrRpc64(RPCParameters* parameters)
+void ScrReadAndDiscardRpc64(RPCParameters* parameters)
 {
     unsigned char* input = parameters->input;
     const int bits = (int)parameters->numberOfBitsOfData;
@@ -1984,7 +1984,7 @@ void RegisterScriptRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrStopObject), ScrStopObject);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetNumberPlate), ScrSetNumberPlate);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrTogglePlayerSpectating), ScrTogglePlayerSpectating);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183A0), ScrRpc125);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown001183A0), ScrIgnoreRpc125);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayerSpectatePlayer), ScrPlayerSpectatePlayer);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrPlayerSpectateVehicle), ScrPlayerSpectateVehicle);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrMoveVehicleComponent), ScrMoveVehicleComponent);
@@ -2039,7 +2039,7 @@ void RegisterScriptRPCs(RakClientInterface* client)
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrResetPlayerMoney), ScrResetPlayerMoney);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrResetPlayerWeapons), ScrResetPlayerWeapons);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrGivePlayerWeapon), ScrGivePlayerWeapon);
-    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown0011830C), ScrRpc64);
+    client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcUnknown0011830C), ScrReadAndDiscardRpc64);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrLinkVehicleToInterior), ScrLinkVehicleToInterior);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrSetPlayerArmor), ScrSetPlayerArmor);
     client->RegisterAsRemoteProcedureCall(const_cast<int*>(&g_rpcScrDeathMessage), ScrDeathMessage);

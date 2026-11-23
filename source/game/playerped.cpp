@@ -1355,7 +1355,7 @@ void CPed::SetControllable(BOOL enabled)
 }
 
 // 0x000acd10
-void CPed::CallBackend730AndVehicle490()
+void CPed::ExtinguishPedAndVehicleFire()
 {
     if (m_pGamePed)
     {
@@ -1398,7 +1398,7 @@ void CPed::Kill()
         return;
     if (HasJetpack())
         DisableJetpack();
-    CallBackend730AndVehicle490();
+    ExtinguishPedAndVehicleFire();
     CMatrix matrix;
     GetMatrix(&matrix);
     Teleport(matrix.position);
@@ -2980,7 +2980,7 @@ DWORD CPed::GetBackendByte72D()
 }
 
 // 0x000ae0d0
-DWORD CPed::CallBackend5E01C0(DWORD first, DWORD second)
+DWORD CPed::GetTransformedBonePosition(DWORD first, DWORD second)
 {
     void* ped = m_pGamePed;
     if (!ped || *(DWORD*)ped == 0x863c40)

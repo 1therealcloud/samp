@@ -148,15 +148,15 @@ public:
     void ProcessControl();
     // Additional native wrappers; original names/semantic argument types are unresolved.
     // 0x0009ed60
-    void Native009ed60(DWORD argument);
+    void GetBackendBoundRect(DWORD argument);
     // 0x0009f5d0
-    void Native009f5d0(DWORD argument);
+    void SetRenderClumpAlpha(DWORD argument);
     // 0x0009f810
-    void Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6);
+    void ApplyBackendTurnForce(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6);
     // 0x0009f840
-    void Native009f840(DWORD argument);
+    void AddVehicleAudioEvent(DWORD argument);
     // 0x0009f960
-    void Native009f960();
+    void RenderForModelPreview();
     // 0x0009fba0
     void ApplyLinearSpeed();
     // 0x0009fa40
@@ -252,7 +252,7 @@ struct GameCollisionSphere
 BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollisionSphere* second);
 // Semantics unresolved; this is the observed pointer/zero backend adapter.
 // 0x000b43f0
-BYTE GameQueryBackend410ce0(const void* data);
+BYTE GameHasCollisionLoaded(const void* data);
 // Raw native flag words are forwarded without bool normalization; result is AL.
 // 0x000b3710
 BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, void* colPoint, void** entity, DWORD buildings, DWORD vehicles, DWORD peds, DWORD objects,

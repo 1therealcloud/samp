@@ -52,10 +52,10 @@ void ScrPlayerOpcode052C(RPCParameters* parameters);
 void ScrPlayerOpcode03FD(RPCParameters* parameters);
 // The original returns immediately.
 // 0x00017bd0
-void ScrRpc125(RPCParameters* parameters);
+void ScrIgnoreRpc125(RPCParameters* parameters);
 // Native consumes and discards a WORD, with stream construction/destruction.
 // 0x0001a230
-void ScrRpc64(RPCParameters* parameters);
+void ScrReadAndDiscardRpc64(RPCParameters* parameters);
 // 0x001182b0
 extern const Scripting::OpcodeInfo g_rpcPlayerOpcode052cCommand;
 // 0x001182c4
