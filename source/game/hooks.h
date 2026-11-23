@@ -377,11 +377,11 @@ extern DWORD g_hookVehicleFlagWrapper;
 // 0x0018f5e4
 extern DWORD g_hookCapture0018F5E4;
 // 0x0018f658
-extern DWORD g_hookCapture0018F658;
+extern DWORD g_hookGamepadInputThis;
 // 0x0018f65c
-extern DWORD g_hookCapture0018F65C;
+extern DWORD g_hookGamepadAimVector;
 // 0x0018f660
-extern DWORD g_hookCapture0018F660;
+extern DWORD g_hookGamepadAimThis;
 // 0x000a2cd0
 void GameHookOverrideGunTaskParameter();
 // 0x000a3b60
@@ -431,13 +431,13 @@ extern DWORD g_hookSavedRendererCameraY;
 // 0x0018e7ec
 extern DWORD g_hookSavedRendererCameraZ;
 // 0x0018e80c
-extern DWORD g_hookCapture0018E80C;
+extern DWORD g_hookVehicleAimCamera;
 // 0x0018e92c
 extern DWORD g_hookCapture0018E92C;
 // 0x0018eaac
 extern DWORD g_hookStreamingFileBuffer;
 // 0x0018eb74
-extern DWORD g_hookCapture0018EB74;
+extern DWORD g_hookVehicleAimInternalAim;
 // 0x0018f338
 extern DWORD g_hookCapture0018F338;
 // 0x0018f344
@@ -447,13 +447,13 @@ extern DWORD g_hookVisibilityDistanceOut;
 // 0x0018f358
 extern DWORD g_hookCapture0018F358;
 // 0x0018f35c
-extern DWORD g_hookCapture0018F35C;
+extern DWORD g_hookVehicleAimCaller;
 // 0x0018f364
 extern DWORD g_hookCapture0018F364;
 // 0x0018f380
-extern DWORD g_hookCapture0018F380;
+extern DWORD g_hookVehicleAimVehicle;
 // 0x0018f48c
-extern DWORD g_hookCapture0018F48C;
+extern DWORD g_hookRemoteSkillTask;
 // 0x0018f490
 extern DWORD g_hookStreamingModelId;
 // 0x0018f608
