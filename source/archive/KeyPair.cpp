@@ -65,7 +65,7 @@ void CKeyPair::LoadFromFile(PCHAR szFileName)
     FILE* fiKey;
 
     // Load the private key from a file
-    fiKey = fopen((CHAR*)szFileName, "rb");
+    fopen_s(&fiKey, (CHAR*)szFileName, "rb");
     fread(&dwKeySize, sizeof(dwKeySize), 1, fiKey);
     pbKeyBlob = new BYTE[dwKeySize];
     fread(pbKeyBlob, 1, dwKeySize, fiKey);
@@ -95,7 +95,7 @@ void CKeyPair::WriteToFile(PCHAR szFileName)
     CryptExportKey(m_hCryptKey, NULL, PRIVATEKEYBLOB, 0, pbKeyBlob, &dwKeySize);
 
     // Write the private key to a file
-    fiKey = fopen((CHAR*)szFileName, "wb");
+    fopen_s(&fiKey, (CHAR*)szFileName, "wb");
     fwrite(&dwKeySize, sizeof(dwKeySize), 1, fiKey);
     fwrite(pbKeyBlob, 1, dwKeySize, fiKey);
     fclose(fiKey);
@@ -121,7 +121,7 @@ void CKeyPair::WriteCHeaderFile(PSTR szFileName)
     CryptExportKey(m_hCryptKey, NULL, PUBLICKEYBLOB, 0, pbKeyBlob, &dwKeySize);
 
     // Generate the header file
-    fiHeader = fopen(szFileName, "wt");
+    fopen_s(&fiHeader, szFileName, "wt");
     fprintf(fiHeader, "//-----------------------------------------\n");
     fprintf(fiHeader, "// SAMP Archive 2 Tool - Public Keys\n");
     fprintf(fiHeader, "//\n");

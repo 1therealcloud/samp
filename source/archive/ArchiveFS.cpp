@@ -333,8 +333,8 @@ DWORD CArchiveFS::GetFileIndex(char* szFileName)
         LoadEntries();
 
     CHAR szFileNameLC[MAX_PATH];
-    strcpy(szFileNameLC, szFileName);
-    _strlwr(szFileNameLC);
+    strncpy_s(szFileNameLC, szFileName, _TRUNCATE);
+    _strlwr_s(szFileNameLC);
 
     DWORD dwHash = this->HashString(szFileNameLC);
 
@@ -344,7 +344,7 @@ DWORD CArchiveFS::GetFileIndex(char* szFileName)
     if (dwIndex != FS_INVALID_FILE)
     {
         CHAR szDebugMsg[1024];
-        sprintf(szDebugMsg, "ArchiveFS: Requested file: %s...\n", szFileNameLC);
+        snprintf(szDebugMsg, sizeof(szDebugMsg), "ArchiveFS: Requested file: %s...\n", szFileNameLC);
         OutputDebugString(szDebugMsg);
     }
 #endif

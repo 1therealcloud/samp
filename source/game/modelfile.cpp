@@ -222,7 +222,8 @@ DWORD CModelFileStream::WriteFileChunks(FILE* file)
 // 0x000bc0c0
 DWORD CModelFileStream::SaveFile(const char* filename)
 {
-    FILE* file = fopen(filename, g_customDownloadWriteMode);
+    FILE* file = nullptr;
+    fopen_s(&file, filename, g_customDownloadWriteMode);
     if (!file)
         return 0;
     WriteFileChunks(file);
@@ -296,7 +297,8 @@ DWORD CModelFileStream::LoadFile(const char* filename)
         free(data);
         data = 0;
     }
-    FILE* file = fopen(filename, g_customDownloadReadMode);
+    FILE* file = nullptr;
+    fopen_s(&file, filename, g_customDownloadReadMode);
     if (!file)
         return 0;
     owned = 1;
@@ -520,7 +522,7 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
         return 0;
     }
     char savedName[32], savedMask[32];
-    strncpy(savedName, name, 31);
+    strncpy_s(savedName, name, 31);
     input->Read(mask, 32);
     if (strlen(mask) > 31)
     {
@@ -528,7 +530,7 @@ DWORD CTxdFile::ReadTexture(CModelFileChunk* chunk)
             error = 0xd2f5;
         return 0;
     }
-    strncpy(savedMask, mask, 31);
+    strncpy_s(savedMask, mask, 31);
     DWORD rasterFormat = 0, d3dFormat = 0;
     input->Read(&rasterFormat, 4);
     input->Read(&d3dFormat, 4);
@@ -2714,7 +2716,9 @@ DWORD CModelCollisionFile::BuildFaceGroups()
 DWORD CModelCollisionFile::SaveFile(const char* filename, const char* modelName)
 {
     CModelFileStream output;
-    strncpy((char*)nativeState + 8, modelName, 20);
+    const size_t nameLength = strnlen(modelName, 20);
+    memset(nativeState + 8, 0, 20);
+    memcpy(nativeState + 8, modelName, nameLength);
     SetInitialHeaderSize();
     output.Write(nativeState, 0x78);
     DWORD total = *(DWORD*)(nativeState + 0x84);

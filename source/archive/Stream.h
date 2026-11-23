@@ -141,8 +141,7 @@ public:
                 break;
         }
 
-        m_fiFile = fopen(szFilename, szMode);
-        if (!m_fiFile)
+        if (fopen_s(&m_fiFile, szFilename, szMode) != 0)
             return false;
 
         return true;

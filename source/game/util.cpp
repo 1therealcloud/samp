@@ -1608,14 +1608,14 @@ BOOL GameLoadTextureDictionary(const char* name, const char* filename, BYTE from
 {
     char directory[65], path[129];
     if (fromSamp)
-        strcpy(directory, "SAMP\\");
+        strncpy_s(directory, "SAMP\\", _TRUNCATE);
     else
-        strcpy(directory, "models\\txd");
+        strncpy_s(directory, "models\\txd", _TRUNCATE);
     int index = GameTxdFind(name);
     if (index != -1)
         return TRUE;
     index = GameTxdAdd(name);
-    sprintf(path, "%s\\%s.txd", directory, filename);
+    snprintf(path, sizeof(path), "%s\\%s.txd", directory, filename);
     if (GameFileExists(path))
     {
         GameTxdLoad(index, path);

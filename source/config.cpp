@@ -32,7 +32,7 @@ CConfig::CConfig(const char* file)
     // Native leaves filename untouched when no nonempty filename is supplied.
     if (file && strlen(file))
     {
-        strcpy(filename, file);
+        strncpy_s(filename, file, _TRUNCATE);
         Load();
     }
 }
@@ -61,10 +61,8 @@ void CConfig::FindFirstFree()
 // 0x00065710
 int CConfig::GetIndex(const char* name)
 {
-    // Native mutates the supplied key despite the const signature in references.
-    _strlwr((char*)name);
     for (int i = 0; i < upperBound; ++i)
-        if (occupied[i] && !strcmp(name, entries[i].name))
+        if (occupied[i] && !_stricmp(name, entries[i].name))
             return i;
     return -1;
 }
@@ -91,8 +89,8 @@ int CConfig::CreateEntry(const char* name)
         return -1;
     if (strlen(name) > 40)
         return -1;
-    _strlwr((char*)name);
-    strcpy(entries[index].name, name);
+    strncpy_s(entries[index].name, name, _TRUNCATE);
+    _strlwr_s(entries[index].name);
     entries[index].readOnly = FALSE;
     entries[index].type = VALUE_TYPE_NONE;
     occupied[index] = TRUE;
@@ -173,7 +171,8 @@ int CConfig::GetType(const char* text)
 // 0x00065a50
 BOOL CConfig::Save()
 {
-    FILE* file = fopen(filename, "w");
+    FILE* file = nullptr;
+    fopen_s(&file, filename, "w");
     if (!file)
         return FALSE;
     for (int i = 0; i < MAX_ENTRIES; ++i)
@@ -232,13 +231,16 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
         if (entries[i].readOnly)
             return FALSE;
     }
-    else
-        entries[i].readOnly = TRUE;
+    const size_t length = strlen(value) + 1;
+    char* copy = (char*)malloc(length);
+    if (!copy)
+        return FALSE;
+    memcpy(copy, value, length);
+    free(entries[i].stringValue);
+    entries[i].stringValue = copy;
     entries[i].type = VALUE_TYPE_STRING;
-    if (entries[i].stringValue)
-        free(entries[i].stringValue);
-    entries[i].stringValue = (char*)calloc(1, strlen(value) + 1);
-    strcpy(entries[i].stringValue, value);
+    if (readOnly)
+        entries[i].readOnly = TRUE;
     Save();
     return TRUE;
 }
@@ -275,7 +277,7 @@ void CConfig::Write(const char* name, char* value)
         case VALUE_TYPE_STRING:
         {
             int length = (int)strlen(value);
-            strncpy(value, value + 1, length - 1);
+            memmove(value, value + 1, length - 1);
             value[length - 2] = 0;
             WriteStringValue(name, value, FALSE);
             break;
@@ -289,7 +291,8 @@ void CConfig::Write(const char* name, char* value)
 // 0x00065cf0
 BOOL CConfig::Load()
 {
-    FILE* file = fopen(filename, "r");
+    FILE* file = nullptr;
+    fopen_s(&file, filename, "r");
     if (!file)
         return FALSE;
     char line[260], name[260], value[260];
@@ -433,17 +436,17 @@ void ClientInitializeCacheDirectory()
     memset(configured, 0, sizeof(configured));
     DWORD length = 260, type;
     HKEY key;
-    sprintf(g_clientCacheDirectory, "%s\\cache", g_clientDataDirectory);
+    snprintf(g_clientCacheDirectory, sizeof(g_clientCacheDirectory), "%s\\cache", g_clientDataDirectory);
     if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\SAMP", 0, KEY_READ, &key) == ERROR_SUCCESS)
     {
         if (RegQueryValueExA(key, "model_cache", 0, &type, configured, &length) == ERROR_SUCCESS)
-            strncpy(g_clientCacheDirectory, (const char*)configured, 261);
+            strncpy_s(g_clientCacheDirectory, (const char*)configured, _TRUNCATE);
     }
     // Native does not close key and does not validate value type or copied termination.
     if (!ClientPathExists(g_clientCacheDirectory))
         CreateDirectoryA(g_clientCacheDirectory, 0);
     char local[264];
-    sprintf(local, "%s\\local", g_clientCacheDirectory);
+    snprintf(local, sizeof(local), "%s\\local", g_clientCacheDirectory);
     if (!ClientPathExists(local))
         CreateDirectoryA(local, 0);
 }
@@ -458,11 +461,11 @@ void ClientInitializePaths()
         GetCurrentDirectoryA(261, g_clientDataDirectory);
         return;
     }
-    sprintf(g_clientDataDirectory, "%s\\SAMP", documents);
+    snprintf(g_clientDataDirectory, sizeof(g_clientDataDirectory), "%s\\SAMP", documents);
     if (!ClientPathExists(g_clientDataDirectory))
         CreateDirectoryA(g_clientDataDirectory, 0);
     char screens[264];
-    sprintf(screens, "%s\\screens", g_clientDataDirectory);
+    snprintf(screens, sizeof(screens), "%s\\screens", g_clientDataDirectory);
     if (!ClientPathExists(screens))
         CreateDirectoryA(screens, 0);
     ClientInitializeCacheDirectory();

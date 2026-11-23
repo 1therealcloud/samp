@@ -260,7 +260,7 @@ int ClientFindScreenshotFilename(std::string* path)
     int index;
     for (index = 0; index < 1000; index++)
     {
-        sprintf(candidate, (*path + g_screenshotFilenamePattern).c_str(), index);
+        snprintf(candidate, sizeof(candidate), (*path + g_screenshotFilenamePattern).c_str(), index);
         WIN32_FIND_DATAA data;
         HANDLE found = FindFirstFileA(candidate, &data);
         if (found == INVALID_HANDLE_VALUE)

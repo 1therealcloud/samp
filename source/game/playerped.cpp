@@ -2830,9 +2830,11 @@ void CPed::ApplyPackedAnimation(DWORD packed)
         char* separator = strchr(combined, ':');
         if (separator)
         {
-            // Retain native unbounded split/copy behavior; do not add truncation.
-            strncpy(library, combined, separator - combined);
-            strcpy(name, separator + 1);
+            const size_t libraryLength = separator - combined;
+            if (libraryLength >= sizeof(library) || strlen(separator + 1) >= sizeof(name))
+                return;
+            memcpy(library, combined, libraryLength);
+            strcpy_s(name, separator + 1);
             ApplyAnimation(name, library, speed, flags & 1, (flags >> 1) & 1, (flags >> 2) & 1, (flags >> 3) & 1, time);
         }
     }
@@ -2892,7 +2894,7 @@ void CPed::SetBackendShoppingName(const char* name)
         if (strlen(name) > 31)
             return;
         memset(g_pedShoppingName, 0, 32);
-        strncpy(g_pedShoppingName, name, 32);
+        strcpy_s(g_pedShoppingName, name);
         *(char**)(ped + 0x78c) = g_pedShoppingName;
     }
     else
@@ -3129,7 +3131,7 @@ void CPed::DrawBoneIds()
         CVector position;
         memcpy(&position, &matrix.position, 12);
         char text[256];
-        sprintf(text, g_pedBoneIdFormat, bone);
+        snprintf(text, sizeof(text), g_pedBoneIdFormat, bone);
         g_deviceLabel->Draw(&position, text, 0xffffffff, 1, 0);
     }
     g_deviceLabel->End();
@@ -3148,7 +3150,7 @@ void CPed::DrawMappedBoneIds()
         CVector position;
         memcpy(&position, &matrix.position, 12);
         char text[256];
-        sprintf(text, g_pedBoneIdFormat, bone);
+        snprintf(text, sizeof(text), g_pedBoneIdFormat, bone);
         g_deviceLabel->Draw(&position, text, 0xffffffff, 1, 0);
     }
     g_deviceLabel->End();
@@ -3170,7 +3172,7 @@ void CPed::DrawAnimationFrameIds()
         CVector position;
         GameTransformPoint(&position, &matrix, (CVector*)(frame + 0x10));
         char text[256];
-        sprintf(text, g_pedBoneIdFormat, bone);
+        snprintf(text, sizeof(text), g_pedBoneIdFormat, bone);
         g_deviceLabel->Draw(&position, text, 0xffffffff, 1, 0);
     }
     g_deviceLabel->End();

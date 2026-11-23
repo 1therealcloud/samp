@@ -246,16 +246,18 @@ static void ParseCommandLine()
 }
 
 // 0x00003bd0
-static bool ChangeExtension(const char* FileName, char* Output, const char* Extension)
+static bool ChangeExtension(const char* FileName, char (&Output)[264], const char* Extension)
 {
     char Path[264];
-    strcpy(Path, FileName);
+    if (strlen(FileName) >= sizeof(Path))
+        return false;
+    strcpy_s(Path, FileName);
     char* Dot = strrchr(Path, '.');
     if (!Dot)
         return false;
     *Dot = 0;
-    sprintf(Output, "%s.%s", Path, Extension);
-    return true;
+    const int length = snprintf(Output, sizeof(Output), "%s.%s", Path, Extension);
+    return length >= 0 && static_cast<size_t>(length) < sizeof(Output);
 }
 
 // 0x00003c60

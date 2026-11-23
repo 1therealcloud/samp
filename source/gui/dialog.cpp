@@ -88,7 +88,7 @@ int CDialog::GetTextWidth(const char* value)
     if (value && strlen(value) && font)
     {
         // lines can be longer than the buffer (list items go up to 255)
-        strncpy(buffer, value, sizeof(buffer) - 1);
+        strncpy_s(buffer, value, sizeof(buffer) - 1);
         buffer[sizeof(buffer) - 1] = 0;
         ChatStripColorTags(buffer);
         font->DrawTextA(0, buffer, -1, &rect, 0x540, 0xffffffff);
@@ -273,7 +273,7 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
         memset(columnTitles[columns], 0, 129);
         if ((BYTE)header)
         {
-            strncpy(columnTitles[columns], scratch.cell, 128);
+            strncpy_s(columnTitles[columns], scratch.cell, 128);
             int measured = GetTextWidth(scratch.cell);
             if (measured > scratch.widths[columns])
                 scratch.widths[columns] = measured;
@@ -351,11 +351,13 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
     type = style;
     serverSide = remote;
     memset(title, 0, sizeof(title));
-    strncpy(title, caption, 64);
+    strncpy_s(title, caption, 64);
     if (text)
         free(text);
     text = (char*)calloc(1, strlen(value) + 64);
-    strcpy(text, value);
+    if (!text)
+        return;
+    memcpy(text, value, strlen(value) + 1);
     FontSize measured = g_deviceFonts->GetLittleTextScreenSize(text, 0x40);
     textWidth = measured.cx;
     textHeight = measured.cy;
@@ -364,7 +366,7 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
         FontSize titleSize = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
         // Native copies the original, untruncated caption and leaves stale caption
         // state untouched when the input caption is empty.
-        strcpy((char*)dialog + 0x16, caption);
+        strncpy_s((char*)dialog + 0x16, 256, caption, _TRUNCATE);
         *(BYTE*)((BYTE*)dialog + 0x14) = 1;
         dialog->SetCaptionHeight(titleSize.cy + 4);
     }
@@ -499,7 +501,7 @@ void CDialog::Close(char response)
     BYTE length = 0;
     if (type == 1 || type == 3)
     {
-        strncpy(reply, input->GetText(), 128);
+        strncpy_s(reply, input->GetText(), 128);
         length = (BYTE)strlen(reply);
     }
     else if (type == 2 || type == 4 || type == 5)
@@ -508,7 +510,7 @@ void CDialog::Close(char response)
         CDXUTListBoxDL* selectedList = list;
         DXUTListBoxItemDL* item = selectedList->GetItem(selectedList->GetSelectedIndex(-1));
         if (item)
-            strncpy(reply, item->text, 128);
+            strncpy_s(reply, item->text, 128);
         ChatStripColorTags(reply);
         length = (BYTE)strlen(reply);
     }

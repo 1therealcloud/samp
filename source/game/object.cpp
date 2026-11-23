@@ -1057,12 +1057,15 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     *texture = GameRwCreateTexture(GameRwCreateRaster(2, 2, 0, 0));
     if (!*texture)
         return;
+    const size_t textSize = strlen(text) + 1;
+    *stored = (char*)calloc(1, textSize);
+    if (!*stored)
+        return;
     ++((ObjectRwTexturePrefix*)*texture)->filterAddressing;
-    *stored = (char*)calloc(1, strlen(text) + 1);
-    strcpy(*stored, text);
+    memcpy(*stored, text, textSize);
     materials.textInfo[index].index = (BYTE)index;
     materials.textInfo[index].size = size;
-    strcpy(materials.textInfo[index].font, font);
+    strncpy_s(materials.textInfo[index].font, font, _TRUNCATE);
     materials.textInfo[index].fontSize = fontSize;
     materials.textInfo[index].bold = bold != 0;
     materials.textInfo[index].fontColor = fontColor;

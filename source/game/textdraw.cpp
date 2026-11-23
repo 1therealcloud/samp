@@ -279,7 +279,7 @@ void CTextDraw::SetText(const char* text)
     memset(state, 0, 800);
     if (strlen(text) >= 800)
         return;
-    strncpy((char*)state, text, 800);
+    strncpy_s((char*)state, 801, text, 800);
     state[800] = 0;
     data.hasKeyCodes = 0;
     char* p = (char*)state;
@@ -331,21 +331,23 @@ void CTextDraw::LoadTexture()
     const char* colon = strchr(text, ':');
     if (!colon || strlen(text) >= 64 || strchr(text, '\\') || strchr(text, '/'))
         return;
-    strncpy(dictionary, text, colon - text);
-    strcpy(texture, colon + 1);
+    if (colon - text >= sizeof(dictionary))
+        return;
+    memcpy(dictionary, text, colon - text);
+    strncpy_s(texture, colon + 1, _TRUNCATE);
     if (data.format.textureSlot == -1)
         return;
     if (!memcmp(dictionary, "hud", 4))
-        strcpy(selected, "hud");
+        strncpy_s(selected, "hud", _TRUNCATE);
     else if (!memcmp(dictionary, "samaps", 7))
     {
-        strcpy(selected, "samaps");
+        strncpy_s(selected, "samaps", _TRUNCATE);
         if (!GameLoadTextureDictionary(selected, "samaps", 1))
             return;
     }
     else if (!memcmp(dictionary, "vehicleprev", 12))
     {
-        strcpy(selected, "vehicleprev");
+        strncpy_s(selected, "vehicleprev", _TRUNCATE);
         if (!GameLoadTextureDictionary(selected, "vehicles128", 1))
             return;
     }
@@ -359,11 +361,11 @@ void CTextDraw::LoadTexture()
         DWORD hash = g_customModels->GetObjectTextureHash(model);
         if (!hash)
             return;
-        sprintf(selected, "%X", hash);
+        snprintf(selected, sizeof(selected), "%X", hash);
     }
     else
     {
-        strncpy(selected, dictionary, 10);
+        strncpy_s(selected, dictionary, 10);
         if (!GameLoadTextureDictionary(selected, dictionary, 0))
             return;
     }

@@ -125,7 +125,7 @@ void CDownloadWindow::Show(DWORD mode)
     DWORD* state = (DWORD*)nativeState;
     state[0x94] = mode;
     FontSize measured = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
-    strcpy((char*)state[10] + 0x16, g_downloadWindowTitle);
+    strncpy_s((char*)state[10] + 0x16, 256, g_downloadWindowTitle, _TRUNCATE);
     ((BYTE*)state[10])[0x14] = 1;
     *(DWORD*)((BYTE*)state[10] + 0x126) = (DWORD)measured.cy + 4;
     ((BYTE*)state[10])[1] = 0;
@@ -365,13 +365,13 @@ void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downl
         delta = downloaded;
         record->total = total;
         if (type == 1)
-            _snprintf(text, 64, g_downloadModel);
+            snprintf(text, 64, g_downloadModel);
         else
-            _snprintf(text, 64, g_downloadTexture);
+            snprintf(text, 64, g_downloadTexture);
         ((CDXUTListBoxDL*)state[11])->AddItem(text, (void*)0xffffffff, -1);
         record->row = state[1];
         AddRecord(record);
-        _snprintf(text, 64, g_downloadIdFormat, id);
+        snprintf(text, 64, g_downloadIdFormat, id);
         ((CDXUTListBoxDL*)state[11])->SetSubItemText(record->row, 0, text);
         ((CDXUTListBoxDL*)state[11])->SelectItem(record->row);
         currentStatus = status;
@@ -403,27 +403,27 @@ void CDownloadWindow::UpdateRecord(BYTE type, DWORD id, BYTE status, DWORD downl
         state[0x96] = 0;
     }
     if (currentStatus == 0)
-        _snprintf(text, 64, g_downloadZeroFormat);
+        snprintf(text, 64, g_downloadZeroFormat);
     else if (currentStatus == 1)
-        _snprintf(text, 64, g_downloadPercentFormat, (double)percentage);
+        snprintf(text, 64, g_downloadPercentFormat, (double)percentage);
     else if (currentStatus == 3)
     {
         if (detail)
-            _snprintf(text, 64, g_downloadDetailFormat, error, detail);
+            snprintf(text, 64, g_downloadDetailFormat, error, detail);
         else
-            _snprintf(text, 64, g_downloadErrorFormat, error, record->downloaded, record->total);
+            snprintf(text, 64, g_downloadErrorFormat, error, record->downloaded, record->total);
     }
     else if (currentStatus == 4)
     {
         state[0x93]++;
-        _snprintf(text, 64, g_downloadCompleteFormat, (double)percentage);
+        snprintf(text, 64, g_downloadCompleteFormat, (double)percentage);
     }
     // Other native statuses leave the previous or untouched local text in place.
     ((CDXUTListBoxDL*)state[11])->SetSubItemText(record->row, 1, text);
     if ((LONG)state[0x94] > 0)
     {
         char title[68];
-        _snprintf(title, 64, g_downloadCaptionFormat, state[0x93], state[0x94], (double)*(const float*)&state[0x97]);
-        strcpy((char*)state[10] + 0x16, title);
+        snprintf(title, 64, g_downloadCaptionFormat, state[0x93], state[0x94], (double)*(const float*)&state[0x97]);
+        strncpy_s((char*)state[10] + 0x16, 256, title, _TRUNCATE);
     }
 }

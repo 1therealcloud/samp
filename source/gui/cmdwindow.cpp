@@ -82,8 +82,8 @@ void CInput::Open()
 void CInput::AddRecall(const char* text)
 {
     for (int i = 8; i >= 0; --i)
-        strcpy(m_szRecallBuffer[i + 1], m_szRecallBuffer[i]);
-    strcpy(m_szRecallBuffer[0], text);
+        strncpy_s(m_szRecallBuffer[i + 1], m_szRecallBuffer[i], _TRUNCATE);
+    strncpy_s(m_szRecallBuffer[0], text, _TRUNCATE);
     if (m_nTotalRecall < 10)
         ++m_nTotalRecall;
 }
@@ -95,7 +95,7 @@ void CInput::RecallUp()
     {
         if (m_nCurrentRecall == -1)
         {
-            strncpy(m_szCurrentBuffer, m_pEditbox->GetText(), 128);
+            strncpy_s(m_szCurrentBuffer, m_pEditbox->GetText(), 128);
             m_szCurrentBuffer[128] = 0;
         }
         ++m_nCurrentRecall;
@@ -145,7 +145,7 @@ void CInput::AddCommand(const char* name, InputCommand command)
     if (m_nCommandCount < 144 && strlen(name) < 32)
     {
         m_pCommandProc[m_nCommandCount] = command;
-        strcpy(m_szCommandName[m_nCommandCount], name);
+        strncpy_s(m_szCommandName[m_nCommandCount], name, _TRUNCATE);
         ++m_nCommandCount;
     }
 }
@@ -202,7 +202,7 @@ void CInput::ProcessInput()
     if (!m_pEditbox)
         return;
 
-    strncpy(m_szInput, m_pEditbox->GetText(), 128);
+    strncpy_s(m_szInput, m_pEditbox->GetText(), 128);
     m_szInput[128] = 0;
     if (strlen(m_szInput))
     {
@@ -235,7 +235,7 @@ void CInput::ProcessInput()
             {
                 // Preserve the complete command before splitting its name.
                 char full[129];
-                strcpy(full, m_szInput);
+                strncpy_s(full, m_szInput, _TRUNCATE);
                 *space = 0;
                 InputCommand command = GetCommandHandler(name);
                 if (command)

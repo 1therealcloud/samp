@@ -116,7 +116,7 @@ FontSize CFonts::GetTextScreenSize(const char* text, int format)
     FontSize size = {0, 0};
     if (strlen(text) > 100000)
         return size;
-    strcpy(m_szTempBuffer, text);
+    strncpy_s(m_szTempBuffer, 100001, text, _TRUNCATE);
     ChatStripColorTags(m_szTempBuffer);
     RECT rect;
     m_pFont->DrawTextA(0, m_szTempBuffer, -1, &rect, format | DT_CALCRECT, 0xff000000);
@@ -131,7 +131,7 @@ FontSize CFonts::GetLittleTextScreenSize(const char* text, int format)
     FontSize size = {0, 0};
     if (strlen(text) > 100000)
         return size;
-    strcpy(m_szTempBuffer, text);
+    strncpy_s(m_szTempBuffer, 100001, text, _TRUNCATE);
     ChatStripColorTags(m_szTempBuffer);
     RECT rect;
     m_pLittleFont->DrawTextA(0, m_szTempBuffer, -1, &rect, format | DT_CALCRECT, 0xff000000);
@@ -156,7 +156,7 @@ void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR
     {
         if (strlen(text) > 100000)
             return;
-        strcpy(m_szTempBuffer, text);
+        strncpy_s(m_szTempBuffer, 100001, text, _TRUNCATE);
         ChatStripColorTags(m_szTempBuffer);
         int length = (int)strlen(m_szTempBuffer);
         --rect.top;
@@ -191,7 +191,7 @@ void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, in
     {
         if (strlen(text) > 100000)
             return;
-        strcpy(m_szTempBuffer, text);
+        strncpy_s(m_szTempBuffer, 100001, text, _TRUNCATE);
         ChatStripColorTags(m_szTempBuffer);
         int length = (int)strlen(m_szTempBuffer);
         --rect.top;
@@ -219,7 +219,7 @@ void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
     sprite->Begin(D3DXSPRITE_ALPHABLEND);
     if (strlen(text) > 100000)
         return;
-    strcpy(m_szTempBuffer, text);
+    strncpy_s(m_szTempBuffer, 100001, text, _TRUNCATE);
     ChatStripColorTags(m_szTempBuffer);
     int length = (int)strlen(m_szTempBuffer);
     rect.top -= 2;

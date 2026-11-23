@@ -24,7 +24,7 @@ void CreateArchive(PCHAR szFileList, PCHAR szArchive)
 
 	// Load the file list
 	FILE* fiList;
-	fiList = fopen(szFileList, "rb");
+	fopen_s(&fiList, szFileList, "rb");
 	if (!fiList)
 		throw "Could not find file list.";
 	fseek(fiList, 0, SEEK_END);
@@ -37,14 +37,15 @@ void CreateArchive(PCHAR szFileList, PCHAR szArchive)
 
 	// Load the files and stuff
 	CHAR* szToken;
-	szToken = strtok(szFiles, "\r\n");
+	char* context = nullptr;
+	szToken = strtok_s(szFiles, "\r\n", &context);
 	while(szToken != NULL) {
 		if (szToken[0] != 0 && szToken[0] != '#') {
 			printf("Adding file: %s...\t", szToken);
 			DWORD hash = archiveBuilder.AddFile(szToken);
 			printf("  Added, file hash=0x%x\n", hash);
 		}
-		szToken = strtok(NULL, "\r\n");
+		szToken = strtok_s(nullptr, "\r\n", &context);
 	}
 
 	// Write the archive
@@ -97,7 +98,7 @@ void VerifyArchive(PCHAR szFileList, PCHAR szArchive)
 
 	// Load the file list
 	FILE* fiList;
-	fiList = fopen(szFileList, "rb");
+	fopen_s(&fiList, szFileList, "rb");
 	if (!fiList)
 		throw "Could not find file list.";
 	fseek(fiList, 0, SEEK_END);
@@ -116,7 +117,8 @@ void VerifyArchive(PCHAR szFileList, PCHAR szArchive)
 	CHAR* szToken;
 	FILE* fiData;
 
-	szToken = strtok(szFiles, "\r\n");
+	char* context = nullptr;
+	szToken = strtok_s(szFiles, "\r\n", &context);
 	while(szToken != NULL) {
 		if (szToken[0] != 0 && szToken[0] != '#') {
 			
@@ -131,7 +133,7 @@ void VerifyArchive(PCHAR szFileList, PCHAR szArchive)
 				printf("Verifying file: %s...\t", szToken);
 
 				// Load the actual file and verify the data
-				fiData = fopen(szToken, "rb");
+				fopen_s(&fiData, szToken, "rb");
 
 				if (dwFileSize == 0)
 					printf("  Warning: 0 byte file.\n");
@@ -159,7 +161,7 @@ void VerifyArchive(PCHAR szFileList, PCHAR szArchive)
 			}
 
 		}
-		szToken = strtok(NULL, "\r\n");
+		szToken = strtok_s(nullptr, "\r\n", &context);
 	}
 
 	// Close the archive
@@ -194,7 +196,7 @@ void VerifyArchiveSingle(PCHAR szFile, PCHAR szArchive)
 		printf("Verifying file: %s...\t", szFile);
 
 		// Load the actual file and verify the data
-		fiData = fopen(szFile, "rb");
+		fopen_s(&fiData, szFile, "rb");
 
 		if (dwFileSize == 0)
 			printf("  Warning: 0 byte file.\n");

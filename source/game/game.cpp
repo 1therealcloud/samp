@@ -888,7 +888,7 @@ void CGame::DisplayGameText(const char* text, int time, int style)
     {
         Scripting::ProcessCommand(&g_gameClearTextCommand);
         *(DWORD*)g_gameTextBuffer = 0;
-        strncpy(g_gameTextBuffer, text, 512);
+        strncpy_s(g_gameTextBuffer, 513, text, 512);
         // GTA SA virtual address: 0x0069f2b0, cdecl.
         // clang-format off
         __asm
@@ -1373,7 +1373,7 @@ DWORD __cdecl GameFrameNodeNameHook(void* arg0, DWORD length, void* arg2)
     {
         if (g_pGame)
         {
-            _snprintf(g_gameFrameNodeError, 256, "SA-MP: FrameNode name was too long (%u). SA-MP must exit.", length);
+            snprintf(g_gameFrameNodeError, 256, "SA-MP: FrameNode name was too long (%u). SA-MP must exit.", length);
             ShowWindow((*(HWND*)0x00c97c1c), SW_MINIMIZE);
             MessageBoxA(0, g_gameFrameNodeError, "SA-MP", MB_ICONWARNING);
         }

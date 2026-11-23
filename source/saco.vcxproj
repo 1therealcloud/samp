@@ -51,6 +51,9 @@
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <IncludePath>$(IncludePath);C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include</IncludePath>
+  </PropertyGroup>
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'" Label="PropertySheets">
@@ -96,8 +99,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;STRSAFE_USE_SECURE_CRT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -140,8 +143,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;STRSAFE_USE_SECURE_CRT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -179,8 +182,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;STRSAFE_USE_SECURE_CRT=1;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -222,8 +225,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;STRSAFE_USE_SECURE_CRT=1;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

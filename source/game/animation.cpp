@@ -18,7 +18,7 @@ WORD GameFindAnimation(const char* library, const char* name)
     if (strlen(library) + strlen(name) > 36)
         return 0xffff;
     char combined[40];
-    sprintf(combined, "%s:%s", library, name);
+    snprintf(combined, sizeof(combined), "%s:%s", library, name);
     Util_strupr(combined);
     for (int i = 0; i < 1812; i++)
         if (!strcmp(combined, g_animationNames[i]))
@@ -45,12 +45,11 @@ void GameInitializeAnimationKeys()
 {
     for (int i = 0; i < 1812; i++)
     {
-        char library[32] = {0}, name[32] = {0};
+        char name[32] = {0};
         char* separator = strchr(g_animationNames[i], ':');
         if (separator)
         {
-            strncpy(library, g_animationNames[i], separator - g_animationNames[i]);
-            strcpy(name, separator + 1);
+            strncpy_s(name, separator + 1, _TRUNCATE);
             g_animationKeys[i] = GameAnimationKey(name);
         }
     }

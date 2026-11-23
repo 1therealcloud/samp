@@ -1787,7 +1787,7 @@ void CLocalPlayer::DrawCameraTargetLabels()
         WORD id = m_state.cameraTargets[kind];
         if (id == 0xffff)
             continue;
-        sprintf(text, formats[kind], (unsigned)id);
+        snprintf(text, sizeof(text), formats[kind], (unsigned)id);
         CNetGamePools* pools = ((CNetGame*)g_pNetGame)->pools;
         id = m_state.cameraTargets[kind];
         CEntity* entity = 0;

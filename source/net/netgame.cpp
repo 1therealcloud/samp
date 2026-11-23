@@ -148,7 +148,7 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
     memset(hostName, 0, 256);
     memset(hostOrIp, 0, 256);
     memcpy(hostName, g_netDefaultHostName, 6);
-    strncpy(hostOrIp, host, 257);
+    strncpy_s(hostOrIp, host, _TRUNCATE);
     serverPort = port;
     rakClient = RakNetworkFactory::GetRakClientInterface();
     InitializePools();
@@ -237,7 +237,7 @@ void __cdecl NetDigestToHex(char* output, const BYTE* digest)
 }
 
 // 0x0005fa60
-void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor)
+void __cdecl NetGenerateGpci(char (&output)[101], const char* seed, DWORD factor)
 {
     DWORD digest[5] = {0};
     ArchiveComputeNameDigest(seed, (DWORD)strlen(seed), digest);
@@ -259,7 +259,7 @@ void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor)
     value.MulInt(factor);
     std::string text;
     value.ToString(text, 16);
-    strcpy(output, text.c_str());
+    strncpy_s(output, text.c_str(), _TRUNCATE);
 }
 
 // 0x000571b0

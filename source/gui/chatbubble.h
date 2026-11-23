@@ -31,7 +31,6 @@ static_assert(offsetof(ChatBubbleEntry, created) == 0x104);
 static_assert(sizeof(CChatBubble) == 0x44a20);
 // Mutates the caller buffer; valid length<=512 does not bound resulting length.
 // 0x000171a0
-int FormatChatBubbleText(char* text, int width, int tolerance);
 // 0x0011bcd0
 extern const float g_chatBubbleLineDistanceScale;
 // 0x0011bccc

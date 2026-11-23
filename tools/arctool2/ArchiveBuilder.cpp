@@ -148,12 +148,12 @@ DWORD CArchiveBuilder::AddFile(PCHAR szFileName)
 	if ((strlen(szNameOnly)+1) > sizeof(pEntry->szFileName))
 		throw "Internal Error: Not enough memory allocated for the length of the filename.";
 
-	strcpy(pEntry->szFileName, szNameOnly);
-	_strlwr(pEntry->szFileName);
+	strncpy_s(pEntry->szFileName, szNameOnly, _TRUNCATE);
+	_strlwr_s(pEntry->szFileName);
 	pEntry->dwFileNameHash = HashString(pEntry->szFileName);
 
 	FILE* fiFile;
-	fiFile = fopen(szFileName, "rb");
+	fopen_s(&fiFile, szFileName, "rb");
 	if (!fiFile)
 		throw "Could not load archive data file.";
 	
@@ -422,7 +422,7 @@ void CArchiveBuilder::WriteArchive(PCHAR szFileName)
 	SAA_ENTRY *pEntryTable;
 	FILE* fiArchive;
 
-	fiArchive = fopen(szFileName, "w+b");
+	fopen_s(&fiArchive, szFileName, "w+b");
 
 	pEntryTable = new SAA_ENTRY[m_dwNumEntries];
 

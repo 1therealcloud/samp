@@ -86,7 +86,9 @@ bool CColModel::GenerateBox(const CGeometry* Geometry)
 bool CColModel::Save(const char* FileName, const char* ModelName)
 {
     CMemoryStream Output;
-    strncpy(Header.Name, ModelName, 20);
+    const size_t nameLength = strnlen(ModelName, sizeof(Header.Name));
+    memset(Header.Name, 0, sizeof(Header.Name));
+    memcpy(Header.Name, ModelName, nameLength);
     Header.Size = 0x74;
     Output.Write(&Header, 0x78);
     unsigned int i;

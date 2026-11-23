@@ -624,7 +624,7 @@ void CVehicle::SetPaintjob(BYTE paintjob)
 // 0x000b7c80
 void CVehicle::SetLicensePlateText(const char* text)
 {
-    strncpy(m_szLicensePlateText, text, 32);
+    strncpy_s(m_szLicensePlateText, text, 32);
 }
 
 // 0x000b7ca0

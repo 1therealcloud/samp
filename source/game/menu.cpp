@@ -39,7 +39,7 @@ CMenu::CMenu(const char* title, float x, float y, BYTE columns, float width1, fl
     this->title[0] = 0;
     columnTitles[0][0] = 0;
     columnTitles[1][0] = 0;
-    strncpy(this->title, title, sizeof(this->title) - 1);
+    strncpy_s(this->title, title, sizeof(this->title) - 1);
     this->title[sizeof(this->title) - 1] = 0;
     memcpy(&this->x, &x, 4);
     memcpy(&this->y, &y, 4);
@@ -55,7 +55,7 @@ void CMenu::AddItem(BYTE column, BYTE row, const char* text)
 {
     if (column >= 2 || row >= 12)
         return;
-    strncpy(items[row][column], text, sizeof(items[row][column]) - 1);
+    strncpy_s(items[row][column], text, sizeof(items[row][column]) - 1);
     items[row][column][sizeof(items[row][column]) - 1] = 0;
 }
 
@@ -64,7 +64,7 @@ void CMenu::SetColumnTitle(BYTE column, const char* text)
 {
     if (column >= 2)
         return;
-    strncpy(columnTitles[column], text, sizeof(columnTitles[column]) - 1);
+    strncpy_s(columnTitles[column], text, sizeof(columnTitles[column]) - 1);
     columnTitles[column][sizeof(columnTitles[column]) - 1] = 0;
 }
 

@@ -309,7 +309,7 @@ void __cdecl NetDigestToHex(char* output, const BYTE* digest);
 // 0x000571b0
 void __cdecl NetGenerateAuthKey(char* output, const char* challenge);
 // 0x0005fa60
-void __cdecl NetGenerateGpci(char* output, const char* seed, DWORD factor);
+void __cdecl NetGenerateGpci(char (&output)[101], const char* seed, DWORD factor);
 // 0x00117bc8
 extern const char g_netConnectionLostMessage[];
 // 0x00117c08

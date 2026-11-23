@@ -152,14 +152,14 @@ void CScoreboard::UpdateList()
     for (int i = 0; i < count; i++)
     {
         row = rows + i;
-        sprintf(text, g_scoreboardUnsignedFormat, row->id);
+        snprintf(text, sizeof(text), g_scoreboardUnsignedFormat, row->id);
         list->AddItem(text, (void*)row->id, row->color);
         if (list->GetItem(i) && *row->name)
         {
             list->SetSubItemText(i, 0, row->name);
-            sprintf(text, g_scoreboardSignedFormat, row->score);
+            snprintf(text, sizeof(text), g_scoreboardSignedFormat, row->score);
             list->SetSubItemText(i, 1, text);
-            sprintf(text, g_scoreboardUnsignedFormat, row->ping);
+            snprintf(text, sizeof(text), g_scoreboardUnsignedFormat, row->ping);
             list->SetSubItemText(i, 2, text);
         }
     }
@@ -200,7 +200,7 @@ void CScoreboard::Draw()
             count = players->GetCount(FALSE) + 1;
     }
     char counter[64];
-    sprintf(counter, g_scoreboardCountFormat, count);
+    snprintf(counter, sizeof(counter), g_scoreboardCountFormat, count);
     LONG left = (LONG)(__int64)((double)x + g_scoreboardHeaderInset);
     LONG top = (LONG)(__int64)((double)y + g_scoreboardHeaderInset);
     LONG right = (LONG)(__int64)((double)x + width);

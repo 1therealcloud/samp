@@ -7551,7 +7551,8 @@ HRESULT CDXUTDialogResourceManager::CreateFont(UINT index)
     wrapper->font = node->pFont;
     node->pFont = wrapper;
     char debug[260];
-    sprintf(debug, "CDXUTDialogResourceManager::CreateFont(pFont=0x%X,pD3DDevice=0x%X)", wrapper, m_pd3dDevice);
+    snprintf(debug, sizeof(debug), "CDXUTDialogResourceManager::CreateFont(pFont=0x%X,pD3DDevice=0x%X)", reinterpret_cast<UINT_PTR>(wrapper),
+             reinterpret_cast<UINT_PTR>(m_pd3dDevice));
     return S_OK;
 }
 
@@ -8703,7 +8704,7 @@ void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
     if (row < 0 || row >= items.GetSize() || column < 0 || column >= columnCount)
         return;
     memset(items[row]->subitems[column], 0, 128);
-    strncpy(items[row]->subitems[column], value, 128);
+    strncpy_s(items[row]->subitems[column], value, 128);
 }
 
 // 0x0008a440

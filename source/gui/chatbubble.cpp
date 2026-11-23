@@ -17,14 +17,11 @@ const float g_chatBubbleDistanceBase = 0.065f;
 const float g_chatBubbleHeightLift = 0.2f;
 
 // 0x000171a0
-int FormatChatBubbleText(char* text, int width, int tolerance)
+static int FormatChatBubbleText(char (&text)[256], int width, int tolerance)
 {
     int remaining = (int)strlen(text);
     int base = 0, cursor = width, rows = 1;
-    char temporary[513];
-    memset(temporary, 0, sizeof(temporary));
-    if (strlen(text) > 512)
-        return -1;
+    size_t length = remaining;
     while (remaining > width)
     {
         int boundary = width;
@@ -32,10 +29,11 @@ int FormatChatBubbleText(char* text, int width, int tolerance)
             --boundary;
         if (cursor - base - boundary > tolerance)
         {
-            strcpy(temporary, text + cursor);
-            text[cursor + 1] = 0;
+            if (length + 1 >= sizeof(text))
+                return rows;
+            memmove(text + cursor + 1, text + cursor, length - cursor + 1);
             text[cursor] = '\n';
-            strcat(text, temporary);
+            ++length;
             remaining -= width;
             base = cursor + 1;
             cursor = base + width;
@@ -69,7 +67,7 @@ void CChatBubble::Add(WORD player, const char* text, DWORD color, float drawDist
         return;
     DWORD converted = (color >> 8) | 0xff000000;
     // Native copies only after clearing and validating the source length.
-    strcpy(entries[player].text, text);
+    strcpy_s(entry->text, text);
     entry->rows = FormatChatBubbleText(entry->text, 36, 12);
     entry->color = converted;
     memcpy(&entry->drawDistance, &drawDistance, 4);

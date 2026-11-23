@@ -33,15 +33,15 @@ void ClientSendCrashReport()
     CHttpClient http;
     char url[256], encoded[16384];
     ClientConstructCrashText(TRUE);
-    strcpy(encoded, "data=");
+    strcpy_s(encoded, "data=");
     Util_Base64Encode(g_clientCrashText, encoded + 5);
-    sprintf(url, "team.sa-mp.com/report_037.php?addr=0x%X&gta=sa", g_clientExceptionContext->Eip);
+    snprintf(url, sizeof(url), "team.sa-mp.com/report_037.php?addr=0x%X&gta=sa", g_clientExceptionContext->Eip);
     http.ProcessURL(HTTP_POST, url, encoded, "www.sa-mp.com");
 }
 */
 
 // 0x0005fd50
-void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
+void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asDwords)
 {
     char line[16384];
     for (int offset = 0; offset < count; offset += 16)
@@ -50,55 +50,55 @@ void ClientDumpMemory(const BYTE* data, int count, char* text, BOOL asDwords)
         if (asDwords)
         {
             const DWORD* words = (const DWORD*)p;
-            sprintf(line, "+%04X: 0x%08X   0x%08X   0x%08X   0x%08X\r\n", offset, words[0], words[1], words[2], words[3]);
+            snprintf(line, sizeof(line), "+%04X: 0x%08X   0x%08X   0x%08X   0x%08X\r\n", offset, words[0], words[1], words[2], words[3]);
         }
         else
         {
-            sprintf(line, "+%04X: %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X\r\n", offset, p[0], p[1], p[2], p[3], p[4], p[5], p[6],
+            snprintf(line, sizeof(line), "+%04X: %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X %02X %02X\r\n", offset, p[0], p[1], p[2], p[3], p[4], p[5], p[6],
                     p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);
         }
-        strcat(text, line);
+        strncat_s(text, line, _TRUNCATE);
     }
 }
 
 // 0x0005fc20
-void ClientDumpNetworkState(char* text)
+void ClientDumpNetworkState(char (&text)[16384])
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     BYTE* players = *(BYTE**)(pools + 8);
     char line[16384];
     text[0] = 0;
-    sprintf(text, "\r\nState Information: Ped Context: %u\r\n", (unsigned)*g_clientCrashPedContext);
+    snprintf(text, sizeof(text), "\r\nState Information: Ped Context: %u\r\n", (unsigned)*g_clientCrashPedContext);
     for (WORD index = 0; index < 1004; ++index)
     {
         if (*(BOOL*)(players + 0xfd6 + index * 4))
         {
             BYTE* remote = *(BYTE**)(players + 0x26 + index * 4);
             BYTE* player = remote ? *(BYTE**)(remote + 8) : 0;
-            sprintf(line, "P%u (%u,%u) ", (unsigned)index, (unsigned)player[0x1a], (unsigned)*(WORD*)(player + 2));
-            strcat(text, line);
+            snprintf(line, sizeof(line), "P%u (%u,%u) ", (unsigned)index, (unsigned)player[0x1a], (unsigned)*(WORD*)(player + 2));
+            strncat_s(text, line, _TRUNCATE);
             if (index && ((index + 1) % 4) == 0)
-                strcat(text, "\r\n");
+                strncat_s(text, "\r\n", _TRUNCATE);
         }
     }
 }
 
 // 0x0005fee0
-void ClientDumpLoadedModules(char* text)
+void ClientDumpLoadedModules(char (&text)[16384])
 {
     MODULEENTRY32 entry;
     char line[16384];
     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
-    strcpy(text, "\r\nLoaded Modules:\r\n");
+    strcpy_s(text, "\r\nLoaded Modules:\r\n");
     if (snapshot == INVALID_HANDLE_VALUE)
     {
-        strcat(text, "-FailedCreate-\r\n");
+        strncat_s(text, "-FailedCreate-\r\n", _TRUNCATE);
         return;
     }
     entry.dwSize = sizeof(entry);
     if (!Module32First(snapshot, &entry))
     {
-        strcat(text, "-FailedFirst-");
+        strncat_s(text, "-FailedFirst-", _TRUNCATE);
         CloseHandle(snapshot);
         return;
     }
@@ -106,8 +106,8 @@ void ClientDumpLoadedModules(char* text)
     {
         if (entry.szModule[0] != 'f' && entry.szModule[1] != 'l' && entry.szModule[2] != 'a')
         {
-            sprintf(line, "%s\tB: 0x%08X\tS: 0x%08X\t(%s)\r\n", entry.szModule, entry.modBaseAddr, entry.modBaseSize, entry.szExePath);
-            strcat(text, line);
+            snprintf(line, sizeof(line), "%s\tB: 0x%08X\tS: 0x%08X\t(%s)\r\n", entry.szModule, reinterpret_cast<UINT_PTR>(entry.modBaseAddr), entry.modBaseSize, entry.szExePath);
+            strncat_s(text, line, _TRUNCATE);
         }
     }
     while (Module32Next(snapshot, &entry));
@@ -119,7 +119,7 @@ void ClientConstructCrashText(BOOL includeModules)
 {
     char text[16384];
     CONTEXT* c = g_clientExceptionContext;
-    sprintf(g_clientCrashText,
+    snprintf(g_clientCrashText, sizeof(g_clientCrashText),
             "SA-MP %s\r\nException At Address: 0x%08X\r\nBase: 0x%08X\r\n\r\nRegisters:\r\nEAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\r\nESI: 0x%08X\tEDI: 0x%08X\tEBP: "
             "0x%08X\tESP: 0x%08X\r\nEFLAGS: 0x%08X\r\n\r\nStack:\r\n",
 #if defined(DL_BUILD)
@@ -127,23 +127,23 @@ void ClientConstructCrashText(BOOL includeModules)
 #else  // DL_BUILD
             "0.3.7-R5",
 #endif // DL_BUILD
-            c->Eip, g_clientModule, c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
+            c->Eip, reinterpret_cast<UINT_PTR>(g_clientModule), c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
 
     ClientDumpMemory((const BYTE*)c->Esp, 640, g_clientCrashText, TRUE);
-    sprintf(text, "\r\nSCM Op: 0x%X, lDbg: %d LastRendObj: %u\r\n", g_scriptLastOpcode, g_scriptLocalDebug, (unsigned)g_clientCrashLastRenderedObject);
-    strcat(g_clientCrashText, text);
+    snprintf(text, sizeof(text), "\r\nSCM Op: 0x%X, lDbg: %d LastRendObj: %u\r\n", g_scriptLastOpcode, g_scriptLocalDebug, (unsigned)g_clientCrashLastRenderedObject);
+    strncat_s(g_clientCrashText, text, _TRUNCATE);
     const char* version = g_gameVersion == 1 ? "US 1.0" : g_gameVersion == 2 ? "EU 1.0" : "UNKNOWN";
-    sprintf(text, "\r\nGame Version: %s\r\n", version);
-    strcat(g_clientCrashText, text);
+    snprintf(text, sizeof(text), "\r\nGame Version: %s\r\n", version);
+    strncat_s(g_clientCrashText, text, _TRUNCATE);
     if (g_pNetGame)
     {
         ClientDumpNetworkState(text);
-        strcat(g_clientCrashText, text);
+        strncat_s(g_clientCrashText, text, _TRUNCATE);
     }
     if (includeModules)
     {
         ClientDumpLoadedModules(text);
-        strcat(g_clientCrashText, text);
+        strncat_s(g_clientCrashText, text, _TRUNCATE);
     }
 }
 

@@ -56,8 +56,8 @@ void ClientInitializeDeviceAndGui()
         return;
     }
     ClientInitializePaths();
-    sprintf(g_clientConfigFilename, "%s\\sa-mp.cfg", g_clientDataDirectory);
-    sprintf(g_clientChatFilename, "%s\\chatlog.txt", g_clientDataDirectory);
+    snprintf(g_clientConfigFilename, sizeof(g_clientConfigFilename), "%s\\sa-mp.cfg", g_clientDataDirectory);
+    snprintf(g_clientChatFilename, sizeof(g_clientChatFilename), "%s\\chatlog.txt", g_clientDataDirectory);
     g_pConfig = new CConfig(g_clientConfigFilename);
     timeBeginPeriod(1);
     GameMarkStartupStage();

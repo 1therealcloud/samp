@@ -111,8 +111,9 @@ void CSpawnScreen::SetText(const char* value)
     text = 0;
     if (value)
     {
-        text = (char*)::operator new(strlen(value) + 1);
-        strcpy(text, value);
+        const size_t length = strlen(value) + 1;
+        text = (char*)::operator new(length);
+        memcpy(text, value, length);
     }
 }
 

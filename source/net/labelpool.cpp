@@ -55,11 +55,16 @@ void CLabelPool::Create(WORD id, const char* text, DWORD color, CVector position
         memset(&labels[id], 0, sizeof(TextLabel));
     }
     color = (color << 24) | (color >> 8);
-    char* allocated = (char*)calloc(1, strlen(text) + 1);
+    const size_t textSize = strlen(text) + 1;
+    char* allocated = (char*)calloc(1, textSize < 400 ? 400 : textSize);
+    if (!allocated)
+    {
+        active[id] = 0;
+        return;
+    }
     TextLabel* entry = &labels[id];
     entry->text = allocated;
-    // Native copies after freeing the old text and does not recover from OOM.
-    strcpy(allocated, text);
+    memcpy(allocated, text, textSize);
     if (strlen(entry->text) < 400)
         ChatPrepareMessage(entry->text, 399);
     entry->color = color;

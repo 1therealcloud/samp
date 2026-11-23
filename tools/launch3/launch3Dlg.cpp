@@ -64,8 +64,8 @@ void LaunchGame(LPCSTR directory, LPSTR arguments, DWORD unused)
     char application[256];
     char dll[256];
 
-    sprintf(application, "%s\\%s", directory, "gta_sa.exe");
-    sprintf(dll, "%s\\%s", directory, "samp.dll");
+    snprintf(application, sizeof(application), "%s\\%s", directory, "gta_sa.exe");
+    snprintf(dll, sizeof(dll), "%s\\%s", directory, "samp.dll");
 
     ZeroMemory(&g_processInformation, sizeof(g_processInformation));
     ZeroMemory(&g_startupInformation, sizeof(g_startupInformation));

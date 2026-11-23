@@ -18,7 +18,7 @@ void logprintf(char* format, ...)
 	va_list ap;
 	va_start(ap, format);
 	char buffer[512];
-	vsprintf(buffer, format, ap);
+	vsnprintf(buffer, sizeof(buffer), format, ap);
 	va_end(ap);
 	puts(buffer);
 }
@@ -165,7 +165,7 @@ int main (int argc, char** argv)
 		return 0;
 	}
 
-	sscanf(szHost, "%d.%d.%d.%d", &ipblock[0], &ipblock[1], &ipblock[2], &ipblock[3]);
+	sscanf_s(szHost, "%d.%d.%d.%d", &ipblock[0], &ipblock[1], &ipblock[2], &ipblock[3]);
 	wPort = (WORD)atoi(argv[2]);
 	szPassword = argv[3];
 	logprintf("Remote Console: %d.%d.%d.%d:%d...\n", ipblock[0], ipblock[1], ipblock[2], ipblock[3], wPort);

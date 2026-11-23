@@ -161,8 +161,9 @@ void Commands::SavePosition(char* params)
 {
     CPed* ped = g_pGame->GetPlayerPed();
     char path[260];
-    sprintf(path, "%s\\savedpositions.txt", ClientGetDataDirectory());
-    FILE* file = fopen(path, "a");
+    snprintf(path, sizeof(path), "%s\\savedpositions.txt", ClientGetDataDirectory());
+    FILE* file = nullptr;
+    fopen_s(&file, path, "a");
     if (!file)
     {
         g_pChat->AddDebugMessage("I can't open the savepositions.txt file for append.");
@@ -199,7 +200,8 @@ void Commands::SavePositionOnly(char* params)
     float angle;
     if (ped->IsInVehicle())
     {
-        FILE* file = fopen("rawvehicles.txt", "a");
+        FILE* file = nullptr;
+        fopen_s(&file, "rawvehicles.txt", "a");
         if (!file)
         {
             g_pChat->AddDebugMessage("I can't open the rawvehicles.txt file for append.");
@@ -219,8 +221,9 @@ void Commands::SavePositionOnly(char* params)
         BYTE* backend = (BYTE*)ped->m_pGamePed;
         Scripting::ProcessCommand(&g_commandGetActorAngle, ped->m_nHandle, &angle);
         char path[260];
-        sprintf(path, "%s\\rawpositions.txt", ClientGetDataDirectory());
-        FILE* file = fopen(path, "a");
+        snprintf(path, sizeof(path), "%s\\rawpositions.txt", ClientGetDataDirectory());
+        FILE* file = nullptr;
+        fopen_s(&file, path, "a");
         if (!file)
         {
             g_pChat->AddDebugMessage("I can't open the rawvehicles.txt file for append.");
@@ -440,7 +443,7 @@ void Commands::DebugSetWorldTime(char* params)
         return;
     }
     int hour = 0, minute = 0;
-    sscanf(params, "%d%d", &hour, &minute);
+    sscanf_s(params, "%d%d", &hour, &minute);
     if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59)
     {
         g_pGame->SetWorldTime(hour, minute);

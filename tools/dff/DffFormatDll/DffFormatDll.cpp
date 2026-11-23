@@ -77,7 +77,7 @@ int __cdecl AppendColToDff(const char* SourceDff, const char* SourceCol, const c
     if (Result < 1)
     {
         char Buffer[512];
-        _snprintf(Buffer, sizeof(Buffer), "[kdffdll:error:appendcol] Could not append col to file. Error: %d\n", Result);
+        snprintf(Buffer, sizeof(Buffer), "[kdffdll:error:appendcol] Could not append col to file. Error: %d\n", Result);
         OutputDebugStringA(Buffer);
         return 7;
     }

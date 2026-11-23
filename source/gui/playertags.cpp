@@ -343,7 +343,7 @@ void ClientDrawLabels()
                                                 aim->source.y, aim->source.z, 1, 0, 0, 1, 0);
         if (((CNetGame*)g_pNetGame)->settings->nameTagLineOfSight && !visible)
             continue;
-        sprintf(g_nametagName, g_nametagNameFormat, players->GetName(id), (int)counter);
+        snprintf(g_nametagName, sizeof(g_nametagName), g_nametagNameFormat, players->GetName(id), (int)counter);
         if (*(DWORD*)(remoteState + 0x1c))
             continue;
         int status = remote->GetStatus();

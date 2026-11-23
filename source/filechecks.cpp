@@ -14,7 +14,7 @@ DWORD g_archiveTrackedNameDigests[3][5] = {{0x11c714fd, 0x0a46694e, 0x7aec2920, 
 // 0x00062b00
 char* GetSHA1Result(unsigned int* digest, char* buffer)
 {
-    sprintf(buffer, "%08X%08X%08X%08X%08X", digest[4], digest[2], digest[3], digest[1], digest[0]);
+    snprintf(buffer, 41, "%08X%08X%08X%08X%08X", digest[4], digest[2], digest[3], digest[1], digest[0]);
     return buffer;
 }
 
@@ -64,7 +64,8 @@ void ArchiveComputeFileDigest(const char* filename, DWORD* digest)
 {
     memset(digest, 0, 20);
 
-    FILE* file = fopen(filename, "rb");
+    FILE* file = nullptr;
+    fopen_s(&file, filename, "rb");
     if (!file)
         return;
 

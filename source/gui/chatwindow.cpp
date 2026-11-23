@@ -201,10 +201,15 @@ void CChat::Log(int type, const char* text, const char* prefix)
     char stamp[65];
     if (m_bDoesLogExist)
     {
-        FILE* file = fopen(m_szLogPath, "a");
+        FILE* file = nullptr;
+        fopen_s(&file, m_szLogPath, "a");
         if (file)
         {
-            strftime(stamp, 64, "[%H:%M:%S]", localtime(&now));
+            tm timeInfo;
+            if (localtime_s(&timeInfo, &now) == 0)
+                strftime(stamp, sizeof(stamp), "[%H:%M:%S]", &timeInfo);
+            else
+                stamp[0] = 0;
             switch (type)
             {
                 case ENTRY_TYPE_CHAT:
@@ -248,8 +253,8 @@ void CChat::AddEntry(int type, const char* text, const char* prefix, D3DCOLOR co
     entry.timestamp = time(0);
     if (prefix)
     {
-        strcpy(entry.prefix, prefix);
-        strcat(entry.prefix, ":");
+        strncpy_s(entry.prefix, prefix, sizeof(entry.prefix) - 2);
+        strncat_s(entry.prefix, ":", _TRUNCATE);
     }
     else
         entry.prefix[0] = 0;
@@ -261,30 +266,30 @@ void CChat::AddEntry(int type, const char* text, const char* prefix, D3DCOLOR co
             --split;
         if (MAX_LINE_LENGTH - split > 12)
         {
-            strncpy(entry.text, text, MAX_LINE_LENGTH);
+            strncpy_s(entry.text, text, MAX_LINE_LENGTH);
             entry.text[MAX_LINE_LENGTH] = 0;
             PushBack();
             entry.type = type;
             entry.textColor = color;
             entry.prefixColor = prefixColor;
             entry.prefix[0] = 0;
-            strcpy(entry.text, text + MAX_LINE_LENGTH);
+            strncpy_s(entry.text, text + MAX_LINE_LENGTH, _TRUNCATE);
         }
         else
         {
-            strncpy(entry.text, text, split);
+            strncpy_s(entry.text, text, split);
             entry.text[split] = 0;
             PushBack();
             entry.type = type;
             entry.textColor = color;
             entry.prefixColor = prefixColor;
             entry.prefix[0] = 0;
-            strcpy(entry.text, text + split + 1);
+            strncpy_s(entry.text, text + split + 1, _TRUNCATE);
         }
     }
     else
     {
-        strncpy(entry.text, text, MAX_MESSAGE_LENGTH);
+        strncpy_s(entry.text, text, _TRUNCATE);
         entry.text[MAX_MESSAGE_LENGTH] = 0;
     }
     m_bRedraw = TRUE;
@@ -315,7 +320,7 @@ void CChat::AddInfoMessage(const char* format, ...)
     memset(text, 0, sizeof(text));
     va_list args;
     va_start(args, format);
-    vsprintf(text, format, args);
+    vsnprintf(text, sizeof(text), format, args);
     va_end(args);
     FilterOutInvalidChars(text);
     AddEntry(ENTRY_TYPE_INFO, text, 0, m_infoColor, 0);
@@ -328,7 +333,7 @@ void CChat::AddDebugMessage(const char* format, ...)
     memset(text, 0, sizeof(text));
     va_list args;
     va_start(args, format);
-    vsprintf(text, format, args);
+    vsnprintf(text, sizeof(text), format, args);
     va_end(args);
     FilterOutInvalidChars(text);
     AddEntry(ENTRY_TYPE_DEBUG, text, 0, m_debugColor, 0);
@@ -356,8 +361,9 @@ CChat::CChat(IDirect3DDevice9* device, CFonts* fonts, const char* path)
     if (path && strlen(path))
     {
         memset(m_szLogPath, 0, sizeof(m_szLogPath));
-        strncpy(m_szLogPath, path, 260);
-        FILE* file = fopen(m_szLogPath, "w");
+        strncpy_s(m_szLogPath, path, 260);
+        FILE* file = nullptr;
+        fopen_s(&file, m_szLogPath, "w");
         if (file)
         {
             m_bDoesLogExist = TRUE;
@@ -510,10 +516,10 @@ void CChat::Render()
         if (m_bTimestamps)
         {
             time_t entryTime = (time_t)entry.timestamp;
-            tm* timeInfo = localtime(&entryTime);
+            tm timeInfo;
             memset(stamp, 0, 64);
-            if (timeInfo)
-                strftime(stamp, 64, "[%H:%M:%S]", timeInfo);
+            if (localtime_s(&timeInfo, &entryTime) == 0)
+                strftime(stamp, sizeof(stamp), "[%H:%M:%S]", &timeInfo);
         }
         switch (entry.type)
         {
@@ -560,7 +566,7 @@ void CChat::RenderEntry(const char* text, RECT rect, D3DCOLOR color)
     if (m_nMode == DISPLAY_MODE_NORMAL)
     {
         char plain[512] = {0};
-        strncpy(plain, text, 511);
+        strncpy_s(plain, text, 511);
         ChatStripColorTags(plain);
         int plainLength = strlen(plain);
         if ((*(int*)0x00c17044) > 1280)
@@ -644,7 +650,7 @@ unsigned long ChatParseColorTag(char* text)
     {
         char digits[17];
         memset(digits, 0, sizeof(digits));
-        strncpy(digits, text + 1, 6);
+        strncpy_s(digits, text + 1, 6);
         return strtoul(digits, 0, 16);
     }
     return 0xffffffff;
@@ -656,7 +662,7 @@ void ChatStripColorTags(char* text)
     while (*text)
     {
         if (ChatParseColorTag(text) != 0xffffffff)
-            strcpy(text, text + 8);
+            memmove(text, text + 8, strlen(text + 8) + 1);
         else
             ++text;
     }
@@ -670,7 +676,7 @@ int ChatPrepareMessage(char* text, int maximumLength)
     memset(buffer, 0, sizeof(buffer));
     if (text && strlen(text) < 400 && strstr(text, "~k~"))
     {
-        strcpy(buffer, text);
+        strncpy_s(buffer, text, _TRUNCATE);
 
         // GTA SA's key-token expansion routine, outside samp.dll.
         // Native GTA bridge preserves the target's register/stack convention.
@@ -687,7 +693,7 @@ int ChatPrepareMessage(char* text, int maximumLength)
         int length = (int)strlen(buffer);
         if (length <= maximumLength)
         {
-            strcpy(text, buffer);
+            memcpy(text, buffer, length + 1);
             return length;
         }
     }

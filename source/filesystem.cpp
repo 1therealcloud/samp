@@ -40,7 +40,8 @@ bool CFileSystem::Load(char* szFileName)
     if (m_bLoaded)
         Unload();
 
-    FILE* f = fopen(szFileName, "rb");
+    FILE* f = nullptr;
+    fopen_s(&f, szFileName, "rb");
     if (f)
     {
         // Header

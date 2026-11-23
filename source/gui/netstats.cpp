@@ -73,7 +73,7 @@ void CNetStats::Draw()
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     CLocalPlayer* local = *(CLocalPlayer**)(*(BYTE**)(pools + 8) + 0x1e);
     CPed* ped = *(CPed**)local;
-    sprintf(g_netStatsDisplay, g_netStatsRatesFormat, down, up);
+    snprintf(g_netStatsDisplay, sizeof(g_netStatsDisplay), g_netStatsRatesFormat, down, up);
     BYTE modelCounts[212] = {0};
     pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     CVehiclePool* vehicles = *(CVehiclePool**)(pools + 0xc);
@@ -104,35 +104,35 @@ void CNetStats::Draw()
         BYTE pedSlots = g_pGame->CountUsedPlayerSlots();
         DWORD rwObjects = g_pGame->GetRenderedBuildingCount();
         char text[256];
-        sprintf(text, g_netStatsModelsFormat, vehicleCount, uniqueModels, loadedModels, rwObjects, (DWORD)pedSlots, objectCount, shotComp, freeModels);
-        strcat(g_netStatsDisplay, text);
+        snprintf(text, sizeof(text), g_netStatsModelsFormat, vehicleCount, uniqueModels, loadedModels, rwObjects, (DWORD)pedSlots, objectCount, shotComp, freeModels);
+        strncat_s(g_netStatsDisplay, text, _TRUNCATE);
     }
     if (ped)
     {
         if (!ped->IsInVehicle())
-            sprintf(g_netStatsScratch, g_netStatsOnFootFormat, local->GetOnFootSendRate());
+            snprintf(g_netStatsScratch, sizeof(g_netStatsScratch), g_netStatsOnFootFormat, local->GetOnFootSendRate());
         else
-            sprintf(g_netStatsScratch, g_netStatsInCarFormat, local->GetInCarSendRate());
-        strcat(g_netStatsDisplay, g_netStatsScratch);
+            snprintf(g_netStatsScratch, sizeof(g_netStatsScratch), g_netStatsInCarFormat, local->GetInCarSendRate());
+        strncat_s(g_netStatsDisplay, g_netStatsScratch, _TRUNCATE);
     }
     if (g_pGame)
     {
         DWORD used = g_pGame->GetUsedMemory();
         DWORD total = g_pGame->GetStreamingMemory();
         if (used && total)
-            sprintf(g_netStatsScratch, g_netStatsMemoryFormat, used >> 20, total >> 20, g_gamePhysicalMegabytes);
+            snprintf(g_netStatsScratch, sizeof(g_netStatsScratch), g_netStatsMemoryFormat, used >> 20, total >> 20, g_gamePhysicalMegabytes);
         // Native appends the previous scratch contents when either value is0.
-        strcat(g_netStatsDisplay, g_netStatsScratch);
+        strncat_s(g_netStatsDisplay, g_netStatsScratch, _TRUNCATE);
     }
     PROCESS_MEMORY_COUNTERS memory;
     memset(&memory, 0, sizeof(memory));
     if (GetProcessMemoryInfo(GetCurrentProcess(), &memory, sizeof(memory)))
     {
-        sprintf(g_netStatsScratch, g_netStatsProcessFormat, memory.PagefileUsage >> 10, memory.WorkingSetSize >> 10);
-        strcat(g_netStatsDisplay, g_netStatsScratch);
+        snprintf(g_netStatsScratch, sizeof(g_netStatsScratch), g_netStatsProcessFormat, memory.PagefileUsage >> 10, memory.WorkingSetSize >> 10);
+        strncat_s(g_netStatsDisplay, g_netStatsScratch, _TRUNCATE);
     }
     StatisticsToString(stats, g_netStatsScratch, 4);
-    strcat(g_netStatsDisplay, g_netStatsScratch);
+    strncat_s(g_netStatsDisplay, g_netStatsScratch, _TRUNCATE);
     FontSize fullSize = g_deviceFonts->GetTextScreenSize(g_netStatsDisplay, 0);
     FontSize probe = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
     // GTA SA virtual address: width captured once for title and all body lines.

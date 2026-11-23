@@ -161,7 +161,7 @@ HANDLE WINAPI Arch_CreateFileA(LPCSTR name, DWORD access, DWORD share, LPSECURIT
         HANDLE handle = ArchiveCreateRecord(index);
         char fileName[MAX_PATH];
         DWORD digest[5];
-        strcpy(fileName, ArchiveFileNameOnly((char*)name));
+        strncpy_s(fileName, ArchiveFileNameOnly((char*)name), _TRUNCATE);
         ArchiveLowercaseName(fileName);
         ArchiveComputeNameDigest(fileName, strlen(fileName), digest);
         ArchivePublishNameDigest(digest);

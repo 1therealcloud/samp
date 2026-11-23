@@ -84,7 +84,8 @@ unsigned int CMemoryStream::Save(FILE* File)
 // 0x00002dc0
 unsigned int CMemoryStream::Save(const char* FileName)
 {
-    FILE* File = fopen(FileName, "wb");
+    FILE* File = nullptr;
+    fopen_s(&File, FileName, "wb");
     if (!File)
         return 0;
     Save(File);
@@ -149,7 +150,8 @@ unsigned int CMemoryStream::Load(const char* FileName)
         free(Data);
         Data = 0;
     }
-    FILE* File = fopen(FileName, "rb");
+    FILE* File = nullptr;
+    fopen_s(&File, FileName, "rb");
     if (!File)
         return 0;
     OwnsData = true;

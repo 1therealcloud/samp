@@ -312,7 +312,7 @@ DWORD CCustomModels::ParseCacheHash(const char* filename)
     if (filename[0] != '0' || filename[1] != 'x')
         return 0;
     char digits[12];
-    strncpy(digits, filename + 2, 8);
+    strncpy_s(digits, filename + 2, 8);
     return strtoul(digits, 0, 16);
 }
 
@@ -918,10 +918,10 @@ void CCustomModels::Initialize()
         return;
     GameInitializeCustomModelInfo();
     GameRegisterCustomCollisionPlugin();
-    _snprintf((char*)nativeState + 0x10e, 260, g_customLocalCachePattern, ClientGetCacheDirectory());
+    snprintf((char*)nativeState + 0x10e, 260, g_customLocalCachePattern, ClientGetCacheDirectory());
     char host[26] = {0};
     SanitizeCacheHost(host, 25, (const char*)((CNetGame*)g_pNetGame)->nativeState + 0x30);
-    _snprintf((char*)nativeState + 9, 260, g_customServerCachePattern, ClientGetCacheDirectory(), host, *(int*)(((CNetGame*)g_pNetGame)->nativeState + 0x235));
+    snprintf((char*)nativeState + 9, 260, g_customServerCachePattern, ClientGetCacheDirectory(), host, *(int*)(((CNetGame*)g_pNetGame)->nativeState + 0x235));
     if (!GameFileExists((char*)nativeState + 9))
         CreateDirectoryA((char*)nativeState + 9, 0);
     nativeState[8] = 1;
@@ -1045,7 +1045,7 @@ void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
         if (worker->enabled && !worker->active)
         {
             worker->download = *download;
-            strncpy(worker->url, url, 256);
+            strncpy_s(worker->url, url, 256);
             worker->active = 1;
             worker->paused = 0;
             return;
@@ -1066,7 +1066,9 @@ void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
         return;
     }
     *(DWORD*)(nativeState + 0x1340) = 0;
-    download.file = fopen(download.temporaryPath, g_customDownloadWriteMode);
+    FILE* file = nullptr;
+    fopen_s(&file, download.temporaryPath, g_customDownloadWriteMode);
+    download.file = file;
     if (!download.file)
     {
         if (g_pChat)
@@ -1231,9 +1233,9 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         return;
     }
     if (download->type == 1)
-        _snprintf(destination, 260, g_customDffCachePattern, (char*)this + 9, download->hash);
+        snprintf(destination, 260, g_customDffCachePattern, (char*)this + 9, download->hash);
     else if (download->type == 2)
-        _snprintf(destination, 260, g_customTxdCachePattern, (char*)this + 9, download->hash);
+        snprintf(destination, 260, g_customTxdCachePattern, (char*)this + 9, download->hash);
     MoveFileA(download->temporaryPath, destination);
     if (record && download->type == 1)
         record[0] = 1;
@@ -1258,7 +1260,8 @@ DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
 // 0x000628e0
 DWORD __cdecl CustomModelFileCrc(const char* filename)
 {
-    FILE* file = fopen(filename, g_customDownloadReadMode);
+    FILE* file = nullptr;
+    fopen_s(&file, filename, g_customDownloadReadMode);
     DWORD crc = 0;
     if (!file)
         return crc;
@@ -1309,7 +1312,7 @@ bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload*
         download->hash = *(DWORD*)(record + 0x4a);
         download->total = *(DWORD*)(record + 0x52);
     }
-    _snprintf(download->temporaryPath, 260, g_customTemporaryPathPattern, (char*)this + 9, index, download->hash);
+    snprintf(download->temporaryPath, 260, g_customTemporaryPathPattern, (char*)this + 9, index, download->hash);
     return true;
 }
 
@@ -1367,7 +1370,9 @@ BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
         return FALSE;
     }
     *(DWORD*)(nativeState + 0x1340) = 0;
-    download->file = fopen(download->temporaryPath, g_customDownloadWriteMode);
+    FILE* file = nullptr;
+    fopen_s(&file, download->temporaryPath, g_customDownloadWriteMode);
+    download->file = file;
     if (!download->file)
         return FALSE;
     if (g_renderDownloadWindow)
@@ -1423,7 +1428,7 @@ int CCustomModels::CountMissingResources()
 BOOL CCustomModels::DeleteCachedDff(DWORD hash)
 {
     char path[264];
-    _snprintf(path, 260, g_customDeleteDffPattern, (char*)this + 9, hash);
+    snprintf(path, 260, g_customDeleteDffPattern, (char*)this + 9, hash);
     return DeleteFileA(path);
 }
 
@@ -1431,7 +1436,7 @@ BOOL CCustomModels::DeleteCachedDff(DWORD hash)
 BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
 {
     char path[264];
-    _snprintf(path, 260, g_customDeleteTxdPattern, (char*)this + 9, hash);
+    snprintf(path, 260, g_customDeleteTxdPattern, (char*)this + 9, hash);
     return DeleteFileA(path);
 }
 
@@ -1439,7 +1444,7 @@ BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
 BOOL CCustomModels::DeleteTemporaryFile(const char* filename)
 {
     char path[264];
-    _snprintf(path, 260, g_customDeleteTempPattern, (char*)this + 9, filename);
+    snprintf(path, 260, g_customDeleteTempPattern, (char*)this + 9, filename);
     return DeleteFileA(path);
 }
 
@@ -1463,9 +1468,9 @@ void CCustomModels::PurgeUnusedCache()
 {
     char temp[264], dff[264], txd[264];
     const char* directory = (char*)this + 9;
-    _snprintf(temp, 260, g_customFindTempPattern, directory);
-    _snprintf(dff, 260, g_customFindDffPattern, directory);
-    _snprintf(txd, 260, g_customFindTxdPattern, directory);
+    snprintf(temp, 260, g_customFindTempPattern, directory);
+    snprintf(dff, 260, g_customFindDffPattern, directory);
+    snprintf(txd, 260, g_customFindTxdPattern, directory);
     WIN32_FIND_DATAA file;
     HANDLE search = FindFirstFileA(temp, &file);
     if (search != INVALID_HANDLE_VALUE)
@@ -1550,10 +1555,10 @@ void CCustomModels::SetExpectedRecordCount(DWORD count)
 bool CCustomModels::IsDffCached(DWORD hash)
 {
     char path[264];
-    _snprintf(path, 260, g_customDffCachePattern, (char*)this + 9, hash);
+    snprintf(path, 260, g_customDffCachePattern, (char*)this + 9, hash);
     if (GameFileExists(path))
         return true;
-    _snprintf(path, 260, g_customDffCachePattern, (char*)this + 0x10e, hash);
+    snprintf(path, 260, g_customDffCachePattern, (char*)this + 0x10e, hash);
     return GameFileExists(path) ? true : false;
 }
 
@@ -1561,10 +1566,10 @@ bool CCustomModels::IsDffCached(DWORD hash)
 bool CCustomModels::IsTxdCached(DWORD hash)
 {
     char path[264];
-    _snprintf(path, 260, g_customTxdCachePattern, (char*)this + 9, hash);
+    snprintf(path, 260, g_customTxdCachePattern, (char*)this + 9, hash);
     if (GameFileExists(path))
         return true;
-    _snprintf(path, 260, g_customTxdCachePattern, (char*)this + 0x10e, hash);
+    snprintf(path, 260, g_customTxdCachePattern, (char*)this + 0x10e, hash);
     return GameFileExists(path) ? true : false;
 }
 
@@ -1717,18 +1722,18 @@ BOOL CCustomModels::LoadPedModel(DWORD base, DWORD model, DWORD dffHash, DWORD t
 {
     char name[28], txd[264], dff[264];
     const char *primary = (const char*)this + 9, *fallback = (const char*)this + 0x10e;
-    sprintf(name, "%X", txdHash);
-    sprintf(dff, "%s\\0x%X.dff", primary, dffHash);
+    snprintf(name, sizeof(name), "%X", txdHash);
+    snprintf(dff, sizeof(dff), "%s\\0x%X.dff", primary, dffHash);
     if (!GameFileExists(dff))
     {
-        sprintf(dff, "%s\\0x%X.dff", fallback, dffHash);
+        snprintf(dff, sizeof(dff), "%s\\0x%X.dff", fallback, dffHash);
         if (!GameFileExists(dff))
             return FALSE;
     }
-    sprintf(txd, "%s\\0x%X.txd", primary, txdHash);
+    snprintf(txd, sizeof(txd), "%s\\0x%X.txd", primary, txdHash);
     if (!GameFileExists(txd))
     {
-        sprintf(txd, "%s\\0x%X.txd", fallback, txdHash);
+        snprintf(txd, sizeof(txd), "%s\\0x%X.txd", fallback, txdHash);
         if (!GameFileExists(txd))
             return FALSE;
     }
@@ -1740,18 +1745,18 @@ BOOL CCustomModels::LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWOR
 {
     char name[28], txd[264], dff[264];
     const char *primary = (const char*)this + 9, *fallback = (const char*)this + 0x10e;
-    sprintf(name, "%X", txdHash);
-    sprintf(dff, "%s\\0x%X.dff", primary, dffHash);
+    snprintf(name, sizeof(name), "%X", txdHash);
+    snprintf(dff, sizeof(dff), "%s\\0x%X.dff", primary, dffHash);
     if (!GameFileExists(dff))
     {
-        sprintf(dff, "%s\\0x%X.dff", fallback, dffHash);
+        snprintf(dff, sizeof(dff), "%s\\0x%X.dff", fallback, dffHash);
         if (!GameFileExists(dff))
             return FALSE;
     }
-    sprintf(txd, "%s\\0x%X.txd", primary, txdHash);
+    snprintf(txd, sizeof(txd), "%s\\0x%X.txd", primary, txdHash);
     if (!GameFileExists(txd))
     {
-        sprintf(txd, "%s\\0x%X.txd", fallback, txdHash);
+        snprintf(txd, sizeof(txd), "%s\\0x%X.txd", fallback, txdHash);
         if (!GameFileExists(txd))
             return FALSE;
     }

@@ -80,7 +80,7 @@ void CRenderPanel::Show()
     FontSize measured = g_deviceFonts->GetTextScreenSize(g_fontMeasureProbe, 0);
     DWORD* state = (DWORD*)nativeState;
     BYTE* dialog = (BYTE*)state[8];
-    strcpy((char*)dialog + 0x16, g_renderPanelTitle);
+    strncpy_s((char*)dialog + 0x16, 256, g_renderPanelTitle, _TRUNCATE);
     ((BYTE*)state[8])[0x14] = 1;
     *(DWORD*)((BYTE*)state[8] + 0x126) = (DWORD)measured.cy + 4;
     ((BYTE*)state[8])[0x13] = 1;

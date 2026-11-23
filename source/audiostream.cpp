@@ -112,7 +112,7 @@ void CAudioStream::DrawInfo()
     memset(text, 0, sizeof(text));
     if (!strlen(g_audioStreamTitle) || !strlen(g_audioStreamStation))
         return;
-    _snprintf(text, 256, g_audioStreamInfoFormat, g_audioStreamTitle, g_audioStreamStation);
+    snprintf(text, 256, g_audioStreamInfoFormat, g_audioStreamTitle, g_audioStreamStation);
     // GTA SA virtual addresses: screen height0x00c17048, width0x00c17044.
     DWORD height = *(DWORD*)0xc17048, width = (DWORD)(*(int*)0x00c17044);
     RECT rect;
@@ -174,7 +174,7 @@ void CAudioStream::ReadMetadata()
             // Original assumes allocation and a trailing quote/semicolon are present.
             char* separator = strchr(copy, ';');
             separator[-1] = 0;
-            _snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, copy);
+            snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, copy);
             free(copy);
         }
         return;
@@ -192,9 +192,9 @@ void CAudioStream::ReadMetadata()
         tags += strlen(tags) + 1;
     }
     if (artist)
-        _snprintf(g_audioStreamTitle, 256, g_audioStreamInfoFormat, artist, title);
+        snprintf(g_audioStreamTitle, 256, g_audioStreamInfoFormat, artist, title);
     else if (title)
-        _snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, title);
+        snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, title);
 }
 
 // 0x00066170
@@ -217,7 +217,7 @@ BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius
     if (g_pGame->m_pAudio->GetRadioVolume() <= g_objectScaleLowerBound)
         return FALSE;
     memset(g_audioStreamUrl, 0, 257);
-    strncpy(g_audioStreamUrl, url, 256);
+    strncpy_s(g_audioStreamUrl, url, 256);
     memset(g_audioStreamTitle, 0, 257);
     memset(g_audioStreamStation, 0, 257);
     memset(g_audioStreamStationUrl, 0, 257);
@@ -253,9 +253,9 @@ void __cdecl CAudioStream::Worker(void*)
         while (*tags)
         {
             if (!_strnicmp(tags, g_audioStreamStationMarker, 9))
-                _snprintf(g_audioStreamStation, 256, g_audioStreamStringFormat, tags + 9);
+                snprintf(g_audioStreamStation, 256, g_audioStreamStringFormat, tags + 9);
             if (!_strnicmp(tags, g_audioStreamStationUrlMarker, 8))
-                _snprintf(g_audioStreamStationUrl, 256, g_audioStreamStringFormat, tags + 8);
+                snprintf(g_audioStreamStationUrl, 256, g_audioStreamStringFormat, tags + 8);
             tags += strlen(tags) + 1;
         }
     ReadMetadata();

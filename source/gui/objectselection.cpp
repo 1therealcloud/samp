@@ -62,7 +62,7 @@ void CObjectSelection::DrawLabels()
     const double distance = object->GetDistanceToCamera();
     int model = object->GetModelIndex();
     char text[256];
-    sprintf(text, g_objectSelectionLabelFormat, (unsigned)objectId, model, distance);
+    snprintf(text, sizeof(text), g_objectSelectionLabelFormat, (unsigned)objectId, model, distance);
     g_deviceLabel->Begin();
     g_deviceLabel->Draw(&position, text, 0xffd47b75, TRUE, FALSE);
     g_deviceLabel->End();

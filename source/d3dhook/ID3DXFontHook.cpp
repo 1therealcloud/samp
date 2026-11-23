@@ -160,8 +160,8 @@ INT STDMETHODCALLTYPE CFontWrapper::DrawTextA(ID3DXSprite* sprite, const char* t
         g_fontGlyphCursor = 0;
         if (strlen(text) > 100000)
             return 0;
-        strcpy(g_fontOriginalText, text);
-        strcpy(g_fontStrippedText, text);
+        strncpy_s(g_fontOriginalText, 100001, text, _TRUNCATE);
+        strncpy_s(g_fontStrippedText, 100001, text, _TRUNCATE);
         FontAnsiToWide(g_fontOriginalText, g_fontWideText, 20000);
         ChatStripColorTags(g_fontStrippedText);
         return font->DrawTextA(&g_fontColorSprite, g_fontStrippedText, (INT)strlen(g_fontStrippedText), rect, format, color);
@@ -217,7 +217,7 @@ unsigned long FontParseWideColorTag(const wchar_t* text)
     {
         wchar_t digits[17];
         memset(digits, 0, sizeof(digits));
-        wcsncpy(digits, text + 1, 6);
+        wcsncpy_s(digits, text + 1, 6);
         return wcstoul(digits, 0, 16);
     }
     return 0xffffffff;
