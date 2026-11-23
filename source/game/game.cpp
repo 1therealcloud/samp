@@ -908,7 +908,7 @@ void CGame::DisplayGameText(const char* text, int time, int style)
 DWORD CGame::CreatePickup(int model, int type, float x, float y, float z, DWORD* index)
 {
     int selected = model;
-    if (!GameModelQueryB4170(selected))
+    if (!GameHasModelInfoForObject(selected))
         selected = 18631;
     else if (selected > 20000 || selected < 0)
         goto createPickup;
@@ -1478,7 +1478,7 @@ BOOL __stdcall GameIsPedModel(int model)
 }
 
 // 0x000b4170
-BOOL __stdcall GameModelQueryB4170(int model)
+BOOL __stdcall GameHasModelInfoForObject(int model)
 {
     void* info = GameGetModelInfo(model);
     return info && (*(DWORD*)info + 0x14u) != 0;
@@ -2338,7 +2338,7 @@ void CGame::SetTimer(DWORD value)
 }
 
 // 0x000a15a0
-DWORD CGame::GetBackendWordB71804()
+DWORD CGame::GetRenderedBuildingCount()
 {
     return *(DWORD*)0xb71804;
 }

@@ -401,9 +401,9 @@ DWORD GameCountNonzeroPoolBytesB7449C();
 // 0x000b3900
 DWORD GameCountNonzeroPoolBytesC8800C();
 // 0x000b4130
-void __stdcall GameReplaceBackendVtable85BBF0(void* entity);
+void __stdcall GameReplaceAtomicModelInfoVtableWithClump(void* entity);
 // 0x000b42c0
-void GameWriteGlobal9689E0(DWORD value);
+void GameSetCollisionPluginCurrentModel(DWORD value);
 // 0x000b3620
 float GameAsin(float value);
 

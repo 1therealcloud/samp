@@ -753,7 +753,7 @@ void CEntity::ProcessControl()
 
 // GTA callees use their original ECX/stack ABI.
 // 0x0009ed60
-void CEntity::Native009ed60(DWORD argument)
+void CEntity::GetBackendBoundRect(DWORD argument)
 {
     void* entity = m_pGameEntity;
     if (!entity)
@@ -765,7 +765,7 @@ void CEntity::Native009ed60(DWORD argument)
 
 // GTA callees use their original ECX/stack ABI.
 // 0x0009f5d0
-void CEntity::Native009f5d0(DWORD argument)
+void CEntity::SetRenderClumpAlpha(DWORD argument)
 {
     if (!m_pEntity || !m_pEntity->rwObject || (DWORD)m_pEntity->vtable == 0x863c40)
         return;
@@ -788,7 +788,7 @@ void CEntity::Native009f5d0(DWORD argument)
 
 // GTA callees use their original ECX/stack ABI.
 // 0x0009f810
-void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6)
+void CEntity::ApplyBackendTurnForce(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6)
 {
     void* entity = m_pGameEntity;
     if (!entity)
@@ -800,7 +800,7 @@ void CEntity::Native009f810(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DW
 
 // GTA callees use their original ECX/stack ABI.
 // 0x0009f840
-void CEntity::Native009f840(DWORD argument)
+void CEntity::AddVehicleAudioEvent(DWORD argument)
 {
     void* entity = m_pGameEntity;
     if (!entity)
@@ -821,7 +821,7 @@ void CEntity::Native009f840(DWORD argument)
 // GTA callees use their original ECX/stack ABI.
 // clang-format off
 // 0x0009f960
-__declspec(naked) void CEntity::Native009f960()
+__declspec(naked) void CEntity::RenderForModelPreview()
 {
     enum {
         Backend = offsetof(CEntity, m_pGameEntity),
@@ -1082,7 +1082,7 @@ BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollis
 // GTA SA virtual address: 0x00410CE0; exact query semantics remain unresolved.
 // Native forwards the input pointer plus a literal zero and returns raw AL.
 // 0x000b43f0
-BYTE GameQueryBackend410ce0(const void* data)
+BYTE GameHasCollisionLoaded(const void* data)
 {
     return ((BYTE(__cdecl*)(const void*, DWORD))0x410ce0)(data, 0);
 }

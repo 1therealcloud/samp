@@ -68,9 +68,9 @@ public:
     // 0x0009c100
     BOOL IsDead();
     // 0x0009c130
-    BYTE GetBackendByte530();
+    BYTE GetPedState();
     // 0x0009c140
-    void SetBackendByte530(BYTE value);
+    void SetPedState(BYTE value);
     // 0x0009c160
     DWORD HasBackendFlag100();
     // 0x0009c180

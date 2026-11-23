@@ -143,7 +143,7 @@ public:
     // 0x000adcb0
     DWORD GetBackendByte72D();
     // 0x000ae0d0
-    DWORD CallBackend5E01C0(DWORD first, DWORD second);
+    DWORD GetTransformedBonePosition(DWORD first, DWORD second);
     // 0x000ae120
     void ResetLocalControlWord();
     // 0x000ae160
@@ -232,7 +232,7 @@ public:
     // 0x000afbd0
     void Kill();
     // 0x000acd10
-    void CallBackend730AndVehicle490();
+    void ExtinguishPedAndVehicleFire();
     // 0x000ac3b0
     void SetControllable(BOOL enabled);
     // 0x000acf60

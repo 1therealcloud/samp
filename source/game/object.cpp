@@ -704,7 +704,7 @@ CObject::CObject(int model, float x, float y, float z, CVector rotation, float d
         visibilityStartHour = firstHour;
         visibilityEndHour = lastHour;
     }
-    if (!GameModelQueryB4170(model))
+    if (!GameHasModelInfoForObject(model))
         model = 18631;
     void* info = GameGetModelInfo(model);
     drawLast = (GameGetModelFlagsByte(model) >> 1) & 1;
@@ -1084,7 +1084,7 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
 {
     if (index < 0 || index >= 16)
         return;
-    if (model > 0 && !GameModelQueryB4170(model))
+    if (model > 0 && !GameHasModelInfoForObject(model))
         return;
     if (materials.textures[index])
     {

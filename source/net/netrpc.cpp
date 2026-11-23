@@ -915,9 +915,9 @@ void ScrSetVehicleParamsEx(RPCParameters* parameters)
     if (params[6] <= 1)
         ((BYTE*)vehicle)[0x64] = params[6];
     if (params[5] <= 1)
-        vehicle->CallBackend6a6ae0(1, 0x11, params[5] ? 0x3f800000 : 0);
+        vehicle->OpenAutomobileDoor(1, 0x11, params[5] ? 0x3f800000 : 0);
     if (params[4] <= 1)
-        vehicle->CallBackend6a6ae0(0, 0x10, params[4] ? 0x3f800000 : 0);
+        vehicle->OpenAutomobileDoor(0, 0x10, params[4] ? 0x3f800000 : 0);
     if (params[2] <= 1)
     {
         vehicle->EnableSiren(params[2]);
@@ -928,7 +928,7 @@ void ScrSetVehicleParamsEx(RPCParameters* parameters)
     const DWORD component[] = {10, 8, 11, 9};
     for (int i = 0; i < 4; i++)
         if (params[8 + i] <= 1)
-            vehicle->CallBackend6a6ae0(2 + i, component[i], params[8 + i] ? 0x3f800000 : 0);
+            vehicle->OpenAutomobileDoor(2 + i, component[i], params[8 + i] ? 0x3f800000 : 0);
     for (int j = 0; j < 4; j++)
     {
         if (params[12 + j] == 0)

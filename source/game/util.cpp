@@ -1475,7 +1475,7 @@ DWORD GameCountNonzeroPoolBytesC8800C()
 }
 
 // 0x000b4130
-void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
+void __stdcall GameReplaceAtomicModelInfoVtableWithClump(void* entity)
 {
     // GTA SA virtual addresses: source and replacement vtables.
     if (entity && *(DWORD*)entity == 0x85bbf0)
@@ -1483,7 +1483,7 @@ void __stdcall GameReplaceBackendVtable85BBF0(void* entity)
 }
 
 // 0x000b42c0
-void GameWriteGlobal9689E0(DWORD value)
+void GameSetCollisionPluginCurrentModel(DWORD value)
 {
     *(DWORD*)0x9689e0 = value;
 }
