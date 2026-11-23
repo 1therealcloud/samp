@@ -377,11 +377,11 @@ extern DWORD g_hookVehicleFlagWrapper;
 // R5 address to verify
 extern DWORD g_hookCapture0018F5E4;
 // R5 address to verify
-extern DWORD g_hookCapture0018F658;
+extern DWORD g_hookGamepadInputThis;
 // R5 address to verify
-extern DWORD g_hookCapture0018F65C;
+extern DWORD g_hookGamepadAimVector;
 // R5 address to verify
-extern DWORD g_hookCapture0018F660;
+extern DWORD g_hookGamepadAimThis;
 // R5 address to verify
 void GameHookOverrideGunTaskParameter();
 // R5 address to verify
@@ -431,13 +431,13 @@ extern DWORD g_hookSavedRendererCameraY;
 // R5 address to verify
 extern DWORD g_hookSavedRendererCameraZ;
 // R5 address to verify
-extern DWORD g_hookCapture0018E80C;
+extern DWORD g_hookVehicleAimCamera;
 // R5 address to verify
 extern DWORD g_hookCapture0018E92C;
 // R5 address to verify
 extern DWORD g_hookStreamingFileBuffer;
 // R5 address to verify
-extern DWORD g_hookCapture0018EB74;
+extern DWORD g_hookVehicleAimInternalAim;
 // R5 address to verify
 extern DWORD g_hookCapture0018F338;
 // R5 address to verify
@@ -447,13 +447,13 @@ extern DWORD g_hookVisibilityDistanceOut;
 // R5 address to verify
 extern DWORD g_hookCapture0018F358;
 // R5 address to verify
-extern DWORD g_hookCapture0018F35C;
+extern DWORD g_hookVehicleAimCaller;
 // R5 address to verify
 extern DWORD g_hookCapture0018F364;
 // R5 address to verify
-extern DWORD g_hookCapture0018F380;
+extern DWORD g_hookVehicleAimVehicle;
 // R5 address to verify
-extern DWORD g_hookCapture0018F48C;
+extern DWORD g_hookRemoteSkillTask;
 // R5 address to verify
 extern DWORD g_hookStreamingModelId;
 // R5 address to verify
