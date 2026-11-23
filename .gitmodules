@@ -13,3 +13,6 @@
 [submodule "third-party/lzma"]
 	path = third-party/lzma
 	url = https://github.com/jljusten/LZMA-SDK.git
+[submodule "third-party/minhook"]
+	path = third-party/minhook
+	url = https://github.com/TsudaKageyu/minhook.git
