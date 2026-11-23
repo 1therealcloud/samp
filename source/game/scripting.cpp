@@ -3,6 +3,7 @@
 #include "gui/chatwindow.h"
 #include "main.h"
 
+#include <float.h>
 #include <stdarg.h>
 #include <string.h>
 // 0x002a93f0
@@ -126,17 +127,14 @@ DWORD __cdecl Scripting::ProcessCommand(const OpcodeInfo* command, ...)
     }
     va_end(args);
     DWORD result = 0;
-    // clang-format off
-    __asm fwait
-        // clang-format on
-        __try
+    // The x86 CRT waits for pending floating-point exceptions before reading status.
+    _statusfp();
+    __try
     {
         result = ExecBuffer();
         for (WORD i = 0; i < variables; i++)
             memcpy(g_scriptVariables[i], g_scriptThread->opaque + 0x3c + i * 4, 4);
-        // clang-format off
-        __asm fwait
-        // clang-format on
+        _statusfp();
     }
     __except (GameExceptionFilter(GetExceptionCode(), GetExceptionInformation(), "opcode")) {}
     return result;

@@ -46,44 +46,18 @@ WORD CVehiclePool::FindInRay(float maxCameraDistance, const CVector* origin, con
         CVehicle* vehicle = m_pObjects[i];
         if (!vehicle || !vehicle->CEntity::DoesExist())
             continue;
-        BYTE nearer;
-        // clang-format off
-        __asm {
-            mov ecx,vehicle
-            call CEntity::GetDistanceToCamera
-            fcomp maxCameraDistance
-            fnstsw ax
-            test ah,5
-            setnp nearer
-        }
-        // clang-format on
-        if (!nearer || vehicle->HasPlayerPed()) continue;
+        if (!(vehicle->GetDistanceToCamera() < maxCameraDistance) || vehicle->HasPlayerPed())
+            continue;
         CVector centre;
         vehicle->GetBoundCentre(&centre);
         if (!GameTestEntityLineSphere(&from.point, &to.point, vehicle->m_pGameEntity, &centre, 1.0f, 1))
             continue;
-        // clang-format off
-        __asm {
-            mov eax,origin
-            push dword ptr [eax+8]
-            push dword ptr [eax+4]
-            push dword ptr [eax]
-            mov ecx,vehicle
-            call CEntity::GetDistanceToPoint
-            fcom closest
-            fnstsw ax
-            test ah,5
-            jp vehicle_ray_not_closer
-            fstp closest
-            mov nearer,1
-            jmp vehicle_ray_distance_done
-        vehicle_ray_not_closer:
-            fstp st(0)
-            mov nearer,0
-        vehicle_ray_distance_done:
+        const double distance = vehicle->GetDistanceToPoint(origin->x, origin->y, origin->z);
+        if (distance < closest)
+        {
+            closest = (float)distance;
+            selected = (WORD)i;
         }
-        // clang-format on
-        if (nearer) selected = (WORD)i;
     }
     return selected;
 }
@@ -110,21 +84,7 @@ void CVehiclePool::Process()
                     goto next_vehicle;
                 }
                 vehicle->SetInvulnerable(vehicle->DriverIsPlayerPed() ? FALSE : TRUE);
-                int destroyed = 0;
-                // clang-format off
-                __asm {
-                    mov ecx,vehicle
-                    call CVehicle::GetHealth
-                    fld dword ptr [g_objectScaleLowerBound]
-                    fucompp
-                    fnstsw ax
-                    test ah,44h
-                    jp health_not_zero
-                    mov destroyed,1
-                health_not_zero:
-                }
-                // clang-format on
-                if (destroyed)
+                if (vehicle->GetHealth() == g_objectScaleLowerBound)
                 {
                     SendDestroyNotification(id);
                     if (!*(DWORD*)(state + 0xdc54 + id * 4))
@@ -340,24 +300,12 @@ WORD CVehiclePool::FindNearestToLocalPlayer()
         if (id < 2000 && m_bNotEmpty[id] && stateBD14[id])
         {
             CVehicle* vehicle = m_pObjects[id];
-            int better = 0;
-            // clang-format off
-            __asm {
-                mov ecx,vehicle
-                call CEntity::GetDistanceToLocalPlayer
-                fcom dword ptr [best]
-                fnstsw ax
-                test ah,5
-                jp reject
-                fstp dword ptr [best]
-                mov better,1
-                jmp compared
-            reject:
-                fstp st(0)
-            compared:
+            const double distance = vehicle->GetDistanceToLocalPlayer();
+            if (distance < best)
+            {
+                best = (float)distance;
+                selected = id;
             }
-            // clang-format on
-            if (better) selected = id;
         }
     }
     while ((int)(WORD)++id <= m_nLargestId);
@@ -377,27 +325,12 @@ WORD CVehiclePool::FindNearestToPoint(float x, float y, float z)
         if (m_bNotEmpty[id] && stateBD14[id])
         {
             CVehicle* vehicle = m_pObjects[id];
-            int better = 0;
-            // clang-format off
-            __asm {
-                push z
-                push y
-                push x
-                mov ecx,vehicle
-                call CEntity::GetDistanceToPoint
-                fcom dword ptr [best]
-                fnstsw ax
-                test ah,5
-                jp reject
-                fstp dword ptr [best]
-                mov better,1
-                jmp compared
-            reject:
-                fstp st(0)
-            compared:
+            const double distance = vehicle->GetDistanceToPoint(x, y, z);
+            if (distance < best)
+            {
+                best = (float)distance;
+                selected = id;
             }
-            // clang-format on
-            if (better) selected = id;
         }
     }
     while ((int)(WORD)++id <= m_nLargestId);

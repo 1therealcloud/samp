@@ -100,63 +100,24 @@ __declspec(naked) DWORD GameRwInvokeEngineSlot24(DWORD first, DWORD second)
 }
 
 // 0x000b6440
-__declspec(naked) void __stdcall GameBuildAimUpVector(const CVector* direction, CVector* up)
+void __stdcall GameBuildAimUpVector(const CVector* direction, CVector* up)
 {
-    // clang-format off
-    __asm {
-        mov ecx,[esp+4]
-        fld dword ptr [ecx]
-        mov eax,[esp+8]
-        fld dword ptr [ecx+4]
-        fpatan
-        fsub qword ptr [g_aimVectorHalfPi]
-        fld st(0)
-        fsin
-        fxch st(1)
-        fcos
-        fld dword ptr [ecx+4]
-        fmul dword ptr [g_objectScaleLowerBound]
-        fld st(1)
-        fmul dword ptr [ecx+8]
-        fsubp st(1),st(0)
-        fstp dword ptr [eax]
-        fld st(1)
-        fmul dword ptr [ecx+8]
-        fld dword ptr [ecx]
-        fmul dword ptr [g_objectScaleLowerBound]
-        fsubp st(1),st(0)
-        fstp dword ptr [eax+4]
-        fmul dword ptr [ecx]
-        fxch st(1)
-        fmul dword ptr [ecx+4]
-        fsubp st(1),st(0)
-        fstp dword ptr [eax+8]
-        ret 8
-    }
-    // clang-format on
+    const double angle = atan2((double)direction->x, (double)direction->y) - g_aimVectorHalfPi;
+    const double sinAngle = sin(angle);
+    const double cosAngle = cos(angle);
+    up->x = (float)(direction->y * g_objectScaleLowerBound - cosAngle * direction->z);
+    up->y = (float)(sinAngle * direction->z - direction->x * g_objectScaleLowerBound);
+    up->z = (float)(cosAngle * direction->x - sinAngle * direction->y);
 }
 // 0x000b44e0
-__declspec(naked) float __cdecl GameNormalizeAngle(float angle)
+float __cdecl GameNormalizeAngle(float angle)
 {
-    // clang-format off
-    // Explicit x87 preserves the native extended ST0 result and unordered comparisons.
-    __asm {
-        fld dword ptr [esp+4]
-        fcom g_angleUpperBound
-        fnstsw ax
-        test ah,41h
-        jnz lower
-        fsub g_anglePeriod
-    lower:
-        fcom g_angleLowerBound
-        fnstsw ax
-        test ah,5
-        jp done
-        fadd g_anglePeriod
-    done:
-        ret
-    }
-    // clang-format on
+    double normalized = angle;
+    if (normalized > g_angleUpperBound)
+        normalized -= g_anglePeriod;
+    if (normalized < g_angleLowerBound)
+        normalized += g_anglePeriod;
+    return (float)normalized;
 }
 
 // 0x000b4850
@@ -167,7 +128,6 @@ void GameTransformPoint(CVector* out, const CMatrix* matrix, const CVector* delt
     out->z = ((matrix->at.z * delta->z + matrix->up.z * delta->y) + matrix->right.z * delta->x) + matrix->position.z;
 }
 
-// Returns the extended-precision result in x87 ST0.
 // 0x000b44b0
 float FloatOffset(float first, float second)
 {
@@ -195,27 +155,9 @@ void __cdecl GameQueryRwMatrixAngle(const CMatrix* matrix, int axis, float* angl
     CVector* queryAxis = (CVector*)(g_entityCollisionScratch + 0x101c);
     *queryAxis = g_rwRotationAxes[axis];
     DWORD target = g_gameVersion == 1 ? 0x7f2720 : 0x7f2760;
-    // Shared axis/centre/result storage and native x87 publication are retained.
-    // clang-format off
-    __asm {
-        lea eax,[g_entityCollisionScratch + 0x1010]
-        push eax
-        lea eax,g_rwQueryAngle
-        push eax
-        lea eax,[g_entityCollisionScratch + 0x101c]
-        push eax
-        push matrix
-        mov edx,target
-        call edx
-        pop edx
-        pop edx
-        pop edx
-        pop edx
-        fld g_rwQueryAngle
-        mov eax,angle
-        fstp dword ptr [eax]
-    }
-    // clang-format on
+    typedef void (__cdecl *BackendFn)(const CMatrix*, CVector*, float*, CVector*);
+    reinterpret_cast<BackendFn>(target)(matrix, queryAxis, &g_rwQueryAngle, (CVector*)(g_entityCollisionScratch + 0x1010));
+    *angle = g_rwQueryAngle;
 }
 
 // GTA SA virtual addresses: USA 7EBA80; all other version values use 7EBAC0.
@@ -369,43 +311,14 @@ __declspec(naked) void GameInvertRwMatrix(CMatrix* out, const CMatrix* matrix)
     // clang-format on
 }
 
-// Returns the extended-precision result in x87 ST0.
 // 0x000b54b0
-__declspec(naked) float GameHeadingToRadians(float heading)
+float GameHeadingToRadians(float heading)
 {
-    // clang-format off
-    __asm {
-        fld float ptr [esp + 0x4]
-        fcomp float ptr g_anglePeriod
-        fnstsw ax
-        test ah,0x41
-        jz rw_100b550f
-        fld float ptr [esp + 0x4]
-        fcomp float ptr g_objectScaleLowerBound
-        fnstsw ax
-        test ah,0x5
-        jnp rw_100b550f
-        fld float ptr [esp + 0x4]
-        fcomp float ptr g_angleUpperBound
-        fld float ptr [esp + 0x4]
-        fnstsw ax
-        test ah,0x41
-        jnz rw_100b5502
-        fsub float ptr g_angleUpperBound
-        fmul float ptr g_headingPi
-        fmul float ptr g_headingInverseHalfTurn
-        fsubr float ptr g_headingPi
-        fchs
-        ret
-rw_100b5502:
-        fmul float ptr g_headingPi
-        fmul float ptr g_headingInverseHalfTurn
-        ret
-rw_100b550f:
-        fld float ptr g_objectScaleLowerBound
-        ret
-    }
-    // clang-format on
+    if (heading > g_anglePeriod || heading < g_objectScaleLowerBound)
+        return g_objectScaleLowerBound;
+    if (heading > g_angleUpperBound)
+        return (float)(-((double)g_headingPi - ((double)heading - g_angleUpperBound) * g_headingPi * g_headingInverseHalfTurn));
+    return (float)((double)heading * g_headingPi * g_headingInverseHalfTurn);
 }
 
 // Native unbounded axis lookup; target publication occurs before the call.
@@ -1170,28 +1083,17 @@ void* GameRwGetClumpWord8Minus64(void* clump, int index)
     return result;
 }
 
-// Native x87 intermediate precision, spill locations and input bit pattern matter.
 // 0x000b55a0
-__declspec(naked) float GameApproximateSqrt(float value)
+float GameApproximateSqrt(float value)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp+4]
-        mov eax,dword ptr [esp+4]
-        fld dword ptr [esp+4]
-        sar eax,1
-        fmul g_textDrawHalf
-        mov ecx,0x5f3759d5
-        sub ecx,eax
-        mov dword ptr [esp+4],ecx
-        fmul dword ptr [esp+4]
-        fmul dword ptr [esp+4]
-        fsubr g_dialogLineScale
-        fmul dword ptr [esp+4]
-        fmulp st(1),st
-        ret
-    }
-    // clang-format on
+    int bits;
+    memcpy(&bits, &value, sizeof(bits));
+    const DWORD estimateBits = 0x5f3759d5u - (DWORD)(bits >> 1);
+
+    float estimate;
+    memcpy(&estimate, &estimateBits, sizeof(estimate));
+    const double correction = g_dialogLineScale - (double)value * g_textDrawHalf * estimate * estimate;
+    return (float)(value * (correction * estimate));
 }
 
 // 0x000b62f0
@@ -1268,60 +1170,22 @@ float __stdcall GameDistance2D(float x, float y, float otherX, float otherY)
 
 // dz squared plus dy squared then dx squared.
 // 0x000b45b0
-__declspec(naked) float __stdcall GameSquaredDistance3D(float x, float y, float z, float otherX, float otherY, float otherZ)
+float __stdcall GameSquaredDistance3D(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp + 4]
-        fsub dword ptr [esp + 0x10]
-        fld dword ptr [esp + 8]
-        fsub dword ptr [esp + 0x14]
-        fld dword ptr [esp + 0xc]
-        fsub dword ptr [esp + 0x18]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 0x18
-    }
-    // clang-format on
+    const float dx = x - otherX;
+    const float dy = y - otherY;
+    const float dz = z - otherZ;
+    return dz * dz + dy * dy + dx * dx;
 }
 
 // dx squared plus dy squared then dz squared; RET8.
 // 0x000b45f0
-__declspec(naked) float __stdcall GameSquaredDistanceVectors(const CVector* first, const CVector* second)
+float __stdcall GameSquaredDistanceVectors(const CVector* first, const CVector* second)
 {
-    // clang-format off
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        mov ecx, dword ptr [esp + 8]
-        fld dword ptr [eax + 8]
-        fsub dword ptr [ecx + 8]
-        fld dword ptr [eax + 4]
-        fsub dword ptr [ecx + 4]
-        fld dword ptr [eax]
-        fsub dword ptr [ecx]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 8
-    }
-    // clang-format on
+    const float dz = first->z - second->z;
+    const float dy = first->y - second->y;
+    const float dx = first->x - second->x;
+    return dx * dx + dy * dy + dz * dz;
 }
 
 // x squared plus y squared then z squared.
@@ -1340,34 +1204,11 @@ bool GameIsVectorWithinUnitBounds(const CVector* vector)
 
 // Sequential stores and input reloads preserve native alias behavior.
 // 0x000b47b0
-__declspec(naked) void GameVectorCrossProductLocal(CVector* out, const CVector* left, const CVector* right)
+void GameVectorCrossProductLocal(CVector* out, const CVector* left, const CVector* right)
 {
-    // clang-format off
-    __asm {
-        mov ecx, dword ptr [esp + 0xc]
-        mov eax, dword ptr [esp + 8]
-        fld dword ptr [ecx + 8]
-        fmul dword ptr [eax + 4]
-        mov edx, dword ptr [esp + 4]
-        fld dword ptr [ecx + 4]
-        fmul dword ptr [eax + 8]
-        fsubp st(1),st
-        fstp dword ptr [edx]
-        fld dword ptr [ecx]
-        fmul dword ptr [eax + 8]
-        fld dword ptr [ecx + 8]
-        fmul dword ptr [eax]
-        fsubp st(1),st
-        fstp dword ptr [edx + 4]
-        fld dword ptr [ecx + 4]
-        fmul dword ptr [eax]
-        fld dword ptr [ecx]
-        fmul dword ptr [eax + 4]
-        fsubp st(1),st
-        fstp dword ptr [edx + 8]
-        ret
-    }
-    // clang-format on
+    out->x = left->y * right->z - left->z * right->y;
+    out->y = left->z * right->x - left->x * right->z;
+    out->z = left->x * right->y - left->y * right->x;
 }
 
 // Square root of x squared plus y squared then z squared.
@@ -1409,43 +1250,13 @@ void GameScaleVector(CVector* out, const CVector* vector, float scale)
 
 // Native inclusive0..360 gate accepts NaN; preserves branch arithmetic.
 // 0x000b5520
-__declspec(naked) float GameHeadingToRadiansBounded(float heading)
+float GameHeadingToRadiansBounded(float heading)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp + 4]
-        fcomp g_anglePeriod
-        fnstsw ax
-        test ah, 0x41
-        je math_b558b
-        fld dword ptr [esp + 4]
-        fcomp g_objectScaleLowerBound
-        fnstsw ax
-        test ah, 5
-        jnp math_b558b
-        fld dword ptr [esp + 4]
-        fcomp g_angleUpperBound
-        fld dword ptr [esp + 4]
-        fnstsw ax
-        test ah, 0x41
-        jne math_b5578
-        fsub g_angleUpperBound
-        fmul g_headingPi
-        fmul g_headingInverseHalfTurn
-        fsubr g_headingPi
-        fchs
-        fmul g_entityEulerSign
-        ret
-    math_b5578:
-        fmul g_headingPi
-        fmul g_headingInverseHalfTurn
-        fmul g_entityEulerSign
-        ret
-    math_b558b:
-        fld g_objectScaleLowerBound
-        ret
-    }
-    // clang-format on
+    if (heading > g_anglePeriod || heading < g_objectScaleLowerBound)
+        return g_objectScaleLowerBound;
+    if (heading > g_angleUpperBound)
+        return (float)(-((double)g_headingPi - ((double)heading - g_angleUpperBound) * g_headingPi * g_headingInverseHalfTurn) * g_entityEulerSign);
+    return (float)((double)heading * g_headingPi * g_headingInverseHalfTurn * g_entityEulerSign);
 }
 
 // 0x000b38d0
@@ -1498,61 +1309,29 @@ float GameAsin(float value)
 
 // Raw GTA backend, sequential position publication and live matrix reloads.
 // 0x000b6260
-__declspec(naked) void GameGetBackendPositionAndHeading(void* entity, CVector* position, float* heading)
+void GameGetBackendPositionAndHeading(void* entity, CVector* position, float* heading)
 {
-    // clang-format off
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        mov ecx, dword ptr [eax + 0x14]
-        test ecx, ecx
-        je placement_b62cd
-        mov edx, dword ptr [ecx + 0x30]
-        mov ecx, dword ptr [esp + 8]
-        mov dword ptr [ecx], edx
-        mov edx, dword ptr [eax + 0x14]
-        mov edx, dword ptr [edx + 0x34]
-        mov dword ptr [ecx + 4], edx
-        mov edx, dword ptr [eax + 0x14]
-        mov edx, dword ptr [edx + 0x38]
-        mov dword ptr [ecx + 8], edx
-        mov eax, dword ptr [eax + 0x14]
-        fld dword ptr [eax + 0x10]
-        fchs
-        fld dword ptr [eax + 0x14]
-        fpatan
-        fmul g_entityRadiansToDegrees
-        fcom g_objectScaleLowerBound
-        fnstsw ax
-        test ah, 5
-        jp placement_b62b3
-        fadd g_anglePeriod
-        mov eax, dword ptr [esp + 0xc]
-        fstp dword ptr [eax]
-        ret
-    placement_b62b3:
-        fcom g_anglePeriod
-        fnstsw ax
-        test ah, 1
-        jne placement_b62c6
-        fsub g_anglePeriod
-    placement_b62c6:
-        mov eax, dword ptr [esp + 0xc]
-        fstp dword ptr [eax]
-        ret
-    placement_b62cd:
-        mov edx, dword ptr [eax + 4]
-        mov ecx, dword ptr [esp + 8]
-        mov dword ptr [ecx], edx
-        mov edx, dword ptr [eax + 8]
-        mov dword ptr [ecx + 4], edx
-        mov edx, dword ptr [eax + 0xc]
-        mov dword ptr [ecx + 8], edx
-        mov eax, dword ptr [eax + 0x10]
-        mov ecx, dword ptr [esp + 0xc]
-        mov dword ptr [ecx], eax
-        ret
+    BYTE* backend = static_cast<BYTE*>(entity);
+    BYTE** matrix = reinterpret_cast<BYTE**>(backend + 0x14);
+    if (*matrix)
+    {
+        memcpy(&position->x, *matrix + 0x30, sizeof(float));
+        memcpy(&position->y, *matrix + 0x34, sizeof(float));
+        memcpy(&position->z, *matrix + 0x38, sizeof(float));
+        const float* right = reinterpret_cast<float*>(*matrix + 0x10);
+        double degrees = atan2(-(double)right[0], (double)right[1]) * g_entityRadiansToDegrees;
+        if (degrees < g_objectScaleLowerBound)
+            degrees += g_anglePeriod;
+        else if (degrees >= g_anglePeriod)
+            degrees -= g_anglePeriod;
+        *heading = (float)degrees;
+        return;
     }
-    // clang-format on
+
+    memcpy(&position->x, backend + 4, sizeof(float));
+    memcpy(&position->y, backend + 8, sizeof(float));
+    memcpy(&position->z, backend + 0x0c, sizeof(float));
+    memcpy(heading, backend + 0x10, sizeof(float));
 }
 
 // 0x000b3720

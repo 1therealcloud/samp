@@ -63,17 +63,8 @@ void CSpawnScreen::Draw()
     if (texture)
     {
         SpawnScreenVertex vertices[4];
-        float topY, bottomY;
-        // clang-format off
-        __asm {
-            fild imageTop
-            fsub g_textDrawHalf
-            fild imageBottom
-            fadd g_textDrawHalf
-            fstp bottomY
-            fstp topY
-        }
-        // clang-format on
+        const float topY = (float)((double)imageTop - g_textDrawHalf);
+        const float bottomY = (float)((double)imageBottom + g_textDrawHalf);
         for (int i = 0; i < 4; ++i)
         {
             vertices[i].z = 0.1f;

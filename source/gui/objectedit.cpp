@@ -14,6 +14,7 @@
 #include <BitStream.h>
 #include <RakClientInterface.h>
 
+#include <math.h>
 #include <string.h>
 // 0x0011a7ac
 const float g_cursorRayUnsignedBias = 4294967296.0f;
@@ -354,17 +355,8 @@ float CObjectEdit::WorldToScreen(const CVector* position, float* screen)
     D3DXMatrixIdentity(&identity);
     D3DXVECTOR3 projected;
     D3DXVec3Project(&projected, (const D3DXVECTOR3*)&point, &viewport, (const D3DXMATRIX*)&g_deviceProjectionMatrix, (const D3DXMATRIX*)&g_deviceViewMatrix, &identity);
-    const float* projectedData = (const float*)&projected;
-    // clang-format off
-    __asm {
-        mov eax,screen
-        mov ecx,projectedData
-        fld dword ptr [ecx]
-        fstp dword ptr [eax]
-        mov edx,[ecx+4]
-        mov [eax+4],edx
-    }
-    // clang-format on
+    screen[0] = projected.x;
+    memcpy(&screen[1], &projected.y, sizeof(float));
     return projected.z;
 }
 
@@ -384,49 +376,14 @@ int CObjectEdit::RenderAxes(const CMatrix* matrix, float axisSize)
         delta.z = 0;
         memcpy((float*)&delta + axis, &axisSize, 4);
         GameTransformPoint(&point, matrix, &delta);
-        const CVector* position = &point;
-        float* screen = (float*)&vertices[0];
-        BYTE visible;
-        // clang-format off
-        __asm {
-            push screen
-            push position
-            mov ecx,this
-            call CObjectEdit::WorldToScreen
-            fcomp g_quaternionMatrixOne
-            fnstsw ax
-            test ah,41h
-            setnz visible
-        }
-        // clang-format on
-        // Native permits unordered depth here and rejects only depth>1.
-        if (!visible) return 0;
+        if (WorldToScreen(&point, (float*)&vertices[0]) > g_quaternionMatrixOne)
+            return 0;
         if (axis == 0)
-        {
-            // clang-format off
-            __asm {
-                fld axisSize
-                fchs
-                fstp negativeSize
-            }
-            // clang-format on
-        }
+            negativeSize = -axisSize;
         memcpy((float*)&delta + axis, &negativeSize, 4);
         GameTransformPoint(&point, matrix, &delta);
-        screen = (float*)&vertices[1];
-        // clang-format off
-        __asm {
-            push screen
-            push position
-            mov ecx,this
-            call CObjectEdit::WorldToScreen
-            fcomp g_quaternionMatrixOne
-            fnstsw ax
-            test ah,41h
-            setnz visible
-        }
-        // clang-format on
-        if (!visible) return 0;
+        if (WorldToScreen(&point, (float*)&vertices[1]) > g_quaternionMatrixOne)
+            return 0;
         line->Begin();
         line->Draw(vertices, 2, 0xffcc9999);
         line->End();
@@ -445,91 +402,23 @@ void __cdecl ObjectEditBuildCursorRay(float rayLength, CVector* origin, CVector*
     POINT point;
     GetCursorPos(&point);
     ScreenToClient((*(HWND*)0x00c97c1c), &point);
-    LONG x = point.x, y = point.y;
-    DWORD width = description.Width, height = description.Height;
-    float normalizedX, normalizedY;
-    // clang-format off
-    __asm {
-        fild x
-        fadd st(0),st(0)
-        mov eax,width
-        test eax,eax
-        fild width
-        jge width_unsigned
-        fadd g_cursorRayUnsignedBias
-width_unsigned:
-        fdivp st(1),st(0)
-        fsub g_quaternionMatrixOne
-        fdiv dword ptr g_deviceProjectionMatrix
-        fstp normalizedX
-        fild y
-        fadd st(0),st(0)
-        mov eax,height
-        test eax,eax
-        fild height
-        jge height_unsigned
-        fadd g_cursorRayUnsignedBias
-height_unsigned:
-        fdivp st(1),st(0)
-        fsub g_quaternionMatrixOne
-        fdiv dword ptr [g_deviceProjectionMatrix+20]
-        fchs
-        fstp normalizedY
-    }
-    // clang-format on
+    const float* projection = (const float*)&g_deviceProjectionMatrix;
+    const volatile float normalizedX = (float)((2.0 * point.x / description.Width - g_quaternionMatrixOne) / projection[0]);
+    const volatile float normalizedY = (float)(-(2.0 * point.y / description.Height - g_quaternionMatrixOne) / projection[5]);
     D3DXMATRIX product, copy, inverse;
     D3DXMatrixMultiply(&product, (const D3DXMATRIX*)&g_deviceWorldMatrix, (const D3DXMATRIX*)&g_deviceViewMatrix);
     memcpy(&copy, &product, 64);
     // Native ignores singular-matrix/API failures and leaves untouched output bytes.
     D3DXMatrixInverse(&inverse, 0, &copy);
-    const float* inverseData = (const float*)&inverse;
-    // clang-format off
-    // Preserve y*x-basis summation order, float stores and overlapping outputs.
-    __asm {
-        mov eax,end
-        mov ecx,origin
-        mov esi,inverseData
-        fld dword ptr [esi+16]
-        fmul normalizedY
-        fld dword ptr [esi+0]
-        fmul normalizedX
-        faddp st(1),st(0)
-        fadd dword ptr [esi+32]
-        fstp dword ptr [eax]
-        fld dword ptr [esi+20]
-        fmul normalizedY
-        fld dword ptr [esi+4]
-        fmul normalizedX
-        faddp st(1),st(0)
-        fadd dword ptr [esi+36]
-        fstp dword ptr [eax+4]
-        fld dword ptr [esi+24]
-        fmul normalizedY
-        fld dword ptr [esi+8]
-        fmul normalizedX
-        faddp st(1),st(0)
-        fadd dword ptr [esi+40]
-        fstp dword ptr [eax+8]
-        mov edx,dword ptr [esi+52]
-        mov [ecx+4],edx
-        fld dword ptr [esi+48]
-        mov edx,dword ptr [esi+56]
-        fstp dword ptr [ecx]
-        mov [ecx+8],edx
-        fld rayLength
-        fmul dword ptr [eax]
-        fadd dword ptr [esi+48]
-        fstp dword ptr [eax]
-        fld rayLength
-        fmul dword ptr [eax+4]
-        fadd dword ptr [ecx+4]
-        fstp dword ptr [eax+4]
-        fld rayLength
-        fmul dword ptr [eax+8]
-        fadd dword ptr [ecx+8]
-        fstp dword ptr [eax+8]
-    }
-    // clang-format on
+    end->x = (float)((double)inverse._21 * normalizedY + (double)inverse._11 * normalizedX + inverse._31);
+    end->y = (float)((double)inverse._22 * normalizedY + (double)inverse._12 * normalizedX + inverse._32);
+    end->z = (float)((double)inverse._23 * normalizedY + (double)inverse._13 * normalizedX + inverse._33);
+    memcpy(&origin->y, &inverse._42, sizeof(float));
+    origin->x = inverse._41;
+    memcpy(&origin->z, &inverse._43, sizeof(float));
+    end->x = (float)((double)rayLength * end->x + inverse._41);
+    end->y = (float)((double)rayLength * end->y + origin->y);
+    end->z = (float)((double)rayLength * end->z + origin->z);
 }
 
 // 0x00071a30
@@ -698,82 +587,23 @@ BOOL CObjectEdit::RenderControlsForObject(const CMatrix* matrix, float axisSize)
         CVector delta = {0, 0, 0}, point;
         memcpy((float*)&delta + axis, &axisSize, 4);
         GameTransformPoint(&point, matrix, &delta);
-        const CVector* position = &point;
-        float* screen = (float*)&vertices[0];
-        BYTE visible;
-        // clang-format off
-        __asm {
-            push screen
-            push position
-            mov ecx,this
-            call CObjectEdit::WorldToScreen
-            fcomp g_quaternionMatrixOne
-            fnstsw ax
-            test ah,41h
-            setnz visible
-        }
-        // clang-format on
-        if (!visible) return FALSE;
+        if (WorldToScreen(&point, (float*)&vertices[0]) > g_quaternionMatrixOne)
+            return FALSE;
         if (axis == 0)
-        {
-            // clang-format off
-            __asm {
-                fld axisSize
-                fchs
-                fstp negativeSize
-            }
-            // clang-format on
-        }
+            negativeSize = -axisSize;
         memcpy((float*)&delta + axis, &negativeSize, 4);
         GameTransformPoint(&point, matrix, &delta);
-        screen = (float*)&vertices[1];
-        // clang-format off
-        __asm {
-            push screen
-            push position
-            mov ecx,this
-            call CObjectEdit::WorldToScreen
-            fcomp g_quaternionMatrixOne
-            fnstsw ax
-            test ah,41h
-            setnz visible
-        }
-        // clang-format on
-        if (!visible) return FALSE;
+        if (WorldToScreen(&point, (float*)&vertices[1]) > g_quaternionMatrixOne)
+            return FALSE;
         line->Begin();
         line->Draw(vertices, 2, colors[axis]);
         line->End();
         if (!flags[1])
         {
-            float* values = (float*)vertices;
-            BYTE horizontal, reverse;
-            // clang-format off
-            // Keep differences extended; unordered/tied magnitudes choose vertical.
-            __asm {
-                mov ecx,values
-                fld dword ptr [ecx]
-                fsub dword ptr [ecx+8]
-                fabs
-                fld dword ptr [ecx+4]
-                fsub dword ptr [ecx+12]
-                fabs
-                fcompp
-                fnstsw ax
-                test ah,5
-                setnp horizontal
-            }
-            // clang-format on
-            float* coordinate = values + (horizontal ? 0 : 1);
-            // clang-format off
-            __asm {
-                mov ecx,coordinate
-                fld dword ptr [ecx]
-                fcomp dword ptr [ecx+8]
-                fnstsw ax
-                test ah,5
-                setnp reverse
-            }
-            // clang-format on
+            const double dx = fabs((double)vertices[0].x - vertices[1].x);
+            const double dy = fabs((double)vertices[0].y - vertices[1].y);
+            const bool horizontal = dy < dx;
+            const bool reverse = horizontal ? vertices[0].x < vertices[1].x : vertices[0].y < vertices[1].y;
             *((BYTE*)this + 0xa4 + axis) = reverse;
             *(DWORD*)((BYTE*)this + 0xb7 + axis * 4) = horizontal ? 0 : 1;
         }
@@ -840,15 +670,7 @@ void CObjectEdit::Render()
             {
                 CMatrix matrix;
                 object->GetMatrix(&matrix);
-                float distance;
-                // clang-format off
-                __asm {
-                    mov ecx,object
-                    call CEntity::GetDistanceToCamera
-                    fmul g_objectEditDistanceScale
-                    fstp distance
-                }
-                // clang-format on
+                const float distance = (float)((double)object->GetDistanceToCamera() * g_objectEditDistanceScale);
                 if (RenderControls(&matrix, distance)) controlsVisible = 1;
             }
         }
@@ -863,14 +685,7 @@ void CObjectEdit::Render()
         {
             CMatrix matrix;
             object->GetMatrix(&matrix);
-            float distance;
-            // clang-format off
-            __asm {
-                mov ecx,object
-                call CEntity::GetDistanceToCamera
-                fstp distance
-            }
-            // clang-format on
+            const volatile float distance = object->GetDistanceToCamera();
             if (!editMode)
             {
                 CMatrix boneMatrix;
@@ -880,14 +695,7 @@ void CObjectEdit::Render()
                 memcpy(&matrix.right, &boneMatrix.right, 12);
                 memcpy(&matrix.at, &boneMatrix.at, 12);
             }
-            // clang-format off
-            __asm {
-                fld distance
-                fmul g_objectEditDistanceScale
-                fstp distance
-            }
-            // clang-format on
-            if (RenderControls(&matrix, distance)) controlsVisible = 1;
+            if (RenderControls(&matrix, distance * g_objectEditDistanceScale)) controlsVisible = 1;
         }
     }
     if (!flags[1])

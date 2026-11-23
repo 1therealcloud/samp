@@ -35,6 +35,7 @@
 #include <SocketLayer.h>
 #include <ttmathuint.h>
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -522,48 +523,14 @@ bool NativeSyncBitStream::ReadQuaternion(float& w, float& x, float& y, float& z)
         y = -y;
     if (zNegative)
         z = -z;
-    // clang-format off
-    // Preserve the unspilled residual and the second, signed store from ST0.
-    __asm {
-        mov eax,x
-        mov ecx,y
-        mov edx,z
-        fld dword ptr [eax]
-        fld dword ptr [ecx]
-        fld dword ptr [edx]
-        fld st(2)
-        fmulp st(3),st(0)
-        fxch st(2)
-        fsubr dword ptr [g_quaternionMatrixOne]
-        fld st(1)
-        fmul st(0),st(2)
-        fsubp st(1),st(0)
-        fld st(2)
-        fmul st(0),st(3)
-        fsubp st(1),st(0)
-        fstp st(2)
-        fstp st(0)
-        fcom dword ptr [g_objectScaleLowerBound]
-        fnstsw ax
-        test ah,5
-        jp quaternion_residual_ready
-        fstp st(0)
-        fld dword ptr [g_objectScaleLowerBound]
-    quaternion_residual_ready:
-        fsqrt
-        mov eax,w
-        fld st(0)
-        fstp dword ptr [eax]
-        cmp wNegative,0
-        je quaternion_positive_w
-        fchs
-        fstp dword ptr [eax]
-        jmp quaternion_w_done
-    quaternion_positive_w:
-        fstp st(0)
-    quaternion_w_done:
-    }
-    // clang-format on
+    double residual = ((double)g_quaternionMatrixOne - (double)x * x) - (double)y * y - (double)z * z;
+    if (residual < g_objectScaleLowerBound)
+        residual = g_objectScaleLowerBound;
+    const double root = sqrt(residual);
+    volatile float& outputW = w;
+    outputW = (float)root;
+    if (wNegative)
+        outputW = (float)-root;
     return true;
 }
 
@@ -573,17 +540,7 @@ bool NativeSyncBitStream::ReadVelocity(float& x, float& y, float& z)
     float magnitude;
     if (!Read(magnitude))
         return false;
-    BYTE positive;
-    // clang-format off
-    __asm {
-        fld magnitude
-        fcomp dword ptr [g_localQuaternionSyncThreshold]
-        fnstsw ax
-        test ah,41h
-        sete positive
-    }
-    // clang-format on
-    if (!positive)
+    if (!(magnitude > g_localQuaternionSyncThreshold))
     {
         x = 0.0f;
         y = 0.0f;
@@ -598,32 +555,13 @@ bool NativeSyncBitStream::ReadVelocity(float& x, float& y, float& z)
         normalizedY = (float)compressed * g_netCompressedVectorScale - g_quaternionMatrixOne;
     if (!Read(compressed))
         return false;
-    // Native keeps the third normalized value in ST0 until its output store.
-    int value = compressed;
-    // clang-format off
-    __asm {
-        fild value
-        fmul dword ptr [g_netCompressedVectorScale]
-        fsub dword ptr [g_quaternionMatrixOne]
-        mov eax,x
-        mov ecx,y
-        mov edx,z
-        fld normalizedX
-        fstp dword ptr [eax]
-        fld normalizedY
-        fstp dword ptr [ecx]
-        fstp dword ptr [edx]
-        fld magnitude
-        fmul dword ptr [eax]
-        fstp dword ptr [eax]
-        fld magnitude
-        fmul dword ptr [ecx]
-        fstp dword ptr [ecx]
-        fld magnitude
-        fmul dword ptr [edx]
-        fstp dword ptr [edx]
-    }
-    // clang-format on
+    const double normalizedZ = (double)compressed * g_netCompressedVectorScale - g_quaternionMatrixOne;
+    x = normalizedX;
+    y = normalizedY;
+    z = (float)normalizedZ;
+    x = magnitude * x;
+    y = magnitude * y;
+    z = magnitude * z;
     return true;
 }
 

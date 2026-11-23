@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include <time.h>
 
@@ -615,19 +616,7 @@ BOOL CPed::IsDead()
     BYTE* ped = (BYTE*)m_pGamePed;
     if (!ped)
         return TRUE;
-    BOOL dead;
-    // clang-format off
-    __asm { mov edx,ped
-        fld dword ptr [edx+0x540]
-        fcomp dword ptr [g_objectScaleLowerBound]
-        fnstsw ax
-        test ah,0x41
-        setne al
-        movzx eax,al
-        mov dead,eax
-    }
-    // clang-format on
-    return dead;
+    return !(*(const float*)(ped + 0x540) > g_objectScaleLowerBound);
 }
 
 // 0x000acdb0
@@ -808,26 +797,7 @@ void CPed::HoldObject(DWORD object)
 // 0x000ad550
 void CPed::SetAimZ(float value)
 {
-    DWORD accepted;
-    // clang-format off
-    __asm { fld value
-        fcomp dword ptr [g_vehicleTrainSpeedMaximum]
-        fnstsw ax
-        test ah,0x41
-        jz reject
-        fld value
-        fcomp dword ptr [g_vehicleTrainSpeedMinimum]
-        fnstsw ax
-        test ah,5
-        jnp reject
-        mov accepted,1
-        jmp compared
-    reject:
-        mov accepted,0
-    compared:
-    }
-    // clang-format on
-    if (accepted && m_pGamePed)
+    if (!(value > g_vehicleTrainSpeedMaximum || value < g_vehicleTrainSpeedMinimum) && m_pGamePed)
     {
         BYTE* state = *(BYTE**)((BYTE*)m_pGamePed + 0x480);
         *(DWORD*)(state + 0x54) = *(DWORD*)&value;
@@ -939,40 +909,15 @@ void CPed::DeleteAccessory(int index)
 }
 
 // 0x000abdc0
-__declspec(naked) float CPed::GetDistanceToEntity(CEntity* entity)
+float CPed::GetDistanceToEntity(CEntity* entity)
 {
-    // clang-format off
-    // Native uninitialized matrix outputs and extended x87 return are intentional.
-    __asm { sub esp,0x80
-        lea eax,[esp]
-        push eax
-        call CEntity::GetMatrix
-        lea ecx,[esp+0x40]
-        push ecx
-        mov ecx,[esp+0x88]
-        call CEntity::GetMatrix
-        fld dword ptr [esp+0x38]
-        fsub dword ptr [esp+0x78]
-        fld dword ptr [esp+0x34]
-        fsub dword ptr [esp+0x74]
-        fld dword ptr [esp+0x30]
-        fsub dword ptr [esp+0x70]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        add esp,0x80
-        ret 4
-    }
-    // clang-format on
+    CMatrix first, second;
+    GetMatrix(&first);
+    entity->GetMatrix(&second);
+    const double z = (double)first.position.z - second.position.z;
+    const double y = (double)first.position.y - second.position.y;
+    const double x = (double)first.position.x - second.position.x;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
 // 0x000ad000
@@ -1130,55 +1075,18 @@ void CPed::StartDancing(int style)
 }
 
 // 0x000abab0
-__declspec(naked) float CPed::GetRotation()
+float CPed::GetRotation()
 {
-    // clang-format off
-    __asm { sub esp,0x40
-        push esi
-        mov esi,ecx
-        mov eax,[esi+0x2a4]
-        test eax,eax
-        jz no_rotation
-        mov eax,[esi+0x44]
-        push eax
-        call GamePoolPedGetAt
-        test eax,eax
-        jnz rotation_matrix
-    no_rotation:
-        fld dword ptr [g_objectScaleLowerBound]
-        pop esi
-        add esp,0x40
-        ret
-    rotation_matrix:
-        lea ecx,[esp+4]
-        push ecx
-        mov ecx,esi
-        call CEntity::GetMatrix
-        fld dword ptr [esp+0x14]
-        fchs
-        fld dword ptr [esp+0x18]
-        fpatan
-        fmul dword ptr [g_entityRadiansToDegrees]
-        fcom dword ptr [g_objectScaleLowerBound]
-        fnstsw ax
-        test ah,5
-        jp rotation_upper
-        fadd dword ptr [g_anglePeriod]
-        pop esi
-        add esp,0x40
-        ret
-    rotation_upper:
-        fcom dword ptr [g_anglePeriod]
-        fnstsw ax
-        test ah,1
-        jnz rotation_done
-        fsub dword ptr [g_anglePeriod]
-    rotation_done:
-        pop esi
-        add esp,0x40
-        ret
-    }
-    // clang-format on
+    if (!m_pGamePed || !GamePoolPedGetAt(m_nHandle))
+        return g_objectScaleLowerBound;
+    CMatrix matrix;
+    GetMatrix(&matrix);
+    double degrees = atan2(-(double)matrix.up.x, (double)matrix.up.y) * g_entityRadiansToDegrees;
+    if (degrees < g_objectScaleLowerBound)
+        degrees += g_anglePeriod;
+    else if (degrees >= g_anglePeriod)
+        degrees -= g_anglePeriod;
+    return (float)degrees;
 }
 
 // 0x000ac6e0
@@ -1342,70 +1250,23 @@ void CPed::Kill()
 }
 
 // 0x000ac630
-__declspec(naked) void* CPed::GetFloor()
+void* CPed::GetFloor()
 {
-    // clang-format off
-    // Preserve native float spills, x87 stack lifetime and unchecked query output.
-    __asm { sub esp,0x50
-        push esi
-        mov esi,ecx
-        mov eax,[esi+0x2a4]
-        test eax,eax
-        jz floor_rejected
-        mov ecx,[eax+0x46c]
-        test ch,1
-        jnz floor_rejected
-        mov eax,[esi+0x44]
-        push eax
-        call GamePoolPedGetAt
-        test eax,eax
-        jz floor_rejected
-        mov eax,[esi+0x2a4]
-        mov ecx,[eax+0x14]
-        fld dword ptr [ecx+0x30]
-        push 0
-        fst dword ptr [esp+0xc]
-        mov edx,[eax+0x14]
-        fld dword ptr [edx+0x34]
-        push 0
-        fst dword ptr [esp+0x14]
-        mov eax,[eax+0x14]
-        fld dword ptr [eax+0x38]
-        push 0
-        fsub dword ptr [g_vehicleCreationLift]
-        push 0
-        push 1
-        push 0
-        fstp dword ptr [esp+0x28]
-        push 1
-        fxch st(1)
-        push 0
-        fstp dword ptr [esp+0x34]
-        lea ecx,[esp+0x24]
-        push ecx
-        fstp dword ptr [esp+0x3c]
-        lea edx,[esp+0x44]
-        fld dword ptr [esp+0x34]
-        push edx
-        fsub dword ptr [g_pedFloorRayLength]
-        lea eax,[esp+0x3c]
-        push eax
-        lea ecx,[esp+0x34]
-        push ecx
-        fstp dword ptr [esp+0x4c]
-        call GameProcessLineOfSightRaw
-        mov eax,[esp+0x34]
-        add esp,0x30
-        pop esi
-        add esp,0x50
-        ret
-    floor_rejected:
-        xor eax,eax
-        pop esi
-        add esp,0x50
-        ret
-    }
-    // clang-format on
+    const BYTE* ped = (const BYTE*)m_pGamePed;
+    if (!ped || (*(const DWORD*)(ped + 0x46c) & 0x100) || !GamePoolPedGetAt(m_nHandle))
+        return 0;
+
+    const CMatrix* matrix = *(const CMatrix* const*)((const BYTE*)m_pGamePed + 0x14);
+    CVector start, end;
+    end.x = start.x = matrix->position.x;
+    end.y = start.y = matrix->position.y;
+    const volatile float startZ = matrix->position.z - g_vehicleCreationLift;
+    start.z = startZ;
+    end.z = startZ - g_pedFloorRayLength;
+    BYTE collision[0x2c];
+    void* entity;
+    GameProcessLineOfSightRaw(&start, &end, collision, &entity, 0, 1, 0, 1, 0, 0, 0, 0);
+    return entity;
 }
 
 // 0x000ac030
@@ -1451,19 +1312,7 @@ void CPed::PutIntoVehicle(int vehicle, int seat)
     if (GetCurrentWeapon() == 46)
         SetArmedWeapon(0, 0);
     BYTE* backend = (BYTE*)GamePoolVehicleGetAt(vehicle);
-    DWORD reject;
-    // clang-format off
-    __asm { fld dword ptr [g_objectScaleLowerBound]
-        mov eax,backend
-        fld dword ptr [eax+0x4c0]
-        fucompp
-        fnstsw ax
-        test ah,0x44
-        setnp al
-        movzx eax,al
-        mov reject,eax
-    }
-    // clang-format on
+    const bool reject = *(const float*)(backend + 0x4c0) == g_objectScaleLowerBound;
     // GTA SA virtual address: excluded vehicle vtable0x00863c40.
     if (reject || *(DWORD*)backend == 0x863c40) return;
     if ((GameGetVehicleSubtype(backend) == 1 || GameGetVehicleSubtype(backend) == 2) && seat > (int)*(backend + 0x488))
@@ -1747,13 +1596,6 @@ void CPed::SetKeys(WORD mask, WORD leftRight, WORD upDown)
     KeyStuff::SetKeys(m_nPlayerNumber, keys);
 }
 
-extern "C"
-{
-    // MSVC CRT x87 conversion helper, provided by selected runtime.
-    // 0x000f9324
-    __int64 __cdecl _ftol2();
-}
-
 // 0x000ad9f0
 void CPed::ProcessDrunk()
 {
@@ -1763,14 +1605,7 @@ void CPed::ProcessDrunk()
     {
         if (m_nPlayerNumber)
             return;
-        int shake;
-        // clang-format off
-        __asm { fild level
-            fmul dword ptr [g_pedDrunkShakeScale]
-            call _ftol2
-            mov shake,eax
-        }
-        // clang-format on
+        int shake = (int)(__int64)((double)level * g_pedDrunkShakeScale);
         if (shake > 250) shake = 250;
         else if (shake < 5) shake = 0;
         Scripting::ProcessCommand(&g_pedDrunkShakeCommand, 0, shake);
@@ -1800,33 +1635,13 @@ void CPed::ProcessDrunk()
                             else
                                 deltaBits = (int)m_drunkLevel < 5000 ? 0xbc449ba6 : 0xbc75c28f;
                         }
-                        // clang-format off
-                        __asm { mov edx,vehicle
-                            push 0
-                            push dword ptr [edx+0x44]
-                            call FloatOffset
-                            fcomp dword ptr [g_pedDrunkSpeedThreshold]
-                            add esp,8
-                            fnstsw ax
-                            test ah,0x41
-                            jz drunk_apply_delta
-                            mov edx,vehicle
-                            push 0
-                            push dword ptr [edx+0x48]
-                            call FloatOffset
-                            fcomp dword ptr [g_pedDrunkSpeedThreshold]
-                            add esp,8
-                            fnstsw ax
-                            test ah,0x41
-                            jnz drunk_delta_done
-                        drunk_apply_delta:
-                            mov edx,vehicle
-                            fld dword ptr deltaBits
-                            fadd dword ptr [edx+0x58]
-                            fstp dword ptr [edx+0x58]
-                        drunk_delta_done:
+                        if (FloatOffset(*(const float*)(vehicle + 0x44), 0.0f) > g_pedDrunkSpeedThreshold ||
+                            FloatOffset(*(const float*)(vehicle + 0x48), 0.0f) > g_pedDrunkSpeedThreshold)
+                        {
+                            float delta;
+                            memcpy(&delta, &deltaBits, sizeof(delta));
+                            *(float*)(vehicle + 0x58) = delta + *(float*)(vehicle + 0x58);
                         }
-                        // clang-format on
                         g_pedDrunkVehicleTick = tick();
                     }
                 }
@@ -2130,15 +1945,7 @@ CPed::CPed(BYTE player, int model, float x, float y, float z, float rotation)
     GetMatrix(&matrix);
     memcpy(&matrix.position.x, &x, 4);
     memcpy(&matrix.position.y, &y, 4);
-    float pz = z, liftedZ;
-    // clang-format off
-    __asm {
-        fld pz
-        fadd g_pedSpawnLift
-        fstp liftedZ
-    }
-    // clang-format on
-    memcpy(&matrix.position.z, &liftedZ, 4);
+    matrix.position.z = z + g_pedSpawnLift;
     SetMatrix(matrix);
     for (int i = 0; i < 10; i++)
     {
@@ -2303,28 +2110,9 @@ void CPed::ProcessParachuteEvent(const char* name)
             return;
         const float* local = (const float*)(*(BYTE**)((BYTE*)GameFindLocalPed() + 0x14) + 0x30);
         const float* position = (const float*)&matrix.position;
-        double effectX, effectY, effectZ;
-        // clang-format off
-        __asm {
-            mov eax,position
-            mov edx,local
-            fld dword ptr [eax]
-            fsub dword ptr [edx]
-            fmul g_objectMutationStep
-            fadd dword ptr [edx]
-            fld dword ptr [eax+4]
-            fsub dword ptr [edx+4]
-            fmul g_objectMutationStep
-            fadd dword ptr [edx+4]
-            fld dword ptr [eax+8]
-            fsub dword ptr [edx+8]
-            fmul g_objectMutationStep
-            fadd dword ptr [edx+8]
-            fstp effectZ
-            fstp effectY
-            fstp effectX
-        }
-        // clang-format on
+        const double effectX = ((double)position[0] - local[0]) * g_objectMutationStep + local[0];
+        const double effectY = ((double)position[1] - local[1]) * g_objectMutationStep + local[1];
+        const double effectZ = ((double)position[2] - local[2]) * g_objectMutationStep + local[2];
         Scripting::ProcessCommand(&g_pedBehaviorEffectCommand, effectX, effectY, effectZ, 1039);
         return;
     }
@@ -2604,20 +2392,8 @@ void CPed::ProcessAccessories()
         for (int axis = 0; axis < 3; axis++)
         {
             float* rotation = (float*)&m_accessoryInfo[i].rotation + axis;
-            BYTE rotate;
-            // clang-format off
-            // Skip ordered +/-zero; unordered values take the rotate branch.
-            __asm {
-                fld g_objectScaleLowerBound
-                mov edx,rotation
-                fld dword ptr [edx]
-                fucompp
-                fnstsw ax
-                test ah,44h
-                setp rotate
-            }
-            // clang-format on
-            if (rotate) GameRotateRwMatrixOnAxis(&matrix, axis, *rotation);
+            if (*rotation != g_objectScaleLowerBound)
+                GameRotateRwMatrixOnAxis(&matrix, axis, *rotation);
         }
         GameScaleRwMatrix(&matrix, &m_accessoryInfo[i].scale);
         ((CEntity*)m_accessoryObjects[i])->SetMatrix(matrix);
@@ -3186,13 +2962,9 @@ void* CPed::GetAimHit(CVector* position)
     // Native ignores AL and tests the returned entity pointer instead.
     if (entity)
     {
-        // clang-format off
-        __asm {
-            mov eax,position
-            fld dword ptr collision
-            fstp dword ptr [eax]
-        }
-        // clang-format on
+        float x;
+        memcpy(&x, collision, sizeof(x));
+        position->x = x;
         memcpy(&position->y, collision + 4, 8);
     }
     return entity;
@@ -3258,11 +3030,8 @@ void CPed::GetCameraAimRay(CVector* origin, CVector* target)
         mov eax,514970h
         call eax
     }
-    __asm {
-        mov eax,target
-        fld destination.x
-        fstp dword ptr [eax]
-    } // clang-format on
+    // clang-format on
+    target->x = destination.x;
     memcpy(&target->y, &destination.y, 8);
     if (m_nPlayerNumber)
     {
@@ -3289,13 +3058,9 @@ void* CPed::GetCameraAimHit(CVector* position)
     GameProcessLineOfSightRaw(&origin, &target, collision, &entity, 0, 1, 1, 1, 0, 0, 0, 0);
     if (entity)
     {
-        // clang-format off
-        __asm {
-            mov eax,position
-            fld dword ptr collision
-            fstp dword ptr [eax]
-        }
-        // clang-format on
+        float x;
+        memcpy(&x, collision, sizeof(x));
+        position->x = x;
         memcpy(&position->y, collision + 4, 8);
     }
     return entity;

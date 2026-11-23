@@ -31,14 +31,7 @@ void GameQuaternionFromMatrix(const CMatrix* matrix, GameQuaternion* out)
     // GTA SA virtual addresses: USA 7EB5C0; all other version values use EU 7EB600.
     DWORD target = g_gameVersion == 1 ? 0x7eb5c0 : 0x7eb600;
     ((void(__cdecl*)(D3DXQUATERNION*, const CMatrix*))target)(&quaternion, matrix);
-    // clang-format off
-    // Native w publication is an x87 float load/store; xyz are raw DWORD copies.
-    __asm {
-        mov eax,out
-        fld quaternion.w
-        fstp dword ptr [eax]
-    }
-    // clang-format on
+    out->w = quaternion.w;
     memcpy(&out->x, &quaternion.x, 12);
 }
 
@@ -53,114 +46,29 @@ void GameQuaternionNormalize(GameQuaternion* quaternion)
     memcpy(&quaternion->x, &output.x, 12);
 }
 
-// The original keeps sx, sz, xz and xy in x87 registers but spills other
-// products to float. VC7 C++ reschedules/spills these differently; explicit x87
-// preserves the native rounding boundaries and caller precision control.
+// Round the scale and selected products before assembling the basis.
 // Flags, padding and translation are untouched; zero input is not special-cased.
 // 0x000b4e40
-__declspec(naked) void GameQuaternionToMatrixBody(const GameQuaternion* quaternion, CMatrix* matrix)
+void GameQuaternionToMatrixBody(const GameQuaternion* quaternion, CMatrix* matrix)
 {
-    // clang-format off
-    __asm {
-        // Raw cdecl frame; x,y,z are retained while scale is computed.
-        sub esp,0x30
-        mov eax,dword ptr [esp + 0x34]
-        fld float ptr [eax + 0x4]
-        mov ecx,dword ptr [eax]
-        fld float ptr [eax + 0x8]
-        mov dword ptr [esp + 0x34],ecx
-        fld float ptr [eax + 0xc]
-        fld float ptr [eax + 0xc]
-        fld float ptr [eax + 0x8]
-        fld float ptr [eax + 0x4]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fld float ptr [esp + 0x34]
-        fmul float ptr [esp + 0x34]
-        // scale = float(2 / (((x*x+y*y)+z*z)+w*w)).
-        faddp st(1),st(0)
-        fdivr float ptr g_quaternionMatrixTwo
-        fstp float ptr [esp + 0x34]
-        fstp st(0)
-        fstp st(0)
-        fstp st(0)
-        // sx and sz remain extended; only sy is rounded to float here.
-        fld float ptr [esp + 0x34]
-        fmul st(0),st(3)
-        fld float ptr [esp + 0x34]
-        fmul st(0),st(3)
-        fstp float ptr [esp + 0x1c]
-        fld float ptr [esp + 0x34]
-        fmul st(0),st(2)
-        fld float ptr [eax]
-        mov eax,dword ptr [esp + 0x38]
-        fld st(0)
-        // wx,wy,wz,xx,yy,zz,yz have native float-store boundaries.
-        fmul st(0),st(3)
-        fstp float ptr [esp]
-        fld float ptr [esp + 0x1c]
-        fmul st(0),st(1)
-        fstp float ptr [esp + 0x4]
-        fmul st(0),st(1)
-        fstp float ptr [esp + 0x8]
-        fld st(1)
-        fmul st(0),st(5)
-        fstp float ptr [esp + 0xc]
-        fld float ptr [esp + 0x1c]
-        fmul st(0),st(4)
-        fstp float ptr [esp + 0x10]
-        fld st(0)
-        fmul st(0),st(3)
-        fstp float ptr [esp + 0x14]
-        fmul st(0),st(3)
-        fstp float ptr [esp + 0x24]
-        fmul st(0),st(1)
-        fstp st(2)
-        fstp st(0)
-        fld float ptr [esp + 0x1c]
-        fmul st(0),st(2)
-        fld float ptr [esp + 0x14]
-        fadd float ptr [esp + 0x10]
-        fsubr float ptr g_quaternionMatrixOne
-        // Publish nine basis components in native order; xz and xy stay extended.
-        fstp float ptr [eax]
-        fld float ptr [esp + 0x8]
-        fadd st(0),st(1)
-        fstp float ptr [eax + 0x4]
-        fld st(1)
-        fsub float ptr [esp + 0x4]
-        fstp float ptr [eax + 0x8]
-        fsub float ptr [esp + 0x8]
-        fstp float ptr [eax + 0x10]
-        fld float ptr [esp + 0x14]
-        fadd float ptr [esp + 0xc]
-        fsubr float ptr g_quaternionMatrixOne
-        fstp float ptr [eax + 0x14]
-        fld float ptr [esp]
-        fadd float ptr [esp + 0x24]
-        fstp float ptr [eax + 0x18]
-        fld float ptr [esp + 0x4]
-        fadd st(0),st(1)
-        fstp float ptr [eax + 0x20]
-        fstp st(0)
-        fstp st(0)
-        fld float ptr [esp + 0x24]
-        fsub float ptr [esp]
-        fstp float ptr [eax + 0x24]
-        fld float ptr [esp + 0x10]
-        fadd float ptr [esp + 0xc]
-        fsubr float ptr g_quaternionMatrixOne
-        fstp float ptr [eax + 0x28]
-        add esp,0x30
-        ret
-    }
-    // clang-format on
+    const double w = quaternion->w, x = quaternion->x, y = quaternion->y, z = quaternion->z;
+    const volatile float scale = (float)(2.0 / (x * x + y * y + z * z + w * w));
+    const double sx = scale * x;
+    const volatile float sy = (float)(scale * y);
+    const double sz = scale * z;
+    const volatile float wx = (float)(w * sx), wy = (float)(w * sy), wz = (float)(w * sz);
+    const volatile float xx = (float)(x * sx), yy = (float)(y * sy), zz = (float)(z * sz);
+    const volatile float yz = (float)(y * sz);
+    const double xy = x * sy, xz = x * sz;
+    matrix->right.x = (float)(1.0 - ((double)zz + yy));
+    matrix->right.y = (float)(wz + xy);
+    matrix->right.z = (float)(xz - wy);
+    matrix->up.x = (float)(xy - wz);
+    matrix->up.y = (float)(1.0 - ((double)zz + xx));
+    matrix->up.z = (float)((double)wx + yz);
+    matrix->at.x = (float)(wy + xz);
+    matrix->at.y = (float)((double)yz - wx);
+    matrix->at.z = (float)(1.0 - ((double)yy + xx));
 }
 
 // Native forwarding entry shares the cdecl argument frame with the body.
@@ -172,10 +80,6 @@ __declspec(naked) void GameQuaternionToMatrix(const GameQuaternion* quaternion, 
     // clang-format on
 }
 
-// CRT helper uses x87 ST0 for its argument/result, rather than a C stack argument.
-// 0x000fce60
-extern "C" void __cdecl _CIasin();
-
 // Snapshot both inputs in D3DX x,y,z,w order before publishing the result.
 // 0x000b4fc0
 void GameQuaternionSlerp(GameQuaternion* out, const GameQuaternion* from, const GameQuaternion* to, float amount)
@@ -186,158 +90,40 @@ void GameQuaternionSlerp(GameQuaternion* out, const GameQuaternion* from, const 
     memcpy(&second.w, &to->w, 4);
     memcpy(&second.x, &to->x, 12);
     D3DXQuaternionSlerp(&result, &first, &second, amount);
-    // clang-format off
-    __asm {
-        mov eax,out
-        fld result.w
-        fstp dword ptr [eax]
-    }
-    // clang-format on
+    out->w = result.w;
     memcpy(&out->x, &result.x, 12);
 }
 
-// Euler inputs are radians. Native FSIN/FCOS and mixed float/x87 intermediates
-// implement the half-angle rotation; all inputs are consumed before output stores.
+// Euler inputs are radians. Read them before storing the quaternion.
 // 0x000b50a0
-__declspec(naked) void GameQuaternionFromEuler(const CVector* angles, GameQuaternion* quaternion)
+void GameQuaternionFromEuler(const CVector* angles, GameQuaternion* quaternion)
 {
-    // clang-format off
-    __asm {
-        sub esp,0x10
-        mov eax,dword ptr [esp + 0x14]
-        fld float ptr [eax + 0x8]
-        fmul float ptr g_textDrawHalf
-        fld st(0)
-        fcos
-        fld float ptr [eax + 0x4]
-        fmul float ptr g_textDrawHalf
-        fld st(0)
-        fcos
-        fstp float ptr [esp + 0x4]
-        fld float ptr [eax]
-        mov eax,dword ptr [esp + 0x18]
-        fmul float ptr g_textDrawHalf
-        fld st(0)
-        fcos
-        fstp float ptr [esp]
-        fxch st(3)
-        fsin
-        fstp float ptr [esp + 0x14]
-        fsin
-        fstp float ptr [esp + 0x8]
-        fxch st(1)
-        fsin
-        fxch st(1)
-        fld float ptr [esp + 0x8]
-        fmul st(0),st(2)
-        fstp float ptr [esp + 0xc]
-        fld float ptr [esp]
-        fmul float ptr [esp + 0x4]
-        fmul st(0),st(1)
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp + 0x14]
-        faddp st(1),st(0)
-        fstp float ptr [eax]
-        fld float ptr [esp + 0x4]
-        fmul st(0),st(2)
-        fmul st(0),st(1)
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp + 0x14]
-        fmul float ptr [esp]
-        fsubp st(1),st(0)
-        fstp float ptr [eax + 0x4]
-        fxch st(1)
-        fmul float ptr [esp + 0x14]
-        fmul float ptr [esp + 0x4]
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp]
-        fmul st(0),st(2)
-        faddp st(1),st(0)
-        fstp float ptr [eax + 0x8]
-        fld float ptr [esp + 0x14]
-        fmul float ptr [esp]
-        fmul float ptr [esp + 0x4]
-        fld float ptr [esp + 0xc]
-        fmul st(0),st(2)
-        fsubp st(1),st(0)
-        fstp float ptr [eax + 0xc]
-        fstp st(0)
-        add esp,0x10
-        ret
-    }
-    // clang-format on
+    const double x = angles->x * 0.5, y = angles->y * 0.5, z = angles->z * 0.5;
+    const volatile float cx = (float)cos(x), cy = (float)cos(y);
+    const double cz = cos(z);
+    const double sx = sin(x);
+    const volatile float sy = (float)sin(y), sz = (float)sin(z);
+    const volatile float sxsy = (float)(sx * sy);
+    quaternion->w = (float)(((double)cx * cy) * cz + (double)sxsy * sz);
+    quaternion->x = (float)((cy * sx) * cz - ((double)sy * sz) * cx);
+    quaternion->y = (float)((sx * sz) * cy + ((double)sy * cx) * cz);
+    quaternion->z = (float)(((double)sz * cx) * cy - sxsy * cz);
 }
 
 // Native FPATAN and CRT asin return radians, without clamping or normalization.
 // Inputs are re-read after each output store; overlapping buffers follow that order.
 // 0x000b5160
-__declspec(naked) void GameQuaternionToEuler(const GameQuaternion* quaternion, CVector* angles)
+void GameQuaternionToEuler(const GameQuaternion* quaternion, CVector* angles)
 {
-    // clang-format off
-    __asm {
-        sub esp,0xc
-        push esi
-        mov esi,dword ptr [esp + 0x14]
-        fld float ptr [esi]
-        push edi
-        fld st(0)
-        mov edi,dword ptr [esp + 0x1c]
-        fmul st(0),st(1)
-        fstp float ptr [esp + 0x10]
-        fstp st(0)
-        fld float ptr [esi + 0x4]
-        fld st(0)
-        fmul st(0),st(1)
-        fstp float ptr [esp + 0x8]
-        fstp st(0)
-        fld float ptr [esi + 0x8]
-        fld st(0)
-        fmul st(0),st(1)
-        fstp float ptr [esp + 0x18]
-        fstp st(0)
-        fld float ptr [esi + 0xc]
-        fld st(0)
-        fmul st(0),st(1)
-        fstp float ptr [esp + 0xc]
-        fstp st(0)
-        fld float ptr [esi + 0x8]
-        fmul float ptr [esi + 0x4]
-        fld float ptr [esi + 0xc]
-        fmul float ptr [esi]
-        faddp st(1),st(0)
-        fadd st(0),st(0)
-        fld float ptr [esp + 0x8]
-        fsub float ptr [esp + 0x18]
-        fsub float ptr [esp + 0xc]
-        fadd float ptr [esp + 0x10]
-        fpatan
-        fstp float ptr [edi]
-        fld float ptr [esi + 0xc]
-        fmul float ptr [esi + 0x4]
-        fld float ptr [esi + 0x8]
-        fmul float ptr [esi]
-        fsubp st(1),st(0)
-        fmul float ptr g_quaternionEulerNegativeTwo
-        call _CIasin
-        fstp float ptr [edi + 0x4]
-        fld float ptr [esi + 0xc]
-        fmul float ptr [esi + 0x8]
-        fld float ptr [esi + 0x4]
-        fmul float ptr [esi]
-        faddp st(1),st(0)
-        fadd st(0),st(0)
-        fld float ptr [esp + 0x18]
-        fadd float ptr [esp + 0x8]
-        fsubr float ptr [esp + 0xc]
-        fadd float ptr [esp + 0x10]
-        fpatan
-        fstp float ptr [edi + 0x8]
-        pop edi
-        pop esi
-        add esp,0xc
-        ret
-    }
-    // clang-format on
+    const volatile float ww = quaternion->w * quaternion->w;
+    const volatile float xx = quaternion->x * quaternion->x;
+    const volatile float yy = quaternion->y * quaternion->y;
+    const volatile float zz = quaternion->z * quaternion->z;
+    angles->x = (float)atan2(2.0 * ((double)quaternion->y * quaternion->x + (double)quaternion->z * quaternion->w),
+                            ((double)xx - yy) - zz + ww);
+    angles->y = (float)asin(-2.0 * ((double)quaternion->z * quaternion->x - (double)quaternion->y * quaternion->w));
+    angles->z = (float)atan2(2.0 * ((double)quaternion->z * quaternion->y + (double)quaternion->x * quaternion->w),
+                            (double)zz - ((double)yy + xx) + ww);
 }
 
 // Selected static CRT helper, not a recovered SA-MP implementation.
@@ -395,117 +181,28 @@ void GameQuaternionFromMatrixComponents(const CMatrix* matrix, GameQuaternion* o
 // fallback (-from.z,from.y,from.x), float spills, and final x,y,z,w store order.
 // There is no additional zero-length guard.
 // 0x000b4b60
-__declspec(naked) void GameQuaternionFromVectors(GameQuaternion* out, const CVector* from, const CVector* to)
+void GameQuaternionFromVectors(GameQuaternion* out, const CVector* from, const CVector* to)
 {
-    // clang-format off
-    __asm {
-        sub esp,0x18
-        mov eax,dword ptr [esp + 0x20]
-        mov ecx,dword ptr [eax]
-        mov edx,dword ptr [eax + 0x4]
-        mov eax,dword ptr [eax + 0x8]
-        mov dword ptr [esp + 0x20],eax
-        mov eax,dword ptr [esp + 0x24]
-        mov dword ptr [esp + 0x4],ecx
-        mov ecx,dword ptr [eax]
-        mov dword ptr [esp],edx
-        mov edx,dword ptr [eax + 0x4]
-        mov eax,dword ptr [eax + 0x8]
-        mov dword ptr [esp + 0x24],eax
-        fld float ptr [esp + 0x24]
-        mov dword ptr [esp + 0x8],edx
-        fmul float ptr [esp]
-        mov dword ptr [esp + 0xc],ecx
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp + 0x20]
-        fsubp st(1),st(0)
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp + 0x20]
-        fld float ptr [esp + 0x24]
-        fmul float ptr [esp + 0x4]
-        fsubp st(1),st(0)
-        fstp float ptr [esp + 0x10]
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp + 0x4]
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp]
-        fsubp st(1),st(0)
-        fstp float ptr [esp + 0x14]
-        fld float ptr [esp + 0x24]
-        fmul float ptr [esp + 0x24]
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp + 0x8]
-        faddp st(1),st(0)
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp + 0xc]
-        faddp st(1),st(0)
-        fld float ptr [esp + 0x20]
-        fmul float ptr [esp + 0x20]
-        fld float ptr [esp]
-        fmul float ptr [esp]
-        faddp st(1),st(0)
-        fld float ptr [esp + 0x4]
-        fmul float ptr [esp + 0x4]
-        faddp st(1),st(0)
-        fmulp st(1),st(0)
-        fsqrt
-        fld float ptr [esp + 0x24]
-        fmul float ptr [esp + 0x20]
-        fld float ptr [esp + 0x8]
-        fmul float ptr [esp]
-        faddp st(1),st(0)
-        fld float ptr [esp + 0xc]
-        fmul float ptr [esp + 0x4]
-        faddp st(1),st(0)
-        faddp st(1),st(0)
-        fst float ptr [esp + 0x24]
-        fcomp float ptr g_quaternionOppositeThreshold
-        fnstsw ax
-        test ah,0x5
-        jp q_vectors_normalize
-        mov ecx,dword ptr [esp]
-        fstp st(0)
-        fld float ptr [esp + 0x20]
-        mov edx,dword ptr [esp + 0x4]
-        fchs
-        mov dword ptr [esp + 0x10],ecx
-        mov dword ptr [esp + 0x14],edx
-        mov dword ptr [esp + 0x24],0x0
-q_vectors_normalize:
-        fld float ptr [esp + 0x24]
-        mov eax,dword ptr [esp + 0x1c]
-        fmul float ptr [esp + 0x24]
-        fld float ptr [esp + 0x14]
-        fmul float ptr [esp + 0x14]
-        faddp st(1),st(0)
-        fld float ptr [esp + 0x10]
-        fmul float ptr [esp + 0x10]
-        faddp st(1),st(0)
-        fld st(1)
-        fmul st(0),st(2)
-        faddp st(1),st(0)
-        fsqrt
-        fld float ptr g_quaternionMatrixOne
-        fdiv st(0),st(1)
-        fstp float ptr [esp + 0x20]
-        fstp st(0)
-        fld float ptr [esp + 0x20]
-        fmul st(0),st(1)
-        fstp float ptr [eax + 0x4]
-        fstp st(0)
-        fld float ptr [esp + 0x20]
-        fmul float ptr [esp + 0x10]
-        fstp float ptr [eax + 0x8]
-        fld float ptr [esp + 0x20]
-        fmul float ptr [esp + 0x14]
-        fstp float ptr [eax + 0xc]
-        fld float ptr [esp + 0x20]
-        fmul float ptr [esp + 0x24]
-        fstp float ptr [eax]
-        add esp,0x18
-        ret
+    const double fx = from->x, fy = from->y, fz = from->z;
+    const double tx = to->x, ty = to->y, tz = to->z;
+    double x = tz * fy - ty * fz;
+    volatile float y = (float)(tx * fz - tz * fx);
+    volatile float z = (float)(ty * fx - tx * fy);
+    const double lengths = sqrt((tz * tz + ty * ty + tx * tx) * (fz * fz + fy * fy + fx * fx));
+    const double dotPlusLengths = lengths + (tz * fz + ty * fy + tx * fx);
+    volatile float w = (float)dotPlusLengths;
+    if (dotPlusLengths < g_quaternionOppositeThreshold)
+    {
+        x = -fz;
+        y = (float)fy;
+        z = (float)fx;
+        w = 0.0f;
     }
-    // clang-format on
+    const volatile float inverseLength = (float)(1.0 / sqrt((double)w * w + (double)z * z + (double)y * y + x * x));
+    out->x = (float)(inverseLength * x);
+    out->y = inverseLength * y;
+    out->z = inverseLength * z;
+    out->w = inverseLength * w;
 }
 
 // The four input components are passed by value, without normalization.
@@ -532,155 +229,37 @@ void GameQuaternionComponentsToMatrix(float w, float x, float y, float z, float*
 
 // Native scalar x,y,z,w inputs; double output order and x87 spill boundaries matter.
 // 0x0009d040
-__declspec(naked) void GameQuaternionDoubleToEuler(double x, double y, double z, double w, double* roll, double* pitch, double* yaw)
+void GameQuaternionDoubleToEuler(double x, double y, double z, double w, double* roll, double* pitch, double* yaw)
 {
-    // clang-format off
-    __asm {
-        sub esp, 0x10
-        fld qword ptr [esp + 0x1c]
-        mov eax, dword ptr [esp + 0x34]
-        fmul qword ptr [esp + 0x1c]
-        fstp qword ptr [esp + 8]
-        fld qword ptr [esp + 0x1c]
-        fmul qword ptr [esp + 0x24]
-        fld qword ptr [esp + 0x14]
-        fmul qword ptr [esp + 0x2c]
-        faddp st(1),st
-        fadd st(0), st(0)
-        fld qword ptr [esp + 0x14]
-        fmul qword ptr [esp + 0x14]
-        fadd qword ptr [esp + 8]
-        fadd st(0), st(0)
-        fsubr g_pedParachuteOne
-        fpatan
-        fstp qword ptr [eax]
-        fld qword ptr [esp + 0x1c]
-        fmul qword ptr [esp + 0x2c]
-        fld qword ptr [esp + 0x14]
-        fmul qword ptr [esp + 0x24]
-        fsubp st(1),st
-        fadd st(0), st(0)
-        fst qword ptr [esp]
-        fabs
-        fcomp g_pedParachuteOne
-        fld qword ptr [esp]
-        fnstsw ax
-        test ah, 1
-        jne native_0009d0b8
-        fsin
-        mov ecx, dword ptr [esp + 0x38]
-        fmul g_aimVectorHalfPi
-        fstp qword ptr [ecx]
-        jmp native_0009d0c3
-    native_0009d0b8:
-        call _CIasin
-        mov edx, dword ptr [esp + 0x38]
-        fstp qword ptr [edx]
-    native_0009d0c3:
-        fld qword ptr [esp + 0x14]
-        mov eax, dword ptr [esp + 0x3c]
-        fmul qword ptr [esp + 0x1c]
-        fld qword ptr [esp + 0x24]
-        fmul qword ptr [esp + 0x2c]
-        faddp st(1),st
-        fadd st(0), st(0)
-        fld qword ptr [esp + 0x24]
-        fmul qword ptr [esp + 0x24]
-        fadd qword ptr [esp + 8]
-        fadd st(0), st(0)
-        fsubr g_pedParachuteOne
-        fpatan
-        fstp qword ptr [eax]
-        add esp, 0x10
-        ret
-    }
-    // clang-format on
+    const volatile double yy = y * y;
+    *roll = atan2(2.0 * (y * z + x * w), 1.0 - 2.0 * (x * x + yy));
+    const double pitchTerm = 2.0 * (y * w - x * z);
+    const volatile double roundedPitchTerm = pitchTerm;
+    *pitch = fabs(pitchTerm) < 1.0 ? asin(roundedPitchTerm) : sin(roundedPitchTerm) * g_aimVectorHalfPi;
+    *yaw = atan2(2.0 * (x * y + z * w), 1.0 - 2.0 * (z * z + yy));
 }
 
 // Half cross-product and half(1+dot), then normalization; no opposite fallback.
 // 0x000b6530
-__declspec(naked) void GameQuaternionFromVectorsHalf(GameQuaternion* out, const CVector* from, const CVector* to)
+void GameQuaternionFromVectorsHalf(GameQuaternion* out, const CVector* from, const CVector* to)
 {
-    // clang-format off
-    __asm {
-        sub esp, 0xc
-        mov ecx, dword ptr [esp + 0x18]
-        mov eax, dword ptr [esp + 0x14]
-        fld dword ptr [ecx + 8]
-        fmul dword ptr [eax + 4]
-        fld dword ptr [ecx + 4]
-        fmul dword ptr [eax + 8]
-        fsubp st(1),st
-        fld dword ptr [ecx]
-        fmul dword ptr [eax + 8]
-        fld dword ptr [ecx + 8]
-        fmul dword ptr [eax]
-        fsubp st(1),st
-        fld dword ptr [ecx + 4]
-        fmul dword ptr [eax]
-        fld dword ptr [ecx]
-        fmul dword ptr [eax + 4]
-        fsubp st(1),st
-        fstp dword ptr [esp + 8]
-        fld dword ptr [eax]
-        fmul dword ptr [ecx]
-        fld dword ptr [ecx + 8]
-        fmul dword ptr [eax + 8]
-        faddp st(1),st
-        fld dword ptr [ecx + 4]
-        fmul dword ptr [eax + 4]
-        mov eax, dword ptr [esp + 0x10]
-        push eax
-        faddp st(1),st
-        fstp dword ptr [esp + 0x18]
-        fxch st(1)
-        fmul g_textDrawHalf
-        fstp dword ptr [eax + 4]
-        fmul g_textDrawHalf
-        fstp dword ptr [eax + 8]
-        fld dword ptr [esp + 0xc]
-        fmul g_textDrawHalf
-        fstp dword ptr [eax + 0xc]
-        fld dword ptr [esp + 0x18]
-        fadd g_quaternionMatrixOne
-        fmul g_textDrawHalf
-        fstp dword ptr [eax]
-        call GameQuaternionNormalize
-        add esp, 0x10
-        ret
-    }
-    // clang-format on
+    const double x = (double)to->z * from->y - (double)to->y * from->z;
+    const double y = (double)to->x * from->z - (double)to->z * from->x;
+    const volatile float z = (float)((double)to->y * from->x - (double)to->x * from->y);
+    const volatile float dot = (float)((double)from->x * to->x + (double)to->z * from->z + (double)to->y * from->y);
+    out->x = (float)(x * 0.5);
+    out->y = (float)(y * 0.5);
+    out->z = z * 0.5f;
+    out->w = (1.0f + dot) * 0.5f;
+    GameQuaternionNormalize(out);
 }
 
 // x squared plus y squared plus z squared then w squared.
 // 0x000b4cc0
-__declspec(naked) float GameQuaternionLengthSquared(const GameQuaternion* quaternion)
+float GameQuaternionLengthSquared(const GameQuaternion* quaternion)
 {
-    // clang-format off
-    __asm {
-        mov eax, dword ptr [esp + 4]
-        fld dword ptr [eax + 0xc]
-        fld dword ptr [eax + 8]
-        fld dword ptr [eax + 4]
-        fld dword ptr [eax]
-        fld st(1)
-        fmul st(0),st(2)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st
-        fld st(4)
-        fmul st(0),st(5)
-        faddp st(1),st
-        fld st(1)
-        fmul st(0),st(2)
-        faddp st(1),st
-        fstp st(4)
-        fstp st(0)
-        fstp st(0)
-        fstp st(0)
-        ret
-    }
-    // clang-format on
+    return quaternion->x * quaternion->x + quaternion->y * quaternion->y
+        + quaternion->z * quaternion->z + quaternion->w * quaternion->w;
 }
 
 // Separate identical native adapter; original distinct name is unresolved.

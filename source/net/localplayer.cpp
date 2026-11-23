@@ -153,7 +153,6 @@ BYTE CLocalPlayer::GetTeam()
     return m_state.team;
 }
 // VC7 runtime helper.
-extern "C" __int64 __cdecl _ftol2();
 // 0x00003390
 BYTE CLocalPlayer::GetSpecialAction()
 {
@@ -217,24 +216,7 @@ void CLocalPlayer::SendOnfootData()
     int keepPrevious = 1;
     for (int i = 0; i < 4; ++i)
     {
-        // Push the native float words unchanged, including exceptional bit patterns.
-        DWORD first = ((DWORD*)current)[i], second = ((DWORD*)previous)[i];
-        int close = 0;
-        // clang-format off
-        __asm {
-            push second
-            push first
-            call FloatOffset
-            add esp,8
-            fcomp dword ptr [g_localQuaternionSyncThreshold]
-            fnstsw ax
-            test ah,5
-            jp onfoot_component_different
-            mov close,1
-        onfoot_component_different:
-        }
-        // clang-format on
-        if (!close)
+        if (!(FloatOffset(current[i], previous[i]) < g_localQuaternionSyncThreshold))
         {
             keepPrevious = 0;
             break;
@@ -242,22 +224,8 @@ void CLocalPlayer::SendOnfootData()
     }
     if (keepPrevious)
         memcpy(&data.rotation, previous, 16);
-    CLocalPlayer* self = this;
-    DWORD health, armour;
-    // clang-format off
-    __asm {
-        mov ecx,self
-        mov ecx,[ecx]
-        call CPed::GetHealth
-        call _ftol2
-        mov health,eax
-        mov ecx,self
-        mov ecx,[ecx]
-        call CPed::GetArmour
-        call _ftol2
-        mov armour,eax
-    }
-    // clang-format on
+    const DWORD health = (DWORD)(__int64)GetPed()->GetHealth();
+    const DWORD armour = (DWORD)(__int64)GetPed()->GetArmour();
     data.health = (BYTE)health;
     data.armour = (BYTE)armour;
     data.weaponAim |= (BYTE)(GetPed()->GetCurrentWeapon() & 0x3f);
@@ -320,24 +288,7 @@ void CLocalPlayer::SendIncarData()
     int keepPrevious = 1;
     for (int i = 0; i < 4; ++i)
     {
-        // Push the native float words unchanged, including exceptional bit patterns.
-        DWORD first = ((DWORD*)current)[i], second = ((DWORD*)previous)[i];
-        int close = 0;
-        // clang-format off
-        __asm {
-            push second
-            push first
-            call FloatOffset
-            add esp,8
-            fcomp dword ptr [g_localQuaternionSyncThreshold]
-            fnstsw ax
-            test ah,5
-            jp incar_component_different
-            mov close,1
-        incar_component_different:
-        }
-        // clang-format on
-        if (!close)
+        if (!(FloatOffset(current[i], previous[i]) < g_localQuaternionSyncThreshold))
         {
             keepPrevious = 0;
             break;
@@ -348,22 +299,8 @@ void CLocalPlayer::SendIncarData()
     data.position = matrix.position;
     data.speed = speed;
     data.health = vehicle->GetHealth();
-    CLocalPlayer* self = this;
-    DWORD health, armour;
-    // clang-format off
-    __asm {
-        mov ecx,self
-        mov ecx,[ecx]
-        call CPed::GetHealth
-        call _ftol2
-        mov health,eax
-        mov ecx,self
-        mov ecx,[ecx]
-        call CPed::GetArmour
-        call _ftol2
-        mov armour,eax
-    }
-    // clang-format on
+    const DWORD health = (DWORD)(__int64)GetPed()->GetHealth();
+    const DWORD armour = (DWORD)(__int64)GetPed()->GetArmour();
     data.pedHealth = (BYTE)health;
     data.armour = (BYTE)armour;
     data.weaponAim |= (BYTE)(GetPed()->GetCurrentWeapon() & 0x3f);
@@ -425,19 +362,8 @@ void CLocalPlayer::SendAimData()
     memcpy(data.vectors, aim, 24);
     data.aimZ = GetPed()->GetAimZ();
     float zoom = AimStuff::GetCameraExtZoom();
-    DWORD aspectValue, zoomValue;
-    // clang-format off
-    __asm {
-        call AimStuff::GetAspectRatio
-        fmul dword ptr [g_localAimAspectScale]
-        call _ftol2
-        mov aspectValue,eax
-        fld dword ptr [zoom]
-        fmul dword ptr [g_localAimZoomScale]
-        call _ftol2
-        mov zoomValue,eax
-    }
-    // clang-format on
+    const DWORD aspectValue = (DWORD)(__int64)((double)AimStuff::GetAspectRatio() * g_localAimAspectScale);
+    const DWORD zoomValue = (DWORD)(__int64)((double)zoom * g_localAimZoomScale);
     data.aspect = (BYTE)aspectValue;
     data.zoomWeapon = (BYTE)(zoomValue & 0x3f);
     DWORD* slot = (DWORD*)GetPed()->GetCurrentWeaponSlot();
@@ -506,22 +432,8 @@ void CLocalPlayer::SendPassengerData()
     data.leftRight = leftRight;
     data.upDown = upDown;
     data.keys = keys;
-    CLocalPlayer* self = this;
-    DWORD health, armour;
-    // clang-format off
-    __asm {
-        mov ecx,self
-        mov ecx,[ecx]
-        call CPed::GetHealth
-        call _ftol2
-        mov health,eax
-        mov ecx,self
-        mov ecx,[ecx]
-        call CPed::GetArmour
-        call _ftol2
-        mov armour,eax
-    }
-    // clang-format on
+    const DWORD health = (DWORD)(__int64)GetPed()->GetHealth();
+    const DWORD armour = (DWORD)(__int64)GetPed()->GetArmour();
     data.health = (BYTE)health;
     data.armour = (BYTE)armour;
     data.seatFlags = (BYTE)(GetPed()->GetVehicleSeatIndex() & 0x3f);
@@ -613,19 +525,7 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
     bool clear = driver && (*(DWORD*)(driver + 0x46c) & 0x100);
     if (!clear)
     {
-        int outsideRange = 0;
-        // clang-format off
-        __asm {
-            mov ecx,vehicle
-            call CEntity::GetDistanceToLocalPlayer
-            fcomp dword ptr [g_localUnoccupiedRange]
-            fnstsw ax
-            test ah,41h
-            jne distance_accepted
-            mov outsideRange,1
-        distance_accepted:
-        }
-        // clang-format on
+        const bool outsideRange = vehicle->GetDistanceToLocalPlayer() > g_localUnoccupiedRange;
         clear = outsideRange || vehicle->IsStationary() || vehicle->GetTractor() != 0;
     }
     if (clear)
@@ -665,30 +565,14 @@ bool CLocalPlayer::ProcessUnoccupiedSync(WORD id, CVehicle* vehicle)
         }
         if (!ped || !ped->DoesExist())
             continue;
-        int better = 0;
-        // clang-format off
-        __asm {
-            push vehicle
-            mov ecx,ped
-            call CPed::GetDistanceToEntity
-            cmp index,0
-            je seed_distance
-            fcom dword ptr [best]
-            fnstsw ax
-            test ah,5
-            jp reject_distance
-            fstp dword ptr [best]
-            mov better,1
-            jmp distance_done
-        seed_distance:
-            fstp dword ptr [best]
-            jmp distance_done
-        reject_distance:
-            fstp st(0)
-        distance_done:
+        const double distance = ped->GetDistanceToEntity(vehicle);
+        if (!index)
+            best = (float)distance;
+        else if (distance < best)
+        {
+            best = (float)distance;
+            closest = index;
         }
-        // clang-format on
-        if (better) closest = index;
     }
     if (closest == players->localId && best <= g_localUnoccupiedRange)
     {
@@ -1059,18 +943,8 @@ void CLocalPlayer::ProcessSurfing()
                 CVehicle* vehicle = vehicles->m_pObjects[vehicleId];
                 if (vehicle && (vehicle->HasDriver() || vehicle->GetModelIndex() == 569 || vehicle->GetModelIndex() == 570))
                 {
-                    BYTE nearby;
-                    // clang-format off
-                    __asm {
-                        mov ecx,vehicle
-                        call CEntity::GetDistanceToLocalPlayer
-                        fcomp g_objectStreamingVehicleMargin
-                        fnstsw ax
-                        test ah,5
-                        setnp nearby
-                    }
-                    // clang-format on
-                    if (nearby) mode = 1;
+                    if (vehicle->GetDistanceToLocalPlayer() < g_objectStreamingVehicleMargin)
+                        mode = 1;
                 }
             }
         }
@@ -1473,56 +1347,24 @@ void CLocalPlayer::ProcessHead()
     CMatrix matrix;
     m_state.ped->GetMatrix(&matrix);
     DWORD now = GetTickCount();
-    CLocalPlayer* self = this;
     if (now - m_state.headUpdateTick > 1000)
     {
         CameraAim* aim = AimStuff::GetInternalAim();
-        float z;
-        // clang-format off
-        __asm {
-            mov eax,aim
-            fld dword ptr [eax]
-            fmul dword ptr [g_remoteHeadDistance]
-            fadd dword ptr [matrix+48]
-            fld dword ptr [eax+4]
-            fmul dword ptr [g_remoteHeadDistance]
-            fadd dword ptr [matrix+52]
-            fld dword ptr [eax+8]
-            mov ecx,self
-            mov edx,now
-            mov [ecx+120h],edx
-            fmul dword ptr [g_remoteHeadDistance]
-            fadd dword ptr [matrix+56]
-            fstp dword ptr [z]
-            fxch st(1)
-            fsub dword ptr [matrix+48]
-            fstp dword ptr [ecx+114h]
-            fsub dword ptr [matrix+52]
-            fstp dword ptr [ecx+118h]
-            fld dword ptr [z]
-            fsub dword ptr [matrix+56]
-            fstp dword ptr [ecx+11ch]
-        }
-        // clang-format on
+        const double x = (double)aim->front.x * g_remoteHeadDistance + matrix.position.x;
+        const double y = (double)aim->front.y * g_remoteHeadDistance + matrix.position.y;
+        m_state.headUpdateTick = now;
+        const volatile float z = (float)((double)aim->front.z * g_remoteHeadDistance + matrix.position.z);
+        m_state.headDirection.x = (float)(x - matrix.position.x);
+        m_state.headDirection.y = (float)(y - matrix.position.y);
+        m_state.headDirection.z = z - matrix.position.z;
     }
     if (now - m_state.headTaskTick > 200)
     {
-        CVector target;
         ped = m_state.ped;
-        // clang-format off
-        __asm {
-            mov ecx,self
-            fld dword ptr [matrix+48]
-            fadd dword ptr [ecx+114h]
-            fstp dword ptr [target]
-            fld dword ptr [matrix+52]
-            fadd dword ptr [ecx+118h]
-            fstp dword ptr [target+4]
-            fld dword ptr [matrix+56]
-            fadd dword ptr [ecx+11ch]
-            fstp dword ptr [target+8]
-        }
-        // clang-format on
+        CVector target;
+        target.x = matrix.position.x + m_state.headDirection.x;
+        target.y = matrix.position.y + m_state.headDirection.y;
+        target.z = matrix.position.z + m_state.headDirection.z;
         ped->ApplyCommandTask(g_remoteHeadTask, 0, 2000, -1, &target, 0, 0.1f, 500, 3, 0);
         m_state.headTaskTick = now;
     }
@@ -1624,20 +1466,8 @@ void CLocalPlayer::ProcessPassengerEntry()
     if (id >= 2000 || !vehicles->m_bNotEmpty[id])
         return;
     CVehicle* vehicle = vehicles->Get(id);
-    BYTE nearEnough = 0;
-    // clang-format off
-    __asm {
-        mov ecx,vehicle
-        call CEntity::GetDistanceToLocalPlayer
-        fcomp dword ptr [g_localPassengerEntryDistance]
-        fnstsw ax
-        test ah,5
-        jp passenger_too_far
-        mov nearEnough,1
-    passenger_too_far:
-    }
-    // clang-format on
-    if (!nearEnough) return;
+    if (!(vehicle->GetDistanceToLocalPlayer() < g_localPassengerEntryDistance))
+        return;
     if ((BYTE)m_state.ped->GetCurrentWeapon() == 46)
         m_state.ped->SetArmedWeapon(0, 0);
     m_state.ped->EnterVehicle(vehicle->m_nHandle, TRUE);
@@ -1810,14 +1640,7 @@ void CLocalPlayer::ProcessSpectating()
     g_pGame->EnableHUD(FALSE);
     m_state.ped->SetHealth(100.0f);
     CVector position = *(CVector*)(data + 6);
-    // clang-format off
-    // Native loads received Z before adding20; retain operand order for NaNs.
-    __asm {
-        fld dword ptr [position+8]
-        fadd dword ptr [g_remoteHeadDistance]
-        fstp dword ptr [position+8]
-    }
-    // clang-format on
+    position.z += g_remoteHeadDistance;
     m_state.ped->Teleport(position);
     if (m_state.spectateType == 1)
     {
@@ -1883,57 +1706,19 @@ bool CLocalPlayer::GetCameraTarget(WORD* targets)
     CVector origin, end;
     void* entity = 0;
     BYTE collision[0x2c];
-    // clang-format off
-    // Retain the native overwritten endpoint calculations and output write order.
-    __asm {
-        mov esi,aim
-        fld dword ptr [esi]
-        fadd dword ptr [esi+0ch]
-        fstp dword ptr [origin]
-        fld dword ptr [esi+4]
-        fadd dword ptr [esi+10h]
-        fstp dword ptr [origin+4]
-        fld dword ptr [esi+8]
-        fadd dword ptr [esi+14h]
-        fstp dword ptr [origin+8]
-        fld dword ptr [esi]
-        fmul dword ptr [g_localCameraRayLength]
-        fadd dword ptr [origin]
-        fstp dword ptr [end]
-        fld dword ptr [esi+4]
-        fmul dword ptr [g_localCameraRayLength]
-        fadd dword ptr [origin+4]
-        fstp dword ptr [end+4]
-        fld dword ptr [esi+8]
-        mov edx,targets
-        mov word ptr [edx],0ffffh
-        fmul dword ptr [g_localCameraRayLength]
-        mov word ptr [edx+2],0ffffh
-        mov word ptr [edx+4],0ffffh
-        mov word ptr [edx+6],0ffffh
-        fadd dword ptr [origin+8]
-        fstp dword ptr [end+8]
-    }
-    // clang-format on
+    origin.x = aim->front.x + aim->source.x;
+    origin.y = aim->front.y + aim->source.y;
+    origin.z = aim->front.z + aim->source.z;
+    end.x = (float)((double)aim->front.x * g_localCameraRayLength + origin.x);
+    end.y = (float)((double)aim->front.y * g_localCameraRayLength + origin.y);
+    for (int i = 0; i < 4; ++i)
+        targets[i] = 0xffff;
+    end.z = (float)((double)aim->front.z * g_localCameraRayLength + origin.z);
     for (int stage = 0; stage < 3; ++stage)
     {
-        // clang-format off
-        __asm {
-            mov eax,aim
-            fld dword ptr [eax]
-            fmul dword ptr [g_localCameraRayLength]
-            fadd dword ptr [eax+0ch]
-            fstp dword ptr [end]
-            fld dword ptr [eax+4]
-            fmul dword ptr [g_localCameraRayLength]
-            fadd dword ptr [eax+10h]
-            fstp dword ptr [end+4]
-            fld dword ptr [eax+8]
-            fmul dword ptr [g_localCameraRayLength]
-            fadd dword ptr [eax+14h]
-            fstp dword ptr [end+8]
-        }
-        // clang-format on
+        end.x = (float)((double)aim->front.x * g_localCameraRayLength + aim->source.x);
+        end.y = (float)((double)aim->front.y * g_localCameraRayLength + aim->source.y);
+        end.z = (float)((double)aim->front.z * g_localCameraRayLength + aim->source.z);
         // Native ignores AL and keeps the same entity/collision storage for all3 calls.
         GameProcessLineOfSightRaw(&origin, &end, collision, &entity, 1, stage == 2, 0, stage != 0, 0, 0, 0, 0);
         if (entity)
@@ -2274,19 +2059,8 @@ BOOL CLocalPlayer::Process()
             m_state.ped->SetDancePoseState(0);
         if (m_state.spawnPermission && !m_state.wantsAnotherClass && ((CNetGame*)g_pNetGame)->gameState == CNetGame::StateConnected)
         {
-            CPed* ped = m_state.ped;
-            BYTE alive;
-            // clang-format off
-            __asm {
-                mov ecx,ped
-                call CPed::GetHealth
-                fcomp dword ptr [g_objectScaleLowerBound]
-                fnstsw ax
-                test ah,41h
-                setz alive
-            }
-            // clang-format on
-            if (alive) Spawn();
+            if (m_state.ped->GetHealth() > g_objectScaleLowerBound)
+                Spawn();
             return TRUE;
         }
         m_state.wasted = 0;

@@ -2667,24 +2667,9 @@ void CModelCollisionNode::Split(CModelCollisionFile* file)
     delta[1] = bounds.maximum[1] - bounds.minimum[1];
     delta[2] = bounds.maximum[2] - bounds.minimum[2];
     int axis = (delta[0] > delta[1] && delta[0] > delta[2]) ? 0 : delta[1] > delta[2] ? 1 : 2;
-    float *distance = delta + axis, *origin = bounds.minimum + axis;
-    float *firstMaximum = left->bounds.maximum + axis, *secondMinimum = right->bounds.minimum + axis;
-    // clang-format off
-    // Native retains the half extent on x87 across both separate additions/stores.
-    __asm {
-        mov eax,distance
-        fld dword ptr [eax]
-        fmul dword ptr g_textDrawHalf
-        fld st(0)
-        mov edx,origin
-        fadd dword ptr [edx]
-        mov eax,firstMaximum
-        fstp dword ptr [eax]
-        fadd dword ptr [edx]
-        mov eax,secondMinimum
-        fstp dword ptr [eax]
-    }
-    // clang-format on
+    const double halfExtent = (double)delta[axis] * g_textDrawHalf;
+    left->bounds.maximum[axis] = (float)(halfExtent + bounds.minimum[axis]);
+    right->bounds.minimum[axis] = (float)(halfExtent + bounds.minimum[axis]);
     for (DWORD i = 0; i < triangles.size(); ++i)
     {
         if (file->TriangleHasVertexInBounds(&triangles[i], &left->bounds))

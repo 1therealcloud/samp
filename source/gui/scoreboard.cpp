@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-extern "C" __int64 __cdecl _ftol2();
 // 0x0011c6d0
 int g_scoreboardNotificationRpc = 23;
 // 0x0011c6d4
@@ -202,127 +201,41 @@ void CScoreboard::Draw()
     }
     char counter[64];
     sprintf(counter, g_scoreboardCountFormat, count);
-    int left, top, right, bottom;
-    CScoreboard* self = this;
-    // clang-format off
-    // Preserve extended arithmetic until each native integer conversion.
-    __asm {
-        mov esi,self
-        fld dword ptr [esi+8]
-        fadd g_scoreboardHeaderInset
-        call _ftol2
-        mov left,eax
-        fld dword ptr [esi+0ch]
-        fadd g_scoreboardHeaderInset
-        call _ftol2
-        mov top,eax
-        fld dword ptr [esi+8]
-        fadd dword ptr [esi+14h]
-        call _ftol2
-        mov right,eax
-        fld dword ptr [esi+1ch]
-        fadd dword ptr [esi+0ch]
-        call _ftol2
-        mov bottom,eax
-    }
-    // clang-format on
+    LONG left = (LONG)(__int64)((double)x + g_scoreboardHeaderInset);
+    LONG top = (LONG)(__int64)((double)y + g_scoreboardHeaderInset);
+    LONG right = (LONG)(__int64)((double)x + width);
+    LONG bottom = (LONG)(__int64)((double)headerHeight + y);
     RECT host = {left, top, right, bottom};
     // Native reaches this dereference even after the nullable earlier net gates.
     g_deviceFonts->DrawLittleText(0, (char*)g_pNetGame + 0x131, host, 0x120, 0xffbebebe, TRUE);
     FontSize size = g_deviceFonts->GetLittleTextScreenSize(g_scoreboardCountProbe, 0);
-    long* textWidth = &size.cx;
-    // clang-format off
-    __asm {
-        mov esi,self
-        mov edx,textWidth
-        fild dword ptr [edx]
-        fsubr dword ptr [esi+14h]
-        fadd dword ptr [esi+8]
-        call _ftol2
-        mov left,eax
-        fld dword ptr [esi+8]
-        fadd dword ptr [esi+14h]
-        call _ftol2
-        mov right,eax
-    }
-    // clang-format on
+    left = (LONG)(__int64)(((double)width - size.cx) + x);
+    right = (LONG)(__int64)((double)x + width);
     RECT players = {left, top, right, bottom};
     g_deviceFonts->DrawLittleText(0, counter, players, 0x120, 0xffbebebe, TRUE);
-    int header;
-    // clang-format off
-    __asm {
-        mov esi,self
-        fld dword ptr [esi+10h]
-        fmul g_objectRotationFactor
-        fadd dword ptr [esi+8]
-        call _ftol2
-        mov left,eax
-        fld dword ptr [esi+10h]
-        fmul g_scoreboardIdRight
-        fadd dword ptr [esi+8]
-        call _ftol2
-        mov right,eax
-        fld dword ptr [esi+1ch]
-        call _ftol2
-        mov header,eax
-    }
-    // clang-format on
-    int lineTop = header - g_deviceFonts->m_nLittleFontHeight - 3;
-    // clang-format off
-    __asm {
-        mov esi,self
-        fild lineTop
-        fadd dword ptr [esi+0ch]
-        call _ftol2
-        mov top,eax
-        fild header
-        fadd dword ptr [esi+0ch]
-        call _ftol2
-        mov bottom,eax
-    }
-    // clang-format on
+    left = (LONG)(__int64)((double)scale * g_objectRotationFactor + x);
+    right = (LONG)(__int64)((double)scale * g_scoreboardIdRight + x);
+    const LONG header = (LONG)(__int64)headerHeight;
+    const LONG lineTop = (LONG)((DWORD)header - (DWORD)g_deviceFonts->m_nLittleFontHeight - 3u);
+    top = (LONG)(__int64)((double)lineTop + y);
+    bottom = (LONG)(__int64)((double)header + y);
     RECT column = {left, top, right, bottom};
     g_deviceFonts->DrawLittleText(0, g_scoreboardIdTitle, column, 0x120, 0xff95b0d0, TRUE);
-    int advance;
-    // clang-format off
-    __asm {
-        mov esi,self
-        fld dword ptr [esi+24h]
-        fmul dword ptr [esi+14h]
-        call _ftol2
-        mov advance,eax
-    }
-    // clang-format on
-    left += advance;
-    right += advance;
+    LONG advance = (LONG)(__int64)((double)idWidthRatio * width);
+    left = (LONG)((DWORD)left + (DWORD)advance);
+    right = (LONG)((DWORD)right + (DWORD)advance);
     column.left = left;
     column.right = right;
     g_deviceFonts->DrawLittleText(0, g_scoreboardNameTitle, column, 0x120, 0xff95b0d0, TRUE);
-    // clang-format off
-    __asm {
-        mov esi,self
-        fld dword ptr [esi+2ch]
-        fmul dword ptr [esi+14h]
-        call _ftol2
-        mov advance,eax
-    }
-    // clang-format on
-    left += advance;
-    right += advance;
+    advance = (LONG)(__int64)((double)nameWidthRatio * width);
+    left = (LONG)((DWORD)left + (DWORD)advance);
+    right = (LONG)((DWORD)right + (DWORD)advance);
     column.left = left;
     column.right = right;
     g_deviceFonts->DrawLittleText(0, g_scoreboardScoreTitle, column, 0x120, 0xff95b0d0, TRUE);
-    // clang-format off
-    __asm {
-        mov esi,self
-        fld dword ptr [esi+28h]
-        fmul dword ptr [esi+14h]
-        call _ftol2
-        mov advance,eax
-    }
-    // clang-format on
-    left += advance;
-    right += advance;
+    advance = (LONG)(__int64)((double)scoreWidthRatio * width);
+    left = (LONG)((DWORD)left + (DWORD)advance);
+    right = (LONG)((DWORD)right + (DWORD)advance);
     column.left = left;
     column.right = right;
     g_deviceFonts->DrawLittleText(0, g_scoreboardPingTitle, column, 0x120, 0xff95b0d0, TRUE);

@@ -46,13 +46,6 @@ void CTextDraw::OnLostDevice()
     }
 }
 
-extern "C"
-{
-    // Provided by the static MSVC runtime.
-    // 0x000f9324
-    __int64 __cdecl _ftol2();
-}
-
 // 0x000b2720
 int GameAllocateTextDrawTexture()
 {
@@ -106,62 +99,24 @@ void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color)
 // 0x000b2c90
 void CTextDraw::DrawTexture()
 {
-    BYTE* state = (BYTE*)this;
-    BYTE highlighted = data.hovered;
-    float scaleX, scaleY;
+    const BYTE highlighted = data.hovered;
+    const volatile float scaleX = (float)((double)*(int*)0xc17044 * *(float*)0x859520);
+    const volatile float scaleY = (float)((double)*(int*)0xc17048 * *(float*)0x859524);
     TextDrawRect rect;
-    // clang-format off
-    __asm {
-        fild dword ptr ds:[0xc17044]
-        fmul dword ptr ds:[0x859520]
-        fstp scaleX
-        fild dword ptr ds:[0xc17048]
-        fmul dword ptr ds:[0x859524]
-        fstp scaleY
-        mov eax,state
-        fld dword ptr [eax+0x98b]
-        fmul scaleX
-        fstp rect.left
-        fld dword ptr [eax+0x98f]
-        fmul scaleY
-        fstp rect.top
-        fld dword ptr [eax+0x98b]
-        fadd dword ptr [eax+0x972]
-        fmul scaleX
-        fstp rect.right
-        fld dword ptr [eax+0x98f]
-        fadd dword ptr [eax+0x976]
-        fmul scaleY
-        fstp rect.bottom
-    }
-    // clang-format on
+    rect.left = data.format.x * scaleX;
+    rect.top = data.format.y * scaleY;
+    rect.right = (float)(((double)data.format.x + data.format.lineWidth) * scaleX);
+    rect.bottom = (float)(((double)data.format.y + data.format.lineHeight) * scaleY);
     DWORD* color = (highlighted ? &data.hoverColor : &data.format.letterColor);
     // The original leaves the index unchecked.
     GameDrawTextDrawTexture(g_textDrawTextures[data.format.textureSlot], &rect, color);
-    int left, top;
-    // clang-format off
-    __asm {
-        mov edi,state
-        fld rect.left
-        call _ftol2
-        mov left,eax
-        mov [edi+0x9c1],eax
-        fld scaleX
-        fmul dword ptr [edi+0x972]
-        fiadd left
-        call _ftol2
-        mov [edi+0x9c9],eax
-        fld rect.top
-        call _ftol2
-        mov top,eax
-        mov [edi+0x9c5],eax
-        fld scaleY
-        fmul dword ptr [edi+0x976]
-        fiadd top
-        call _ftol2
-        mov [edi+0x9cd],eax
-    }
-    // clang-format on
+    RECT& selection = data.selectableRect;
+    const LONG left = (LONG)(__int64)rect.left;
+    selection.left = left;
+    selection.right = (LONG)(__int64)((double)scaleX * data.format.lineWidth + left);
+    const LONG top = (LONG)(__int64)rect.top;
+    selection.top = top;
+    selection.bottom = (LONG)(__int64)((double)scaleY * data.format.lineHeight + top);
     data.hasSelectableRect = 1;
 }
 
@@ -185,44 +140,15 @@ void CTextDraw::DrawText()
     while (*from++);
     float screenW = (float)*(int*)0xc17044, screenH = (float)*(int*)0xc17048;
     float hudX = *(float*)0x859520, hudY = *(float*)0x859524;
-    float scaleX, scaleY, wrapX, wrapY, posX, posY;
-    // clang-format off
-    __asm {
-        mov eax,state
-        fld screenH
-        fmul dword ptr [eax+0x967]
-        fmul hudY
-        fmul g_textDrawHalf
-        fstp scaleY
-        fld screenW
-        fmul dword ptr [eax+0x963]
-        fmul hudX
-        fstp scaleX
-    }
-    // clang-format on
+    const float scaleY = (float)((double)screenH * data.format.letterHeight * hudY * g_textDrawHalf);
+    const float scaleX = (float)((double)screenW * data.format.letterWidth * hudX);
     Font_SetScale(scaleX, scaleY);
     Font_SetColor(*(data.hovered ? &data.hoverColor : &data.format.letterColor));
     Font_SetJustify(0);
     Font_SetOrientation(data.format.alignRight ? 2 : (data.format.centered ? 0 : 1));
-    // clang-format off
-    __asm {
-        mov eax,state
-        fld screenW
-        fmul dword ptr [eax+0x972]
-        fmul hudX
-        fstp wrapX
-    }
-    // clang-format on
+    const volatile float wrapX = (float)((double)screenW * data.format.lineWidth * hudX);
     Font_SetLineWidth(wrapX);
-    // clang-format off
-    __asm {
-        mov eax,state
-        fld screenW
-        fmul dword ptr [eax+0x976]
-        fmul hudX
-        fstp wrapY
-    }
-    // clang-format on
+    const volatile float wrapY = (float)((double)screenW * data.format.lineHeight * hudX);
     Font_SetLineHeight(wrapY);
     Font_UseBox(data.format.box, 0);
     Font_UseBoxColor(data.format.boxColor);
@@ -236,110 +162,31 @@ void CTextDraw::DrawText()
     Font_GetTextSubstitutionAddress(buffer, -1, -1, -1, -1, -1, -1, buffer);
     if (data.hasKeyCodes)
         Font_ExpandKeyTokens(buffer);
-    // clang-format off
-    __asm {
-        mov eax,state
-        fld g_textDrawVirtualHeight
-        fsub dword ptr [eax+0x98f]
-        fld screenH
-        fmul hudY
-        fmulp st(1),st(0)
-        fsubr screenH
-        fstp posY
-        fld g_textDrawVirtualWidth
-        fsub dword ptr [eax+0x98b]
-        fld screenW
-        fmul hudX
-        fmulp st(1),st(0)
-        fsubr screenW
-        fstp posX
-    }
-    // clang-format on
+    const volatile float posY = (float)(screenH - ((double)g_textDrawVirtualHeight - data.format.y) * ((double)screenH * hudY));
+    const volatile float posX = (float)(screenW - ((double)g_textDrawVirtualWidth - data.format.x) * ((double)screenW * hudX));
     Font_PrintString(posX, posY, buffer);
     Font_SetOutline(0);
+
+    RECT& selection = data.selectableRect;
     if (data.format.alignRight)
     {
-        // clang-format off
-        __asm {
-            mov edi,state
-            fld wrapX
-            fsub posX
-            fsubr posX
-            call _ftol2
-            mov [edi+0x9c1],eax
-            fld posX
-            call _ftol2
-            mov [edi+0x9c9],eax
-        }
-        // clang-format on
+        selection.left = (LONG)(__int64)(posX - ((double)wrapX - posX));
+        selection.right = (LONG)(__int64)posX;
     }
     else if (data.format.centered)
     {
-        int left;
-        // clang-format off
-        __asm {
-            mov edi,state
-            fld wrapY
-            fmul g_textDrawHalf
-            fsubr posX
-            call _ftol2
-            mov left,eax
-            mov [edi+0x9c1],eax
-            fld wrapY
-            call _ftol2
-            add eax,left
-            mov [edi+0x9c9],eax
-        }
-        // clang-format on
+        const LONG left = (LONG)(__int64)(posX - (double)wrapY * g_textDrawHalf);
+        selection.left = left;
+        selection.right = (LONG)((DWORD)left + (DWORD)(__int64)wrapY);
     }
     else
     {
-        // clang-format off
-        __asm {
-            mov edi,state
-            fld posX
-            call _ftol2
-            mov [edi+0x9c1],eax
-            fld wrapX
-            fsub posX
-            fadd posX
-            call _ftol2
-            mov [edi+0x9c9],eax
-        }
-        // clang-format on
+        selection.left = (LONG)(__int64)posX;
+        selection.right = (LONG)(__int64)(((double)wrapX - posX) + posX);
     }
-    // clang-format off
-    __asm {
-        mov edi,state
-        fld posY
-        call _ftol2
-        mov [edi+0x9c5],eax
-    }
-    // clang-format on
-    if (!data.format.alignRight && data.format.centered)
-    {
-        // clang-format off
-        __asm {
-            mov edi,state
-            fld posY
-            fadd wrapX
-            call _ftol2
-            mov [edi+0x9cd],eax
-        }
-        // clang-format on
-    }
-    else
-    {
-        // clang-format off
-        __asm {
-            mov edi,state
-            fld posY
-            fadd wrapY
-            call _ftol2
-            mov [edi+0x9cd],eax
-        }
-        // clang-format on
-    }
+    selection.top = (LONG)(__int64)posY;
+    const float height = !data.format.alignRight && data.format.centered ? wrapX : wrapY;
+    selection.bottom = (LONG)(__int64)((double)posY + height);
     data.hasSelectableRect = 1;
 }
 

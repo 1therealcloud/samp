@@ -1940,33 +1940,12 @@ BYTE __stdcall GameTestEntityLineSphere(const CVector* origin, const CVector* en
     sphere.centre.x = 0;
     sphere.centre.y = 0;
     sphere.centre.z = 0;
-    // Keep the native unrounded radius comparison/multiplication sequence.
-    const float half = 0.5f, one = 1.0f, enlarge = 1.5f;
-    float radius;
-    // clang-format off
-    __asm {
-        mov eax,collision
-        fld dword ptr [eax+0x24]
-        fcom half
-        fnstsw ax
-        test ah,5
-        jp radius_above_half
-        fstp st(0)
-        fld half
-        jmp radius_enlarge
-radius_above_half:
-        fcom one
-        fnstsw ax
-        test ah,5
-        jp radius_scale
-radius_enlarge:
-        fmul enlarge
-radius_scale:
-        fmul scale
-        fstp radius
-    }
-    // clang-format on
-    sphere.radius = radius;
+    double radius = *(float*)(collision + 0x24);
+    if (radius < 0.5)
+        radius = 0.5;
+    if (radius < 1.0)
+        radius *= 1.5;
+    sphere.radius = (float)(radius * scale);
     typedef BYTE(__cdecl * Intersect)(const void*, const void*);
     g_gameLineSphereResult = ((Intersect)0x417470)(line, &sphere);
     return g_gameLineSphereResult;

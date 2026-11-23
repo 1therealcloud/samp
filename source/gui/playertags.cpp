@@ -179,47 +179,17 @@ void CPlayerTags::DrawHealthBar(const CVector* position, float health, float arm
 {
     CVector point;
     memcpy(&point, position, 12);
-    float* height = &point.z;
-    // clang-format off
-    __asm {
-        fld distance
-        fmul g_playerTagDistanceHeight
-        mov eax,height
-        fadd dword ptr [eax]
-        fadd g_chatBubbleHeightLift
-        fstp dword ptr [eax]
-    }
-    // clang-format on
+    point.z = (float)((double)distance * g_playerTagDistanceHeight + point.z + g_chatBubbleHeightLift);
     D3DVIEWPORT9 viewport;
     device->GetViewport(&viewport);
     D3DXMATRIX identity;
     D3DXMatrixIdentity(&identity);
     D3DXVECTOR3 projected;
     D3DXVec3Project(&projected, (D3DXVECTOR3*)&point, &viewport, (D3DXMATRIX*)&g_deviceProjectionMatrix, (D3DXMATRIX*)&g_deviceViewMatrix, &identity);
-    BYTE visible, acceptedHealth;
-    float* depth = &projected.z;
-    // clang-format off
-    __asm {
-        mov eax,depth
-        fld dword ptr [eax]
-        fcomp g_quaternionMatrixOne
-        fnstsw ax
-        test ah,41h
-        setnz visible
-    }
-    // clang-format on
-    if (!visible) return;
-    // clang-format off
-    __asm {
-        fld health
-        fcomp g_objectScaleLowerBound
-        fnstsw ax
-        test ah,5
-        setp acceptedHealth
-    }
-    // clang-format on
-    // Both gates accept unordered operands; only ordered negative health is rejected.
-    if (!acceptedHealth) return;
+    if (projected.z > g_quaternionMatrixOne)
+        return;
+    if (health < g_objectScaleLowerBound)
+        return;
     float x = (float)(int)projected.x, y = (float)(int)projected.y;
     PlayerTagVertex *border = g_playerTagVertices, *background = border + 4, *fill = border + 8;
     for (int i = 0; i < 4; i++)
@@ -237,16 +207,7 @@ void CPlayerTags::DrawHealthBar(const CVector* position, float health, float arm
     background[2].x = background[3].x = x + g_playerTagHalfWidth;
     if (health > g_vehicleTrainSpeedMaximum)
         health = g_vehicleTrainSpeedMaximum;
-    float right;
-    // clang-format off
-    __asm {
-        fld health
-        fmul g_playerTagFillScale
-        fsub g_playerTagHalfWidth
-        fadd x
-        fstp right
-    }
-    // clang-format on
+    const float right = (float)((double)health * g_playerTagFillScale - g_playerTagHalfWidth + x);
     fill[2].x = fill[3].x = right;
     if (armour > g_objectScaleLowerBound)
     {
@@ -276,15 +237,7 @@ void CPlayerTags::DrawHealthBar(const CVector* position, float health, float arm
         }
         if (armour > g_vehicleTrainSpeedMaximum)
             armour = g_vehicleTrainSpeedMaximum;
-        // clang-format off
-        __asm {
-            fld armour
-            fmul g_playerTagFillScale
-            fsub g_playerTagHalfWidth
-            fadd x
-            fstp right
-        }
-        // clang-format on
+        const float right = (float)((double)armour * g_playerTagFillScale - g_playerTagHalfWidth + x);
         fill[2].x = fill[3].x = right;
         device->SetFVF(0x44);
         device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, border, sizeof(PlayerTagVertex));
@@ -298,37 +251,15 @@ void CPlayerTags::DrawLabel(const CVector* position, const char* text, DWORD col
 {
     CVector point;
     memcpy(&point, position, 12);
-    float* height = &point.z;
-    // clang-format off
-    __asm {
-        fld distance
-        fmul g_playerTagDistanceHeight
-        mov eax,height
-        fadd dword ptr [eax]
-        fadd g_chatBubbleHeightLift
-        fstp dword ptr [eax]
-    }
-    // clang-format on
+    point.z = (float)((double)distance * g_playerTagDistanceHeight + point.z + g_chatBubbleHeightLift);
     D3DVIEWPORT9 viewport;
     device->GetViewport(&viewport);
     D3DXMATRIX identity;
     D3DXMatrixIdentity(&identity);
     D3DXVECTOR3 projected;
     D3DXVec3Project(&projected, (D3DXVECTOR3*)&point, &viewport, (D3DXMATRIX*)&g_deviceProjectionMatrix, (D3DXMATRIX*)&g_deviceViewMatrix, &identity);
-    BYTE visible;
-    float* depth = &projected.z;
-    // clang-format off
-    __asm {
-        mov eax,depth
-        fld dword ptr [eax]
-        fcomp g_quaternionMatrixOne
-        fnstsw ax
-        test ah,41h
-        setnz visible
-    }
-    // clang-format on
-    // Native accepts unordered projected depth, ignores viewport/projection failures.
-    if (!visible) return;
+    if (projected.z > g_quaternionMatrixOne)
+        return;
     int x = (int)projected.x, y = (int)projected.y;
     FontSize size = g_deviceFonts->GetLittleTextScreenSize(text, 0);
     RECT rect = {x - size.cx / 2, y + 17 - size.cy, x + size.cx / 2, y};
@@ -386,21 +317,10 @@ void ClientDrawLabels()
         CPed* ped = *(CPed**)(remoteState + 4);
         if (!ped || !remoteState[0x1a] || !*(DWORD*)(remoteState + 0x10))
             continue;
-        BYTE nearby;
-        // clang-format off
-        // Keep the distance in ST0 and reload settings after the callee.
-        __asm {
-            mov ecx,ped
-            call CEntity::GetDistanceToCamera
-            mov ecx,g_pNetGame
-            mov edx,dword ptr [ecx+3d5h]
-            fcomp dword ptr [edx+27h]
-            fnstsw ax
-            test ah,41h
-            setnp nearby
-        }
-        // clang-format on
-        if (!nearby) continue;
+        const double distanceToCamera = ped->GetDistanceToCamera();
+        const CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
+        if (!(distanceToCamera <= settings->nameTagDrawDistance))
+            continue;
         CVehicle* vehicle = *(CVehicle**)(remoteState + 8);
         if (remoteState[0x1a] == 0x13 && vehicle && vehicle->IsRC())
         {
@@ -459,20 +379,10 @@ void ClientDrawPlayerTags()
         CPed* ped = *(CPed**)(remote + 4);
         if (!ped || !remote[0x1a] || !*(DWORD*)(remote + 0x10))
             continue;
-        BYTE nearby;
-        // clang-format off
-        __asm {
-            mov ecx,ped
-            call CEntity::GetDistanceToCamera
-            mov ecx,g_pNetGame
-            mov edx,dword ptr [ecx+3d5h]
-            fcomp dword ptr [edx+27h]
-            fnstsw ax
-            test ah,41h
-            setnp nearby
-        }
-        // clang-format on
-        if (!nearby) continue;
+        const double distanceToCamera = ped->GetDistanceToCamera();
+        const CNetGameSettings* settings = ((CNetGame*)g_pNetGame)->settings;
+        if (!(distanceToCamera <= settings->nameTagDrawDistance))
+            continue;
         CVehicle* vehicle = *(CVehicle**)(remote + 8);
         if (remote[0x1a] == 0x13 && vehicle && vehicle->IsRC())
         {
@@ -644,108 +554,24 @@ void CLegacyPlayerTags::Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD
 }
 
 // 0x0006d950
-__declspec(naked) void CLegacyPlayerTags::InitQuad(char c, float x, float y2, NameTextVertex_s* pVB)
+void CLegacyPlayerTags::InitQuad(char c, float x, float y2, NameTextVertex_s* pVB)
 {
-    // clang-format off
-    __asm {
-        sub esp, 8
-        movsx eax, byte ptr [esp + 0xc]
-        movzx edx, byte ptr g_legacyPlayerTagStorage[eax + 192]
-        mov dword ptr [esp + 0xc], edx
-        mov edx, eax
-        and edx, 0x8000000f
-        fild dword ptr [esp + 0xc]
-        push esi
-        push edi
-        fst dword ptr [esp + 0x14]
-        fmul dword ptr [ecx + 0x1c]
-        fadd dword ptr [esp + 0x18]
-        fld dword ptr [ecx + 0x18]
-        fmul dword ptr [ecx + 0x1c]
-        fadd dword ptr [esp + 0x1c]
-        jns quad_6d98d
-        dec edx
-        or edx, 0xfffffff0
-        inc edx
-    quad_6d98d:
-        mov dword ptr [esp + 8], edx
-        fild dword ptr [esp + 8]
-        sub eax, edx
-        mov edx, dword ptr [esp + 0x18]
-        fmul g_legacyPlayerTagInv16
-        fld dword ptr [esp + 0x14]
-        mov dword ptr [esp + 0x14], eax
-        fdiv dword ptr [ecx + 0x14]
-        mov eax, dword ptr [esp + 0x20]
-        mov ecx, dword ptr [esp + 0x1c]
-        mov dword ptr [eax + 4], ecx
-        xor ecx, ecx
-        mov dword ptr [eax + 8], ecx
-        mov esi, eax
-        fmul g_legacyPlayerTagInv16
-        fadd st(0),st(1)
-        fstp dword ptr [esp + 8]
-        fild dword ptr [esp + 0x14]
-        fmul g_legacyPlayerTagInv256
-        fst dword ptr [esp + 0x14]
-        fadd g_legacyPlayerTagInv16
-        fst dword ptr [esp + 0xc]
-        fld dword ptr [esp + 0x18]
-        fstp dword ptr [eax]
-        fld st(1)
-        fstp dword ptr [eax + 0xc]
-        fstp dword ptr [eax + 0x10]
-        mov dword ptr [eax + 0x14], edx
-        mov edx, dword ptr [esp + 0x14]
-        fld st(1)
-        mov dword ptr [eax + 0x24], edx
-        fstp dword ptr [eax + 0x18]
-        mov edx, dword ptr [esp + 8]
-        fstp dword ptr [eax + 0x20]
-        mov dword ptr [eax + 0x1c], ecx
-        mov dword ptr [eax + 0x34], edx
-        fld st(1)
-        mov edx, dword ptr [esp + 0x14]
-        fstp dword ptr [eax + 0x28]
-        mov dword ptr [eax + 0x38], edx
-        mov dword ptr [eax + 0x30], ecx
-        fstp dword ptr [eax + 0x2c]
-        mov edi, dword ptr [esi]
-        lea edx, [eax + 0x3c]
-        mov dword ptr [edx], edi
-        mov edi, dword ptr [esi + 4]
-        mov dword ptr [edx + 4], edi
-        mov edi, dword ptr [esi + 8]
-        mov dword ptr [edx + 8], edi
-        mov edi, dword ptr [esi + 0xc]
-        mov esi, dword ptr [esi + 0x10]
-        mov dword ptr [edx + 0xc], edi
-        mov dword ptr [edx + 0x10], esi
-        mov esi, dword ptr [eax + 0x28]
-        lea edx, [eax + 0x50]
-        mov dword ptr [edx], esi
-        mov esi, dword ptr [eax + 0x2c]
-        mov dword ptr [edx + 4], esi
-        mov esi, dword ptr [eax + 0x30]
-        mov dword ptr [edx + 8], esi
-        mov esi, dword ptr [eax + 0x34]
-        mov dword ptr [edx + 0xc], esi
-        mov esi, dword ptr [eax + 0x38]
-        mov dword ptr [edx + 0x10], esi
-        fstp dword ptr [eax + 0x64]
-        mov edx, dword ptr [esp + 0x1c]
-        mov dword ptr [eax + 0x68], edx
-        mov edx, dword ptr [esp + 0xc]
-        mov dword ptr [eax + 0x6c], ecx
-        mov ecx, dword ptr [esp + 8]
-        pop edi
-        mov dword ptr [eax + 0x70], ecx
-        mov dword ptr [eax + 0x74], edx
-        pop esi
-        add esp, 8
-        ret 0x10
-    }
-    // clang-format on
+    const int character = (signed char)c;
+    const int glyphWidth = g_legacyPlayerTagStorage[192 + character];
+    const int column = character % 16;
+    const float right = (float)((double)glyphWidth * m_fScale + x);
+    const float otherY = (float)((double)m_fCharHeight * m_fScale + y2);
+    const double u = (double)column * g_legacyPlayerTagInv16;
+    const float uRight = (float)(((double)glyphWidth / m_fCharWidth) * g_legacyPlayerTagInv16 + u);
+    const double v = (double)(character - column) * g_legacyPlayerTagInv256;
+    const float vBottom = (float)(v + g_legacyPlayerTagInv16);
+
+    pVB[0].Initialise(x, y2, (float)u, vBottom);
+    pVB[1].Initialise(x, otherY, (float)u, (float)v);
+    pVB[2].Initialise(right, otherY, uRight, (float)v);
+    pVB[3] = pVB[0];
+    pVB[4] = pVB[2];
+    pVB[5].Initialise(right, y2, uRight, vBottom);
 }
 
 // 0x0006da80

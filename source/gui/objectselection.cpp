@@ -52,32 +52,14 @@ void CObjectSelection::DrawLabels()
     CObject* object = *(DWORD*)(pool + 4 + id * 4) ? *(CObject**)(pool + 0x20d4 + id * 4) : 0;
     if (!object)
         return;
-    BYTE visible;
-    // clang-format off
-    __asm {
-        mov ecx,object
-        call CEntity::GetDistanceToCamera
-        fcomp g_objectSelectionMaxDistance
-        fnstsw ax
-        test ah,41h
-        setnp visible
-    }
-    // clang-format on
-    if (!visible) return;
+    if (!(object->GetDistanceToCamera() <= g_objectSelectionMaxDistance))
+        return;
     CMatrix matrix;
     object->GetMatrix(&matrix);
     CVector position;
     memcpy(&position, &matrix.position, 12);
     ((CObjectEdit*)g_deviceObjectEdit)->RenderAxes(&matrix, 1.0f);
-    // The second distance is promoted directly from ST0 to a double for sprintf.
-    double distance;
-    // clang-format off
-    __asm {
-        mov ecx,object
-        call CEntity::GetDistanceToCamera
-        fstp distance
-    }
-    // clang-format on
+    const double distance = object->GetDistanceToCamera();
     int model = object->GetModelIndex();
     char text[256];
     sprintf(text, g_objectSelectionLabelFormat, (unsigned)objectId, model, distance);

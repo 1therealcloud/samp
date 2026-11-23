@@ -14,6 +14,7 @@
 #include "net/playerpool.h"
 #include "net/vehiclepool.h"
 
+#include <math.h>
 #include <string.h>
 // 0x001181dc
 const float g_remoteVehicleAxisTeleportDistance = 6.0f;
@@ -110,21 +111,7 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
     bool significant = false, teleport = false;
     for (int axis = 0; axis < 3; ++axis)
     {
-        DWORD wanted = ((const DWORD*)target)[axis], current = ((DWORD*)&matrix.position)[axis];
-        BYTE changed;
-        // clang-format off
-        __asm {
-            push current
-            push wanted
-            call FloatOffset
-            fcomp dword ptr [g_objectMutationStep]
-            add esp,8
-            fnstsw ax
-            test ah,41h
-            setp changed
-        }
-        // clang-format on
-        if (changed)
+        if (!(FloatOffset((&target->x)[axis], (&matrix.position.x)[axis]) <= g_objectMutationStep))
         {
             significant = true;
             break;
@@ -134,23 +121,8 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
         return;
     for (int axis = 0; axis < 3; ++axis)
     {
-        DWORD wanted = ((const DWORD*)target)[axis], current = ((DWORD*)&matrix.position)[axis];
-        BYTE distant;
         const float* limit = axis < 2 ? &g_remoteVehicleAxisTeleportDistance : &g_frameScaleMultiplier;
-        // clang-format off
-        __asm {
-            push current
-            push wanted
-            call FloatOffset
-            mov ecx,limit
-            fcomp dword ptr [ecx]
-            add esp,8
-            fnstsw ax
-            test ah,41h
-            sete distant
-        }
-        // clang-format on
-        if (distant)
+        if (FloatOffset((&target->x)[axis], (&matrix.position.x)[axis]) > *limit)
         {
             teleport = true;
             break;
@@ -173,29 +145,8 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
     {
         const float *wanted = &target->x + axis, *current = &matrix.position.x + axis;
         float* value = &speed.x + axis;
-        // clang-format off
-        __asm {
-            mov ecx,current
-            push dword ptr [ecx]
-            mov edx,wanted
-            push dword ptr [edx]
-            call FloatOffset
-            fcomp qword ptr [g_remoteUnoccupiedCorrectionThreshold]
-            add esp,8
-            fnstsw ax
-            test ah,41h
-            jne unoccupied_axis_done
-            mov ecx,wanted
-            mov edx,current
-            mov eax,value
-            fld dword ptr [ecx]
-            fsub dword ptr [edx]
-            fmul dword ptr [g_remoteIncarCorrection]
-            fadd dword ptr [eax]
-            fstp dword ptr [eax]
-        unoccupied_axis_done:
-        }
-        // clang-format on
+        if (FloatOffset(*wanted, *current) > g_remoteUnoccupiedCorrectionThreshold)
+            *value = (float)(((double)*wanted - *current) * g_remoteIncarCorrection + *value);
     }
     vehicle->SetSpeed(speed);
     vehicle->m_dwRemoteUnoccupiedSync = 1;
@@ -226,21 +177,7 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     bool significant = false, teleport = false;
     for (int axis = 0; axis < 3; ++axis)
     {
-        DWORD wanted = ((const DWORD*)target)[axis], current = ((DWORD*)&matrix.position)[axis];
-        BYTE changed;
-        // clang-format off
-        __asm {
-            push current
-            push wanted
-            call FloatOffset
-            fcomp dword ptr [g_textDrawHalf]
-            add esp,8
-            fnstsw ax
-            test ah,41h
-            setp changed
-        }
-        // clang-format on
-        if (changed)
+        if (!(FloatOffset((&target->x)[axis], (&matrix.position.x)[axis]) <= g_textDrawHalf))
         {
             significant = true;
             break;
@@ -250,23 +187,8 @@ void CRemotePlayer::UpdateTrailer(const void* data)
         return;
     for (int axis = 0; axis < 3; ++axis)
     {
-        DWORD wanted = ((const DWORD*)target)[axis], current = ((DWORD*)&matrix.position)[axis];
-        BYTE distant;
         const float* limit = axis < 2 ? &g_remoteVehicleAxisTeleportDistance : &g_frameScaleMultiplier;
-        // clang-format off
-        __asm {
-            push current
-            push wanted
-            call FloatOffset
-            mov ecx,limit
-            fcomp dword ptr [ecx]
-            add esp,8
-            fnstsw ax
-            test ah,41h
-            sete distant
-        }
-        // clang-format on
-        if (distant)
+        if (FloatOffset((&target->x)[axis], (&matrix.position.x)[axis]) > *limit)
         {
             teleport = true;
             break;
@@ -288,29 +210,8 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     {
         const float *wanted = &target->x + axis, *current = &matrix.position.x + axis;
         float* value = &speed.x + axis;
-        // clang-format off
-        __asm {
-            mov ecx,current
-            push dword ptr [ecx]
-            mov edx,wanted
-            push dword ptr [edx]
-            call FloatOffset
-            fcomp dword ptr [g_pedDrunkSpeedThreshold]
-            add esp,8
-            fnstsw ax
-            test ah,41h
-            jne trailer_axis_done
-            mov ecx,wanted
-            mov edx,current
-            mov eax,value
-            fld dword ptr [ecx]
-            fsub dword ptr [edx]
-            fmul dword ptr [g_remoteTrailerCorrection]
-            fadd dword ptr [eax]
-            fstp dword ptr [eax]
-        trailer_axis_done:
-        }
-        // clang-format on
+        if (FloatOffset(*wanted, *current) > g_pedDrunkSpeedThreshold)
+            *value = (float)(((double)*wanted - *current) * g_remoteTrailerCorrection + *value);
     }
     trailer->SetSpeed(speed);
 }
@@ -332,26 +233,7 @@ void CRemotePlayer::UpdateBullet(const void* data)
         for (int axis = 0; axis < 3; ++axis)
         {
             float* component = &bullet.offset.x + axis;
-            BYTE accepted = 0;
-            // clang-format off
-            // Native accepts unordered offsets and includes both +/-300 endpoints.
-            __asm {
-                mov eax,component
-                fld dword ptr [eax]
-                fcomp dword ptr [g_remoteBulletOffsetMaximum]
-                fnstsw ax
-                test ah,41h
-                jz bullet_offset_done
-                mov eax,component
-                fld dword ptr [eax]
-                fcomp dword ptr [g_remoteBulletOffsetMinimum]
-                fnstsw ax
-                test ah,5
-                jnp bullet_offset_done
-                mov accepted,1
-            bullet_offset_done:
-            }
-            // clang-format on
+            const bool accepted = !(*component > g_remoteBulletOffsetMaximum || *component < g_remoteBulletOffsetMinimum);
             if (!accepted) return;
         }
         if (type == 1)
@@ -656,56 +538,24 @@ void CRemotePlayer::ProcessHead()
     CMatrix matrix;
     m_state.ped->GetMatrix(&matrix);
     DWORD now = GetTickCount();
-    CRemotePlayer* self = this;
     if (now - m_state.lastHeadUpdateTick > 1000)
     {
         CameraAim* aim = AimStuff::GetPlayerAim(*((BYTE*)m_state.ped + 0x2b0));
-        float z;
-        // clang-format off
-        __asm {
-            mov eax,aim
-            fld dword ptr [eax]
-            fmul dword ptr [g_remoteHeadDistance]
-            fadd dword ptr [matrix+48]
-            fld dword ptr [eax+4]
-            fmul dword ptr [g_remoteHeadDistance]
-            fadd dword ptr [matrix+52]
-            fld dword ptr [eax+8]
-            mov ecx,self
-            mov edx,now
-            mov [ecx+1e1h],edx
-            fmul dword ptr [g_remoteHeadDistance]
-            fadd dword ptr [matrix+56]
-            fstp dword ptr [z]
-            fxch st(1)
-            fsub dword ptr [matrix+48]
-            fstp dword ptr [ecx+1d5h]
-            fsub dword ptr [matrix+52]
-            fstp dword ptr [ecx+1d9h]
-            fld dword ptr [z]
-            fsub dword ptr [matrix+56]
-            fstp dword ptr [ecx+1ddh]
-        }
-        // clang-format on
+        const double x = (double)aim->front.x * g_remoteHeadDistance + matrix.position.x;
+        const double y = (double)aim->front.y * g_remoteHeadDistance + matrix.position.y;
+        m_state.lastHeadUpdateTick = now;
+        const volatile float z = (float)((double)aim->front.z * g_remoteHeadDistance + matrix.position.z);
+        m_state.headDirection.x = (float)(x - matrix.position.x);
+        m_state.headDirection.y = (float)(y - matrix.position.y);
+        m_state.headDirection.z = z - matrix.position.z;
     }
     if (now - m_state.lastHeadTaskTick > 200)
     {
-        CVector target;
         ped = m_state.ped;
-        // clang-format off
-        __asm {
-            mov ecx,self
-            fld dword ptr [matrix+48]
-            fadd dword ptr [ecx+1d5h]
-            fstp dword ptr [target]
-            fld dword ptr [matrix+52]
-            fadd dword ptr [ecx+1d9h]
-            fstp dword ptr [target+4]
-            fld dword ptr [matrix+56]
-            fadd dword ptr [ecx+1ddh]
-            fstp dword ptr [target+8]
-        }
-        // clang-format on
+        CVector target;
+        target.x = matrix.position.x + m_state.headDirection.x;
+        target.y = matrix.position.y + m_state.headDirection.y;
+        target.z = matrix.position.z + m_state.headDirection.z;
         ped->ApplyCommandTask(g_remoteHeadTask, 0, 1000, -1, &target, 0, 0.1f, 500, 3, 0);
         m_state.lastHeadTaskTick = now;
     }
@@ -862,47 +712,13 @@ void CRemotePlayer::UpdateOnfootSpeedAndPosition()
     }
     CVector speed;
     m_state.ped->GetSpeed(&speed);
-    CRemotePlayer* self = this;
-    // clang-format off
-    __asm {
-        mov ecx,self
-        fld dword ptr [g_remoteOnfootCorrection]
-        fld dword ptr [ecx+190h]
-        fcomp dword ptr [g_localQuaternionSyncThreshold]
-        fnstsw ax
-        test ah,41h
-        jne onfoot_y_correction
-        fld dword ptr [ecx+120h]
-        fsub dword ptr [matrix+48]
-        fmul st(0),st(1)
-        fadd dword ptr [speed]
-        fstp dword ptr [speed]
-    onfoot_y_correction:
-        fld dword ptr [ecx+194h]
-        fcomp dword ptr [g_localQuaternionSyncThreshold]
-        fnstsw ax
-        test ah,41h
-        jne onfoot_z_correction
-        fld dword ptr [ecx+124h]
-        fsub dword ptr [matrix+52]
-        fmul st(0),st(1)
-        fadd dword ptr [speed+4]
-        fstp dword ptr [speed+4]
-    onfoot_z_correction:
-        fld dword ptr [ecx+198h]
-        fcomp dword ptr [g_localQuaternionSyncThreshold]
-        fnstsw ax
-        test ah,41h
-        jne onfoot_correction_done
-        fld dword ptr [ecx+128h]
-        fsub dword ptr [matrix+56]
-        fmul st(0),st(1)
-        fadd dword ptr [speed+8]
-        fstp dword ptr [speed+8]
-    onfoot_correction_done:
-        fstp st(0)
-    }
-    // clang-format on
+    for (int axis = 0; axis < 3; ++axis)
+        if (delta[axis] > g_localQuaternionSyncThreshold)
+        {
+            const double difference = (double)(&target->x)[axis] - (&matrix.position.x)[axis];
+            float& component = (&speed.x)[axis];
+            component = (float)(difference * g_remoteOnfootCorrection + component);
+        }
     m_state.ped->SetSpeed(speed);
 }
 
@@ -924,50 +740,11 @@ void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
     }
     volatile float* delta = (volatile float*)&m_state.positionInaccuracy;
     delta[0] = FloatOffset(target->x, matrix.position.x);
-    int action = 0;
-    CRemotePlayer* self = this;
-    // clang-format off
-    __asm {
-        mov ecx,self
-        push dword ptr [matrix+52]
-        push dword ptr [ecx+124h]
-        call FloatOffset
-        add esp,8
-        mov ecx,self
-        fst dword ptr [ecx+194h]
-        fld dword ptr [ecx+190h]
-        fcomp dword ptr [g_objectTurnVelocityScale]
-        fnstsw ax
-        test ah,41h
-        jp xy_significant
-        fcom dword ptr [g_objectTurnVelocityScale]
-        fnstsw ax
-        test ah,41h
-        jnp xy_discard_y
-    xy_significant:
-        fld dword ptr [ecx+190h]
-        fcomp dword ptr [g_quaternionMatrixTwo]
-        fnstsw ax
-        test ah,41h
-        je xy_teleport_pop
-        fcomp dword ptr [g_quaternionMatrixTwo]
-        fnstsw ax
-        test ah,41h
-        je xy_teleport
-        mov action,1
-        jmp xy_decided
-    xy_teleport_pop:
-        fstp st(0)
-    xy_teleport:
-        mov action,2
-        jmp xy_decided
-    xy_discard_y:
-        fstp st(0)
-    xy_decided:
-    }
-    // clang-format on
-    if (!action) return;
-    if (action == 2)
+    const double y = FloatOffset(target->y, matrix.position.y);
+    delta[1] = (float)y;
+    if (delta[0] <= g_objectTurnVelocityScale && y <= g_objectTurnVelocityScale)
+        return;
+    if (delta[0] > g_quaternionMatrixTwo || y > g_quaternionMatrixTwo)
     {
         matrix.position.x = target->x;
         matrix.position.y = target->y;
@@ -980,18 +757,7 @@ void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
         if (delta[i] > g_objectPoolSecondsPerTick)
         {
             float *wanted = (float*)target + i, *current = (float*)&matrix.position + i, *value = (float*)&speed + i;
-            // clang-format off
-        __asm {
-            mov ecx,wanted
-            mov edx,current
-            mov eax,value
-            fld dword ptr [ecx]
-            fsub dword ptr [edx]
-            fmul dword ptr [g_objectMutationStep]
-            fadd dword ptr [eax]
-            fstp dword ptr [eax]
-        }
-            // clang-format on
+            *value = (float)(((double)*wanted - *current) * g_objectMutationStep + *value);
         }
     m_state.ped->SetSpeed(speed);
 }
@@ -1015,40 +781,10 @@ void CRemotePlayer::UpdateIncarSpeedAndPosition()
     volatile float* delta = (volatile float*)&m_state.positionInaccuracy;
     delta[0] = FloatOffset(target->x, matrix.position.x);
     delta[1] = FloatOffset(target->y, matrix.position.y);
-    int significant = 0;
-    CRemotePlayer* self = this;
-    // clang-format off
-    __asm {
-        mov ecx,self
-        push dword ptr [matrix+56]
-        push dword ptr [ecx+140h]
-        call FloatOffset
-        add esp,8
-        mov ecx,self
-        fst dword ptr [ecx+198h]
-        fld dword ptr [ecx+190h]
-        fcomp dword ptr [g_pedDrunkSpeedThreshold]
-        fnstsw ax
-        test ah,41h
-        jp incar_significant_pop_z
-        fld dword ptr [ecx+194h]
-        fcomp dword ptr [g_pedDrunkSpeedThreshold]
-        fnstsw ax
-        test ah,41h
-        jp incar_significant_pop_z
-        fcomp dword ptr [g_pedDrunkSpeedThreshold]
-        fnstsw ax
-        test ah,41h
-        jnp incar_significance_done
-        jmp incar_significant
-    incar_significant_pop_z:
-        fstp st(0)
-    incar_significant:
-        mov significant,1
-    incar_significance_done:
-    }
-    // clang-format on
-    if (!significant) return;
+    const double z = FloatOffset(target->z, matrix.position.z);
+    delta[2] = (float)z;
+    if (delta[0] <= g_pedDrunkSpeedThreshold && delta[1] <= g_pedDrunkSpeedThreshold && z <= g_pedDrunkSpeedThreshold)
+        return;
     float zLimit = 0.5f;
     if (m_state.vehicle->GetSubtype() == 4 || m_state.vehicle->GetSubtype() == 5 || m_state.vehicle->GetSubtype() == 3)
         zLimit = 2.0f;
@@ -1064,18 +800,7 @@ void CRemotePlayer::UpdateIncarSpeedAndPosition()
         if (delta[i] > g_pedDrunkSpeedThreshold)
         {
             float *wanted = (float*)target + i, *current = (float*)&matrix.position + i, *value = (float*)&speed + i;
-            // clang-format off
-        __asm {
-            mov ecx,wanted
-            mov edx,current
-            mov eax,value
-            fld dword ptr [ecx]
-            fsub dword ptr [edx]
-            fmul dword ptr [g_remoteIncarCorrection]
-            fadd dword ptr [eax]
-            fstp dword ptr [eax]
-        }
-            // clang-format on
+            *value = (float)(((double)*wanted - *current) * g_remoteIncarCorrection + *value);
         }
     if (FloatOffset(speed.x, 0) > g_objectTurnVelocityScale || FloatOffset(speed.y, 0) > g_objectTurnVelocityScale || FloatOffset(speed.z, 0) > g_objectTurnVelocityScale)
         m_state.vehicle->SetSpeed(speed);
@@ -1094,34 +819,13 @@ void CRemotePlayer::UpdateOnfootRotation()
     GameQuaternionSlerp(&result, &m_state.onfoot.rotation, &current, 0.75f);
     GameQuaternionToMatrixComponents(&result, &matrix);
     m_state.ped->SetMatrix(matrix);
-    float angle;
-    // clang-format off
-    __asm {
-        fld dword ptr [matrix+16]
-        fchs
-        fld dword ptr [matrix+20]
-        fpatan
-        fmul dword ptr [g_entityRadiansToDegrees]
-        fst dword ptr [angle]
-        fcomp dword ptr [g_objectScaleLowerBound]
-        fld dword ptr [angle]
-        fnstsw ax
-        test ah,5
-        jp onfoot_heading_nonnegative
-        fadd dword ptr [g_anglePeriod]
-        jmp onfoot_heading_store
-    onfoot_heading_nonnegative:
-        fcomp dword ptr [g_anglePeriod]
-        fnstsw ax
-        test ah,1
-        jne onfoot_heading_ready
-        fld dword ptr [angle]
-        fsub dword ptr [g_anglePeriod]
-    onfoot_heading_store:
-        fstp dword ptr [angle]
-    onfoot_heading_ready:
-    }
-    // clang-format on
+    const double degrees = atan2(-(double)matrix.up.x, (double)matrix.up.y) * g_entityRadiansToDegrees;
+    const volatile float roundedDegrees = (float)degrees;
+    float angle = roundedDegrees;
+    if (degrees < g_objectScaleLowerBound)
+        angle = (float)((double)roundedDegrees + g_anglePeriod);
+    else if (roundedDegrees >= g_anglePeriod)
+        angle = (float)((double)roundedDegrees - g_anglePeriod);
     m_state.ped->SetRotation(angle);
 }
 
@@ -1361,17 +1065,8 @@ void CRemotePlayer::UpdateAim(const void* data)
     m_state.ped->SetAim(&aim);
     m_state.ped->SetAimZ(sync->aimZ);
     int aspect = sync->aspect, zoom = sync->zoomWeapon & 0x3f;
-    float aspectValue, zoomValue;
-    // clang-format off
-    __asm {
-        fild dword ptr [aspect]
-        fmul dword ptr [g_remoteAimAspectScale]
-        fstp dword ptr [aspectValue]
-        fild dword ptr [zoom]
-        fmul dword ptr [g_remoteAimZoomScale]
-        fstp dword ptr [zoomValue]
-    }
-    // clang-format on
+    const float aspectValue = (float)((double)aspect * g_remoteAimAspectScale);
+    const float zoomValue = (float)((double)zoom * g_remoteAimZoomScale);
     ped = m_state.ped;
     AimStuff::SetPlayerCamera(*((BYTE*)ped + 0x2b0), zoomValue, aspectValue);
     DWORD* slot = (DWORD*)m_state.ped->GetCurrentWeaponSlot();
@@ -1517,72 +1212,29 @@ DWORD CRemotePlayer::GetColorAsRGBA()
 }
 
 // 0x00015d50
-__declspec(naked) float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
+float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
 {
-    // clang-format off
-    __asm {
-        mov ecx,dword ptr [ecx+4]
-        sub esp,80h
-        test ecx,ecx
-        jnz have_ped
-        fld g_remoteAbsentDistance
-        add esp,80h
-        ret 4
-    have_ped:
-        lea eax,[esp]
-        push eax
-        call CEntity::GetMatrix
-        mov edx,dword ptr [esp+84h]
-        lea ecx,[esp+40h]
-        push ecx
-        mov ecx,dword ptr [edx+4]
-        call CEntity::GetMatrix
-        fld dword ptr [esp+38h]
-        fsub dword ptr [esp+78h]
-        fld dword ptr [esp+34h]
-        fsub dword ptr [esp+74h]
-        fld dword ptr [esp+30h]
-        fsub dword ptr [esp+70h]
-        fld st(0)
-        fmul st,st(1)
-        fld st(2)
-        fmul st,st(3)
-        faddp st(1),st
-        fld st(3)
-        fmul st,st(4)
-        faddp st(1),st
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        add esp,80h
-        ret 4
-    }
-    // clang-format on
+    if (!m_state.ped)
+        return g_remoteAbsentDistance;
+    CMatrix first, second;
+    m_state.ped->GetMatrix(&first);
+    other->m_state.ped->GetMatrix(&second);
+    const double z = (double)first.position.z - second.position.z;
+    const double y = (double)first.position.y - second.position.y;
+    const double x = (double)first.position.x - second.position.x;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
+
 // 0x00015dd0
-__declspec(naked) float CRemotePlayer::GetDistanceToLocalPlayer()
+float CRemotePlayer::GetDistanceToLocalPlayer()
 {
-    // clang-format off
-    __asm {
-        mov eax,ecx
-        mov ecx,dword ptr [eax+4]
-        test ecx,ecx
-        jnz select_entity
-        fld g_remoteAbsentDistance
-        ret
-    select_entity:
-        cmp byte ptr [eax+1ah],13h
-        jne selected
-        mov eax,dword ptr [eax+8]
-        test eax,eax
-        jz selected
-        mov ecx,eax
-    selected:
-        jmp CEntity::GetDistanceToLocalPlayer
-    }
-    // clang-format on
+    if (!m_state.ped)
+        return g_remoteAbsentDistance;
+    CEntity* entity = m_state.ped;
+    if (m_state.playerState == 0x13 && m_state.vehicle)
+        entity = m_state.vehicle;
+    return entity->GetDistanceToLocalPlayer();
 }
 
 // 0x00015e50
@@ -1651,28 +1303,7 @@ void CRemotePlayer::ApplySurfingMatrix()
     for (int axis = 0; axis < 3; axis++)
     {
         float* component = (float*)&m_state.onfoot.surfingOffset + axis;
-        BYTE accepted;
-        // clang-format off
-        // Preserve FCOMP unordered acceptance and native +/-100 bounds.
-        __asm {
-            mov edx,component
-            fld dword ptr [edx]
-            fcomp g_vehicleTrainSpeedMaximum
-            fnstsw ax
-            test ah,41h
-            jz invalid_offset
-            fld dword ptr [edx]
-            fcomp g_vehicleTrainSpeedMinimum
-            fnstsw ax
-            test ah,5
-            jnp invalid_offset
-            mov accepted,1
-            jmp checked_offset
-        invalid_offset:
-            mov accepted,0
-        checked_offset:
-        }
-        // clang-format on
+        const bool accepted = !(*component > g_vehicleTrainSpeedMaximum || *component < g_vehicleTrainSpeedMinimum);
         if (!accepted) return;
     }
     CMatrix entityMatrix, pedMatrix;

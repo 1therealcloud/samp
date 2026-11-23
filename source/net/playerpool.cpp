@@ -109,44 +109,18 @@ WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, cons
         CPed* ped = remote->m_state.ped;
         if (!ped || !ped->DoesExist())
             continue;
-        BYTE nearer;
-        // clang-format off
-        __asm {
-            mov ecx,ped
-            call CEntity::GetDistanceToCamera
-            fcomp maxCameraDistance
-            fnstsw ax
-            test ah,5
-            setnp nearer
-        }
-        // clang-format on
-        if (!nearer) continue;
+        if (!(ped->GetDistanceToCamera() < maxCameraDistance))
+            continue;
         CVector centre;
         ped->GetBoundCentre(&centre);
         if (!GameTestEntityLineSphere(&from.point, &to.point, ped->m_pGameEntity, &centre, 1.5f, 1))
             continue;
-        // clang-format off
-        __asm {
-            mov eax,origin
-            push dword ptr [eax+8]
-            push dword ptr [eax+4]
-            push dword ptr [eax]
-            mov ecx,ped
-            call CEntity::GetDistanceToPoint
-            fcom closest
-            fnstsw ax
-            test ah,5
-            jp player_ray_not_closer
-            fstp closest
-            mov nearer,1
-            jmp player_ray_distance_done
-        player_ray_not_closer:
-            fstp st(0)
-            mov nearer,0
-        player_ray_distance_done:
+        const double distance = ped->GetDistanceToPoint(origin->x, origin->y, origin->z);
+        if (distance < closest)
+        {
+            closest = (float)distance;
+            selected = (WORD)i;
         }
-        // clang-format on
-        if (nearer) selected = (WORD)i;
     }
     return selected;
 }

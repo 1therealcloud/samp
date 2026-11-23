@@ -255,19 +255,8 @@ bool CObjectPool::TestCollisionShapes(const GameEntityCollisionShape* first, con
             CObject* object = objects[i];
             if (!object || !object->IsAdded() || object->cameraCollisionDisabled)
                 continue;
-            // Compare extended ST0 directly; rounding to float can change this gate.
-            BYTE nearby;
-            // clang-format off
-        __asm {
-            mov ecx,object
-            call CEntity::GetDistanceToCamera
-            fcomp limit
-            fnstsw ax
-            test ah,5
-            setnp nearby
-        }
-            // clang-format on
-            if (!nearby || object->IsIgnored()) continue;
+            if (!(object->GetDistanceToCamera() < limit) || object->IsIgnored())
+                continue;
             if (object->CEntity::TestCollisionShapes(first, second, 1))
                 return true;
         }
@@ -292,20 +281,8 @@ WORD CObjectPool::FindInRay(float maxDistance, const CVector* origin, const CVec
         if (active[i])
         {
             CObject* object = objects[i];
-            float distance;
-            // clang-format off
-        // Native calls the distance method even before checking a null object.
-        // It also stores ST0 to float before the later comparison.
-        __asm {
-            mov eax,origin
-            push dword ptr [eax+8]
-            push dword ptr [eax+4]
-            push dword ptr [eax]
-            mov ecx,object
-            call CEntity::GetDistanceToPoint
-            fstp distance
-        }
-            // clang-format on
+            // The original calls the distance method before checking the slot pointer.
+            const volatile float distance = object->GetDistanceToPoint(origin->x, origin->y, origin->z);
             if (!object || !object->IsAdded() || object->GetModelIndex() == 19300 || !(distance < closest)) continue;
             BYTE* collision = (BYTE*)GameGetModelCollision(object->GetModelIndex());
             if (!collision)

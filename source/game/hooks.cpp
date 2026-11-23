@@ -1206,8 +1206,77 @@ __declspec(naked) void GameHookOverrideVerticalLineCollisionFlags()
     // clang-format on
 }
 
-// The comparison and repeated division retain x87 precision until the final
-// float store. A rounded float ratio changes the native 16:10 boundary.
+static void RestoreVehicleVerticalSpeed()
+{
+    float speed;
+    memcpy(&speed, &g_hookSavedSpeed[2], sizeof(speed));
+    *(float*)(g_hookControlVehicle + 0x4c) = speed;
+}
+
+static void RestoreVehicleLean()
+{
+    BYTE* vehicle = (BYTE*)g_hookControlVehicle;
+    float* lean = (float*)(vehicle + 0x648);
+    float* target = (float*)(vehicle + 0x64c);
+    memcpy(lean, &g_hookVehicleLean, sizeof(float));
+    float desired;
+    memcpy(&desired, &g_hookVehicleLeanTarget, sizeof(desired));
+    *target = desired;
+
+    if (*target > *lean)
+        *lean = (float)(((double)*target - *lean) * g_textDrawHalf + *lean);
+    else if (*target < *lean)
+        *lean = (float)(*lean - ((double)*lean - *target) * g_textDrawHalf);
+}
+
+static bool IsVehicleWithinStreamingDistance(const CMatrix* player, const CMatrix* vehicle)
+{
+    const double x = (double)player->position.x - vehicle->position.x;
+    const double y = (double)player->position.y - vehicle->position.y;
+    const double distanceSquared = x * x + y * y;
+    g_gameVehicleDistanceSquared = (float)distanceSquared;
+    return distanceSquared <= g_gameStreamingDistanceSquared;
+}
+
+static bool HasTrailerHealth(const BYTE* trailer)
+{
+    return *(const float*)(trailer + 0x4c0) > g_objectScaleLowerBound;
+}
+
+static bool IsObjectDrawDistanceFar(const BYTE* object)
+{
+    return *(const float*)(object + 0x54) > g_objectStreamingNearDistance;
+}
+
+static bool IsCollisionPointWithinBounds(const float* point)
+{
+    return !(point[0] > g_hookCollisionBoundHigh || point[0] < g_hookCollisionBoundLow ||
+             point[1] > g_hookCollisionBoundHigh || point[1] < g_hookCollisionBoundLow);
+}
+
+static void ScaleShotRayPoint(float* point)
+{
+    point[0] *= g_frameScaleNumerator;
+    point[1] *= g_frameScaleNumerator;
+    point[2] *= g_frameScaleNumerator;
+}
+
+static void TranslateShotPoint(const PedBulletData* shot)
+{
+    const CMatrix* matrix = *(const CMatrix* const*)((const BYTE*)shot->entity + 0x14);
+    g_hookAdjustedShotPoint.x = matrix->position.x + shot->offset.x;
+    g_hookAdjustedShotPoint.y = matrix->position.y + shot->offset.y;
+    g_hookAdjustedShotPoint.z = matrix->position.z + shot->offset.z;
+}
+
+static void ExtendShotEndpoint(const CVector* origin, CVector* end)
+{
+    const CVector& point = g_hookAdjustedShotPoint;
+    end->x = (float)(((double)point.x - origin->x) + point.x);
+    end->y = (float)(((double)point.y - origin->y) + point.y);
+    end->z = (float)(((double)point.z - origin->z) + point.z);
+}
+
 // 0x000a2220
 void GamePrepareHudDraw()
 {
@@ -1216,24 +1285,10 @@ void GamePrepareHudDraw()
     BYTE enabled = g_hookHudAspectFix;
     g_hookHudWidth = (float)*(int*)0xc17044;
     g_hookHudHeight = (float)*(int*)0xc17048;
-    if (enabled)
+    if (enabled && (double)g_hookHudWidth / g_hookHudHeight >= g_hookHudAspectThreshold)
     {
-        // clang-format off
-        __asm {
-            fld g_hookHudWidth
-            fdiv g_hookHudHeight
-            fcomp g_hookHudAspectThreshold
-            fnstsw ax
-            test ah,1
-            jnz done
-            mov dword ptr ds:[0x859524],0x3b1e98dd
-            fld g_hookHudWidth
-            fdiv g_hookHudHeight
-            fdivr g_hookHudScaleNumerator
-            fstp dword ptr ds:[0x859520]
-        done:
-        }
-        // clang-format on
+        *(DWORD*)0x859524 = 0x3b1e98dd;
+        *(float*)0x859520 = (float)(g_hookHudScaleNumerator / ((double)g_hookHudWidth / g_hookHudHeight));
     }
 }
 
@@ -2191,9 +2246,7 @@ __declspec(naked) void GameHookProcessRemoteVehicleControl()
         mov eax,[g_hookSavedMatrix+56]
         mov dword ptr [ecx + 0x38],eax
     branch_100a3198:
-        fld dword ptr [g_hookSavedSpeed+8]
-        mov ecx,dword ptr [g_hookControlVehicle]
-        fstp dword ptr [ecx + 0x4c]
+        call RestoreVehicleVerticalSpeed
     branch_100a31a7:
         mov eax,[g_hookVehicleProcess]
     branch_100a31ac:
@@ -2202,34 +2255,7 @@ __declspec(naked) void GameHookProcessRemoteVehicleControl()
         cmp eax,0x6b9250
         jnz branch_100a323f
     branch_100a31be:
-        mov eax,[g_hookControlVehicle]
-        mov edx,dword ptr [g_hookVehicleLean]
-        mov dword ptr [eax + 0x648],edx
-        fld dword ptr [g_hookVehicleLeanTarget]
-        mov ecx,dword ptr [g_hookControlVehicle]
-        fstp dword ptr [ecx + 0x64c]
-        mov ecx,dword ptr [g_hookControlVehicle]
-        fld dword ptr [ecx + 0x64c]
-        fcomp dword ptr [ecx + 0x648]
-        fld dword ptr [ecx + 0x64c]
-        fnstsw ax
-        test ah,0x41
-        jnz branch_100a3214
-        fsub dword ptr [ecx + 0x648]
-        fmul dword ptr [g_textDrawHalf]
-        fadd dword ptr [ecx + 0x648]
-        jmp branch_100a3239
-    branch_100a3214:
-        fcomp dword ptr [ecx + 0x648]
-        fnstsw ax
-        test ah,0x5
-        jp branch_100a323f
-        fld dword ptr [ecx + 0x648]
-        fsub dword ptr [ecx + 0x64c]
-        fmul dword ptr [g_textDrawHalf]
-        fsubr dword ptr [ecx + 0x648]
-    branch_100a3239:
-        fstp dword ptr [ecx + 0x648]
+        call RestoreVehicleLean
     branch_100a323f:
         mov edx,dword ptr [g_clientCrashPedContext]
         mov byte ptr [edx],bl
@@ -2351,27 +2377,17 @@ __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
         jz branch_100b6519
         test ecx,ecx
         jz branch_100b6519
-        fld dword ptr [ecx + 0x34]
         mov edx,dword ptr [eax + 0x34]
-        fld dword ptr [ecx + 0x30]
-        add ecx,0x30
-        fsubr dword ptr [eax + 0x30]
         mov dword ptr [ebp + 0x8],edx
-        fld dword ptr [ebp + 0x8]
-        fsub st(0),st(2)
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fst dword ptr [g_gameVehicleDistanceSquared]
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        fcomp dword ptr [g_gameStreamingDistanceSquared]
-        fnstsw ax
-        test ah,0x41
-        jp branch_100b6519
+        push ecx
+        push ecx
+        push eax
+        call IsVehicleWithinStreamingDistance
+        add esp,8
+        pop ecx
+        test al,al
+        jz branch_100b6519
+        add ecx,0x30
         mov dword ptr [ebp + -0x4],ecx
         mov byte ptr [ebp + 0xb],0x0
         push 0x0
@@ -3033,11 +3049,11 @@ __declspec(naked) void GameHookHandleVehicleTowLink()
         cmp dword ptr [g_hookTrailerBackend], 0
         je hook_a49d0_a4a90
         mov eax, dword ptr [g_hookTrailerBackend]
-        fld dword ptr [eax + 0x4c0]
-        fcomp dword ptr [g_objectScaleLowerBound]
-        fnstsw ax
-        test ah, 0x41
-        jne hook_a49d0_a4a90
+        push eax
+        call HasTrailerHealth
+        add esp, 4
+        test al, al
+        je hook_a49d0_a4a90
         mov ecx, dword ptr [g_pNetGame]
         call CNetGame::GetVehiclePool
         mov dword ptr [g_hookTrailerPool], eax
@@ -3200,11 +3216,11 @@ __declspec(naked) void GameHookFilterObjectRenderList()
         cmp dword ptr [ecx + 0x118b], 0
         jne hook_a4e70_a4f0b
         mov edx, dword ptr [g_hookObjectDrawWrapper]
-        fld dword ptr [edx + 0x54]
-        fcomp dword ptr [g_objectStreamingNearDistance]
-        fnstsw ax
-        test ah, 0x41
-        je hook_a4e70_a4f0b
+        push edx
+        call IsObjectDrawDistanceFar
+        add esp, 4
+        test al, al
+        jne hook_a4e70_a4f0b
         mov eax, dword ptr [g_hookObjectDrawWrapper]
         movzx ecx, byte ptr [eax + 0x1199]
         test ecx, ecx
@@ -3236,11 +3252,11 @@ __declspec(naked) void GameHookFilterObjectRenderList()
         cmp dword ptr [eax + 0x118b], 0
         jne hook_a4e70_a4f82
         mov ecx, dword ptr [g_hookObjectDrawWrapper]
-        fld dword ptr [ecx + 0x54]
-        fcomp dword ptr [g_objectStreamingNearDistance]
-        fnstsw ax
-        test ah, 0x41
-        jne hook_a4e70_a4f85
+        push ecx
+        call IsObjectDrawDistanceFar
+        add esp, 4
+        test al, al
+        je hook_a4e70_a4f85
     hook_a4e70_a4f82:
         popad
         pop esi
@@ -3457,27 +3473,11 @@ __declspec(naked) void GameHookTestMultiplayerCollisionShapes()
         mov byte ptr [g_hookCollisionResult], al
         pop edx
         pop edx
-        fld dword ptr [esi]
-        fcomp dword ptr [g_hookCollisionBoundHigh]
-        fnstsw ax
-        test ah, 0x41
-        je hook_a56b0_a576e
-        fld dword ptr [esi]
-        fcomp dword ptr [g_hookCollisionBoundLow]
-        fnstsw ax
-        test ah, 5
-        jnp hook_a56b0_a576e
-        fld dword ptr [esi + 4]
-        fcomp dword ptr [g_hookCollisionBoundHigh]
-        fnstsw ax
-        test ah, 0x41
-        je hook_a56b0_a576e
-        fld dword ptr [esi + 4]
-        fcomp dword ptr [g_hookCollisionBoundLow]
-        fnstsw ax
-        test ah, 5
-        jp hook_a56b0_a5818
-    hook_a56b0_a576e:
+        push esi
+        call IsCollisionPointWithinBounds
+        add esp, 4
+        test al, al
+        jne hook_a56b0_a5818
         mov ecx, dword ptr [g_pNetGame]
         test ecx, ecx
         mov al, byte ptr [g_hookCollisionResult]
@@ -3629,24 +3629,10 @@ void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target,
             }
             else
             {
-                // clang-format off
-                __asm {
-                    mov edx,hit
-                    mov esi,collision
-                    mov eax,[edx+14h]
-                    fld dword ptr [esi]
-                    fsub dword ptr [eax+30h]
-                    fstp dword ptr [g_hookBulletHitData+28]
-                    mov ecx,[edx+14h]
-                    fld dword ptr [esi+4]
-                    fsub dword ptr [ecx+34h]
-                    fstp dword ptr [g_hookBulletHitData+32]
-                    mov eax,[edx+14h]
-                    fld dword ptr [esi+8]
-                    fsub dword ptr [eax+38h]
-                    fstp dword ptr [g_hookBulletHitData+36]
-                }
-                // clang-format on
+                CMatrix* const* matrix = (CMatrix* const*)((BYTE*)hit + 0x14);
+                g_hookBulletHitData.offset.x = collision->x - (*matrix)->position.x;
+                g_hookBulletHitData.offset.y = collision->y - (*matrix)->position.y;
+                g_hookBulletHitData.offset.z = collision->z - (*matrix)->position.z;
             }
             g_hookBulletHitData.entity = hit;
         }
@@ -3755,15 +3741,14 @@ __declspec(naked) void GameHookAdjustShotRayPoint()
     __asm {
         push ebp
         mov ebp,esp
-        fld dword ptr [ebp+1ch]
-        fmul dword ptr [g_frameScaleNumerator]
-        fstp dword ptr [ebp+1ch]
-        fld dword ptr [ebp+20h]
-        fmul dword ptr [g_frameScaleNumerator]
-        fstp dword ptr [ebp+20h]
-        fld dword ptr [ebp+24h]
-        fmul dword ptr [g_frameScaleNumerator]
-        fstp dword ptr [ebp+24h]
+        pushfd
+        pushad
+        lea eax,[ebp+1ch]
+        push eax
+        call ScaleShotRayPoint
+        add esp,4
+        popad
+        popfd
         push dword ptr [ebp+24h]
         push dword ptr [ebp+20h]
         push dword ptr [ebp+1ch]
@@ -3826,34 +3811,14 @@ __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVecto
         add esp,0ch
         jmp shot_los_endpoint
     shot_los_translation:
-        mov ecx,[eax+28h]
-        mov edx,[ecx+14h]
-        fld dword ptr [edx+30h]
-        fadd dword ptr [eax+1ch]
-        fstp dword ptr [g_hookAdjustedShotPoint]
-        mov ecx,[eax+28h]
-        mov edx,[ecx+14h]
-        fld dword ptr [edx+34h]
-        fadd dword ptr [eax+20h]
-        fstp dword ptr [g_hookAdjustedShotPoint+4]
-        mov ecx,[eax+28h]
-        mov edx,[ecx+14h]
-        fld dword ptr [edx+38h]
-        fadd dword ptr [eax+24h]
-        fstp dword ptr [g_hookAdjustedShotPoint+8]
+        push eax
+        call TranslateShotPoint
+        add esp,4
     shot_los_endpoint:
-        fld dword ptr [g_hookAdjustedShotPoint]
-        fsub dword ptr [ebp]
-        fadd dword ptr [g_hookAdjustedShotPoint]
-        fstp dword ptr [ebx]
-        fld dword ptr [g_hookAdjustedShotPoint+4]
-        fsub dword ptr [ebp+4]
-        fadd dword ptr [g_hookAdjustedShotPoint+4]
-        fstp dword ptr [ebx+4]
-        fld dword ptr [g_hookAdjustedShotPoint+8]
-        fsub dword ptr [ebp+8]
-        fadd dword ptr [g_hookAdjustedShotPoint+8]
-        fstp dword ptr [ebx+8]
+        push ebx
+        push ebp
+        call ExtendShotEndpoint
+        add esp,8
     shot_los_backend:
         mov eax,[esp+40h]
         mov ecx,[esp+3ch]
@@ -4062,12 +4027,21 @@ __declspec(naked) void GameHookFilterVehicleCreation()
     // clang-format on
 }
 
+static float GetFarClipDistanceForHook()
+{
+    return g_gameFarClipDistance;
+}
+
 // 0x000a37e0
 __declspec(naked) void GameHookOverrideFarClipDistance()
 {
     // clang-format off
     __asm {
-        fld dword ptr [g_gameFarClipDistance]
+        pushfd
+        pushad
+        call GetFarClipDistanceForHook
+        popad
+        popfd
         push esi
         mov esi, dword ptr [esp + 8]
         mov edx, dword ptr [g_gameVersionAddressB]
@@ -4301,6 +4275,16 @@ __declspec(naked) void GameHookAllocatePedTask()
     // clang-format on
 }
 
+static void LogPedSpeech()
+{
+    if (g_hookSpeechContext == 0x2d || !g_pChat)
+        return;
+    float probability;
+    memcpy(&probability, &g_hookSpeechProbability, sizeof(probability));
+    g_pChat->AddDebugMessage(g_hookPedSayFormat, g_hookSpeechContext, g_hookSpeechStartDelay, (double)probability,
+                             g_hookSpeechOverrideSilence, g_hookSpeechForceAudible, g_hookSpeechFrontEnd);
+}
+
 // 0x000a3bc0
 __declspec(naked) void GameHookLogPedSpeech()
 {
@@ -4319,29 +4303,7 @@ __declspec(naked) void GameHookLogPedSpeech()
         mov eax, dword ptr [esp + 0x18]
         mov dword ptr [g_hookSpeechFrontEnd], eax
         pushad
-        cmp dword ptr [g_hookSpeechContext], 0x2d
-        je raw_a3c4a
-        cmp dword ptr [g_pChat], 0
-        je raw_a3c4a
-        mov eax, dword ptr [g_hookSpeechFrontEnd]
-        push eax
-        mov ecx, dword ptr [g_hookSpeechForceAudible]
-        push ecx
-        mov edx, dword ptr [g_hookSpeechOverrideSilence]
-        push edx
-        fld dword ptr [g_hookSpeechProbability]
-        sub esp, 8
-        fstp qword ptr [esp]
-        mov eax, dword ptr [g_hookSpeechStartDelay]
-        push eax
-        mov ecx, dword ptr [g_hookSpeechContext]
-        push ecx
-        push offset g_hookPedSayFormat
-        mov edx, dword ptr [g_pChat]
-        push edx
-        call CChat::AddDebugMessage
-        add esp, 0x24
-    raw_a3c4a:
+        call LogPedSpeech
         popad
         mov eax, dword ptr [esp + 4]
         test ax, ax
@@ -4673,6 +4635,17 @@ __declspec(naked) void GameHookSkipGamepadInputPath()
     // clang-format on
 }
 
+static void LogGamepadAim()
+{
+    if (!g_pNetGame || !g_pChat)
+        return;
+    const CVector* aim = (const CVector*)g_hookGamepadAimVector;
+    const double z = aim->z, y = aim->y, x = aim->x;
+    const DWORD localControl = g_hookLocalPedControl;
+    const BOOL usingGamepad = g_pGame->UsingGamepad();
+    g_pChat->AddDebugMessage(g_hookGamepadAimFormat, usingGamepad, localControl, x, y, z);
+}
+
 // 0x000a52d0
 __declspec(naked) void GameHookLogGamepadAimUpdate()
 {
@@ -4682,31 +4655,7 @@ __declspec(naked) void GameHookLogGamepadAimUpdate()
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookGamepadAimVector], eax
         pushad
-        mov eax, dword ptr [g_pNetGame]
-        test eax, eax
-        je raw_a5333
-        mov eax, dword ptr [g_pChat]
-        test eax, eax
-        je raw_a5333
-        mov eax, dword ptr [g_hookGamepadAimVector]
-        fld dword ptr [eax + 8]
-        mov ecx, dword ptr [g_pGame]
-        sub esp, 0x18
-        fstp qword ptr [esp + 0x10]
-        fld dword ptr [eax + 4]
-        fstp qword ptr [esp + 8]
-        fld dword ptr [eax]
-        mov eax, dword ptr [g_hookLocalPedControl]
-        fstp qword ptr [esp]
-        push eax
-        call CGame::UsingGamepad
-        mov ecx, dword ptr [g_pChat]
-        push eax
-        push offset g_hookGamepadAimFormat
-        push ecx
-        call CChat::AddDebugMessage
-        add esp, 0x28
-    raw_a5333:
+        call LogGamepadAim
         mov ecx, dword ptr [g_hookGamepadAimThis]
         push dword ptr [g_hookGamepadAimVector]
         mov eax, 0x50cb10
@@ -4815,6 +4764,25 @@ __declspec(naked) void GameHookApplyRemoteSkillContextB()
     // clang-format on
 }
 
+static void PublishMountedVehicleAim(CameraAim* aim)
+{
+    g_hookVehicleAimInternalAim = (DWORD)aim;
+    memcpy(&aim->front.x, &g_hookMountedMatrix.right.x, sizeof(float));
+    aim->front.y = g_hookMountedMatrix.right.y;
+    aim->front.z = g_hookMountedMatrix.right.z;
+    aim->up.x = g_hookMountedMatrix.up.x;
+    aim->up.y = g_hookMountedMatrix.up.y;
+    aim->up.z = g_hookMountedMatrix.up.z;
+}
+
+static void PublishVehicleAimOffset()
+{
+    CVector* offset = (CVector*)(g_hookVehicleAimCamera + 0x19c);
+    offset->x = g_hookAimOffsetMatrix.position.x;
+    offset->y = g_hookAimOffsetMatrix.position.y;
+    offset->z = g_hookAimOffsetMatrix.position.z;
+}
+
 // 0x000a4510
 __declspec(naked) void GameHookAdjustVehicleAimMatrix()
 {
@@ -4871,34 +4839,11 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
         call GameRotateRwMatrixOnAxis
         add esp, 0x18
         call AimStuff::GetInternalAim
-        mov ecx, dword ptr [g_hookMountedMatrix]
-        mov dword ptr [g_hookVehicleAimInternalAim], eax
-        mov dword ptr [eax], ecx
-        fld dword ptr [g_hookMountedMatrix+0x4]
-        mov edx, dword ptr [g_hookVehicleAimInternalAim]
-        fstp dword ptr [edx + 4]
-        mov eax, dword ptr [g_hookVehicleAimInternalAim]
-        fld dword ptr [g_hookMountedMatrix+0x8]
-        fstp dword ptr [eax + 8]
-        mov ecx, dword ptr [g_hookVehicleAimInternalAim]
-        fld dword ptr [g_hookMountedMatrix+0x10]
-        fstp dword ptr [ecx + 0x24]
-        mov edx, dword ptr [g_hookVehicleAimInternalAim]
-        fld dword ptr [g_hookMountedMatrix+0x14]
-        fstp dword ptr [edx + 0x28]
-        mov eax, dword ptr [g_hookVehicleAimInternalAim]
-        fld dword ptr [g_hookMountedMatrix+0x18]
-        fstp dword ptr [eax + 0x2c]
+        push eax
+        call PublishMountedVehicleAim
+        add esp, 4
     context_a4647:
-        fld dword ptr [g_hookAimOffsetMatrix+0x30]
-        mov ecx, dword ptr [g_hookVehicleAimCamera]
-        fstp dword ptr [ecx + 0x19c]
-        mov edx, dword ptr [g_hookVehicleAimCamera]
-        fld dword ptr [g_hookAimOffsetMatrix+0x34]
-        fstp dword ptr [edx + 0x1a0]
-        mov eax, dword ptr [g_hookVehicleAimCamera]
-        fld dword ptr [g_hookAimOffsetMatrix+0x38]
-        fstp dword ptr [eax + 0x1a4]
+        call PublishVehicleAimOffset
         popad
         ret 0x10
     }
@@ -5090,6 +5035,15 @@ __declspec(naked) void GameHookNotifyVehicleEnter()
     // clang-format on
 }
 
+static void WarpLocalPlayerFromTrain()
+{
+    const CVector& position = g_hookExitMatrix.position;
+    const float x = position.x + g_hookTrainExitOffset;
+    const float y = position.y + g_hookTrainExitOffset;
+    const float z = position.z;
+    g_hookEventLocalPlayer->GetPed()->WarpFromVehicle(x, y, z);
+}
+
 // 0x000a35e0
 __declspec(naked) void GameHookNotifyVehicleExit()
 {
@@ -5149,20 +5103,7 @@ __declspec(naked) void GameHookNotifyVehicleExit()
         push offset g_hookExitMatrix
         mov ecx,g_hookExitVehicle
         call CEntity::GetMatrix
-        mov ecx,dword ptr [g_hookExitMatrix+0x38]
-        push ecx
-        fld dword ptr [g_hookExitMatrix+0x34]
-        fadd g_hookTrainExitOffset
-        push ecx
-        fstp dword ptr [esp]
-        fld dword ptr [g_hookExitMatrix+0x30]
-        fadd g_hookTrainExitOffset
-        push ecx
-        fstp dword ptr [esp]
-        mov ecx,g_hookEventLocalPlayer
-        call CLocalPlayer::GetPed
-        mov ecx,eax
-        call CPed::WarpFromVehicle
+        call WarpLocalPlayerFromTrain
         jmp done
     send_exit:
         mov dx,g_hookEventVehicleId

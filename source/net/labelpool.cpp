@@ -118,38 +118,14 @@ void CLabelPool::Draw()
             CPed* ped = *(CPed**)((BYTE*)remote + 4);
             if (!ped)
                 continue;
-            BYTE nearby;
-            float* limit = &entry->drawDistance;
-            // clang-format off
-            __asm {
-                mov ecx,ped
-                call CEntity::GetDistanceToLocalPlayer
-                mov edx,limit
-                fcomp dword ptr [edx]
-                fnstsw ax
-                test ah,41h
-                setnp nearby
-            }
-            // clang-format on
-            if (!nearby) continue;
+            if (!(ped->GetDistanceToLocalPlayer() <= entry->drawDistance))
+                continue;
             CVector bone;
             ped->GetBonePosition(8, &bone);
             position.x = bone.x + entry->position.x;
             position.y = bone.y + entry->position.y;
-            memcpy(&position.z, &bone.z, 4);
-            float *zOffset = &entry->position.z, *height = &position.z;
-            // clang-format off
-            __asm {
-                mov ecx,ped
-                call CEntity::GetDistanceToCamera
-                fmul g_pedDrunkSpeedThreshold
-                mov edx,zOffset
-                fadd dword ptr [edx]
-                mov edx,height
-                fadd dword ptr [edx]
-                fstp dword ptr [edx]
-            }
-            // clang-format on
+            const double height = (double)ped->GetDistanceToCamera() * g_pedDrunkSpeedThreshold;
+            position.z = (float)(height + entry->position.z + bone.z);
         }
         else if (entry->attachedVehicle != 0xffff)
         {
@@ -159,20 +135,8 @@ void CLabelPool::Draw()
             CVehicle* object = vehicles->Get(vehicle);
             if (!object)
                 continue;
-            BYTE nearby;
-            float* limit = &entry->drawDistance;
-            // clang-format off
-            __asm {
-                mov ecx,object
-                call CEntity::GetDistanceToLocalPlayer
-                mov edx,limit
-                fcomp dword ptr [edx]
-                fnstsw ax
-                test ah,41h
-                setnp nearby
-            }
-            // clang-format on
-            if (!nearby) continue;
+            if (!(object->GetDistanceToLocalPlayer() <= entry->drawDistance))
+                continue;
             CMatrix matrix;
             object->GetMatrix(&matrix);
             CVector offset;
@@ -181,24 +145,9 @@ void CLabelPool::Draw()
         }
         else
         {
-            BYTE nearby;
-            float *point = &entry->position.x, *limit = &entry->drawDistance;
-            // clang-format off
-            __asm {
-                mov edx,point
-                push dword ptr [edx+8]
-                push dword ptr [edx+4]
-                push dword ptr [edx]
-                mov ecx,local
-                call CEntity::GetDistanceToPoint
-                mov edx,limit
-                fcomp dword ptr [edx]
-                fnstsw ax
-                test ah,41h
-                setnp nearby
-            }
-            // clang-format on
-            if (!nearby) continue;
+            const CVector& point = entry->position;
+            if (!(local->GetDistanceToPoint(point.x, point.y, point.z) <= entry->drawDistance))
+                continue;
             memcpy(&position, &entry->position, 12);
         }
         // Per-label Draw remains unconditional even when Begin was skipped.

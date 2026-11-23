@@ -2,10 +2,14 @@
 
 #include "game/camera.h"
 #include "game/game.h"
+#include "game/playerped.h"
 #include "game/scripting.h"
 #include "game/util.h"
 #include "gui/chatwindow.h"
 #include "main.h"
+#include "net/localplayer.h"
+#include "net/netgame.h"
+#include "net/playerpool.h"
 
 #include <math.h>
 #include <string.h>
@@ -328,26 +332,9 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
             typedef void (__fastcall *BackendFn)(void*, int, void*, void*, void*, DWORD);
             reinterpret_cast<BackendFn>(0x59a840)((void*)matrix, 0, (void*)x, (void*)y, (void*)z, 0x15);
         }
-        // clang-format off
-        // Keep the two native x87 multiplies and the store only at the end.
-        __asm {
-            mov eax,x
-            fld dword ptr [eax]
-            fmul g_entityRadiansToDegrees
-            fmul g_entityEulerSign
-            fstp dword ptr [eax]
-            mov eax,y
-            fld dword ptr [eax]
-            fmul g_entityRadiansToDegrees
-            fmul g_entityEulerSign
-            fstp dword ptr [eax]
-            mov eax,z
-            fld dword ptr [eax]
-            fmul g_entityRadiansToDegrees
-            fmul g_entityEulerSign
-            fstp dword ptr [eax]
-        }
-        // clang-format on
+        *x = (float)((double)*x * g_entityRadiansToDegrees * g_entityEulerSign);
+        *y = (float)((double)*y * g_entityRadiansToDegrees * g_entityEulerSign);
+        *z = (float)((double)*z * g_entityRadiansToDegrees * g_entityEulerSign);
     }
 }
 
@@ -552,90 +539,28 @@ DWORD __stdcall GameReadBackendDword(const void* backend)
     return *(const DWORD*)backend;
 }
 
-// Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
 // 0x0009ef00
-__declspec(naked) float CEntity::GetDistanceToLocalPlayer()
+float CEntity::GetDistanceToLocalPlayer()
 {
-    // clang-format off
-    __asm {
-        sub esp,0x80
-        push esi
-        mov esi,ecx
-        mov ecx,dword ptr g_pGame
-        push edi
-        call CGame::GetPlayerPed
-        mov edi,eax
-        test edi,edi
-        jnz branch_1009ef2a
-        fld float ptr g_entityUnavailableDistance
-        pop edi
-        pop esi
-        add esp,0x80
-        ret
-    branch_1009ef2a:
-        lea eax,[esp + 0x48]
-        push eax
-        mov ecx,esi
-        call CEntity::GetMatrix
-        mov eax,g_pNetGame
-        test eax,eax
-        jz branch_1009ef7f
-        mov ecx,dword ptr [eax + 0x3de]
-        mov edx,dword ptr [ecx + 0x8]
-        mov eax,dword ptr [edx + 0x1e]
-        test eax,eax
-        jz branch_1009ef78
-        mov ecx,dword ptr [eax + 0x12c]
-        test ecx,ecx
-        jnz branch_1009ef63
-        mov ecx,dword ptr [eax + 0x1d4]
-        test ecx,ecx
-        jz branch_1009ef78
-    branch_1009ef63:
-        mov ecx,dword ptr g_pGame
-        mov ecx,dword ptr [ecx + 0x4]
-        lea eax,[esp + 0x8]
-        push eax
-        call CCamera::GetMatrix
-        jmp branch_1009ef8b
-    branch_1009ef78:
-        lea edx,[esp + 0x8]
-        push edx
-        jmp branch_1009ef84
-    branch_1009ef7f:
-        lea eax,[esp + 0x8]
-        push eax
-    branch_1009ef84:
-        mov ecx,edi
-        call CEntity::GetMatrix
-    branch_1009ef8b:
-        fld float ptr [esp + 0x80]
-        pop edi
-        fsub float ptr [esp + 0x3c]
-        pop esi
-        fld float ptr [esp + 0x74]
-        fsub float ptr [esp + 0x34]
-        fld float ptr [esp + 0x70]
-        fsub float ptr [esp + 0x30]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        add esp,0x80
-        ret
-    }
-    // clang-format on
+    CPed* player = g_pGame->GetPlayerPed();
+    if (!player)
+        return g_entityUnavailableDistance;
+
+    CMatrix entityMatrix, referenceMatrix;
+    GetMatrix(&entityMatrix);
+    CNetGame* netGame = static_cast<CNetGame*>(g_pNetGame);
+    CLocalPlayer* local = netGame ? netGame->pools->players->local : 0;
+    if (local && (local->m_state.spectating || local->m_state.rcMode))
+        g_pGame->GetCamera()->GetMatrix(&referenceMatrix);
+    else
+        player->CEntity::GetMatrix(&referenceMatrix);
+
+    const double z = (double)entityMatrix.position.z - referenceMatrix.position.z;
+    const double y = (double)entityMatrix.position.y - referenceMatrix.position.y;
+    const double x = (double)entityMatrix.position.x - referenceMatrix.position.x;
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
-// Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
 // 0x0009efd0
 float CEntity::GetDistanceToCamera()
 {
@@ -650,81 +575,25 @@ float CEntity::GetDistanceToCamera()
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-// Native thiscall; preserve uninitialized GetMatrix outputs and extended ST0.
 // 0x0009f030
-__declspec(naked) float CEntity::GetDistanceToLocalPlayerNoHeight()
+float CEntity::GetDistanceToLocalPlayerNoHeight()
 {
-    // clang-format off
-    __asm {
-        sub esp,0x80
-        push esi
-        mov esi,ecx
-        mov ecx,dword ptr g_pGame
-        push edi
-        call CGame::GetPlayerPed
-        mov edi,eax
-        test edi,edi
-        jnz branch_1009f05a
-        fld float ptr g_entityUnavailableDistance
-        pop edi
-        pop esi
-        add esp,0x80
-        ret
-    branch_1009f05a:
-        lea eax,[esp + 0x48]
-        push eax
-        mov ecx,esi
-        call CEntity::GetMatrix
-        mov eax,g_pNetGame
-        test eax,eax
-        jz branch_1009f0af
-        mov ecx,dword ptr [eax + 0x3de]
-        mov edx,dword ptr [ecx + 0x8]
-        mov eax,dword ptr [edx + 0x1e]
-        test eax,eax
-        jz branch_1009f0a8
-        mov ecx,dword ptr [eax + 0x12c]
-        test ecx,ecx
-        jnz branch_1009f093
-        mov ecx,dword ptr [eax + 0x1d4]
-        test ecx,ecx
-        jz branch_1009f0a8
-    branch_1009f093:
-        mov ecx,dword ptr g_pGame
-        mov ecx,dword ptr [ecx + 0x4]
-        lea eax,[esp + 0x8]
-        push eax
-        call CCamera::GetMatrix
-        jmp branch_1009f0bb
-    branch_1009f0a8:
-        lea edx,[esp + 0x8]
-        push edx
-        jmp branch_1009f0b4
-    branch_1009f0af:
-        lea eax,[esp + 0x8]
-        push eax
-    branch_1009f0b4:
-        mov ecx,edi
-        call CEntity::GetMatrix
-    branch_1009f0bb:
-        fld float ptr [esp + 0x7c]
-        pop edi
-        fsub float ptr [esp + 0x38]
-        pop esi
-        fld float ptr [esp + 0x70]
-        fsub float ptr [esp + 0x30]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(2)
-        fstp st(0)
-        add esp,0x80
-        ret
-    }
-    // clang-format on
+    CPed* player = g_pGame->GetPlayerPed();
+    if (!player)
+        return g_entityUnavailableDistance;
+
+    CMatrix entityMatrix, referenceMatrix;
+    GetMatrix(&entityMatrix);
+    CNetGame* netGame = static_cast<CNetGame*>(g_pNetGame);
+    CLocalPlayer* local = netGame ? netGame->pools->players->local : 0;
+    if (local && (local->m_state.spectating || local->m_state.rcMode))
+        g_pGame->GetCamera()->GetMatrix(&referenceMatrix);
+    else
+        player->CEntity::GetMatrix(&referenceMatrix);
+
+    const double y = (double)entityMatrix.position.y - referenceMatrix.position.y;
+    const double x = (double)entityMatrix.position.x - referenceMatrix.position.x;
+    return (float)sqrt(x * x + y * y);
 }
 
 // 0x0009f560
@@ -921,110 +790,32 @@ void CEntity::ApplyLinearSpeed()
 // 0x0018de60
 
 // 0x0009fa40
-__declspec(naked) bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode)
+bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode)
 {
-    // clang-format off
-    __asm {
-        push esi
-        mov esi,ecx
-        mov eax,dword ptr [esi + 0x40]
-        test eax,eax
-        jz branch_1009fb0e
-        cmp dword ptr [eax],0x863c40
-        jz branch_1009fb0e
-        movsx eax,word ptr [eax + 0x22]
-        push eax
-        call GameGetModelCollisionRadius
-        fcomp float ptr g_objectScaleLowerBound
-        add esp,0x4
-        fnstsw ax
-        test ah,0x41
-        jnp branch_1009fb0e
-        mov ecx,dword ptr [esp + 0x8]
-        mov edx,dword ptr [ecx]
-        mov dword ptr g_entityCollisionShapeA,edx
-        mov eax,dword ptr [ecx + 0x4]
-        mov [g_entityCollisionShapeA+4],eax
-        mov edx,dword ptr [ecx + 0x8]
-        mov dword ptr [g_entityCollisionShapeA+8],edx
-        mov eax,dword ptr [ecx + 0xc]
-        mov edx,dword ptr [esp + 0xc]
-        mov [g_entityCollisionShapeA+12],eax
-        mov ecx,dword ptr [ecx + 0x10]
-        mov dword ptr [g_entityCollisionShapeA+16],ecx
-        mov eax,dword ptr [edx]
-        mov g_entityCollisionShapeB,eax
-        mov ecx,dword ptr [edx + 0x4]
-        mov dword ptr [g_entityCollisionShapeB+4],ecx
-        mov eax,dword ptr [edx + 0x8]
-        mov [g_entityCollisionShapeB+8],eax
-        mov ecx,dword ptr [edx + 0xc]
-        mov al,byte ptr [esp + 0x10]
-        test al,al
-        mov dword ptr [g_entityCollisionShapeB+12],ecx
-        mov edx,dword ptr [edx + 0x10]
-        mov dword ptr [g_entityCollisionShapeB+16],edx
-        mov esi,dword ptr [esi + 0x40]
-        push esi
-        push offset g_entityCollisionShapeB
-        mov dword ptr g_entityCollisionEntity,esi
-        push offset g_entityCollisionShapeA
-        jz branch_1009faff
-        call GameEntityCollisionQueryDirect
-        test al,al
-        jz branch_1009fb0e
-        mov al,0x1
-        pop esi
-        ret 0xc
-    branch_1009faff:
-        call GameEntityCollisionQueryScoped
-        test al,al
-        jz branch_1009fb0e
-        mov al,0x1
-        pop esi
-        ret 0xc
-    branch_1009fb0e:
-        xor al,al
-        pop esi
-        ret 0xc
-    }
-    // clang-format on
+    const BYTE* backend = static_cast<const BYTE*>(m_pGameEntity);
+    if (!backend || *(const DWORD*)backend == 0x863c40)
+        return false;
+    if (GameGetModelCollisionRadius(*(const short*)(backend + 0x22)) <= g_objectScaleLowerBound)
+        return false;
+
+    for (int i = 0; i < 5; ++i)
+        g_entityCollisionShapeA.words[i] = first->words[i];
+    for (int i = 0; i < 5; ++i)
+        g_entityCollisionShapeB.words[i] = second->words[i];
+    g_entityCollisionEntity = m_pGameEntity;
+    if (mode)
+        return GameEntityCollisionQueryDirect(&g_entityCollisionShapeA, &g_entityCollisionShapeB, g_entityCollisionEntity);
+    return GameEntityCollisionQueryScoped(&g_entityCollisionShapeA, &g_entityCollisionShapeB, g_entityCollisionEntity);
 }
 
 // 0x000b5ea0
-__declspec(naked) float __cdecl GameGetModelCollisionRadius(int model)
+float __cdecl GameGetModelCollisionRadius(int model)
 {
-    // clang-format off
-    __asm {
-        sub esp,0x8
-        push esi
-        mov esi,dword ptr [esp + 0x10]
-        push esi
-        call GameGetModelInfo
-        test eax,eax
-        jz branch_100b5ed7
-        push esi
-        call GameGetModelInfo
-        mov dword ptr [esp + 0x8],eax
-        mov dword ptr [esp + 0x4],0x0
-        mov eax,dword ptr [esp + 0x8]
-        mov edx,dword ptr [eax + 0x14]
-        mov dword ptr [esp + 0x4],edx
-        mov eax,dword ptr [esp + 0x4]
-        test eax,eax
-        jnz branch_100b5ee2
-    branch_100b5ed7:
-        fld float ptr g_objectScaleLowerBound
-        pop esi
-        add esp,0x8
-        ret
-    branch_100b5ee2:
-        fld float ptr [eax + 0x24]
-        pop esi
-        add esp,0x8
-        ret
-    }
-    // clang-format on
+    if (!GameGetModelInfo(model))
+        return g_objectScaleLowerBound;
+    const BYTE* info = (const BYTE*)GameGetModelInfo(model);
+    const BYTE* collision = *(const BYTE* const*)(info + 0x14);
+    return collision ? *(const float*)(collision + 0x24) : g_objectScaleLowerBound;
 }
 
 // 0x000b6070
@@ -1188,181 +979,52 @@ int CEntity::GetModelAtomicCount()
     return -1;
 }
 
-// Native x87 precision/spill boundaries and repeated backend loads are significant.
 // History moves from last toward first in place: overlapping copies deliberately cascade.
 // 0x0009eb80
-__declspec(naked) void CEntity::SetAveragedSpeed(CVector speed)
+void CEntity::SetAveragedSpeed(CVector speed)
 {
-    // clang-format off
-    __asm {
-        push esi
-        lea esi, [ecx + 0x28]
-        push edi
-        mov eax, esi
-        mov edx, 4
-        align 16
-    native_0009eb90:
-        mov edi, dword ptr [eax + 0xc]
-        mov dword ptr [eax], edi
-        mov edi, dword ptr [eax + 0x10]
-        mov dword ptr [eax + 4], edi
-        mov edi, dword ptr [eax + 0x14]
-        mov dword ptr [eax + 8], edi
-        sub eax, 0xc
-        dec edx
-        jne native_0009eb90
-        mov eax, dword ptr [esp + 0xc]
-        mov edx, dword ptr [esp + 0x10]
-        mov dword ptr [ecx + 0x34], eax
-        mov eax, dword ptr [esp + 0x14]
-        mov dword ptr [ecx + 0x3c], eax
-        mov dword ptr [ecx + 0x38], edx
-        fld dword ptr [ecx + 4]
-        fld dword ptr [ecx + 8]
-        mov edx, dword ptr [ecx + 0xc]
-        fxch st(1)
-        mov dword ptr [esp + 0x14], edx
-        fadd dword ptr [ecx + 0x10]
-        mov eax, dword ptr [ecx + 0x40]
-        pop edi
-        fstp dword ptr [esp + 8]
-        fadd dword ptr [ecx + 0x14]
-        fld dword ptr [esp + 0x10]
-        fadd dword ptr [ecx + 0x18]
-        fld dword ptr [esp + 8]
-        fadd dword ptr [ecx + 0x1c]
-        fstp dword ptr [esp + 8]
-        fxch st(1)
-        fadd dword ptr [ecx + 0x20]
-        fstp dword ptr [esp + 0xc]
-        fadd dword ptr [ecx + 0x24]
-        fld dword ptr [esp + 8]
-        fadd dword ptr [esi]
-        pop esi
-        fld dword ptr [esp + 8]
-        fadd dword ptr [ecx + 0x2c]
-        fstp dword ptr [esp + 8]
-        fxch st(1)
-        fadd dword ptr [ecx + 0x30]
-        fstp dword ptr [esp + 0xc]
-        fadd dword ptr [ecx + 0x34]
-        fld dword ptr [esp + 8]
-        fadd dword ptr [ecx + 0x38]
-        fstp dword ptr [esp + 8]
-        fld dword ptr [esp + 0xc]
-        fadd dword ptr [ecx + 0x3c]
-        fstp dword ptr [esp + 0xc]
-        fmul g_chatBubbleHeightLift
-        fld dword ptr [esp + 8]
-        fmul g_chatBubbleHeightLift
-        fld dword ptr [esp + 0xc]
-        fmul g_chatBubbleHeightLift
-        fstp dword ptr [esp + 0xc]
-        fxch st(1)
-        fstp dword ptr [eax + 0x44]
-        mov edx, dword ptr [ecx + 0x40]
-        fstp dword ptr [edx + 0x48]
-        mov eax, dword ptr [ecx + 0x40]
-        mov ecx, dword ptr [esp + 0xc]
-        mov dword ptr [eax + 0x4c], ecx
-        ret 0xc
-    }
-    // clang-format on
+    for (int i = 3; i >= 0; --i)
+        memcpy(&m_aSpeedHistory[i], &m_aSpeedHistory[i + 1], sizeof(CVector));
+    memcpy(&m_aSpeedHistory[4], &speed, sizeof(speed));
+
+    const CVector* history = m_aSpeedHistory;
+    volatile float x = history[0].x + history[1].x;
+    x = x + history[2].x;
+    const volatile float yFirst = (float)((double)history[0].y + history[1].y + history[2].y);
+    const volatile float y = yFirst + history[3].y;
+    volatile float z = (float)((double)history[0].z + history[1].z + history[2].z + history[3].z);
+    z = z + history[4].z;
+    const volatile float yTotal = y + history[4].y;
+    const volatile float scaledZ = z * g_chatBubbleHeightLift;
+
+    m_pEntity->speed.x = (float)(((double)x + history[3].x + history[4].x) * g_chatBubbleHeightLift);
+    m_pEntity->speed.y = yTotal * g_chatBubbleHeightLift;
+    m_pEntity->speed.z = scaledZ;
 }
 
-// Native x87 precision/spill boundaries and repeated backend loads are significant.
 // 0x0009f630
-__declspec(naked) void CEntity::SetEulerRotation(float x, float y, float z)
+void CEntity::SetEulerRotation(float x, float y, float z)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp + 4]
-        mov eax, dword ptr [ecx + 0x40]
-        fmul g_objectDegreesToRadians
-        mov edx, dword ptr [eax + 0x14]
-        fld dword ptr [esp + 8]
-        fmul g_objectDegreesToRadians
-        fstp dword ptr [esp + 8]
-        fld dword ptr [esp + 0xc]
-        fmul g_objectDegreesToRadians
-        fstp dword ptr [esp + 0xc]
-        fld st(0)
-        fcos
-        fstp dword ptr [esp + 4]
-        fsin
-        fld dword ptr [esp + 8]
-        fcos
-        fld dword ptr [esp + 8]
-        fsin
-        fld dword ptr [esp + 0xc]
-        fcos
-        fld dword ptr [esp + 0xc]
-        fsin
-        fst dword ptr [esp + 8]
-        fmul st,st(4)
-        fld st(1)
-        fmul st,st(5)
-        fstp dword ptr [esp + 0xc]
-        fld st(1)
-        fmul st,st(4)
-        fld st(1)
-        fmul st,st(4)
-        fsubp st(1),st
-        fstp dword ptr [edx]
-        mov eax, dword ptr [ecx + 0x40]
-        fld dword ptr [esp + 0xc]
-        mov edx, dword ptr [eax + 0x14]
-        fmul st,st(3)
-        fld dword ptr [esp + 8]
-        fmul st,st(5)
-        faddp st(1),st
-        fstp dword ptr [edx + 4]
-        mov eax, dword ptr [ecx + 0x40]
-        mov edx, dword ptr [eax + 0x14]
-        fld st(2)
-        fmul dword ptr [esp + 4]
-        fchs
-        fstp dword ptr [edx + 8]
-        mov eax, dword ptr [ecx + 0x40]
-        fld dword ptr [esp + 8]
-        mov edx, dword ptr [eax + 0x14]
-        fmul dword ptr [esp + 4]
-        fchs
-        fstp dword ptr [edx + 0x10]
-        mov eax, dword ptr [ecx + 0x40]
-        mov edx, dword ptr [eax + 0x14]
-        fld st(1)
-        fmul dword ptr [esp + 4]
-        fstp dword ptr [edx + 0x14]
-        mov eax, dword ptr [ecx + 0x40]
-        mov edx, dword ptr [eax + 0x14]
-        fxch st(4)
-        fstp dword ptr [edx + 0x18]
-        fxch st(3)
-        fmul st,st(2)
-        fxch st(3)
-        fmul st,st(1)
-        faddp st(3),st
-        mov eax, dword ptr [ecx + 0x40]
-        fxch st(2)
-        mov edx, dword ptr [eax + 0x14]
-        fstp dword ptr [edx + 0x20]
-        mov eax, dword ptr [ecx + 0x40]
-        fld dword ptr [esp + 8]
-        mov edx, dword ptr [eax + 0x14]
-        fmul st,st(2)
-        fld dword ptr [esp + 0xc]
-        fmul st,st(2)
-        fsubp st(1),st
-        fstp dword ptr [edx + 0x24]
-        mov eax, dword ptr [ecx + 0x40]
-        mov ecx, dword ptr [eax + 0x14]
-        fstp st(1)
-        fmul dword ptr [esp + 4]
-        fstp dword ptr [ecx + 0x28]
-        ret 0xc
-    }
-    // clang-format on
+    const double xRadians = (double)x * g_objectDegreesToRadians;
+    const volatile float yRadians = y * g_objectDegreesToRadians;
+    const volatile float zRadians = z * g_objectDegreesToRadians;
+    const volatile float cx = (float)cos(xRadians);
+    const double sx = sin(xRadians);
+    const double cy = cos((double)yRadians), sy = sin((double)yRadians);
+    const double cz = cos((double)zRadians), sz = sin((double)zRadians);
+    const volatile float roundedSz = (float)sz;
+    const volatile float czsx = (float)(cz * sx);
+    const double szsx = sz * sx;
+
+    m_pEntity->matrix->right.x = (float)(cz * cy - szsx * sy);
+    m_pEntity->matrix->right.y = (float)(czsx * sy + (double)roundedSz * cy);
+    m_pEntity->matrix->right.z = (float)(-sy * cx);
+    m_pEntity->matrix->up.x = (float)(-(double)roundedSz * cx);
+    m_pEntity->matrix->up.y = (float)(cz * cx);
+    m_pEntity->matrix->up.z = (float)sx;
+    m_pEntity->matrix->at.x = (float)(szsx * cy + cz * sy);
+    m_pEntity->matrix->at.y = (float)(roundedSz * sy - czsx * cy);
+    m_pEntity->matrix->at.z = (float)(cy * cx);
 }
 
 // Does not use incoming ECX.

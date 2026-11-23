@@ -3,6 +3,7 @@
 #include "game/hooks.h"
 #include "game/util.h"
 
+#include <math.h>
 #include <string.h>
 // 0x0011e338
 const float g_buildingRemovalDrop = 2000.0f;
@@ -16,22 +17,14 @@ int g_buildingRemovalCount;
 // 0x0009ca80
 void GameHideObjectEntity(void* entity)
 {
-    // clang-format off
-    __asm {
-        mov eax,entity
-        fld dword ptr [eax+0ch]
-        mov byte ptr [eax+2fh],1
-        fsub g_buildingRemovalDrop
-        fstp dword ptr [eax+0ch]
-        mov eax,dword ptr [eax+14h]
-        test eax,eax
-        jz hidden
-        fld dword ptr [eax+38h]
-        fsub g_buildingRemovalDrop
-        fstp dword ptr [eax+38h]
-    hidden:
-    }
-    // clang-format on
+    BYTE* object = static_cast<BYTE*>(entity);
+    const float z = *reinterpret_cast<float*>(object + 0x0c);
+    object[0x2f] = 1;
+    *reinterpret_cast<float*>(object + 0x0c) = z - g_buildingRemovalDrop;
+
+    BYTE* matrix = *reinterpret_cast<BYTE**>(object + 0x14);
+    if (matrix)
+        *reinterpret_cast<float*>(matrix + 0x38) -= g_buildingRemovalDrop;
 }
 
 // 0x0009cab0
@@ -52,23 +45,9 @@ void GameRemoveLodBuildings(float x, float y, float z, float radius)
         float px = (float)*(short*)record * g_buildingLodCoordinateScale;
         float py = (float)*(short*)(record + 2) * g_buildingLodCoordinateScale;
         float pz = (float)*(short*)(record + 4) * g_buildingLodCoordinateScale;
-        BYTE inside;
-        // clang-format off
-        __asm {
-            push z
-            push y
-            push x
-            push pz
-            push py
-            push px
-            call GameDistanceBetweenPoints
-            fcomp radius
-            fnstsw ax
-            test ah,5
-            setnp inside
-        }
-        // clang-format on
-        if (inside) for (int word = 0; word < 6; word++)((short*)record)[word] = 0;
+        if (GameDistanceBetweenPoints(px, py, pz, x, y, z) < radius)
+            for (int word = 0; word < 6; ++word)
+                ((short*)record)[word] = 0;
     }
 }
 
@@ -95,24 +74,7 @@ void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radi
                 continue;
             BYTE* matrix = *(BYTE**)(pool + 0x14);
             float* point = (float*)(matrix ? matrix + 0x30 : pool + 4);
-            BYTE inside;
-            // clang-format off
-            __asm {
-                push z
-                push y
-                push x
-                mov edx,point
-                push dword ptr [edx+8]
-                push dword ptr [edx+4]
-                push dword ptr [edx]
-                call GameDistanceBetweenPoints
-                fcomp radius
-                fnstsw ax
-                test ah,41h
-                setnp inside
-            }
-            // clang-format on
-            if (inside)
+            if (GameDistanceBetweenPoints(point[0], point[1], point[2], x, y, z) <= radius)
             {
                 if (kind == 2)
                     GameHideObjectEntity(pool);
@@ -136,34 +98,14 @@ void GameRemoveBuilding(int model, float x, float y, float z, float radius)
     memcpy(&record->radius, &radius, 4);
     g_buildingRemovalCount = (int)((DWORD)count + 1);
 }
-// Native ST0 returns an unspilled x87 result. Order is dz^2 + dy^2 + dx^2;
-// reassociation or a float temporary changes radius-boundary comparisons.
+// Keep the accumulation order for radius-boundary comparisons.
 // 0x000b4570
-__declspec(naked) float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ)
+float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
-    // clang-format off
-    __asm {
-        fld dword ptr [esp+4]
-        fsub dword ptr [esp+16]
-        fld dword ptr [esp+8]
-        fsub dword ptr [esp+20]
-        fld dword ptr [esp+12]
-        fsub dword ptr [esp+24]
-        fld st(0)
-        fmul st(0),st(1)
-        fld st(2)
-        fmul st(0),st(3)
-        faddp st(1),st(0)
-        fld st(3)
-        fmul st(0),st(4)
-        faddp st(1),st(0)
-        fsqrt
-        fstp st(3)
-        fstp st(0)
-        fstp st(0)
-        ret 24
-    }
-    // clang-format on
+    const float dx = x - otherX;
+    const float dy = y - otherY;
+    const float dz = z - otherZ;
+    return (float)sqrt(dz * dz + dy * dy + dx * dx);
 }
 
 // 0x0009cae0

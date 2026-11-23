@@ -73,23 +73,9 @@ float __stdcall AimStuff::GetCameraExtZoom()
 // 0x0009c2d0
 void __stdcall AimStuff::ApplyPlayerCamera(BYTE player)
 {
-    // clang-format off
-    // VC7 reassociates zoom*35+35 into (zoom+1)*35 under /O2.
-    // Preserve native x87 order, including the caller's precision control.
-    __asm {
-        movzx eax,player
-        mov ecx,g_aimInternalZoom
-        shl eax,2
-        fld dword ptr g_aimPlayerZoom[eax]
-        fmul g_aimCameraZoomRange
-        fadd g_aimCameraZoomRange
-        fstp dword ptr [ecx]
-        mov edx,g_aimInternalAspect
-        fld dword ptr g_aimPlayerAspect[eax]
-        fadd g_aimCameraAspectBase
-        fstp dword ptr [edx]
-    }
-    // clang-format on
+    const volatile double zoom = (double)g_aimPlayerZoom[player] * g_aimCameraZoomRange;
+    *g_aimInternalZoom = (float)(zoom + g_aimCameraZoomRange);
+    *g_aimInternalAspect = g_aimPlayerAspect[player] + g_aimCameraAspectBase;
 }
 
 // 0x0009c310
