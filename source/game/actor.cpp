@@ -92,7 +92,7 @@ void CActor::SetPedState(BYTE value)
 }
 
 // 0x0009c160
-DWORD CActor::HasBackendFlag100()
+DWORD CActor::IsInVehicle()
 {
     if (!actorBackend)
         return 0;

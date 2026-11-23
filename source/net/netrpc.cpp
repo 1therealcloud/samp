@@ -891,7 +891,7 @@ void ScrSetVehicleParamsEx(RPCParameters* parameters)
     if (params[2] <= 1)
     {
         vehicle->EnableSiren(params[2]);
-        vehicle->SetBackendWord45c(params[2] ? 20000 : 0);
+        vehicle->SetAlarmState(params[2] ? 20000 : 0);
     }
     if (params[7] <= 1)
         vehicle->EnableSiren(params[7]);

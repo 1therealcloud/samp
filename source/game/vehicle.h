@@ -18,16 +18,16 @@ public:
     // 0x0000e290
     void SetObjective(BYTE objective);
     // 0x000b73e0
-    void SetBackendFloat94CAnd950(float first, float second);
+    void SetTurretRotation(float first, float second);
 
     // 0x000b6db0
-    void SetBackendFlag428Bit5(BOOL enabled);
+    void SetHandbrakeOn(BOOL enabled);
     // Native backend pointer is unchecked; result is returned in ST0.
     // 0x000b7400
-    float GetBackendFloat94C();
+    float GetTurretVerticalRotation();
     // Native backend pointer is unchecked; result is returned in ST0.
     // 0x000b7410
-    float GetBackendFloat950();
+    float GetTurretHorizontalRotation();
     // 0x000b6d70
     void SetLocked(BOOL locked);
     // 0x000b6f10
@@ -89,7 +89,7 @@ public:
     // 0x000b7440
     void SetTrainSpeed(float speed);
     // 0x000b7e10
-    void SetBackendFloat64c(float speed);
+    void SetBikeDesiredLeanAngle(float speed);
     // 0x000b6bd0
     void ChangeInterior(int interior);
     // 0x000b6e70
@@ -99,7 +99,7 @@ public:
     // 0x000b6fe0
     BOOL HasTurret();
     // 0x000b7010
-    void SetBackendBytes1f6And514(BYTE value);
+    void SetVehicleAudioHornAndCounter(BYTE value);
     // 0x000b7380
     void Lock(BOOL locked);
     // 0x000b73b0
@@ -121,7 +121,7 @@ public:
     // 0x000b7ca0
     void SetRotation(float angle);
     // 0x000b7de0
-    float GetBackendFloat648();
+    float GetBikeLeanAngle();
     // 0x000b7ea0
     void SetWindowOpenFlag(BYTE window);
     // 0x000b7ed0
@@ -143,7 +143,7 @@ public:
     // 0x000b70a0
     BOOL SirenEnabled();
     // 0x000b70c0
-    void SetBackendWord45c(WORD value);
+    void SetAlarmState(WORD value);
     // 0x000b71e0
     void SetHydraThrusters(DWORD value);
     // 0x000b7200

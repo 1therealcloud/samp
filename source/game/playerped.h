@@ -105,7 +105,7 @@ public:
     // 0x000ac1f0
     int GetVehicleTransitionTaskState();
     // 0x000ac260
-    BOOL HasTaskType704();
+    BOOL HasLeaveCarTask();
     // 0x000ac2b0
     BOOL IsDucking();
     // 0x000ac2e0
@@ -113,11 +113,11 @@ public:
     // 0x000ac340
     void ClearDuckingFlag();
     // 0x000ac830
-    BOOL HasTaskType211();
+    BOOL HasJumpTask();
     // 0x000ac870
-    BOOL HasTaskType1016();
+    BOOL HasFightTask();
     // 0x000ac8b0
-    BOOL HasTaskType208();
+    BOOL HasFallAndGetUpTask();
     // Raw backend +500 or wrapper +2e6 gate; existing field names retained.
     // 0x000aca20
     BOOL HasAimTarget();
@@ -131,17 +131,17 @@ public:
     // 0x000acb40
     void ProcessDancePoseWeapon();
     // 0x000acc50
-    BOOL HasTaskType1022();
+    BOOL HasGangDrivebyTask();
     // 0x000acca0
-    void StopTaskType1022();
+    void StopGangDrivebyTask();
     // 0x000ace20
     void SetMoney(int amount);
     // 0x000ad060
     void CheckParachuteWeapon();
     // 0x000ad640
-    BOOL HasTaskType401();
+    BOOL HasNamedAnimationTask();
     // 0x000adcb0
-    DWORD GetBackendByte72D();
+    DWORD GetFightingStyle();
     // 0x000ae0d0
     DWORD GetTransformedBonePosition(DWORD first, DWORD second);
     // 0x000ae120
@@ -420,7 +420,7 @@ public:
     DWORD GetDrunkLevel();
     // Observed task-type test; does not establish a complete GTA task interface.
     // 0x000ac8f0
-    BOOL HasTaskType268();
+    BOOL HasInWaterTask();
     // 0x000acb10
     BOOL HasDanceState();
     // 0x000aca60

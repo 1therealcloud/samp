@@ -70,12 +70,12 @@ public:
     // Descriptive raw flag names; invalid GTA backend vtable is excluded.
     // Clearing bit40000 invokes virtual Add afterwards.
     // 0x0009f500
-    void SetBackendFlag40000(BOOL enabled);
+    void SetStaticWaitingForCollision(BOOL enabled);
     // 0x0009f540
-    void SetBackendFlags80400();
+    void DisableStreamingAndDeletion();
     // Nonzero argument clears bit2000; zero sets it.
     // 0x0009f580
-    void SetBackendFlag2000(BOOL clear);
+    void SetSpeedApplicationEnabled(BOOL clear);
     // 0x0009f610
     DWORD GetRwObjectWord38();
     // 0x0009f7a0

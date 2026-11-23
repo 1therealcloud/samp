@@ -1145,7 +1145,7 @@ __declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector* origin, const CV
 }
 
 // 0x0009f500
-void CEntity::SetBackendFlag40000(BOOL enabled)
+void CEntity::SetStaticWaitingForCollision(BOOL enabled)
 {
     if (!m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40)
         return;
@@ -1159,14 +1159,14 @@ void CEntity::SetBackendFlag40000(BOOL enabled)
 }
 
 // 0x0009f540
-void CEntity::SetBackendFlags80400()
+void CEntity::DisableStreamingAndDeletion()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         *(DWORD*)((BYTE*)m_pGameEntity + 0x1c) |= 0x80400;
 }
 
 // 0x0009f580
-void CEntity::SetBackendFlag2000(BOOL clear)
+void CEntity::SetSpeedApplicationEnabled(BOOL clear)
 {
     if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
         return;

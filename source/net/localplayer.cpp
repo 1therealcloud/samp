@@ -175,7 +175,7 @@ BYTE CLocalPlayer::GetSpecialAction()
         return 1;
     if (GetPed()->GetVehicleTransitionTaskState())
         return 3;
-    if (GetPed()->HasTaskType704())
+    if (GetPed()->HasLeaveCarTask())
         return 4;
     if (GetPed()->GetHeldObjectType())
     {
@@ -381,7 +381,7 @@ void CLocalPlayer::SendIncarData()
     else if (vehicle->GetModelIndex() == 538 || vehicle->GetModelIndex() == 537 || vehicle->GetModelIndex() == 449)
         *(float*)&data.modelData = vehicle->GetTrainSpeed();
     else if (vehicle->GetSubtype() == 2 || vehicle->GetSubtype() == 6)
-        *(float*)&data.modelData = vehicle->GetBackendFloat648();
+        *(float*)&data.modelData = vehicle->GetBikeLeanAngle();
     else
         data.modelData = 0;
     data.siren = vehicle->SirenEnabled() != 0;
@@ -1076,7 +1076,7 @@ void CLocalPlayer::ProcessSurfing()
             }
         }
     }
-    if (m_state.ped->HasTaskType208() || m_state.ped->HasTaskType704() || m_state.ped->GetVehicleTransitionTaskState())
+    if (m_state.ped->HasFallAndGetUpTask() || m_state.ped->HasLeaveCarTask() || m_state.ped->GetVehicleTransitionTaskState())
     {
         m_state.surfingContactState = 0;
         m_state.surfingEntity = 0;
@@ -1395,7 +1395,7 @@ void CLocalPlayer::ApplySurfingPhysics()
     WORD leftRight, upDown;
     m_state.ped->GetKeys(&leftRight, &upDown);
     KeyStuff::GetInternalKeys();
-    if (m_state.surfingLocked && !leftRight && !upDown && !m_state.ped->HasTaskType211())
+    if (m_state.surfingLocked && !leftRight && !upDown && !m_state.ped->HasJumpTask())
     {
         GameTransformPoint(&g_localSurfPedMatrix.position, &g_localSurfEntityMatrix, &m_state.surfingOffset);
         m_state.ped->ApplyMatrix(g_localSurfPedMatrix);
@@ -2223,7 +2223,7 @@ BOOL CLocalPlayer::Process()
             {
                 if (m_state.passengerDriveby)
                 {
-                    m_state.ped->StopTaskType1022();
+                    m_state.ped->StopGangDrivebyTask();
                     m_state.passengerDriveby = 0;
                 }
             }

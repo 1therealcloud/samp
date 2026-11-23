@@ -72,7 +72,7 @@ public:
     // 0x0009c140
     void SetPedState(BYTE value);
     // 0x0009c160
-    DWORD HasBackendFlag100();
+    DWORD IsInVehicle();
     // 0x0009c180
     void SetInvulnerable(BYTE enabled);
 };
