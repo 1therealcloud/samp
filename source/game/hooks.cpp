@@ -402,11 +402,11 @@ DWORD g_hookVehicleFlagWrapper;
 // 0x0018f5e4
 DWORD g_hookCapture0018F5E4;
 // 0x0018f658
-DWORD g_hookCapture0018F658;
+DWORD g_hookGamepadInputThis;
 // 0x0018f65c
-DWORD g_hookCapture0018F65C;
+DWORD g_hookGamepadAimVector;
 // 0x0018f660
-DWORD g_hookCapture0018F660;
+DWORD g_hookGamepadAimThis;
 // 0x0018e878
 CMatrix g_hookAimOffsetMatrix;
 // 0x0018ead8
@@ -428,13 +428,13 @@ DWORD g_hookSavedRendererCameraY;
 // 0x0018e7ec
 DWORD g_hookSavedRendererCameraZ;
 // 0x0018e80c
-DWORD g_hookCapture0018E80C;
+DWORD g_hookVehicleAimCamera;
 // 0x0018e92c
 DWORD g_hookCapture0018E92C;
 // 0x0018eaac
 DWORD g_hookStreamingFileBuffer;
 // 0x0018eb74
-DWORD g_hookCapture0018EB74;
+DWORD g_hookVehicleAimInternalAim;
 // 0x0018f338
 DWORD g_hookCapture0018F338;
 // 0x0018f344
@@ -444,13 +444,13 @@ DWORD g_hookVisibilityDistanceOut;
 // 0x0018f358
 DWORD g_hookCapture0018F358;
 // 0x0018f35c
-DWORD g_hookCapture0018F35C;
+DWORD g_hookVehicleAimCaller;
 // 0x0018f364
 DWORD g_hookCapture0018F364;
 // 0x0018f380
-DWORD g_hookCapture0018F380;
+DWORD g_hookVehicleAimVehicle;
 // 0x0018f48c
-DWORD g_hookCapture0018F48C;
+DWORD g_hookRemoteSkillTask;
 // 0x0018f490
 DWORD g_hookStreamingModelId;
 // 0x0018f608
@@ -4651,7 +4651,7 @@ __declspec(naked) void GameHookSkipGamepadInputPath()
 {
     // clang-format off
     __asm {
-        mov dword ptr [g_hookCapture0018F658], ecx
+        mov dword ptr [g_hookGamepadInputThis], ecx
         pushad
         mov ecx, dword ptr [g_pGame]
         test ecx, ecx
@@ -4660,14 +4660,14 @@ __declspec(naked) void GameHookSkipGamepadInputPath()
         test eax, eax
         je raw_a52b2
         popad
-        mov ecx, dword ptr [g_hookCapture0018F658]
+        mov ecx, dword ptr [g_hookGamepadInputThis]
         ret
     raw_a52b2:
-        mov ecx, dword ptr [g_hookCapture0018F658]
+        mov ecx, dword ptr [g_hookGamepadInputThis]
         mov edx, 0x60dc50
         call edx
         popad
-        mov ecx, dword ptr [g_hookCapture0018F658]
+        mov ecx, dword ptr [g_hookGamepadInputThis]
         ret
     }
     // clang-format on
@@ -4678,9 +4678,9 @@ __declspec(naked) void GameHookLogGamepadAimUpdate()
 {
     // clang-format off
     __asm {
-        mov dword ptr [g_hookCapture0018F660], ecx
+        mov dword ptr [g_hookGamepadAimThis], ecx
         mov eax, dword ptr [esp + 4]
-        mov dword ptr [g_hookCapture0018F65C], eax
+        mov dword ptr [g_hookGamepadAimVector], eax
         pushad
         mov eax, dword ptr [g_pNetGame]
         test eax, eax
@@ -4688,7 +4688,7 @@ __declspec(naked) void GameHookLogGamepadAimUpdate()
         mov eax, dword ptr [g_pChat]
         test eax, eax
         je raw_a5333
-        mov eax, dword ptr [g_hookCapture0018F65C]
+        mov eax, dword ptr [g_hookGamepadAimVector]
         fld dword ptr [eax + 8]
         mov ecx, dword ptr [g_pGame]
         sub esp, 0x18
@@ -4707,8 +4707,8 @@ __declspec(naked) void GameHookLogGamepadAimUpdate()
         call CChat::AddDebugMessage
         add esp, 0x28
     raw_a5333:
-        mov ecx, dword ptr [g_hookCapture0018F660]
-        push dword ptr [g_hookCapture0018F65C]
+        mov ecx, dword ptr [g_hookGamepadAimThis]
+        push dword ptr [g_hookGamepadAimVector]
         mov eax, 0x50cb10
         call eax
         popad
@@ -4724,7 +4724,7 @@ __declspec(naked) void GameHookApplyRemoteSkillContextA()
 {
     // clang-format off
     __asm {
-        mov dword ptr [g_hookCapture0018F48C], ecx
+        mov dword ptr [g_hookRemoteSkillTask], ecx
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCameraPed], eax
         mov eax, dword ptr [esp + 8]
@@ -4753,7 +4753,7 @@ __declspec(naked) void GameHookApplyRemoteSkillContextA()
         push dword ptr [g_hookCapture0018F364]
         push dword ptr [g_hookCapture0018E548]
         push dword ptr [g_hookCameraPed]
-        mov ecx, dword ptr [g_hookCapture0018F48C]
+        mov ecx, dword ptr [g_hookRemoteSkillTask]
         mov edx, 0x6857e0
         call edx
         call AimStuff::ApplyLocalSkills
@@ -4762,7 +4762,7 @@ __declspec(naked) void GameHookApplyRemoteSkillContextA()
         push dword ptr [g_hookCapture0018F364]
         push dword ptr [g_hookCapture0018E548]
         push dword ptr [g_hookCameraPed]
-        mov ecx, dword ptr [g_hookCapture0018F48C]
+        mov ecx, dword ptr [g_hookRemoteSkillTask]
         mov edx, 0x6857e0
         call edx
     context_a2ddd:
@@ -4778,7 +4778,7 @@ __declspec(naked) void GameHookApplyRemoteSkillContextB()
     __asm {
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCameraPed], eax
-        mov dword ptr [g_hookCapture0018F48C], ecx
+        mov dword ptr [g_hookRemoteSkillTask], ecx
         mov eax, dword ptr [g_clientCrashPedContext]
         mov edx, dword ptr [g_hookCameraPed]
         mov cl, byte ptr [eax]
@@ -4799,14 +4799,14 @@ __declspec(naked) void GameHookApplyRemoteSkillContextB()
         push eax
         call AimStuff::ApplyPlayerSkills
         push dword ptr [g_hookCameraPed]
-        mov ecx, dword ptr [g_hookCapture0018F48C]
+        mov ecx, dword ptr [g_hookRemoteSkillTask]
         mov edx, 0x688810
         call edx
         call AimStuff::ApplyLocalSkills
         jmp context_a2e63
     context_a2e50:
         push dword ptr [g_hookCameraPed]
-        mov ecx, dword ptr [g_hookCapture0018F48C]
+        mov ecx, dword ptr [g_hookRemoteSkillTask]
         mov edx, 0x688810
         call edx
     context_a2e63:
@@ -4820,9 +4820,9 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
 {
     // clang-format off
     __asm {
-        mov dword ptr [g_hookCapture0018E80C], ecx
+        mov dword ptr [g_hookVehicleAimCamera], ecx
         mov eax, dword ptr [esp]
-        mov dword ptr [g_hookCapture0018F35C], eax
+        mov dword ptr [g_hookVehicleAimCaller], eax
         mov eax, dword ptr [esp + 4]
         mov dword ptr [g_hookCapture0018F358], eax
         mov eax, dword ptr [esp + 8]
@@ -4836,7 +4836,7 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
         push dword ptr [g_hookCapture0018E92C]
         push dword ptr [g_hookCapture0018E54C]
         push dword ptr [g_hookCapture0018F358]
-        mov ecx, dword ptr [g_hookCapture0018E80C]
+        mov ecx, dword ptr [g_hookVehicleAimCamera]
         mov edx, 0x521500
         call edx
         mov ecx, dword ptr [g_pGame]
@@ -4855,7 +4855,7 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
         mov ecx, eax
         call CPed::GetVehicle
         test eax, eax
-        mov dword ptr [g_hookCapture0018F380], eax
+        mov dword ptr [g_hookVehicleAimVehicle], eax
         je context_a4647
         mov esi, dword ptr [eax + 0x14]
         push 0x42b40000
@@ -4872,31 +4872,31 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
         add esp, 0x18
         call AimStuff::GetInternalAim
         mov ecx, dword ptr [g_hookMountedMatrix]
-        mov dword ptr [g_hookCapture0018EB74], eax
+        mov dword ptr [g_hookVehicleAimInternalAim], eax
         mov dword ptr [eax], ecx
         fld dword ptr [g_hookMountedMatrix+0x4]
-        mov edx, dword ptr [g_hookCapture0018EB74]
+        mov edx, dword ptr [g_hookVehicleAimInternalAim]
         fstp dword ptr [edx + 4]
-        mov eax, dword ptr [g_hookCapture0018EB74]
+        mov eax, dword ptr [g_hookVehicleAimInternalAim]
         fld dword ptr [g_hookMountedMatrix+0x8]
         fstp dword ptr [eax + 8]
-        mov ecx, dword ptr [g_hookCapture0018EB74]
+        mov ecx, dword ptr [g_hookVehicleAimInternalAim]
         fld dword ptr [g_hookMountedMatrix+0x10]
         fstp dword ptr [ecx + 0x24]
-        mov edx, dword ptr [g_hookCapture0018EB74]
+        mov edx, dword ptr [g_hookVehicleAimInternalAim]
         fld dword ptr [g_hookMountedMatrix+0x14]
         fstp dword ptr [edx + 0x28]
-        mov eax, dword ptr [g_hookCapture0018EB74]
+        mov eax, dword ptr [g_hookVehicleAimInternalAim]
         fld dword ptr [g_hookMountedMatrix+0x18]
         fstp dword ptr [eax + 0x2c]
     context_a4647:
         fld dword ptr [g_hookAimOffsetMatrix+0x30]
-        mov ecx, dword ptr [g_hookCapture0018E80C]
+        mov ecx, dword ptr [g_hookVehicleAimCamera]
         fstp dword ptr [ecx + 0x19c]
-        mov edx, dword ptr [g_hookCapture0018E80C]
+        mov edx, dword ptr [g_hookVehicleAimCamera]
         fld dword ptr [g_hookAimOffsetMatrix+0x34]
         fstp dword ptr [edx + 0x1a0]
-        mov eax, dword ptr [g_hookCapture0018E80C]
+        mov eax, dword ptr [g_hookVehicleAimCamera]
         fld dword ptr [g_hookAimOffsetMatrix+0x38]
         fstp dword ptr [eax + 0x1a4]
         popad
