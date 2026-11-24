@@ -16,6 +16,17 @@ struct ActorCreateInfo
     BYTE invulnerable;
 };
 static_assert(sizeof(ActorCreateInfo) == 31);
+
+struct ActorCreateInfoR5
+{
+    WORD id;
+    int model;
+    CVector position;
+    float heading, health;
+    BYTE invulnerable;
+};
+static_assert(sizeof(ActorCreateInfoR5) == 27);
+
 class CActorPool
 {
     static_assert(offsetof(CActor, actorBackend) == 0x48);

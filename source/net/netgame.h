@@ -274,8 +274,6 @@ extern const char g_netConnectionAcceptedMessage[];
 extern const char g_netServerFullMessage[];
 // 0x00117b28
 extern const char g_netNoResponseMessage[];
-// 0x001179dc
-extern const char g_netStartedMessage[];
 // 0x00117c28
 extern const char g_netDefaultHostName[];
 // 0x00117b6c

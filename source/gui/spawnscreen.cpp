@@ -10,13 +10,9 @@
 
 #include <new>
 #include <string.h>
-#if defined(DL_BUILD)
+
 // 0x0011c74c
-const char g_spawnVersionText[] = "SA-MP 0.3.DL-R1";
-#else  // DL_BUILD
-// 0x000EA724
-const char g_spawnVersionText[] = "SA-MP 0.3.7-R5";
-#endif // DL_BUILD
+const std::string g_spawnVersionText = "SA-MP " + g_ClientVersionString;
 
 // 0x000705c0
 SpawnScreenVertex::SpawnScreenVertex() {}
@@ -96,10 +92,10 @@ void CSpawnScreen::Draw()
         device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vertices, 28);
         states[0]->Apply();
     }
-    FontSize size = fonts->GetTextScreenSize(g_spawnVersionText, 0);
+    FontSize size = fonts->GetTextScreenSize(g_spawnVersionText.c_str(), 0);
     LONG left = (LONG)(20u + (DWORD)((int)(185u - (DWORD)size.cx) / 2));
     RECT versionRect = {left, imageBottom, (LONG)((DWORD)left + (DWORD)size.cx), (LONG)((DWORD)imageBottom + (DWORD)size.cy)};
-    fonts->DrawText(0, g_spawnVersionText, versionRect, 0xff27abfa, TRUE);
+    fonts->DrawText(0, g_spawnVersionText.c_str(), versionRect, 0xff27abfa, TRUE);
 }
 
 // 0x00070630

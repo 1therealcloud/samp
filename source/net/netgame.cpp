@@ -47,13 +47,6 @@ const char g_netNoNameTagStatusOption[] = "nonametagstatus";
 const char g_netConnectionLostMessage[] = "Lost connection to the server. Reconnecting..";
 // 0x00117c08
 const char g_netJoiningMessage[] = "Connected. Joining the game...";
-#if defined(DL_BUILD)
-// 0x00117bfc
-const char g_netClientVersion[] = "0.3.DL-R1";
-#else
-// 0x000E5B8C (0.3.7-r5 samp.dll)
-const char g_netClientVersion[] = "0.3.7-R5";
-#endif
 // 0x00117bf8
 int g_netJoinRpc = 25;
 // 0x00117ba0
@@ -75,13 +68,11 @@ const char g_netPickupException[] = "s005";
 const char g_netMenuException[] = "s006";
 // 0x00117a39
 const char g_netEmptyShoppingSubsection[] = "";
-#if defined(DL_BUILD)
+
+
 // 0x001179dc
-const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.DL-R1 {FFFFFF}Started";
-#else  // DL_BUILD
-// 0x000E596C (0.3.7-r5 samp.dll)
-const char g_netStartedMessage[] = "{FFFFFF}SA-MP {B9C9BF}0.3.7-R5 {FFFFFF}Started";
-#endif // DL_BUILD
+const std::string g_netStartedMessage = "{FFFFFF}SA-MP {B9C9BF}" + g_ClientVersionString + " {FFFFFF}Started";
+
 // 0x00117af0
 const char g_netDisconnectedMessage[] = "Server closed the connection.";
 // 0x00117b10
@@ -185,7 +176,7 @@ CNetGame::CNetGame(const char* host, int port, const char* nickname, const char*
     lanMode = 0;
     modelWaitActive = 0;
     if (g_pChat)
-        g_pChat->AddDebugMessage(g_netStartedMessage);
+        g_pChat->AddDebugMessage(g_netStartedMessage.c_str());
 }
 
 // 0x0000b290
@@ -334,21 +325,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     input.ReadBits((BYTE*)&port, 16, true);
     input.ReadBits((BYTE*)&player, 16, true);
     input.ReadBits((BYTE*)&challenge, 32, true);
-#if defined(DL_BUILD)
-    challenge ^= 4062; // 0xfde
-#else                  // DL_BUILD
-    challenge ^= 4057; // 0xfd9
-#endif                 // DL_BUILD
+    challenge ^= g_DLClient ? 4062 : 4057; // 0xfde : 0xfd9
     if (g_pChat)
         g_pChat->AddDebugMessage(g_netJoiningMessage);
     gameState = StateAwaitingInit;
     size_t length = strlen(pools->players->localName.c_str());
     RakNet::BitStream output;
-#if defined(DL_BUILD)
-    DWORD version = 4062; // 0xfde
-#else                     // DL_BUILD
-    DWORD version = 4057; // 0xfd9
-#endif                    // DL_BUILD
+    DWORD version = g_DLClient ? 4062 : 4057; // 0xfde : 0xfd9
     BYTE byte = 1;
     output.WriteBits((BYTE*)&version, 32, true);
     output.WriteBits(&byte, 8, true);
@@ -361,17 +344,9 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* packet)
     byte = (BYTE)strlen(serial);
     output.WriteBits(&byte, 8, true);
     output.Write(serial, byte);
-#if defined(DL_BUILD)
-    byte = 9;
-#else  // DL_BUILD
-    byte = 8;
-#endif // DL_BUILD
+    byte = g_DLClient ? 9 : 8;
     output.WriteBits(&byte, 8, true);
-#if defined(DL_BUILD)
-    output.Write(g_netClientVersion, 9);
-#else  // DL_BUILD
-    output.Write(g_netClientVersion, 8);
-#endif // DL_BUILD
+    output.Write(g_ClientVersionString.c_str(), g_DLClient ? 9 : 8);
     output.WriteBits((BYTE*)&challenge, 32, true);
     rakClient->RPC(&g_netJoinRpc, &output, (PacketPriority)1, (PacketReliability)8, 0, false);
 }
@@ -935,7 +910,7 @@ void CNetGame::ProcessCustomModelWait()
 void CNetGame::InitialNotification()
 {
     if (g_pChat)
-        g_pChat->AddDebugMessage(g_netStartedMessage);
+        g_pChat->AddDebugMessage(g_netStartedMessage.c_str());
 }
 
 // 0x000085e0

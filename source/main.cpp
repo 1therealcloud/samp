@@ -18,6 +18,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+bool g_DLClient = true;
+const std::string g_ClientVersionString = g_DLClient ? "0.3.DL-R1" : "0.3.7-R5";
+
 // Client runtime globals, initialization and frame coordination.
 // 0x002aca3c
 CGame* g_pGame;

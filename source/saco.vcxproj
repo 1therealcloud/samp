@@ -4,16 +4,8 @@
     <XPDeprecationWarning>false</XPDeprecationWarning>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug DL|Win32">
-      <Configuration>Debug DL</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release DL|Win32">
-      <Configuration>Release DL</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -29,18 +21,6 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
@@ -58,12 +38,6 @@
     <IncludePath>$(IncludePath);C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include</IncludePath>
   </PropertyGroup>
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -84,16 +58,6 @@
     <OutDir>$(SolutionDir)build\binaries\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">
-    <OutDir>$(SolutionDir)build\binaries\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">
-    <OutDir>$(SolutionDir)build\binaries\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\intermediate\$(Configuration)\$(ProjectName)\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -120,7 +84,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MERGE:.pstate=.data %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>RakNet.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -162,7 +126,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>RakNet.lib;lzma.lib;bass.lib;minhook.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;minhook.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -182,119 +146,26 @@
       <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;STRSAFE_USE_SECURE_CRT=1;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <StructMemberAlignment>1Byte</StructMemberAlignment>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
-      <ForcedIncludeFiles>dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;minhook.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)samp.dll</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)samp.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
-      <TargetMachine>MachineX86</TargetMachine>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-    </Link>
-    <PostBuildEvent>
-      <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
-    </PostBuildEvent>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.;..\third-party\RakNet\Include;..\third-party\bass;..\third-party\minhook\include;..\third-party\dxut;..\third-party\curl\include;..\third-party\zlib;..\third-party\lzma\C;..\third-party\ttmath\ttmath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STRSAFE_NO_DEPRECATE;STRSAFE_USE_SECURE_CRT=1;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <StructMemberAlignment>1Byte</StructMemberAlignment>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CompileAs>Default</CompileAs>
-      <ForcedIncludeFiles>dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <AdditionalOptions>/MERGE:.pstate=.data %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)samp.dll</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)samp.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
-      <OptimizeReferences>false</OptimizeReferences>
-      <EnableCOMDATFolding>false</EnableCOMDATFolding>
-      <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
-      <TargetMachine>MachineX86</TargetMachine>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-    </Link>
-    <PostBuildEvent>
-      <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
-    </PostBuildEvent>
-    <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;DL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\third-party\dxut\dxstdafx.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUT.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUTenum.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUTgui.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUTmedia.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUTmisc.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUTSettingsDlg.cpp">
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">true</BufferSecurityCheck>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
     </ClCompile>
     <ClCompile Include="archive\ArchiveFS.cpp" />
@@ -309,9 +180,7 @@
     <ClCompile Include="config.cpp" />
     <ClCompile Include="d3dhook\ID3DXFontHook.cpp" />
     <ClCompile Include="d3dhook\IDirect3DDevice9Hook.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="dllmain.cpp" />
@@ -321,30 +190,22 @@
     <ClCompile Include="filehooks.cpp" />
     <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="game\actor.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\aimstuff.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\animation.cpp" />
     <ClCompile Include="game\audio.cpp" />
     <ClCompile Include="game\building_removal.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\camera.cpp" />
     <ClCompile Include="game\custommodels.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\debug.cpp" />
@@ -352,47 +213,35 @@
     <ClCompile Include="game\entity.cpp" />
     <ClCompile Include="game\font.cpp" />
     <ClCompile Include="game\game.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\hooks.cpp" />
     <ClCompile Include="game\keystuff.cpp" />
     <ClCompile Include="game\menu.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\modelfile.cpp" />
     <ClCompile Include="game\model_preview.cpp" />
     <ClCompile Include="game\object.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\patches.cpp" />
     <ClCompile Include="game\playerped.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\quaternion.cpp" />
     <ClCompile Include="game\scripting.cpp" />
     <ClCompile Include="game\task.cpp" />
     <ClCompile Include="game\textdraw.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\util.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="game\vehicle.cpp" />
@@ -401,25 +250,19 @@
     <ClCompile Include="gui\cmdwindow.cpp" />
     <ClCompile Include="gui\deathwindow.cpp" />
     <ClCompile Include="gui\dialog.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="gui\downloadwindow.cpp" />
     <ClCompile Include="gui\gui.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="gui\helpdialog.cpp" />
     <ClCompile Include="gui\label.cpp" />
     <ClCompile Include="gui\netstats.cpp" />
     <ClCompile Include="gui\objectedit.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="gui\objectselection.cpp" />
@@ -432,9 +275,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md5.cpp" />
     <ClCompile Include="net\actorpool.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="net\gangzonepool.cpp" />
@@ -442,17 +283,13 @@
     <ClCompile Include="net\localplayer.cpp" />
     <ClCompile Include="net\menupool.cpp" />
     <ClCompile Include="net\netgame.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">winsock2.h;dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">winsock2.h;dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">winsock2.h;dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">winsock2.h;dxstdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="net\netrpc.cpp" />
     <ClCompile Include="net\objectpool.cpp" />
     <ClCompile Include="net\pickuppool.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="net\playerinfo.cpp" />
@@ -460,23 +297,17 @@
     <ClCompile Include="net\remoteplayer.cpp" />
     <ClCompile Include="net\scriptrpc.cpp" />
     <ClCompile Include="net\textdrawpool.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="net\vehiclepool.cpp" />
     <ClCompile Include="render\fontrender.cpp" />
     <ClCompile Include="render\licenseplate.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="render\objectmaterialtext.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
-      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release DL|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="runutil.cpp" />

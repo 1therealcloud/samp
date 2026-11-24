@@ -679,8 +679,8 @@ void ScrSetSpawnInfo(RPCParameters* parameters)
     const int bits = (int)parameters->numberOfBitsOfData;
     RakNet::BitStream stream(input, bits / 8 + 1, false);
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
-    BYTE info[LocalSpawnInfoWireSize] = {0};
-    stream.Read((char*)info, sizeof(info));
+    BYTE info[sizeof(LocalSpawnInfo)] = {0};
+    stream.Read((char*)info, GetLocalSpawnInfoWireSize());
     pool->local->SetSpawnInfo(info);
 }
 
@@ -745,25 +745,30 @@ void ScrSetPlayerTeam(RPCParameters* parameters)
 void ScrSetPlayerSkin(RPCParameters* parameters)
 {
     int model = 0;
-#if defined(DL_BUILD)
-    int customModel = 0;
-#endif // DL_BUILD
+    int customModel = 0; // g_DLClient
+
     RakNet::BitStream stream(parameters->input, (int)parameters->numberOfBitsOfData / 8 + 1, false);
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;
     if (!pool)
         return;
-#if defined(DL_BUILD)
-    WORD id;
-#else  // DL_BUILD
-    DWORD id;
-#endif // DL_BUILD
-    stream.Read(id);
+
+    DWORD id = 0;
+    if (g_DLClient)
+    {
+        WORD id16;
+        stream.Read(id16);
+        id = id16;
+    }
+    else
+        stream.Read(id);
+
     stream.Read(model);
-#if defined(DL_BUILD)
-    stream.Read(customModel);
-    if (customModel > 20000 && (GameIsPedModel(customModel) || (g_customModels && g_customModels->DoesExist(customModel))))
-        model = customModel;
-#endif // DL_BUILD
+    if (g_DLClient)
+    {
+        stream.Read(customModel);
+        if (customModel > 20000 && (GameIsPedModel(customModel) || (g_customModels && g_customModels->DoesExist(customModel))))
+            model = customModel;
+    } // g_DLClient
     if (!GameIsPedModel(model))
     {
         if (g_pChat)

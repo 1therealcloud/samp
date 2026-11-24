@@ -43,8 +43,6 @@ public:
 };
 
 static_assert(sizeof(CSpawnScreen) == 32);
-// 0x0011c74c
-extern const char g_spawnVersionText[];
 static_assert(sizeof(SpawnScreenVertex) == 28);
 static_assert(offsetof(CSpawnScreen, spawnText) == 4);
 

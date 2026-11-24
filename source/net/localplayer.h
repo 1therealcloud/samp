@@ -3,6 +3,7 @@
 
 #include "synchronization.h"
 
+#include "main.h"
 #include "game/quaternion.h"
 #include "game/scripting.h"
 
@@ -29,14 +30,11 @@ struct LocalSpawnInfo
     int weapons[3], ammo[3];
 };
 
-enum
+
+inline DWORD GetLocalSpawnInfoWireSize()
 {
-#if defined(DL_BUILD)
-    LocalSpawnInfoWireSize = sizeof(LocalSpawnInfo)
-#else  // DL_BUILD
-    LocalSpawnInfoWireSize = sizeof(LocalSpawnInfo) - sizeof(int)
-#endif // DL_BUILD
-};
+    return sizeof(LocalSpawnInfo) - (g_DLClient ? 0 : sizeof(int));
+}
 
 struct LocalPlayerState
 {

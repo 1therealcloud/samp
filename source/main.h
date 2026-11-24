@@ -94,4 +94,7 @@ extern DWORD g_clientQuitStarted;
 // 0x000c6630
 void ClientProcessFrame();
 
+extern bool g_DLClient;
+extern const std::string g_ClientVersionString;
+
 #endif // MAIN_H
