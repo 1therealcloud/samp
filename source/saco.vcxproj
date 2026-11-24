@@ -312,7 +312,7 @@
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="events.cpp" />
+    <ClCompile Include="game\events.cpp" />
     <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="filechecks.cpp" />
     <ClCompile Include="filehooks.cpp" />
@@ -518,7 +518,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="d3dhook\ID3DXFontHook.h" />
     <ClInclude Include="d3dhook\IDirect3DDevice9Hook.h" />
-    <ClInclude Include="events.h" />
+    <ClInclude Include="game\events.h" />
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="filechecks.h" />
     <ClInclude Include="filehooks.h" />

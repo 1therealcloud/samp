@@ -40,6 +40,9 @@
     <Filter Include="third-party\dxut">
       <UniqueIdentifier>{22a5e12f-fd42-4348-9853-6d18be0b07af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="net\pools">
+      <UniqueIdentifier>{696f3b2a-39fa-455f-9cbf-276515f3d377}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="audiostream.cpp">
@@ -52,9 +55,6 @@
       <Filter>general</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="events.cpp">
       <Filter>general</Filter>
     </ClCompile>
     <ClCompile Include="exceptions.cpp">
@@ -222,19 +222,7 @@
     <ClCompile Include="game\vehicle.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="net\actorpool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\gangzonepool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\labelpool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
     <ClCompile Include="net\localplayer.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\menupool.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="net\netgame.cpp">
@@ -243,28 +231,13 @@
     <ClCompile Include="net\netrpc.cpp">
       <Filter>net</Filter>
     </ClCompile>
-    <ClCompile Include="net\objectpool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\pickuppool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
     <ClCompile Include="net\playerinfo.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\playerpool.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="net\remoteplayer.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="net\scriptrpc.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\textdrawpool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="net\vehiclepool.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="archive\ArchiveFS.cpp">
@@ -315,6 +288,36 @@
     <ClCompile Include="..\third-party\dxut\DXUTSettingsDlg.cpp">
       <Filter>third-party\dxut</Filter>
     </ClCompile>
+    <ClCompile Include="net\actorpool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\gangzonepool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\labelpool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\menupool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\objectpool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\pickuppool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\playerpool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\textdrawpool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="net\vehiclepool.cpp">
+      <Filter>net\pools</Filter>
+    </ClCompile>
+    <ClCompile Include="game\events.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audiostream.h">
@@ -324,9 +327,6 @@
       <Filter>general</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="events.h">
       <Filter>general</Filter>
     </ClInclude>
     <ClInclude Include="exceptions.h">
@@ -491,19 +491,7 @@
     <ClInclude Include="game\vehicle.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="net\actorpool.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\gangzonepool.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\labelpool.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="net\localplayer.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\menupool.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="net\netgame.h">
@@ -512,28 +500,13 @@
     <ClInclude Include="net\netrpc.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="net\objectpool.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\pickuppool.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="net\playerinfo.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\playerpool.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="net\remoteplayer.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="net\scriptrpc.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\textdrawpool.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="net\vehiclepool.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="archive\ArchiveCommon.h">
@@ -643,6 +616,36 @@
     </ClInclude>
     <ClInclude Include="net\synchronization.h">
       <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\labelpool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\actorpool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\gangzonepool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\menupool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\objectpool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\pickuppool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\playerpool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\textdrawpool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="net\vehiclepool.h">
+      <Filter>net\pools</Filter>
+    </ClInclude>
+    <ClInclude Include="game\events.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
