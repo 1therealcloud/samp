@@ -582,6 +582,7 @@
     <ClInclude Include="net\playerpool.h" />
     <ClInclude Include="net\remoteplayer.h" />
     <ClInclude Include="net\scriptrpc.h" />
+    <ClInclude Include="net\synchronization.h" />
     <ClInclude Include="net\textdrawpool.h" />
     <ClInclude Include="net\vehiclepool.h" />
     <ClInclude Include="render\fontrender.h" />

@@ -1,109 +1,13 @@
 #ifndef LOCALPLAYER_H
 #define LOCALPLAYER_H
 
+#include "synchronization.h"
+
 #include "game/quaternion.h"
 #include "game/scripting.h"
 
 #include <stddef.h>
 #include <windows.h>
-
-#pragma pack(push, 1)
-struct LocalOnfootSyncData
-{
-    WORD leftRight, upDown, keys;
-    CVector position;
-    GameQuaternion rotation;
-    BYTE health, armour, weaponAim, specialAction;
-    CVector speed, surfingOffset;
-    WORD surfingVehicle;
-    DWORD animation;
-};
-struct LocalIncarSyncData
-{
-    WORD vehicle, leftRight, upDown, keys;
-    GameQuaternion rotation;
-    CVector position, speed;
-    float health;
-    BYTE pedHealth, armour, weaponAim, siren, landingGear;
-    WORD trailer;
-    DWORD modelData;
-};
-#pragma pack(pop)
-static_assert(sizeof(LocalOnfootSyncData) == 68);
-static_assert(sizeof(LocalIncarSyncData) == 63);
-
-#pragma pack(push, 1)
-struct LocalAimSyncData
-{
-    BYTE cameraMode;
-    BYTE vectors[24];
-    float aimZ;
-    BYTE zoomWeapon, aspect;
-};
-struct LocalTrailerSyncData
-{
-    WORD vehicle;
-    CVector position;
-    GameQuaternion rotation;
-    CVector speed, turnSpeed;
-};
-struct LocalPassengerSyncData
-{
-    WORD vehicle;
-    BYTE seatFlags, weaponAim, health, armour;
-    WORD leftRight, upDown, keys;
-    CVector position;
-};
-#pragma pack(pop)
-static_assert(sizeof(LocalAimSyncData) == 31);
-static_assert(sizeof(LocalTrailerSyncData) == 54);
-static_assert(sizeof(LocalPassengerSyncData) == 24);
-
-#pragma pack(push, 1)
-struct UnoccupiedSyncData
-{
-    WORD vehicle;
-    BYTE seat;
-    CVector right, up, position, speed, turnSpeed;
-    float health;
-};
-#pragma pack(pop)
-static_assert(sizeof(UnoccupiedSyncData) == 67);
-
-#pragma pack(push, 1)
-struct BulletSyncData
-{
-    BYTE type;
-    WORD targetId;
-    CVector origin, target, offset;
-    BYTE weapon;
-};
-#pragma pack(pop)
-static_assert(sizeof(BulletSyncData) == 40);
-static_assert(offsetof(LocalOnfootSyncData, position) == 6);
-static_assert(offsetof(LocalOnfootSyncData, rotation) == 0x12);
-static_assert(offsetof(LocalOnfootSyncData, health) == 0x22);
-static_assert(offsetof(LocalOnfootSyncData, speed) == 0x26);
-static_assert(offsetof(LocalOnfootSyncData, surfingOffset) == 0x32);
-static_assert(offsetof(LocalOnfootSyncData, animation) == 0x40);
-static_assert(offsetof(LocalIncarSyncData, rotation) == 8);
-static_assert(offsetof(LocalIncarSyncData, position) == 0x18);
-static_assert(offsetof(LocalIncarSyncData, speed) == 0x24);
-static_assert(offsetof(LocalIncarSyncData, health) == 0x30);
-static_assert(offsetof(LocalIncarSyncData, pedHealth) == 0x34);
-static_assert(offsetof(LocalIncarSyncData, trailer) == 0x39);
-static_assert(offsetof(LocalIncarSyncData, modelData) == 0x3b);
-static_assert(offsetof(LocalAimSyncData, aimZ) == 25);
-static_assert(offsetof(LocalAimSyncData, zoomWeapon) == 29);
-static_assert(offsetof(LocalTrailerSyncData, rotation) == 14);
-static_assert(offsetof(LocalTrailerSyncData, speed) == 30);
-static_assert(offsetof(LocalPassengerSyncData, keys) == 10);
-static_assert(offsetof(LocalPassengerSyncData, position) == 12);
-static_assert(offsetof(UnoccupiedSyncData, position) == 27);
-static_assert(offsetof(UnoccupiedSyncData, health) == 63);
-static_assert(offsetof(BulletSyncData, targetId) == 1);
-static_assert(offsetof(BulletSyncData, origin) == 3);
-static_assert(offsetof(BulletSyncData, weapon) == 39);
 
 class CPed;
 class CEntity;

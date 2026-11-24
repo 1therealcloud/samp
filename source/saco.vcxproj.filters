@@ -641,6 +641,9 @@
     <ClInclude Include="..\third-party\dxut\DXUTSettingsDlg.h">
       <Filter>third-party\dxut</Filter>
     </ClInclude>
+    <ClInclude Include="net\synchronization.h">
+      <Filter>net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="game\animation_names.inc">
