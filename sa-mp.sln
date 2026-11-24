@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "saco", "source\saco.vcxproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RakNet", "third-party\RakNet.vcxproj", "{781B4154-2BF0-4E95-9F30-F2D453B818B5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "curl", "third-party\curl.vcxproj", "{5EBB02B7-D1DD-41FF-965B-0DC7FC1E1FB4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "curl", "third-party\libcurl.vcxproj", "{5EBB02B7-D1DD-41FF-965B-0DC7FC1E1FB4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lzma", "third-party\lzma.vcxproj", "{837E2777-C65D-410D-BAD7-10467548789B}"
 EndProject

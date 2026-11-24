@@ -602,7 +602,7 @@
     <ResourceCompile Include="samp.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\third-party\curl.vcxproj">
+    <ProjectReference Include="..\third-party\libcurl.vcxproj">
       <Project>{5ebb02b7-d1dd-41ff-965b-0dc7fc1e1fb4}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
