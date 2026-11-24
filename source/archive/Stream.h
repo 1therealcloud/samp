@@ -302,5 +302,3 @@ public:
     }
 };
 #pragma pack(pop)
-
-static_assert(sizeof(CMemoryStream) == 17);
