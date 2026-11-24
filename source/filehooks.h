@@ -3,14 +3,12 @@
 
 #include <windows.h>
 
-#pragma pack(push, 1)
 struct ArchiveFileRecord
 {
     HANDLE handle;
     DWORD position, size;
     BYTE *start, *current;
 };
-#pragma pack(pop)
 static_assert(sizeof(ArchiveFileRecord) == 20);
 // 0x0016bf60
 extern ArchiveFileRecord g_archiveOpenRecords[50];

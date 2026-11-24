@@ -36,7 +36,6 @@ void GameSetEventOpcode();
 // 0x00001c60
 void GamePlayerDriverOpcode();
 
-#pragma pack(push, 1)
 struct GamePedModelRecord
 {
     DWORD vtable;
@@ -47,7 +46,9 @@ struct GameModelRecord32
     DWORD vtable;
     BYTE data[28];
 };
-#pragma pack(pop)
+
+static_assert(sizeof(GamePedModelRecord) == 68);
+static_assert(sizeof(GameModelRecord32) == 32);
 // 0x001e04b0
 extern DWORD g_gameScanList[40000];
 // 0x002075b0

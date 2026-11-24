@@ -6,7 +6,6 @@
 #include <windows.h>
 
 struct RPCParameters;
-#pragma pack(push, 1)
 class CObjectPool
 {
     static_assert(offsetof(CObject, renderReady) == 0x49);
@@ -94,7 +93,6 @@ public:
     // 0x00012a50
     void ShutdownMaterials();
 };
-#pragma pack(pop)
 static_assert(sizeof(CObjectPool) == 0x41a4);
 // Native copies all five words; the fifth is intentionally uninitialized stack data.
 // 0x00156b5c

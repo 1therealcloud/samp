@@ -3,7 +3,6 @@
 
 #include <windows.h>
 
-#pragma pack(push, 1)
 struct GangZone
 {
     float rectangle[4];
@@ -30,7 +29,6 @@ public:
     // 0x000022a0
     void Draw();
 };
-#pragma pack(pop)
 static_assert(sizeof(GangZone) == 24);
 static_assert(sizeof(CGangZonePool) == 0x2000);
 // 0x001569a0

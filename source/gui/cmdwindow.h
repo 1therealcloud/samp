@@ -20,7 +20,6 @@ struct InputRect : RECT
         bottom = 0;
     }
 };
-#pragma pack(push, 1)
 class CInput
 {
 public:
@@ -70,7 +69,6 @@ public:
     // 0x00069250
     bool IsActive();
 };
-#pragma pack(pop)
 static_assert(sizeof(CInput) == 0x1afc);
 static_assert(offsetof(CInput, m_bEnabled) == 0x14e0);
 static_assert(offsetof(CInput, m_szRecallBuffer) == 0x1565);

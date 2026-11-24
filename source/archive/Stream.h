@@ -214,6 +214,7 @@ public:
     }
 };
 
+#pragma pack(push, 1)
 class CMemoryStream : public CAbstractStream
 {
 protected:
@@ -300,3 +301,6 @@ public:
         return m_nOffset;
     }
 };
+#pragma pack(pop)
+
+static_assert(sizeof(CMemoryStream) == 17);

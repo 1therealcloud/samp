@@ -140,6 +140,7 @@ const DWORD FILES_FORCE_FS[] = {
     OBFUSCATE_DATA(0xa848b69a), //bindat.bin
 };
 
+#pragma pack(push, 1)
 class CArchiveFS
 #ifndef ARCTOOL
     : public CFileSystem
@@ -190,6 +191,7 @@ public:
     // 0x00064bd0
     virtual void UnloadData(DWORD dwFileIndex);
 };
+#pragma pack(pop)
 
 // 0x002ac9d4
 extern CArchiveFS* g_pArchive;

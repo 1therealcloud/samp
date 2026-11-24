@@ -5,7 +5,6 @@
 #include "game/scripting.h"
 
 #include <d3dx9.h>
-#pragma pack(push, 1)
 class CLabel
 {
 public:
@@ -28,7 +27,8 @@ public:
     // 0x0006b6d0
     void Draw(const CVector* position, const char* text, DWORD color, BOOL shadow, BOOL status);
 };
-#pragma pack(pop)
+
+static_assert(sizeof(CLabel) == 8);
 // 0x0011c640
 extern const Scripting::OpcodeInfo g_labelLineOfSightCommand;
 

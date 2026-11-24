@@ -6,7 +6,6 @@
 #include <windows.h>
 
 struct RPCParameters;
-#pragma pack(push, 1)
 class CTextDrawPool
 {
     // 0x0001ca30
@@ -32,7 +31,6 @@ public:
     // 0x0001e360
     void OnLostDevice();
 };
-#pragma pack(pop)
 static_assert(sizeof(CTextDrawPool) == 0x4800);
 
 #endif // TEXTDRAWPOOL_H

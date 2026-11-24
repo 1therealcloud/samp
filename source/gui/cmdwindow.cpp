@@ -260,13 +260,13 @@ void CInput::ProcessInput()
 }
 
 // Partial view: only the independently observed client field is described.
-#pragma pack(push, 1)
 struct InputNetGameView
 {
     unsigned char unknown[0x2c];
     RakClientInterface* client;
 };
-#pragma pack(pop)
+
+static_assert(sizeof(InputNetGameView) == 48);
 static_assert(offsetof(InputNetGameView, client) == 0x2c);
 
 // Native 0x1011c310 contains the 32-bit numeric RPC identifier 50.

@@ -164,13 +164,11 @@ static bool Generate(const char* Dff, const char* Output, int Mode)
 }
 
 // Private symbols are descriptive; all addresses refer to the original kdff.exe.
-#pragma pack(push, 1)
 struct CommandLine
 {
     unsigned char Mode;
     char Dff[261], Other[261], Output[261], GenerationMode[65];
 };
-#pragma pack(pop)
 
 // 0x00012f20
 static CommandLine Options;

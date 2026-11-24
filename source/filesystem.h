@@ -21,6 +21,7 @@
 
 //----------------------------------------------------------
 
+#pragma pack(push, 1)
 typedef struct _FS_HEADER
 {
     DWORD dwSAAV;
@@ -69,6 +70,11 @@ public:
     // 0x00060640
     void DecryptData(BYTE* pData, DWORD dwDataLen, WORD wKey);
 };
+#pragma pack(pop)
+
+static_assert(sizeof(_FS_HEADER) == 10);
+static_assert(sizeof(_FS_FILE_ENTRY) == 38);
+static_assert(sizeof(CFileSystem) == 19);
 
 //----------------------------------------------------------
 // EOF

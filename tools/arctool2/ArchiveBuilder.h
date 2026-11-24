@@ -12,8 +12,6 @@
 
 #include "ArchiveCommon.h"
 
-#pragma pack(1)
-
 typedef struct _AB_ENTRY_MEMSTATE 
 {
 	SAA_ENTRY*	pEntry;
@@ -32,8 +30,6 @@ typedef struct _AB_ENTRY_MEMSTATE
 	}
 
 } AB_ENTRY_MEMSTATE;
-
-#pragma pack()
 
 typedef std::vector<AB_ENTRY_MEMSTATE*> EntryMemStateVector_t;
 

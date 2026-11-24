@@ -11,13 +11,13 @@ struct CRunningScript
 extern CRunningScript* g_scriptThread;
 namespace Scripting
 {
-#pragma pack(push, 1)
 struct OpcodeInfo
 {
     WORD opcode;
     char parameters[16];
 };
-#pragma pack(pop)
+
+static_assert(sizeof(OpcodeInfo) == 18);
 // 0x000b2150
 void Initialize();
 // 0x000b1ed0

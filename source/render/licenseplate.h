@@ -5,7 +5,6 @@
 
 #include <d3dx9.h>
 struct CVector;
-#pragma pack(push, 1)
 class CLicensePlate
 {
 public:
@@ -26,6 +25,7 @@ public:
     // 0x0006d2c0
     IDirect3DTexture9* Create(const char* text);
 };
-#pragma pack(pop)
+
+static_assert(sizeof(CLicensePlate) == 36);
 
 #endif // LICENSEPLATE_H

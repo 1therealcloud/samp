@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-#pragma pack(push, 1)
 struct ChatBubbleEntry
 {
     BOOL active;
@@ -25,7 +24,6 @@ public:
     // 0x00066950
     void Draw();
 };
-#pragma pack(pop)
 static_assert(sizeof(ChatBubbleEntry) == 280);
 static_assert(offsetof(ChatBubbleEntry, created) == 0x104);
 static_assert(sizeof(CChatBubble) == 0x44a20);

@@ -27,7 +27,6 @@ public:
     DWORD pad3;
 };
 // Observed GTA backend prefix only; unknown ranges are not reconstructed fields.
-#pragma pack(push, 1)
 struct EntityBackendPrefix
 {
     // Raw address and RW word view follow the supplied 0.2x backend representation.
@@ -43,7 +42,6 @@ struct EntityBackendPrefix
     CVector speed;
     CVector turnSpeed;
 };
-#pragma pack(pop)
 static_assert(offsetof(EntityBackendPrefix, matrix) == 0x14);
 static_assert(offsetof(EntityBackendPrefix, speed) == 0x44);
 static_assert(offsetof(EntityBackendPrefix, turnSpeed) == 0x50);
@@ -53,7 +51,6 @@ void GameChangeBackendEntityModel(void* entity, DWORD model);
 // Raw helper; no full object type or vtable meaning established.
 // 0x000b4120
 DWORD __stdcall GameReadBackendDword(const void* backend);
-#pragma pack(push, 1)
 // samp.dll vtable RVA: 0x0011e30c
 class CEntity
 {
@@ -196,7 +193,6 @@ public:
         Teleport(position.x, position.y, position.z);
     }
 };
-#pragma pack(pop)
 static_assert(sizeof(CEntity) == 72);
 static_assert(offsetof(CEntity, m_aSpeedHistory) == 4);
 static_assert(offsetof(CEntity, m_pGameEntity) == 0x40);

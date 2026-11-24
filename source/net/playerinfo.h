@@ -6,7 +6,6 @@
 #include <windows.h>
 
 class CRemotePlayer;
-#pragma pack(push, 1)
 class CPlayerInfo
 {
 public:
@@ -41,7 +40,6 @@ public:
     // 0x00013e10
     ~CPlayerInfo();
 };
-#pragma pack(pop)
 #ifdef _DEBUG
 static_assert(sizeof(std::string) == 28);
 #else

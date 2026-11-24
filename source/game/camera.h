@@ -3,7 +3,6 @@
 
 #include "game/entity.h"
 
-#pragma pack(push, 1)
 class CCamera
 {
 public:
@@ -46,7 +45,6 @@ public:
     // 0x0009d670
     void Detach();
 };
-#pragma pack(pop)
 static_assert(sizeof(CCamera) == 8);
 // 0x000b46e0
 BYTE __cdecl GameIsCameraPointValid(const CVector* point);

@@ -6,7 +6,6 @@
 
 class CPed;
 struct CVector;
-#pragma pack(push, 1)
 // samp.dll vtable RVA: 0x0011f434; seven slots, allocated extent 16 bytes.
 class CTask
 {
@@ -39,7 +38,6 @@ public:
     // 0x000b2300
     virtual BOOL IsSimple();
 };
-#pragma pack(pop)
 static_assert(sizeof(CTask) == 16);
 static_assert(offsetof(CTask, m_pTaskType) == 12);
 static_assert(offsetof(CTask, m_pPlayerPed) == 8);

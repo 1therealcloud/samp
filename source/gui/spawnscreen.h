@@ -6,7 +6,6 @@
 #include <d3dx9.h>
 
 struct CVector;
-#pragma pack(push, 1)
 struct SpawnScreenVertex
 {
     float x, y, z, rhw;
@@ -42,7 +41,8 @@ public:
     // 0x00070690
     void OnResetDevice();
 };
-#pragma pack(pop)
+
+static_assert(sizeof(CSpawnScreen) == 32);
 // 0x0011c74c
 extern const char g_spawnVersionText[];
 static_assert(sizeof(SpawnScreenVertex) == 28);

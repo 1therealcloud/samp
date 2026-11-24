@@ -5,7 +5,6 @@
 
 #include <d3dx9.h>
 struct CVector;
-#pragma pack(push, 1)
 class CObjectMaterialText
 {
 public:
@@ -22,6 +21,7 @@ public:
     // 0x00070300
     void OnResetDevice();
 };
-#pragma pack(pop)
+
+static_assert(sizeof(CObjectMaterialText) == 12);
 
 #endif // OBJECTMATERIALTEXT_H
