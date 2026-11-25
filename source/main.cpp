@@ -19,33 +19,23 @@
 #include <string.h>
 
 bool g_DLClient = true;
-const std::string g_ClientVersionString = g_DLClient ? "0.3.DL-R1" : "0.3.7-R5";
-
-// Client runtime globals, initialization and frame coordination.
+std::string g_ClientVersionString = g_DLClient ? "0.3.DL-R1" : "0.3.7-R5";
 
 CGame* g_pGame;
-
 CInput* g_pInput;
-
 CChat* g_pChat;
-
 void* g_pNetGame;
 
-IDirect3DDevice9* g_clientSavedGameDevice;
-
-DWORD g_clientDeviceInitialized;
-
-DWORD g_clientNetworkInitialized;
-static_assert(sizeof(CNetGame) == 0x3e2);
-static_assert(sizeof(CTextDrawSelection) == 10);
+static IDirect3DDevice9* g_clientSavedGameDevice;
+static DWORD g_clientDeviceInitialized;
+static DWORD g_clientNetworkInitialized;
 
 DWORD g_clientSkipGameFrame;
-
 DWORD g_clientQuitRequested;
 
-DWORD g_clientQuitStarted;
+static DWORD g_clientQuitStarted;
 
-void ClientInitializeDeviceAndGui()
+static void ClientInitializeDeviceAndGui()
 {
     if (g_clientDeviceInitialized)
     {
@@ -56,13 +46,16 @@ void ClientInitializeDeviceAndGui()
         }
         return;
     }
+
     ClientInitializePaths();
     snprintf(g_clientConfigFilename, sizeof(g_clientConfigFilename), "%s\\sa-mp.cfg", g_clientDataDirectory);
     snprintf(g_clientChatFilename, sizeof(g_clientChatFilename), "%s\\chatlog.txt", g_clientDataDirectory);
+
     g_pConfig = new CConfig(g_clientConfigFilename);
+
     timeBeginPeriod(1);
-    GameMarkStartupStage();
     ClientInstallWindowProcedure();
+
     g_clientSavedGameDevice = GameGetCurrentD3DDevice();
     g_gameD3DDevice = g_pGame->GetDevice();
     *(IDirect3DDevice9**)0xc97c28 = new IDirect3DDevice9Hook;
@@ -72,13 +65,16 @@ void ClientInitializeDeviceAndGui()
     g_pInput = new CInput(g_gameD3DDevice);
     g_fontOriginalText = (char*)calloc(1, 100001);
     g_fontStrippedText = (char*)calloc(1, 100001);
+
     if (g_pConfig->GetIntValue("timestamp"))
     {
         g_pChat->m_bTimestamps = true;
         g_pChat->m_bRedraw = TRUE;
     }
+
     if (g_pConfig->GetIntValue("pagesize"))
         g_pChat->SetPageSize(g_pConfig->GetIntValue("pagesize"));
+
     ClientInitializeDialogResources();
     if (g_clientSettings.online)
     {
@@ -101,11 +97,14 @@ void ClientInitializeDeviceAndGui()
     g_devicePlateManager = (BYTE*)new CLicensePlate(g_gameD3DDevice);
     g_deviceMaterialText = new CObjectMaterialText(g_gameD3DDevice);
     g_modelPreview = new CModelPreview;
+
     ClientInitializeGui();
     Commands::Setup();
     ClientInstallRenderStateHook();
+
     g_pGame->SetMaxStats();
     g_pGame->LetTimeGo(0);
+
     if (g_clientSettings.debug)
     {
         CCamera* camera = g_pGame->m_pCamera;
@@ -113,42 +112,52 @@ void ClientInitializeDeviceAndGui()
         camera->Restore();
         g_pGame->EnableHUD(TRUE);
         g_pGame->EnableClock(false);
+
         if (strlen(g_clientSettings.debugScript))
             DebugScript::Initialize(g_clientSettings.debugScript);
     }
+
     int limit = g_pConfig->GetIntValue("fpslimit");
     if (!limit)
     {
         g_pConfig->WriteIntValue("fpslimit", 48, FALSE);
         limit = 48;
     }
+
     if (limit >= 20 && limit <= 90)
         g_pGame->SetFrameLimiter(limit);
+
     if (!g_pConfig->DoesExist("multicore"))
         g_pConfig->WriteIntValue("multicore", 1, FALSE);
     if (!g_pConfig->GetIntValue("multicore"))
         SetProcessAffinityMask(GetCurrentProcess(), 1);
+
     g_renderAudioStream = new CAudioStream;
     if (g_renderAudioStream)
         g_renderAudioStream->initialized = 0;
     g_renderAudioStream->Reset();
+
     g_pGame->m_bHeadMove = g_pConfig->GetIntValue("disableheadmove") == 0;
     g_clientDeviceInitialized = 1;
 }
 
-void ClientProcessFrame()
+static void ClientProcessFrame()
 {
     ClientInitializeDeviceAndGui();
+
     if (g_gameD3DDevice)
     {
         g_gameD3DDevice->SetRenderState(D3DRS_FOGENABLE, g_hookDisableFog == 0);
         g_gameD3DDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_NONE);
         g_gameD3DDevice->SetRenderState(D3DRS_FOGVERTEXMODE, D3DFOG_LINEAR);
     }
+
     if (g_pNetGame)
         ((CNetGame*)g_pNetGame)->Process();
+
     if (g_renderAudioStream)
         g_renderAudioStream->ControlGameRadio();
+
     if (g_pGame)
         g_pGame->m_pAudio->Process();
 }
@@ -229,49 +238,7 @@ void ClientRequestQuit()
 {
     if (g_pNetGame && *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) == 5)
         (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Disconnect(500, 0);
+
     g_clientQuitRequested = 1;
     g_clientQuitStarted = GetTickCount();
-}
-
-int FontGetHeight()
-{
-    int height;
-    if ((*(int*)0x00c17044) < 1024)
-        height = 14;
-    else if ((*(int*)0x00c17044) < 1400)
-        height = 16;
-    else if ((*(int*)0x00c17044) < 1600)
-        height = 18;
-    else
-        height = 20;
-    return height + g_pConfig->GetIntValue("fontsize") * 2;
-}
-
-int FontGetDeathWindowHeight()
-{
-    int base = 14;
-    if ((*(int*)0x00c17044) < 1024)
-        base = 12;
-    int adjusted = (int)((DWORD)base + (DWORD)g_pConfig->GetIntValue("fontsize") * 2);
-    return adjusted < base ? base : adjusted;
-}
-
-int FontGetWeight()
-{
-    int weight = g_pConfig->GetIntValue("fontweight");
-    if (weight == 0)
-        return 700;
-    return weight == 1 ? 400 : 700;
-}
-
-const char* FontGetFace()
-{
-    if (g_pConfig && g_pConfig->GetStringValue("fontface"))
-        return g_pConfig->GetStringValue("fontface");
-    return "Arial";
-}
-
-int FontGetDialogHeight()
-{
-    return g_pConfig->GetIntValue("fontsize") * 2 + 20;
 }

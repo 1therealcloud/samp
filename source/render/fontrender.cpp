@@ -4,6 +4,7 @@
 #include "d3dhook/ID3DXFontHook.h"
 #include "gui/chatwindow.h"
 #include "gui/cmdwindow.h"
+#include "config.h"
 
 #include <DXUTgui.h>
 
@@ -287,4 +288,47 @@ void CFonts::Reset()
     m_pLicensePlateFont = wrapper;
     m_nFontHeight = GetTextScreenSize(g_fontMeasureProbe, 0).cy;
     m_nLittleFontHeight = GetLittleTextScreenSize(g_fontMeasureProbe, 0).cy;
+}
+
+int FontGetHeight()
+{
+    int height;
+    if ((*(int*)0x00c17044) < 1024)
+        height = 14;
+    else if ((*(int*)0x00c17044) < 1400)
+        height = 16;
+    else if ((*(int*)0x00c17044) < 1600)
+        height = 18;
+    else
+        height = 20;
+    return height + g_pConfig->GetIntValue("fontsize") * 2;
+}
+
+int FontGetDeathWindowHeight()
+{
+    int base = 14;
+    if ((*(int*)0x00c17044) < 1024)
+        base = 12;
+    int adjusted = (int)((DWORD)base + (DWORD)g_pConfig->GetIntValue("fontsize") * 2);
+    return adjusted < base ? base : adjusted;
+}
+
+int FontGetWeight()
+{
+    int weight = g_pConfig->GetIntValue("fontweight");
+    if (weight == 0)
+        return 700;
+    return weight == 1 ? 400 : 700;
+}
+
+const char* FontGetFace()
+{
+    if (g_pConfig && g_pConfig->GetStringValue("fontface"))
+        return g_pConfig->GetStringValue("fontface");
+    return "Arial";
+}
+
+int FontGetDialogHeight()
+{
+    return g_pConfig->GetIntValue("fontsize") * 2 + 20;
 }

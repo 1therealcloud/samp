@@ -15,19 +15,21 @@
 #undef GetSystemMetrics
 #endif
 
-DWORD g_clientInputOutsideClick;
+static DWORD g_clientInputOutsideClick;
+static DWORD g_clientScoreboardOutsideClick;
 
-DWORD g_clientScoreboardOutsideClick;
+static WNDPROC g_clientPreviousWindowProcedure;
 
-const char g_screenshotFilenamePattern[] = "\\screens\\sa-mp-%03i.png";
+static constexpr char g_screenshotFilenamePattern[] = "\\screens\\sa-mp-%03i.png";
+static constexpr char g_screenshotTakenMessage[] = "Screenshot Taken - sa-mp-%03i.png";
+static constexpr char g_screenshotFailureMessage[] = "Unable to save screenshot.";
 
-const char g_screenshotTakenMessage[] = "Screenshot Taken - sa-mp-%03i.png";
+// forward
+static BOOL ClientHandleKeyRelease(unsigned int key);
+static BOOL ClientHandleCharacter(unsigned int character);
+static void ClientToggleWindowedMode();
 
-const char g_screenshotFailureMessage[] = "Unable to save screenshot.";
-
-WNDPROC g_clientPreviousWindowProcedure;
-
-LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
+static LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
     if (message == WM_ACTIVATEAPP && wparam == 1 && g_pGame && g_gameD3DDevice && !g_pGame->IsMenuVisible() && !g_pGame->m_nCursorMode)
         g_gameD3DDevice->ShowCursor(FALSE);
@@ -202,7 +204,7 @@ LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam,
     return CallWindowProcA(g_clientPreviousWindowProcedure, window, message, wparam, lparam);
 }
 
-BOOL ClientHandleCharacter(unsigned int character)
+static BOOL ClientHandleCharacter(unsigned int character)
 {
     if (g_pInput && g_pInput->m_bEnabled)
     {
@@ -237,7 +239,7 @@ BOOL ClientHandleCharacter(unsigned int character)
     return FALSE;
 }
 
-void ClientToggleWindowedMode()
+static void ClientToggleWindowedMode()
 {
     // GTA SA virtual addresses: current mode C97C18, mode table C97C48, change-mode 745C70.
     int mode = *(int*)0xc97c18;
@@ -248,7 +250,7 @@ void ClientToggleWindowedMode()
     *(int*)0xc97c18 = mode;
 }
 
-int ClientFindScreenshotFilename(std::string* path)
+static int ClientFindScreenshotFilename(std::string* path)
 {
     path->assign(ClientGetDataDirectory());
     char candidate[260] = {0};
@@ -267,7 +269,7 @@ int ClientFindScreenshotFilename(std::string* path)
     return index;
 }
 
-int ClientSaveRenderTarget(IDirect3DDevice9* device, const char* filename)
+static int ClientSaveRenderTarget(IDirect3DDevice9* device, const char* filename)
 {
     IDirect3DSurface9 *target = 0, *surface = 0;
     POINT origin = {0, 0};
@@ -322,7 +324,7 @@ void ClientCaptureScreenshot()
     // Original does not release surface and does not check create/save HRESULTs.
 }
 
-void ClientRefreshWindowProcedure()
+static void ClientRefreshWindowProcedure()
 {
     HWND window = (*(HWND*)0x00c97c1c);
     if (window)
@@ -351,7 +353,7 @@ BOOL ClientInstallWindowProcedure()
     return TRUE;
 }
 
-BOOL ClientHandleKeyRelease(unsigned int key)
+static BOOL ClientHandleKeyRelease(unsigned int key)
 {
     switch (key)
     {

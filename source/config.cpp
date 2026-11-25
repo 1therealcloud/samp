@@ -7,15 +7,11 @@
 #include <sys/stat.h>
 
 CConfig* g_pConfig;
-
 ClientSettings g_clientSettings;
 
 char g_clientDataDirectory[261];
-
 char g_clientCacheDirectory[261];
-
 char g_clientConfigFilename[520];
-
 char g_clientChatFilename[264];
 
 CConfig::CConfig(const char* file)

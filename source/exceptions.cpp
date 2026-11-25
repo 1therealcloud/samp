@@ -18,12 +18,11 @@
 #include <stdio.h>
 #include <string.h>
 
-CONTEXT* g_clientExceptionContext;
+static CONTEXT* g_clientExceptionContext;
 
-char g_clientCrashText[16384];
+static char g_clientCrashText[16384];
 
-BYTE* g_clientCrashPedContext = (BYTE*)0xb7cd74; // GTA SA virtual address.
-
+BYTE* g_clientCrashPedContext = (BYTE*)0xb7cd74;
 WORD g_clientCrashLastRenderedObject;
 
 /*
@@ -39,7 +38,7 @@ void ClientSendCrashReport()
 }
 */
 
-void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asDwords)
+static void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asDwords)
 {
     char line[16384];
     for (int offset = 0; offset < count; offset += 16)
@@ -59,7 +58,7 @@ void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asD
     }
 }
 
-void ClientDumpNetworkState(char (&text)[16384])
+static void ClientDumpNetworkState(char (&text)[16384])
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
     BYTE* players = *(BYTE**)(pools + 8);
@@ -80,7 +79,7 @@ void ClientDumpNetworkState(char (&text)[16384])
     }
 }
 
-void ClientDumpLoadedModules(char (&text)[16384])
+static void ClientDumpLoadedModules(char (&text)[16384])
 {
     MODULEENTRY32 entry;
     char line[16384];
@@ -110,7 +109,7 @@ void ClientDumpLoadedModules(char (&text)[16384])
     CloseHandle(snapshot);
 }
 
-void ClientConstructCrashText(BOOL includeModules)
+static void ClientConstructCrashText(BOOL includeModules)
 {
     char text[16384];
     CONTEXT* c = g_clientExceptionContext;
@@ -138,7 +137,7 @@ void ClientConstructCrashText(BOOL includeModules)
     }
 }
 
-INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
+static INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
@@ -172,6 +171,7 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
     return FALSE;
 }
 
+// non-static
 LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS* exception)
 {
     g_clientExceptionContext = exception->ContextRecord;

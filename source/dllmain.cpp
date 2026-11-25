@@ -1,6 +1,7 @@
 #include "archive/ArchiveFS.h"
 #include "filehooks.h"
 #include "game/hooks.h"
+#include "exceptions.h"
 #include "main.h"
 
 #include <MinHook.h>
@@ -8,19 +9,13 @@
 #include <process.h>
 #include <string.h>
 
-// standard CRT integration adapter
-extern "C" BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
-{
-    return ClientDllMainForward(module, reason, reserved);
-}
-
 HMODULE g_clientModule;
 
 CArchiveFS* g_pArchive;
 
-DWORD g_clientStartupMarker;
+static void __cdecl ClientStartupThread(void* argument);
 
-BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
+BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
 {
     if (reason == DLL_PROCESS_ATTACH)
     {
@@ -39,16 +34,13 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
             while (archivePath[end] != '\\')
                 --end;
             memcpy(archivePath + end + 1, "samp.saa", 9);
-            // Native computes archivePath but opens the relative name below.
             g_pArchive = new CArchiveFS;
             if (!g_pArchive->Load("samp.saa"))
-            {
-                // clang-format off
-                __asm { int 3 } // debugbreak
-                // clang-format on
-            }
+                __debugbreak(); // _asm int 3;
+
             AddFontResourceExA("gtaweap3.ttf", FR_PRIVATE, NULL);
             AddFontResourceExA("sampaux3.ttf", FR_PRIVATE, NULL);
+
             ArchiveInstallFileHooks();
             ArchiveInstallCursorHook();
             g_pGame = new CGame;
@@ -69,24 +61,16 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     return TRUE;
 }
 
-BOOL WINAPI ClientDllMainForward(HINSTANCE module, DWORD reason, LPVOID reserved)
-{
-    return ClientDllMain(module, reason, reserved);
-}
-
-void GameMarkStartupStage()
-{
-    g_clientStartupMarker = 1;
-}
-
-void __cdecl ClientStartupThread(void* argument)
+static void __cdecl ClientStartupThread(void* argument)
 {
     (void)argument;
+
     if (g_pGame)
         g_pGame->InitGame();
+
     while (*(volatile DWORD*)0xc8d4c0 != 7)
         Sleep(5);
-    GameMarkStartupStage();
+
     g_pGame->StartGame();
     ExitThread(0);
 }
