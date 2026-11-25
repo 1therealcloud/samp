@@ -304,10 +304,11 @@ DWORD CModelFileStream::LoadFile(const char* filename)
     owned = 1;
     data = (BYTE*)malloc(1);
     length = 1;
-    // Native loops on the VC7 FILE EOF bit, without a separate ferror escape.
-    while (!(*(BYTE*)((BYTE*)file + 0xc) & 0x10))
+    while (!feof(file) && !ferror(file))
     {
         DWORD count = (DWORD)fread(buffer, 1, 2048, file);
+        if (count == 0)
+            break;
         Write(buffer, count);
     }
     fclose(file);
@@ -419,7 +420,7 @@ static CModelFileChunk* ModelReadChunk(CModelFileStream* input, bool* truncated)
 {
     if (!input->length || input->ended)
         return 0;
-    CModelFileChunk* chunk = (CModelFileChunk*)::operator new(0x23);
+    CModelFileChunk* chunk = (CModelFileChunk*)::operator new(sizeof(CModelFileChunk));
     if (!chunk)
         return 0;
     chunk->stream.data = 0;
