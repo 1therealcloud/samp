@@ -11,7 +11,10 @@
 #include "main.h"
 #include "render/fontrender.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4200)
 #include <bass.h>
+#pragma warning(pop)
 
 #include <process.h>
 #include <stdio.h>
