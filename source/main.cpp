@@ -120,7 +120,7 @@ static void ClientInitializeDeviceAndGui()
     int limit = g_pConfig->GetIntValue("fpslimit");
     if (!limit)
     {
-        g_pConfig->WriteIntValue("fpslimit", 48, FALSE);
+        g_pConfig->Write("fpslimit", 48, FALSE);
         limit = 48;
     }
 
@@ -128,7 +128,7 @@ static void ClientInitializeDeviceAndGui()
         g_pGame->SetFrameLimiter(limit);
 
     if (!g_pConfig->DoesExist("multicore"))
-        g_pConfig->WriteIntValue("multicore", 1, FALSE);
+        g_pConfig->Write("multicore", 1, FALSE);
     if (!g_pConfig->GetIntValue("multicore"))
         SetProcessAffinityMask(GetCurrentProcess(), 1);
 

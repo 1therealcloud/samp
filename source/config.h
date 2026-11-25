@@ -4,10 +4,6 @@
 #include <stddef.h>
 #include <windows.h>
 
-extern CConfig* g_pConfig;
-
-extern ClientSettings g_clientSettings;
-
 namespace Settings
 {
 void Initialize();
@@ -88,10 +84,10 @@ public:
     ConfigEntry* GetEntry(int);
     int GetType(const char*);
 
-    BOOL WriteIntValue(const char*, int, BOOL = FALSE);
-    BOOL WriteStringValue(const char*, const char*, BOOL = FALSE);
-    BOOL WriteFloatValue(const char*, float, BOOL = FALSE);
-    void Write(const char*, char*);
+    BOOL Write(const char*, int, BOOL = FALSE);
+    BOOL Write(const char*, const char*, BOOL = FALSE);
+    BOOL Write(const char*, float, BOOL = FALSE);
+    void WriteRaw(const char*, char*);
 
     BOOL Free(const char*);
     BOOL Save();
@@ -103,5 +99,8 @@ static_assert(sizeof(CConfig) == 0x8309);
 static_assert(offsetof(CConfig, occupied) == 0x7a00);
 static_assert(offsetof(CConfig, filename) == 0x8200);
 static_assert(offsetof(CConfig, upperBound) == 0x8305);
+
+extern CConfig* g_pConfig;
+extern ClientSettings g_clientSettings;
 
 #endif // CONFIG_H

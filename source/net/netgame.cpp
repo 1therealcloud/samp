@@ -1218,14 +1218,14 @@ void CNetGame::ToggleNameTagStatus()
     {
         g_pChat->AddInfoMessage("NameTag Player Status: ON");
         if (g_pConfig)
-            g_pConfig->WriteIntValue("nonametagstatus", 0, FALSE);
+            g_pConfig->Write("nonametagstatus", 0, FALSE);
         showNameTagStatus = 1;
     }
     else
     {
         g_pChat->AddInfoMessage("NameTag Player Status: OFF");
         if (g_pConfig)
-            g_pConfig->WriteIntValue("nonametagstatus", 1, FALSE);
+            g_pConfig->Write("nonametagstatus", 1, FALSE);
         showNameTagStatus = 0;
     }
 }

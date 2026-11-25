@@ -255,7 +255,7 @@ void Commands::SetChatPageSize(char* params)
     if (g_pChat)
         g_pChat->SetPageSize(size);
     if (g_pConfig)
-        g_pConfig->WriteIntValue("pagesize", size, FALSE);
+        g_pConfig->Write("pagesize", size, FALSE);
 }
 
 void Commands::SetChatFontSize(char* params)
@@ -266,7 +266,7 @@ void Commands::SetChatFontSize(char* params)
         if (size >= -3 && size <= 5)
         {
             if (g_pConfig)
-                g_pConfig->WriteIntValue("fontsize", size, FALSE);
+                g_pConfig->Write("fontsize", size, FALSE);
             if (g_deviceFonts)
                 g_deviceFonts->Reset();
             if (g_pChat)
@@ -300,14 +300,14 @@ void Commands::DrawChatTimestamps(char*)
             chat->m_bTimestamps = false;
             chat->m_bRedraw = TRUE;
             if (g_pConfig)
-                g_pConfig->WriteIntValue("timestamp", 0, FALSE);
+                g_pConfig->Write("timestamp", 0, FALSE);
         }
         else
         {
             chat->m_bTimestamps = true;
             chat->m_bRedraw = TRUE;
             if (g_pConfig)
-                g_pConfig->WriteIntValue("timestamp", 1, FALSE);
+                g_pConfig->Write("timestamp", 1, FALSE);
         }
     }
 }
@@ -316,13 +316,13 @@ void Commands::ToggleAudioStreamMessages(char*)
 {
     if (g_pConfig->GetIntValue("audiomsgoff") == 1)
     {
-        g_pConfig->WriteIntValue("audiomsgoff", 0, FALSE);
+        g_pConfig->Write("audiomsgoff", 0, FALSE);
         if (g_pChat)
             g_pChat->AddInfoMessage("Audio messages: On");
     }
     else
     {
-        g_pConfig->WriteIntValue("audiomsgoff", 1, FALSE);
+        g_pConfig->Write("audiomsgoff", 1, FALSE);
         if (g_pChat)
             g_pChat->AddInfoMessage("Audio messages: Off");
     }
@@ -332,13 +332,13 @@ void Commands::ToggleURLMessages(char*)
 {
     if (g_pConfig->GetIntValue("logurls") == 1)
     {
-        g_pConfig->WriteIntValue("logurls", 0, FALSE);
+        g_pConfig->Write("logurls", 0, FALSE);
         if (g_pChat)
             g_pChat->AddInfoMessage("URL messages: Off");
     }
     else
     {
-        g_pConfig->WriteIntValue("logurls", 1, FALSE);
+        g_pConfig->Write("logurls", 1, FALSE);
         if (g_pChat)
             g_pChat->AddInfoMessage("URL messages: On");
     }
@@ -364,7 +364,7 @@ void Commands::SetFrameLimiter(char* params)
         {
             g_pGame->SetFrameLimiter(value);
             if (g_pConfig)
-                g_pConfig->WriteIntValue("fpslimit", value, FALSE);
+                g_pConfig->Write("fpslimit", (int)value, FALSE);
             g_pChat->AddInfoMessage("-> Frame Limiter: %u", value);
         }
         else
@@ -380,14 +380,14 @@ void Commands::ToggleHeadMoves(char*)
         {
             g_pGame->m_bHeadMove = FALSE;
             if (g_pConfig)
-                g_pConfig->WriteIntValue("disableheadmove", 1, FALSE);
+                g_pConfig->Write("disableheadmove", 1, FALSE);
             g_pChat->AddInfoMessage("-> Head movements disabled");
         }
         else
         {
             g_pGame->m_bHeadMove = TRUE;
             if (g_pConfig)
-                g_pConfig->WriteIntValue("disableheadmove", 0, FALSE);
+                g_pConfig->Write("disableheadmove", 0, FALSE);
             g_pChat->AddInfoMessage("-> Head movements enabled");
         }
     }

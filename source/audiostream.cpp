@@ -80,7 +80,7 @@ BOOL CAudioStream::Reset()
         BASS_SetConfig(21, 1);
         BASS_SetConfig(11, 10000);
         if (!g_pConfig->DoesExist("audioproxyoff"))
-            g_pConfig->WriteIntValue("audioproxyoff", 0, FALSE);
+            g_pConfig->Write("audioproxyoff", 0, FALSE);
         if (g_pConfig->GetIntValue("audioproxyoff"))
             BASS_SetConfigPtr(17, 0);
         BASS_SetEAXParameters(-1, 0.0f, -1.0f, -1.0f);

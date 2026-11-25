@@ -177,7 +177,7 @@ BOOL CConfig::Save()
     return TRUE;
 }
 
-BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
+BOOL CConfig::Write(const char* name, int value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -197,7 +197,7 @@ BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
     return TRUE;
 }
 
-BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnly)
+BOOL CConfig::Write(const char* name, const char* value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -223,7 +223,7 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
     return TRUE;
 }
 
-BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
+BOOL CConfig::Write(const char* name, float value, BOOL readOnly)
 {
     int i = GetIndex(name);
     if (i < 0)
@@ -243,23 +243,23 @@ BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
     return TRUE;
 }
 
-void CConfig::Write(const char* name, char* value)
+void CConfig::WriteRaw(const char* name, char* value)
 {
     switch (GetType(value))
     {
         case VALUE_TYPE_FLOAT:
-            WriteFloatValue(name, (float)atof(value), FALSE);
+            Write(name, (float)atof(value), FALSE);
             break;
         case VALUE_TYPE_STRING:
         {
             int length = (int)strlen(value);
             memmove(value, value + 1, length - 1);
             value[length - 2] = 0;
-            WriteStringValue(name, value, FALSE);
+            Write(name, value, FALSE);
             break;
         }
         case VALUE_TYPE_INT:
-            WriteIntValue(name, atoi(value), FALSE);
+            Write(name, atoi(value), FALSE);
             break;
     }
 }
@@ -310,7 +310,7 @@ BOOL CConfig::Load()
             p = value + valueLength - 1;
             while (*p == ' ' || *p == '\t' || *p == '\r')
                 *p-- = 0;
-            Write(name, value);
+            WriteRaw(name, value);
         }
         while (!feof(file));
     }
