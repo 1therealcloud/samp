@@ -43,6 +43,9 @@
     <Filter Include="net\pools">
       <UniqueIdentifier>{696f3b2a-39fa-455f-9cbf-276515f3d377}</UniqueIdentifier>
     </Filter>
+    <Filter Include="general\filesystem">
+      <UniqueIdentifier>{735caa27-baa2-4021-8eed-b8cd7a9bea23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="audiostream.cpp">
@@ -60,19 +63,7 @@
     <ClCompile Include="exceptions.cpp">
       <Filter>general</Filter>
     </ClCompile>
-    <ClCompile Include="filechecks.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="filehooks.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="md5.cpp">
       <Filter>general</Filter>
     </ClCompile>
     <ClCompile Include="runutil.cpp">
@@ -318,6 +309,18 @@
     <ClCompile Include="game\events.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="filechecks.cpp">
+      <Filter>general\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filehooks.cpp">
+      <Filter>general\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem.cpp">
+      <Filter>general\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="md5.cpp">
+      <Filter>general\filesystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audiostream.h">
@@ -332,19 +335,7 @@
     <ClInclude Include="exceptions.h">
       <Filter>general</Filter>
     </ClInclude>
-    <ClInclude Include="filechecks.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="filehooks.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem.h">
-      <Filter>general</Filter>
-    </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="md5.h">
       <Filter>general</Filter>
     </ClInclude>
     <ClInclude Include="runutil.h">
@@ -646,6 +637,18 @@
     </ClInclude>
     <ClInclude Include="game\events.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem.h">
+      <Filter>general\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filechecks.h">
+      <Filter>general\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="filehooks.h">
+      <Filter>general\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="md5.h">
+      <Filter>general\filesystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
