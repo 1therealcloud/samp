@@ -13,32 +13,30 @@
 
 #include <math.h>
 #include <string.h>
-// 0x001181b8
+
 extern const float g_entityRadiansToDegrees = 57.2957763671875f;
-// 0x0011c660
+
 extern const float g_entityEulerSign = -1.0f;
-// 0x0011b31c
+
 extern const float g_entityBoundaryLift = 0.03999999910593033f;
 
-// 0x0011e644
 const float g_entityUnavailableDistance = 100000.0f;
 GameEntityCollisionShape g_entityCollisionShapeA;
-// 0x0018de4c
+
 GameEntityCollisionShape g_entityCollisionShapeB;
-// 0x0018de7c
+
 void* g_entityCollisionEntity;
-// 0x00155404
+
 GameEntityCollisionBackend g_entityCollisionBackend = (GameEntityCollisionBackend)0x419f00; // GTA SA virtual address.
-// 0x00155408
+
 void** g_entityCollisionContextSlot = (void**)0x9655cc; // GTA SA virtual address.
-// 0x002abe5c
+
 void* g_entityCollisionSavedContext;
-// 0x002abe60
+
 BYTE g_entityCollisionResult;
-// 0x0011e64c
+
 const char g_entityDetachExceptionLabel[5] = "s113";
 
-// 0x0009e950
 void CEntity::GetMatrix(CMatrix* matrix)
 {
     if (!m_pEntity || !m_pEntity->matrix)
@@ -57,7 +55,6 @@ void CEntity::GetMatrix(CMatrix* matrix)
     matrix->position.z = m_pEntity->matrix->position.z;
 }
 
-// 0x0009ee80
 void CEntity::Teleport(float x, float y, float z)
 {
     void* entity = m_pGameEntity;
@@ -83,7 +80,6 @@ void CEntity::Teleport(float x, float y, float z)
     }
 }
 
-// 0x0009f140
 void CEntity::Add()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && !*(DWORD*)((BYTE*)m_pGameEntity + 0xb4))
@@ -98,14 +94,12 @@ void CEntity::Add()
     }
 }
 
-// 0x0009f240
 void CEntity::Remove()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0xb4))
         GameWorldRemove(m_pGameEntity);
 }
 
-// 0x0009ea00
 void CEntity::SetMatrix(CMatrix matrix)
 {
     if (!m_pEntity || !m_pEntity->matrix)
@@ -124,7 +118,6 @@ void CEntity::SetMatrix(CMatrix matrix)
     m_pEntity->matrix->position.z = matrix.position.z;
 }
 
-// 0x0009eb20
 void CEntity::GetSpeed(CVector* speed)
 {
     speed->x = m_pEntity->speed.x;
@@ -132,7 +125,6 @@ void CEntity::GetSpeed(CVector* speed)
     speed->z = m_pEntity->speed.z;
 }
 
-// 0x0009eb50
 void CEntity::SetSpeed(CVector speed)
 {
     m_pEntity->speed.x = speed.x;
@@ -140,7 +132,6 @@ void CEntity::SetSpeed(CVector speed)
     m_pEntity->speed.z = speed.z;
 }
 
-// 0x0009ec70
 void CEntity::GetTurnSpeed(CVector* speed)
 {
     speed->x = m_pEntity->turnSpeed.x;
@@ -148,7 +139,6 @@ void CEntity::GetTurnSpeed(CVector* speed)
     speed->z = m_pEntity->turnSpeed.z;
 }
 
-// 0x0009eca0
 void CEntity::SetTurnSpeed(CVector speed)
 {
     m_pEntity->turnSpeed.x = speed.x;
@@ -156,7 +146,6 @@ void CEntity::SetTurnSpeed(CVector speed)
     m_pEntity->turnSpeed.z = speed.z;
 }
 
-// 0x0009ecd0
 void CEntity::ApplyTurnSpeed()
 {
     void* entity = m_pGameEntity;
@@ -168,7 +157,7 @@ void CEntity::ApplyTurnSpeed()
 }
 
 // GTA returns raw float bits in EAX, not an ST0 float result.
-// 0x0009ecf0
+
 float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
 {
     void* entity = m_pGameEntity;
@@ -187,7 +176,6 @@ float CEntity::GetDistanceFromCentreOfMassToBaseOfModel()
     return distance;
 }
 
-// 0x0009ed30
 void CEntity::GetBoundCentre(CVector* centre)
 {
     void* entity = m_pGameEntity;
@@ -198,19 +186,16 @@ void CEntity::GetBoundCentre(CVector* centre)
     reinterpret_cast<BackendFn>(0x534250)((void*)entity, 0, (void*)centre);
 }
 
-// 0x0009ee70
 int CEntity::GetModelIndex()
 {
     return (int)*(short*)((BYTE*)m_pGameEntity + 0x22);
 }
 
-// 0x0009f210
 BOOL CEntity::DoesExist()
 {
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0xb4) ? TRUE : FALSE;
 }
 
-// 0x0009f260
 BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
     if (!m_pEntity)
@@ -270,7 +255,6 @@ BOOL CEntity::EnforceWorldBoundries(float positiveX, float negativeX, float posi
     return FALSE;
 }
 
-// 0x0009f400
 BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float positiveY, float negativeY)
 {
     if (!m_pEntity)
@@ -288,7 +272,6 @@ BOOL CEntity::HasExceededWorldBoundries(float positiveX, float negativeX, float 
     return FALSE;
 }
 
-// 0x0009f4a0
 DWORD CEntity::GetCollisionFlag()
 {
     if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
@@ -296,7 +279,6 @@ DWORD CEntity::GetCollisionFlag()
     return *(BYTE*)&m_pEntity->flags & 1;
 }
 
-// 0x0009f470
 void CEntity::SetCollisionFlag(BOOL enabled)
 {
     if (m_pEntity && (DWORD)m_pEntity->vtable != 0x863c40)
@@ -308,7 +290,6 @@ void CEntity::SetCollisionFlag(BOOL enabled)
     }
 }
 
-// 0x0009f4c0
 void CEntity::SetCollisionProcessed(BOOL processed)
 {
     if (m_pEntity && (DWORD)m_pEntity->vtable != 0x863c40)
@@ -320,7 +301,6 @@ void CEntity::SetCollisionProcessed(BOOL processed)
     }
 }
 
-// 0x0009f730
 void CEntity::GetEulerInverted(float* x, float* y, float* z)
 {
     if (m_pGameEntity)
@@ -338,7 +318,6 @@ void CEntity::GetEulerInverted(float* x, float* y, float* z)
     }
 }
 
-// 0x0009f8a0
 DWORD* CEntity::GetRwObject()
 {
     if (!m_pEntity)
@@ -346,7 +325,6 @@ DWORD* CEntity::GetRwObject()
     return m_pEntity->rwObject;
 }
 
-// 0x0009f9f0
 void CEntity::DeleteRwObject()
 {
     if (m_pEntity && m_pEntity->rwObject)
@@ -363,7 +341,6 @@ void CEntity::DeleteRwObject()
     }
 }
 
-// 0x0009fb20
 bool CEntity::IsIgnored()
 {
     if (m_pGameEntity && m_pGameEntity == *(void**)0xb7cd68)
@@ -371,7 +348,6 @@ bool CEntity::IsIgnored()
     return false;
 }
 
-// 0x0009fc20
 BOOL CEntity::IsStationary()
 {
     if (!DoesExist())
@@ -381,7 +357,6 @@ BOOL CEntity::IsStationary()
     return FALSE;
 }
 
-// 0x0009eac0
 void CEntity::UpdateRwFrame()
 {
     if (m_pEntity && (DWORD)m_pEntity->vtable != 0x863c40)
@@ -426,7 +401,7 @@ enum
 } // namespace ApplyMatrix
 
 // clang-format off
-// 0x0009fb40
+
 __declspec(naked) void CEntity::ApplyMatrix(CMatrix matrix)
 {
     using namespace ApplyMatrix;
@@ -474,7 +449,6 @@ __declspec(naked) void CEntity::ApplyMatrix(CMatrix matrix)
 }
 // clang-format on
 
-// 0x0009f0f0
 float CEntity::GetDistanceToPoint(float x, float y, float z)
 {
     CMatrix matrix;
@@ -485,14 +459,12 @@ float CEntity::GetDistanceToPoint(float x, float y, float z)
     return (float)sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-// 0x0009f5c0
 void CEntity::ClearBackendFlag8()
 {
     if (m_pGameEntity)
         *(DWORD*)((BYTE*)m_pGameEntity + 0x40) &= 0xfffffff7;
 }
 
-// 0x0009ed90
 BOOL CEntity::SetModelIndex(int model)
 {
     if (!m_pGameEntity)
@@ -537,20 +509,19 @@ BOOL CEntity::SetModelIndex(int model)
 
 // GTA SA virtual address: 0x00403EC0; ECX is the opaque GTA entity.
 // Native forwards the complete argument word; backend reads its low model WORD.
-// 0x000b3990
+
 void GameChangeBackendEntityModel(void* entity, DWORD model)
 {
     typedef void(__fastcall * BackendFn)(void*, int, DWORD);
     reinterpret_cast<BackendFn>(0x403ec0)((void*)entity, 0, model);
 }
 // Caller context/semantic object type is not established; raw first DWORD only.
-// 0x000b4120
+
 DWORD __stdcall GameReadBackendDword(const void* backend)
 {
     return *(const DWORD*)backend;
 }
 
-// 0x0009ef00
 float CEntity::GetDistanceToLocalPlayer()
 {
     CPed* player = g_pGame->GetPlayerPed();
@@ -572,7 +543,6 @@ float CEntity::GetDistanceToLocalPlayer()
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-// 0x0009efd0
 float CEntity::GetDistanceToCamera()
 {
     if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
@@ -586,7 +556,6 @@ float CEntity::GetDistanceToCamera()
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-// 0x0009f030
 float CEntity::GetDistanceToLocalPlayerNoHeight()
 {
     CPed* player = g_pGame->GetPlayerPed();
@@ -607,7 +576,6 @@ float CEntity::GetDistanceToLocalPlayerNoHeight()
     return (float)sqrt(x * x + y * y);
 }
 
-// 0x0009f560
 void CEntity::SetBackendHighFlag()
 {
     DWORD* backend = (DWORD*)m_pGameEntity;
@@ -616,7 +584,7 @@ void CEntity::SetBackendHighFlag()
 }
 
 // GTA vtable slot 10 (+28), ProcessControl. Native does not check backend.
-// 0x0009fa20
+
 void CEntity::ProcessControl()
 {
     DWORD vtable = m_pEntity->vtable;
@@ -632,7 +600,7 @@ void CEntity::ProcessControl()
 }
 
 // GTA callees use their original ECX/stack ABI.
-// 0x0009ed60
+
 void CEntity::GetBackendBoundRect(DWORD argument)
 {
     void* entity = m_pGameEntity;
@@ -644,7 +612,7 @@ void CEntity::GetBackendBoundRect(DWORD argument)
 }
 
 // GTA callees use their original ECX/stack ABI.
-// 0x0009f5d0
+
 void CEntity::SetRenderClumpAlpha(DWORD argument)
 {
     if (!m_pEntity || !m_pEntity->rwObject || (DWORD)m_pEntity->vtable == 0x863c40)
@@ -667,7 +635,7 @@ void CEntity::SetRenderClumpAlpha(DWORD argument)
 }
 
 // GTA callees use their original ECX/stack ABI.
-// 0x0009f810
+
 void CEntity::ApplyBackendTurnForce(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWORD a5, DWORD a6)
 {
     void* entity = m_pGameEntity;
@@ -679,7 +647,7 @@ void CEntity::ApplyBackendTurnForce(DWORD a1, DWORD a2, DWORD a3, DWORD a4, DWOR
 }
 
 // GTA callees use their original ECX/stack ABI.
-// 0x0009f840
+
 void CEntity::AddVehicleAudioEvent(DWORD argument)
 {
     void* entity = m_pGameEntity;
@@ -719,7 +687,7 @@ enum
 
 // GTA callees use their original ECX/stack ABI.
 // clang-format off
-// 0x0009f960
+
 __declspec(naked) void CEntity::RenderForModelPreview()
 {
     using namespace RenderForModelPreview;
@@ -795,7 +763,7 @@ __declspec(naked) void CEntity::RenderForModelPreview()
 // clang-format on
 
 // GTA callees use their original ECX/stack ABI.
-// 0x0009fba0
+
 void CEntity::ApplyLinearSpeed()
 {
     if (m_pEntity)
@@ -811,9 +779,7 @@ void CEntity::ApplyLinearSpeed()
     }
 }
 
-// 0x0018de60
 
-// 0x0009fa40
 bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode)
 {
     const BYTE* backend = static_cast<const BYTE*>(m_pGameEntity);
@@ -832,7 +798,6 @@ bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const G
     return GameEntityCollisionQueryScoped(&g_entityCollisionShapeA, &g_entityCollisionShapeB, g_entityCollisionEntity);
 }
 
-// 0x000b5ea0
 float __cdecl GameGetModelCollisionRadius(int model)
 {
     if (!GameGetModelInfo(model))
@@ -842,7 +807,6 @@ float __cdecl GameGetModelCollisionRadius(int model)
     return collision ? *(const float*)(collision + 0x24) : g_objectScaleLowerBound;
 }
 
-// 0x000b6070
 __declspec(naked) bool __stdcall GameEntityCollisionQueryDirect(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity)
 {
     // clang-format off
@@ -860,7 +824,6 @@ __declspec(naked) bool __stdcall GameEntityCollisionQueryDirect(const GameEntity
     // clang-format on
 }
 
-// 0x000b6090
 __declspec(naked) bool __stdcall GameEntityCollisionQueryScoped(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, void* entity)
 {
     // clang-format off
@@ -888,7 +851,7 @@ __declspec(naked) bool __stdcall GameEntityCollisionQueryScoped(const GameEntity
 }
 
 // GTA SA virtual address: 0x00411E70; exactly two cdecl arguments.
-// 0x000b60e0
+
 BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollisionSphere* second)
 {
     return ((BOOL(__cdecl*)(const GameCollisionSphere*, const GameCollisionSphere*))0x411e70)(first, second);
@@ -896,7 +859,7 @@ BOOL GameTestCollisionSpheres(const GameCollisionSphere* first, const GameCollis
 
 // GTA SA virtual address: 0x00410CE0; exact query semantics remain unresolved.
 // Native forwards the input pointer plus a literal zero and returns raw AL.
-// 0x000b43f0
+
 BYTE GameHasCollisionLoaded(const void* data)
 {
     return ((BYTE(__cdecl*)(const void*, DWORD))0x410ce0)(data, 0);
@@ -904,7 +867,7 @@ BYTE GameHasCollisionLoaded(const void* data)
 
 // GTA SA virtual address: 0x0056BA00. Native is a transparent tail bridge:
 // preserve caller argument copies and the backend's raw AL return.
-// 0x000b3710
+
 __declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector* origin, const CVector* target, void* colPoint, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
                                                  DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
 {
@@ -916,7 +879,6 @@ __declspec(naked) BYTE GameProcessLineOfSightRaw(const CVector* origin, const CV
     // clang-format on
 }
 
-// 0x0009f500
 void CEntity::SetStaticWaitingForCollision(BOOL enabled)
 {
     if (!m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40)
@@ -930,14 +892,12 @@ void CEntity::SetStaticWaitingForCollision(BOOL enabled)
     }
 }
 
-// 0x0009f540
 void CEntity::DisableStreamingAndDeletion()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
         *(DWORD*)((BYTE*)m_pGameEntity + 0x1c) |= 0x80400;
 }
 
-// 0x0009f580
 void CEntity::SetSpeedApplicationEnabled(BOOL clear)
 {
     if (!m_pEntity || (DWORD)m_pEntity->vtable == 0x863c40)
@@ -962,7 +922,6 @@ void CEntity::SetSpeedApplicationEnabled(BOOL clear)
     // clang-format on
 }
 
-// 0x0009f610
 DWORD CEntity::GetRwObjectWord38()
 {
     void* backend = m_pGameEntity;
@@ -974,7 +933,6 @@ DWORD CEntity::GetRwObjectWord38()
     return *(DWORD*)(object + 0x38);
 }
 
-// 0x0009f7a0
 void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
 {
     if (!m_pGameEntity)
@@ -991,7 +949,6 @@ void CEntity::GetRwMatrixAngles(float* x, float* y, float* z)
     *z = angle;
 }
 
-// 0x0009f870
 int CEntity::GetModelAtomicCount()
 {
     if (m_pEntity)
@@ -1004,7 +961,7 @@ int CEntity::GetModelAtomicCount()
 }
 
 // History moves from last toward first in place: overlapping copies deliberately cascade.
-// 0x0009eb80
+
 void CEntity::SetAveragedSpeed(CVector speed)
 {
     for (int i = 3; i >= 0; --i)
@@ -1026,7 +983,6 @@ void CEntity::SetAveragedSpeed(CVector speed)
     m_pEntity->speed.z = scaledZ;
 }
 
-// 0x0009f630
 void CEntity::SetEulerRotation(float x, float y, float z)
 {
     const double xRadians = (double)x * g_objectDegreesToRadians;
@@ -1053,7 +1009,7 @@ void CEntity::SetEulerRotation(float x, float y, float z)
 
 // Does not use incoming ECX.
 // GTA SA virtual addresses: 0x00733160 and 0x00553260.
-// 0x0009f8b0
+
 void __cdecl GameDetachBackendRwObject(void* entity, void* object)
 {
     if (!entity || !object)

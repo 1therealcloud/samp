@@ -43,17 +43,16 @@ public:
     void* Groups;
     unsigned int GroupCount;
 
-    // 0x00002350
     CColModel();
-    // 0x000023b0
+
     ~CColModel();
-    // 0x000011a0
+
     bool GenerateEmpty(const CGeometry* Geometry);
-    // 0x000011d0
+
     bool GenerateFaces(const CGeometry* Geometry);
-    // 0x000015c0
+
     bool GenerateBox(const CGeometry* Geometry);
-    // 0x00001360
+
     bool Save(const char* FileName, const char* ModelName);
 };
 #pragma pack(pop)

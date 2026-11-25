@@ -10,19 +10,17 @@
 #include "net/remoteplayer.h"
 
 #include <string.h>
-// 0x00156b84
+
 DWORD g_playerPoolProcessCount;
-// 0x0011817c
+
 const char g_playerPoolRemoteException[] = "s001";
-// 0x00118174
+
 const char g_playerPoolLocalException[] = "s002";
 
-// 0x00156ac0
 DWORD g_cachedActivePlayerCount = 0;
-// 0x00156ac4
+
 DWORD g_activePlayerCountCountdown = 0;
 
-// 0x000010d0
 CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
 {
     if (player < 1004)
@@ -34,33 +32,28 @@ CPlayerInfo* CPlayerPool::GetPlayerInfo(WORD player)
     return 0;
 }
 
-// 0x0000a1d0
 const char* CPlayerPool::GetLocalPlayerName()
 {
     return localName.c_str();
 }
 
-// 0x0000b5e0
 void CPlayerPool::SetLocalPlayerName(const char* text)
 {
     localName.assign(text, strlen(text));
 }
 
-// 0x00013630
 void CPlayerPool::SetAt(WORD player, CPlayerInfo* info)
 {
     if (player < 1004)
         *(CPlayerInfo**)((BYTE*)this + 0x26 + (DWORD)player * 4) = info;
 }
 
-// 0x0001da50
 void CPlayerPool::SetName(WORD player, const char* text)
 {
     if (player < 1004 && players[player])
         players[player]->name.assign(text, strlen(text));
 }
 
-// 0x000136c0
 BOOL CPlayerPool::Process()
 {
     ++g_playerPoolProcessCount;
@@ -89,7 +82,6 @@ BOOL CPlayerPool::Process()
     return TRUE;
 }
 
-// 0x00013c50
 WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, DWORD rayWord)
 {
     struct RayPoint
@@ -125,7 +117,6 @@ WORD CPlayerPool::FindInRay(float maxCameraDistance, const CVector* origin, cons
     return selected;
 }
 
-// 0x000139f0
 void CPlayerPool::Deactivate()
 {
     local->m_state.active = 0;
@@ -139,7 +130,6 @@ void CPlayerPool::Deactivate()
         }
 }
 
-// 0x00013e80
 CPlayerPool::CPlayerPool()
 {
     for (WORD id = 0; id < 1004; id++)
@@ -155,7 +145,6 @@ CPlayerPool::CPlayerPool()
     largestId = 0;
 }
 
-// 0x00014100
 BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
 {
     CPlayerInfo* info = new CPlayerInfo(name, npc);
@@ -177,7 +166,6 @@ BOOL CPlayerPool::Create(WORD id, const char* name, DWORD npc)
     return TRUE;
 }
 
-// 0x00013f40
 BOOL CPlayerPool::Delete(WORD id, BYTE reason)
 {
     (void)reason;
@@ -192,7 +180,6 @@ BOOL CPlayerPool::Delete(WORD id, BYTE reason)
     return TRUE;
 }
 
-// 0x00013fd0
 CPlayerPool::~CPlayerPool()
 {
     if (local)
@@ -202,7 +189,6 @@ CPlayerPool::~CPlayerPool()
         Delete(id, 0);
 }
 
-// 0x00013650
 void CPlayerPool::UpdateLargestId()
 {
     int largest = 0;
@@ -212,7 +198,6 @@ void CPlayerPool::UpdateLargestId()
     largestId = largest;
 }
 
-// 0x00013b50
 void CPlayerPool::ForceCollision()
 {
     int highest = largestId;
@@ -230,7 +215,6 @@ void CPlayerPool::ForceCollision()
     }
 }
 
-// 0x00013bd0
 void CPlayerPool::RestoreCollision()
 {
     int highest = largestId;
@@ -250,13 +234,11 @@ void CPlayerPool::RestoreCollision()
     }
 }
 
-// 0x00001a80
 CLocalPlayer* CPlayerPool::GetLocalPlayer()
 {
     return local;
 }
 
-// 0x000138c0
 int CPlayerPool::GetCount(BOOL includeFlagged)
 {
     int count = 0;
@@ -275,7 +257,6 @@ int CPlayerPool::GetCount(BOOL includeFlagged)
     return count;
 }
 
-// 0x0006e290
 int CPlayerPool::GetScore(WORD player)
 {
     BYTE* entry;
@@ -290,7 +271,6 @@ int CPlayerPool::GetScore(WORD player)
     return *(int*)entry;
 }
 
-// 0x0006e2b0
 DWORD CPlayerPool::GetPing(WORD player)
 {
     BYTE* entry;
@@ -305,19 +285,16 @@ DWORD CPlayerPool::GetPing(WORD player)
     return *(DWORD*)(entry + 0xc);
 }
 
-// 0x0006e2e0
 int CPlayerPool::GetLocalScore()
 {
     return localScore;
 }
 
-// 0x0006e2f0
 DWORD CPlayerPool::GetLocalPing()
 {
     return localPing;
 }
 
-// 0x000010f0
 CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
 {
     if (player < 1004)
@@ -329,7 +306,6 @@ CRemotePlayer* CPlayerPool::GetPlayer(WORD player)
     return 0;
 }
 
-// 0x000010b0
 DWORD CPlayerPool::IsConnected(WORD player)
 {
     if (player >= 1004)
@@ -337,7 +313,6 @@ DWORD CPlayerPool::IsConnected(WORD player)
     return *(DWORD*)((BYTE*)this + 0xfd6 + player * 4);
 }
 
-// 0x0000e300
 DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
 {
     BYTE* entry;
@@ -352,7 +327,6 @@ DWORD CPlayerPool::GetPlayerInfoFlag(WORD player)
     return *(DWORD*)(entry + 4);
 }
 
-// 0x000137c0
 WORD CPlayerPool::Find(void* ped)
 {
     for (WORD player = 0; (int)player <= largestId; ++player)
@@ -375,7 +349,6 @@ WORD CPlayerPool::Find(void* ped)
     return 0xffff;
 }
 
-// 0x00013840
 void CPlayerPool::ProcessPlayerPosesAndAccessories()
 {
     CLocalPlayer* local = this->local;
@@ -402,7 +375,6 @@ void CPlayerPool::ProcessPlayerPosesAndAccessories()
     }
 }
 
-// 0x00013a40
 CObject* CPlayerPool::FindAccessory(void* backend)
 {
     CLocalPlayer* local = this->local;
@@ -439,7 +411,6 @@ CObject* CPlayerPool::FindAccessory(void* backend)
     return 0;
 }
 
-// 0x000170d0
 const char* CPlayerPool::GetName(WORD player)
 {
     BYTE* state = (BYTE*)this;
@@ -453,25 +424,21 @@ const char* CPlayerPool::GetName(WORD player)
     return *(DWORD*)(entry + 0x28) >= 16 ? *(char**)(entry + 0x14) : (char*)entry + 0x14;
 }
 
-// 0x00002dd0
 int CPlayerPool::GetLargestId()
 {
     return largestId;
 }
 
-// 0x00002de0
 WORD CPlayerPool::GetLocalId()
 {
     return localId;
 }
 
-// 0x0000e330
 void CPlayerPool::SetLocalId(WORD id)
 {
     localId = id;
 }
 
-// 0x0000e340
 void CPlayerPool::SetScore(WORD id, int value)
 {
     if (id == localId)
@@ -486,7 +453,6 @@ void CPlayerPool::SetScore(WORD id, int value)
         info->score = value;
 }
 
-// 0x0000e380
 void CPlayerPool::SetPing(WORD id, DWORD value)
 {
     if (id == localId)
@@ -502,7 +468,7 @@ void CPlayerPool::SetPing(WORD id, DWORD value)
 }
 
 // Does not use ECX or stack arguments.
-// 0x00003ff0
+
 DWORD GetCachedActivePlayerCount()
 {
     CPlayerPool* pool = ((CNetGame*)g_pNetGame)->pools->players;

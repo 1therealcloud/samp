@@ -17,25 +17,22 @@
 // Reconstructed from 0.3.DL-R1 machine code; 0.2x is structural context only.
 // Build with the pinned VC++ 2003 flags. See analysis/chat-build-v51-O2-Ob2.json.
 #include "gui/chatwindow.h"
-// 0x002aca3c
+
 extern CGame* g_pGame;
-// 0x002aca14
+
 extern CInput* g_pInput;
 
-// 0x00068e00
 LONG CChat::GetChatWindowBottom()
 {
     return m_nWindowBottom;
 }
 
-// 0x00067f20
 void CChat::SetTimestamps(BYTE enabled)
 {
     *((BYTE*)this + offsetof(CChat, m_bTimestamps)) = enabled;
     m_bRedraw = TRUE;
 }
 
-// 0x00067f40
 BYTE CChat::GetTimestamps()
 {
     return *((BYTE*)this + offsetof(CChat, m_bTimestamps));
@@ -43,13 +40,11 @@ BYTE CChat::GetTimestamps()
 
 // These declarations do not call back into the original DLL.
 
-// 0x00060d30
 int CChat::GetMode()
 {
     return m_nMode;
 }
 
-// 0x00060d40
 void CChat::SwitchMode()
 {
     int mode = m_nMode;
@@ -68,7 +63,6 @@ void CChat::SwitchMode()
         m_nMode = DISPLAY_MODE_NOSHADOW;
 }
 
-// 0x00066b90
 void CChat::RecalcFontSize()
 {
     RECT rect;
@@ -78,7 +72,6 @@ void CChat::RecalcFontSize()
     m_nTimestampWidth = rect.right - rect.left;
 }
 
-// 0x00066c10
 void CChat::OnLostDevice()
 {
     if (m_pSurface)
@@ -98,7 +91,6 @@ void CChat::OnLostDevice()
     }
 }
 
-// 0x00066c70
 void CChat::UpdateScrollbar()
 {
     if (m_pScrollbar)
@@ -111,7 +103,6 @@ void CChat::UpdateScrollbar()
     }
 }
 
-// 0x00066d10
 void CChat::SetPageSize(int size)
 {
     if (size >= 10 && size <= 100)
@@ -122,7 +113,6 @@ void CChat::SetPageSize(int size)
     }
 }
 
-// 0x00066d40
 void CChat::PageUp()
 {
     if (m_nMode && m_pScrollbar && !g_pGame->IsMenuVisible() && !g_pInput->IsActive())
@@ -134,7 +124,6 @@ void CChat::PageUp()
     }
 }
 
-// 0x00066da0
 void CChat::PageDown()
 {
     if (m_nMode && m_pScrollbar && !g_pGame->IsMenuVisible() && !g_pInput->IsActive())
@@ -150,14 +139,12 @@ void CChat::PageDown()
     }
 }
 
-// 0x00066e00
 void CChat::ScrollToBottom()
 {
     if (m_pScrollbar)
         m_pScrollbar->SetTrackPos(90);
 }
 
-// 0x00066e30
 void CChat::Scroll(int delta)
 {
     if (m_nMode && m_pScrollbar)
@@ -168,7 +155,6 @@ void CChat::Scroll(int delta)
     }
 }
 
-// 0x00066e90
 void CChat::FilterOutInvalidChars(char* text)
 {
     while (*text)
@@ -179,7 +165,6 @@ void CChat::FilterOutInvalidChars(char* text)
     }
 }
 
-// 0x00066ec0
 void CChat::PushBack()
 {
     // Native quirk: forward REP MOVSD copies 100 entries, reading one entry
@@ -194,7 +179,6 @@ void CChat::PushBack()
     memcpy(copy.destination, copy.source, sizeof(m_entry));
 }
 
-// 0x00067240
 void CChat::Log(int type, const char* text, const char* prefix)
 {
     time_t now = time(0);
@@ -225,7 +209,6 @@ void CChat::Log(int type, const char* text, const char* prefix)
     }
 }
 
-// 0x00067310
 void CChat::ResetDialogControls(CDXUTDialog* dialog)
 {
     m_pGameUi = dialog;
@@ -239,7 +222,6 @@ void CChat::ResetDialogControls(CDXUTDialog* dialog)
     }
 }
 
-// 0x00067650
 void CChat::AddEntry(int type, const char* text, const char* prefix, D3DCOLOR color, D3DCOLOR prefixColor)
 {
     int split = 0;
@@ -295,14 +277,12 @@ void CChat::AddEntry(int type, const char* text, const char* prefix, D3DCOLOR co
     m_bRedraw = TRUE;
 }
 
-// 0x00067a90
 void CChat::AddChatMessage(const char* prefix, D3DCOLOR prefixColor, char* text)
 {
     FilterOutInvalidChars(text);
     AddEntry(ENTRY_TYPE_CHAT, text, prefix, m_textColor, prefixColor);
 }
 
-// 0x00067be0
 void CChat::AddMessage(D3DCOLOR color, char* text)
 {
     if (strlen(text) <= MAX_MESSAGE_LENGTH)
@@ -313,7 +293,6 @@ void CChat::AddMessage(D3DCOLOR color, char* text)
     }
 }
 
-// 0x00067ae0
 void CChat::AddInfoMessage(const char* format, ...)
 {
     char text[512];
@@ -326,7 +305,6 @@ void CChat::AddInfoMessage(const char* format, ...)
     AddEntry(ENTRY_TYPE_INFO, text, 0, m_infoColor, 0);
 }
 
-// 0x00067b60
 void CChat::AddDebugMessage(const char* format, ...)
 {
     char text[512];
@@ -339,7 +317,6 @@ void CChat::AddDebugMessage(const char* format, ...)
     AddEntry(ENTRY_TYPE_DEBUG, text, 0, m_debugColor, 0);
 }
 
-// 0x00067df0
 CChat::CChat(IDirect3DDevice9* device, CFonts* fonts, const char* path)
 {
     m_pDevice = device;
@@ -381,7 +358,6 @@ CChat::CChat(IDirect3DDevice9* device, CFonts* fonts, const char* path)
     OnResetDevice();
 }
 
-// 0x00067870
 void CChat::Draw()
 {
     if (m_pScrollbar)
@@ -406,7 +382,6 @@ void CChat::Draw()
     }
 }
 
-// 0x00067940
 void CChat::RenderToSurface()
 {
     if (m_bRenderToSurface && m_pDevice && m_pRenderToSurface && m_pTexture && m_pSurface && m_pFontRenderer->m_pFont)
@@ -434,7 +409,6 @@ void CChat::RenderToSurface()
     }
 }
 
-// 0x00067c40
 void CChat::OnResetDevice()
 {
     m_bRenderToSurface = TRUE;
@@ -488,7 +462,6 @@ void CChat::OnResetDevice()
     m_bRedraw = TRUE;
 }
 
-// 0x000673b0
 void CChat::Render()
 {
     RECT rect, measure;
@@ -557,7 +530,6 @@ void CChat::Render()
     m_nWindowBottom = rect.bottom;
 }
 
-// 0x00066ee0
 void CChat::RenderEntry(const char* text, RECT rect, D3DCOLOR color)
 {
     ID3DXFont* shadow = m_pFontRenderer->m_pShadow;
@@ -634,7 +606,6 @@ void CChat::RenderEntry(const char* text, RECT rect, D3DCOLOR color)
     font->DrawTextA(m_pTextSprite, text, length, (RECT*)&rect, 0x120, color | 0xff000000);
 }
 
-// 0x000b5950
 int ChatIsHexDigit(char value)
 {
     if ((value >= '0' && value <= '9') || (value >= 'A' && value <= 'F') || (value >= 'a' && value <= 'f'))
@@ -642,7 +613,6 @@ int ChatIsHexDigit(char value)
     return 0;
 }
 
-// 0x000b59c0
 unsigned long ChatParseColorTag(char* text)
 {
     if (text[0] && text[0] == '{' && text[1] && ChatIsHexDigit(text[1]) && text[2] && ChatIsHexDigit(text[2]) && text[3] && ChatIsHexDigit(text[3]) && text[4] &&
@@ -656,7 +626,6 @@ unsigned long ChatParseColorTag(char* text)
     return 0xffffffff;
 }
 
-// 0x000b5c00
 void ChatStripColorTags(char* text)
 {
     while (*text)
@@ -669,7 +638,6 @@ void ChatStripColorTags(char* text)
     *text = 0;
 }
 
-// 0x000b5c40
 int ChatPrepareMessage(char* text, int maximumLength)
 {
     char buffer[2049];

@@ -22,18 +22,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 0x0011bdd0
+
 const Scripting::OpcodeInfo g_commandGetVehicleAngle = {0x174, "iv"};
-// 0x0011bdf8
+
 const Scripting::OpcodeInfo g_commandGetActorAngle = {0x172, "iv"};
-// 0x00156ac8
+
 BYTE g_commandCameraTargetLabels;
-// 0x00154698
+
 DWORD g_commandObjectLighting = 1;
-// 0x0011bde4
+
 const Scripting::OpcodeInfo g_commandGetInterior = {0x77e, "v"};
 
-// 0x00068b50
 void Commands::Setup()
 {
     g_pInput->SetDefaultCommand(Default);
@@ -69,7 +68,6 @@ void Commands::Setup()
     g_pInput->AddCommand("logurls", ToggleURLMessages);
 }
 
-// 0x00067f70
 void Commands::TestDeathWindow(char*)
 {
     if (!g_deviceDeathWindow)
@@ -84,7 +82,6 @@ void Commands::TestDeathWindow(char*)
     ((CDeathWindow*)g_deviceDeathWindow)->AddMessage("Pooper", "PooperPooperPooper0001", 0xffffffff, 0xffffffff, 0);
 }
 
-// 0x00068740
 void Commands::DebugSetPlayerSkin(char* params)
 {
     if (!g_clientSettings.debug)
@@ -102,7 +99,6 @@ void Commands::DebugSetPlayerSkin(char* params)
         ped->SetModelIndex(model);
 }
 
-// 0x000687b0
 void Commands::DebugCreateVehicle(char* params)
 {
     if (!g_clientSettings.debug)
@@ -135,14 +131,12 @@ void Commands::DebugCreateVehicle(char* params)
     g_pGame->CreateVehicle(model, position.x, position.y, position.z, 0, FALSE)->Add();
 }
 
-// 0x000688f0
 void Commands::DebugEnableVehicleSelection(char*)
 {
     if (g_clientSettings.debug)
         GameSetDebugState(0, 0, 10);
 }
 
-// 0x00068a70
 void Commands::SendRconCommand(char* params)
 {
     if (!params || !g_pNetGame)
@@ -156,7 +150,6 @@ void Commands::SendRconCommand(char* params)
     (*(RakClientInterface**)((BYTE*)g_pNetGame + 0x2c))->Send(&stream, HIGH_PRIORITY, RELIABLE, 0);
 }
 
-// 0x00068440
 void Commands::SavePosition(char* params)
 {
     CPed* ped = g_pGame->GetPlayerPed();
@@ -193,7 +186,6 @@ void Commands::SavePosition(char* params)
     }
 }
 
-// 0x000685c0
 void Commands::SavePositionOnly(char* params)
 {
     CPed* ped = g_pGame->GetPlayerPed();
@@ -236,7 +228,6 @@ void Commands::SavePositionOnly(char* params)
     }
 }
 
-// 0x00067f50
 void Commands::Default(char* params)
 {
     if (g_pNetGame)
@@ -247,13 +238,11 @@ void Commands::Default(char* params)
     }
 }
 
-// 0x00068050
 void Commands::ToggleCameraTargetLabels(char*)
 {
     g_commandCameraTargetLabels = g_commandCameraTargetLabels == 0;
 }
 
-// 0x00068060
 void Commands::SetChatPageSize(char* params)
 {
     int size;
@@ -269,7 +258,6 @@ void Commands::SetChatPageSize(char* params)
         g_pConfig->WriteIntValue("pagesize", size, FALSE);
 }
 
-// 0x000680e0
 void Commands::SetChatFontSize(char* params)
 {
     if (strlen(params))
@@ -296,14 +284,12 @@ void Commands::SetChatFontSize(char* params)
         g_pChat->AddDebugMessage("Valid fontsize: -3 to 5");
 }
 
-// 0x00068190
 void Commands::DrawNameTagStatus(char*)
 {
     if (g_pNetGame)
         ((CNetGame*)g_pNetGame)->ToggleNameTagStatus();
 }
 
-// 0x000681a0
 void Commands::DrawChatTimestamps(char*)
 {
     CChat* chat = g_pChat;
@@ -326,7 +312,6 @@ void Commands::DrawChatTimestamps(char*)
     }
 }
 
-// 0x00068200
 void Commands::ToggleAudioStreamMessages(char*)
 {
     if (g_pConfig->GetIntValue("audiomsgoff") == 1)
@@ -343,7 +328,6 @@ void Commands::ToggleAudioStreamMessages(char*)
     }
 }
 
-// 0x00068270
 void Commands::ToggleURLMessages(char*)
 {
     if (g_pConfig->GetIntValue("logurls") == 1)
@@ -360,20 +344,17 @@ void Commands::ToggleURLMessages(char*)
     }
 }
 
-// 0x000682e0
 void Commands::ToggleHudScaleFix(char*)
 {
     g_hookHudAspectFix = g_hookHudAspectFix == 0;
 }
 
-// 0x000682f0
 void Commands::PrintMemory(char*)
 {
     // GTA SA virtual address: 0x008a5a80.
     g_pChat->AddDebugMessage("Memory: %u", *(DWORD*)0x8a5a80);
 }
 
-// 0x00068310
 void Commands::SetFrameLimiter(char* params)
 {
     if (strlen(params))
@@ -391,7 +372,6 @@ void Commands::SetFrameLimiter(char* params)
     }
 }
 
-// 0x000683a0
 void Commands::ToggleHeadMoves(char*)
 {
     if (g_pGame)
@@ -413,17 +393,15 @@ void Commands::ToggleHeadMoves(char*)
     }
 }
 
-// 0x00068420
 void Commands::Quit(char*)
 {
     ClientRequestQuit();
 }
 
 // Native empty callback, not a substitute for missing behavior.
-// 0x00068430
+
 void Commands::CmpStat(char*) {}
 
-// 0x00068910
 void Commands::DebugSetWorldWeather(char* params)
 {
     if (!strlen(params))
@@ -434,7 +412,6 @@ void Commands::DebugSetWorldWeather(char* params)
     g_pGame->SetWorldWeather(atoi(params));
 }
 
-// 0x00068960
 void Commands::DebugSetWorldTime(char* params)
 {
     if (!strlen(params))
@@ -452,7 +429,6 @@ void Commands::DebugSetWorldTime(char* params)
     g_pChat->AddDebugMessage("Invalid Time. Use /set_time (hour 0-23) (minute 0-59)");
 }
 
-// 0x00068a10
 void Commands::PrintCurrentInterior(char*)
 {
     int interior;
@@ -460,13 +436,11 @@ void Commands::PrintCurrentInterior(char*)
     g_pChat->AddDebugMessage("Current Interior: %u", interior);
 }
 
-// 0x00068a40
 void Commands::ToggleObjectsLight(char*)
 {
     g_commandObjectLighting = g_commandObjectLighting == 0;
 }
 
-// 0x00068a60
 void Commands::ToggleDebugLabels(char*)
 {
     g_renderShowVehicleInfo = g_renderShowVehicleInfo == 0;

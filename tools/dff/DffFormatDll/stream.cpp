@@ -4,7 +4,6 @@
 #include <string.h>
 #include <windows.h>
 
-// 0x00001000
 void* __cdecl AllocateHeap(void* Context, unsigned int Size)
 {
     if (!Size)
@@ -12,13 +11,11 @@ void* __cdecl AllocateHeap(void* Context, unsigned int Size)
     return malloc(Size);
 }
 
-// 0x00001020
 void __cdecl ReleaseHeap(void* Context, void* Address)
 {
     free(Address);
 }
 
-// 0x00001030
 void* __cdecl AllocateVirtual(void* Context, unsigned int Size)
 {
     if (!Size)
@@ -26,7 +23,6 @@ void* __cdecl AllocateVirtual(void* Context, unsigned int Size)
     return VirtualAlloc(0, Size, MEM_COMMIT, PAGE_READWRITE);
 }
 
-// 0x00001050
 void __cdecl ReleaseVirtual(void* Context, void* Address)
 {
     if (Address)
@@ -38,7 +34,6 @@ CAllocatorCallbacks VirtualAllocator = {AllocateVirtual, ReleaseVirtual};
 
 CMemoryStream::CMemoryStream() : Data(0), Position(0), Size(0), End(false), OwnsData(false), Unknown0e(0), Unknown12(0), Unknown16(false) {}
 
-// 0x00001070
 CMemoryStream::~CMemoryStream()
 {
     if (OwnsData && Data)
@@ -48,7 +43,6 @@ CMemoryStream::~CMemoryStream()
     }
 }
 
-// 0x00001630
 unsigned int CMemoryStream::Skip(int Count)
 {
     unsigned int Next = Position + Count;
@@ -62,7 +56,6 @@ unsigned int CMemoryStream::Skip(int Count)
     return Size;
 }
 
-// 0x00002d60
 unsigned int CMemoryStream::Save(FILE* File)
 {
     unsigned int Offset = 0;
@@ -81,7 +74,6 @@ unsigned int CMemoryStream::Save(FILE* File)
     return Size;
 }
 
-// 0x00002dc0
 unsigned int CMemoryStream::Save(const char* FileName)
 {
     FILE* File = nullptr;
@@ -93,7 +85,6 @@ unsigned int CMemoryStream::Save(const char* FileName)
     return Size;
 }
 
-// 0x00002e00
 bool CMemoryStream::MakeOwned()
 {
     unsigned char* Copy = static_cast<unsigned char*>(malloc(Size));
@@ -105,7 +96,6 @@ bool CMemoryStream::MakeOwned()
     return true;
 }
 
-// 0x00002e40
 unsigned int CMemoryStream::Write(const void* Buffer, unsigned int Count)
 {
     if (Size < Position + Count)
@@ -121,7 +111,6 @@ unsigned int CMemoryStream::Write(const void* Buffer, unsigned int Count)
     return Count;
 }
 
-// 0x00002ec0
 unsigned int CMemoryStream::Read(void* Buffer, unsigned int Count)
 {
     memset(Buffer, 0, Count);
@@ -141,7 +130,6 @@ unsigned int CMemoryStream::Read(void* Buffer, unsigned int Count)
     return Count;
 }
 
-// 0x00002f40
 unsigned int CMemoryStream::Load(const char* FileName)
 {
     Position = 0;
@@ -169,7 +157,6 @@ unsigned int CMemoryStream::Load(const char* FileName)
     return Size;
 }
 
-// 0x00003030
 unsigned int CMemoryStream::ReadUInt()
 {
     unsigned int Value = 0;
@@ -177,7 +164,6 @@ unsigned int CMemoryStream::ReadUInt()
     return Value;
 }
 
-// 0x00001660
 CRwChunk::CRwChunk()
 {
     Header.Type = 0;
@@ -186,13 +172,11 @@ CRwChunk::CRwChunk()
     Header.Version = 0x1803;
 }
 
-// 0x00001690
 CRwChunk::~CRwChunk()
 {
     // CMemoryStream performs the native owned-buffer cleanup.
 }
 
-// 0x000016c0
 CRwChunk* ReadChunk(CMemoryStream* Stream)
 {
     if (!Stream->Size || Stream->End)
@@ -219,7 +203,6 @@ CRwChunk* ReadChunk(CMemoryStream* Stream)
     return Chunk;
 }
 
-// 0x00001bb0
 bool AppendChunk(CRwChunk* Destination, const CRwChunk* Source)
 {
     if (!Destination || !Source)
@@ -249,7 +232,6 @@ void* CPointerArray::Get(unsigned int Index) const
     return 0;
 }
 
-// 0x00001d10
 bool CPointerArray::Resize(unsigned int NewCount)
 {
     if (!NewCount)
@@ -272,7 +254,6 @@ bool CPointerArray::Resize(unsigned int NewCount)
     return true;
 }
 
-// 0x00003b30
 int CPointerArray::Add(void* Value)
 {
     unsigned int OldCount = Count;

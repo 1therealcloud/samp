@@ -7,28 +7,28 @@
 class CTextDrawSelection
 {
 public:
-    // 0x000c5120
+
     CTextDrawSelection();
     DWORD enabled, hoverColor;
     WORD hoveredTextDrawId;
-    // 0x00070ee0
+
     void Enable(DWORD color);
-    // 0x00070db0
+
     void UpdateHovered();
-    // 0x00070f20
+
     void SendNotification();
-    // 0x00070d50
+
     void ResetTextDraws();
-    // 0x00071010
+
     BOOL MsgProc(UINT message, WPARAM wparam, LPARAM lparam);
-    // 0x00070fc0
+
     void Disable();
-    // 0x00070eb0
+
     void Process();
 };
 #pragma pack(pop)
 static_assert(sizeof(CTextDrawSelection) == 10);
-// 0x001182f8
+
 extern int g_textDrawClickRpc;
 
 #endif // TEXTDRAWSELECTION_H

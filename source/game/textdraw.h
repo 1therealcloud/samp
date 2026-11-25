@@ -76,29 +76,29 @@ class CTextDraw
     };
 
 public:
-    // 0x000b32e0
+
     CTextDraw(const TextDrawTransmit* info, const char* text);
-    // 0x00070d10
+
     RECT* GetSelectableRect();
-    // 0x00070d30
+
     void SetHover(BYTE active, DWORD color);
-    // 0x000b2b50
+
     ~CTextDraw();
-    // 0x000b2b60
+
     void SetText(const char* text);
     // Texture-name resolution; descriptive recovered method name.
-    // 0x000b28d0
+
     void LoadTexture();
-    // 0x000b3080
+
     void Draw();
     // Preview coordinator; actual GTA preview execution remains unverified.
-    // 0x000b30a0
+
     void PrepareModelPreview();
-    // 0x000b32b0
+
     void OnLostDevice();
-    // 0x000b2c90
+
     void DrawTexture();
-    // 0x000b2da0
+
     void DrawText();
 };
 #pragma pack(pop)
@@ -126,36 +126,36 @@ static_assert(offsetof(TextDrawState, hovered) == 0x9d1);
 static_assert(sizeof(TextDrawState) == 0x9d6);
 static_assert(sizeof(CTextDraw) == 0x9d6);
 // Shared texture-slot release entry.
-// 0x000b2750
+
 void GameReleaseTextDrawTexture(int slot);
-// 0x0011f54c
+
 extern const char g_textDrawUnmatchedTilde[23];
-// 0x0011f524
+
 extern const char g_textDrawLongKeyString[40];
 // RenderWare rectangle field order.
 struct TextDrawRect
 {
     float left, bottom, right, top;
 };
-// 0x002a9400
+
 extern void* g_textDrawTextures[200];
-// 0x002a9720
+
 extern DWORD g_textDrawTextureUsed[200];
-// 0x00117884
+
 extern const float g_textDrawHalf;
-// 0x0011f564
+
 extern const float g_textDrawVirtualWidth;
-// 0x0011f568
+
 extern const float g_textDrawVirtualHeight;
-// 0x000b2720
+
 int GameAllocateTextDrawTexture();
-// 0x000b2750
+
 void GameReleaseTextDrawTexture(int slot);
-// 0x000b3560
+
 void GameDestroyTextDrawTexture(void* texture);
-// 0x000b28a0
+
 void GameDrawTextDrawTexture(void* texture, TextDrawRect* rect, DWORD* color);
-// 0x000b26f0
+
 BOOL GameInitializeTextDrawTextures();
 
 #endif // TEXTDRAW_H

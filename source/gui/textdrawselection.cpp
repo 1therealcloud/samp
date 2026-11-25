@@ -5,10 +5,9 @@
 
 #include <BitStream.h>
 #include <RakClientInterface.h>
-// 0x001182f8
+
 int g_textDrawClickRpc = 83;
 
-// 0x000c5120
 CTextDrawSelection::CTextDrawSelection()
 {
     enabled = 0;
@@ -16,7 +15,6 @@ CTextDrawSelection::CTextDrawSelection()
     hoverColor = 0xffffffff;
 }
 
-// 0x00071010
 BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
 {
     if (enabled && message == WM_LBUTTONUP)
@@ -28,7 +26,6 @@ BOOL CTextDrawSelection::MsgProc(UINT message, WPARAM, LPARAM)
     return FALSE;
 }
 
-// 0x00070fc0
 void CTextDrawSelection::Disable()
 {
     enabled = 0;
@@ -43,7 +40,6 @@ void CTextDrawSelection::Disable()
     ResetTextDraws();
 }
 
-// 0x00070ee0
 void CTextDrawSelection::Enable(DWORD color)
 {
     enabled = 1;
@@ -51,7 +47,6 @@ void CTextDrawSelection::Enable(DWORD color)
     hoveredTextDrawId = 0xffff;
 }
 
-// 0x00070d50
 void CTextDrawSelection::ResetTextDraws()
 {
     if (!g_pNetGame)
@@ -75,7 +70,6 @@ void CTextDrawSelection::ResetTextDraws()
     }
 }
 
-// 0x00070db0
 void CTextDrawSelection::UpdateHovered()
 {
     // GTA SA VA: 0x00c97c1c (game window handle, outside samp.dll).
@@ -117,7 +111,6 @@ void CTextDrawSelection::UpdateHovered()
     }
 }
 
-// 0x00070eb0
 void CTextDrawSelection::Process()
 {
     if (!enabled)
@@ -127,7 +120,6 @@ void CTextDrawSelection::Process()
     UpdateHovered();
 }
 
-// 0x00070f20
 void CTextDrawSelection::SendNotification()
 {
     RakNet::BitStream stream;

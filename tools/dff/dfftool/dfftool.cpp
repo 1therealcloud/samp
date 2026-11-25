@@ -9,7 +9,6 @@
 
 // Address comments in this unit refer to the original kdff.exe.
 
-// 0x00003eb0
 static bool ProcessFile(const char* Dff, const char* Col)
 {
     CClump Clump;
@@ -37,7 +36,6 @@ static bool ProcessFile(const char* Dff, const char* Col)
     return true;
 }
 
-// 0x000040d0
 static bool Append(const char* Dff, const char* Col, const char* Output)
 {
     CClump Clump;
@@ -61,7 +59,6 @@ static bool Append(const char* Dff, const char* Col, const char* Output)
     return false;
 }
 
-// 0x00004200
 static bool Info(const char* Dff)
 {
     CClump Clump;
@@ -79,7 +76,6 @@ static bool Info(const char* Dff)
     return true;
 }
 
-// 0x000042f0
 static bool Import(const char* Dff, const char* NightDff, const char* Output)
 {
     CClump Source, Night;
@@ -170,10 +166,8 @@ struct CommandLine
     char Dff[261], Other[261], Output[261], GenerationMode[65];
 };
 
-// 0x00012f20
 static CommandLine Options;
 
-// 0x00003a50
 static void ReadQuoted(const char* Input, char* Output)
 {
     while (*Input != '"')
@@ -184,7 +178,6 @@ static void ReadQuoted(const char* Input, char* Output)
     *Output = 0;
 }
 
-// 0x00003a90
 static void ReadValue(const char* Input, char* Output)
 {
     while (*Input == ' ')
@@ -199,7 +192,6 @@ static void ReadValue(const char* Input, char* Output)
     *Output = 0;
 }
 
-// 0x00003af0
 static void ParseCommandLine()
 {
     const char* Input = GetCommandLineA();
@@ -243,7 +235,6 @@ static void ParseCommandLine()
     }
 }
 
-// 0x00003bd0
 static bool ChangeExtension(const char* FileName, char (&Output)[264], const char* Extension)
 {
     char Path[264];
@@ -258,7 +249,6 @@ static bool ChangeExtension(const char* FileName, char (&Output)[264], const cha
     return length >= 0 && static_cast<size_t>(length) < sizeof(Output);
 }
 
-// 0x00003c60
 static void Usage()
 {
     printf("[usage] Modes: -i (info) -a (append col) -p (process all) -v (night vertex)\n");
@@ -271,7 +261,6 @@ static void Usage()
     printf("[usage] Example (all in current dir): kdff.exe -p (process *.dff in cwd and attach *.col)\n");
 }
 
-// 0x00004010
 static void ProcessAll()
 {
     char Directory[264], Col[264];
@@ -296,7 +285,6 @@ static void ProcessAll()
     printf("[info] Processed %d files", Count);
 }
 
-// 0x00004b00
 int main()
 {
     ParseCommandLine();

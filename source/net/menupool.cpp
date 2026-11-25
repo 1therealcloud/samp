@@ -9,12 +9,10 @@
 
 #include <string.h>
 
-// 0x001179c4
 int g_menuSelectedRpc = 132;
-// 0x001179c0
+
 int g_menuExitedRpc = 140;
 
-// 0x000177b0
 DWORD CMenuPool::GetActiveState(BYTE id)
 {
     if (id >= 128)
@@ -22,7 +20,6 @@ DWORD CMenuPool::GetActiveState(BYTE id)
     return active[id];
 }
 
-// 0x00007b40
 CMenuPool::CMenuPool()
 {
     for (BYTE i = 0; i < 128; ++i)
@@ -33,7 +30,6 @@ CMenuPool::CMenuPool()
     currentMenu = 128;
 }
 
-// 0x00007b90
 CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE columns, float width1, float width2, const void* interaction)
 {
     if (id >= 128)
@@ -54,7 +50,6 @@ CMenu* CMenuPool::Create(BYTE id, const char* title, float x, float y, BYTE colu
     return 0;
 }
 
-// 0x00007c60
 BOOL CMenuPool::Delete(BYTE id)
 {
     if (id >= 128 || !active[id] || !menus[id])
@@ -65,7 +60,6 @@ BOOL CMenuPool::Delete(BYTE id)
     return TRUE;
 }
 
-// 0x00007cb0
 void CMenuPool::Show(BYTE id)
 {
     if (id >= 128 || !active[id] || !menus[id])
@@ -77,7 +71,6 @@ void CMenuPool::Show(BYTE id)
     pendingClose = 0;
 }
 
-// 0x00007d10
 void CMenuPool::Hide(BYTE id)
 {
     if (id >= 128 || currentMenu == 128 || !active[id] || !menus[id])
@@ -86,7 +79,6 @@ void CMenuPool::Hide(BYTE id)
     currentMenu = 128;
 }
 
-// 0x00007eb0
 CMenuPool::~CMenuPool()
 {
     if (currentMenu != 128)
@@ -99,7 +91,6 @@ CMenuPool::~CMenuPool()
         }
 }
 
-// 0x00007d50
 char* CMenuPool::GetTextPointer(const char* suffix)
 {
     if (currentMenu == 128)
@@ -125,7 +116,7 @@ char* CMenuPool::GetTextPointer(const char* suffix)
 }
 
 static_assert(HIGH_PRIORITY == 1 && RELIABLE == 8);
-// 0x00007ef0
+
 void CMenuPool::Process()
 {
     if (currentMenu == 128)

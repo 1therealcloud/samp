@@ -8,32 +8,31 @@
 
 #include <ctype.h>
 #include <string.h>
-// 0x0016bf60
+
 ArchiveFileRecord g_archiveOpenRecords[50];
-// 0x0016be98
+
 BOOL g_archiveRecordUsed[50];
-// 0x0016c378
+
 BOOL g_archiveHooksInstalled;
-// 0x0016c34c
+
 BYTE* g_archiveRealGetFileSize;
-// 0x0016c350
+
 BYTE* g_archiveRealSetFilePointer;
-// 0x0016c354
+
 BYTE* g_archiveRealCreateFileA;
-// 0x0016c35c
+
 BYTE* g_archiveRealReadFile;
-// 0x0016c360
+
 BYTE* g_archiveRealCloseHandle;
-// 0x0016c364
+
 BYTE* g_archiveRealGetFileType;
-// 0x0016c368
+
 BYTE* g_archiveRealShowCursor;
-// 0x00140338
+
 DWORD g_archiveNextHandle = 0xff000001;
-// 0x0016c358
+
 BYTE* g_archiveRealCreateFileAValidation;
 
-// 0x00062720
 void ArchiveInstallFileHooks()
 {
     if (g_archiveHooksInstalled)
@@ -53,14 +52,12 @@ void ArchiveInstallFileHooks()
     g_archiveHooksInstalled = TRUE;
 }
 
-// 0x000623f0
 void ArchiveInstallCursorHook()
 {
     MH_CreateHookApi(L"user32", "ShowCursor", (LPVOID)Arch_ShowCursor, (LPVOID*)&g_archiveRealShowCursor);
     MH_EnableHook(MH_ALL_HOOKS);
 }
 
-// 0x00062810
 /*
 void ArchiveRemoveHooks()
 {
@@ -77,19 +74,16 @@ void ArchiveRemoveHooks()
 }
 */
 
-// 0x000623e0
 int WINAPI Arch_ShowCursor(BOOL visible)
 {
     return visible ? 0 : -1;
 }
 
-// 0x00062000
 BOOL ArchiveIsCustomHandle(DWORD handle)
 {
     return handle >= 0xff000001 && handle < 0xff000101;
 }
 
-// 0x00062020
 int ArchiveFindUnusedRecord()
 {
     for (int i = 0; i != 50; i++)
@@ -98,7 +92,6 @@ int ArchiveFindUnusedRecord()
     return -1;
 }
 
-// 0x00062040
 int ArchiveFindRecord(HANDLE handle)
 {
     for (int i = 0; i != 50; i++)
@@ -107,7 +100,6 @@ int ArchiveFindRecord(HANDLE handle)
     return -1;
 }
 
-// 0x00062070
 HANDLE ArchiveCreateRecord(DWORD index)
 {
     int slot = ArchiveFindUnusedRecord();
@@ -124,7 +116,6 @@ HANDLE ArchiveCreateRecord(DWORD index)
     return record.handle;
 }
 
-// 0x00062410
 char* ArchiveFileNameOnly(char* path)
 {
     if (path[strlen(path) - 1] == ' ')
@@ -139,7 +130,6 @@ char* ArchiveFileNameOnly(char* path)
     return path;
 }
 
-// 0x000624d0
 char* ArchiveLowercaseName(char* name)
 {
     char* cursor = name;
@@ -151,7 +141,6 @@ char* ArchiveLowercaseName(char* name)
     return name;
 }
 
-// 0x000625d0
 HANDLE WINAPI Arch_CreateFileA(LPCSTR name, DWORD access, DWORD share, LPSECURITY_ATTRIBUTES security, DWORD disposition, DWORD flags, HANDLE templateFile)
 {
     DWORD index = g_pArchive->GetFileIndex(ArchiveFileNameOnly((char*)name));
@@ -170,7 +159,6 @@ HANDLE WINAPI Arch_CreateFileA(LPCSTR name, DWORD access, DWORD share, LPSECURIT
     return ((Original)g_archiveRealCreateFileA)(name, access, share, security, disposition, flags, templateFile);
 }
 
-// 0x000620f0
 BOOL WINAPI Arch_ReadFile(HANDLE file, LPVOID buffer, DWORD requested, LPDWORD read, LPOVERLAPPED overlapped)
 {
     int slot;
@@ -213,7 +201,6 @@ BOOL WINAPI Arch_ReadFile(HANDLE file, LPVOID buffer, DWORD requested, LPDWORD r
     return ((Original)g_archiveRealReadFile)(file, buffer, requested, read, overlapped);
 }
 
-// 0x00062270
 DWORD WINAPI Arch_GetFileSize(HANDLE file, PDWORD high)
 {
     int slot;
@@ -227,7 +214,6 @@ DWORD WINAPI Arch_GetFileSize(HANDLE file, PDWORD high)
     return ((Original)g_archiveRealGetFileSize)(file, high);
 }
 
-// 0x000622c0
 DWORD WINAPI Arch_SetFilePointer(HANDLE file, LONG distance, PLONG high, DWORD method)
 {
     int slot;
@@ -255,7 +241,6 @@ DWORD WINAPI Arch_SetFilePointer(HANDLE file, LONG distance, PLONG high, DWORD m
     return ((Original)g_archiveRealSetFilePointer)(file, distance, high, method);
 }
 
-// 0x00062360
 BOOL WINAPI Arch_CloseHandle(HANDLE file)
 {
     int slot;
@@ -268,7 +253,6 @@ BOOL WINAPI Arch_CloseHandle(HANDLE file)
     return ((Original)g_archiveRealCloseHandle)(file);
 }
 
-// 0x000623a0
 DWORD WINAPI Arch_GetFileType(HANDLE file)
 {
     int slot;
@@ -278,7 +262,6 @@ DWORD WINAPI Arch_GetFileType(HANDLE file)
     return ((Original)g_archiveRealGetFileType)(file);
 }
 
-// 0x00061df0
 BOOL ArchiveIsIdeOrIplExtension(const char* extension)
 {
     if (((BYTE)extension[0] & 0xdf) != 'I')
@@ -290,7 +273,6 @@ BOOL ArchiveIsIdeOrIplExtension(const char* extension)
     return FALSE;
 }
 
-// 0x00061f90
 DWORD ArchiveHashLowercaseName(const char* name)
 {
     DWORD hash = 0;
@@ -310,7 +292,6 @@ DWORD ArchiveHashLowercaseName(const char* name)
     return hash * 0x8001;
 }
 
-// 0x00062470
 char* ArchiveFileExtension(char* path)
 {
     if (path[strlen(path) - 1] == ' ')
@@ -325,7 +306,6 @@ char* ArchiveFileExtension(char* path)
     return path;
 }
 
-// 0x00061e50
 void ArchiveCheckFileDigest(DWORD hash, HANDLE file)
 {
     DWORD index = g_pArchive->GetFileIndex((DWORD)0xa848b69a);
@@ -363,7 +343,6 @@ void ArchiveCheckFileDigest(DWORD hash, HANDLE file)
     }
 }
 
-// 0x000626b0
 HANDLE WINAPI Arch_CreateFileAWithValidation(LPCSTR name, DWORD access, DWORD share, LPSECURITY_ATTRIBUTES security, DWORD disposition, DWORD flags, HANDLE templateFile)
 {
     typedef HANDLE(WINAPI * Original)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE);

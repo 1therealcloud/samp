@@ -17,16 +17,15 @@
 
 #include <stdio.h>
 #include <string.h>
-// 0x0015fa68
+
 CONTEXT* g_clientExceptionContext;
-// 0x0015fa70
+
 char g_clientCrashText[16384];
-// 0x00151960
+
 BYTE* g_clientCrashPedContext = (BYTE*)0xb7cd74; // GTA SA virtual address.
-// 0x0018f584
+
 WORD g_clientCrashLastRenderedObject;
 
-// 0x00060260
 /*
 void ClientSendCrashReport()
 {
@@ -40,7 +39,6 @@ void ClientSendCrashReport()
 }
 */
 
-// 0x0005fd50
 void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asDwords)
 {
     char line[16384];
@@ -61,7 +59,6 @@ void ClientDumpMemory(const BYTE* data, int count, char (&text)[16384], BOOL asD
     }
 }
 
-// 0x0005fc20
 void ClientDumpNetworkState(char (&text)[16384])
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -83,7 +80,6 @@ void ClientDumpNetworkState(char (&text)[16384])
     }
 }
 
-// 0x0005fee0
 void ClientDumpLoadedModules(char (&text)[16384])
 {
     MODULEENTRY32 entry;
@@ -114,7 +110,6 @@ void ClientDumpLoadedModules(char (&text)[16384])
     CloseHandle(snapshot);
 }
 
-// 0x00060070
 void ClientConstructCrashText(BOOL includeModules)
 {
     char text[16384];
@@ -143,7 +138,6 @@ void ClientConstructCrashText(BOOL includeModules)
     }
 }
 
-// 0x00060330
 INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -178,7 +172,6 @@ INT_PTR CALLBACK ClientExceptionDialog(HWND dialog, UINT message, WPARAM wParam,
     return FALSE;
 }
 
-// 0x00060430
 LONG WINAPI ClientExceptionFilter(EXCEPTION_POINTERS* exception)
 {
     g_clientExceptionContext = exception->ContextRecord;

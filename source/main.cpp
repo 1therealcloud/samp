@@ -22,31 +22,29 @@ bool g_DLClient = true;
 const std::string g_ClientVersionString = g_DLClient ? "0.3.DL-R1" : "0.3.7-R5";
 
 // Client runtime globals, initialization and frame coordination.
-// 0x002aca3c
+
 CGame* g_pGame;
-// 0x002aca14
+
 CInput* g_pInput;
-// 0x002aca10
+
 CChat* g_pChat;
-// 0x002aca24
+
 void* g_pNetGame;
 
-// 0x002abe70
 IDirect3DDevice9* g_clientSavedGameDevice;
-// 0x002aca40
+
 DWORD g_clientDeviceInitialized;
-// 0x002aca44
+
 DWORD g_clientNetworkInitialized;
 static_assert(sizeof(CNetGame) == 0x3e2);
 static_assert(sizeof(CTextDrawSelection) == 10);
-// 0x002aca68
+
 DWORD g_clientSkipGameFrame;
-// 0x002ac9c0
+
 DWORD g_clientQuitRequested;
-// 0x002ac9c4
+
 DWORD g_clientQuitStarted;
 
-// 0x000c5e70
 void ClientInitializeDeviceAndGui()
 {
     if (g_clientDeviceInitialized)
@@ -138,7 +136,6 @@ void ClientInitializeDeviceAndGui()
     g_clientDeviceInitialized = 1;
 }
 
-// 0x000c6630
 void ClientProcessFrame()
 {
     ClientInitializeDeviceAndGui();
@@ -156,7 +153,6 @@ void ClientProcessFrame()
         g_pGame->m_pAudio->Process();
 }
 
-// 0x000c66b0
 __declspec(naked) void ClientGameLoop()
 {
     // clang-format off
@@ -229,7 +225,6 @@ __declspec(naked) void ClientGameLoop()
     // clang-format on
 }
 
-// 0x000c5550
 void ClientRequestQuit()
 {
     if (g_pNetGame && *(DWORD*)((BYTE*)g_pNetGame + 0x3cd) == 5)
@@ -238,7 +233,6 @@ void ClientRequestQuit()
     g_clientQuitStarted = GetTickCount();
 }
 
-// 0x000c6950
 int FontGetHeight()
 {
     int height;
@@ -253,7 +247,6 @@ int FontGetHeight()
     return height + g_pConfig->GetIntValue("fontsize") * 2;
 }
 
-// 0x000c69a0
 int FontGetDeathWindowHeight()
 {
     int base = 14;
@@ -263,7 +256,6 @@ int FontGetDeathWindowHeight()
     return adjusted < base ? base : adjusted;
 }
 
-// 0x000c6a00
 int FontGetWeight()
 {
     int weight = g_pConfig->GetIntValue("fontweight");
@@ -272,7 +264,6 @@ int FontGetWeight()
     return weight == 1 ? 400 : 700;
 }
 
-// 0x000c6a30
 const char* FontGetFace()
 {
     if (g_pConfig && g_pConfig->GetStringValue("fontface"))
@@ -280,7 +271,6 @@ const char* FontGetFace()
     return "Arial";
 }
 
-// 0x000c69e0
 int FontGetDialogHeight()
 {
     return g_pConfig->GetIntValue("fontsize") * 2 + 20;

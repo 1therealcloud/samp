@@ -8,24 +8,23 @@
 #include "main.h"
 
 #include <string.h>
-// 0x0011e2d0
+
 const Scripting::OpcodeInfo g_actorKillCommand = {0x321, "i"};
-// 0x0011e294
+
 const Scripting::OpcodeInfo g_actorImmunityCommand = {0x2ab, "iiiiii"};
-// 0x0011e2e4
+
 const Scripting::OpcodeInfo g_actorAnimationCommand = {0x812, "issfiiiii"};
-// 0x00181e5c
+
 void* g_actorTaskBackend;
-// 0x0011e280
+
 const Scripting::OpcodeInfo g_actorCreateCommand = {0x9a, "iifffv"};
-// 0x0011e2bc
+
 const Scripting::OpcodeInfo g_actorHeadingCommand = {0x173, "if"};
-// 0x0011e2a8
+
 const Scripting::OpcodeInfo g_actorConfigurationCommand = {0x446, "ii"};
-// 0x0011e2f8
+
 const Scripting::OpcodeInfo g_actorTaskFlagsCommand = {0x60b, "ii"};
 
-// 0x0009c030
 float CActor::GetHealth()
 {
     if (!actorBackend)
@@ -33,7 +32,6 @@ float CActor::GetHealth()
     return actorBackend->health;
 }
 
-// 0x0009c050
 void CActor::SetHealth(float health)
 {
     if (!actorBackend)
@@ -43,7 +41,6 @@ void CActor::SetHealth(float health)
         Scripting::ProcessCommand(&g_actorKillCommand, m_nHandle);
 }
 
-// 0x0009c090
 float CActor::GetArmour()
 {
     if (!actorBackend)
@@ -51,14 +48,12 @@ float CActor::GetArmour()
     return actorBackend->armour;
 }
 
-// 0x0009c0b0
 void CActor::SetArmour(float armour)
 {
     if (actorBackend)
         memcpy(&actorBackend->armour, &armour, 4);
 }
 
-// 0x0009c0d0
 DWORD CActor::GetBackendFlags()
 {
     if (!actorBackend)
@@ -66,33 +61,28 @@ DWORD CActor::GetBackendFlags()
     return actorBackend->flags;
 }
 
-// 0x0009c0e0
 void CActor::SetBackendFlags(DWORD flags)
 {
     if (actorBackend)
         actorBackend->flags = flags;
 }
 
-// 0x0009c100
 BOOL CActor::IsDead()
 {
     return !actorBackend || !(actorBackend->health > 0.0f);
 }
 
-// 0x0009c130
 BYTE CActor::GetPedState()
 {
     return *(BYTE*)&actorBackend->state530;
 }
 
-// 0x0009c140
 void CActor::SetPedState(BYTE value)
 {
     if (actorBackend)
         actorBackend->state530 = value;
 }
 
-// 0x0009c160
 DWORD CActor::IsInVehicle()
 {
     if (!actorBackend)
@@ -100,7 +90,6 @@ DWORD CActor::IsInVehicle()
     return (actorBackend->flags >> 8) & 1;
 }
 
-// 0x0009c180
 void CActor::SetInvulnerable(BYTE enabled)
 {
     if (!actorBackend)
@@ -112,7 +101,6 @@ void CActor::SetInvulnerable(BYTE enabled)
         Scripting::ProcessCommand(&g_actorImmunityCommand, m_nHandle, 0, 0, 0, 1, 0);
 }
 
-// 0x0009be80
 void CActor::Destroy()
 {
     void* saved = actorBackend;
@@ -133,7 +121,6 @@ void CActor::Destroy()
     m_pGameEntity = 0;
 }
 
-// 0x0009bff0
 void CActor::SetRotation(float heading)
 {
     if (!actorBackend || !GamePoolPedGetAt(m_nHandle))
@@ -142,13 +129,11 @@ void CActor::SetRotation(float heading)
     actorBackend->heading = radians;
 }
 
-// 0x0009c1d0
 CActor::~CActor()
 {
     Destroy();
 }
 
-// 0x0009bee0
 void CActor::PerformAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time)
 {
     int attempts = 0;
@@ -174,7 +159,7 @@ void CActor::PerformAnimation(const char* name, const char* library, float speed
     }
     Scripting::ProcessCommand(&g_actorAnimationCommand, m_nHandle, name, library, (double)speed, loop, lockX, lockY, freeze, time);
 }
-// 0x0009bfb0
+
 DWORD GameClearActorTasks()
 {
     // GTA SA virtual address: task clearing backend, thiscall with argument1.
@@ -190,7 +175,6 @@ DWORD GameClearActorTasks()
     return 1;
 }
 
-// 0x0009bfd0
 void CActor::ClearTasks()
 {
     g_actorTaskBackend = actorBackend;
@@ -198,7 +182,6 @@ void CActor::ClearTasks()
         GameClearActorTasks();
 }
 
-// 0x0009bd30
 CActor::CActor(int model, float x, float y, float z, float heading)
 {
     actorBackend = 0;

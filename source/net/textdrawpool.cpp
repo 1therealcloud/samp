@@ -2,7 +2,7 @@
 
 #include "game/textdraw.h"
 #include "gui/gui.h"
-// 0x000177d0
+
 CTextDraw* CTextDrawPool::Get(WORD id)
 {
     if (id >= 2304)
@@ -13,7 +13,6 @@ CTextDraw* CTextDrawPool::Get(WORD id)
     return draws[index];
 }
 
-// 0x0001e260
 CTextDrawPool::CTextDrawPool()
 {
     for (int i = 0; i != 2304; ++i)
@@ -24,7 +23,6 @@ CTextDrawPool::CTextDrawPool()
     GameInitializeTextDrawTextures();
 }
 
-// 0x0001e2b0
 void CTextDrawPool::Delete(WORD id)
 {
     CTextDraw* draw = draws[id];
@@ -35,7 +33,6 @@ void CTextDrawPool::Delete(WORD id)
     active[id] = 0;
 }
 
-// 0x0001e390
 CTextDrawPool::~CTextDrawPool()
 {
     for (int i = 0; i < 2304; ++i)
@@ -49,7 +46,6 @@ CTextDrawPool::~CTextDrawPool()
     }
 }
 
-// 0x0001e3d0
 CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const char* text)
 {
     DWORD index = id;
@@ -65,7 +61,6 @@ CTextDraw* CTextDrawPool::Create(WORD id, const TextDrawTransmit* info, const ch
     return 0;
 }
 
-// 0x0001e2f0
 void CTextDrawPool::Draw()
 {
     int i = 0;
@@ -80,7 +75,6 @@ void CTextDrawPool::Draw()
     }
 }
 
-// 0x0001e330
 void CTextDrawPool::PrepareModelPreviews()
 {
     for (int i = 0; i != 2304; i++)
@@ -88,7 +82,6 @@ void CTextDrawPool::PrepareModelPreviews()
             draws[i]->PrepareModelPreview();
 }
 
-// 0x0001e360
 void CTextDrawPool::OnLostDevice()
 {
     for (int i = 0; i != 2304; i++)

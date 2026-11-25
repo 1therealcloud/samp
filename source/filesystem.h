@@ -50,24 +50,21 @@ private:
     BYTE** m_pFileData;
 
 public:
-    // 0x00060500
+
     CFileSystem();
-    // 0x00060690
+
     virtual ~CFileSystem();
 
-    // 0x000606b0
     virtual bool Load(char* szFileName);
-    // 0x00060520
+
     virtual void Unload();
 
-    // 0x00060580
     virtual DWORD GetFileIndex(char* szFileName);
-    // 0x000605e0
+
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-    // 0x00060610
+
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 
-    // 0x00060640
     void DecryptData(BYTE* pData, DWORD dwDataLen, WORD wKey);
 };
 #pragma pack(pop)

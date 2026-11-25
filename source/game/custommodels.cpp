@@ -26,26 +26,24 @@
 #include <string.h>
 #include <sys/stat.h>
 
-// 0x00117cd8
 const char g_customDeleteDffPattern[] = "%s\\0x%X.dff";
-// 0x00117ce4
+
 const char g_customDeleteTxdPattern[] = "%s\\0x%X.txd";
-// 0x00117cf0
+
 const char g_customDeleteTempPattern[] = "%s\\%s";
-// 0x00117d24
+
 const char g_customFindTempPattern[] = "%s/*.temp";
-// 0x00117d18
+
 const char g_customFindDffPattern[] = "%s/*.dff";
-// 0x00117d0c
+
 const char g_customFindTxdPattern[] = "%s/*.txd";
 
-// 0x002aca28
 CCustomModels* g_customModels;
-// 0x001e0448
+
 DWORD g_gameLoadingCustomModel;
 
 // Original owning type/name unconfirmed; preserve this distinct native entry.
-// 0x00152ae8
+
 const GameModelReferencePatch g_gameModelReferencePatchesUS[707] = {
     {0x0040122a, 0x8b}, {0x00403da4, 0x8b}, {0x00403ecc, 0x8b}, {0x00405cdf, 0x8b}, {0x00405e50, 0x8b}, {0x004063f1, 0x8b}, {0x00406b11, 0x8b}, {0x00407b21, 0x8b},
     {0x00407b72, 0x8b}, {0x00407b92, 0x8b}, {0x004080b4, 0x8b}, {0x004082f4, 0x8b}, {0x004083a4, 0x8b}, {0x00408894, 0x8b}, {0x004088a8, 0x8b}, {0x00408903, 0x8b},
@@ -137,7 +135,7 @@ const GameModelReferencePatch g_gameModelReferencePatchesUS[707] = {
     {0x0156d089, 0x8b}, {0x0156d0b6, 0x8b}, {0x0156d0e6, 0x8b}, {0x01570248, 0x8b}, {0x01570270, 0x8b}, {0x01570298, 0x8b}, {0x015702c0, 0x8b}, {0x015702e8, 0x8b},
     {0x01570310, 0x8b}, {0x01570404, 0x8b}, {0x0157045d, 0x8b},
 };
-// 0x001538b8
+
 const GameModelReferencePatch g_gameModelReferencePatchesEU[707] = {
     {0x0040121f, 0x8b}, {0x00403da4, 0x8b}, {0x00403ecc, 0x8b}, {0x00405cdf, 0x8b}, {0x00405e50, 0x8b}, {0x004063f1, 0x8b}, {0x00406b0d, 0x8b}, {0x00407b21, 0x8b},
     {0x00407b72, 0x8b}, {0x00407b92, 0x8b}, {0x004080b4, 0x8b}, {0x004082f4, 0x8b}, {0x004083a4, 0x8b}, {0x00408894, 0x8b}, {0x004088a8, 0x8b}, {0x00408903, 0x8b},
@@ -229,39 +227,39 @@ const GameModelReferencePatch g_gameModelReferencePatchesEU[707] = {
     {0x0156d0c9, 0x8b}, {0x0156d0f6, 0x8b}, {0x0156d126, 0x8b}, {0x015702d8, 0x8b}, {0x01570300, 0x8b}, {0x01570328, 0x8b}, {0x01570350, 0x8b}, {0x01570378, 0x8b},
     {0x015703a0, 0x8b}, {0x01570494, 0x8b}, {0x015704ed, 0x8b},
 };
-// 0x00117c30
+
 const char g_customServerCachePattern[] = "%s\\%s.%d";
-// 0x00117c3c
+
 const char g_customLocalCachePattern[] = "%s\\local";
-// 0x0011edc8
+
 const char g_customCollisionWrongType[] = "[Error] not a COL3 collision";
-// 0x0011ed9c
+
 const char g_customCollisionLoadFailed[] = "[Error] model loader failed to load col.";
-// 0x0011ed68
+
 const char g_customCollisionAllocationFailed[] = "[Error] model loader failed to allocated a new col.";
-// 0x00117e1c
+
 const char g_customDownloadSizeError[] = "[error] file 0x%X bad length got:%u expected:%u. Deleting..";
-// 0x00117de8
+
 const char g_customDownloadCrcError[] = "[error] file 0x%X bad checksum (0x%X). Deleting..";
-// 0x002ac390
+
 char g_customProxy[261];
-// 0x0011f9c0
+
 const char g_customRegistryKey[] = "Software\\SAMP";
-// 0x0011f9dc
+
 const char g_customProxyValue[] = "artwork_proxy";
-// 0x00117e58
+
 const char g_customUserAgent[] = "SAMP/0.3";
-// 0x00117e9c
+
 const char g_customLogUrlsOption[] = "logurls";
-// 0x00117e8c
+
 const char g_customUrlLogFormat[] = "[url 0x%X]: %s";
-// 0x00117e64
+
 const char g_customNoFreeWorkerError[] = "[error] AddURLRequest: No free slots!";
-// 0x00117ed8
+
 const char g_customUrlInfoError[] = "DownloadRedirect: Can't fill download info!";
-// 0x00117ea4
+
 const char g_customUrlOpenError[] = "DownloadRedirect: Can't open temp file for writing!";
-// 0x00140378
+
 const DWORD g_customCrcTable[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd,
     0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7, 0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec,
@@ -283,28 +281,27 @@ const DWORD g_customCrcTable[256] = {
     0x47b2cf7f, 0x30b5ffe9, 0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
 };
-// 0x00156b44
+
 CCustomModels* g_customDownloadManager;
-// 0x00117cfc
+
 const char g_customTemporaryPathPattern[] = "%s/%05d_%X.temp";
-// 0x00117d30
+
 const char g_customDownloadWriteMode[] = "wb";
-// 0x00118e1c
+
 const char g_customDownloadReadMode[] = "rb";
-// 0x00117d34
+
 const char g_customFillDownloadError[] = "Can't fill download info for CRC: 0x%X";
-// 0x00117c48
+
 const char g_customDffCachePattern[] = "%s/0x%X.dff";
-// 0x00117c54
+
 const char g_customTxdCachePattern[] = "%s/0x%X.txd";
-// 0x00117d60
+
 int g_customRequestDffRpc = 181;
-// 0x00117d5c
+
 int g_customRequestTxdRpc = 182;
-// 0x00117d64
+
 int g_customRequestsCompleteRpc = 184;
 
-// 0x0000c0b0
 DWORD CCustomModels::ParseCacheHash(const char* filename)
 {
     if (filename[0] != '0' || filename[1] != 'x')
@@ -314,7 +311,6 @@ DWORD CCustomModels::ParseCacheHash(const char* filename)
     return strtoul(digits, 0, 16);
 }
 
-// 0x0000b990
 void CCustomModels::ClearTransferStorage()
 {
     memset(nativeState + 0x222, 0, 0x11e);
@@ -322,7 +318,6 @@ void CCustomModels::ClearTransferStorage()
         nativeState[0x1345 + i] = 0;
 }
 
-// 0x0000d890
 CCustomModels::CCustomModels()
 {
     *(DWORD*)nativeState = 0;
@@ -341,7 +336,6 @@ CCustomModels::CCustomModels()
     nativeState[0x1344] = 0;
 }
 
-// 0x0000c4e0
 // record indices come from the server
 static const DWORD kMaxCustomModelRecords = 65536;
 
@@ -378,7 +372,6 @@ bool CCustomModels::ResizeRecords(DWORD count)
     return true;
 }
 
-// 0x0000c6a0
 void CCustomModels::TrimRecords()
 {
     DWORD count = *(DWORD*)(nativeState + 4);
@@ -402,7 +395,6 @@ void CCustomModels::TrimRecords()
         ResizeRecords(last + 1);
 }
 
-// 0x0000cfc0
 bool CCustomModels::EraseRecord(DWORD index)
 {
     if (index >= *(DWORD*)(nativeState + 4))
@@ -412,7 +404,6 @@ bool CCustomModels::EraseRecord(DWORD index)
     return true;
 }
 
-// 0x0000cff0
 bool CCustomModels::SetRecord(DWORD index, void* record)
 {
     if (index >= kMaxCustomModelRecords)
@@ -423,7 +414,6 @@ bool CCustomModels::SetRecord(DWORD index, void* record)
     return true;
 }
 
-// 0x0000d550
 DWORD CCustomModels::AddRecord(DWORD index, const void* record)
 {
     int base = *(const int*)((const BYTE*)record + 0xc);
@@ -441,7 +431,6 @@ DWORD CCustomModels::AddRecord(DWORD index, const void* record)
     return index;
 }
 
-// 0x0000d5a0
 DWORD CCustomModels::DeleteRecord(DWORD index)
 {
     void* record = GetRecord(index);
@@ -454,13 +443,11 @@ DWORD CCustomModels::DeleteRecord(DWORD index)
     return 0xffffffff;
 }
 
-// 0x0000d5e0
 void CCustomModels::ClearRecords()
 {
     ResizeRecords(0);
 }
 
-// 0x0000bd10
 void CCustomModels::StopWorkers()
 {
     for (int i = 0; i < 6; ++i)
@@ -468,7 +455,6 @@ void CCustomModels::StopWorkers()
     nativeState[0x1344] = 0;
 }
 
-// 0x0000bd90
 void CCustomModels::ResumeReadyWorker()
 {
     if (!nativeState[0x1344])
@@ -490,7 +476,6 @@ void CCustomModels::ResumeReadyWorker()
     }
 }
 
-// 0x0000c950
 bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
 {
     if (!nativeState[0x21f])
@@ -506,7 +491,6 @@ bool CCustomModels::HasEarlierResourceRequest(int endIndex, DWORD hash)
     return false;
 }
 
-// 0x0000c9b0
 int CCustomModels::MarkResourceRequests()
 {
     BYTE* state = (BYTE*)this;
@@ -540,7 +524,6 @@ int CCustomModels::MarkResourceRequests()
     return (int)pending;
 }
 
-// 0x0000cc80
 bool CCustomModels::IsPedEntry(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -556,7 +539,6 @@ bool CCustomModels::IsPedEntry(int model)
     return false;
 }
 
-// 0x0000ccc0
 bool CCustomModels::IsObjectEntry(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -572,7 +554,6 @@ bool CCustomModels::IsObjectEntry(int model)
     return false;
 }
 
-// 0x0000cd00
 BYTE CCustomModels::GetLoadedFlag(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -588,7 +569,6 @@ BYTE CCustomModels::GetLoadedFlag(int model)
     return 0;
 }
 
-// 0x0000ce30
 BOOL CCustomModels::DoesExist(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -610,7 +590,6 @@ BOOL CCustomModels::DoesExist(int model)
     return FALSE;
 }
 
-// 0x0000ce90
 BOOL CCustomModels::LoadObjectEntry(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -633,7 +612,6 @@ BOOL CCustomModels::LoadObjectEntry(int model)
     return FALSE;
 }
 
-// 0x000a7670
 void* GameClonePedModelInfo(int base, int model)
 {
     void* copy = calloc(0x44, 1);
@@ -648,7 +626,6 @@ void* GameClonePedModelInfo(int base, int model)
     return 0;
 }
 
-// 0x000a76c0
 void* GameCloneObjectModelInfo(int base, int model)
 {
     void* existing = g_gameModelInfoTable[model];
@@ -665,7 +642,6 @@ void* GameCloneObjectModelInfo(int base, int model)
     return 0;
 }
 
-// 0x000a7750
 bool GameAttachModelTxd(int model, const char* name, const char* path)
 {
     int index = GameTxdFind(name);
@@ -687,7 +663,6 @@ bool GameAttachModelTxd(int model, const char* name, const char* path)
     return true;
 }
 
-// 0x000a77c0
 BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* dff, const char* txd)
 {
     if (GameClonePedModelInfo(base, model) && GameAttachModelTxd(model, name, txd))
@@ -702,7 +677,6 @@ BOOL GameRegisterCustomPed(int base, int model, const char* name, const char* df
     return FALSE;
 }
 
-// 0x000a7820
 BOOL GameRegisterCustomObject(int base, int model, const char* name, const char* dff, const char* txd)
 {
     g_gameLoadingCustomModel = model;
@@ -724,7 +698,6 @@ BOOL GameRegisterCustomObject(int base, int model, const char* name, const char*
     return FALSE;
 }
 
-// 0x000b41d0
 void __stdcall GamePublishPedClump(int model, void* clump)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -732,7 +705,6 @@ void __stdcall GamePublishPedClump(int model, void* clump)
     ((void(__fastcall*)(void*, void*, void*))(*(DWORD**)info)[16])(info, 0, clump);
 }
 
-// 0x000b34a0
 int GameTxdAdd(const char* name)
 {
     int result;
@@ -741,7 +713,6 @@ int GameTxdAdd(const char* name)
     return result;
 }
 
-// 0x000b34c0
 DWORD GameTxdLoad(int index, const char* path)
 {
     BYTE result = 0;
@@ -761,13 +732,11 @@ DWORD GameTxdLoad(int index, const char* path)
     return result;
 }
 
-// 0x000b4260
 void __stdcall GameSetModelTxd(int model, int index)
 {
     *(WORD*)((BYTE*)GameGetModelInfo(model) + 0xa) = (WORD)index;
 }
 
-// 0x000b4330
 void __stdcall GameSetModelField8(int model, WORD value)
 {
     BYTE* info = (BYTE*)GameGetModelInfo(model);
@@ -775,7 +744,6 @@ void __stdcall GameSetModelField8(int model, WORD value)
         *(WORD*)(info + 8) = value;
 }
 
-// 0x000b40e0
 BOOL __stdcall GameIsObjectModelInfo(void* info)
 {
     if (info)
@@ -788,7 +756,6 @@ BOOL __stdcall GameIsObjectModelInfo(void* info)
     return FALSE;
 }
 
-// 0x000a7560
 BOOL GamePatchModelInfoReferences()
 {
     for (int i = 0; i < 707; ++i)
@@ -812,7 +779,6 @@ BOOL GamePatchModelInfoReferences()
     return TRUE;
 }
 
-// 0x000a75f0
 BOOL GameInitializeCustomModelInfo()
 {
     // Native clears65535 DWORDs starting at1A0448, ending before enable1E0444.
@@ -825,7 +791,6 @@ BOOL GameInitializeCustomModelInfo()
     return TRUE;
 }
 
-// 0x000b6390
 void* __cdecl GameCreateCollisionModel()
 {
     // GTA SA virtual addresses: allocator0x0040fc30 and thiscall constructor0x0040fb60.
@@ -835,7 +800,6 @@ void* __cdecl GameCreateCollisionModel()
     return collision;
 }
 
-// 0x000b63c0
 BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collision)
 {
     // 8 byte header (fourcc + size), then 24 more bytes before the body
@@ -849,7 +813,6 @@ BOOL __cdecl GameLoadCollisionData(const void* data, DWORD length, void* collisi
     return TRUE;
 }
 
-// 0x000a78b0
 DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
 {
     if (length > 0x40000)
@@ -885,14 +848,12 @@ DWORD __cdecl GameReadCustomCollision(void* stream, DWORD length)
     return 0;
 }
 
-// 0x000a7980
 void GameRegisterCustomCollisionPlugin()
 {
     GameRwRegisterClumpPlugin(0x253f2ff);
     GameRwRegisterClumpPluginStream(0x253f2ff, (DWORD)GameReadCustomCollision);
 }
 
-// 0x0000b9c0
 DWORD CCustomModels::SanitizeCacheHost(char* output, DWORD capacity, const char* host)
 {
     DWORD length = (DWORD)strlen(host), written = 0;
@@ -909,7 +870,6 @@ DWORD CCustomModels::SanitizeCacheHost(char* output, DWORD capacity, const char*
     return written;
 }
 
-// 0x0000ba40
 void CCustomModels::Initialize()
 {
     if (nativeState[8])
@@ -926,7 +886,7 @@ void CCustomModels::Initialize()
     *(DWORD*)(nativeState + 0x213) = 2;
 }
 static_assert(sizeof(SizeT) == 4);
-// 0x000c52d0
+
 const char* CustomModelGetProxy()
 {
     memset(g_customProxy, 0, 261);
@@ -938,7 +898,6 @@ const char* CustomModelGetProxy()
     return RegQueryValueExA(key, g_customProxyValue, 0, &type, (BYTE*)g_customProxy, &length) == 0 ? g_customProxy : 0;
 }
 
-// 0x0000de60
 BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
 {
     CURL* curl = curl_easy_init();
@@ -975,7 +934,6 @@ BOOL __cdecl CustomModelFetchUrl(CustomModelWorker* worker, const char* proxy)
     return TRUE;
 }
 
-// 0x0000df90
 void __cdecl CustomModelDownloadThread(void* argument)
 {
     const char* proxy = CustomModelGetProxy();
@@ -994,7 +952,6 @@ void __cdecl CustomModelDownloadThread(void* argument)
     worker->enabled = 0;
 }
 
-// 0x0000dff0
 bool CCustomModels::StartWorkers()
 {
     for (int i = 0; i < 6; ++i)
@@ -1023,7 +980,6 @@ bool CCustomModels::StartWorkers()
     return true;
 }
 
-// 0x0000e0a0
 void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
 {
     if (g_pChat && g_pConfig && g_pConfig->GetIntValue(g_customLogUrlsOption))
@@ -1047,7 +1003,6 @@ void CCustomModels::QueueUrl(CustomModelDownload* download, const char* url)
         g_pChat->AddDebugMessage(g_customNoFreeWorkerError);
 }
 
-// 0x0000e180
 void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
 {
     CustomModelDownload download;
@@ -1075,14 +1030,12 @@ void CCustomModels::BeginUrlDownload(BYTE type, DWORD hash, const char* url)
         *(DWORD*)(nativeState + 0x213) = 2;
 }
 
-// 0x000c50d0
 int __stdcall CustomModelLzmaDecode(BYTE* destination, DWORD* destinationLength, const BYTE* source, DWORD* sourceLength, const BYTE* properties, DWORD propertySize)
 {
     ELzmaStatus status;
     return LzmaDecode(destination, (SizeT*)destinationLength, source, (SizeT*)sourceLength, properties, propertySize, LZMA_FINISH_ANY, &status, &g_Alloc);
 }
 
-// 0x0000d070
 void CCustomModels::ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, const void* data, DWORD length)
 {
     BYTE properties[5] = {0x5d, 0, 0, 1, 0}, output[4096];
@@ -1113,7 +1066,6 @@ void CCustomModels::ProcessCompressedChunk(BYTE stage, DWORD unpackedLength, con
         AbortDownload(0, 5002, 0);
 }
 
-// 0x0000da80
 bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
 {
     CDffFile file;
@@ -1130,7 +1082,6 @@ bool CCustomModels::VerifyDff(const char* filename, DWORD hash)
     return true;
 }
 
-// 0x0000bfd0
 bool CCustomModels::VerifyTxd(const char* filename, DWORD hash)
 {
     CTxdFile file;
@@ -1147,7 +1098,6 @@ bool CCustomModels::VerifyTxd(const char* filename, DWORD hash)
     return true;
 }
 
-// 0x0000dbd0
 void CCustomModels::FinishDownload(CustomModelDownload* download)
 {
     if (!download)
@@ -1237,7 +1187,7 @@ void CCustomModels::FinishDownload(CustomModelDownload* download)
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 4, download->downloaded, 0, -1, 0);
     *(DWORD*)(nativeState + 0x213) = 2;
 }
-// 0x000628a0
+
 DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
 {
     DWORD crc = ~seed;
@@ -1249,7 +1199,6 @@ DWORD __cdecl CustomModelCrc(DWORD seed, const void* data, DWORD length)
     return ~crc;
 }
 
-// 0x000628e0
 DWORD __cdecl CustomModelFileCrc(const char* filename)
 {
     FILE* file = nullptr;
@@ -1267,7 +1216,6 @@ DWORD __cdecl CustomModelFileCrc(const char* filename)
     return crc;
 }
 
-// 0x0000c7e0
 int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
 {
     DWORD count = *(DWORD*)(nativeState + 4);
@@ -1282,7 +1230,6 @@ int CCustomModels::FindResourceIndex(BYTE type, DWORD hash)
     return -1;
 }
 
-// 0x0000c830
 bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload* download)
 {
     int index = FindResourceIndex(type, hash);
@@ -1308,7 +1255,6 @@ bool CCustomModels::FillDownloadInfo(BYTE type, DWORD hash, CustomModelDownload*
     return true;
 }
 
-// 0x0000bc30
 void CCustomModels::WriteDownload(CustomModelDownload* download, const void* data, DWORD length)
 {
     if (!download)
@@ -1328,7 +1274,6 @@ void CCustomModels::WriteDownload(CustomModelDownload* download, const void* dat
         g_renderDownloadWindow->UpdateRecord(download->type, download->hash, 1, download->downloaded, 0, -1, 0);
 }
 
-// 0x0000c760
 void CCustomModels::AbortDownload(CustomModelDownload* download, int error, const char* detail)
 {
     if (!download)
@@ -1351,7 +1296,6 @@ void CCustomModels::AbortDownload(CustomModelDownload* download, int error, cons
     *(DWORD*)(nativeState + 0x213) = 2;
 }
 
-// 0x0000d1c0
 BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
 {
     CustomModelDownload* download = (CustomModelDownload*)(nativeState + 0x222);
@@ -1373,7 +1317,6 @@ BOOL CCustomModels::BeginDirectDownload(BYTE type, DWORD hash)
     return TRUE;
 }
 
-// 0x0000bca0
 int CCustomModels::FindWorkerByFile(void* file)
 {
     for (int i = 0; i != 6; ++i)
@@ -1382,7 +1325,6 @@ int CCustomModels::FindWorkerByFile(void* file)
     return -1;
 }
 
-// 0x0000bcd0
 DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void* download)
 {
     CCustomModels* manager = g_customDownloadManager;
@@ -1397,7 +1339,6 @@ DWORD __cdecl CustomModelDownloadWrite(void* data, DWORD size, DWORD count, void
     return size * count;
 }
 
-// 0x0000c8e0
 int CCustomModels::CountMissingResources()
 {
     if (!nativeState[0x21f])
@@ -1416,7 +1357,7 @@ int CCustomModels::CountMissingResources()
     return (int)missing;
 }
 // Cache mutation and manifest completion stay with the same manager class.
-// 0x0000c100
+
 BOOL CCustomModels::DeleteCachedDff(DWORD hash)
 {
     char path[264];
@@ -1424,7 +1365,6 @@ BOOL CCustomModels::DeleteCachedDff(DWORD hash)
     return DeleteFileA(path);
 }
 
-// 0x0000c140
 BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
 {
     char path[264];
@@ -1432,7 +1372,6 @@ BOOL CCustomModels::DeleteCachedTxd(DWORD hash)
     return DeleteFileA(path);
 }
 
-// 0x0000c180
 BOOL CCustomModels::DeleteTemporaryFile(const char* filename)
 {
     char path[264];
@@ -1440,7 +1379,6 @@ BOOL CCustomModels::DeleteTemporaryFile(const char* filename)
     return DeleteFileA(path);
 }
 
-// 0x0000ca40
 bool CCustomModels::HasResourceHash(DWORD hash)
 {
     if (!nativeState[0x21f])
@@ -1455,7 +1393,6 @@ bool CCustomModels::HasResourceHash(DWORD hash)
     return false;
 }
 
-// 0x0000ca90
 void CCustomModels::PurgeUnusedCache()
 {
     char temp[264], dff[264], txd[264];
@@ -1507,7 +1444,6 @@ void CCustomModels::PurgeUnusedCache()
     }
 }
 
-// 0x0000cbf0
 void CCustomModels::RefreshCachedResources()
 {
     if (!nativeState[0x21f])
@@ -1530,7 +1466,6 @@ void CCustomModels::RefreshCachedResources()
     PurgeUnusedCache();
 }
 
-// 0x0000d030
 void CCustomModels::SetExpectedRecordCount(DWORD count)
 {
     *(DWORD*)(nativeState + 0x21b) = count;
@@ -1543,7 +1478,6 @@ void CCustomModels::SetExpectedRecordCount(DWORD count)
     }
 }
 
-// 0x0000bb10
 bool CCustomModels::IsDffCached(DWORD hash)
 {
     char path[264];
@@ -1554,7 +1488,6 @@ bool CCustomModels::IsDffCached(DWORD hash)
     return GameFileExists(path) ? true : false;
 }
 
-// 0x0000bba0
 bool CCustomModels::IsTxdCached(DWORD hash)
 {
     char path[264];
@@ -1565,7 +1498,6 @@ bool CCustomModels::IsTxdCached(DWORD hash)
     return GameFileExists(path) ? true : false;
 }
 
-// 0x0000bd40
 bool CCustomModels::PauseReadyWorker()
 {
     BYTE* state = (BYTE*)this;
@@ -1589,7 +1521,6 @@ bool CCustomModels::PauseReadyWorker()
     return false;
 }
 
-// 0x0000bde0
 int CCustomModels::CountReadyWorkers()
 {
     BYTE* state = (BYTE*)this;
@@ -1603,7 +1534,6 @@ int CCustomModels::CountReadyWorkers()
     return count;
 }
 
-// 0x0000c6e0
 bool CCustomModels::IsDffRequested(DWORD hash)
 {
     BYTE* state = (BYTE*)this;
@@ -1617,7 +1547,6 @@ bool CCustomModels::IsDffRequested(DWORD hash)
     return false;
 }
 
-// 0x0000c720
 bool CCustomModels::IsTxdRequested(DWORD hash)
 {
     BYTE* state = (BYTE*)this;
@@ -1631,7 +1560,6 @@ bool CCustomModels::IsTxdRequested(DWORD hash)
     return false;
 }
 
-// 0x0000d270
 BOOL CCustomModels::RequestResource(DWORD index, BYTE type, DWORD hash, DWORD size)
 {
     (void)index;
@@ -1651,7 +1579,6 @@ BOOL CCustomModels::RequestResource(DWORD index, BYTE type, DWORD hash, DWORD si
     return TRUE;
 }
 
-// 0x0000d390
 void CCustomModels::Process()
 {
     BYTE* state = (BYTE*)this;
@@ -1702,14 +1629,12 @@ void CCustomModels::Process()
     }
 }
 
-// 0x000b5900
 BOOL GameFileExists(const char* path)
 {
     struct _stat state;
     return _stat(path, &state) == 0;
 }
 
-// 0x0000c1c0
 BOOL CCustomModels::LoadPedModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash)
 {
     char name[28], txd[264], dff[264];
@@ -1732,7 +1657,6 @@ BOOL CCustomModels::LoadPedModel(DWORD base, DWORD model, DWORD dffHash, DWORD t
     return GameRegisterCustomPed(base, model, name, dff, txd) != 0;
 }
 
-// 0x0000c2e0
 BOOL CCustomModels::LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWORD txdHash)
 {
     char name[28], txd[264], dff[264];
@@ -1755,7 +1679,6 @@ BOOL CCustomModels::LoadObjectModel(DWORD base, DWORD model, DWORD dffHash, DWOR
     return GameRegisterCustomObject(base, model, name, dff, txd) != 0;
 }
 
-// 0x000b19c0
 void* GameRwStreamOpen(int type, int access, const void* data)
 {
     // GTA SA virtual addresses; every version other than 1 uses the EU path.
@@ -1763,35 +1686,30 @@ void* GameRwStreamOpen(int type, int access, const void* data)
     return ((void*(__cdecl*)(int, int, const void*))target)(type, access, data);
 }
 
-// 0x000b1a00
 BOOL GameRwStreamClose(void* stream, void* data)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ece20 : 0x7ece60;
     return ((BOOL(__cdecl*)(void*, void*))target)(stream, data);
 }
 
-// 0x000b1a80
 BOOL GameRwFindChunk(void* stream, DWORD type, DWORD* length, DWORD* version)
 {
     DWORD target = g_gameVersion == 1 ? 0x7ed2d0 : 0x7ed310;
     return ((BOOL(__cdecl*)(void*, DWORD, DWORD*, DWORD*))target)(stream, type, length, version);
 }
 
-// 0x000b1ad0
 void* GameRwReadClump(void* stream)
 {
     DWORD target = g_gameVersion == 1 ? 0x74b420 : 0x74b470;
     return ((void*(__cdecl*)(void*))target)(stream);
 }
 
-// 0x000b1ba0
 DWORD GameLoadAtomicStream(void* stream, int model)
 {
     // GTA SA virtual address; preserve zero-extension of AL.
     return ((BYTE(__cdecl*)(void*, int))0x5371f0)(stream, model);
 }
 
-// 0x000b1b10
 void* GameLoadPedDff(const char* path)
 {
     void* stream = GameRwStreamOpen(2, 1, path);
@@ -1811,7 +1729,6 @@ void* GameLoadPedDff(const char* path)
     return clump;
 }
 
-// 0x000b1bc0
 BOOL GameLoadObjectDff(const char* path, int model)
 {
     void* stream = GameRwStreamOpen(2, 1, path);
@@ -1835,7 +1752,6 @@ BOOL GameLoadObjectDff(const char* path, int model)
     return TRUE;
 }
 
-// 0x0000cdf0
 DWORD CCustomModels::GetObjectTextureHash(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -1849,7 +1765,6 @@ DWORD CCustomModels::GetObjectTextureHash(int model)
     return 0;
 }
 
-// 0x0000cf00
 BYTE CCustomModels::GetObjectFirstHour(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -1863,7 +1778,6 @@ BYTE CCustomModels::GetObjectFirstHour(int model)
     return 0;
 }
 
-// 0x0000cf40
 BYTE CCustomModels::GetObjectLastHour(int model)
 {
     BYTE* state = (BYTE*)this;
@@ -1877,13 +1791,11 @@ BYTE CCustomModels::GetObjectLastHour(int model)
     return 0;
 }
 
-// 0x0000c430
 DWORD CCustomModels::GetCount()
 {
     return *(DWORD*)(nativeState + 4);
 }
 
-// 0x0000c410
 __forceinline void* CCustomModels::GetRecord(DWORD index)
 {
     if (index >= *(DWORD*)(nativeState + 4))
@@ -1891,7 +1803,6 @@ __forceinline void* CCustomModels::GetRecord(DWORD index)
     return (*(void***)nativeState)[index];
 }
 
-// 0x0000c400
 CCustomModels* CCustomModels::InitializeRecordStorage()
 {
     *(void***)nativeState = 0;
@@ -1899,7 +1810,6 @@ CCustomModels* CCustomModels::InitializeRecordStorage()
     return this;
 }
 
-// 0x0000cdb0
 DWORD CCustomModels::GetObjectDffHash(int model)
 {
     DWORD count = *(DWORD*)(nativeState + 4), index = 0;
@@ -1914,7 +1824,6 @@ DWORD CCustomModels::GetObjectDffHash(int model)
     return 0;
 }
 
-// 0x0000cd50
 void CCustomModels::ProcessDelayedReleases()
 {
     DWORD count = *(DWORD*)(nativeState + 4), index = 0;
@@ -1939,13 +1848,11 @@ void CCustomModels::ProcessDelayedReleases()
         while (++index != count);
 }
 
-// 0x00008200
 DWORD CCustomModels::GetActiveVirtualWorld()
 {
     return *(DWORD*)(nativeState + 0x217);
 }
 
-// 0x00017820
 void CCustomModels::SetActiveVirtualWorld(DWORD world)
 {
     if (*(DWORD*)(nativeState + 0x217) != world)
@@ -1956,26 +1863,22 @@ void CCustomModels::SetActiveVirtualWorld(DWORD world)
     }
 }
 
-// 0x00008210
 BYTE CCustomModels::GetStopFlag()
 {
     return nativeState[0x221];
 }
 
-// 0x0000e400
 void CCustomModels::RequestStop()
 {
     nativeState[0x221] = 1;
     StopWorkers();
 }
 
-// 0x0000cf90
 void CCustomModels::ClearRecordStorage()
 {
     ResizeRecords(0);
 }
 
-// 0x0000beb0
 DWORD CCustomModels::CountEnabledActiveWorkers()
 {
     CustomModelWorker* workers = (CustomModelWorker*)(nativeState + 0x1345);
@@ -1986,7 +1889,6 @@ DWORD CCustomModels::CountEnabledActiveWorkers()
     return count;
 }
 
-// 0x0000bf40
 DWORD CCustomModels::CountEnabledPausedWorkers()
 {
     CustomModelWorker* workers = (CustomModelWorker*)(nativeState + 0x1345);

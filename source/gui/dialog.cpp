@@ -26,16 +26,14 @@ struct DialogControlAccess : CDXUTControl
     using CDXUTControl::UpdateRects;
 };
 
-// 0x0011c304
 const float g_dialogNegativeLineScale = -1.5f;
-// 0x00118490
+
 const float g_dialogLineScale = 1.5f;
-// 0x0011c724
+
 const float g_dialogEditPadding = 14.0f;
-// 0x0011c348
+
 int g_dialogResponseRpcId = 62;
 
-// 0x0006eec0
 CDialog::CDialog(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -53,13 +51,11 @@ CDialog::CDialog(IDirect3DDevice9* device)
         nativeState[0x89 + i] = 0;
 }
 
-// 0x0006ef10
 bool CDialog::MsgProc(UINT message, WPARAM wparam, LPARAM lparam)
 {
     return CDXUTIMEEditBox::StaticMsgProc(message, wparam, lparam) != false;
 }
 
-// 0x0006ef30
 bool CDialog::IsInputHidden()
 {
     if (*(DWORD*)(nativeState + 0x24))
@@ -67,7 +63,6 @@ bool CDialog::IsInputHidden()
     return false;
 }
 
-// 0x0006f0f0
 RECT* CDialog::GetRect(RECT* rect)
 {
     int left = x;
@@ -79,7 +74,6 @@ RECT* CDialog::GetRect(RECT* rect)
     return rect;
 }
 
-// 0x0006f120
 int CDialog::GetTextWidth(const char* value)
 {
     ID3DXFont* font = dialog->GetFont(1)->pFont;
@@ -97,13 +91,11 @@ int CDialog::GetTextWidth(const char* value)
     return -1;
 }
 
-// 0x0006f1e0
 int CDialog::GetFontHeight()
 {
     return dialog->GetFont(1)->nHeight;
 }
 
-// 0x0006f200
 const char* CDialog::CopyColumn(const char* value, char* output, int limit)
 {
     while (*value == '\t')
@@ -121,7 +113,6 @@ const char* CDialog::CopyColumn(const char* value, char* output, int limit)
     return value;
 }
 
-// 0x0006f260
 const char* CDialog::CopyLine(const char* value, char* output, int limit)
 {
     int copied = 0;
@@ -135,7 +126,6 @@ const char* CDialog::CopyLine(const char* value, char* output, int limit)
     return *value ? value : 0;
 }
 
-// 0x0006f2a0
 void CDialog::Hide()
 {
     g_pGame->SetCursorMode(0, FALSE);
@@ -143,7 +133,6 @@ void CDialog::Hide()
     active = FALSE;
 }
 
-// 0x0006ef40
 void CDialog::Recalc()
 {
     if (width < buttonWidth * 2 + 30)
@@ -174,7 +163,6 @@ void CDialog::Recalc()
     input->SetLocation(5, contentHeight - editFontOffset - buttonHeight - 24);
 }
 
-// 0x0006f2d0
 void CDialog::Draw()
 {
     if (!active || g_pInput->m_bEnabled || *(DWORD*)g_deviceScoreboard->nativeState)
@@ -205,7 +193,6 @@ void CDialog::Draw()
     }
 }
 
-// 0x0006f630
 BOOL CDialog::PopulateList(const char* value, SIZE* size)
 {
     list->RemoveAllItems();
@@ -237,7 +224,6 @@ BOOL CDialog::PopulateList(const char* value, SIZE* size)
     return TRUE;
 }
 
-// 0x0006f730
 int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
 {
     list->RemoveAllItems();
@@ -336,7 +322,6 @@ int CDialog::PopulateTable(const char* value, SIZE* size, BOOL header)
     return 1;
 }
 
-// 0x0006fa50
 void CDialog::Show(int requestId, int style, const char* caption, const char* value, const char* firstButton, const char* secondButton, BOOL remote)
 {
     if (requestId < 0)
@@ -490,7 +475,6 @@ void CDialog::Show(int requestId, int style, const char* caption, const char* va
     active = TRUE;
 }
 
-// 0x000700d0
 void CDialog::Close(char response)
 {
     if (!active)
@@ -529,7 +513,6 @@ void CDialog::Close(char response)
     Hide();
 }
 
-// 0x0006f460
 void CDialog::ResetDialogControls(CDXUTDialog* parent)
 {
     dialog = parent;

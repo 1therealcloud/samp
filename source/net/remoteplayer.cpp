@@ -16,79 +16,72 @@
 
 #include <math.h>
 #include <string.h>
-// 0x001181dc
+
 const float g_remoteVehicleAxisTeleportDistance = 6.0f;
-// 0x001181d0
+
 const double g_remoteUnoccupiedCorrectionThreshold = 0.05;
-// 0x001181e0
+
 const float g_remoteTrailerCorrection = 0.025f;
-// 0x001181fc
+
 const float g_remoteBulletOffsetMinimum = -300.0f;
-// 0x00118200
+
 const float g_remoteBulletOffsetMaximum = 300.0f;
 
-// 0x00118218
 const char g_remoteVendingAnimation[] = "VEND_EAT_P";
-// 0x00118224
+
 const char g_remoteVendingLibrary[] = "VENDING";
-// 0x00118204
+
 const char g_remoteCarryAnimation[] = "crry_prtial";
-// 0x00118210
+
 const char g_remoteCarryLibrary[] = "CARRY";
-// 0x00117874
+
 const float g_remoteHeadDistance = 20.0f;
-// 0x00117868
+
 const char g_remoteHeadTask[] = "FollowPedSA";
-// 0x0013c498
+
 float g_remoteOnfootCorrection = 0.1f;
-// 0x0013c49c
+
 float g_remoteIncarCorrection = 0.06f;
-// 0x0011797c
+
 const float g_remoteIncarTeleportDistance = 8.0f;
-// 0x0013c4a0
+
 DWORD g_remoteClampTurnSpeed = 1;
-// 0x001181bc
+
 const float g_remoteTurnSpeedMinimum = -0.02f;
-// 0x001181c8
+
 const float g_remoteAimZoomScale = 0.01587301678955555f;
-// 0x001181cc
+
 const float g_remoteAimAspectScale = 0.003921568859368563f;
-// 0x001181e4
+
 const float g_remoteAbsentDistance = 10000.0f;
-// 0x001181e8
+
 const char g_remoteCarJackedText[] = "~r~Car Jacked~w~!";
 
-// 0x00017790
 void CRemotePlayer::ShowNameTag(BYTE show)
 {
     m_state.showNameTag = show != 0;
 }
 
-// 0x000739c0
 float CRemotePlayer::GetReportedHealth()
 {
     return m_state.reportedHealth;
 }
 
-// 0x000739d0
 float CRemotePlayer::GetReportedArmour()
 {
     return m_state.reportedArmour;
 }
 
-// 0x00008180
 void CRemotePlayer::SetTeam(BYTE team)
 {
     m_state.team = team;
 }
 
-// 0x000a21e0
 BYTE CRemotePlayer::GetTeam()
 {
     return m_state.team;
 }
 
-// 0x00015600
 void CRemotePlayer::UpdateUnoccupied(const void* data)
 {
     const UnoccupiedSyncData* sync = (const UnoccupiedSyncData*)data;
@@ -152,7 +145,6 @@ void CRemotePlayer::UpdateUnoccupied(const void* data)
     vehicle->m_dwRemoteUnoccupiedSync = 1;
 }
 
-// 0x00015950
 void CRemotePlayer::UpdateTrailer(const void* data)
 {
     const LocalTrailerSyncData* sync = (const LocalTrailerSyncData*)data;
@@ -216,7 +208,6 @@ void CRemotePlayer::UpdateTrailer(const void* data)
     trailer->SetSpeed(speed);
 }
 
-// 0x00016010
 void CRemotePlayer::UpdateBullet(const void* data)
 {
     CPed* ped = m_state.ped;
@@ -287,7 +278,6 @@ void CRemotePlayer::UpdateBullet(const void* data)
     m_state.ped->FireWeapon();
 }
 
-// 0x00016230
 void CRemotePlayer::SetState(BYTE state)
 {
     BYTE previous = m_state.playerState;
@@ -298,7 +288,6 @@ void CRemotePlayer::SetState(BYTE state)
     }
 }
 
-// 0x00016310
 void CRemotePlayer::Process()
 {
     if (!m_state.ped)
@@ -526,7 +515,6 @@ void CRemotePlayer::Process()
         m_state.status = 0;
 }
 
-// 0x00014240
 void CRemotePlayer::ProcessHead()
 {
     CPed* ped = m_state.ped;
@@ -562,7 +550,6 @@ void CRemotePlayer::ProcessHead()
     }
 }
 
-// 0x00014390
 void CRemotePlayer::SetMarkerState(BOOL enabled)
 {
     if (!enabled)
@@ -577,7 +564,6 @@ void CRemotePlayer::SetMarkerState(BOOL enabled)
     m_state.markerEnabled = enabled;
 }
 
-// 0x000143d0
 void CRemotePlayer::SetMarkerPosition(short x, short y, short z)
 {
     m_state.markerEnabled = 1;
@@ -596,7 +582,6 @@ void CRemotePlayer::SetMarkerPosition(short x, short y, short z)
     m_state.marker = marker;
 }
 
-// 0x00014470
 BOOL CRemotePlayer::HasSurfingTarget()
 {
     if (m_state.playerState != 17)
@@ -605,7 +590,6 @@ BOOL CRemotePlayer::HasSurfingTarget()
     return id && id != 0xffff && id < 4100 ? TRUE : FALSE;
 }
 
-// 0x000144a0
 BOOL CRemotePlayer::SurfingOnObject()
 {
     if (m_state.playerState != 17)
@@ -614,7 +598,6 @@ BOOL CRemotePlayer::SurfingOnObject()
     return id && id != 0xffff && id >= 2000 && id < 4100 ? TRUE : FALSE;
 }
 
-// 0x00014780
 void CRemotePlayer::ProcessSpecialAction()
 {
     CPed* ped = m_state.ped;
@@ -684,7 +667,6 @@ void CRemotePlayer::ProcessSpecialAction()
     m_state.ped->CheckParachuteWeapon();
 }
 
-// 0x000149f0
 void CRemotePlayer::UpdateOnfootSpeedAndPosition()
 {
     CPed* ped = m_state.ped;
@@ -723,7 +705,6 @@ void CRemotePlayer::UpdateOnfootSpeedAndPosition()
     m_state.ped->SetSpeed(speed);
 }
 
-// 0x00014c00
 void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
 {
     CPed* ped = m_state.ped;
@@ -763,7 +744,6 @@ void CRemotePlayer::UpdateOnfootXYSpeedAndPosition()
     m_state.ped->SetSpeed(speed);
 }
 
-// 0x00014ec0
 void CRemotePlayer::UpdateIncarSpeedAndPosition()
 {
     CVector speed = {0, 0, 0};
@@ -807,7 +787,6 @@ void CRemotePlayer::UpdateIncarSpeedAndPosition()
         m_state.vehicle->SetSpeed(speed);
 }
 
-// 0x00014d80
 void CRemotePlayer::UpdateOnfootRotation()
 {
     CPed* ped = m_state.ped;
@@ -830,7 +809,6 @@ void CRemotePlayer::UpdateOnfootRotation()
     m_state.ped->SetRotation(angle);
 }
 
-// 0x000151c0
 void CRemotePlayer::UpdateIncarRotation()
 {
     CVector turnSpeed = {0, 0, 0};
@@ -860,7 +838,6 @@ void CRemotePlayer::UpdateIncarRotation()
     m_state.vehicle->SetMatrix(matrix);
 }
 
-// 0x000153a0
 void CRemotePlayer::UpdateTrain(const CMatrix* target, const CVector* targetSpeed, float trainSpeed)
 {
     if (!m_state.ped || !m_state.vehicle)
@@ -878,7 +855,6 @@ void CRemotePlayer::UpdateTrain(const CMatrix* target, const CVector* targetSpee
     m_state.vehicle->SetTrainSpeed(trainSpeed);
 }
 
-// 0x00014e50
 void CRemotePlayer::SetOnfootTarget(const CVector* position, const CVector* speed)
 {
     for (int i = 0; i < 12; i += 4)
@@ -888,7 +864,6 @@ void CRemotePlayer::SetOnfootTarget(const CVector* position, const CVector* spee
     m_state.ped->SetSpeed(m_state.onfootTargetSpeed);
 }
 
-// 0x00015330
 void CRemotePlayer::SetIncarTarget(const CMatrix* matrix, const CVector* position, const CVector* speed)
 {
     GameQuaternionFromMatrix(matrix, &m_state.incarTargetRotation);
@@ -899,7 +874,6 @@ void CRemotePlayer::SetIncarTarget(const CMatrix* matrix, const CVector* positio
     m_state.vehicle->SetSpeed(*speed);
 }
 
-// 0x00016c50
 BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* position, float rotation, DWORD color, BYTE fightingStyle)
 {
     (void)team;
@@ -943,7 +917,6 @@ BOOL CRemotePlayer::Spawn(BYTE team, int model, int customModel, const CVector* 
     return TRUE;
 }
 
-// 0x00014660
 void CRemotePlayer::OnEnterVehicle()
 {
     CVehiclePool* vehicles = ((CNetGame*)g_pNetGame)->pools->vehicles;
@@ -968,7 +941,6 @@ void CRemotePlayer::OnEnterVehicle()
     m_state.ped->PutIntoVehicle(ref, seat);
 }
 
-// 0x00016da0
 void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
@@ -993,7 +965,6 @@ void CRemotePlayer::UpdateOnfoot(const void* data, DWORD timestamp)
         m_state.playerState = 17;
 }
 
-// 0x00016e70
 void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
 {
     const BYTE* input = (const BYTE*)data;
@@ -1024,7 +995,6 @@ void CRemotePlayer::UpdateIncar(const void* data, DWORD timestamp)
     }
 }
 
-// 0x00016f60
 void CRemotePlayer::UpdatePassenger(const void* data)
 {
     const BYTE* input = (const BYTE*)data;
@@ -1046,7 +1016,6 @@ void CRemotePlayer::UpdatePassenger(const void* data)
         m_state.playerState = 18;
 }
 
-// 0x000154a0
 void CRemotePlayer::UpdateAim(const void* data)
 {
     const LocalAimSyncData* sync = (const LocalAimSyncData*)data;
@@ -1080,7 +1049,6 @@ void CRemotePlayer::UpdateAim(const void* data)
         slot[2] = 2;
 }
 
-// 0x00014730
 void CRemotePlayer::OnExitVehicle()
 {
     CPed* ped = m_state.ped;
@@ -1093,7 +1061,6 @@ void CRemotePlayer::OnExitVehicle()
     }
 }
 
-// 0x00017120
 void CRemotePlayer::Chat(char* text)
 {
     WORD id = m_state.id;
@@ -1102,7 +1069,6 @@ void CRemotePlayer::Chat(char* text)
     g_pChat->AddChatMessage(name, color, text);
 }
 
-// 0x00016250
 CRemotePlayer::CRemotePlayer()
 {
     DWORD(WINAPI * tick)() = GetTickCount;
@@ -1125,7 +1091,6 @@ CRemotePlayer::CRemotePlayer()
     ResetData();
 }
 
-// 0x000162c0
 CRemotePlayer::~CRemotePlayer()
 {
     DWORD marker = m_state.marker;
@@ -1143,7 +1108,6 @@ CRemotePlayer::~CRemotePlayer()
     }
 }
 
-// 0x00015c60
 void CRemotePlayer::ResetData()
 {
     m_state.vehicleId = 0;
@@ -1174,7 +1138,6 @@ void CRemotePlayer::ResetData()
         m_state.lastNetworkTimestamp = (DWORD)((CNetGame*)g_pNetGame)->GetCounter();
 }
 
-// 0x00017040
 void CRemotePlayer::Remove()
 {
     if (m_state.ped)
@@ -1187,7 +1150,6 @@ void CRemotePlayer::Remove()
     m_state.showNameTag = 1;
 }
 
-// 0x00017080
 void CRemotePlayer::Kill()
 {
     if (m_state.ped)
@@ -1200,19 +1162,16 @@ void CRemotePlayer::Kill()
     ResetData();
 }
 
-// 0x00015e00
 void CRemotePlayer::SetColor(DWORD color)
 {
     PlayerColors::Set(m_state.id, color);
 }
 
-// 0x00015e20
 DWORD CRemotePlayer::GetColorAsRGBA()
 {
     return PlayerColors::Get(m_state.id);
 }
 
-// 0x00015d50
 float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
 {
     if (!m_state.ped)
@@ -1226,7 +1185,6 @@ float CRemotePlayer::GetDistanceToPlayer(CRemotePlayer* other)
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-// 0x00015dd0
 float CRemotePlayer::GetDistanceToLocalPlayer()
 {
     if (!m_state.ped)
@@ -1237,7 +1195,6 @@ float CRemotePlayer::GetDistanceToLocalPlayer()
     return entity->GetDistanceToLocalPlayer();
 }
 
-// 0x00015e50
 void CRemotePlayer::EnterVehicle(WORD id, BOOL passenger)
 {
     BYTE* pools = *(BYTE**)((BYTE*)g_pNetGame + 0x3de);
@@ -1253,7 +1210,6 @@ void CRemotePlayer::EnterVehicle(WORD id, BOOL passenger)
     m_state.ped->EnterVehicle(ref, passenger);
 }
 
-// 0x00015ee0
 void CRemotePlayer::ExitVehicle()
 {
     CPed* ped = m_state.ped;
@@ -1263,7 +1219,6 @@ void CRemotePlayer::ExitVehicle()
     m_state.ped->ExitVehicle();
 }
 
-// 0x00015f10
 void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
 {
     if (newState != 19 || oldState != 17)
@@ -1282,7 +1237,6 @@ void CRemotePlayer::ChangeState(BYTE newState, BYTE oldState)
     g_pGame->DisplayGameText(g_remoteCarJackedText, 1000, 5);
 }
 
-// 0x000144d0
 void CRemotePlayer::ApplySurfingMatrix()
 {
     if (m_state.playerState != 17)
@@ -1318,19 +1272,16 @@ void CRemotePlayer::ApplySurfingMatrix()
     m_state.ped->ApplyMatrix(pedMatrix);
 }
 
-// 0x00001080
 BOOL CRemotePlayer::IsActive()
 {
     return m_state.ped && m_state.playerState != 0;
 }
 
-// 0x00015e30
 DWORD CRemotePlayer::GetColorAsARGB()
 {
     return (PlayerColors::Get(m_state.id) >> 8) | 0xff000000;
 }
 
-// 0x00015fd0
 int CRemotePlayer::GetStatus()
 {
     if (!m_state.ped || !m_state.ped->DoesExist() || m_state.ped->GetVehicleTransitionTaskState() || m_state.ped->HasLeaveCarTask())
@@ -1338,56 +1289,47 @@ int CRemotePlayer::GetStatus()
     return (int)m_state.status;
 }
 
-// 0x00002dc0
 BYTE CRemotePlayer::GetState()
 {
     return m_state.playerState;
 }
 
-// 0x000135d0
 void CRemotePlayer::SetId(WORD id)
 {
     m_state.id = id;
 }
 
-// 0x000135e0
 WORD CRemotePlayer::GetId()
 {
     return m_state.id;
 }
 
-// 0x000135f0
 void CRemotePlayer::SetNpc(DWORD value)
 {
     m_state.isNpc = value;
 }
 
-// 0x00013600
 void CRemotePlayer::ResetStateAndLabels()
 {
     m_state.playerState = 0;
     m_state.showNameTag = 1;
 }
 
-// 0x00014220
 BYTE CRemotePlayer::GetSpecialAction()
 {
     return m_state.specialAction;
 }
 
-// 0x00014230
 DWORD CRemotePlayer::IsNpc()
 {
     return m_state.isNpc;
 }
 
-// 0x00001070
 CPed* CRemotePlayer::GetPed()
 {
     return m_state.ped;
 }
 
-// 0x000010a0
 CVehicle* CRemotePlayer::GetVehicle()
 {
     return m_state.vehicle;

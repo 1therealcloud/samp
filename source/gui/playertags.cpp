@@ -19,55 +19,55 @@
 #include <new>
 #include <stdio.h>
 #include <string.h>
-// 0x0017e988
+
 CMatrix g_nametagVehicleMatrix;
-// 0x0017eb08
+
 char g_nametagName[128];
-// 0x0017eb88
+
 CMatrix g_nametagLocalMatrix;
-// 0x0017ebcc
+
 CVector g_nametagBone;
-// 0x0017ebf4
+
 CVector g_nametagDrawPosition;
-// 0x0011c7a4
+
 const Scripting::OpcodeInfo g_nametagLineOfSightCommand = {0x6bd, "ffffffiiiii"};
-// 0x0011c7b8
+
 const char g_nametagNameFormat[8] = "%s (%d)";
-// 0x00140878
+
 PlayerTagVertex g_playerTagVertices[12] = {{0, 0, 0, 1, 0xff000000}, {0, 25, 0, 1, 0xff000000}, {100, 25, 0, 1, 0xff000000}, {100, 0, 0, 1, 0xff000000},
                                            {2, 2, 0, 1, 0xff4b0b14}, {2, 18, 0, 1, 0xff4b0b14}, {96, 18, 0, 1, 0xff4b0b14},  {96, 2, 0, 1, 0xff4b0b14},
                                            {2, 2, 0, 1, 0xffb92228}, {2, 18, 0, 1, 0xffb92228}, {96, 18, 0, 1, 0xffb92228},  {96, 2, 0, 1, 0xffb92228}};
-// 0x0011c674
+
 const float g_playerTagFillScale = 0.38461539149284363f;
-// 0x0011c678
+
 const float g_playerTagInnerBottom = 23.0f;
-// 0x0011c67c
+
 const float g_playerTagHalfWidth = 19.0f;
-// 0x0011c680
+
 const float g_playerTagOuterRight = 21.0f;
-// 0x0011c684
+
 const float g_playerTagOuterBottom = 24.0f;
-// 0x0011c688
+
 const float g_playerTagOuterTop = 18.0f;
-// 0x00117874
+
 const float g_playerTagOuterLeft = 20.0f;
-// 0x0011797c
+
 const float g_playerTagArmourOffset = 8.0f;
-// 0x0011c670
+
 const float g_playerTagDistanceHeight = 0.0475f;
-// 0x00118388
+
 const char g_playerTagStatusBack[2] = "C";
-// 0x00118370
+
 const char g_playerTagStatusFront[2] = "E";
-// 0x0011c6b4
+
 const float g_legacyPlayerTagInv256 = 0.00390625f;
-// 0x0011c6b8
+
 const float g_legacyPlayerTagInv16 = 0.0625f;
-// 0x0011c6bc
+
 const char g_legacyPlayerTagTextureName[] = "bland.png";
 
 // Legacy0.2x renderer retained in DL alongside the newer screen-space tags.
-// 0x00140998
+
 __declspec(align(4)) BYTE g_legacyPlayerTagStorage[448] = {
     0x9a, 0x99, 0x99, 0xbe, 0x8f, 0xc2, 0xf5, 0xbc, 0x6f, 0x12, 0x03, 0xbb, 0x00, 0x00, 0x00, 0xff, 0x9a, 0x99, 0x99, 0xbe, 0x8f, 0xc2, 0xf5, 0x3c, 0x6f, 0x12, 0x03, 0xbb,
     0x00, 0x00, 0x00, 0xff, 0x9a, 0x99, 0x99, 0x3e, 0x8f, 0xc2, 0xf5, 0x3c, 0x6f, 0x12, 0x03, 0xbb, 0x00, 0x00, 0x00, 0xff, 0x9a, 0x99, 0x99, 0x3e, 0x8f, 0xc2, 0xf5, 0xbc,
@@ -86,7 +86,6 @@ __declspec(align(4)) BYTE g_legacyPlayerTagStorage[448] = {
     0x0d, 0x0d, 0x0d, 0x0d, 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x0f, 0x0f, 0x0f, 0x0f, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d,
     0x0d, 0x0d, 0x14, 0x0b, 0x0d, 0x0d, 0x0d, 0x0d, 0x06, 0x06, 0x06, 0x06, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d, 0x11, 0x0d, 0x0d, 0x0d, 0x0d, 0x0d, 0x0c, 0x0d, 0x0c};
 
-// 0x0006d090
 void CPlayerTags::OnLostDevice()
 {
     if (state)
@@ -98,7 +97,6 @@ void CPlayerTags::OnLostDevice()
         sprite->OnLostDevice();
 }
 
-// 0x0006d0c0
 void CPlayerTags::OnResetDevice()
 {
     if (sprite)
@@ -107,7 +105,6 @@ void CPlayerTags::OnResetDevice()
         device->CreateStateBlock(D3DSBT_ALL, &state);
 }
 
-// 0x0006c730
 CPlayerTags::CPlayerTags(IDirect3DDevice9* value)
 {
     device = value;
@@ -116,7 +113,6 @@ CPlayerTags::CPlayerTags(IDirect3DDevice9* value)
     D3DXCreateSprite(device, &sprite);
 }
 
-// 0x0006c760
 CPlayerTags::~CPlayerTags()
 {
     if (state)
@@ -129,7 +125,6 @@ CPlayerTags::~CPlayerTags()
     }
 }
 
-// 0x0006c790
 void CPlayerTags::EndHealthBar()
 {
     if (sprite)
@@ -138,21 +133,18 @@ void CPlayerTags::EndHealthBar()
         state->Apply();
 }
 
-// 0x0006c7c0
 void CPlayerTags::BeginLabel()
 {
     if (sprite)
         sprite->Begin(0x10);
 }
 
-// 0x0006c7d0
 void CPlayerTags::EndLabel()
 {
     if (sprite)
         sprite->End();
 }
 
-// 0x0006d0f0
 void CPlayerTags::BeginHealthBar()
 {
     if (!state)
@@ -174,7 +166,6 @@ void CPlayerTags::BeginHealthBar()
     device->SetRenderState(D3DRS_ZENABLE, FALSE);
 }
 
-// 0x0006cae0
 void CPlayerTags::DrawHealthBar(const CVector* position, float health, float armour, float distance)
 {
     CVector point;
@@ -246,7 +237,6 @@ void CPlayerTags::DrawHealthBar(const CVector* position, float health, float arm
     }
 }
 
-// 0x0006c7e0
 void CPlayerTags::DrawLabel(const CVector* position, const char* text, DWORD color, float distance, BYTE drawStatus, int status)
 {
     CVector point;
@@ -292,7 +282,6 @@ void CPlayerTags::DrawLabel(const CVector* position, const char* text, DWORD col
     }
 }
 
-// 0x00074dc0
 void ClientDrawLabels()
 {
     if (!g_pNetGame || !((CNetGame*)g_pNetGame)->settings->showNameTags)
@@ -355,7 +344,6 @@ void ClientDrawLabels()
     g_devicePlayerTags->EndLabel();
 }
 
-// 0x00073cb0
 void ClientDrawPlayerTags()
 {
     if (!g_pNetGame || !((CNetGame*)g_pNetGame)->settings->showNameTags)
@@ -426,7 +414,7 @@ struct LegacyHealthBarVertex
 #define HealthBarBGVertices ((LegacyHealthBarVertex*)(g_legacyPlayerTagStorage + 64))
 #define HealthBarVertices ((LegacyHealthBarVertex*)(g_legacyPlayerTagStorage + 128))
 #define HealthBarVertices_s LegacyHealthBarVertex
-// 0x0006d8b0
+
 void CLegacyPlayerTags::NameTextVertex_s::Initialise(float fX, float fY, float fTu, float fTv)
 {
     memcpy(&x, &fX, 4);
@@ -436,7 +424,6 @@ void CLegacyPlayerTags::NameTextVertex_s::Initialise(float fX, float fY, float f
     memcpy(&tv, &fTv, 4);
 }
 
-// 0x0006d8e0
 CLegacyPlayerTags::CLegacyPlayerTags(IDirect3DDevice9* pDevice)
 {
     m_pDevice = pDevice;
@@ -450,7 +437,6 @@ CLegacyPlayerTags::CLegacyPlayerTags(IDirect3DDevice9* pDevice)
     m_fScale = 0.0075f;
 }
 
-// 0x0006d910
 CLegacyPlayerTags::~CLegacyPlayerTags()
 {
     if (m_pTexture)
@@ -463,7 +449,6 @@ CLegacyPlayerTags::~CLegacyPlayerTags()
         m_pNewStates->Release();
 }
 
-// 0x0006df10
 void CLegacyPlayerTags::Begin()
 {
     if ((!m_pOldStates) || (!m_pNewStates))
@@ -476,7 +461,6 @@ void CLegacyPlayerTags::Begin()
     m_pNewStates->Apply();
 }
 
-// 0x0006df50
 void CLegacyPlayerTags::End()
 {
     if (!m_pOldStates)
@@ -488,7 +472,6 @@ void CLegacyPlayerTags::End()
     m_pOldStates->Apply();
 }
 
-// 0x0006df80
 void CLegacyPlayerTags::Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD dwColor, float fHealth)
 {
     if ((!m_pVB) || (!m_pTexture))
@@ -553,7 +536,6 @@ void CLegacyPlayerTags::Draw(D3DXMATRIX* pWorldTransform, char* pNameText, DWORD
     // --- end: HealthBar drawing ---
 }
 
-// 0x0006d950
 void CLegacyPlayerTags::InitQuad(char c, float x, float y2, NameTextVertex_s* pVB)
 {
     const int character = (signed char)c;
@@ -574,7 +556,6 @@ void CLegacyPlayerTags::InitQuad(char c, float x, float y2, NameTextVertex_s* pV
     pVB[5].Initialise(right, y2, uRight, vBottom);
 }
 
-// 0x0006da80
 void CLegacyPlayerTags::DeleteDeviceObjects()
 {
     if (m_pVB)
@@ -596,7 +577,6 @@ void CLegacyPlayerTags::DeleteDeviceObjects()
     }
 }
 
-// 0x0006dad0
 void CLegacyPlayerTags::RestoreDeviceObjects()
 {
     if (!m_pTexture)

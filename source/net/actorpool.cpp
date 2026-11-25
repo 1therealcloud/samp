@@ -5,13 +5,11 @@
 #include "gui/chatwindow.h"
 #include "main.h"
 
-// 0x00001610
 CActor* CActorPool::Get(WORD id)
 {
     return id < 1000 && active[id] ? actors[id] : 0;
 }
 
-// 0x00001640
 BOOL CActorPool::DoesExist(WORD id)
 {
     if (id >= 1000)
@@ -19,7 +17,6 @@ BOOL CActorPool::DoesExist(WORD id)
     return active[id];
 }
 
-// 0x00001660
 void CActorPool::UpdateLargestId()
 {
     int largest = 0;
@@ -29,7 +26,6 @@ void CActorPool::UpdateLargestId()
     largestId = largest;
 }
 
-// 0x000016c0
 CActorPool::CActorPool()
 {
     for (int i = 0; i < 1000; ++i)
@@ -41,7 +37,6 @@ CActorPool::CActorPool()
     largestId = 0;
 }
 
-// 0x000016f0
 BOOL CActorPool::Delete(WORD id)
 {
     if (id >= 1000 || !active[id] || !actors[id])
@@ -55,14 +50,12 @@ BOOL CActorPool::Delete(WORD id)
     return TRUE;
 }
 
-// 0x000018e0
 CActorPool::~CActorPool()
 {
     for (WORD i = 0; i < 1000; ++i)
         Delete(i);
 }
 
-// 0x000018b0
 WORD CActorPool::Find(void* ped)
 {
     int limit = largestId;
@@ -80,7 +73,6 @@ WORD CActorPool::Find(void* ped)
     return 0xffff;
 }
 
-// 0x00001900
 BOOL CActorPool::Create(const ActorCreateInfo* info)
 {
     // Native deliberately performs no ID bounds check.
@@ -115,7 +107,6 @@ BOOL CActorPool::Create(const ActorCreateInfo* info)
     return FALSE;
 }
 
-// 0x00001770
 WORD CActorPool::FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, float rayValue)
 {
     struct RayPoint

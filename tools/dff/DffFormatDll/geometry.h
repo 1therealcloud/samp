@@ -75,43 +75,41 @@ public:
     CPointerArray Splits;
     RwSkin Skin;
 
-    // 0x00001ee0
     CGeometry();
-    // 0x00001f60
+
     ~CGeometry();
-    // 0x00004420
+
     bool Read(CMemoryStream* Stream, unsigned short Version);
-    // 0x00004310
+
     bool ReadMaterials(CMemoryStream* Stream);
-    // 0x00003ea0
+
     bool ReadMaterial(CMemoryStream* Stream);
-    // 0x00003b90
+
     bool ReadExtensions(CMemoryStream* Stream);
-    // 0x00003470
+
     bool ReadSkin(CMemoryStream* Stream);
-    // 0x00003610
+
     CRwChunk* WriteStruct();
-    // 0x000037a0
+
     bool RemoveExtension(unsigned int Type);
-    // 0x000038d0
+
     bool ImportNightColors(const CGeometry* Source);
-    // 0x00003950
+
     CRwChunk* Write();
 #ifdef KDFF_DLL
-    // 0x00003150
+
     void CalculateNormals();
-    // 0x00003260
+
     bool GenerateNormals();
-    // 0x000032b0
+
     bool SetColors(const RwColor* Day, const RwColor* Night, const CVector* DayDirection, const CVector* NightDirection, float Minimum, float Maximum);
 #endif
 };
 #pragma pack(pop)
 
-// 0x000010a0
 bool GetGeometryBounds(const CGeometry* Geometry, CVector* Min, CVector* Max);
 #ifdef KDFF_DLL
-// 0x00003050
+
 void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal, const CVector* Direction, float Minimum, float Maximum);
 #endif
 

@@ -11,12 +11,10 @@
 
 //------------------------------------
 
-// 0x00140790
 DWORD CHasher::ms_dwHashAlgorithm = CALG_SHA1;
 
 //------------------------------------
 
-// 0x000652f0
 CHasher::CHasher(CCryptoContext* pContext)
 {
     // Save context for later
@@ -29,7 +27,6 @@ CHasher::CHasher(CCryptoContext* pContext)
 
 //------------------------------------
 
-// 0x00065320
 CHasher::~CHasher(void)
 {
     // Destory the hash container
@@ -38,7 +35,6 @@ CHasher::~CHasher(void)
 
 //------------------------------------
 
-// 0x00065330
 void CHasher::AddData(DWORD dwDataLength, BYTE* pbData)
 {
     // Add the data to be hashed
@@ -47,7 +43,6 @@ void CHasher::AddData(DWORD dwDataLength, BYTE* pbData)
 
 //------------------------------------
 
-// 0x00065350
 HCRYPTKEY CHasher::GetContainer()
 {
     return m_hCryptHash;

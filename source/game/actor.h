@@ -39,46 +39,46 @@ class CActor : public CEntity
 
 public:
     // Five native stack DWORDs; scalar coordinates preserve the 20-byte ABI.
-    // 0x0009bd30
+
     CActor(int model, float x, float y, float z, float heading);
-    // 0x0009bee0
+
     void PerformAnimation(const char* name, const char* library, float speed, DWORD loop, DWORD lockX, DWORD lockY, DWORD freeze, int time);
-    // 0x0009bfd0
+
     void ClearTasks();
-    // 0x0009c1d0
+
     virtual ~CActor();
-    // 0x0009be80
+
     void Destroy();
-    // 0x0009bff0
+
     void SetRotation(float heading);
-    // 0x0009c030
+
     float GetHealth();
-    // 0x0009c050
+
     void SetHealth(float health);
-    // 0x0009c090
+
     float GetArmour();
-    // 0x0009c0b0
+
     void SetArmour(float armour);
-    // 0x0009c0d0
+
     DWORD GetBackendFlags();
-    // 0x0009c0e0
+
     void SetBackendFlags(DWORD flags);
-    // 0x0009c100
+
     BOOL IsDead();
-    // 0x0009c130
+
     BYTE GetPedState();
-    // 0x0009c140
+
     void SetPedState(BYTE value);
-    // 0x0009c160
+
     DWORD IsInVehicle();
-    // 0x0009c180
+
     void SetInvulnerable(BYTE enabled);
 };
 #pragma pack(pop)
 static_assert(sizeof(CActor) == 0x56);
-// 0x00181e5c
+
 extern void* g_actorTaskBackend;
-// 0x0009bfb0
+
 DWORD GameClearActorTasks();
 
 #endif // ACTOR_H

@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x00002350
 CColModel::CColModel() : Faces(0), FaceCount(0), Vertices(0), VertexCount(0), GroupCount(0)
 {
     memset(&Header, 0, sizeof(Header));
@@ -12,7 +11,6 @@ CColModel::CColModel() : Faces(0), FaceCount(0), Vertices(0), VertexCount(0), Gr
     // Native constructor leaves Groups untouched while GroupCount is zero.
 }
 
-// 0x000023b0
 CColModel::~CColModel()
 {
     Spheres.Resize(0);
@@ -20,7 +18,6 @@ CColModel::~CColModel()
     // Native destructor does not release face/vertex buffers or array payloads.
 }
 
-// 0x000011a0
 bool CColModel::GenerateEmpty(const CGeometry* Geometry)
 {
     GetGeometryBounds(Geometry, &Header.Min, &Header.Max);
@@ -28,7 +25,6 @@ bool CColModel::GenerateEmpty(const CGeometry* Geometry)
     return true;
 }
 
-// 0x000011d0
 bool CColModel::GenerateFaces(const CGeometry* Geometry)
 {
     GetGeometryBounds(Geometry, &Header.Min, &Header.Max);
@@ -67,7 +63,6 @@ bool CColModel::GenerateFaces(const CGeometry* Geometry)
     return true;
 }
 
-// 0x000015c0
 bool CColModel::GenerateBox(const CGeometry* Geometry)
 {
     GetGeometryBounds(Geometry, &Header.Min, &Header.Max);
@@ -82,7 +77,6 @@ bool CColModel::GenerateBox(const CGeometry* Geometry)
     return true;
 }
 
-// 0x00001360
 bool CColModel::Save(const char* FileName, const char* ModelName)
 {
     CMemoryStream Output;

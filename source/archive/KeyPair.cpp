@@ -18,7 +18,6 @@ DWORD CKeyPair::ms_dwRSAKeySize = 1024;
 
 //------------------------------------
 
-// 0x00065360
 CKeyPair::CKeyPair(CCryptoContext* pContext)
 {
     m_pContext = pContext;
@@ -27,7 +26,6 @@ CKeyPair::CKeyPair(CCryptoContext* pContext)
 
 //------------------------------------
 
-// 0x00065430
 CKeyPair::~CKeyPair(void)
 {
     if (m_hCryptKey != NULL)
@@ -47,7 +45,6 @@ void CKeyPair::GenerateKey()
 
 //------------------------------------
 
-// 0x00065380
 void CKeyPair::ReleaseKey()
 {
     // Destroy the key pair
@@ -152,7 +149,6 @@ void CKeyPair::WriteCHeaderFile(PSTR szFileName)
 
 //------------------------------------
 
-// 0x000653a0
 void CKeyPair::LoadFromMemory(DWORD dwPubKeySize, BYTE* pbPubKeyBlob, BYTE bytXORKey)
 {
     BYTE* pbKeyBlob;
@@ -182,7 +178,6 @@ void CKeyPair::LoadFromMemory(DWORD dwPubKeySize, BYTE* pbPubKeyBlob, BYTE bytXO
 
 //------------------------------------
 
-// 0x00065420
 HCRYPTKEY CKeyPair::GetContainer()
 {
     return m_hCryptKey;

@@ -16,30 +16,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 0x0011c6d0
+
 int g_scoreboardNotificationRpc = 23;
-// 0x0011c6d4
+
 const char g_scoreboardSignedFormat[] = "%d";
-// 0x0011b3d4
+
 const char g_scoreboardUnsignedFormat[] = "%u";
-// 0x0011c6d8
+
 const char g_scoreboardPingTitle[] = "ping";
-// 0x0011c6e0
+
 const char g_scoreboardScoreTitle[] = "score";
-// 0x0011c6e8
+
 const char g_scoreboardNameTitle[] = "name";
-// 0x0011c6f0
+
 const char g_scoreboardIdTitle[] = "id";
-// 0x0011c6f4
+
 const float g_scoreboardIdRight = 56.0f;
-// 0x0011c6f8
+
 const char g_scoreboardCountProbe[] = "Players: 10000";
-// 0x0011c708
+
 const char g_scoreboardCountFormat[] = "Players: %d";
-// 0x0011c194
+
 const float g_scoreboardHeaderInset = 5.0f;
 
-// 0x0006e310
 void ScoreboardSwapRows(ScoreboardRow* first, ScoreboardRow* second)
 {
     ScoreboardRow temporary;
@@ -48,7 +47,6 @@ void ScoreboardSwapRows(ScoreboardRow* first, ScoreboardRow* second)
     memcpy(second, &temporary, 45);
 }
 
-// 0x0006e4e0
 void CScoreboard::ResetDialogControls(CDXUTDialog* parent)
 {
     dialog = parent;
@@ -70,7 +68,6 @@ void CScoreboard::ResetDialogControls(CDXUTDialog* parent)
     Recalc();
 }
 
-// 0x0006e640
 void CScoreboard::SendNotification()
 {
     if (!enabled || !dialog)
@@ -88,7 +85,6 @@ void CScoreboard::SendNotification()
     Close(true);
 }
 
-// 0x0006e760
 void CScoreboard::UpdateList()
 {
     if (!g_pNetGame)
@@ -168,7 +164,6 @@ void CScoreboard::UpdateList()
     scroll->SetTrackPos(position);
 }
 
-// 0x0006eaf0
 void CScoreboard::Draw()
 {
     if (!enabled)
@@ -241,7 +236,6 @@ void CScoreboard::Draw()
     g_deviceFonts->DrawLittleText(0, g_scoreboardPingTitle, column, 0x120, 0xff95b0d0, TRUE);
 }
 
-// 0x0006e460
 CScoreboard::CScoreboard(IDirect3DDevice9* device)
 {
     DWORD* state = (DWORD*)nativeState;
@@ -270,7 +264,6 @@ CScoreboard::CScoreboard(IDirect3DDevice9* device)
     state[0] = 0;
 }
 
-// 0x0006e360
 void CScoreboard::Recalc()
 {
     RECT rect;
@@ -280,7 +273,6 @@ void CScoreboard::Recalc()
     *(float*)(nativeState + 12) = (float)rect.bottom * 0.5f - *(float*)(nativeState + 0x18) * 0.5f;
 }
 
-// 0x0006e3c0
 void CScoreboard::GetRect(RECT* rect)
 {
     int left = (int)*(float*)(nativeState + 8);
@@ -291,7 +283,6 @@ void CScoreboard::GetRect(RECT* rect)
     rect->bottom = top + (int)*(float*)(nativeState + 0x18);
 }
 
-// 0x0006e410
 void CScoreboard::Close(bool restoreCursor)
 {
     if (*(DWORD*)nativeState && *(CDXUTDialog**)(nativeState + 0x34))
@@ -305,7 +296,6 @@ void CScoreboard::Close(bool restoreCursor)
     }
 }
 
-// 0x0006ee10
 void CScoreboard::Enable()
 {
     if (!*(DWORD*)nativeState && *(CDXUTDialog**)(nativeState + 0x34))

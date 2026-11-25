@@ -11,36 +11,35 @@
 #include "main.h"
 
 #include <string.h>
-// 0x0011f56c
+
 const char g_taskNoneName[5] = "None";
-// 0x001518d4
+
 DWORD g_debugSelectedVehicleModel = 400;
-// 0x0018dd48
+
 KeyPad* g_debugVehicleKeys;
-// 0x0018dd4c
+
 CCamera* g_debugVehicleCamera;
-// 0x0018de30
+
 DWORD g_debugVehicleSelectionActive;
-// 0x0018de34
+
 CVehicle* g_debugSelectedVehicle;
-// 0x0018ddec
+
 DWORD g_debugSelectionFlagA;
-// 0x0018ddf0
+
 DWORD g_debugSelectionFlagB;
-// 0x0011e530
+
 const char g_debugVehicleSelectText[15] = "Vehicle Select";
-// 0x0018dc20
+
 BYTE g_nativeDebugFlag18DC20 = 0;
-// 0x0011f594
+
 const char g_debugRasterMissingText[] = "No texture!";
-// 0x000b3cf0
+
 const char* GameGetTaskName(void* task)
 {
     (void)task;
     return g_taskNoneName;
 }
 
-// 0x000b3ca0
 DWORD GameGetTaskType(void* task)
 {
     DWORD result = 0;
@@ -67,7 +66,6 @@ DWORD GameGetTaskType(void* task)
     return 0;
 }
 
-// 0x000b3c50
 void* GameGetTaskChild(void* task)
 {
     void* result = 0;
@@ -95,7 +93,6 @@ void* GameGetTaskChild(void* task)
     return 0;
 }
 
-// 0x0009dee0
 void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
 {
     g_gameDebugStage = stage;
@@ -103,13 +100,11 @@ void GameSetDebugState(DWORD first, DWORD second, DWORD stage)
     g_debugSelectionFlagB = second;
 }
 
-// 0x0009df00
 void GameClearDebugState()
 {
     g_gameDebugStage = 0;
 }
 
-// 0x0009df10
 void GameRebuildDebugVehicle()
 {
     if (g_debugSelectedVehicle)
@@ -117,7 +112,6 @@ void GameRebuildDebugVehicle()
     g_debugSelectedVehicle = g_pGame->CreateVehicle(g_debugSelectedVehicleModel, 5, 5, 500, 0, FALSE);
 }
 
-// 0x0009df50
 void GameDrawDebugEntities()
 {
     if (!g_debugVehicleSelectionActive)
@@ -194,7 +188,6 @@ void GameDrawDebugEntities()
     }
 }
 
-// 0x000b3a00
 DWORD __stdcall GameCountUnusedModelSlots()
 {
     DWORD count = 0;
@@ -205,14 +198,13 @@ DWORD __stdcall GameCountUnusedModelSlots()
     return count;
 }
 
-// 0x0009d3a0
 void __stdcall GameSetNativeDebugFlag18DC20(BYTE value)
 {
     g_nativeDebugFlag18DC20 = value;
 }
 
 // Ignores GTA result and returns raw collision-position Z, even on failure.
-// 0x0009dc80
+
 float GameDebugGroundHeight(const CVector* position)
 {
     CVector end;
@@ -223,11 +215,10 @@ float GameDebugGroundHeight(const CVector* position)
     return *(float*)(collision + 8);
 }
 
-// 0x002abe40
 #define g_debugRasterSource (*(void**)(g_entityCollisionScratch + 0x1028))
-// 0x002abe44
+
 #define g_debugRasterResult (*(void**)(g_entityCollisionScratch + 0x102c))
-// 0x000b5610
+
 void GameDebugBindRasterResult()
 {
     void* volatile& source = g_debugRasterSource;

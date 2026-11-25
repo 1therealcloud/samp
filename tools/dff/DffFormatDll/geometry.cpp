@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x00001ee0
 CGeometry::CGeometry() :
     Modified(false), Unknown01(false), Error(0), ErrorDetail(0), Flags(0), Format(0), TriangleCount(0), VertexCount(0), MorphCount(0), HasColors(false), HasNightColors(false),
     Colors(0), NightColors(0), UV(0), Triangles(0), Radius(0), HasVertices(0), HasNormals(0), Vertices(0), Normals(0), MaterialChunk(0), ExtensionChunk(0), MaterialCount(0),
@@ -13,7 +12,6 @@ CGeometry::CGeometry() :
     memset(&Skin, 0, sizeof(Skin));
 }
 
-// 0x00001f60
 CGeometry::~CGeometry()
 {
     if (Normals)
@@ -107,7 +105,6 @@ CGeometry::~CGeometry()
     // Member destructors free Splits and Materials pointer tables, in that order.
 }
 
-// 0x00004420
 bool CGeometry::Read(CMemoryStream* Stream, unsigned short Version)
 {
     unsigned int Value = 0;
@@ -200,7 +197,6 @@ BadRead:
     return false;
 }
 
-// 0x00004310
 bool CGeometry::ReadMaterials(CMemoryStream* Stream)
 {
     MaterialChunk = ReadChunk(Stream);
@@ -236,7 +232,6 @@ bool CGeometry::ReadMaterials(CMemoryStream* Stream)
     return true;
 }
 
-// 0x00003ea0
 bool CGeometry::ReadMaterial(CMemoryStream* Stream)
 {
     RwMaterial* Material = static_cast<RwMaterial*>(calloc(1, sizeof(RwMaterial)));
@@ -339,7 +334,6 @@ BadHeader:
     return false;
 }
 
-// 0x00003b90
 bool CGeometry::ReadExtensions(CMemoryStream* Stream)
 {
     ExtensionChunk = ReadChunk(Stream);
@@ -423,7 +417,6 @@ bool CGeometry::ReadExtensions(CMemoryStream* Stream)
     return true;
 }
 
-// 0x00003470
 bool CGeometry::ReadSkin(CMemoryStream* Stream)
 {
     if (static_cast<int>(VertexCount) < 1)
@@ -448,7 +441,6 @@ bool CGeometry::ReadSkin(CMemoryStream* Stream)
     return !Skin.BoneLimit && !Skin.MeshCount && !Skin.RleCount;
 }
 
-// 0x00003610
 CRwChunk* CGeometry::WriteStruct()
 {
     CRwChunk* Chunk = new CRwChunk;
@@ -474,7 +466,6 @@ CRwChunk* CGeometry::WriteStruct()
     return Chunk;
 }
 
-// 0x000037a0
 bool CGeometry::RemoveExtension(unsigned int Type)
 {
     CRwChunk* Replacement = new CRwChunk;
@@ -499,7 +490,6 @@ bool CGeometry::RemoveExtension(unsigned int Type)
     return true;
 }
 
-// 0x000038d0
 bool CGeometry::ImportNightColors(const CGeometry* Source)
 {
     if (!Source->HasColors)
@@ -520,7 +510,6 @@ bool CGeometry::ImportNightColors(const CGeometry* Source)
     return true;
 }
 
-// 0x00003950
 CRwChunk* CGeometry::Write()
 {
     CRwChunk* Chunk = new CRwChunk;
@@ -550,7 +539,6 @@ CRwChunk* CGeometry::Write()
     return Chunk;
 }
 
-// 0x000010a0
 bool GetGeometryBounds(const CGeometry* Geometry, CVector* Min, CVector* Max)
 {
     Min->x = Min->y = Min->z = 100000.0f;
@@ -577,7 +565,7 @@ bool GetGeometryBounds(const CGeometry* Geometry, CVector* Min, CVector* Max)
 }
 
 #ifdef KDFF_DLL
-// 0x00003050
+
 void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal, const CVector* Direction, float Minimum, float Maximum)
 {
     if (Direction->x == 0 && Direction->y == 0 && Direction->z == 0)
@@ -597,7 +585,6 @@ void LightColor(RwColor* Result, const RwColor* Color, const CVector* Normal, co
     Result->b = static_cast<unsigned char>(static_cast<int>(Color->b * Brightness));
 }
 
-// 0x00003150
 void CGeometry::CalculateNormals()
 {
     unsigned int i;
@@ -616,7 +603,6 @@ void CGeometry::CalculateNormals()
         Normalize(&Normals[i], &Normals[i]);
 }
 
-// 0x00003260
 bool CGeometry::GenerateNormals()
 {
     if (!(Flags & 0x10) && !HasNormals && !Normals)
@@ -630,7 +616,6 @@ bool CGeometry::GenerateNormals()
     return false;
 }
 
-// 0x000032b0
 bool CGeometry::SetColors(const RwColor* Day, const RwColor* Night, const CVector* DayDirection, const CVector* NightDirection, float Minimum, float Maximum)
 {
     Modified = true;

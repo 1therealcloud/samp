@@ -6,21 +6,18 @@
 #include <string.h>
 #include <sys/stat.h>
 
-// 0x002aca0c
 CConfig* g_pConfig;
 
-// 0x002abe78
 ClientSettings g_clientSettings;
-// 0x002ac7a8
+
 char g_clientDataDirectory[261];
-// 0x002ac8b0
+
 char g_clientCacheDirectory[261];
-// 0x002ac498
+
 char g_clientConfigFilename[520];
-// 0x002ac6a0
+
 char g_clientChatFilename[264];
 
-// 0x00065e60
 CConfig::CConfig(const char* file)
 {
     for (int i = 0; i < MAX_ENTRIES; ++i)
@@ -37,7 +34,6 @@ CConfig::CConfig(const char* file)
     }
 }
 
-// 0x00065680
 CConfig::~CConfig()
 {
     for (int i = 0; i < MAX_ENTRIES; ++i)
@@ -48,7 +44,6 @@ CConfig::~CConfig()
     }
 }
 
-// 0x000656c0
 void CConfig::FindFirstFree()
 {
     int last = 0;
@@ -58,7 +53,6 @@ void CConfig::FindFirstFree()
     upperBound = last + 1;
 }
 
-// 0x00065710
 int CConfig::GetIndex(const char* name)
 {
     for (int i = 0; i < upperBound; ++i)
@@ -67,7 +61,6 @@ int CConfig::GetIndex(const char* name)
     return -1;
 }
 
-// 0x000657b0
 bool CConfig::DoesExist(const char* name)
 {
     if (GetIndex(name) >= 0)
@@ -75,7 +68,6 @@ bool CConfig::DoesExist(const char* name)
     return false;
 }
 
-// 0x000657d0
 int CConfig::CreateEntry(const char* name)
 {
     int index = 0;
@@ -98,7 +90,6 @@ int CConfig::CreateEntry(const char* name)
     return index;
 }
 
-// 0x00065890
 int CConfig::GetIntValue(const char* name)
 {
     int i = GetIndex(name);
@@ -109,7 +100,6 @@ int CConfig::GetIntValue(const char* name)
     return entries[i].intValue;
 }
 
-// 0x000658c0
 const char* CConfig::GetStringValue(const char* name)
 {
     int i = GetIndex(name);
@@ -120,7 +110,6 @@ const char* CConfig::GetStringValue(const char* name)
     return entries[i].stringValue;
 }
 
-// 0x000658f0
 float CConfig::GetFloatValue(const char* name)
 {
     int i = GetIndex(name);
@@ -131,7 +120,6 @@ float CConfig::GetFloatValue(const char* name)
     return entries[i].floatValue;
 }
 
-// 0x00065920
 BOOL CConfig::Free(const char* name)
 {
     int i = GetIndex(name);
@@ -145,20 +133,17 @@ BOOL CConfig::Free(const char* name)
     return TRUE;
 }
 
-// 0x00065980
 int CConfig::GetValueType(const char* name)
 {
     int i = GetIndex(name);
     return i < 0 ? VALUE_TYPE_NONE : entries[i].type;
 }
 
-// 0x000659b0
 CConfig::ConfigEntry* CConfig::GetEntry(int index)
 {
     return index >= 0 && index < MAX_ENTRIES && occupied[index] ? &entries[index] : 0;
 }
 
-// 0x000659e0
 int CConfig::GetType(const char* text)
 {
     if (!text || !strlen(text))
@@ -168,7 +153,6 @@ int CConfig::GetType(const char* text)
     return strchr(text, '.') ? VALUE_TYPE_FLOAT : VALUE_TYPE_INT;
 }
 
-// 0x00065a50
 BOOL CConfig::Save()
 {
     FILE* file = nullptr;
@@ -197,7 +181,6 @@ BOOL CConfig::Save()
     return TRUE;
 }
 
-// 0x00065b00
 BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
 {
     int i = GetIndex(name);
@@ -218,7 +201,6 @@ BOOL CConfig::WriteIntValue(const char* name, int value, BOOL readOnly)
     return TRUE;
 }
 
-// 0x00065b60
 BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnly)
 {
     int i = GetIndex(name);
@@ -245,7 +227,6 @@ BOOL CConfig::WriteStringValue(const char* name, const char* value, BOOL readOnl
     return TRUE;
 }
 
-// 0x00065c00
 BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
 {
     int i = GetIndex(name);
@@ -266,7 +247,6 @@ BOOL CConfig::WriteFloatValue(const char* name, float value, BOOL readOnly)
     return TRUE;
 }
 
-// 0x00065c60
 void CConfig::Write(const char* name, char* value)
 {
     switch (GetType(value))
@@ -288,7 +268,6 @@ void CConfig::Write(const char* name, char* value)
     }
 }
 
-// 0x00065cf0
 BOOL CConfig::Load()
 {
     FILE* file = nullptr;
@@ -345,7 +324,7 @@ BOOL CConfig::Load()
 
 // Native parsers have no destination bound; missing opening quotes also have
 // no terminator guard. Retain that behavior instead of silently truncating.
-// 0x000c5590
+
 void Settings::GetFromCommandLine(const char* line, char* output)
 {
     while (*line == ' ')
@@ -355,7 +334,6 @@ void Settings::GetFromCommandLine(const char* line, char* output)
     *output = 0;
 }
 
-// 0x000c55e0
 void Settings::GetFromQuotes(const char* line, char* output)
 {
     while (*line != '"')
@@ -368,7 +346,7 @@ void Settings::GetFromQuotes(const char* line, char* output)
 
 // The scanner keeps walking through argument values, including quoted paths.
 // Later -c/-d occurrences overwrite earlier debug/online selection.
-// 0x000c5c90
+
 void Settings::Initialize()
 {
     const char* line = GetCommandLineA();
@@ -409,26 +387,22 @@ void Settings::Initialize()
     }
 }
 
-// 0x000c51a0
 const char* ClientGetDataDirectory()
 {
     return g_clientDataDirectory;
 }
 
-// 0x000c51b0
 const char* ClientGetCacheDirectory()
 {
     return g_clientCacheDirectory;
 }
 
-// 0x000b5900
 BOOL ClientPathExists(const char* path)
 {
     struct _stat info;
     return _stat(path, &info) == 0;
 }
 
-// 0x000c51c0
 void ClientInitializeCacheDirectory()
 {
     memset(g_clientCacheDirectory, 0, 261);
@@ -451,7 +425,6 @@ void ClientInitializeCacheDirectory()
         CreateDirectoryA(local, 0);
 }
 
-// 0x000c5340
 void ClientInitializePaths()
 {
     memset(g_clientDataDirectory, 0, 261);

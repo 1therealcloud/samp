@@ -13,19 +13,16 @@
 #include <BitStream.h>
 #include <RakClientInterface.h>
 
-// 0x00117690
 int g_scmEventRpcId = 96;
-// 0x00156988
+
 DWORD g_scmEventParameters[4];
 
-// 0x00156980
 CPed* g_driverPed;
-// 0x00156998
+
 BOOL g_driverCompareFlag;
-// 0x0015699c
+
 void* g_driverScriptThread;
 
-// 0x00001aa0
 void GameProcessIncomingEvent(WORD player, DWORD eventType, WORD vehicle, DWORD param2, DWORD param3)
 {
     if (!g_pNetGame || g_localSkipInitialState)
@@ -104,7 +101,7 @@ struct ScmNetGameView
 };
 #pragma pack(pop)
 static_assert(offsetof(ScmNetGameView, pools) == 0x3de);
-// 0x00001d10
+
 void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, DWORD eventType)
 {
     if (g_pNetGame)
@@ -141,7 +138,6 @@ void GameProcessOutgoingEvent(DWORD vehicleHandle, DWORD param2, DWORD param3, D
     }
 }
 
-// 0x000020c0
 __declspec(naked) void GameSetEventOpcode()
 {
     // clang-format off
@@ -172,7 +168,6 @@ __declspec(naked) void GameSetEventOpcode()
     // clang-format on
 }
 
-// 0x00001c60
 __declspec(naked) void GamePlayerDriverOpcode()
 {
     // clang-format off

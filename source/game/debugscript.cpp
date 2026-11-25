@@ -11,14 +11,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 0x0018de38
+
 CVector g_debugScriptCameraPosition;
-// 0x0018de44
+
 CObjectPool* g_debugScriptObjects;
-// 0x0018de48
+
 WORD g_debugScriptObjectCount;
 
-// 0x0009e2f0
 char* DebugScript::GetCommandParams(char* line)
 {
     char* openingParenthesis = strchr(line, '(');
@@ -32,7 +31,6 @@ char* DebugScript::GetCommandParams(char* line)
     return line;
 }
 
-// 0x0009e340
 void DebugScript::CreateObject(const char* params)
 {
     if (!params)
@@ -53,7 +51,6 @@ void DebugScript::CreateObject(const char* params)
     }
 }
 
-// 0x0009e450
 void DebugScript::CreateVehicle(const char* params)
 {
     if (!params)
@@ -68,7 +65,6 @@ void DebugScript::CreateVehicle(const char* params)
     new CVehicle(model, x, y, z, rotation, 0, FALSE);
 }
 
-// 0x0009e560
 void DebugScript::SetPlayerCameraPos(const char* params)
 {
     if (!params)
@@ -81,7 +77,6 @@ void DebugScript::SetPlayerCameraPos(const char* params)
     g_debugScriptCameraPosition.y = y;
 }
 
-// 0x0009e5d0
 void DebugScript::RemoveBuildingForPlayer(const char* params)
 {
     if (!params)
@@ -94,10 +89,8 @@ void DebugScript::RemoveBuildingForPlayer(const char* params)
     GameRemoveBuilding(model, x, y, z, radius);
 }
 
-// 0x0009e680
 void DebugScript::SetPlayerCameraLookAt(const char*) {}
 
-// 0x0009e690
 void DebugScript::SetPlayerInterior(const char* params)
 {
     if (!params)
@@ -110,7 +103,6 @@ void DebugScript::SetPlayerInterior(const char* params)
         ped->LinkToInterior((BYTE)interior, TRUE);
 }
 
-// 0x0009e6e0
 void DebugScript::ProcessLine(const char* line)
 {
     if (!strncmp(line, "CreateObject", 12))
@@ -127,7 +119,6 @@ void DebugScript::ProcessLine(const char* line)
         SetPlayerInterior(GetCommandParams((char*)line));
 }
 
-// 0x0009e7f0
 void DebugScript::Initialize(const char* filename)
 {
     g_pGame->SetWorldTime(12, 0);

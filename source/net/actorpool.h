@@ -40,26 +40,26 @@ class CActorPool
     DWORD state3e84[1000];
 
 public:
-    // 0x00001610
+
     CActor* Get(WORD id);
     // Raw active DWORD, not normalized to bool.
-    // 0x00001640
+
     BOOL DoesExist(WORD id);
     // Copies the fourth float directly into the ray records.
-    // 0x00001770
+
     WORD FindInRay(float maxCameraDistance, const CVector* origin, const CVector* end, float rayValue);
-    // 0x00001900
+
     BOOL Create(const ActorCreateInfo* info);
-    // 0x000016c0
+
     CActorPool();
-    // 0x000018e0
+
     ~CActorPool();
-    // 0x00001660
+
     void UpdateLargestId();
-    // 0x000016f0
+
     BOOL Delete(WORD id);
     // ID in AX; native failure preserves the high half of the EAX counter.
-    // 0x000018b0
+
     WORD Find(void* ped);
 };
 #pragma pack(pop)

@@ -40,7 +40,6 @@ static STARTUPINFOA g_startupInformation;        // 0x1F790
 
 //----------------------------------------------------
 
-// 0x12B0
 static std::string GetAppPath()
 {
     char module[MAX_PATH];
@@ -54,7 +53,6 @@ static std::string GetAppPath()
 
 //----------------------------------------------------
 
-// 0x1130
 void LaunchGame(LPCSTR directory, LPSTR arguments, DWORD unused)
 {
     char application[256];
@@ -76,7 +74,6 @@ void LaunchGame(LPCSTR directory, LPSTR arguments, DWORD unused)
 
 //----------------------------------------------------
 
-// 0x1540
 static FARPROC ResolveLoadLibraryA()
 {
     HMODULE kernel32 = GetModuleHandleA("Kernel32");
@@ -85,7 +82,6 @@ static FARPROC ResolveLoadLibraryA()
 
 //----------------------------------------------------
 
-// 0x1560
 BOOL WINAPI CreateProcessWithDll(LPCSTR application, LPSTR arguments, LPSECURITY_ATTRIBUTES processAttributes, LPSECURITY_ATTRIBUTES threadAttributes, BOOL inheritHandles,
                                  DWORD flags, LPVOID environment, LPCSTR currentDirectory, LPSTARTUPINFOA startupInfo, LPPROCESS_INFORMATION processInfo, LPCSTR dllPath,
                                  PFN_CREATE_PROCESS_A createProcessFunction)
@@ -114,7 +110,6 @@ BOOL WINAPI CreateProcessWithDll(LPCSTR application, LPSTR arguments, LPSECURITY
 
 //----------------------------------------------------
 
-// 0x1630
 BOOL InjectDllViaThreadContext(HANDLE process, HANDLE thread, FARPROC loadLibraryA, LPCSTR dllPath, DWORD pathLength)
 {
     DWORD bytesWritten = 0;
@@ -179,7 +174,6 @@ done:
 // project-owned emitters at 00401890..00401ABB
 //----------------------------------------------------
 
-// 0x1890
 BYTE* EmitMovEAX(BYTE* code, DWORD value)
 {
     *code++ = 0xB8;
@@ -189,7 +183,6 @@ BYTE* EmitMovEAX(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x18C0
 BYTE* EmitMovEBX(BYTE* code, DWORD value)
 {
     *code++ = 0xBB;
@@ -199,7 +192,6 @@ BYTE* EmitMovEBX(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x18F0
 BYTE* EmitMovECX(BYTE* code, DWORD value)
 {
     *code++ = 0xB9;
@@ -209,7 +201,6 @@ BYTE* EmitMovECX(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x1920
 BYTE* EmitMovEDX(BYTE* code, DWORD value)
 {
     *code++ = 0xBA;
@@ -219,7 +210,6 @@ BYTE* EmitMovEDX(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x1950
 BYTE* EmitMovESI(BYTE* code, DWORD value)
 {
     *code++ = 0xBE;
@@ -229,7 +219,6 @@ BYTE* EmitMovESI(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x1980
 BYTE* EmitMovEDI(BYTE* code, DWORD value)
 {
     *code++ = 0xBF;
@@ -239,7 +228,6 @@ BYTE* EmitMovEDI(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x19B0
 BYTE* EmitMovEBP(BYTE* code, DWORD value)
 {
     *code++ = 0xBD;
@@ -249,7 +237,6 @@ BYTE* EmitMovEBP(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x19E0
 BYTE* EmitMovESP(BYTE* code, DWORD value)
 {
     *code++ = 0xBC;
@@ -259,7 +246,6 @@ BYTE* EmitMovESP(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x1A10
 BYTE* EmitPushImm32(BYTE* code, DWORD value)
 {
     *code++ = 0x68;
@@ -269,7 +255,6 @@ BYTE* EmitPushImm32(BYTE* code, DWORD value)
 
 //----------------------------------------------------
 
-// 0x1A40
 BYTE* EmitJmpRel32(BYTE* code, DWORD target, DWORD instructionVA)
 {
     if (instructionVA == 0)
@@ -281,7 +266,6 @@ BYTE* EmitJmpRel32(BYTE* code, DWORD target, DWORD instructionVA)
 
 //----------------------------------------------------
 
-// 0x1A80
 BYTE* EmitCallRel32(BYTE* code, DWORD target, DWORD instructionVA)
 {
     if (instructionVA == 0)

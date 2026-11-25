@@ -17,60 +17,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 0x0016c7cc
+
 DWORD g_audioStreamHandle;
-// 0x001407b0
+
 char g_audioStreamAgent[10] = "SA-MP/0.3";
-// 0x0016c7d0
+
 BYTE g_audioStreamRadioActive;
-// 0x0016c5c0
+
 char g_audioStreamTitle[257];
-// 0x0016c3b0
+
 char g_audioStreamStation[257];
-// 0x0011bbf0
+
 const char g_audioStreamInfoFormat[8] = "%s - %s";
-// 0x001407ba
+
 BYTE g_audioStreamStopRequested;
-// 0x0011bc08
+
 const char g_audioStreamIcyTitleMarker[14] = "StreamTitle='";
-// 0x0011bc00
+
 const char g_audioStreamArtistMarker[8] = "artist=";
-// 0x0011bbf8
+
 const char g_audioStreamTitleMarker[7] = "title=";
-// 0x001185d8
+
 const char g_audioStreamStringFormat[3] = "%s";
-// 0x0016c6c8
+
 char g_audioStreamStationUrl[257];
 
-// 0x0016c7d4
 CVector g_audioStreamPosition;
-// 0x0016c7e0
+
 BYTE g_audioStreamSpatial;
-// 0x001407bc
+
 float g_audioStreamRadius = 50.0f;
-// 0x0011bbec
+
 const float g_audioStreamVolumeScale = 7000.0f;
-// 0x0011bc18
+
 const float g_audioStreamSpatialVolumeScale = 8000.0f;
-// 0x0011bc28
+
 const char g_audioStreamStationMarker[10] = "icy-name:";
-// 0x0011bc1c
+
 const char g_audioStreamStationUrlMarker[9] = "icy-url:";
-// 0x0011bc48
+
 const char g_audioStreamMessageOffKey[12] = "audiomsgoff";
-// 0x0011bc34
+
 const char g_audioStreamMessageFormat[17] = "Audio stream: %s";
-// 0x0011bc98
+
 const char g_audioStreamOffsetFormat[45] = "BASS_ChannelSet3DAttributes offset: %f %f %f";
-// 0x0011bc74
+
 const char g_audioStreamAttributesError[34] = "BASS_ChannelSet3DAttributes Error";
-// 0x0011bc54
+
 const char g_audioStreamPositionError[32] = "BASS_ChannelSet3DPosition Error";
 
-// 0x0016c4b8
 char g_audioStreamUrl[257];
 
-// 0x00065f00
 BOOL CAudioStream::Reset()
 {
     g_audioStreamHandle = 0;
@@ -93,7 +90,6 @@ BOOL CAudioStream::Reset()
     return FALSE;
 }
 
-// 0x00066500
 void CAudioStream::ControlGameRadio()
 {
     if (initialized && g_audioStreamRadioActive)
@@ -103,7 +99,6 @@ void CAudioStream::ControlGameRadio()
     }
 }
 
-// 0x00066530
 void CAudioStream::DrawInfo()
 {
     if (!initialized || !g_audioStreamRadioActive)
@@ -122,7 +117,7 @@ void CAudioStream::DrawInfo()
     rect.right = (LONG)width;
     g_deviceFonts->DrawLittleText(0, text, rect, 0x100, 0x99ffffff, FALSE);
 }
-// 0x00066610
+
 void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
 {
     float x = input->x;
@@ -134,7 +129,6 @@ void __cdecl AudioStreamSwapYZNegateX(const CVector* input, CVector* output)
     output->z = y;
 }
 
-// 0x00066630
 void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
 {
     float x = input->x;
@@ -146,7 +140,6 @@ void __cdecl AudioStreamSwapNegateYZ(const CVector* input, CVector* output)
     output->z = -y;
 }
 
-// 0x00065fe0
 BOOL CAudioStream::Stop(bool wait)
 {
     if (!initialized || !g_audioStreamRadioActive)
@@ -160,7 +153,6 @@ BOOL CAudioStream::Stop(bool wait)
     return TRUE;
 }
 
-// 0x00066040
 void CAudioStream::ReadMetadata()
 {
     memset(g_audioStreamTitle, 0, 257);
@@ -197,13 +189,11 @@ void CAudioStream::ReadMetadata()
         snprintf(g_audioStreamTitle, 256, g_audioStreamStringFormat, title);
 }
 
-// 0x00066170
 void CALLBACK CAudioStream::MetadataSync(DWORD, DWORD, DWORD, void*)
 {
     ReadMetadata();
 }
 
-// 0x000663e0
 BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius, bool spatial)
 {
     if (!initialized)
@@ -233,7 +223,6 @@ BOOL CAudioStream::Play(const char* url, float x, float y, float z, float radius
     return TRUE;
 }
 
-// 0x00066180
 void __cdecl CAudioStream::Worker(void*)
 {
     g_audioStreamRadioActive = 1;
@@ -299,7 +288,6 @@ void __cdecl CAudioStream::Worker(void*)
     g_audioStreamRadioActive = 0;
 }
 
-// 0x00066650
 void CAudioStream::Update3D()
 {
     CPed* ped = g_pGame->GetPlayerPed();

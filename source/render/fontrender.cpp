@@ -9,12 +9,11 @@
 
 #include <stdlib.h>
 #include <string.h>
-// 0x00118400
+
 const char g_fontMeasureProbe[2] = "Y";
-// 0x002aca2c
+
 CFonts* g_deviceFonts;
 
-// 0x0006b270
 DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
 {
     BYTE alpha = (BYTE)(color >> 24);
@@ -36,7 +35,6 @@ DWORD __stdcall FontLightenColor(DWORD color, BYTE amount)
     return (result << 8) | blue;
 }
 
-// 0x0006b210
 DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
 {
     BYTE alpha = (BYTE)(color >> 24);
@@ -58,7 +56,6 @@ DWORD __stdcall FontDarkenColor(DWORD color, BYTE amount)
     return (result << 8) | blue;
 }
 
-// 0x0006b530
 CFonts::CFonts(IDirect3DDevice9* device)
 {
     m_pDevice = device;
@@ -77,7 +74,7 @@ CFonts::CFonts(IDirect3DDevice9* device)
         p->Release();                                                                                                                                                              \
         p = 0;                                                                                                                                                                     \
     }
-// 0x0006ab40
+
 CFonts::~CFonts()
 {
     RELEASE_FONT(m_pFont)
@@ -88,7 +85,6 @@ CFonts::~CFonts()
     RELEASE_FONT(m_pLicensePlateFont)
 }
 
-// 0x0006abc0
 void CFonts::OnLostDevice()
 {
     m_pFont->OnLostDevice();
@@ -99,7 +95,6 @@ void CFonts::OnLostDevice()
     m_pLicensePlateFont->OnLostDevice();
 }
 
-// 0x0006ac00
 void CFonts::OnResetDevice()
 {
     m_pFont->OnResetDevice();
@@ -110,7 +105,6 @@ void CFonts::OnResetDevice()
     m_pLicensePlateFont->OnResetDevice();
 }
 
-// 0x0006ac40
 FontSize CFonts::GetTextScreenSize(const char* text, int format)
 {
     FontSize size = {0, 0};
@@ -125,7 +119,6 @@ FontSize CFonts::GetTextScreenSize(const char* text, int format)
     return size;
 }
 
-// 0x0006acf0
 FontSize CFonts::GetLittleTextScreenSize(const char* text, int format)
 {
     FontSize size = {0, 0};
@@ -140,7 +133,6 @@ FontSize CFonts::GetLittleTextScreenSize(const char* text, int format)
     return size;
 }
 
-// 0x0006ada0
 void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR color, BOOL shadow)
 {
     if (!text || !*text)
@@ -175,7 +167,6 @@ void CFonts::DrawText(ID3DXSprite* sprite, const char* text, RECT rect, D3DCOLOR
         sprite->End();
 }
 
-// 0x0006af20
 void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, int format, D3DCOLOR color, BOOL shadow)
 {
     if (!text || !*text)
@@ -210,7 +201,6 @@ void CFonts::DrawLittleText(ID3DXSprite* sprite, const char* text, RECT rect, in
         sprite->End();
 }
 
-// 0x0006b090
 void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
 {
     if (!text || !*text)
@@ -238,7 +228,6 @@ void CFonts::DrawLicensePlateText(const char* text, RECT rect, D3DCOLOR color)
     sprite->End();
 }
 
-// 0x0006b320
 void CFonts::Reset()
 {
     if (!m_pDevice)

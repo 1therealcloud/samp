@@ -28,499 +28,496 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 0x00151a60
 BYTE g_gameCustomModelHookJump[6] = {0xff, 0x25, 0xd7, 0x87, 0x40, 0x00};
 
-// 0x0018f624
 CPlayerPool* g_hookDamagePlayerPool;
-// 0x00151afc
+
 WORD g_hookDamagePlayerId = 0xffff;
-// 0x0018f628
+
 DWORD g_hookVehicleDamageAttacker;
-// 0x0018f62c
+
 DWORD g_hookVehicleDamageReceiver;
-// 0x0018f630
+
 DWORD g_hookVehicleDamageWord;
-// 0x0018f634
+
 DWORD g_hookVehicleDamageBlocked;
-// 0x0018f638
+
 DWORD g_hookVehicleDamageReturn;
-// 0x0018f644
+
 void* g_hookBulletHitEntity;
-// 0x0018e590
+
 PedBulletData g_hookBulletHitData;
-// 0x0018e828
+
 CMatrix g_hookBulletInverseMatrix;
-// 0x0018ea60
+
 CMatrix g_hookBulletOrthoMatrix;
-// 0x0018f66c
+
 DWORD g_hookShotArguments[8];
-// 0x0018eb7c
+
 CVector g_hookAdjustedShotPoint;
-// 0x0018f648
+
 DWORD g_hookShotLineResult;
-// 0x002ac9cc
+
 DWORD g_gameLoopAddress;
-// 0x0018f56c
+
 DWORD g_gameHookFarClipReturn;
-// 0x00151a10
+
 BYTE g_gameHookJump00151a10[10] = {0xff, 0x25, 0x34, 0x39, 0x4d, 0x00, 0x90, 0x90, 0x90, 0x90};
-// 0x00151a1c
+
 BYTE g_gameHookJump00151a1c[7] = {0xff, 0x25, 0x09, 0x46, 0x4d, 0x00, 0x90};
-// 0x0015197c
+
 BYTE g_gameHookJump0015197c[7] = {0xff, 0x25, 0xbb, 0x19, 0x69, 0x00, 0x90};
-// 0x00151984
+
 BYTE g_gameHookJump00151984[7] = {0xff, 0x25, 0xba, 0xb8, 0x63, 0x00, 0x90};
-// 0x00151994
+
 BYTE g_gameHookJump00151994[7] = {0xff, 0x25, 0xaa, 0x85, 0x43, 0x00, 0x90};
-// 0x0015198c
+
 BYTE g_gameHookJump0015198c[7] = {0xff, 0x25, 0x79, 0x4a, 0x58, 0x00, 0x90};
-// 0x001519b0
+
 BYTE g_gameHookJump001519b0[7] = {0xff, 0x25, 0xf1, 0xc8, 0x53, 0x00, 0x90};
-// 0x001519b8
+
 BYTE g_gameHookJump001519b8[6] = {0xff, 0x25, 0xbc, 0x5a, 0x4b, 0x00};
-// 0x001519e8
+
 BYTE g_gameHookJump001519e8[6] = {0xff, 0x25, 0x1b, 0x8b, 0x73, 0x00};
-// 0x001519f0
+
 BYTE g_gameHookJump001519f0[6] = {0xff, 0x25, 0x5b, 0x88, 0x73, 0x00};
-// 0x001519d4
+
 BYTE g_gameHookJump001519d4[9] = {0xff, 0x25, 0x43, 0x00, 0x6a, 0x00, 0x90, 0x90, 0x90};
-// 0x00151a34
+
 BYTE g_gameHookJump00151a34[6] = {0xff, 0x25, 0x21, 0xc7, 0x59, 0x00};
-// 0x00151a3c
+
 BYTE g_gameHookJump00151a3c[7] = {0xff, 0x25, 0x84, 0x80, 0x53, 0x00, 0x90};
-// 0x00151a44
+
 BYTE g_gameHookJump00151a44[9] = {0xff, 0x25, 0xa6, 0x34, 0x55, 0x00, 0x90, 0x90, 0x90};
-// 0x00151a50
+
 BYTE g_gameHookJump00151a50[6] = {0xff, 0x25, 0x33, 0x34, 0x4b, 0x00};
-// 0x00151a68
+
 BYTE g_gameHookJump00151a68[6] = {0xff, 0x25, 0xdb, 0x74, 0x56, 0x00};
-// 0x0018f4c8
+
 DWORD g_hookRadarIndex;
-// 0x0018f4cc
+
 DWORD g_hookCheatFunction;
-// 0x0018f4b0
+
 DWORD g_hookCameraPed;
-// 0x0018f540
+
 DWORD g_hookRenderEsi;
-// 0x0018f544
+
 DWORD g_hookRenderEbx;
-// 0x0018f568
+
 DWORD g_hookFreedBuffer;
-// 0x00151ab8
+
 DWORD g_hookKeepBuffer = 1;
-// 0x0018f560
+
 DWORD g_hookCachedBuffer;
-// 0x00151abc
+
 DWORD g_hookAllocateFunction = 0x7fb270;
-// 0x0018f570
+
 DWORD g_hookSavedEsi;
-// 0x0018f5c4
+
 DWORD g_hookRenderReturn;
-// 0x00151ac8
+
 BYTE g_hookRenderRestore[3] = {0xff, 0x52, 0x20};
-// 0x0018f5d4
+
 DWORD g_hookSavedFontA;
-// 0x0018f5d8
+
 DWORD g_hookSavedFontB;
-// 0x0018f508
+
 DWORD g_hookHudScaleY;
-// 0x0018f50c
+
 float g_hookHudWidth;
-// 0x0018f510
+
 float g_hookHudHeight;
-// 0x00151a6e
+
 BYTE g_hookHudAspectFix = 1;
-// 0x0011c728
+
 const float g_hookHudAspectThreshold = 1.6f;
-// 0x0011eb68
+
 const float g_hookHudScaleNumerator = 0.00221999991f;
-// 0x002aca6c
+
 DWORD g_hookFogEnabled;
-// 0x002aca70
+
 DWORD g_hookDisableFog;
-// 0x0018e560
+
 DWORD g_hookCollisionPed;
-// 0x0018e8e0
+
 DWORD g_hookSavedMatrix[16];
-// 0x0018eab4
+
 DWORD g_hookSavedSpeed[3];
-// 0x0018f52c
+
 DWORD g_hookHornArgument;
-// 0x0018f530
+
 DWORD g_hookHornThis;
-// 0x0018eb24
+
 DWORD g_hookHornVehicle;
-// 0x0018f534
+
 BYTE g_hookHornStatus;
-// 0x0018f4c4
+
 DWORD g_hookAnimationReturn;
-// 0x0018e584
+
 DWORD g_hookAnimationClump;
-// 0x0018f548
+
 DWORD g_hookAnimationGroup;
-// 0x0018f54c
+
 DWORD g_hookAnimationId;
-// 0x0018f550
+
 DWORD g_hookAnimationBlend;
-// 0x0018eb90
+
 DWORD g_hookAnimationPed;
-// 0x0018eb88
+
 DWORD g_hookAnimationLocalClump;
-// 0x0018f4ec
+
 DWORD g_hookAnimationType;
-// 0x0018f4f0
+
 DWORD g_hookQueuedAnimationGroup;
-// 0x0018f4f4
+
 DWORD g_hookQueuedAnimationId;
-// 0x0018f4f8
+
 DWORD g_hookQueuedAnimationBlend;
-// 0x00151aa4
+
 DWORD g_hookAnimationContinueA = 0x4d3aaa;
-// 0x00151aa8
+
 DWORD g_hookAnimationContinueB = 0x4d4617;
-// 0x0018f5cc
+
 DWORD g_hookRenderObject;
-// 0x00151acc
+
 BYTE g_hookObjectRestore[5] = {0xe8, 0x3c, 0xff, 0xff, 0xff};
-// 0x0018f5b4
+
 DWORD g_hookMarker;
-// 0x0018f5b8
+
 DWORD g_hookMarkerArgument;
-// 0x0018f5bc
+
 DWORD g_hookSuppressAllMarkers;
 BYTE g_hookCameraHudPrepared;
-// 0x0018f6a8
+
 DWORD g_hookAudioSavedState;
-// 0x0018f6ac
+
 DWORD g_hookAudioArgument0;
-// 0x0018f6b0
+
 DWORD g_hookAudioArgument1;
 CObjectPool* g_debugObjectPool;
-// 0x00151964
+
 WORD* g_hookCameraModeWord = (WORD*)0xb6f858;
-// 0x0018f4ac
+
 BYTE g_hookSavedPlayer;
-// 0x0018f4b4
+
 BYTE g_hookPlayerIndex;
-// 0x0018f4c0
+
 DWORD g_hookPedControlThis;
-// 0x0018f51c
+
 DWORD g_hookWeaponResult;
-// 0x0018f520
+
 DWORD g_hookRestoreSkills;
-// 0x0018f524
+
 DWORD g_hookLocalPedControl;
-// 0x0018f528
+
 DWORD g_hookRestoreKeys;
-// 0x0018ea58
+
 BYTE g_hookSavedCameraMode;
-// 0x0018e5c8
+
 WORD g_hookSavedCameraModeWord;
-// 0x0018e810
+
 DWORD g_hookVehicleProcess;
-// 0x0018e8d0
+
 DWORD g_hookControlVehicle;
-// 0x0018ea54
+
 DWORD g_hookVehicleVtable;
-// 0x0018e934
+
 DWORD g_hookVehicleKeys;
-// 0x0018e938
+
 BYTE g_hookVehicleStatus;
-// 0x0018eb20
+
 DWORD g_hookVehicleLean;
-// 0x0018e8cc
+
 DWORD g_hookVehicleLeanTarget;
-// 0x002a9a44
+
 int g_gameVehicleModel;
-// 0x002a9a48
+
 DWORD g_gameLinkedVehicle;
-// 0x002a9a4c
+
 float g_gameVehicleDistanceSquared;
-// 0x0011f5dc
+
 const float g_gameStreamingDistanceSquared = 40000.0f;
-// 0x0018f694
+
 DWORD g_hookContactOther;
-// 0x0018f698
+
 DWORD g_hookContactReturn;
-// 0x0018f69c
+
 DWORD g_hookSirenVehicle;
-// 0x0018f6a0
+
 BYTE g_hookSirenResult;
-// 0x0018f6a4
+
 DWORD g_hookSirenOnce;
-// 0x00151b0c
+
 WORD g_hookSirenVehicleId = 0xffff;
-// 0x0018f63c
+
 DWORD g_hookPedQueryThis;
-// 0x0018f640
+
 DWORD g_hookPedQueryPed;
-// 0x0018e7f8
+
 DWORD g_hookPickupBackend;
-// 0x0018e5cc
+
 DWORD g_hookMenuTextResult;
-// 0x0018f5a8
+
 CVector g_hookPassengerCameraPosition;
-// 0x0018e580
+
 DWORD g_hookTrailerBackend;
-// 0x0018e7fc
+
 CVehiclePool* g_hookTrailerPool;
-// 0x0018e7f0
+
 WORD g_hookTrailerId;
-// 0x0018f5e0
+
 CVehicle* g_hookTrailerVehicle;
-// 0x0018f600
+
 DWORD g_hookObjectSavedStack;
-// 0x0018f5f8
+
 DWORD g_hookObjectBackend;
-// 0x0018f604
+
 DWORD g_hookObjectResult;
-// 0x0018f5fc
+
 CObject* g_hookObjectRotationWrapper;
-// 0x0018f614
+
 CObjectPool* g_hookObjectDrawPool;
-// 0x0018f618
+
 DWORD g_hookObjectDrawBackend;
-// 0x0018f578
+
 CObject* g_hookObjectDrawWrapper;
-// 0x0018f580
+
 DWORD g_hookMaterialReturn;
-// 0x0018f574
+
 DWORD g_hookMaterialBackend;
-// 0x0018f57c
+
 CPlayerPool* g_hookMaterialPlayerPool;
-// 0x0018f5a4
+
 DWORD g_hookSurfingIndex;
-// 0x0018e7f4
+
 CRemotePlayer* g_hookSurfingRemote;
-// 0x0018eac0
+
 GameEntityCollisionShape g_hookCollisionFirst;
-// 0x0018e56c
+
 GameEntityCollisionShape g_hookCollisionSecond;
-// 0x0018f68c
+
 BYTE g_hookCollisionResult;
-// 0x0011e508
+
 const float g_hookCollisionBoundHigh = 3000.0f;
-// 0x0011ec3c
+
 const float g_hookCollisionBoundLow = -3000.0f;
-// 0x0018f4d0
+
 DWORD g_hookGate18F4D0;
-// 0x0018eb2c
+
 DWORD g_hookRandomReturn;
-// 0x0018e8b8
+
 DWORD g_hookVehicleSetClumpCaller;
-// 0x0018f5c8
+
 DWORD g_hookCapturedObject;
-// 0x0011ec04
+
 const char g_hookGamepadAimFormat[] = "Joypad: %d LocalContext: %u UpdateCameraAim: %f %f %f";
-// 0x00151aac
+
 DWORD g_hookPedAnimationRequestContinue = 0x4d4417;
-// 0x00151ab0
+
 DWORD g_hookResolveAnimationContinue = 0x4d3b30;
-// 0x00151ab4
+
 WORD g_hookResolvedAnimationIndex = 0xffff;
-// 0x00151ac4
+
 WORD g_hookVehicleFlagId = 0xffff;
-// 0x0018e540
+
 DWORD g_hookCameraTargetThis;
-// 0x0018e544
+
 DWORD g_hookSpeechForceAudible;
-// 0x0018e564
+
 DWORD g_hookCapture0018E564;
-// 0x0018e588
+
 DWORD g_hookSavedGunTaskParameter;
-// 0x0018e58c
+
 DWORD g_hookCapture0018E58C;
-// 0x0018e5c4
+
 DWORD g_hookCapture0018E5C4;
-// 0x0018e5d8
+
 DWORD g_hookCapture0018E5D8;
-// 0x0018e800
+
 CVector g_hookAimRayTarget;
-// 0x0018e814
+
 DWORD g_hookCapture0018E814;
-// 0x0018e818
+
 DWORD g_hookCameraTargetSourceOut;
-// 0x0018e86c
+
 DWORD g_hookCapture0018E86C;
-// 0x0018e874
+
 DWORD g_hookCameraTargetOriginY;
-// 0x0018e8c8
+
 DWORD g_hookSpeechContext;
-// 0x0018e8d4
+
 DWORD g_hookCapture0018E8D4;
-// 0x0018e924
+
 DWORD g_hookCameraTargetDestinationOut;
-// 0x0018e928
+
 DWORD g_hookSpeechFrontEnd;
-// 0x0018ea40
+
 CVector g_hookAimRayOrigin;
-// 0x0018eaa0
+
 DWORD g_hookCameraTargetOriginX;
-// 0x0018eaa4
+
 DWORD g_hookSpeechProbability;
-// 0x0018eaa8
+
 DWORD g_hookDoorAnimationCaller;
-// 0x0018eab0
+
 DWORD g_hookCapture0018EAB0;
-// 0x0018eb1c
+
 DWORD g_hookCapture0018EB1C;
-// 0x0018eb70
+
 DWORD g_hookCameraTargetOriginZ;
-// 0x0018eb78
+
 DWORD g_hookCapture0018EB78;
-// 0x0018eb8c
+
 DWORD g_hookCapture0018EB8C;
-// 0x0018f33c
+
 DWORD g_hookSpeechOverrideSilence;
-// 0x0018f340
+
 DWORD g_hookSpeechStartDelay;
-// 0x0018f34c
+
 DWORD g_hookCapture0018F34C;
-// 0x0018f350
+
 DWORD g_hookCapture0018F350;
-// 0x0018f354
+
 DWORD g_hookCapture0018F354;
-// 0x0018f360
+
 DWORD g_hookCameraTargetRange;
-// 0x0018f368
+
 DWORD g_hookCapture0018F368;
-// 0x0018f37c
+
 DWORD g_hookGunTaskResult;
-// 0x0018f558
+
 DWORD g_hookCapture0018F558;
-// 0x0018f55c
+
 DWORD g_hookResolvedAnimationKey;
-// 0x0018f594
+
 DWORD g_hookDoorAnimationPed;
-// 0x0018f598
+
 DWORD g_hookVehicleFlagGameVehicle;
-// 0x0018f59c
+
 DWORD g_hookVehicleFlagPool;
-// 0x0018f5a0
+
 DWORD g_hookVehicleFlagWrapper;
-// 0x0018f5e4
+
 DWORD g_hookCapture0018F5E4;
-// 0x0018f658
+
 DWORD g_hookGamepadInputThis;
-// 0x0018f65c
+
 DWORD g_hookGamepadAimVector;
-// 0x0018f660
+
 DWORD g_hookGamepadAimThis;
-// 0x0018e878
+
 CMatrix g_hookAimOffsetMatrix;
-// 0x0018ead8
+
 CMatrix g_hookMountedMatrix;
-// 0x00151ad4
+
 DWORD g_hookVisibilityCameraPosition[3] = {0x0, 0x0, 0x41700000};
-// 0x00151ae0
+
 BYTE g_hookVisibilityCheckOriginalCode[22] = {0x8b, 0xce, 0xe8, 0x79, 0x1, 0xfe, 0xff, 0x84, 0xc0, 0x74, 0xb5, 0x8b, 0xce, 0xe8, 0xe, 0xb7, 0x1c, 0x0, 0x84, 0xc0, 0x75, 0xaa};
-// 0x00151af8
+
 WORD g_hookVisibilityBranchOriginalCode = 0x4774;
-// 0x0018e548
+
 DWORD g_hookCapture0018E548;
-// 0x0018e54c
+
 DWORD g_hookCapture0018E54C;
-// 0x0018e7e4
+
 DWORD g_hookSavedRendererCameraX;
-// 0x0018e7e8
+
 DWORD g_hookSavedRendererCameraY;
-// 0x0018e7ec
+
 DWORD g_hookSavedRendererCameraZ;
-// 0x0018e80c
+
 DWORD g_hookVehicleAimCamera;
-// 0x0018e92c
+
 DWORD g_hookCapture0018E92C;
-// 0x0018eaac
+
 DWORD g_hookStreamingFileBuffer;
-// 0x0018eb74
+
 DWORD g_hookVehicleAimInternalAim;
-// 0x0018f338
+
 DWORD g_hookCapture0018F338;
-// 0x0018f344
+
 DWORD g_hookStreamingThirdStackWord;
-// 0x0018f348
+
 DWORD g_hookVisibilityDistanceOut;
-// 0x0018f358
+
 DWORD g_hookCapture0018F358;
-// 0x0018f35c
+
 DWORD g_hookVehicleAimCaller;
-// 0x0018f364
+
 DWORD g_hookCapture0018F364;
-// 0x0018f380
+
 DWORD g_hookVehicleAimVehicle;
-// 0x0018f48c
+
 DWORD g_hookRemoteSkillTask;
-// 0x0018f490
+
 DWORD g_hookStreamingModelId;
-// 0x0018f608
+
 DWORD g_hookVisibilityOverrideEntity;
-// 0x0018f60c
+
 DWORD g_hookVisibilityEntity;
-// 0x0018f610
+
 DWORD g_hookVisibilityResult;
-// 0x002aca54
+
 DWORD g_clientRenderCaller;
-// 0x002aca58
+
 DWORD g_clientRenderState;
-// 0x002aca5c
+
 DWORD g_clientRenderValue;
-// 0x0018e550
+
 DWORD g_hookExitTask;
-// 0x0018e5d4
+
 CVehiclePool* g_hookEventVehiclePool;
-// 0x0018e568
+
 WORD g_hookEventVehicleId;
-// 0x0018e868
+
 CVehicle* g_hookExitVehicle;
-// 0x0018eb18
+
 CLocalPlayer* g_hookEventLocalPlayer;
-// 0x0018eb30
+
 CMatrix g_hookExitMatrix;
-// 0x00151aa0
+
 DWORD g_hookExitTaskArgument = 0xffffffff;
-// 0x0011c65c
+
 const float g_hookTrainExitOffset = 2.5f;
-// 0x0018e5bc
+
 DWORD g_hookQuitDeadline;
-// 0x0018f538
+
 DWORD g_hookDamageResponse;
-// 0x0018f53c
+
 DWORD g_hookDamagePed;
-// 0x0018e8c0
+
 DWORD g_hookPedControlField540;
-// 0x0018f378
+
 CPlayerPool* g_hookFaultPlayerPool;
-// 0x00151970
+
 WORD g_hookFaultPlayerId = 0xffff;
-// 0x0018e824
+
 CRemotePlayer* g_hookFaultRemotePlayer;
-// 0x00151a70
+
 const BYTE g_hookPedRestoreA[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
-// 0x00151a88
+
 const BYTE g_hookPedRestoreB[6] = {0xd9, 0x96, 0x5c, 0x05, 0, 0};
-// 0x00151a90
+
 const BYTE g_hookPedRemoteRestore[5] = {0xe8, 0x17, 0x88, 0xff, 0xff};
-// 0x0011ebcc
+
 const char g_hookPedExceptionLabel[10] = "playerped";
-// 0x0011ebac
+
 const char g_hookPedRemovedMessage[32] = "Removed player %u due to error.";
 
 // GTA CWeather::Update adapter. No native caller has been established.
-// 0x0018f504
+
 DWORD g_hookHudScaleX;
-// 0x0018f690
+
 DWORD g_hookContactThis;
-// 0x0018e81c
+
 CVehicle* g_hookEnterVehicle;
-// 0x0011ebe4
+
 const char g_hookPedSayFormat[] = "CPed::Say(%u,%u,%f,%u,%u,%u)";
-// 0x002aca50
+
 DWORD g_clientPreviousRenderState;
-// 0x0018f4a8
+
 DWORD g_hookIgnoreNextExit;
 
-// 0x000a5b80
 __declspec(naked) void GameUpdateWeather()
 {
     // clang-format off
@@ -532,7 +529,6 @@ __declspec(naked) void GameUpdateWeather()
     // clang-format on
 }
 
-// 0x000a5bf0
 __declspec(naked) void GameHookValidateCustomModelIndex()
 {
     // clang-format off
@@ -552,14 +548,13 @@ __declspec(naked) void GameHookValidateCustomModelIndex()
     // clang-format on
 }
 
-// 0x000a6d30
 void GameInstallModelInfoHook()
 {
     GameInstallHook(0x4087ea, (DWORD)GameHookValidateCustomModelIndex, 0x4087d7, g_gameCustomModelHookJump, 6);
 }
 
 // Raw installed callback: EAX returns the preview-ped backing storage.
-// 0x000a3ec0
+
 __declspec(naked) void GameHookGetPreviewPedBuffer()
 {
     // clang-format off
@@ -570,7 +565,6 @@ __declspec(naked) void GameHookGetPreviewPedBuffer()
     // clang-format on
 }
 
-// 0x000a5d80
 void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* jumpCode, int size)
 {
     DWORD oldProtect, ignored;
@@ -582,7 +576,6 @@ void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* j
     VirtualProtect((void*)address, size, oldProtect, &ignored);
 }
 
-// 0x000a5e30
 void GamePrepareHooks()
 {
     DWORD local_8;
@@ -628,7 +621,6 @@ void GamePrepareHooks()
     return;
 }
 
-// 0x000a6020
 void GameInstallHooks()
 {
     DWORD local_8;
@@ -884,7 +876,7 @@ void GameInstallHooks()
 }
 
 // Yield before entering the original game update routine.
-// 0x000a2200
+
 __declspec(naked) void GameHookYieldBeforeWorldUpdate()
 {
     // clang-format off
@@ -895,7 +887,7 @@ __declspec(naked) void GameHookYieldBeforeWorldUpdate()
     // clang-format on
 }
 // The original argument remains on the caller's stack; Get consumes its copy.
-// 0x000a37a0
+
 __declspec(naked) void GameHookTranslateRadarColor()
 {
     // clang-format off
@@ -908,7 +900,6 @@ __declspec(naked) void GameHookTranslateRadarColor()
     // clang-format on
 }
 
-// 0x000a37c0
 __declspec(naked) void GameHookDisableCheatProcessing()
 {
     // clang-format off
@@ -924,10 +915,10 @@ __declspec(naked) void GameHookDisableCheatProcessing()
 }
 // clang-format off
 // Intentional native one-RET callback, not a replacement for an unknown body.
-// 0x000a3ac0
+
 __declspec(naked) void GameHookDisableSniperCameraShake() { __asm ret }
 // clang-format on
-// 0x000a3ad0
+
 __declspec(naked) void GameHookSetLocalCameraFlags()
 {
     // clang-format off
@@ -946,7 +937,7 @@ __declspec(naked) void GameHookSetLocalCameraFlags()
     // clang-format on
 }
 // Preserve the sign bit while replacing the remaining float bits by 1.0f.
-// 0x000a3b00
+
 __declspec(naked) void GameHookPreserveTrainSpeedOnDerailment()
 {
     // clang-format off
@@ -958,7 +949,7 @@ __declspec(naked) void GameHookPreserveTrainSpeedOnDerailment()
     // clang-format on
 }
 // The non-null branch continues after GTA's original PUSH EDI prologue.
-// 0x000a3b20
+
 __declspec(naked) void GameHookGuardAnimationDecompression()
 {
     // clang-format off
@@ -974,7 +965,6 @@ __declspec(naked) void GameHookGuardAnimationDecompression()
     // clang-format on
 }
 
-// 0x000a3ce0
 __declspec(naked) void GameHookGuardMissingRenderMaterial()
 {
     // clang-format off
@@ -1002,7 +992,7 @@ __declspec(naked) void GameHookGuardMissingRenderMaterial()
     // clang-format on
 }
 // EBP is an incoming GTA frame pointer, not a compiler-owned C++ frame.
-// 0x000a3d20
+
 __declspec(naked) void GameHookFilterRenderStateType()
 {
     // clang-format off
@@ -1020,7 +1010,6 @@ __declspec(naked) void GameHookFilterRenderStateType()
     // clang-format on
 }
 
-// 0x000a3e50
 __declspec(naked) void GameHookGuardPhysicalProcessCollision()
 {
     // clang-format off
@@ -1039,7 +1028,6 @@ __declspec(naked) void GameHookGuardPhysicalProcessCollision()
     // clang-format on
 }
 
-// 0x000a4190
 __declspec(naked) void GameHookPreserveCachedRenderBuffer()
 {
     // clang-format off
@@ -1066,7 +1054,7 @@ __declspec(naked) void GameHookPreserveCachedRenderBuffer()
     // clang-format on
 }
 // Preserve the native sticky allocator selection and four POP EBX operations.
-// 0x000a4280
+
 __declspec(naked) void GameHookAllocateCachedRenderBuffer()
 {
     // clang-format off
@@ -1094,11 +1082,11 @@ __declspec(naked) void GameHookAllocateCachedRenderBuffer()
     // clang-format on
 }
 // clang-format off
-// 0x000a42c0
+
 __declspec(naked) void GameHookCaptureRenderEsi() { __asm { mov g_hookSavedEsi,esi
         ret } }
 // clang-format on
-// 0x000a4850
+
 __declspec(naked) void GameHookPatchRenderCallback()
 {
     // clang-format off
@@ -1127,7 +1115,6 @@ __declspec(naked) void GameHookPatchRenderCallback()
     // clang-format on
 }
 
-// 0x000a4960
 __declspec(naked) void GameHookAdjustFontScale()
 {
     // clang-format off
@@ -1158,7 +1145,6 @@ __declspec(naked) void GameHookAdjustFontScale()
     // clang-format on
 }
 
-// 0x000a5150
 __declspec(naked) void GameHookGuardNullVehicleArgument()
 {
     // clang-format off
@@ -1172,7 +1158,6 @@ __declspec(naked) void GameHookGuardNullVehicleArgument()
     // clang-format on
 }
 
-// 0x000a5850
 __declspec(naked) void GameHookFilterCameraIgnoredObject()
 {
     // clang-format off
@@ -1191,7 +1176,7 @@ __declspec(naked) void GameHookFilterCameraIgnoredObject()
 }
 // Continue into GTA after its 44-byte local-frame allocation, forwarding the
 // observed argument-byte override rather than translating this into a C++ call.
-// 0x000a5d20
+
 __declspec(naked) void GameHookOverrideVerticalLineCollisionFlags()
 {
     // clang-format off
@@ -1276,7 +1261,6 @@ static void ExtendShotEndpoint(const CVector* origin, CVector* end)
     end->z = (float)(((double)point.z - origin->z) + point.z);
 }
 
-// 0x000a2220
 void GamePrepareHudDraw()
 {
     g_hookHudScaleX = *(DWORD*)0x859520;
@@ -1291,7 +1275,6 @@ void GamePrepareHudDraw()
     }
 }
 
-// 0x000c5400
 void GameSetupD3DFog(DWORD enabled)
 {
     if (g_hookDisableFog)
@@ -1304,7 +1287,6 @@ void GameSetupD3DFog(DWORD enabled)
     }
 }
 
-// 0x000a22c0
 __declspec(naked) void GameHookDrawScaledRadar()
 {
     // clang-format off
@@ -1325,7 +1307,6 @@ __declspec(naked) void GameHookDrawScaledRadar()
     // clang-format on
 }
 
-// 0x000a29d0
 __declspec(naked) void GameHookPreservePedTransform()
 {
     // clang-format off
@@ -1398,7 +1379,7 @@ __declspec(naked) void GameHookPreservePedTransform()
 }
 // Original thiscall consumes one stack argument and restores only the status
 // byte it saved, leaving the GTA callee's other results intact.
-// 0x000a33c0
+
 __declspec(naked) void GameHookHandleVehicleHorn()
 {
     // clang-format off
@@ -1434,7 +1415,6 @@ __declspec(naked) void GameHookHandleVehicleHorn()
     // clang-format on
 }
 
-// 0x000a3b90
 __declspec(naked) void GameHookOverrideFogDuringRender()
 {
     // clang-format off
@@ -1463,7 +1443,6 @@ __declspec(naked) void GameHookOverrideFogDuringRender()
     // clang-format on
 }
 
-// 0x000a3f30
 __declspec(naked) void GameHookAddPedAnimation()
 {
     // clang-format off
@@ -1510,7 +1489,6 @@ __declspec(naked) void GameHookAddPedAnimation()
     // clang-format on
 }
 
-// 0x000a3fe0
 __declspec(naked) void GameHookBlendPedAnimation()
 {
     // clang-format off
@@ -1561,7 +1539,6 @@ __declspec(naked) void GameHookBlendPedAnimation()
     // clang-format on
 }
 
-// 0x000a47d0
 __declspec(naked) void GameHookSuppressWorldMarker()
 {
     // clang-format off
@@ -1606,7 +1583,6 @@ __declspec(naked) void GameHookSuppressWorldMarker()
     // clang-format on
 }
 
-// 0x000a48c0
 __declspec(naked) void GameHookRenderCustomObjects()
 {
     // clang-format off
@@ -1659,10 +1635,8 @@ __declspec(naked) void GameHookRenderCustomObjects()
     // clang-format on
 }
 
-// 0x0018f514
-
 // Raw GTA entry ABIs: preserve live registers and native CALL/JMP/RET behavior.
-// 0x000a22f0
+
 __declspec(naked) void GameHookDrawScaledCrosshair()
 {
     // clang-format off
@@ -1710,7 +1684,6 @@ __declspec(naked) void GameHookDrawScaledCrosshair()
     // clang-format on
 }
 
-// 0x000a2370
 __declspec(naked) void GameHookPostProcessRemotePeds()
 {
     // clang-format off
@@ -1733,7 +1706,6 @@ __declspec(naked) void GameHookPostProcessRemotePeds()
     // clang-format on
 }
 
-// 0x000a23a0
 __declspec(naked) void GameHookUpdateCameraOwner()
 {
     // clang-format off
@@ -1753,7 +1725,6 @@ __declspec(naked) void GameHookUpdateCameraOwner()
     // clang-format on
 }
 
-// 0x000a5b90
 __declspec(naked) void GameHookOverrideVehicleAudioState()
 {
     // clang-format off
@@ -1784,9 +1755,7 @@ __declspec(naked) void GameHookOverrideVehicleAudioState()
     // clang-format on
 }
 
-// 0x0018de44
 
-// 0x000a23d0
 void GameHookProcessMultiplayerFrame()
 {
     if (g_pGame)
@@ -1858,7 +1827,6 @@ using KeyStuff::UpdateKeys;
 // Raw entry ABI: weapon ECX=ped; ped control ECX=this, [ESP+4]=ped;
 // vehicle ECX=vehicle. Vehicle control preserves PUSHAD registers.
 
-// 0x000b3f60
 BYTE __stdcall GameFindPlayerPedIndex(void* ped)
 {
     for (BYTE player = 0; player != 210; ++player)
@@ -1867,7 +1835,6 @@ BYTE __stdcall GameFindPlayerPedIndex(void* ped)
     return 0;
 }
 
-// 0x000b4410
 BOOL __stdcall GameIsTrainVehicle(void* vehicle)
 {
     if (vehicle)
@@ -1879,7 +1846,6 @@ BOOL __stdcall GameIsTrainVehicle(void* vehicle)
     return FALSE;
 }
 
-// 0x000b4460
 BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
 {
     if (!vehicle)
@@ -1892,7 +1858,6 @@ BOOL __stdcall GameHasOccupiedLinkedVehicle(void* vehicle)
     return driver && (*(DWORD*)(driver + 0x46c) & 0x100) ? TRUE : FALSE;
 }
 
-// 0x000a2ab0
 __declspec(naked) void GameHookApplyRemoteWeaponSkills()
 {
     // clang-format off
@@ -1940,7 +1905,6 @@ __declspec(naked) void GameHookApplyRemoteWeaponSkills()
     // clang-format on
 }
 
-// 0x000a2b50
 __declspec(naked) void GameHookProcessRemoteGunTask()
 {
     // clang-format off
@@ -2038,7 +2002,6 @@ __declspec(naked) void GameHookProcessRemoteGunTask()
     // clang-format on
 }
 
-// 0x000a2e70
 __declspec(naked) void GameHookProcessRemoteVehicleControl()
 {
     // clang-format off
@@ -2358,7 +2321,7 @@ __declspec(naked) void GameHookProcessRemoteVehicleControl()
     // clang-format on
 }
 // Retain the unrounded x87 threshold test and native argument cleanup.
-// 0x000b6490
+
 __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
 {
     // clang-format off
@@ -2413,7 +2376,7 @@ __declspec(naked) BOOL __stdcall GameIsVehicleInStreamingArea(void* vehicle)
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a5870
+
 __declspec(naked) void GameHookFilterAutomobileCollision()
 {
     // clang-format off
@@ -2460,7 +2423,7 @@ __declspec(naked) void GameHookFilterAutomobileCollision()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a5910
+
 __declspec(naked) void GameHookFilterBikeCollision()
 {
     // clang-format off
@@ -2507,7 +2470,7 @@ __declspec(naked) void GameHookFilterBikeCollision()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a59b0
+
 __declspec(naked) void GameHookFilterBoatCollision()
 {
     // clang-format off
@@ -2554,7 +2517,7 @@ __declspec(naked) void GameHookFilterBoatCollision()
 }
 
 // Raw GTA collision method ABI; suppression returns with RET8.
-// 0x000a5a50
+
 __declspec(naked) void GameHookFilterPhysicalEntityCollision()
 {
     // clang-format off
@@ -2600,7 +2563,6 @@ __declspec(naked) void GameHookFilterPhysicalEntityCollision()
     // clang-format on
 }
 
-// 0x000a5820
 __declspec(naked) void GameHookFilterCollisionTest()
 {
     // clang-format off
@@ -2623,7 +2585,6 @@ __declspec(naked) void GameHookFilterCollisionTest()
     // clang-format on
 }
 
-// 0x000a5100
 __declspec(naked) void GameHookResolvePedPlayerContext()
 {
     // clang-format off
@@ -2656,7 +2617,7 @@ __declspec(naked) void GameHookResolvePedPlayerContext()
     // clang-format on
 }
 // Raw siren query returns AL. The one-shot path deliberately leaves upper EAX.
-// 0x000a5af0
+
 __declspec(naked) void GameHookOverrideVehicleSiren()
 {
     // clang-format off
@@ -2708,7 +2669,6 @@ __declspec(naked) void GameHookOverrideVehicleSiren()
     // clang-format on
 }
 
-// 0x000a3430
 BOOL GameNotifyEnterVehicle()
 {
     if (!g_pNetGame)
@@ -2756,7 +2716,6 @@ BOOL GameNotifyEnterVehicle()
     return TRUE;
 }
 
-// 0x000a3840
 WORD GameResolveDamagePlayer(void* entity)
 {
     if (!entity)
@@ -2790,7 +2749,6 @@ WORD GameResolveDamagePlayer(void* entity)
     return result;
 }
 
-// 0x000a38e0
 WORD GameResolveDamageActor(void* entity)
 {
     if (!entity)
@@ -2805,7 +2763,7 @@ struct GameDamageResponsePrefix
     float damage;
     DWORD bodyPart, weapon;
 };
-// 0x000a3910
+
 BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
 {
     void* local = GameFindLocalPed();
@@ -2866,7 +2824,7 @@ BOOL __stdcall GameNotifyPedDamage(void* response, void* ped)
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3c60
+
 __declspec(naked) void GameHookDrawGangZones()
 {
     // clang-format off
@@ -2888,7 +2846,7 @@ __declspec(naked) void GameHookDrawGangZones()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3c80
+
 __declspec(naked) void GameHookMarkRemotePedState()
 {
     // clang-format off
@@ -2912,7 +2870,7 @@ __declspec(naked) void GameHookMarkRemotePedState()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3ca0
+
 __declspec(naked) void GameHookNotifyPickupCollected()
 {
     // clang-format off
@@ -2942,7 +2900,7 @@ __declspec(naked) void GameHookNotifyPickupCollected()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a3d90
+
 __declspec(naked) void GameHookResolveMultiplayerMenuText()
 {
     // clang-format off
@@ -3001,7 +2959,7 @@ __declspec(naked) void GameHookResolveMultiplayerMenuText()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4770
+
 __declspec(naked) void GameHookGetContextPlayerSpeed()
 {
     // clang-format off
@@ -3034,7 +2992,7 @@ __declspec(naked) void GameHookGetContextPlayerSpeed()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a49d0
+
 __declspec(naked) void GameHookHandleVehicleTowLink()
 {
     // clang-format off
@@ -3090,7 +3048,7 @@ __declspec(naked) void GameHookHandleVehicleTowLink()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4c30
+
 __declspec(naked) void GameHookUpdateAttachedObjectRotation()
 {
     // clang-format off
@@ -3126,7 +3084,7 @@ __declspec(naked) void GameHookUpdateAttachedObjectRotation()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4df0
+
 __declspec(naked) void GameHookRenderMultiplayerObjects()
 {
     // clang-format off
@@ -3154,7 +3112,7 @@ __declspec(naked) void GameHookRenderMultiplayerObjects()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4e30
+
 __declspec(naked) void GameHookRenderLateMultiplayerObjects()
 {
     // clang-format off
@@ -3182,7 +3140,7 @@ __declspec(naked) void GameHookRenderLateMultiplayerObjects()
 }
 
 // Raw installed GTA ABI; void() is an address declaration only.
-// 0x000a4e70
+
 __declspec(naked) void GameHookFilterObjectRenderList()
 {
     // clang-format off
@@ -3271,7 +3229,7 @@ __declspec(naked) void GameHookFilterObjectRenderList()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// 0x000a42d0
+
 __declspec(naked) void GameHookApplyCustomObjectMaterials()
 {
     // clang-format off
@@ -3362,7 +3320,7 @@ __declspec(naked) void GameHookApplyCustomObjectMaterials()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// 0x000a46b0
+
 __declspec(naked) void GameHookUpdateSurfingAttachment()
 {
     // clang-format off
@@ -3433,7 +3391,7 @@ __declspec(naked) void GameHookUpdateSurfingAttachment()
 }
 
 // Raw installed GTA ABI; void() is an installation-address type only.
-// 0x000a56b0
+
 __declspec(naked) void GameHookTestMultiplayerCollisionShapes()
 {
     // clang-format off
@@ -3542,7 +3500,6 @@ __declspec(naked) void GameHookTestMultiplayerCollisionShapes()
     // clang-format on
 }
 
-// 0x000a4fa0
 BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
 {
     (void)unused;
@@ -3566,7 +3523,6 @@ BOOL GameShouldBlockVehicleDamage(void* vehicle, void* attacker, DWORD unused)
     return net->pools->players->GetPlayer(id)->nativeState[0x19] == team ? TRUE : FALSE;
 }
 
-// 0x000a5090
 __declspec(naked) void GameHookFilterVehicleDamage()
 {
     // clang-format off
@@ -3604,7 +3560,6 @@ __declspec(naked) void GameHookFilterVehicleDamage()
     // clang-format on
 }
 
-// 0x000a5170
 void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target, const CVector* collision, void** entity)
 {
     (void)target;
@@ -3639,7 +3594,6 @@ void __stdcall GameRecordBulletHit(const CVector* origin, const CVector* target,
     g_pGame->GetPlayerPed()->SetBulletData(&g_hookBulletHitData);
 }
 
-// 0x000a5540
 __declspec(naked) void GameHookProcessShotLineOfSight()
 {
     // clang-format off
@@ -3702,7 +3656,6 @@ __declspec(naked) void GameHookProcessShotLineOfSight()
     // clang-format on
 }
 
-// 0x000a5600
 __declspec(naked) void GameHookProcessShotLineOfSightSimple()
 {
     // clang-format off
@@ -3733,7 +3686,6 @@ __declspec(naked) void GameHookProcessShotLineOfSightSimple()
     // clang-format on
 }
 
-// 0x000a5650
 __declspec(naked) void GameHookAdjustShotRayPoint()
 {
     // clang-format off
@@ -3767,7 +3719,6 @@ __declspec(naked) void GameHookAdjustShotRayPoint()
     // clang-format on
 }
 
-// 0x000a5360
 __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVector* target, void* collision, void** entity, DWORD buildings, DWORD vehicles, DWORD peds,
                                                    DWORD objects, DWORD dummies, DWORD seeThrough, DWORD cameraIgnore, DWORD shootThrough)
 {
@@ -3907,7 +3858,7 @@ __declspec(naked) DWORD GameProcessShotLineOfSight(const CVector* origin, CVecto
 }
 
 // Native leaves the cache published during the hooked raster-destroy call.
-// 0x000a4200
+
 void GameReleaseCachedRasterBuffer()
 {
     DWORD target = g_gameVersion == 1 ? 0x7fb020 : 0x7fb060;
@@ -3916,7 +3867,6 @@ void GameReleaseCachedRasterBuffer()
     g_hookCachedBuffer = 0;
 }
 
-// 0x000a2690
 void GameDisablePedRemoteCall()
 {
     // GTA SA virtual address: five-byte call site; page remains writable.
@@ -3925,7 +3875,6 @@ void GameDisablePedRemoteCall()
     *(BYTE*)0x5e92f8 = 0x90;
 }
 
-// 0x000a26b0
 void GameRestorePedRemoteCall()
 {
     // Native restore does not call VirtualProtect or flush the instruction cache.
@@ -3933,7 +3882,6 @@ void GameRestorePedRemoteCall()
     *(BYTE*)0x5e92f8 = g_hookPedRemoteRestore[4];
 }
 
-// 0x000a5d40
 void GameWriteProtectedDword(DWORD address, DWORD value)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -3944,7 +3892,7 @@ void GameWriteProtectedDword(DWORD address, DWORD value)
 }
 
 // Opcode byte is passed through without restricting it to CALL/JMP.
-// 0x000a5df0
+
 void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
 {
     BOOL(WINAPI * protect)(LPVOID, SIZE_T, DWORD, PDWORD) = VirtualProtect;
@@ -3955,7 +3903,6 @@ void GameWriteProtectedRelativeBranch(DWORD address, DWORD target, BYTE opcode)
     protect((void*)address, 5, oldProtection, &ignoredProtection);
 }
 
-// 0x000a22a0
 __declspec(naked) void GameRestoreHudDraw()
 {
     // clang-format off
@@ -3969,7 +3916,6 @@ __declspec(naked) void GameRestoreHudDraw()
     // clang-format on
 }
 
-// 0x000a2630
 __declspec(naked) void GameDisablePedControlCalls()
 {
     // clang-format off
@@ -3987,7 +3933,6 @@ __declspec(naked) void GameDisablePedControlCalls()
     // clang-format on
 }
 
-// 0x000a2650
 __declspec(naked) void GameRestorePedControlCalls()
 {
     // clang-format off
@@ -4007,7 +3952,6 @@ __declspec(naked) void GameRestorePedControlCalls()
     // clang-format on
 }
 
-// 0x000a3780
 __declspec(naked) void GameHookFilterVehicleCreation()
 {
     // clang-format off
@@ -4031,7 +3975,6 @@ static float GetFarClipDistanceForHook()
     return g_gameFarClipDistance;
 }
 
-// 0x000a37e0
 __declspec(naked) void GameHookOverrideFarClipDistance()
 {
     // clang-format off
@@ -4049,7 +3992,6 @@ __declspec(naked) void GameHookOverrideFarClipDistance()
     // clang-format on
 }
 
-// 0x000a3b40
 __declspec(naked) void GameHookGuardGameWindowState()
 {
     // clang-format off
@@ -4066,7 +4008,6 @@ __declspec(naked) void GameHookGuardGameWindowState()
     // clang-format on
 }
 
-// 0x000a3d50
 __declspec(naked) void GameHookGuardNullPedTask()
 {
     // clang-format off
@@ -4085,7 +4026,6 @@ __declspec(naked) void GameHookGuardNullPedTask()
     // clang-format on
 }
 
-// 0x000a3d70
 __declspec(naked) void GameHookGuardVehicleColorAccess()
 {
     // clang-format off
@@ -4102,7 +4042,6 @@ __declspec(naked) void GameHookGuardVehicleColorAccess()
     // clang-format on
 }
 
-// 0x000a3e40
 __declspec(naked) void GameHookCaptureRandomResult()
 {
     // clang-format off
@@ -4115,7 +4054,6 @@ __declspec(naked) void GameHookCaptureRandomResult()
     // clang-format on
 }
 
-// 0x000a4240
 __declspec(naked) void* GameAllocateHookBuffer()
 {
     // clang-format off
@@ -4142,7 +4080,6 @@ __declspec(naked) void* GameAllocateHookBuffer()
     // clang-format on
 }
 
-// 0x000a4c10
 __declspec(naked) void GameHookApplyFrameLimiter()
 {
     // clang-format off
@@ -4164,7 +4101,6 @@ __declspec(naked) void GameHookApplyFrameLimiter()
     // clang-format on
 }
 
-// 0x000a4c90
 __declspec(naked) void GameHookGuardMenuState()
 {
     // clang-format off
@@ -4181,7 +4117,6 @@ __declspec(naked) void GameHookGuardMenuState()
     // clang-format on
 }
 
-// 0x000a4cb0
 __declspec(naked) void GameHookSetGunMoveAnimation()
 {
     // clang-format off
@@ -4194,7 +4129,6 @@ __declspec(naked) void GameHookSetGunMoveAnimation()
     // clang-format on
 }
 
-// 0x000a4170
 __declspec(naked) void GameHookCaptureVehicleSetClumpCaller()
 {
     // clang-format off
@@ -4209,7 +4143,6 @@ __declspec(naked) void GameHookCaptureVehicleSetClumpCaller()
     // clang-format on
 }
 
-// 0x000a48a0
 __declspec(naked) void GameHookCaptureObjectCall()
 {
     // clang-format off
@@ -4225,7 +4158,6 @@ __declspec(naked) void GameHookCaptureObjectCall()
     // clang-format on
 }
 
-// 0x000a2cd0
 __declspec(naked) void GameHookOverrideGunTaskParameter()
 {
     // clang-format off
@@ -4253,7 +4185,6 @@ __declspec(naked) void GameHookOverrideGunTaskParameter()
     // clang-format on
 }
 
-// 0x000a3b60
 __declspec(naked) void GameHookAllocatePedTask()
 {
     // clang-format off
@@ -4284,7 +4215,6 @@ static void LogPedSpeech()
                              g_hookSpeechFrontEnd);
 }
 
-// 0x000a3bc0
 __declspec(naked) void GameHookLogPedSpeech()
 {
     // clang-format off
@@ -4312,7 +4242,6 @@ __declspec(naked) void GameHookLogPedSpeech()
     // clang-format on
 }
 
-// 0x000a3e70
 __declspec(naked) void GameHookTemporarilyBypassRenderInit()
 {
     // clang-format off
@@ -4339,7 +4268,6 @@ __declspec(naked) void GameHookTemporarilyBypassRenderInit()
     // clang-format on
 }
 
-// 0x000a40a0
 __declspec(naked) void GameHookCapturePedAnimationRequest()
 {
     // clang-format off
@@ -4374,7 +4302,6 @@ __declspec(naked) void GameHookCapturePedAnimationRequest()
     // clang-format on
 }
 
-// 0x000a4110
 __declspec(naked) void GameHookResolveAnimationByKey()
 {
     // clang-format off
@@ -4405,7 +4332,6 @@ __declspec(naked) void GameHookResolveAnimationByKey()
     // clang-format on
 }
 
-// 0x000a43d0
 __declspec(naked) void GameHookSkipVehicleDoorWhenDancing()
 {
     // clang-format off
@@ -4448,7 +4374,6 @@ __declspec(naked) void GameHookSkipVehicleDoorWhenDancing()
     // clang-format on
 }
 
-// 0x000a4450
 __declspec(naked) void GameHookUpdateVehicleStateFlags()
 {
     // clang-format off
@@ -4499,7 +4424,6 @@ __declspec(naked) void GameHookUpdateVehicleStateFlags()
     // clang-format on
 }
 
-// 0x000a4aa0
 __declspec(naked) void GameHookCaptureThirdPersonCameraTarget()
 {
     // clang-format off
@@ -4535,7 +4459,6 @@ __declspec(naked) void GameHookCaptureThirdPersonCameraTarget()
     // clang-format on
 }
 
-// 0x000a4b20
 __declspec(naked) void GameHookCaptureWeaponAimRay()
 {
     // clang-format off
@@ -4567,7 +4490,6 @@ __declspec(naked) void GameHookCaptureWeaponAimRay()
     // clang-format on
 }
 
-// 0x000a4b80
 __declspec(naked) void GameHookCaptureCameraAimRay()
 {
     // clang-format off
@@ -4607,7 +4529,6 @@ __declspec(naked) void GameHookCaptureCameraAimRay()
     // clang-format on
 }
 
-// 0x000a5290
 __declspec(naked) void GameHookSkipGamepadInputPath()
 {
     // clang-format off
@@ -4645,7 +4566,6 @@ static void LogGamepadAim()
     g_pChat->AddDebugMessage(g_hookGamepadAimFormat, usingGamepad, localControl, x, y, z);
 }
 
-// 0x000a52d0
 __declspec(naked) void GameHookLogGamepadAimUpdate()
 {
     // clang-format off
@@ -4667,7 +4587,6 @@ __declspec(naked) void GameHookLogGamepadAimUpdate()
 
 // Additional native control/camera/patch callbacks and their shared aggregates.
 
-// 0x000a2d30
 __declspec(naked) void GameHookApplyRemoteSkillContextA()
 {
     // clang-format off
@@ -4719,7 +4638,6 @@ __declspec(naked) void GameHookApplyRemoteSkillContextA()
     // clang-format on
 }
 
-// 0x000a2de0
 __declspec(naked) void GameHookApplyRemoteSkillContextB()
 {
     // clang-format off
@@ -4782,7 +4700,6 @@ static void PublishVehicleAimOffset()
     offset->z = g_hookAimOffsetMatrix.position.z;
 }
 
-// 0x000a4510
 __declspec(naked) void GameHookAdjustVehicleAimMatrix()
 {
     // clang-format off
@@ -4849,7 +4766,6 @@ __declspec(naked) void GameHookAdjustVehicleAimMatrix()
     // clang-format on
 }
 
-// 0x000a4680
 __declspec(naked) void GameHookCaptureStreamingConversion()
 {
     // clang-format off
@@ -4868,7 +4784,6 @@ __declspec(naked) void GameHookCaptureStreamingConversion()
     // clang-format on
 }
 
-// 0x000a4cc0
 __declspec(naked) void GameHookPatchCustomObjectRenderPath()
 {
     // clang-format off
@@ -4950,7 +4865,6 @@ __declspec(naked) void GameHookPatchCustomObjectRenderPath()
     // clang-format on
 }
 
-// 0x000c54c0
 void ClientInstallRenderStateHook()
 {
     // GTA SA VA: 0x00c97b24; capture the engine table once, as native does.
@@ -4959,7 +4873,6 @@ void ClientInstallRenderStateHook()
     *(DWORD*)(table + 0x20) = (DWORD)ClientRenderStateHook;
 }
 
-// 0x000c5450
 __declspec(naked) void ClientRenderStateHook()
 {
     // clang-format off
@@ -4994,7 +4907,7 @@ __declspec(naked) void ClientRenderStateHook()
 }
 
 // Raw GTA task ABI: continuation jumps and original constructor stack words.
-// 0x000a3580
+
 __declspec(naked) void GameHookNotifyVehicleEnter()
 {
     // clang-format off
@@ -5043,7 +4956,6 @@ static void WarpLocalPlayerFromTrain()
     g_hookEventLocalPlayer->GetPed()->WarpFromVehicle(x, y, z);
 }
 
-// 0x000a35e0
 __declspec(naked) void GameHookNotifyVehicleExit()
 {
     // clang-format off
@@ -5123,7 +5035,6 @@ __declspec(naked) void GameHookNotifyVehicleExit()
     // clang-format on
 }
 
-// 0x000a3a70
 __declspec(naked) void GameHookNotifyPedDamage()
 {
     // clang-format off
@@ -5155,7 +5066,7 @@ __declspec(naked) void GameHookNotifyPedDamage()
     // clang-format on
 }
 // Native does not return. Preserve its unsigned deadline comparison/wrap behavior.
-// 0x000a3800
+
 __declspec(naked) void GameHookDeferGameShutdown()
 {
     // clang-format off
@@ -5182,7 +5093,6 @@ __declspec(naked) void GameHookDeferGameShutdown()
     // clang-format on
 }
 
-// 0x000a2530
 void GameRunPedControlBackend()
 {
     __try
@@ -5215,8 +5125,6 @@ void GameRunPedControlBackend()
     }
 }
 
-// extracted readable body
-// inline
 void GameProcessPedControlBody()
 {
     g_hookCollisionPed = g_hookCameraPed;
@@ -5297,7 +5205,7 @@ void GameProcessPedControlBody()
     }
 }
 // Raw entry: ECX=GTA ped; original preserves all PUSHAD registers and returns.
-// 0x000a26d0
+
 __declspec(naked) void GameHookProcessPedControl()
 {
     // clang-format off

@@ -9,26 +9,26 @@ class CAudio
 public:
     BOOL m_bSoundLoaded;
     bool m_bOutdoorAmbienceTrackDisabled;
-    // inline
+
     CAudio() : m_bSoundLoaded(FALSE), m_bOutdoorAmbienceTrackDisabled(false) {}
-    // 0x000a2030
+
     int GetRadioStation();
-    // 0x000a2060
+
     void StartRadio(int station);
     // Native wrapper at A2080; external A2260 anchor points into HUD code.
-    // 0x000a2080
+
     void StopRadio();
-    // 0x000a20a0
+
     float GetRadioVolume();
-    // 0x000a20b0
+
     void StopOutdoorAmbienceTrack();
-    // 0x000a20c0
+
     void SetOutdoorAmbienceTrack(int track);
-    // 0x000a21c0
+
     bool IsOutdoorAmbienceTrackDisabled();
-    // 0x000a20e0
+
     void Play(int sound, CVector position);
-    // 0x000a1ff0
+
     void Process();
 };
 #pragma pack(pop)

@@ -35,7 +35,6 @@ typedef struct _AFS_ENTRYBT_NODE
     _AFS_ENTRYBT_NODE* pRNode;
     BYTE* pbData;
 
-    // 0x000641f0
     _AFS_ENTRYBT_NODE()
     {
         this->pEntry = NULL;
@@ -44,7 +43,6 @@ typedef struct _AFS_ENTRYBT_NODE
         this->pbData = NULL;
     }
 
-    // 0x00064200
     _AFS_ENTRYBT_NODE(SAA_ENTRY* pSAAEntry)
     {
         this->pEntry = pSAAEntry;
@@ -53,7 +51,6 @@ typedef struct _AFS_ENTRYBT_NODE
         this->pbData = NULL;
     }
 
-    // 0x00064220
     void AddEntry(SAA_ENTRY* pSAAEntry)
     {
         if (this->pEntry == NULL)
@@ -79,7 +76,6 @@ typedef struct _AFS_ENTRYBT_NODE
         }
     }
 
-    // 0x000642b0
     _AFS_ENTRYBT_NODE* FindEntry(DWORD dwHash)
     {
         if (this->pEntry->dwFileNameHash == dwHash)
@@ -105,7 +101,6 @@ typedef struct _AFS_ENTRYBT_NODE
         }
     }
 
-    // 0x00064d80
     ~_AFS_ENTRYBT_NODE()
     {
         if (this->pLNode != NULL)
@@ -156,42 +151,36 @@ private:
     DWORD m_dwObfsMask;
     DWORD m_dwNumEntries;
 
-    // 0x00064550
     void LoadEntries();
 
-    // 0x00140778
     static DWORD ms_dwHashInit;
-    // 0x00064300
+
     DWORD HashString(PCHAR szString);
 
 public:
-    // 0x00064dd0
+
     CArchiveFS(void);
-    // 0x00064e20
+
     CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize);
-    // 0x00064e80
+
     virtual ~CArchiveFS(void);
 
-    // 0x00064f20
     virtual bool Load(char* szFileName);
-    // 0x000647b0
+
     virtual bool Load(BYTE* pbData, DWORD nLength);
-    // 0x00064890
+
     virtual void Unload();
 
-    // 0x000648c0
     virtual DWORD GetFileIndex(DWORD dwFileHash);
-    // 0x00064940
+
     virtual DWORD GetFileIndex(char* szFileName);
-    // 0x000649a0
+
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-    // 0x000649e0
+
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 
-    // 0x00064bd0
     virtual void UnloadData(DWORD dwFileIndex);
 };
 #pragma pack(pop)
 
-// 0x002ac9d4
 extern CArchiveFS* g_pArchive;

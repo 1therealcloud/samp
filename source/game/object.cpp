@@ -91,54 +91,50 @@ static_assert(offsetof(ObjectRwGeometryPrefix, flags) == 8 && offsetof(ObjectRwG
               offsetof(ObjectRwGeometryPrefix, materialList.count) == 0x24);
 static_assert(offsetof(ObjectRwAtomicPrefix, geometry) == 0x18);
 
-// 0x0011edfc
 const Scripting::OpcodeInfo g_objectSetRotationCommand = {0x453, "ifff"};
-// 0x0011ee7c
+
 extern const float g_objectMotionRotationSentinel = -999.0f;
-// 0x0011e648
+
 extern const float g_objectDegreesToRadians = 0.01745329238474369f;
-// 0x0011ee24
+
 extern const Scripting::OpcodeInfo g_objectIsAttachedCommand = {0x685, "i"};
-// 0x0011ee10
+
 extern const Scripting::OpcodeInfo g_objectAttachVehicleCommand = {0x681, "iiffffff"};
-// 0x0011ee38
+
 extern const Scripting::OpcodeInfo g_objectAttachObjectCommand = {0x69a, "iiffffff"};
-// 0x00118200
+
 extern const float g_objectStreamingNearDistance = 300.0f;
-// 0x00117878
+
 extern const float g_objectStreamingVehicleMargin = 30.0f;
-// 0x001181b0
+
 extern const float g_objectTurnVelocityScale = 0.01f;
-// 0x0011ee78
+
 extern const float g_objectNegativeTurnVelocityLimit = -0.001f;
-// 0x001e0498
+
 void* g_objectSharedMaterialTexture = 0;
-// 0x0011ee4c
+
 extern const Scripting::OpcodeInfo g_objectDestroyCommand = {0x108, "i"};
-// 0x0011ede8
+
 extern const Scripting::OpcodeInfo g_objectCreateCommand = {0x107, "ifffv"};
-// 0x001e0450
+
 CMatrix g_objectAttachmentMatrix;
-// 0x001e049c
+
 CVector g_objectAttachmentZeroSpeed = {0, 0, 0};
-// 0x0011ee80
+
 extern const float g_objectRenderDistanceThreshold = 600.0f;
-// 0x001e04a8
+
 BYTE g_objectRenderFlag;
 
-// 0x000715c0
 CVector* CObject::GetRotation()
 {
     return &eulerRotation;
 }
 
-// 0x00017750
 void CObject::DisableCameraCollision()
 {
     cameraCollisionDisabled = 1;
 }
 
-// 0x000a7c90
 void CObject::SetRotation(const CVector* rotation)
 {
     if (m_pGameEntity && GamePoolObjectGetAt(m_nHandle))
@@ -150,7 +146,6 @@ void CObject::SetRotation(const CVector* rotation)
     }
 }
 
-// 0x000a7c20
 void CObject::Stop()
 {
     CVector zero = {0, 0, 0};
@@ -159,7 +154,6 @@ void CObject::Stop()
     motionFlags &= 0xfe;
 }
 
-// 0x000a7bf0
 float CObject::GetAngleDifference(float from, float to)
 {
     to = GameNormalizeAngle(to);
@@ -168,7 +162,7 @@ float CObject::GetAngleDifference(float from, float to)
 }
 // Keep the native x87 trigonometry and float spill boundaries. Only the nine
 // rotation coefficients are written; matrix padding and position are untouched.
-// 0x000a7fb0
+
 void CObject::Rotate(float x, float y, float z)
 {
     eulerRotation.x = x;
@@ -193,7 +187,7 @@ void CObject::Rotate(float x, float y, float z)
 }
 
 // Keep differences/products in x87 registers through sqrt, returning ST0.
-// 0x000a7bb0
+
 float CObject::GetDistanceToTarget(const CMatrix* matrix)
 {
     float z = matrix->position.z - targetMatrix.position.z;
@@ -202,7 +196,6 @@ float CObject::GetDistanceToTarget(const CMatrix* matrix)
     return (float)sqrt(x * x + y * y + z * z);
 }
 
-// 0x000a7e30
 void CObject::AttachToVehicle(CVehicle* vehicle)
 {
     if (!Scripting::ProcessCommand(&g_objectIsAttachedCommand, m_nHandle))
@@ -212,7 +205,6 @@ void CObject::AttachToVehicle(CVehicle* vehicle)
     }
 }
 
-// 0x000a7eb0
 void CObject::AttachToObject(CObject* object)
 {
     if (!Scripting::ProcessCommand(&g_objectIsAttachedCommand, m_nHandle))
@@ -222,7 +214,6 @@ void CObject::AttachToObject(CObject* object)
     }
 }
 
-// 0x000a97c0
 void CObject::Move(CVector position, float speed, CVector rotation)
 {
     CMatrix matrix;
@@ -276,7 +267,6 @@ void CObject::Move(CVector position, float speed, CVector rotation)
     ClearBackendFlag8();
 }
 
-// 0x000a8870
 bool CObject::GetMaterialSize(int code, int* width, int* height)
 {
     switch (code)
@@ -342,7 +332,6 @@ bool CObject::GetMaterialSize(int code, int* width, int* height)
     }
 }
 
-// 0x000a9ad0
 void CObject::ConstructMaterialText()
 {
     for (int i = 0; i < 16; ++i)
@@ -362,7 +351,6 @@ void CObject::ConstructMaterialText()
     }
 }
 
-// 0x000a8ac0
 void CObject::ShutdownMaterialText()
 {
     for (int i = 0; i < 16; ++i)
@@ -377,7 +365,6 @@ void CObject::ShutdownMaterialText()
     }
 }
 
-// 0x000a7b40
 bool CObject::IsTimeVisible()
 {
     BYTE hour = 0, minute = 0;
@@ -399,7 +386,6 @@ bool CObject::IsTimeVisible()
     return false;
 }
 
-// 0x000a8b90
 void CObject::ClearModelFlag0()
 {
     if (m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40)
@@ -410,7 +396,6 @@ void CObject::ClearModelFlag0()
     }
 }
 
-// 0x000a9150
 void CObject::ProcessStreaming()
 {
     renderReady = 0;
@@ -450,7 +435,6 @@ void CObject::ProcessStreaming()
     }
 }
 
-// 0x000a9240
 void CObject::Process(float elapsedSeconds)
 {
     if (!hasMaterials && !(streamingDistance > g_objectStreamingNearDistance) && !timeVisibilityEnabled)
@@ -593,7 +577,6 @@ void CObject::Process(float elapsedSeconds)
     }
 }
 
-// 0x000a79a0
 void CObject::Add()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -601,7 +584,6 @@ void CObject::Add()
         GameWorldAdd(m_pGameEntity);
 }
 
-// 0x000a79f0
 void CObject::Remove()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -609,7 +591,6 @@ void CObject::Remove()
         GameWorldRemove(m_pGameEntity);
 }
 
-// 0x000a9020
 CObject::~CObject()
 {
     BYTE* state = (BYTE*)this;
@@ -652,7 +633,6 @@ CObject::~CObject()
     }
 }
 
-// 0x000a8bc0
 void CObject::UpdateCachedCentre()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
@@ -672,7 +652,6 @@ void CObject::UpdateCachedCentre()
     }
 }
 
-// 0x000a8d00
 CObject::CObject(int model, float x, float y, float z, CVector rotation, float drawDistance, BYTE lightingRequest, BYTE firstHour, BYTE lastHour) : CEntity()
 {
     DWORD handle = 0;
@@ -773,14 +752,12 @@ CObject::CObject(int model, float x, float y, float z, CVector rotation, float d
     }
 }
 
-// 0x000a79c0
 BOOL CObject::IsAdded()
 {
     // GTA SA virtual address: excluded backend vtable 0x00863c40.
     return m_pGameEntity && *(DWORD*)m_pGameEntity != 0x863c40 && *(DWORD*)((BYTE*)m_pGameEntity + 0x18) && backendCreationMarker ? TRUE : FALSE;
 }
 
-// 0x000a8c30
 void CObject::SetupLighting()
 {
     if (m_pEntity && m_pEntity->vtable != 0x863c40)
@@ -801,7 +778,6 @@ void CObject::SetupLighting()
     }
 }
 
-// 0x000a8c70
 void CObject::RemoveLighting()
 {
     if (m_pEntity && m_pEntity->vtable != 0x863c40 && lightingPassEntered)
@@ -821,7 +797,6 @@ void CObject::RemoveLighting()
     }
 }
 
-// 0x000a8cc0
 bool CObject::HasRwFrameFlag8()
 {
     if (!m_pGameEntity || *(DWORD*)m_pGameEntity == 0x863c40)
@@ -840,7 +815,6 @@ bool CObject::HasRwFrameFlag8()
     return false;
 }
 
-// 0x000a7d00
 void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* rotation)
 {
     if (id == 0xffff)
@@ -857,7 +831,6 @@ void CObject::SetAttachedVehicle(WORD id, const CVector* offset, const CVector* 
         ((DWORD*)&attachmentRotation)[i] = *(const DWORD*)((const BYTE*)rotation + i * 4);
 }
 
-// 0x000a7d90
 void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* rotation, BYTE flag)
 {
     if (id == 0xffff)
@@ -879,7 +852,6 @@ void CObject::SetAttachedObject(WORD id, const CVector* offset, const CVector* r
     *(DWORD*)&attachmentRotation.z = last;
 }
 
-// 0x000a80b0
 BOOL CObject::IsMoving()
 {
     WORD object = attachedObject;
@@ -906,7 +878,6 @@ BOOL CObject::IsMoving()
     return FALSE;
 }
 
-// 0x000a8430
 void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
@@ -947,7 +918,6 @@ void* __cdecl ObjectApplyMaterials(void* atomic, void* object)
     return atomic;
 }
 
-// 0x000a86c0
 void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
@@ -972,7 +942,6 @@ void* __cdecl ObjectSaveMaterials(void* atomic, void* object)
     return atomic;
 }
 
-// 0x000a8740
 void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
 {
     ObjectRwAtomicPrefix* a = (ObjectRwAtomicPrefix*)atomic;
@@ -1000,7 +969,6 @@ void* __cdecl ObjectRestoreMaterials(void* atomic, void* object)
     return atomic;
 }
 
-// 0x000a87f0
 void CObject::ProcessMaterials()
 {
     BYTE* state = (BYTE*)this;
@@ -1027,7 +995,6 @@ void CObject::ProcessMaterials()
         GameRwForAllFrameObjects(frame, ObjectApplyMaterials, this);
 }
 
-// 0x000a82a0
 void CObject::SetMaterialText(int index, const char* text, BYTE size, const char* font, BYTE fontSize, BYTE bold, DWORD fontColor, DWORD backgroundColor, BYTE alignment)
 {
     if (index < 0 || index >= 16)
@@ -1080,7 +1047,6 @@ void CObject::SetMaterialText(int index, const char* text, BYTE size, const char
     hasMaterials = 1;
 }
 
-// 0x000a8120
 void CObject::SetMaterial(int model, int index, const char* dictionary, const char* texture, DWORD color)
 {
     if (index < 0 || index >= 16)
@@ -1131,7 +1097,6 @@ void CObject::SetMaterial(int model, int index, const char* dictionary, const ch
     hasMaterials = 1;
 }
 
-// 0x000a9a20
 void CObject::BeforeMaterialRender()
 {
     if (hasMaterials && materialPassState)
@@ -1143,7 +1108,6 @@ void CObject::BeforeMaterialRender()
     materialPassState = 1;
 }
 
-// 0x000a9a60
 void CObject::AfterMaterialRender()
 {
     if (!hasMaterials)
@@ -1162,7 +1126,6 @@ void CObject::AfterMaterialRender()
         GameRwForAllFrameObjects(frame, ObjectRestoreMaterials, this);
 }
 
-// 0x000a7a10
 void CObject::UpdateAttachedObjectRotation()
 {
     if (attachedObject == 0xffff || attachmentRotationSync)
@@ -1180,7 +1143,7 @@ void CObject::UpdateAttachedObjectRotation()
 }
 
 // Name follows the DL API map; original SA-MP spelling unconfirmed.
-// 0x000a8b50
+
 void CObject::Render()
 {
     if (!m_pEntity)
@@ -1205,7 +1168,7 @@ void CObject::Render()
 }
 
 // Name follows the DL API map; original SA-MP spelling unconfirmed.
-// 0x000a9b80
+
 void CObject::Draw()
 {
     // GTA SA virtual address: excluded backend vtable.
@@ -1253,13 +1216,11 @@ void CObject::Draw()
     materialPassState = 1;
 }
 
-// 0x000a8b00
 void* __cdecl ObjectFrameIdentity(void* object, void*)
 {
     return object;
 }
 
-// 0x000a8b10
 void CObject::ProcessFrameObjectsOnce()
 {
     BYTE* rw = (BYTE*)GetRwObject();
@@ -1272,7 +1233,6 @@ void CObject::ProcessFrameObjectsOnce()
     materials.frameObjectsProcessed = 1;
 }
 
-// 0x000a7f30
 void CObject::AttachToBackend(void* target, const CVector* offset, const CVector* rotation)
 {
     DWORD entity = (DWORD)m_pGameEntity;

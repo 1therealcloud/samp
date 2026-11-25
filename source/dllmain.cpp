@@ -14,16 +14,12 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     return ClientDllMainForward(module, reason, reserved);
 }
 
-// 0x002ac9c8
 HMODULE g_clientModule;
 
-// 0x002ac9d4
 CArchiveFS* g_pArchive;
 
-// 0x0018dc38
 DWORD g_clientStartupMarker;
 
-// 0x000c6780
 BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
 {
     if (reason == DLL_PROCESS_ATTACH)
@@ -73,19 +69,16 @@ BOOL WINAPI ClientDllMain(HINSTANCE module, DWORD reason, LPVOID reserved)
     return TRUE;
 }
 
-// 0x000c6930
 BOOL WINAPI ClientDllMainForward(HINSTANCE module, DWORD reason, LPVOID reserved)
 {
     return ClientDllMain(module, reason, reserved);
 }
 
-// 0x0009db90
 void GameMarkStartupStage()
 {
     g_clientStartupMarker = 1;
 }
 
-// 0x000c5150
 void __cdecl ClientStartupThread(void* argument)
 {
     (void)argument;

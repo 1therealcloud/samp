@@ -1,7 +1,7 @@
 #include "game/audio.h"
 
 #include "game/scripting.h"
-// 0x000a2030
+
 int CAudio::GetRadioStation()
 {
     // GTA SA radio manager VA: 0x008cb6f8; station byte is at +0xe9.
@@ -18,47 +18,40 @@ int CAudio::GetRadioStation()
     return station;
 }
 
-// 0x000a2060
 void CAudio::StartRadio(int station)
 {
     typedef void(__fastcall * BackendFn)(void*, int, DWORD, DWORD);
     reinterpret_cast<BackendFn>(0x507dc0)((void*)0xb6bc90, 0, (DWORD)station, 0);
 }
 
-// 0x000a2080
 void CAudio::StopRadio()
 {
     typedef void(__fastcall * BackendFn)(void*, int, DWORD, DWORD);
     reinterpret_cast<BackendFn>(0x506f70)((void*)0xb6bc90, 0, 0, 0);
 }
 
-// 0x000a20a0
 float CAudio::GetRadioVolume()
 {
     return *(float*)0xb5fcc8;
 }
 
-// 0x000a20b0
 void CAudio::StopOutdoorAmbienceTrack()
 {
     typedef void(__fastcall * BackendFn)(void*, int);
     reinterpret_cast<BackendFn>(0x4d6d60)((void*)0x8ac15c, 0);
 }
 
-// 0x000a20c0
 void CAudio::SetOutdoorAmbienceTrack(int track)
 {
     typedef void(__fastcall * BackendFn)(void*, int, DWORD);
     reinterpret_cast<BackendFn>(0x4d6d50)((void*)0x8ac15c, 0, (DWORD)track);
 }
 
-// 0x000a21c0
 bool CAudio::IsOutdoorAmbienceTrackDisabled()
 {
     return m_bOutdoorAmbienceTrackDisabled;
 }
 
-// 0x000a20e0
 void CAudio::Play(int sound, CVector position)
 {
     if (sound == 0)
@@ -86,7 +79,6 @@ void CAudio::Play(int sound, CVector position)
     }
 }
 
-// 0x000a1ff0
 void CAudio::Process()
 {
     if (m_bSoundLoaded && m_bSoundLoaded == 1 && Scripting::ProcessCommand(&g_audioIsLoaded, 1))

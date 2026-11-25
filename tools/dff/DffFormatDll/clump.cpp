@@ -3,10 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// 0x00002300
 CClump::CClump() : Error(0), ErrorDetail(0), FileSize(0), HasCol(false), Root(0), Struct(0), FrameList(0), GeometryList(0), Atomic(0), Extension(0), Unknown44(0), Unknown48(0) {}
 
-// 0x000023f0
 CClump::~CClump()
 {
     delete Extension;
@@ -36,7 +34,6 @@ CClump::~CClump()
     Geometries.Resize(0);
 }
 
-// 0x000017d0
 bool CClump::ReadClump(CRwChunk* Chunk)
 {
     CRwChunk* Child = ReadChunk(&Chunk->Stream);
@@ -95,7 +92,6 @@ bool CClump::ReadClump(CRwChunk* Chunk)
     return true;
 }
 
-// 0x00001910
 int CClump::Load(const char* FileName)
 {
     if (!File.Load(FileName))
@@ -131,7 +127,6 @@ int CClump::Load(const char* FileName)
     return 0;
 }
 
-// 0x000019d0
 unsigned int CClump::Save(const char* FileName)
 {
     CMemoryStream Output;
@@ -160,7 +155,6 @@ unsigned int CClump::Save(const char* FileName)
     return Output.Save(FileName);
 }
 
-// 0x00001c00
 int CClump::AppendCol(const char* FileName)
 {
     CRwChunk Col;
@@ -173,7 +167,6 @@ int CClump::AppendCol(const char* FileName)
     return AppendChunk(Extension, &Col);
 }
 
-// 0x00001d80
 bool CClump::RebuildGeometry()
 {
     if (!Geometries.Count)
@@ -198,7 +191,6 @@ bool CClump::RebuildGeometry()
     return true;
 }
 
-// 0x00002170
 bool CClump::ReadGeometry()
 {
     if (!GeometryList)

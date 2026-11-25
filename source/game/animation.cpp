@@ -4,13 +4,13 @@
 
 #include <stdio.h>
 #include <string.h>
-// 0x001419d0
+
 char g_animationNames[1812][36] = {
 #include "game/animation_names.inc"
 };
-// 0x001871a8
+
 DWORD g_animationKeys[1812];
-// 0x0009c870
+
 WORD GameFindAnimation(const char* library, const char* name)
 {
     if (!library || !name)
@@ -26,7 +26,6 @@ WORD GameFindAnimation(const char* library, const char* name)
     return 0xffff;
 }
 
-// 0x0009c950
 char* GameGetAnimationName(short index)
 {
     if (index > 1812 || index < 1)
@@ -34,13 +33,11 @@ char* GameGetAnimationName(short index)
     return g_animationNames[index - 1];
 }
 
-// 0x000b4080
 DWORD __stdcall GameAnimationKey(const char* name)
 {
     return ((DWORD(__cdecl*)(const char*))0x53cf30)(name);
 }
 
-// 0x0009c980
 void GameInitializeAnimationKeys()
 {
     for (int i = 0; i < 1812; i++)
@@ -55,7 +52,6 @@ void GameInitializeAnimationKeys()
     }
 }
 
-// 0x0009ca50
 WORD GameFindAnimationByKey(DWORD key)
 {
     for (int i = 0; i != 1812; i++)
@@ -64,7 +60,6 @@ WORD GameFindAnimationByKey(DWORD key)
     return 0xffff;
 }
 
-// 0x000b4030
 DWORD __stdcall GameGetAnimationGroupKey(int group, int animation)
 {
     // GTA SA virtual address: lookup returns an opaque association descriptor.

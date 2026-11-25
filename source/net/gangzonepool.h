@@ -14,26 +14,26 @@ class CGangZonePool
     DWORD active[1024];
 
 public:
-    // 0x00002150
+
     CGangZonePool();
-    // 0x00002180
+
     ~CGangZonePool();
-    // 0x000021b0
+
     void Create(WORD id, float minX, float minY, float maxX, float maxY, DWORD color);
-    // 0x00002230
+
     void StartFlashing(WORD id, DWORD color);
-    // 0x00002250
+
     void StopFlashing(WORD id);
-    // 0x00002270
+
     void Delete(WORD id);
-    // 0x000022a0
+
     void Draw();
 };
 static_assert(sizeof(GangZone) == 24);
 static_assert(sizeof(CGangZonePool) == 0x2000);
-// 0x001569a0
+
 extern BYTE g_gangZoneFlashPhase;
-// 0x001569a4
+
 extern DWORD g_gangZoneFlashTick;
 
 #endif // GANGZONEPOOL_H

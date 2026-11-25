@@ -6,17 +6,14 @@
 #include "game/scripting.h"
 #include "gui/gui.h"
 
-// 0x0011c640
 const Scripting::OpcodeInfo g_labelLineOfSightCommand = {0x6bd, "ffffffiiiii"};
 
-// 0x0006b5f0
 CLabel::CLabel(IDirect3DDevice9* value)
 {
     device = value;
     D3DXCreateSprite(device, &sprite);
 }
 
-// 0x0006b610
 CLabel::~CLabel()
 {
     if (sprite)
@@ -26,21 +23,18 @@ CLabel::~CLabel()
     }
 }
 
-// 0x0006b630
 void CLabel::OnLostDevice()
 {
     if (sprite)
         sprite->OnLostDevice();
 }
 
-// 0x0006b640
 void CLabel::OnResetDevice()
 {
     if (sprite)
         sprite->OnResetDevice();
 }
 
-// 0x0006b650
 BOOL CLabel::HasLineOfSight(float x, float y, float z)
 {
     CameraAim* aim = AimStuff::GetInternalAim();
@@ -49,21 +43,18 @@ BOOL CLabel::HasLineOfSight(float x, float y, float z)
     return FALSE;
 }
 
-// 0x0006b6b0
 void CLabel::Begin()
 {
     if (sprite)
         sprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 
-// 0x0006b6c0
 void CLabel::End()
 {
     if (sprite)
         sprite->End();
 }
 
-// 0x0006b6d0
 void CLabel::Draw(const CVector* position, const char* text, DWORD color, BOOL shadow, BOOL status)
 {
     if (!device)

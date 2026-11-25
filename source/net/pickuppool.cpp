@@ -11,17 +11,14 @@
 #include <stddef.h>
 #include <string.h>
 
-// 0x00118158
 const Scripting::OpcodeInfo g_pickupDestroyCommand = {0x215, "i"};
-// 0x0011816c
+
 int g_pickupCollectedRpc = 131;
-// 0x00118170
+
 int g_weaponPickupCollectedRpc = 97;
 
-// 0x00118144
 const Scripting::OpcodeInfo g_pickupCollectedCommand = {0x214, "i"};
 
-// 0x00008190
 CPickupPool::CPickupPool()
 {
     static_assert(offsetof(CPickupPool, count) == 0);
@@ -41,7 +38,6 @@ CPickupPool::CPickupPool()
     }
 }
 
-// 0x00013170
 void CPickupPool::Create(const Pickup* pickup, int id)
 {
     if (count >= Capacity || id < 0 || id >= Capacity)
@@ -57,7 +53,6 @@ void CPickupPool::Create(const Pickup* pickup, int id)
     ++count;
 }
 
-// 0x00013220
 void CPickupPool::Delete(int id)
 {
     if (count <= 0 || id < 0 || id >= Capacity || !handles[id])
@@ -69,7 +64,6 @@ void CPickupPool::Delete(int id)
     --count;
 }
 
-// 0x00013280
 void CPickupPool::DeleteWeapon(WORD owner)
 {
     for (int i = 0; i < Capacity; ++i)
@@ -84,7 +78,6 @@ void CPickupPool::DeleteWeapon(WORD owner)
     }
 }
 
-// 0x000132e0
 int CPickupPool::GetIndex(int index)
 {
     for (int i = 0; i != Capacity; ++i)
@@ -93,7 +86,6 @@ int CPickupPool::GetIndex(int index)
     return -1;
 }
 
-// 0x00013310
 CPickupPool::~CPickupPool()
 {
     for (int i = 0; i < Capacity; ++i)
@@ -104,7 +96,7 @@ CPickupPool::~CPickupPool()
 }
 
 static_assert(HIGH_PRIORITY == 1 && RELIABLE_ORDERED == 9 && RELIABLE_SEQUENCED == 10);
-// 0x00013340
+
 void CPickupPool::SendNotification(int index)
 {
     int id = GetIndex(index);
@@ -116,7 +108,6 @@ void CPickupPool::SendNotification(int index)
     cooldown[id] = 15;
 }
 
-// 0x00013420
 void CPickupPool::Process()
 {
     for (int i = 0; i < Capacity; ++i)
@@ -145,7 +136,6 @@ void CPickupPool::Process()
     }
 }
 
-// 0x00013080
 void CPickupPool::CreateWeapon(int model, float x, float y, float z, int ammo, WORD owner)
 {
     if (count >= Capacity)

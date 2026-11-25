@@ -19,9 +19,9 @@ private:
     DWORD m_dwLength;
 
 public:
-    // 0x00065440
+
     CSigner(void);
-    // 0x00065450
+
     ~CSigner(void);
 
 #ifdef ARCTOOL
@@ -30,8 +30,7 @@ public:
     DWORD GetSignatureLength();
 #endif
 
-    // 0x00065460
     void SetSignature(DWORD dwLength, BYTE* pbSignature);
-    // 0x000654b0
+
     BOOL VerifySignature(CHasher* pHasher, CKeyPair* pKeyPair);
 };

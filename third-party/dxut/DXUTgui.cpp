@@ -15,8 +15,6 @@
 #include "DXUTgui.h"
 #include "DXUTsettingsDlg.h"
 
-
-// 0x0006a130
 void CDXUTDialog::SetCaptionText(const char* text)
 {
     char* output = m_wszCaption;
@@ -30,11 +28,11 @@ void CDXUTDialog::SetCaptionText(const char* text)
 }
 
 // Shared with the recovered DL widgets; a single state instance serves both.
-// 0x00181a8d
+
 bool g_dxutScrollDragging;
-// 0x00181a90
+
 int g_dxutScrollThumbOffsetY;
-// 0x00181a95
+
 bool g_dxutListScrollInitialized;
 #undef min // use __min instead
 #undef max // use __max instead
@@ -351,7 +349,7 @@ void CDXUTDialog::Refresh()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00090360
+
 HRESULT CDXUTDialog::OnRender( float fElapsedTime )
 {   
     // If this assert triggers, you need to call CDXUTDialogResourceManager::On*Device() from inside
@@ -480,7 +478,7 @@ VOID CDXUTDialog::SendEvent( UINT nEvent, bool bTriggeredByUser, CDXUTControl* p
 
 
 //--------------------------------------------------------------------------------------
-// 0x00086B40
+
 DXUTFontNode* CDXUTDialog::GetFont( UINT index )
 {
     if( NULL == m_pManager )
@@ -500,7 +498,7 @@ DXUTTextureNode* CDXUTDialog::GetTexture( UINT index )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00089900
+
 bool CDXUTDialog::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     bool bHandled = false;
@@ -1405,7 +1403,7 @@ HRESULT CDXUTDialog::CalcTextRect( LPCWSTR strText, CDXUTElement* pElement, RECT
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008ce50
+
 HRESULT CDXUTDialog::DrawTextW( LPCWSTR strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow, int nCount)
 {
     HRESULT hr = S_OK;
@@ -1568,7 +1566,7 @@ bool CDXUTDialog::OnCycleFocus( bool bForward )
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
-// 0x0008DCC0
+
 CDXUTControl::CDXUTControl( CDXUTDialog *pDialog )
 {
     m_Type = DXUT_CONTROL_BUTTON;
@@ -1593,9 +1591,6 @@ CDXUTControl::CDXUTControl( CDXUTDialog *pDialog )
    ZeroMemory( &m_rcBoundingBox, sizeof( m_rcBoundingBox ) );
 }
 
-// 0x0008DE00
-
-
 CDXUTControl::~CDXUTControl()
 {
     for( int i = 0; i < m_Elements.GetSize(); ++i )
@@ -1607,7 +1602,7 @@ CDXUTControl::~CDXUTControl()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00087540
+
 void CDXUTControl::SetTextColor( D3DCOLOR Color )
 {
     CDXUTElement* pElement = m_Elements.GetAt( 0 );
@@ -1618,7 +1613,7 @@ void CDXUTControl::SetTextColor( D3DCOLOR Color )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00089D50
+
 HRESULT CDXUTControl::SetElement( UINT iElement, CDXUTElement* pElement )
 {
     HRESULT hr = S_OK;
@@ -1650,7 +1645,7 @@ HRESULT CDXUTControl::SetElement( UINT iElement, CDXUTElement* pElement )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00087560
+
 void CDXUTControl::Refresh()
 {
     m_bMouseOver = false;
@@ -1665,7 +1660,7 @@ void CDXUTControl::Refresh()
 
 
 //--------------------------------------------------------------------------------------
-// 0x000848A0
+
 void CDXUTControl::UpdateRects()
 {
     SetRect( &m_rcBoundingBox, m_x, m_y, m_x + m_width, m_y + m_height );
@@ -2931,7 +2926,7 @@ int CDXUTSlider::ValueFromPos( int x )
 }
 
 //--------------------------------------------------------------------------------------
-// 0x00087e80
+
 bool CDXUTSlider::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -3140,7 +3135,7 @@ void CDXUTSlider::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
-// 0x0008E750
+
 CDXUTScrollBar::CDXUTScrollBar( CDXUTDialog *pDialog )
 {
     m_Type = DXUT_CONTROL_SCROLLBAR;
@@ -3162,14 +3157,14 @@ CDXUTScrollBar::CDXUTScrollBar( CDXUTDialog *pDialog )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008E800
+
 CDXUTScrollBar::~CDXUTScrollBar()
 {
 }
 
 
 //--------------------------------------------------------------------------------------
-// 0x000881B0
+
 void CDXUTScrollBar::UpdateRects()
 {
     CDXUTControl::UpdateRects();
@@ -3191,7 +3186,7 @@ void CDXUTScrollBar::UpdateRects()
 
 //--------------------------------------------------------------------------------------
 // Compute the dimension of the scroll thumb
-// 0x00084DA0
+
 void CDXUTScrollBar::UpdateThumbRect()
 {
     if( m_nEnd - m_nStart > m_nPageSize )
@@ -3216,7 +3211,7 @@ void CDXUTScrollBar::UpdateThumbRect()
 //--------------------------------------------------------------------------------------
 // Scroll() scrolls by nDelta items.  A positive value scrolls down, while a negative
 // value scrolls up.
-// 0x00088230
+
 void CDXUTScrollBar::Scroll( int nDelta )
 {
     // Perform scroll
@@ -3231,7 +3226,7 @@ void CDXUTScrollBar::Scroll( int nDelta )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00084E30
+
 void CDXUTScrollBar::ShowItem( int nIndex )
 {
     // Cap the index
@@ -3255,7 +3250,7 @@ void CDXUTScrollBar::ShowItem( int nIndex )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00084E70
+
 bool CDXUTScrollBar::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return false;
@@ -3263,7 +3258,7 @@ bool CDXUTScrollBar::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00088250
+
 bool CDXUTScrollBar::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam )
 {
 
@@ -3375,7 +3370,7 @@ bool CDXUTScrollBar::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPa
 
 
 //--------------------------------------------------------------------------------------
-// 0x000884D0
+
 void CDXUTScrollBar::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     // Check if the arrow button has been held for a while.
@@ -3474,7 +3469,7 @@ void CDXUTScrollBar::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 
 //--------------------------------------------------------------------------------------
-// 0x000886D0
+
 void CDXUTScrollBar::SetTrackRange( int nStart, int nEnd )
 {
     m_nStart = nStart; m_nEnd = nEnd;
@@ -3484,7 +3479,7 @@ void CDXUTScrollBar::SetTrackRange( int nStart, int nEnd )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00084E80
+
 void CDXUTScrollBar::Cap()  // Clips position at boundaries. Ensures it stays within legal range.
 {
     if( m_nPosition < m_nStart ||
@@ -4117,23 +4112,23 @@ void CDXUTListBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 
 // Static member initialization
-// 0x00180618
+
 HINSTANCE CUniBuffer::s_hDll = NULL;
-// 0x00140bfc
+
 HRESULT (WINAPI *CUniBuffer::_ScriptApplyDigitSubstitution)( const SCRIPT_DIGITSUBSTITUTE*, SCRIPT_CONTROL*, SCRIPT_STATE* ) = Dummy_ScriptApplyDigitSubstitution;
-// 0x00140c00
+
 HRESULT (WINAPI *CUniBuffer::_ScriptStringAnalyse)( HDC, const void *, int, int, int, DWORD, int, SCRIPT_CONTROL*, SCRIPT_STATE*, const int*, SCRIPT_TABDEF*, const BYTE*, SCRIPT_STRING_ANALYSIS* ) = Dummy_ScriptStringAnalyse;
-// 0x00140c04
+
 HRESULT (WINAPI *CUniBuffer::_ScriptStringCPtoX)( SCRIPT_STRING_ANALYSIS, int, BOOL, int* ) = Dummy_ScriptStringCPtoX;
-// 0x00140c08
+
 HRESULT (WINAPI *CUniBuffer::_ScriptStringXtoCP)( SCRIPT_STRING_ANALYSIS, int, int*, int* ) = Dummy_ScriptStringXtoCP;
-// 0x00140c0c
+
 HRESULT (WINAPI *CUniBuffer::_ScriptStringFree)( SCRIPT_STRING_ANALYSIS* ) = Dummy_ScriptStringFree;
-// 0x00140c10
+
 const SCRIPT_LOGATTR* (WINAPI *CUniBuffer::_ScriptString_pLogAttr)( SCRIPT_STRING_ANALYSIS ) = Dummy_ScriptString_pLogAttr;
-// 0x00140c14
+
 const int* (WINAPI *CUniBuffer::_ScriptString_pcOutChars)( SCRIPT_STRING_ANALYSIS ) = Dummy_ScriptString_pcOutChars;
-// 0x0017f694
+
 bool CDXUTEditBox::s_bHideCaret;   // If true, we don't render the caret.
 
 
@@ -4147,7 +4142,7 @@ bool CDXUTEditBox::s_bHideCaret;   // If true, we don't render the caret.
 #define EDITBOX_SCROLLEXTENT 4
 
 //--------------------------------------------------------------------------------------
-// 0x0008ed00
+
 CDXUTEditBox::CDXUTEditBox( CDXUTDialog *pDialog )
 {
     m_Type = DXUT_CONTROL_EDITBOX;
@@ -4174,7 +4169,7 @@ CDXUTEditBox::CDXUTEditBox( CDXUTDialog *pDialog )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008ee30
+
 CDXUTEditBox::~CDXUTEditBox()
 {
 }
@@ -4184,7 +4179,7 @@ CDXUTEditBox::~CDXUTEditBox()
 // PlaceCaret: Set the caret to a character position, and adjust the scrolling if
 //             necessary.
 //--------------------------------------------------------------------------------------
-// 0x00084ef0
+
 void CDXUTEditBox::PlaceCaret( int nCP )
 {
     assert( nCP >= 0 && nCP <= m_Buffer.GetTextSize() );
@@ -4233,7 +4228,7 @@ void CDXUTEditBox::PlaceCaret( int nCP )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00084fd0
+
 void CDXUTEditBox::ClearText()
 {
     m_Buffer.Clear();
@@ -4255,7 +4250,6 @@ void CDXUTEditBox::SetText( LPCWSTR wszText, bool bSelected )
     m_nSelStart = bSelected ? 0 : m_nCaret;
 }
 
-// 0x00085000
 void CDXUTEditBox::SetText(const char* text, bool selected)
 {
     m_Buffer.SetText(text);
@@ -4264,12 +4258,11 @@ void CDXUTEditBox::SetText(const char* text, bool selected)
     m_nSelStart = selected ? 0 : m_nCaret;
 }
 
-// 0x000850d0
 const char* CDXUTEditBox::GetText()
 {
     return InputWideToAnsi(m_Buffer.GetBuffer());
 }
-// 0x0006eeb0
+
 void CDXUTEditBox::SetPasswordMode(bool enabled)
 {
     m_nativeFlag126 = enabled;
@@ -4278,7 +4271,7 @@ void CDXUTEditBox::SetPasswordMode(bool enabled)
 
 
 //--------------------------------------------------------------------------------------
-// 0x00088950
+
 HRESULT CDXUTEditBox::GetTextCopy( LPWSTR strDest, UINT bufferCount )
 {
     assert( strDest );
@@ -4290,7 +4283,7 @@ HRESULT CDXUTEditBox::GetTextCopy( LPWSTR strDest, UINT bufferCount )
 
 
 //--------------------------------------------------------------------------------------
-// 0x000850e0
+
 void CDXUTEditBox::DeleteSelectionText()
 {
     int nFirst = __min( m_nCaret, m_nSelStart );
@@ -4305,7 +4298,7 @@ void CDXUTEditBox::DeleteSelectionText()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085130
+
 void CDXUTEditBox::UpdateRects()
 {
     CDXUTControl::UpdateRects();
@@ -4329,9 +4322,6 @@ void CDXUTEditBox::UpdateRects()
     // Inflate further by m_nSpacing
     InflateRect( &m_rcText, -m_nSpacing, -m_nSpacing );
 }
-
-// 0x00085260
-
 
 void CDXUTEditBox::CopyToClipboard()
 {
@@ -4362,9 +4352,6 @@ void CDXUTEditBox::CopyToClipboard()
     }
 }
 
-// 0x00085320
-
-
 void CDXUTEditBox::PasteFromClipboard()
 {
     DeleteSelectionText();
@@ -4392,7 +4379,7 @@ void CDXUTEditBox::PasteFromClipboard()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00088970
+
 bool CDXUTEditBox::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -4520,7 +4507,7 @@ bool CDXUTEditBox::HandleKeyboard( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00088be0
+
 bool CDXUTEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -4583,7 +4570,7 @@ bool CDXUTEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lPara
 
 
 //--------------------------------------------------------------------------------------
-// 0x00088d90
+
 void CDXUTEditBox::OnFocusIn()
 {
     CDXUTControl::OnFocusIn();
@@ -4593,7 +4580,7 @@ void CDXUTEditBox::OnFocusIn()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00088da0
+
 bool CDXUTEditBox::MsgProc( UINT message, WPARAM wparam, LPARAM lparam )
 {
     (void)lparam;
@@ -4688,7 +4675,7 @@ bool CDXUTEditBox::MsgProc( UINT message, WPARAM wparam, LPARAM lparam )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008ee80
+
 void CDXUTEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     (void)pd3dDevice;
@@ -4765,8 +4752,6 @@ void CDXUTEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 #define IN_FLOAT_CHARSET( c ) \
     ( (c) == L'-' || (c) == L'.' || ( (c) >= L'0' && (c) <= L'9' ) )
-
-// 0x00089000
 
 void CDXUTEditBox::ParseFloatArray( float *pNumbers, int nCount )
 {
@@ -4851,67 +4836,65 @@ void CDXUTEditBox::SetTextFloatArray( const float *pNumbers, int nCount )
 #define IMEID_CHS_VER53 ( LANG_CHS | MAKEIMEVERSION( 5, 3 ) )   // MSPY3    // WinXP
 
 // Function pointers
-// 0x00140c18
+
 INPUTCONTEXT* (WINAPI * CDXUTIMEEditBox::_ImmLockIMC)( HIMC ) = CDXUTIMEEditBox::Dummy_ImmLockIMC;
-// 0x00140c1c
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmUnlockIMC)( HIMC ) = CDXUTIMEEditBox::Dummy_ImmUnlockIMC;
-// 0x00140c20
+
 LPVOID (WINAPI * CDXUTIMEEditBox::_ImmLockIMCC)( HIMCC ) = CDXUTIMEEditBox::Dummy_ImmLockIMCC;
-// 0x00140c24
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmUnlockIMCC)( HIMCC ) = CDXUTIMEEditBox::Dummy_ImmUnlockIMCC;
-// 0x00140c28
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmDisableTextFrameService)( DWORD ) = CDXUTIMEEditBox::Dummy_ImmDisableTextFrameService;
-// 0x00140c2c
+
 LONG (WINAPI * CDXUTIMEEditBox::_ImmGetCompositionStringW)( HIMC, DWORD, LPVOID, DWORD ) = CDXUTIMEEditBox::Dummy_ImmGetCompositionStringW;
-// 0x00140c30
+
 DWORD (WINAPI * CDXUTIMEEditBox::_ImmGetCandidateListW)( HIMC, DWORD, LPCANDIDATELIST, DWORD ) = CDXUTIMEEditBox::Dummy_ImmGetCandidateListW;
-// 0x00140c34
+
 HIMC (WINAPI * CDXUTIMEEditBox::_ImmGetContext)( HWND ) = CDXUTIMEEditBox::Dummy_ImmGetContext;
-// 0x00140c38
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmReleaseContext)( HWND, HIMC ) = CDXUTIMEEditBox::Dummy_ImmReleaseContext;
-// 0x00140c3c
+
 HIMC (WINAPI * CDXUTIMEEditBox::_ImmAssociateContext)( HWND, HIMC ) = CDXUTIMEEditBox::Dummy_ImmAssociateContext;
-// 0x00140c40
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmGetOpenStatus)( HIMC ) = CDXUTIMEEditBox::Dummy_ImmGetOpenStatus;
-// 0x00140c44
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmSetOpenStatus)( HIMC, BOOL ) = CDXUTIMEEditBox::Dummy_ImmSetOpenStatus;
-// 0x00140c48
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmGetConversionStatus)( HIMC, LPDWORD, LPDWORD ) = CDXUTIMEEditBox::Dummy_ImmGetConversionStatus;
-// 0x00140c4c
+
 HWND (WINAPI * CDXUTIMEEditBox::_ImmGetDefaultIMEWnd)( HWND ) = CDXUTIMEEditBox::Dummy_ImmGetDefaultIMEWnd;
-// 0x00140c50
+
 UINT (WINAPI * CDXUTIMEEditBox::_ImmGetIMEFileNameA)( HKL, LPSTR, UINT ) = CDXUTIMEEditBox::Dummy_ImmGetIMEFileNameA;
-// 0x00140c54
+
 UINT (WINAPI * CDXUTIMEEditBox::_ImmGetVirtualKey)( HWND ) = CDXUTIMEEditBox::Dummy_ImmGetVirtualKey;
-// 0x00140c58
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmNotifyIME)( HIMC, DWORD, DWORD, DWORD ) = CDXUTIMEEditBox::Dummy_ImmNotifyIME;
-// 0x00140c5c
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmSetConversionStatus)( HIMC, DWORD, DWORD ) = CDXUTIMEEditBox::Dummy_ImmSetConversionStatus;
-// 0x00140c60
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmSimulateHotKey)( HWND, DWORD ) = CDXUTIMEEditBox::Dummy_ImmSimulateHotKey;
-// 0x00140c64
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ImmIsIME)( HKL ) = CDXUTIMEEditBox::Dummy_ImmIsIME;
-// 0x00140c68
+
 UINT (WINAPI * CDXUTIMEEditBox::_GetReadingString)( HIMC, UINT, LPWSTR, PINT, BOOL*, PUINT ) = CDXUTIMEEditBox::Dummy_GetReadingString; // Traditional Chinese IME
-// 0x00140c6c
+
 BOOL (WINAPI * CDXUTIMEEditBox::_ShowReadingWindow)( HIMC, BOOL ) = CDXUTIMEEditBox::Dummy_ShowReadingWindow; // Traditional Chinese IME
-// 0x00140c70
+
 BOOL (APIENTRY * CDXUTIMEEditBox::_VerQueryValueA)( const LPVOID, LPSTR, LPVOID *, PUINT ) = CDXUTIMEEditBox::Dummy_VerQueryValueA;
-// 0x00140c74
+
 BOOL (APIENTRY * CDXUTIMEEditBox::_GetFileVersionInfoA)( LPSTR, DWORD, DWORD, LPVOID )= CDXUTIMEEditBox::Dummy_GetFileVersionInfoA;
-// 0x00140c78
+
 DWORD (APIENTRY * CDXUTIMEEditBox::_GetFileVersionInfoSizeA)( LPSTR, LPDWORD ) = CDXUTIMEEditBox::Dummy_GetFileVersionInfoSizeA;
 
-// 0x00180604
-
 HINSTANCE CDXUTIMEEditBox::s_hDllImm32;      // IMM32 DLL handle
-// 0x0017f6a4
+
 HINSTANCE CDXUTIMEEditBox::s_hDllVer;        // Version DLL handle
-// 0x00180600
+
 HKL       CDXUTIMEEditBox::s_hklCurrent;     // Current keyboard layout of the process
-// 0x0017F6B1
+
 bool      CDXUTIMEEditBox::s_bVerticalCand;  // Indicates that the candidates are listed vertically
-// 0x00140C7C
+
 WCHAR     CDXUTIMEEditBox::s_aszIndicator[5][3] = // String to draw to indicate current input locale
             {
                 L"En",
@@ -4920,41 +4903,41 @@ WCHAR     CDXUTIMEEditBox::s_aszIndicator[5][3] = // String to draw to indicate 
                 L"\xAC00",
                 L"\x3042",
             };
-// 0x00140C9C
+
 LPWSTR    CDXUTIMEEditBox::s_wszCurrIndicator = CDXUTIMEEditBox::s_aszIndicator[0];  // Points to an indicator string that corresponds to current input locale
-// 0x0017F695
+
 bool      CDXUTIMEEditBox::s_bInsertOnType;     // Insert the character as soon as a key is pressed (Korean behavior)
-// 0x0017f6b4
+
 HINSTANCE CDXUTIMEEditBox::s_hDllIme;           // Instance handle of the current IME module
-// 0x0017F6A8
+
 HIMC      CDXUTIMEEditBox::s_hImcDef;           // Default input context
-// 0x0018061C
+
 CDXUTIMEEditBox::IMESTATE  CDXUTIMEEditBox::s_ImeState = IMEUI_STATE_OFF;
-// 0x0017F6B0
+
 bool      CDXUTIMEEditBox::s_bEnableImeSystem;  // Whether the IME system is active
-// 0x0017F69C
+
 POINT     CDXUTIMEEditBox::s_ptCompString;      // Composition string position. Updated every frame.
-// 0x0017F690
+
 int       CDXUTIMEEditBox::s_nCompCaret;
-// 0x0017F6AC
+
 int       CDXUTIMEEditBox::s_nFirstTargetConv;  // Index of the first target converted char in comp string.  If none, -1.
-// 0x0018062c
+
 CUniBuffer CDXUTIMEEditBox::s_CompString = CUniBuffer( 0 );
-// 0x0017F6B8
+
 BYTE      CDXUTIMEEditBox::s_abCompStringAttr[MAX_COMPSTRING_SIZE];
-// 0x0017F7B8
+
 DWORD     CDXUTIMEEditBox::s_adwCompStringClause[MAX_COMPSTRING_SIZE];
-// 0x001803C0
+
 WCHAR     CDXUTIMEEditBox::s_wszReadingString[32];
-// 0x00180640
+
 CDXUTIMEEditBox::CCandList CDXUTIMEEditBox::s_CandList;       // Data relevant to the candidate list
-// 0x0017F696
+
 bool      CDXUTIMEEditBox::s_bShowReadingWindow; // Indicates whether reading window is visible
-// 0x001803BA
+
 bool      CDXUTIMEEditBox::s_bHorizontalReading; // Indicates whether the reading window is vertical or horizontal
-// 0x001803B9
+
 bool      CDXUTIMEEditBox::s_bChineseIME;
-// 0x00180620
+
 CGrowableArray< CDXUTIMEEditBox::CInputLocale > CDXUTIMEEditBox::s_Locale; // Array of loaded keyboard layout on system
 #if defined(DEBUG) | defined(_DEBUG)
 bool      CDXUTIMEEditBox::m_bIMEStaticMsgProcCalled = false;
@@ -4962,7 +4945,7 @@ bool      CDXUTIMEEditBox::m_bIMEStaticMsgProcCalled = false;
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008F370
+
 CDXUTIMEEditBox::CDXUTIMEEditBox( CDXUTDialog *pDialog )
 {
     CDXUTIMEEditBox::Initialize(); // ensure static vars are properly init'ed first
@@ -4994,14 +4977,14 @@ CDXUTIMEEditBox::CDXUTIMEEditBox( CDXUTDialog *pDialog )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008F470
+
 CDXUTIMEEditBox::~CDXUTIMEEditBox()
 {
 }
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085430
+
 void CDXUTIMEEditBox::SendKey( BYTE nVirtKey )
 {
     keybd_event( nVirtKey, 0, 0,               0 );
@@ -5012,7 +4995,7 @@ void CDXUTIMEEditBox::SendKey( BYTE nVirtKey )
 //--------------------------------------------------------------------------------------
 // Called by CDXUTResourceCache's OnCreateDevice.  This gives the class a
 // chance to initialize its default input context associated with the app window.
-// 0x00085460
+
 HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 {
     _ImmDisableTextFrameService((DWORD)-1);
@@ -5025,7 +5008,7 @@ HRESULT CDXUTIMEEditBox::StaticOnCreateDevice()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085490
+
 void CDXUTIMEEditBox::UpdateRects()
 {
     if (!s_bEnableImeSystem)
@@ -5072,13 +5055,11 @@ void CDXUTIMEEditBox::UpdateRects()
 // For more information, see the CompareString() reference.
 #define LCID_INVARIANT MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
 
-// 0x00085500
-
 DWORD CDXUTIMEEditBox::GetImeId( UINT uIndex )
 {
-    // 0x00181A84
+
     static HKL hklPrev = 0;
-    // 0x00181A7C
+
     static DWORD dwID[2] = { 0, 0 };  // Cache the result
     
     DWORD   dwVerSize;
@@ -5167,10 +5148,10 @@ DWORD CDXUTIMEEditBox::GetImeId( UINT uIndex )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085760
+
 void CDXUTIMEEditBox::CheckInputLocale()
 {
-    // 0x00181A88
+
     static HKL hklPrev = 0;
     s_hklCurrent = GetKeyboardLayout( 0 );
     if ( hklPrev == s_hklCurrent )
@@ -5224,7 +5205,7 @@ void CDXUTIMEEditBox::CheckInputLocale()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085860
+
 void CDXUTIMEEditBox::CheckToggleState()
 {
     CheckInputLocale();
@@ -5254,7 +5235,7 @@ void CDXUTIMEEditBox::CheckToggleState()
 //--------------------------------------------------------------------------------------
 // Enable/disable the entire IME system.  When disabled, the default IME handling
 // kicks in.
-// 0x00085940
+
 void CDXUTIMEEditBox::EnableImeSystem( bool bEnable )
 {
     s_bEnableImeSystem = bEnable;
@@ -5264,7 +5245,7 @@ void CDXUTIMEEditBox::EnableImeSystem( bool bEnable )
 //--------------------------------------------------------------------------------------
 // Sets up IME-specific APIs for the IME edit controls.  This is called every time
 // the input locale changes.
-// 0x00085950
+
 void CDXUTIMEEditBox::SetupImeApi()
 {
     char szImeFile[MAX_PATH + 1];
@@ -5287,7 +5268,7 @@ void CDXUTIMEEditBox::SetupImeApi()
 
 //--------------------------------------------------------------------------------------
 // Resets the composition string.
-// 0x000859E0
+
 void CDXUTIMEEditBox::ResetCompositionString()
 {
     s_nCompCaret = 0;
@@ -5298,7 +5279,7 @@ void CDXUTIMEEditBox::ResetCompositionString()
 
 //--------------------------------------------------------------------------------------
 // Truncate composition string by sending keystrokes to the window.
-// 0x00085A10
+
 void CDXUTIMEEditBox::TruncateCompString( bool bUseBackSpace, int iNewStrLen )
 {
     if( !s_bInsertOnType )
@@ -5345,7 +5326,7 @@ void CDXUTIMEEditBox::TruncateCompString( bool bUseBackSpace, int iNewStrLen )
 //--------------------------------------------------------------------------------------
 // Sends the current composition string to the application by sending keystroke
 // messages.
-// 0x00085B20
+
 void CDXUTIMEEditBox::SendCompString()
 {
     for( int i = 0; i < lstrlenW( s_CompString.GetBuffer() ); ++i )
@@ -5355,14 +5336,12 @@ void CDXUTIMEEditBox::SendCompString()
 
 //--------------------------------------------------------------------------------------
 // Outputs current composition string then cleans up the composition task.
-// 0x00085B70
+
 void CDXUTIMEEditBox::FinalizeString( bool bSend )
 {
     HIMC hImc;
     if( NULL == ( hImc = _ImmGetContext((*(HWND*)0x00c97c1c) ) ) )
         return;
-
-    // 0x00181A8C
 
     static bool bProcessing = false;
     if( bProcessing )    // avoid infinite recursion
@@ -5399,7 +5378,7 @@ void CDXUTIMEEditBox::FinalizeString( bool bSend )
 
 //--------------------------------------------------------------------------------------
 // Determine whether the reading window should be vertical or horizontal.
-// 0x0008AC70
+
 void CDXUTIMEEditBox::GetReadingWindowOrientation( DWORD dwId )
 {
     s_bHorizontalReading = ( s_hklCurrent == _CHS_HKL ) || ( s_hklCurrent == _CHT_HKL2 ) || ( dwId == 0 );
@@ -5435,7 +5414,7 @@ void CDXUTIMEEditBox::GetReadingWindowOrientation( DWORD dwId )
 
 //--------------------------------------------------------------------------------------
 // Obtain the reading string upon WM_IME_NOTIFY/INM_PRIVATE notification.
-// 0x0008ADD0
+
 void CDXUTIMEEditBox::GetPrivateReadingString()
 {
     DWORD dwId = GetImeId();
@@ -5646,7 +5625,7 @@ void CDXUTIMEEditBox::GetPrivateReadingString()
 //--------------------------------------------------------------------------------------
 // This function is used only briefly in CHT IME handling,
 // so accelerator isn't processed.
-// 0x00085C40
+
 void CDXUTIMEEditBox::PumpMessage()
 {
     MSG msg;
@@ -5665,7 +5644,7 @@ void CDXUTIMEEditBox::PumpMessage()
 
 
 //--------------------------------------------------------------------------------------
-// 0x000890B0
+
 void CDXUTIMEEditBox::OnFocusIn()
 {
     CDXUTEditBox::OnFocusIn();
@@ -5691,7 +5670,7 @@ void CDXUTIMEEditBox::OnFocusIn()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085CC0
+
 void CDXUTIMEEditBox::OnFocusOut()
 {
     CDXUTEditBox::OnFocusOut();
@@ -5706,7 +5685,7 @@ void CDXUTIMEEditBox::OnFocusOut()
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008C2C0
+
 bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     HIMC hImc;
@@ -5856,7 +5835,7 @@ bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00089110
+
 bool CDXUTIMEEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -6032,7 +6011,7 @@ bool CDXUTIMEEditBox::HandleMouse( UINT uMsg, POINT pt, WPARAM wParam, LPARAM lP
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008B300
+
 bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     if( !m_bEnabled || !m_bVisible )
@@ -6049,11 +6028,11 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
     bool *trapped = &trappedData;
 
     HIMC hImc;
-    // 0x00140CB8
+
     static LPARAM lAlt = 0x80000000;
-    // 0x00140CB4
+
     static LPARAM lCtrl = 0x80000000;
-    // 0x00140CB0
+
     static LPARAM lShift = 0x80000000;
 
     *trapped = false;
@@ -6456,7 +6435,7 @@ bool CDXUTIMEEditBox::MsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008F480
+
 void CDXUTIMEEditBox::RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice, float fElapsedTime, bool bReading )
 {
     RECT rc;
@@ -6587,7 +6566,7 @@ void CDXUTIMEEditBox::RenderCandidateReadingWindow( IDirect3DDevice9* pd3dDevice
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008FAA0
+
 void CDXUTIMEEditBox::RenderComposition( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     RECT rcCaret = { 0, 0, 0, 0 };
@@ -6751,7 +6730,7 @@ void CDXUTIMEEditBox::RenderComposition( IDirect3DDevice9* pd3dDevice, float fEl
 
 
 //--------------------------------------------------------------------------------------
-// 0x000900E0
+
 void CDXUTIMEEditBox::RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     CDXUTElement *pElement = m_Elements.GetAt( 9 );
@@ -6771,7 +6750,7 @@ void CDXUTIMEEditBox::RenderIndicator( IDirect3DDevice9* pd3dDevice, float fElap
 
 
 //--------------------------------------------------------------------------------------
-// 0x00090230
+
 void CDXUTIMEEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 {
     if( m_bVisible == false )
@@ -6829,7 +6808,7 @@ void CDXUTIMEEditBox::Render( IDirect3DDevice9* pd3dDevice, float fElapsedTime )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009ba60
+
 void CUniBuffer::Initialize()
 {
     if( s_hDll )
@@ -6858,7 +6837,7 @@ void CUniBuffer::Initialize()
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b1d0
+
 void CUniBuffer::Uninitialize()
 {
     if( s_hDll )
@@ -6878,7 +6857,7 @@ void CUniBuffer::Uninitialize()
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b240
+
 bool CUniBuffer::SetBufferSize( int nNewSize )
 {
     // If the current size is already the maximum allowed,
@@ -6914,7 +6893,7 @@ bool CUniBuffer::SetBufferSize( int nNewSize )
 //--------------------------------------------------------------------------------------
 // Uniscribe -- Analyse() analyses the string in the buffer
 //--------------------------------------------------------------------------------------
-// 0x0009b310
+
 HRESULT CUniBuffer::Analyse()
 {
     if( m_Analysis )
@@ -6954,7 +6933,7 @@ HRESULT CUniBuffer::Analyse()
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009bbb0
+
 CUniBuffer::CUniBuffer( int nInitialSize )
 {
     CUniBuffer::Initialize();  // ensure static vars are properly init'ed first
@@ -6973,7 +6952,7 @@ CUniBuffer::CUniBuffer( int nInitialSize )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b440
+
 CUniBuffer::~CUniBuffer()
 {
     delete[] m_pwszBuffer;
@@ -6983,7 +6962,7 @@ CUniBuffer::~CUniBuffer()
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b470
+
 WCHAR& CUniBuffer::operator[]( int n )  // No param checking
 {
     // This version of operator[] is called only
@@ -6995,7 +6974,7 @@ WCHAR& CUniBuffer::operator[]( int n )  // No param checking
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b480
+
 void CUniBuffer::Clear()
 {
     *m_pwszBuffer = L'\0';
@@ -7007,7 +6986,7 @@ void CUniBuffer::Clear()
 // Inserts the char at specified index.
 // If nIndex == -1, insert to the end.
 //--------------------------------------------------------------------------------------
-// 0x0009b520
+
 bool CUniBuffer::InsertChar(int index, char value)
 {
     DWORD wide = 0;
@@ -7031,7 +7010,7 @@ bool CUniBuffer::InsertChar(int index, char value)
     InsertChar(index, (WCHAR)wide);
     return true;
 }
-// 0x0009bbf0
+
 bool CUniBuffer::OverwriteAnsiChar(int index, char value)
 {
     DWORD wide = 0;
@@ -7057,7 +7036,6 @@ bool CUniBuffer::OverwriteAnsiChar(int index, char value)
     return true;
 }
 
-// 0x0009b490
 bool CUniBuffer::InsertChar( int nIndex, WCHAR wChar )
 {
     assert( nIndex >= 0 );
@@ -7099,7 +7077,7 @@ bool CUniBuffer::InsertChar( int nIndex, WCHAR wChar )
 // Removes the char at specified index.
 // If nIndex == -1, remove the last char.
 //--------------------------------------------------------------------------------------
-// 0x0009b5d0
+
 bool CUniBuffer::RemoveChar( int nIndex )
 {
     if( !lstrlenW( m_pwszBuffer ) || nIndex < 0 || nIndex >= lstrlenW( m_pwszBuffer ) )
@@ -7116,7 +7094,7 @@ bool CUniBuffer::RemoveChar( int nIndex )
 // If nCount == -1, the entire string is inserted.
 // If nIndex == -1, insert to the end.
 //--------------------------------------------------------------------------------------
-// 0x0009b630
+
 bool CUniBuffer::InsertString( int nIndex, const WCHAR *pStr, int nCount )
 {
     assert( nIndex >= 0 );
@@ -7146,7 +7124,7 @@ bool CUniBuffer::InsertString( int nIndex, const WCHAR *pStr, int nCount )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009ba00
+
 bool CUniBuffer::SetText(const char* text)
 {
     if (lstrlenA(text) > 1024)
@@ -7157,7 +7135,6 @@ bool CUniBuffer::SetText(const char* text)
     return true;
 }
 
-// 0x0009b9a0
 bool CUniBuffer::SetText( LPCWSTR wszText )
 {
     assert( wszText != NULL );
@@ -7184,7 +7161,7 @@ bool CUniBuffer::SetText( LPCWSTR wszText )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b770
+
 HRESULT CUniBuffer::CPtoX( int nCP, BOOL bTrail, int *pX )
 {
     assert( pX );
@@ -7202,7 +7179,7 @@ HRESULT CUniBuffer::CPtoX( int nCP, BOOL bTrail, int *pX )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b7b0
+
 HRESULT CUniBuffer::XtoCP( int nX, int *pCP, int *pnTrail )
 {
     assert( pCP && pnTrail );
@@ -7232,7 +7209,7 @@ HRESULT CUniBuffer::XtoCP( int nX, int *pCP, int *pnTrail )
 
 
 //--------------------------------------------------------------------------------------
-// 0x0009b840
+
 void CUniBuffer::GetPriorItemPos( int nCP, int *pPrior )
 {
     *pPrior = nCP;  // Default is the char itself
@@ -7264,7 +7241,7 @@ void CUniBuffer::GetPriorItemPos( int nCP, int *pPrior )
     
 
 //--------------------------------------------------------------------------------------
-// 0x0009b8d0
+
 void CUniBuffer::GetNextItemPos( int nCP, int *pPrior )
 {
     *pPrior = nCP;  // Default is the char itself
@@ -7305,7 +7282,7 @@ void CUniBuffer::GetNextItemPos( int nCP, int *pPrior )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085cf0
+
 void CDXUTEditBox::ResetCaretBlink()
 {
     m_bCaretOn = true;
@@ -7314,7 +7291,7 @@ void CDXUTEditBox::ResetCaretBlink()
 
 
 //--------------------------------------------------------------------------------------
-// 0x0008bcc0
+
 void CDXUTIMEEditBox::Initialize()
 {
     if( s_hDllImm32 ) // Only need to do once
@@ -7368,7 +7345,7 @@ void CDXUTIMEEditBox::Initialize()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085d10
+
 void CDXUTIMEEditBox::Uninitialize()
 {
     if( s_hDllImm32 )
@@ -7418,7 +7395,7 @@ void CDXUTIMEEditBox::Uninitialize()
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085E90
+
 void DXUTBlendColor::Init( D3DCOLOR defaultColor, D3DCOLOR disabledColor, D3DCOLOR hiddenColor )
 {
     for( int i=0; i < MAX_CONTROL_STATES; i++ )
@@ -7433,7 +7410,7 @@ void DXUTBlendColor::Init( D3DCOLOR defaultColor, D3DCOLOR disabledColor, D3DCOL
 
 
 //--------------------------------------------------------------------------------------
-// 0x00085F40
+
 void DXUTBlendColor::Blend( UINT iState, float fElapsedTime, float fRate )
 {
     D3DXCOLOR destColor = States[ iState ];
@@ -7443,7 +7420,7 @@ void DXUTBlendColor::Blend( UINT iState, float fElapsedTime, float fRate )
 
 
 //--------------------------------------------------------------------------------------
-// 0x00086010
+
 void CDXUTElement::SetTexture( UINT iTexture, RECT* prcTexture, D3DCOLOR defaultTextureColor )
 {
     this->iTexture = iTexture;
@@ -7458,7 +7435,7 @@ void CDXUTElement::SetTexture( UINT iTexture, RECT* prcTexture, D3DCOLOR default
     
 
 //--------------------------------------------------------------------------------------
-// 0x00086060
+
 void CDXUTElement::SetFont( UINT iFont, D3DCOLOR defaultFontColor, DWORD dwTextFormat )
 {
     this->iFont = iFont;
@@ -7469,7 +7446,7 @@ void CDXUTElement::SetFont( UINT iFont, D3DCOLOR defaultFontColor, DWORD dwTextF
 
 
 //--------------------------------------------------------------------------------------
-// 0x00086090
+
 void CDXUTElement::Refresh()
 {
     TextureColor.Current = TextureColor.States[ DXUT_STATE_HIDDEN ];
@@ -7480,7 +7457,6 @@ void CDXUTElement::Refresh()
 #include "dxstdafx.h"
 #include <stdio.h>
 
-// 0x0008c8f0
 int CDXUTDialogResourceManager::AddFont(const char* face, LONG height, LONG weight)
 {
     for (int i = 0; i < m_FontCache.GetSize(); ++i)
@@ -7503,7 +7479,6 @@ int CDXUTDialogResourceManager::AddFont(const char* face, LONG height, LONG weig
     return index;
 }
 
-// 0x0008c9e0
 int CDXUTDialogResourceManager::UpdateFont(UINT index, const char* face, LONG height, LONG weight)
 {
     DXUTFontNode* node = m_FontCache.GetAt(index);
@@ -7526,7 +7501,6 @@ int CDXUTDialogResourceManager::UpdateFont(UINT index, const char* face, LONG he
     return index;
 }
 
-// 0x0008ca50
 HRESULT CDXUTDialog::SetFont(UINT index, const char* face, LONG height, LONG weight)
 {
     for (UINT i = m_Fonts.GetSize(); i <= index; ++i)
@@ -7536,7 +7510,6 @@ HRESULT CDXUTDialog::SetFont(UINT index, const char* face, LONG height, LONG wei
     return S_OK;
 }
 
-// 0x0008c170
 HRESULT CDXUTDialogResourceManager::CreateFont(UINT index)
 {
     DXUTFontNode* node = m_FontCache.GetAt(index);
@@ -7558,7 +7531,6 @@ HRESULT CDXUTDialogResourceManager::CreateFont(UINT index)
 
 #include "dxstdafx.h"
 
-// 0x0008cae0
 HRESULT CDXUTDialog::DrawTextA(const char* strText, CDXUTElement* pElement, RECT* prcDest, bool bShadow, int nCount)
 {
     HRESULT hr = S_OK;
@@ -7618,7 +7590,7 @@ HRESULT CDXUTDialog::DrawTextA(const char* strText, CDXUTElement* pElement, RECT
 
 #include "dxstdafx.h"
 #include "DXUTmedia.h"
-// 0x000897d0
+
 int CDXUTDialogResourceManager::AddTexture(const char* strFilename)
 {
     // See if this texture already exists
@@ -7649,7 +7621,6 @@ int CDXUTDialogResourceManager::AddTexture(const char* strFilename)
     return iTexture;
 }
 
-// 0x00089890
 HRESULT CDXUTDialog::SetTexture(UINT index, const char* strFilename)
 {
     // If this assert triggers, you need to call CDXUTDialog::Init() first.  This change
@@ -7670,7 +7641,6 @@ HRESULT CDXUTDialog::SetTexture(UINT index, const char* strFilename)
     return S_OK;
 }
 
-// 0x000874b0
 HRESULT CDXUTDialogResourceManager::CreateTexture(UINT iTexture)
 {
     HRESULT hr = S_OK;
@@ -7714,7 +7684,6 @@ HRESULT CDXUTDialogResourceManager::CreateTexture(UINT iTexture)
 #include "dxstdafx.h"
 #include "render/fontrender.h"
 
-// 0x0008d1c0
 void CDXUTDialog::InitFont()
 {
     int height = FontGetDialogHeight();
@@ -7722,7 +7691,7 @@ void CDXUTDialog::InitFont()
     SetFont(0, FontGetFace(), height, weight);
     SetFont(1, FontGetFace(), height - 2, weight);
 }
-// 0x0008d200
+
 void CDXUTDialog::InitDefaultElements()
 {
     SetTexture(0, "sampgui.png");
@@ -7919,7 +7888,6 @@ void CDXUTDialog::InitDefaultElements()
 #include <string.h>
 #include <wchar.h>
 
-// 0x0009b700
 void InputBufferAnsiToWide(const char* text, wchar_t* output, int capacity)
 {
     memset(output, 0, capacity * sizeof(wchar_t));
@@ -7928,7 +7896,6 @@ void InputBufferAnsiToWide(const char* text, wchar_t* output, int capacity)
         MultiByteToWideChar(CP_ACP, 0, text, (int)strlen(text), output, length);
 }
 
-// 0x00090b30
 HRESULT CDXUTDialog::AddIMEEditBox(int id, const char* text, int x, int y, int width, int height, bool isDefault, CDXUTIMEEditBox** created)
 {
     CDXUTIMEEditBox* edit = new CDXUTIMEEditBox(this);
@@ -7948,9 +7915,8 @@ HRESULT CDXUTDialog::AddIMEEditBox(int id, const char* text, int x, int y, int w
     return S_OK;
 }
 
-// 0x0017fbb8
 char g_inputAnsiText[2049]; // Includes the observed terminator write at index 2048.
-// 0x00085060
+
 const char* InputWideToAnsi(const wchar_t* text)
 {
     memset(g_inputAnsiText, 0, 2048);
@@ -7963,9 +7929,8 @@ const char* InputWideToAnsi(const wchar_t* text)
     return g_inputAnsiText;
 }
 
-// 0x00180400
 wchar_t g_inputMaskedText[256];
-// 0x000853a0
+
 const wchar_t* InputMaskWideText(const wchar_t* text)
 {
     memset(g_inputMaskedText, 0, 511); // Native clears exactly 511 bytes.
@@ -7991,18 +7956,17 @@ public:
         _ImmReleaseContext(window, s_hImcDef);
     }
 };
-// 0x00085460
+
 void InputResetIme()
 {
     InputImeAccess::ResetDefaultContext((*(HWND*)0x00c97c1c));
 }
-// 0x00085940
+
 void InputEnableIme(bool enable)
 {
     CDXUTIMEEditBox::EnableImeSystem(enable);
 }
 
-// 0x0017f698
 DWORD g_inputImeActivityTick;
 class InputImeActivityAccess : public CDXUTIMEEditBox
 {
@@ -8017,7 +7981,7 @@ public:
         return s_bShowReadingWindow;
     }
 };
-// 0x00085e60
+
 bool ChatImeActive()
 {
     if (InputImeActivityAccess::CandidateWindowVisible())
@@ -8039,7 +8003,7 @@ bool ChatImeActive()
 #include <assert.h>
 #include <new>
 #include <string.h>
-// 0x0008c860
+
 HRESULT CDXUTDialogResourceManager::OnCreateDevice(IDirect3DDevice9* device)
 {
     m_pd3dDevice = device;
@@ -8062,7 +8026,7 @@ HRESULT CDXUTDialogResourceManager::OnCreateDevice(IDirect3DDevice9* device)
     InputResetIme();
     return S_OK;
 }
-// 0x00086a00
+
 HRESULT CDXUTDialogResourceManager::OnResetDevice()
 {
     for (int i = 0; i < m_FontCache.GetSize(); ++i)
@@ -8083,27 +8047,26 @@ HRESULT CDXUTDialogResourceManager::OnResetDevice()
 #include <string.h>
 #include <strsafe.h>
 
-// 0x0006ee60
 CDXUTButtonDL* CDXUTDialogDL::GetButton(int id)
 {
     return (CDXUTButtonDL*)((CDXUTDialog*)this)->GetControl(id, DXUT_CONTROL_BUTTON);
 }
-// 0x0006a170
+
 void CDXUTListBoxDL::SetColumnCount(int value)
 {
     columnCount = value;
 }
-// 0x0006ee80
+
 int CDXUTListBoxDL::GetColumnCount()
 {
     return columnCount;
 }
-// 0x0006a180
+
 void CDXUTListBoxDL::SetColumnWidth(int column, int value)
 {
     columnWidths[column] = value;
 }
-// 0x0006ee90
+
 int CDXUTListBoxDL::GetColumnWidth(int column)
 {
     return columnWidths[column];
@@ -8118,7 +8081,6 @@ struct DLControlAccess : CDXUTControl
     using CDXUTControl::UpdateRects;
 };
 
-// 0x0008e810
 CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog* parent) : CDXUTControl(0), scrollBar(parent)
 {
     m_pDialog = parent;
@@ -8135,13 +8097,11 @@ CDXUTListBoxDL::CDXUTListBoxDL(CDXUTDialog* parent) : CDXUTControl(0), scrollBar
     columnWidths[0] = columnWidths[1] = columnWidths[2] = 0;
 }
 
-// 0x0008e8d0
 CDXUTListBoxDL::~CDXUTListBoxDL()
 {
     RemoveAllItems();
 }
 
-// 0x0008a500
 bool CDXUTListBoxDL::HandleKeyboard(UINT message, WPARAM key, LPARAM lparam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -8223,7 +8183,6 @@ bool CDXUTListBoxDL::HandleKeyboard(UINT message, WPARAM key, LPARAM lparam)
     return true;
 }
 
-// 0x0008a6e0
 bool CDXUTListBoxDL::HandleMouse(UINT message, POINT point, WPARAM keys, LPARAM lparam)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -8353,7 +8312,6 @@ bool CDXUTListBoxDL::HandleMouse(UINT message, POINT point, WPARAM keys, LPARAM 
     return false;
 }
 
-// 0x0008e900
 void CDXUTListBoxDL::Render(IDirect3DDevice9* device, float elapsed)
 {
     if (!m_bVisible)
@@ -8432,20 +8390,17 @@ void CDXUTListBoxDL::Render(IDirect3DDevice9* device, float elapsed)
     scrollBar.Render(device, elapsed);
 }
 
-// 0x0008e8c0
 HRESULT CDXUTListBoxDL::OnInit()
 {
     return ((CDXUTControl*)this)->m_pDialog->InitControl((CDXUTControl*)&scrollBar);
 }
 
-// 0x0008e8a0
 bool CDXUTListBoxDL::CanHaveFocus()
 {
     DLControlAccess* base = (DLControlAccess*)this;
     return base->m_bVisible && base->m_bEnabled;
 }
 
-// 0x00088700
 void CDXUTListBoxDL::UpdateRects()
 {
     DLControlAccess* base = (DLControlAccess*)this;
@@ -8467,7 +8422,6 @@ void CDXUTListBoxDL::UpdateRects()
     }
 }
 
-// 0x0008de50
 CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog* parent) : CDXUTControl(0)
 {
     m_pDialog = parent;
@@ -8479,16 +8433,13 @@ CDXUTStaticDL::CDXUTStaticDL(CDXUTDialog* parent) : CDXUTControl(0)
     m_Elements.RemoveAll();
 }
 
-// 0x0008dec0
 CDXUTStaticDL::~CDXUTStaticDL() {}
 
-// 0x0008deb0
 BOOL CDXUTStaticDL::ContainsPoint(POINT)
 {
     return FALSE;
 }
 
-// 0x0008ded0
 void CDXUTStaticDL::Render(IDirect3DDevice9*, float elapsed)
 {
     if (!m_bVisible)
@@ -8499,7 +8450,6 @@ void CDXUTStaticDL::Render(IDirect3DDevice9*, float elapsed)
     m_pDialog->DrawTextA(text, element, &m_rcBoundingBox, true, -1);
 }
 
-// 0x0008df20
 CDXUTButtonDL::CDXUTButtonDL(CDXUTDialog* parent) : CDXUTStaticDL(0)
 {
     m_pDialog = parent;
@@ -8508,29 +8458,24 @@ CDXUTButtonDL::CDXUTButtonDL(CDXUTDialog* parent) : CDXUTStaticDL(0)
     m_nHotkey = 0;
 }
 
-// 0x0008dfc0
 CDXUTButtonDL::~CDXUTButtonDL() {}
 
-// 0x0008df60
 BOOL CDXUTButtonDL::ContainsPoint(POINT point)
 {
     return PtInRect(&m_rcBoundingBox, point);
 }
 
-// 0x0008df80
 bool CDXUTButtonDL::CanHaveFocus()
 {
     return m_bVisible && m_bEnabled;
 }
 
-// 0x0008dfa0
 void CDXUTButtonDL::OnHotkey()
 {
     m_pDialog->RequestFocus(this);
     m_pDialog->SendEvent(0x101, true, this);
 }
 
-// 0x000848d0
 bool CDXUTButtonDL::HandleKeyboard(UINT message, WPARAM wparam, LPARAM)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -8552,7 +8497,6 @@ bool CDXUTButtonDL::HandleKeyboard(UINT message, WPARAM wparam, LPARAM)
     return false;
 }
 
-// 0x00084930
 bool CDXUTButtonDL::HandleMouse(UINT message, POINT point, WPARAM, LPARAM)
 {
     if (!m_bEnabled || !m_bVisible)
@@ -8581,7 +8525,6 @@ bool CDXUTButtonDL::HandleMouse(UINT message, POINT point, WPARAM, LPARAM)
     return false;
 }
 
-// 0x0008dfd0
 void CDXUTButtonDL::Render(IDirect3DDevice9*, float elapsed)
 {
     int offsetX = 0, offsetY = 0;
@@ -8619,7 +8562,6 @@ void CDXUTButtonDL::Render(IDirect3DDevice9*, float elapsed)
     m_pDialog->DrawTextA(text, element, &rect, false, -1);
 }
 
-// 0x00090790
 HRESULT CDXUTDialogDL::AddButton(int id, const char* text, int x, int y, int width, int height, UINT hotkey, bool isDefault, CDXUTButtonDL** created)
 {
     // This native factory has no constructor-failure cleanup frame.
@@ -8642,7 +8584,6 @@ HRESULT CDXUTDialogDL::AddButton(int id, const char* text, int x, int y, int wid
     return S_OK;
 }
 
-// 0x000875c0
 HRESULT CDXUTStaticDL::SetText(const char* value)
 {
     if (!value)
@@ -8654,7 +8595,6 @@ HRESULT CDXUTStaticDL::SetText(const char* value)
     return S_OK;
 }
 
-// 0x0008a270
 HRESULT CDXUTListBoxDL::AddItem(const char* value, void* data, int row)
 {
     DXUTListBoxItemDL* item = new DXUTListBoxItemDL;
@@ -8679,7 +8619,6 @@ HRESULT CDXUTListBoxDL::AddItem(const char* value, void* data, int row)
     return result;
 }
 
-// 0x0008a370
 HRESULT CDXUTListBoxDL::InsertItem(int index, const char* value, void* data, DWORD color)
 {
     DXUTListBoxItemDL* item = new DXUTListBoxItemDL;
@@ -8698,7 +8637,6 @@ HRESULT CDXUTListBoxDL::InsertItem(int index, const char* value, void* data, DWO
     return result;
 }
 
-// 0x00088880
 void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
 {
     if (row < 0 || row >= items.GetSize() || column < 0 || column >= columnCount)
@@ -8707,25 +8645,23 @@ void CDXUTListBoxDL::SetSubItemText(int row, int column, const char* value)
     strncpy_s(items[row]->subitems[column], value, 128);
 }
 
-// 0x0008a440
 DXUTListBoxItemDL* CDXUTListBoxDL::GetItem(int row)
 {
     if (row < 0 || row >= items.GetSize())
         return 0;
     return items[row];
 }
-// 0x0006e240
+
 DXUTListBoxItemDL* CDXUTListBoxDL::GetSelectedItem(int previous)
 {
     return GetItem(GetSelectedIndex(previous));
 }
-// 0x0006e260
+
 CDXUTScrollBar* CDXUTListBoxDL::GetScrollBar()
 {
     return &scrollBar;
 }
 
-// 0x0008c270
 void CDXUTListBoxDL::RemoveAllItems()
 {
     for (int i = 0; i < items.GetSize(); ++i)
@@ -8734,7 +8670,6 @@ void CDXUTListBoxDL::RemoveAllItems()
     scrollBar.SetTrackRange(0, 1);
 }
 
-// 0x00088800
 void CDXUTListBoxDL::RemoveItem(int index)
 {
     if (index < 0 || index >= items.GetSize())
@@ -8747,7 +8682,6 @@ void CDXUTListBoxDL::RemoveItem(int index)
     m_pDialog->SendEvent(EVENT_LISTBOX_SELECTION, true, this);
 }
 
-// 0x0008a470
 void CDXUTListBoxDL::SelectItem(int index)
 {
     int count = items.GetSize();
@@ -8770,7 +8704,6 @@ void CDXUTListBoxDL::SelectItem(int index)
     parent->SendEvent(0x702, true, (CDXUTControl*)this);
 }
 
-// 0x000888f0
 int CDXUTListBoxDL::GetSelectedIndex(int previous)
 {
     if (previous < -1)

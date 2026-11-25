@@ -5,16 +5,15 @@
 
 #include <math.h>
 #include <string.h>
-// 0x0011e338
+
 const float g_buildingRemovalDrop = 2000.0f;
-// 0x0011e33c
+
 const float g_buildingLodCoordinateScale = 0.25f;
-// 0x00188df8
+
 BuildingRemovalRecord g_buildingRemovalRecords[1000];
-// 0x0018dc18
+
 int g_buildingRemovalCount;
 
-// 0x0009ca80
 void GameHideObjectEntity(void* entity)
 {
     BYTE* object = static_cast<BYTE*>(entity);
@@ -27,14 +26,12 @@ void GameHideObjectEntity(void* entity)
         *reinterpret_cast<float*>(matrix + 0x38) -= g_buildingRemovalDrop;
 }
 
-// 0x0009cab0
 void GameHideBuildingEntity(void* entity)
 {
     if (entity)
         GameHideObjectEntity(entity);
 }
 
-// 0x0009cb50
 void GameRemoveLodBuildings(float x, float y, float z, float radius)
 {
     // GTA SA virtual addresses: count0x00c73f98, inline18-byte records0x00c73fa0.
@@ -51,7 +48,6 @@ void GameRemoveLodBuildings(float x, float y, float z, float radius)
     }
 }
 
-// 0x0009cc10
 void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radius)
 {
     BYTE* pool = (BYTE*)GamePoolBuildingGetArray();
@@ -85,7 +81,6 @@ void GameRemoveBuildingsInRange(int model, float x, float y, float z, float radi
     }
 }
 
-// 0x0009d210
 void GameRemoveBuilding(int model, float x, float y, float z, float radius)
 {
     GameRemoveBuildingsInRange(model, x, y, z, radius);
@@ -99,7 +94,7 @@ void GameRemoveBuilding(int model, float x, float y, float z, float radius)
     g_buildingRemovalCount = (int)((DWORD)count + 1);
 }
 // Keep the accumulation order for radius-boundary comparisons.
-// 0x000b4570
+
 float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float otherX, float otherY, float otherZ)
 {
     const float dx = x - otherX;
@@ -108,7 +103,6 @@ float __stdcall GameDistanceBetweenPoints(float x, float y, float z, float other
     return (float)sqrt(dz * dz + dy * dy + dx * dx);
 }
 
-// 0x0009cae0
 BOOL GameShouldSuppressMarker(int model, float x, float y, float z)
 {
     if (g_buildingRemovalCount)
@@ -129,7 +123,6 @@ BOOL GameShouldSuppressMarker(int model, float x, float y, float z)
     return FALSE;
 }
 
-// 0x0009cdd0
 void GameHideAllWorldEntities()
 {
     BYTE* cursor = (BYTE*)GamePoolBuildingGetArray();
