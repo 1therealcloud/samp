@@ -315,9 +315,6 @@
     <ClCompile Include="filehooks.cpp">
       <Filter>general\filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="md5.cpp">
-      <Filter>general\filesystem</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audiostream.h">
@@ -639,9 +636,6 @@
       <Filter>general\filesystem</Filter>
     </ClInclude>
     <ClInclude Include="filehooks.h">
-      <Filter>general\filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="md5.h">
       <Filter>general\filesystem</Filter>
     </ClInclude>
   </ItemGroup>

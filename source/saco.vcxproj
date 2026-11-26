@@ -275,7 +275,6 @@
     <ClCompile Include="gui\svrnetstats.cpp" />
     <ClCompile Include="gui\textdrawselection.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="md5.cpp" />
     <ClCompile Include="net\actorpool.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
@@ -403,7 +402,6 @@
     <ClInclude Include="gui\svrnetstats.h" />
     <ClInclude Include="gui\textdrawselection.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="md5.h" />
     <ClInclude Include="net\actorpool.h" />
     <ClInclude Include="net\gangzonepool.h" />
     <ClInclude Include="net\labelpool.h" />
