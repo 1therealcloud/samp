@@ -1,0 +1,93 @@
+name: build
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      # v141_xp is not on the runner image, install it
+      - name: ensure v141_xp toolset
+        shell: pwsh
+        run: |
+          $installerDirectory = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer"
+          $visualStudioPath = & "$installerDirectory\vswhere.exe" -latest -products * -property installationPath
+          Write-Host "VS path: $visualStudioPath"
+
+          Set-Location $installerDirectory
+          $installerArguments = @(
+            '/c', 'vs_installer.exe', 'modify',
+            '--installPath', "`"$visualStudioPath`"",
+            '--add', 'Microsoft.VisualStudio.Component.VC.v141.x86.x64',
+            '--add', 'Microsoft.VisualStudio.Component.WinXP',
+            '--quiet', '--norestart', '--nocache'
+          )
+          $installerProcess = Start-Process -FilePath cmd.exe -ArgumentList $installerArguments -Wait -PassThru -WindowStyle Hidden
+          Write-Host "Installer exit code: $($installerProcess.ExitCode)"
+          if ($installerProcess.ExitCode -notin 0, 3010) { throw "vs installer failed: $($installerProcess.ExitCode)" }
+
+          Write-Host "XPSupport packages:"
+          Get-ChildItem "C:\ProgramData\Microsoft\VisualStudio\Packages" -Directory -Filter "Microsoft.Windows.XPSupport*" -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.Name }
+
+          $winXpInstancePath = & "$installerDirectory\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.WinXP -property installationPath
+          if (-not $winXpInstancePath) { throw "WinXP component not registered after install" }
+
+      - name: build
+        shell: pwsh
+        run: |
+          $msbuildPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" | Select-Object -First 1
+          & $msbuildPath sa-mp.sln -t:saco -p:Configuration=${{ matrix.config }} -p:Platform=x86 -m -v:m
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: package
+        shell: pwsh
+        run: |
+          $outputDirectory = "build\binaries\${{ matrix.config }}"
+          $filesToPackage = "samp.dll", "samp.pdb" | ForEach-Object { "$outputDirectory\$_" } | Where-Object { Test-Path $_ }
+          Compress-Archive -Path $filesToPackage -DestinationPath "saco-${{ matrix.config }}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: saco-${{ matrix.config }}
+          path: saco-${{ matrix.config }}.zip
+
+  nightly:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: publish nightly release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete nightly --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
+          gh release create nightly dist/*.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --prerelease \
+            --title "nightly" \
+            --notes "automatic build of $GITHUB_SHA"
