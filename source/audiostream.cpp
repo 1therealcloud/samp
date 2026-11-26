@@ -24,49 +24,31 @@
 DWORD g_audioStreamHandle;
 
 char g_audioStreamAgent[10] = "SA-MP/0.3";
-
 BYTE g_audioStreamRadioActive;
-
 char g_audioStreamTitle[257];
-
 char g_audioStreamStation[257];
-
 const char g_audioStreamInfoFormat[8] = "%s - %s";
-
 BYTE g_audioStreamStopRequested;
-
 const char g_audioStreamIcyTitleMarker[14] = "StreamTitle='";
-
 const char g_audioStreamArtistMarker[8] = "artist=";
-
 const char g_audioStreamTitleMarker[7] = "title=";
-
 const char g_audioStreamStringFormat[3] = "%s";
 
 char g_audioStreamStationUrl[257];
 
 CVector g_audioStreamPosition;
-
 BYTE g_audioStreamSpatial;
 
 float g_audioStreamRadius = 50.0f;
-
 const float g_audioStreamVolumeScale = 7000.0f;
-
 const float g_audioStreamSpatialVolumeScale = 8000.0f;
 
 const char g_audioStreamStationMarker[10] = "icy-name:";
-
 const char g_audioStreamStationUrlMarker[9] = "icy-url:";
-
 const char g_audioStreamMessageOffKey[12] = "audiomsgoff";
-
 const char g_audioStreamMessageFormat[17] = "Audio stream: %s";
-
 const char g_audioStreamOffsetFormat[45] = "BASS_ChannelSet3DAttributes offset: %f %f %f";
-
 const char g_audioStreamAttributesError[34] = "BASS_ChannelSet3DAttributes Error";
-
 const char g_audioStreamPositionError[32] = "BASS_ChannelSet3DPosition Error";
 
 char g_audioStreamUrl[257];
