@@ -23,14 +23,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-const Scripting::OpcodeInfo g_commandGetVehicleAngle = {0x174, "iv"};
-
-const Scripting::OpcodeInfo g_commandGetActorAngle = {0x172, "iv"};
-
 BYTE g_commandCameraTargetLabels;
-
 DWORD g_commandObjectLighting = 1;
 
+const Scripting::OpcodeInfo g_commandGetVehicleAngle = {0x174, "iv"};
+const Scripting::OpcodeInfo g_commandGetActorAngle = {0x172, "iv"};
 const Scripting::OpcodeInfo g_commandGetInterior = {0x77e, "v"};
 
 void Commands::Setup()

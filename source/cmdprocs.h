@@ -1,10 +1,8 @@
 #ifndef CMDPROCS_H
 #define CMDPROCS_H
 
-#include "game/scripting.h"
 namespace Commands
 {
-
 void Default(char* params);
 
 void TestDeathWindow(char* params);
@@ -60,16 +58,6 @@ void SendRconCommand(char* params);
 void Setup();
 } // namespace Commands
 
-void ClientRequestQuit();
-
 extern BYTE g_commandCameraTargetLabels;
-
-extern DWORD g_commandObjectLighting;
-
-extern const Scripting::OpcodeInfo g_commandGetInterior;
-
-extern const Scripting::OpcodeInfo g_commandGetVehicleAngle;
-
-extern const Scripting::OpcodeInfo g_commandGetActorAngle;
 
 #endif // CMDPROCS_H

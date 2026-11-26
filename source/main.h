@@ -26,6 +26,8 @@ extern DWORD g_clientQuitRequested;
 
 void ClientGameLoop();
 
+void ClientRequestQuit();
+
 // subclass.cpp
 void ClientCaptureScreenshot();
 
