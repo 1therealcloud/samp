@@ -15,10 +15,6 @@ concurrency:
 jobs:
   build:
     runs-on: windows-2022
-    strategy:
-      fail-fast: false
-      matrix:
-        config: [Debug, Release]
     steps:
       - uses: actions/checkout@v5
         with:
@@ -50,24 +46,114 @@ jobs:
           $winXpInstancePath = & "$installerDirectory\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.WinXP -property installationPath
           if (-not $winXpInstancePath) { throw "WinXP component not registered after install" }
 
-      - name: build
+      - name: build sa-mp.sln
         shell: pwsh
         run: |
           $msbuildPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" | Select-Object -First 1
-          & $msbuildPath sa-mp.sln -t:saco -p:Configuration=${{ matrix.config }} -p:Platform=x86 -m -v:m
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: package
+          # run both configs even if the first one fails, so the log shows everything
+          $failedConfigs = @()
+          foreach ($config in 'Debug', 'Release') {
+            Write-Host "=== $config ==="
+            & $msbuildPath sa-mp.sln -p:Configuration=$config -p:Platform=x86 -m -v:m
+            if ($LASTEXITCODE -ne 0) { $failedConfigs += $config }
+          }
+          if ($failedConfigs.Count -gt 0) { throw "msbuild failed: $($failedConfigs -join ', ')" }
+
+      - name: fetch delphi 7
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # archive lives in the "Toolchain" release, nightly never touches it
+          gh release download Toolchain -p "delphi7.7z" --repo $env:GITHUB_REPOSITORY
+          if ($LASTEXITCODE -ne 0) { throw "delphi7.7z download failed" }
+
+          7z x delphi7.7z -o"C:\delphi7" -pdelphi7 -y | Select-Object -Last 2
+          if ($LASTEXITCODE -ne 0) { throw "delphi7.7z extract failed" }
+
+          # dcc32.cfg with paths for the runner
+          $compilerConfigPath = 'C:\delphi7\Bin\dcc32.cfg'
+          Set-Content $compilerConfigPath '-aWinTypes=Windows;WinProcs=Windows;DbiProcs=BDE;DbiTypes=BDE;DbiErrs=BDE' -Encoding ascii
+          Add-Content $compilerConfigPath '-u"C:\delphi7\lib";"C:\delphi7\lib\Obj"' -Encoding ascii
+
+      - name: build delphi tools
         shell: pwsh
         run: |
-          $outputDirectory = "build\binaries\${{ matrix.config }}"
-          $filesToPackage = "samp.dll", "samp.pdb" | ForEach-Object { "$outputDirectory\$_" } | Where-Object { Test-Path $_ }
-          Compress-Archive -Path $filesToPackage -DestinationPath "saco-${{ matrix.config }}.zip"
+          $projects = 'tools\exgui\samp.dpr', 'tools\dff\Project1\Project1.dpr'
+          foreach ($project in $projects) {
+            $projectPath = (Resolve-Path $project).Path
+            Write-Host "=== $project ==="
+
+            # compile from the project folder so relative unit paths resolve
+            Push-Location (Split-Path $projectPath -Parent)
+            & C:\delphi7\Bin\dcc32.exe -B -Q (Split-Path $projectPath -Leaf)
+            $compilerExitCode = $LASTEXITCODE
+            Pop-Location
+
+            if ($compilerExitCode -ne 0) { throw "dcc32 failed: $project" }
+          }
+
+      - name: package samp
+        shell: pwsh
+        run: |
+          foreach ($config in 'Debug', 'Release') {
+            $outputDirectory = "build\binaries\$config"
+            $filesToPackage = foreach ($fileName in 'samp.dll', 'samp.pdb') {
+              $filePath = "$outputDirectory\$fileName"
+              if (Test-Path $filePath) { $filePath } else { Write-Warning "missing: $filePath" }
+            }
+            if (-not $filesToPackage) { throw "nothing to package for samp - $config" }
+            Compress-Archive -Path $filesToPackage -DestinationPath "samp - $config.zip"
+          }
+
+      - name: package tools
+        shell: pwsh
+        run: |
+          # Project1.exe is the kdff gui, ship it as kdffgui.exe
+          $kdffGuiSource = 'tools\dff\Project1\Project1.exe'
+          $kdffGuiTarget = 'tools\dff\Project1\kdffgui.exe'
+          if (Test-Path $kdffGuiSource) { Move-Item $kdffGuiSource $kdffGuiTarget -Force }
+
+          foreach ($config in 'Debug', 'Release') {
+            $outputDirectory = "build\binaries\$config"
+            $toolsRoot = "stage\$config\tools"
+
+            # source, folder inside the archive ('.' = tools root)
+            $entries = @(
+              @("$outputDirectory\kdff.exe", 'dff'),
+              @("$outputDirectory\dfftool.pdb", 'dff'),
+              @("$outputDirectory\kdff.dll", 'dff'),
+              @("$outputDirectory\kdff.pdb", 'dff'),
+              @("$outputDirectory\arctool2.exe", '.'),
+              @("$outputDirectory\arctool2.pdb", '.'),
+              @("$outputDirectory\samp_debug.exe", '.'),
+              @("$outputDirectory\launch3.pdb", '.'),
+              @("$outputDirectory\rcon.exe", '.'),
+              @("$outputDirectory\rcon.pdb", '.'),
+              # delphi has no debug config, same exes go to both archives
+              @($kdffGuiTarget, 'dff'),
+              @('tools\exgui\samp.exe', 'exgui')
+            )
+
+            $packedCount = 0
+            foreach ($entry in $entries) {
+              $source, $folder = $entry
+              if (-not (Test-Path $source)) { Write-Warning "missing: $source"; continue }
+              $targetDirectory = Join-Path $toolsRoot $folder
+              New-Item -ItemType Directory $targetDirectory -Force | Out-Null
+              Copy-Item $source $targetDirectory
+              $packedCount++
+            }
+            if ($packedCount -eq 0) { throw "nothing to package for tools - $config" }
+
+            Compress-Archive -Path $toolsRoot -DestinationPath "tools - $config.zip"
+          }
 
       - uses: actions/upload-artifact@v4
         with:
-          name: saco-${{ matrix.config }}
-          path: saco-${{ matrix.config }}.zip
+          name: dist
+          path: "*.zip"
 
   nightly:
     needs: build
@@ -77,8 +163,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          name: dist
           path: dist
-          merge-multiple: true
 
       - name: publish nightly release
         env:
