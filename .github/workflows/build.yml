@@ -103,8 +103,8 @@ jobs:
               $filePath = "$outputDirectory\$fileName"
               if (Test-Path $filePath) { $filePath } else { Write-Warning "missing: $filePath" }
             }
-            if (-not $filesToPackage) { throw "nothing to package for samp - $config" }
-            Compress-Archive -Path $filesToPackage -DestinationPath "samp - $config.zip"
+            if (-not $filesToPackage) { throw "nothing to package for samp-$config" }
+            Compress-Archive -Path $filesToPackage -DestinationPath "samp-$config.zip"
           }
 
       - name: package tools
@@ -117,7 +117,7 @@ jobs:
 
           foreach ($config in 'Debug', 'Release') {
             $outputDirectory = "build\binaries\$config"
-            $toolsRoot = "stage\$config\tools"
+            $toolsRoot = "stage\$config"
 
             # source, folder inside the archive ('.' = tools root)
             $entries = @(
@@ -145,9 +145,10 @@ jobs:
               Copy-Item $source $targetDirectory
               $packedCount++
             }
-            if ($packedCount -eq 0) { throw "nothing to package for tools - $config" }
+            if ($packedCount -eq 0) { throw "nothing to package for tools-$config" }
 
-            Compress-Archive -Path $toolsRoot -DestinationPath "tools - $config.zip"
+            # archive the contents, not the folder itself
+            Compress-Archive -Path "$toolsRoot\*" -DestinationPath "tools-$config.zip"
           }
 
       - uses: actions/upload-artifact@v4
