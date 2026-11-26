@@ -15,8 +15,7 @@ The 0.2x sources serve as reference material for names, organization and some co
 ## Dependencies
 
 RakNet, zlib, libcurl, LZMA, and TTMath are pinned Git submodules under `third-party/`.\
-BASS, Detours, and the modified DXUT sources are included directly.\
-The DirectX SDK supplies D3DX9.\
+DXSDK, BASS, Detours, and the DXUT are included directly.\
 The MSVC runtime is linked statically.
 
 | Dependency | Match status |
@@ -48,8 +47,7 @@ The repository also includes the server browser and supporting tools:
 Build requirements:
 
 - [Git](https://git-scm.com/install/windows).
-- [Visual Studio .NET 2003 RTM](https://archive.org/details/microsoft-visual-studio-.-net-2003-professional-disc-1).
-- [DirectX 9.0 SDK, April 2005](https://web.archive.org/web/20111118175754/https://download.microsoft.com/download/a/c/d/acdfb557-266f-4af4-8673-6ab8009b4ddd/dxsdk_apr2005.exe).
+- [Visual Studio 2022](https://aka.ms/vs/17/release/vs_community.exe) with the MSVC v141 (VS 2017) - Windows XP support toolset.
 - [Delphi 7 (optional)](https://altd.embarcadero.com/download/delphi/d7/english/ent/delphi_7_ent_en.iso).
 
 Initialize the dependencies:
@@ -58,12 +56,7 @@ Initialize the dependencies:
 git submodule update --init --recursive
 ```
 
-Open `sa-mp.sln` in Visual Studio .NET 2003 and build the configuration for your client version.
-
-| Client | Configuration | Output |
-| --- | --- | --- |
-| 0.3.7-R5 | `Release` | `build/binaries/Release/` |
-| 0.3.DL-R1 | `Release DL` | `build/binaries/Release DL/` |
+Open `sa-mp.sln` in Visual Studio 2022 and build.
 
 The solution includes the C++ utilities: `rcon`, `arctool2`, `launch3`, `dfftool` and `DffFormatDll`.
 
