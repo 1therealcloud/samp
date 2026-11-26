@@ -35,7 +35,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup>
-    <IncludePath>$(IncludePath);C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Include</IncludePath>
+    <IncludePath>$(IncludePath);$(SolutionDir)third-party\dxsdk\include</IncludePath>
   </PropertyGroup>
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -87,7 +87,7 @@
       <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;$(SolutionDir)third-party\dxsdk\libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)samp.pdb</ProgramDatabaseFile>
@@ -129,7 +129,7 @@
       <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;minhook.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;C:\Program Files (x86)\Microsoft DirectX 9.0 SDK (April 2005)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;$(SolutionDir)third-party\dxsdk\libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)samp.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
