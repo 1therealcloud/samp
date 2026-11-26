@@ -20,7 +20,6 @@ private:
 
 public:
     CSigner(void);
-
     ~CSigner(void);
 
 #ifdef ARCTOOL
@@ -30,6 +29,5 @@ public:
 #endif
 
     void SetSignature(DWORD dwLength, BYTE* pbSignature);
-
     BOOL VerifySignature(CHasher* pHasher, CKeyPair* pKeyPair);
 };

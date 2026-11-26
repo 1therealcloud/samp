@@ -20,7 +20,6 @@ private:
 
 public:
     CHasher(CCryptoContext* pContext);
-
     ~CHasher(void);
 
     void AddData(DWORD dwDataLength, BYTE* pbData);

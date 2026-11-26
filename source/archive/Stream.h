@@ -25,20 +25,17 @@ public:
     };
 
     CAbstractStream() {}
-
     virtual ~CAbstractStream() {}
 
     // MSVC scalar deleting destructor emitted for ~CAbstractStream.
 
     virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes) = 0;
-
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return Read(pbBuffer, nNumberOfElements * nElementSize);
     }
 
     virtual void Seek(int nOffset, eSeek seekMode) = 0;
-
     virtual void Seek(int nOffset)
     {
         Seek(nOffset, SeekStart);

@@ -13,11 +13,8 @@ class CCryptoContext
 {
 private:
     static DWORD ms_dwRefCount;
-
     static DWORD ms_dwProviderType;
-
     static LPSTR ms_szProviderName;
-
     static LPSTR ms_szContainerName;
 
     HCRYPTPROV m_hCryptProv;

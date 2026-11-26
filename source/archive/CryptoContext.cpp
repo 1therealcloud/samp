@@ -12,11 +12,8 @@
 //------------------------------------
 
 DWORD CCryptoContext::ms_dwRefCount = 0;
-
 DWORD CCryptoContext::ms_dwProviderType = PROV_RSA_FULL;
-
 LPSTR CCryptoContext::ms_szProviderName = NULL;
-
 LPSTR CCryptoContext::ms_szContainerName = (LPSTR) "SAMP";
 
 //------------------------------------

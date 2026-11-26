@@ -135,15 +135,11 @@ public:
     virtual ~CArchiveFS(void);
 
     virtual bool Load(char* szFileName);
-
     virtual void Unload();
 
     virtual DWORD GetFileIndex(DWORD dwFileHash);
-
     virtual DWORD GetFileIndex(char* szFileName);
-
     virtual DWORD GetFileSize(DWORD dwFileIndex);
-
     virtual BYTE* GetFileData(DWORD dwFileIndex);
 };
 #pragma pack(pop)

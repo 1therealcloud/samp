@@ -31,18 +31,6 @@ CKeyPair::~CKeyPair(void)
     if (m_hCryptKey != NULL)
         ReleaseKey();
 }
-
-//------------------------------------
-
-#ifdef ARCTOOL
-void CKeyPair::GenerateKey()
-{
-    // Generate a key pair
-    HCRYPTPROV hCryptProv = m_pContext->GetProvider();
-    CryptGenKey(hCryptProv, AT_SIGNATURE, (ms_dwRSAKeySize << 16) | CRYPT_EXPORTABLE, &m_hCryptKey);
-}
-#endif
-
 //------------------------------------
 
 void CKeyPair::ReleaseKey()
@@ -55,6 +43,15 @@ void CKeyPair::ReleaseKey()
 //------------------------------------
 
 #ifdef ARCTOOL
+void CKeyPair::GenerateKey()
+{
+    // Generate a key pair
+    HCRYPTPROV hCryptProv = m_pContext->GetProvider();
+    CryptGenKey(hCryptProv, AT_SIGNATURE, (ms_dwRSAKeySize << 16) | CRYPT_EXPORTABLE, &m_hCryptKey);
+}
+
+//------------------------------------
+
 void CKeyPair::LoadFromFile(PCHAR szFileName)
 {
     DWORD dwKeySize;
@@ -75,11 +72,9 @@ void CKeyPair::LoadFromFile(PCHAR szFileName)
     // Clean up memory
     delete[] pbKeyBlob;
 }
-#endif
 
 //------------------------------------
 
-#ifdef ARCTOOL
 void CKeyPair::WriteToFile(PCHAR szFileName)
 {
     DWORD dwKeySize;
@@ -100,11 +95,9 @@ void CKeyPair::WriteToFile(PCHAR szFileName)
     // Clean up memory
     delete[] pbKeyBlob;
 }
-#endif
 
 //------------------------------------
 
-#ifdef ARCTOOL
 void CKeyPair::WriteCHeaderFile(PSTR szFileName)
 {
     const BYTE bytXORKey = 0xAA;
@@ -145,7 +138,7 @@ void CKeyPair::WriteCHeaderFile(PSTR szFileName)
     // Clean up
     delete[] pbKeyBlob;
 }
-#endif
+#endif // ARCTOOL
 
 //------------------------------------
 
