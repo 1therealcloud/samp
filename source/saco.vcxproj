@@ -84,7 +84,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MERGE:.pstate=.data %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;dxguid.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;libcmt.lib;libcpmt.lib;oldnames.lib;d3dx9.lib;user32.lib;comctl32.lib;advapi32.lib;kernel32.lib;gdi32.lib;wsock32.lib;winmm.lib;psapi.lib;bass.lib;ws2_32.lib;crypt32.lib;shell32.lib;imm32.lib;ole32.lib;oleaut32.lib;uuid.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Release;$(SolutionDir)third-party\bass;$(SolutionDir)third-party\dxsdk\libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -126,7 +126,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;minhook.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RakNet.lib;zlib.lib;libcurl.lib;lzma.lib;bass.lib;minhook.lib;oldnames.lib;kernel32.lib;psapi.lib;user32.lib;gdi32.lib;advapi32.lib;ws2_32.lib;winmm.lib;imm32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;shell32.lib;crypt32.lib;secur32.lib;version.lib;usp10.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)samp.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(SolutionDir)build\libraries\Debug;$(SolutionDir)third-party\bass;$(SolutionDir)third-party\dxsdk\libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="..\third-party\dxut\dxstdafx.cpp">
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
+      <PreprocessorDefinitions>INITGUID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\third-party\dxut\DXUT.cpp">
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
