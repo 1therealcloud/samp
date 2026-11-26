@@ -15,7 +15,6 @@
 class CFontColorSprite : public ID3DXSprite
 {
 public:
-
     CFontColorSprite();
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void** output);

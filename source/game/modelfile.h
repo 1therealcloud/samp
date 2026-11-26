@@ -77,7 +77,6 @@ struct CModelFileStream
 };
 struct CModelFileChunk
 {
-
     CModelFileChunk();
 
     void SetBuffer(BYTE* buffer, DWORD size);
@@ -189,7 +188,6 @@ struct CModelSkin
 };
 struct CModelGeometry
 {
-
     CModelFileChunk* BuildStructure();
 
     bool RemoveExtension(DWORD type);
@@ -254,7 +252,6 @@ struct CModelGeometry
 };
 struct CDffFile
 {
-
     bool RebuildGeometryList();
 
     DWORD SaveFile(const char* filename);

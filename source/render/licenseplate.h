@@ -8,7 +8,6 @@ struct CVector;
 class CLicensePlate
 {
 public:
-
     CLicensePlate(IDirect3DDevice9* device);
 
     ~CLicensePlate();

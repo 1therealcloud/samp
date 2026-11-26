@@ -1,10 +1,10 @@
 // SA-MP font orchestration; COM/D3DX implementations remain external.
 #include "render/fontrender.h"
 
+#include "config.h"
 #include "d3dhook/ID3DXFontHook.h"
 #include "gui/chatwindow.h"
 #include "gui/cmdwindow.h"
-#include "config.h"
 
 #include <DXUTgui.h>
 

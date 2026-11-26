@@ -40,7 +40,6 @@ class CActorPool
     DWORD state3e84[1000];
 
 public:
-
     CActor* Get(WORD id);
     // Raw active DWORD, not normalized to bool.
 

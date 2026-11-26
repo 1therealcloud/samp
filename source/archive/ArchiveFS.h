@@ -126,12 +126,11 @@ private:
     DWORD HashString(PCHAR szString);
 
 public:
-
     CArchiveFS(void);
 
-    #ifdef ARCTOOL
+#ifdef ARCTOOL
     CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize);
-    #endif // ARCTOOL
+#endif // ARCTOOL
 
     virtual ~CArchiveFS(void);
 

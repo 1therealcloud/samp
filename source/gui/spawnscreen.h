@@ -21,7 +21,6 @@ struct SpawnScreenVertex
 class CSpawnScreen
 {
 public:
-
     void SetText(const char* text);
 
     CSpawnScreen(IDirect3DDevice9* device);

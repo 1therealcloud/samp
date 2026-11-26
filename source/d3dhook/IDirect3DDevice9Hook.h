@@ -8,7 +8,6 @@
 class IDirect3DDevice9Hook : public IDirect3DDevice9
 {
 public:
-
     IDirect3DDevice9Hook();
 
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppvObj);

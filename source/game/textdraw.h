@@ -76,7 +76,6 @@ class CTextDraw
     };
 
 public:
-
     CTextDraw(const TextDrawTransmit* info, const char* text);
 
     RECT* GetSelectableRect();

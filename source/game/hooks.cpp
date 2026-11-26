@@ -1755,7 +1755,6 @@ __declspec(naked) void GameHookOverrideVehicleAudioState()
     // clang-format on
 }
 
-
 void GameHookProcessMultiplayerFrame()
 {
     if (g_pGame)

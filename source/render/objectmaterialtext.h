@@ -8,7 +8,6 @@ struct CVector;
 class CObjectMaterialText
 {
 public:
-
     IDirect3DTexture9* Create(const char* text, const char* font, unsigned fontSize, int width, int height, D3DCOLOR color, D3DCOLOR background, BOOL bold, BYTE alignment);
 
     CObjectMaterialText(IDirect3DDevice9* device);

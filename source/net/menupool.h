@@ -8,7 +8,6 @@ struct RPCParameters;
 // Native allocation is0x402 bytes; current-menu sentinel is128.
 class CMenuPool
 {
-
     friend void ScrInitMenu(RPCParameters* parameters);
     CMenu* menus[128];
     DWORD active[128];

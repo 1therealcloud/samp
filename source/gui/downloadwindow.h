@@ -42,7 +42,6 @@ public:
 
     int GetFilesCount();
 
-
     void TrimRecords();
 
     int FindRecord(DWORD id);

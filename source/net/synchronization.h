@@ -4,8 +4,9 @@
 
 #include "game/quaternion.h"
 
-#include <cstddef>
 #include <cstdint>
+
+#include <cstddef>
 
 #pragma pack(push, 1)
 struct LocalOnfootSyncData
@@ -27,8 +28,6 @@ static_assert(offsetof(LocalOnfootSyncData, speed) == 38);
 static_assert(offsetof(LocalOnfootSyncData, surfingOffset) == 50);
 static_assert(offsetof(LocalOnfootSyncData, animation) == 64);
 
-
-
 struct LocalIncarSyncData
 {
     uint16_t vehicle, leftRight, upDown, keys;
@@ -49,8 +48,6 @@ static_assert(offsetof(LocalIncarSyncData, pedHealth) == 52);
 static_assert(offsetof(LocalIncarSyncData, trailer) == 57);
 static_assert(offsetof(LocalIncarSyncData, modelData) == 59);
 
-
-
 struct LocalAimSyncData
 {
     uint8_t cameraMode;
@@ -62,8 +59,6 @@ static_assert(sizeof(LocalAimSyncData) == 31);
 
 static_assert(offsetof(LocalAimSyncData, aimZ) == 25);
 static_assert(offsetof(LocalAimSyncData, zoomWeapon) == 29);
-
-
 
 struct LocalTrailerSyncData
 {
@@ -77,7 +72,6 @@ static_assert(sizeof(LocalTrailerSyncData) == 54);
 static_assert(offsetof(LocalTrailerSyncData, rotation) == 14);
 static_assert(offsetof(LocalTrailerSyncData, speed) == 30);
 
-
 struct LocalPassengerSyncData
 {
     uint16_t vehicle;
@@ -90,8 +84,6 @@ static_assert(sizeof(LocalPassengerSyncData) == 24);
 static_assert(offsetof(LocalPassengerSyncData, keys) == 10);
 static_assert(offsetof(LocalPassengerSyncData, position) == 12);
 
-
-
 struct UnoccupiedSyncData
 {
     uint16_t vehicle;
@@ -103,8 +95,6 @@ static_assert(sizeof(UnoccupiedSyncData) == 67);
 
 static_assert(offsetof(UnoccupiedSyncData, position) == 27);
 static_assert(offsetof(UnoccupiedSyncData, health) == 63);
-
-
 
 struct BulletSyncData
 {

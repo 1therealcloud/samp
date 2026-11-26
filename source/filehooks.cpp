@@ -213,8 +213,6 @@ static int WINAPI Arch_ShowCursor(BOOL visible)
     return visible ? 0 : -1;
 }
 
-
-
 // helpers
 //------------------------------------
 

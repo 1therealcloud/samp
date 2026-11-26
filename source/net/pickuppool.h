@@ -28,7 +28,6 @@ class CPickupPool
     Pickup pickups[Capacity];
 
 public:
-
     void CreateWeapon(int model, float x, float y, float z, int ammo, WORD owner);
 
     void SendNotification(int index);

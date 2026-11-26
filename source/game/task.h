@@ -45,7 +45,6 @@ static_assert(offsetof(CTask, m_pPlayerPed) == 8);
 class CTaskJetpack : public CTask
 {
 public:
-
     CTaskJetpack();
 
     CTaskJetpack(BYTE* task);
@@ -56,7 +55,6 @@ public:
 class CTaskTakeDamageFall : public CTask
 {
 public:
-
     CTaskTakeDamageFall(DWORD fallType, DWORD number);
 
     virtual ~CTaskTakeDamageFall();
@@ -67,7 +65,6 @@ static_assert(sizeof(CTaskTakeDamageFall) == 16);
 class CTaskUseGoggles : public CTask
 {
 public:
-
     CTaskUseGoggles();
 
     virtual ~CTaskUseGoggles();

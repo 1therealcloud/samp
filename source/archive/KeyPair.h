@@ -21,7 +21,6 @@ private:
     CCryptoContext* m_pContext;
 
 public:
-
     CKeyPair(CCryptoContext* pContext);
 
     ~CKeyPair(void);

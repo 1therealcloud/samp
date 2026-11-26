@@ -3,7 +3,6 @@
 
 extern "C"
 {
-
     int __cdecl GenerateColFromDff(const char* SourceDff, int Mode, const char* DestinationCol);
 
     int __cdecl AppendColToDff(const char* SourceDff, const char* SourceCol, const char* DestinationDff);

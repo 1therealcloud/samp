@@ -14,7 +14,6 @@ class CGangZonePool
     DWORD active[1024];
 
 public:
-
     CGangZonePool();
 
     ~CGangZonePool();

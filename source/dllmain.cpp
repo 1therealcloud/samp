@@ -1,7 +1,7 @@
 #include "archive/ArchiveFS.h"
+#include "exceptions.h"
 #include "filehooks.h"
 #include "game/hooks.h"
-#include "exceptions.h"
 #include "main.h"
 
 #include <MinHook.h>

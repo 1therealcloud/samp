@@ -50,7 +50,6 @@ class CObjectPool
     CObject* objects[2100];
 
 public:
-
     int GetLargestId();
 
     DWORD IsActive(WORD id);

@@ -12,7 +12,6 @@ class CDXUTIMEEditBox;
 class CDialog
 {
 public:
-
     void Show(int id, int type, const char* title, const char* text, const char* button1, const char* button2, BOOL serverSide);
     union
     {

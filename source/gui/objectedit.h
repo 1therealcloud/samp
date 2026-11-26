@@ -9,7 +9,6 @@ struct CVector;
 class CObjectEdit
 {
 public:
-
     WORD GetObjectId();
     BYTE controlLayout[0x78];
     DWORD editTarget, editMode, editing, controlsVisible;

@@ -8,7 +8,6 @@
 class CLabel
 {
 public:
-
     CLabel(IDirect3DDevice9* device);
 
     ~CLabel();

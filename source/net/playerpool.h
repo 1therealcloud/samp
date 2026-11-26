@@ -15,7 +15,6 @@ struct CVector;
 class CPlayerPool
 {
 public:
-
     void SetScore(WORD id, int value);
 
     void SetPing(WORD id, DWORD value);

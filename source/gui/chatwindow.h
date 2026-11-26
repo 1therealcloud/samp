@@ -16,7 +16,6 @@ class CDXUTScrollBar;
 class CChat
 {
 public:
-
     LONG GetChatWindowBottom();
     // Stores the raw timestamp byte and always requests redraw.
 

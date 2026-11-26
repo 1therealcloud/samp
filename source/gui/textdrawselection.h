@@ -7,7 +7,6 @@
 class CTextDrawSelection
 {
 public:
-
     CTextDrawSelection();
     DWORD enabled, hoverColor;
     WORD hoveredTextDrawId;

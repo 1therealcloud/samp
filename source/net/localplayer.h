@@ -1,11 +1,10 @@
 #ifndef LOCALPLAYER_H
 #define LOCALPLAYER_H
 
-#include "synchronization.h"
-
-#include "main.h"
 #include "game/quaternion.h"
 #include "game/scripting.h"
+#include "main.h"
+#include "synchronization.h"
 
 #include <stddef.h>
 #include <windows.h>
@@ -29,7 +28,6 @@ struct LocalSpawnInfo
     float rotation;
     int weapons[3], ammo[3];
 };
-
 
 inline DWORD GetLocalSpawnInfoWireSize()
 {

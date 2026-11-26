@@ -12,7 +12,6 @@
 class CCryptoContext
 {
 private:
-
     static DWORD ms_dwRefCount;
 
     static DWORD ms_dwProviderType;
@@ -24,7 +23,6 @@ private:
     HCRYPTPROV m_hCryptProv;
 
 public:
-
     CCryptoContext(void);
 
     ~CCryptoContext(void);

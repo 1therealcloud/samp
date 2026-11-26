@@ -9,7 +9,6 @@ class CRemotePlayer;
 class CPlayerInfo
 {
 public:
-
     int GetScore();
 
     DWORD GetPing();

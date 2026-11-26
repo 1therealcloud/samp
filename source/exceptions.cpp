@@ -116,8 +116,7 @@ static void ClientConstructCrashText(BOOL includeModules)
     snprintf(g_clientCrashText, sizeof(g_clientCrashText),
              "SA-MP %s\r\nException At Address: 0x%08X\r\nBase: 0x%08X\r\n\r\nRegisters:\r\nEAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\r\nESI: 0x%08X\tEDI: 0x%08X\tEBP: "
              "0x%08X\tESP: 0x%08X\r\nEFLAGS: 0x%08X\r\n\r\nStack:\r\n",
-             g_ClientVersionString.c_str(), c->Eip, reinterpret_cast<UINT_PTR>(g_clientModule),
-             c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
+             g_ClientVersionString.c_str(), c->Eip, reinterpret_cast<UINT_PTR>(g_clientModule), c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp, c->EFlags);
 
     ClientDumpMemory((const BYTE*)c->Esp, 640, g_clientCrashText, TRUE);
     snprintf(text, sizeof(text), "\r\nSCM Op: 0x%X, lDbg: %d LastRendObj: %u\r\n", g_scriptLastOpcode, g_scriptLocalDebug, (unsigned)g_clientCrashLastRenderedObject);

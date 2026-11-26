@@ -14,7 +14,6 @@
 class CTinyEncrypt
 {
 private:
-
     static DWORD ms_dwRounds;
 
     static DWORD ms_dwInitDelta;
@@ -32,7 +31,6 @@ private:
     void DecryptBlock(DWORD& dwV0, DWORD& dwV1);
 
 public:
-
     CTinyEncrypt(void);
 
     ~CTinyEncrypt(void);

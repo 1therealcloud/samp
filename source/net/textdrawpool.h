@@ -8,13 +8,11 @@
 struct RPCParameters;
 class CTextDrawPool
 {
-
     friend void ScrTextDrawSetString(RPCParameters* parameters);
     DWORD active[2304];
     CTextDraw* draws[2304];
 
 public:
-
     CTextDraw* Get(WORD id);
 
     CTextDrawPool();

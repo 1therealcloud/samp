@@ -630,7 +630,6 @@ void CVehicle::ClearWindowOpenFlag(BYTE window)
     }
 }
 
-
 void CVehicle::SetInvulnerable(BOOL enabled)
 {
     if (m_pGameVehicle && GamePoolVehicleGetAt(m_nHandle) && *(DWORD*)m_pGameVehicle != 0x863c40)

@@ -779,7 +779,6 @@ void CEntity::ApplyLinearSpeed()
     }
 }
 
-
 bool CEntity::TestCollisionShapes(const GameEntityCollisionShape* first, const GameEntityCollisionShape* second, BYTE mode)
 {
     const BYTE* backend = static_cast<const BYTE*>(m_pGameEntity);

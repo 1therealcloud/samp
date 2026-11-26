@@ -102,7 +102,6 @@ typedef struct _SAA_FILE_HEADER
         fwrite(&headerV1, 1, sizeof(DWORD) * 2 + sizeof(WORD) * dwFakeDataSize, f);
         fwrite(&headerV2, 1, sizeof(VER2_HEADER), f);
     }
-
 #endif
 
     bool VerifyIdentifier()

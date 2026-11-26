@@ -1,7 +1,7 @@
 #include "net/netrpc.h"
 
-#include "game/events.h"
 #include "game/custommodels.h"
+#include "game/events.h"
 #include "game/game.h"
 #include "game/patches.h"
 #include "game/playerped.h"

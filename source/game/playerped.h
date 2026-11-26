@@ -24,7 +24,6 @@ static_assert(sizeof(PedAccessoryState) == 52);
 class CPed : public CEntity
 {
 public:
-
     PedBulletData* GetBulletData();
 
     WORD GetCurrentWeaponTotalAmmo();

@@ -19,7 +19,6 @@ private:
     DWORD m_dwLength;
 
 public:
-
     CSigner(void);
 
     ~CSigner(void);

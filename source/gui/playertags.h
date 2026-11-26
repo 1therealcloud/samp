@@ -13,7 +13,6 @@ struct PlayerTagVertex
 class CPlayerTags
 {
 public:
-
     void DrawHealthBar(const CVector* position, float health, float armour, float distance);
 
     void BeginHealthBar();
@@ -107,7 +106,6 @@ private:
     float m_fScale;
 
 public:
-
     CLegacyPlayerTags(IDirect3DDevice9* pDevice);
 
     ~CLegacyPlayerTags();

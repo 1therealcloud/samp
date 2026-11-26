@@ -14,13 +14,11 @@
 class CHasher
 {
 private:
-
     static DWORD ms_dwHashAlgorithm;
 
     HCRYPTHASH m_hCryptHash;
 
 public:
-
     CHasher(CCryptoContext* pContext);
 
     ~CHasher(void);
