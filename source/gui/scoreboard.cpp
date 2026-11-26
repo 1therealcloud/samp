@@ -101,7 +101,7 @@ void CScoreboard::UpdateList()
     DWORD localId = *(WORD*)players;
     ScoreboardRow* rows = (ScoreboardRow*)calloc(count, sizeof(ScoreboardRow));
     // Native has no allocation failure branch and copies names without a bound.
-    const char* name = *(DWORD*)((BYTE*)players + 0x1a) >= 16 ? *(char**)((BYTE*)players + 6) : (char*)players + 6;
+    const char* name = players->localName.c_str();
     char* out = rows[0].name;
     do
     {
