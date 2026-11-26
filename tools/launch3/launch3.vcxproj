@@ -65,7 +65,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)launch3.exe</OutputFile>
+      <OutputFile>$(OutDir)samp_debug.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)launch3.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -88,7 +88,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)launch3.exe</OutputFile>
+      <OutputFile>$(OutDir)samp_debug.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)launch3.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>

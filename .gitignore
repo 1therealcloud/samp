@@ -9,3 +9,4 @@ tools/dff/Project1/kdff.dll
 tools/exgui/samp.exe
 /.vs
 *.user
+/third-party/dxsdk/binaries
