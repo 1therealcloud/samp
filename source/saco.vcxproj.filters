@@ -237,9 +237,6 @@
     <ClCompile Include="archive\CryptoContext.cpp">
       <Filter>archive</Filter>
     </ClCompile>
-    <ClCompile Include="archive\CryptoFns.cpp">
-      <Filter>archive</Filter>
-    </ClCompile>
     <ClCompile Include="archive\Hasher.cpp">
       <Filter>archive</Filter>
     </ClCompile>
@@ -501,9 +498,6 @@
       <Filter>archive</Filter>
     </ClInclude>
     <ClInclude Include="archive\CryptoContext.h">
-      <Filter>archive</Filter>
-    </ClInclude>
-    <ClInclude Include="archive\CryptoFns.h">
       <Filter>archive</Filter>
     </ClInclude>
     <ClInclude Include="archive\Hasher.h">

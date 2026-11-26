@@ -7,7 +7,7 @@
 
 #include "Hasher.h"
 
-#include "CryptoFns.h"
+#include <wincrypt.h>
 
 //------------------------------------
 
@@ -19,7 +19,7 @@ CHasher::CHasher(CCryptoContext* pContext)
 {
     // Generate a hash container
     HCRYPTPROV hCryptProv = pContext->GetProvider();
-    CRYPT(CreateHash)(hCryptProv, ms_dwHashAlgorithm, NULL, NULL, &m_hCryptHash);
+    CryptCreateHash(hCryptProv, ms_dwHashAlgorithm, NULL, NULL, &m_hCryptHash);
 }
 
 //------------------------------------
@@ -27,7 +27,7 @@ CHasher::CHasher(CCryptoContext* pContext)
 CHasher::~CHasher(void)
 {
     // Destory the hash container
-    CRYPT(DestroyHash)(m_hCryptHash);
+    CryptDestroyHash(m_hCryptHash);
 }
 
 //------------------------------------
@@ -35,7 +35,7 @@ CHasher::~CHasher(void)
 void CHasher::AddData(DWORD dwDataLength, BYTE* pbData)
 {
     // Add the data to be hashed
-    CRYPT(HashData)(m_hCryptHash, pbData, dwDataLength, 0);
+    CryptHashData(m_hCryptHash, pbData, dwDataLength, 0);
 }
 
 //------------------------------------

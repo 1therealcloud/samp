@@ -173,7 +173,6 @@
     </ClCompile>
     <ClCompile Include="archive\ArchiveFS.cpp" />
     <ClCompile Include="archive\CryptoContext.cpp" />
-    <ClCompile Include="archive\CryptoFns.cpp" />
     <ClCompile Include="archive\Hasher.cpp" />
     <ClCompile Include="archive\KeyPair.cpp" />
     <ClCompile Include="archive\Signer.cpp" />
@@ -339,7 +338,6 @@
     <ClInclude Include="archive\ArchiveCommon.h" />
     <ClInclude Include="archive\ArchiveFS.h" />
     <ClInclude Include="archive\CryptoContext.h" />
-    <ClInclude Include="archive\CryptoFns.h" />
     <ClInclude Include="archive\Hasher.h" />
     <ClInclude Include="archive\KeyPair.h" />
     <ClInclude Include="archive\keys\pkey.h" />

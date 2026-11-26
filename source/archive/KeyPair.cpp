@@ -7,7 +7,7 @@
 
 #include "KeyPair.h"
 
-#include "CryptoFns.h"
+#include <wincrypt.h>
 
 #include <stdio.h>
 
@@ -48,7 +48,7 @@ void CKeyPair::GenerateKey()
 void CKeyPair::ReleaseKey()
 {
     // Destroy the key pair
-    CRYPT(DestroyKey)(m_hCryptKey);
+    CryptDestroyKey(m_hCryptKey);
     m_hCryptKey = NULL;
 }
 
@@ -167,7 +167,7 @@ void CKeyPair::LoadFromMemory(DWORD dwPubKeySize, BYTE* pbPubKeyBlob, BYTE bytXO
 
     // Import the key
     HCRYPTPROV hCryptProv = m_pContext->GetProvider();
-    CRYPT(ImportKey)(hCryptProv, pbKeyBlob, dwPubKeySize, NULL, NULL, &m_hCryptKey);
+    CryptImportKey(hCryptProv, pbKeyBlob, dwPubKeySize, NULL, NULL, &m_hCryptKey);
 
     // Clean up
     if (bytXORKey != 0)

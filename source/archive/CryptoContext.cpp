@@ -7,7 +7,7 @@
 
 #include "CryptoContext.h"
 
-#include "CryptoFns.h"
+#include <wincrypt.h>
 
 //------------------------------------
 
@@ -24,9 +24,9 @@ LPSTR CCryptoContext::ms_szContainerName = (LPSTR) "SAMP";
 CCryptoContext::CCryptoContext(void)
 {
     // Open existing context, if not found, create one!
-    if (!CRYPT(AcquireContext)(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, 0))
+    if (!CryptAcquireContextA(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, 0))
     {
-        if (!CRYPT(AcquireContext)(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, CRYPT_NEWKEYSET))
+        if (!CryptAcquireContextA(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, CRYPT_NEWKEYSET))
         {
             throw(1);
         }
@@ -40,13 +40,13 @@ CCryptoContext::CCryptoContext(void)
 CCryptoContext::~CCryptoContext(void)
 {
     // Release the context
-    CRYPT(ReleaseContext)(m_hCryptProv, 0);
+    CryptReleaseContext(m_hCryptProv, 0);
     ms_dwRefCount--;
 
     if (ms_dwRefCount == 0)
     {
         // Delete the context
-        CRYPT(AcquireContext)(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, CRYPT_DELETEKEYSET);
+        CryptAcquireContextA(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, CRYPT_DELETEKEYSET);
     }
 }
 

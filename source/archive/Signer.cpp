@@ -7,7 +7,7 @@
 
 #include "Signer.h"
 
-#include "CryptoFns.h"
+#include <wincrypt.h>
 
 //------------------------------------
 
@@ -74,7 +74,7 @@ BOOL CSigner::VerifySignature(CHasher* pHasher, CKeyPair* pKeyPair)
     HCRYPTKEY hCryptKey = pKeyPair->GetContainer();
     BOOL bVerify;
 
-    bVerify = CRYPT(VerifySignature)(hCryptHash, m_pbSignature, m_dwLength, hCryptKey, NULL, CRYPT_NOHASHOID);
+    bVerify = CryptVerifySignatureA(hCryptHash, m_pbSignature, m_dwLength, hCryptKey, NULL, CRYPT_NOHASHOID);
 
     return bVerify;
 }
