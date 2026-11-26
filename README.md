@@ -14,7 +14,7 @@ The 0.2x sources serve as reference material for names, organization and some co
 
 ## Dependencies
 
-RakNet, zlib, libcurl, LZMA, and TTMath are pinned Git submodules under `third-party/`.\
+RakNet, zlib, libcurl, and LZMA are pinned Git submodules under `third-party/`.\
 DXSDK, BASS, Detours, and the DXUT are included directly.\
 The MSVC runtime is linked statically.
 
@@ -24,7 +24,6 @@ The MSVC runtime is linked statically.
 | zlib 1.2.11 | All verified function bodies match the original. |
 | LZMA 16.04 | All verified function bodies match the original. |
 | BASS | The project uses [BASS 2.4.7](http://www.un4seen.com/stuff/bass247.zip), the same build shipped with the original client. |
-| TTMath | Uses the [open.mp fork of TTMath 0.9.3](https://github.com/openmultiplayer/ttmath), which includes small source changes. |
 | RakNet and DXUT | Closely match the client-specific versions in the original binary. Some implementations still differ. |
 | Detours | The project uses the same Detours version as the original client (1.5 Build 46). |
 

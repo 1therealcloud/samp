@@ -34,9 +34,6 @@
     <Filter Include="third-party\bass">
       <UniqueIdentifier>{2cb9933c-f38c-4f6d-8666-f70d94eabb91}</UniqueIdentifier>
     </Filter>
-    <Filter Include="third-party\ttmath">
-      <UniqueIdentifier>{b28bce40-0b13-4051-bc52-3743a859cd25}</UniqueIdentifier>
-    </Filter>
     <Filter Include="third-party\dxut">
       <UniqueIdentifier>{22a5e12f-fd42-4348-9853-6d18be0b07af}</UniqueIdentifier>
     </Filter>
@@ -532,45 +529,6 @@
     </ClInclude>
     <ClInclude Include="..\third-party\bass\bass.h">
       <Filter>third-party\bass</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmath.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathbig.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathdec.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathint.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathmisc.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathobjects.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathparser.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmaththreads.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathtypes.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint_noasm.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint_x86.h">
-      <Filter>third-party\ttmath</Filter>
-    </ClInclude>
-    <ClInclude Include="..\third-party\ttmath\ttmath\ttmathuint_x86_64.h">
-      <Filter>third-party\ttmath</Filter>
     </ClInclude>
     <ClInclude Include="..\third-party\dxut\dxstdafx.h">
       <Filter>third-party\dxut</Filter>

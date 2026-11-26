@@ -33,7 +33,6 @@
 #include <RakClientInterface.h>
 #include <RakNetworkFactory.h>
 #include <SocketLayer.h>
-#include <ttmathuint.h>
 
 #include <math.h>
 #include <stdlib.h>
@@ -227,14 +226,42 @@ void __cdecl NetGenerateGpci(char (&output)[101], const char* seed, DWORD factor
     }
     if (!g_pNetGame)
         --factor;
-    char hex[41];
-    NetDigestToHex(hex, transformed);
-    ttmath::UInt<100> value;
-    value.FromString(hex, 16, 0, 0);
-    value.MulInt(factor);
-    std::string text;
-    value.ToString(text, 16);
-    strncpy_s(output, text.c_str(), _TRUNCATE);
+
+    BYTE product[24] = {0};
+    unsigned __int64 carry = 0;
+    for (int i = 19; i >= 0; --i)
+    {
+        unsigned __int64 current = (unsigned __int64)transformed[i] * factor + carry;
+        product[i + 4] = (BYTE)(current & 0xFF);
+        carry = current >> 8;
+    }
+    for (int i = 3; i >= 0; --i)
+    {
+        product[i] = (BYTE)(carry & 0xFF);
+        carry >>= 8;
+    }
+
+    static const char hexDigits[] = "0123456789ABCDEF";
+    char* out = output;
+    bool started = false;
+    for (int i = 0; i < 24; ++i)
+    {
+        BYTE high = (product[i] >> 4) & 0x0F;
+        BYTE low = product[i] & 0x0F;
+        if (started || high != 0)
+        {
+            *out++ = hexDigits[high];
+            started = true;
+        }
+        if (started || low != 0)
+        {
+            *out++ = hexDigits[low];
+            started = true;
+        }
+    }
+    if (!started)
+        *out++ = '0';
+    *out = '\0';
 }
 
 void __cdecl NetGenerateAuthKey(char* output, const char* challenge)
