@@ -19,8 +19,6 @@
 
 #include <time.h>
 
-#define DO_ENCRYPT
-
 //------------------------------------
 
 DWORD CArchiveBuilder::ms_dwHashInit = OBFUSCATE_DATA(0x9E3779B9);
@@ -215,13 +213,6 @@ void CArchiveBuilder::BuildEntryTable(SAA_ENTRY *pEntryTable, DWORD dwInvalidInd
 		}
 	}
 
-	/*
-	// Ver1: Set all the invalid entries to the invalid index
-	for(DWORD i=0; i<m_dwNumEntries; i++) {
-		pEntryTable[i].dwPrevEntry = dwInvalidIndex;
-	}
-	*/
-
 	// Ver2: Set all the invalid entries to itself, use the invalid index for the first entry instead
 	for(DWORD i=0; i<m_dwNumEntries; i++) {
 		pEntryTable[i].dwPrevEntry = i;
@@ -268,27 +259,6 @@ void CArchiveBuilder::BuildEntryTable(SAA_ENTRY *pEntryTable, DWORD dwInvalidInd
 
 		it++;
 	}
-
-	/*
-	// Ver1:
-	// Process the first entry finally and set its previous index to
-	// an invalid entry, but not to our invalid index
-	it = m_vecEntries.begin();
-	while(1) {	
-		dwIndex = (GetRandom() >> 5) & 0xFF;	// Take it from the middle!
-		
-		// Check if it matches our reserved index for invalid files
-		if (dwIndex == dwInvalidIndex)
-			continue;
-		
-		// Check to see if any existing entries have this index
-		if (pbEntryUsed[dwIndex])
-			continue;
-
-		break;
-	}
-	(*it)->pEntry->dwPrevEntry = dwIndex;
-	*/
 	
 	// Now obfuscate the non-hash part of all our entries
 	// XOR it with the hash for good measure.
@@ -363,9 +333,7 @@ void CArchiveBuilder::BuildEntryData(FILE *fiArchive)
 			if (dwReadSize < dwReadBlockSize) {
 				context.GenerateRandom(dwReadBlockSize-dwReadSize, pbReadData+dwReadSize);
 			}
-#ifdef DO_ENCRYPT
 			tinyEncrypt.EncryptData(dwReadBlockSize, pbReadData);
-#endif
 			fwrite(pbReadData, 1, dwReadBlockSize, fiArchive);
 		}
 
@@ -394,11 +362,9 @@ void CArchiveBuilder::SignArchive(FILE *fiArchive, DWORD dwSignatureOffset, SAA_
 	const DWORD dwReadBlockSize = 10 * 1024;	// 10kb
 	BYTE *pbReadData = new BYTE[dwReadBlockSize];
 	DWORD dwReadSize;
-	DWORD dwPos = ftell(fiArchive);
 	while(!feof(fiArchive)) {
 		dwReadSize = (DWORD)fread(pbReadData, 1, dwReadBlockSize, fiArchive);
 		hasher.AddData(dwReadSize, pbReadData);
-		dwPos = ftell(fiArchive);
 	}
 	delete[] pbReadData;
 
@@ -440,9 +406,7 @@ void CArchiveBuilder::WriteArchive(PCHAR szFileName)
 	//    (Note that the file data decryption must be done with decrypted entry table used for keys)
 	CTinyEncrypt tinyEnc;
 	tinyEnc.LoadKey("skey.bin");
-#ifdef DO_ENCRYPT
 	tinyEnc.EncryptData(sizeof(SAA_ENTRY)*m_dwNumEntries, reinterpret_cast<BYTE*>(pEntryTable));
-#endif
 	fwrite(pEntryTable, sizeof(SAA_ENTRY), m_dwNumEntries, fiArchive);
 
 	// 5. Sign the data (excluding the header)
@@ -450,9 +414,7 @@ void CArchiveBuilder::WriteArchive(PCHAR szFileName)
 	SignArchive(fiArchive, (DWORD)ftell(fiArchive), &header);
 
 	// 6. Finish the header and write it
-#ifdef DO_ENCRYPT
 	header.XorV2Identifier();
-#endif
 	header.Write(fiArchive);
 
 	// And we're done.

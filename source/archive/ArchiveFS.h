@@ -19,13 +19,6 @@
 #include "keys/pkey.h"
 #include "keys/skey.h"
 
-#ifndef ARCTOOL
-
-// Load the original CFileSystem class
-#include "filesystem.h"
-
-#endif
-
 #define FS_INVALID_FILE 0xFFFFFFFF
 
 typedef struct _AFS_ENTRYBT_NODE
@@ -113,33 +106,8 @@ typedef struct _AFS_ENTRYBT_NODE
 
 } AFS_ENTRYBT_NODE;
 
-const DWORD FILES_FORCE_FS[] = {
-    OBFUSCATE_DATA(0x5440792e), //ar_stats.dat
-    OBFUSCATE_DATA(0x57d2bfe5), //carmods.dat
-    OBFUSCATE_DATA(0x4e643d5e), //default.dat
-    OBFUSCATE_DATA(0x2acf3319), //default.ide
-    OBFUSCATE_DATA(0xe9a7df22), //gta.dat
-    OBFUSCATE_DATA(0x2cc7ce25), //handling.cfg
-    OBFUSCATE_DATA(0xd83f24dd), //main.scm
-    OBFUSCATE_DATA(0xcbc78e39), //melee.dat
-    OBFUSCATE_DATA(0xb7ffa1cb), //object.dat
-    OBFUSCATE_DATA(0x6fdca2be), //ped.dat
-    OBFUSCATE_DATA(0x6c62978a), //peds.ide
-    OBFUSCATE_DATA(0x11a462d1), //script.img
-    OBFUSCATE_DATA(0x131fad35), //shopping.dat
-    OBFUSCATE_DATA(0x4633bceb), //stream.ini
-    OBFUSCATE_DATA(0xc1d9e789), //timecyc.dat
-    OBFUSCATE_DATA(0xee6dfcb7), //vehicles.ide
-    OBFUSCATE_DATA(0xebfa9ab6), //weapon.dat
-    OBFUSCATE_DATA(0x7a504fb9), //loadscv.txd  (remote process AC dll)
-    OBFUSCATE_DATA(0xa848b69a), //bindat.bin
-};
-
 #pragma pack(push, 1)
 class CArchiveFS
-#ifndef ARCTOOL
-    : public CFileSystem
-#endif
 {
 private:
     bool m_bLoaded;
@@ -161,13 +129,13 @@ public:
 
     CArchiveFS(void);
 
+    #ifdef ARCTOOL
     CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize);
+    #endif // ARCTOOL
 
     virtual ~CArchiveFS(void);
 
     virtual bool Load(char* szFileName);
-
-    virtual bool Load(BYTE* pbData, DWORD nLength);
 
     virtual void Unload();
 
@@ -178,8 +146,6 @@ public:
     virtual DWORD GetFileSize(DWORD dwFileIndex);
 
     virtual BYTE* GetFileData(DWORD dwFileIndex);
-
-    virtual void UnloadData(DWORD dwFileIndex);
 };
 #pragma pack(pop)
 

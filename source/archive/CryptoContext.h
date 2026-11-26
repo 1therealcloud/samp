@@ -21,9 +21,6 @@ private:
 
     static LPSTR ms_szContainerName;
 
-    // legacy
-    static HMODULE ms_hAdvApi32;
-
     HCRYPTPROV m_hCryptProv;
 
 public:

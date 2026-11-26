@@ -315,9 +315,6 @@
     <ClCompile Include="filehooks.cpp">
       <Filter>general\filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="filesystem.cpp">
-      <Filter>general\filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="md5.cpp">
       <Filter>general\filesystem</Filter>
     </ClCompile>
@@ -637,9 +634,6 @@
     </ClInclude>
     <ClInclude Include="game\events.h">
       <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem.h">
-      <Filter>general\filesystem</Filter>
     </ClInclude>
     <ClInclude Include="filechecks.h">
       <Filter>general\filesystem</Filter>

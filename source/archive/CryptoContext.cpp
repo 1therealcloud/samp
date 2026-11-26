@@ -18,20 +18,11 @@ DWORD CCryptoContext::ms_dwProviderType = PROV_RSA_FULL;
 LPSTR CCryptoContext::ms_szProviderName = NULL;
 
 LPSTR CCryptoContext::ms_szContainerName = (LPSTR) "SAMP";
-// legacy
-HMODULE CCryptoContext::ms_hAdvApi32 = NULL;
 
 //------------------------------------
 
 CCryptoContext::CCryptoContext(void)
 {
-    /*
-	if (!ms_hAdvApi32)
-	{
-		ms_hAdvApi32 = LoadLibrary("advapi32.dll");
-	}
-	*/
-
     // Open existing context, if not found, create one!
     if (!CRYPT(AcquireContext)(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, 0))
     {
@@ -54,12 +45,6 @@ CCryptoContext::~CCryptoContext(void)
 
     if (ms_dwRefCount == 0)
     {
-        /*
-		// Free the library
-		if (ms_hAdvApi32)
-			FreeLibrary(ms_hAdvApi32);
-		*/
-
         // Delete the context
         CRYPT(AcquireContext)(&m_hCryptProv, ms_szContainerName, ms_szProviderName, ms_dwProviderType, CRYPT_DELETEKEYSET);
     }

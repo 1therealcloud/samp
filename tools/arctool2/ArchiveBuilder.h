@@ -42,9 +42,6 @@ private:
 
 	EntryMemStateVector_t m_vecEntries;
 
-	PCHAR m_szPrivKeyFile;
-	PCHAR m_szTEAKeyFile;
-
 	static DWORD ms_dwHashInit;
 	DWORD HashString(PCHAR szString);
 	PCHAR ExtractFileName(PCHAR szString);
@@ -59,8 +56,6 @@ public:
 	CArchiveBuilder(void);
 	CArchiveBuilder(DWORD dwNumEntries, DWORD dwFDSize, BOOL bProperHeader);
 	~CArchiveBuilder(void);
-
-	void SetKeyFile(PCHAR szPrivKeyFile, PCHAR szTEAKeyFile);
 
 	DWORD AddFile(PCHAR szFileName);
 	void WriteArchive(PCHAR szFileName);

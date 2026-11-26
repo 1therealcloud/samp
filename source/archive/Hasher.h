@@ -18,7 +18,6 @@ private:
     static DWORD ms_dwHashAlgorithm;
 
     HCRYPTHASH m_hCryptHash;
-    CCryptoContext* m_pContext;
 
 public:
 

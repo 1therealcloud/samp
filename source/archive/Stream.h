@@ -12,7 +12,6 @@
 // as well as as a memory based stream.
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 class CAbstractStream
@@ -36,13 +35,6 @@ public:
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return Read(pbBuffer, nNumberOfElements * nElementSize);
-    }
-
-    virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes) = 0;
-
-    virtual unsigned int Write(const void* pbBuffer, int nElementSize, int nNumberOfElements)
-    {
-        return Write(pbBuffer, nNumberOfElements * nElementSize);
     }
 
     virtual void Seek(int nOffset, eSeek seekMode) = 0;
@@ -134,11 +126,6 @@ public:
         return true;
     }
 
-    virtual bool IsOpen()
-    {
-        return (m_fiFile != NULL);
-    }
-
     virtual void Close()
     {
         if (m_fiFile)
@@ -156,16 +143,6 @@ public:
     virtual unsigned int Read(void* pbBuffer, int nElementSize, int nNumberOfElements)
     {
         return (unsigned int)fread(pbBuffer, nElementSize, nNumberOfElements, m_fiFile);
-    }
-
-    virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes)
-    {
-        return (unsigned int)fwrite(pbBuffer, 1, nNumberOfBytes, m_fiFile);
-    }
-
-    virtual unsigned int Write(const void* pbBuffer, int nElementSize, int nNumberOfElements)
-    {
-        return (unsigned int)fwrite(pbBuffer, nElementSize, nNumberOfElements, m_fiFile);
     }
 
     virtual void Seek(int nOffset, eSeek seekMode)
@@ -192,87 +169,3 @@ public:
         return (unsigned int)ftell(m_fiFile);
     }
 };
-
-#pragma pack(push, 1)
-class CMemoryStream : public CAbstractStream
-{
-protected:
-    unsigned char* m_pbBuffer;
-    unsigned int m_nOffset;
-    unsigned int m_nLength;
-    bool m_bCopy;
-
-public:
-
-    CMemoryStream(unsigned char* pbBuffer, unsigned int nLength, bool bCopy = true)
-    {
-        m_bCopy = bCopy;
-        m_nOffset = 0;
-        m_nLength = nLength;
-
-        if (bCopy)
-        {
-            m_pbBuffer = (unsigned char*)malloc(nLength);
-            memcpy(m_pbBuffer, pbBuffer, nLength);
-        }
-        else
-        {
-            m_pbBuffer = pbBuffer;
-        }
-    }
-
-    virtual ~CMemoryStream()
-    {
-        if (m_bCopy && m_pbBuffer)
-        {
-            free(m_pbBuffer);
-        }
-    }
-
-    virtual unsigned int Read(void* pbBuffer, int nNumberOfBytes)
-    {
-        if (m_nOffset + nNumberOfBytes > m_nLength)
-            nNumberOfBytes = m_nLength - m_nOffset;
-
-        memcpy(pbBuffer, m_pbBuffer + m_nOffset, nNumberOfBytes);
-        m_nOffset += nNumberOfBytes;
-
-        return nNumberOfBytes;
-    }
-
-    virtual unsigned int Write(const void* pbBuffer, int nNumberOfBytes)
-    {
-        if (m_nOffset + nNumberOfBytes > m_nLength)
-            nNumberOfBytes = m_nLength - m_nOffset;
-
-        memcpy(m_pbBuffer + m_nOffset, pbBuffer, nNumberOfBytes);
-        m_nOffset += nNumberOfBytes;
-
-        return nNumberOfBytes;
-    }
-
-    virtual void Seek(int nOffset, eSeek seekMode)
-    {
-        switch (seekMode)
-        {
-            case SeekStart:
-                m_nOffset = nOffset;
-                break;
-            case SeekCurrent:
-                m_nOffset += nOffset;
-                break;
-            case SeekEnd:
-                m_nOffset = m_nLength + nOffset;
-                break;
-        }
-
-        if (m_nOffset > m_nLength)
-            m_nOffset = m_nLength;
-    }
-
-    virtual unsigned int Tell()
-    {
-        return m_nOffset;
-    }
-};
-#pragma pack(pop)

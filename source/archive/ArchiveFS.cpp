@@ -14,12 +14,6 @@
 #include "Signer.h"
 #include "TinyEncrypt.h"
 
-extern void _declspec(noreturn) GameForcedExit(int iReasonCode);
-#define FORCE_EXIT(a)                                                                                                                                                              \
-    GameForcedExit(a);                                                                                                                                                             \
-    while (true)                                                                                                                                                                   \
-        ;
-
 //------------------------------------
 
 DWORD CArchiveFS::ms_dwHashInit = OBFUSCATE_DATA(0x9E3779B9);
@@ -35,6 +29,7 @@ CArchiveFS::CArchiveFS(void)
 
 //------------------------------------
 
+#ifdef ARCTOOL
 CArchiveFS::CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize)
 {
     m_dwNumEntries = dwNumEntries;
@@ -43,6 +38,7 @@ CArchiveFS::CArchiveFS(DWORD dwNumEntries, DWORD dwFDSize)
 
     m_Header.dwFakeDataSize = dwFDSize;
 }
+#endif // ARCTOOL
 
 //------------------------------------
 
@@ -200,9 +196,7 @@ void CArchiveFS::LoadEntries()
     // 4. Decode the TEA encrypted archive entry
 
     m_pStream->Seek((dwSignDataEnd - m_dwNumEntries * sizeof(SAA_ENTRY)));
-    DWORD dwFilePos = m_pStream->Tell();
     m_pStream->Read(m_pEntries, sizeof(SAA_ENTRY), m_dwNumEntries);
-    dwFilePos = m_pStream->Tell();
 
     tinyEnc.SetKey((BYTE*)TEA_KEY, TEA_XOR_KEY);
     tinyEnc.DecryptData(sizeof(SAA_ENTRY) * m_dwNumEntries, reinterpret_cast<BYTE*>(m_pEntries));
@@ -227,30 +221,6 @@ bool CArchiveFS::Load(char* szFileName)
         Unload();
 
     m_pStream = new CFileStream(szFileName, CFileStream::TypeBinary, CFileStream::ModeRead);
-
-    m_Header.Read(m_pStream);
-
-    m_Header.XorV2Identifier();
-
-    m_bLoaded = true;
-
-    if (!m_Header.VerifyIdentifier())
-    {
-        Unload();
-        return false;
-    }
-
-    return true;
-}
-
-//------------------------------------
-
-bool CArchiveFS::Load(BYTE* pbData, DWORD nLength)
-{
-    if (m_bLoaded)
-        Unload();
-
-    m_pStream = new CMemoryStream(pbData, nLength);
 
     m_Header.Read(m_pStream);
 
@@ -411,16 +381,5 @@ BYTE* CArchiveFS::GetFileData(DWORD dwFileIndex)
         }
 
         return node->pbData;
-    }
-}
-
-void CArchiveFS::UnloadData(DWORD dwFileIndex)
-{
-    AFS_ENTRYBT_NODE* node = *(reinterpret_cast<AFS_ENTRYBT_NODE**>(&dwFileIndex));
-
-    if (node->pbData != NULL)
-    {
-        delete[] node->pbData;
-        node->pbData = NULL;
     }
 }

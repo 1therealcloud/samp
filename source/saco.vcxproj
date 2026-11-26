@@ -97,6 +97,7 @@
       <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <GenerateMapFile>true</GenerateMapFile>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
@@ -136,6 +137,7 @@
       <ImportLibrary>$(SolutionDir)build\libraries\samp.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <GenerateMapFile>true</GenerateMapFile>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)third-party\bass\bass.dll" "$(OutDir)bass.dll" &gt;nul</Command>
@@ -189,7 +191,6 @@
     <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="filechecks.cpp" />
     <ClCompile Include="filehooks.cpp" />
-    <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="game\actor.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
       <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">OnlyExplicitInline</InlineFunctionExpansion>
@@ -357,7 +358,6 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="filechecks.h" />
     <ClInclude Include="filehooks.h" />
-    <ClInclude Include="filesystem.h" />
     <ClInclude Include="game\actor.h" />
     <ClInclude Include="game\aimstuff.h" />
     <ClInclude Include="game\animation.h" />
