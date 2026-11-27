@@ -5690,12 +5690,13 @@ bool CDXUTIMEEditBox::StaticMsgProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     HIMC hImc;
 
-    if( !s_bEnableImeSystem )
-        return false;
-
 #if defined(DEBUG) | defined(_DEBUG)
+    // set before the early return, otherwise CDXUTIMEEditBox::MsgProc asserts whenever the IME system is disabled
     m_bIMEStaticMsgProcCalled = true;
 #endif
+
+    if( !s_bEnableImeSystem )
+        return false;
 
     switch( uMsg )
     {
