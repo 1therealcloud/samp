@@ -221,6 +221,8 @@ void GameInstallHook(DWORD address, DWORD function, DWORD storage, const BYTE* j
 void GamePrepareHooks();
 
 void GameInstallHooks();
+
+void GameInstallFastloadHooks();
 // Raw GTA callback; not an ordinary void() call interface.
 
 void GameHookValidateCustomModelIndex();

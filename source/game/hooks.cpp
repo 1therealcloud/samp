@@ -518,6 +518,57 @@ DWORD g_clientPreviousRenderState;
 
 DWORD g_hookIgnoreNextExit;
 
+static int g_gameFastloadPreviousSplash = 1;
+
+static void __cdecl GameHookFastloadAdvanceSplash()
+{
+    volatile int* splash = (volatile int*)0x8d093c;
+    int current = *splash;
+    g_gameFastloadPreviousSplash = current + 1;
+    if (++current >= 7)
+        current = 1;
+    *splash = current;
+}
+
+void GameInstallFastloadHooks()
+{
+    const DWORD skipFastloadCall = g_gameVersion == 1 ? 0x748cf6 : 0x748d46;
+    const DWORD forceFastloadStateAddress = g_gameVersion == 1 ? 0x748aa8 : 0x748af8;
+
+    *(DWORD*)0xc8d4c0 = 5;
+    UnFuck((void*)skipFastloadCall, 5);
+    memset((void*)skipFastloadCall, 0x90, 5);
+    UnFuck((void*)forceFastloadStateAddress, 10);
+    memset((void*)forceFastloadStateAddress, 0x90, 6);
+    static const BYTE forceFastloadState[] = {0xc7, 0x05, 0xc0, 0xd4, 0xc8, 0x00, 0x05, 0x00, 0x00, 0x00};
+    memcpy((void*)forceFastloadStateAddress, forceFastloadState, sizeof(forceFastloadState));
+
+    // skip the splash fade
+    UnFuck((void*)0x590ae4, 5);
+    static const BYTE skipSplashFade[] = {0xe9, 0xb5, 0x01, 0x00, 0x00};
+    memcpy((void*)0x590ae4, skipSplashFade, sizeof(skipSplashFade));
+    UnFuck((void*)0x590ade, 5);
+    *(BYTE*)0x590ade = 0xe8;
+    *(DWORD*)0x590adf = (DWORD)GameHookFastloadAdvanceSplash - 0x590ae3;
+    *(BYTE*)0x590ae3 = 0x90;
+
+    const DWORD previousSplashOperands[] = {0x590044, 0x59059d, 0x590b23, 0x590bf7, 0x590c6a};
+    for (DWORD address : previousSplashOperands)
+    {
+        UnFuck((void*)address, sizeof(DWORD));
+        *(DWORD*)address = (DWORD)&g_gameFastloadPreviousSplash;
+    }
+
+    static float fastloadTime = 0.1f;
+    UnFuck((void*)0x590da6, sizeof(DWORD));
+    *(DWORD*)0x590da6 = (DWORD)&fastloadTime;
+    UnFuck((void*)0x5905b4, 5);
+    memset((void*)0x5905b4, 0x90, 5);
+    UnFuck((void*)0x590d9f, 5);
+    static const BYTE skipLoadScreen[] = {0xc3, 0x90, 0x90, 0x90, 0x90};
+    memcpy((void*)0x590d9f, skipLoadScreen, sizeof(skipLoadScreen));
+}
+
 __declspec(naked) void GameUpdateWeather()
 {
     // clang-format off

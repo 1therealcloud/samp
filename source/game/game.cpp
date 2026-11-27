@@ -1248,6 +1248,7 @@ BOOL GameInitializeVersionPatches()
         g_gameVersion = 1;
     else if (*version == 0xc8)
         g_gameVersion = 2;
+    GameInstallFastloadHooks();
     DWORD oldProtect;
     BYTE* skip = 0;
     if (g_gameVersion == 1)
