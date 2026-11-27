@@ -1266,8 +1266,13 @@ BOOL GameInitializeVersionPatches()
     memcpy((void*)0x866ccc, g_gameStartupTitle, 6);
     VirtualProtect((void*)0x745b87, 0x44, PAGE_EXECUTE_READWRITE, &oldProtect);
     memset((void*)0x745b87, 0x90, 0x44);
+    // GetBestRefreshRate (gta-reversed)
     VirtualProtect((void*)0x7459e1, 2, PAGE_EXECUTE_READWRITE, &oldProtect);
     *(WORD*)0x7459e1 = 0x9090;
+    // 60hz+ patch (GetBestRefreshRate (gta-reversed))
+    VirtualProtect((void*)0x7460a0, 3, PAGE_EXECUTE_READWRITE, &oldProtect);
+    *(WORD*)0x7460a0 = 0xc031;
+    *(BYTE*)0x7460a2 = 0xc3;
     GameWaitUnprotect((BYTE*)0x561872, 0x1e, 0x85);
     *(BYTE*)0x561872 = 0x33;
     *(BYTE*)0x561873 = 0xc0;
