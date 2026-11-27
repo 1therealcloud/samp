@@ -11,6 +11,9 @@
 #include "gui/gui.h"
 #include "main.h"
 #include "net/vehiclepool.h"
+#ifdef _DEBUG
+#include "windowmode.h"
+#endif
 
 #include <BitStream.h>
 #include <DXUT.h>
@@ -127,11 +130,19 @@ HRESULT __stdcall IDirect3DDevice9Hook::SetCursorProperties(UINT XHotSpot, UINT 
 
 void __stdcall IDirect3DDevice9Hook::SetCursorPosition(int X, int Y, DWORD Flags)
 {
+#ifdef _DEBUG
+    if (WindowMode::DeviceCursorHeld())
+        return;
+#endif
     g_gameD3DDevice->SetCursorPosition(X, Y, Flags);
 }
 
 BOOL __stdcall IDirect3DDevice9Hook::ShowCursor(BOOL bShow)
 {
+#ifdef _DEBUG
+    if (WindowMode::DeviceCursorHeld())
+        return WindowMode::RecordDeviceCursor(bShow);
+#endif
     return g_gameD3DDevice->ShowCursor(bShow);
 }
 
@@ -153,7 +164,13 @@ UINT __stdcall IDirect3DDevice9Hook::GetNumberOfSwapChains()
 HRESULT __stdcall IDirect3DDevice9Hook::Reset(D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
     ClientDeviceObjectsLost();
+#ifdef _DEBUG
+    WindowMode::BeforeReset(pPresentationParameters);
+#endif
     HRESULT result = g_gameD3DDevice->Reset(pPresentationParameters);
+#ifdef _DEBUG
+    WindowMode::AfterReset();
+#endif
     if (SUCCEEDED(result))
         ClientDeviceObjectsReset();
     return result;

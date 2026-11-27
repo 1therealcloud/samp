@@ -309,6 +309,9 @@
     <ClCompile Include="filehooks.cpp">
       <Filter>general\filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="windowmode.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audiostream.h">
@@ -589,6 +592,9 @@
     </ClInclude>
     <ClInclude Include="filehooks.h">
       <Filter>general\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="windowmode.h">
+      <Filter>general</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,9 @@
 #include "gui/cmdwindow.h"
 #include "gui/gui.h"
 #include "main.h"
+#ifdef _DEBUG
+#include "windowmode.h"
+#endif
 
 #include <DXUT.h>
 #include <DXUTgui.h>
@@ -27,10 +30,14 @@ static constexpr char g_screenshotFailureMessage[] = "Unable to save screenshot.
 // forward
 static BOOL ClientHandleKeyRelease(unsigned int key);
 static BOOL ClientHandleCharacter(unsigned int character);
-static void ClientToggleWindowedMode();
 
 static LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
+#ifdef _DEBUG
+    LRESULT windowModeResult;
+    if (WindowMode::HandleMessage(window, message, wparam, lparam, &windowModeResult))
+        return windowModeResult;
+#endif
     if (message == WM_ACTIVATEAPP && wparam == 1 && g_pGame && g_gameD3DDevice && !g_pGame->IsMenuVisible() && !g_pGame->m_nCursorMode)
         g_gameD3DDevice->ShowCursor(FALSE);
     if (g_pInput)
@@ -165,11 +172,6 @@ static LRESULT CALLBACK ClientWindowProcedure(HWND window, UINT message, WPARAM 
                 return 0;
             }
         }
-        else if (message == WM_SYSKEYUP)
-        {
-            if (wparam == VK_RETURN)
-                ClientToggleWindowedMode();
-        }
         else if (message == WM_LBUTTONDOWN)
         {
             int x = (short)LOWORD(lparam), y = (short)HIWORD(lparam);
@@ -237,17 +239,6 @@ static BOOL ClientHandleCharacter(unsigned int character)
         return TRUE;
     }
     return FALSE;
-}
-
-static void ClientToggleWindowedMode()
-{
-    // GTA SA virtual addresses: current mode C97C18, mode table C97C48, change-mode 745C70.
-    int mode = *(int*)0xc97c18;
-    DWORD* windowed = (DWORD*)(*(DWORD*)0xc97c48 + mode * 20 + 16);
-    *windowed = *windowed == 0;
-    *(int*)0xc97c18 = -1;
-    ((void(__cdecl*)(int))0x745c70)(mode);
-    *(int*)0xc97c18 = mode;
 }
 
 static int ClientFindScreenshotFilename(std::string* path)
@@ -350,6 +341,9 @@ BOOL ClientInstallWindowProcedure()
     }
     SetWindowTextA(window, "GTA:SA:MP");
     IsWindowUnicode(window);
+#ifdef _DEBUG
+    WindowMode::Install(window);
+#endif
     return TRUE;
 }
 

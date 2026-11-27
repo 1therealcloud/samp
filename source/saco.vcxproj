@@ -312,6 +312,10 @@
     </ClCompile>
     <ClCompile Include="runutil.cpp" />
     <ClCompile Include="subclass.cpp" />
+    <ClCompile Include="windowmode.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\third-party\bass\bass.h" />
@@ -407,6 +411,10 @@
     <ClInclude Include="render\licenseplate.h" />
     <ClInclude Include="render\objectmaterialtext.h" />
     <ClInclude Include="runutil.h" />
+    <ClInclude Include="windowmode.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="game\animation_names.inc" />
